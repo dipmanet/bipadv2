@@ -1,0 +1,44 @@
+@import '~base-scss/base';
+@import '~rs-scss/button-base';
+
+.tabular-book {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+
+    .header-container {
+        display: flex;
+        align-items: center;
+
+        .pending-message {
+            margin-right: $spacing-medium;
+            color: $color-text-label;
+        }
+    }
+
+    .body {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        padding: 0;
+        overflow: auto;
+
+        .sheet-view {
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        .tabs {
+            flex-shrink: 0;
+
+            .tab {
+                .tab-button {
+                    @extend %button-base;
+                    padding: $spacing-small-alt $spacing-medium;
+                    text-transform: uppercase;
+                }
+            }
+        }
+    }
+}

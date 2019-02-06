@@ -1,0 +1,35 @@
+@import '~base-scss/base';
+
+.region-detail-form {
+    display: flex;
+    position: relative;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        border-bottom: $width-separator-thin solid $color-separator;
+        padding: $spacing-small;
+
+        .heading {
+            flex-grow: 1;
+        }
+    }
+
+    .input-container {
+        flex-grow: 1;
+        padding: $spacing-small;
+        overflow-y: auto;
+
+        .text-input {
+            padding: 0;
+
+            input {
+                background-color: transparent;
+            }
+        }
+    }
+}

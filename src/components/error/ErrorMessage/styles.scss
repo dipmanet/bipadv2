@@ -1,0 +1,11 @@
+@import '~base-scss/base';
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    color: $color-danger;
+
+    .button {
+        margin-top: $spacing-medium;
+    }
+}

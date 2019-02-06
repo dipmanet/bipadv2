@@ -1,0 +1,24 @@
+@import '~base-scss/base';
+
+.preview-gallery {
+    position: relative;
+}
+
+.gallery-file-name {
+    color: $color-accent;
+}
+
+.preview-nothing {
+    display: inline;
+    align-items: center;
+    justify-content: center;
+
+    .label {
+        margin-right: $spacing-small;
+    }
+
+    .loading-animation {
+        display: inline-block;
+        animation: spin 1s linear infinite;
+    }
+}

@@ -1,0 +1,61 @@
+@import '~base-scss/base';
+
+$width-region-detail-view: 280px;
+$height-region-detail-max: 320px;
+
+$position-top: 42px;
+$position-right: $spacing-small-alt;
+
+.region-detail-view {
+    @include shadow-small;
+    @include background-color($color-foreground);
+    display: flex;
+    position: absolute;
+    top: $position-top;
+    right: $position-right;
+    flex-direction: column;
+    z-index: $z-index-region-detail-view;
+    width: $width-region-detail-view;
+    max-height: $height-region-detail-max;
+
+    .heading {
+        flex-shrink: 0;
+        padding: $spacing-small;
+        color: $color-primary;
+    }
+
+    .content {
+        display: table;
+        flex-grow: 1;
+        overflow-y: auto;
+
+        .row {
+            @include background-color($color-background-row-alt);
+            display: table-row;
+
+            .title {
+                display: table-cell;
+                padding: $spacing-small;
+                text-transform: uppercase;
+                color: $color-text-label;
+                font-size: $font-size-small;
+
+                &::after {
+                    content: ':';
+                }
+            }
+
+            .value {
+                display: table-cell;
+                padding: $spacing-extra-small $spacing-medium;
+                width: 100%;
+                font-size: $font-size-medium-alt;
+            }
+
+            &:nth-child(odd) {
+                @include background-color($color-background-row);
+            }
+        }
+    }
+
+}

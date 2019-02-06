@@ -1,0 +1,62 @@
+@import '~base-scss/base';
+
+$height-expanded-view-chart: 80vh;
+$width-expanded-view: 90vw;
+
+.data-series {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .heading {
+            flex-grow: 1;
+            padding: 0 $spacing-small;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: $color-text;
+        }
+
+        .actions {
+            display: flex;
+            flex-shrink: 0;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .vertical-bar-chart,
+        .horizontal-bar-chart,
+        .geo-visualization,
+        .word-cloud {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
+
+.expanded-view {
+    width: $width-expanded-view;
+
+    .action-buttons {
+        display: flex;
+    }
+
+    .body {
+        .horizontal-bar-chart,
+        .vertical-bar-chart,
+        .word-cloud,
+        .geo {
+            height: $height-expanded-view-chart;
+        }
+    }
+}

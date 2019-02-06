@@ -1,0 +1,92 @@
+@import '~base-scss/base';
+
+.form-container {
+    .edit-admin-level-form {
+        .admin-level-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .text-input {
+                flex-basis: 100%;
+                background-color: transparent;
+            }
+
+            .select-input {
+                margin-bottom: $spacing-small;
+            }
+
+            .current-upload {
+                display: flex;
+                align-items: center;
+                margin-bottom: $spacing-medium;
+                text-transform: uppercase;
+                color: $color-text-label;
+
+                >p:after {
+                    margin-right: $spacing-small;
+                    content: ':';
+                }
+            }
+
+            .no-file-upload {
+                display: flex;
+                align-items: center;
+                margin-bottom: $spacing-medium;
+                text-transform: uppercase;
+                color: $color-text-label;
+            }
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left-container {
+            display: flex;
+            align-items: center;
+
+            >* {
+                margin-right: $spacing-medium-alt;
+            }
+
+            .geo-file {
+                width: auto;
+
+                :global {
+                    label {
+                        @include button-like-link($color-accent);
+                    }
+                }
+
+                .load {
+                    padding: $spacing-small;
+                }
+
+                i {
+                    margin-right: $spacing-small;
+                }
+
+                >p {
+                    display: none;
+                }
+
+                a {
+                    margin: 0 $spacing-small;
+                    color: $color-primary;
+                }
+            }
+        }
+
+        .right-container {
+            display: flex;
+            align-items: center;
+
+            >* {
+                margin-left: $spacing-medium-alt;
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+@import '~base-scss/base';
+
+.geo-list-input {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .action {
+        padding: $spacing-extra-small $spacing-small;
+    }
+
+    .select-input {
+        flex-grow: 1;
+    }
+
+    .no-list-selection {
+        display: flex;
+    }
+}
