@@ -9,6 +9,7 @@ const notExportCreatable = ({ isLoggedIn, hasAnalysisFramework, exportPermission
 const acl = {
     dashboard: {},
     riskInfo: {},
+    capacityAndResources: {},
 
     projectDenied: {},
     fourHundredThree: {},

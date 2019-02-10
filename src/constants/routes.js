@@ -34,6 +34,14 @@ export const routes = {
         links: allLinks,
     }, // _ts('pageTitle', 'riskInfo');
 
+    capacityAndResources: {
+        order: 3,
+        type: ROUTE.public,
+        path: '/capacity-and-resources',
+        loader: () => import('../views/CapacityAndResources'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'capacityAndResources');
+
     projectDenied: {
         order: 970,
         type: ROUTE.public,

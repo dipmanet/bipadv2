@@ -1,0 +1,171 @@
+@import '~base-scss/base';
+
+.capacity-and-resources {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+    .aside {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(to right, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0));
+        padding-top: $height-navbar;
+        width: 420px;
+        height: calc(100vh - #{$height-navbar});
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: $spacing-medium;
+            width: 320px;
+            height: 100%;
+
+            .alerts {
+                display: flex;
+                position: relative;
+                flex-direction: column;
+                
+                .header {
+                    flex-shrink: 0;
+
+                    .heading {
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                    }
+                }
+
+                .alert-list {
+                    flex-grow: 1;
+                    overflow: auto;
+
+                    .alert {
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                        padding: $spacing-medium;
+
+                        .icon {
+                            flex-shrink: 0;
+                            padding-right: $spacing-medium;
+                            color: $color-danger;
+                            font-size: $font-size-extra-large;
+                        }
+
+                        .title {
+                            flex-grow: 1;
+                        }
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, .05);
+                        }
+                    }
+                }
+            }
+
+            .key-statistics {
+                display: flex;
+                flex-direction: column;
+
+                .header {
+                    flex-shrink: 0;
+
+                    .heading {
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                    }
+                }
+
+                .content {
+                    padding: $spacing-medium;
+
+                    .donut-charts {
+                        display: flex;
+                        padding: $spacing-medium 0;
+
+                        .donut-chart-1 {
+                            flex-basis: 50%;
+                            width: 100px;
+                            height: 120px;
+                        }
+
+                        .donut-chart-2 {
+                            flex-basis: 50%;
+                            width: 100px;
+                            height: 120px;
+                        }
+                    }
+
+                    .pie-chart {
+                        height: 180px;
+                    }
+
+                    .horizontal-bar-chart {
+                        margin-top: $spacing-large;
+                        height: 200px;
+                    }
+
+                    .bar-chart {
+                        height: 160px;
+                    }
+                }
+            }
+        }
+    }
+
+    .filter-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(to left, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0));
+        padding: $spacing-medium;
+        padding-top: $height-navbar;
+        width: 300px;
+        height: calc(100vh - #{$height-navbar});
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            padding: 0 $spacing-medium;
+
+            .header {
+                flex-shrink: 0;
+
+                .heading {
+                    padding: $spacing-medium $spacing-small;
+                    color: $color-primary;
+                }
+            }
+
+            .content {
+                flex-grow: 1;
+                overflow: auto;
+
+                .resource-type-selection {
+                    padding: $spacing-small;
+                }
+
+                .hazard-type-selection-container {
+                    margin-top: $spacing-medium;
+                    padding: $spacing-small;
+
+                    .hazard-type-selection {
+                        padding: $spacing-extra-small 0;
+
+                        :global .radio-option {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .map {
+        position: relative;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+    }
+}
