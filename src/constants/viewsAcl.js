@@ -7,7 +7,8 @@ const notExportCreatable = ({ isLoggedIn, hasAnalysisFramework, exportPermission
 // NOTE: route related to a project should either have
 // projectPermissions.view or any other permissions
 const acl = {
-    weeklySnapshot: {},
+    dashboard: {},
+    riskInfo: {},
 
     projectDenied: {},
     fourHundredThree: {},

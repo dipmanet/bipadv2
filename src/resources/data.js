@@ -37,6 +37,13 @@ export const alertList = [
     },
 ];
 
+export const resourceTypeList = [
+    { key: 'health', label: 'Health' },
+    { key: 'education', label: 'Education' },
+    { key: 'waterSupply', label: 'Water supply' },
+    { key: 'communication', label: 'Communication' },
+];
+
 export const hazardTypeList = [
     { key: 'earthquake', label: 'Earthquake' },
     { key: 'urbanFlood', label: 'Urban flood' },

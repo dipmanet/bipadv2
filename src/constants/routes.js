@@ -26,13 +26,13 @@ export const routes = {
         links: allLinks,
     }, // _ts('pageTitle', 'dashboard');
 
-    weeklySnapshot: {
+    riskInfo: {
         order: 2,
         type: ROUTE.public,
-        path: '/weekly-snapshot',
-        loader: () => import('../views/WeeklySnapshot'),
+        path: '/risk-info',
+        loader: () => import('../views/RiskInfo'),
         links: allLinks,
-    }, // _ts('pageTitle', 'weeklySnapshot');
+    }, // _ts('pageTitle', 'riskInfo');
 
     projectDenied: {
         order: 970,
