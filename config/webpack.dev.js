@@ -6,6 +6,9 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ShellRunPlugin = require('./shellrun-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const dotenv = require('dotenv').config({
+    path: '.env',
+});
 
 const getEnvVariables = require('./env.js');
 
@@ -19,7 +22,8 @@ const appFavicon = path.resolve(appBase, 'public/favicon.ico');
 const appLogo = path.resolve(appBase, 'public/favicon.png');
 
 module.exports = (env) => {
-    const ENV_VARS = getEnvVariables(env);
+    console.warn(dotenv.pared);
+    const ENV_VARS = { ...dotenv.pared, ...getEnvVariables(env) };
 
     return {
         entry: appIndexJs,

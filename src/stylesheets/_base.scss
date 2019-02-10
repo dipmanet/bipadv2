@@ -89,7 +89,8 @@ body {
             perspective: 1000px;
             background-color: $color-background;
             padding: $spacing-small-alt;
-            height: calc(100vh - #{$height-navbar});
+            // height: calc(100vh - #{$height-navbar});
+            height: 100vh;
             overflow-y: auto;
         }
 
