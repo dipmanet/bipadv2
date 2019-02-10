@@ -22,7 +22,6 @@ const appFavicon = path.resolve(appBase, 'public/favicon.ico');
 const appLogo = path.resolve(appBase, 'public/favicon.png');
 
 module.exports = (env) => {
-    console.warn(dotenv.pared);
     const ENV_VARS = { ...dotenv.pared, ...getEnvVariables(env) };
 
     return {
