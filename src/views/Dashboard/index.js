@@ -34,6 +34,11 @@ const pieChartLabelSelector = d => d.label;
 
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
+const colors = [
+    '#fb8072',
+    '#80b1d3',
+    '#fdb462',
+];
 
 const getFeatureCollectionFromPoints = (points) => {
     const geojson = {
@@ -118,11 +123,13 @@ export default class Dashboard extends React.PureComponent {
                         <DonutChart
                             className={styles.donutChart1}
                             data={donutChartData1}
+                            colorScheme={colors}
                             labelSelector={donutChartLabelSelector}
                             valueSelector={donutChartValueSelector}
                             sideLengthRatio={0.3}
                         />
                         <DonutChart
+                            colorScheme={colors}
                             className={styles.donutChart2}
                             data={donutChartData2}
                             labelSelector={donutChartLabelSelector}
@@ -134,6 +141,7 @@ export default class Dashboard extends React.PureComponent {
                         className={styles.pieChart}
                         data={pieChartData}
                         labelSelector={pieChartLabelSelector}
+                        colorScheme={colors}
                         valueSelector={pieChartValueSelector}
                     />
                     <SimpleVerticalBarChart
@@ -154,6 +162,10 @@ export default class Dashboard extends React.PureComponent {
 
         return (
             <div className={styles.dashboard}>
+                <Map
+                    points={featureCollection}
+                    className={styles.map}
+                />
                 <Navbar />
                 <aside className={styles.aside}>
                     <div className={styles.container}>
@@ -184,11 +196,6 @@ export default class Dashboard extends React.PureComponent {
                         </div>
                     </div>
                 </aside>
-
-                <Map
-                    points={featureCollection}
-                    className={styles.map}
-                />
             </div>
         );
     }
