@@ -1,3 +1,14 @@
+import fireIcon from '#resources/icons/fire.svg';
+import floodIcon from '#resources/icons/flood.svg';
+import heatwaveIcon from '#resources/icons/heatwave.svg';
+import landslideIcon from '#resources/icons/landslide.svg';
+import waterIcon from '#resources/icons/water.svg';
+import earthquakeIcon from '#resources/icons/earthquake.svg';
+import cycloneIcon from '#resources/icons/cyclone.svg';
+import healthIcon from '#resources/icons/health.svg';
+import educationIcon from '#resources/icons/education.svg';
+import radioIcon from '#resources/icons/radio.svg';
+
 export const alertList = [
     {
         id: 1,
@@ -44,21 +55,21 @@ export const incidentList = [
 ];
 
 export const resourceTypeList = [
-    { key: 'health', label: 'Health' },
-    { key: 'education', label: 'Education' },
-    { key: 'waterSupply', label: 'Water supply' },
-    { key: 'communication', label: 'Communication' },
+    { key: 'health', label: 'Health', icon: healthIcon },
+    { key: 'education', label: 'Education', icon: educationIcon },
+    { key: 'waterSupply', label: 'Water supply', icon: waterIcon },
+    { key: 'communication', label: 'Communication', icon: radioIcon },
 ];
 
 export const hazardTypeList = [
-    { key: 'earthquake', label: 'Earthquake' },
-    { key: 'urbanFlood', label: 'Urban flood' },
-    { key: 'costalFlood', label: 'Costal flood' },
-    { key: 'landslide', label: 'Landslide' },
-    { key: 'wildfire', label: 'Wildfire' },
-    { key: 'waterScarcity', label: 'Water scarcity' },
-    { key: 'extremeHeat', label: 'Extreme heat' },
-    { key: 'cyclone', label: 'Cyclone' },
+    { key: 'earthquake', label: 'Earthquake', icon: earthquakeIcon },
+    { key: 'urbanFlood', label: 'Urban flood', icon: floodIcon },
+    { key: 'costalFlood', label: 'Costal flood', icon: floodIcon },
+    { key: 'landslide', label: 'Landslide', icon: landslideIcon },
+    { key: 'wildfire', label: 'Wildfire', icon: fireIcon },
+    { key: 'waterScarcity', label: 'Water scarcity', icon: waterIcon },
+    { key: 'extremeHeat', label: 'Extreme heat', icon: heatwaveIcon },
+    { key: 'cyclone', label: 'Cyclone', icon: cycloneIcon },
 ];
 
 export const adminLevelFilterOptionList = [

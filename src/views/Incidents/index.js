@@ -16,7 +16,7 @@ import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import ListSelection from '#rsci/ListSelection';
+import MultiListSelection from '#components/MultiListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import { basicColor } from '#constants/colorScheme';
@@ -147,7 +147,9 @@ export default class Dashboard extends React.PureComponent {
                 }
                 mainContentClassName={styles.main}
                 mainContent={
-                    <Map className={styles.map} />
+                    <Map
+                        className={styles.map}
+                    />
                 }
                 rightContentClassName={styles.right}
                 rightContent={
@@ -159,7 +161,7 @@ export default class Dashboard extends React.PureComponent {
                         </header>
                         <div className={styles.content}>
                             <RegionSelectInput />
-                            <ListSelection
+                            <MultiListSelection
                                 className={styles.listSelectionInput}
                                 label="Hazard type"
                                 options={hazardTypeList}

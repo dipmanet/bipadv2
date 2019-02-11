@@ -62,14 +62,12 @@ const MenuItem = ({
     title,
     link,
 }) => (
-    <div>
-        <a
-            className={_cs(className, styles.menuItem)}
-            href={reverseRoute(pathNames[link], {})}
-        >
-            {title}
-        </a>
-    </div>
+    <a
+        className={_cs(className, styles.menuItem)}
+        href={reverseRoute(pathNames[link], {})}
+    >
+        {title}
+    </a>
 );
 
 export default class Navbar extends React.PureComponent {

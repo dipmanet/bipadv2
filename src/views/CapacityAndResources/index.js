@@ -17,7 +17,8 @@ import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
 import Label from '#rsci/Label';
 import RadioInput from '#rsci/RadioInput';
-import ListSelection from '#rsci/ListSelection';
+import MultiListSelection from '#components/MultiListSelection';
+import ListSelection from '#components/ListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import { basicColor } from '#constants/colorScheme';
@@ -117,24 +118,18 @@ export default class CapacityAndResources extends React.PureComponent {
                         </header>
                         <div className={styles.content}>
                             <RegionSelectInput />
-                            <ListSelection
+                            <MultiListSelection
                                 className={styles.resourceTypeSelection}
                                 label="Resources"
                                 options={resourceTypeList}
                                 value={['health', 'education']}
                             />
-                            <div className={styles.hazardTypeSelectionContainer}>
-                                <Label
-                                    text="Hazard type"
-                                    show
-                                />
-                                <RadioInput
-                                    className={styles.hazardTypeSelection}
-                                    name="Hazard type"
-                                    options={hazardTypeList}
-                                    value="earthquake"
-                                />
-                            </div>
+                            <ListSelection
+                                className={styles.hazardTypeSelection}
+                                label="Hazard type"
+                                options={hazardTypeList}
+                                value="earthquake"
+                            />
                         </div>
                     </React.Fragment>
                 }

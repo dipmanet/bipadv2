@@ -5,6 +5,7 @@ import turf from 'turf';
 import Map from '#rscz/Map/index';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+import { getHashFromString } from '#rsu/common';
 
 import nepalGeoJson from '#resources/districts.json';
 
@@ -16,6 +17,7 @@ const propTypes = {
 
 const defaultProps = {
     className: '',
+    showColors: false,
 };
 
 const nepalBounds = turf.bbox(nepalGeoJson);
@@ -26,8 +28,8 @@ const boundsFill = {
 };
 
 const boundsOutline = {
-    'line-color': '#ffffff',
-    'line-opacity': 1,
+    'line-color': '#4c4caa',
+    'line-opacity': 0.2,
     'line-width': 1,
 };
 
@@ -93,6 +95,7 @@ export default class ProjectsMap extends React.PureComponent {
         const {
             className: classNameFromProps,
             points,
+            showColors,
         } = this.props;
 
         const className = [
@@ -105,6 +108,7 @@ export default class ProjectsMap extends React.PureComponent {
             <Map
                 className={className}
                 bounds={nepalBounds}
+                boundsPadding={160}
                 fitBoundsDuration={200}
                 hideNavControl
             >
@@ -112,16 +116,39 @@ export default class ProjectsMap extends React.PureComponent {
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
                 >
-                    <MapLayer
-                        layerKey="bounds-fill"
-                        type="fill"
-                        paint={boundsFill}
-                    />
-                    <MapLayer
-                        layerKey="bounds-outline"
-                        type="line"
-                        paint={boundsOutline}
-                    />
+                    {!showColors ? (
+                        <React.Fragment>
+                            <MapLayer
+                                layerKey="bounds-fill"
+                                type="fill"
+                                paint={boundsFill}
+                            />
+                            <MapLayer
+                                layerKey="bounds-outline"
+                                type="line"
+                                paint={boundsOutline}
+                            />
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            {nepalGeoJson.features.map(m => (
+                                <MapLayer
+                                    layerKey={`bounds-fill-${m.properties.DIST_ID}`}
+                                    type="fill"
+                                    filter={['==', 'DIST_ID', m.properties.DIST_ID]}
+                                    paint={{
+                                        'fill-color': `hsl(200, 50%, ${(Math.abs(getHashFromString(m.properties.DISTRICT)) % 50) + 50}%)`,
+                                        'fill-opacity': 0.8,
+                                    }}
+                                />
+                            ))}
+                            <MapLayer
+                                layerKey="bounds-outline"
+                                type="line"
+                                paint={boundsOutline}
+                            />
+                        </React.Fragment>
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="points"

@@ -27,16 +27,12 @@
                 padding: $spacing-small;
             }
 
-            .hazard-type-selection-container {
+            .hazard-type-selection {
                 margin-top: $spacing-medium;
                 padding: $spacing-small;
 
-                .hazard-type-selection {
-                    padding: $spacing-extra-small 0;
-
-                    :global .radio-option {
-                        display: block;
-                    }
+                :global .radio-option {
+                    display: block;
                 }
             }
         }

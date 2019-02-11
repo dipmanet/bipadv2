@@ -1,0 +1,45 @@
+@import '~base-scss/base';
+
+.multi-list-selection {
+    padding: 0;
+
+    .options {
+        .option {
+            .icon {
+                transition: $duration-transition-medium all ease-in-out;
+                opacity: .5;
+                padding: $spacing-small;
+                width: 56px;
+                height: 56px;
+                filter: grayscale(77%);
+            }
+
+            .title {
+                transition: $duration-transition-medium all ease-in-out;
+                text-transform: none;
+                color: $color-text-disabled;
+            }
+
+            &:hover {
+                .icon {
+                    opacity: 1;
+                }
+
+                .title {
+                    color: $color-text;
+                }
+            }
+
+            &.active {
+                .icon {
+                    opacity: 1;
+                    filter: none;
+                }
+
+                .title {
+                    color: $color-text;
+                }
+            }
+        }
+    }
+}

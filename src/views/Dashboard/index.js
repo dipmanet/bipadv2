@@ -12,12 +12,12 @@ import {
 
 import Page from '#components/Page';
 import RegionSelectInput from '#components/RegionSelectInput';
+import MultiListSelection from '#components/MultiListSelection';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import ListSelection from '#rsci/ListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 
@@ -188,7 +188,7 @@ export default class Dashboard extends React.PureComponent {
                         </header>
                         <div className={styles.content}>
                             <RegionSelectInput />
-                            <ListSelection
+                            <MultiListSelection
                                 className={styles.listSelectionInput}
                                 label="Hazard type"
                                 options={hazardTypeList}

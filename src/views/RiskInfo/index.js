@@ -17,7 +17,8 @@ import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
 import Label from '#rsci/Label';
 import RadioInput from '#rsci/RadioInput';
-import ListSelection from '#rsci/ListSelection';
+import ListSelection from '#components/ListSelection';
+import MultiListSelection from '#components/MultiListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import { basicColor } from '#constants/colorScheme';
@@ -105,7 +106,10 @@ export default class RiskInfo extends React.PureComponent {
                 }
                 mainContentClassName={styles.main}
                 mainContent={
-                    <Map className={styles.map} />
+                    <Map
+                        className={styles.map}
+                        showColors
+                    />
                 }
                 rightContentClassName={styles.right}
                 rightContent={
@@ -117,24 +121,19 @@ export default class RiskInfo extends React.PureComponent {
                         </header>
                         <div className={styles.content}>
                             <RegionSelectInput />
-                            <ListSelection
+                            <MultiListSelection
                                 className={styles.resourceTypeSelection}
                                 label="Resources"
                                 options={resourceTypeList}
                                 value={['health', 'education']}
                             />
-                            <div className={styles.hazardTypeSelectionContainer}>
-                                <Label
-                                    text="Hazard type"
-                                    show
-                                />
-                                <RadioInput
-                                    className={styles.hazardTypeSelection}
-                                    name="Hazard type"
-                                    options={hazardTypeList}
-                                    value="earthquake"
-                                />
-                            </div>
+                            <ListSelection
+                                label="Hazard type"
+                                className={styles.hazardTypeSelection}
+                                name="Hazard type"
+                                options={hazardTypeList}
+                                value="earthquake"
+                            />
                         </div>
                     </React.Fragment>
                 }
