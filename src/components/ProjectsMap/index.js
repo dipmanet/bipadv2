@@ -106,6 +106,7 @@ export default class ProjectsMap extends React.PureComponent {
                 className={className}
                 bounds={nepalBounds}
                 fitBoundsDuration={200}
+                hideNavControl
             >
                 <MapSource
                     sourceKey="bounds"

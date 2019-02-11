@@ -10,7 +10,7 @@ import {
     hazardTypeList,
 } from '#resources/data';
 
-import Navbar from '#components/Navbar';
+import Page from '#components/Page';
 import RegionSelectInput from '#components/RegionSelectInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
@@ -161,14 +161,11 @@ export default class Dashboard extends React.PureComponent {
         const featureCollection = getFeatureCollectionFromPoints(alertList);
 
         return (
-            <div className={styles.dashboard}>
-                <Map
-                    points={featureCollection}
-                    className={styles.map}
-                />
-                <Navbar />
-                <aside className={styles.aside}>
-                    <div className={styles.container}>
+            <Page
+                className={styles.dashboard}
+                leftContentClassName={styles.left}
+                leftContent={
+                    <React.Fragment>
                         <Alerts
                             className={styles.alerts}
                             data={alertList}
@@ -176,10 +173,18 @@ export default class Dashboard extends React.PureComponent {
                         <KeyStatistics
                             className={styles.keyStatistics}
                         />
-                    </div>
-                </aside>
-                <aside className={styles.filterContainer}>
-                    <div className={styles.container}>
+                    </React.Fragment>
+                }
+                mainContentClassName={styles.main}
+                mainContent={
+                    <Map
+                        points={featureCollection}
+                        className={styles.map}
+                    />
+                }
+                rightContentClassName={styles.right}
+                rightContent={
+                    <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
                                 Filters
@@ -194,9 +199,9 @@ export default class Dashboard extends React.PureComponent {
                                 value={['earthquake', 'wildfire']}
                             />
                         </div>
-                    </div>
-                </aside>
-            </div>
+                    </React.Fragment>
+                }
+            />
         );
     }
 }

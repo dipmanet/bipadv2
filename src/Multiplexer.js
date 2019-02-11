@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import ExclusivelyPublicRoute from '#rscg/ExclusivelyPublicRoute';
 import PrivateRoute from '#rscg/PrivateRoute';
 import Toast from '#rscv/Toast';
+import Navbar from '#components/Navbar';
 
 import RouteSynchronizer from '#components/general/RouteSynchronizer';
 
@@ -131,6 +132,7 @@ export default class Multiplexer extends React.PureComponent {
                     notification={lastNotify}
                     onClose={this.handleToastClose}
                 />
+                <Navbar />
                 <div className="deep-main-content">
                     <Switch>
                         { routesOrder.map(this.renderRoute) }

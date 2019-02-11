@@ -5,168 +5,101 @@
     width: 100%;
     height: 100%;
 
-    .aside {
-        position: absolute;
-        top: $height-navbar + $spacing-medium;
-        left: $spacing-medium;
-        z-index: 1;
-        border-radius: 5px;
-        background: rgba(255, 255, 255, .8);
-        width: 320px;
-        height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+    .right {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $spacing-medium;
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: $spacing-medium;
-            height: 100%;
+        .header {
+            flex-shrink: 0;
 
-            .alerts {
-                display: flex;
-                position: relative;
-                flex-direction: column;
-                
-                .header {
-                    flex-shrink: 0;
+            .heading {
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
+            }
+        }
 
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
+        .content {
+            flex-grow: 1;
+            overflow: auto;
 
-                .alert-list {
-                    flex-grow: 1;
-                    overflow: auto;
-
-                    .alert {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        padding: $spacing-medium;
-
-                        .icon {
-                            flex-shrink: 0;
-                            padding-right: $spacing-medium;
-                            color: $color-danger;
-                            font-size: $font-size-extra-large;
-                        }
-
-                        .title {
-                            flex-grow: 1;
-                        }
-
-                        &:hover {
-                            background-color: rgba(0, 0, 0, .05);
-                        }
-                    }
-                }
+            .resource-type-selection {
+                padding: $spacing-small;
             }
 
-            .key-statistics {
-                display: flex;
-                flex-direction: column;
+            .hazard-type-selection-container {
+                margin-top: $spacing-medium;
+                padding: $spacing-small;
 
-                .header {
-                    flex-shrink: 0;
+                .hazard-type-selection {
+                    padding: $spacing-extra-small 0;
 
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
-
-                .content {
-                    padding: $spacing-medium;
-
-                    .donut-charts {
-                        display: flex;
-                        padding: $spacing-medium 0;
-
-                        .donut-chart-1 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 120px;
-                        }
-
-                        .donut-chart-2 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 120px;
-                        }
-                    }
-
-                    .pie-chart {
-                        height: 180px;
-                    }
-
-                    .horizontal-bar-chart {
-                        margin-top: $spacing-large;
-                        height: 200px;
-                    }
-
-                    .bar-chart {
-                        height: 160px;
+                    :global .radio-option {
+                        display: block;
                     }
                 }
             }
         }
     }
 
-    .filter-container {
-        position: absolute;
-        top: $height-navbar;
-        right: $spacing-medium;
-        z-index: 1;
-        width: 300px;
-        height: calc(100vh - #{$height-navbar});
+    .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
-        .container {
+        .key-statistics {
             display: flex;
             flex-direction: column;
-            background: rgba(255, 255, 255, .8);
-            padding: 0 $spacing-medium;
-            border-raidus: 5px;
-
 
             .header {
                 flex-shrink: 0;
 
                 .heading {
-                    padding: $spacing-medium $spacing-small;
+                    padding: $spacing-medium;
                     color: $color-primary;
                 }
             }
 
             .content {
-                flex-grow: 1;
-                overflow: auto;
+                padding: $spacing-medium;
 
-                .resource-type-selection {
-                    padding: $spacing-small;
+                .donut-charts {
+                    display: flex;
+                    padding: $spacing-medium 0;
+
+                    .donut-chart-1 {
+                        flex-basis: 50%;
+                        width: 100px;
+                        height: 120px;
+                    }
+
+                    .donut-chart-2 {
+                        flex-basis: 50%;
+                        width: 100px;
+                        height: 120px;
+                    }
                 }
 
-                .hazard-type-selection-container {
-                    margin-top: $spacing-medium;
-                    padding: $spacing-small;
+                .pie-chart {
+                    height: 180px;
+                }
 
-                    .hazard-type-selection {
-                        padding: $spacing-extra-small 0;
+                .horizontal-bar-chart {
+                    margin-top: $spacing-large;
+                    height: 200px;
+                }
 
-                        :global .radio-option {
-                            display: block;
-                        }
-                    }
+                .bar-chart {
+                    height: 160px;
                 }
             }
         }
     }
 
-    .map {
-        position: relative;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
+    .main {
+        .map {
+            width: 100%;
+            height: 100%;
+        }
     }
 }

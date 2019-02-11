@@ -10,7 +10,7 @@ import {
     resourceTypeList,
 } from '#resources/data';
 
-import Navbar from '#components/Navbar';
+import Page from '#components/Page';
 import RegionSelectInput from '#components/RegionSelectInput';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
@@ -91,17 +91,21 @@ export default class RiskInfo extends React.PureComponent {
         const KeyStatistics = this.renderKeyStatistics;
 
         return (
-            <div className={styles.riskInfo}>
-                <Navbar />
-                <aside className={styles.aside}>
-                    <div className={styles.container}>
-                        <KeyStatistics
-                            className={styles.keyStatistics}
-                        />
-                    </div>
-                </aside>
-                <aside className={styles.filterContainer}>
-                    <div className={styles.container}>
+            <Page
+                className={styles.riskInfo}
+                leftContentClassName={styles.left}
+                leftContent={
+                    <KeyStatistics
+                        className={styles.keyStatistics}
+                    />
+                }
+                mainContentClassName={styles.main}
+                mainContent={
+                    <Map className={styles.map} />
+                }
+                rightContentClassName={styles.right}
+                rightContent={
+                    <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
                                 Filters
@@ -128,11 +132,9 @@ export default class RiskInfo extends React.PureComponent {
                                 />
                             </div>
                         </div>
-                    </div>
-                </aside>
-
-                <Map className={styles.map} />
-            </div>
+                    </React.Fragment>
+                }
+            />
         );
     }
 }

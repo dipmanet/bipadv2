@@ -10,7 +10,7 @@ import {
     hazardTypeList,
 } from '#resources/data';
 
-import Navbar from '#components/Navbar';
+import Page from '#components/Page';
 import RegionSelectInput from '#components/RegionSelectInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
@@ -130,21 +130,24 @@ export default class Dashboard extends React.PureComponent {
 
     render() {
         const Incidents = this.renderIncidents;
-        const KeyStatistics = this.renderKeyStatistics;
 
         return (
-            <div className={styles.dashboard}>
-                <Navbar />
-                <aside className={styles.aside}>
-                    <div className={styles.container}>
-                        <Incidents
-                            className={styles.incidents}
-                            data={incidentList}
-                        />
-                    </div>
-                </aside>
-                <aside className={styles.filterContainer}>
-                    <div className={styles.container}>
+            <Page
+                className={styles.incidents}
+                leftContentClassName={styles.left}
+                leftContent={
+                    <Incidents
+                        className={styles.incidents}
+                        data={incidentList}
+                    />
+                }
+                mainContentClassName={styles.main}
+                mainContent={
+                    <Map className={styles.map} />
+                }
+                rightContentClassName={styles.right}
+                rightContent={
+                    <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
                                 Filters
@@ -159,11 +162,9 @@ export default class Dashboard extends React.PureComponent {
                                 value={['earthquake', 'wildfire']}
                             />
                         </div>
-                    </div>
-                </aside>
-
-                <Map className={styles.map} />
-            </div>
+                    </React.Fragment>
+                }
+            />
         );
     }
 }

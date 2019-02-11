@@ -1,153 +1,82 @@
 @import '~base-scss/base';
 
-.dashboard {
-    padding: 0;
-    width: 100%;
-    height: 100%;
+.incidents {
+    .right {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $spacing-medium;
 
-    .aside {
-        position: absolute;
-        top: $height-navbar + $spacing-medium;
-        left: $spacing-medium;
-        z-index: 1;
-        border-radius: 5px;
-        background: rgba(255, 255, 255, .8);
-        width: 320px;
-        height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+        .header {
+            flex-shrink: 0;
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: $spacing-medium;
-            height: 100%;
-
-            .incidents {
-                display: flex;
-                position: relative;
-                flex-direction: column;
-                
-                .header {
-                    flex-shrink: 0;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
-
-                .incident-list {
-                    flex-grow: 1;
-                    overflow: auto;
-
-                    .incident {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        padding: $spacing-medium;
-
-                        .icon {
-                            flex-shrink: 0;
-                            padding-right: $spacing-medium;
-                            color: $color-danger;
-                            font-size: $font-size-extra-large;
-                        }
-
-                        .title {
-                            flex-grow: 1;
-                        }
-
-                        &:hover {
-                            background-color: rgba(0, 0, 0, .05);
-                        }
-                    }
-                }
+            .heading {
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
             }
+        }
 
-            .key-statistics {
-                display: flex;
-                flex-direction: column;
+        .content {
+            flex-grow: 1;
+            overflow: auto;
 
-                .header {
-                    flex-shrink: 0;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
-
-                .content {
-                    padding: $spacing-medium;
-
-                    .donut-charts {
-                        display: flex;
-
-                        .donut-chart-1 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 100px;
-                        }
-
-                        .donut-chart-2 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 100px;
-                        }
-                    }
-
-                    .pie-chart {
-                        height: 200px;
-                    }
-
-                    .bar-chart {
-                        margin-top: $spacing-medium;
-                        height: 160px;
-                    }
-                }
+            .list-selection-input {
+                padding: $spacing-small;
             }
         }
     }
 
-    .filter-container {
-        position: absolute;
-        top: $height-navbar;
-        right: $spacing-medium;
-        z-index: 1;
-        width: 300px;
-        height: calc(100vh - #{$height-navbar});
+    .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
-        .container {
+        .incidents {
             display: flex;
+            position: relative;
             flex-direction: column;
-            background: rgba(255, 255, 255, .8);
-            padding: 0 $spacing-medium;
-            border-raidus: 5px;
 
             .header {
                 flex-shrink: 0;
 
                 .heading {
-                    padding: $spacing-medium $spacing-small;
+                    padding: $spacing-medium;
                     color: $color-primary;
                 }
             }
 
-            .content {
+            .incident-list {
                 flex-grow: 1;
                 overflow: auto;
 
-                .list-selection-input {
-                    padding: $spacing-small;
+                .incident {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    padding: $spacing-medium;
+
+                    .icon {
+                        flex-shrink: 0;
+                        padding-right: $spacing-medium;
+                        color: $color-danger;
+                        font-size: $font-size-extra-large;
+                    }
+
+                    .title {
+                        flex-grow: 1;
+                    }
+
+                    &:hover {
+                        background-color: rgba(0, 0, 0, .05);
+                    }
                 }
             }
         }
     }
 
-    .map {
-        position: relative;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
+    .main {
+        .map {
+            width: 100%;
+            height: 100%;
+        }
     }
 }

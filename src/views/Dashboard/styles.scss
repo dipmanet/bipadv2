@@ -1,161 +1,128 @@
 @import '~base-scss/base';
 
 .dashboard {
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    .right {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $spacing-medium;
 
-    .heading {
-        font-size: $font-size-large-alt;
-    }
+        .header {
+            flex-shrink: 0;
 
-    .aside {
-        position: absolute;
-        top: 0;
-        left: $spacing-medium;
-        padding-top: $height-navbar;
-        height: calc(100vh - #{$height-navbar});
-
-        .container {
-            //@include shadow-small();
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: $width-separator-medium solid $color-separator;
-            border-radius: 10px;
-            background-color: #fff;
-            width: 320px;
-            height: 100%;
-
-            .alerts {
-                display: flex;
-                position: relative;
-                flex-direction: column;
-
-                .header {
-                    flex-shrink: 0;
-                    border-bottom: $width-separator-thin solid $color-separator;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
-
-                .alert-list {
-                    flex-grow: 1;
-                    overflow: auto;
-
-                    .alert {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        padding: $spacing-medium;
-
-                        .icon {
-                            flex-shrink: 0;
-                            padding-right: $spacing-medium;
-                            color: $color-danger;
-                            font-size: $font-size-extra-large;
-                        }
-
-                        .title {
-                            flex-grow: 1;
-                        }
-
-                        &:hover {
-                            background-color: rgba(0, 0, 0, .05);
-                        }
-                    }
-                }
+            .heading {
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
             }
+        }
 
-            .key-statistics {
-                display: flex;
-                flex-direction: column;
+        .content {
+            flex-grow: 1;
+            overflow: auto;
 
-                .header {
-                    flex-shrink: 0;
-                    border-bottom: $width-separator-thin solid $color-separator;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        color: $color-primary;
-                    }
-                }
-
-                .content {
-                    padding: $spacing-medium;
-
-                    .donut-charts {
-                        display: flex;
-
-                        .donut-chart-1 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 100px;
-                        }
-
-                        .donut-chart-2 {
-                            flex-basis: 50%;
-                            width: 100px;
-                            height: 100px;
-                        }
-                    }
-
-                    .pie-chart {
-                        height: 200px;
-                    }
-
-                    .bar-chart {
-                        margin-top: $spacing-medium;
-                        height: 160px;
-                    }
-                }
+            .list-selection-input {
+                padding: $spacing-small;
             }
         }
     }
 
-    .filter-container {
-        position: absolute;
-        top: 0;
-        right: $spacing-medium;
-        padding-top: $height-navbar;
-        width: 300px;
-        height: calc(100vh - #{$height-navbar});
 
-        .container {
-            @include shadow-medium();
+    .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .alerts {
             display: flex;
+            position: relative;
             flex-direction: column;
-            border: $width-separator-thin solid $color-separator;
-            background: #fff;
-            padding: 0 $spacing-medium;
-            border-raidus: 5px;
 
             .header {
                 flex-shrink: 0;
+                border-bottom: $width-separator-thin solid $color-separator;
 
                 .heading {
-                    padding: $spacing-medium $spacing-small;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
+            }
+
+            .alert-list {
+                flex-grow: 1;
+                overflow: auto;
+
+                .alert {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    padding: $spacing-medium;
+
+                    .icon {
+                        flex-shrink: 0;
+                        padding-right: $spacing-medium;
+                        color: $color-danger;
+                        font-size: $font-size-extra-large;
+                    }
+
+                    .title {
+                        flex-grow: 1;
+                    }
+
+                    &:hover {
+                        background-color: rgba(0, 0, 0, .05);
+                    }
+                }
+            }
+        }
+
+        .key-statistics {
+            display: flex;
+            flex-direction: column;
+
+            .header {
+                flex-shrink: 0;
+                border-bottom: $width-separator-thin solid $color-separator;
+
+                .heading {
+                    padding: $spacing-medium;
                     color: $color-primary;
                 }
             }
 
             .content {
-                flex-grow: 1;
-                overflow: auto;
+                padding: $spacing-medium;
 
-                .list-selection-input {
-                    padding: $spacing-small;
+                .donut-charts {
+                    display: flex;
+
+                    .donut-chart-1 {
+                        flex-basis: 50%;
+                        width: 100px;
+                        height: 100px;
+                    }
+
+                    .donut-chart-2 {
+                        flex-basis: 50%;
+                        width: 100px;
+                        height: 100px;
+                    }
+                }
+
+                .pie-chart {
+                    height: 200px;
+                }
+
+                .bar-chart {
+                    margin-top: $spacing-medium;
+                    height: 160px;
                 }
             }
         }
     }
 
-    .map {
-        position: relative;
-        width: 100%;
-        height: 100%;
+    .main {
+        .map {
+            width: 100%;
+            height: 100%;
+        }
     }
 }
