@@ -35,15 +35,15 @@ export default class Page extends React.PureComponent {
 
         return (
             <div className={_cs(styles.page, className)}>
-                { leftContent && (
-                    <aside className={_cs(styles.leftContent, leftContentClassName)}>
-                        { leftContent }
-                    </aside>
-                ) }
                 { mainContent && (
                     <main className={_cs(styles.mainContent, mainContentClassName)}>
                         { mainContent }
                     </main>
+                ) }
+                { leftContent && (
+                    <aside className={_cs(styles.leftContent, leftContentClassName)}>
+                        { leftContent }
+                    </aside>
                 ) }
                 { rightContent && (
                     <aside className={_cs(styles.rightContent, rightContentClassName)}>

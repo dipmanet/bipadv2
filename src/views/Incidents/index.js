@@ -19,6 +19,7 @@ import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import ListSelection from '#rsci/ListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
+import { basicColor } from '#constants/colorScheme';
 
 import _cs from '#cs';
 import styles from './styles.scss';
@@ -102,10 +103,12 @@ export default class Dashboard extends React.PureComponent {
                             labelSelector={donutChartLabelSelector}
                             valueSelector={donutChartValueSelector}
                             sideLengthRatio={0.3}
+                            colorScheme={basicColor}
                         />
                         <DonutChart
                             className={styles.donutChart2}
                             data={donutChartData2}
+                            colorScheme={basicColor}
                             labelSelector={donutChartLabelSelector}
                             valueSelector={donutChartValueSelector}
                             sideLengthRatio={0.3}
@@ -113,6 +116,7 @@ export default class Dashboard extends React.PureComponent {
                     </div>
                     <PieChart
                         className={styles.pieChart}
+                        colorScheme={basicColor}
                         data={pieChartData}
                         labelSelector={pieChartLabelSelector}
                         valueSelector={pieChartValueSelector}

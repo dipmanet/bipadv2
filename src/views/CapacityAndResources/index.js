@@ -20,6 +20,7 @@ import RadioInput from '#rsci/RadioInput';
 import ListSelection from '#rsci/ListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
+import { basicColor } from '#constants/colorScheme';
 
 import _cs from '#cs';
 import styles from './styles.scss';
@@ -60,12 +61,14 @@ export default class CapacityAndResources extends React.PureComponent {
                             data={donutChartData1}
                             labelSelector={donutChartLabelSelector}
                             valueSelector={donutChartValueSelector}
+                            colorScheme={basicColor}
                             sideLengthRatio={0.3}
                         />
                         <DonutChart
                             className={styles.donutChart2}
                             data={donutChartData2}
                             labelSelector={donutChartLabelSelector}
+                            colorScheme={basicColor}
                             valueSelector={donutChartValueSelector}
                             sideLengthRatio={0.3}
                         />
@@ -80,6 +83,7 @@ export default class CapacityAndResources extends React.PureComponent {
                         className={styles.pieChart}
                         data={pieChartData}
                         labelSelector={pieChartLabelSelector}
+                        colorScheme={basicColor}
                         valueSelector={pieChartValueSelector}
                     />
                 </div>

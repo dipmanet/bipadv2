@@ -13,7 +13,6 @@ $width-right-panel: 280px;
         position: absolute;
         top: $height-navbar + $spacing-medium;
         left: $spacing-medium;
-        z-index: 1;
         border: $width-separator-medium solid $color-separator;
         background: $color-foreground;
         width: $width-left-panel;
@@ -21,7 +20,6 @@ $width-right-panel: 280px;
     }
 
     .main-content {
-        z-index: 0;
         width: 100%;
         height: 100%;
     }
@@ -30,7 +28,6 @@ $width-right-panel: 280px;
         position: absolute;
         top: $height-navbar + $spacing-medium;
         right: $spacing-medium;
-        z-index: 1;
         border: $width-separator-medium solid $color-separator;
         background: $color-foreground;
         width: $width-right-panel;

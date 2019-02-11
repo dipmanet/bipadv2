@@ -50,6 +50,38 @@ export const routes = {
         links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
+    lossAndDamage: {
+        order: 4,
+        type: ROUTE.public,
+        path: '/incidents',
+        loader: () => import('../views/Incidents'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'incidents');
+
+    drrProfileMapping: {
+        order: 4,
+        type: ROUTE.public,
+        path: '/incidents',
+        loader: () => import('../views/Incidents'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'incidents');
+
+    policyAndPublication: {
+        order: 4,
+        type: ROUTE.public,
+        path: '/incidents',
+        loader: () => import('../views/Incidents'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'incidents');
+
+    aboutUs: {
+        order: 4,
+        type: ROUTE.public,
+        path: '/incidents',
+        loader: () => import('../views/Incidents'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'incidents');
+
     projectDenied: {
         order: 970,
         type: ROUTE.public,

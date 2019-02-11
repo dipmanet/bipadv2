@@ -1,5 +1,7 @@
 @import '~base-scss/base';
 
+$height-menu: 160px;
+
 .navbar {
     display: flex;
     position: absolute;
@@ -33,5 +35,61 @@
     .menu-button {
         padding: $spacing-extra-small $spacing-medium;
         font-size: $font-size-extra-large;
+    }
+
+    .menu {
+        @include transition-medium();
+        display: flex;
+        position: absolute;
+        top: -$height-menu;
+        right: 0;
+        flex-direction: column;
+        z-index: 10;
+        border: $width-separator-thin solid $color-separator;
+        background-color: rgba(255, 255, 255, .98);
+        padding: $spacing-large;
+        width: 100vw;
+        height: $height-menu;
+        overflow-y: auto;
+
+        &.shown {
+            top: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+
+            .menu-close-button {
+                font-size: $font-size-extra-large;
+            }
+        }
+
+        .menu-items {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            .menu-item {
+                @include transition-fast;
+                margin: $spacing-medium 0;
+                border: $width-separator-thin solid $color-accent;
+                border-radius: 4px;
+                background-color: $color-foreground;
+                cursor: pointer;
+                padding: $spacing-medium $spacing-large;
+                text-decoration: none;
+                color: $color-accent;
+                font-size: $font-size-large;
+
+                &:hover {
+                    border-color: $color-separator;
+                    background-color: $color-accent;
+                    color: $color-foreground;
+                }
+            }
+        }
     }
 }
