@@ -17,21 +17,27 @@ export const alertList = [
         lat: 28.2063,
         lng: 85.6229,
     },
+];
+
+export const incidentList = [
     {
-        id: 4,
-        title: '5.6 magnitude earthquake hits Taplejung',
+        id: 1,
+        title: 'A tragic earthquake of 3.2 ritcher scale was reported which cause the loss of serveral ants',
         lat: 27.6257,
         lng: 87.7763,
+        timestamp: 1549812836124,
+        locationName: 'Taplejung',
+        hazard: 'earthquake',
     },
     {
-        id: 5,
-        title: 'Pollution level exceeds 150ppm in Kathmandu',
+        id: 2,
+        title: 'Incident 2',
         lat: 27.7172,
         lng: 85.3240,
     },
     {
-        id: 6,
-        title: 'Avalanche due to heavy rainfall in the Langtang region',
+        id: 3,
+        title: 'Incident 3',
         lat: 28.2063,
         lng: 85.6229,
     },

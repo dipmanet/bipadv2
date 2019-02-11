@@ -21,8 +21,8 @@ const defaultProps = {
 const nepalBounds = turf.bbox(nepalGeoJson);
 
 const boundsFill = {
-    'fill-color': '#00897B',
-    'fill-opacity': 0.4,
+    'fill-color': '#0081f0',
+    'fill-opacity': 0.1,
 };
 
 const boundsOutline = {
@@ -33,27 +33,21 @@ const boundsOutline = {
 
 const pointsOuter = {
     'circle-color': '#000',
-    'circle-radius': 14,
+    'circle-radius': 10,
     'circle-opacity': 0.4,
 };
 
 const pointsInner = {
-    'circle-color': '#f37123',
-    'circle-radius': 10,
+    'circle-color': '#f04656',
+    'circle-radius': 7,
     'circle-opacity': 1,
 };
 
 const hoverPaint = {
-    'circle-color': '#f37123',
+    'circle-color': '#f04656',
     'circle-radius': 10,
     'circle-opacity': 1,
 };
-const rcDataParams = (key, data) => ({
-    title: data.name,
-    value: data.value,
-});
-
-const keySelector = d => d.name;
 
 export default class ProjectsMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -99,7 +93,7 @@ export default class ProjectsMap extends React.PureComponent {
             <Map
                 className={className}
                 bounds={nepalBounds}
-                fitBoundsDuration={10}
+                fitBoundsDuration={200}
             >
                 <MapSource
                     sourceKey="bounds"
@@ -114,6 +108,27 @@ export default class ProjectsMap extends React.PureComponent {
                         layerKey="bounds-outline"
                         type="line"
                         paint={boundsOutline}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="points"
+                    geoJson={points}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="points-red"
+                        type="circle"
+                        paint={pointsOuter}
+                        property="id"
+                        onClick={this.handlePointClick}
+                    />
+                    <MapLayer
+                        layerKey="points"
+                        type="circle"
+                        paint={pointsInner}
+                        property="id"
+                        onClick={this.handlePointClick}
+                        hoverInfo={this.hoverInfo}
                     />
                 </MapSource>
             </Map>

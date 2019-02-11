@@ -2,11 +2,11 @@ import React from 'react';
 import Map from '#components/ProjectsMap';
 
 import {
-    alertList,
     barChartData,
     pieChartData,
     donutChartData1,
     donutChartData2,
+    incidentList,
     hazardTypeList,
 } from '#resources/data';
 
@@ -24,7 +24,7 @@ import _cs from '#cs';
 import styles from './styles.scss';
 
 const emptyObject = {};
-const alertKeySelector = d => d.id;
+const incidentKeySelector = d => d.id;
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
@@ -35,32 +35,13 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
-const getFeatureCollectionFromPoints = (points) => {
-    const geojson = {
-        type: 'FeatureCollection',
-        features: points.map(point => ({
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [point.lng, point.lat],
-            },
-            properties: {
-                title: point.title,
-                description: point.description,
-            },
-        })),
-    };
-
-    return geojson;
-};
-
 export default class Dashboard extends React.PureComponent {
-    getAlertRendererParams = (_, d) => ({
+    getIncidentRendererParams = (_, d) => ({
         data: d,
-        className: styles.alert,
+        className: styles.incident,
     });
 
-    renderAlert = ({
+    renderIncident = ({
         className,
         data: {
             title,
@@ -79,25 +60,25 @@ export default class Dashboard extends React.PureComponent {
         </div>
     );
 
-    renderAlerts = ({
+    renderIncidents = ({
         className,
         data,
     }) => {
-        console.warn('rendering alerts');
+        console.warn('rendering incidents');
 
         return (
             <div className={className}>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Alerts
+                        Incidents
                     </h4>
                 </header>
                 <ListView
-                    className={styles.alertList}
+                    className={styles.incidentList}
                     data={data}
-                    renderer={this.renderAlert}
-                    rendererParams={this.getAlertRendererParams}
-                    keySelector={alertKeySelector}
+                    renderer={this.renderIncident}
+                    rendererParams={this.getIncidentRendererParams}
+                    keySelector={incidentKeySelector}
                 />
             </div>
         );
@@ -148,21 +129,17 @@ export default class Dashboard extends React.PureComponent {
     }
 
     render() {
-        const Alerts = this.renderAlerts;
+        const Incidents = this.renderIncidents;
         const KeyStatistics = this.renderKeyStatistics;
-        const featureCollection = getFeatureCollectionFromPoints(alertList);
 
         return (
             <div className={styles.dashboard}>
                 <Navbar />
                 <aside className={styles.aside}>
                     <div className={styles.container}>
-                        <Alerts
-                            className={styles.alerts}
-                            data={alertList}
-                        />
-                        <KeyStatistics
-                            className={styles.keyStatistics}
+                        <Incidents
+                            className={styles.incidents}
+                            data={incidentList}
                         />
                     </div>
                 </aside>
@@ -185,10 +162,7 @@ export default class Dashboard extends React.PureComponent {
                     </div>
                 </aside>
 
-                <Map
-                    points={featureCollection}
-                    className={styles.map}
-                />
+                <Map className={styles.map} />
             </div>
         );
     }

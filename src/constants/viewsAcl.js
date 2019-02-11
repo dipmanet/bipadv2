@@ -10,6 +10,7 @@ const acl = {
     dashboard: {},
     riskInfo: {},
     capacityAndResources: {},
+    inicidents: {},
 
     projectDenied: {},
     fourHundredThree: {},
