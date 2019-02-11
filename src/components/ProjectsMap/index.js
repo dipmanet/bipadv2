@@ -57,23 +57,36 @@ export default class ProjectsMap extends React.PureComponent {
         super(props);
 
         this.state = {
-            currentHoverId: undefined,
+            currentHoverData: undefined,
         };
 
         this.hoverInfo = {
             paint: hoverPaint,
             showTooltip: true,
             tooltipProperty: 'name',
+            tooltipModifier: this.renderTooltip,
             onMouseOver: this.handleMapPointHover,
         };
     }
 
     handleMapPointHover = (data = {}) => {
-        this.setState({ currentHoverId: data.id });
+        this.setState({ currentHoverData: data.title });
     }
 
     handlePointClick = (id) => {
         window.open(`#/${id}`, '_blank');
+    }
+
+    renderTooltip = () => {
+        const { currentHoverData } = this.state;
+
+        return (
+            <div className={styles.hoverInfo}>
+                <h4>
+                    {currentHoverData}
+                </h4>
+            </div>
+        );
     }
 
     render() {
@@ -88,7 +101,6 @@ export default class ProjectsMap extends React.PureComponent {
             'projects-map',
         ].join(' ');
 
-        console.warn(process.env);
         return (
             <Map
                 className={className}
