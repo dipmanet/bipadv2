@@ -4,6 +4,7 @@
 /node_modules
 vendor/
 src/public/
+generated/
 /.pnp
 .pnp.js
 
@@ -29,3 +30,5 @@ generated/
 *.tmp
 *.bak
 *.swp
+
+src/generated/*
