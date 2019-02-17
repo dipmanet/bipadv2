@@ -1,82 +1,80 @@
 @import '~base-scss/base';
 
-.incidents {
-    .right {
+.right {
+    display: flex;
+    flex-direction: column;
+    padding: 0 $spacing-medium;
+
+    .header {
+        flex-shrink: 0;
+
+        .heading {
+            padding: $spacing-medium $spacing-small;
+            color: $color-primary;
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: auto;
+
+        .list-selection-input {
+            padding: $spacing-small;
+        }
+    }
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .incidents {
         display: flex;
+        position: relative;
         flex-direction: column;
-        padding: 0 $spacing-medium;
 
         .header {
             flex-shrink: 0;
 
             .heading {
-                padding: $spacing-medium $spacing-small;
+                padding: $spacing-medium;
                 color: $color-primary;
             }
         }
 
-        .content {
+        .incident-list {
             flex-grow: 1;
             overflow: auto;
 
-            .list-selection-input {
-                padding: $spacing-small;
-            }
-        }
-    }
+            .incident {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                padding: $spacing-medium;
 
-    .left {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .incidents {
-            display: flex;
-            position: relative;
-            flex-direction: column;
-
-            .header {
-                flex-shrink: 0;
-
-                .heading {
-                    padding: $spacing-medium;
-                    color: $color-primary;
+                .icon {
+                    flex-shrink: 0;
+                    padding-right: $spacing-medium;
+                    color: $color-danger;
+                    font-size: $font-size-extra-large;
                 }
-            }
 
-            .incident-list {
-                flex-grow: 1;
-                overflow: auto;
+                .title {
+                    flex-grow: 1;
+                }
 
-                .incident {
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    padding: $spacing-medium;
-
-                    .icon {
-                        flex-shrink: 0;
-                        padding-right: $spacing-medium;
-                        color: $color-danger;
-                        font-size: $font-size-extra-large;
-                    }
-
-                    .title {
-                        flex-grow: 1;
-                    }
-
-                    &:hover {
-                        background-color: rgba(0, 0, 0, .05);
-                    }
+                &:hover {
+                    background-color: rgba(0, 0, 0, .05);
                 }
             }
         }
     }
+}
 
-    .main {
-        .map {
-            width: 100%;
-            height: 100%;
-        }
+.main {
+    .map {
+        width: 100%;
+        height: 100%;
     }
 }

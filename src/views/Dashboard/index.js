@@ -13,6 +13,7 @@ import {
 import Page from '#components/Page';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
+import SelectInput from '#rsci/SelectInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
@@ -36,6 +37,9 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
+const pastDataKeySelector = d => d.key;
+const pastDataLabelSelector = d => d.label;
+
 const getFeatureCollectionFromPoints = (points) => {
     const geojson = {
         type: 'FeatureCollection',
@@ -54,6 +58,25 @@ const getFeatureCollectionFromPoints = (points) => {
 
     return geojson;
 };
+
+const pastDataSelectOptions = [
+    {
+        label: 'Last 3 days',
+        key: 'past3Days',
+    },
+    {
+        label: 'Last 7 days',
+        key: 'past7Days',
+    },
+    {
+        label: 'Last 2 weeks',
+        key: 'past2Weeks',
+    },
+    {
+        label: 'Last 1 month',
+        key: 'past1Month',
+    },
+];
 
 export default class Dashboard extends React.PureComponent {
     getAlertRendererParams = (_, d) => ({
@@ -187,6 +210,15 @@ export default class Dashboard extends React.PureComponent {
                             </h4>
                         </header>
                         <div className={styles.content}>
+                            <SelectInput
+                                value="past7Days"
+                                label="Data range"
+                                className={styles.pastDataSelectInput}
+                                keySelector={pastDataKeySelector}
+                                labelSelector={pastDataLabelSelector}
+                                options={pastDataSelectOptions}
+                                onChange={() => {}}
+                            />
                             <RegionSelectInput />
                             <MultiListSelection
                                 className={styles.listSelectionInput}

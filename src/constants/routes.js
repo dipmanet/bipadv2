@@ -29,7 +29,7 @@ export const routes = {
     riskInfo: {
         order: 2,
         type: ROUTE.public,
-        path: '/risk-info',
+        path: '/risk-info/',
         loader: () => import('../views/RiskInfo'),
         links: allLinks,
     }, // _ts('pageTitle', 'riskInfo');
@@ -37,7 +37,7 @@ export const routes = {
     capacityAndResources: {
         order: 3,
         type: ROUTE.public,
-        path: '/capacity-and-resources',
+        path: '/capacity-and-resources/',
         loader: () => import('../views/CapacityAndResources'),
         links: allLinks,
     }, // _ts('pageTitle', 'capacityAndResources');
@@ -45,7 +45,7 @@ export const routes = {
     incidents: {
         order: 4,
         type: ROUTE.public,
-        path: '/incidents',
+        path: '/incidents/',
         loader: () => import('../views/Incidents'),
         links: allLinks,
     }, // _ts('pageTitle', 'incidents');

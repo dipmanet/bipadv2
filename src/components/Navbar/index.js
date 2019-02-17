@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Link from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { reverseRoute } from '#rsu/common';
 import Button from '#rsca/Button';
@@ -62,12 +62,12 @@ const MenuItem = ({
     title,
     link,
 }) => (
-    <a
+    <Link
         className={_cs(className, styles.menuItem)}
-        href={reverseRoute(pathNames[link], {})}
+        to={reverseRoute(pathNames[link], {})}
     >
         {title}
-    </a>
+    </Link>
 );
 
 export default class Navbar extends React.PureComponent {

@@ -1,16 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import turf from 'turf';
 import {
     Switch,
     Route,
     withRouter,
 } from 'react-router-dom';
+import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
+import Map from '#rscz/Map/index';
 import ExclusivelyPublicRoute from '#rscg/ExclusivelyPublicRoute';
 import PrivateRoute from '#rscg/PrivateRoute';
 import Toast from '#rscv/Toast';
 import Navbar from '#components/Navbar';
+import nepalGeoJson from '#resources/districts.json';
 
 import RouteSynchronizer from '#components/general/RouteSynchronizer';
 
@@ -27,6 +31,7 @@ import {
     lastNotifySelector,
     notifyHideAction,
 } from '#redux';
+import styles from './styles.scss';
 
 const ROUTE = {
     exclusivelyPublic: 'exclusively-public',
@@ -34,6 +39,7 @@ const ROUTE = {
     private: 'private',
 };
 
+const nepalBounds = turf.bbox(nepalGeoJson);
 const views = mapObjectToObject(
     routes,
     (route, name) => props => (
@@ -67,12 +73,14 @@ const mapDispatchToProps = dispatch => ({
 export default class Multiplexer extends React.PureComponent {
     static propTypes = propTypes;
 
+    getMapRoutes = memoize(ro => ro.map(this.renderRoute))
+
     handleToastClose = () => {
         const { notifyHide } = this.props;
         notifyHide();
     }
 
-    renderRoute = (routeId) => {
+    renderRoute = memoize((routeId) => {
         const view = views[routeId];
         if (!view) {
             console.error(`Cannot find view associated with routeID: ${routeId}`);
@@ -119,12 +127,14 @@ export default class Multiplexer extends React.PureComponent {
                 console.error(`Invalid route type ${type}`);
                 return null;
         }
-    }
+    })
 
     render() {
         const {
             lastNotify,
         } = this.props;
+
+        const mapRoutes = this.getMapRoutes(routesOrder);
 
         return (
             <Fragment>
@@ -134,9 +144,17 @@ export default class Multiplexer extends React.PureComponent {
                 />
                 <Navbar />
                 <div className="deep-main-content">
-                    <Switch>
-                        { routesOrder.map(this.renderRoute) }
-                    </Switch>
+                    <Map
+                        className={styles.map}
+                        bounds={nepalBounds}
+                        boundsPadding={160}
+                        fitBoundsDuration={200}
+                        hideNavControl
+                    >
+                        <Switch>
+                            {mapRoutes}
+                        </Switch>
+                    </Map>
                 </div>
             </Fragment>
         );

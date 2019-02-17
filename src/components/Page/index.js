@@ -34,7 +34,7 @@ export default class Page extends React.PureComponent {
         } = this.props;
 
         return (
-            <div className={_cs(styles.page, className)}>
+            <React.Fragment >
                 { mainContent && (
                     <main className={_cs(styles.mainContent, mainContentClassName)}>
                         { mainContent }
@@ -50,7 +50,7 @@ export default class Page extends React.PureComponent {
                         { rightContent }
                     </aside>
                 ) }
-            </div>
+            </React.Fragment>
         );
     }
 }

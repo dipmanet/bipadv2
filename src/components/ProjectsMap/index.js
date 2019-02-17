@@ -58,6 +58,7 @@ export default class ProjectsMap extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        console.warn('this is here');
         this.state = {
             currentHoverData: undefined,
         };
@@ -105,13 +106,7 @@ export default class ProjectsMap extends React.PureComponent {
         ].join(' ');
 
         return (
-            <Map
-                className={className}
-                bounds={nepalBounds}
-                boundsPadding={160}
-                fitBoundsDuration={200}
-                hideNavControl
-            >
+            <React.Fragment>
                 <MapSource
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
@@ -171,7 +166,7 @@ export default class ProjectsMap extends React.PureComponent {
                         hoverInfo={this.hoverInfo}
                     />
                 </MapSource>
-            </Map>
+            </React.Fragment>
         );
     }
 }

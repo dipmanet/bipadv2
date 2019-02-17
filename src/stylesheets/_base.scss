@@ -16,11 +16,11 @@ $font-weight-heading: 500;
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
     color: $color-text;
     font-family: $font-family-sans-serif;
     font-size: $font-size-default;
     font-weight: $font-weight-default;
-    overflow: hidden;
 
     h1,
     h2,
@@ -44,7 +44,6 @@ body {
     // @frozenhelium
     transform-origin: bottom;
     border: $width-separator-thin solid $color-separator-alt;
-    background-color: $color-background-alt;
     height: 100%;
     animation: slide-in $duration-slow ease forwards;
 }

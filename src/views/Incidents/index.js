@@ -147,9 +147,7 @@ export default class Dashboard extends React.PureComponent {
                 }
                 mainContentClassName={styles.main}
                 mainContent={
-                    <Map
-                        className={styles.map}
-                    />
+                    <Map className={styles.map} />
                 }
                 rightContentClassName={styles.right}
                 rightContent={

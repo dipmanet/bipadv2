@@ -4,34 +4,38 @@ $width-left-panel: 320px;
 $width-right-panel: 280px;
 
 .page {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     overflow: auto;
 
-    .left-content {
-        position: absolute;
-        top: $height-navbar + $spacing-medium;
-        left: $spacing-medium;
-        border: $width-separator-medium solid $color-separator;
-        background: $color-foreground;
-        width: $width-left-panel;
-        height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
-    }
+}
+.left-content {
+    position: absolute;
+    top: $height-navbar + $spacing-medium;
+    left: $spacing-medium;
+    z-index: 1;
+    border: $width-separator-medium solid $color-separator;
+    background: $color-foreground;
+    width: $width-left-panel;
+    height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+}
 
-    .main-content {
-        width: 100%;
-        height: 100%;
-    }
+.main-content {
+    width: 0;
+    height: 0;
+}
 
-    .right-content {
-        position: absolute;
-        top: $height-navbar + $spacing-medium;
-        right: $spacing-medium;
-        border: $width-separator-medium solid $color-separator;
-        background: $color-foreground;
-        width: $width-right-panel;
-        height: auto;
-        // height: calc(100vh - #{$height-navbar + $spacing-medium * 2})
-    }
+.right-content {
+    position: absolute;
+    top: $height-navbar + $spacing-medium;
+    right: $spacing-medium;
+    z-index: 1;
+    border: $width-separator-medium solid $color-separator;
+    background: $color-foreground;
+    width: $width-right-panel;
+    height: auto;
+    // height: calc(100vh - #{$height-navbar + $spacing-medium * 2})
 }
