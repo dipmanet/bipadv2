@@ -142,7 +142,6 @@ export default class Multiplexer extends React.PureComponent {
                     notification={lastNotify}
                     onClose={this.handleToastClose}
                 />
-                <Navbar />
                 <div className="deep-main-content">
                     <Map
                         className={styles.map}
@@ -156,6 +155,7 @@ export default class Multiplexer extends React.PureComponent {
                         </Switch>
                     </Map>
                 </div>
+                <Navbar />
             </Fragment>
         );
     }

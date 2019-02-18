@@ -1,7 +1,6 @@
 @import '~base-scss/base';
 
 $height-menu: 160px;
-$width-menu: 296px;
 
 .navbar {
     display: flex;
@@ -43,12 +42,12 @@ $width-menu: 296px;
         display: flex;
         position: absolute;
         top: 0;
-        right: -$width-menu;
+        right: 0;
         flex-direction: column;
         z-index: 10;
-        border: $width-separator-thin solid $color-separator;
+        border-left: $width-separator-thin solid $color-separator;
         background-color: rgba(255, 255, 255, .98);
-        width: $width-menu;
+        width: $width-navbar;
         height: 100vh;
         overflow-y: auto;
 
@@ -73,19 +72,53 @@ $width-menu: 296px;
             flex-grow: 1;
 
             .menu-item {
-                @include transition-fast;
-                border-top: $width-separator-thin solid $color-separator;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                border-top: $width-separator-thin solid $color-separator-light;
                 background-color: $color-foreground;
                 cursor: pointer;
-                padding: $spacing-large-alt $spacing-large;
+                padding: $spacing-large;
                 text-decoration: none;
-                color: $color-accent;
-                font-size: $font-size-large;
+                color: $color-text-label;
+                @include transition-medium;
+
+                .icon {
+                    @include transition-medium;
+                    opacity: .6;
+                    margin-bottom: $spacing-small;
+                    font-size: $font-size-super-large;
+                }
+
+                .menu-title {
+                    @include transition-medium;
+                    text-align: center;
+                    font-size: $font-size-small;
+                }
 
                 &:hover {
-                    border-color: $color-separator;
-                    background-color: $color-accent;
-                    color: $color-foreground;
+                    color: $color-text;
+
+                    .icon {
+                        opacity: 1;
+                    }
+                }
+
+                &.selected {
+                    color: $color-accent;
+
+                    .icon {
+                        opacity: 1;
+                    }
+                }
+
+                &.disabled {
+                    color: $color-text-disabled;
+
+                    .icon {
+                        opacity: .6;
+                    }
                 }
 
                 &:last-child {

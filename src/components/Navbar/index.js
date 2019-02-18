@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { reverseRoute } from '#rsu/common';
@@ -10,6 +11,9 @@ import {
     pathNames,
     iconNames,
 } from '#constants';
+
+import { routePathKeySelector } from '#redux';
+
 import _cs from '#cs';
 
 import styles from './styles.scss';
@@ -26,34 +30,38 @@ const pages = [
     {
         title: 'Dashboard',
         link: 'dashboard',
+        iconName: iconNames.dashboard,
+        disabled: false,
     },
     {
         title: 'Risk Information',
         link: 'riskInfo',
-    },
-    {
-        title: 'Capacity & Resources',
-        link: 'capacityAndResources',
+        iconName: iconNames.riskMap,
+        disabled: false,
     },
     {
         title: 'Incidents',
         link: 'incidents',
+        iconName: iconNames.incidents,
+        disabled: false,
     },
     {
         title: 'Loss & Damage',
         link: 'lossAndDamage',
+        iconName: iconNames.lossAndDamange,
+        disabled: true,
     },
     {
-        title: 'DRR Profile Mapping',
+        title: 'Profile Mapping',
         link: 'drrProfileMapping',
-    },
-    {
-        title: 'Policy & Publications',
-        link: 'policyAndPublication',
+        iconName: iconNames.drrProfileMapping,
+        disabled: true,
     },
     {
         title: 'About Us',
         link: 'aboutUs',
+        iconName: iconNames.aboutUs,
+        disabled: true,
     },
 ];
 
@@ -61,16 +69,53 @@ const MenuItem = ({
     className,
     title,
     link,
+    iconName,
+    routeKey,
+    disabled,
 }) => (
     <Link
-        className={_cs(className, styles.menuItem)}
-        to={reverseRoute(pathNames[link], {})}
+        className={
+            _cs(
+                className,
+                styles.menuItem,
+                routeKey === link && styles.selected,
+                disabled && styles.disabled,
+            )
+        }
+        to={!disabled && reverseRoute(pathNames[link], {})}
     >
-        {title}
+        <span
+            className={_cs(iconName, styles.icon)}
+            title={title}
+        />
+        <div className={styles.menuTitle}>
+            {title}
+        </div>
     </Link>
 );
 
-export default class Navbar extends React.PureComponent {
+MenuItem.propTypes = {
+    className: PropTypes.string,
+    title: PropTypes.string,
+    link: PropTypes.string,
+    iconName: PropTypes.string,
+    routeKey: PropTypes.string,
+    disabled: PropTypes.bool.isRequired,
+};
+
+MenuItem.defaultProps = {
+    className: '',
+    title: '',
+    link: '',
+    iconName: '',
+    routeKey: '',
+};
+
+const mapStateToProps = state => ({
+    routeKey: routePathKeySelector(state),
+});
+
+class Navbar extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -93,10 +138,16 @@ export default class Navbar extends React.PureComponent {
     menuRendererParams = (key, data) => ({
         title: data.title,
         link: data.link,
+        iconName: data.iconName,
+        routeKey: this.props.routeKey,
+        disabled: data.disabled,
     });
 
     render() {
-        const { className: classNameFromProps } = this.props;
+        const {
+            className: classNameFromProps,
+        } = this.props;
+
         const { menuShown } = this.state;
 
         const className = _cs(
@@ -114,13 +165,8 @@ export default class Navbar extends React.PureComponent {
                         )
                     }
                 >
+                    {/*
                     <header>
-                        <div className={styles.logo}>
-                            <div className={styles.left} />
-                            <div className={styles.right}>
-                                Bipad
-                            </div>
-                        </div>
                         <Button
                             className={styles.menuCloseButton}
                             iconName={iconNames.close}
@@ -130,6 +176,7 @@ export default class Navbar extends React.PureComponent {
                             smallVerticalPadding
                         />
                     </header>
+                    */}
                     <ListView
                         data={pages}
                         keySelector={Navbar.menuKeySelector}
@@ -144,6 +191,7 @@ export default class Navbar extends React.PureComponent {
                         Bipad
                     </div>
                 </div>
+                {/*
                 <Button
                     className={styles.menuButton}
                     iconName={iconNames.menu}
@@ -152,7 +200,10 @@ export default class Navbar extends React.PureComponent {
                     smallHorizontalPadding
                     smallVerticalPadding
                 />
+                */}
             </nav>
         );
     }
 }
+
+export default connect(mapStateToProps)(Navbar);

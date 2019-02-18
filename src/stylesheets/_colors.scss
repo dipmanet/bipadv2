@@ -37,6 +37,8 @@ $color-accent-light: #1080ff;
 $color-accent-dark: #c34176;
 $color-accent: get-color($color-accent-light, $color-accent-dark);
 
+$color-secondary-accent: #f04656;
+
 $color-info-light: #41a1f0;
 $color-info-dark: #41a1f0;
 $color-info: get-color($color-info-light, $color-info-dark);
@@ -115,6 +117,9 @@ $color-background-input: #f9f9f9;
 $color-separator-on-light: rgba(0, 0, 0, .1);
 $color-separator-on-dark: rgba(255, 255, 255, .08);
 $color-separator: get-color($color-separator-on-light, $color-separator-on-dark);
+
+$color-separator-light: rgba(0, 0, 0, .05);
+
 
 $color-separator-on-light-alt: rgba(0, 0, 0, .2);
 $color-separator-on-dark-alt: rgba(255, 255, 255, .17);
