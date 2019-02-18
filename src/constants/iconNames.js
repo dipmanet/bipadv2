@@ -1,7 +1,7 @@
 const iconNames = {
     // alert: 'ion-md-alert',
     alert: 'ion-android-alert',
-    menu: 'ion-md-menu',
+    menu: 'ion-android-menu',
     close: 'ion-close',
 
     dashboard: 'ion-android-home',
@@ -10,6 +10,11 @@ const iconNames = {
     lossAndDamange: 'ion-ios-clock',
     drrProfileMapping: 'ion-briefcase',
     aboutUs: 'ion-ios-information',
+
+    filter: 'ion-android-funnel',
+    chevronUp: 'ion-chevron-up',
+    chevronRight: 'ion-chevron-right',
+    chevronLeft: 'ion-chevron-left',
 };
 
 export default iconNames;

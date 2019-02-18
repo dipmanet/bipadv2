@@ -3,14 +3,21 @@
 .right {
     display: flex;
     flex-direction: column;
-    padding: 0 $spacing-medium;
+    // padding: 0 $spacing-medium;
 
     .header {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
 
         .heading {
+            flex-grow: 1;
             padding: $spacing-medium $spacing-small;
             color: $color-primary;
+        }
+
+        button {
+            flex-shrink: 0;
         }
     }
 
@@ -26,6 +33,30 @@
             padding: $spacing-small;
         }
     }
+
+    .show-filter-button-container {
+        transform-origin: 100% 0;
+    }
+
+    .filters-container {
+        transform-origin: 100% 0;
+        background-color: $color-foreground;
+        padding: 0 $spacing-medium;
+        width: 240px;
+    }
+
+    :global {
+        .expanded-container-ghost,
+        .collapsed-container-ghost {
+            top: 0;
+            right: 0;
+        }
+
+        .expanded-container-expanding {
+            top: 0;
+            right: 0;
+        }
+    }
 }
 
 .left {
@@ -33,18 +64,41 @@
     flex-direction: column;
     justify-content: space-between;
 
+    .show-alerts-button-container {
+        transform-origin: 0 0;
+
+        .show-alerts-button {
+            padding: $spacing-extra-small $spacing-small;
+            color: $color-danger;
+            font-size: $font-size-extra-large;
+        }
+    }
+
+    .alerts-container {
+        transform-origin: 0 0;
+        background-color: $color-foreground;
+        width: 320px;
+        height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+    }
+
     .alerts {
         display: flex;
         position: relative;
         flex-direction: column;
 
         .header {
+            display: flex;
+            align-items: center;
             flex-shrink: 0;
-            border-bottom: $width-separator-thin solid $color-separator;
 
             .heading {
+                flex-grow: 1;
                 padding: $spacing-medium;
                 color: $color-primary;
+            }
+
+            .hide-alerts-button {
+                flex-shrink: 0;
             }
         }
 
@@ -82,7 +136,6 @@
 
         .header {
             flex-shrink: 0;
-            border-bottom: $width-separator-thin solid $color-separator;
 
             .heading {
                 padding: $spacing-medium;

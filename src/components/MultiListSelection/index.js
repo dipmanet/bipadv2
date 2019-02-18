@@ -5,6 +5,9 @@ import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
 
+import { FaramInputElement } from '#rscg/FaramElements';
+import Delay from '#rscg/Delay';
+
 import _cs from '#cs';
 import styles from './styles.scss';
 
@@ -28,6 +31,8 @@ const defaultProps = {
     className: '',
 };
 
+@FaramInputElement
+@Delay
 export default class MultiListSelection extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -49,6 +54,25 @@ export default class MultiListSelection extends React.PureComponent {
             className: styles.option,
             isActive: value.indexOf(key) !== -1,
         };
+    }
+
+    handleOptionClick = ({ params: { optionKey } }) => {
+        const {
+            keySelector,
+            value,
+            onChange,
+        } = this.props;
+
+        const newValue = [...value];
+        const optionIndex = value.findIndex(d => d === optionKey);
+
+        if (optionIndex === -1) {
+            newValue.push(optionKey);
+        } else {
+            newValue.splice(optionIndex, 1);
+        }
+
+        onChange(newValue);
     }
 
     renderOption = ({
