@@ -1,6 +1,8 @@
 # Bipad - A disaster information management system
 
-[![pipeline status](https://gitlab.com/bipad/client/badges/feature-ci/pipeline.svg)](https://gitlab.com/bipad/client/commits/feature-ci)
+[![pipeline status](https://gitlab.com/bipad/client/badges/develop/pipeline.svg)](https://gitlab.com/bipad/client/commits/develop) [![coverage status](https://gitlab.com/bipad/client/badges/develop/coverage.svg)](https://gitlab.com/bipad/client/commits/develop)
+
+
 
 This is web client for the *Bipad*
 
@@ -29,4 +31,4 @@ docker run --rm -t -p 3050:3050 -v `pwd`/:/code/ <docker-image> sh -c 'yarn inst
 
 * Run the application in the browser from http://localhost:3050
 
-docker run --rm -t -p 3050:3050 -v `pwd`/:/code/ registry.gitlab.com/bipad/client/feature-ci:latest sh -c 'yarn install && yarn start'
+docker run --rm -t -p 3050:3050 -v `pwd`/:/code/ registry.gitlab.com/bipad/client/develop:latest sh -c 'yarn install && yarn start'

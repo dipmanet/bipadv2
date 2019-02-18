@@ -57,7 +57,7 @@ test:
         sh -c 'export CI=true && yarn install && yarn test'
     - docker tag ${DOCKER_IMAGE_B_SHA} ${DOCKER_IMAGE_B}
     - docker push ${DOCKER_IMAGE_B}
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  coverage: '/TOTAL.*\s+(\d+%)$/'
   artifacts:
     paths:
       - coverage/

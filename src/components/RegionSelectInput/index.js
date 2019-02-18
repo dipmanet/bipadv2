@@ -1,39 +1,58 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SelectInput from '#rsci/SelectInput';
+import { connect } from 'react-redux';
 
 import { FaramInputElement } from '#rscg/FaramElements';
 import Delay from '#rscg/Delay';
 
 import {
-    adminLevelFilterOptionList,
-    geoareaFilterOptions,
-} from '#resources/data';
+    adminLevelListSelector,
+    geoAreasSelector,
+} from '#redux';
 
 import _cs from '#cs';
 import styles from './styles.scss';
 
-const adminLevelKeySelector = d => d.key;
-const adminLevelLabelSelector = d => d.label;
-const geoareaKeySelector = d => d.key;
-const geoareaLabelSelector = d => d.label;
+const adminLevelKeySelector = d => d.pk;
+const adminLevelLabelSelector = d => d.title;
+const geoareaKeySelector = d => d.pk;
+const geoareaLabelSelector = d => d.title;
 
 const emptyObject = {};
 
+const propTypes = {
+    className: PropTypes.string,
+    adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    geoAreas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    onChange: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+    className: '',
+    value: {},
+};
+
+const mapStateToProps = state => ({
+    adminLevelList: adminLevelListSelector(state),
+    geoAreas: geoAreasSelector(state),
+});
+
+
+@connect(mapStateToProps)
 @FaramInputElement
 @Delay
 export default class RegionSelectInput extends React.PureComponent {
+    static propTypes = propTypes
+    static defaultProps = defaultProps
+
     handleAdminLevelChange = (newAdminLevel) => {
-        const {
-            value: {
-                adminLevel,
-                geoarea,
-            } = emptyObject,
-            onChange,
-        } = this.props;
+        const { onChange } = this.props;
 
         onChange({
             adminLevel: newAdminLevel,
-            geoarea,
+            geoarea: undefined,
         });
     }
 
@@ -41,7 +60,6 @@ export default class RegionSelectInput extends React.PureComponent {
         const {
             value: {
                 adminLevel,
-                geoarea,
             } = emptyObject,
             onChange,
         } = this.props;
@@ -59,6 +77,8 @@ export default class RegionSelectInput extends React.PureComponent {
                 adminLevel,
                 geoarea,
             } = emptyObject,
+            adminLevelList,
+            geoAreas,
         } = this.props;
 
         const className = _cs(
@@ -71,21 +91,24 @@ export default class RegionSelectInput extends React.PureComponent {
                 <SelectInput
                     className={styles.adminLevelSelectInput}
                     label="Admin level"
-                    options={adminLevelFilterOptionList}
+                    options={adminLevelList}
                     value={adminLevel}
                     keySelector={adminLevelKeySelector}
                     labelSelector={adminLevelLabelSelector}
                     onChange={this.handleAdminLevelChange}
                 />
-                <SelectInput
-                    className={styles.geoareaSelectInput}
-                    label="Geoarea"
-                    options={geoareaFilterOptions[adminLevel]}
-                    value={geoarea}
-                    keySelector={geoareaKeySelector}
-                    labelSelector={geoareaLabelSelector}
-                    onChange={this.handleGeoareaChange}
-                />
+                {
+                    adminLevel &&
+                    <SelectInput
+                        className={styles.geoareaSelectInput}
+                        label="Geoarea"
+                        options={geoAreas[adminLevel]}
+                        value={geoarea}
+                        keySelector={geoareaKeySelector}
+                        labelSelector={geoareaLabelSelector}
+                        onChange={this.handleGeoAreaChange}
+                    />
+                }
             </div>
         );
     }
