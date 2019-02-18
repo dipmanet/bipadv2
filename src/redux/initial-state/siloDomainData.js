@@ -455,6 +455,7 @@ const initialSiloDomainData = {
     incidentPage: {
         incidentList: [
             {
+                pk: 1,
                 title: 'Landslide blocks Kali Gandaki',
                 description: 'Residents living on the banks of the Kali Gandaki River in Gharapjhong Rural Municipality of Mustang were terrified a lot today following a landslide that blocked water flow in the river for hours.',
                 cause: 'day-long snowfall and strong wind at night',
@@ -515,7 +516,7 @@ const initialSiloDomainData = {
                         },
                     ],
                 },
-                point: [27.700769, 85.300140],
+                point: [85.300140, 27.700769],
                 /*
                     polygon: ?
                     wards: ?
@@ -524,6 +525,7 @@ const initialSiloDomainData = {
                 */
             },
             {
+                pk: 2,
                 title: 'Earthquake destroys half of the highway',
                 description: 'Residents living on the banks of',
                 cause: 'Fracking around the hilly region',
@@ -536,9 +538,10 @@ const initialSiloDomainData = {
                 incident_on: 1550473513420,
                 event: undefined,
                 hazard: 1,
-                point: [27.700869, 85.300140],
+                point: [85.100140, 27.900769],
             },
             {
+                pk: 3,
                 title: 'Wildfire in forests around Chitwan',
                 description: 'Unreachable roads due to wildfire',
                 cause: 'Careless management of fire',
@@ -551,9 +554,10 @@ const initialSiloDomainData = {
                 incident_on: 1550473513420,
                 event: undefined,
                 hazard: 5,
-                point: [27.700769, 85.300140],
+                point: [85.320140, 27.200769],
             },
             {
+                pk: 4,
                 title: 'Flooding around Saptakoshi',
                 description: 'this is a description',
                 cause: 'Large amount of rain during monsoon',
@@ -566,7 +570,7 @@ const initialSiloDomainData = {
                 incident_on: 1550473513420,
                 event: undefined,
                 hazard: 2,
-                point: [27.700769, 85.300140],
+                point: [85.800140, 27.100769],
             },
         ],
     },

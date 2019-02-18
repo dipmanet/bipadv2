@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Map from '#components/ProjectsMap';
+import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
 import {
@@ -29,7 +30,7 @@ import IncidentsFilter from './Filter';
 import styles from './styles.scss';
 
 const emptyObject = {};
-const incidentKeySelector = d => d.id;
+const incidentKeySelector = d => d.pk;
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
@@ -60,6 +61,26 @@ export default class Incidents extends React.PureComponent {
         className: styles.incident,
     });
 
+    getFeatureCollection = memoize((incidentList) => {
+        const geojson = {
+            type: 'FeatureCollection',
+            features: incidentList
+                .filter(incident => incident.point)
+                .map(incident => ({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: incident.point,
+                    },
+                    properties: {
+                        title: incident.title,
+                        description: incident.description,
+                    },
+                })),
+        };
+        return geojson;
+    });
+
     renderIncident = ({
         className,
         data: {
@@ -82,26 +103,22 @@ export default class Incidents extends React.PureComponent {
     renderIncidents = ({
         className,
         data,
-    }) => {
-        console.warn('rendering incidents');
-
-        return (
-            <div className={className}>
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Incidents
-                    </h4>
-                </header>
-                <ListView
-                    className={styles.incidentList}
-                    data={data}
-                    renderer={this.renderIncident}
-                    rendererParams={this.getIncidentRendererParams}
-                    keySelector={incidentKeySelector}
-                />
-            </div>
-        );
-    }
+    }) => (
+        <div className={className}>
+            <header className={styles.header}>
+                <h4 className={styles.heading}>
+                    Incidents
+                </h4>
+            </header>
+            <ListView
+                className={styles.incidentList}
+                data={data}
+                renderer={this.renderIncident}
+                rendererParams={this.getIncidentRendererParams}
+                keySelector={incidentKeySelector}
+            />
+        </div>
+    );
 
     renderKeyStatistics = ({ className }) => {
         console.warn('rendering key statistics');
@@ -157,6 +174,8 @@ export default class Incidents extends React.PureComponent {
 
         const IncidentInfo = this.renderIncidents;
 
+        const featureCollection = this.getFeatureCollection(incidentList);
+
         return (
             <Page
                 className={styles.incidents}
@@ -169,7 +188,10 @@ export default class Incidents extends React.PureComponent {
                 }
                 mainContentClassName={styles.main}
                 mainContent={
-                    <Map className={styles.map} />
+                    <Map
+                        points={featureCollection}
+                        className={styles.map}
+                    />
                 }
                 rightContentClassName={styles.right}
                 rightContent={

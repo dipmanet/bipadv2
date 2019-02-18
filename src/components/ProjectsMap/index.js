@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import turf from 'turf';
 
-import Map from '#rscz/Map/index';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 import { getHashFromString } from '@togglecorp/fujs';
@@ -13,14 +11,13 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    showColors: PropTypes.bool,
 };
 
 const defaultProps = {
     className: '',
     showColors: false,
 };
-
-const nepalBounds = turf.bbox(nepalGeoJson);
 
 const boundsFill = {
     'fill-color': '#0081f0',
