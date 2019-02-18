@@ -34,21 +34,27 @@ const pages = [
         disabled: false,
     },
     {
-        title: 'Risk Information',
-        link: 'riskInfo',
-        iconName: iconNames.riskMap,
-        disabled: false,
-    },
-    {
         title: 'Incidents',
         link: 'incidents',
         iconName: iconNames.incidents,
         disabled: false,
     },
     {
+        title: 'Risk Information',
+        link: 'riskInfo',
+        iconName: iconNames.riskMap,
+        disabled: false,
+    },
+    {
         title: 'Loss & Damage',
         link: 'lossAndDamage',
         iconName: iconNames.lossAndDamange,
+        disabled: true,
+    },
+    {
+        title: 'Real Time',
+        link: 'realtime',
+        iconName: iconNames.realtime,
         disabled: true,
     },
     {

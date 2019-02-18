@@ -10,6 +10,7 @@ const iconNames = {
     lossAndDamange: 'ion-ios-clock',
     drrProfileMapping: 'ion-briefcase',
     aboutUs: 'ion-ios-information',
+    realtime: 'ion-android-wifi',
 
     filter: 'ion-android-funnel',
     chevronUp: 'ion-chevron-up',
