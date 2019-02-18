@@ -31,7 +31,7 @@ $width-right-panel: 280px;
 .right-content {
     position: absolute;
     top: $height-navbar + $spacing-medium;
-    right: $spacing-medium;
+    right: $width-navbar + $spacing-medium;
     z-index: 1;
     border: $width-separator-medium solid $color-separator;
     background: $color-foreground;

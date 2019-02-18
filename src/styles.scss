@@ -3,4 +3,10 @@
 .map {
     width: 100vw;
     height: 100vh;
+
+    :global {
+        .mapboxgl-ctrl-bottom-right {
+            right: $width-navbar;
+        }
+    }
 }
