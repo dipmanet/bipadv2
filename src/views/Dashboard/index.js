@@ -16,7 +16,7 @@ import Faram from '#rscg/Faram';
 import Button from '#rsca/Button';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
-import SelectInput from '#rsci/SelectInput';
+import PastDateRangeInput from '#components/PastDateRangeInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
@@ -40,8 +40,6 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
-const pastDataKeySelector = d => d.key;
-const pastDataLabelSelector = d => d.label;
 
 const getFeatureCollectionFromPoints = (points) => {
     const geojson = {
@@ -61,25 +59,6 @@ const getFeatureCollectionFromPoints = (points) => {
 
     return geojson;
 };
-
-const pastDataSelectOptions = [
-    {
-        label: 'Last 3 days',
-        key: 'past3Days',
-    },
-    {
-        label: 'Last 7 days',
-        key: 'past7Days',
-    },
-    {
-        label: 'Last 2 weeks',
-        key: 'past2Weeks',
-    },
-    {
-        label: 'Last 1 month',
-        key: 'past1Month',
-    },
-];
 
 const filterSchema = {
     fields: {
@@ -303,13 +282,10 @@ export default class Dashboard extends React.PureComponent {
                                     error={faramErrors}
                                     disabled={false}
                                 >
-                                    <SelectInput
+                                    <PastDateRangeInput
                                         label="Data range"
-                                        className={styles.pastDataSelectInput}
-                                        keySelector={pastDataKeySelector}
-                                        labelSelector={pastDataLabelSelector}
-                                        options={pastDataSelectOptions}
                                         faramElementName="dateRange"
+                                        className={styles.pastDataSelectInput}
                                     />
                                     <RegionSelectInput
                                         faramElementName="region"

@@ -47,7 +47,7 @@ const myTransform = createTransform(
 */
 
 const storeConfig = {
-    blacklist: ['notify', 'route', 'app'],
+    blacklist: ['notify', 'route', 'app', 'siloDomainData'],
     key: 'bipad',
     version: 2,
     storage: localforage,

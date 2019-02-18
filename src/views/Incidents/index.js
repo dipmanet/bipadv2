@@ -1,27 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Map from '#components/ProjectsMap';
+import { connect } from 'react-redux';
 
 import {
     barChartData,
     pieChartData,
     donutChartData1,
     donutChartData2,
-    incidentList,
-    hazardTypeList,
 } from '#resources/data';
 
+import {
+    incidentListSelectorIP,
+} from '#redux';
+
 import Page from '#components/Page';
-import RegionSelectInput from '#components/RegionSelectInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import MultiListSelection from '#components/MultiListSelection';
 import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import { basicColor } from '#constants/colorScheme';
-
 import _cs from '#cs';
+
+import IncidentsFilter from './Filter';
+
 import styles from './styles.scss';
 
 const emptyObject = {};
@@ -36,7 +40,21 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
-export default class Dashboard extends React.PureComponent {
+const propTypes = {
+    incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+const defaultProps = {};
+
+const mapStateToProps = state => ({
+    incidentList: incidentListSelectorIP(state),
+});
+
+@connect(mapStateToProps)
+export default class Incidents extends React.PureComponent {
+    static propTypes = propTypes
+    static defaultProps = defaultProps
+
     getIncidentRendererParams = (_, d) => ({
         data: d,
         className: styles.incident,
@@ -133,14 +151,18 @@ export default class Dashboard extends React.PureComponent {
     }
 
     render() {
-        const Incidents = this.renderIncidents;
+        const {
+            incidentList,
+        } = this.props;
+
+        const IncidentInfo = this.renderIncidents;
 
         return (
             <Page
                 className={styles.incidents}
                 leftContentClassName={styles.left}
                 leftContent={
-                    <Incidents
+                    <IncidentInfo
                         className={styles.incidents}
                         data={incidentList}
                     />
@@ -151,22 +173,7 @@ export default class Dashboard extends React.PureComponent {
                 }
                 rightContentClassName={styles.right}
                 rightContent={
-                    <React.Fragment>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Filters
-                            </h4>
-                        </header>
-                        <div className={styles.content}>
-                            <RegionSelectInput />
-                            <MultiListSelection
-                                className={styles.listSelectionInput}
-                                label="Hazard type"
-                                options={hazardTypeList}
-                                value={['earthquake', 'wildfire']}
-                            />
-                        </div>
-                    </React.Fragment>
+                    <IncidentsFilter />
                 }
             />
         );
