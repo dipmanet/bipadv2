@@ -91,7 +91,7 @@ $color-background-hover-light: rgba(0, 0, 0, .05);
 $color-background-hover-dark: rgba(255, 255, 255, .05);
 $color-background-hover: get-color($color-background-hover-light, $color-background-hover-dark);
 
-$color-background-selected-light: rgba(0, 0, 0, .07);
+$color-background-selected-light: rgba(44, 100, 200, .07);
 $color-background-selected-dark: rgba(255, 255, 255, .07);
 $color-background-selected: get-color($color-background-selected-light, $color-background-selected-dark);
 
