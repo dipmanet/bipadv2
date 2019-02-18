@@ -761,7 +761,7 @@
   dependencies:
     regenerator-transform "^0.13.3"
 
-"@babel/plugin-transform-runtime@^7.0.0-beta.46", "@babel/plugin-transform-runtime@^7.1.0":
+"@babel/plugin-transform-runtime@^7.0.0-beta.46":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.2.0.tgz#566bc43f7d0aedc880eaddbd29168d0f248966ea"
   integrity sha512-jIgkljDdq4RYDnJyQsiWbdvGeei/0MOTtSHKO/rfbd/mXBxNpdlulMx49L0HQ4pug1fXannxoqCI+fYSle9eSw==
@@ -816,14 +816,6 @@
     "@babel/helper-plugin-utils" "7.0.0-beta.54"
     "@babel/helper-regex" "7.0.0-beta.54"
     regexpu-core "^4.1.3"
-
-"@babel/polyfill@^7.0.0":
-  version "7.2.5"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.2.5.tgz#6c54b964f71ad27edddc567d065e57e87ed7fa7d"
-  integrity sha512-8Y/t3MWThtMLYr0YNC/Q76tqN1w30+b0uQMeFUYauG2UGTR19zyUtFrAzT23zNtBxPp+LbE5E/nwV/q/r3y6ug==
-  dependencies:
-    core-js "^2.5.7"
-    regenerator-runtime "^0.12.0"
 
 "@babel/preset-env@7.0.0-beta.54":
   version "7.0.0-beta.54"
@@ -1063,21 +1055,25 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@togglecorp/ravl@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@togglecorp/ravl/-/ravl-1.2.0.tgz#799b280d9e51cf202ab1f28f38fd572b5202cba3"
-  integrity sha512-vwZLz0kvDTHDMMA+GIPdQ1siVcq4U4/unrFDUXRWZkaAS/OBdql8F8dKKTia3DW0OfRB+W+lcDhGPedDo1tKQQ==
+"@togglecorp/fujs@^1.2.1", "@togglecorp/fujs@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@togglecorp/fujs/-/fujs-1.3.0.tgz#c663826e60eea46129ae7531b2f2db527aff59e7"
+  integrity sha512-Ymhw3uFTSbJmUcWNfytS75ZAkIR7D9QJKgBuIePVYqNpntmx5Inly7y8Ha5vPH2sOYIzzJ1Pc8qZuk3iNjJ0QA==
 
-"@togglecorp/react-rest-request@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-1.3.1.tgz#fa6fcef421f49a732190b164d0580c2d392226ae"
-  integrity sha512-9886EcWh2tN5pHkAWv4c2MCqCyCJjosjyeySuHmBRDduBKNSGKe/Tw0uxETmvr/j/FaJh4vc/+2n0F1+YKPliQ==
+"@togglecorp/ravl@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@togglecorp/ravl/-/ravl-1.2.2.tgz#27906dd0e3ab1dd5ec8f7a70d36f72217f42429a"
+  integrity sha512-CoTjvZDXDD1mj5iczy49E2kaa/OLCcGBV4dMqB1Sp3oj0aBssDKXu9E4FKcFtAiUbTSBwxaYxK/WhNJGmEj57Q==
   dependencies:
-    "@babel/plugin-transform-runtime" "^7.1.0"
-    "@babel/polyfill" "^7.0.0"
-    "@babel/runtime" "^7.1.2"
-    hoist-non-react-statics "^3.0.1"
-    prop-types "^15.6.2"
+    "@togglecorp/fujs" "^1.2.1"
+
+"@togglecorp/react-rest-request@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-2.0.8.tgz#7bedd0e35883943e411e7965571f4421f36d2712"
+  integrity sha512-srB3SpmpvkiRphst6gK3fY6i0eyZ/sZzser0L8cZQBLvIAygQXKkfgrt9FPcnsBgLwJ7eHX5Obevb+JGzuNy3Q==
+  dependencies:
+    "@togglecorp/fujs" "^1.2.1"
+    hoist-non-react-statics "^3.2.1"
 
 "@types/node@*":
   version "10.12.24"
@@ -2820,7 +2816,7 @@ copy-webpack-plugin@^4.6.0:
     p-limit "^1.0.0"
     serialize-javascript "^1.4.0"
 
-core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7:
+core-js@^2.4.0, core-js@^2.5.0:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.4.tgz#b8897c062c4d769dd30a0ac5c73976c47f92ea0d"
   integrity sha512-05qQ5hXShcqGkPZpXEFLIpxayZscVD2kuMBZewxiIPPEagukO4mqgPA9CWhUvFBJfy3ODdK2p9xyHh7FTU9/7A==
@@ -5171,7 +5167,7 @@ hoist-non-react-statics@^2.5.0:
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
 
-hoist-non-react-statics@^3.0.1, hoist-non-react-statics@^3.1.0:
+hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
   integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==

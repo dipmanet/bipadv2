@@ -8,7 +8,7 @@ import {
 import {
     // mapToMap,
     randomString,
-} from '#rsu/common';
+} from '@togglecorp/fujs';
 
 // import { isBeta } from './env';
 

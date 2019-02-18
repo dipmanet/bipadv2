@@ -5,7 +5,7 @@ import turf from 'turf';
 import Map from '#rscz/Map/index';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
-import { getHashFromString } from '#rsu/common';
+import { getHashFromString } from '@togglecorp/fujs';
 
 import nepalGeoJson from '#resources/districts.json';
 

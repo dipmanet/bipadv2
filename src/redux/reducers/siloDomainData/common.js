@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { listToMap } from '#rsu/common';
+import { listToMap } from '@togglecorp/fujs';
 
 // TYPE
 
