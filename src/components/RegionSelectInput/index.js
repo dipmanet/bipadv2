@@ -1,6 +1,9 @@
 import React from 'react';
 import SelectInput from '#rsci/SelectInput';
 
+import { FaramInputElement } from '#rscg/FaramElements';
+import Delay from '#rscg/Delay';
+
 import {
     adminLevelFilterOptionList,
     geoareaFilterOptions,
@@ -14,25 +17,49 @@ const adminLevelLabelSelector = d => d.label;
 const geoareaKeySelector = d => d.key;
 const geoareaLabelSelector = d => d.label;
 
-export default class RegionSelectInput extends React.PureComponent {
-    constructor(props) {
-        super(props);
+const emptyObject = {};
 
-        this.state = {
-            adminLevel: 'province',
-            geoarea: '1',
-        };
+@FaramInputElement
+@Delay
+export default class RegionSelectInput extends React.PureComponent {
+    handleAdminLevelChange = (newAdminLevel) => {
+        const {
+            value: {
+                adminLevel,
+                geoarea,
+            } = emptyObject,
+            onChange,
+        } = this.props;
+
+        onChange({
+            adminLevel: newAdminLevel,
+            geoarea,
+        });
+    }
+
+    handleGeoAreaChange = (newGeoarea) => {
+        const {
+            value: {
+                adminLevel,
+                geoarea,
+            } = emptyObject,
+            onChange,
+        } = this.props;
+
+        onChange({
+            adminLevel,
+            geoarea: newGeoarea,
+        });
     }
 
     render() {
         const {
             className: classNameFromProps,
+            value: {
+                adminLevel,
+                geoarea,
+            } = emptyObject,
         } = this.props;
-
-        const {
-            adminLevel,
-            geoarea,
-        } = this.state;
 
         const className = _cs(
             classNameFromProps,
@@ -48,6 +75,7 @@ export default class RegionSelectInput extends React.PureComponent {
                     value={adminLevel}
                     keySelector={adminLevelKeySelector}
                     labelSelector={adminLevelLabelSelector}
+                    onChange={this.handleAdminLevelChange}
                 />
                 <SelectInput
                     className={styles.geoareaSelectInput}
@@ -56,6 +84,7 @@ export default class RegionSelectInput extends React.PureComponent {
                     value={geoarea}
                     keySelector={geoareaKeySelector}
                     labelSelector={geoareaLabelSelector}
+                    onChange={this.handleGeoareaChange}
                 />
             </div>
         );

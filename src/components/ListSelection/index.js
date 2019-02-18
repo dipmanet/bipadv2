@@ -5,6 +5,9 @@ import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
 
+import { FaramInputElement } from '#rscg/FaramElements';
+import Delay from '#rscg/Delay';
+
 import _cs from '#cs';
 import styles from './styles.scss';
 
@@ -26,6 +29,8 @@ const defaultProps = {
     className: '',
 };
 
+@FaramInputElement
+@Delay
 export default class ListSelection extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -47,6 +52,11 @@ export default class ListSelection extends React.PureComponent {
             className: styles.option,
             isActive: key === value,
         };
+    }
+
+    handleOptionClick = ({ params: { optionKey } }) => {
+        const { onChange } = this.props;
+        onChange(optionKey);
     }
 
     renderOption = ({

@@ -1,0 +1,30 @@
+@import '~base-scss/base';
+
+.collapsible-view {
+    position: relative;
+
+    .expanding {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .collapsing {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .ghost {
+        position: absolute;
+        opacity: 0;
+    }
+}
+
+@keyframes expand {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

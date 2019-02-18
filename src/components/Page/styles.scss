@@ -1,7 +1,7 @@
 @import '~base-scss/base';
 
 $width-left-panel: 320px;
-$width-right-panel: 280px;
+$width-right-panel: auto;
 
 .page {
     position: absolute;
@@ -12,15 +12,16 @@ $width-right-panel: 280px;
     overflow: auto;
 
 }
+
 .left-content {
     position: absolute;
     top: $height-navbar + $spacing-medium;
     left: $spacing-medium;
     z-index: 1;
-    border: $width-separator-medium solid $color-separator;
-    background: $color-foreground;
-    width: $width-left-panel;
-    height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+    // border: $width-separator-medium solid $color-separator;
+    // background: $color-foreground;
+    // width: $width-left-panel;
+    // height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
 }
 
 .main-content {
@@ -33,9 +34,9 @@ $width-right-panel: 280px;
     top: $height-navbar + $spacing-medium;
     right: $width-navbar + $spacing-medium;
     z-index: 1;
-    border: $width-separator-medium solid $color-separator;
-    background: $color-foreground;
-    width: $width-right-panel;
-    height: auto;
+    // border: $width-separator-medium solid $color-separator;
+    // background: $color-foreground;
+    // width: $width-right-panel;
+    // height: auto;
     // height: calc(100vh - #{$height-navbar + $spacing-medium * 2})
 }

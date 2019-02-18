@@ -1,5 +1,6 @@
 import React from 'react';
 import Map from '#components/ProjectsMap';
+import CollapsibleView from '#components/CollapsibleView';
 
 import {
     alertList,
@@ -11,6 +12,8 @@ import {
 } from '#resources/data';
 
 import Page from '#components/Page';
+import Faram from '#rscg/Faram';
+import Button from '#rsca/Button';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
 import SelectInput from '#rsci/SelectInput';
@@ -78,11 +81,53 @@ const pastDataSelectOptions = [
     },
 ];
 
+const filterSchema = {
+    fields: {
+        dateRange: [],
+        region: [],
+        hazardType: [],
+    },
+};
+
 export default class Dashboard extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showFilters: true,
+            showAlerts: true,
+            faramValue: {},
+            faramErrors: {},
+        };
+    }
+
     getAlertRendererParams = (_, d) => ({
         data: d,
         className: styles.alert,
     });
+
+    handleFaramChange = (faramValues, faramErrors) => {
+        this.setState({
+            faramValues,
+            faramErrors,
+        });
+    }
+
+    handleShowFiltersButtonClick = () => {
+        this.setState({ showFilters: true });
+    }
+
+    handleHideFiltersButtonClick = () => {
+        this.setState({ showFilters: false });
+    }
+
+    handleShowAlertsButtonClick = () => {
+        this.setState({ showAlerts: true });
+    }
+
+    handleHideAlertsButtonClick = () => {
+        this.setState({ showAlerts: false });
+    }
 
     renderAlert = ({
         className,
@@ -106,93 +151,114 @@ export default class Dashboard extends React.PureComponent {
     renderAlerts = ({
         className,
         data,
-    }) => {
-        console.warn('rendering alerts');
-
-        return (
-            <div className={className}>
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Alerts
-                    </h4>
-                </header>
-                <ListView
-                    className={styles.alertList}
-                    data={data}
-                    renderer={this.renderAlert}
-                    rendererParams={this.getAlertRendererParams}
-                    keySelector={alertKeySelector}
+    }) => (
+        <div className={className}>
+            <header className={styles.header}>
+                <h4 className={styles.heading}>
+                    Alerts
+                </h4>
+                <Button
+                    className={styles.hideAlertsButton}
+                    onClick={this.handleHideAlertsButtonClick}
+                    iconName={iconNames.chevronUp}
+                    title="Close Alerts"
+                    transparent
                 />
-            </div>
-        );
-    }
+            </header>
+            <ListView
+                className={styles.alertList}
+                data={data}
+                renderer={this.renderAlert}
+                rendererParams={this.getAlertRendererParams}
+                keySelector={alertKeySelector}
+            />
+        </div>
+    )
 
-    renderKeyStatistics = ({ className }) => {
-        console.warn('rendering key statistics');
-
-        return (
-            <div className={className}>
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Key statistics
-                    </h4>
-                </header>
-                <div className={styles.content}>
-                    <div className={styles.donutCharts}>
-                        <DonutChart
-                            className={styles.donutChart1}
-                            data={donutChartData1}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            sideLengthRatio={0.3}
-                            colorScheme={basicColor}
-                        />
-                        <DonutChart
-                            colorScheme={basicColor}
-                            className={styles.donutChart2}
-                            data={donutChartData2}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            sideLengthRatio={0.3}
-                        />
-                    </div>
-                    <PieChart
-                        className={styles.pieChart}
-                        data={pieChartData}
-                        labelSelector={pieChartLabelSelector}
+    renderKeyStatistics = ({ className }) => (
+        <div className={className}>
+            <header className={styles.header}>
+                <h4 className={styles.heading}>
+                    Key statistics
+                </h4>
+            </header>
+            <div className={styles.content}>
+                <div className={styles.donutCharts}>
+                    <DonutChart
+                        className={styles.donutChart1}
+                        data={donutChartData1}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        sideLengthRatio={0.3}
                         colorScheme={basicColor}
-                        valueSelector={pieChartValueSelector}
                     />
-                    <SimpleVerticalBarChart
-                        className={styles.barChart}
-                        data={barChartData}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
+                    <DonutChart
+                        colorScheme={basicColor}
+                        className={styles.donutChart2}
+                        data={donutChartData2}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        sideLengthRatio={0.3}
                     />
                 </div>
+                <PieChart
+                    className={styles.pieChart}
+                    data={pieChartData}
+                    labelSelector={pieChartLabelSelector}
+                    colorScheme={basicColor}
+                    valueSelector={pieChartValueSelector}
+                />
+                <SimpleVerticalBarChart
+                    className={styles.barChart}
+                    data={barChartData}
+                    labelSelector={barChartLabelSelector}
+                    valueSelector={barChartValueSelector}
+                />
             </div>
-        );
-    }
+        </div>
+    )
 
     render() {
         const Alerts = this.renderAlerts;
         const KeyStatistics = this.renderKeyStatistics;
         const featureCollection = getFeatureCollectionFromPoints(alertList);
 
+        const {
+            faramValues,
+            faramErrors,
+            showFilters,
+            showAlerts,
+        } = this.state;
+
         return (
             <Page
                 className={styles.dashboard}
                 leftContentClassName={styles.left}
                 leftContent={
-                    <React.Fragment>
-                        <Alerts
-                            className={styles.alerts}
-                            data={alertList}
-                        />
-                        <KeyStatistics
-                            className={styles.keyStatistics}
-                        />
-                    </React.Fragment>
+                    <CollapsibleView
+                        expanded={showAlerts}
+                        collapsedViewContainerClassName={styles.showAlertsButtonContainer}
+                        collapsedView={
+                            <Button
+                                className={styles.showAlertsButton}
+                                onClick={this.handleShowAlertsButtonClick}
+                                iconName={iconNames.alert}
+                                title="Show alerts"
+                            />
+                        }
+                        expandedViewContainerClassName={styles.alertsContainer}
+                        expandedView={
+                            <React.Fragment>
+                                <Alerts
+                                    className={styles.alerts}
+                                    data={alertList}
+                                />
+                                <KeyStatistics
+                                    className={styles.keyStatistics}
+                                />
+                            </React.Fragment>
+                        }
+                    />
                 }
                 mainContentClassName={styles.main}
                 mainContent={
@@ -203,31 +269,61 @@ export default class Dashboard extends React.PureComponent {
                 }
                 rightContentClassName={styles.right}
                 rightContent={
-                    <React.Fragment>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Filters
-                            </h4>
-                        </header>
-                        <div className={styles.content}>
-                            <SelectInput
-                                value="past7Days"
-                                label="Data range"
-                                className={styles.pastDataSelectInput}
-                                keySelector={pastDataKeySelector}
-                                labelSelector={pastDataLabelSelector}
-                                options={pastDataSelectOptions}
-                                onChange={() => {}}
+                    <CollapsibleView
+                        expanded={showFilters}
+                        collapsedViewContainerClassName={styles.showFilterButtonContainer}
+                        collapsedView={
+                            <Button
+                                onClick={this.handleShowFiltersButtonClick}
+                                iconName={iconNames.filter}
+                                title="Show filters"
                             />
-                            <RegionSelectInput />
-                            <MultiListSelection
-                                className={styles.listSelectionInput}
-                                label="Hazard type"
-                                options={hazardTypeList}
-                                value={['earthquake', 'wildfire']}
-                            />
-                        </div>
-                    </React.Fragment>
+                        }
+                        expandedViewContainerClassName={styles.filtersContainer}
+                        expandedView={
+                            <React.Fragment>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Filters
+                                    </h4>
+                                    <Button
+                                        onClick={this.handleHideFiltersButtonClick}
+                                        iconName={iconNames.chevronUp}
+                                        title="Hide Filters"
+                                        transparent
+                                    />
+                                </header>
+                                <Faram
+                                    className={styles.content}
+                                    onChange={this.handleFaramChange}
+                                    onValidationFailure={this.handleFaramValidationFailure}
+                                    onValidationSuccess={this.handleFaramValidationSuccess}
+                                    schema={this.schema}
+                                    value={faramValues}
+                                    error={faramErrors}
+                                    disabled={false}
+                                >
+                                    <SelectInput
+                                        label="Data range"
+                                        className={styles.pastDataSelectInput}
+                                        keySelector={pastDataKeySelector}
+                                        labelSelector={pastDataLabelSelector}
+                                        options={pastDataSelectOptions}
+                                        faramElementName="dateRange"
+                                    />
+                                    <RegionSelectInput
+                                        faramElementName="region"
+                                    />
+                                    <MultiListSelection
+                                        faramElementName="hazardType"
+                                        className={styles.listSelectionInput}
+                                        label="Hazard type"
+                                        options={hazardTypeList}
+                                    />
+                                </Faram>
+                            </React.Fragment>
+                        }
+                    />
                 }
             />
         );
