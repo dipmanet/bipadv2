@@ -524,9 +524,9 @@ const initialSiloDomainData = {
                 */
             },
             {
-                title: 'Landslide blocks Kathmandu',
-                description: 'Residents living on the banks of the Kathmandu River in Lalitpur Rural Municipality of Godawari were terrified a lot today following a landslide that blocked fire flow in the river for seconds.',
-                cause: 'day-long firefall and strong water at night',
+                title: 'Earthquake destroys half of the highway',
+                description: 'Residents living on the banks of',
+                cause: 'Fracking around the hilly region',
                 inducer: 'artificial', // or artificial
                 severity: 'catastropic', // or minor, catastrophic
                 source: {
@@ -539,10 +539,10 @@ const initialSiloDomainData = {
                 point: [27.700869, 85.300140],
             },
             {
-                title: 'houseslide blocks Europe Gandaki',
-                description: 'Residents living on the banks of',
-                cause: 'night-long waterfall and strong sleep at night',
-                inducer: 'natural', // or artificial
+                title: 'Wildfire in forests around Chitwan',
+                description: 'Unreachable roads due to wildfire',
+                cause: 'Careless management of fire',
+                inducer: 'artificial', // or artificial
                 severity: 'minor', // or minor, catastrophic
                 source: {
                     name: 'himalayan-times',
@@ -554,9 +554,9 @@ const initialSiloDomainData = {
                 point: [27.700769, 85.300140],
             },
             {
-                title: 'What is this my friend',
+                title: 'Flooding around Saptakoshi',
                 description: 'this is a description',
-                cause: 'and this is the cause',
+                cause: 'Large amount of rain during monsoon',
                 inducer: 'natural', // or artificial
                 severity: 'major', // or minor, catastrophic
                 source: {
