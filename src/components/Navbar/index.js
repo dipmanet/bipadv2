@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { reverseRoute } from '#rsu/common';
+import { reverseRoute } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 
@@ -34,21 +34,27 @@ const pages = [
         disabled: false,
     },
     {
-        title: 'Risk Information',
-        link: 'riskInfo',
-        iconName: iconNames.riskMap,
-        disabled: false,
-    },
-    {
         title: 'Incidents',
         link: 'incidents',
         iconName: iconNames.incidents,
         disabled: false,
     },
     {
+        title: 'Risk Information',
+        link: 'riskInfo',
+        iconName: iconNames.riskMap,
+        disabled: false,
+    },
+    {
         title: 'Loss & Damage',
         link: 'lossAndDamage',
         iconName: iconNames.lossAndDamange,
+        disabled: true,
+    },
+    {
+        title: 'Real Time',
+        link: 'realtime',
+        iconName: iconNames.realtime,
         disabled: true,
     },
     {
