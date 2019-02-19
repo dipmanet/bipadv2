@@ -14,4 +14,5 @@ export * from './reducers/notify';
 export * from './reducers/route';
 export * from './reducers/siloDomainData/common';
 export * from './reducers/siloDomainData/incidentPage';
+export * from './reducers/siloDomainData/dashboardPage';
 // export * from './reducers/domainData/analysisFrameworks';

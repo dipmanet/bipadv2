@@ -39,6 +39,15 @@ const mapDispatchToProps = dispatch => ({
     setFilters: params => dispatch(setFiltersActionIP(params)),
 });
 
+const filterSchema = {
+    fields: {
+        hazardType: [],
+        region: [],
+        dateRange: [],
+    },
+};
+
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class IncidentsFilter extends React.PureComponent {
     static propTypes = propTypes
@@ -46,14 +55,6 @@ export default class IncidentsFilter extends React.PureComponent {
 
     constructor(props) {
         super(props);
-
-        this.schema = {
-            fields: {
-                hazardType: [],
-                region: [],
-                dateRange: [],
-            },
-        };
 
         this.state = {
             showFilters: false,
@@ -113,7 +114,7 @@ export default class IncidentsFilter extends React.PureComponent {
                         onChange={this.handleFaramChange}
                         onValidationFailure={this.handleFaramFailure}
                         onValidationSuccess={this.handleFaramSuccess}
-                        schema={this.schema}
+                        schema={filterSchema}
                         value={faramValues}
                         error={faramErrors}
                     >

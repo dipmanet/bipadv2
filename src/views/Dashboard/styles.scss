@@ -20,19 +20,6 @@
         }
     }
 
-    .content {
-        flex-grow: 1;
-        overflow: auto;
-
-        .past-data-select-input {
-            padding: $spacing-small;
-        }
-
-        .list-selection-input {
-            padding: $spacing-small;
-        }
-    }
-
     .show-filter-button-container {
         transform-origin: 100% 0;
     }

@@ -593,6 +593,42 @@ const initialSiloDomainData = {
                 },
             },
         ],
+        filters: {
+            faramValues: {},
+            faramErrors: {},
+            pristine: true,
+        },
+    },
+
+    dashboardPage: {
+        alertList: [
+            {
+                pk: 1,
+                title: '5.6 magnitude earthquake hits Taplejung',
+                hazard: 1,
+                lat: 27.6257,
+                lng: 87.7763,
+            },
+            {
+                pk: 2,
+                title: 'Pollution level exceeds 150ppm in Kathmandu',
+                hazard: 2,
+                lat: 27.7172,
+                lng: 85.3240,
+            },
+            {
+                pk: 3,
+                title: 'Avalanche due to heavy rainfall in the Langtang region',
+                hazard: 3,
+                lat: 28.2063,
+                lng: 85.6229,
+            },
+        ],
+        filters: {
+            faramValues: {},
+            faramErrors: {},
+            pristine: true,
+        },
     },
 };
 
