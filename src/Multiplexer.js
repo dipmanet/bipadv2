@@ -29,6 +29,7 @@ import {
 import {
     authenticatedSelector,
     lastNotifySelector,
+    mapStyleSelector,
     notifyHideAction,
 } from '#redux';
 import styles from './styles.scss';
@@ -55,10 +56,16 @@ const views = mapObjectToObject(
 const propTypes = {
     authenticated: PropTypes.bool.isRequired,
     lastNotify: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    mapStyle: PropTypes.string,
     notifyHide: PropTypes.func.isRequired,
 };
 
+const defaultProps = {
+    mapStyle: undefined,
+};
+
 const mapStateToProps = state => ({
+    mapStyle: mapStyleSelector(state),
     authenticated: authenticatedSelector(state),
     lastNotify: lastNotifySelector(state),
 });
@@ -72,6 +79,7 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Multiplexer extends React.PureComponent {
     static propTypes = propTypes;
+    static defaultProps = defaultProps;
 
     getMapRoutes = memoize(ro => ro.map(this.renderRoute))
 
@@ -132,6 +140,7 @@ export default class Multiplexer extends React.PureComponent {
     render() {
         const {
             lastNotify,
+            mapStyle,
         } = this.props;
 
         const mapRoutes = this.getMapRoutes(routesOrder);
@@ -149,6 +158,7 @@ export default class Multiplexer extends React.PureComponent {
                         boundsPadding={160}
                         fitBoundsDuration={200}
                         hideNavControl
+                        mapStyle={mapStyle}
                     >
                         <Switch>
                             {mapRoutes}

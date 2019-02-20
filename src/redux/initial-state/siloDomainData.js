@@ -523,11 +523,11 @@ const initialSiloDomainData = {
                     province: 'Province 3',
                 },
                 /*
-                    polygon: ?
-                    wards: ?
-                    street address: ?
-                    detail: ?
-                */
+                   polygon: ?
+                   wards: ?
+                   street address: ?
+                   detail: ?
+                 */
             },
             {
                 pk: 2,
@@ -663,7 +663,6 @@ const initialSiloDomainData = {
             pristine: true,
         },
     },
-
     responsePage: {
         resourceList: [
             {
@@ -703,6 +702,29 @@ const initialSiloDomainData = {
             },
         ],
     },
+    mapStyles: [
+        {
+            name: 'light',
+            style: 'mapbox://styles/mapbox/light-v10',
+            color: '#cdcdcd',
+        },
+        {
+            name: 'street',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            color: '#ece0ca',
+        },
+        {
+            name: 'dark',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            color: '#000000',
+        },
+        {
+            name: 'outdoor',
+            style: 'mapbox://styles/mapbox/outdoors-v11',
+            color: '#c8dd97',
+        },
+    ],
+    selectedMapStyle: undefined,
 };
 
 export default initialSiloDomainData;

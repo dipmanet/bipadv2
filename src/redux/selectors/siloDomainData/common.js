@@ -17,3 +17,9 @@ export const hazardTypeListSelector = createSelector(
     hazardTypesSelector,
     hazards => mapToList(hazards) || emptyArray,
 );
+
+export const mapStylesSelector = ({ siloDomainData }) =>
+    siloDomainData.mapStyles || emptyArray;
+
+export const mapStyleSelector = ({ siloDomainData }) =>
+    siloDomainData.selectedMapStyle;
