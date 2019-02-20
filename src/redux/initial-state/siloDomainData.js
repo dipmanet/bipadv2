@@ -465,7 +465,7 @@ const initialSiloDomainData = {
                     name: 'himalayan-times',
                     displayName: 'The Himalayan Times',
                 },
-                incident_on: 1550473513420,
+                incident_on: 1550427300733,
                 event: undefined,
                 hazard: 4, // NOTE: landslide
                 loss: {
@@ -540,7 +540,7 @@ const initialSiloDomainData = {
                     name: 'himalayan-space',
                     displayName: 'The Himalayan Space',
                 },
-                incident_on: 1550473513420,
+                incident_on: 1550081700430,
                 event: undefined,
                 hazard: 1,
                 point: [85.100140, 27.900769],
@@ -561,7 +561,7 @@ const initialSiloDomainData = {
                     name: 'himalayan-times',
                     displayName: 'The Himalayan Times',
                 },
-                incident_on: 1550473513420,
+                incident_on: 1549563300865,
                 event: undefined,
                 hazard: 5,
                 point: [85.320140, 27.200769],
@@ -582,7 +582,7 @@ const initialSiloDomainData = {
                     name: 'himalayan-times',
                     displayName: 'The Himalayan Times',
                 },
-                incident_on: 1550473513420,
+                incident_on: 1549044900073,
                 event: undefined,
                 hazard: 2,
                 point: [85.800140, 27.100769],
@@ -608,6 +608,7 @@ const initialSiloDomainData = {
                 hazard: 1,
                 lat: 27.6257,
                 lng: 87.7763,
+                alert_on: 1550427300733,
             },
             {
                 pk: 2,
@@ -615,6 +616,7 @@ const initialSiloDomainData = {
                 hazard: 2,
                 lat: 27.7172,
                 lng: 85.3240,
+                alert_on: 1550081700430,
             },
             {
                 pk: 3,
@@ -622,6 +624,7 @@ const initialSiloDomainData = {
                 hazard: 3,
                 lat: 28.2063,
                 lng: 85.6229,
+                alert_on: 1549563300865,
             },
         ],
         filters: {
