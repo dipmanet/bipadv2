@@ -1,13 +1,15 @@
 import createReducerWithMap from '#utils/createReducerWithMap';
 
 import commonReducers from './common';
-import incidentPage from './incidentPage';
+import incidentPageReducers from './incidentPage';
+import dashboardPageReducers from './dashboardPage';
 
 import initialSiloDomainData from '../../initial-state/siloDomainData';
 
 const reducers = {
     ...commonReducers,
-    ...incidentPage,
+    ...incidentPageReducers,
+    ...dashboardPageReducers,
 };
 
 const reducer = createReducerWithMap(reducers, initialSiloDomainData);

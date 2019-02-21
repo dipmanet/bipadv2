@@ -1,22 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import Map from '#components/ProjectsMap';
 import CollapsibleView from '#components/CollapsibleView';
 
 import {
-    alertList,
     barChartData,
     pieChartData,
     donutChartData1,
     donutChartData2,
-    hazardTypeList,
 } from '#resources/data';
 
+import {
+    alertListSelectorDP,
+} from '#redux';
+
 import Page from '#components/Page';
-import Faram from '#rscg/Faram';
 import Button from '#rsca/Button';
-import RegionSelectInput from '#components/RegionSelectInput';
-import MultiListSelection from '#components/MultiListSelection';
-import PastDateRangeInput from '#components/PastDateRangeInput';
 import ListView from '#rscv/List/ListView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
@@ -26,6 +27,8 @@ import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 
 import _cs from '#cs';
+import DashboardFilter from './Filter';
+
 import styles from './styles.scss';
 
 const emptyObject = {};
@@ -60,23 +63,27 @@ const getFeatureCollectionFromPoints = (points) => {
     return geojson;
 };
 
-const filterSchema = {
-    fields: {
-        dateRange: [],
-        region: [],
-        hazardType: [],
-    },
+const propTypes = {
+    alertList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
+const defaultProps = {};
+
+const mapStateToProps = state => ({
+    alertList: alertListSelectorDP(state),
+});
+
+@connect(mapStateToProps)
 export default class Dashboard extends React.PureComponent {
+    static propTypes = propTypes
+    static defaultProps = defaultProps
+
     constructor(props) {
         super(props);
 
         this.state = {
             showFilters: true,
             showAlerts: true,
-            faramValue: {},
-            faramErrors: {},
         };
     }
 
@@ -84,13 +91,6 @@ export default class Dashboard extends React.PureComponent {
         data: d,
         className: styles.alert,
     });
-
-    handleFaramChange = (faramValues, faramErrors) => {
-        this.setState({
-            faramValues,
-            faramErrors,
-        });
-    }
 
     handleShowFiltersButtonClick = () => {
         this.setState({ showFilters: true });
@@ -200,11 +200,10 @@ export default class Dashboard extends React.PureComponent {
     render() {
         const Alerts = this.renderAlerts;
         const KeyStatistics = this.renderKeyStatistics;
+        const { alertList } = this.props;
         const featureCollection = getFeatureCollectionFromPoints(alertList);
 
         const {
-            faramValues,
-            faramErrors,
             showFilters,
             showAlerts,
         } = this.state;
@@ -270,31 +269,7 @@ export default class Dashboard extends React.PureComponent {
                                             transparent
                                         />
                                     </header>
-                                    <Faram
-                                        className={styles.content}
-                                        onChange={this.handleFaramChange}
-                                        onValidationFailure={this.handleFaramValidationFailure}
-                                        onValidationSuccess={this.handleFaramValidationSuccess}
-                                        schema={this.schema}
-                                        value={faramValues}
-                                        error={faramErrors}
-                                        disabled={false}
-                                    >
-                                        <PastDateRangeInput
-                                            label="Data range"
-                                            faramElementName="dateRange"
-                                            className={styles.pastDataSelectInput}
-                                        />
-                                        <RegionSelectInput
-                                            faramElementName="region"
-                                        />
-                                        <MultiListSelection
-                                            faramElementName="hazardType"
-                                            className={styles.listSelectionInput}
-                                            label="Hazard type"
-                                            options={hazardTypeList}
-                                        />
-                                    </Faram>
+                                    <DashboardFilter />
                                 </React.Fragment>
                             }
                         />

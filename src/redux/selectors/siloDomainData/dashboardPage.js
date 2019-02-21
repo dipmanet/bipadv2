@@ -39,38 +39,38 @@ const getDateFromRange = (range) => {
     return now.getTime();
 };
 
-const incidentPageSelector = ({ siloDomainData }) =>
-    siloDomainData.incidentPage || emptyObject;
+const dashboardPageSelector = ({ siloDomainData }) =>
+    siloDomainData.dashboardPage || emptyObject;
 
-export const filtersSelectorIP = createSelector(
-    incidentPageSelector,
-    incidentPage => incidentPage.filters || emptyFilter,
+export const filtersSelectorDP = createSelector(
+    dashboardPageSelector,
+    dashboardPage => dashboardPage.filters || emptyFilter,
 );
 
-export const incidentListSelectorIP = createSelector(
-    filtersSelectorIP,
-    incidentPageSelector,
+export const alertListSelectorDP = createSelector(
+    filtersSelectorDP,
+    dashboardPageSelector,
     // TODO: Remove this filter later
     (
         { faramValues } = emptyFilter,
-        { incidentList },
+        { alertList },
     ) => {
         const { hazardType, dateRange } = faramValues;
-        if (!incidentList) {
+        if (!alertList) {
             return emptyArray;
         }
 
-        let returnList = incidentList;
+        let returnList = alertList;
         if (hazardType && hazardType.length > 0) {
             returnList = returnList.filter(
-                incident => hazardType.includes(incident.hazard),
+                alert => hazardType.includes(alert.hazard),
             );
         }
 
         if (dateRange) {
             const date = getDateFromRange(dateRange);
             returnList = returnList.filter(
-                incident => incident.incident_on > date,
+                alert => alert.alert_on > date,
             );
         }
 
