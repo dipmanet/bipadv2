@@ -6,7 +6,6 @@ import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
 
 import { FaramInputElement } from '@togglecorp/faram';
-import Delay from '#rscg/Delay';
 
 import _cs from '#cs';
 import styles from './styles.scss';
@@ -32,7 +31,6 @@ const defaultProps = {
 };
 
 @FaramInputElement
-@Delay
 export default class MultiListSelection extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;

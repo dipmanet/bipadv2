@@ -4,7 +4,6 @@ import SelectInput from '#rsci/SelectInput';
 import { connect } from 'react-redux';
 
 import { FaramInputElement } from '@togglecorp/faram';
-import Delay from '#rscg/Delay';
 
 import {
     adminLevelListSelector,
@@ -42,7 +41,6 @@ const mapStateToProps = state => ({
 
 @connect(mapStateToProps)
 @FaramInputElement
-@Delay
 export default class RegionSelectInput extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps

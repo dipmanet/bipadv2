@@ -182,21 +182,24 @@ class Navbar extends React.PureComponent {
     }
 
     renderLayer = (key, data) => {
-        const { color, name } = data;
+        const {
+            color,
+            name,
+        } = data;
 
         return (
             <Button
+                className={styles.mapLayerButton}
                 onClick={() => this.handleStyleSelection(data)}
                 transparent
             >
                 <div
-                    style={{
-                        backgroundColor: color,
-                        height: '20px',
-                        width: '20px',
-                    }}
+                    className={styles.preview}
+                    style={{ backgroundColor: color }}
                 />
-                { name }
+                <div className={styles.label}>
+                    { name }
+                </div>
             </Button>
         );
     }
@@ -244,6 +247,7 @@ class Navbar extends React.PureComponent {
                         className={styles.menuItems}
                     />
                     <ListView
+                        className={styles.layerSwitch}
                         data={mapStyles}
                         keySelector={layerKeySelector}
                         modifier={this.renderLayer}
