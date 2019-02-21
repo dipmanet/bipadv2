@@ -1,0 +1,22 @@
+@import '~base-scss/base';
+
+.incident-item {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    .header {
+        .heading {
+            padding-bottom: $spacing-small;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: $font-weight-medium;
+        }
+    }
+
+    .geo-output {
+        padding-bottom: $spacing-small;
+    }
+}
+

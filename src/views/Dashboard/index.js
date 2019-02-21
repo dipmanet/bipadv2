@@ -210,98 +210,97 @@ export default class Dashboard extends React.PureComponent {
         } = this.state;
 
         return (
-            <Page
-                className={styles.dashboard}
-                leftContentClassName={styles.left}
-                leftContent={
-                    <CollapsibleView
-                        expanded={showAlerts}
-                        collapsedViewContainerClassName={styles.showAlertsButtonContainer}
-                        collapsedView={
-                            <Button
-                                className={styles.showAlertsButton}
-                                onClick={this.handleShowAlertsButtonClick}
-                                iconName={iconNames.alert}
-                                title="Show alerts"
-                            />
-                        }
-                        expandedViewContainerClassName={styles.alertsContainer}
-                        expandedView={
-                            <React.Fragment>
-                                <Alerts
-                                    className={styles.alerts}
-                                    data={alertList}
+            <React.Fragment>
+                <Map
+                    points={featureCollection}
+                    className={styles.map}
+                />
+                <Page
+                    className={styles.dashboard}
+                    leftContentClassName={styles.left}
+                    leftContent={
+                        <CollapsibleView
+                            expanded={showAlerts}
+                            collapsedViewContainerClassName={styles.showAlertsButtonContainer}
+                            collapsedView={
+                                <Button
+                                    className={styles.showAlertsButton}
+                                    onClick={this.handleShowAlertsButtonClick}
+                                    iconName={iconNames.alert}
+                                    title="Show alerts"
                                 />
-                                <KeyStatistics
-                                    className={styles.keyStatistics}
+                            }
+                            expandedViewContainerClassName={styles.alertsContainer}
+                            expandedView={
+                                <React.Fragment>
+                                    <Alerts
+                                        className={styles.alerts}
+                                        data={alertList}
+                                    />
+                                    <KeyStatistics
+                                        className={styles.keyStatistics}
+                                    />
+                                </React.Fragment>
+                            }
+                        />
+                    }
+                    rightContentClassName={styles.right}
+                    rightContent={
+                        <CollapsibleView
+                            expanded={showFilters}
+                            collapsedViewContainerClassName={styles.showFilterButtonContainer}
+                            collapsedView={
+                                <Button
+                                    onClick={this.handleShowFiltersButtonClick}
+                                    iconName={iconNames.filter}
+                                    title="Show filters"
                                 />
-                            </React.Fragment>
-                        }
-                    />
-                }
-                mainContentClassName={styles.main}
-                mainContent={
-                    <Map
-                        points={featureCollection}
-                        className={styles.map}
-                    />
-                }
-                rightContentClassName={styles.right}
-                rightContent={
-                    <CollapsibleView
-                        expanded={showFilters}
-                        collapsedViewContainerClassName={styles.showFilterButtonContainer}
-                        collapsedView={
-                            <Button
-                                onClick={this.handleShowFiltersButtonClick}
-                                iconName={iconNames.filter}
-                                title="Show filters"
-                            />
-                        }
-                        expandedViewContainerClassName={styles.filtersContainer}
-                        expandedView={
-                            <React.Fragment>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Filters
-                                    </h4>
-                                    <Button
-                                        onClick={this.handleHideFiltersButtonClick}
-                                        iconName={iconNames.chevronUp}
-                                        title="Hide Filters"
-                                        transparent
-                                    />
-                                </header>
-                                <Faram
-                                    className={styles.content}
-                                    onChange={this.handleFaramChange}
-                                    onValidationFailure={this.handleFaramValidationFailure}
-                                    onValidationSuccess={this.handleFaramValidationSuccess}
-                                    schema={this.schema}
-                                    value={faramValues}
-                                    error={faramErrors}
-                                    disabled={false}
-                                >
-                                    <PastDateRangeInput
-                                        label="Data range"
-                                        faramElementName="dateRange"
-                                        className={styles.pastDataSelectInput}
-                                    />
-                                    <RegionSelectInput
-                                        faramElementName="region"
-                                    />
-                                    <MultiListSelection
-                                        faramElementName="hazardType"
-                                        className={styles.listSelectionInput}
-                                        label="Hazard type"
-                                        options={hazardTypeList}
-                                    />
-                                </Faram>
-                            </React.Fragment>
-                        }
-                    />
-                }
-            />
+                            }
+                            expandedViewContainerClassName={styles.filtersContainer}
+                            expandedView={
+                                <React.Fragment>
+                                    <header className={styles.header}>
+                                        <h4 className={styles.heading}>
+                                            Filters
+                                        </h4>
+                                        <Button
+                                            onClick={this.handleHideFiltersButtonClick}
+                                            iconName={iconNames.chevronUp}
+                                            title="Hide Filters"
+                                            transparent
+                                        />
+                                    </header>
+                                    <Faram
+                                        className={styles.content}
+                                        onChange={this.handleFaramChange}
+                                        onValidationFailure={this.handleFaramValidationFailure}
+                                        onValidationSuccess={this.handleFaramValidationSuccess}
+                                        schema={this.schema}
+                                        value={faramValues}
+                                        error={faramErrors}
+                                        disabled={false}
+                                    >
+                                        <PastDateRangeInput
+                                            label="Data range"
+                                            faramElementName="dateRange"
+                                            className={styles.pastDataSelectInput}
+                                        />
+                                        <RegionSelectInput
+                                            faramElementName="region"
+                                        />
+                                        <MultiListSelection
+                                            faramElementName="hazardType"
+                                            className={styles.listSelectionInput}
+                                            label="Hazard type"
+                                            options={hazardTypeList}
+                                        />
+                                    </Faram>
+                                </React.Fragment>
+                            }
+                        />
+                    }
+                />
+            </React.Fragment>
         );
     }
 }

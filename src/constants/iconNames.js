@@ -16,6 +16,9 @@ const iconNames = {
     chevronUp: 'ion-chevron-up',
     chevronRight: 'ion-chevron-right',
     chevronLeft: 'ion-chevron-left',
+
+    calendar: 'ion-ios-calendar-outline',
+    location: 'ion-ios-location-outline',
 };
 
 export default iconNames;

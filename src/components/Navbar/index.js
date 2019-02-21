@@ -79,25 +79,46 @@ const MenuItem = ({
     routeKey,
     disabled,
 }) => (
-    <Link
-        className={
-            _cs(
-                className,
-                styles.menuItem,
-                routeKey === link && styles.selected,
-                disabled && styles.disabled,
-            )
-        }
-        to={!disabled && reverseRoute(pathNames[link], {})}
-    >
-        <span
-            className={_cs(iconName, styles.icon)}
-            title={title}
-        />
-        <div className={styles.menuTitle}>
-            {title}
+    !disabled ? (
+        <Link
+            className={
+                _cs(
+                    className,
+                    styles.menuItem,
+                    routeKey === link && styles.selected,
+                    disabled && styles.disabled,
+                )
+            }
+            to={reverseRoute(pathNames[link], {})}
+        >
+            <div
+                className={_cs(iconName, styles.icon)}
+                title={title}
+            />
+            <div className={styles.menuTitle}>
+                {title}
+            </div>
+        </Link>
+    ) : (
+        <div
+            className={
+                _cs(
+                    className,
+                    styles.menuItem,
+                    routeKey === link && styles.selected,
+                    disabled && styles.disabled,
+                )
+            }
+        >
+            <span
+                className={_cs(iconName, styles.icon)}
+                title={title}
+            />
+            <div className={styles.menuTitle}>
+                {title}
+            </div>
         </div>
-    </Link>
+    )
 );
 
 MenuItem.propTypes = {

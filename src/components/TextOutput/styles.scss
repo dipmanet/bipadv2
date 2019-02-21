@@ -1,0 +1,19 @@
+@import '~base-scss/base';
+
+.text-output {
+    display: flex;
+
+    .label {
+        flex-shrink: 0;
+        color: $color-text-label;
+
+        &:after {
+            margin-right: $spacing-small;
+            content: ':';
+        }
+    }
+
+    .value {
+        flex-grow: 1;
+    }
+}

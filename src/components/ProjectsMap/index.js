@@ -55,7 +55,6 @@ export default class ProjectsMap extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        console.warn('this is here');
         this.state = {
             currentHoverData: undefined,
         };
@@ -74,7 +73,7 @@ export default class ProjectsMap extends React.PureComponent {
     }
 
     handlePointClick = (id) => {
-        window.open(`#/${id}`, '_blank');
+        // window.open(`#/${id}`, '_blank');
     }
 
     renderTooltip = () => {

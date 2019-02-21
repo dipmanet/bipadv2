@@ -517,6 +517,11 @@ const initialSiloDomainData = {
                     ],
                 },
                 point: [85.300140, 27.700769],
+                geoareaName: {
+                    palika: 'Mahalaxmi',
+                    district: 'Lalitpur',
+                    province: 'Province 3',
+                },
                 /*
                     polygon: ?
                     wards: ?
@@ -539,6 +544,11 @@ const initialSiloDomainData = {
                 event: undefined,
                 hazard: 1,
                 point: [85.100140, 27.900769],
+                geoareaName: {
+                    palika: 'Mahalaxmi',
+                    district: 'Lalitpur',
+                    province: 'Province 3',
+                },
             },
             {
                 pk: 3,
@@ -555,6 +565,11 @@ const initialSiloDomainData = {
                 event: undefined,
                 hazard: 5,
                 point: [85.320140, 27.200769],
+                geoareaName: {
+                    palika: 'Mahalaxmi',
+                    district: 'Lalitpur',
+                    province: 'Province 3',
+                },
             },
             {
                 pk: 4,
@@ -571,6 +586,11 @@ const initialSiloDomainData = {
                 event: undefined,
                 hazard: 2,
                 point: [85.800140, 27.100769],
+                geoareaName: {
+                    palika: 'Mahalaxmi',
+                    district: 'Lalitpur',
+                    province: 'Province 3',
+                },
             },
         ],
     },

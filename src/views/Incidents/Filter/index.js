@@ -8,10 +8,14 @@ import {
     filtersSelectorIP,
 } from '#redux';
 
+import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import Faram from '#rscg/Faram';
+import Button from '#rsca/Button';
+
+import { iconNames } from '#constants';
 
 import styles from './styles.scss';
 
@@ -50,6 +54,10 @@ export default class IncidentsFilter extends React.PureComponent {
                 dateRange: [],
             },
         };
+
+        this.state = {
+            showFilters: false,
+        };
     }
 
     handleFaramChange = (faramValues, faramErrors) => {
@@ -71,6 +79,10 @@ export default class IncidentsFilter extends React.PureComponent {
         console.warn(values);
     }
 
+    handleShowFiltersButtonClick = () => {
+        this.setState({ showFilters: true });
+    }
+
     render() {
         const {
             hazardTypeList,
@@ -80,39 +92,59 @@ export default class IncidentsFilter extends React.PureComponent {
             },
         } = this.props;
 
+        const { showFilters } = this.state;
+
         return (
-            <Faram
-                onChange={this.handleFaramChange}
-                onValidationFailure={this.handleFaramFailure}
-                onValidationSuccess={this.handleFaramSuccess}
-                schema={this.schema}
-                value={faramValues}
-                error={faramErrors}
-            >
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Filters
-                    </h4>
-                </header>
-                <div className={styles.content}>
-                    <PastDateRangeInput
-                        className={styles.pastDataSelectInput}
-                        label="Data range"
-                        faramElementName="dateRange"
+            <CollapsibleView
+                className={styles.filter}
+                expanded={showFilters}
+                collapsedViewContainerClassName={styles.showFiltersButtonContainer}
+                collapsedView={
+                    <Button
+                        className={styles.showFiltersButton}
+                        iconName={iconNames.filter}
+                        onClick={this.handleShowFiltersButtonClick}
                     />
-                    <RegionSelectInput
-                        faramElementName="region"
-                    />
-                    <MultiListSelection
-                        faramElementName="hazardType"
-                        className={styles.listSelectionInput}
-                        label="Hazard type"
-                        keySelector={hazardTypeKeySelector}
-                        labelSelector={hazardTypeLabelSelector}
-                        options={hazardTypeList}
-                    />
-                </div>
-            </Faram>
+                }
+                expandedViewContainerClassName={styles.filtersContainer}
+                expandedView={
+                    <Faram
+                        className={styles.filtersFaram}
+                        onChange={this.handleFaramChange}
+                        onValidationFailure={this.handleFaramFailure}
+                        onValidationSuccess={this.handleFaramSuccess}
+                        schema={this.schema}
+                        value={faramValues}
+                        error={faramErrors}
+                    >
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Filters
+                            </h4>
+                        </header>
+                        <div className={styles.content}>
+                            <PastDateRangeInput
+                                className={styles.pastDataSelectInput}
+                                label="Data range"
+                                faramElementName="dateRange"
+                                showHintAndError={false}
+                            />
+                            <RegionSelectInput
+                                faramElementName="region"
+                                showHintAndError={false}
+                            />
+                            <MultiListSelection
+                                faramElementName="hazardType"
+                                className={styles.listSelectionInput}
+                                label="Hazard type"
+                                keySelector={hazardTypeKeySelector}
+                                labelSelector={hazardTypeLabelSelector}
+                                options={hazardTypeList}
+                            />
+                        </div>
+                    </Faram>
+                }
+            />
         );
     }
 }
