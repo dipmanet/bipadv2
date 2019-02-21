@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Map from '#components/ProjectsMap';
-import CollapsibleView from '#components/CollapsibleView';
+import Button from '#rsca/Button';
+import ListView from '#rscv/List/ListView';
+import DonutChart from '#rscz/DonutChart';
+import PieChart from '#rscz/PieChart';
+import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 
 import {
     barChartData,
@@ -16,15 +19,11 @@ import {
     alertListSelectorDP,
 } from '#redux';
 
+import CollapsibleView from '#components/CollapsibleView';
 import Page from '#components/Page';
-import Button from '#rsca/Button';
-import ListView from '#rscv/List/ListView';
+import Map from '#components/ProjectsMap';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
-
-import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import PieChart from '#rscz/PieChart';
-import DonutChart from '#rscz/DonutChart';
 
 import _cs from '#cs';
 import DashboardFilter from './Filter';
