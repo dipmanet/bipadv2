@@ -5,7 +5,7 @@ import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
 
-import { FaramInputElement } from '#rscg/FaramElements';
+import { FaramInputElement } from '@togglecorp/faram';
 import Delay from '#rscg/Delay';
 
 import _cs from '#cs';

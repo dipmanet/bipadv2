@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SelectInput from '#rsci/SelectInput';
 import { connect } from 'react-redux';
 
-import { FaramInputElement } from '#rscg/FaramElements';
+import { FaramInputElement } from '@togglecorp/faram';
 import Delay from '#rscg/Delay';
 
 import {

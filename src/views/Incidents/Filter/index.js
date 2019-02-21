@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Faram from '@togglecorp/faram';
+
+import Button from '#rsca/Button';
 
 import {
     hazardTypeListSelector,
@@ -12,8 +15,6 @@ import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
 import PastDateRangeInput from '#components/PastDateRangeInput';
-import Faram from '#rscg/Faram';
-import Button from '#rsca/Button';
 
 import { iconNames } from '#constants';
 
