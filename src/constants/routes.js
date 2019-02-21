@@ -50,8 +50,16 @@ export const routes = {
         links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
+    response: {
+        order: 5,
+        type: ROUTE.public,
+        path: '/incidents/:incidentId/response',
+        loader: () => import('../views/Response'),
+        links: allLinks,
+    }, // _ts('pageTitle', 'incidents');
+
     lossAndDamage: {
-        order: 4,
+        order: 6,
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
@@ -59,7 +67,7 @@ export const routes = {
     }, // _ts('pageTitle', 'incidents');
 
     drrProfileMapping: {
-        order: 4,
+        order: 7,
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
@@ -67,7 +75,7 @@ export const routes = {
     }, // _ts('pageTitle', 'incidents');
 
     policyAndPublication: {
-        order: 4,
+        order: 8,
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
@@ -75,7 +83,7 @@ export const routes = {
     }, // _ts('pageTitle', 'incidents');
 
     aboutUs: {
-        order: 4,
+        order: 9,
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),

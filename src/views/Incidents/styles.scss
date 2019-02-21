@@ -1,9 +1,7 @@
 @import '~base-scss/base';
 
 .right {
-    display: flex;
-    flex-direction: column;
-    padding: 0 $spacing-medium;
+    padding: 0;
 }
 
 .left {
@@ -15,12 +13,15 @@
         display: flex;
         position: relative;
         flex-direction: column;
+        border: $width-separator-thin solid $color-separator-light;
+        background-color: $color-foreground;
+        width: 280px;
 
-        .header {
+        >.header {
             flex-shrink: 0;
 
             .heading {
-                padding: $spacing-medium;
+                padding: $spacing-large;
                 color: $color-primary;
             }
         }
@@ -30,33 +31,13 @@
             overflow: auto;
 
             .incident {
-                display: flex;
-                align-items: center;
                 cursor: pointer;
-                padding: $spacing-medium;
-
-                .icon {
-                    flex-shrink: 0;
-                    padding-right: $spacing-medium;
-                    color: $color-danger;
-                    font-size: $font-size-extra-large;
-                }
-
-                .title {
-                    flex-grow: 1;
-                }
+                padding: $spacing-large;
 
                 &:hover {
                     background-color: rgba(0, 0, 0, .05);
                 }
             }
         }
-    }
-}
-
-.main {
-    .map {
-        width: 100%;
-        height: 100%;
     }
 }

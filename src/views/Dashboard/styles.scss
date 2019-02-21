@@ -3,7 +3,6 @@
 .right {
     display: flex;
     flex-direction: column;
-    // padding: 0 $spacing-medium;
 
     .header {
         display: flex;
@@ -41,8 +40,8 @@
     .filters-container {
         transform-origin: 100% 0;
         background-color: $color-foreground;
-        padding: 0 $spacing-medium;
-        width: 240px;
+        padding: 0 $spacing-small;
+        width: 256px;
     }
 
     :global {
@@ -171,12 +170,5 @@
                 height: 160px;
             }
         }
-    }
-}
-
-.main {
-    .map {
-        width: 100%;
-        height: 100%;
     }
 }

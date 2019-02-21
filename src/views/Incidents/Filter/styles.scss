@@ -1,23 +1,52 @@
 @import '~base-scss/base';
 
-.header {
-    flex-shrink: 0;
+$width-filters-container: 256px;
 
-    .heading {
-        padding: $spacing-medium $spacing-small;
-        color: $color-primary;
-    }
-}
-
-.content {
-    flex-grow: 1;
-    overflow: auto;
-
-    .list-selection-input {
-        padding: $spacing-small;
+.filter {
+    .show-filters-button-container {
+        transform-origin: 100% 0;
     }
 
-    .past-data-select-input {
-        padding: $spacing-small;
+    .filters-container {
+        transform-origin: 100% 0;
+        border: $width-separator-thin solid $color-separator-light;
+        background-color: $color-foreground;
+        padding: 0 $spacing-small;
+        width: $width-filters-container;
+
+        .header {
+            flex-shrink: 0;
+
+            .heading {
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
+            }
+        }
+
+        .content {
+            flex-grow: 1;
+            overflow: auto;
+
+            .list-selection-input {
+                margin: $spacing-medium $spacing-small;
+            }
+
+            .past-data-select-input {
+                margin: $spacing-medium $spacing-small;
+            }
+        }
+    }
+
+    :global {
+        .expanded-container-ghost,
+        .collapsed-container-ghost {
+            top: 0;
+            right: 0;
+        }
+
+        .expanded-container-expanding {
+            top: 0;
+            right: 0;
+        }
     }
 }

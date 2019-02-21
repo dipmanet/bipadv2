@@ -1,0 +1,15 @@
+@import '~base-scss/base';
+
+.date-output {
+    display: flex;
+
+    .icon {
+        flex-shrink: 0;
+        padding-right: $spacing-small;
+        font-size: $font-size-large;
+    }
+
+    .formatted-date {
+        flex-grow: 1;
+    }
+}
