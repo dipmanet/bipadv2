@@ -17,7 +17,7 @@
 
     .hr {
         margin: $spacing-small 0;
-        border-bottom: $width-separator-thin solid $color-separator-light;
+        border: $width-separator-thin solid $color-separator-light;
     }
 
     .inducer,
@@ -30,4 +30,19 @@
         border-top: $width-separator-thin solid $color-separator-light;
         padding-top: $spacing-small;
     }
+}
+
+@keyframes fade-in {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+.icon {
+    opacity: 0;
+    height: $font-size-large;
+    animation: fade-in $duration-transition-slow 1.2s ease-in forwards;
+}
+
+.resource-detail-popup {
+    margin-top: $spacing-medium;
 }

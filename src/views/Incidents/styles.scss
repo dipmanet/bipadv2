@@ -4,24 +4,30 @@
     padding: 0;
 }
 
+@keyframes fade-in {
+    from { opacity: 0; } 
+    to { opacity: 1; }
+}
+
 .left {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    animation: fade-in $duration-transition-slow ease-in forwards;
 
     .incidents {
         display: flex;
         position: relative;
         flex-direction: column;
-        border: $width-separator-thin solid $color-separator-light;
+        border: $width-separator-thin solid $color-separator;
         background-color: $color-foreground;
-        width: 280px;
+        width: 300px;
 
         >.header {
             flex-shrink: 0;
 
             .heading {
-                padding: $spacing-large;
+                padding: $spacing-medium $spacing-medium-alt $spacing-extra-small $spacing-medium-alt;
                 color: $color-primary;
             }
         }
@@ -32,7 +38,7 @@
 
             .incident {
                 cursor: pointer;
-                padding: $spacing-large;
+                padding: $spacing-medium $spacing-medium-alt;
 
                 &:hover {
                     background-color: rgba(0, 0, 0, .05);

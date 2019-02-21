@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { incidentIdFromRouteSelector } from '../route';
 
 const emptyObject = {};
 const emptyArray = [];
@@ -75,5 +76,17 @@ export const incidentListSelectorIP = createSelector(
         }
 
         return returnList;
+    },
+);
+
+export const incidentSelector = createSelector(
+    incidentIdFromRouteSelector,
+    incidentPageSelector,
+    (id, { incidentList }) => {
+        const incident = incidentList.find(
+            i => String(i.pk) === String(id),
+        );
+
+        return incident || emptyObject;
     },
 );

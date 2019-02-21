@@ -42,12 +42,4 @@ const createRouteSelector = name => createSelector(
     },
 );
 
-export const afIdFromRouteSelector = createRouteSelector('analysisFrameworkId');
-export const ceIdFromRouteSelector = createRouteSelector('categoryEditorId');
-export const connectorIdFromRouteSelector = createRouteSelector('connectorId');
-export const countryIdFromRouteSelector = createRouteSelector('countryId');
-export const groupIdFromRouteSelector = createRouteSelector('userGroupId');
-export const leadIdFromRouteSelector = createRouteSelector('leadId');
-export const leadGroupIdFromRouteSelector = createRouteSelector('leadGroupId');
-export const projectIdFromRouteSelector = createRouteSelector('projectId');
-export const userIdFromRouteSelector = createRouteSelector('userId');
+export const incidentIdFromRouteSelector = createRouteSelector('incidentId');

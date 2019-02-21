@@ -7,16 +7,16 @@
 
     .header {
         .heading {
-            padding-bottom: $spacing-small;
+            padding-bottom: $spacing-extra-small;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-weight: $font-weight-medium;
+            font-weight: $font-weight-bold;
         }
     }
 
     .geo-output {
-        padding-bottom: $spacing-small;
+        padding-bottom: $spacing-extra-small;
     }
 }
 

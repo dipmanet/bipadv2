@@ -1,0 +1,39 @@
+@import '~base-scss/base';
+
+.resources {
+    margin-bottom: $spacing-medium;
+    padding: $spacing-small 0;
+
+    .header {
+        display: flex;
+        margin-bottom: $spacing-small;
+
+        .icon {
+            padding-right: $spacing-medium;
+            height: $font-size-large;
+        }
+
+        .heading {
+            flex-grow: 1;
+        }
+    }
+
+    .content {
+        .resource {
+            padding: $spacing-small 0;
+
+            .title {
+                color: $color-text-label;
+                font-weight: $font-weight-bold;
+            }
+
+            .distance {
+                display: flex;
+
+                .amount {
+                    margin-right: $spacing-small;
+                }
+            }
+        }
+    }
+}

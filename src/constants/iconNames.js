@@ -19,6 +19,7 @@ const iconNames = {
 
     calendar: 'ion-ios-calendar-outline',
     location: 'ion-ios-location-outline',
+    distance: 'ion-android-locate',
 };
 
 export default iconNames;

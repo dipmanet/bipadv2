@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import { Redirect } from 'react-router-dom';
 import turf from 'turf';
+import { reverseRoute } from '@togglecorp/fujs';
 
+import DistanceOutput from '#components/DistanceOutput';
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import PeopleLoss from '#components/PeopleLoss';
+import MapIconLayer from '#components/MapIconLayer';
+
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { reverseRoute } from '@togglecorp/fujs';
 import { routes } from '#constants';
 
 import nepalGeoJson from '#resources/districts.json';
+import healthFacilityIcon from '#resources/icons/health-facility.svg';
+import groupIcon from '#resources/icons/group.svg';
 
 import {
     boundsFill,
@@ -32,19 +36,20 @@ const defaultProps = {
     className: '',
 };
 
+const icons = {
+    hospital: healthFacilityIcon,
+    volunteer: groupIcon,
+};
+
 const emptyList = [];
 const emptyObject = {};
 
-export default class IncidentMap extends React.PureComponent {
+export default class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            redirectTo: undefined,
-        };
 
         this.hoverInfo = {
             paint: hoverPaint,
@@ -53,20 +58,31 @@ export default class IncidentMap extends React.PureComponent {
         };
     }
 
-    getFeatureCollection = memoize((incidentList) => {
+    getResourceFeatureCollection = memoize((resourceList) => {
         const geojson = {
             type: 'FeatureCollection',
-            features: incidentList
-                .filter(incident => incident.point)
-                .map(incident => ({
+            features: resourceList
+                .filter(resource => resource.point)
+                .map(resource => ({
                     type: 'Feature',
                     geometry: {
                         type: 'Point',
-                        coordinates: incident.point,
+                        coordinates: resource.point,
                     },
                     properties: {
-                        incident,
-                        severity: incident.severity,
+                        resource,
+                        imageSource: icons[resource.type],
+                        className: styles.icon,
+                        popupComponent: (
+                            <div className={styles.resourceDetailPopup}>
+                                <h3 className={styles.title}>
+                                    { resource.title }
+                                </h3>
+                                <DistanceOutput
+                                    value={resource.distance}
+                                />
+                            </div>
+                        ),
                     },
                 })),
         };
@@ -136,28 +152,37 @@ export default class IncidentMap extends React.PureComponent {
     render() {
         const {
             className,
-            incidentList,
+            incident,
+            resourceList,
         } = this.props;
 
-        const { redirectTo } = this.state;
+        const point = turf.point(incident.point);
+        const buffered = turf.buffer(point, 5, 'kilometers');
+        const bbox = turf.bbox(buffered);
 
-        if (redirectTo) {
-            return (
-                <Redirect
-                    to={redirectTo}
-                    push
-                />
-            );
-        }
+        const featureCollection = {
+            type: 'FeatureCollection',
+            features: [{
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: incident.point,
+                },
+                properties: {
+                    incident,
+                    severity: incident.severity,
+                },
+            }],
+        };
 
-        const featureCollection = this.getFeatureCollection(incidentList);
+        const resourceFeatures = this.getResourceFeatureCollection(resourceList);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
-                    bounds={turf.bbox(nepalGeoJson)}
+                    bounds={bbox}
                 >
                     <MapLayer
                         layerKey="bounds-fill"
@@ -184,6 +209,9 @@ export default class IncidentMap extends React.PureComponent {
                         hoverInfo={this.hoverInfo}
                     />
                 </MapSource>
+                <MapIconLayer
+                    geoJson={resourceFeatures}
+                />
             </React.Fragment>
         );
     }
