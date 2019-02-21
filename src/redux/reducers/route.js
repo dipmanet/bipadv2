@@ -25,15 +25,7 @@ export const clearRouteStateAction = () => ({
 // REDUCER
 
 const urlValues = [
-    'analysisFrameworkId',
-    'categoryEditorId',
-    'connectorId',
-    'countryId',
-    'leadGroupId',
-    'leadId',
-    'projectId',
-    'userGroupId',
-    'userId',
+    'responseId',
 ];
 
 const transform = (params) => {

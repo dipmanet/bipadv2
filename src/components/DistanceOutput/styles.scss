@@ -1,0 +1,20 @@
+@import '~base-scss/base';
+
+.distance-output {
+    display: flex;
+
+    .icon {
+        flex-shrink: 0;
+        padding-right: $spacing-small;
+        font-size: $font-size-large;
+    }
+
+    .value {
+        display: flex;
+
+        .amount {
+            margin-right: $spacing-extra-small;
+            font-weight: $font-weight-bold;
+        }
+    }
+}

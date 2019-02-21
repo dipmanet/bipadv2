@@ -35,12 +35,12 @@ export default class Incidents extends React.PureComponent {
                 to={reverseRoute(routes.response.path, { incidentId })}
             >
                 <header className={styles.header}>
-                    <h2
+                    <h3
                         title={title}
                         className={styles.heading}
                     >
                         { title }
-                    </h2>
+                    </h3>
                 </header>
                 <GeoOutput
                     className={styles.geoOutput}

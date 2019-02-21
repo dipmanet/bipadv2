@@ -633,6 +633,46 @@ const initialSiloDomainData = {
             pristine: true,
         },
     },
+
+    responsePage: {
+        resourceList: [
+            {
+                pk: 1,
+                point: [85.304140, 27.810769],
+                type: 'hospital',
+                title: 'Alka Hospital Pvt. Ltd.',
+                distance: 2,
+            },
+            {
+                pk: 2,
+                point: [85.419140, 27.700769],
+                type: 'hospital',
+                title: 'Nidaan Hospital Pvt. Ltd.',
+                distance: 1.8,
+            },
+            {
+                pk: 3,
+                point: [85.311140, 27.710769],
+                type: 'hospital',
+                title: 'Mediciti Hospital',
+                distance: 0.2,
+            },
+            {
+                pk: 4,
+                point: [85.121140, 27.710769],
+                type: 'volunteer',
+                title: 'Togglecorp Solutions Pvt. Ltd.',
+                distance: 2.5,
+            },
+            {
+                pk: 5,
+                point: [85.521140, 27.510769],
+                type: 'volunteer',
+                title: 'Naxa Pvt. Ltd.',
+                distance: 4.6,
+            },
+        ],
+    },
 };
 
 export default initialSiloDomainData;
