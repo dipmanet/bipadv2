@@ -70,7 +70,7 @@ export const alertListSelectorDP = createSelector(
         if (dateRange) {
             const date = getDateFromRange(dateRange);
             returnList = returnList.filter(
-                alert => alert.alert_on > date,
+                alert => alert.alertOn > date,
             );
         }
 

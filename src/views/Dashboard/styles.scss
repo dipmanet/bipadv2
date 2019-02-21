@@ -28,6 +28,7 @@
 
     .filters-container {
         transform-origin: 100% 0;
+        border: $width-separator-thin solid $color-separator-light;
         background-color: $color-foreground;
         padding: 0 $spacing-small;
         width: 256px;
@@ -64,6 +65,7 @@
 
     .alerts-container {
         transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator-light;
         background-color: $color-foreground;
         width: 320px;
         height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
@@ -73,6 +75,7 @@
         display: flex;
         position: relative;
         flex-direction: column;
+        height: 50%;
 
         .header {
             display: flex;
@@ -102,7 +105,10 @@
 
                 .icon {
                     flex-shrink: 0;
-                    padding-right: $spacing-medium;
+                    margin-right: $spacing-medium;
+                    width: 20px;
+                    height: 20px;
+                    object-fit: contain;
                     color: $color-danger;
                     font-size: $font-size-extra-large;
                 }
@@ -121,6 +127,8 @@
     .key-statistics {
         display: flex;
         flex-direction: column;
+        height: 50%;
+        overflow-y: auto;
 
         .header {
             flex-shrink: 0;

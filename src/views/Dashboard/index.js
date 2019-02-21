@@ -1,31 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { mapToList } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-import DonutChart from '#rscz/DonutChart';
 import PieChart from '#rscz/PieChart';
-import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-
-import {
-    barChartData,
-    pieChartData,
-    donutChartData1,
-    donutChartData2,
-} from '#resources/data';
+import Histogram from '#rscz/Histogram';
 
 import {
     alertListSelectorDP,
+    hazardTypesSelector,
 } from '#redux';
 
 import CollapsibleView from '#components/CollapsibleView';
 import Page from '#components/Page';
-import Map from '#components/ProjectsMap';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
 
 import _cs from '#cs';
+import Map from './Map';
 import DashboardFilter from './Filter';
 
 import styles from './styles.scss';
@@ -42,34 +37,16 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
-
-const getFeatureCollectionFromPoints = (points) => {
-    const geojson = {
-        type: 'FeatureCollection',
-        features: points.map(point => ({
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [point.lng, point.lat],
-            },
-            properties: {
-                title: point.title,
-                description: point.description,
-            },
-        })),
-    };
-
-    return geojson;
-};
-
 const propTypes = {
     alertList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    hazardTypes: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {};
 
 const mapStateToProps = state => ({
     alertList: alertListSelectorDP(state),
+    hazardTypes: hazardTypesSelector(state),
 });
 
 @connect(mapStateToProps)
@@ -107,24 +84,60 @@ export default class Dashboard extends React.PureComponent {
         this.setState({ showAlerts: false });
     }
 
+    groupByHazard = memoize((alerts, hazards) => {
+        const freqObj = alerts.reduce((total, obj) => {
+            const key = obj.hazard;
+            if (!total[key]) {
+                total[key] = []; // eslint-disable-line no-param-reassign
+            }
+            total[key].push(obj.hazard);
+            return total;
+        }, {});
+
+        return mapToList(
+            freqObj,
+            (d, k) => ({
+                label: hazards[k].title,
+                value: d.length,
+            }),
+        );
+    });
+
     renderAlert = ({
         className,
         data: {
             title,
+            hazard,
         } = emptyObject,
-    }) => (
-        <div className={className}>
-            <div
-                className={_cs(
-                    iconNames.alert,
-                    styles.icon,
+    }) => {
+        const { hazardTypes } = this.props;
+        const {
+            icon,
+            label,
+        } = hazardTypes[hazard];
+
+        return (
+            <div className={className}>
+                { icon ? (
+                    <img
+                        className={styles.icon}
+                        src={icon}
+                        alt={label}
+                    />
+                ) : (
+                    <div
+                        className={_cs(
+                            iconNames.alert,
+                            styles.icon,
+                        )}
+                    />
                 )}
-            />
-            <div className={styles.title}>
-                { title }
+                <div className={styles.title}>
+                    { title }
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     renderAlerts = ({
         className,
@@ -153,54 +166,70 @@ export default class Dashboard extends React.PureComponent {
         </div>
     )
 
-    renderKeyStatistics = ({ className }) => (
-        <div className={className}>
-            <header className={styles.header}>
-                <h4 className={styles.heading}>
-                    Key statistics
-                </h4>
-            </header>
-            <div className={styles.content}>
-                <div className={styles.donutCharts}>
-                    <DonutChart
-                        className={styles.donutChart1}
-                        data={donutChartData1}
-                        labelSelector={donutChartLabelSelector}
-                        valueSelector={donutChartValueSelector}
-                        sideLengthRatio={0.3}
+    renderKeyStatistics = ({ className }) => {
+        const {
+            alertList,
+            hazardTypes,
+        } = this.props;
+
+        const alertFreq = this.groupByHazard(alertList, hazardTypes);
+        const alertTimeStamps = alertList.map(a => a.alertOn);
+
+        return (
+            <div className={className}>
+                <header className={styles.header}>
+                    <h4 className={styles.heading}>
+                        Key statistics
+                    </h4>
+                </header>
+                <div className={styles.content}>
+                    {/*
+                    <div className={styles.donutCharts}>
+                        <DonutChart
+                            className={styles.donutChart1}
+                            data={alertFreq}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            sideLengthRatio={0.3}
+                            colorScheme={basicColor}
+                        />
+                        <DonutChart
+                            colorScheme={basicColor}
+                            className={styles.donutChart2}
+                            data={alertFreq}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            sideLengthRatio={0.3}
+                        />
+                    </div>
+                    */}
+                    <PieChart
+                        className={styles.pieChart}
+                        data={alertFreq}
+                        labelSelector={pieChartLabelSelector}
                         colorScheme={basicColor}
+                        valueSelector={pieChartValueSelector}
                     />
-                    <DonutChart
-                        colorScheme={basicColor}
-                        className={styles.donutChart2}
-                        data={donutChartData2}
-                        labelSelector={donutChartLabelSelector}
-                        valueSelector={donutChartValueSelector}
-                        sideLengthRatio={0.3}
+                    {/*
+                    <SimpleVerticalBarChart
+                        className={styles.barChart}
+                        data={barChartData}
+                        labelSelector={barChartLabelSelector}
+                        valueSelector={barChartValueSelector}
+                    />
+                    */}
+                    <Histogram
+                        data={alertTimeStamps}
                     />
                 </div>
-                <PieChart
-                    className={styles.pieChart}
-                    data={pieChartData}
-                    labelSelector={pieChartLabelSelector}
-                    colorScheme={basicColor}
-                    valueSelector={pieChartValueSelector}
-                />
-                <SimpleVerticalBarChart
-                    className={styles.barChart}
-                    data={barChartData}
-                    labelSelector={barChartLabelSelector}
-                    valueSelector={barChartValueSelector}
-                />
             </div>
-        </div>
-    )
+        );
+    }
 
     render() {
         const Alerts = this.renderAlerts;
         const KeyStatistics = this.renderKeyStatistics;
         const { alertList } = this.props;
-        const featureCollection = getFeatureCollectionFromPoints(alertList);
 
         const {
             showFilters,
@@ -210,7 +239,7 @@ export default class Dashboard extends React.PureComponent {
         return (
             <React.Fragment>
                 <Map
-                    points={featureCollection}
+                    alertList={alertList}
                     className={styles.map}
                 />
                 <Page
