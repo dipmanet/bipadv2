@@ -25,3 +25,21 @@
         line-height: 1.8;
     }
 }
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: $color-foreground;
+    width: $font-size-super-large;
+    height: $font-size-super-large;
+}
+
+.icon {
+    height: $font-size-small-alt;
+}
+
+.marker-popup {
+    margin-top: $spacing-small;
+}

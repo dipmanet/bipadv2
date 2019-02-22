@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import ReactDOMServer from 'react-dom/server';
+import turf from 'turf';
 
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
+import MapMarkerLayer from '#components/MapMarkerLayer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
@@ -42,7 +45,7 @@ export default class AlertMap extends React.PureComponent {
         };
     }
 
-    getFeatureCollection = memoize((alertList) => {
+    getFeatureCollection = memoize((alertList, hazardTypes) => {
         const geojson = {
             type: 'FeatureCollection',
             features: alertList
@@ -55,6 +58,21 @@ export default class AlertMap extends React.PureComponent {
                     },
                     properties: {
                         alert,
+                        containerClassName: styles.iconContainer,
+                        markerHTML: ReactDOMServer.renderToString(
+                            <img
+                                src={hazardTypes[alert.hazard].icon}
+                                alt={alert.title}
+                                className={styles.icon}
+                            />,
+                        ),
+                        popupHTML: ReactDOMServer.renderToString(
+                            <div className={styles.markerPopup}>
+                                <h3 className={styles.heading}>
+                                    { alert.title }
+                                </h3>
+                            </div>,
+                        ),
                     },
                 })),
         };
@@ -80,15 +98,17 @@ export default class AlertMap extends React.PureComponent {
         const {
             className,
             alertList,
+            hazardTypes,
         } = this.props;
 
-        const featureCollection = this.getFeatureCollection(alertList);
+        const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
+                    bounds={turf.bbox(nepalGeoJson)}
                 >
                     <MapLayer
                         layerKey="bounds-fill"
@@ -101,6 +121,10 @@ export default class AlertMap extends React.PureComponent {
                         paint={boundsOutline}
                     />
                 </MapSource>
+                <MapMarkerLayer
+                    geoJson={featureCollection}
+                />
+                {/*
                 <MapSource
                     sourceKey="points"
                     geoJson={featureCollection}
@@ -115,6 +139,7 @@ export default class AlertMap extends React.PureComponent {
                         // onClick={this.handlePointClick}
                     />
                 </MapSource>
+                */}
             </React.Fragment>
         );
     }
