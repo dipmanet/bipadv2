@@ -110,11 +110,6 @@ export default class ProjectsMap extends React.PureComponent {
                     {!showColors ? (
                         <React.Fragment>
                             <MapLayer
-                                layerKey="bounds-fill"
-                                type="fill"
-                                paint={boundsFill}
-                            />
-                            <MapLayer
                                 layerKey="bounds-outline"
                                 type="line"
                                 paint={boundsOutline}

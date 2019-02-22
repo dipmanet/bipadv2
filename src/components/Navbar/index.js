@@ -12,19 +12,17 @@ import {
     iconNames,
 } from '#constants';
 
-import { routePathKeySelector } from '#redux';
+import {
+    routePathKeySelector,
+    mapStylesSelector,
+    setMapStyleAction,
+} from '#redux';
 
 import _cs from '#cs';
 
 import styles from './styles.scss';
 
-const propTypes = {
-    className: PropTypes.string,
-};
-
-const defaultProps = {
-    className: '',
-};
+const layerKeySelector = d => d.name;
 
 const pages = [
     {
@@ -138,9 +136,16 @@ MenuItem.defaultProps = {
     routeKey: '',
 };
 
-const mapStateToProps = state => ({
-    routeKey: routePathKeySelector(state),
-});
+const propTypes = {
+    className: PropTypes.string,
+    mapStyles: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    setMapStyle: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+    className: '',
+    mapStyles: [],
+};
 
 class Navbar extends React.PureComponent {
     static propTypes = propTypes;
@@ -170,9 +175,39 @@ class Navbar extends React.PureComponent {
         disabled: data.disabled,
     });
 
+    handleStyleSelection = (data) => {
+        const { setMapStyle } = this.props;
+        const { style } = data;
+        setMapStyle(style);
+    }
+
+    renderLayer = (key, data) => {
+        const {
+            color,
+            name,
+        } = data;
+
+        return (
+            <Button
+                className={styles.mapLayerButton}
+                onClick={() => this.handleStyleSelection(data)}
+                transparent
+            >
+                <div
+                    className={styles.preview}
+                    style={{ backgroundColor: color }}
+                />
+                <div className={styles.label}>
+                    { name }
+                </div>
+            </Button>
+        );
+    }
+
     render() {
         const {
             className: classNameFromProps,
+            mapStyles,
         } = this.props;
 
         const { menuShown } = this.state;
@@ -211,6 +246,13 @@ class Navbar extends React.PureComponent {
                         rendererParams={this.menuRendererParams}
                         className={styles.menuItems}
                     />
+                    <ListView
+                        className={styles.layerSwitch}
+                        data={mapStyles}
+                        keySelector={layerKeySelector}
+                        modifier={this.renderLayer}
+                        emptyComponent={null}
+                    />
                 </div>
                 <div className={styles.logo}>
                     <div className={styles.left} />
@@ -233,4 +275,13 @@ class Navbar extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps)(Navbar);
+const mapStateToProps = state => ({
+    routeKey: routePathKeySelector(state),
+    mapStyles: mapStylesSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setMapStyle: params => dispatch(setMapStyleAction(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

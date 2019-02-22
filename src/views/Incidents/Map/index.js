@@ -155,28 +155,28 @@ export default class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="bounds"
+                    sourceKey="incident-bounds"
                     geoJson={nepalGeoJson}
                     bounds={turf.bbox(nepalGeoJson)}
                 >
                     <MapLayer
-                        layerKey="bounds-fill"
+                        layerKey="incident-bounds-fill"
                         type="fill"
                         paint={boundsFill}
                     />
                     <MapLayer
-                        layerKey="bounds-outline"
+                        layerKey="incident-bounds-outline"
                         type="line"
                         paint={boundsOutline}
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey="points"
+                    sourceKey="incident-points"
                     geoJson={featureCollection}
                     supportHover
                 >
                     <MapLayer
-                        layerKey="points"
+                        layerKey="incident-points"
                         type="circle"
                         property="incident"
                         paint={pointPaint}

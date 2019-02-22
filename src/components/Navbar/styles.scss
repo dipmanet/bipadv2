@@ -123,4 +123,26 @@ $height-menu: 160px;
             }
         }
     }
+
+    .layer-switch {
+        overflow: hidden;
+
+        .map-layer-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            .preview {
+                margin-right: $spacing-small;
+                border-radius: 50%;
+                width: $font-size-extra-small;
+                height: $font-size-extra-small;
+            }
+
+            .label {
+                text-transform: capitalize;
+                font-size: $font-size-extra-small;
+            }
+        }
+    }
 }
