@@ -72,6 +72,7 @@ export default class ResponseMap extends React.PureComponent {
                     },
                     properties: {
                         resource,
+                        containerClassName: styles.markerContainer,
                         markerHTML: ReactDOMServer.renderToString(
                             <img
                                 src={icons[resource.type]}
