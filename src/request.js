@@ -12,12 +12,11 @@ import update from '#rsu/immutable-update';
 
 import { wsEndpoint } from '#config/rest';
 import schema from '#schema';
-import { alterResponseErrorToFaramError } from '#rest';
-import { tokenSelector } from '#redux';
+// import { tokenSelector } from '#redux';
 import notify from '#notify';
 
 const mapStateToProps = state => ({
-    token: tokenSelector(state),
+    // token: tokenSelector(state),
 });
 
 const CustomRequestCoordinator = createRequestCoordinator({
@@ -73,13 +72,7 @@ const CustomRequestCoordinator = createRequestCoordinator({
         return body;
     },
 
-    transformErrors: (response) => {
-        const faramErrors = alterResponseErrorToFaramError(response.errors);
-        return {
-            response,
-            faramErrors,
-        };
-    },
+    transformErrors: response => response,
 });
 
 export const RequestCoordinator = compose(

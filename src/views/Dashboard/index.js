@@ -10,7 +10,15 @@ import PieChart from '#rscz/PieChart';
 import Histogram from '#rscz/Histogram';
 
 import {
+    RequestCoordinator,
+    RequestClient,
+    requestMethods,
+} from '#request';
+
+import {
     alertListSelectorDP,
+    setAlertListActionDP,
+    setHazardTypesAction,
     hazardTypesSelector,
 } from '#redux';
 
@@ -24,6 +32,28 @@ import Map from './Map';
 import DashboardFilter from './Filter';
 
 import styles from './styles.scss';
+
+const requests = {
+    hazardTypesRequest: {
+        method: requestMethods.GET,
+        url: '/hazard/',
+        onSuccess: ({ response, props: { setHazardTypes } }) => {
+            if (response.status === 'success') {
+                setHazardTypes(response);
+            }
+        },
+    },
+    alertsRequest: {
+        method: requestMethods.GET,
+        url: '/alert/',
+        onSuccess: ({ response, props: { setAlertList } }) => {
+            if (response.status === 'success') {
+                setAlertList(response);
+            }
+        },
+    },
+    // TODO: add onFailure, onFatal, schema
+};
 
 const emptyObject = {};
 const alertKeySelector = d => d.id;
@@ -49,7 +79,14 @@ const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+    setAlertList: params => dispatch(setAlertListActionDP(params)),
+    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+@RequestCoordinator
+@RequestClient(requests)
 export default class Dashboard extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps

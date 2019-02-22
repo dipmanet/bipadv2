@@ -5,6 +5,12 @@ import { connect } from 'react-redux';
 import DateOutput from '#components/DateOutput';
 
 import {
+    RequestCoordinator,
+    RequestClient,
+    requestMethods,
+} from '#request';
+
+import {
     barChartData,
     pieChartData,
     donutChartData1,
@@ -13,6 +19,7 @@ import {
 
 import {
     incidentListSelectorIP,
+    setIncidentListActionIP,
 } from '#redux';
 
 import Page from '#components/Page';
@@ -31,6 +38,18 @@ import Map from './Map';
 
 import styles from './styles.scss';
 
+const requests = {
+    incidentsRequest: {
+        method: requestMethods.GET,
+        url: '/incident/',
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            if (response.status === 'success') {
+                setIncidentList(response);
+            }
+        },
+    },
+    // TODO: add schema, onFailure, onFatal
+};
 const emptyObject = {};
 const incidentKeySelector = d => d.pk;
 
@@ -53,10 +72,16 @@ const mapStateToProps = state => ({
     incidentList: incidentListSelectorIP(state),
 });
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+@RequestCoordinator
+@RequestClient(requests)
 export default class Incidents extends React.PureComponent {
-    static propTypes = propTypes
-    static defaultProps = defaultProps
+    static propTypes = propTypes;
+    static defaultProps = defaultProps;
 
     getIncidentRendererParams = (_, d) => ({
         data: d,
