@@ -1,113 +1,85 @@
-import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import {
-    createRequestCoordinator,
-    createRequestClient,
-    RestRequest,
-} from '@togglecorp/react-rest-request';
-
 import update from '#rsu/immutable-update';
 
-import { wsEndpoint } from '#config/rest';
+import {
+    createRequestCoordinator,
+    methods,
+} from '@togglecorp/react-rest-request';
 import schema from '#schema';
-import { alterResponseErrorToFaramError } from '#rest';
-import { tokenSelector } from '#redux';
-import notify from '#notify';
+// import { tokenSelector } from '#redux';
+
+export * from '@togglecorp/react-rest-request';
+
+const wsEndpoint = 'http://bipad.nepware.com/api/v1';
 
 const mapStateToProps = state => ({
-    token: tokenSelector(state),
+    // token: tokenSelector(state),
+    token: {},
 });
 
-const CustomRequestCoordinator = createRequestCoordinator({
-    transformParams: (params, props) => {
-        const { access } = props.token;
-        if (!access) {
-            return params;
-        }
-
-        const settings = {
-            headers: { $auto: {
-                Authorization: { $set: `Bearer ${access}` },
-            } },
-        };
-
-        return update(params, settings);
-    },
-    transformProps: (props) => {
-        const {
-            token, // eslint-disable-line no-unused-vars
-            ...otherProps
-        } = props;
-        return otherProps;
-    },
-
-    transformUrl: (url) => {
-        if (/^https?:\/\//i.test(url)) {
-            return url;
-        }
-
-        return `${wsEndpoint}${url}`;
-    },
-
-    transformResponse: (body, request) => {
-        const {
-            url,
-            method,
-            schemaName,
-        } = request;
-        if (schemaName === undefined) {
-            // NOTE: usually there is no response body for DELETE
-            if (method !== 'DELETE') {
-                console.error(`Schema is not defined for ${url} ${method}`);
-            }
-        } else {
-            try {
-                schema.validate(body, schemaName);
-            } catch (e) {
-                console.error(url, method, body, e.message);
-                throw (e);
-            }
-        }
-        return body;
-    },
-
-    transformErrors: (response) => {
-        const faramErrors = alterResponseErrorToFaramError(response.errors);
-        return {
-            response,
-            faramErrors,
-        };
-    },
-});
-
-export const RequestCoordinator = compose(
+export const createConnectedRequestCoordinator = () => compose(
     connect(mapStateToProps),
-    CustomRequestCoordinator,
+    createRequestCoordinator({
+        transformParams: (params, props) => {
+            const { access } = props.token;
+            if (!access) {
+                return params;
+            }
+
+            const settings = {
+                headers: { $auto: {
+                    Authorization: { $set: `Bearer ${access}` },
+                } },
+            };
+
+            return update(params, settings);
+        },
+        transformProps: (props) => {
+            const {
+                token, // eslint-disable-line no-unused-vars
+                ...otherProps
+            } = props;
+            return otherProps;
+        },
+
+        transformUrl: (url) => {
+            if (/^https?:\/\//i.test(url)) {
+                return url;
+            }
+
+            return `${wsEndpoint}${url}`;
+        },
+
+        transformResponse: (body, request) => {
+            const {
+                url,
+                method,
+                extras,
+            } = request;
+            if (!extras || extras.schemaName === undefined) {
+                // NOTE: usually there is no response body for DELETE
+                if (method !== methods.DELETE) {
+                    console.error(`Schema is not defined for ${url} ${method}`);
+                }
+            } else {
+                try {
+                    schema.validate(body, extras.schemaName);
+                } catch (e) {
+                    console.error(url, method, body, e.message);
+                    throw (e);
+                }
+            }
+            return body;
+        },
+
+        transformErrors: (response) => {
+            const faramErrors = response.errors;
+            return {
+                response,
+                faramErrors,
+            };
+        },
+    }),
 );
-
-export const RequestClient = createRequestClient();
-RequestClient.propType = PropTypes.shape({
-    do: PropTypes.func,
-    pending: PropTypes.bool,
-    response: PropTypes.object,
-    error: PropTypes.object,
-});
-
-export const notifyOnFailure = title => ({
-    error: {
-        body,
-    } = {},
-}) => {
-    const message = body.$internal.join(' ');
-
-    notify.send({
-        title,
-        type: notify.type.ERROR,
-        message,
-        duration: notify.duration.MEDIUM,
-    });
-};
-
-export const requestMethods = RestRequest.methods;
