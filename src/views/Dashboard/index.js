@@ -10,9 +10,8 @@ import PieChart from '#rscz/PieChart';
 import Histogram from '#rscz/Histogram';
 
 import {
-    RequestCoordinator,
-    RequestClient,
-    requestMethods,
+    createConnectedRequestCoordinator,
+    createRequestClient,
 } from '#request';
 
 import {
@@ -35,22 +34,32 @@ import styles from './styles.scss';
 
 const requests = {
     hazardTypesRequest: {
-        method: requestMethods.GET,
         url: '/hazard/',
         onSuccess: ({ response, props: { setHazardTypes } }) => {
-            if (response.status === 'success') {
-                setHazardTypes(response);
-            }
+            const { results: hazardTypes = [] } = response;
+            setHazardTypes({ hazardTypes });
         },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        onMount: true,
     },
     alertsRequest: {
-        method: requestMethods.GET,
         url: '/alert/',
         onSuccess: ({ response, props: { setAlertList } }) => {
-            if (response.status === 'success') {
-                setAlertList(response);
-            }
+            const { results: alertList = [] } = response;
+            setAlertList({ alertList });
         },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        onMount: true,
     },
     // TODO: add onFailure, onFatal, schema
 };
@@ -74,20 +83,7 @@ const propTypes = {
 
 const defaultProps = {};
 
-const mapStateToProps = state => ({
-    alertList: alertListSelectorDP(state),
-    hazardTypes: hazardTypesSelector(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    setAlertList: params => dispatch(setAlertListActionDP(params)),
-    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
-});
-
-@connect(mapStateToProps, mapDispatchToProps)
-@RequestCoordinator
-@RequestClient(requests)
-export default class Dashboard extends React.PureComponent {
+class Dashboard extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
@@ -344,3 +340,19 @@ export default class Dashboard extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    alertList: alertListSelectorDP(state),
+    hazardTypes: hazardTypesSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setAlertList: params => dispatch(setAlertListActionDP(params)),
+    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(Dashboard),
+    ),
+);

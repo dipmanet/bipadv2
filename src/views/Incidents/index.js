@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import DateOutput from '#components/DateOutput';
 
 import {
-    RequestCoordinator,
-    RequestClient,
-    requestMethods,
+    createConnectedRequestCoordinator,
+    createRequestClient,
 } from '#request';
 
 import {
@@ -40,13 +39,18 @@ import styles from './styles.scss';
 
 const requests = {
     incidentsRequest: {
-        method: requestMethods.GET,
         url: '/incident/',
         onSuccess: ({ response, props: { setIncidentList } }) => {
-            if (response.status === 'success') {
-                setIncidentList(response);
-            }
+            const { results: incidentList = [] } = response;
+            setIncidentList({ incidentList });
         },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        onMount: true,
     },
     // TODO: add schema, onFailure, onFatal
 };
@@ -68,18 +72,7 @@ const propTypes = {
 
 const defaultProps = {};
 
-const mapStateToProps = state => ({
-    incidentList: incidentListSelectorIP(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
-});
-
-@connect(mapStateToProps, mapDispatchToProps)
-@RequestCoordinator
-@RequestClient(requests)
-export default class Incidents extends React.PureComponent {
+class Incidents extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -182,3 +175,17 @@ export default class Incidents extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    incidentList: incidentListSelectorIP(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(Incidents),
+    ),
+);

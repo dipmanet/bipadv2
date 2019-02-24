@@ -110,7 +110,7 @@
         "@togglecorp/faram": "^1.1.0",
         "@togglecorp/fujs": "^1.3.0",
         "@togglecorp/ravl": "^1.2.2",
-        "@togglecorp/react-rest-request": "^2.0.8",
+        "@togglecorp/react-rest-request": "^2.0.9",
         "body-parser": "^1.18.3",
         "classnames": "^2.2.6",
         "d3-area-label": "^1.4.0",
