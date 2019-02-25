@@ -27,11 +27,21 @@ import {
 } from '#constants';
 
 import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+} from '#request';
+
+import {
     authenticatedSelector,
     lastNotifySelector,
     mapStyleSelector,
     notifyHideAction,
+    setProvincesAction,
+    setDistrictsAction,
+    setMunicipalitiesAction,
+    setWardsAction,
 } from '#redux';
+
 import styles from './styles.scss';
 
 const ROUTE = {
@@ -64,20 +74,70 @@ const defaultProps = {
     mapStyle: undefined,
 };
 
-const mapStateToProps = state => ({
-    mapStyle: mapStyleSelector(state),
-    authenticated: authenticatedSelector(state),
-    lastNotify: lastNotifySelector(state),
-});
+const requests = {
+    provinceListRequest: {
+        url: '/province/',
+        onSuccess: ({ response, props: { setProvinces } }) => {
+            const { results: provinces = [] } = response;
+            setProvinces({ provinces });
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        schemaName: 'provinceResponse',
+        onMount: true,
+    },
+    districtListRequest: {
+        url: '/district/',
+        onSuccess: ({ response, props: { setDistricts } }) => {
+            const { results: districts = [] } = response;
+            setDistricts({ districts });
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        schemaName: 'districtResponse',
+        onMount: true,
+    },
+    municipalityListRequest: {
+        url: '/municipality/',
+        onSuccess: ({ response, props: { setMunicipalities } }) => {
+            const { results: municipalities = [] } = response;
+            setMunicipalities({ municipalities });
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        schemaName: 'municipalityResponse',
+        onMount: true,
+    },
+    wardListRequest: {
+        url: '/ward/',
+        onSuccess: ({ response, props: { setWards } }) => {
+            const { results: wards = [] } = response;
+            setWards({ wards });
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failed', error, params);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('fatal', error, params);
+        },
+        schemaName: 'wardResponse',
+        onMount: true,
+    },
+};
 
-const mapDispatchToProps = dispatch => ({
-    notifyHide: params => dispatch(notifyHideAction(params)),
-});
-
-// NOTE: withRouter is required here so that link change are updated
-@withRouter
-@connect(mapStateToProps, mapDispatchToProps)
-export default class Multiplexer extends React.PureComponent {
+class Multiplexer extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -170,3 +230,26 @@ export default class Multiplexer extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    mapStyle: mapStyleSelector(state),
+    authenticated: authenticatedSelector(state),
+    lastNotify: lastNotifySelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    notifyHide: params => dispatch(notifyHideAction(params)),
+    setProvinces: params => dispatch(setProvincesAction(params)),
+    setDistricts: params => dispatch(setDistrictsAction(params)),
+    setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
+    setWards: params => dispatch(setWardsAction(params)),
+});
+
+// NOTE: withRouter is required here so that link change are updated
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(
+        createConnectedRequestCoordinator()(
+            createRequestClient(requests)(Multiplexer),
+        ),
+    ),
+);

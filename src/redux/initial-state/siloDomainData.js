@@ -710,20 +710,19 @@ const initialSiloDomainData = {
             style: 'mapbox://styles/mapbox/streets-v11',
             color: '#ece0ca',
         },
-        /*
-        {
-            name: 'dark',
-            style: 'mapbox://styles/mapbox/dark-v10',
-            color: '#000000',
-        },
-        */
         {
             name: 'outdoor',
             style: 'mapbox://styles/mapbox/outdoors-v11',
             color: '#c8dd97',
         },
     ],
+
     selectedMapStyle: 'mapbox://styles/mapbox/streets-v11',
+
+    provinces: [],
+    districts: [],
+    municipalities: [],
+    wards: [],
 };
 
 export default initialSiloDomainData;

@@ -6,6 +6,10 @@ import { listToMap } from '@togglecorp/fujs';
 export const SET_HAZARD_TYPES = 'siloDomainData/SET_HAZARD_TYPES';
 export const SET_MAP_STYLES = 'siloDomainData/SET_MAP_STYLES';
 export const SET_MAP_STYLE = 'siloDomainData/SET_MAP_STYLE';
+export const SET_PROVINCES = 'siloDomainData/SET_PROVINCES';
+export const SET_DISTRICTS = 'siloDomainData/SET_DISTRICTS';
+export const SET_MUNICIPALITIES = 'siloDomainData/SET_MUNICIPALITIES';
+export const SET_WARDS = 'siloDomainData/SET_WARDS';
 
 // ACTION-CREATOR
 
@@ -21,6 +25,26 @@ export const setMapStylesAction = mapStyles => ({
 export const setMapStyleAction = mapStyle => ({
     type: SET_MAP_STYLE,
     mapStyle,
+});
+
+export const setProvincesAction = ({ provinces }) => ({
+    type: SET_PROVINCES,
+    provinces,
+});
+
+export const setDistrictsAction = ({ districts }) => ({
+    type: SET_DISTRICTS,
+    districts,
+});
+
+export const setMunicipalitiesAction = ({ municipalities }) => ({
+    type: SET_MUNICIPALITIES,
+    municipalities,
+});
+
+export const setWardsAction = ({ wards }) => ({
+    type: SET_WARDS,
+    wards,
 });
 
 // REDUCER
@@ -61,11 +85,64 @@ const setMapStyle = (state, action) => {
     return newState;
 };
 
+const setProvinces = (state, action) => {
+    const {
+        provinces,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.provinces = provinces;
+    });
+    return newState;
+};
+
+const setDistricts = (state, action) => {
+    const {
+        districts,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.districts = districts;
+    });
+    return newState;
+};
+
+const setMunicipalities = (state, action) => {
+    const {
+        municipalities,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.municipalities = municipalities;
+    });
+    return newState;
+};
+
+const setWards = (state, action) => {
+    const {
+        wards,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.wards = wards;
+    });
+    return newState;
+};
+
+
 // REDUCER MAP
 
 const reducers = {
     [SET_HAZARD_TYPES]: setHazardTypes,
     [SET_MAP_STYLES]: setMapStyles,
     [SET_MAP_STYLE]: setMapStyle,
+    [SET_PROVINCES]: setProvinces,
+    [SET_DISTRICTS]: setDistricts,
+    [SET_MUNICIPALITIES]: setMunicipalities,
+    [SET_WARDS]: setWards,
 };
 export default reducers;
