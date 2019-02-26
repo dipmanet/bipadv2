@@ -50,31 +50,35 @@ export default class AlertMap extends React.PureComponent {
             type: 'FeatureCollection',
             features: alertList
                 .filter(alert => alert.point)
-                .map(alert => ({
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: alert.point,
-                    },
-                    properties: {
-                        alert,
-                        containerClassName: styles.iconContainer,
-                        markerHTML: ReactDOMServer.renderToString(
-                            <img
-                                src={hazardTypes[alert.hazard].icon}
-                                alt={alert.title}
-                                className={styles.icon}
-                            />,
-                        ),
-                        popupHTML: ReactDOMServer.renderToString(
-                            <div className={styles.markerPopup}>
-                                <h3 className={styles.heading}>
-                                    { alert.title }
-                                </h3>
-                            </div>,
-                        ),
-                    },
-                })),
+                .map((alert) => {
+                    const hazardType = hazardTypes[alert.hazard];
+                    const src = hazardType ? hazardType.icon : undefined;
+                    return {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: alert.point,
+                        },
+                        properties: {
+                            alert,
+                            containerClassName: styles.iconContainer,
+                            markerHTML: ReactDOMServer.renderToString(
+                                <img
+                                    src={src}
+                                    alt={alert.title}
+                                    className={styles.icon}
+                                />,
+                            ),
+                            popupHTML: ReactDOMServer.renderToString(
+                                <div className={styles.markerPopup}>
+                                    <h3 className={styles.heading}>
+                                        { alert.title }
+                                    </h3>
+                                </div>,
+                            ),
+                        },
+                    };
+                }),
         };
 
         return geojson;

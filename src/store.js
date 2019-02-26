@@ -2,12 +2,6 @@ import { compose, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from '#redux/middlewares/logger';
 import siloBackgroundTasks from '#redux/middlewares/siloBackgroundTasks';
-// import { sendToken } from '#utils/browserExtension';
-import {
-    commonHeaderForPost,
-    commonHeaderForGet,
-    authorizationHeaderForPost,
-} from '#config/rest';
 import { createActionSyncMiddleware } from '#rsu/redux-sync';
 
 import reducer from '#redux/reducers';
@@ -19,7 +13,6 @@ import {
     reducersToSync,
     actionsToSkipLogging,
     uniqueTabId,
-    reduxExtensionEnvs,
 } from '#config/store';
 
 const prepareStore = () => {
@@ -37,8 +30,7 @@ const prepareStore = () => {
 
     // Override compose if development mode and redux extension is installed
     const overrideCompose = reduxExtensionCompose && (
-        isDevelopment ||
-        reduxExtensionEnvs.includes(process.env.REACT_APP_DEEP_ENVIRONMENT)
+        isDevelopment
     );
     const applicableComposer = !overrideCompose
         ? compose

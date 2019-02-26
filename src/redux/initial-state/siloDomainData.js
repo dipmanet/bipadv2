@@ -8,58 +8,12 @@ import cycloneIcon from '#resources/icons/cyclone.svg';
 
 
 const initialSiloDomainData = {
-    hazardTypes: {
-        1: {
-            pk: 1,
-            title: 'Earthquake',
-            icon: earthquakeIcon,
-        },
-        2: {
-            pk: 2,
-            title: 'Flood',
-            icon: floodIcon,
-        },
-        4: {
-            pk: 4,
-            title: 'Landslide',
-            icon: landslideIcon,
-        },
-        5: {
-            pk: 5,
-            title: 'Wildfire',
-            icon: fireIcon,
-        },
-        6: {
-            pk: 6,
-            title: 'Water scarcity',
-            icon: waterIcon,
-        },
-        7: {
-            pk: 7,
-            title: 'Extreme heat',
-            icon: heatwaveIcon,
-        },
-        8: {
-            pk: 8,
-            title: 'Cyclone',
-            icon: cycloneIcon,
-        },
-    },
+    provinces: [],
+    districts: [],
+    municipalities: [],
+    wards: [],
 
-    adminLevelList: [
-        {
-            pk: 1,
-            title: 'Province',
-        },
-        {
-            pk: 2,
-            title: 'District',
-        },
-        {
-            pk: 3,
-            title: 'Municipality',
-        },
-    ],
+    hazardTypes: {},
 
     geoAreas: {
         1: [
@@ -719,10 +673,21 @@ const initialSiloDomainData = {
 
     selectedMapStyle: 'mapbox://styles/mapbox/streets-v11',
 
-    provinces: [],
-    districts: [],
-    municipalities: [],
-    wards: [],
+    adminLevelList: [
+        {
+            pk: 1,
+            title: 'Province',
+        },
+        {
+            pk: 2,
+            title: 'District',
+        },
+        {
+            pk: 3,
+            title: 'Municipality',
+        },
+    ],
+
 };
 
 export default initialSiloDomainData;
