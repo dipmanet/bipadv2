@@ -1,0 +1,53 @@
+@import '~base-scss/base';
+
+.left-pane {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    border: $width-separator-thin solid $color-separator;
+    background-color: $color-foreground;
+    width: 300px;
+
+    .header {
+        flex-shrink: 0;
+
+        .heading {
+            padding: $spacing-medium;
+            color: $color-primary;
+        }
+    }
+
+    .content {
+        padding: $spacing-medium;
+
+        .donut-charts {
+            display: flex;
+            padding: $spacing-medium 0;
+
+            .donut-chart-1 {
+                flex-basis: 50%;
+                width: 100px;
+                height: 120px;
+            }
+
+            .donut-chart-2 {
+                flex-basis: 50%;
+                width: 100px;
+                height: 120px;
+            }
+        }
+
+        .pie-chart {
+            height: 180px;
+        }
+
+        .horizontal-bar-chart {
+            margin-top: $spacing-large;
+            height: 200px;
+        }
+
+        .bar-chart {
+            height: 160px;
+        }
+    }
+}

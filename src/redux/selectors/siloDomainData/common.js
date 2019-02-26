@@ -7,6 +7,9 @@ const emptyArray = [];
 export const hazardTypesSelector = ({ siloDomainData }) =>
     siloDomainData.hazardTypes || emptyObject;
 
+export const resourceTypesSelector = ({ siloDomainData }) =>
+    siloDomainData.resourceTypes || emptyObject;
+
 export const adminLevelListSelector = ({ siloDomainData }) =>
     siloDomainData.adminLevelList || emptyArray;
 
@@ -16,6 +19,11 @@ export const geoAreasSelector = ({ siloDomainData }) =>
 export const hazardTypeListSelector = createSelector(
     hazardTypesSelector,
     hazards => mapToList(hazards) || emptyArray,
+);
+
+export const resourceTypeListSelector = createSelector(
+    resourceTypesSelector,
+    resources => mapToList(resources) || emptyArray,
 );
 
 export const mapStylesSelector = ({ siloDomainData }) =>
