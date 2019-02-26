@@ -1,0 +1,88 @@
+@import '~base-scss/base';
+
+$width-filter-container: 260px;
+$width-vertical-nav: 64px;
+
+$width-non-tabular-container: 360px;
+$width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertical-nav + $spacing-medium * 3});
+
+.left-pane {
+    .show-incident-button-container {
+        transform-origin: 0 0;
+
+        .show-incidents-button {
+            padding: $spacing-extra-small $spacing-small;
+            color: $color-danger;
+            font-size: $font-size-extra-large;
+        }
+    }
+
+    .incident-list-container {
+        transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator-light;
+
+        .non-tabular-container {
+            transform-origin: 0 0;
+            background-color: $color-foreground;
+            width: $width-non-tabular-container;
+            height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+
+            .header {
+                display: flex;
+                flex-shrink: 0;
+
+                .heading {
+                    flex-grow: 1;
+                    padding: $spacing-medium $spacing-medium-alt $spacing-extra-small $spacing-medium-alt;
+                    color: $color-primary;
+                }
+
+                .expand-tabular-view-button {
+                    flex-shrink: 0;
+                }
+
+                .hide-incidents-button {
+                    flex-shrink: 0;
+                }
+            }
+
+            .incident-list {
+                flex-grow: 1;
+                overflow: auto;
+
+                .incident {
+                    cursor: pointer;
+                    padding: $spacing-medium $spacing-medium-alt;
+
+                    &:hover {
+                        background-color: rgba(0, 0, 0, .05);
+                    }
+                }
+            }
+        }
+
+        .tabular-container {
+            display: flex;
+            flex-direction: column;
+            transform-origin: 0 0;
+            background-color: $color-foreground;
+            width: $width-tabular-container;
+            height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+
+            .header {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                justify-content: flex-end;
+            }
+
+            .tabular-view {
+                flex-grow: 1;
+                overflow: auto;
+            }
+        }
+
+
+    }
+
+}
