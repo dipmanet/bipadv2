@@ -175,10 +175,26 @@ class Multiplexer extends React.PureComponent {
                         mapStyle={mapStyle}
                     >
                         { pending ? (
-                            <h1>
-                                {/* FIXME: style me */}
-                                Loading Resources
-                            </h1>
+                            <div
+                                style={{
+                                    zIndex: '1111',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '200px',
+                                    height: '60px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '18px',
+                                    backgroundColor: '#ffffff',
+                                    border: '1px solid rgba(0, 0, 0, 0.2)',
+                                    borderRadius: '3px',
+                                }}
+                            >
+                                Loading Resources...
+                            </div>
                         ) : (
                             <Switch>
                                 {mapRoutes}

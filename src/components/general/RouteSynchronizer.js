@@ -30,9 +30,26 @@ import {
 import _ts from '#ts';
 
 const LoadingRenderer = ({ text }) => (
-    <h1>
+    <div
+        style={{
+            zIndex: '1111',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '200px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '18px',
+            backgroundColor: '#ffffff',
+            border: '1px solid rgba(0, 0, 0, 0.2)',
+            borderRadius: '3px',
+        }}
+    >
         {text}
-    </h1>
+    </div>
 );
 
 const ErrorBoundBundle = boundError(AppError)(Bundle);
