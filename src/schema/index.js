@@ -1,16 +1,14 @@
 import Dict, { basicTypes } from '@togglecorp/ravl';
+import { isProduction } from '#config/env';
 
-const basicTypeSchemas = basicTypes.map(
-    entry => ({ name: entry.doc.name, schema: entry }),
-);
-// TODO: better way to add schema
-const userDefinedSchemas = [];
+import alertSchemas from './alert';
+import commonSchemas from './common';
+import incidentSchemas from './incident';
 
-{
-    const name = 'dbentity';
-    const schema = {
+const userDefinedSchemas = [
+    {
         doc: {
-            name: 'Database Entity',
+            name: 'dbentity',
             description: 'Defines all the attributes common to db entities',
         },
         fields: {
@@ -23,19 +21,18 @@ const userDefinedSchemas = [];
             modifiedByName: { type: 'string' },
             versionId: { type: 'uint', required: true },
         },
-    };
-    userDefinedSchemas.push({ name, schema });
-}
+    },
+];
 
-// TODO: set this value in production only
-const isProd = false;
-const dict = new Dict(
-    isProd ? { warning: false } : { warning: true },
-);
+const warning = !isProduction;
+const dict = new Dict({ warning });
 
 [
-    ...basicTypeSchemas,
+    ...basicTypes,
     ...userDefinedSchemas,
-].forEach(({ name, schema }) => dict.put(name, schema));
+    ...alertSchemas,
+    ...commonSchemas,
+    ...incidentSchemas,
+].forEach(schema => dict.put(schema.doc.name, schema));
 
 export default dict;

@@ -1,98 +1,93 @@
-const provinceSchema = {
-    doc: {
-        name: 'province',
-        description: 'Province',
+export default [
+    {
+        doc: {
+            name: 'province',
+            description: 'Province',
+        },
+        fields: {
+            id: { type: 'number', required: true },
+            title: { type: 'string', required: true },
+        },
     },
-    fields: {
-        id: { type: 'number', required: true },
-        title: { type: 'string', required: true },
+    {
+        doc: {
+            name: 'provinceResponse',
+            description: 'Response of province',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'number' },
+            previous: { type: 'number' },
+            results: { type: 'array.province' },
+        },
     },
-};
-
-const provinceResponse = {
-    doc: {
-        name: 'provinceResponse',
-        description: 'Response of province',
+    {
+        doc: {
+            name: 'district',
+            description: 'District',
+        },
+        fields: {
+            id: { type: 'number', required: true },
+            title: { type: 'string', required: true },
+            province: { type: 'number', required: true },
+        },
     },
-    fields: {
-        count: { type: 'number' },
-        next: { type: 'number' },
-        previous: { type: 'number' },
-        results: { type: 'array.province' },
+    {
+        doc: {
+            name: 'districtResponse',
+            description: 'Response of district',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'number' },
+            previous: { type: 'number' },
+            results: { type: 'array.district' },
+        },
     },
-};
-
-const districtSchema = {
-    doc: {
-        name: 'district',
-        description: 'District',
+    {
+        doc: {
+            name: 'municipality',
+            description: 'Municipality',
+        },
+        fields: {
+            id: { type: 'number', required: true },
+            title: { type: 'string', required: true },
+            district: { type: 'number', required: true },
+        },
     },
-    fields: {
-        id: { type: 'number', required: true },
-        title: { type: 'string', required: true },
-        province: { type: 'number', required: true },
+    {
+        doc: {
+            name: 'municipalityResponse',
+            description: 'Response of municipality',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'number' },
+            previous: { type: 'number' },
+            results: { type: 'array.municipality' },
+        },
     },
-};
-
-const districtResponse = {
-    doc: {
-        name: 'districtResponse',
-        description: 'Response of district',
+    {
+        doc: {
+            name: 'ward',
+            description: 'Ward',
+        },
+        fields: {
+            id: { type: 'number', required: true },
+            title: { type: 'string', required: true },
+            municipality: { type: 'number', required: true },
+        },
     },
-    fields: {
-        count: { type: 'number' },
-        next: { type: 'number' },
-        previous: { type: 'number' },
-        results: { type: 'array.district' },
+    {
+        doc: {
+            name: 'wardResponse',
+            description: 'Response of ward',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'number' },
+            previous: { type: 'number' },
+            results: { type: 'array.ward' },
+        },
     },
-};
-
-const municipalitySchema = {
-    doc: {
-        name: 'municipality',
-        description: 'Municipality',
-    },
-    fields: {
-        id: { type: 'number', required: true },
-        title: { type: 'string', required: true },
-        district: { type: 'number', required: true },
-    },
-};
-
-const municipalityResponse = {
-    doc: {
-        name: 'municipalityResponse',
-        description: 'Response of municipality',
-    },
-    fields: {
-        count: { type: 'number' },
-        next: { type: 'number' },
-        previous: { type: 'number' },
-        results: { type: 'array.municipality' },
-    },
-};
-
-const wardSchema = {
-    doc: {
-        name: 'ward',
-        description: 'Ward',
-    },
-    fields: {
-        id: { type: 'number', required: true },
-        title: { type: 'string', required: true },
-        municipality: { type: 'number', required: true },
-    },
-};
-
-const wardResponse = {
-    doc: {
-        name: 'wardResponse',
-        description: 'Response of ward',
-    },
-    fields: {
-        count: { type: 'number' },
-        next: { type: 'number' },
-        previous: { type: 'number' },
-        results: { type: 'array.ward' },
-    },
-};
+];

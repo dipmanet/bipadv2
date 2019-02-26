@@ -1,41 +1,24 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-
-import update from '#rsu/immutable-update';
-
 import {
     createRequestCoordinator,
     methods,
 } from '@togglecorp/react-rest-request';
+
 import schema from '#schema';
-// import { tokenSelector } from '#redux';
 
 export * from '@togglecorp/react-rest-request';
 
 const wsEndpoint = 'http://bipad.nepware.com/api/v1';
 
-const mapStateToProps = state => ({
-    // token: tokenSelector(state),
-    token: {},
+const mapStateToProps = () => ({
+    // token: {},
 });
 
 export const createConnectedRequestCoordinator = () => compose(
     connect(mapStateToProps),
     createRequestCoordinator({
-        transformParams: (params, props) => {
-            const { access } = props.token;
-            if (!access) {
-                return params;
-            }
-
-            const settings = {
-                headers: { $auto: {
-                    Authorization: { $set: `Bearer ${access}` },
-                } },
-            };
-
-            return update(params, settings);
-        },
+        transformParams: params => params,
         transformProps: (props) => {
             const {
                 token, // eslint-disable-line no-unused-vars
