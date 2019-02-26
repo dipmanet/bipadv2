@@ -1,14 +1,61 @@
 @import '~base-scss/base';
 
-.filter {
-    flex-grow: 1;
-    overflow: auto;
+$width-table-container: 260px;
 
-    .past-data-select-input {
-        padding: $spacing-small;
+.filter {
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .heading {
+            flex-grow: 1;
+            padding: $spacing-medium $spacing-small;
+            color: $color-primary;
+        }
+
+        button {
+            flex-shrink: 0;
+        }
     }
 
-    .list-selection-input {
-        padding: $spacing-small;
+    .show-filter-button-container {
+        top: 0;
+        right: 0;
+        transform-origin: 100% 0;
+    }
+
+    .filters-container {
+        transform-origin: 100% 0;
+        border: $width-separator-thin solid $color-separator-light;
+        background-color: $color-foreground;
+        padding: 0 $spacing-small;
+        width: $width-table-container;
+    }
+
+    :global {
+        .expanded-container-ghost,
+        .collapsed-container-ghost {
+            top: 0;
+            right: 0;
+        }
+
+        .expanded-container-expanding {
+            top: 0;
+            right: 0;
+        }
+    }
+    
+    .filter-form {
+        flex-grow: 1;
+        overflow: auto;
+
+        .past-data-select-input {
+            padding: $spacing-small;
+        }
+
+        .list-selection-input {
+            padding: $spacing-small;
+        }
     }
 }
