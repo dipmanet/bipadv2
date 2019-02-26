@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import ReactDOMServer from 'react-dom/server';
 
 import { _cs } from '@togglecorp/fujs';
 
@@ -17,7 +16,7 @@ const defaultProps = {
 const emptyObject = {};
 
 @MapChild
-export default class MapIconLayer extends React.PureComponent {
+export default class MapMarkerLayer extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -41,8 +40,9 @@ export default class MapIconLayer extends React.PureComponent {
             this.create(nextProps);
         }
 
-        if (this.props.features !== nextProps.features) {
-            this.reloadFeatures(nextProps);
+        if (this.props.geoJson !== nextProps.geoJson) {
+            this.destroy();
+            this.create(nextProps);
         }
     }
 
@@ -50,29 +50,26 @@ export default class MapIconLayer extends React.PureComponent {
         this.destroy();
     }
 
-    create = () => {
-        const {
-            geoJson,
-            map,
-        } = this.props;
-
+    create = ({
+        geoJson,
+        map,
+    }) => {
         geoJson.features.forEach((feature) => {
             const {
                 properties: {
-                    popupComponent,
-                    imageSource,
-                    className,
+                    popupHTML,
+                    markerHTML,
+                    containerClassName,
                 },
             } = feature;
 
-            const el = document.createElement('img');
-            el.className = className;
-            el.src = imageSource;
+            const el = document.createElement('div');
+            el.className = containerClassName;
 
             const marker = new mapboxgl.Marker(el);
+            el.innerHTML = markerHTML;
 
-            if (popupComponent) {
-                const popupHTML = ReactDOMServer.renderToString(popupComponent);
+            if (popupHTML) {
                 const popup = new mapboxgl.Popup({ offset: 10 })
                     .setHTML(popupHTML);
                 marker.setPopup(popup);
@@ -87,6 +84,7 @@ export default class MapIconLayer extends React.PureComponent {
 
     destroy = () => {
         this.markers.forEach(marker => marker.remove());
+        this.markers = [];
     }
 
     render() {

@@ -16,12 +16,7 @@ const initialSiloDomainData = {
         },
         2: {
             pk: 2,
-            title: 'Urban flood',
-            icon: floodIcon,
-        },
-        3: {
-            pk: 3,
-            title: 'Costal flood',
+            title: 'Flood',
             icon: floodIcon,
         },
         4: {
@@ -613,8 +608,8 @@ const initialSiloDomainData = {
             },
             {
                 pk: 2,
-                title: 'Pollution level exceeds 150ppm in Kathmandu',
-                hazard: 2,
+                title: 'Heavy rainfall in Manang, risk of landslide',
+                hazard: 4,
                 point: [85.3240, 27.7172],
                 source: 'Hydrology',
                 alertOn: 1550081700430,
@@ -623,7 +618,7 @@ const initialSiloDomainData = {
             {
                 pk: 3,
                 title: 'Avalanche due to heavy rainfall in the Langtang region',
-                hazard: 3,
+                hazard: 4,
                 point: [85.6229, 28.2063],
                 source: 'Hydrology',
                 alertOn: 1549563300865,
@@ -632,7 +627,7 @@ const initialSiloDomainData = {
             {
                 pk: 4,
                 title: 'Heavy rainfall in the Rara region',
-                hazard: 3,
+                hazard: 2,
                 point: [82.079508, 29.531221],
                 source: 'Hydrology',
                 alertOn: 1549563300865,
@@ -641,7 +636,7 @@ const initialSiloDomainData = {
             {
                 pk: 5,
                 title: 'Possible flood in the Lamjung',
-                hazard: 3,
+                hazard: 2,
                 point: [84.499204, 28.234112],
                 source: 'Hydrology',
                 alertOn: 1549563300865,
@@ -649,7 +644,7 @@ const initialSiloDomainData = {
             },
             {
                 pk: 6,
-                title: 'Fire in Ilam, half of all tea turned to tobacco',
+                title: 'Wild fire started in Ilam, still spreading out of control',
                 hazard: 5,
                 point: [87.922457, 26.887003],
                 source: 'ICIMOD',
@@ -663,6 +658,7 @@ const initialSiloDomainData = {
             pristine: true,
         },
     },
+
     responsePage: {
         resourceList: [
             {
@@ -702,6 +698,7 @@ const initialSiloDomainData = {
             },
         ],
     },
+
     mapStyles: [
         {
             name: 'light',
@@ -726,7 +723,7 @@ const initialSiloDomainData = {
             color: '#c8dd97',
         },
     ],
-    selectedMapStyle: undefined,
+    selectedMapStyle: 'mapbox://styles/mapbox/streets-v11',
 };
 
 export default initialSiloDomainData;

@@ -254,10 +254,15 @@ class Navbar extends React.PureComponent {
                         emptyComponent={null}
                     />
                 </div>
-                <div className={styles.logo}>
-                    <div className={styles.left} />
-                    <div className={styles.right}>
-                        Bipad
+                <div className={styles.navbarLeftContainer}>
+                    <div className={styles.logo}>
+                        <div className={styles.left} />
+                        <div className={styles.right}>
+                            Bipad
+                        </div>
+                        <div className={styles.currentPage}>
+                            {this.props.routeKey}
+                        </div>
                     </div>
                 </div>
                 {/*

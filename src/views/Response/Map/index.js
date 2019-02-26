@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import turf from 'turf';
 import { reverseRoute } from '@togglecorp/fujs';
+import ReactDOMServer from 'react-dom/server';
 
 import DistanceOutput from '#components/DistanceOutput';
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import PeopleLoss from '#components/PeopleLoss';
-import MapIconLayer from '#components/MapIconLayer';
+import MapMarkerLayer from '#components/MapMarkerLayer';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
@@ -71,9 +72,15 @@ export default class ResponseMap extends React.PureComponent {
                     },
                     properties: {
                         resource,
-                        imageSource: icons[resource.type],
-                        className: styles.icon,
-                        popupComponent: (
+                        containerClassName: styles.markerContainer,
+                        markerHTML: ReactDOMServer.renderToString(
+                            <img
+                                src={icons[resource.type]}
+                                alt={resource.title}
+                                className={styles.icon}
+                            />,
+                        ),
+                        popupHTML: ReactDOMServer.renderToString(
                             <div className={styles.resourceDetailPopup}>
                                 <h3 className={styles.title}>
                                     { resource.title }
@@ -81,7 +88,7 @@ export default class ResponseMap extends React.PureComponent {
                                 <DistanceOutput
                                     value={resource.distance}
                                 />
-                            </div>
+                            </div>,
                         ),
                     },
                 })),
@@ -209,7 +216,7 @@ export default class ResponseMap extends React.PureComponent {
                         hoverInfo={this.hoverInfo}
                     />
                 </MapSource>
-                <MapIconLayer
+                <MapMarkerLayer
                     geoJson={resourceFeatures}
                 />
             </React.Fragment>

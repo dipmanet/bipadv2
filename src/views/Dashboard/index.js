@@ -65,20 +65,14 @@ const requests = {
 };
 
 const emptyObject = {};
-const alertKeySelector = d => d.id;
-
-const barChartValueSelector = d => d.value;
-const barChartLabelSelector = d => d.label;
+const alertKeySelector = d => d.pk;
 
 const pieChartValueSelector = d => d.value;
 const pieChartLabelSelector = d => d.label;
 
-const donutChartValueSelector = d => d.value;
-const donutChartLabelSelector = d => d.label;
-
 const propTypes = {
     alertList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-    hazardTypes: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {};
@@ -262,7 +256,10 @@ class Dashboard extends React.PureComponent {
     render() {
         const Alerts = this.renderAlerts;
         const KeyStatistics = this.renderKeyStatistics;
-        const { alertList } = this.props;
+        const {
+            alertList,
+            hazardTypes,
+        } = this.props;
 
         const {
             showFilters,
@@ -273,6 +270,7 @@ class Dashboard extends React.PureComponent {
             <React.Fragment>
                 <Map
                     alertList={alertList}
+                    hazardTypes={hazardTypes}
                     className={styles.map}
                 />
                 <Page

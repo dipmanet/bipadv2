@@ -37,10 +37,20 @@
     to { opacity: 1 }
 }
 
-.icon {
+.marker-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
-    height: $font-size-large;
+    border-radius: 50%;
+    background-color: $color-foreground;
+    width: $font-size-super-large;
+    height: $font-size-super-large;
     animation: fade-in $duration-transition-slow 1.2s ease-in forwards;
+
+    .icon {
+        height: $font-size-small;
+    }
 }
 
 .resource-detail-popup {
