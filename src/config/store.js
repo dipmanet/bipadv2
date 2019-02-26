@@ -74,9 +74,4 @@ export const actionsToSkipLogging = [
     // 'domainData/SET_NOTIFICATIONS_COUNT',
 ];
 
-export const reduxExtensionEnvs = [
-    // 'nightly',
-    // 'alpha',
-];
-
 export default storeConfig;

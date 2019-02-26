@@ -17,7 +17,6 @@ import {
 import {
     alertListSelectorDP,
     setAlertListActionDP,
-    setHazardTypesAction,
     hazardTypesSelector,
 } from '#redux';
 
@@ -33,35 +32,14 @@ import DashboardFilter from './Filter';
 import styles from './styles.scss';
 
 const requests = {
-    hazardTypesRequest: {
-        url: '/hazard/',
-        onSuccess: ({ response, props: { setHazardTypes } }) => {
-            const { results: hazardTypes = [] } = response;
-            setHazardTypes({ hazardTypes });
-        },
-        onFailure: ({ error, params }) => {
-            console.warn('failed', error, params);
-        },
-        onFatal: ({ error, params }) => {
-            console.warn('fatal', error, params);
-        },
-        onMount: true,
-    },
     alertsRequest: {
         url: '/alert/',
         onSuccess: ({ response, props: { setAlertList } }) => {
             const { results: alertList = [] } = response;
             setAlertList({ alertList });
         },
-        onFailure: ({ error, params }) => {
-            console.warn('failed', error, params);
-        },
-        onFatal: ({ error, params }) => {
-            console.warn('fatal', error, params);
-        },
         onMount: true,
     },
-    // TODO: add onFailure, onFatal, schema
 };
 
 const emptyObject = {};
@@ -124,7 +102,7 @@ class Dashboard extends React.PureComponent {
         return mapToList(
             freqObj,
             (d, k) => ({
-                label: hazards[k].title,
+                label: (hazards[k] || {}).title,
                 value: d.length,
             }),
         );
@@ -141,7 +119,7 @@ class Dashboard extends React.PureComponent {
         const {
             icon,
             label,
-        } = hazardTypes[hazard];
+        } = hazardTypes[hazard] || {};
 
         return (
             <div className={className}>
@@ -346,7 +324,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setAlertList: params => dispatch(setAlertListActionDP(params)),
-    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

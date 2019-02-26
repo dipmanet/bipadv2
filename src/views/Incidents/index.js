@@ -44,12 +44,6 @@ const requests = {
             const { results: incidentList = [] } = response;
             setIncidentList({ incidentList });
         },
-        onFailure: ({ error, params }) => {
-            console.warn('failed', error, params);
-        },
-        onFatal: ({ error, params }) => {
-            console.warn('fatal', error, params);
-        },
         onMount: true,
     },
     // TODO: add schema, onFailure, onFatal

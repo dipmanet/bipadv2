@@ -29,6 +29,29 @@ import {
 } from '#redux';
 import _ts from '#ts';
 
+const LoadingRenderer = ({ text }) => (
+    <div
+        style={{
+            zIndex: '1111',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '200px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '18px',
+            backgroundColor: '#ffffff',
+            border: '1px solid rgba(0, 0, 0, 0.2)',
+            borderRadius: '3px',
+        }}
+    >
+        {text}
+    </div>
+);
+
 const ErrorBoundBundle = boundError(AppError)(Bundle);
 
 const PageError = ({ noProjectPermission }) => {
@@ -47,6 +70,7 @@ const PageError = ({ noProjectPermission }) => {
             <ErrorBoundBundle
                 key={name}
                 load={routes[name].loader}
+                renderer={LoadingRenderer}
             />
         </Fragment>
     );
@@ -76,6 +100,7 @@ const Page = ({ name, disabled, noProjectPermission, ...otherProps }) => {
                 {...otherProps}
                 name={name}
                 key={name}
+                renderer={LoadingRenderer}
             />
         </Fragment>
     );
