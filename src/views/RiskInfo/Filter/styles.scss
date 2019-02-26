@@ -1,0 +1,51 @@
+@import '~base-scss/base';
+
+.filter {
+    .container {
+        transform-origin: 100% 0;
+        border: $width-separator-thin solid $color-separator-light;
+        background-color: $color-foreground;
+        padding: 0 $spacing-medium;
+        width: 260px;
+
+        .header {
+            flex-shrink: 0;
+
+            .heading {
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
+            }
+        }
+
+        .content {
+            flex-grow: 1;
+            overflow: auto;
+
+            .past-data-select-input {
+                margin: $spacing-small;
+            }
+
+            .resource-type-selection {
+                margin: $spacing-small;
+            }
+
+            .hazard-type-selection {
+                margin-top: $spacing-medium;
+                padding: $spacing-small;
+            }
+        }
+    }
+
+    :global {
+        .expanded-container-ghost,
+        .collapsed-container-ghost {
+            top: 0;
+            right: 0;
+        }
+
+        .expanded-container-expanding {
+            top: 0;
+            right: 0;
+        }
+    }
+}
