@@ -19,10 +19,12 @@ import TabularView from './TabularView';
 import styles from './styles.scss';
 
 const propTypes = {
+    alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
 };
 
 const defaultProps = {
+    alertList: [],
     className: undefined,
 };
 
@@ -234,6 +236,9 @@ export default class LeftPane extends React.PureComponent {
                         expandedView={
                             <React.Fragment>
                                 <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Alerts
+                                    </h3>
                                     <Button
                                         className={styles.hideAlertsButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}

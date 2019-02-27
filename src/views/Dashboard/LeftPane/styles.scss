@@ -139,6 +139,13 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
                 align-items: center;
                 flex-shrink: 0;
                 justify-content: flex-end;
+
+                .heading {
+                    flex-grow: 1;
+                    align-self: flex-start;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
             }
 
             .tabular-view {
