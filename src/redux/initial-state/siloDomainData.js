@@ -413,7 +413,7 @@ const initialSiloDomainData = {
     incidentPage: {
         incidentList: [
             {
-                pk: 1,
+                id: 1,
                 title: 'Landslide blocks Kali Gandaki',
                 description: 'Residents living on the banks of the Kali Gandaki River in Gharapjhong Rural Municipality of Mustang were terrified a lot today following a landslide that blocked water flow in the river for hours.',
                 cause: 'day-long snowfall and strong wind at night',
@@ -488,7 +488,7 @@ const initialSiloDomainData = {
                  */
             },
             {
-                pk: 2,
+                id: 2,
                 title: 'Earthquake destroys half of the highway',
                 description: 'Residents living on the banks of',
                 cause: 'Fracking around the hilly region',
@@ -509,7 +509,7 @@ const initialSiloDomainData = {
                 },
             },
             {
-                pk: 3,
+                id: 3,
                 title: 'Wildfire in forests around Chitwan',
                 description: 'Unreachable roads due to wildfire',
                 cause: 'Careless management of fire',
@@ -530,7 +530,7 @@ const initialSiloDomainData = {
                 },
             },
             {
-                pk: 4,
+                id: 4,
                 title: 'Flooding around Saptakoshi',
                 description: 'this is a description',
                 cause: 'Large amount of rain during monsoon',

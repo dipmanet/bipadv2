@@ -7,20 +7,20 @@ const pastDataLabelSelector = d => d.label;
 
 const pastDateRangeOptions = [
     {
-        label: '3d',
-        key: 'past3Days',
+        label: 'Last 3 days',
+        key: 3,
     },
     {
-        label: '7d',
-        key: 'past7Days',
+        label: 'Last 7 days',
+        key: 7,
     },
     {
-        label: '2w',
-        key: 'past2Weeks',
+        label: 'Last 2 weeks',
+        key: 14,
     },
     {
-        label: '1m',
-        key: 'past1Month',
+        label: 'Last 1 month',
+        key: 30,
     },
 ];
 

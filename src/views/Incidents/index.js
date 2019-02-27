@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import {
@@ -10,6 +11,7 @@ import {
 import {
     incidentListSelectorIP,
     setIncidentListActionIP,
+    filtersValuesSelectorIP,
 } from '#redux';
 
 import Page from '#components/Page';
@@ -20,17 +22,8 @@ import Map from './Map';
 import LeftPane from './LeftPane';
 import styles from './styles.scss';
 
-const requests = {
-    incidentsRequest: {
-        url: '/incident/',
-        onSuccess: ({ response, props: { setIncidentList } }) => {
-            const { results: incidentList = [] } = response;
-            setIncidentList({ incidentList });
-        },
-        onMount: true,
-    },
-    // TODO: add schema, onFailure, onFatal
-};
+import { pastDaysToDateRange } from '../../utils/common';
+
 
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -41,6 +34,11 @@ const defaultProps = {};
 class Incidents extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
+
+    getIncidentRendererParams = (_, d) => ({
+        data: d,
+        className: styles.incident,
+    });
 
     render() {
         const {
@@ -69,14 +67,46 @@ class Incidents extends React.PureComponent {
 
 const mapStateToProps = state => ({
     incidentList: incidentListSelectorIP(state),
+    filters: filtersValuesSelectorIP(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setIncidentList: params => dispatch(setIncidentListActionIP(params)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    createConnectedRequestCoordinator()(
-        createRequestClient(requests)(Incidents),
-    ),
-);
+const transformDateRangeFilter = (filters) => {
+    const { dateRange, ...other } = filters;
+    if (dateRange) {
+        const { startDate, endDate } = pastDaysToDateRange(dateRange);
+        return {
+            incident_on__lt: endDate ? endDate.toISOString() : undefined,
+            incident_on__gt: startDate ? startDate.toISOString() : undefined,
+            ...other,
+        };
+    }
+    return filters;
+};
+
+const requests = {
+    incidentsRequest: {
+        url: '/incident/',
+        query: ({ props: { filters } }) => transformDateRangeFilter(filters),
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            const { results: incidentList = [] } = response;
+            setIncidentList({ incidentList });
+        },
+        onMount: true,
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { hazard, dateRange } },
+                prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
+            }) => hazard !== prevHazard || dateRange !== prevDateRange,
+        },
+    },
+};
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator(),
+    createRequestClient(requests),
+)(Incidents);

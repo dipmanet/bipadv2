@@ -61,13 +61,10 @@ const setHazardTypes = (state, action) => {
     } = action;
 
     const newState = produce(state, (deferedState) => {
-        /* eslint-disable no-param-reassign */
-        deferedState.hazardTypes = listToMap(
-            hazardTypes,
-            hazardType => hazardType.id,
-        );
-        /* eslint-enable no-param-reassign */
+        // eslint-disable-next-line no-param-reassign
+        deferedState.hazardTypes = hazardTypes;
     });
+
     return newState;
 };
 

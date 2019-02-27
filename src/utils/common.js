@@ -71,6 +71,21 @@ export const camelToNormalCase = (text) => {
     return secondPhase;
 };
 
+export const addDaysToDate = (date, days) => {
+    const newDate = new Date(date.valueOf());
+    newDate.setDate(newDate.getDate() + days);
+    return newDate;
+};
+
+export const pastDaysToDateRange = (pastDays) => {
+    const today = new Date();
+    const lastDate = addDaysToDate(today, -pastDays);
+    return {
+        startDate: lastDate,
+        endDate: today,
+    };
+};
+
 const decodeTimeInMinutes = (value, separator = ':') => {
     if (!value) {
         return 0;

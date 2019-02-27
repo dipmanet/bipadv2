@@ -6,7 +6,7 @@ import Faram from '@togglecorp/faram';
 import Button from '#rsca/Button';
 
 import {
-    hazardTypeListSelector,
+    hazardTypesSelector,
     setFiltersActionIP,
     filtersSelectorIP,
 } from '#redux';
@@ -32,7 +32,7 @@ const propTypes = {
 const defaultProps = {};
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypeListSelector(state),
+    hazardTypeList: hazardTypesSelector(state),
     filters: filtersSelectorIP(state),
 });
 
@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch => ({
 
 const filterSchema = {
     fields: {
-        hazardType: [],
+        hazard: [],
         region: [],
         dateRange: [],
     },
@@ -136,7 +136,7 @@ export default class IncidentsFilter extends React.PureComponent {
                                 showHintAndError={false}
                             />
                             <MultiListSelection
-                                faramElementName="hazardType"
+                                faramElementName="hazard"
                                 className={styles.listSelectionInput}
                                 label="Hazard type"
                                 keySelector={hazardTypeKeySelector}

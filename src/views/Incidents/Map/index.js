@@ -35,6 +35,17 @@ const defaultProps = {
 const emptyList = [];
 const emptyObject = {};
 
+const multiPolyToPoly = (multi) => {
+    const { type, coordinates, ...other } = multi;
+    const newCoords = type === 'MultiPolygon' ? coordinates[0] : coordinates;
+    const newType = type === 'MultiPolygon' ? 'Polygon' : type;
+    return {
+        ...other,
+        type: newType,
+        coordinates: newCoords,
+    };
+};
+
 export default class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -57,13 +68,10 @@ export default class IncidentMap extends React.PureComponent {
         const geojson = {
             type: 'FeatureCollection',
             features: incidentList
-                .filter(incident => incident.point)
+                .filter(incident => incident.point || incident.polygon)
                 .map(incident => ({
                     type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: incident.point,
-                    },
+                    geometry: multiPolyToPoly(incident.point || incident.polygon),
                     properties: {
                         incident,
                         severity: incident.severity,

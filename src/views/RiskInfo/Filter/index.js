@@ -6,7 +6,7 @@ import Button from '#rsca/Button';
 import { iconNames } from '#constants';
 
 import {
-    hazardTypeListSelector,
+    hazardTypesSelector,
     setFiltersActionIP,
     filtersSelectorIP,
     resourceTypeListSelector,
@@ -22,7 +22,7 @@ import _cs from '#cs';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypeListSelector(state),
+    hazardTypeList: hazardTypesSelector(state),
     resourceTypeList: resourceTypeListSelector(state),
     filters: filtersSelectorIP(state),
 });
