@@ -8,6 +8,7 @@ export const SET_MAP_STYLES = 'siloDomainData/SET_MAP_STYLES';
 export const SET_MAP_STYLE = 'siloDomainData/SET_MAP_STYLE';
 export const SET_PROVINCES = 'siloDomainData/SET_PROVINCES';
 export const SET_DISTRICTS = 'siloDomainData/SET_DISTRICTS';
+export const SET_DISTRICTS_GEO_JSON = 'siloDomainData/SET_DISTRICTS_GEO_JSON';
 export const SET_MUNICIPALITIES = 'siloDomainData/SET_MUNICIPALITIES';
 export const SET_WARDS = 'siloDomainData/SET_WARDS';
 
@@ -37,6 +38,11 @@ export const setDistrictsAction = ({ districts }) => ({
     districts,
 });
 
+export const setDistrictsGeoJsonAction = ({ districtGeoJson }) => ({
+    type: SET_DISTRICTS_GEO_JSON,
+    districtGeoJson,
+});
+
 export const setMunicipalitiesAction = ({ municipalities }) => ({
     type: SET_MUNICIPALITIES,
     municipalities,
@@ -58,7 +64,7 @@ const setHazardTypes = (state, action) => {
         /* eslint-disable no-param-reassign */
         deferedState.hazardTypes = listToMap(
             hazardTypes,
-            hazardType => hazardType.pk,
+            hazardType => hazardType.id,
         );
         /* eslint-enable no-param-reassign */
     });
@@ -109,6 +115,18 @@ const setDistricts = (state, action) => {
     return newState;
 };
 
+const setDistrictsGeoJson = (state, action) => {
+    const {
+        districtsGeoJson,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.geoJsons.district = districtsGeoJson;
+    });
+    return newState;
+};
+
 const setMunicipalities = (state, action) => {
     const {
         municipalities,
@@ -142,6 +160,7 @@ const reducers = {
     [SET_MAP_STYLE]: setMapStyle,
     [SET_PROVINCES]: setProvinces,
     [SET_DISTRICTS]: setDistricts,
+    [SET_DISTRICTS_GEO_JSON]: setDistrictsGeoJson,
     [SET_MUNICIPALITIES]: setMunicipalities,
     [SET_WARDS]: setWards,
 };

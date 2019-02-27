@@ -3,13 +3,22 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import ReactDOMServer from 'react-dom/server';
 import turf from 'turf';
+import { connect } from 'react-redux';
 
-import TextOutput from '#components/TextOutput';
-import GeoOutput from '#components/GeoOutput';
-import DateOutput from '#components/DateOutput';
+import {
+    filtersSelectorDP,
+    districtsGeoJsonSelector,
+    setDistrictsGeoJsonAction,
+} from '#redux';
+
 import MapMarkerLayer from '#components/MapMarkerLayer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+} from '#request';
 
 import nepalGeoJson from '#resources/districts.json';
 
@@ -31,7 +40,10 @@ const defaultProps = {
     className: '',
 };
 
-export default class AlertMap extends React.PureComponent {
+const emptyObject = {};
+const emptyList = [];
+
+class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -84,6 +96,36 @@ export default class AlertMap extends React.PureComponent {
         return geojson;
     });
 
+    getCurrentBounds = () => {
+        const {
+            filters: {
+                faramValues: {
+                    region: {
+                        adminLevel,
+                        geoarea,
+                    } = emptyObject,
+                } = emptyObject,
+            },
+            districtsGeoJson,
+        } = this.props;
+
+        const {
+            features = emptyList,
+        } = districtsGeoJson;
+
+        let currentBoundingObject = districtsGeoJson;
+
+        // FIXME: use better adminLevel detection
+        if (adminLevel === 2 && geoarea) {
+            const currentDistrict = features.find(d => geoarea === d.id);
+            if (currentDistrict) {
+                currentBoundingObject = currentDistrict;
+            }
+        }
+
+        return turf.bbox(currentBoundingObject);
+    }
+
     renderTooltip = ({ alert: alertString }) => {
         const alert = JSON.parse(alertString);
 
@@ -103,16 +145,21 @@ export default class AlertMap extends React.PureComponent {
             className,
             alertList,
             hazardTypes,
+            districtsGeoJson,
+            filters,
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
+        const bounds = this.getCurrentBounds();
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="bounds"
-                    geoJson={nepalGeoJson}
-                    bounds={turf.bbox(nepalGeoJson)}
+                    // geoJson={nepalGeoJson}
+                    geoJson={districtsGeoJson}
+                    bounds={bounds}
+                    // bounds={turf.bbox(nepalGeoJson)}
                 >
                     <MapLayer
                         layerKey="bounds-fill"
@@ -148,3 +195,33 @@ export default class AlertMap extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    filters: filtersSelectorDP(state),
+    districtsGeoJson: districtsGeoJsonSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setDistrictsGeoJson: params => dispatch(setDistrictsGeoJsonAction),
+});
+
+const requests = {
+    districtGeoJsonRequest: {
+        url: '/district/?format=geojson',
+        onSuccess: ({ response, props: { setDistrictsGeoJson } }) => {
+            console.warn(response);
+            setDistrictsGeoJson({ districtsGeoJson: response });
+        },
+        extras: {
+            // schemaName: 'provinceResponse',
+        },
+        onMount: false,
+        // onMount: true,
+    },
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(AlertMap),
+    ),
+);
