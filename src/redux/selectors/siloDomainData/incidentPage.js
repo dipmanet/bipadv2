@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { incidentIdFromRouteSelector } from '../route';
 
 const emptyObject = {};
-const emptyList = {};
+const emptyList = [];
 const emptyFilter = {
     faramValues: {},
     faramErrors: {},

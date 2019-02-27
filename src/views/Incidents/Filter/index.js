@@ -6,7 +6,7 @@ import Faram from '@togglecorp/faram';
 import Button from '#rsca/Button';
 
 import {
-    hazardTypesSelector,
+    hazardTypeListSelector,
     setFiltersActionIP,
     filtersSelectorIP,
 } from '#redux';
@@ -32,7 +32,7 @@ const propTypes = {
 const defaultProps = {};
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypesSelector(state),
+    hazardTypeList: hazardTypeListSelector(state),
     filters: filtersSelectorIP(state),
 });
 

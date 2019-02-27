@@ -62,7 +62,11 @@ const setHazardTypes = (state, action) => {
 
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
-        deferedState.hazardTypes = hazardTypes;
+        deferedState.hazardTypes = listToMap(
+            hazardTypes,
+            hazardType => hazardType.id,
+            hazardType => hazardType,
+        );
     });
 
     return newState;

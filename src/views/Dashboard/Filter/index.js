@@ -7,7 +7,7 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 
 import {
-    hazardTypesSelector,
+    hazardTypeListSelector,
     filtersSelectorDP,
     setFiltersActionDP,
 } from '#redux';
@@ -31,7 +31,7 @@ const propTypes = {
 const defaultProps = {};
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypesSelector(state),
+    hazardTypeList: hazardTypeListSelector(state),
     filters: filtersSelectorDP(state),
 });
 

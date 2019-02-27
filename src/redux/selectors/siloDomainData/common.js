@@ -5,7 +5,12 @@ const emptyObject = {};
 const emptyList = [];
 
 export const hazardTypesSelector = ({ siloDomainData }) =>
-    siloDomainData.hazardTypes || emptyList;
+    siloDomainData.hazardTypes || emptyObject;
+
+export const hazardTypeListSelector = createSelector(
+    hazardTypesSelector,
+    hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
+);
 
 export const resourceTypesSelector = ({ siloDomainData }) =>
     siloDomainData.resourceTypes || emptyObject;
