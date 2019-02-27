@@ -21,7 +21,7 @@ import { iconNames } from '#constants';
 import styles from './styles.scss';
 
 const hazardTypeLabelSelector = d => d.title;
-const hazardTypeKeySelector = d => d.pk;
+const hazardTypeKeySelector = d => d.id;
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types

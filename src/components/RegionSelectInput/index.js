@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectInput from '#rsci/SelectInput';
+import SegmentInput from '#rsci/SegmentInput';
 import { connect } from 'react-redux';
 
 import { FaramInputElement } from '@togglecorp/faram';
@@ -17,11 +18,12 @@ import styles from './styles.scss';
 
 const adminLevelKeySelector = d => d.pk;
 const adminLevelLabelSelector = d => d.title;
+
 const geoareaKeySelector = d => d.id;
 const geoareaLabelSelector = d => d.title;
 
 const emptyObject = {};
-const emptyArray = {};
+const emptyArray = [];
 
 const propTypes = {
     className: PropTypes.string,
@@ -100,10 +102,12 @@ export default class RegionSelectInput extends React.PureComponent {
             (adminLevel === 3 && municipalities) ||
             emptyArray
         );
+        const adminLevelItem = adminLevelList.find(item => item.pk === adminLevel);
+        const adminLevelLabel = adminLevelItem ? adminLevelItem.title : 'Geo area';
 
         return (
             <div className={className}>
-                <SelectInput
+                <SegmentInput
                     className={styles.adminLevelSelectInput}
                     label="Admin level"
                     options={adminLevelList}
@@ -113,20 +117,18 @@ export default class RegionSelectInput extends React.PureComponent {
                     onChange={this.handleAdminLevelChange}
                     showHintAndError={showHintAndError}
                 />
-                {
-                    adminLevel &&
-                    <SelectInput
-                        key={adminLevel}
-                        className={styles.geoareaSelectInput}
-                        label="Geoarea"
-                        options={geoArea}
-                        value={geoarea}
-                        keySelector={geoareaKeySelector}
-                        labelSelector={geoareaLabelSelector}
-                        onChange={this.handleGeoAreaChange}
-                        showHintAndError={showHintAndError}
-                    />
-                }
+                <SelectInput
+                    key={adminLevel}
+                    disabled={!adminLevel}
+                    className={styles.geoareaSelectInput}
+                    label={adminLevelLabel}
+                    options={geoArea}
+                    value={geoarea}
+                    keySelector={geoareaKeySelector}
+                    labelSelector={geoareaLabelSelector}
+                    onChange={this.handleGeoAreaChange}
+                    showHintAndError={showHintAndError}
+                />
             </div>
         );
     }
