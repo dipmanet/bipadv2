@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { hazardTypesSelector } from './common';
+
 const emptyObject = {};
 const emptyArray = [];
 const emptyFilter = {
@@ -50,10 +52,12 @@ export const filtersSelectorDP = createSelector(
 export const alertListSelectorDP = createSelector(
     filtersSelectorDP,
     dashboardPageSelector,
+    hazardTypesSelector,
     // TODO: Remove this filter later
     (
         { faramValues } = emptyFilter,
         { alertList },
+        hazardTypes,
     ) => {
         const { hazardType, dateRange } = faramValues;
         if (!alertList) {
@@ -74,6 +78,11 @@ export const alertListSelectorDP = createSelector(
             );
         }
 
-        return returnList;
+        return returnList.map((alert) => {
+            console.warn('alert', alert);
+            const { hazard: hazardId } = alert;
+            const hazardInfo = hazardTypes[hazardId] || {};
+            return { ...alert, hazardInfo };
+        });
     },
 );

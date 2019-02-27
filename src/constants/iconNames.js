@@ -2,6 +2,7 @@ const iconNames = {
     // alert: 'ion-md-alert',
     alert: 'ion-android-alert',
     menu: 'ion-android-menu',
+    check: 'ion-checkmark',
     close: 'ion-close',
 
     dashboard: 'ion-android-home',

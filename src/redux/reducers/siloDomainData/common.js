@@ -58,7 +58,7 @@ const setHazardTypes = (state, action) => {
         /* eslint-disable no-param-reassign */
         deferedState.hazardTypes = listToMap(
             hazardTypes,
-            hazardType => hazardType.pk,
+            hazardType => hazardType.id,
         );
         /* eslint-enable no-param-reassign */
     });
