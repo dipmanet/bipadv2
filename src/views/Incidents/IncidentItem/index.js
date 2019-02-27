@@ -23,8 +23,8 @@ export default class Incidents extends React.PureComponent {
             className,
             data: {
                 title,
-                incident_on: incidentOn,
-                geoareaName,
+                incidentOn,
+                streetAddress,
                 pk: incidentId,
             },
         } = this.props;
@@ -44,7 +44,7 @@ export default class Incidents extends React.PureComponent {
                 </header>
                 <GeoOutput
                     className={styles.geoOutput}
-                    geoareaName={geoareaName}
+                    geoareaName={streetAddress}
                 />
                 <DateOutput
                     className={styles.dateOutput}

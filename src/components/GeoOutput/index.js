@@ -22,11 +22,7 @@ export default class DateOutput extends React.PureComponent {
     render() {
         const {
             className: classNameFromProps,
-            geoareaName: {
-                province,
-                district,
-                palika,
-            } = emptyObject,
+            geoareaName,
         } = this.props;
 
         return (
@@ -39,7 +35,7 @@ export default class DateOutput extends React.PureComponent {
                     )}
                 />
                 <div className={styles.title}>
-                    {province}, {district}, {palika}
+                    {geoareaName}
                 </div>
             </div>
         );
