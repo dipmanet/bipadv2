@@ -50,36 +50,17 @@ export const filtersSelectorDP = createSelector(
 );
 
 export const alertListSelectorDP = createSelector(
-    filtersSelectorDP,
     dashboardPageSelector,
     hazardTypesSelector,
-    // TODO: Remove this filter later
     (
-        { faramValues } = emptyFilter,
         { alertList },
         hazardTypes,
     ) => {
-        const { hazardType, dateRange } = faramValues;
         if (!alertList) {
             return emptyArray;
         }
 
-        let returnList = alertList;
-        if (hazardType && hazardType.length > 0) {
-            returnList = returnList.filter(
-                alert => hazardType.includes(alert.hazard),
-            );
-        }
-
-        if (dateRange) {
-            const date = getDateFromRange(dateRange);
-            returnList = returnList.filter(
-                alert => alert.alertOn > date,
-            );
-        }
-
-        return returnList.map((alert) => {
-            console.warn('alert', alert);
+        return alertList.map((alert) => {
             const { hazard: hazardId } = alert;
             const hazardInfo = hazardTypes[hazardId] || {};
             return { ...alert, hazardInfo };

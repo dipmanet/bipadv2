@@ -126,7 +126,7 @@ export default [
             description: 'Incident Object',
         },
         fields: {
-            pk: { type: 'uint', required: true },
+            id: { type: 'uint', required: true },
             title: { type: 'string', required: true },
             description: { type: 'string', required: true },
             cause: { type: 'string', required: true },

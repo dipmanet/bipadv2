@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { incidentIdFromRouteSelector } from '../route';
 
 const emptyObject = {};
+const emptyList = [];
 const emptyFilter = {
     faramValues: {},
     faramErrors: {},
@@ -23,7 +24,7 @@ export const filtersValuesSelectorIP = createSelector(
 
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
-    ({ incidentList }) => incidentList,
+    ({ incidentList }) => incidentList || emptyList,
 );
 
 export const incidentSelector = createSelector(
@@ -31,7 +32,7 @@ export const incidentSelector = createSelector(
     incidentPageSelector,
     (id, { incidentList }) => {
         const incident = incidentList.find(
-            i => String(i.pk) === String(id),
+            i => String(i.id) === String(id),
         );
 
         return incident || emptyObject;

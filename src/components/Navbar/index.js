@@ -189,6 +189,7 @@ class Navbar extends React.PureComponent {
 
         return (
             <Button
+                key={key}
                 className={styles.mapLayerButton}
                 onClick={() => this.handleStyleSelection(data)}
                 transparent

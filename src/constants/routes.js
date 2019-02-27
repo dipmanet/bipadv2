@@ -56,7 +56,7 @@ export const routes = {
         path: '/incidents/:incidentId/response',
         loader: () => import('../views/Response'),
         links: allLinks,
-    }, // _ts('pageTitle', 'incidents');
+    }, // _ts('pageTitle', 'response');
 
     lossAndDamage: {
         order: 6,
