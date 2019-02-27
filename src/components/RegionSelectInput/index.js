@@ -7,7 +7,9 @@ import { FaramInputElement } from '@togglecorp/faram';
 
 import {
     adminLevelListSelector,
-    geoAreasSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
 } from '#redux';
 
 import _cs from '#cs';
@@ -15,17 +17,20 @@ import styles from './styles.scss';
 
 const adminLevelKeySelector = d => d.pk;
 const adminLevelLabelSelector = d => d.title;
-const geoareaKeySelector = d => d.pk;
+const geoareaKeySelector = d => d.id;
 const geoareaLabelSelector = d => d.title;
 
 const emptyObject = {};
+const emptyArray = {};
 
 const propTypes = {
     className: PropTypes.string,
     adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-    geoAreas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func.isRequired,
+    districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    municipalities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    provinces: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
@@ -35,7 +40,9 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
     adminLevelList: adminLevelListSelector(state),
-    geoAreas: geoAreasSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
 });
 
 
@@ -76,13 +83,22 @@ export default class RegionSelectInput extends React.PureComponent {
                 geoarea,
             } = emptyObject,
             adminLevelList,
-            geoAreas,
             showHintAndError,
+            provinces,
+            districts,
+            municipalities,
         } = this.props;
 
         const className = _cs(
             classNameFromProps,
             styles.regionSelectInput,
+        );
+
+        const geoArea = (
+            (adminLevel === 1 && provinces) ||
+            (adminLevel === 2 && districts) ||
+            (adminLevel === 3 && municipalities) ||
+            emptyArray
         );
 
         return (
@@ -100,9 +116,10 @@ export default class RegionSelectInput extends React.PureComponent {
                 {
                     adminLevel &&
                     <SelectInput
+                        key={adminLevel}
                         className={styles.geoareaSelectInput}
                         label="Geoarea"
-                        options={geoAreas[adminLevel]}
+                        options={geoArea}
                         value={geoarea}
                         keySelector={geoareaKeySelector}
                         labelSelector={geoareaLabelSelector}
