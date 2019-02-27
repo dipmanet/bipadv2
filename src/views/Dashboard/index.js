@@ -7,10 +7,13 @@ import {
     createRequestClient,
 } from '#request';
 
+import { transformDateRangeFilterParam } from '#utils/transformations';
+
 import {
     alertListSelectorDP,
     setAlertListActionDP,
     hazardTypesSelector,
+    filtersValuesSelectorDP,
 } from '#redux';
 
 import Page from '#components/Page';
@@ -20,17 +23,6 @@ import LeftPane from './LeftPane';
 import DashboardFilter from './Filter';
 
 import styles from './styles.scss';
-
-const requests = {
-    alertsRequest: {
-        url: '/alert/',
-        onSuccess: ({ response, props: { setAlertList } }) => {
-            const { results: alertList = [] } = response;
-            setAlertList({ alertList });
-        },
-        onMount: true,
-    },
-};
 
 const propTypes = {
     alertList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -72,11 +64,31 @@ class Dashboard extends React.PureComponent {
 const mapStateToProps = state => ({
     alertList: alertListSelectorDP(state),
     hazardTypes: hazardTypesSelector(state),
+    filters: filtersValuesSelectorDP(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setAlertList: params => dispatch(setAlertListActionDP(params)),
 });
+
+const requests = {
+    alertsRequest: {
+        url: '/alert/',
+        // We have to transform dateRange to created_on__lt and created_on__gt
+        query: ({ props: { filters } }) => transformDateRangeFilterParam(filters, 'created_on'),
+        onSuccess: ({ response, props: { setAlertList } }) => {
+            const { results: alertList = [] } = response;
+            setAlertList({ alertList });
+        },
+        onMount: true,
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { hazard, dateRange } },
+                prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
+            }) => hazard !== prevHazard || dateRange !== prevDateRange,
+        },
+    },
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator()(
