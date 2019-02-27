@@ -13,7 +13,7 @@ const defaultProps = {
     className: '',
 };
 
-export default class Navbar extends React.PureComponent {
+export default class CollapsibleView extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 

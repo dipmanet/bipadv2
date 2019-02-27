@@ -16,7 +16,7 @@ import {
 import _cs from '#cs';
 import styles from './styles.scss';
 
-const adminLevelKeySelector = d => d.pk;
+const adminLevelKeySelector = d => d.id;
 const adminLevelLabelSelector = d => d.title;
 
 const geoareaKeySelector = d => d.id;
@@ -56,6 +56,7 @@ export default class RegionSelectInput extends React.PureComponent {
 
     handleAdminLevelChange = (newAdminLevel) => {
         const { onChange } = this.props;
+        console.warn(newAdminLevel);
 
         onChange({
             adminLevel: newAdminLevel,
@@ -102,7 +103,7 @@ export default class RegionSelectInput extends React.PureComponent {
             (adminLevel === 3 && municipalities) ||
             emptyArray
         );
-        const adminLevelItem = adminLevelList.find(item => item.pk === adminLevel);
+        const adminLevelItem = adminLevelList.find(item => item.id === adminLevel);
         const adminLevelLabel = adminLevelItem ? adminLevelItem.title : 'Geo area';
 
         return (

@@ -63,7 +63,7 @@ export default class Resource extends React.PureComponent {
                     data={data}
                     renderer={ResourceElement}
                     rendererParams={this.getResourceElementRendererParams}
-                    keySelector={d => d.pk}
+                    keySelector={d => d.id}
                 />
             </div>
         );
