@@ -40,3 +40,11 @@ export const mapStylesSelector = ({ siloDomainData }) =>
 
 export const mapStyleSelector = ({ siloDomainData }) =>
     siloDomainData.selectedMapStyle;
+
+export const geoJsonsSelector = ({ siloDomainData }) =>
+    siloDomainData.geoJsons;
+
+export const districtsGeoJsonSelector = createSelector(
+    geoJsonsSelector,
+    geoJsons => geoJsons.district,
+);
