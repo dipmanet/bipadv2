@@ -79,8 +79,8 @@ const transformDateRangeFilter = (filters) => {
     if (dateRange) {
         const { startDate, endDate } = pastDaysToDateRange(dateRange);
         return {
-            date__lt: endDate ? endDate.getTime() : undefined,
-            date__gt: startDate ? startDate.getTime() : undefined,
+            incident_on__lt: endDate ? endDate.toISOString() : undefined,
+            incident_on__gt: startDate ? startDate.toISOString() : undefined,
             ...other,
         };
     }
@@ -98,9 +98,9 @@ const requests = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazardType, dateRange } },
-                prevProps: { filters: { hazardType: prevHazardType, dateRange: prevDateRange } },
-            }) => hazardType !== prevHazardType || dateRange !== prevDateRange,
+                props: { filters: { hazard, dateRange } },
+                prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
+            }) => hazard !== prevHazard || dateRange !== prevDateRange,
         },
     },
 };

@@ -78,7 +78,6 @@ export default class IncidentMap extends React.PureComponent {
                     },
                 })),
         };
-        console.warn('GEO JSON', geojson);
 
         return geojson;
     });
