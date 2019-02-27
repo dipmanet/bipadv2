@@ -99,7 +99,7 @@ export default class ResponseMap extends React.PureComponent {
 
     handlePointClick = (propertiesString) => {
         const properties = JSON.parse(propertiesString);
-        const { pk: incidentId } = properties;
+        const { id: incidentId } = properties;
         const redirectTo = reverseRoute(routes.response.path, { incidentId });
         this.setState({ redirectTo });
     }
