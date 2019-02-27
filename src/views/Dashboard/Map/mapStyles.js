@@ -3,6 +3,11 @@ export const boundsFill = {
     'fill-opacity': 0.1,
 };
 
+export const polygonBoundsFill = {
+    'fill-color': 'red',
+    'fill-opacity': 0.4,
+};
+
 export const boundsOutline = {
     'line-color': '#4c4caa',
     'line-opacity': 0.2,
