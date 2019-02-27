@@ -6,7 +6,8 @@ const iconNames = {
 
     dashboard: 'ion-android-home',
     riskMap: 'ion-android-map',
-    incidents: 'ion-alert-circled',
+    incidents: 'ion-alert-circled', // TODO remove this
+    incident: 'ion-alert-circled',
     lossAndDamange: 'ion-ios-clock',
     drrProfileMapping: 'ion-briefcase',
     aboutUs: 'ion-ios-information',
@@ -20,6 +21,9 @@ const iconNames = {
     calendar: 'ion-ios-calendar-outline',
     location: 'ion-ios-location-outline',
     distance: 'ion-android-locate',
+
+    expand: 'ion-arrow-expand',
+    shrink: 'ion-arrow-shrink',
 };
 
 export default iconNames;
