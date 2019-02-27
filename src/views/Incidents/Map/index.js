@@ -176,7 +176,7 @@ export default class IncidentMap extends React.PureComponent {
                     supportHover
                 >
                     <MapLayer
-                        layerKey="incident-points"
+                        layerKey="incident-points-fill"
                         type="circle"
                         property="incident"
                         paint={pointPaint}

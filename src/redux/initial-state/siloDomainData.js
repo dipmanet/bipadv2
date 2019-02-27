@@ -678,6 +678,16 @@ const initialSiloDomainData = {
             style: 'mapbox://styles/mapbox/outdoors-v11',
             color: '#c8dd97',
         },
+        {
+            name: 'satellite',
+            style: 'mapbox://styles/mapbox/satellite-streets-v11',
+            color: '#c89966',
+        },
+        {
+            name: 'nav',
+            style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
+            color: '#671076',
+        },
     ],
 
     selectedMapStyle: 'mapbox://styles/mapbox/streets-v11',

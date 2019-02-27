@@ -7,6 +7,7 @@ export default [
         fields: {
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
+            boundary: { type: 'object' }, // FIXME: shouldn't be object
         },
     },
     {
@@ -30,6 +31,7 @@ export default [
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
             province: { type: 'number', required: true },
+            boundary: { type: 'object' }, // FIXME: shouldn't be object
         },
     },
     {
@@ -53,6 +55,7 @@ export default [
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
             district: { type: 'number', required: true },
+            boundary: { type: 'object' }, // FIXME: shouldn't be object
         },
     },
     {
@@ -76,6 +79,7 @@ export default [
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
             municipality: { type: 'number', required: true },
+            boundary: { type: 'object' }, // FIXME: shouldn't be object
         },
     },
     {

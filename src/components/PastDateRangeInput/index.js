@@ -1,32 +1,32 @@
 import React from 'react';
 
-import SelectInput from '#rsci/SelectInput';
+import SegmentInput from '#rsci/SegmentInput';
 
 const pastDataKeySelector = d => d.key;
 const pastDataLabelSelector = d => d.label;
 
 const pastDateRangeOptions = [
     {
-        label: 'Last 3 days',
+        label: '3d',
         key: 'past3Days',
     },
     {
-        label: 'Last 7 days',
+        label: '7d',
         key: 'past7Days',
     },
     {
-        label: 'Last 2 weeks',
+        label: '2w',
         key: 'past2Weeks',
     },
     {
-        label: 'Last 1 month',
+        label: '1m',
         key: 'past1Month',
     },
 ];
 
 
 const PastDateRangeInput = props => (
-    <SelectInput
+    <SegmentInput
         keySelector={pastDataKeySelector}
         labelSelector={pastDataLabelSelector}
         options={pastDateRangeOptions}
