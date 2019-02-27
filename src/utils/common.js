@@ -1,3 +1,45 @@
+import { isNotDefined } from '@togglecorp/fujs';
+
+export const convertJsonToCsv = (data, columnDelimiter = ',', lineDelimiter = '\n', emptyValue = '') => {
+    if (!data || data.length <= 0) {
+        return undefined;
+    }
+
+    // TODO: get exhaustive keys
+    const keys = Object.keys(data[0]);
+
+    let result = keys.join(columnDelimiter);
+    result += lineDelimiter;
+
+    data.forEach((item) => {
+        result += keys
+            .map(key => item[key])
+            .map((str) => {
+                if (isNotDefined(str)) {
+                    return emptyValue;
+                }
+                const val = String(str);
+                if (val.includes(columnDelimiter)) {
+                    return `"${val}"`;
+                }
+                return val;
+            })
+            .join(columnDelimiter);
+        result += lineDelimiter;
+    });
+
+    return result;
+};
+
+export const convertCsvToLink = (csvRaw) => {
+    let csv = csvRaw;
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = `data:text/csv;charset=utf-8,${csv}`;
+    }
+    return encodeURI(csv);
+};
+
+
 export const mapObjectToObject = (obj, fn) => {
     const newObj = {};
     Object.keys(obj).forEach((key) => {
