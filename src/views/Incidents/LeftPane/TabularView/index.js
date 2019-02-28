@@ -151,8 +151,6 @@ export default class TabularView extends React.PureComponent {
             incidentList,
         } = this.props;
 
-        console.warn(incidentList);
-
         // need to transform data
         const incidentListForExport = incidentList.map(incident => ({
             verified: incident.verified,
