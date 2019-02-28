@@ -4,17 +4,17 @@ import memoize from 'memoize-one';
 import { Redirect } from 'react-router-dom';
 import turf from 'turf';
 
-import TextOutput from '#components/TextOutput';
-import GeoOutput from '#components/GeoOutput';
-import DateOutput from '#components/DateOutput';
-import PeopleLoss from '#components/PeopleLoss';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import { reverseRoute } from '@togglecorp/fujs';
+import store from '#store';
 import { routes } from '#constants';
 
+import Tooltip from '#components/Tooltip';
+
 import nepalGeoJson from '#resources/districts.json';
+
 
 import {
     boundsFill,
@@ -22,18 +22,15 @@ import {
     pointPaint,
     hoverPaint,
 } from './mapStyles';
-import styles from './styles.scss';
 
 const propTypes = {
-    className: PropTypes.string,
 };
 
 const defaultProps = {
-    className: '',
 };
 
-const emptyList = [];
-const emptyObject = {};
+// NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
+const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
 const multiPolyToPoly = (multi) => {
     const { type, coordinates, ...other } = multi;
@@ -60,7 +57,7 @@ export default class IncidentMap extends React.PureComponent {
         this.hoverInfo = {
             paint: hoverPaint,
             showTooltip: true,
-            tooltipModifier: this.renderTooltip,
+            tooltipModifier: toolTipWrapper,
         };
     }
 
@@ -89,61 +86,8 @@ export default class IncidentMap extends React.PureComponent {
         this.setState({ redirectTo });
     }
 
-    renderTooltip = ({ incident: incidentString }) => {
-        const incident = JSON.parse(incidentString);
-
-        const {
-            title,
-            inducer,
-            cause,
-            incident_on: incidentOn,
-            geoareaName,
-            loss: {
-                peoples = emptyList,
-            } = emptyObject,
-        } = incident;
-
-        const inducerText = {
-            artificial: 'Artificial',
-            natural: 'Natural',
-        };
-
-        return (
-            <div className={styles.tooltip}>
-                <h2 className={styles.heading}>
-                    {title}
-                </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
-                <DateOutput
-                    className={styles.incidentDate}
-                    date={incidentOn}
-                />
-                <div className={styles.hr} />
-                <TextOutput
-                    className={styles.inducer}
-                    label="Inducer"
-                    value={inducerText[inducer]}
-                />
-                <TextOutput
-                    className={styles.cause}
-                    label="Cause"
-                    value={cause}
-                />
-                <PeopleLoss
-                    className={styles.peopleLoss}
-                    label="People loss"
-                    peopleList={peoples}
-                />
-            </div>
-        );
-    }
-
     render() {
         const {
-            className,
             incidentList,
         } = this.props;
 

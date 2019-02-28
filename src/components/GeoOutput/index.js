@@ -7,13 +7,13 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    geoareaName: PropTypes.string,
 };
 
 const defaultProps = {
     className: '',
+    geoareaName: '',
 };
-
-const emptyObject = {};
 
 export default class DateOutput extends React.PureComponent {
     static propTypes = propTypes;

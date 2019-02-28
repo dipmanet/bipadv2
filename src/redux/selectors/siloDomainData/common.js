@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { mapToList } from '@togglecorp/fujs';
+import { mapToList, listToMap } from '@togglecorp/fujs';
 
 const emptyObject = {};
 const emptyList = [];
@@ -29,6 +29,11 @@ export const municipalitiesSelector = ({ siloDomainData }) =>
 
 export const wardsSelector = ({ siloDomainData }) =>
     siloDomainData.wards || emptyList;
+
+export const wardsMapSelector = createSelector(
+    wardsSelector,
+    wards => listToMap(wards, elem => elem.id),
+);
 
 export const resourceTypeListSelector = createSelector(
     resourceTypesSelector,
