@@ -52,15 +52,13 @@ export const filtersSelectorDP = createSelector(
 export const alertListSelectorDP = createSelector(
     dashboardPageSelector,
     hazardTypesSelector,
-    (
-        { alertList },
-        hazardTypes,
-    ) => {
+    ({ alertList }, hazardTypes) => {
         if (!alertList) {
             return emptyArray;
         }
 
         return alertList.map((alert) => {
+            // FIXME: potential problem
             const { hazard: hazardId } = alert;
             const hazardInfo = hazardTypes[hazardId] || {};
             return { ...alert, hazardInfo };

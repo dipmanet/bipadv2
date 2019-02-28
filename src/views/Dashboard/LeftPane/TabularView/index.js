@@ -4,8 +4,14 @@ import PropTypes from 'prop-types';
 import Table from '#rscv/Table';
 import FormattedDate from '#rscv/FormattedDate';
 import { iconNames } from '#constants';
+import { convertJsonToCsv, convertCsvToLink } from '#utils/common';
 
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    compareDate,
+    compareString,
+    compareBoolean,
+} from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 
@@ -29,9 +35,64 @@ export default class TabularView extends React.PureComponent {
         super(props);
         this.alertsTableHeader = [
             {
+                key: 'verified',
+                label: 'Verified',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareBoolean(a.verified, b.verified),
+                modifier: (row) => {
+                    const iconClass = row.verified ? `
+                    ${iconNames.check} ${styles.verified}` : `
+                    ${iconNames.close} ${styles.notVerified}
+                    `;
+                    return <span className={iconClass} />;
+                },
+            },
+            {
+                key: 'title',
+                label: 'Title',
+                sortable: true,
+                comparator: (a, b) => compareString(a.title, b.title),
+                order: 3,
+            },
+            {
+                key: 'description',
+                label: 'Description',
+                order: 4,
+                sortable: true,
+                comparator: (a, b) => compareString(a.description, b.description),
+            },
+            {
+                key: 'source',
+                label: 'Source',
+                order: 5,
+                sortable: true,
+                comparator: (a, b) => compareString(a.source, b.source),
+            },
+            /*
+            {
+                key: 'event',
+                label: 'Event',
+                order: 6,
+                sortable: true,
+                comparator: (a, b) => compareString(a.source, b.source),
+            },
+            */
+            {
+                key: 'hazardInfo',
+                label: 'Hazard',
+                order: 6,
+                modifier: row => row.hazardInfo.title,
+                sortable: true,
+                // FIXME: potential problem
+                comparator: (a, b) => compareString(a.hazardInfo.title, b.hazardInfo.title),
+            },
+            {
                 key: 'createdOn',
                 label: 'Created On',
-                order: 1,
+                order: 7,
+                sortable: true,
+                comparator: (a, b) => compareDate(a.createdOn, b.createdOn),
                 modifier: row => (
                     <FormattedDate
                         date={row.createdOn}
@@ -42,7 +103,9 @@ export default class TabularView extends React.PureComponent {
             {
                 key: 'expireOn',
                 label: 'Expires On',
-                order: 2,
+                order: 8,
+                sortable: true,
+                comparator: (a, b) => compareDate(a.expireOn, b.expireOn),
                 modifier: row => (
                     <FormattedDate
                         date={row.expiresOn}
@@ -50,53 +113,28 @@ export default class TabularView extends React.PureComponent {
                     />
                 ),
             },
-            {
-                key: 'title',
-                label: 'Title',
-                order: 3,
-            },
-            {
-                key: 'description',
-                label: 'Description',
-                order: 4,
-            },
-            {
-                key: 'source',
-                label: 'Source',
-                order: 5,
-            },
-            {
-                key: 'event',
-                label: 'Event',
-                order: 6,
-            },
-            {
-                key: 'hazardInfo',
-                label: 'Hazard',
-                order: 7,
-                modifier: row => row.hazardInfo.title,
-            },
-            {
-                key: 'verified',
-                label: 'Verified',
-                order: 8,
-                modifier: (row) => {
-                    const iconClass = row.verified ? `
-                    ${iconNames.check} ${styles.verified}` : `
-                    ${iconNames.close} ${styles.notVerified}
-                    `;
-                    return <span className={iconClass} />;
-                },
-            },
         ];
     }
-
 
     render() {
         const {
             className,
             alertList,
         } = this.props;
+
+        // need to transform data
+        const alertListForExport = alertList.map(alert => ({
+            verified: alert.verified,
+            title: alert.title,
+            description: alert.description,
+            source: alert.source,
+            // FIXME: potential problem
+            hazard: alert.hazardInfo.title,
+            created_on: alert.createdOn,
+            expire_on: alert.expireOn,
+        }));
+        const csv = convertJsonToCsv(alertListForExport);
+        const data = convertCsvToLink(csv);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
@@ -106,6 +144,12 @@ export default class TabularView extends React.PureComponent {
                     headers={this.alertsTableHeader}
                     keySelector={TabularView.tableKeySelector}
                 />
+                <a
+                    href={data}
+                    download="export.csv"
+                >
+                    Download csv
+                </a>
             </div>
         );
     }
