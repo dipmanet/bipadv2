@@ -13,20 +13,24 @@ import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import ListView from '#rscv/List/ListView';
 import Histogram from '#rscz/Histogram';
+import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
 
 import TabularView from './TabularView';
+
 import styles from './styles.scss';
 
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    pending: PropTypes.bool,
     className: PropTypes.string,
 };
 
 const defaultProps = {
+    pending: false,
     alertList: [],
     className: undefined,
 };
@@ -138,12 +142,14 @@ export default class LeftPane extends React.PureComponent {
     renderAlerts = ({
         className,
         data,
+        pending,
     }) => (
         <div className={className}>
             <header className={styles.header}>
                 <h4 className={styles.heading}>
                     Alerts
                 </h4>
+                <Spinner loading={pending} />
                 <Button
                     className={styles.expandTabularViewButton}
                     onClick={this.handleExpandButtonClick}
@@ -205,6 +211,7 @@ export default class LeftPane extends React.PureComponent {
         const {
             className,
             alertList,
+            pending,
         } = this.props;
 
         const {
@@ -221,12 +228,15 @@ export default class LeftPane extends React.PureComponent {
                 expanded={showAlerts}
                 collapsedViewContainerClassName={styles.showAlertsButtonContainer}
                 collapsedView={
-                    <Button
-                        className={styles.showAlertsButton}
-                        onClick={this.handleShowAlertsButtonClick}
-                        iconName={iconNames.alert}
-                        title="Show alerts"
-                    />
+                    <React.Fragment>
+                        <Button
+                            className={styles.showAlertsButton}
+                            onClick={this.handleShowAlertsButtonClick}
+                            iconName={iconNames.alert}
+                            title="Show alerts"
+                        />
+                        <Spinner loading={pending} />
+                    </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.alertsContainer}
                 expandedView={
@@ -238,6 +248,7 @@ export default class LeftPane extends React.PureComponent {
                                 <Alerts
                                     className={styles.alerts}
                                     data={alertList}
+                                    pending={pending}
                                 />
                                 <KeyStatistics
                                     className={styles.keyStatistics}
@@ -251,6 +262,7 @@ export default class LeftPane extends React.PureComponent {
                                     <h3 className={styles.heading}>
                                         Alerts
                                     </h3>
+                                    <Spinner loading={pending} />
                                     <Button
                                         className={styles.hideAlertsButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}

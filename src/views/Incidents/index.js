@@ -43,6 +43,9 @@ class Incidents extends React.PureComponent {
     render() {
         const {
             incidentList,
+            requests: {
+                incidentsRequest: { pending: incidentsPending },
+            },
         } = this.props;
 
         return (
@@ -53,6 +56,7 @@ class Incidents extends React.PureComponent {
                     leftContent={
                         <LeftPane
                             incidentList={incidentList}
+                            pending={incidentsPending}
                         />
                     }
                     rightContentClassName={styles.right}

@@ -4,6 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
+import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
@@ -14,10 +15,12 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    pending: PropTypes.bool,
 };
 
 const defaultProps = {
     className: undefined,
+    pending: false,
 };
 
 const incidentKeySelector = d => d.id;
@@ -61,6 +64,7 @@ export default class LeftPane extends React.PureComponent {
         const {
             className,
             incidentList,
+            pending,
         } = this.props;
 
         const {
@@ -74,12 +78,15 @@ export default class LeftPane extends React.PureComponent {
                 expanded={showIncidents}
                 collapsedViewContainerClassName={styles.showIncidentsButtonContainer}
                 collapsedView={
-                    <Button
-                        className={styles.showIncidentsButton}
-                        onClick={this.handleShowIncidentsButtonClick}
-                        iconName={iconNames.incident}
-                        title="Show alerts"
-                    />
+                    <React.Fragment>
+                        <Button
+                            className={styles.showIncidentsButton}
+                            onClick={this.handleShowIncidentsButtonClick}
+                            iconName={iconNames.incident}
+                            title="Show alerts"
+                        />
+                        <Spinner loading={pending} />
+                    </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.incidentListContainer}
                 expandedView={
@@ -92,6 +99,7 @@ export default class LeftPane extends React.PureComponent {
                                     <h4 className={styles.heading}>
                                         Incidents
                                     </h4>
+                                    <Spinner loading={pending} />
                                     <Button
                                         className={styles.expandTabularViewButton}
                                         onClick={this.handleExpandButtonClick}
@@ -120,6 +128,7 @@ export default class LeftPane extends React.PureComponent {
                         expandedView={
                             <React.Fragment>
                                 <header className={styles.header}>
+                                    <Spinner loading={pending} />
                                     <Button
                                         className={styles.collapseTabularViewButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}
@@ -147,4 +156,3 @@ export default class LeftPane extends React.PureComponent {
         );
     }
 }
-

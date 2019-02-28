@@ -9,6 +9,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
 .left-pane {
     .show-alerts-button-container {
         transform-origin: 0 0;
+        align-items: center;
 
         .show-alerts-button {
             padding: $spacing-extra-small $spacing-small;
