@@ -29,6 +29,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
 
             .header {
                 display: flex;
+                align-items: center;
                 flex-shrink: 0;
 
                 .heading {

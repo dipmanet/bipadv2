@@ -27,6 +27,7 @@ import styles from './styles.scss';
 const propTypes = {
     alertList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    requests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {};
@@ -39,6 +40,9 @@ class Dashboard extends React.PureComponent {
         const {
             alertList,
             hazardTypes,
+            requests: {
+                alertsRequest: { pending: alertsPending },
+            },
         } = this.props;
 
         return (
@@ -52,6 +56,7 @@ class Dashboard extends React.PureComponent {
                         <LeftPane
                             alertList={alertList}
                             hazardTypes={hazardTypes}
+                            pending={alertsPending}
                         />
                     }
                     rightContent={<DashboardFilter />}
