@@ -26,7 +26,7 @@ const ResourceElement = (d) => {
                 { title }
             </div>
             <DistanceOutput
-                value={distance}
+                value={distance / 1000}
             />
         </div>
     );
@@ -63,7 +63,8 @@ export default class Resource extends React.PureComponent {
                     data={data}
                     renderer={ResourceElement}
                     rendererParams={this.getResourceElementRendererParams}
-                    keySelector={d => d.id}
+                    keySelector={d => d.title}
+                    // keySelector={d => d.id}
                 />
             </div>
         );
