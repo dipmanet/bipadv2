@@ -153,6 +153,7 @@ class AlertMap extends React.PureComponent {
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
+        const bounds = this.getCurrentBounds();
 
         return (
             <React.Fragment>
@@ -160,8 +161,8 @@ class AlertMap extends React.PureComponent {
                     sourceKey="bounds"
                     geoJson={districtsGeoJson}
                     // geoJson={nepalGeoJson}
-                    // bounds={bounds}
-                    // bounds={turf.bbox(nepalGeoJson)}
+                    bounds={bounds}
+                    // bounds={turf.bbox(districtsGeoJson)}
                 >
                     <MapLayer
                         layerKey="bounds-fill"

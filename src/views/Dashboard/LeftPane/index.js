@@ -49,7 +49,7 @@ export default class LeftPane extends React.PureComponent {
         super(props);
 
         this.state = {
-            showAlerts: false,
+            showAlerts: true,
             showTabular: false,
         };
     }
@@ -188,7 +188,7 @@ export default class LeftPane extends React.PureComponent {
             <div className={className}>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Key statistics
+                        Alerts Overview
                     </h4>
                 </header>
                 <div className={styles.content}>
