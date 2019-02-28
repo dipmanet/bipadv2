@@ -2,7 +2,18 @@
 
 .tabular-view {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+
+    .verified {
+        color: $color-success-light;
+    }
+
+    .not-verified {
+        color: $color-danger-light;
+    }
+
+    .incidents-table {
+        flex-grow: 1;
+    }
 }
 

@@ -1,8 +1,10 @@
 import { createSelector } from 'reselect';
+
+import { hazardTypesSelector } from './common';
 import { incidentIdFromRouteSelector } from '../route';
 
 const emptyObject = {};
-const emptyList = [];
+const emptyArray = [];
 const emptyFilter = {
     faramValues: {},
     faramErrors: {},
@@ -24,7 +26,19 @@ export const filtersValuesSelectorIP = createSelector(
 
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
-    ({ incidentList }) => incidentList || emptyList,
+    hazardTypesSelector,
+    ({ incidentList }, hazardTypes) => {
+        if (!incidentList) {
+            return emptyArray;
+        }
+
+        return incidentList.map((incident) => {
+            // FIXME: potential problem
+            const { hazard: hazardId } = incident;
+            const hazardInfo = hazardTypes[hazardId] || {};
+            return { ...incident, hazardInfo };
+        });
+    },
 );
 
 export const incidentSelector = createSelector(
