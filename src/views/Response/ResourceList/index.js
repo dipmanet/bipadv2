@@ -6,6 +6,8 @@ import ListView from '#rscv/List/ListView';
 
 import Hospital from './resources/Hospital';
 import Volunteer from './resources/Volunteer';
+import Education from './resources/Education';
+import Finance from './resources/Finance';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -17,15 +19,20 @@ const defaultProps = {
 const resourceComponents = {
     hospital: Hospital,
     volunteer: Volunteer,
-    education: Volunteer,
+    education: Education,
+    finance: Finance,
 };
+
+const resourceKeySelector = d => d.id;
 
 const Resource = ({
     type,
     ...otherProps
 }) => {
     const ResourceComponent = resourceComponents[type];
-    return <ResourceComponent {...otherProps} />;
+    return (
+        <ResourceComponent {...otherProps} />
+    );
 };
 
 export default class Response extends React.PureComponent {
@@ -42,6 +49,7 @@ export default class Response extends React.PureComponent {
             hospital: [],
             volunteer: [],
             education: [],
+            finance: [],
         };
 
         resourceList.forEach((r) => {

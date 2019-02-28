@@ -2,12 +2,17 @@
 
 .incident-details {
     border: $width-separator-thin solid $color-separator-light;
+    border-radius: $radius-border-medium;
     background-color: $color-foreground;
     padding: $spacing-large;
 }
 
-.resource-list {
+.resource-list-container {
     border: $width-separator-thin solid $color-separator-light;
-    background-color: $color-foreground;
+    border-radius: $radius-border-large;
+    background-color: rgba(255, 255, 255, .9);
     padding: $spacing-large;
+    width: 240px;
+    max-height: calc(100vh - #{$spacing-medium * 2});
+    overflow: auto;
 }

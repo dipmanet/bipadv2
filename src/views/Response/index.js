@@ -52,15 +52,16 @@ class Response extends React.PureComponent {
                     resourceList={resourceList}
                 />
                 <Page
-                    rightContentClassName={styles.incidentDetails}
-                    rightContent={
+                    leftContentClassName={styles.incidentDetails}
+                    leftContent={
                         <Tooltip
                             incident={JSON.stringify(incident)}
                         />
                     }
-                    leftContent={
+                    rightContentClassName={styles.resourceListContainer}
+                    rightContent={
                         <ResourceList
-                            className={styles.resourceList}
+                            // className={styles.resourceList}
                             resourceList={resourceList}
                         />
                     }
@@ -74,7 +75,7 @@ const requests = {
     responseRequest: {
         url: ({ props: { incidentId } }) => (
             // ?distance=1000
-            `/incident/${incidentId}/response/?distance=1000`
+            `/incident/${incidentId}/response/?distance=12`
         ),
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });

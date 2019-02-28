@@ -42,14 +42,15 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
+    border: $width-separator-thin solid $color-accent;
     border-radius: 50%;
     background-color: $color-foreground;
-    width: $font-size-super-large;
-    height: $font-size-super-large;
-    animation: fade-in $duration-transition-slow 1.2s ease-in forwards;
+    width: $font-size-large-alt;
+    height: $font-size-large-alt;
+    animation: fade-in $duration-transition-slow 1s ease-in forwards;
 
     .icon {
-        height: $font-size-small;
+        height: $font-size-super-small;
     }
 }
 

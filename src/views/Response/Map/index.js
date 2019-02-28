@@ -21,6 +21,8 @@ import { routes } from '#constants';
 import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import groupIcon from '#resources/icons/group.svg';
+import financeIcon from '#resources/icons/University.svg';
+import educationIcon from '#resources/icons/Education.svg';
 
 import Tooltip from '#components/Tooltip';
 
@@ -43,7 +45,8 @@ const defaultProps = {
 const icons = {
     hospital: healthFacilityIcon,
     volunteer: groupIcon,
-    education: healthFacilityIcon,
+    education: educationIcon,
+    finance: financeIcon,
 };
 
 // NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
@@ -116,7 +119,7 @@ export default class ResponseMap extends React.PureComponent {
         } = this.props;
 
         const point = turf.point(incident.point.coordinates);
-        const buffered = turf.buffer(point, 5, 'kilometers');
+        const buffered = turf.buffer(point, 32, 'kilometers');
         const bbox = turf.bbox(buffered);
 
         const featureCollection = {
