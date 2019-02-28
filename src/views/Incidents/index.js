@@ -82,7 +82,10 @@ const requests = {
     incidentsRequest: {
         url: '/incident/',
         // We have to transform dateRange to incident_on__lt and incident_on__gt
-        query: ({ props: { filters } }) => transformDateRangeFilterParam(filters, 'incident_on'),
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            expand: 'loss,event',
+        }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             const { results: incidentList = [] } = response;
             setIncidentList({ incidentList });

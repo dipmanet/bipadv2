@@ -8,7 +8,7 @@ import turf from 'turf';
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
-import PeopleLoss from '#components/PeopleLoss';
+import Loss from '#components/Loss';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
@@ -115,10 +115,11 @@ class IncidentMap extends React.PureComponent {
             incidentOn,
             wards = emptyList,
             streetAddress: geoareaName,
+            event: {
+                title: eventTitle = '-',
+            } = {},
 
-            loss: {
-                peoples = emptyList,
-            } = emptyObject,
+            loss = emptyObject,
 
             ...misc
         } = incident;
@@ -148,7 +149,7 @@ class IncidentMap extends React.PureComponent {
                     className={styles.incidentDate}
                     date={incidentOn}
                 />
-                Misc <div className={styles.hr} />
+                <div className={styles.hr} />
                 <TextOutput
                     className={styles.commonInfo}
                     label="Source"
@@ -169,12 +170,18 @@ class IncidentMap extends React.PureComponent {
                     label="Hazard"
                     value={hazardType}
                 />
-                <PeopleLoss
-                    className={styles.peopleLoss}
-                    label="People loss"
-                    peopleList={peoples}
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Event"
+                    value={eventTitle}
+                />
+                <Loss
+                    className={styles.loss}
+                    label="Loss"
+                    loss={loss}
                 />
                 <div className={styles.hr} />
+                <b> Misc </b>
                 <TextOutput
                     className={styles.commonInfo}
                     label="Wards"
