@@ -23,6 +23,27 @@ export const filtersValuesSelectorDP = createSelector(
     ({ faramValues }) => faramValues,
 );
 
+export const hazardTypeListAlertsDP = createSelector(
+    dashboardPageSelector,
+    hazardTypesSelector,
+    ({ alertList }, hazardTypes) => {
+        if (!alertList) {
+            return emptyArray;
+        }
+
+        const types = new Set();
+
+        alertList.forEach((alert) => {
+            const { hazard: hazardId } = alert;
+            const hazard = hazardTypes[hazardId];
+            if (hazard) {
+                types.add(hazard);
+            }
+        });
+        return [...types];
+    },
+);
+
 export const alertListSelectorDP = createSelector(
     dashboardPageSelector,
     hazardTypesSelector,
