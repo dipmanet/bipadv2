@@ -16,13 +16,13 @@ import {
 
 import Page from '#components/Page';
 
+import { transformDateRangeFilterParam } from '#utils/transformations';
+
 import IncidentsFilter from './Filter';
 import Map from './Map';
 
 import LeftPane from './LeftPane';
 import styles from './styles.scss';
-
-import { pastDaysToDateRange } from '../../utils/common';
 
 
 const propTypes = {
@@ -74,23 +74,11 @@ const mapDispatchToProps = dispatch => ({
     setIncidentList: params => dispatch(setIncidentListActionIP(params)),
 });
 
-const transformDateRangeFilter = (filters) => {
-    const { dateRange, ...other } = filters;
-    if (dateRange) {
-        const { startDate, endDate } = pastDaysToDateRange(dateRange);
-        return {
-            incident_on__lt: endDate ? endDate.toISOString() : undefined,
-            incident_on__gt: startDate ? startDate.toISOString() : undefined,
-            ...other,
-        };
-    }
-    return filters;
-};
-
 const requests = {
     incidentsRequest: {
         url: '/incident/',
-        query: ({ props: { filters } }) => transformDateRangeFilter(filters),
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: ({ props: { filters } }) => transformDateRangeFilterParam(filters, 'incident_on'),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             const { results: incidentList = [] } = response;
             setIncidentList({ incidentList });

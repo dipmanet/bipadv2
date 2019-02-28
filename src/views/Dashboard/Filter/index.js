@@ -47,7 +47,7 @@ export default class DashboardFilter extends React.PureComponent {
         fields: {
             dateRange: [],
             region: [],
-            hazardType: [],
+            hazard: [],
         },
     }
 
@@ -143,7 +143,7 @@ export default class DashboardFilter extends React.PureComponent {
                                 faramElementName="region"
                             />
                             <MultiListSelection
-                                faramElementName="hazardType"
+                                faramElementName="hazard"
                                 className={styles.listSelectionInput}
                                 keySelector={hazardTypeKeySelector}
                                 labelSelector={hazardTypeLabelSelector}
