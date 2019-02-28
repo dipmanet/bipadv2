@@ -28,7 +28,7 @@ const initialSiloDomainData = {
         incidentList: [],
         filters: {
             faramValues: {
-                dateRange: 3,
+                dateRange: 30,
                 region: {
                     adminLevel: 1,
                 },
@@ -99,7 +99,7 @@ const initialSiloDomainData = {
         ],
         filters: {
             faramValues: {
-                dateRange: 3,
+                dateRange: 30,
                 region: {
                     adminLevel: 1,
                 },

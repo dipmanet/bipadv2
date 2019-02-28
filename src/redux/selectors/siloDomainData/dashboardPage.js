@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { isDefined, mapToList } from '@togglecorp/fujs';
 
 import { hazardTypesSelector } from './common';
 
@@ -31,16 +32,25 @@ export const hazardTypeListAlertsDP = createSelector(
             return emptyArray;
         }
 
-        const types = new Set();
+        const counts = {};
 
         alertList.forEach((alert) => {
             const { hazard: hazardId } = alert;
             const hazard = hazardTypes[hazardId];
             if (hazard) {
-                types.add(hazard);
+                const count = counts[hazardId];
+                counts[hazardId] = isDefined(count) ? count + 1 : 1;
             }
         });
-        return [...types];
+        console.warn(counts);
+
+        const list = mapToList(hazardTypes);
+        console.warn(list);
+
+        return list.sort((a, b) => (
+            (isDefined(counts[b.id]) ? counts[b.id] : 0)
+            - (isDefined(counts[a.id]) ? counts[a.id] : 0)
+        ));
     },
 );
 
