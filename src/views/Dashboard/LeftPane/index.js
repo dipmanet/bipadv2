@@ -5,9 +5,12 @@ import {
     _cs,
     mapToList,
 } from '@togglecorp/fujs';
+import ReactSVG from 'react-svg';
 
+import { hazardIcons } from '#resources/data';
 import Button from '#rsca/Button';
 import PieChart from '#rscz/PieChart';
+import DonutChart from '#rscz/DonutChart';
 import ListView from '#rscv/List/ListView';
 import Histogram from '#rscz/Histogram';
 
@@ -96,23 +99,32 @@ export default class LeftPane extends React.PureComponent {
     }) => {
         const { hazardTypes } = this.props;
         const {
-            icon,
+            // icon,
             label,
         } = hazardTypes[hazard] || {};
+        const icon = hazardIcons[hazard];
+
+        /*
+        <img
+            className={styles.icon}
+            src={icon}
+            alt={label}
+        />
+        */
 
         return (
             <div className={className}>
                 { icon ? (
-                    <img
-                        className={styles.icon}
-                        src={icon}
-                        alt={label}
+                    <ReactSVG
+                        className={styles.svgContainer}
+                        path={icon}
+                        svgClassName={styles.icon}
                     />
                 ) : (
                     <div
                         className={_cs(
                             iconNames.alert,
-                            styles.icon,
+                            styles.defaultIcon,
                         )}
                     />
                 )}

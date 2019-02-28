@@ -1,65 +1,59 @@
-import fireIcon from '#resources/icons/fire.svg';
-import floodIcon from '#resources/icons/flood.svg';
 import heatwaveIcon from '#resources/icons/heatwave.svg';
 import landslideIcon from '#resources/icons/landslide.svg';
 import waterIcon from '#resources/icons/water.svg';
-import earthquakeIcon from '#resources/icons/earthquake.svg';
 import cycloneIcon from '#resources/icons/cyclone.svg';
-import healthIcon from '#resources/icons/health.svg';
-import educationIcon from '#resources/icons/education.svg';
-import radioIcon from '#resources/icons/radio.svg';
 
-export const alertList = [
-    {
-        id: 1,
-        title: '5.6 magnitude earthquake hits Taplejung',
-        lat: 27.6257,
-        lng: 87.7763,
-    },
-    {
-        id: 2,
-        title: 'Pollution level exceeds 150ppm in Kathmandu',
-        lat: 27.7172,
-        lng: 85.3240,
-    },
-    {
-        id: 3,
-        title: 'Avalanche due to heavy rainfall in the Langtang region',
-        lat: 28.2063,
-        lng: 85.6229,
-    },
-];
+import airCrashIcon from '#resources/icons/Airport-destroyed.svg';
+import animalTerrorIcon from '#resources/icons/Animal-terror.svg';
+import avalancheIcon from '#resources/icons/Snow-avalanche.svg';
+import boatCapsizeIcon from '#resources/icons/Boat.svg';
+import bridgeCollapseIcon from '#resources/icons/Bridge-destroyed.svg';
+import coldwaveIcon from '#resources/icons/Cold-wave.svg';
+import drowningIcon from '#resources/icons/Drowned.svg';
+import earthquakeIcon from '#resources/icons/Earthquake.svg';
+import epidemicIcon from '#resources/icons/Epidemic.svg';
+import fireIcon from '#resources/icons/Fire.svg';
+import floodIcon from '#resources/icons/Flood.svg';
+import forestFireIcon from '#resources/icons/Forest-fire.svg';
+import hailstoneIcon from '#resources/icons/Hailstone.svg';
+import heavyRainfallIcon from '#resources/icons/Heavy-rain.svg';
+import helicopterCrashIcon from '#resources/icons/Helicopter.svg';
+import highAltitudeIcon from '#resources/icons/High-altitude.svg';
+import otherIcon from '#resources/icons/Warning-Error.svg';
+import rainfallIcon from '#resources/icons/Rain.svg';
+import snakeBiteIcon from '#resources/icons/Snake.svg';
+// import snowStormIcon from '#resources/icons/.svg';
+// import stormIcon from '#resources/icons/Storm.svg';
+import thunderboltIcon from '#resources/icons/Storm.svg';
+import windstormIcon from '#resources/icons/Storm-surge.svg';
 
-export const incidentList = [
-    {
-        id: 1,
-        title: 'A tragic earthquake of 3.2 ritcher scale was reported which cause the loss of serveral ants',
-        lat: 27.6257,
-        lng: 87.7763,
-        timestamp: 1549812836124,
-        locationName: 'Taplejung',
-        hazard: 'earthquake',
-    },
-    {
-        id: 2,
-        title: 'Incident 2',
-        lat: 27.7172,
-        lng: 85.3240,
-    },
-    {
-        id: 3,
-        title: 'Incident 3',
-        lat: 28.2063,
-        lng: 85.6229,
-    },
-];
 
-export const resourceTypeList = [
-    { key: 'health', label: 'Health', icon: healthIcon },
-    { key: 'education', label: 'Education', icon: educationIcon },
-    { key: 'waterSupply', label: 'Water supply', icon: waterIcon },
-    { key: 'communication', label: 'Communication', icon: radioIcon },
-];
+export const hazardIcons = {
+    1: airCrashIcon,
+    2: animalTerrorIcon,
+    3: avalancheIcon,
+    4: boatCapsizeIcon,
+    5: bridgeCollapseIcon,
+    6: coldwaveIcon,
+    7: drowningIcon,
+    8: earthquakeIcon,
+    9: epidemicIcon,
+    10: fireIcon,
+    11: floodIcon,
+    12: forestFireIcon,
+    13: hailstoneIcon,
+    14: heavyRainfallIcon,
+    15: helicopterCrashIcon,
+    16: highAltitudeIcon,
+    17: landslideIcon,
+    18: otherIcon,
+    19: rainfallIcon,
+    20: snakeBiteIcon,
+    // 21: snowStormIcon,
+    // 22: stormIcon,
+    23: thunderboltIcon,
+    // 24: windstormIcon,
+};
 
 export const hazardTypeList = [
     { key: 'earthquake', label: 'Earthquake', icon: earthquakeIcon },
@@ -72,29 +66,6 @@ export const hazardTypeList = [
     { key: 'cyclone', label: 'Cyclone', icon: cycloneIcon },
 ];
 
-export const adminLevelFilterOptionList = [
-    { key: 'province', label: 'Province' },
-    { key: 'district', label: 'District' },
-    { key: 'municipality', label: 'Municipality' },
-];
-
-export const geoareaFilterOptions = {
-    province: [
-        { key: '1', label: 'Province 1' },
-        { key: '2', label: 'Province 2' },
-        { key: '3', label: 'Province 3' },
-    ],
-    district: [
-        { key: '1', label: 'Kathmandu' },
-        { key: '2', label: 'Bhaktapur' },
-        { key: '3', label: 'Lalitpur' },
-    ],
-    municipality: [
-        { key: '1', label: 'Dhankuta' },
-        { key: '2', label: 'Imadol' },
-        { key: '3', label: 'Ilam' },
-    ],
-};
 
 export const donutChartData1 = [
     { label: 'Wildfire', value: 19 },

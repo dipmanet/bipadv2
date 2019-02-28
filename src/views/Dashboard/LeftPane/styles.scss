@@ -20,10 +20,12 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
     .alerts-container {
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
+        border-radius: $radius-border-large;
 
         .non-tabular-container {
             transform-origin: 0 0;
-            background-color: $color-foreground;
+            border-radius: $radius-border-large;
+            background-color: rgba(255, 255, 255, .9);
             width: $width-non-tabular-container;
             height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
 
@@ -32,6 +34,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
                 position: relative;
                 flex-direction: column;
                 height: 50%;
+                overflow: auto;
 
                 .header {
                     display: flex;
@@ -40,12 +43,13 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
 
                     .heading {
                         flex-grow: 1;
-                        padding: $spacing-medium;
+                        padding: $spacing-medium $spacing-large;
                         color: $color-primary;
                     }
 
                     .hide-alerts-button {
                         flex-shrink: 0;
+                        margin-right: $spacing-small;
                     }
                 }
 
@@ -57,16 +61,30 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
                         display: flex;
                         align-items: center;
                         cursor: pointer;
-                        padding: $spacing-medium;
+                        padding: $spacing-medium $spacing-large;
 
-                        .icon {
+                        .svg-container {
+                            flex-shrink: 0;
+                            margin-right: $spacing-medium;
+
+                            .icon {
+                                width: 20px;
+                                height: auto;
+                                height: $font-size-extra-large;
+
+                                path {
+                                    fill: $color-danger;
+                                }
+                            }
+                        }
+
+                        .default-icon {
                             flex-shrink: 0;
                             margin-right: $spacing-medium;
                             width: 20px;
                             height: 20px;
                             color: $color-danger;
                             font-size: $font-size-extra-large;
-                            object-fit: contain;
                         }
 
                         .title {
@@ -141,8 +159,8 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
                 justify-content: flex-end;
 
                 .heading {
-                    flex-grow: 1;
                     align-self: flex-start;
+                    flex-grow: 1;
                     padding: $spacing-medium;
                     color: $color-primary;
                 }
