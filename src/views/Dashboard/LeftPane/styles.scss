@@ -34,7 +34,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
                 display: flex;
                 position: relative;
                 flex-direction: column;
-                height: 50%;
+                height: 60%;
                 overflow: auto;
 
                 .header {
@@ -102,15 +102,17 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
             .key-statistics {
                 display: flex;
                 flex-direction: column;
-                height: 50%;
+                height: 40%;
                 overflow-y: auto;
 
                 .header {
+                    padding-top: $spacing-large;
                     flex-shrink: 0;
 
                     .heading {
                         padding: $spacing-medium;
                         color: $color-primary;
+                        text-align: center;
                     }
                 }
 

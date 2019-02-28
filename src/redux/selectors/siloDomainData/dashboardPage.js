@@ -42,10 +42,8 @@ export const hazardTypeListAlertsDP = createSelector(
                 counts[hazardId] = isDefined(count) ? count + 1 : 1;
             }
         });
-        console.warn(counts);
 
         const list = mapToList(hazardTypes);
-        console.warn(list);
 
         return list.sort((a, b) => (
             (isDefined(counts[b.id]) ? counts[b.id] : 0)

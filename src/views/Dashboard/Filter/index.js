@@ -57,7 +57,7 @@ export default class DashboardFilter extends React.PureComponent {
         super(props);
 
         this.state = {
-            showFilters: false,
+            showFilters: true,
         };
     }
 

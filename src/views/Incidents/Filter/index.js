@@ -60,7 +60,7 @@ export default class IncidentsFilter extends React.PureComponent {
         super(props);
 
         this.state = {
-            showFilters: false,
+            showFilters: true,
         };
     }
 
