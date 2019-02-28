@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 
 import Button from '#rsca/Button';
+import { hazardIcons } from '#resources/data';
 
 import {
     hazardTypeListIncidentsIP,
@@ -22,6 +23,7 @@ import styles from './styles.scss';
 
 const hazardTypeLabelSelector = d => d.title;
 const hazardTypeKeySelector = d => d.id;
+const hazardTypeIconSelector = d => hazardIcons[d.id];
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -85,6 +87,10 @@ export default class IncidentsFilter extends React.PureComponent {
         this.setState({ showFilters: true });
     }
 
+    handleHideFiltersButtonClick = () => {
+        this.setState({ showFilters: false });
+    }
+
     render() {
         const {
             hazardTypeList,
@@ -123,6 +129,12 @@ export default class IncidentsFilter extends React.PureComponent {
                             <h4 className={styles.heading}>
                                 Filters
                             </h4>
+                            <Button
+                                onClick={this.handleHideFiltersButtonClick}
+                                iconName={iconNames.chevronUp}
+                                title="Hide Filters"
+                                transparent
+                            />
                         </header>
                         <div className={styles.content}>
                             <PastDateRangeInput
@@ -141,6 +153,7 @@ export default class IncidentsFilter extends React.PureComponent {
                                 label="Hazard type"
                                 keySelector={hazardTypeKeySelector}
                                 labelSelector={hazardTypeLabelSelector}
+                                iconSelector={hazardTypeIconSelector}
                                 options={hazardTypeList}
                             />
                         </div>

@@ -1,8 +1,12 @@
 @import '~base-scss/base';
 
-$width-table-container: 260px;
+$width-table-container: 250px;
 
 .filter {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - #{$spacing-medium * 2});
+
     .header {
         display: flex;
         align-items: center;
@@ -26,11 +30,16 @@ $width-table-container: 260px;
     }
 
     .filters-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
         transform-origin: 100% 0;
         border: $width-separator-thin solid $color-separator-light;
-        background-color: $color-foreground;
+        border-radius: $radius-border-large;
+        background-color: rgba(255, 255, 255, .9);
         padding: 0 $spacing-small;
         width: $width-table-container;
+        overflow: auto;
     }
 
     :global {

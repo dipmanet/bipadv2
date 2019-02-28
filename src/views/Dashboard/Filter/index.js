@@ -11,6 +11,7 @@ import {
     filtersSelectorDP,
     setFiltersActionDP,
 } from '#redux';
+import { hazardIcons } from '#resources/data';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
@@ -21,6 +22,7 @@ import styles from './styles.scss';
 
 const hazardTypeLabelSelector = d => d.title;
 const hazardTypeKeySelector = d => d.id;
+const hazardTypeIconSelector = d => hazardIcons[d.id];
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -147,6 +149,7 @@ export default class DashboardFilter extends React.PureComponent {
                                 className={styles.listSelectionInput}
                                 keySelector={hazardTypeKeySelector}
                                 labelSelector={hazardTypeLabelSelector}
+                                iconSelector={hazardTypeIconSelector}
                                 label="Hazard type"
                                 options={hazardTypeList}
                             />

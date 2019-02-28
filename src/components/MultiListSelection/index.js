@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactSVG from 'react-svg';
 
 import Button from '#rsca/Button';
 import Label from '#rsci/Label';
@@ -87,10 +88,10 @@ export default class MultiListSelection extends React.PureComponent {
             onClick={this.handleOptionClick}
         >
             { icon && (
-                <img
+                <ReactSVG
                     className={styles.icon}
-                    src={icon}
-                    alt={label}
+                    svgClassName={styles.svg}
+                    path={icon}
                 />
             )}
             <div className={styles.title}>

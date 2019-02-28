@@ -4,14 +4,26 @@
     padding: 0;
 
     .options {
+        display: flex;
+        flex-wrap: wrap;
+
         .option {
+            flex-basis: calc(100% / 3);
+
             .icon {
                 transition: $duration-transition-medium all ease-in-out;
                 opacity: .5;
                 padding: $spacing-small;
-                width: 56px;
-                height: 56px;
                 filter: grayscale(77%);
+
+                .svg {
+                    width: 24px;
+                    height: 24px;
+
+                    path {
+                        fill: $color-text;
+                    }
+                }
             }
 
             .title {
@@ -34,6 +46,12 @@
                 .icon {
                     opacity: 1;
                     filter: none;
+
+                    .svg {
+                        path {
+                            fill: $color-accent;
+                        }
+                    }
                 }
 
                 .title {

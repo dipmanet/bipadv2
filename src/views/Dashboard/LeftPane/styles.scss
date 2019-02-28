@@ -3,7 +3,7 @@
 $width-filter-container: 260px;
 $width-vertical-nav: 64px;
 
-$width-non-tabular-container: 360px;
+$width-non-tabular-container: 300px;
 $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertical-nav + $spacing-medium * 3});
 
 .left-pane {
