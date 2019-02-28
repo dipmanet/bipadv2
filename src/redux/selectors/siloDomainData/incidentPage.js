@@ -24,6 +24,28 @@ export const filtersValuesSelectorIP = createSelector(
     ({ faramValues }) => faramValues,
 );
 
+export const hazardTypeListIncidentsIP = createSelector(
+    incidentPageSelector,
+    hazardTypesSelector,
+    ({ incidentList }, hazardTypes) => {
+        if (!incidentList) {
+            return emptyArray;
+        }
+
+        const types = new Set();
+
+        incidentList.forEach((incident) => {
+            const { hazard: hazardId } = incident;
+            const hazard = hazardTypes[hazardId];
+            if (hazard) {
+                types.add(hazard);
+            }
+        });
+        return [...types];
+    },
+);
+
+
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
     hazardTypesSelector,
