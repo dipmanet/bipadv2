@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import ReactDOMServer from 'react-dom/server';
 import turf from 'turf';
+import { isTruthy } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 import {
@@ -24,6 +25,7 @@ import nepalGeoJson from '#resources/districts.json';
 
 import {
     boundsFill,
+    polygonBoundsFill,
     boundsOutline,
     // pointsOuter,
     pointsInner,
@@ -61,19 +63,19 @@ class AlertMap extends React.PureComponent {
         const geojson = {
             type: 'FeatureCollection',
             features: alertList
-                .filter(alert => alert.point)
+                .filter(alert => isTruthy(alert.polygon))
                 .map((alert) => {
                     const hazardType = hazardTypes[alert.hazard];
                     const src = hazardType ? hazardType.icon : undefined;
                     return {
                         type: 'Feature',
                         geometry: {
-                            type: 'Point',
-                            coordinates: alert.point,
+                            ...alert.polygon,
                         },
                         properties: {
                             alert,
                             containerClassName: styles.iconContainer,
+                            /*
                             markerHTML: ReactDOMServer.renderToString(
                                 <img
                                     src={src}
@@ -81,6 +83,7 @@ class AlertMap extends React.PureComponent {
                                     className={styles.icon}
                                 />,
                             ),
+                            */
                             popupHTML: ReactDOMServer.renderToString(
                                 <div className={styles.markerPopup}>
                                     <h3 className={styles.heading}>
@@ -150,15 +153,14 @@ class AlertMap extends React.PureComponent {
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
-        const bounds = this.getCurrentBounds();
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="bounds"
-                    // geoJson={nepalGeoJson}
                     geoJson={districtsGeoJson}
-                    bounds={bounds}
+                    // geoJson={nepalGeoJson}
+                    // bounds={bounds}
                     // bounds={turf.bbox(nepalGeoJson)}
                 >
                     <MapLayer
@@ -172,25 +174,25 @@ class AlertMap extends React.PureComponent {
                         paint={boundsOutline}
                     />
                 </MapSource>
+                {/*
                 <MapMarkerLayer
                     geoJson={featureCollection}
                 />
-                {/*
+                */}
                 <MapSource
-                    sourceKey="points"
+                    sourceKey="polygons"
                     geoJson={featureCollection}
                     supportHover
                 >
                     <MapLayer
-                        layerKey="points"
-                        type="circle"
+                        layerKey="polygon"
+                        type="fill"
                         property="alert"
-                        paint={pointsInner}
+                        paint={polygonBoundsFill}
                         hoverInfo={this.hoverInfo}
                         // onClick={this.handlePointClick}
                     />
                 </MapSource>
-                */}
             </React.Fragment>
         );
     }
@@ -209,7 +211,6 @@ const requests = {
     districtGeoJsonRequest: {
         url: '/district/?format=geojson',
         onSuccess: ({ response, props: { setDistrictsGeoJson } }) => {
-            console.warn(response);
             setDistrictsGeoJson({ districtsGeoJson: response });
         },
         extras: {

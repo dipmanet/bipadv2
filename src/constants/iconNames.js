@@ -4,6 +4,7 @@ const iconNames = {
     menu: 'ion-android-menu',
     check: 'ion-checkmark',
     close: 'ion-close',
+    layers: 'ion-social-buffer',
 
     dashboard: 'ion-android-home',
     riskMap: 'ion-android-map',

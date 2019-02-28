@@ -9,7 +9,7 @@ import ReactSVG from 'react-svg';
 
 import { hazardIcons } from '#resources/data';
 import Button from '#rsca/Button';
-import PieChart from '#rscz/PieChart';
+// import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import ListView from '#rscv/List/ListView';
 import Histogram from '#rscz/Histogram';
@@ -192,16 +192,19 @@ export default class LeftPane extends React.PureComponent {
                     </h4>
                 </header>
                 <div className={styles.content}>
-                    <PieChart
+                    <DonutChart
+                        sideLengthRatio={0.2}
                         className={styles.pieChart}
                         data={alertFreq}
                         labelSelector={pieChartLabelSelector}
                         colorScheme={basicColor}
                         valueSelector={pieChartValueSelector}
                     />
+                    {/*
                     <Histogram
                         data={alertTimeStamps}
                     />
+                    */}
                 </div>
             </div>
         );
