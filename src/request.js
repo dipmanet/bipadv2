@@ -6,6 +6,7 @@ import {
 } from '@togglecorp/react-rest-request';
 
 import schema from '#schema';
+import { sanitizeResponse } from '#utils/common';
 
 export * from '@togglecorp/react-rest-request';
 
@@ -41,6 +42,9 @@ export const createConnectedRequestCoordinator = () => compose(
                 method,
                 extras,
             } = request;
+
+            const sanitizedResponse = sanitizeResponse(body);
+
             if (!extras || extras.schemaName === undefined) {
                 // NOTE: usually there is no response body for DELETE
                 if (method !== methods.DELETE) {
@@ -48,13 +52,14 @@ export const createConnectedRequestCoordinator = () => compose(
                 }
             } else {
                 try {
-                    schema.validate(body, extras.schemaName);
+                    schema.validate(sanitizedResponse, extras.schemaName);
                 } catch (e) {
-                    console.error(url, method, body, e.message);
+                    console.error(url, method, sanitizedResponse, e.message);
                     throw (e);
                 }
             }
-            return body;
+
+            return sanitizedResponse;
         },
 
         transformErrors: (response) => {

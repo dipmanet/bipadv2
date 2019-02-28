@@ -136,3 +136,29 @@ export const timeFrom = (date) => {
 
     return 'just now';
 };
+
+export const sanitizeResponse = (data) => {
+    if (data === null) {
+        return undefined;
+    }
+    if (Array.isArray(data)) {
+        const newData = [];
+        data.forEach((k) => {
+            const newEntry = sanitizeResponse(k);
+            if (newEntry !== undefined) {
+                newData.push(newEntry);
+            }
+        });
+        return newData;
+    } else if (typeof data === 'object') {
+        const newData = {};
+        Object.keys(data).forEach((k) => {
+            const newEntry = sanitizeResponse(data[k]);
+            if (newEntry !== undefined) {
+                newData[k] = newEntry;
+            }
+        });
+        return newData;
+    }
+    return data;
+};
