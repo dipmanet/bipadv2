@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ShellRunPlugin = require('./shellrun-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
@@ -139,21 +138,7 @@ module.exports = (env) => {
                 filename: 'css/[name].css',
                 chunkFilename: 'css/[id].css',
             }),
-            new WebpackPwaManifest({
-                name: 'DEEP',
-                short_name: 'DEEP',
-                description: 'DEEP is an open source, community driven web application to intelligently collect, tag, analyze and export secondary data.',
-                background_color: '#e0e0e0',
-                start_url: '.',
-                display: 'standalone',
-                theme_color: '#008975',
-                icons: [
-                    {
-                        src: path.resolve(appLogo),
-                        sizes: [96, 128, 192, 256, 384, 512],
-                    },
-                ],
-            }),
+           }),
             // May need to support ts, tsx, jsx
             new ShellRunPlugin({
                 messageBefore: 'Generating language map.',

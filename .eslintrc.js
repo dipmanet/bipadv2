@@ -16,7 +16,31 @@ module.exports = {
     ],
     'settings': {
         'import/resolver': {
-            'babel-module': {},
+            'babel-module': {
+                'root': ['.'],
+                'extensions': ['.js', '.jsx', '.ts', '.tsx'],
+                'alias': {
+                    '#components': './src/components',
+                    '#config': './src/config',
+                    '#constants': './src/constants',
+                    '#notify': './src/notify',
+                    '#redux': './src/redux',
+                    '#request': './src/request',
+                    '#resources': './src/resources',
+                    '#schema': './src/schema',
+                    '#store': './src/store',
+                    '#ts': './src/ts',
+                    '#utils': './src/utils',
+                    '#rsca': './src/vendor/react-store/components/Action',
+                    '#rscg': './src/vendor/react-store/components/General',
+                    '#rsci': './src/vendor/react-store/components/Input',
+                    '#rscv': './src/vendor/react-store/components/View',
+                    '#rscz': './src/vendor/react-store/components/Visualization',
+                    '#rsk': './src/vendor/react-store/constants',
+                    '#rsu': './src/vendor/react-store/utils',
+                    '#views': './src/views',
+                },
+            },
         },
         'react': {
             'version': 'detect',
