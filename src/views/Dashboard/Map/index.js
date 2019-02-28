@@ -75,13 +75,15 @@ class AlertMap extends React.PureComponent {
                         properties: {
                             alert,
                             containerClassName: styles.iconContainer,
-                            // markerHTML: ReactDOMServer.renderToString(
-                            //     <img
-                            //         src={src}
-                            //         alt={alert.title}
-                            //         className={styles.icon}
-                            //     />,
-                            // ),
+                            /*
+                            markerHTML: ReactDOMServer.renderToString(
+                                <img
+                                    src={src}
+                                    alt={alert.title}
+                                    className={styles.icon}
+                                />,
+                            ),
+                            */
                             popupHTML: ReactDOMServer.renderToString(
                                 <div className={styles.markerPopup}>
                                     <h3 className={styles.heading}>
@@ -151,7 +153,6 @@ class AlertMap extends React.PureComponent {
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
-        console.warn(featureCollection);
 
         return (
             <React.Fragment>

@@ -159,8 +159,8 @@ class Navbar extends React.PureComponent {
         this.state = { menuShown: false };
     }
 
-    handleMenuOpen = () => {
-        this.setState({ menuShown: true });
+    handleMenuClick = () => {
+        this.setState({ menuShown: !this.state.menuShown });
     }
 
     handleMenuClose = () => {
@@ -219,64 +219,87 @@ class Navbar extends React.PureComponent {
         );
 
         return (
-            <nav className={className}>
-                <div
-                    className={
-                        _cs(
-                            styles.menu,
-                            menuShown && styles.shown,
-                        )
-                    }
-                >
-                    {/*
-                    <header>
-                        <Button
-                            className={styles.menuCloseButton}
-                            iconName={iconNames.close}
-                            onClick={this.handleMenuClose}
-                            transparent
-                            smallHorizontalPadding
-                            smallVerticalPadding
+            <React.Fragment>
+                <nav className={className}>
+                    <div
+                        className={
+                            _cs(
+                                styles.menu,
+                                menuShown && styles.shown,
+                            )
+                        }
+                    >
+                        {/*
+                        <header>
+                            <Button
+                                className={styles.menuCloseButton}
+                                iconName={iconNames.close}
+                                onClick={this.handleMenuClose}
+                                transparent
+                                smallHorizontalPadding
+                                smallVerticalPadding
+                            />
+                        </header>
+                        */}
+                        <ListView
+                            data={pages}
+                            keySelector={Navbar.menuKeySelector}
+                            renderer={MenuItem}
+                            rendererParams={this.menuRendererParams}
+                            className={styles.menuItems}
                         />
-                    </header>
-                    */}
-                    <ListView
-                        data={pages}
-                        keySelector={Navbar.menuKeySelector}
-                        renderer={MenuItem}
-                        rendererParams={this.menuRendererParams}
-                        className={styles.menuItems}
-                    />
-                    <ListView
-                        className={styles.layerSwitch}
-                        data={mapStyles}
-                        keySelector={layerKeySelector}
-                        modifier={this.renderLayer}
-                        emptyComponent={null}
-                    />
-                </div>
-                <div className={styles.navbarLeftContainer}>
-                    <div className={styles.logo}>
-                        <div className={styles.left} />
-                        <div className={styles.right}>
-                            Bipad
-                        </div>
-                        <div className={styles.currentPage}>
-                            {this.props.routeKey}
+                        <button
+                            className={styles.layerSwitchButton}
+                            onClick={this.handleMenuClick}
+                            type="submit"
+                        >
+                            <span className={iconNames.layers} />
+                        </button>
+                    </div>
+                    <div className={styles.navbarLeftContainer}>
+                        <div className={styles.logo}>
+                            <div className={styles.left} />
+                            <div className={styles.right}>
+                                Bipad
+                            </div>
+                            <div className={styles.currentPage}>
+                                {this.props.routeKey}
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/*
-                <Button
-                    className={styles.menuButton}
-                    iconName={iconNames.menu}
-                    onClick={this.handleMenuOpen}
-                    transparent
-                    smallHorizontalPadding
-                    smallVerticalPadding
-                />
-                */}
-            </nav>
+                    {/*
+                    <Button
+                        className={styles.menuButton}
+                        iconName={iconNames.menu}
+                        onClick={this.handleMenuOpen}
+                        transparent
+                        smallHorizontalPadding
+                        smallVerticalPadding
+                    />
+                    */}
+                </nav>
+                {menuShown &&
+                    <div className={styles.layerSwitchBox} >
+                        <div className={styles.header}>
+                            <h4>
+                                Map Layers
+                            </h4>
+                            <Button
+                                onClick={this.handleMenuClick}
+                                iconName={iconNames.close}
+                                transparent
+                            />
+                        </div>
+                        <ListView
+                            className={styles.layerSwitch}
+                            data={mapStyles}
+                            keySelector={layerKeySelector}
+                            modifier={this.renderLayer}
+                            emptyComponent={null}
+                        />
+                    </div>
+                }
+            </React.Fragment>
         );
     }
 }
