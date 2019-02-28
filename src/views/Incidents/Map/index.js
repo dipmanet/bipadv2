@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { Redirect } from 'react-router-dom';
 import turf from 'turf';
@@ -11,10 +12,16 @@ import PeopleLoss from '#components/PeopleLoss';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { reverseRoute } from '@togglecorp/fujs';
+import { reverseRoute, mapToList } from '@togglecorp/fujs';
 import { routes } from '#constants';
 
+import {
+    wardsMapSelector,
+} from '#redux';
+
 import nepalGeoJson from '#resources/districts.json';
+
+import { toTitleCase } from '#utils/common';
 
 import {
     boundsFill,
@@ -26,10 +33,12 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
     className: '',
+    wardsMap: {},
 };
 
 const emptyList = [];
@@ -46,7 +55,7 @@ const multiPolyToPoly = (multi) => {
     };
 };
 
-export default class IncidentMap extends React.PureComponent {
+class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -91,22 +100,40 @@ export default class IncidentMap extends React.PureComponent {
 
     renderTooltip = ({ incident: incidentString }) => {
         const incident = JSON.parse(incidentString);
+        const { wardsMap } = this.props;
 
         const {
             title,
             inducer,
             cause,
-            incident_on: incidentOn,
-            geoareaName,
+            source,
+
+            // eslint-disable-next-line no-unused-vars
+            hazard, id, point, createdOn,
+
+            hazardInfo: { title: hazardType = emptyObject },
+            incidentOn,
+            wards = emptyList,
+            streetAddress: geoareaName,
+
             loss: {
                 peoples = emptyList,
             } = emptyObject,
+
+            ...misc
         } = incident;
+
+        const wardNames = wards.map(x => (wardsMap[x] || {}).title);
 
         const inducerText = {
             artificial: 'Artificial',
             natural: 'Natural',
         };
+
+        const miscInfo = mapToList(
+            misc,
+            (value, key) => ({ key: toTitleCase(key), value: value.toString() }),
+        );
 
         return (
             <div className={styles.tooltip}>
@@ -121,7 +148,12 @@ export default class IncidentMap extends React.PureComponent {
                     className={styles.incidentDate}
                     date={incidentOn}
                 />
-                <div className={styles.hr} />
+                Misc <div className={styles.hr} />
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Source"
+                    value={source}
+                />
                 <TextOutput
                     className={styles.inducer}
                     label="Inducer"
@@ -132,11 +164,32 @@ export default class IncidentMap extends React.PureComponent {
                     label="Cause"
                     value={cause}
                 />
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Hazard"
+                    value={hazardType}
+                />
                 <PeopleLoss
                     className={styles.peopleLoss}
                     label="People loss"
                     peopleList={peoples}
                 />
+                <div className={styles.hr} />
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Wards"
+                    value={wardNames.join(', ')}
+                />
+                {
+                    miscInfo.map(x => (
+                        <TextOutput
+                            className={styles.commonInfo}
+                            key={x.key}
+                            label={x.key}
+                            value={x.value}
+                        />
+                    ))
+                }
             </div>
         );
     }
@@ -196,3 +249,9 @@ export default class IncidentMap extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    wardsMap: wardsMapSelector(state),
+});
+
+export default connect(mapStateToProps, null)(IncidentMap);

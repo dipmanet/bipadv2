@@ -71,6 +71,11 @@ export const camelToNormalCase = (text) => {
     return secondPhase;
 };
 
+export const toTitleCase = str => str.replace(
+    /(^|\s)\S/g,
+    t => t.toUpperCase(),
+);
+
 export const addDaysToDate = (date, days) => {
     const newDate = new Date(date.valueOf());
     newDate.setDate(newDate.getDate() + days);
