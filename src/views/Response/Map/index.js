@@ -15,11 +15,14 @@ import MapMarkerLayer from '#components/MapMarkerLayer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+import store from '#store';
 import { routes } from '#constants';
 
 import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import groupIcon from '#resources/icons/group.svg';
+
+import Tooltip from '#components/Tooltip';
 
 import {
     boundsFill,
@@ -43,8 +46,8 @@ const icons = {
     education: healthFacilityIcon,
 };
 
-const emptyList = [];
-const emptyObject = {};
+// NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
+const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
 export default class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -56,7 +59,7 @@ export default class ResponseMap extends React.PureComponent {
         this.hoverInfo = {
             paint: hoverPaint,
             showTooltip: true,
-            tooltipModifier: this.renderTooltip,
+            tooltipModifier: toolTipWrapper,
         };
     }
 
@@ -103,58 +106,6 @@ export default class ResponseMap extends React.PureComponent {
         const { id: incidentId } = properties;
         const redirectTo = reverseRoute(routes.response.path, { incidentId });
         this.setState({ redirectTo });
-    }
-
-    renderTooltip = ({ incident: incidentString }) => {
-        const incident = JSON.parse(incidentString);
-
-        const {
-            title,
-            inducer,
-            cause,
-            incident_on: incidentOn,
-            geoareaName,
-            loss: {
-                peoples = emptyList,
-            } = emptyObject,
-        } = incident;
-
-        const inducerText = {
-            artificial: 'Artificial',
-            natural: 'Natural',
-        };
-
-        return (
-            <div className={styles.tooltip}>
-                <h2 className={styles.heading}>
-                    {title}
-                </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
-                <DateOutput
-                    className={styles.incidentDate}
-                    date={incidentOn}
-                />
-                <div className={styles.hr} />
-                <TextOutput
-                    className={styles.inducer}
-                    label="Inducer"
-                    value={inducerText[inducer]}
-                />
-                <TextOutput
-                    className={styles.cause}
-                    label="Cause"
-                    value={cause}
-                />
-                <PeopleLoss
-                    className={styles.peopleLoss}
-                    label="People loss"
-                    peopleList={peoples}
-                />
-            </div>
-        );
     }
 
     render() {

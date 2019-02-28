@@ -39,7 +39,6 @@ export const convertCsvToLink = (csvRaw) => {
     return encodeURI(csv);
 };
 
-
 export const mapObjectToObject = (obj, fn) => {
     const newObj = {};
     Object.keys(obj).forEach((key) => {
@@ -71,10 +70,15 @@ export const camelToNormalCase = (text) => {
     return secondPhase;
 };
 
-export const toTitleCase = str => str.replace(
-    /(^|\s)\S/g,
-    t => t.toUpperCase(),
-);
+export const toTitleCase = (str) => {
+    if (isNotDefined(str)) {
+        return undefined;
+    }
+    return String(str).replace(
+        /(^|\s)\S/g,
+        t => t.toUpperCase(),
+    );
+};
 
 export const addDaysToDate = (date, days) => {
     const newDate = new Date(date.valueOf());

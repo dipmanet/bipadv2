@@ -1,0 +1,34 @@
+@import '~base-scss/base';
+
+.tooltip {
+    border: $width-separator-thin solid $color-separator-light;
+    background-color: $color-foreground;
+    padding: $spacing-large;
+
+    .heading {
+        padding-bottom: $spacing-small;
+        font-weight: $font-weight-bold;
+    }
+
+    .geoarea-name,
+    .incident-date {
+        padding: $spacing-extra-small 0;
+    }
+
+    .hr {
+        margin: $spacing-small 0;
+        border-bottom: $width-separator-thin solid $color-separator-light;
+    }
+
+    .common-info,
+    .inducer,
+    .cause {
+        line-height: 1.8;
+    }
+
+    .loss {
+        margin-top: $spacing-small;
+        border-top: $width-separator-thin solid $color-separator-light;
+        padding-top: $spacing-small;
+    }
+}

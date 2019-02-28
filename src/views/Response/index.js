@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -16,10 +17,10 @@ import {
 } from '#redux';
 
 import Page from '#components/Page';
+import Tooltip from '#components/Tooltip';
 
 import Map from './Map';
 import ResourceList from './ResourceList';
-import IncidentInformation from './IncidentInformation';
 
 import styles from './styles.scss';
 
@@ -53,8 +54,8 @@ class Response extends React.PureComponent {
                 <Page
                     rightContentClassName={styles.incidentDetails}
                     rightContent={
-                        <IncidentInformation
-                            incident={incident}
+                        <Tooltip
+                            incident={JSON.stringify(incident)}
                         />
                     }
                     leftContent={

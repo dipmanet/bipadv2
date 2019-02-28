@@ -1,27 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { Redirect } from 'react-router-dom';
 import turf from 'turf';
 
-import TextOutput from '#components/TextOutput';
-import GeoOutput from '#components/GeoOutput';
-import DateOutput from '#components/DateOutput';
-import Loss from '#components/Loss';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { reverseRoute, mapToList } from '@togglecorp/fujs';
+import { reverseRoute } from '@togglecorp/fujs';
+import store from '#store';
 import { routes } from '#constants';
 
-import {
-    wardsMapSelector,
-} from '#redux';
+import Tooltip from '#components/Tooltip';
 
 import nepalGeoJson from '#resources/districts.json';
 
-import { toTitleCase } from '#utils/common';
 
 import {
     boundsFill,
@@ -29,20 +22,15 @@ import {
     pointPaint,
     hoverPaint,
 } from './mapStyles';
-import styles from './styles.scss';
 
 const propTypes = {
-    className: PropTypes.string,
-    wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
-    className: '',
-    wardsMap: {},
 };
 
-const emptyList = [];
-const emptyObject = {};
+// NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
+const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
 const multiPolyToPoly = (multi) => {
     const { type, coordinates, ...other } = multi;
@@ -55,7 +43,7 @@ const multiPolyToPoly = (multi) => {
     };
 };
 
-class IncidentMap extends React.PureComponent {
+export default class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -69,7 +57,7 @@ class IncidentMap extends React.PureComponent {
         this.hoverInfo = {
             paint: hoverPaint,
             showTooltip: true,
-            tooltipModifier: this.renderTooltip,
+            tooltipModifier: toolTipWrapper,
         };
     }
 
@@ -98,112 +86,8 @@ class IncidentMap extends React.PureComponent {
         this.setState({ redirectTo });
     }
 
-    renderTooltip = ({ incident: incidentString }) => {
-        const incident = JSON.parse(incidentString);
-        const { wardsMap } = this.props;
-
-        const {
-            title,
-            inducer,
-            cause,
-            source,
-
-            // eslint-disable-next-line no-unused-vars
-            hazard, id, point, createdOn,
-
-            hazardInfo: { title: hazardType = emptyObject },
-            incidentOn,
-            wards = emptyList,
-            streetAddress: geoareaName,
-            event: {
-                title: eventTitle = '-',
-            } = {},
-
-            loss = emptyObject,
-
-            ...misc
-        } = incident;
-
-        const wardNames = wards.map(x => (wardsMap[x] || {}).title);
-
-        const inducerText = {
-            artificial: 'Artificial',
-            natural: 'Natural',
-        };
-
-        const miscInfo = mapToList(
-            misc,
-            (value, key) => ({ key: toTitleCase(key), value: value.toString() }),
-        );
-
-        return (
-            <div className={styles.tooltip}>
-                <h2 className={styles.heading}>
-                    {title}
-                </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
-                <DateOutput
-                    className={styles.incidentDate}
-                    date={incidentOn}
-                />
-                <div className={styles.hr} />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Source"
-                    value={source}
-                />
-                <TextOutput
-                    className={styles.inducer}
-                    label="Inducer"
-                    value={inducerText[inducer]}
-                />
-                <TextOutput
-                    className={styles.cause}
-                    label="Cause"
-                    value={cause}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Hazard"
-                    value={hazardType}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Event"
-                    value={eventTitle}
-                />
-                <Loss
-                    className={styles.loss}
-                    label="Loss"
-                    loss={loss}
-                />
-                <div className={styles.hr} />
-                <b> Misc </b>
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Wards"
-                    value={wardNames.join(', ')}
-                />
-                {
-                    miscInfo.map(x => (
-                        <TextOutput
-                            className={styles.commonInfo}
-                            key={x.key}
-                            label={x.key}
-                            value={x.value}
-                        />
-                    ))
-                }
-            </div>
-        );
-    }
-
     render() {
         const {
-            className,
             incidentList,
         } = this.props;
 
@@ -256,9 +140,3 @@ class IncidentMap extends React.PureComponent {
         );
     }
 }
-
-const mapStateToProps = state => ({
-    wardsMap: wardsMapSelector(state),
-});
-
-export default connect(mapStateToProps, null)(IncidentMap);
