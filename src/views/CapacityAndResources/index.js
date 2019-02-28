@@ -23,7 +23,6 @@ import PieChart from '#rscz/PieChart';
 import DonutChart from '#rscz/DonutChart';
 import { basicColor } from '#constants/colorScheme';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const emptyObject = {};

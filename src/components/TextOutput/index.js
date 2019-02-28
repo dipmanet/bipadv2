@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
+import { _cs } from '@togglecorp/fujs';
 import React from 'react';
 
 import { iconNames } from '#constants';
-import _cs from '#cs';
 import styles from './styles.scss';
 
 

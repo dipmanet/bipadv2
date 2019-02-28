@@ -130,8 +130,8 @@ export default class TabularView extends React.PureComponent {
             source: alert.source,
             // FIXME: potential problem
             hazard: alert.hazardInfo.title,
-            created_on: alert.createdOn,
-            expire_on: alert.expireOn,
+            'created on': alert.createdOn,
+            'expire on': alert.expireOn,
         }));
         const csv = convertJsonToCsv(alertListForExport);
         const data = convertCsvToLink(csv);

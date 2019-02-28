@@ -1,4 +1,6 @@
-export default [
+import { Schema } from '@togglecorp/ravl';
+
+const schemaList: Schema[] = [
     {
         doc: {
             name: 'alert',
@@ -14,3 +16,4 @@ export default [
         },
     },
 ];
+export default schemaList;

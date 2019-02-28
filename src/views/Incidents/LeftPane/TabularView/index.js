@@ -158,7 +158,7 @@ export default class TabularView extends React.PureComponent {
             description: incident.description,
             source: incident.source,
             hazard: incident.hazardInfo,
-            street_address: incident.streetAddress,
+            'street address': incident.streetAddress,
             cause: incident.cause,
             inducer: incident.inducer,
             severity: incident.severity,

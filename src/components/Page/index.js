@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const propTypes = {

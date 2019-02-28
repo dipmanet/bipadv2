@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SelectInput from '#rsci/SelectInput';
 import SegmentInput from '#rsci/SegmentInput';
 import { connect } from 'react-redux';
-
+import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 
 import {
@@ -13,7 +13,6 @@ import {
     provincesSelector,
 } from '#redux';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const adminLevelKeySelector = d => d.id;

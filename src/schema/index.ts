@@ -1,11 +1,11 @@
-import Dict, { basicTypes } from '@togglecorp/ravl';
+import Dict, { basicTypes, Schema } from '@togglecorp/ravl';
 import { isProduction } from '#config/env';
 
 import alertSchemas from './alert';
 import commonSchemas from './common';
 import incidentSchemas from './incident';
 
-const userDefinedSchemas = [
+const userDefinedSchemas: Schema[] = [
     {
         doc: {
             name: 'dbentity',

@@ -1,13 +1,8 @@
 // NOTE: use this from react-store
 import {
-    mapObjectToObject,
-    mapObjectToArray,
-} from '#utils/common';
-
-import {
-    allLinks,
-    // noLinks,
-} from './linksAcl';
+    mapToMap,
+    mapToList,
+} from '@togglecorp/fujs';
 
 export const ROUTE = {
     exclusivelyPublic: 'exclusively-public',
@@ -23,7 +18,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/',
         loader: () => import('../views/Dashboard'),
-        links: allLinks,
     }, // _ts('pageTitle', 'dashboard');
 
     riskInfo: {
@@ -31,7 +25,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/risk-info/',
         loader: () => import('../views/RiskInfo'),
-        links: allLinks,
     }, // _ts('pageTitle', 'riskInfo');
 
     capacityAndResources: {
@@ -39,7 +32,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/capacity-and-resources/',
         loader: () => import('../views/CapacityAndResources'),
-        links: allLinks,
     }, // _ts('pageTitle', 'capacityAndResources');
 
     incidents: {
@@ -47,7 +39,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents/',
         loader: () => import('../views/Incidents'),
-        links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
     response: {
@@ -55,7 +46,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents/:incidentId/response',
         loader: () => import('../views/Response'),
-        links: allLinks,
     }, // _ts('pageTitle', 'response');
 
     lossAndDamage: {
@@ -63,7 +53,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
-        links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
     drrProfileMapping: {
@@ -71,7 +60,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
-        links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
     policyAndPublication: {
@@ -79,7 +67,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
-        links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
     aboutUs: {
@@ -87,7 +74,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/incidents',
         loader: () => import('../views/Incidents'),
-        links: allLinks,
     }, // _ts('pageTitle', 'incidents');
 
     projectDenied: {
@@ -95,8 +81,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/project-denied/',
         loader: () => import('../views/ProjectDenied'),
-        hideNavbar: false,
-        links: allLinks,
     }, // _ts('pageTitle', 'projectDenied');
 
     fourHundredThree: {
@@ -104,8 +88,6 @@ export const routes = {
         type: ROUTE.public,
         path: '/403/',
         loader: () => import('../views/FourHundredThree'),
-        hideNavbar: false,
-        links: allLinks,
     }, // _ts('pageTitle', 'fourHundredThree');
 
     fourHundredFour: {
@@ -113,15 +95,11 @@ export const routes = {
         type: ROUTE.public,
         path: undefined,
         loader: () => import('../views/FourHundredFour'),
-        hideNavbar: true,
-        links: allLinks,
     }, // _ts('pageTitle', 'fourHundredFour');
 };
 
-export const pathNames = mapObjectToObject(routes, route => route.path);
-export const validLinks = mapObjectToObject(routes, route => route.links);
-export const hideNavbar = mapObjectToObject(routes, route => !!route.hideNavbar);
-export const routesOrder = mapObjectToArray(
+export const pathNames = mapToMap(routes, undefined, route => route.path);
+export const routesOrder = mapToList(
     routes,
     (route, key) => ({
         key,

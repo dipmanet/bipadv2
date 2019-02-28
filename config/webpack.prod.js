@@ -14,10 +14,10 @@ const dotenv = require('dotenv').config({
 const getEnvVariables = require('./env.js');
 
 const appBase = process.cwd();
-const eslintFile = path.resolve(appBase, '.eslintrc-loader');
+const eslintFile = path.resolve(appBase, '.eslintrc-loader.js');
 const appSrc = path.resolve(appBase, 'src/');
 const appDist = path.resolve(appBase, 'build/');
-const appIndexJs = path.resolve(appBase, 'src/index.js');
+const appIndexJs = path.resolve(appBase, 'src/index.tsx');
 const appIndexHtml = path.resolve(appBase, 'public/index.html');
 const appFavicon = path.resolve(appBase, 'public/favicon.ico');
 const appLogo = path.resolve(appBase, 'public/favicon.png');

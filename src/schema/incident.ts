@@ -1,27 +1,29 @@
-export default [
+import { Schema } from '@togglecorp/ravl';
+
+const schemaList: Schema[] = [
     {
         doc: {
             name: 'inducer',
             description: 'Inducer Enum',
+            example: ['natural', 'artificial'],
         },
         extends: 'string',
-        example: ['natural', 'artificial'],
     },
     {
         doc: {
             name: 'lnglat',
             description: 'lnglat',
+            // example: [[85.300140, 27.700769]],
         },
         extends: 'array',
-        example: [[85.300140, 27.700769]],
     },
     {
         doc: {
             name: 'peoplestatus',
             description: 'People Status',
+            example: ['missing', 'dead', 'injured', 'affected'],
         },
         extends: 'string',
-        example: ['missing', 'dead', 'injured', 'affected'],
     },
     {
         doc: {
@@ -41,9 +43,9 @@ export default [
         doc: {
             name: 'familystatus',
             description: 'Family Status',
+            example: ['evacuated', 'relocated'],
         },
         extends: 'string',
-        example: ['evacuated', 'relocated'],
     },
     {
         doc: {
@@ -60,9 +62,9 @@ export default [
         doc: {
             name: 'infrastructurestatus',
             description: 'Infrastructure Status',
+            example: ['affected', 'destroyed'],
         },
         extends: 'string',
-        example: ['affected', 'destroyed'],
     },
     {
         doc: {
@@ -85,8 +87,8 @@ export default [
                 },
             },
             status: { type: 'infrastructurestatus', required: true },
-            equipment_value: { type: 'uint', required: true },
-            infrastructure_value: { type: 'uint', required: true },
+            equipmentValue: { type: 'uint', required: true },
+            infrastructureValue: { type: 'uint', required: true },
             beneficiaryOwner: { type: 'string', required: true },
             serviceDisrupted: { type: 'boolean', required: true },
         },
@@ -95,9 +97,9 @@ export default [
         doc: {
             name: 'livestockstatusschema',
             description: 'Livestock Status',
+            example: ['affected', 'destroyed'],
         },
         extends: 'string',
-        example: ['affected', 'destroyed'],
     },
     {
         doc: {
@@ -145,7 +147,7 @@ export default [
                     },
                 },
             },
-            incident_on: { type: 'uint', required: true },
+            incidentOn: { type: 'uint', required: true },
             event: { type: 'uint', required: true },
             hazard: { type: 'uint', required: true },
             point: { type: 'lnglat', required: true },
@@ -181,3 +183,4 @@ export default [
         },
     },
 ];
+export default schemaList;

@@ -22,7 +22,7 @@ export const createConnectedRequestCoordinator = () => compose(
         transformParams: params => params,
         transformProps: (props) => {
             const {
-                token, // eslint-disable-line no-unused-vars
+                // token, // eslint-disable-line no-unused-vars
                 ...otherProps
             } = props;
             return otherProps;
