@@ -40,6 +40,7 @@ const defaultProps = {
 const icons = {
     hospital: healthFacilityIcon,
     volunteer: groupIcon,
+    education: healthFacilityIcon,
 };
 
 const emptyList = [];
@@ -68,14 +69,14 @@ export default class ResponseMap extends React.PureComponent {
                     type: 'Feature',
                     geometry: {
                         type: 'Point',
-                        coordinates: resource.point,
+                        coordinates: resource.point.coordinates,
                     },
                     properties: {
                         resource,
                         containerClassName: styles.markerContainer,
                         markerHTML: ReactDOMServer.renderToString(
                             <img
-                                src={icons[resource.type]}
+                                src={icons[resource.resourceType]}
                                 alt={resource.title}
                                 className={styles.icon}
                             />,
@@ -86,7 +87,7 @@ export default class ResponseMap extends React.PureComponent {
                                     { resource.title }
                                 </h3>
                                 <DistanceOutput
-                                    value={resource.distance}
+                                    value={resource.distance / 1000}
                                 />
                             </div>,
                         ),
@@ -163,7 +164,7 @@ export default class ResponseMap extends React.PureComponent {
             resourceList,
         } = this.props;
 
-        const point = turf.point(incident.point);
+        const point = turf.point(incident.point.coordinates);
         const buffered = turf.buffer(point, 5, 'kilometers');
         const bbox = turf.bbox(buffered);
 
@@ -173,7 +174,7 @@ export default class ResponseMap extends React.PureComponent {
                 type: 'Feature',
                 geometry: {
                     type: 'Point',
-                    coordinates: incident.point,
+                    coordinates: incident.point.coordinates,
                 },
                 properties: {
                     incident,

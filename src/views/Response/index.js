@@ -3,8 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+} from '#request';
+
+import {
+    incidentIdFromRouteSelector,
     incidentSelector,
+    setIncidentActionIP,
     resourceListSelectorRP,
+    setResourceListActionRP,
 } from '#redux';
 
 import Page from '#components/Page';
@@ -21,22 +29,20 @@ const propTypes = {
 const defaultProps = {
 };
 
-const mapStateToProps = state => ({
-    // incidentId: incidentIdFromRouteSelector(state),
-    incident: incidentSelector(state),
-    resourceList: resourceListSelectorRP(state),
-});
-
-@connect(mapStateToProps)
-export default class Response extends React.PureComponent {
+class Response extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
     render() {
         const {
-            incident,
+            incident = {},
             resourceList,
         } = this.props;
+
+        if (!incident.id) {
+            return null;
+        }
+
 
         return (
             <React.Fragment>
@@ -62,3 +68,48 @@ export default class Response extends React.PureComponent {
         );
     }
 }
+
+const requests = {
+    responseRequest: {
+        url: ({ props: { incidentId } }) => (
+            // ?distance=1000
+            `/incident/${incidentId}/response/?distance=1000`
+        ),
+        onSuccess: ({ response, props: { setResourceList } }) => {
+            setResourceList({ resourceList: response });
+        },
+        onMount: ({ props: { incidentId } }) => (
+            !!incidentId
+        ),
+    },
+    incidentRequest: {
+        url: ({ props: { incidentId } }) => (
+            `/incident/${incidentId}/`
+        ),
+        onSuccess: ({ response, props: { setIncident } }) => {
+            setIncident({ incident: response });
+        },
+        onMount: ({ props: { incidentId } }) => (
+            !!incidentId
+        ),
+    },
+    // TODO: add schema, onFailure, onFatal
+};
+
+const mapStateToProps = state => ({
+    incidentId: incidentIdFromRouteSelector(state),
+    incident: incidentSelector(state),
+    resourceList: resourceListSelectorRP(state),
+    // incidentList: incidentListSelectorIP(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setResourceList: params => dispatch(setResourceListActionRP(params)),
+    setIncident: params => dispatch(setIncidentActionIP(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(Response),
+    ),
+);

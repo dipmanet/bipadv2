@@ -25,6 +25,7 @@ export default class Incidents extends React.PureComponent {
                 title,
                 incidentOn,
                 streetAddress,
+                geoareaName,
                 id: incidentId,
             },
         } = this.props;

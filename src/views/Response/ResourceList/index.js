@@ -17,6 +17,7 @@ const defaultProps = {
 const resourceComponents = {
     hospital: Hospital,
     volunteer: Volunteer,
+    education: Volunteer,
 };
 
 const Resource = ({
@@ -40,10 +41,11 @@ export default class Response extends React.PureComponent {
         const resources = {
             hospital: [],
             volunteer: [],
+            education: [],
         };
 
         resourceList.forEach((r) => {
-            resources[r.type].push(r);
+            resources[r.resourceType].push(r);
         });
 
         return resources;
