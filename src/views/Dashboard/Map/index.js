@@ -104,7 +104,11 @@ class AlertMap extends React.PureComponent {
                     } = emptyObject,
                 } = emptyObject,
             },
-            districtsGeoJson,
+            requests: {
+                districtsGeoJsonRequest: {
+                    response: districtsGeoJson,
+                },
+            },
         } = this.props;
 
         const {
@@ -143,9 +147,17 @@ class AlertMap extends React.PureComponent {
             className,
             alertList,
             hazardTypes,
-            districtsGeoJson,
             filters,
+            requests: {
+                districtsGeoJsonRequest: {
+                    response: districtsGeoJson,
+                },
+            },
         } = this.props;
+
+        if (!districtsGeoJson) {
+            return null;
+        }
 
         const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
         const bounds = this.getCurrentBounds();
@@ -204,16 +216,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const requests = {
-    districtGeoJsonRequest: {
+    districtsGeoJsonRequest: {
         url: '/district/?format=geojson',
-        onSuccess: ({ response, props: { setDistrictsGeoJson } }) => {
-            setDistrictsGeoJson({ districtsGeoJson: response });
-        },
-        extras: {
-            // schemaName: 'provinceResponse',
-        },
-        onMount: false,
-        // onMount: true,
+        onMount: true,
     },
 };
 
