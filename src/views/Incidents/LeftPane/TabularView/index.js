@@ -108,13 +108,13 @@ export default class TabularView extends React.PureComponent {
                 comparator: (a, b) => compareString(a.severity, b.severity),
             },
             {
-                key: 'loss',
-                label: 'Loss',
+                key: 'people-loss',
+                label: 'Deaths',
                 order: 11,
+                modifier: (d = {}) => d.peopleDeathCount,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.loss, b.loss),
             },
-
             {
                 key: 'createdOn',
                 label: 'Created On',
@@ -162,27 +162,33 @@ export default class TabularView extends React.PureComponent {
             cause: incident.cause,
             inducer: incident.inducer,
             severity: incident.severity,
-            loss: incident.loss,
+            deaths: (incident.loss || {}).peopleDeathCount,
             createdOn: incident.createdOn,
             incidentOn: incident.incidentOn,
         }));
+
         const csv = convertJsonToCsv(incidentListForExport);
         const data = convertCsvToLink(csv);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
-                <Table
-                    className={styles.incidentsTable}
-                    data={incidentList}
-                    headers={this.incidentsTableHeader}
-                    keySelector={TabularView.tableKeySelector}
-                />
-                <a
-                    href={data}
-                    download="export.csv"
-                >
-                    Download csv
-                </a>
+                <div className={styles.tableContainer}>
+                    <Table
+                        className={styles.incidentsTable}
+                        data={incidentList}
+                        headers={this.incidentsTableHeader}
+                        keySelector={TabularView.tableKeySelector}
+                    />
+                </div>
+                <div className={styles.downloadLinkContainer}>
+                    <a
+                        className={styles.downloadLink}
+                        href={data}
+                        download="export.csv"
+                    >
+                        Download csv
+                    </a>
+                </div>
             </div>
         );
     }

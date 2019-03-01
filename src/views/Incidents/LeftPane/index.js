@@ -128,6 +128,9 @@ export default class LeftPane extends React.PureComponent {
                         expandedView={
                             <React.Fragment>
                                 <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Incidents
+                                    </h4>
                                     <Spinner loading={pending} />
                                     <Button
                                         className={styles.collapseTabularViewButton}

@@ -138,18 +138,23 @@ export default class TabularView extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.tabularView)}>
-                <Table
-                    className={styles.alertsTable}
-                    data={alertList}
-                    headers={this.alertsTableHeader}
-                    keySelector={TabularView.tableKeySelector}
-                />
-                <a
-                    href={data}
-                    download="export.csv"
-                >
-                    Download csv
-                </a>
+                <div className={styles.tableContainer}>
+                    <Table
+                        className={styles.alertsTable}
+                        data={alertList}
+                        headers={this.alertsTableHeader}
+                        keySelector={TabularView.tableKeySelector}
+                    />
+                </div>
+                <div className={styles.downloadLinkContainer}>
+                    <a
+                        className={styles.downloadLink}
+                        href={data}
+                        download="export.csv"
+                    >
+                        Download csv
+                    </a>
+                </div>
             </div>
         );
     }

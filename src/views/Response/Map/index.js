@@ -164,7 +164,7 @@ export default class ResponseMap extends React.PureComponent {
                 </MapSource>
             );
         } else if (incident.polygon) {
-            const buffered = turf.buffer(incident.polygon, 24, 'kilometeres');
+            const buffered = turf.buffer(incident.polygon, 24, 'kilometers');
             bbox = turf.bbox(buffered);
 
             const featureCollection = {

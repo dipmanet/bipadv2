@@ -3,16 +3,48 @@
 .tabular-view {
     display: flex;
     flex-direction: column;
+    overflow: auto;
 
-    .verified {
-        color: $color-success-light;
-    }
-
-    .not-verified {
-        color: $color-danger-light;
-    }
-
-    .alerts-table {
+    .table-container {
         flex-grow: 1;
+        overflow: auto;
+
+        .incidents-table {
+            .verified {
+                color: $color-success-light;
+            }
+
+            .not-verified {
+                color: $color-danger-light;
+            }
+
+            :global {
+                .header {
+                    border-right: none;
+
+                    &.description {
+                        >div {
+                            width: 300px;
+                        }
+                    }
+                }
+
+                .row {
+                    background-color: $color-foreground;
+                }
+            }
+        }
+    }
+
+    .download-link-container {
+        flex-shrink: 0;
+        padding: $spacing-medium;
+
+        .download-link {
+            background-color: $color-accent;
+            padding: $spacing-small $spacing-medium;
+            text-decoration: none;
+            color: $color-foreground;
+        }
     }
 }
