@@ -5,6 +5,7 @@ import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
 import DistanceOutput from '#components/DistanceOutput';
 
+import ResourceElement from './ResourceItem';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -13,28 +14,11 @@ const propTypes = {
 const defaultProps = {
 };
 
-const ResourceElement = (d) => {
-    const {
-        className,
-        title,
-        distance,
-    } = d;
-
-    return (
-        <div className={_cs(styles.resource, className)}>
-            <div className={styles.title}>
-                { title }
-            </div>
-            <DistanceOutput
-                value={distance / 1000}
-            />
-        </div>
-    );
-};
-
 export default class Resource extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
+
+    static keySelector = d => d.title;
 
     getResourceElementRendererParams = (_, d) => d
 
@@ -63,8 +47,7 @@ export default class Resource extends React.PureComponent {
                     data={data}
                     renderer={ResourceElement}
                     rendererParams={this.getResourceElementRendererParams}
-                    keySelector={d => d.title}
-                    // keySelector={d => d.id}
+                    keySelector={Resource.keySelector}
                 />
             </div>
         );

@@ -1,0 +1,36 @@
+@import '~base-scss/base';
+
+.resource {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-small 0;
+
+    .left-container {
+        .title {
+            color: $color-text-label;
+            font-weight: $font-weight-bold;
+        }
+
+        .distance {
+            display: flex;
+
+            .amount {
+                margin-right: $spacing-small;
+            }
+        }
+    }
+
+    .right-container {
+        .link {
+            outline: none;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: inherit;
+
+            >span {
+                color: $color-primary;
+            }
+        }
+    }
+}
