@@ -12,7 +12,6 @@ import {
     setDistrictsGeoJsonAction,
 } from '#redux';
 
-import MapMarkerLayer from '#components/MapMarkerLayer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
@@ -21,15 +20,11 @@ import {
     createRequestClient,
 } from '#request';
 
-import nepalGeoJson from '#resources/districts.json';
-
 import {
     boundsFill,
     polygonBoundsFill,
     boundsOutline,
     // pointsOuter,
-    pointsInner,
-    symbol,
     hoverPaint,
 } from './mapStyles';
 import styles from './styles.scss';

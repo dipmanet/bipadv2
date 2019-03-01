@@ -6,11 +6,13 @@ import { reverseRoute } from '@togglecorp/fujs';
 import ReactDOMServer from 'react-dom/server';
 
 import DistanceOutput from '#components/DistanceOutput';
+/*
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import PeopleLoss from '#components/PeopleLoss';
-import MapMarkerLayer from '#components/MapMarkerLayer';
+*/
+import MapMarkerLayer from '#rscz/Map/MapMarkerLayer';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
