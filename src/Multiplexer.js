@@ -169,10 +169,11 @@ class Multiplexer extends React.PureComponent {
                     <Map
                         className={styles.map}
                         bounds={nepalBounds}
+                        mapStyle={mapStyle}
                         boundsPadding={160}
                         fitBoundsDuration={200}
                         hideNavControl
-                        mapStyle={mapStyle}
+                        minZoom={3}
                     >
                         { pending ? (
                             <div
