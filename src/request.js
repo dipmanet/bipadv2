@@ -10,7 +10,7 @@ import { sanitizeResponse } from '#utils/common';
 
 export * from '@togglecorp/react-rest-request';
 
-const wsEndpoint = 'http://bipad.nepware.com/api/v1';
+const wsEndpoint = 'https://bipad.nepware.com/api/v1';
 
 const mapStateToProps = () => ({
     // token: {},
