@@ -26,10 +26,10 @@ export const pointPaint = {
     'circle-radius': [
         'match',
         ['get', 'severity'],
-        'catastropic', 7,
-        'major', 6,
-        'minor', 5,
-        5,
+        'catastropic', 10,
+        'major', 9,
+        'minor', 8,
+        8,
     ],
     'circle-opacity': [
         'match',

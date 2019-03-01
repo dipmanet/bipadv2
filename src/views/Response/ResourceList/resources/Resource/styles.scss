@@ -17,23 +17,4 @@
             flex-grow: 1;
         }
     }
-
-    .content {
-        .resource {
-            padding: $spacing-small 0;
-
-            .title {
-                color: $color-text-label;
-                font-weight: $font-weight-bold;
-            }
-
-            .distance {
-                display: flex;
-
-                .amount {
-                    margin-right: $spacing-small;
-                }
-            }
-        }
-    }
 }

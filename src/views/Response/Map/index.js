@@ -219,10 +219,10 @@ export default class ResponseMap extends React.PureComponent {
                         paint={boundsOutline}
                     />
                 </MapSource>
-                <FeatureMapSource />
                 <MapMarkerLayer
                     geoJson={resourceFeatures}
                 />
+                <FeatureMapSource />
             </React.Fragment>
         );
     }

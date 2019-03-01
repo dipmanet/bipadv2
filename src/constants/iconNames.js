@@ -5,6 +5,7 @@ const iconNames = {
     check: 'ion-checkmark',
     close: 'ion-close',
     layers: 'ion-social-buffer',
+    share: 'ion-android-share-alt',
 
     dashboard: 'ion-android-home',
     riskMap: 'ion-android-map',
