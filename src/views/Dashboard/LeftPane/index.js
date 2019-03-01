@@ -262,9 +262,9 @@ export default class LeftPane extends React.PureComponent {
                         expandedView={
                             <React.Fragment>
                                 <header className={styles.header}>
-                                    <h3 className={styles.heading}>
+                                    <h4 className={styles.heading}>
                                         Alerts
-                                    </h3>
+                                    </h4>
                                     <Spinner loading={pending} />
                                     <Button
                                         className={styles.hideAlertsButton}
