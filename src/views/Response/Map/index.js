@@ -49,6 +49,11 @@ const icons = {
     finance: financeIcon,
 };
 
+const polygonBoundsFill = {
+    'fill-color': 'red',
+    'fill-opacity': 0.4,
+};
+
 // NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
 const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
@@ -118,24 +123,79 @@ export default class ResponseMap extends React.PureComponent {
             resourceList,
         } = this.props;
 
-        const point = turf.point(incident.point.coordinates);
-        const buffered = turf.buffer(point, 32, 'kilometers');
-        const bbox = turf.bbox(buffered);
+        let FeatureMapSource;
+        let bbox;
 
-        const featureCollection = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                geometry: {
-                    type: 'Point',
-                    coordinates: incident.point.coordinates,
-                },
-                properties: {
-                    incident,
-                    severity: incident.severity,
-                },
-            }],
-        };
+        if (incident.point) {
+            // const point = turf.point(incident.point.coordinates);
+            const buffered = turf.buffer(incident.point, 32, 'kilometers');
+            bbox = turf.bbox(buffered);
+
+            const featureCollection = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    geometry: {
+                        ...incident.point,
+                    },
+                    properties: {
+                        incident,
+                        severity: incident.severity,
+                    },
+                }],
+            };
+
+            FeatureMapSource = () => (
+                <MapSource
+                    sourceKey="points"
+                    geoJson={featureCollection}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="points"
+                        type="circle"
+                        property="incident"
+                        paint={pointPaint}
+                        onClick={this.handlePointClick}
+                        hoverInfo={this.hoverInfo}
+                    />
+                </MapSource>
+            );
+        } else if (incident.polygon) {
+            const buffered = turf.buffer(incident.polygon, 24, 'kilometeres');
+            bbox = turf.bbox(buffered);
+
+            const featureCollection = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    geometry: {
+                        ...incident.polygon,
+                    },
+                    properties: {
+                        incident,
+                        severity: incident.severity,
+                    },
+                }],
+            };
+
+            FeatureMapSource = () => (
+                <MapSource
+                    sourceKey="polygon"
+                    geoJson={featureCollection}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="points"
+                        type="fill"
+                        property="incident"
+                        paint={polygonBoundsFill}
+                        onClick={this.handlePointClick}
+                        // hoverInfo={this.hoverInfo}
+                    />
+                </MapSource>
+            );
+        }
 
         const resourceFeatures = this.getResourceFeatureCollection(resourceList);
 
@@ -157,20 +217,7 @@ export default class ResponseMap extends React.PureComponent {
                         paint={boundsOutline}
                     />
                 </MapSource>
-                <MapSource
-                    sourceKey="points"
-                    geoJson={featureCollection}
-                    supportHover
-                >
-                    <MapLayer
-                        layerKey="points"
-                        type="circle"
-                        property="incident"
-                        paint={pointPaint}
-                        onClick={this.handlePointClick}
-                        hoverInfo={this.hoverInfo}
-                    />
-                </MapSource>
+                <FeatureMapSource />
                 <MapMarkerLayer
                     geoJson={resourceFeatures}
                 />

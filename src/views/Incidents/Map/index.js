@@ -20,7 +20,9 @@ import {
     boundsFill,
     boundsOutline,
     pointPaint,
+    polygonBoundsFill,
     hoverPaint,
+    polygonHoverPaint,
 } from './mapStyles';
 
 const propTypes = {
@@ -59,16 +61,44 @@ export default class IncidentMap extends React.PureComponent {
             showTooltip: true,
             tooltipModifier: toolTipWrapper,
         };
+
+        this.polygonHoverInfo = {
+            paint: polygonHoverPaint,
+            showTooltip: true,
+            tooltipModifier: toolTipWrapper,
+        };
     }
 
-    getFeatureCollection = memoize((incidentList) => {
+    getPointFeatureCollection = memoize((incidentList) => {
         const geojson = {
             type: 'FeatureCollection',
             features: incidentList
-                .filter(incident => incident.point || incident.polygon)
+                .filter(incident => incident.point)
                 .map(incident => ({
                     type: 'Feature',
-                    geometry: multiPolyToPoly(incident.point || incident.polygon),
+                    geometry: {
+                        ...incident.point,
+                    },
+                    properties: {
+                        incident,
+                        severity: incident.severity,
+                    },
+                })),
+        };
+
+        return geojson;
+    });
+
+    getPolygonFeatureCollection = memoize((incidentList) => {
+        const geojson = {
+            type: 'FeatureCollection',
+            features: incidentList
+                .filter(incident => incident.polygon)
+                .map(incident => ({
+                    type: 'Feature',
+                    geometry: {
+                        ...incident.polygon,
+                    },
                     properties: {
                         incident,
                         severity: incident.severity,
@@ -102,7 +132,8 @@ export default class IncidentMap extends React.PureComponent {
             );
         }
 
-        const featureCollection = this.getFeatureCollection(incidentList);
+        const pointFeatureCollection = this.getPointFeatureCollection(incidentList);
+        const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList);
 
         return (
             <React.Fragment>
@@ -124,7 +155,7 @@ export default class IncidentMap extends React.PureComponent {
                 </MapSource>
                 <MapSource
                     sourceKey="incident-points"
-                    geoJson={featureCollection}
+                    geoJson={pointFeatureCollection}
                     supportHover
                 >
                     <MapLayer
@@ -134,6 +165,20 @@ export default class IncidentMap extends React.PureComponent {
                         paint={pointPaint}
                         onClick={this.handlePointClick}
                         hoverInfo={this.hoverInfo}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="incident-polygons"
+                    geoJson={polygonFeatureCollection}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="incident-polygon-fill"
+                        type="fill"
+                        property="incident"
+                        paint={polygonBoundsFill}
+                        onClick={this.handlePointClick}
+                        hoverInfo={this.polygonHoverInfo}
                     />
                 </MapSource>
             </React.Fragment>
