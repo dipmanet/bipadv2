@@ -2,8 +2,6 @@ import { isTruthy } from '@togglecorp/fujs';
 
 import createReducerWithMap from '#utils/createReducerWithMap';
 
-import initialRouteState from '../initial-state/route';
-
 // TYPE
 
 export const ROUTE__SET_PARAMS = 'route/SET_PARAMS';
@@ -71,5 +69,5 @@ export const routeReducers = {
     [ROUTE__CLEAR_STATE]: clearRouteState,
 };
 
-const routeReducer = createReducerWithMap(routeReducers, initialRouteState);
+const routeReducer = createReducerWithMap(routeReducers, null);
 export default routeReducer;

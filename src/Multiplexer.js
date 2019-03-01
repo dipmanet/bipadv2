@@ -13,7 +13,6 @@ import { mapToMap } from '@togglecorp/fujs';
 import Map from '#rscz/Map/index';
 import ExclusivelyPublicRoute from '#rscg/ExclusivelyPublicRoute';
 import PrivateRoute from '#rscg/PrivateRoute';
-import Toast from '#rscv/Toast';
 import Navbar from '#components/Navbar';
 import nepalGeoJson from '#resources/districts.json';
 
@@ -31,8 +30,6 @@ import {
 } from '#request';
 
 import {
-    authenticatedSelector,
-    lastNotifySelector,
     mapStyleSelector,
     notifyHideAction,
     setProvincesAction,
@@ -65,8 +62,6 @@ const views = mapToMap(
 );
 
 const propTypes = {
-    authenticated: PropTypes.bool.isRequired,
-    lastNotify: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     mapStyle: PropTypes.string,
     notifyHide: PropTypes.func.isRequired,
     requests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -96,7 +91,7 @@ class Multiplexer extends React.PureComponent {
 
         const path = pathNames[routeId];
         const { redirectTo, type } = routes[routeId];
-        const { authenticated } = this.props;
+        const authenticated = false;
 
         switch (type) {
             case ROUTE.exclusivelyPublic:
@@ -138,7 +133,6 @@ class Multiplexer extends React.PureComponent {
 
     render() {
         const {
-            lastNotify,
             mapStyle,
             requests: {
                 provinceListRequest: { pending: provincePending },
@@ -161,10 +155,6 @@ class Multiplexer extends React.PureComponent {
 
         return (
             <Fragment>
-                <Toast
-                    notification={lastNotify}
-                    onClose={this.handleToastClose}
-                />
                 <div className="bipad-main-content">
                     <Map
                         className={styles.map}
@@ -211,8 +201,6 @@ class Multiplexer extends React.PureComponent {
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
-    authenticated: authenticatedSelector(state),
-    lastNotify: lastNotifySelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
