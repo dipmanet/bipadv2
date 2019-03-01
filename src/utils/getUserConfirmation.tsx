@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Confirm from '#rscv/Modal/Confirm';
 
-const getUserConfirmation = (message, confirm) => {
+interface ConfirmFunction {
+    (confirmation: boolean): void;
+}
+
+const getUserConfirmation = (message: string, confirm: ConfirmFunction) => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const confirmWithCleanup = (result) => {
+    const handleConfirmClose: ConfirmFunction = (result) => {
         ReactDOM.unmountComponentAtNode(container);
         document.body.removeChild(container);
         confirm(result);
@@ -15,9 +19,11 @@ const getUserConfirmation = (message, confirm) => {
     ReactDOM.render(
         <Confirm
             show
-            onClose={(result) => { confirmWithCleanup(result); }}
+            onClose={handleConfirmClose}
         >
-            <p>{ message }</p>
+            <p>
+                {message}
+            </p>
         </Confirm>,
         container,
     );

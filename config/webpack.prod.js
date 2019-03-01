@@ -6,7 +6,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ShellRunPlugin = require('./shellrun-plugin');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
@@ -132,24 +131,13 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: appIndexHtml,
                 filename: './index.html',
-                title: 'DEEP',
+                title: 'bipad',
                 favicon: path.resolve(appFavicon),
                 chunksSortMode: 'none',
             }),
             new MiniCssExtractPlugin({
                 filename: 'css/[name].[hash].css',
                 chunkFilename: 'css/[id].[hash].css',
-            }),
-            new ShellRunPlugin({
-                messageBefore: 'Generating language map.',
-                command: `
-                    find ${appSrc} -name *.js |
-                        xargs /usr/bin/gawk -f ${appSrc}/utils/finder.awk > ${appSrc}/usage.tmp &&
-                        mkdir -p ${appSrc}/generated &&
-                        rsync -c ${appSrc}/usage.tmp ${appSrc}/generated/usage.js;
-                        rm ${appSrc}/usage.tmp;
-                `,
-                messageAfter: 'Done.',
             }),
         ],
     };

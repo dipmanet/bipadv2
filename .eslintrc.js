@@ -28,7 +28,7 @@ module.exports = {
                     '#request': './src/request',
                     '#resources': './src/resources',
                     '#schema': './src/schema',
-                    '#store': './src/store',
+                    '#store': './src/redux/store',
                     '#ts': './src/ts',
                     '#utils': './src/utils',
                     '#rsca': './src/vendor/react-store/components/Action',

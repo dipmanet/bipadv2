@@ -27,7 +27,6 @@ import {
     // tabsByCurrentUrlSelector,
     // setTabStatusAction,
 } from '#redux';
-import _ts from '#ts';
 
 const LoadingRenderer = ({ text }) => (
     <div
@@ -64,7 +63,7 @@ const PageError = ({ noProjectPermission }) => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>
-                    { _ts('pageTitle', name) }
+                    {name}
                 </title>
             </Helmet>
             <ErrorBoundBundle
@@ -93,7 +92,7 @@ const Page = ({ name, disabled, noProjectPermission, ...otherProps }) => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>
-                    { _ts('pageTitle', name) }
+                    {name}
                 </title>
             </Helmet>
             <ErrorBoundBundle

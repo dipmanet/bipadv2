@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ShellRunPlugin = require('./shellrun-plugin');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
@@ -130,26 +129,13 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: appIndexHtml,
                 filename: './index.html',
-                title: 'DEEP',
+                title: 'bipad',
                 favicon: path.resolve(appFavicon),
                 chunksSortMode: 'none',
             }),
             new MiniCssExtractPlugin({
                 filename: 'css/[name].css',
                 chunkFilename: 'css/[id].css',
-            }),
-           }),
-            // May need to support ts, tsx, jsx
-            new ShellRunPlugin({
-                messageBefore: 'Generating language map.',
-                command: `
-                    find ${appSrc} -name *.js |
-                        xargs gawk -f ${appSrc}/utils/finder.awk > usage.tmp &&
-                        mkdir -p ${appSrc}/generated &&
-                        rsync -c usage.tmp ${appSrc}/generated/usage.js;
-                        rm usage.tmp;
-                `,
-                messageAfter: 'Done.',
             }),
         ],
     };
