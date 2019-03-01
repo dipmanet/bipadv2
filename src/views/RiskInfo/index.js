@@ -2,8 +2,6 @@ import React from 'react';
 
 import Page from '#components/Page';
 
-import _cs from '#cs';
-
 import Map from './Map';
 import LeftPane from './LeftPane';
 import Filter from './Filter';

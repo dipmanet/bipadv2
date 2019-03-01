@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { _cs, reverseRoute } from '@togglecorp/fujs';
 
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
-import { reverseRoute } from '@togglecorp/fujs';
 import { routes } from '#constants';
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const propTypes = {

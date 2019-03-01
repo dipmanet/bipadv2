@@ -4,8 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ShellRunPlugin = require('./shellrun-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
@@ -13,10 +11,10 @@ const dotenv = require('dotenv').config({
 const getEnvVariables = require('./env.js');
 
 const appBase = process.cwd();
-const eslintFile = path.resolve(appBase, '.eslintrc-loader');
+const eslintFile = path.resolve(appBase, '.eslintrc-loader.js');
 const appSrc = path.resolve(appBase, 'src/');
 const appDist = path.resolve(appBase, 'build/');
-const appIndexJs = path.resolve(appBase, 'src/index.js');
+const appIndexJs = path.resolve(appBase, 'src/index.tsx');
 const appIndexHtml = path.resolve(appBase, 'public/index.html');
 const appFavicon = path.resolve(appBase, 'public/favicon.ico');
 const appLogo = path.resolve(appBase, 'public/favicon.png');
@@ -35,6 +33,7 @@ module.exports = (env) => {
         },
 
         resolve: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             alias: {
                 'base-scss': path.resolve(appBase, 'src/stylesheets/'),
                 'rs-scss': path.resolve(appBase, 'src/vendor/react-store/stylesheets/'),
@@ -68,7 +67,7 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    test: /\.(js|jsx)$/,
+                    test: /\.(js|jsx|ts|tsx)$/,
                     include: appSrc,
                     use: [
                         'babel-loader',
@@ -130,39 +129,13 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: appIndexHtml,
                 filename: './index.html',
-                title: 'DEEP',
+                title: 'bipad',
                 favicon: path.resolve(appFavicon),
                 chunksSortMode: 'none',
             }),
             new MiniCssExtractPlugin({
                 filename: 'css/[name].css',
                 chunkFilename: 'css/[id].css',
-            }),
-            new WebpackPwaManifest({
-                name: 'DEEP',
-                short_name: 'DEEP',
-                description: 'DEEP is an open source, community driven web application to intelligently collect, tag, analyze and export secondary data.',
-                background_color: '#e0e0e0',
-                start_url: '.',
-                display: 'standalone',
-                theme_color: '#008975',
-                icons: [
-                    {
-                        src: path.resolve(appLogo),
-                        sizes: [96, 128, 192, 256, 384, 512],
-                    },
-                ],
-            }),
-            new ShellRunPlugin({
-                messageBefore: 'Generating language map.',
-                command: `
-                    find ${appSrc} -name *.js |
-                        xargs gawk -f ${appSrc}/utils/finder.awk > usage.tmp &&
-                        mkdir -p ${appSrc}/generated &&
-                        rsync -c usage.tmp ${appSrc}/generated/usage.js;
-                        rm usage.tmp;
-                `,
-                messageAfter: 'Done.',
             }),
         ],
     };

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
+import { mapToMap } from '@togglecorp/fujs';
 
 import Map from '#rscz/Map/index';
 import ExclusivelyPublicRoute from '#rscg/ExclusivelyPublicRoute';
@@ -17,8 +18,6 @@ import Navbar from '#components/Navbar';
 import nepalGeoJson from '#resources/districts.json';
 
 import RouteSynchronizer from '#components/general/RouteSynchronizer';
-
-import { mapObjectToObject } from '#utils/common';
 
 import {
     pathNames,
@@ -52,8 +51,9 @@ const ROUTE = {
 };
 
 const nepalBounds = turf.bbox(nepalGeoJson);
-const views = mapObjectToObject(
+const views = mapToMap(
     routes,
+    undefined,
     (route, name) => props => (
         <RouteSynchronizer
             {...props}
@@ -165,7 +165,7 @@ class Multiplexer extends React.PureComponent {
                     notification={lastNotify}
                     onClose={this.handleToastClose}
                 />
-                <div className="deep-main-content">
+                <div className="bipad-main-content">
                     <Map
                         className={styles.map}
                         bounds={nepalBounds}

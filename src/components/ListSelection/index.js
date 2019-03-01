@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FaramInputElement } from '@togglecorp/faram';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
 
-import { FaramInputElement } from '@togglecorp/faram';
 import Delay from '#rscg/Delay';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const propTypes = {

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
+import { _cs } from '@togglecorp/fujs';
 
 import TextOutput from '#components/TextOutput';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const propTypes = {

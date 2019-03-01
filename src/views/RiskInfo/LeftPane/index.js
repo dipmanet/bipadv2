@@ -1,4 +1,5 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
@@ -15,7 +16,6 @@ import {
     donutChartData2,
 } from '#resources/data';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const barChartValueSelector = d => d.value;

@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { _cs, reverseRoute } from '@togglecorp/fujs';
 
-import { reverseRoute } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 
@@ -18,7 +18,6 @@ import {
     setMapStyleAction,
 } from '#redux';
 
-import _cs from '#cs';
 
 import styles from './styles.scss';
 

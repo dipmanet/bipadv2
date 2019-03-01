@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import { iconNames } from '#constants';
@@ -18,7 +19,6 @@ import ListSelection from '#components/ListSelection';
 import CollapsibleView from '#components/CollapsibleView';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
-import _cs from '#cs';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
