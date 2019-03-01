@@ -135,7 +135,7 @@ const initialSiloDomainData = {
             color: '#c89966',
         },
         {
-            name: 'nav',
+            name: 'roads',
             style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
             color: '#671076',
         },
