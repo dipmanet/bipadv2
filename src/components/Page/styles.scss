@@ -2,7 +2,7 @@
 
 .left-content {
     position: absolute;
-    top: $height-navbar + $spacing-medium;
+    top: calc(#{$height-navbar} + #{$spacing-medium});
     left: $spacing-medium;
     z-index: 1;
 }
@@ -15,6 +15,6 @@
 .right-content {
     position: absolute;
     top: $spacing-medium;
-    right: $width-navbar + $spacing-medium;
+    right: calc(#{$width-navbar} + #{$spacing-medium});
     z-index: 1;
 }

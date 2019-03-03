@@ -6,6 +6,7 @@ import { persistStore } from 'redux-persist';
 
 import getUserConfirmation from '#utils/getUserConfirmation';
 import store, { AppState } from '#store';
+import { initializeStyles } from '#rsu/styles';
 
 import App from './App';
 
@@ -23,6 +24,8 @@ export default class Root extends React.Component<Props, State> {
 
         this.state = { rehydrated: false };
         this.store = store;
+
+        initializeStyles();
 
         console.info('React version:', React.version);
     }

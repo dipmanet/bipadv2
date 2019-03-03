@@ -197,7 +197,7 @@ class AlertMap extends React.PureComponent {
                         type="fill"
                         property="alert"
                         paint={polygonBoundsFill}
-                        hoverInfo={this.hoverInfo}
+                        // hoverInfo={this.hoverInfo}
                         // onClick={this.handlePointClick}
                     />
                 </MapSource>
