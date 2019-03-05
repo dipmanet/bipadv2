@@ -38,7 +38,6 @@ build:
     # clone libs
     - mkdir -p $(dirname "${REACT_STORE_DIR}")
     - git clone https://github.com/toggle-corp/react-store.git --branch bipad ${REACT_STORE_DIR}
-    - cp ${REACT_STORE_DIR}/stylesheets/_user-imports-sample.scss ${REACT_STORE_DIR}/stylesheets/_user-imports.scss
     # Build docker image
     - |
       docker build\
