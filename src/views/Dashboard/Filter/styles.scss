@@ -5,7 +5,7 @@ $width-table-container: 250px;
 .filter {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - #{$spacing-medium * 2});
+    max-height: calc(100vh - var(--spacing-medium) * 2);
 
     .header {
         display: flex;

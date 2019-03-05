@@ -4,7 +4,7 @@ $width-filter-container: 260px;
 $width-vertical-nav: 64px;
 
 $width-non-tabular-container: 300px;
-$width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertical-nav + $spacing-medium * 3});
+$width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$width-vertical-nav} - #{$spacing-medium}) * 3);
 
 .left-pane {
     .show-alerts-button-container {
@@ -28,7 +28,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
             border-radius: $radius-border-large;
             background-color: rgba(255, 255, 255, .9);
             width: $width-non-tabular-container;
-            height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
 
             .alerts {
                 display: flex;
@@ -153,7 +153,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container + $width-vertic
             transform-origin: 0 0;
             background-color: $color-foreground;
             width: $width-tabular-container;
-            height: calc(100vh - #{$height-navbar + $spacing-medium * 2});
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
 
             .header {
                 display: flex;
