@@ -30,16 +30,21 @@ export default class Root extends React.Component<Props, State> {
         console.info('React version:', React.version);
     }
 
-    public componentWillMount() {
-        const afterRehydrateCallback = () => this.setState({ rehydrated: true });
+    public componentDidMount() {
         // NOTE: We can also use PersistGate instead of callback to wait for rehydration
-        persistStore(this.store, undefined, afterRehydrateCallback);
+        persistStore(this.store, undefined, this.setRehydrated);
+    }
+
+    private setRehydrated = () => {
+        this.setState({ rehydrated: true });
     }
 
     private store: Store<AppState>;
 
     public render() {
-        if (!this.state.rehydrated) {
+        const { rehydrated } = this.state;
+
+        if (!rehydrated) {
             // NOTE: showing empty div, this lasts for a fraction of a second
             return <div />;
         }

@@ -1,10 +1,5 @@
 import produce from 'immer';
 
-// TYPE
-
-export const DP__SET_ALERTS = 'siloDomainData/DASHBOARD_PAGE/SET_ALERTS';
-export const DP__SET_FILTERS = 'siloDomainData/DASHBOARD_PAGE/SET_FILTERS';
-
 // ACTION-CREATOR
 
 export const setAlertListActionDP = ({ alertList }) => ({
