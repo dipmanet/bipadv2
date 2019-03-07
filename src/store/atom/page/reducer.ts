@@ -61,6 +61,53 @@ export const setWardsAction = (
     wards,
 });
 
+// dashboard action creator
+
+export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) => ({
+    type: Type.PageType.DP__SET_ALERTS,
+    alertList,
+});
+
+export const setFiltersActionDP = ({ faramValues, faramErrors, pristine }: {
+    faramValues: object,
+    faramErrors: object,
+    pristine: boolean,
+}) => ({
+    type: Type.PageType.DP__SET_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
+});
+
+// incident action creator
+
+export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.Incident[]}) => ({
+    type: Type.PageType.IP__SET_INCIDENT_LIST,
+    incidentList,
+});
+
+export const setIncidentActionIP = ({ incident }: { incident: Type.Incident}) => ({
+    type: Type.PageType.IP__SET_INCIDENT,
+    incident,
+});
+
+export const setFiltersActionIP = ({ faramValues, faramErrors, pristine }: {
+    faramValues: object,
+    faramErrors: object,
+    pristine: boolean,
+}) => ({
+    type: Type.PageType.IP__SET_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
+});
+
+// response action creator
+export const setResourceListActionRP = ({ resourceList }:  {resourceList: Type.Resource[]}) => ({
+    type: Type.PageType.RP__SET_RESOURCE_LIST,
+    resourceList,
+});
+
 //  REDUCERS
 
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
@@ -142,7 +189,146 @@ const setWards = (state: Type.PageState, action: Type.SetWards) => {
     return newState;
 };
 
-// dashboard
+// dashboard page
+
+const setAlertList = (state: Type.PageState, action: Type.SetDashboardAlertList) => {
+    const { alertList } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.dashboardPage) {
+            // FIXME: find a good way to handle this
+            deferedState.dashboardPage = initialState.dashboardPage;
+        }
+        /* eslint-enable no-param-reassign */
+        deferedState.dashboardPage.alertList = alertList;
+    });
+    return newState;
+};
+
+const setDashboardFilters = (state: Type.PageState, action: Type.SetDashboardFilters) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.dashboardPage) {
+            // FIXME: find a good way to handle this
+            deferedState.dashboardPage = initialState.dashboardPage;
+        }
+        if (!deferedState.dashboardPage.filters) {
+            // FIXME: find a good way to handle this
+            deferedState.dashboardPage.filters = initialState.dashboardPage.filters;
+        }
+
+        if (faramValues) {
+            deferedState.dashboardPage.filters.faramValues = faramValues;
+        }
+        if (faramErrors) {
+            deferedState.dashboardPage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.dashboardPage.filters.pristine = pristine;
+        }
+    });
+
+    return newState;
+}
+
+// incident page
+const setIncidentList = (state: Type.PageState, action: Type.SetIncidentList) => {
+    const {
+        incidentList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.incidentPage) {
+            // FIXME: find a good way to handle this
+            deferedState.incidentPage = initialState.incidentPage;
+        }
+        deferedState.incidentPage.incidentList = incidentList;
+        /* eslint-enable no-param-reassign */
+    });
+    return newState;
+};
+
+const setIncident = (state: Type.PageState, action: Type.SetIncident) => {
+    const {
+        incident,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.incidentPage) {
+            deferedState.incidentPage = initialState.incidentPage;
+        }
+
+        const {
+            incidentPage: {
+                incidentList,
+            },
+        } = deferedState;
+
+        const incidentIndex = incidentList.findIndex(d => d.id === incident.id);
+        if (incidentIndex !== -1) {
+            incidentList.splice(incidentIndex, 1, incident);
+        } else {
+            incidentList.push(incident);
+        }
+        /* eslint-enable no-param-reassign */
+    });
+    return newState;
+};
+
+const setIncidentFilters = (state: Type.PageState, action: Type.SetIncidentFilters) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.incidentPage) {
+            deferedState.incidentPage = initialState.incidentPage;
+        }
+        if (!deferedState.incidentPage.filters) {
+            deferedState.incidentPage.filters = initialState.incidentPage.filters;
+        }
+
+        if (faramValues) {
+            deferedState.incidentPage.filters.faramValues = faramValues;
+        }
+        if (faramErrors) {
+            deferedState.incidentPage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.incidentPage.filters.pristine = pristine;
+        }
+    });
+
+    return newState;
+};
+
+// response page
+
+export const setResourceList = (state :Type.PageState, action: Type.SetResourceList) => {
+    const {
+        resourceList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.responsePage.resourceList = resourceList;
+    });
+
+    return newState;
+};
+
 
 export default function routeReducer(
     state = initialState,
@@ -165,6 +351,18 @@ export default function routeReducer(
             return setMunicipalities(state, action);
         case Type.PageType.SET_WARDS:
             return setWards(state, action);
+        case Type.PageType.DP__SET_ALERTS:
+            return setAlertList(state, action);
+        case Type.PageType.DP__SET_FILTERS:
+            return setDashboardFilters(state, action);
+        case Type.PageType.IP__SET_INCIDENT_LIST:
+            return setIncidentList(state, action);
+        case Type.PageType.IP__SET_INCIDENT:
+            return setIncident(state, action);
+        case Type.PageType.IP__SET_FILTERS:
+            return setIncidentFilters(state, action);
+        case Type.PageType.RP__SET_RESOURCE_LIST:
+            return setResourceList(state, action);
         default:
             return state;
     }

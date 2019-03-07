@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
-import { mapToList, listToMap } from '@togglecorp/fujs';
+import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
+import { incidentIdFromRouteSelector } from '../route/selector';
 
 export const hazardTypesSelector = ({ page }: AppState) =>
     page.hazardTypes;
@@ -53,3 +54,133 @@ export const districtsGeoJsonSelector = createSelector(
     geoJsonsSelector,
     geoJsons => geoJsons.district,
 );
+
+// dashboardPage
+
+export const dashboardPageSelector = ({ page }: AppState) =>
+    page.dashboardPage;
+
+export const filtersSelectorDP = createSelector(
+    dashboardPageSelector,
+    dashboardPage => dashboardPage.filters,
+);
+
+export const filtersValuesSelectorDP = createSelector(
+    filtersSelectorDP,
+    ({ faramValues }) => faramValues,
+);
+
+export const hazardTypeListAlertsDP = createSelector(
+    dashboardPageSelector,
+    hazardTypesSelector,
+    ({ alertList }, hazardTypes) => {
+
+        const counts: {[ key: number]: number } = {};
+
+        alertList.forEach((alert) => {
+            const { hazard: hazardId } = alert;
+            const hazard = hazardTypes[hazardId];
+            if (hazard) {
+                const count = counts[hazardId];
+                counts[hazardId] = isDefined(count) ? count + 1 : 1;
+            }
+        });
+
+        const list = mapToList(hazardTypes);
+
+        return list.sort((a, b) => (
+            (isDefined(counts[b.id]) ? counts[b.id] : 0)
+                - (isDefined(counts[a.id]) ? counts[a.id] : 0)
+        ));
+    }
+)
+
+export const alertListSelectorDP = createSelector(
+    dashboardPageSelector,
+    hazardTypesSelector,
+    ({ alertList }, hazardTypes) => {
+
+        return alertList.map((alert) => {
+            // FIXME: potential problem
+            const { hazard: hazardId } = alert;
+            const hazardInfo = hazardTypes[hazardId] || {};
+            return { ...alert, hazardInfo };
+        });
+    },
+)
+
+// incidentPage
+
+const incidentPageSelector = ({ page }: AppState) =>
+    page.incidentPage;
+
+export const filtersSelectorIP = createSelector(
+    incidentPageSelector,
+    incidentPage => incidentPage.filters,
+);
+
+export const filtersValuesSelectorIP = createSelector(
+    filtersSelectorIP,
+    ({ faramValues }) => faramValues,
+);
+
+export const hazardTypeListIncidentsIP = createSelector(
+    incidentPageSelector,
+    hazardTypesSelector,
+    ({ incidentList }, hazardTypes) => {
+
+        const counts: {[ key: number]: number } = {};
+
+        incidentList.forEach((incident) => {
+            const { hazard: hazardId } = incident;
+            const hazard = hazardTypes[hazardId];
+            if (hazard) {
+                const count = counts[hazardId];
+                counts[hazardId] = isDefined(count) ? count + 1 : 1;
+            }
+        });
+
+        return mapToList(hazardTypes).sort((a, b) => (
+            (isDefined(counts[b.id]) ? counts[b.id] : 0)
+            - (isDefined(counts[a.id]) ? counts[a.id] : 0)
+        ));
+    },
+);
+
+
+export const incidentListSelectorIP = createSelector(
+    incidentPageSelector,
+    hazardTypesSelector,
+    ({ incidentList }, hazardTypes) => {
+        return incidentList.map((incident) => {
+            // FIXME: potential problem
+            const { hazard: hazardId } = incident;
+            const hazardInfo = hazardTypes[hazardId] || {};
+            return { ...incident, hazardInfo };
+        });
+    },
+);
+
+export const incidentSelector = createSelector(
+    incidentIdFromRouteSelector,
+    incidentPageSelector,
+    (id, { incidentList }) => {
+        const incident = incidentList.find(
+            i => String(i.id) === String(id),
+        );
+
+        return incident;
+    },
+);
+
+// responsePage
+
+const responsePageSelector = ({ page }: AppState) =>
+    page.responsePage;
+
+export const resourceListSelectorRP = createSelector(
+    responsePageSelector,
+    ({ resourceList }) => resourceList,
+);
+
+export const dummyRP = '';

@@ -20,6 +20,13 @@ export interface HazardType {
 export interface ResourceType {
 }
 export interface Alert {
+    hazard: number,
+}
+export interface Incident {
+    id: number,
+    hazard: number,
+}
+export interface Resource {
 }
 
 export interface GeoJson {
@@ -42,6 +49,27 @@ export interface AdminLevel {
     title: string;
 }
 
+export interface DashboardPage {
+    alertList: Alert[];
+    filters: {
+        faramValues: object;
+        faramErrors: object;
+        pristine: boolean;
+    }
+}
+
+export interface IncidentPage {
+    incidentList: Incident[];
+    filters: {
+        faramValues: object;
+        faramErrors: object;
+        pristine: boolean;
+    }
+}
+
+export interface ResponsePage {
+    resourceList: Resource[];
+}
 // INTERFACE
 
 export interface PageState {
@@ -65,9 +93,9 @@ export interface PageState {
         ward?: GeoJson;
     };
 
-    dashboardPage: object;
-    incidentPage: object;
-    responsePage: object;
+    dashboardPage: DashboardPage;
+    incidentPage: IncidentPage;
+    responsePage: ResponsePage;
 }
 
 // ACTION TYPES
@@ -85,6 +113,14 @@ export enum PageType {
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
     DP__SET_FILTERS = 'page/DASHBOARD/SET_FILTERS',
+
+    // incident
+    IP__SET_INCIDENT_LIST = 'page/INCIDENT_PAGE/SET_INCIDENT_LIST',
+    IP__SET_INCIDENT = 'page/INCIDENT_PAGE/SET_INCIDENT',
+    IP__SET_FILTERS = 'page/INCIDENT_PAGE/SET_FILTERS',
+
+    // response
+    RP__SET_RESOURCE_LIST = 'page/RESOURCE_PAGE/SET_RESOURCE',
 }
 
 // ACTION CREATOR INTERFACE
@@ -143,7 +179,35 @@ export interface SetDashboardFilters {
     pristine: boolean;
 }
 
+// incident
+
+export interface SetIncidentList {
+    type: typeof PageType.IP__SET_INCIDENT_LIST;
+    incidentList: Incident[];
+}
+
+export interface SetIncident {
+    type: typeof PageType.IP__SET_INCIDENT,
+    incident: Incident;
+}
+
+export interface SetIncidentFilters {
+    type: typeof PageType.IP__SET_FILTERS,
+    faramValues: object;
+    faramErrors: object;
+    pristine: boolean;
+}
+
+// response
+
+export interface SetResourceList {
+    type: typeof PageType.RP__SET_RESOURCE_LIST,
+    resourceList: Resource[],
+}
+
 export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
-    SetDistricts | SetMunicipalities | SetWards | SetDistrictGeoJson
+    SetDistricts | SetMunicipalities | SetWards | SetDistrictGeoJson |
+    SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
+    SetIncident | SetIncidentFilters | SetResourceList
 );
