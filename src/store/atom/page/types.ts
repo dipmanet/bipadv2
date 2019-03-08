@@ -20,11 +20,11 @@ export interface HazardType {
 export interface ResourceType {
 }
 export interface Alert {
-    hazard: number,
+    hazard: number;
 }
 export interface Incident {
-    id: number,
-    hazard: number,
+    id: number;
+    hazard: number;
 }
 export interface Resource {
 }
@@ -55,7 +55,7 @@ export interface DashboardPage {
         faramValues: object;
         faramErrors: object;
         pristine: boolean;
-    }
+    };
 }
 
 export interface IncidentPage {
@@ -64,7 +64,7 @@ export interface IncidentPage {
         faramValues: object;
         faramErrors: object;
         pristine: boolean;
-    }
+    };
 }
 
 export interface ResponsePage {
@@ -187,12 +187,12 @@ export interface SetIncidentList {
 }
 
 export interface SetIncident {
-    type: typeof PageType.IP__SET_INCIDENT,
+    type: typeof PageType.IP__SET_INCIDENT;
     incident: Incident;
 }
 
 export interface SetIncidentFilters {
-    type: typeof PageType.IP__SET_FILTERS,
+    type: typeof PageType.IP__SET_FILTERS;
     faramValues: object;
     faramErrors: object;
     pristine: boolean;
@@ -201,8 +201,8 @@ export interface SetIncidentFilters {
 // response
 
 export interface SetResourceList {
-    type: typeof PageType.RP__SET_RESOURCE_LIST,
-    resourceList: Resource[],
+    type: typeof PageType.RP__SET_RESOURCE_LIST;
+    resourceList: Resource[];
 }
 
 export type PageActionTypes = (

@@ -68,10 +68,10 @@ export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) 
     alertList,
 });
 
-export const setFiltersActionDP = ({ faramValues, faramErrors, pristine }: {
-    faramValues: object,
-    faramErrors: object,
-    pristine: boolean,
+export const setFiltesrActionDP = ({ faramValues, faramErrors, pristine }: {
+    faramValues: object;
+    faramErrors: object;
+    pristine: boolean;
 }) => ({
     type: Type.PageType.DP__SET_FILTERS,
     faramValues,
@@ -92,9 +92,9 @@ export const setIncidentActionIP = ({ incident }: { incident: Type.Incident}) =>
 });
 
 export const setFiltersActionIP = ({ faramValues, faramErrors, pristine }: {
-    faramValues: object,
-    faramErrors: object,
-    pristine: boolean,
+    faramValues: object;
+    faramErrors: object;
+    pristine: boolean;
 }) => ({
     type: Type.PageType.IP__SET_FILTERS,
     faramValues,
@@ -103,7 +103,8 @@ export const setFiltersActionIP = ({ faramValues, faramErrors, pristine }: {
 });
 
 // response action creator
-export const setResourceListActionRP = ({ resourceList }:  {resourceList: Type.Resource[]}) => ({
+
+export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Resource[]}) => ({
     type: Type.PageType.RP__SET_RESOURCE_LIST,
     resourceList,
 });
@@ -200,8 +201,8 @@ const setAlertList = (state: Type.PageState, action: Type.SetDashboardAlertList)
             // FIXME: find a good way to handle this
             deferedState.dashboardPage = initialState.dashboardPage;
         }
-        /* eslint-enable no-param-reassign */
         deferedState.dashboardPage.alertList = alertList;
+        /* eslint-enable no-param-reassign */
     });
     return newState;
 };
@@ -233,10 +234,11 @@ const setDashboardFilters = (state: Type.PageState, action: Type.SetDashboardFil
         if (pristine) {
             deferedState.dashboardPage.filters.pristine = pristine;
         }
+        /* eslint-enable no-param-reassign */
     });
 
     return newState;
-}
+};
 
 // incident page
 const setIncidentList = (state: Type.PageState, action: Type.SetIncidentList) => {
@@ -309,6 +311,7 @@ const setIncidentFilters = (state: Type.PageState, action: Type.SetIncidentFilte
         if (pristine) {
             deferedState.incidentPage.filters.pristine = pristine;
         }
+        /* eslint-enable no-param-reassign */
     });
 
     return newState;
@@ -316,7 +319,7 @@ const setIncidentFilters = (state: Type.PageState, action: Type.SetIncidentFilte
 
 // response page
 
-export const setResourceList = (state :Type.PageState, action: Type.SetResourceList) => {
+export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
     const {
         resourceList,
     } = action;
@@ -324,6 +327,7 @@ export const setResourceList = (state :Type.PageState, action: Type.SetResourceL
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.responsePage.resourceList = resourceList;
+        /* eslint-enable no-param-reassign */
     });
 
     return newState;

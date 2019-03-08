@@ -14,7 +14,7 @@ import withTracker from '#rscg/withTracker';
 
 import AppError from '#components/error/AppError';
 import { routes } from '#constants/routes';
-import { setRouteParamsAction } from '#redux';
+import { setRouteParamsAction } from '#actionCreators';
 
 const ErrorBoundBundle = boundError(AppError)(Bundle);
 

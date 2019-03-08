@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 
 import getUserConfirmation from '#utils/getUserConfirmation';
-import store, { AppState } from '#store';
+import store from '#store';
+import { AppState } from '#store/types';
 import { initializeStyles } from '#rsu/styles';
-
 import App from './App';
 
 interface State {

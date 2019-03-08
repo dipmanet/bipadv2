@@ -74,7 +74,6 @@ export const hazardTypeListAlertsDP = createSelector(
     dashboardPageSelector,
     hazardTypesSelector,
     ({ alertList }, hazardTypes) => {
-
         const counts: {[ key: number]: number } = {};
 
         alertList.forEach((alert) => {
@@ -92,22 +91,19 @@ export const hazardTypeListAlertsDP = createSelector(
             (isDefined(counts[b.id]) ? counts[b.id] : 0)
                 - (isDefined(counts[a.id]) ? counts[a.id] : 0)
         ));
-    }
-)
+    },
+);
 
 export const alertListSelectorDP = createSelector(
     dashboardPageSelector,
     hazardTypesSelector,
-    ({ alertList }, hazardTypes) => {
-
-        return alertList.map((alert) => {
-            // FIXME: potential problem
-            const { hazard: hazardId } = alert;
-            const hazardInfo = hazardTypes[hazardId] || {};
-            return { ...alert, hazardInfo };
-        });
-    },
-)
+    ({ alertList }, hazardTypes) => alertList.map((alert) => {
+        // FIXME: potential problem
+        const { hazard: hazardId } = alert;
+        const hazardInfo = hazardTypes[hazardId] || {};
+        return { ...alert, hazardInfo };
+    }),
+);
 
 // incidentPage
 
@@ -128,7 +124,6 @@ export const hazardTypeListIncidentsIP = createSelector(
     incidentPageSelector,
     hazardTypesSelector,
     ({ incidentList }, hazardTypes) => {
-
         const counts: {[ key: number]: number } = {};
 
         incidentList.forEach((incident) => {
@@ -151,14 +146,12 @@ export const hazardTypeListIncidentsIP = createSelector(
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
     hazardTypesSelector,
-    ({ incidentList }, hazardTypes) => {
-        return incidentList.map((incident) => {
-            // FIXME: potential problem
-            const { hazard: hazardId } = incident;
-            const hazardInfo = hazardTypes[hazardId] || {};
-            return { ...incident, hazardInfo };
-        });
-    },
+    ({ incidentList }, hazardTypes) => incidentList.map((incident) => {
+        // FIXME: potential problem
+        const { hazard: hazardId } = incident;
+        const hazardInfo = hazardTypes[hazardId] || {};
+        return { ...incident, hazardInfo };
+    }),
 );
 
 export const incidentSelector = createSelector(

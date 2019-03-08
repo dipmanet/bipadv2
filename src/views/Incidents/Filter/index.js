@@ -7,10 +7,12 @@ import Button from '#rsca/Button';
 import { hazardIcons } from '#resources/data';
 
 import {
-    hazardTypeListIncidentsIP,
     setFiltersActionIP,
+} from '#actionCreators';
+import {
+    hazardTypeListIncidentsIP,
     filtersSelectorIP,
-} from '#redux';
+} from '#selectors';
 
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';

@@ -13,11 +13,12 @@ import {
 } from '#constants';
 
 import {
+    setMapStyleAction,
+} from '#actionCreators';
+import {
     routePathKeySelector,
     mapStylesSelector,
-    setMapStyleAction,
-} from '#redux';
-
+} from '#selectors';
 
 import styles from './styles.scss';
 

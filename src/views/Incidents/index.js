@@ -9,10 +9,12 @@ import {
 } from '#request';
 
 import {
-    incidentListSelectorIP,
     setIncidentListActionIP,
+} from '#actionCreators';
+import {
+    incidentListSelectorIP,
     filtersValuesSelectorIP,
-} from '#redux';
+} from '#selectors';
 
 import Page from '#components/Page';
 
@@ -20,8 +22,8 @@ import { transformDateRangeFilterParam } from '#utils/transformations';
 
 import IncidentsFilter from './Filter';
 import Map from './Map';
-
 import LeftPane from './LeftPane';
+
 import styles from './styles.scss';
 
 

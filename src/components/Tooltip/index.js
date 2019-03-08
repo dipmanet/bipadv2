@@ -10,7 +10,8 @@ import Loss from '#components/Loss';
 
 import { mapToList } from '@togglecorp/fujs';
 
-import { wardsMapSelector } from '#redux';
+import { wardsMapSelector } from '#selectors';
+
 import { toTitleCase } from '#utils/common';
 
 import styles from './styles.scss';

@@ -11,7 +11,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-} from '#redux';
+} from '#selectors';
 
 import styles from './styles.scss';
 

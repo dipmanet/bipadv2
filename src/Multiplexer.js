@@ -30,14 +30,16 @@ import {
 } from '#request';
 
 import {
-    mapStyleSelector,
     notifyHideAction,
     setProvincesAction,
     setDistrictsAction,
     setMunicipalitiesAction,
     setWardsAction,
     setHazardTypesAction,
-} from '#redux';
+} from '#actionCreators';
+import {
+    mapStyleSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 

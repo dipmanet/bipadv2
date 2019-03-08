@@ -7,10 +7,13 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 
 import {
+    setFiltersActionDP,
+} from '#actionCreators';
+import {
     hazardTypeListAlertsDP,
     filtersSelectorDP,
-    setFiltersActionDP,
-} from '#redux';
+} from '#selectors';
+
 import { hazardIcons } from '#resources/data';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
