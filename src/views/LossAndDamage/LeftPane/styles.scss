@@ -1,0 +1,25 @@
+@import '~base-scss/base';
+
+.left-pane {
+    .show-detials-button-container {
+        transform-origin: 0 0;
+
+        .show-detials-button {
+            padding: $spacing-extra-small $spacing-small;
+            color: $color-danger;
+            font-size: $font-size-extra-large;
+        }
+    }
+
+    .visualizations-container {
+        transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator-light;
+        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+        width: 320px;
+
+        .visualizations {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

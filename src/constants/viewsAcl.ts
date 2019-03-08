@@ -10,6 +10,7 @@ const acl = {
     capacityAndResources: {},
     incidents: {},
     response: {},
+    lossAndDamage: {},
 
     projectDenied: {},
     fourHundredThree: {},
