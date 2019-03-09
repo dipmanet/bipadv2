@@ -9,12 +9,14 @@ import {
 } from '#request';
 
 import {
+    setIncidentActionIP,
+    setResourceListActionRP,
+} from '#actionCreators';
+import {
     incidentIdFromRouteSelector,
     incidentSelector,
-    setIncidentActionIP,
     resourceListSelectorRP,
-    setResourceListActionRP,
-} from '#redux';
+} from '#selectors';
 
 import Page from '#components/Page';
 import Tooltip from '#components/Tooltip';

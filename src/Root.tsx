@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 
 import getUserConfirmation from '#utils/getUserConfirmation';
-import store, { AppState } from '#store';
+import store from '#store';
+import { AppState } from '#store/types';
 import { initializeStyles } from '#rsu/styles';
-
 import App from './App';
 
 interface State {
@@ -23,23 +23,29 @@ export default class Root extends React.Component<Props, State> {
         super(props);
 
         this.state = { rehydrated: false };
-        this.store = store;
+        // FIXME: later
+        this.store = store as Store<AppState>;
 
         initializeStyles();
 
         console.info('React version:', React.version);
     }
 
-    public componentWillMount() {
-        const afterRehydrateCallback = () => this.setState({ rehydrated: true });
+    public componentDidMount() {
         // NOTE: We can also use PersistGate instead of callback to wait for rehydration
-        persistStore(this.store, undefined, afterRehydrateCallback);
+        persistStore(this.store, undefined, this.setRehydrated);
+    }
+
+    private setRehydrated = () => {
+        this.setState({ rehydrated: true });
     }
 
     private store: Store<AppState>;
 
     public render() {
-        if (!this.state.rehydrated) {
+        const { rehydrated } = this.state;
+
+        if (!rehydrated) {
             // NOTE: showing empty div, this lasts for a fraction of a second
             return <div />;
         }

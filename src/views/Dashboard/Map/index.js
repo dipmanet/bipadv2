@@ -7,10 +7,12 @@ import { isTruthy } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 import {
+    setDistrictsGeoJsonAction,
+} from '#actionCreators';
+import {
     filtersSelectorDP,
     districtsGeoJsonSelector,
-    setDistrictsGeoJsonAction,
-} from '#redux';
+} from '#selectors';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';

@@ -45,7 +45,7 @@ const defaultProps = {
 };
 
 const icons = {
-    hospital: healthFacilityIcon,
+    health: healthFacilityIcon,
     volunteer: groupIcon,
     education: educationIcon,
     finance: financeIcon,

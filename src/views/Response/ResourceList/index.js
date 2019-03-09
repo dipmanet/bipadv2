@@ -4,7 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
 
-import Hospital from './resources/Hospital';
+import Health from './resources/Health';
 import Volunteer from './resources/Volunteer';
 import Education from './resources/Education';
 import Finance from './resources/Finance';
@@ -17,7 +17,7 @@ const defaultProps = {
 };
 
 const resourceComponents = {
-    hospital: Hospital,
+    health: Health,
     volunteer: Volunteer,
     education: Education,
     finance: Finance,
@@ -46,7 +46,7 @@ export default class Response extends React.PureComponent {
 
     getResources = (resourceList) => {
         const resources = {
-            hospital: [],
+            health: [],
             volunteer: [],
             education: [],
             finance: [],

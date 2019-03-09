@@ -10,11 +10,13 @@ import {
 import { transformDateRangeFilterParam } from '#utils/transformations';
 
 import {
-    alertListSelectorDP,
     setAlertListActionDP,
+} from '#actionCreators';
+import {
+    alertListSelectorDP,
     hazardTypesSelector,
     filtersValuesSelectorDP,
-} from '#redux';
+} from '#selectors';
 
 import Page from '#components/Page';
 

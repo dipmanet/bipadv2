@@ -7,11 +7,13 @@ import Button from '#rsca/Button';
 import { iconNames } from '#constants';
 
 import {
-    hazardTypesSelector,
     setFiltersActionIP,
+} from '#actionCreators';
+import {
+    hazardTypesSelector,
     filtersSelectorIP,
     resourceTypeListSelector,
-} from '#redux';
+} from '#selectors';
 
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
