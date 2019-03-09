@@ -28,6 +28,10 @@ export default class DistanceOutput extends React.PureComponent {
         let amount = valueFromProps;
         let unit = 'Km';
 
+        if (!amount) {
+            return null;
+        }
+
         if (amount < 1) {
             amount *= 1000;
             unit = 'm';

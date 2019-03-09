@@ -18,7 +18,7 @@ export default class Resource extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
-    static keySelector = d => d.title;
+    static keySelector = d => `${d.title}-${d.distance}`;
 
     getResourceElementRendererParams = (_, d) => d
 

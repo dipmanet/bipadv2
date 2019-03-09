@@ -13,7 +13,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-export default class Hospital extends React.PureComponent {
+export default class Health extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
