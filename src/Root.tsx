@@ -23,7 +23,8 @@ export default class Root extends React.Component<Props, State> {
         super(props);
 
         this.state = { rehydrated: false };
-        this.store = store;
+        // FIXME: later
+        this.store = store as Store<AppState>;
 
         initializeStyles();
 
