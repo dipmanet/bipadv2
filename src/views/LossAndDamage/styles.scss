@@ -1,0 +1,10 @@
+@import '~base-scss/base';
+
+.left {
+    background-color: $color-foreground;
+
+    .graph {
+        width: 500px;
+        height: 80vh;
+    }
+}

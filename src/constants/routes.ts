@@ -51,8 +51,8 @@ export const routes = {
     lossAndDamage: {
         order: 6,
         type: ROUTE.public,
-        path: '/incidents',
-        loader: () => import('../views/Incidents'),
+        path: '/loss-and-damage',
+        loader: () => import('../views/LossAndDamage'),
     },
 
     drrProfileMapping: {

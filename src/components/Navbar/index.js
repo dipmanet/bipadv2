@@ -47,7 +47,7 @@ const pages = [
         title: 'Loss & Damage',
         link: 'lossAndDamage',
         iconName: iconNames.lossAndDamange,
-        disabled: true,
+        disabled: false,
     },
     {
         title: 'Real Time',
