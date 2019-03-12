@@ -100,7 +100,7 @@ const mapDispatchToProps = dispatch => ({
 
 const requests = {
     lossAndDamageRequest: {
-        url: '/incident/?fields=loss.peoples.age,loss.peoples.status,point,polygon,incident_on&expand=loss.peoples',
+        url: '/incident/?expand=loss.peoples',
         onMount: true,
     },
 };

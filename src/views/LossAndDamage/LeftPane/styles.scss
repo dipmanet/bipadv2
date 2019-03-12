@@ -15,11 +15,39 @@
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
         height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        background-color: $color-foreground;
         width: 320px;
 
         .visualizations {
-            width: 100%;
-            height: 100%;
+            .header {
+                display: flex;
+                flex-shrink: 0;
+
+                .heading {
+                    flex-grow: 1;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
+            }
+
+            .content {
+                padding: $spacing-medium;
+
+                .count-chart {
+                    height: 250px;
+                }
+
+                .estimate-chart {
+                    height: 250px;
+                }
+
+                .parallel-chart {
+                    height: 250px;
+                }
+            }
         }
     }
 }
