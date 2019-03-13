@@ -1,17 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
+import {
+    _cs,
+    mapToList,
+} from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
 
+import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
+import DonutChart from '#rscz/DonutChart';
+import ParallelCoordinates from '#rscz/ParallelCoordinates';
+
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
+
+import {
+    hazardTypesSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     pending: PropTypes.bool,
 };
 
@@ -20,8 +34,13 @@ const defaultProps = {
     pending: false,
 };
 
+const barChartValueSelector = d => d.value;
+const barChartLabelSelector = d => d.label;
+const donutChartValueSelector = d => d.value;
+const donutChartLabelSelector = d => d.label;
+const parallelLabelSelector = d => d.label;
 
-export default class LeftPane extends React.PureComponent {
+class LeftPane extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
@@ -33,12 +52,124 @@ export default class LeftPane extends React.PureComponent {
         };
     }
 
+    getHazardLossEstimation = memoize((lossAndDamageList) => {
+        const { hazardTypes } = this.props;
+
+        const lossEstimation = lossAndDamageList
+            .filter(v => (
+                v.loss !== undefined &&
+                v.loss.estimatedLoss
+            ))
+            .reduce((acc, current) => {
+                if (acc[current.hazard] === undefined) {
+                    acc[current.hazard] = 0;
+                } else {
+                    acc[current.hazard] += current.loss.estimatedLoss;
+                }
+                return acc;
+            }, {});
+
+        return mapToList(
+            lossEstimation,
+            (d, k) => ({
+                label: hazardTypes[k].title,
+                value: d,
+            }),
+        );
+    });
+
+    getHazardLossType = memoize((lossAndDamageList) => {
+        const { hazardTypes } = this.props;
+
+        const hazardLossType = lossAndDamageList
+            .filter(v => (
+                v.loss !== undefined && (
+                    v.loss.peopleDeathCount ||
+                    v.loss.livestockDestroyedCount ||
+                    v.loss.infrastructureDestroyedCount
+                )))
+            .reduce((acc, current) => {
+                if (acc[current.hazard] === undefined) {
+                    acc[current.hazard] = {
+                        people: 0,
+                        infrastructure: 0,
+                        livestock: 0,
+                    };
+                } else {
+                    const {
+                        peopleDeathCount = 0,
+                        livestockDestroyedCount = 0,
+                        infrastructureDestroyedCount = 0,
+                    } = current.loss;
+
+                    acc[current.hazard].people += peopleDeathCount;
+                    acc[current.hazard].infrastructure +=
+                        infrastructureDestroyedCount;
+                    acc[current.hazard].livestock += livestockDestroyedCount;
+                }
+                return acc;
+            }, {});
+
+        return mapToList(
+            hazardLossType,
+            (d, k) => ({
+                ...d,
+                label: hazardTypes[k].title,
+            }),
+        );
+    });
+
+    getLossTypeCount = memoize((lossAndDamageList) => {
+        const losses = lossAndDamageList.map(item => item.loss).filter(v => v !== undefined);
+
+        if (losses.length === 0) {
+            return [];
+        }
+
+        const acc = {
+            peopleDeathCount: 0,
+            livestockDestroyedCount: 0,
+            infrastructureDestroyedCount: 0,
+        };
+
+        losses.forEach((current) => {
+            const {
+                peopleDeathCount = 0,
+                livestockDestroyedCount = 0,
+                infrastructureDestroyedCount = 0,
+            } = current;
+            acc.peopleDeathCount += peopleDeathCount;
+            acc.livestockDestroyedCount += livestockDestroyedCount;
+            acc.infrastructureDestroyedCount += infrastructureDestroyedCount;
+        });
+
+        return mapToList(
+            acc,
+            (d, k) => ({
+                label: k,
+                value: d,
+            }),
+        );
+    });
+
+    handleShowDetailsButtonClick = () => {
+        this.setState({ showDetails: true });
+    }
+
+    handleCollapseDetailsView = () => {
+        this.setState({ showDetails: false });
+    }
+
     render() {
         const {
             className,
             lossAndDamageList,
             pending,
         } = this.props;
+
+        const countData = this.getLossTypeCount(lossAndDamageList);
+        const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
+        const hazardLossType = this.getHazardLossType(lossAndDamageList);
 
         const {
             showDetails,
@@ -54,8 +185,8 @@ export default class LeftPane extends React.PureComponent {
                         <Button
                             className={styles.showDetailsButton}
                             onClick={this.handleShowDetailsButtonClick}
-                            iconName={iconNames.chevronDown}
-                            title="Show detilas"
+                            iconName={iconNames.lossAndDamange}
+                            title="Show details"
                         />
                         <Spinner loading={pending} />
                     </React.Fragment>
@@ -63,10 +194,54 @@ export default class LeftPane extends React.PureComponent {
                 expandedViewContainerClassName={styles.visualizationsContainer}
                 expandedView={
                     <div className={styles.visualizations}>
-                        All the viz goes here
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Details
+                            </h4>
+                            <Button
+                                className={styles.collapseDetailsButton}
+                                onClick={this.handleCollapseDetailsView}
+                                iconName={iconNames.shrink}
+                                title="Hide detailed view"
+                                transparent
+                            />
+                        </header>
+                        <div className={styles.content}>
+                            <SimpleVerticalBarChart
+                                className={styles.countChart}
+                                data={countData}
+                                labelSelector={barChartLabelSelector}
+                                valueSelector={barChartValueSelector}
+                            />
+                            <DonutChart
+                                sideLengthRatio={0.5}
+                                className={styles.estimateChart}
+                                data={hazardLossEstimate}
+                                labelSelector={donutChartLabelSelector}
+                                valueSelector={donutChartValueSelector}
+                            />
+                            <ParallelCoordinates
+                                data={hazardLossType}
+                                className={styles.parallelChart}
+                                labelName="label"
+                                labelSelector={parallelLabelSelector}
+                                margins={{
+                                    top: 40,
+                                    right: 20,
+                                    bottom: 20,
+                                    left: 20,
+                                }}
+                            />
+                        </div>
                     </div>
                 }
             />
         );
     }
 }
+
+const mapStateToProps = state => ({
+    hazardTypes: hazardTypesSelector(state),
+});
+
+export default connect(mapStateToProps)(LeftPane);
