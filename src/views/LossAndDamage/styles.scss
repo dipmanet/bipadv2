@@ -1,10 +1,35 @@
 @import '~base-scss/base';
 
 .left {
-    background-color: $color-foreground;
+    // background-color: $color-foreground;
 
     .graph {
+        border-radius: 5px;
         width: 500px;
-        height: 80vh;
+        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+    }
+}
+
+.main {
+    .container {
+        border-radius: 3px;
+        background-color: #fff;
+        padding: $spacing-medium $spacing-medium-alt;
+
+        .info {
+            display: flex;
+
+            >* {
+                padding: $spacing-small;
+            }
+        }
+
+        .bottom {
+            display: flex;
+
+            .play-button {
+                font-size: $font-size-large;
+            }
+        }
     }
 }

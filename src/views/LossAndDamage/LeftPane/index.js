@@ -184,6 +184,7 @@ class LeftPane extends React.PureComponent {
             keySelector={itemSelector}
             labelSelector={legendLabelSelector}
             colorSelector={legendColorSelector}
+            emptyComponent={() => ''}
         />
     )
 
@@ -222,47 +223,19 @@ class LeftPane extends React.PureComponent {
                 expandedView={
                     <div className={styles.visualizations}>
                         <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Details
-                            </h4>
+                            <h3 className={styles.heading}>
+                                Summary
+                            </h3>
+                            <Spinner loading={pending} />
                             <Button
                                 className={styles.collapseDetailsButton}
                                 onClick={this.handleCollapseDetailsView}
-                                iconName={iconNames.shrink}
+                                iconName={iconNames.chevronUp}
                                 title="Hide detailed view"
                                 transparent
                             />
                         </header>
                         <div className={styles.content}>
-                            <div className={styles.barContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Loss count
-                                    </h4>
-                                </header>
-                                <SimpleVerticalBarChart
-                                    className={styles.chart}
-                                    data={countData}
-                                    labelSelector={barChartLabelSelector}
-                                    valueSelector={barChartValueSelector}
-                                />
-                            </div>
-                            <div className={styles.donutContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Estimated Monetary Loss
-                                    </h4>
-                                </header>
-                                <DonutChart
-                                    sideLengthRatio={0.5}
-                                    className={styles.chart}
-                                    data={hazardLossEstimate}
-                                    labelSelector={donutChartLabelSelector}
-                                    valueSelector={donutChartValueSelector}
-                                    colorSelector={donutChartColorSelector}
-                                />
-                                { this.renderLegend(hazardLossEstimate) }
-                            </div>
                             <div className={styles.parallelContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -283,6 +256,35 @@ class LeftPane extends React.PureComponent {
                                     }}
                                 />
                                 { this.renderLegend(hazardLossType) }
+                            </div>
+                            <div className={styles.donutContainer}>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Estimated Monetary Loss
+                                    </h4>
+                                </header>
+                                <DonutChart
+                                    sideLengthRatio={0.4}
+                                    className={styles.chart}
+                                    data={hazardLossEstimate}
+                                    labelSelector={donutChartLabelSelector}
+                                    valueSelector={donutChartValueSelector}
+                                    colorSelector={donutChartColorSelector}
+                                />
+                                { this.renderLegend(hazardLossEstimate) }
+                            </div>
+                            <div className={styles.barContainer}>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Loss count
+                                    </h4>
+                                </header>
+                                <SimpleVerticalBarChart
+                                    className={styles.chart}
+                                    data={countData}
+                                    labelSelector={barChartLabelSelector}
+                                    valueSelector={barChartValueSelector}
+                                />
                             </div>
                         </div>
                     </div>

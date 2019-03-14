@@ -1,0 +1,13 @@
+@import '~base-scss/base';
+
+.seekbar {
+    background-color: rgba(0, 0, 0, .1);
+    width: 600px;
+    min-height: 3px;
+    // height: 24px;
+
+    .progress {
+        background-color: $color-accent;
+        height: 100%;
+    }
+}
