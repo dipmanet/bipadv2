@@ -1,3 +1,7 @@
+import { Obj } from '@togglecorp/fujs';
+import { Filters } from '#store/atom/page/types';
+
+
 const addDaysToDate = (date: Date, days: number) => {
     const newDate = new Date(date.valueOf());
     newDate.setDate(newDate.getDate() + days);
@@ -13,28 +17,29 @@ const pastDaysToDateRange = (pastDays: number) => {
     };
 };
 
-interface Filters {
-    dateRange?: number;
-}
-
 // eslint-disable-next-line import/prefer-default-export, arrow-parens
-export const transformDateRangeFilterParam = <T extends Filters>(
-    filters: T,
+export const transformDateRangeFilterParam = (
+    filters: Filters['faramValues'],
     destParamName: string,
-) => {
-    /* Transforms object with dateRange key to {
-     * <destParamName>__lt: <iso>
-     * <destParamName>__gt: <iso>
-     * }
-     */
-    const { dateRange, ...other } = filters;
+): Obj<string | number | undefined> => {
+    const {
+        dateRange,
+        region,
+        ...other
+    } = filters;
+    let outputFilters = { ...other };
     if (dateRange) {
+        /* Transforms object with dateRange key to {
+         * <destParamName>__lt: <iso>
+         * <destParamName>__gt: <iso>
+         * }
+         */
         const { startDate, endDate } = pastDaysToDateRange(dateRange);
-        return {
-            ...other,
+        outputFilters = {
+            ...outputFilters,
             [`${destParamName}__lt`]: endDate.toISOString(),
             [`${destParamName}__gt`]: startDate.toISOString(),
         };
     }
-    return filters;
+    return outputFilters;
 };

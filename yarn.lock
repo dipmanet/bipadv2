@@ -1107,10 +1107,10 @@
   dependencies:
     "@togglecorp/fujs" "^1.2.1"
 
-"@togglecorp/react-rest-request@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-2.4.1.tgz#4d34d675c1b99c2304e30c93c8f0c9fbbed0f60f"
-  integrity sha512-dD+DFC2l8WB+ZGrWMiEDSJiUjf6phDvRn1QAYUvVnhR5lFgFLU+7lEoa2omils460Nw+itlKOCk7/XVDhVWFvg==
+"@togglecorp/react-rest-request@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-2.4.2.tgz#8bad74fe96997efbf4a1142f745fbaa87f5ebb2a"
+  integrity sha512-5+z+OxfEjNFKd1Y81mvfIa0RNLMbJn9JawUsPN22MI2bieiy57YUzS/bYsCQUQGv05WdjpXX6gVnWjchpRADtw==
   dependencies:
     "@togglecorp/fujs" "^1.2.1"
     hoist-non-react-statics "^3.2.1"
