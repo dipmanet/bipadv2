@@ -1,18 +1,17 @@
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import {
     createRequestCoordinator,
     methods,
 } from '@togglecorp/react-rest-request';
+import { AppState } from '#store/types';
 
+import store from '#store';
+import {
+    mapStyleSelector,
+} from '#selectors';
 import schema from '#schema';
 import { sanitizeResponse } from '#utils/common';
 
 const wsEndpoint = 'https://bipad.nepware.com/api/v1';
-
-const mapStateToProps = () => ({
-    // myToken: {},
-});
 
 // FIXME: get this from react-rest-request
 interface CoordinatorAttributes {
@@ -34,84 +33,78 @@ interface CoordinatorAttributes {
 // FIXME: don't know why eslint disable is required right now
 // eslint-disable-next-line arrow-parens
 export const createConnectedRequestCoordinator = <OwnProps>() => {
-    type Props = OwnProps & PropsFromDispatch & PropsFromState;
-    // type NextProps = Pick<Props, Exclude<keyof OwnProps, 'myToken'>>;
-    type NextProps = Props;
+    type Props = OwnProps;
 
-    interface PropsFromState {
-        // myToken: Token;
-    }
+    const requestor = createRequestCoordinator({
+        transformParams: (data: CoordinatorAttributes) => {
+            const {
+                body,
+                method,
+            } = data;
+            return {
+                method: method || methods.GET,
+                body: JSON.stringify(body),
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+            };
+        },
+        transformProps: (props: Props) => {
+            const {
+                // myOwnMapStyle, // eslint-disable-line no-unused-props
+                ...otherProps
+            } = props;
+            // FIXME: persistCombineReducers still doesn't support ts fully
+            const mapStyle = mapStyleSelector(store.getState() as AppState);
+            console.warn('Map style is', mapStyle);
+            return otherProps;
+        },
 
-    interface PropsFromDispatch {
-    }
+        transformUrl: (url: string) => {
+            if (/^https?:\/\//i.test(url)) {
+                return url;
+            }
 
-    return compose(
-        connect(mapStateToProps),
-        createRequestCoordinator({
-            transformParams: (data: CoordinatorAttributes) => {
-                const {
-                    body,
-                    method,
-                } = data;
-                return {
-                    method: method || methods.GET,
-                    body: JSON.stringify(body),
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json; charset=utf-8',
-                    },
-                };
-            },
-            transformProps: (props: Props) => {
-                const {
-                    // token, // eslint-disable-line no-unused-vars
-                    ...otherProps
-                } = props;
-                return otherProps;
-            },
+            return `${wsEndpoint}${url}`;
+        },
 
-            transformUrl: (url: string) => {
-                if (/^https?:\/\//i.test(url)) {
-                    return url;
+        transformResponse: (body: object, request: CoordinatorAttributes) => {
+            const {
+                url,
+                method,
+                extras: requestOptions,
+            } = request;
+            const sanitizedResponse = sanitizeResponse(body);
+
+            const extras = requestOptions as { schemaName?: string };
+            if (!extras || extras.schemaName === undefined) {
+                // NOTE: usually there is no response body for DELETE
+                if (method !== methods.DELETE) {
+                    console.error(`Schema is not defined for ${url} ${method}`);
                 }
-
-                return `${wsEndpoint}${url}`;
-            },
-
-            transformResponse: (body: object, request: CoordinatorAttributes) => {
-                const {
-                    url,
-                    method,
-                    extras: requestOptions,
-                } = request;
-                const sanitizedResponse = sanitizeResponse(body);
-
-                const extras = requestOptions as { schemaName?: string };
-                if (!extras || extras.schemaName === undefined) {
-                    // NOTE: usually there is no response body for DELETE
-                    if (method !== methods.DELETE) {
-                        console.error(`Schema is not defined for ${url} ${method}`);
-                    }
-                } else {
-                    try {
-                        schema.validate(sanitizedResponse, extras.schemaName);
-                    } catch (e) {
-                        console.error(url, method, sanitizedResponse, e.message);
-                        throw (e);
-                    }
+            } else {
+                try {
+                    schema.validate(sanitizedResponse, extras.schemaName);
+                } catch (e) {
+                    console.error(url, method, sanitizedResponse, e.message);
+                    throw (e);
                 }
+            }
 
-                return sanitizedResponse;
-            },
+            return sanitizedResponse;
+        },
 
-            transformErrors: (response: { errors: string[] }) => {
-                const faramErrors = response.errors;
-                return {
-                    response,
-                    faramErrors,
-                };
-            },
-        }),
-    );
+        transformErrors: (response: { errors: string[] }) => {
+            const faramErrors = response.errors;
+            return {
+                response,
+                faramErrors,
+            };
+        },
+    });
+
+    return requestor;
 };
+
 export * from '@togglecorp/react-rest-request';
