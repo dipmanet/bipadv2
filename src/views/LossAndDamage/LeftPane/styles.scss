@@ -12,14 +12,14 @@
     }
 
     .visualizations-container {
-        transform-origin: 0 0;
-        border: $width-separator-thin solid $color-separator-light;
-        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
         display: flex;
         position: relative;
         flex-direction: column;
+        transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator-light;
         background-color: $color-foreground;
         width: 320px;
+        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
 
         .visualizations {
             .header {
@@ -34,18 +34,64 @@
             }
 
             .content {
-                padding: $spacing-medium;
+                padding: $spacing-small;
 
-                .count-chart {
-                    height: 250px;
+                .container {
+                    display: flex;
+                    flex-direction: column;
+                    height: 300px;
+
+                    .header {
+                        flex-shrink: 0;
+                        padding-top: $spacing-medium;
+
+                        .heading {
+                            padding: $spacing-medium;
+                            text-align: flex-start;
+                            color: $color-primary;
+                        }
+                    }
+
+                    .chart {
+                        flex-grow: 1;
+                    }
+
+                    .legend {
+                        display: flex;
+                        flex-wrap: wrap;
+                        margin-top: $spacing-medium;
+
+                        .legend-item {
+                            margin-right: $spacing-medium;
+                        }
+                    }
                 }
 
-                .estimate-chart {
-                    height: 250px;
+                .bar-container {
+                    display: flex;
+                    flex-direction: column;
+
+                    .header {
+                        flex-shrink: 0;
+                        padding-top: $spacing-medium;
+
+                        .heading {
+                            padding: $spacing-medium;
+                            text-align: flex-start;
+                            color: $color-primary;
+                        }
+                    }
+
+                    .chart {
+                        height: 240px;
+                    }
                 }
 
-                .parallel-chart {
-                    height: 250px;
+                .donut-container {
+                    @extend .container;
+                }
+                .parallel-container {
+                    @extend .container;
                 }
             }
         }
