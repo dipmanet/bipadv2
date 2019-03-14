@@ -7,7 +7,6 @@ import {
     withRouter,
 } from 'react-router-dom';
 import memoize from 'memoize-one';
-import { connect } from 'react-redux';
 import { mapToMap } from '@togglecorp/fujs';
 
 import Map from '#rscz/Map/index';
@@ -24,23 +23,6 @@ import {
     routes,
 } from '#constants';
 
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-} from '#request';
-
-import {
-    notifyHideAction,
-    setProvincesAction,
-    setDistrictsAction,
-    setMunicipalitiesAction,
-    setWardsAction,
-    setHazardTypesAction,
-} from '#actionCreators';
-import {
-    mapStyleSelector,
-} from '#selectors';
-
 import styles from './styles.scss';
 
 const ROUTE = {
@@ -50,6 +32,7 @@ const ROUTE = {
 };
 
 const nepalBounds = turf.bbox(nepalGeoJson);
+
 const views = mapToMap(
     routes,
     undefined,
@@ -63,13 +46,30 @@ const views = mapToMap(
     ),
 );
 
+const loadingStyle = {
+    zIndex: '1111',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '200px',
+    height: '60px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '18px',
+    backgroundColor: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.2)',
+    borderRadius: '3px',
+};
+
 const propTypes = {
+    pending: PropTypes.bool,
     mapStyle: PropTypes.string,
-    notifyHide: PropTypes.func.isRequired,
-    requests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
+    pending: false,
     mapStyle: undefined,
 };
 
@@ -78,11 +78,6 @@ class Multiplexer extends React.PureComponent {
     static defaultProps = defaultProps;
 
     getMapRoutes = memoize(ro => ro.map(this.renderRoute))
-
-    handleToastClose = () => {
-        const { notifyHide } = this.props;
-        notifyHide();
-    }
 
     renderRoute = memoize((routeId) => {
         const view = views[routeId];
@@ -135,25 +130,11 @@ class Multiplexer extends React.PureComponent {
 
     render() {
         const {
+            pending,
             mapStyle,
-            requests: {
-                provinceListRequest: { pending: provincePending },
-                districtListRequest: { pending: districtPending },
-                municipalityListRequest: { pending: municipalityPending },
-                wardListRequest: { pending: wardListPending },
-                hazardTypesRequest: { pending: hazardTypePending },
-            },
         } = this.props;
 
         const mapRoutes = this.getMapRoutes(routesOrder);
-
-        const pending = (
-            provincePending ||
-            districtPending ||
-            municipalityPending ||
-            wardListPending ||
-            hazardTypePending
-        );
 
         return (
             <Fragment>
@@ -168,24 +149,7 @@ class Multiplexer extends React.PureComponent {
                         minZoom={3}
                     >
                         { pending ? (
-                            <div
-                                style={{
-                                    zIndex: '1111',
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    width: '200px',
-                                    height: '60px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '18px',
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid rgba(0, 0, 0, 0.2)',
-                                    borderRadius: '3px',
-                                }}
-                            >
+                            <div style={loadingStyle}>
                                 Loading Resources...
                             </div>
                         ) : (
@@ -201,79 +165,5 @@ class Multiplexer extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => ({
-    mapStyle: mapStyleSelector(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    notifyHide: params => dispatch(notifyHideAction(params)),
-    setProvinces: params => dispatch(setProvincesAction(params)),
-    setDistricts: params => dispatch(setDistrictsAction(params)),
-    setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
-    setWards: params => dispatch(setWardsAction(params)),
-    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
-});
-
-const requests = {
-    provinceListRequest: {
-        url: '/province/',
-        onSuccess: ({ response, props: { setProvinces } }) => {
-            const { results: provinces = [] } = response;
-            setProvinces({ provinces });
-        },
-        extras: {
-            schemaName: 'provinceResponse',
-        },
-        onMount: true,
-    },
-    districtListRequest: {
-        url: '/district/',
-        onSuccess: ({ response, props: { setDistricts } }) => {
-            const { results: districts = [] } = response;
-            setDistricts({ districts });
-        },
-        extras: {
-            schemaName: 'districtResponse',
-        },
-        onMount: true,
-    },
-    municipalityListRequest: {
-        url: '/municipality/',
-        onSuccess: ({ response, props: { setMunicipalities } }) => {
-            const { results: municipalities = [] } = response;
-            setMunicipalities({ municipalities });
-        },
-        extras: {
-            schemaName: 'municipalityResponse',
-        },
-        onMount: true,
-    },
-    wardListRequest: {
-        url: '/ward/',
-        onSuccess: ({ response, props: { setWards } }) => {
-            const { results: wards = [] } = response;
-            setWards({ wards });
-        },
-        extras: {
-            schemaName: 'wardResponse',
-        },
-        onMount: true,
-    },
-    hazardTypesRequest: {
-        url: '/hazard/',
-        onSuccess: ({ response, props: { setHazardTypes } }) => {
-            const { results: hazardTypes = [] } = response;
-            setHazardTypes({ hazardTypes });
-        },
-        onMount: true,
-    },
-};
-
 // NOTE: withRouter is required here so that link change are updated
-export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(
-        createConnectedRequestCoordinator()(
-            createRequestClient(requests)(Multiplexer),
-        ),
-    ),
-);
+export default withRouter(Multiplexer);
