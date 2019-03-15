@@ -32,10 +32,10 @@ export default class Loss extends React.PureComponent {
 
         const {
             // FIXME: Remove random numbers: just for aesthetic purpose until api is ready
-            peopleDeathCount = parseInt(Math.random() * 100, 10),
-            livestockDestroyedCount = parseInt(Math.random() * 100, 10),
-            infrastructureDestroyedCount = parseInt(Math.random() * 100, 10),
-            estimatedLoss = parseInt(Math.random() * 100, 10),
+            peopleDeathCount = 0,
+            livestockDestroyedCount = 0,
+            infrastructureDestroyedCount = 0,
+            estimatedLoss = 0,
             description = 'Not provided',
         } = loss;
 
