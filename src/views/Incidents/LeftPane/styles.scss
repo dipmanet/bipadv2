@@ -50,16 +50,66 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 }
             }
 
-            .incident-list {
-                flex-grow: 1;
-                overflow: auto;
+            .content {
+                display: flex;
+                flex-direction: column;
 
-                .incident {
-                    cursor: pointer;
-                    padding: $spacing-medium $spacing-medium-alt;
+                .container {
+                    min-height: 240px;
+                    display: flex;
+                    flex-direction: column;
 
-                    &:hover {
-                        background-color: rgba(0, 0, 0, .05);
+                    .header {
+                        flex-shrink: 0;
+                        padding-top: $spacing-medium;
+
+                        .heading {
+                            padding: $spacing-medium;
+                            text-align: flex-start;
+                            color: $color-primary;
+                        }
+                    }
+
+                    .chart {
+                        flex-grow: 1;
+                    }
+
+                    .legend {
+                        align-self: center;
+                        display: flex;
+                        flex-wrap: wrap;
+                        margin-top: $spacing-medium;
+
+                        .legend-item {
+                            margin-right: $spacing-medium;
+                        }
+                    }
+                }
+
+                .bar-container {
+                    @extend .container;
+                }
+
+                .treemap-container {
+                    @extend .container;
+                }
+
+                .donut-container {
+                    @extend .container;
+                }
+
+                .incident-list {
+                    flex-direction: column;
+                    flex-grow: 1;
+                    overflow: auto;
+
+                    .incident {
+                        cursor: pointer;
+                        padding: $spacing-medium $spacing-medium-alt;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, .05);
+                        }
                     }
                 }
             }
