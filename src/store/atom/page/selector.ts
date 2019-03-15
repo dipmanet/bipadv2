@@ -2,7 +2,9 @@ import { createSelector } from 'reselect';
 import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
-import { incidentIdFromRouteSelector } from '../route/selector';
+// import { incidentIdFromRouteSelector } from '../route/selector';
+
+const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
 export const hazardTypesSelector = ({ page }: AppState) =>
     page.hazardTypes;
@@ -155,7 +157,7 @@ export const incidentListSelectorIP = createSelector(
 );
 
 export const incidentSelector = createSelector(
-    incidentIdFromRouteSelector,
+    incidentIdSelector,
     incidentPageSelector,
     (id, { incidentList }) => {
         const incident = incidentList.find(

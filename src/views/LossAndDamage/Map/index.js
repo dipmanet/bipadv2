@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import turf from 'turf';
+import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
 import MapLayer from '#rscz/Map/MapLayer';
@@ -154,7 +153,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                 <MapSource
                     sourceKey="loss-and-damage-bounds"
                     geoJson={nepalGeoJson}
-                    bounds={turf.bbox(nepalGeoJson)}
+                    bounds={bbox(nepalGeoJson)}
                 >
                     <MapLayer
                         layerKey="loss-and-damage-bounds-fill"

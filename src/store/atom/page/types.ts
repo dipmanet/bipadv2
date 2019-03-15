@@ -1,7 +1,4 @@
-// FIXME: common
-interface Obj<T>{
-    [key: string]: T;
-}
+import { Obj } from '@togglecorp/fujs';
 
 export interface Province {
 }
@@ -49,22 +46,26 @@ export interface AdminLevel {
     title: string;
 }
 
+export interface Filters {
+    faramValues: {
+        hazard?: number;
+        dateRange?: number;
+        region?: {
+            adminLevel: number;
+        };
+    };
+    faramErrors: object;
+    pristine: boolean;
+}
+
 export interface DashboardPage {
     alertList: Alert[];
-    filters: {
-        faramValues: object;
-        faramErrors: object;
-        pristine: boolean;
-    };
+    filters: Filters;
 }
 
 export interface IncidentPage {
     incidentList: Incident[];
-    filters: {
-        faramValues: object;
-        faramErrors: object;
-        pristine: boolean;
-    };
+    filters: Filters;
 }
 
 export interface ResponsePage {

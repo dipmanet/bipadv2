@@ -68,7 +68,7 @@ export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) 
     alertList,
 });
 
-export const setFiltesrActionDP = ({ faramValues, faramErrors, pristine }: {
+export const setFiltersActionDP = ({ faramValues, faramErrors, pristine }: {
     faramValues: object;
     faramErrors: object;
     pristine: boolean;

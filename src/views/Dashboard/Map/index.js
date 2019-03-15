@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import ReactDOMServer from 'react-dom/server';
-import turf from 'turf';
+import bbox from '@turf/bbox';
 import { isTruthy } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
@@ -127,7 +127,7 @@ class AlertMap extends React.PureComponent {
             }
         }
 
-        return turf.bbox(currentBoundingObject);
+        return bbox(currentBoundingObject);
     }
 
     renderTooltip = ({ alert: alertString }) => {
@@ -171,7 +171,7 @@ class AlertMap extends React.PureComponent {
                     geoJson={districtsGeoJson}
                     // geoJson={nepalGeoJson}
                     bounds={bounds}
-                    // bounds={turf.bbox(districtsGeoJson)}
+                    // bounds={bbox(districtsGeoJson)}
                 >
                     <MapLayer
                         layerKey="bounds-fill"

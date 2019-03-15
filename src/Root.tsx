@@ -1,10 +1,8 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 
-import getUserConfirmation from '#utils/getUserConfirmation';
 import store from '#store';
 import { AppState } from '#store/types';
 import { initializeStyles } from '#rsu/styles';
@@ -52,9 +50,7 @@ export default class Root extends React.Component<Props, State> {
 
         return (
             <Provider store={this.store}>
-                <BrowserRouter getUserConfirmation={getUserConfirmation}>
-                    <App />
-                </BrowserRouter>
+                <App />
             </Provider>
         );
     }

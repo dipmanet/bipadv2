@@ -41,31 +41,7 @@ const LoadingRenderer = ({ text }) => (
     </div>
 );
 
-const PageError = () => {
-    const name = 'fourHundredThree';
-    return (
-        <Fragment>
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>
-                    {name}
-                </title>
-            </Helmet>
-            <ErrorBoundBundle
-                key={name}
-                load={routes[name].loader}
-                renderer={LoadingRenderer}
-            />
-        </Fragment>
-    );
-};
-
 const Page = ({ name, disabled, ...otherProps }) => {
-    // NOTE: don't show page if it is disabled as well
-    if (disabled) {
-        return <PageError />;
-    }
-
     return (
         <Fragment>
             <Helmet>

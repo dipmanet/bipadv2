@@ -25,9 +25,7 @@ import {
 import Multiplexer from './Multiplexer';
 
 interface State {}
-
 interface Params {}
-
 interface OwnProps {}
 interface PropsFromState {
     mapStyle: string;
@@ -152,50 +150,10 @@ class App extends React.Component<Props, State> {
     }
 }
 
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             App,
         ),
     ),
 );
-
-/*
-Root:
-    Loads redux into memory
-    Create redux context
-    create router context
-    Attach prompt on router context
-    Attach notifier
-App:
-    Load required information from server
-Multiplexer:
-    create navbar
-    create router routes
-
-    <Switch>
-        {routes.map(route => (
-            <Route
-                component={
-                    compose(
-                        boundError(AppError),
-                            // NONE
-                        redirector,
-                            // authenticated:
-                            // redirectIf: authenticated => !authenticated;
-                            // redirectLink
-                        routeSychronizer,
-                            // NONE
-                        helmet,
-                            // title
-                        bundle(LoadingRenderer, FailedRenderer),
-                    )(Component)
-                }
-            />
-        ))}
-    </Switch>
-*/

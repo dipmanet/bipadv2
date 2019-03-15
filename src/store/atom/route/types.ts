@@ -1,7 +1,4 @@
-// FIXME: common
-interface Obj<T>{
-    [key: string]: T;
-}
+import { Obj } from '@togglecorp/fujs';
 
 export interface Match {
     path: string;
