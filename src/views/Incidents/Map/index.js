@@ -16,6 +16,7 @@ import nepalGeoJson from '#resources/districts.json';
 
 import {
     boundsFill,
+    boundsHoverFill,
     boundsOutline,
     pointPaint,
     polygonBoundsFill,
@@ -75,6 +76,7 @@ export default class IncidentMap extends React.PureComponent {
                     },
                     properties: {
                         incident,
+                        incidentId: incident.id,
                         severity: incident.severity,
                     },
                 })),
@@ -95,6 +97,7 @@ export default class IncidentMap extends React.PureComponent {
                     },
                     properties: {
                         incident,
+                        incidentId: incident.id,
                         severity: incident.severity,
                     },
                 })),
@@ -144,7 +147,7 @@ export default class IncidentMap extends React.PureComponent {
                     <MapLayer
                         layerKey="incident-points-fill"
                         type="circle"
-                        property="incident"
+                        property="incidentId"
                         paint={pointPaint}
                         onClick={this.handlePointClick}
                         hoverInfo={this.hoverInfo}
@@ -158,7 +161,7 @@ export default class IncidentMap extends React.PureComponent {
                     <MapLayer
                         layerKey="incident-polygon-fill"
                         type="fill"
-                        property="incident"
+                        property="incidentId"
                         paint={polygonBoundsFill}
                         onClick={this.handlePointClick}
                         hoverInfo={this.polygonHoverInfo}
