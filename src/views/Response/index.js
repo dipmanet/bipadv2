@@ -13,7 +13,7 @@ import {
     setResourceListActionRP,
 } from '#actionCreators';
 import {
-    incidentIdFromRouteSelector,
+    // incidentIdFromRouteSelector,
     incidentSelector,
     resourceListSelectorRP,
 } from '#selectors';
@@ -100,9 +100,9 @@ const requests = {
     // TODO: add schema, onFailure, onFatal
 };
 
-const mapStateToProps = state => ({
-    incidentId: incidentIdFromRouteSelector(state),
-    incident: incidentSelector(state),
+const mapStateToProps = (state, props) => ({
+    // incidentId: incidentIdFromRouteSelector(state),
+    incident: incidentSelector(state, props),
     resourceList: resourceListSelectorRP(state),
     // incidentList: incidentListSelectorIP(state),
 });

@@ -1,80 +1,28 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { _cs, reverseRoute } from '@togglecorp/fujs';
+import { Link } from '@reach/router';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
+import { routeSettings, iconNames } from '#constants';
 
-import {
-    pathNames,
-    iconNames,
-} from '#constants';
-
-import {
-    setMapStyleAction,
-} from '#actionCreators';
-import {
-    routePathKeySelector,
-    mapStylesSelector,
-} from '#selectors';
+import { setMapStyleAction } from '#actionCreators';
+import { mapStylesSelector } from '#selectors';
 
 import styles from './styles.scss';
 
 const layerKeySelector = d => d.name;
 
-const pages = [
-    {
-        title: 'Dashboard',
-        link: 'dashboard',
-        iconName: iconNames.dashboard,
-        disabled: false,
-    },
-    {
-        title: 'Incidents',
-        link: 'incidents',
-        iconName: iconNames.incidents,
-        disabled: false,
-    },
-    {
-        title: 'Risk Information',
-        link: 'riskInfo',
-        iconName: iconNames.riskMap,
-        disabled: false,
-    },
-    {
-        title: 'Loss & Damage',
-        link: 'lossAndDamage',
-        iconName: iconNames.lossAndDamange,
-        disabled: false,
-    },
-    {
-        title: 'Real Time',
-        link: 'realtime',
-        iconName: iconNames.realtime,
-        disabled: true,
-    },
-    {
-        title: 'Profile Mapping',
-        link: 'drrProfileMapping',
-        iconName: iconNames.drrProfileMapping,
-        disabled: true,
-    },
-    {
-        title: 'About Us',
-        link: 'aboutUs',
-        iconName: iconNames.aboutUs,
-        disabled: true,
-    },
-];
+const pages = routeSettings.filter(setting => !!setting.navbar);
 
 const MenuItem = ({
     className,
     title,
     link,
     iconName,
-    routeKey,
+    // routeKey,
     disabled,
 }) => (
     !disabled ? (
@@ -83,11 +31,11 @@ const MenuItem = ({
                 _cs(
                     className,
                     styles.menuItem,
-                    routeKey === link && styles.selected,
+                    // routeKey === link && styles.selected,
                     disabled && styles.disabled,
                 )
             }
-            to={reverseRoute(pathNames[link], {})}
+            to={link}
         >
             <div
                 className={_cs(iconName, styles.icon)}
@@ -103,7 +51,7 @@ const MenuItem = ({
                 _cs(
                     className,
                     styles.menuItem,
-                    routeKey === link && styles.selected,
+                    // routeKey === link && styles.selected,
                     disabled && styles.disabled,
                 )
             }
@@ -121,19 +69,15 @@ const MenuItem = ({
 
 MenuItem.propTypes = {
     className: PropTypes.string,
-    title: PropTypes.string,
-    link: PropTypes.string,
-    iconName: PropTypes.string,
-    routeKey: PropTypes.string,
-    disabled: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    iconName: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
 };
 
 MenuItem.defaultProps = {
     className: '',
-    title: '',
-    link: '',
-    iconName: '',
-    routeKey: '',
+    disabled: false,
 };
 
 const propTypes = {
@@ -151,7 +95,7 @@ class Navbar extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    static menuKeySelector = d => d.link;
+    static menuKeySelector = d => d.name;
 
     constructor(props) {
         super(props);
@@ -169,9 +113,8 @@ class Navbar extends React.PureComponent {
 
     menuRendererParams = (key, data) => ({
         title: data.title,
-        link: data.link,
+        link: data.path,
         iconName: data.iconName,
-        routeKey: this.props.routeKey,
         disabled: data.disabled,
     });
 
@@ -262,9 +205,11 @@ class Navbar extends React.PureComponent {
                             <div className={styles.right}>
                                 Bipad
                             </div>
+                            {/*
                             <div className={styles.currentPage}>
                                 {this.props.routeKey}
                             </div>
+                            */}
                         </div>
                     </div>
                     {/*
@@ -305,7 +250,6 @@ class Navbar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-    routeKey: routePathKeySelector(state),
     mapStyles: mapStylesSelector(state),
 });
 

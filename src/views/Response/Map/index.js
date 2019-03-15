@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import turf from 'turf';
-import { reverseRoute } from '@togglecorp/fujs';
+import bbox from '@turf/bbox';
+import buffer from '@turf/buffer';
 import ReactDOMServer from 'react-dom/server';
 
 import DistanceOutput from '#components/DistanceOutput';
@@ -18,7 +18,6 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import store from '#store';
-import { routes } from '#constants';
 
 import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
@@ -112,10 +111,12 @@ export default class ResponseMap extends React.PureComponent {
     });
 
     handlePointClick = (propertiesString) => {
+        /*
         const properties = JSON.parse(propertiesString);
         const { id: incidentId } = properties;
         const redirectTo = reverseRoute(routes.response.path, { incidentId });
-        this.setState({ redirectTo });
+        navigate(redirectTo);
+        */
     }
 
     render() {
@@ -125,29 +126,35 @@ export default class ResponseMap extends React.PureComponent {
             resourceList,
         } = this.props;
 
-        let FeatureMapSource;
-        let bbox;
+        const {
+            point,
+            polygon,
+            severity,
+        } = incident;
 
-        if (incident.point) {
-            // const point = turf.point(incident.point.coordinates);
-            const buffered = turf.buffer(incident.point, 32, 'kilometers');
-            bbox = turf.bbox(buffered);
+        let featureMapSource;
+        let box;
+
+        if (point) {
+            // const point = turf.point(point.coordinates);
+            const buffered = buffer(point, 32, { units: 'kilometers' });
+            box = bbox(buffered);
 
             const featureCollection = {
                 type: 'FeatureCollection',
                 features: [{
                     type: 'Feature',
                     geometry: {
-                        ...incident.point,
+                        ...point,
                     },
                     properties: {
                         incident,
-                        severity: incident.severity,
+                        severity,
                     },
                 }],
             };
 
-            FeatureMapSource = () => (
+            featureMapSource = (
                 <MapSource
                     sourceKey="points"
                     geoJson={featureCollection}
@@ -163,25 +170,25 @@ export default class ResponseMap extends React.PureComponent {
                     />
                 </MapSource>
             );
-        } else if (incident.polygon) {
-            const buffered = turf.buffer(incident.polygon, 24, 'kilometers');
-            bbox = turf.bbox(buffered);
+        } else if (polygon) {
+            const buffered = buffer(polygon, 24, 'kilometers');
+            box = bbox(buffered);
 
             const featureCollection = {
                 type: 'FeatureCollection',
                 features: [{
                     type: 'Feature',
                     geometry: {
-                        ...incident.polygon,
+                        ...polygon,
                     },
                     properties: {
                         incident,
-                        severity: incident.severity,
+                        severity,
                     },
                 }],
             };
 
-            FeatureMapSource = () => (
+            featureMapSource = (
                 <MapSource
                     sourceKey="polygon"
                     geoJson={featureCollection}
@@ -206,7 +213,7 @@ export default class ResponseMap extends React.PureComponent {
                 <MapSource
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
-                    bounds={bbox}
+                    bounds={box}
                 >
                     <MapLayer
                         layerKey="bounds-fill"
@@ -222,7 +229,7 @@ export default class ResponseMap extends React.PureComponent {
                 <MapMarkerLayer
                     geoJson={resourceFeatures}
                 />
-                <FeatureMapSource />
+                {featureMapSource}
             </React.Fragment>
         );
     }

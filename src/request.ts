@@ -51,14 +51,9 @@ export const createConnectedRequestCoordinator = <OwnProps>() => {
             };
         },
         transformProps: (props: Props) => {
-            const {
-                // myOwnMapStyle, // eslint-disable-line no-unused-props
-                ...otherProps
-            } = props;
-            // FIXME: persistCombineReducers still doesn't support ts fully
             const mapStyle = mapStyleSelector(store.getState() as AppState);
-            console.warn('Map style is', mapStyle);
-            return otherProps;
+            // console.warn('Map style is', mapStyle);
+            return props;
         },
 
         transformUrl: (url: string) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import turf from 'turf';
+import bbox from '@turf/bbox';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
@@ -34,7 +34,7 @@ export default class ResponseMap extends React.PureComponent {
                 <MapSource
                     sourceKey="bounds"
                     geoJson={nepalGeoJson}
-                    bounds={turf.bbox(nepalGeoJson)}
+                    bounds={bbox(nepalGeoJson)}
                 >
                     <MapLayer
                         layerKey="bounds-fill"

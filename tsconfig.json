@@ -4,6 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": true,
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "strict": true,
@@ -16,6 +17,7 @@
     "paths": {
         "#components/*": ["./src/components/*"],
         "#config/*": ["./src/config/*"],
+        "#constants": ["./src/constants"],
         "#constants/*": ["./src/constants/*"],
         "#notify": ["./src/notify"],
         "#actionCreators": ["./src/store/actionCreators"],

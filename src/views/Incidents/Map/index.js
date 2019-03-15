@@ -1,15 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import { Redirect } from 'react-router-dom';
-import turf from 'turf';
+import bbox from '@turf/bbox';
+import { navigate } from '@reach/router';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import { reverseRoute } from '@togglecorp/fujs';
 import store from '#store';
-import { routes } from '#constants';
 
 import Tooltip from '#components/Tooltip';
 
@@ -51,10 +49,6 @@ export default class IncidentMap extends React.PureComponent {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            redirectTo: undefined,
-        };
 
         this.hoverInfo = {
             paint: hoverPaint,
@@ -112,25 +106,14 @@ export default class IncidentMap extends React.PureComponent {
     handlePointClick = (propertiesString) => {
         const properties = JSON.parse(propertiesString);
         const { id: incidentId } = properties;
-        const redirectTo = reverseRoute(routes.response.path, { incidentId });
-        this.setState({ redirectTo });
+        const redirectTo = reverseRoute(':incidentId/response/', { incidentId });
+        navigate(redirectTo);
     }
 
     render() {
         const {
             incidentList,
         } = this.props;
-
-        const { redirectTo } = this.state;
-
-        if (redirectTo) {
-            return (
-                <Redirect
-                    to={redirectTo}
-                    push
-                />
-            );
-        }
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList);
@@ -140,7 +123,7 @@ export default class IncidentMap extends React.PureComponent {
                 <MapSource
                     sourceKey="incident-bounds"
                     geoJson={nepalGeoJson}
-                    bounds={turf.bbox(nepalGeoJson)}
+                    bounds={bbox(nepalGeoJson)}
                 >
                     <MapLayer
                         layerKey="incident-bounds-fill"

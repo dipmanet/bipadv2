@@ -10,6 +10,7 @@ const schemaList: Schema[] = [
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
             boundary: { type: 'object' }, // FIXME: shouldn't be object
+            type: { type: 'string' },
         },
     },
     {
@@ -19,7 +20,7 @@ const schemaList: Schema[] = [
         },
         fields: {
             count: { type: 'number' },
-            next: { type: 'number' },
+            next: { type: 'string' },
             previous: { type: 'number' },
             results: { type: 'array.province' },
         },
@@ -34,6 +35,7 @@ const schemaList: Schema[] = [
             title: { type: 'string', required: true },
             province: { type: 'number', required: true },
             boundary: { type: 'object' }, // FIXME: shouldn't be object
+            type: { type: 'string' },
         },
     },
     {
@@ -43,7 +45,7 @@ const schemaList: Schema[] = [
         },
         fields: {
             count: { type: 'number' },
-            next: { type: 'number' },
+            next: { type: 'string' },
             previous: { type: 'number' },
             results: { type: 'array.district' },
         },
@@ -58,6 +60,7 @@ const schemaList: Schema[] = [
             title: { type: 'string', required: true },
             district: { type: 'number', required: true },
             boundary: { type: 'object' }, // FIXME: shouldn't be object
+            type: { type: 'string' },
         },
     },
     {
@@ -67,7 +70,7 @@ const schemaList: Schema[] = [
         },
         fields: {
             count: { type: 'number' },
-            next: { type: 'number' },
+            next: { type: 'string' },
             previous: { type: 'number' },
             results: { type: 'array.municipality' },
         },
@@ -82,6 +85,7 @@ const schemaList: Schema[] = [
             title: { type: 'string', required: true },
             municipality: { type: 'number', required: true },
             boundary: { type: 'object' }, // FIXME: shouldn't be object
+            type: { type: 'string' },
         },
     },
     {
@@ -91,7 +95,7 @@ const schemaList: Schema[] = [
         },
         fields: {
             count: { type: 'number' },
-            next: { type: 'number' },
+            next: { type: 'string' },
             previous: { type: 'number' },
             results: { type: 'array.ward' },
         },
