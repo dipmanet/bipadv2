@@ -27,6 +27,9 @@ const iconNames = {
 
     expand: 'ion-arrow-expand',
     shrink: 'ion-arrow-shrink',
+
+    play: 'ion-ios-play',
+    pause: 'ion-ios-pause',
 };
 
 export default iconNames;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
@@ -17,9 +18,11 @@ import {
 } from './mapStyles';
 
 const propTypes = {
+    pause: PropTypes.bool,
 };
 
 const defaultProps = {
+    pause: false,
 };
 
 export default class LossAndDamageMap extends React.PureComponent {
@@ -96,9 +99,11 @@ export default class LossAndDamageMap extends React.PureComponent {
     playback = () => {
         const {
             lossAndDamageList,
+            onPlaybackProgress,
+            pause: isPaused,
         } = this.props;
 
-        if ((Object.keys(lossAndDamageList)).length > 0) {
+        if (!isPaused && (Object.keys(lossAndDamageList)).length > 0) {
             const {
                 currentRange: {
                     start,
@@ -107,22 +112,29 @@ export default class LossAndDamageMap extends React.PureComponent {
             } = this.state;
 
             const aDay = 1000 * 60 * 60 * 24;
+            const offset = aDay * 10;
 
             const timeExtent = this.getTimeExtent(lossAndDamageList);
             if (!start || end > timeExtent.max) {
-                this.setState({
-                    currentRange: {
-                        start: timeExtent.min,
-                        end: timeExtent.min + (aDay * 30),
-                    },
-                });
+                const currentRange = {
+                    start: timeExtent.min,
+                    end: timeExtent.min + offset,
+                };
+
+                this.setState({ currentRange });
+                if (onPlaybackProgress) {
+                    onPlaybackProgress(currentRange, timeExtent);
+                }
             } else {
-                this.setState({
-                    currentRange: {
-                        start: end,
-                        end: end + (aDay * 30),
-                    },
-                });
+                const currentRange = {
+                    start: end,
+                    end: end + offset,
+                };
+
+                this.setState({ currentRange });
+                if (onPlaybackProgress) {
+                    onPlaybackProgress(currentRange, timeExtent);
+                }
             }
         }
 
@@ -154,6 +166,12 @@ export default class LossAndDamageMap extends React.PureComponent {
                     sourceKey="loss-and-damage-bounds"
                     geoJson={nepalGeoJson}
                     bounds={bbox(nepalGeoJson)}
+                    boundsPadding={{
+                        top: 0,
+                        right: 64,
+                        bottom: 0,
+                        left: 330,
+                    }}
                 >
                     <MapLayer
                         layerKey="loss-and-damage-bounds-fill"
@@ -183,4 +201,3 @@ export default class LossAndDamageMap extends React.PureComponent {
         );
     }
 }
-
