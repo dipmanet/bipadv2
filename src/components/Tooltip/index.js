@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 import TextOutput from '#components/TextOutput';
@@ -10,7 +9,6 @@ import Loss from '#components/Loss';
 
 import { mapToList } from '@togglecorp/fujs';
 
-import { wardsMapSelector } from '#selectors';
 
 import { toTitleCase } from '#utils/common';
 
@@ -28,11 +26,11 @@ const propTypes = {
 };
 
 const defaultProps = {
-    wardsMap: {},
     incident: '{}',
+    wardsMap: {},
 };
 
-class Tooltip extends React.PureComponent {
+export default class Tooltip extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -145,9 +143,3 @@ class Tooltip extends React.PureComponent {
         );
     }
 }
-
-const mapStateToProps = state => ({
-    wardsMap: wardsMapSelector(state),
-});
-
-export default connect(mapStateToProps)(Tooltip);

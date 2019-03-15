@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
 import ReactDOMServer from 'react-dom/server';
+
+import { wardsMapSelector } from '#selectors';
 
 import DistanceOutput from '#components/DistanceOutput';
 /*
@@ -16,8 +19,6 @@ import MapMarkerLayer from '#rscz/Map/MapMarkerLayer';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
-
-import store from '#store';
 
 import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
@@ -37,10 +38,13 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
     className: '',
+    wardsMap: {},
 };
 
 const icons = {
@@ -55,10 +59,9 @@ const polygonBoundsFill = {
     'fill-opacity': 0.4,
 };
 
-// NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
-const toolTipWrapper = props => <Tooltip store={store} {...props} />;
+const toolTipWrapper = props => otherprops => <Tooltip {...props} {...otherprops} />;
 
-export default class ResponseMap extends React.PureComponent {
+class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -68,7 +71,7 @@ export default class ResponseMap extends React.PureComponent {
         this.hoverInfo = {
             paint: hoverPaint,
             showTooltip: true,
-            tooltipModifier: toolTipWrapper,
+            tooltipModifier: toolTipWrapper({ wardsMap: this.props.wardsMap }),
         };
     }
 
@@ -234,3 +237,9 @@ export default class ResponseMap extends React.PureComponent {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    wardsMap: wardsMapSelector(state),
+});
+
+export default connect(mapStateToProps)(ResponseMap);
