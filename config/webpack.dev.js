@@ -7,7 +7,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
-
 const getEnvVariables = require('./env.js');
 
 const appBase = process.cwd();
@@ -42,6 +41,7 @@ module.exports = (env) => {
         },
 
         mode: 'development',
+
         performance: {
             hints: 'warning',
         },
@@ -53,6 +53,7 @@ module.exports = (env) => {
             hash: true,
         },
         devtool: 'cheap-module-eval-source-map',
+
         devServer: {
             host: '0.0.0.0',
             port: 3050,
