@@ -113,6 +113,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             const { results: hazardTypes = [] } = response as Response;
             setHazardTypes({ hazardTypes });
         },
+        // FIXME: write schema
         onMount: true,
     },
 };

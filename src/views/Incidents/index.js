@@ -99,6 +99,7 @@ const requests = {
                 prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
             }) => hazard !== prevHazard || dateRange !== prevDateRange,
         },
+        // FIXME: write schema
     },
 };
 
