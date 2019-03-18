@@ -34,14 +34,18 @@ module.exports = (env) => {
         },
 
         resolve: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             alias: {
                 'base-scss': path.resolve(appBase, 'src/stylesheets/'),
                 'rs-scss': path.resolve(appBase, 'src/vendor/react-store/stylesheets/'),
             },
+            symlinks: false,
         },
 
         mode: 'production',
+
         devtool: 'source-map',
+
         optimization: {
             minimizer: [
                 new UglifyJsPlugin({
@@ -73,7 +77,7 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    test: /\.(js|jsx)$/,
+                    test: /\.(js|jsx|ts|tsx)$/,
                     include: appSrc,
                     use: [
                         'babel-loader',
@@ -101,7 +105,12 @@ module.exports = (env) => {
                                 sourceMap: true,
                             },
                         },
-                        require.resolve('sass-loader'),
+                        {
+                            loader: require.resolve('sass-loader'),
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
                     ],
                 },
                 {
@@ -136,8 +145,8 @@ module.exports = (env) => {
                 chunksSortMode: 'none',
             }),
             new MiniCssExtractPlugin({
-                filename: 'css/[name].[hash].css',
-                chunkFilename: 'css/[id].[hash].css',
+                filename: 'css/[name].css',
+                chunkFilename: 'css/[id].css',
             }),
         ],
     };

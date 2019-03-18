@@ -25,6 +25,10 @@ export default class DateOutput extends React.PureComponent {
             geoareaName,
         } = this.props;
 
+        if (!geoareaName) {
+            return null;
+        }
+
         return (
             <div className={_cs(classNameFromProps, styles.dateOutput)}>
                 <div

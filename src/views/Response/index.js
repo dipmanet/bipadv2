@@ -85,6 +85,7 @@ const requests = {
         onMount: ({ props: { incidentId } }) => (
             !!incidentId
         ),
+        // FIXME: write schema
     },
     incidentRequest: {
         url: ({ props: { incidentId } }) => (
@@ -96,8 +97,8 @@ const requests = {
         onMount: ({ props: { incidentId } }) => (
             !!incidentId
         ),
+        // FIXME: write schema
     },
-    // TODO: add schema, onFailure, onFatal
 };
 
 const mapStateToProps = (state, props) => ({

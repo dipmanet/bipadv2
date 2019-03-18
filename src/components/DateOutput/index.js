@@ -22,8 +22,13 @@ export default class DateOutput extends React.PureComponent {
     render() {
         const {
             className: classNameFromProps,
+            value,
             ...otherProps
         } = this.props;
+
+        if (!value) {
+            return null;
+        }
 
         return (
             <div className={_cs(classNameFromProps, styles.dateOutput)}>
@@ -36,6 +41,7 @@ export default class DateOutput extends React.PureComponent {
                 />
                 <FormattedDate
                     className={styles.formattedDate}
+                    value={value}
                     {...otherProps}
                 />
             </div>
