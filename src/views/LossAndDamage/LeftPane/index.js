@@ -226,7 +226,10 @@ class LeftPane extends React.PureComponent {
                             <h3 className={styles.heading}>
                                 Summary
                             </h3>
-                            <Spinner loading={pending} />
+                            <Spinner
+                                className={styles.spinner}
+                                loading={pending}
+                            />
                             <Button
                                 className={styles.collapseDetailsButton}
                                 onClick={this.handleCollapseDetailsView}
