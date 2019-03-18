@@ -64,6 +64,28 @@ class LeftPane extends React.PureComponent {
         };
     }
 
+    getSummaryForLabel = memoize((incidentList, labelName, labelModifier = k => k) => {
+        const summary = incidentList
+            .filter(v => v[labelName])
+            .reduce((acc, current) => {
+                if (acc[current[labelName]] === undefined) {
+                    acc[current[labelName]] = 0;
+                } else {
+                    acc[current[labelName]] += 1;
+                }
+                return acc;
+            }, {});
+
+        return mapToList(
+            summary,
+            (d, k) => ({
+                label: labelModifier(k),
+                value: d,
+                color: colors(labelModifier(k)),
+            }),
+        );
+    });
+
     getSeveritySummary = memoize((incidentList) => {
         const severity = incidentList
             .filter(v => v.severity)
@@ -86,16 +108,14 @@ class LeftPane extends React.PureComponent {
         );
     });
 
-    getHazardSummary = memoize((incidentList) => {
-        const { hazardTypes } = this.props;
-
+    getEventSummary = memoize((incidentList) => {
         const hazardCount = incidentList
-            .filter(v => v.hazard)
+            .filter(v => v.event)
             .reduce((acc, current) => {
-                if (acc[current.hazard] === undefined) {
-                    acc[current.hazard] = 0;
+                if (acc[current.event.title] === undefined) {
+                    acc[current.event.title] = 0;
                 } else {
-                    acc[current.hazard] += 1;
+                    acc[current.event.title] += 1;
                 }
                 return acc;
             }, {});
@@ -103,7 +123,7 @@ class LeftPane extends React.PureComponent {
         return mapToList(
             hazardCount,
             (d, k) => ({
-                label: hazardTypes[k].title,
+                label: k,
                 value: d,
             }),
         );
@@ -135,6 +155,7 @@ class LeftPane extends React.PureComponent {
         const {
             className,
             incidentList,
+            hazardTypes,
             pending,
         } = this.props;
 
@@ -143,8 +164,10 @@ class LeftPane extends React.PureComponent {
             showTabular,
         } = this.state;
 
-        const hazardSummary = this.getHazardSummary(incidentList);
-        const severitySummary = this.getSeveritySummary(incidentList);
+        const severitySummary = this.getSummaryForLabel(incidentList, 'severity');
+        const inducerSummary = this.getSummaryForLabel(incidentList, 'inducer');
+        const hazardSummary = this.getSummaryForLabel(incidentList, 'hazard', k => hazardTypes[k].title);
+        const eventSummary = this.getEventSummary(incidentList);
 
         return (
             <CollapsibleView
@@ -203,28 +226,66 @@ class LeftPane extends React.PureComponent {
                                             valueSelector={barChartValueSelector}
                                         />
                                     </div>
-                                    <div className={styles.donutContainer}>
+                                    <div className={styles.barContainer}>
                                         <header className={styles.header}>
                                             <h4 className={styles.heading}>
-                                                Severity
+                                                Event Statistics
                                             </h4>
                                         </header>
-                                        <DonutChart
-                                            sideLengthRatio={0.5}
+                                        <SimpleVerticalBarChart
                                             className={styles.chart}
-                                            data={severitySummary}
-                                            labelSelector={donutChartLabelSelector}
-                                            valueSelector={donutChartValueSelector}
-                                            colorSelector={donutChartColorSelector}
+                                            data={eventSummary}
+                                            labelSelector={barChartLabelSelector}
+                                            valueSelector={barChartValueSelector}
                                         />
-                                        <Legend
-                                            className={styles.legend}
-                                            data={severitySummary}
-                                            itemClassName={styles.legendItem}
-                                            keySelector={itemSelector}
-                                            labelSelector={legendLabelSelector}
-                                            colorSelector={legendColorSelector}
-                                        />
+                                    </div>
+                                    <div className={styles.donutContainer}>
+                                        <div className={styles.severitySummary}>
+                                            <header className={styles.header}>
+                                                <h4 className={styles.heading}>
+                                                    Severity
+                                                </h4>
+                                            </header>
+                                            <DonutChart
+                                                sideLengthRatio={0.5}
+                                                className={styles.chart}
+                                                data={severitySummary}
+                                                labelSelector={donutChartLabelSelector}
+                                                valueSelector={donutChartValueSelector}
+                                                colorSelector={donutChartColorSelector}
+                                            />
+                                            <Legend
+                                                className={styles.legend}
+                                                data={severitySummary}
+                                                itemClassName={styles.legendItem}
+                                                keySelector={itemSelector}
+                                                labelSelector={legendLabelSelector}
+                                                colorSelector={legendColorSelector}
+                                            />
+                                        </div>
+                                        <div className={styles.inducerSummary}>
+                                            <header className={styles.header}>
+                                                <h4 className={styles.heading}>
+                                                    Inducers
+                                                </h4>
+                                            </header>
+                                            <DonutChart
+                                                sideLengthRatio={0.5}
+                                                className={styles.chart}
+                                                data={inducerSummary}
+                                                labelSelector={donutChartLabelSelector}
+                                                valueSelector={donutChartValueSelector}
+                                                colorSelector={donutChartColorSelector}
+                                            />
+                                            <Legend
+                                                className={styles.legend}
+                                                data={inducerSummary}
+                                                itemClassName={styles.legendItem}
+                                                keySelector={itemSelector}
+                                                labelSelector={legendLabelSelector}
+                                                colorSelector={legendColorSelector}
+                                            />
+                                        </div>
                                     </div>
                                     <ListView
                                         className={styles.incidentList}

@@ -17,6 +17,7 @@ import {
     setMunicipalitiesAction,
     setWardsAction,
     setHazardTypesAction,
+    setEventTypesAction,
 } from '#actionCreators';
 import {
     mapStyleSelector,
@@ -36,6 +37,7 @@ interface PropsFromDispatch {
     setMunicipalities: typeof setMunicipalitiesAction;
     setWards: typeof setWardsAction;
     setHazardTypes: typeof setHazardTypesAction;
+    setEventTypes: typeof setEventTypesAction;
 }
 type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -50,6 +52,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
     setWards: params => dispatch(setWardsAction(params)),
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
+    setEventTypes: params => dispatch(setEventTypesAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -112,6 +115,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             interface Response { results: PageTypes.HazardType[] }
             const { results: hazardTypes = [] } = response as Response;
             setHazardTypes({ hazardTypes });
+        },
+        onMount: true,
+    },
+    eventTypesRequest: {
+        url: '/event/',
+        method: methods.GET,
+        onSuccess: ({ response, props: { setEventTypes } }) => {
+            interface Response { results: PageTypes.EventType[] }
+            const { results: eventTypes = [] } = response as Response;
+            setEventTypes({ eventTypes });
         },
         onMount: true,
     },

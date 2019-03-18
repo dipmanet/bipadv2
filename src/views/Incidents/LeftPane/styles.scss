@@ -50,58 +50,66 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 }
             }
 
-            .content {
+            .container {
+                min-height: 240px;
+                min-width: 100px;
                 display: flex;
                 flex-direction: column;
 
-                .container {
-                    min-height: 240px;
-                    display: flex;
-                    flex-direction: column;
+                .header {
+                    flex-shrink: 0;
+                    padding-top: $spacing-medium;
 
-                    .header {
-                        flex-shrink: 0;
-                        padding-top: $spacing-medium;
-
-                        .heading {
-                            padding: $spacing-medium;
-                            text-align: flex-start;
-                            color: $color-primary;
-                        }
-                    }
-
-                    .chart {
-                        flex-grow: 1;
-                    }
-
-                    .legend {
-                        align-self: center;
-                        display: flex;
-                        flex-wrap: wrap;
-                        margin-top: $spacing-medium;
-
-                        .legend-item {
-                            margin-right: $spacing-medium;
-                        }
+                    .heading {
+                        padding: $spacing-medium;
+                        text-align: flex-start;
+                        color: $color-primary;
                     }
                 }
+
+                .chart {
+                    flex-grow: 1;
+                }
+
+                .legend {
+                    align-self: center;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-top: $spacing-medium;
+
+                    .legend-item {
+                        margin-right: $spacing-medium;
+                    }
+                }
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                overflow: auto;
 
                 .bar-container {
                     @extend .container;
                 }
 
-                .treemap-container {
-                    @extend .container;
-                }
-
                 .donut-container {
-                    @extend .container;
+                    min-height: 240px;
+                    display: flex;
+
+                    .severity-summary {
+                        @extend .container;
+                        flex-grow: 1;
+                    }
+
+                    .inducer-summary {
+                        @extend .container;
+                        flex-grow: 1;
+                    }
                 }
 
                 .incident-list {
                     flex-direction: column;
                     flex-grow: 1;
-                    overflow: auto;
 
                     .incident {
                         cursor: pointer;

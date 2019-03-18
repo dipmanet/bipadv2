@@ -14,6 +14,9 @@ export interface HazardType {
     // TODO: fill this
     id: number;
 }
+export interface EventType {
+    id: number;
+}
 export interface ResourceType {
 }
 export interface Alert {
@@ -86,6 +89,7 @@ export interface PageState {
 
     resourceTypes: Obj<ResourceType>;
     hazardTypes: Obj<HazardType>;
+    eventTypes: Obj<EventType>;
     filters: object;
     geoJsons: {
         district?: GeoJson;
@@ -103,6 +107,7 @@ export interface PageState {
 
 export enum PageType {
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
+    SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
     SET_MAP_STYLES = 'page/SET_MAP_STYLES',
     SET_MAP_STYLE = 'page/SET_MAP_STYLE',
     SET_PROVINCES = 'page/SET_PROVINCES',
@@ -129,6 +134,10 @@ export enum PageType {
 export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
     hazardTypes: HazardType[];
+}
+export interface SetEventType {
+    type: typeof PageType.SET_EVENT_TYPES;
+    eventTypes: EventType[];
 }
 
 export interface SetMapStyles {
@@ -210,5 +219,5 @@ export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards | SetDistrictGeoJson |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
-    SetIncident | SetIncidentFilters | SetResourceList
+    SetIncident | SetIncidentFilters | SetResourceList | SetEventType
 );
