@@ -100,6 +100,12 @@ class LossAndDamageMap extends React.PureComponent {
 
     handleDistrictClick = (args) => {
         this.setState({ selectedDistrict: args });
+
+        const { onDistrictSelect } = this.props;
+
+        if (onDistrictSelect) {
+            onDistrictSelect(args);
+        }
     }
 
     playback = () => {
