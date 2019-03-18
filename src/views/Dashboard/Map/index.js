@@ -70,6 +70,7 @@ class AlertMap extends React.PureComponent {
                             ...alert.polygon,
                         },
                         properties: {
+                            id: alert.id,
                             alert,
                             containerClassName: styles.iconContainer,
                             /*
@@ -80,7 +81,6 @@ class AlertMap extends React.PureComponent {
                                     className={styles.icon}
                                 />,
                             ),
-                            */
                             popupHTML: ReactDOMServer.renderToString(
                                 <div className={styles.markerPopup}>
                                     <h3 className={styles.heading}>
@@ -88,6 +88,7 @@ class AlertMap extends React.PureComponent {
                                     </h3>
                                 </div>,
                             ),
+                            */
                         },
                     };
                 }),
@@ -184,11 +185,6 @@ class AlertMap extends React.PureComponent {
                         paint={boundsOutline}
                     />
                 </MapSource>
-                {/*
-                <MapMarkerLayer
-                    geoJson={featureCollection}
-                />
-                */}
                 <MapSource
                     sourceKey="polygons"
                     geoJson={featureCollection}
@@ -197,9 +193,9 @@ class AlertMap extends React.PureComponent {
                     <MapLayer
                         layerKey="polygon"
                         type="fill"
-                        property="alert"
+                        property="id"
                         paint={polygonBoundsFill}
-                        // hoverInfo={this.hoverInfo}
+                        hoverInfo={this.hoverInfo}
                         // onClick={this.handlePointClick}
                     />
                 </MapSource>

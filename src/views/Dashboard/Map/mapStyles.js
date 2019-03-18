@@ -27,7 +27,6 @@ export const pointsInner = {
 };
 
 export const hoverPaint = {
-    'circle-color': '#f04656',
-    'circle-radius': 10,
-    'circle-opacity': 1,
+    'fill-color': 'red',
+    'fill-opacity': 0.8,
 };
