@@ -16,7 +16,6 @@ import nepalGeoJson from '#resources/districts.json';
 
 import {
     boundsFill,
-    boundsHoverFill,
     boundsOutline,
     pointPaint,
     polygonBoundsFill,
@@ -30,19 +29,36 @@ const propTypes = {
 const defaultProps = {
 };
 
+const calculateSeverity = (loss) => {
+    const {
+        estimatedLoss = 0,
+        peopleDeathCount = 0,
+        livestockDestroyedCount = 0,
+        infrastructureDestroyedCount = 0,
+    } = loss;
+
+    const severity = ((0.2 * estimatedLoss) / 50000) +
+        (0.4 * peopleDeathCount) +
+        (0.1 * livestockDestroyedCount) +
+        (0.3 * infrastructureDestroyedCount);
+    return severity * 50000;
+};
+
+const hazardColorMap = {
+    fire: '#ff4656',
+    earthquake: '#f08842',
+    flood: '#f08842',
+    landslide: '#f08842',
+};
+
+const getHazardColor = (hazard) => {
+    if (hazard.color) return hazard.color;
+    return hazardColorMap[hazard.title.toLowerCase()] || '#4666b0';
+};
+
 // NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
 const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
-const multiPolyToPoly = (multi) => {
-    const { type, coordinates, ...other } = multi;
-    const newCoords = type === 'MultiPolygon' ? coordinates[0] : coordinates;
-    const newType = type === 'MultiPolygon' ? 'Polygon' : type;
-    return {
-        ...other,
-        type: newType,
-        coordinates: newCoords,
-    };
-};
 
 export default class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -77,7 +93,9 @@ export default class IncidentMap extends React.PureComponent {
                     properties: {
                         incident,
                         incidentId: incident.id,
-                        severity: incident.severity,
+                        // Calculate severity from loss
+                        severity: calculateSeverity(incident.loss),
+                        hazard: getHazardColor(incident.hazard),
                     },
                 })),
         };

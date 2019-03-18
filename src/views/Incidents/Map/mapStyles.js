@@ -20,22 +20,15 @@ export const boundsOutline = {
 };
 
 export const pointPaint = {
-    'circle-color': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', '#ff4656',
-        'major', '#f08842',
-        'minor', '#f0b676',
-        '#4666b0',
-    ],
-    'circle-radius': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', 10,
-        'major', 9,
-        'minor', 8,
-        8,
-    ],
+    'circle-color': ['get', 'hazard'],
+    'circle-radius': {
+        property: 'severity',
+        type: 'exponential',
+        stops: [
+            [124, 2],
+            [34615, 10],
+        ],
+    },
     'circle-opacity': [
         'match',
         ['get', 'severity'],

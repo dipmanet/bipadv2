@@ -68,7 +68,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // We have to transform dateRange to incident_on__lt and incident_on__gt
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            expand: ['loss', 'event'],
+            expand: ['loss', 'event', 'hazard'],
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
@@ -81,6 +81,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 props: { filters: { hazard, dateRange } },
                 prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
             }) => hazard !== prevHazard || dateRange !== prevDateRange,
+        },
+        extras: {
+            schemaName: 'incidentResponse',
         },
     },
 };
