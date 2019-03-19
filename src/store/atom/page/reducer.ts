@@ -13,6 +13,13 @@ export const setHazardTypesAction = (
     hazardTypes,
 });
 
+export const setEventTypesAction = (
+    { eventTypes }: { eventTypes: Type.EventType[] },
+) => ({
+    type: Type.PageType.SET_EVENT_TYPES,
+    eventTypes,
+});
+
 export const setMapStylesAction = (
     mapStyles: Type.MapStyle[],
 ) => ({
@@ -119,6 +126,19 @@ const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
             hazardTypes,
             hazardType => hazardType.id,
             hazardType => hazardType,
+        );
+    });
+    return newState;
+};
+
+const setEventTypes = (state: Type.PageState, action: Type.SetEventType) => {
+    const { eventTypes } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.eventTypes = listToMap(
+            eventTypes,
+            eventType => eventType.id,
+            eventType => eventType,
         );
     });
     return newState;
@@ -341,6 +361,8 @@ export default function routeReducer(
     switch (action.type) {
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
+        case Type.PageType.SET_EVENT_TYPES:
+            return setEventTypes(state, action);
         case Type.PageType.SET_MAP_STYLES:
             return setMapStyles(state, action);
         case Type.PageType.SET_MAP_STYLE:

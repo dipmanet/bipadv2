@@ -6,6 +6,8 @@ import { AppState } from '../../types';
 
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
+export const eventTypesSelector = ({ page }: AppState) =>
+    page.eventTypes;
 export const hazardTypesSelector = ({ page }: AppState) =>
     page.hazardTypes;
 

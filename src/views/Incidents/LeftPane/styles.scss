@@ -50,16 +50,74 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 }
             }
 
-            .incident-list {
-                flex-grow: 1;
+            .container {
+                min-height: 240px;
+                min-width: 100px;
+                display: flex;
+                flex-direction: column;
+
+                .header {
+                    flex-shrink: 0;
+                    padding-top: $spacing-medium;
+
+                    .heading {
+                        padding: $spacing-medium;
+                        text-align: flex-start;
+                        color: $color-primary;
+                    }
+                }
+
+                .chart {
+                    flex-grow: 1;
+                }
+
+                .legend {
+                    align-self: center;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-top: $spacing-medium;
+
+                    .legend-item {
+                        margin-right: $spacing-medium;
+                    }
+                }
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
                 overflow: auto;
 
-                .incident {
-                    cursor: pointer;
-                    padding: $spacing-medium $spacing-medium-alt;
+                .bar-container {
+                    @extend .container;
+                }
 
-                    &:hover {
-                        background-color: rgba(0, 0, 0, .05);
+                .donut-container {
+                    min-height: 240px;
+                    display: flex;
+
+                    .severity-summary {
+                        @extend .container;
+                        flex-grow: 1;
+                    }
+
+                    .inducer-summary {
+                        @extend .container;
+                        flex-grow: 1;
+                    }
+                }
+
+                .incident-list {
+                    flex-direction: column;
+                    flex-grow: 1;
+
+                    .incident {
+                        cursor: pointer;
+                        padding: $spacing-medium $spacing-medium-alt;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, .05);
+                        }
                     }
                 }
             }
