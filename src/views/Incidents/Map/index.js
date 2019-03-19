@@ -116,7 +116,8 @@ export default class IncidentMap extends React.PureComponent {
                     properties: {
                         incident,
                         incidentId: incident.id,
-                        severity: incident.severity,
+                        severity: calculateSeverity(incident.loss),
+                        hazard: getHazardColor(incident.hazard),
                     },
                 })),
         };

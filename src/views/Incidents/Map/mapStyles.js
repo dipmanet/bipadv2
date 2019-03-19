@@ -9,8 +9,7 @@ export const boundsHoverFill = {
 };
 
 export const polygonBoundsFill = {
-    'fill-color': 'red',
-    'fill-opacity': 0.4,
+    'fill-color': ['get', 'hazard'],
 };
 
 export const boundsOutline = {
@@ -29,14 +28,6 @@ export const pointPaint = {
             [34615, 10],
         ],
     },
-    'circle-opacity': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', 1,
-        'major', 0.9,
-        'minor', 0.8,
-        1,
-    ],
 };
 
 export const hoverPaint = {
