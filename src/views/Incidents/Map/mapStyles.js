@@ -28,12 +28,19 @@ export const pointPaint = {
             [34615, 10],
         ],
     },
+    'circle-opacity': 0.9,
 };
 
 export const hoverPaint = {
-    'circle-color': '#f0f0f0',
-    'circle-radius': 9,
-    'circle-opacity': 1,
+    'circle-radius': {
+        property: 'severity',
+        type: 'exponential',
+        stops: [
+            [124, 2],
+            [34615, 10],
+        ],
+    },
+    'circle-opacity': 0.6,
 };
 
 export const polygonHoverPaint = {

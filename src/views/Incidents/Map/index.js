@@ -37,7 +37,8 @@ const calculateSeverity = (loss) => {
         infrastructureDestroyedCount = 0,
     } = loss;
 
-    const severity = ((0.2 * estimatedLoss) / 50000) +
+    const offset = 0.2;
+    const severity = offset + ((0.2 * estimatedLoss) / 50000) +
         (0.4 * peopleDeathCount) +
         (0.1 * livestockDestroyedCount) +
         (0.3 * infrastructureDestroyedCount);
