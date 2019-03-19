@@ -86,13 +86,13 @@ export default class Tooltip extends React.PureComponent {
                 <h2 className={styles.heading}>
                     {title}
                 </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
                 <DateOutput
                     className={styles.incidentDate}
                     date={incidentOn}
+                />
+                <GeoOutput
+                    geoareaName={geoareaName}
+                    className={styles.geoareaName}
                 />
                 <div className={styles.hr} />
                 <TextOutput
