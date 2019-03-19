@@ -2,181 +2,242 @@ import { Schema } from '@togglecorp/ravl';
 
 const schemaList: Schema[] = [
     {
+        extends: 'dbentity',
+        doc: {
+            name: 'event',
+            description: 'Event',
+        },
+        fields: {
+            title: { type: 'string', required: true },
+            description: { type: 'string' },
+            severity: { type: 'string' },
+        },
+    },
+    {
+        extends: 'dbentity',
+        doc: {
+            name: 'loss',
+            description: 'Loss',
+        },
+        fields: {
+            description: { type: 'string' },
+            estimatedLoss: { type: 'uint' },
+            infrastructureDestroyedCount: { type: 'uint' },
+            livestockDestroyedCount: { type: 'uint' },
+            peopleDeathCount: { type: 'uint' },
+            /*
+            families: {
+                arrayType: {
+                    doc: {
+                        name: 'family',
+                        description: 'Family',
+                    },
+                    fields: {
+                        status: { type: 'familyStatus', required: true },
+                        belowPoverty: { type: 'boolean', required: true },
+                        phoneNumber: { type: 'uint', required: true },
+                    },
+                },
+            },
+            infrastructures: {
+                arrayType: {
+                    doc: {
+                        name: 'infrastructure',
+                        description: 'Infrastructure',
+                    },
+                    fields: {
+                        title: { type: 'string', required: true },
+                        type: {
+                            required: true,
+                            type: {
+                                doc: {
+                                    name: 'type',
+                                    description: 'Type of infrastructure',
+                                },
+                                fields: {
+                                    title: { type: 'string', required: true },
+                                    description: { type: 'string', required: true },
+                                },
+                            },
+                        },
+                        status: { type: 'infrastructureStatus', required: true },
+                        equipmentValue: { type: 'uint', required: true },
+                        infrastructureValue: { type: 'uint', required: true },
+                        beneficiaryOwner: { type: 'string', required: true },
+                        serviceDisrupted: { type: 'boolean', required: true },
+                    },
+                },
+            },
+            livestocks: {
+                arrayType: {
+                    doc: {
+                        name: 'livestock',
+                        description: 'Livestock',
+                    },
+                    fields: {
+                        type: {
+                            type: {
+                                doc: {
+                                    name: 'title',
+                                    description: 'Title',
+                                },
+                                fields: {
+                                    title: { type: 'string' },
+                                },
+                            },
+                        },
+                        status: { type: 'livestockStatus', required: true },
+                        count: { type: 'uint', required: true },
+                    },
+                },
+            },
+            */
+        },
+    },
+    {
+        extends: 'string',
+        doc: {
+            name: 'gender',
+            description: 'Gender Enum',
+            example: ['male', 'female', 'other'],
+        },
+    },
+    {
+        extends: 'string',
         doc: {
             name: 'inducer',
             description: 'Inducer Enum',
             example: ['natural', 'artificial'],
         },
+    },
+    {
         extends: 'string',
-    },
-    {
         doc: {
-            name: 'lnglat',
-            description: 'lnglat',
-            // example: [[85.300140, 27.700769]],
-        },
-        extends: 'array',
-    },
-    {
-        doc: {
-            name: 'peoplestatus',
+            name: 'peopleStatus',
             description: 'People Status',
             example: ['missing', 'dead', 'injured', 'affected'],
         },
+    },
+    {
         extends: 'string',
-    },
-    {
         doc: {
-            name: 'people',
-            description: 'People',
-        },
-        fields: {
-            status: { type: 'status', required: true },
-            name: { type: 'string', required: true },
-            age: { type: 'uint', required: true },
-            gender: { type: 'gender', required: true },
-            belowPoverty: { type: 'boolean', required: true },
-            phoneNumber: { type: 'uint', required: true },
-        },
-    },
-    {
-        doc: {
-            name: 'familystatus',
+            name: 'familyStatus',
             description: 'Family Status',
             example: ['evacuated', 'relocated'],
         },
+    },
+    {
         extends: 'string',
-    },
-    {
         doc: {
-            name: 'family',
-            description: 'Family',
-        },
-        fields: {
-            status: { type: 'familystatus', required: true },
-            belowPoverty: { type: 'boolean', required: true },
-            phoneNumber: { type: 'uint', required: true },
-        },
-    },
-    {
-        doc: {
-            name: 'infrastructurestatus',
+            name: 'infrastructureStatus',
             description: 'Infrastructure Status',
             example: ['affected', 'destroyed'],
         },
+    },
+    {
         extends: 'string',
-    },
-    {
         doc: {
-            name: 'infrastructure',
-            description: 'Infrastructure',
-        },
-        fields: {
-            title: { type: 'string', required: true },
-            type: {
-                required: true,
-                type: {
-                    doc: {
-                        name: 'type',
-                        description: 'Type of infrastructure',
-                    },
-                    fields: {
-                        title: { type: 'string', required: true },
-                        description: { type: 'string', required: true },
-                    },
-                },
-            },
-            status: { type: 'infrastructurestatus', required: true },
-            equipmentValue: { type: 'uint', required: true },
-            infrastructureValue: { type: 'uint', required: true },
-            beneficiaryOwner: { type: 'string', required: true },
-            serviceDisrupted: { type: 'boolean', required: true },
-        },
-    },
-    {
-        doc: {
-            name: 'livestockstatusschema',
+            name: 'livestockStatus',
             description: 'Livestock Status',
             example: ['affected', 'destroyed'],
         },
-        extends: 'string',
     },
     {
-        doc: {
-            name: 'livestock',
-            description: 'Livestock',
-        },
-        fields: {
-            type: {
-                type: {
-                    doc: {
-                        name: 'title',
-                        description: 'Title',
-                    },
-                    fields: {
-                        title: { type: 'string' },
-                    },
-                },
-            },
-            status: { type: 'livestockstatus', required: true },
-            count: { type: 'uint', required: true },
-        },
-    },
-    {
+        extends: 'dbentity',
         doc: {
             name: 'incident',
             description: 'Incident Object',
         },
         fields: {
-            id: { type: 'uint', required: true },
             title: { type: 'string', required: true },
-            description: { type: 'string', required: true },
-            cause: { type: 'string', required: true },
-            inducer: { type: 'inducer', required: true },
-            severity: { type: 'string', required: true },
-            source: {
-                required: true,
-                type: {
-                    doc: {
-                        name: 'source',
-                        description: 'Source object',
-                    },
-                    fields: {
-                        name: { type: 'string', required: true },
-                        displayName: { type: 'string', required: true },
-                    },
-                },
-            },
-            incidentOn: { type: 'uint', required: true },
-            event: { type: 'uint', required: true },
+            description: { type: 'string' },
+            detail: { type: 'object' }, // FIXME: what is this
+            cause: { type: 'string' },
+            inducer: { type: 'inducer' },
+            severity: { type: 'string' },
+            verified: { type: 'boolean' },
+            wards: { type: 'array' }, // FIXME: why is this sent
+            streetAddress: { type: 'string' },
+            source: { type: 'string', required: true },
+            incidentOn: { type: 'string', required: true }, // date
+            reportedOn: { type: 'string' }, // date
+            event: { type: 'event' },
             hazard: { type: 'uint', required: true },
-            point: { type: 'lnglat', required: true },
-            geoareaName: {
-                required: true,
-                type: {
+            point: { type: 'object' }, // FIXME: geometry object
+            polygon: { type: 'object' }, // FIXME: geometry object
+            loss: { type: 'loss' },
+        },
+    },
+    {
+        extends: 'incident',
+        doc: {
+            name: 'singleIncidentResponse',
+            description: 'Response of single incident',
+        },
+        fields: {
+            loss: { type: 'uint' },
+        },
+    },
+    {
+        doc: {
+            name: 'incidentResponse',
+            description: 'Response of incident',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'string' },
+            previous: { type: 'number' },
+            results: { type: 'array.incident' },
+        },
+    },
+    {
+        doc: {
+            name: 'incidentWithPeopleResponse',
+            description: 'Response of incident',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'string' },
+            previous: { type: 'number' },
+            results: {
+                arrayType: {
+                    extends: 'incident',
                     doc: {
-                        name: 'geoareaname',
-                        description: 'Geo Area Name',
+                        name: 'incidentWithPeople',
                     },
                     fields: {
-                        palika: { type: 'string', required: true },
-                        district: { type: 'string', required: true },
-                        province: { type: 'string', required: true },
-                    },
-                },
-            },
-            loss: {
-                type: {
-                    doc: {
-                        name: 'loss',
-                        description: 'Loss',
-                    },
-                    fields: {
-                        estimatedLoss: { type: 'uint' },
-                        peoples: { type: 'array.people' },
-                        families: { type: 'array.family' },
-                        infrastructures: { type: 'array.infrastructure' },
-                        livestocks: { type: 'array.livestock' },
+                        event: { type: 'uint' },
+                        loss: {
+                            type: {
+                                extends: 'loss',
+                                doc: {
+                                    name: 'lossWithPeople',
+                                },
+                                fields: {
+                                    peoples: {
+                                        required: true,
+                                        arrayType: {
+                                            doc: {
+                                                name: 'people',
+                                                description: 'People',
+                                            },
+                                            fields: {
+                                                id: { type: 'uint', required: true },
+                                                // name: { type: 'string', required: true },
+                                                loss: { type: 'uint' },
+                                                age: { type: 'uint' },
+                                                belowPoverty: { type: 'boolean' },
+                                                count: { type: 'uint' },
+                                                // disabled:
+                                                status: { type: 'peopleStatus', required: true },
+                                                gender: { type: 'gender' },
+                                                // phoneNumber: { type: 'uint', required: true },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },

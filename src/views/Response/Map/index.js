@@ -203,7 +203,7 @@ class ResponseMap extends React.PureComponent {
                         property="incident"
                         paint={polygonBoundsFill}
                         onClick={this.handlePointClick}
-                        // hoverInfo={this.hoverInfo}
+                        hoverInfo={this.hoverInfo}
                     />
                 </MapSource>
             );

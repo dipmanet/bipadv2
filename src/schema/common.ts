@@ -100,5 +100,28 @@ const schemaList: Schema[] = [
             results: { type: 'array.ward' },
         },
     },
+    {
+        doc: {
+            name: 'hazard',
+            description: 'Hazard',
+        },
+        fields: {
+            id: { type: 'number', required: true },
+            title: { type: 'string', required: true },
+            icon: { type: 'string' }, // FIXME: should be required
+        },
+    },
+    {
+        doc: {
+            name: 'hazardResponse',
+            description: 'Response of hazard',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'string' },
+            previous: { type: 'number' },
+            results: { type: 'array.hazard' },
+        },
+    },
 ];
 export default schemaList;

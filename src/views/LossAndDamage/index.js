@@ -178,7 +178,9 @@ const requests = {
     lossAndDamageRequest: {
         url: '/incident/?expand=loss.peoples',
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'incidentWithPeopleResponse',
+        },
     },
 };
 

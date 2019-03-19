@@ -10,20 +10,12 @@ import Education from './resources/Education';
 import Finance from './resources/Finance';
 import styles from './styles.scss';
 
-const propTypes = {
-};
-
-const defaultProps = {
-};
-
 const resourceComponents = {
     health: Health,
     volunteer: Volunteer,
     education: Education,
     finance: Finance,
 };
-
-const resourceKeySelector = d => d.id;
 
 const Resource = ({
     type,
@@ -33,6 +25,15 @@ const Resource = ({
     return (
         <ResourceComponent {...otherProps} />
     );
+};
+Resource.propTypes = {
+    type: PropTypes.string.isRequired,
+};
+
+const propTypes = {
+};
+
+const defaultProps = {
 };
 
 export default class Response extends React.PureComponent {
