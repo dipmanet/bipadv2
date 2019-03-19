@@ -17,7 +17,7 @@ import {
     setMunicipalitiesAction,
     setWardsAction,
     setHazardTypesAction,
-    setEventTypesAction,
+    // setEventTypesAction,
 } from '#actionCreators';
 import {
     mapStyleSelector,
@@ -37,7 +37,7 @@ interface PropsFromDispatch {
     setMunicipalities: typeof setMunicipalitiesAction;
     setWards: typeof setWardsAction;
     setHazardTypes: typeof setHazardTypesAction;
-    setEventTypes: typeof setEventTypesAction;
+    // setEventTypes: typeof setEventTypesAction;
 }
 type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
     setWards: params => dispatch(setWardsAction(params)),
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
-    setEventTypes: params => dispatch(setEventTypesAction(params)),
+    // setEventTypes: params => dispatch(setEventTypesAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -118,6 +118,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: true,
     },
+    /*
     eventTypesRequest: {
         url: '/event/',
         method: methods.GET,
@@ -128,6 +129,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: true,
     },
+    */
 };
 
 // NOTE: BrowserRouter is acting weird so not using React.PureComponent
