@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import { navigate } from '@reach/router';
@@ -9,9 +11,16 @@ import MapSource from '#rscz/Map/MapSource';
 import { reverseRoute } from '@togglecorp/fujs';
 import store from '#store';
 
+import { hazardTypesSelector } from '#selectors';
+
 import Tooltip from '#components/Tooltip';
 
 import nepalGeoJson from '#resources/districts.json';
+
+import {
+    calculateScaledSeverity,
+    getHazardColor,
+} from '../utils';
 
 
 import {
@@ -29,39 +38,19 @@ const propTypes = {
 const defaultProps = {
 };
 
-const calculateSeverity = (loss) => {
-    const {
-        estimatedLoss = 0,
-        peopleDeathCount = 0,
-        livestockDestroyedCount = 0,
-        infrastructureDestroyedCount = 0,
-    } = loss;
+// severityScaleFactor is to show severity as radius of circle in map, which is logarithmic
+// and for small values, all severities look same for which we need to scale
+const severityScaleFactor = 20000;
 
-    const offset = 0.2;
-    const severity = offset + ((0.2 * estimatedLoss) / 50000) +
-        (0.4 * peopleDeathCount) +
-        (0.1 * livestockDestroyedCount) +
-        (0.3 * infrastructureDestroyedCount);
-    return severity * 50000;
-};
-
-const hazardColorMap = {
-    fire: '#ff4656',
-    earthquake: '#f08842',
-    flood: '#f08842',
-    landslide: '#f08842',
-};
-
-const getHazardColor = (hazard) => {
-    if (hazard.color) return hazard.color;
-    return hazardColorMap[hazard.title.toLowerCase()] || '#4666b0';
-};
+const mapStateToProps = state => ({
+    hazards: hazardTypesSelector(state),
+});
 
 // NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
 const toolTipWrapper = props => <Tooltip store={store} {...props} />;
 
 
-export default class IncidentMap extends React.PureComponent {
+class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -82,6 +71,7 @@ export default class IncidentMap extends React.PureComponent {
     }
 
     getPointFeatureCollection = memoize((incidentList) => {
+        const { hazards } = this.props;
         const geojson = {
             type: 'FeatureCollection',
             features: incidentList
@@ -95,8 +85,8 @@ export default class IncidentMap extends React.PureComponent {
                         incident,
                         incidentId: incident.id,
                         // Calculate severity from loss
-                        severity: calculateSeverity(incident.loss),
-                        hazard: getHazardColor(incident.hazard),
+                        severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
+                        hazardColor: getHazardColor(hazards[incident.hazard]),
                     },
                 })),
         };
@@ -105,6 +95,7 @@ export default class IncidentMap extends React.PureComponent {
     });
 
     getPolygonFeatureCollection = memoize((incidentList) => {
+        const { hazards } = this.props;
         const geojson = {
             type: 'FeatureCollection',
             features: incidentList
@@ -117,8 +108,8 @@ export default class IncidentMap extends React.PureComponent {
                     properties: {
                         incident,
                         incidentId: incident.id,
-                        severity: calculateSeverity(incident.loss),
-                        hazard: getHazardColor(incident.hazard),
+                        severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
+                        hazardColor: getHazardColor(hazards[incident.hazard]),
                     },
                 })),
         };
@@ -191,3 +182,5 @@ export default class IncidentMap extends React.PureComponent {
         );
     }
 }
+
+export default compose(connect(mapStateToProps))(IncidentMap);

@@ -19,7 +19,7 @@ export const boundsOutline = {
 };
 
 export const pointPaint = {
-    'circle-color': ['get', 'hazard'],
+    'circle-color': ['get', 'hazardColor'],
     'circle-radius': {
         property: 'severity',
         type: 'exponential',

@@ -22,6 +22,8 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
+import { calculateCategorizedSeverity } from '../utils';
+
 import IncidentItem from '../IncidentItem';
 import TabularView from './TabularView';
 
@@ -31,6 +33,7 @@ const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     pending: PropTypes.bool,
+    incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
@@ -154,7 +157,7 @@ class LeftPane extends React.PureComponent {
     render() {
         const {
             className,
-            incidentList,
+            incidentList: incidentListNoSeverity,
             hazardTypes,
             pending,
         } = this.props;
@@ -163,6 +166,10 @@ class LeftPane extends React.PureComponent {
             showIncidents,
             showTabular,
         } = this.state;
+
+        const incidentList = incidentListNoSeverity.map(
+            x => ({ ...x, severity: calculateCategorizedSeverity(x.loss) }),
+        );
 
         const severitySummary = this.getSummaryForLabel(incidentList, 'severity');
         const inducerSummary = this.getSummaryForLabel(incidentList, 'inducer');
