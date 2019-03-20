@@ -40,12 +40,14 @@ class Response extends React.PureComponent {
         const {
             incident = {},
             resourceList,
+            requests: {
+                responseRequest: { pending },
+            },
         } = this.props;
 
         if (!incident.id) {
             return null;
         }
-
 
         return (
             <React.Fragment>
@@ -65,6 +67,7 @@ class Response extends React.PureComponent {
                         <ResourceList
                             // className={styles.resourceList}
                             resourceList={resourceList}
+                            pending={pending}
                         />
                     }
                 />

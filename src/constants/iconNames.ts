@@ -15,6 +15,7 @@ const iconNames = {
     drrProfileMapping: 'ion-briefcase',
     aboutUs: 'ion-ios-information',
     realtime: 'ion-android-wifi',
+    resource: 'ion-android-globe',
 
     filter: 'ion-android-funnel',
     chevronUp: 'ion-chevron-up',

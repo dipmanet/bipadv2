@@ -1,0 +1,107 @@
+@import '~base-scss/base';
+
+$width-filter-container: 260px;
+$width-vertical-nav: 64px;
+
+$width-non-tabular-container: 300px;
+$width-tabular-container: 800px;
+
+.right-pane {
+    .show-resource-button-container {
+        top: 0;
+        right: 0;
+        transform-origin: 100% 0;
+
+        .show-resource-button {
+            padding: $spacing-extra-small $spacing-small;
+            color: $color-primary;
+            font-size: $font-size-extra-large;
+        }
+    }
+
+    .resource-container {
+        transform-origin: 100% 0;
+        border: $width-separator-thin solid $color-separator-light;
+        border-radius: $radius-border-large;
+        background-color: rgba(255, 255, 255, .9);
+        padding: 0 $spacing-small;
+        overflow: auto;
+
+        .non-tabular-container {
+            display: flex;
+            flex-direction: column;
+            background-color: $color-foreground;
+            width: $width-non-tabular-container;
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+            overflow: auto;
+
+            .resource {
+                display: flex;
+                position: relative;
+                flex-direction: column;
+
+                .header {
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+                }
+
+                .heading {
+                    flex-grow: 1;
+                    padding: $spacing-medium $spacing-large;
+                    color: $color-primary;
+                }
+
+                .hide-resource-button {
+                    flex-shrink: 0;
+                    margin-right: $spacing-small;
+                }
+            }
+
+            .resource-list {
+                flex-grow: 1;
+                overflow: auto;
+            }
+        }
+
+        .tabular-container {
+            display: flex;
+            flex-direction: column;
+            background-color: $color-foreground;
+            width: $width-tabular-container;
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+
+            .header {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                justify-content: flex-end;
+
+                .heading {
+                    align-self: flex-start;
+                    flex-grow: 1;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
+            }
+
+            .tabular-view {
+                flex-grow: 1;
+                overflow: auto;
+            }
+        }
+    }
+
+    :global {
+        .expanded-container-ghost,
+        .collapsed-container-ghost {
+            top: 0;
+            right: 0;
+        }
+
+        .expanded-container-expanding {
+            top: 0;
+            right: 0;
+        }
+    }
+}
