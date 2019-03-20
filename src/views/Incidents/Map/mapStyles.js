@@ -9,8 +9,7 @@ export const boundsHoverFill = {
 };
 
 export const polygonBoundsFill = {
-    'fill-color': 'red',
-    'fill-opacity': 0.4,
+    'fill-color': ['get', 'hazard'],
 };
 
 export const boundsOutline = {
@@ -20,36 +19,28 @@ export const boundsOutline = {
 };
 
 export const pointPaint = {
-    'circle-color': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', '#ff4656',
-        'major', '#f08842',
-        'minor', '#f0b676',
-        '#4666b0',
-    ],
-    'circle-radius': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', 10,
-        'major', 9,
-        'minor', 8,
-        8,
-    ],
-    'circle-opacity': [
-        'match',
-        ['get', 'severity'],
-        'catastropic', 1,
-        'major', 0.9,
-        'minor', 0.8,
-        1,
-    ],
+    'circle-color': ['get', 'hazardColor'],
+    'circle-radius': {
+        property: 'severity',
+        type: 'exponential',
+        stops: [
+            [124, 2],
+            [34615, 10],
+        ],
+    },
+    'circle-opacity': 0.9,
 };
 
 export const hoverPaint = {
-    'circle-color': '#f0f0f0',
-    'circle-radius': 9,
-    'circle-opacity': 1,
+    'circle-radius': {
+        property: 'severity',
+        type: 'exponential',
+        stops: [
+            [124, 2],
+            [34615, 10],
+        ],
+    },
+    'circle-opacity': 0.6,
 };
 
 export const polygonHoverPaint = {

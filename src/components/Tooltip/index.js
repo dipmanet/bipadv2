@@ -7,6 +7,8 @@ import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import Loss from '#components/Loss';
 
+import FormattedDate from '#rscv/FormattedDate';
+
 import { mapToList } from '@togglecorp/fujs';
 
 
@@ -46,11 +48,10 @@ export default class Tooltip extends React.PureComponent {
             inducer,
             cause,
             source,
+            verified,
+            reportedOn,
 
-            // eslint-disable-next-line no-unused-vars
-            hazard, id, point, createdOn,
-
-            hazardInfo: { title: hazardType } = emptyObject,
+            hazard: { title: hazardType } = emptyObject,
             incidentOn,
             wards = emptyList,
             streetAddress: geoareaName,
@@ -59,6 +60,9 @@ export default class Tooltip extends React.PureComponent {
             } = {},
 
             loss = emptyObject,
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+            id, point, createdOn, polygon, hazardInfo,
 
             ...misc
         } = incident;
@@ -82,15 +86,20 @@ export default class Tooltip extends React.PureComponent {
                 <h2 className={styles.heading}>
                     {title}
                 </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
                 <DateOutput
                     className={styles.incidentDate}
                     date={incidentOn}
                 />
+                <GeoOutput
+                    geoareaName={geoareaName}
+                    className={styles.geoareaName}
+                />
                 <div className={styles.hr} />
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Verified"
+                    value={verified}
+                />
                 <TextOutput
                     className={styles.commonInfo}
                     label="Source"
@@ -115,6 +124,16 @@ export default class Tooltip extends React.PureComponent {
                     className={styles.commonInfo}
                     label="Event"
                     value={eventTitle}
+                />
+                <TextOutput
+                    className={styles.commonInfo}
+                    label="Reported On"
+                    value={
+                        <FormattedDate
+                            mode="dd-MM-yyyy hh:mm:ss"
+                            value={reportedOn}
+                        />
+                    }
                 />
                 <Loss
                     className={styles.loss}

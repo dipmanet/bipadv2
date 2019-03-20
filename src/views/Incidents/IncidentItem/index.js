@@ -2,6 +2,9 @@ import React from 'react';
 import { _cs, reverseRoute } from '@togglecorp/fujs';
 import { Link } from '@reach/router';
 
+import { iconNames } from '#constants';
+
+import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
 import styles from './styles.scss';
@@ -23,9 +26,15 @@ export default class Incidents extends React.PureComponent {
                 incidentOn,
                 streetAddress,
                 geoareaName,
+                source,
+                verified,
                 id: incidentId,
             },
         } = this.props;
+
+        const verifiedIconClass = verified ?
+            `${iconNames.check} ${styles.verified}` :
+            `${iconNames.close} ${styles.notVerified}`;
 
         // FIXME:
         return (
@@ -41,13 +50,18 @@ export default class Incidents extends React.PureComponent {
                         { title }
                     </h3>
                 </header>
+                <DateOutput
+                    className={styles.dateOutput}
+                    date={incidentOn}
+                />
+                <span className={verifiedIconClass} />
                 <GeoOutput
                     className={styles.geoOutput}
                     geoareaName={streetAddress}
                 />
-                <DateOutput
-                    className={styles.dateOutput}
-                    date={incidentOn}
+                <TextOutput
+                    label="Source"
+                    value={source}
                 />
             </Link>
         );
