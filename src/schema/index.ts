@@ -12,14 +12,9 @@ const userDefinedSchemas: Schema[] = [
             description: 'Defines all the attributes common to db entities',
         },
         fields: {
-            createdAt: { type: 'string', required: true }, // date
-            createdBy: { type: 'uint' },
-            createdByName: { type: 'string' },
             id: { type: 'uint', required: true },
-            modifiedAt: { type: 'string', required: true }, // date
-            modifiedBy: { type: 'uint' },
-            modifiedByName: { type: 'string' },
-            versionId: { type: 'uint', required: true },
+            createdOn: { type: 'string', required: true }, // date
+            modifiedOn: { type: 'string' }, // date
         },
     },
 ];

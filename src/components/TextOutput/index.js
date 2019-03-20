@@ -2,19 +2,18 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 import React from 'react';
 
-import { iconNames } from '#constants';
 import styles from './styles.scss';
-
 
 const propTypes = {
     className: PropTypes.string,
+    label: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
     className: '',
+    value: undefined,
 };
-
-const emptyObject = {};
 
 export default class TextOutput extends React.PureComponent {
     static propTypes = propTypes;
@@ -26,6 +25,10 @@ export default class TextOutput extends React.PureComponent {
             label,
             value,
         } = this.props;
+
+        if (!value) {
+            return null;
+        }
 
         return (
             <div className={_cs(classNameFromProps, styles.textOutput)}>

@@ -99,6 +99,9 @@ const requests = {
                 prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
             }) => hazard !== prevHazard || dateRange !== prevDateRange,
         },
+        extras: {
+            schemaName: 'incidentResponse',
+        },
         // FIXME: write schema
     },
 };

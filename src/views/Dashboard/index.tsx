@@ -76,6 +76,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 hazard !== prevHazard || dateRange !== prevDateRange
             ),
         },
+        extras: {
+            schemaName: 'alertResponse',
+        },
         // FIXME: write schema
     },
 };

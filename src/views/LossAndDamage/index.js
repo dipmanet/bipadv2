@@ -80,14 +80,20 @@ class LossAndDamage extends React.PureComponent {
     }
 
     handleMapPlaybackProgress = (current, extent) => {
-        const progress = current.end - extent.min;
+        const start = current.start - extent.min;
+        const end = current.end - extent.min;
         const range = extent.max - extent.min;
         this.setState({
             currentRange: current,
             timeExtent: extent,
-            playbackProgress: (100 * progress) / range,
+            playbackStart: (100 * start) / range,
+            playbackEnd: (100 * end) / range,
         });
         // console.warn(current, extent);
+    }
+
+    handleMapDistrictSelect = (selectedDistrict) => {
+        this.setState({ selectedDistrict });
     }
 
     handlePlayPauseButtonClick = () => {
@@ -97,7 +103,8 @@ class LossAndDamage extends React.PureComponent {
 
     renderMainContent = () => {
         const {
-            playbackProgress,
+            playbackStart,
+            playbackEnd,
             currentRange,
             pauseMap,
         } = this.state;
@@ -121,7 +128,8 @@ class LossAndDamage extends React.PureComponent {
                         iconName={pauseMap ? iconNames.play : iconNames.pause}
                     />
                     <Seekbar
-                        progress={playbackProgress}
+                        start={playbackStart}
+                        end={playbackEnd}
                     />
                 </div>
             </div>
@@ -141,7 +149,10 @@ class LossAndDamage extends React.PureComponent {
             },
         } = this.props;
 
-        const { pauseMap } = this.state;
+        const {
+            pauseMap,
+            selectedDistrict,
+        } = this.state;
 
         return (
             <React.Fragment>
@@ -149,6 +160,7 @@ class LossAndDamage extends React.PureComponent {
                     pause={pauseMap}
                     lossAndDamageList={lossAndDamageList}
                     onPlaybackProgress={this.handleMapPlaybackProgress}
+                    onDistrictSelect={this.handleMapDistrictSelect}
                 />
                 <Page
                     leftContentClassName={styles.left}
@@ -156,6 +168,7 @@ class LossAndDamage extends React.PureComponent {
                         <LeftPane
                             pending={pending}
                             lossAndDamageList={lossAndDamageList}
+                            selectedDistrict={selectedDistrict}
                         />
                     }
                     rightContentClassName={styles.right}
@@ -178,7 +191,9 @@ const requests = {
     lossAndDamageRequest: {
         url: '/incident/?expand=loss.peoples',
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'incidentWithPeopleResponse',
+        },
     },
 };
 

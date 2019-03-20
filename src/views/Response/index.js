@@ -76,7 +76,6 @@ class Response extends React.PureComponent {
 const requests = {
     responseRequest: {
         url: ({ props: { incidentId } }) => (
-            // ?distance=1000
             `/incident/${incidentId}/response/?distance=12`
         ),
         onSuccess: ({ response, props: { setResourceList } }) => {
@@ -97,7 +96,9 @@ const requests = {
         onMount: ({ props: { incidentId } }) => (
             !!incidentId
         ),
-        // FIXME: write schema
+        extras: {
+            schemaName: 'singleIncidentResponse',
+        },
     },
 };
 

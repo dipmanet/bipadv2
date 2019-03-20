@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
+import { createRequestClient } from '#request';
+
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
@@ -10,11 +12,10 @@ import nepalGeoJson from '#resources/districts.json';
 
 import {
     boundsFill,
+    boundsHoverFill,
     boundsOutline,
     pointPaint,
-    polygonBoundsFill,
-    hoverPaint,
-    polygonHoverPaint,
+    activeBoundsFill,
 } from './mapStyles';
 
 const propTypes = {
@@ -25,7 +26,7 @@ const defaultProps = {
     pause: false,
 };
 
-export default class LossAndDamageMap extends React.PureComponent {
+class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -34,6 +35,7 @@ export default class LossAndDamageMap extends React.PureComponent {
 
         this.state = {
             currentRange: {},
+            selectedDistrict: undefined,
         };
     }
 
@@ -96,6 +98,16 @@ export default class LossAndDamageMap extends React.PureComponent {
         return geojson;
     });
 
+    handleDistrictClick = (args) => {
+        this.setState({ selectedDistrict: args });
+
+        const { onDistrictSelect } = this.props;
+
+        if (onDistrictSelect) {
+            onDistrictSelect(args);
+        }
+    }
+
     playback = () => {
         const {
             lossAndDamageList,
@@ -145,27 +157,40 @@ export default class LossAndDamageMap extends React.PureComponent {
     render() {
         const {
             lossAndDamageList,
+            requests: {
+                districtsGeoJsonRequest: {
+                    pending,
+                    response: districtsGeoJson,
+                },
+            },
         } = this.props;
+
+        if (!districtsGeoJson) {
+            return null;
+        }
 
         const {
             currentRange,
+            selectedDistrict = 'none',
         } = this.state;
 
         const pointFeatureCollection = this.getPointFeatureCollection(lossAndDamageList);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
 
-        let filter;
+        let pointsFilter;
 
         if (currentRange.start) {
-            filter = ['all', ['>=', 'incidentOn', currentRange.start], ['<=', 'incidentOn', currentRange.end]];
+            pointsFilter = ['all', ['>=', 'incidentOn', currentRange.start], ['<=', 'incidentOn', currentRange.end]];
         }
+
+        const activeFilter = ['==', 'title', selectedDistrict];
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="loss-and-damage-bounds"
-                    geoJson={nepalGeoJson}
-                    bounds={bbox(nepalGeoJson)}
+                    geoJson={districtsGeoJson}
+                    bounds={bbox(districtsGeoJson)}
                     boundsPadding={{
                         top: 0,
                         right: 64,
@@ -177,6 +202,18 @@ export default class LossAndDamageMap extends React.PureComponent {
                         layerKey="loss-and-damage-bounds-fill"
                         type="fill"
                         paint={boundsFill}
+                        hoverInfo={{
+                            paint: boundsHoverFill,
+                        }}
+                        onClick={this.handleDistrictClick}
+                        property="title"
+                    />
+                    <MapLayer
+                        layerKey="loss-and-damage-active-bounds-fill"
+                        type="fill"
+                        paint={activeBoundsFill}
+                        property="title"
+                        filter={activeFilter}
                     />
                     <MapLayer
                         layerKey="loss-and-damage-bounds-outline"
@@ -194,10 +231,19 @@ export default class LossAndDamageMap extends React.PureComponent {
                         type="circle"
                         property="incident"
                         paint={pointPaint}
-                        filter={filter}
+                        filter={pointsFilter}
                     />
                 </MapSource>
             </React.Fragment>
         );
     }
 }
+
+const requests = {
+    districtsGeoJsonRequest: {
+        url: '/district/?format=geojson',
+        onMount: true,
+    },
+};
+
+export default createRequestClient(requests)(LossAndDamageMap);

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, isFalsy } from '@togglecorp/fujs';
 
 import { iconNames } from '#constants';
 import styles from './styles.scss';
@@ -12,8 +12,6 @@ const propTypes = {
 const defaultProps = {
     className: '',
 };
-
-const emptyObject = {};
 
 export default class DistanceOutput extends React.PureComponent {
     static propTypes = propTypes;
@@ -28,7 +26,7 @@ export default class DistanceOutput extends React.PureComponent {
         let amount = valueFromProps;
         let unit = 'Km';
 
-        if (!amount) {
+        if (isFalsy(valueFromProps)) {
             return null;
         }
 
