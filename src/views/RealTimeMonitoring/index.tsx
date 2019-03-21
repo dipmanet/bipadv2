@@ -32,7 +32,7 @@ interface PropsFromDispatch {
 }
 
 interface PropsFromState {
-    realTimeRain: PageType.Rain[];
+    realTimeRainList: PageType.RealTimeRain[];
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -57,6 +57,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             setRealTimeRainList({ realTimeRainList });
         },
         onMount: true,
+        // FIXME: write schema
     },
 };
 

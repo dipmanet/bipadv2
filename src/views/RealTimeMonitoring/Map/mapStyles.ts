@@ -16,7 +16,12 @@ export const boundsOutline = {
 
 export const pointPaint = {
     'circle-color': '#E71D36',
-    'circle-opacity': 0.9,
+    'circle-radius': 8,
+    'circle-opacity': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.9,
+        0.5,
+    ],
 };
 
 export const hoverPaint = {
