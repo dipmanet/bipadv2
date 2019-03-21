@@ -55,7 +55,7 @@ export default class Tooltip extends React.PureComponent {
             wards = emptyList,
             streetAddress: geoareaName,
             event: {
-                title: eventTitle = '-',
+                title: eventTitle,
             } = {},
 
             loss = emptyObject,
@@ -66,6 +66,7 @@ export default class Tooltip extends React.PureComponent {
             ...misc
         } = incident;
 
+        const verifiedText = verified ? 'Yes' : 'No';
         const wardNames = wards.map(x => (wardsMap[x] || {}).title);
 
         // FIXME: move to constants
@@ -104,7 +105,7 @@ export default class Tooltip extends React.PureComponent {
                 <TextOutput
                     className={styles.commonInfo}
                     label="Verified"
-                    value={verified}
+                    value={verifiedText}
                 />
                 <TextOutput
                     className={styles.commonInfo}
