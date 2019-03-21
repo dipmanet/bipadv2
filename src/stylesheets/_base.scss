@@ -38,6 +38,10 @@ body {
         height: 100vh;
         // height: calc(100vh - #{$height-navbar});
     }
+
+    .mapboxgl-ctrl-top-right {
+        right: 48px !important;
+    }
 }
 
 %main-content {

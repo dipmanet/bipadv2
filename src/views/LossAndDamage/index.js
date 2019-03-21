@@ -74,6 +74,7 @@ class LossAndDamage extends React.PureComponent {
             currentRange: {},
             timeExtent: {},
             pauseMap: false,
+            selectedDistricts: [],
         };
     }
 
@@ -90,8 +91,8 @@ class LossAndDamage extends React.PureComponent {
         // console.warn(current, extent);
     }
 
-    handleMapDistrictSelect = (selectedDistrict) => {
-        this.setState({ selectedDistrict });
+    handleMapDistrictSelect = (selectedDistricts) => {
+        this.setState({ selectedDistricts });
     }
 
     handlePlayPauseButtonClick = () => {
@@ -126,6 +127,7 @@ class LossAndDamage extends React.PureComponent {
                         iconName={pauseMap ? iconNames.play : iconNames.pause}
                     />
                     <Seekbar
+                        className={styles.seekbar}
                         start={playbackStart}
                         end={playbackEnd}
                     />
@@ -149,7 +151,7 @@ class LossAndDamage extends React.PureComponent {
 
         const {
             pauseMap,
-            selectedDistrict,
+            selectedDistricts,
         } = this.state;
 
         return (
@@ -166,7 +168,7 @@ class LossAndDamage extends React.PureComponent {
                         <LeftPane
                             pending={pending}
                             lossAndDamageList={lossAndDamageList}
-                            selectedDistrict={selectedDistrict}
+                            selectedDistricts={selectedDistricts}
                         />
                     }
                     rightContentClassName={styles.right}

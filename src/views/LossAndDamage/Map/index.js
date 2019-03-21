@@ -4,6 +4,7 @@ import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
 import MapLayer from '#rscz/Map/MapLayer';
+import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
 import { createRequestClient } from '#request';
@@ -41,6 +42,7 @@ class LossAndDamageMap extends React.PureComponent {
         this.state = {
             currentRange: {},
             selectedDistrict: undefined,
+            selectedDistricts: [],
         };
     }
 
@@ -105,13 +107,27 @@ class LossAndDamageMap extends React.PureComponent {
         return geojson;
     });
 
-    handleDistrictClick = (args) => {
-        this.setState({ selectedDistrict: args });
+    handleDistrictClick = (district) => {
+        const { selectedDistricts } = this.state;
+        const newSelectedDistricts = [...selectedDistricts];
+
+        const districtIndex = selectedDistricts.findIndex(d => d === district);
+
+        if (districtIndex === -1) {
+            newSelectedDistricts.push(district);
+        } else {
+            newSelectedDistricts.splice(districtIndex, 1);
+        }
+
+        this.setState({
+            selectedDistrict: district,
+            selectedDistricts: newSelectedDistricts,
+        });
 
         const { onDistrictSelect } = this.props;
 
         if (onDistrictSelect) {
-            onDistrictSelect(args);
+            onDistrictSelect(newSelectedDistricts);
         }
     }
 
@@ -179,6 +195,7 @@ class LossAndDamageMap extends React.PureComponent {
         const {
             currentRange,
             selectedDistrict = 'none',
+            selectedDistricts,
         } = this.state;
 
         const pointFeatureCollection = this.getPointFeatureCollection(lossAndDamageList);
@@ -190,7 +207,7 @@ class LossAndDamageMap extends React.PureComponent {
             pointsFilter = ['all', ['>=', 'incidentOn', currentRange.start], ['<=', 'incidentOn', currentRange.end]];
         }
 
-        const activeFilter = ['==', 'title', selectedDistrict];
+        const activeFilter = ['in', 'title', ...selectedDistricts];
 
         return (
             <React.Fragment>
@@ -233,6 +250,7 @@ class LossAndDamageMap extends React.PureComponent {
                         filter={pointsFilter}
                     />
                 </MapSource>
+                <MapDraw />
             </React.Fragment>
         );
     }

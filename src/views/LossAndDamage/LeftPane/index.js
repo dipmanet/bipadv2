@@ -188,11 +188,85 @@ class LeftPane extends React.PureComponent {
         />
     )
 
+    renderSummary = ({ district }) => {
+        const {
+            lossAndDamageList,
+            pending,
+        } = this.props;
+
+        const countData = this.getLossTypeCount(lossAndDamageList);
+        const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
+        const hazardLossType = this.getHazardLossType(lossAndDamageList);
+
+        return (
+            <div className={styles.districtSummary}>
+                <header className={styles.header}>
+                    <h4 className={styles.heading}>
+                        { district || 'Overall' }
+                    </h4>
+                </header>
+                <div className={styles.content}>
+                    <div className={styles.parallelContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Hazard Loss Details
+                            </h4>
+                        </header>
+                        <ParallelCoordinates
+                            data={hazardLossType}
+                            className={styles.chart}
+                            ignoreProperties={['label', 'color']}
+                            labelSelector={parallelLabelSelector}
+                            colorSelector={parallelColorSelector}
+                            margins={{
+                                top: 20,
+                                right: 20,
+                                bottom: 20,
+                                left: 20,
+                            }}
+                        />
+                        { this.renderLegend(hazardLossType) }
+                    </div>
+                    <div className={styles.donutContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Estimated Monetary Loss
+                            </h4>
+                        </header>
+                        <DonutChart
+                            sideLengthRatio={0.4}
+                            className={styles.chart}
+                            data={hazardLossEstimate}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            colorSelector={donutChartColorSelector}
+                        />
+                        { this.renderLegend(hazardLossEstimate) }
+                    </div>
+                    <div className={styles.barContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Loss count
+                            </h4>
+                        </header>
+                        <SimpleVerticalBarChart
+                            className={styles.chart}
+                            data={countData}
+                            labelSelector={barChartLabelSelector}
+                            valueSelector={barChartValueSelector}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const {
             className,
             lossAndDamageList,
             pending,
+            selectedDistricts,
         } = this.props;
 
         const countData = this.getLossTypeCount(lossAndDamageList);
@@ -202,6 +276,8 @@ class LeftPane extends React.PureComponent {
         const {
             showDetails,
         } = this.state;
+
+        const DistrictSummary = this.renderSummary;
 
         return (
             <CollapsibleView
@@ -238,6 +314,18 @@ class LeftPane extends React.PureComponent {
                                 transparent
                             />
                         </header>
+                        <div className={styles.summaryList}>
+                            { selectedDistricts.map(district => (
+                                <DistrictSummary
+                                    key={district}
+                                    district={district}
+                                />
+                            )) }
+                            { selectedDistricts.length === 0 && (
+                                <DistrictSummary />
+                            )}
+                        </div>
+                        {/*
                         <div className={styles.content}>
                             <div className={styles.parallelContainer}>
                                 <header className={styles.header}>
@@ -290,6 +378,7 @@ class LeftPane extends React.PureComponent {
                                 />
                             </div>
                         </div>
+                        */}
                     </div>
                 }
             />

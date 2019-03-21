@@ -19,8 +19,10 @@
         border: $width-separator-thin solid $color-separator-light;
         border-radius: 5px;
         background-color: $color-foreground;
-        width: 320px;
-        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+        min-width: 320px;
+        max-width: calc(100vw - 200px);
+        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2) - 100px);
+        overflow: auto;
 
         .visualizations {
             display: flex;
@@ -88,6 +90,84 @@
                     @extend %container;
                 }
             }
+
+            .summary-list {
+                display: flex;
+                flex-grow: 1;
+
+                .district-summary {
+                    display: flex;
+                    flex-direction: column;
+                    width: 320px;
+
+                    &:not(:last-child) {
+                        border-right: $width-separator-thin solid $color-separator;
+                    }
+
+                    > .header {
+                        display: flex;
+                        align-items: center;
+                        flex-shrink: 0;
+
+                        .heading {
+                            flex-grow: 1;
+                            padding: 0 $spacing-medium;
+                            color: $color-primary;
+                        }
+                    }
+
+                    .content {
+                        display: flex;
+                        flex-direction: column;
+                        flex-grow: 1;
+                        padding: $spacing-small;
+
+                        %container {
+                            display: flex;
+                            flex-basis: calc(100% / 3);
+                            flex-direction: column;
+                            padding: $spacing-small 0;
+
+                            .header {
+                                flex-shrink: 0;
+
+                                .heading {
+                                    padding: $spacing-small;
+                                    color: $color-accent;
+                                }
+                            }
+
+                            .chart {
+                                flex-grow: 1;
+                                width: 100%;
+                            }
+
+                            .legend {
+                                display: flex;
+                                flex-shrink: 0;
+                                flex-wrap: wrap;
+
+                                .legend-item {
+                                    padding: 0 $spacing-small;
+                                }
+                            }
+                        }
+
+                        .bar-container {
+                            @extend %container;
+                        }
+
+                        .donut-container {
+                            @extend %container;
+                        }
+
+                        .parallel-container {
+                            @extend %container;
+                        }
+                    }
+                }
+            }
         }
+
     }
 }

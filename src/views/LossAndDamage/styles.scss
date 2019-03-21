@@ -11,6 +11,10 @@
 }
 
 .main {
+    left: $spacing-medium;
+    transform: none;
+    width: calc(100vw - 72px);
+
     .container {
         border-radius: 3px;
         background-color: #fff;
@@ -28,7 +32,12 @@
             display: flex;
 
             .play-button {
+                flex-shrink: 0;
                 font-size: $font-size-large;
+            }
+
+            .seekbar {
+                flex-grow: 1;
             }
         }
     }

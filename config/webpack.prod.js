@@ -45,6 +45,9 @@ module.exports = (env) => {
         mode: 'production',
 
         devtool: 'source-map',
+        node: {
+            fs: 'empty',
+        },
 
         optimization: {
             minimizer: [
