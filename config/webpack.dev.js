@@ -53,6 +53,9 @@ module.exports = (env) => {
             hash: true,
         },
         devtool: 'cheap-module-eval-source-map',
+        node: {
+            fs: 'empty',
+        },
 
         devServer: {
             host: '0.0.0.0',

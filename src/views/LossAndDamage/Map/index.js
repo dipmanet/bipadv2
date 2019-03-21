@@ -4,6 +4,7 @@ import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
 import MapLayer from '#rscz/Map/MapLayer';
+import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
 import { createRequestClient } from '#request';
@@ -41,6 +42,7 @@ class LossAndDamageMap extends React.PureComponent {
         this.state = {
             currentRange: {},
             selectedDistrict: undefined,
+            selectedDistricts: [],
         };
     }
 
@@ -53,6 +55,8 @@ class LossAndDamageMap extends React.PureComponent {
     }
 
     getBounds = memoize(geoJson => bbox(geoJson))
+
+    getActiveFilter = memoize(districts => ['in', 'title', ...districts])
 
     getTimeExtent = (lossAndDamageList) => {
         const timestamps = lossAndDamageList.filter(d => d.incidentOn)
@@ -85,6 +89,7 @@ class LossAndDamageMap extends React.PureComponent {
         return geojson;
     });
 
+    /*
     getPolygonFeatureCollection = memoize((lossAndDamageList) => {
         const geojson = {
             type: 'FeatureCollection',
@@ -104,14 +109,30 @@ class LossAndDamageMap extends React.PureComponent {
 
         return geojson;
     });
+    */
 
-    handleDistrictClick = (args) => {
-        this.setState({ selectedDistrict: args });
+    handleDistrictClick = (id, item) => {
+        const district = item.title;
+
+        const { selectedDistricts } = this.state;
+        const newSelectedDistricts = [...selectedDistricts];
+
+        const districtIndex = selectedDistricts.findIndex(d => d === district);
+
+        if (districtIndex === -1) {
+            newSelectedDistricts.push(district);
+        } else {
+            newSelectedDistricts.splice(districtIndex, 1);
+        }
+
+        this.setState({
+            selectedDistrict: district,
+            selectedDistricts: newSelectedDistricts,
+        });
 
         const { onDistrictSelect } = this.props;
-
         if (onDistrictSelect) {
-            onDistrictSelect(args);
+            onDistrictSelect(newSelectedDistricts);
         }
     }
 
@@ -179,60 +200,63 @@ class LossAndDamageMap extends React.PureComponent {
         const {
             currentRange,
             selectedDistrict = 'none',
+            selectedDistricts,
         } = this.state;
 
         const pointFeatureCollection = this.getPointFeatureCollection(lossAndDamageList);
-        const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
+        // const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
 
         let pointsFilter;
-
         if (currentRange.start) {
-            pointsFilter = ['all', ['>=', 'incidentOn', currentRange.start], ['<=', 'incidentOn', currentRange.end]];
+            pointsFilter = [
+                'all',
+                ['>=', 'incidentOn', currentRange.start],
+                ['<=', 'incidentOn', currentRange.end],
+            ];
         }
 
-        const activeFilter = ['==', 'title', selectedDistrict];
+        const activeFilter = this.getActiveFilter(selectedDistricts);
 
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="loss-and-damage-bounds"
+                    sourceKey="district"
                     geoJson={districtsGeoJson}
                     bounds={this.getBounds(districtsGeoJson)}
                     boundsPadding={districtsPadding}
                 >
                     <MapLayer
-                        layerKey="loss-and-damage-active-bounds-fill"
+                        layerKey="district-selected-fill"
                         type="fill"
                         paint={activeBoundsFill}
                         property="title"
                         filter={activeFilter}
                     />
                     <MapLayer
-                        layerKey="loss-and-damage-bounds-fill"
+                        layerKey="district-fill"
                         type="fill"
                         paint={boundsFill}
                         enableHover
-                        // onClick={this.handleDistrictClick}
-                        // property="title"
+                        onClick={this.handleDistrictClick}
                     />
                     <MapLayer
-                        layerKey="loss-and-damage-bounds-outline"
+                        layerKey="district-outline"
                         type="line"
                         paint={boundsOutline}
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey="loss-and-damage-points"
+                    sourceKey="points"
                     geoJson={pointFeatureCollection}
                 >
                     <MapLayer
-                        layerKey="incident-points-fill"
+                        layerKey="points"
                         type="circle"
-                        property="incident"
                         paint={pointPaint}
                         filter={pointsFilter}
                     />
                 </MapSource>
+                <MapDraw />
             </React.Fragment>
         );
     }
