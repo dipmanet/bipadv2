@@ -56,6 +56,8 @@ class LossAndDamageMap extends React.PureComponent {
 
     getBounds = memoize(geoJson => bbox(geoJson))
 
+    getActiveFilter = memoize(districts => ['in', 'title', ...districts])
+
     getTimeExtent = (lossAndDamageList) => {
         const timestamps = lossAndDamageList.filter(d => d.incidentOn)
             .map(d => (new Date(d.incidentOn)).getTime());
@@ -87,6 +89,7 @@ class LossAndDamageMap extends React.PureComponent {
         return geojson;
     });
 
+    /*
     getPolygonFeatureCollection = memoize((lossAndDamageList) => {
         const geojson = {
             type: 'FeatureCollection',
@@ -106,8 +109,11 @@ class LossAndDamageMap extends React.PureComponent {
 
         return geojson;
     });
+    */
 
-    handleDistrictClick = (district) => {
+    handleDistrictClick = (id, item) => {
+        const district = item.title;
+
         const { selectedDistricts } = this.state;
         const newSelectedDistricts = [...selectedDistricts];
 
@@ -125,7 +131,6 @@ class LossAndDamageMap extends React.PureComponent {
         });
 
         const { onDistrictSelect } = this.props;
-
         if (onDistrictSelect) {
             onDistrictSelect(newSelectedDistricts);
         }
@@ -199,53 +204,54 @@ class LossAndDamageMap extends React.PureComponent {
         } = this.state;
 
         const pointFeatureCollection = this.getPointFeatureCollection(lossAndDamageList);
-        const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
+        // const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
 
         let pointsFilter;
-
         if (currentRange.start) {
-            pointsFilter = ['all', ['>=', 'incidentOn', currentRange.start], ['<=', 'incidentOn', currentRange.end]];
+            pointsFilter = [
+                'all',
+                ['>=', 'incidentOn', currentRange.start],
+                ['<=', 'incidentOn', currentRange.end],
+            ];
         }
 
-        const activeFilter = ['in', 'title', ...selectedDistricts];
+        const activeFilter = this.getActiveFilter(selectedDistricts);
 
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="loss-and-damage-bounds"
+                    sourceKey="district"
                     geoJson={districtsGeoJson}
                     bounds={this.getBounds(districtsGeoJson)}
                     boundsPadding={districtsPadding}
                 >
                     <MapLayer
-                        layerKey="loss-and-damage-active-bounds-fill"
+                        layerKey="district-selected-fill"
                         type="fill"
                         paint={activeBoundsFill}
                         property="title"
                         filter={activeFilter}
                     />
                     <MapLayer
-                        layerKey="loss-and-damage-bounds-fill"
+                        layerKey="district-fill"
                         type="fill"
                         paint={boundsFill}
                         enableHover
-                        // onClick={this.handleDistrictClick}
-                        // property="title"
+                        onClick={this.handleDistrictClick}
                     />
                     <MapLayer
-                        layerKey="loss-and-damage-bounds-outline"
+                        layerKey="district-outline"
                         type="line"
                         paint={boundsOutline}
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey="loss-and-damage-points"
+                    sourceKey="points"
                     geoJson={pointFeatureCollection}
                 >
                     <MapLayer
-                        layerKey="incident-points-fill"
+                        layerKey="points"
                         type="circle"
-                        property="incident"
                         paint={pointPaint}
                         filter={pointsFilter}
                     />
