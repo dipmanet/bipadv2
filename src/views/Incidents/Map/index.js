@@ -86,7 +86,7 @@ class IncidentMap extends React.PureComponent {
                     properties: {
                         incidentId: incident.id,
                         severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
-                        hazardColor: getHazardColor(hazards[incident.hazard], true),
+                        hazardColor: getHazardColor(hazards[incident.hazard]),
                     },
                 })),
         };
