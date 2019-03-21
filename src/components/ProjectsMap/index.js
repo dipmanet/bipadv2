@@ -139,7 +139,6 @@ export default class ProjectsMap extends React.PureComponent {
                 <MapSource
                     sourceKey="points"
                     geoJson={points}
-                    supportHover
                 >
                     <MapLayer
                         layerKey="points-red"

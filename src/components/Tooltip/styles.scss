@@ -1,9 +1,7 @@
 @import '~base-scss/base';
 
 .tooltip {
-    border: $width-separator-thin solid $color-separator-light;
     background-color: $color-foreground;
-    padding: $spacing-large;
     max-width: 300px;
 
     .heading {

@@ -339,6 +339,25 @@ const setIncidentFilters = (state: Type.PageState, action: Type.SetIncidentFilte
 
 // response page
 
+// FIXME: should be moved to utils
+function unique<T, W>(
+    arr: T[],
+    getValue: (t: T) => W,
+    getComparisionValue: (t: T) => (string | number),
+) {
+    const memory: { [key: string]: boolean } = {};
+    const newArr: W[] = [];
+    arr.forEach((o) => {
+        const comparator = getComparisionValue;
+        const id = comparator(o);
+        if (!memory[id]) {
+            memory[id] = true;
+            newArr.push(getValue(o));
+        }
+    });
+    return newArr;
+}
+
 export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
     const {
         resourceList,
@@ -346,7 +365,8 @@ export const setResourceList = (state: Type.PageState, action: Type.SetResourceL
 
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
-        deferedState.responsePage.resourceList = resourceList;
+        // FIXME: unique value must be sent from server later
+        deferedState.responsePage.resourceList = unique(resourceList, w => w, w => w.title);
         /* eslint-enable no-param-reassign */
     });
 

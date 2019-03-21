@@ -109,6 +109,7 @@ const schemaList: Schema[] = [
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
             icon: { type: 'string' }, // FIXME: should be required
+            color: { type: 'string' }, // FIXME: should be required
         },
     },
     {

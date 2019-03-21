@@ -43,7 +43,12 @@ export const hazardColorMap = {
     landslide: '#f08842',
 };
 
-export const getHazardColor = (hazard) => {
-    if (hazard.color) return hazard.color;
+export const getHazardColor = (hazard, hari) => {
+    if (hari) {
+        console.warn(hazard);
+    }
+    if (hazard.color) {
+        return hazard.color;
+    }
     return hazardColorMap[hazard.title.toLowerCase()] || '#4666b0';
 };

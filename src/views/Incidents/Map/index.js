@@ -3,15 +3,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
-import { navigate } from '@reach/router';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { reverseRoute } from '@togglecorp/fujs';
-import store from '#store';
-
-import { hazardTypesSelector } from '#selectors';
+import {
+    hazardTypesSelector,
+    wardsMapSelector,
+} from '#selectors';
 
 import Tooltip from '#components/Tooltip';
 
@@ -24,12 +23,10 @@ import {
 
 
 import {
-    boundsFill,
-    boundsOutline,
-    pointPaint,
-    polygonBoundsFill,
-    hoverPaint,
-    polygonHoverPaint,
+    districtsFill,
+    districtsOutline,
+    incidentPointPaint,
+    incidentPolygonPaint,
 } from './mapStyles';
 
 const propTypes = {
@@ -44,31 +41,12 @@ const severityScaleFactor = 20000;
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
+    wardsMap: wardsMapSelector(state),
 });
-
-// NOTE: store needs to be passed bacause somehow this goes out of context in MapLayer
-const toolTipWrapper = props => <Tooltip store={store} {...props} />;
-
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
-
-    constructor(props) {
-        super(props);
-
-        this.hoverInfo = {
-            paint: hoverPaint,
-            showTooltip: true,
-            tooltipModifier: toolTipWrapper,
-        };
-
-        this.polygonHoverInfo = {
-            paint: polygonHoverPaint,
-            showTooltip: true,
-            tooltipModifier: toolTipWrapper,
-        };
-    }
 
     getPointFeatureCollection = memoize((incidentList) => {
         const { hazards } = this.props;
@@ -78,13 +56,12 @@ class IncidentMap extends React.PureComponent {
                 .filter(incident => incident.point)
                 .map(incident => ({
                     type: 'Feature',
+                    id: incident.id,
                     geometry: {
                         ...incident.point,
                     },
                     properties: {
-                        incident,
                         incidentId: incident.id,
-                        // Calculate severity from loss
                         severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
                         hazardColor: getHazardColor(hazards[incident.hazard]),
                     },
@@ -101,15 +78,15 @@ class IncidentMap extends React.PureComponent {
             features: incidentList
                 .filter(incident => incident.polygon)
                 .map(incident => ({
+                    id: incident.id,
                     type: 'Feature',
                     geometry: {
                         ...incident.polygon,
                     },
                     properties: {
-                        incident,
                         incidentId: incident.id,
                         severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
-                        hazardColor: getHazardColor(hazards[incident.hazard]),
+                        hazardColor: getHazardColor(hazards[incident.hazard], true),
                     },
                 })),
         };
@@ -117,11 +94,17 @@ class IncidentMap extends React.PureComponent {
         return geojson;
     });
 
-    handlePointClick = (propertiesString) => {
-        const properties = JSON.parse(propertiesString);
-        const { id: incidentId } = properties;
-        const redirectTo = reverseRoute(':incidentId/response/', { incidentId });
-        navigate(redirectTo);
+    tooltipRendererParams = (id) => {
+        const {
+            wardsMap,
+            incidentList,
+        } = this.props;
+
+        const incident = incidentList.find(i => i.id === id);
+        return {
+            incident,
+            wardsMap,
+        };
     }
 
     render() {
@@ -135,47 +118,45 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="incident-bounds"
+                    sourceKey="districts"
                     geoJson={nepalGeoJson}
                     bounds={bbox(nepalGeoJson)}
                 >
                     <MapLayer
-                        layerKey="incident-bounds-fill"
+                        layerKey="districts-fill"
                         type="fill"
-                        paint={boundsFill}
+                        paint={districtsFill}
                     />
                     <MapLayer
-                        layerKey="incident-bounds-outline"
+                        layerKey="districts-outline"
                         type="line"
-                        paint={boundsOutline}
+                        paint={districtsOutline}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="incident-points"
                     geoJson={pointFeatureCollection}
-                    supportHover
                 >
                     <MapLayer
                         layerKey="incident-points-fill"
                         type="circle"
-                        property="incidentId"
-                        paint={pointPaint}
-                        onClick={this.handlePointClick}
-                        hoverInfo={this.hoverInfo}
+                        paint={incidentPointPaint}
+                        enableHover
+                        tooltipRenderer={Tooltip}
+                        tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="incident-polygons"
                     geoJson={polygonFeatureCollection}
-                    supportHover
                 >
                     <MapLayer
                         layerKey="incident-polygon-fill"
                         type="fill"
-                        property="incidentId"
-                        paint={polygonBoundsFill}
-                        onClick={this.handlePointClick}
-                        hoverInfo={this.polygonHoverInfo}
+                        paint={incidentPolygonPaint}
+                        enableHover
+                        tooltipRenderer={Tooltip}
+                        tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
             </React.Fragment>

@@ -27,6 +27,7 @@ export interface Incident {
     hazard: number;
 }
 export interface Resource {
+    title: string;
 }
 
 export interface GeoJson {

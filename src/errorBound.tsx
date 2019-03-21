@@ -1,13 +1,13 @@
 import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-// export default (ErrorComponent) => {
-
 interface Handler {
     handleException?(error: Error, errorInfo: React.ErrorInfo): void;
 }
 
-export default function unnamed<P>(ErrorComponent: React.ComponentType<P> & Handler) {
+type Comp<P> = (React.ComponentType<P> | React.SFC<P>) & Handler;
+
+export default function unnamed<P>(ErrorComponent: Comp<P>) {
     return (WrappedComponent: React.ComponentType<P>) => {
         interface State {
             hasError: boolean;
@@ -56,7 +56,7 @@ export default function unnamed<P>(ErrorComponent: React.ComponentType<P> & Hand
             }
         }
 
-        return hoistNonReactStatics<React.ComponentType<P>, React.ComponentType<P> & Handler>(
+        return hoistNonReactStatics<React.ComponentType<P>, React.ComponentType<P>>(
             BoundedComponent,
             WrappedComponent,
         );

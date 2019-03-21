@@ -175,6 +175,7 @@ const schemaList: Schema[] = [
             description: 'Response of single incident',
         },
         fields: {
+            event: { type: 'uint' },
             loss: { type: 'uint' },
         },
     },

@@ -5,7 +5,6 @@ import { Router } from '@reach/router';
 
 import Map from '#rscz/Map/index';
 
-import AppError from '#components/error/AppError';
 import Navbar from '#components/Navbar';
 import nepalGeoJson from '#resources/districts.json';
 import { routeSettings } from '#constants';
@@ -26,6 +25,7 @@ const loadingStyle: React.CSSProperties = {
     width: '200px',
     height: '60px',
     display: 'flex',
+    textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '18px',
@@ -33,7 +33,7 @@ const loadingStyle: React.CSSProperties = {
     border: '1px solid rgba(0, 0, 0, 0.2)',
     borderRadius: '3px',
 };
-// FIXME: use different
+
 const LoadingResources = () => (
     <div style={loadingStyle}>
         Loading Resources...
@@ -44,6 +44,11 @@ const LoadingPage = () => (
         Loading Page...
     </div>
 );
+const ErrorInPage = () => (
+    <div style={loadingStyle}>
+        Some problem occured.
+    </div>
+);
 
 // BOUNDS
 
@@ -52,7 +57,7 @@ const nepalBounds = bbox(nepalGeoJson);
 // ROUTES
 
 const routes = routeSettings.map(({ load, ...settings }) => {
-    const Component = errorBound(AppError)(
+    const Component = errorBound<typeof settings>(ErrorInPage)(
         helmetify(
             Loadable({
                 loader: load,

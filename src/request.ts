@@ -1,6 +1,7 @@
 import {
     createRequestCoordinator,
     methods,
+    CoordinatorAttributes,
 } from '@togglecorp/react-rest-request';
 import { AppState } from '#store/types';
 
@@ -12,23 +13,6 @@ import schema from '#schema';
 import { sanitizeResponse } from '#utils/common';
 
 const wsEndpoint = 'https://bipad.nepware.com/api/v1';
-
-// FIXME: get this from react-rest-request
-interface CoordinatorAttributes {
-    key: string;
-    group?: string;
-
-    method: string;
-    url: string;
-    body?: object;
-    query?: { [key: string]: string };
-    options?: object;
-    extras?: object;
-
-    onSuccess?: (value: { response: object; status: number }) => void;
-    onFailure?: (value: { error: object; status: number }) => void;
-    onFatal?: (value: { error: object }) => void;
-}
 
 // FIXME: don't know why eslint disable is required right now
 // eslint-disable-next-line arrow-parens

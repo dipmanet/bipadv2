@@ -98,7 +98,6 @@ const state: PageState = {
     },
 
     // FIXME: Remove Geojson from redux
-
     geoJsons: {
         district: {
             type: 'FeatureCollection',
