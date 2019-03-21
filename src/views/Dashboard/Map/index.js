@@ -54,6 +54,7 @@ class AlertMap extends React.PureComponent {
                         id,
                         title,
                         polygon,
+                        description,
                     } = alert;
 
                     return {
@@ -64,6 +65,7 @@ class AlertMap extends React.PureComponent {
                         },
                         properties: {
                             title,
+                            description,
                         },
                     };
                 }),
@@ -106,14 +108,20 @@ class AlertMap extends React.PureComponent {
         return bbox(currentBoundingObject);
     }
 
-    tooltipRendererParams = (id, { title }) => ({
+    tooltipRendererParams = (id, { title, description }) => ({
         title,
+        description,
     })
 
-    tooltipRenderer = ({ title }) => (
-        <h3>
-            {title}
-        </h3>
+    tooltipRenderer = ({ title, description }) => (
+        <div>
+            <h3>
+                {title}
+            </h3>
+            <p>
+                {description}
+            </p>
+        </div>
     )
 
     render() {
