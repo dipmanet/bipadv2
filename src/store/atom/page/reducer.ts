@@ -115,6 +115,13 @@ export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Re
     type: Type.PageType.RP__SET_RESOURCE_LIST,
     resourceList,
 });
+// real time monitoring action creator
+
+export const setRealTimeRainListAction = (
+    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]}) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST,
+    realTimeRainList,
+});
 
 //  REDUCERS
 
@@ -373,6 +380,22 @@ export const setResourceList = (state: Type.PageState, action: Type.SetResourceL
     return newState;
 };
 
+// real time monitoring page
+
+export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealTimeRainList) => {
+    const {
+        realTimeRainList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.realTimeRainList = realTimeRainList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 export default function routeReducer(
     state = initialState,
@@ -409,6 +432,8 @@ export default function routeReducer(
             return setIncidentFilters(state, action);
         case Type.PageType.RP__SET_RESOURCE_LIST:
             return setResourceList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
+            return setRealTimeRainList(state, action);
         default:
             return state;
     }

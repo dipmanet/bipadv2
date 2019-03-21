@@ -181,3 +181,14 @@ export const resourceListSelectorRP = createSelector(
 );
 
 export const dummyRP = '';
+
+
+// real time monitoring page
+
+const realTimeMonitoringPageSelector = ({ page }: AppState) =>
+    page.realTimeMonitoringPage;
+
+export const realTimeRainListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ realTimeRainList }) => realTimeRainList,
+);

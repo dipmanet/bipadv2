@@ -1,0 +1,17 @@
+@import '~base-scss/base';
+
+.right {
+    padding: 0;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: fade-in $duration-transition-slow ease-in forwards;
+}

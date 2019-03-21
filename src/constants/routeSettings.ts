@@ -71,9 +71,8 @@ const routeSettings: SomeRoute[] = [
         title: 'Realtime',
         path: '/realtime/',
         iconName: iconNames.realtime,
-        load: () => import('../views/Dashboard'),
+        load: () => import('../views/RealTimeMonitoring'),
         navbar: true,
-        disabled: true,
     },
     {
         name: 'profileMapping',
