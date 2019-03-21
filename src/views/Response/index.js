@@ -16,6 +16,7 @@ import {
     // incidentIdFromRouteSelector,
     incidentSelector,
     resourceListSelectorRP,
+    wardsMapSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -27,10 +28,15 @@ import ResourceList from './ResourceList';
 import styles from './styles.scss';
 
 const propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
+    wardsMap: {},
 };
+
+const emptyObject = {};
 
 class Response extends React.PureComponent {
     static propTypes = propTypes
@@ -38,11 +44,12 @@ class Response extends React.PureComponent {
 
     render() {
         const {
-            incident = {},
+            incident = emptyObject,
             resourceList,
             requests: {
                 responseRequest: { pending },
             },
+            wardsMap,
         } = this.props;
 
         if (!incident.id) {
@@ -59,7 +66,10 @@ class Response extends React.PureComponent {
                     leftContentClassName={styles.incidentDetails}
                     leftContent={
                         <Tooltip
-                            incident={JSON.stringify(incident)}
+                            className={styles.info}
+                            incident={incident}
+                            wardsMap={wardsMap}
+                            hideLink
                         />
                     }
                     rightContentClassName={styles.resourceListContainer}
@@ -109,6 +119,7 @@ const mapStateToProps = (state, props) => ({
     // incidentId: incidentIdFromRouteSelector(state),
     incident: incidentSelector(state, props),
     resourceList: resourceListSelectorRP(state),
+    wardsMap: wardsMapSelector(state),
     // incidentList: incidentListSelectorIP(state),
 });
 

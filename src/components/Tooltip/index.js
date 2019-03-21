@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
+import { _cs, reverseRoute, mapToList } from '@togglecorp/fujs';
+import { Link } from '@reach/router';
+
+import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
 import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import Loss from '#components/Loss';
-
-import FormattedDate from '#rscv/FormattedDate';
-
-import { mapToList } from '@togglecorp/fujs';
-
-
 import { toTitleCase } from '#utils/common';
 
 import styles from './styles.scss';
@@ -22,26 +19,28 @@ const emptyList = [];
 
 
 const propTypes = {
-    incident: PropTypes.string.isRequired,
+    incident: PropTypes.object.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
-    incident: '{}',
+    incident: {},
     wardsMap: {},
 };
 
+// FIXME: wards map should be loaded
 export default class Tooltip extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    memoizedJSONParse = memoize(JSON.parse)
-
     render() {
-        const { incident: incidentString } = this.props;
-        const incident = this.memoizedJSONParse(incidentString);
-        const { wardsMap } = this.props;
+        const {
+            incident,
+            wardsMap,
+            className,
+            hideLink,
+        } = this.props;
 
         const {
             title,
@@ -56,7 +55,7 @@ export default class Tooltip extends React.PureComponent {
             wards = emptyList,
             streetAddress: geoareaName,
             event: {
-                title: eventTitle = '-',
+                title: eventTitle,
             } = {},
 
             loss = emptyObject,
@@ -67,6 +66,7 @@ export default class Tooltip extends React.PureComponent {
             ...misc
         } = incident;
 
+        const verifiedText = verified ? 'Yes' : 'No';
         const wardNames = wards.map(x => (wardsMap[x] || {}).title);
 
         // FIXME: move to constants
@@ -82,10 +82,17 @@ export default class Tooltip extends React.PureComponent {
         );
 
         return (
-            <div className={styles.tooltip}>
+            <div className={_cs(styles.tooltip, className)}>
                 <h2 className={styles.heading}>
                     {title}
                 </h2>
+                { !hideLink &&
+                    <Link
+                        to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
+                    >
+                        Go to response
+                    </Link>
+                }
                 <DateOutput
                     className={styles.incidentDate}
                     date={incidentOn}
@@ -98,7 +105,7 @@ export default class Tooltip extends React.PureComponent {
                 <TextOutput
                     className={styles.commonInfo}
                     label="Verified"
-                    value={verified}
+                    value={verifiedText}
                 />
                 <TextOutput
                     className={styles.commonInfo}

@@ -8,8 +8,8 @@ import MapSource from '#rscz/Map/MapSource';
 import nepalGeoJson from '#resources/districts.json';
 
 import {
-    boundsFill,
-    boundsOutline,
+    districtsFill,
+    districtsOutline,
 } from './mapStyles';
 
 const propTypes = {
@@ -25,26 +25,25 @@ export default class ResponseMap extends React.PureComponent {
     static defaultProps = defaultProps;
 
     render() {
-        const {
-            className,
-        } = this.props;
+        const { className } = this.props;
 
+        const bounds = bbox(nepalGeoJson);
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="bounds"
+                    sourceKey="districts"
                     geoJson={nepalGeoJson}
-                    bounds={bbox(nepalGeoJson)}
+                    bounds={bounds}
                 >
                     <MapLayer
-                        layerKey="bounds-fill"
+                        layerKey="districts-fill"
                         type="fill"
-                        paint={boundsFill}
+                        paint={districtsFill}
                     />
                     <MapLayer
-                        layerKey="bounds-outline"
+                        layerKey="districts-outline"
                         type="line"
-                        paint={boundsOutline}
+                        paint={districtsOutline}
                     />
                 </MapSource>
             </React.Fragment>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 import bbox from '@turf/bbox';
 import { isTruthy } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
@@ -23,11 +23,9 @@ import {
 } from '#request';
 
 import {
-    boundsFill,
-    polygonBoundsFill,
-    boundsOutline,
-    // pointsOuter,
-    hoverPaint,
+    districtsFill,
+    polygonFill,
+    districtsOutline,
 } from './mapStyles';
 import styles from './styles.scss';
 
@@ -46,49 +44,28 @@ class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    constructor(props) {
-        super(props);
-
-        this.hoverInfo = {
-            paint: hoverPaint,
-            showTooltip: true,
-            tooltipModifier: this.renderTooltip,
-        };
-    }
-
-    getFeatureCollection = memoize((alertList, hazardTypes) => {
+    getFeatureCollection = memoize((alertList) => {
         const geojson = {
             type: 'FeatureCollection',
             features: alertList
                 .filter(alert => isTruthy(alert.polygon))
                 .map((alert) => {
-                    const hazardType = hazardTypes[alert.hazard];
-                    const src = hazardType ? hazardType.icon : undefined;
+                    const {
+                        id,
+                        title,
+                        polygon,
+                        description,
+                    } = alert;
+
                     return {
+                        id,
                         type: 'Feature',
                         geometry: {
-                            ...alert.polygon,
+                            ...polygon,
                         },
                         properties: {
-                            id: alert.id,
-                            alert,
-                            containerClassName: styles.iconContainer,
-                            /*
-                            markerHTML: ReactDOMServer.renderToString(
-                                <img
-                                    src={src}
-                                    alt={alert.title}
-                                    className={styles.icon}
-                                />,
-                            ),
-                            popupHTML: ReactDOMServer.renderToString(
-                                <div className={styles.markerPopup}>
-                                    <h3 className={styles.heading}>
-                                        { alert.title }
-                                    </h3>
-                                </div>,
-                            ),
-                            */
+                            title,
+                            description,
                         },
                     };
                 }),
@@ -131,25 +108,26 @@ class AlertMap extends React.PureComponent {
         return bbox(currentBoundingObject);
     }
 
-    renderTooltip = ({ alert: alertString }) => {
-        const alert = JSON.parse(alertString);
+    tooltipRendererParams = (id, { title, description }) => ({
+        title,
+        description,
+    })
 
-        const { title } = alert;
-
-        return (
-            <div className={styles.tooltip}>
-                <h2 className={styles.heading}>
-                    {title}
-                </h2>
-            </div>
-        );
-    }
+    tooltipRenderer = ({ title, description }) => (
+        <div>
+            <h3>
+                {title}
+            </h3>
+            <p>
+                {description}
+            </p>
+        </div>
+    )
 
     render() {
         const {
             className,
             alertList,
-            hazardTypes,
             filters,
             requests: {
                 districtsGeoJsonRequest: {
@@ -162,41 +140,38 @@ class AlertMap extends React.PureComponent {
             return null;
         }
 
-        const featureCollection = this.getFeatureCollection(alertList, hazardTypes);
+        const featureCollection = this.getFeatureCollection(alertList);
         const bounds = this.getCurrentBounds();
 
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="bounds"
+                    sourceKey="districts"
                     geoJson={districtsGeoJson}
-                    // geoJson={nepalGeoJson}
                     bounds={bounds}
-                    // bounds={bbox(districtsGeoJson)}
                 >
                     <MapLayer
-                        layerKey="bounds-fill"
+                        layerKey="districts-fill"
                         type="fill"
-                        paint={boundsFill}
+                        paint={districtsFill}
                     />
                     <MapLayer
-                        layerKey="bounds-outline"
+                        layerKey="districts-outline"
                         type="line"
-                        paint={boundsOutline}
+                        paint={districtsOutline}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="polygons"
                     geoJson={featureCollection}
-                    supportHover
                 >
                     <MapLayer
                         layerKey="polygon"
                         type="fill"
-                        property="id"
-                        paint={polygonBoundsFill}
-                        hoverInfo={this.hoverInfo}
-                        // onClick={this.handlePointClick}
+                        paint={polygonFill}
+                        enableHover
+                        tooltipRenderer={this.tooltipRenderer}
+                        tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
             </React.Fragment>

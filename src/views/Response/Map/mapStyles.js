@@ -1,9 +1,9 @@
-export const boundsFill = {
+export const districtsFill = {
     'fill-color': '#0081f0',
     'fill-opacity': 0.1,
 };
 
-export const boundsOutline = {
+export const districtsOutline = {
     'line-color': '#4c4caa',
     'line-opacity': 0.2,
     'line-width': 1,
@@ -36,8 +36,22 @@ export const pointPaint = {
     ],
 };
 
-export const hoverPaint = {
-    'circle-color': '#f0f0f0',
-    'circle-radius': 9,
-    'circle-opacity': 1,
+export const polygonFill = {
+    'fill-color': 'red',
+    'fill-opacity': 0.4,
+};
+
+export const resourcePointPaint = {
+    'circle-color': '#ffffff',
+    'circle-radius': 10,
+    'circle-opacity': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.5,
+        0.9,
+    ],
+};
+
+export const resourceIconLayout = {
+    'icon-image': ['get', 'iconName'],
+    'icon-size': 1,
 };

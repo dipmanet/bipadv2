@@ -31,7 +31,6 @@ export default class Loss extends React.PureComponent {
         } = this.props;
 
         const {
-            // FIXME: Remove random numbers: just for aesthetic purpose until api is ready
             peopleDeathCount = 0,
             livestockDestroyedCount = 0,
             infrastructureDestroyedCount = 0,

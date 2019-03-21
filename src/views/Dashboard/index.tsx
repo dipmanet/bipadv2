@@ -79,7 +79,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         extras: {
             schemaName: 'alertResponse',
         },
-        // FIXME: write schema
     },
 };
 
@@ -97,7 +96,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             <React.Fragment>
                 <Map
                     alertList={alertList}
-                    hazardTypes={hazardTypes}
                 />
                 <Page
                     leftContent={

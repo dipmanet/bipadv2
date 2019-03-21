@@ -1,24 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
-import ReactDOMServer from 'react-dom/server';
-
-import { wardsMapSelector } from '#selectors';
-
-import DistanceOutput from '#components/DistanceOutput';
-/*
-import TextOutput from '#components/TextOutput';
-import GeoOutput from '#components/GeoOutput';
-import DateOutput from '#components/DateOutput';
-import PeopleLoss from '#components/PeopleLoss';
-*/
-import MapMarkerLayer from '#rscz/Map/MapMarkerLayer';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+
+import DistanceOutput from '#components/DistanceOutput';
 
 import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
@@ -26,86 +15,51 @@ import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 
-import Tooltip from '#components/Tooltip';
-
 import {
-    boundsFill,
-    boundsOutline,
+    districtsFill,
+    districtsOutline,
     pointPaint,
-    hoverPaint,
+    polygonFill,
+    resourceIconLayout,
+    resourcePointPaint,
 } from './mapStyles';
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    wardsMap: PropTypes.object,
 };
 
 const defaultProps = {
     className: '',
-    wardsMap: {},
 };
 
-const icons = {
-    health: healthFacilityIcon,
-    volunteer: groupIcon,
-    education: educationIcon,
-    finance: financeIcon,
-};
+const resourceImages = [
+    { name: 'health', icon: healthFacilityIcon },
+    { name: 'volunteer', icon: groupIcon },
+    { name: 'education', icon: educationIcon },
+    { name: 'finance', icon: financeIcon },
+];
 
-const polygonBoundsFill = {
-    'fill-color': 'red',
-    'fill-opacity': 0.4,
-};
-
-const toolTipWrapper = props => otherprops => <Tooltip {...props} {...otherprops} />;
-
-class ResponseMap extends React.PureComponent {
+export default class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
-
-    constructor(props) {
-        super(props);
-
-        this.hoverInfo = {
-            paint: hoverPaint,
-            showTooltip: true,
-            tooltipModifier: toolTipWrapper({ wardsMap: this.props.wardsMap }),
-        };
-    }
 
     getResourceFeatureCollection = memoize((resourceList) => {
         const geojson = {
             type: 'FeatureCollection',
             features: resourceList
                 .filter(resource => resource.point)
-                .map(resource => ({
+                .map((resource, i) => ({
+                    id: i,
                     type: 'Feature',
                     geometry: {
                         type: 'Point',
                         coordinates: resource.point.coordinates,
                     },
                     properties: {
-                        resource,
-                        containerClassName: styles.markerContainer,
-                        markerHTML: ReactDOMServer.renderToString(
-                            <img
-                                src={icons[resource.resourceType]}
-                                alt={resource.title}
-                                className={styles.icon}
-                            />,
-                        ),
-                        popupHTML: ReactDOMServer.renderToString(
-                            <div className={styles.resourceDetailPopup}>
-                                <h3 className={styles.title}>
-                                    { resource.title }
-                                </h3>
-                                <DistanceOutput
-                                    value={resource.distance / 1000}
-                                />
-                            </div>,
-                        ),
+                        iconName: resource.resourceType,
+                        title: resource.title,
+                        distance: resource.distance,
                     },
                 })),
         };
@@ -113,14 +67,41 @@ class ResponseMap extends React.PureComponent {
         return geojson;
     });
 
-    handlePointClick = (propertiesString) => {
-        /*
-        const properties = JSON.parse(propertiesString);
-        const { id: incidentId } = properties;
-        const redirectTo = reverseRoute(routes.response.path, { incidentId });
-        navigate(redirectTo);
-        */
-    }
+    getFeatureCollection = memoize((shape, incident, severity) => ({
+        type: 'FeatureCollection',
+        features: [{
+            type: 'Feature',
+            geometry: {
+                ...shape,
+            },
+            properties: {
+                incident,
+                severity,
+            },
+        }],
+    }))
+
+    getBuffer = memoize((shape) => {
+        const buffered = buffer(shape, 32, { units: 'kilometers' });
+        const box = bbox(buffered);
+        return box;
+    });
+
+    tooltipRenderer = ({ title, distance }) => (
+        <div>
+            <h3 className={styles.title}>
+                { title }
+            </h3>
+            <DistanceOutput
+                value={distance / 1000}
+            />
+        </div>
+    )
+
+    tooltipRendererParams = (id, { title, distance }) => ({
+        title,
+        distance,
+    })
 
     render() {
         const {
@@ -135,111 +116,74 @@ class ResponseMap extends React.PureComponent {
             severity,
         } = incident;
 
-        let featureMapSource;
-        let box;
-
-        if (point) {
-            // const point = turf.point(point.coordinates);
-            const buffered = buffer(point, 32, { units: 'kilometers' });
-            box = bbox(buffered);
-
-            const featureCollection = {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    geometry: {
-                        ...point,
-                    },
-                    properties: {
-                        incident,
-                        severity,
-                    },
-                }],
-            };
-
-            featureMapSource = (
-                <MapSource
-                    sourceKey="points"
-                    geoJson={featureCollection}
-                    supportHover
-                >
-                    <MapLayer
-                        layerKey="points"
-                        type="circle"
-                        property="incident"
-                        paint={pointPaint}
-                        onClick={this.handlePointClick}
-                        hoverInfo={this.hoverInfo}
-                    />
-                </MapSource>
-            );
-        } else if (polygon) {
-            const buffered = buffer(polygon, 24, 'kilometers');
-            box = bbox(buffered);
-
-            const featureCollection = {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    geometry: {
-                        ...polygon,
-                    },
-                    properties: {
-                        incident,
-                        severity,
-                    },
-                }],
-            };
-
-            featureMapSource = (
-                <MapSource
-                    sourceKey="polygon"
-                    geoJson={featureCollection}
-                    supportHover
-                >
-                    <MapLayer
-                        layerKey="points"
-                        type="fill"
-                        property="incident"
-                        paint={polygonBoundsFill}
-                        onClick={this.handlePointClick}
-                        hoverInfo={this.hoverInfo}
-                    />
-                </MapSource>
-            );
-        }
-
-        const resourceFeatures = this.getResourceFeatureCollection(resourceList);
+        const box = this.getBuffer(point || polygon);
 
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="bounds"
+                    sourceKey="districts"
                     geoJson={nepalGeoJson}
                     bounds={box}
                 >
                     <MapLayer
-                        layerKey="bounds-fill"
+                        layerKey="districts-fill"
                         type="fill"
-                        paint={boundsFill}
+                        paint={districtsFill}
                     />
                     <MapLayer
-                        layerKey="bounds-outline"
+                        layerKey="districts-outline"
                         type="line"
-                        paint={boundsOutline}
+                        paint={districtsOutline}
                     />
                 </MapSource>
-                <MapMarkerLayer
-                    geoJson={resourceFeatures}
-                />
-                {featureMapSource}
+
+                <MapSource
+                    sourceKey="resource"
+                    geoJson={this.getResourceFeatureCollection(resourceList)}
+                    images={resourceImages}
+                >
+                    <MapLayer
+                        layerKey="resource-point"
+                        type="circle"
+                        paint={resourcePointPaint}
+                        enableHover
+                        tooltipRenderer={this.tooltipRenderer}
+                        tooltipRendererParams={this.tooltipRendererParams}
+                    />
+                    <MapLayer
+                        layerKey="resource-symbol"
+                        type="symbol"
+                        layout={resourceIconLayout}
+                    />
+                </MapSource>
+
+                { point &&
+                    <MapSource
+                        sourceKey="points"
+                        geoJson={this.getFeatureCollection(point, incident, severity)}
+                    >
+                        <MapLayer
+                            layerKey="points"
+                            type="circle"
+                            property="incident"
+                            paint={pointPaint}
+                        />
+                    </MapSource>
+                }
+                { polygon &&
+                    <MapSource
+                        sourceKey="polygon"
+                        geoJson={this.getFeatureCollection(polygon, incident, severity)}
+                    >
+                        <MapLayer
+                            layerKey="polygon"
+                            type="fill"
+                            property="incident"
+                            paint={polygonFill}
+                        />
+                    </MapSource>
+                }
             </React.Fragment>
         );
     }
 }
-
-const mapStateToProps = state => ({
-    wardsMap: wardsMapSelector(state),
-});
-
-export default connect(mapStateToProps)(ResponseMap);

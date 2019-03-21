@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
 
-import { createRequestClient } from '#request';
-
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import nepalGeoJson from '#resources/districts.json';
+import { createRequestClient } from '#request';
 
 import {
     boundsFill,
@@ -17,6 +15,13 @@ import {
     pointPaint,
     activeBoundsFill,
 } from './mapStyles';
+
+const districtsPadding = {
+    top: 0,
+    right: 64,
+    bottom: 0,
+    left: 330,
+};
 
 const propTypes = {
     pause: PropTypes.bool,
@@ -46,6 +51,8 @@ class LossAndDamageMap extends React.PureComponent {
     componentWillUnmount() {
         clearTimeout(this.timeout);
     }
+
+    getBounds = memoize(geoJson => bbox(geoJson))
 
     getTimeExtent = (lossAndDamageList) => {
         const timestamps = lossAndDamageList.filter(d => d.incidentOn)
@@ -190,30 +197,23 @@ class LossAndDamageMap extends React.PureComponent {
                 <MapSource
                     sourceKey="loss-and-damage-bounds"
                     geoJson={districtsGeoJson}
-                    bounds={bbox(districtsGeoJson)}
-                    boundsPadding={{
-                        top: 0,
-                        right: 64,
-                        bottom: 0,
-                        left: 330,
-                    }}
+                    bounds={this.getBounds(districtsGeoJson)}
+                    boundsPadding={districtsPadding}
                 >
-                    <MapLayer
-                        layerKey="loss-and-damage-bounds-fill"
-                        type="fill"
-                        paint={boundsFill}
-                        hoverInfo={{
-                            paint: boundsHoverFill,
-                        }}
-                        onClick={this.handleDistrictClick}
-                        property="title"
-                    />
                     <MapLayer
                         layerKey="loss-and-damage-active-bounds-fill"
                         type="fill"
                         paint={activeBoundsFill}
                         property="title"
                         filter={activeFilter}
+                    />
+                    <MapLayer
+                        layerKey="loss-and-damage-bounds-fill"
+                        type="fill"
+                        paint={boundsFill}
+                        enableHover
+                        // onClick={this.handleDistrictClick}
+                        // property="title"
                     />
                     <MapLayer
                         layerKey="loss-and-damage-bounds-outline"
@@ -224,7 +224,6 @@ class LossAndDamageMap extends React.PureComponent {
                 <MapSource
                     sourceKey="loss-and-damage-points"
                     geoJson={pointFeatureCollection}
-                    supportHover
                 >
                     <MapLayer
                         layerKey="incident-points-fill"

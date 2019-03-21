@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
@@ -17,7 +16,6 @@ import Page from '#components/Page';
 
 import Map from './Map';
 import LeftPane from './LeftPane';
-import Filter from './Filter';
 
 import Seekbar from './Seekbar';
 import styles from './styles.scss';

@@ -44,6 +44,8 @@ export const hazardColorMap = {
 };
 
 export const getHazardColor = (hazard) => {
-    if (hazard.color) return hazard.color;
+    if (hazard.color) {
+        return hazard.color;
+    }
     return hazardColorMap[hazard.title.toLowerCase()] || '#4666b0';
 };

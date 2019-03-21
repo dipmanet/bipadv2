@@ -1,11 +1,13 @@
 @import '~base-scss/base';
 
+.info {
+    border: $width-separator-thin solid $color-separator-light;
+    padding: $spacing-large;
+}
+
 .incident-details {
     border: $width-separator-thin solid $color-separator-light;
     border-radius: $radius-border-medium;
     background-color: $color-foreground;
     // padding: $spacing-large;
-}
-
-.resource-list-container {
 }

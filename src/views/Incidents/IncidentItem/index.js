@@ -36,7 +36,6 @@ export default class Incidents extends React.PureComponent {
             `${iconNames.check} ${styles.verified}` :
             `${iconNames.close} ${styles.notVerified}`;
 
-        // FIXME:
         return (
             <Link
                 className={_cs(className, styles.incidentItem)}
