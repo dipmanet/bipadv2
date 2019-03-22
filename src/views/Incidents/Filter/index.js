@@ -111,7 +111,6 @@ export default class IncidentsFilter extends React.PureComponent {
                 collapsedViewContainerClassName={styles.showFiltersButtonContainer}
                 collapsedView={
                     <Button
-                        className={styles.showFiltersButton}
                         iconName={iconNames.filter}
                         onClick={this.handleShowFiltersButtonClick}
                     />
@@ -119,7 +118,6 @@ export default class IncidentsFilter extends React.PureComponent {
                 expandedViewContainerClassName={styles.filtersContainer}
                 expandedView={
                     <Faram
-                        className={styles.filtersFaram}
                         onChange={this.handleFaramChange}
                         onValidationFailure={this.handleFaramFailure}
                         onValidationSuccess={this.handleFaramSuccess}

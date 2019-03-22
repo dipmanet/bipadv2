@@ -1,13 +1,12 @@
 import React from 'react';
 import memoize from 'memoize-one';
-import bbox from '@turf/bbox';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import TextOutput from '#components/TextOutput';
 
-import nepalGeoJson from '#resources/districts.json';
+import { mapSources } from '#constants';
 
 import {
     boundsFill,
@@ -71,30 +70,26 @@ export default class RealTimeMap extends React.PureComponent {
     )
 
     render() {
-        const {
-            realTimeRainList,
-        } = this.props;
+        const { realTimeRainList } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(realTimeRainList);
-
-        // FIXME: memoize
-        const box = bbox(nepalGeoJson);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="real-time-rain-bounds"
-                    geoJson={nepalGeoJson}
-                    bounds={box}
+                    url={mapSources.district.url}
                 >
                     <MapLayer
                         layerKey="real-time-rain-bounds-fill"
                         type="fill"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={boundsFill}
                     />
                     <MapLayer
                         layerKey="real-time-bounds-outline"
                         type="line"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={boundsOutline}
                     />
                 </MapSource>

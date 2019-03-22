@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import bbox from '@turf/bbox';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
@@ -11,10 +10,8 @@ import {
     hazardTypesSelector,
     wardsMapSelector,
 } from '#selectors';
-
+import { mapSources } from '#constants';
 import Tooltip from '#components/Tooltip';
-
-import nepalGeoJson from '#resources/districts.json';
 
 import {
     calculateScaledSeverity,
@@ -108,9 +105,7 @@ class IncidentMap extends React.PureComponent {
     }
 
     render() {
-        const {
-            incidentList,
-        } = this.props;
+        const { incidentList } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList);
@@ -119,18 +114,19 @@ class IncidentMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    geoJson={nepalGeoJson}
-                    bounds={bbox(nepalGeoJson)}
+                    url={mapSources.district.url}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
                         paint={districtsFill}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
                         paint={districtsOutline}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                 </MapSource>
                 <MapSource

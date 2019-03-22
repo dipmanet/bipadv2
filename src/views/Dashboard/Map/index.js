@@ -1,46 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-// import ReactDOMServer from 'react-dom/server';
-import bbox from '@turf/bbox';
-import { isTruthy } from '@togglecorp/fujs';
-import { connect } from 'react-redux';
 
-import {
-    setDistrictsGeoJsonAction,
-} from '#actionCreators';
-import {
-    filtersSelectorDP,
-    districtsGeoJsonSelector,
-} from '#selectors';
+import { isTruthy } from '@togglecorp/fujs';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-} from '#request';
+// import { filtersSelectorDP } from '#selectors';
+import { mapSources } from '#constants';
 
 import {
+    alertFill,
     districtsFill,
-    polygonFill,
     districtsOutline,
 } from './mapStyles';
+
 import styles from './styles.scss';
 
 const propTypes = {
-    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    alertList: PropTypes.array,
 };
 
 const defaultProps = {
-    className: '',
+    alertList: [],
 };
 
-const emptyObject = {};
-const emptyList = [];
-
-class AlertMap extends React.PureComponent {
+export default class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -74,48 +61,14 @@ class AlertMap extends React.PureComponent {
         return geojson;
     });
 
-    getCurrentBounds = () => {
-        const {
-            filters: {
-                faramValues: {
-                    region: {
-                        adminLevel,
-                        geoarea,
-                    } = emptyObject,
-                } = emptyObject,
-            },
-            requests: {
-                districtsGeoJsonRequest: {
-                    response: districtsGeoJson,
-                },
-            },
-        } = this.props;
-
-        const {
-            features = emptyList,
-        } = districtsGeoJson;
-
-        let currentBoundingObject = districtsGeoJson;
-
-        // FIXME: use better adminLevel detection
-        if (adminLevel === 2 && geoarea) {
-            const currentDistrict = features.find(d => geoarea === d.id);
-            if (currentDistrict) {
-                currentBoundingObject = currentDistrict;
-            }
-        }
-
-        return bbox(currentBoundingObject);
-    }
-
     tooltipRendererParams = (id, { title, description }) => ({
         title,
         description,
     })
 
     tooltipRenderer = ({ title, description }) => (
-        <div>
-            <h3>
+        <div className={styles.tooltip}>
+            <h3 className={styles.heading}>
                 {title}
             </h3>
             <p>
@@ -125,51 +78,37 @@ class AlertMap extends React.PureComponent {
     )
 
     render() {
-        const {
-            className,
-            alertList,
-            filters,
-            requests: {
-                districtsGeoJsonRequest: {
-                    response: districtsGeoJson,
-                },
-            },
-        } = this.props;
-
-        if (!districtsGeoJson) {
-            return null;
-        }
-
+        const { alertList } = this.props;
         const featureCollection = this.getFeatureCollection(alertList);
-        const bounds = this.getCurrentBounds();
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    geoJson={districtsGeoJson}
-                    bounds={bounds}
+                    url={mapSources.district.url}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={districtsFill}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={districtsOutline}
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey="polygons"
+                    sourceKey="alerts"
                     geoJson={featureCollection}
                 >
                     <MapLayer
-                        layerKey="polygon"
+                        layerKey="alerts-fill"
                         type="fill"
-                        paint={polygonFill}
                         enableHover
+                        paint={alertFill}
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
@@ -179,24 +118,9 @@ class AlertMap extends React.PureComponent {
     }
 }
 
+/*
 const mapStateToProps = state => ({
     filters: filtersSelectorDP(state),
-    districtsGeoJson: districtsGeoJsonSelector(state),
 });
-
-const mapDispatchToProps = dispatch => ({
-    setDistrictsGeoJson: params => dispatch(setDistrictsGeoJsonAction),
-});
-
-const requests = {
-    districtsGeoJsonRequest: {
-        url: '/district/?format=geojson',
-        onMount: true,
-    },
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-    createConnectedRequestCoordinator()(
-        createRequestClient(requests)(AlertMap),
-    ),
-);
+export default connect(mapStateToProps)(AlertMap);
+*/

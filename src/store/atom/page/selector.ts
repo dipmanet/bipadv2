@@ -51,14 +51,6 @@ export const mapStylesSelector = ({ page }: AppState) =>
 export const mapStyleSelector = ({ page }: AppState) =>
     page.selectedMapStyle;
 
-export const geoJsonsSelector = ({ page }: AppState) =>
-    page.geoJsons;
-
-export const districtsGeoJsonSelector = createSelector(
-    geoJsonsSelector,
-    geoJsons => geoJsons.district,
-);
-
 // dashboardPage
 
 export const dashboardPageSelector = ({ page }: AppState) =>

@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bbox from '@turf/bbox';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import nepalGeoJson from '#resources/districts.json';
+import { mapSources } from '#constants';
 
 import {
     districtsFill,
@@ -27,23 +26,23 @@ export default class ResponseMap extends React.PureComponent {
     render() {
         const { className } = this.props;
 
-        const bounds = bbox(nepalGeoJson);
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    geoJson={nepalGeoJson}
-                    bounds={bounds}
+                    url={mapSources.district.url}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
                         paint={districtsFill}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
                         paint={districtsOutline}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                 </MapSource>
             </React.Fragment>
