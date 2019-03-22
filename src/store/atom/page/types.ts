@@ -62,6 +62,10 @@ export interface Filters {
     pristine: boolean;
 }
 
+export interface RealTimeRain {
+    id: number;
+}
+
 export interface DashboardPage {
     alertList: Alert[];
     filters: Filters;
@@ -76,6 +80,10 @@ export interface ResponsePage {
     resourceList: Resource[];
 }
 // INTERFACE
+
+export interface RealTimeMonitoringPage {
+    realTimeRainList: RealTimeRain[];
+}
 
 export interface PageState {
     selectedMapStyle: string;
@@ -102,6 +110,7 @@ export interface PageState {
     dashboardPage: DashboardPage;
     incidentPage: IncidentPage;
     responsePage: ResponsePage;
+    realTimeMonitoringPage: RealTimeMonitoringPage;
 }
 
 // ACTION TYPES
@@ -128,6 +137,9 @@ export enum PageType {
 
     // response
     RP__SET_RESOURCE_LIST = 'page/RESOURCE_PAGE/SET_RESOURCE',
+
+    // real time monitoring
+    RTM__SET_REAL_TIME_RAIN_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RAIN',
 }
 
 // ACTION CREATOR INTERFACE
@@ -216,9 +228,17 @@ export interface SetResourceList {
     resourceList: Resource[];
 }
 
+// real time monitoring
+
+export interface SetRealTimeRainList {
+    type: typeof PageType.RTM__SET_REAL_TIME_RAIN_LIST;
+    realTimeRainList: RealTimeRain[];
+}
+
 export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards | SetDistrictGeoJson |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
-    SetIncident | SetIncidentFilters | SetResourceList | SetEventType
+    SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
+    SetRealTimeRainList
 );

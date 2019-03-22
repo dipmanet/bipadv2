@@ -97,6 +97,10 @@ const state: PageState = {
         pristine: true,
     },
 
+    realTimeMonitoringPage: {
+        realTimeRainList: [],
+    },
+
     // FIXME: Remove Geojson from redux
     geoJsons: {
         district: {
