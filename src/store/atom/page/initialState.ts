@@ -101,6 +101,8 @@ const state: PageState = {
 
     realTimeMonitoringPage: {
         realTimeRainList: [],
+        realTimeRiverList: [],
+        realTimeEarthquakeList: [],
     },
 };
 export default state;

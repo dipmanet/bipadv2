@@ -11,14 +11,64 @@ import { mapSources } from '#constants';
 import {
     boundsFill,
     boundsOutline,
-    pointPaint,
+    rainPointPaint,
+    riverPointPaint,
+    earthquakePointPaint,
 
 } from './mapStyles';
 
 import styles from './styles.scss';
 
 export default class RealTimeMap extends React.PureComponent {
-    getPointFeatureCollection = memoize((realTimeRainList) => {
+    getEarthquakeFeatureCollection = memoize((realTimeEarthquakeList) => {
+        const geojson = {
+            type: 'FeatureCollection',
+            features: realTimeEarthquakeList
+                .filter(earthquake => earthquake.point)
+                .map(earthquake => ({
+                    id: earthquake.id,
+                    type: 'Feature',
+                    geometry: {
+                        ...earthquake.point,
+                    },
+                    properties: {
+                        earthquakeId: earthquake.id,
+                        address: earthquake.address,
+                        description: earthquake.description,
+                        eventOn: earthquake.eventOn,
+                        magnitude: earthquake.magnitude,
+                    },
+                })),
+        };
+
+        return geojson;
+    })
+
+    getRiverFeatureCollection = memoize((realTimeRiverList) => {
+        const geojson = {
+            type: 'FeatureCollection',
+            features: realTimeRiverList
+                .filter(river => river.point)
+                .map(river => ({
+                    id: river.id,
+                    type: 'Feature',
+                    geometry: {
+                        ...river.point,
+                    },
+                    properties: {
+                        riverId: river.id,
+                        title: river.title,
+                        description: river.description,
+                        basin: river.basin,
+                        status: river.status,
+                    },
+                })),
+        };
+
+        return geojson;
+    })
+
+    getRainFeatureCollection = memoize((realTimeRainList) => {
         const geojson = {
             type: 'FeatureCollection',
             features: realTimeRainList
@@ -69,19 +119,54 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
-    render() {
-        const { realTimeRainList } = this.props;
+    earthquakeTooltipRendererParams = (id, { address, description, eventOn, magnitude }) => ({
+        address,
+        description,
+        eventOn,
+        magnitude,
+    })
 
-        const pointFeatureCollection = this.getPointFeatureCollection(realTimeRainList);
+    earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
+        <div>
+            <TextOutput
+                label="Address"
+                value={address}
+            />
+            <TextOutput
+                label="Description"
+                value={description}
+            />
+            <TextOutput
+                label="Event On"
+                value={eventOn}
+            />
+            <TextOutput
+                label="Magnitude"
+                value={magnitude}
+            />
+        </div>
+    )
+
+    render() {
+        const {
+            realTimeRainList,
+            realTimeRiverList,
+            realTimeEarthquakeList,
+        } = this.props;
+
+        const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
+        const riverFeatureCollection = this.getRiverFeatureCollection(realTimeRiverList);
+        const earthquakeFeatureCollection =
+            this.getEarthquakeFeatureCollection(realTimeEarthquakeList);
 
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="real-time-rain-bounds"
+                    sourceKey="real-time-bounds"
                     url={mapSources.district.url}
                 >
                     <MapLayer
-                        layerKey="real-time-rain-bounds-fill"
+                        layerKey="real-time-bounds-fill"
                         type="fill"
                         sourceLayer={mapSources.district.sourceLayer}
                         paint={boundsFill}
@@ -95,17 +180,47 @@ export default class RealTimeMap extends React.PureComponent {
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-rain-points"
-                    geoJson={pointFeatureCollection}
+                    geoJson={rainFeatureCollection}
                     supportHover
                 >
                     <MapLayer
                         layerKey="real-time-rain-points-fill"
                         type="circle"
                         property="rainId"
-                        paint={pointPaint}
+                        paint={rainPointPaint}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="real-time-river-points"
+                    geoJson={riverFeatureCollection}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="real-time-river-points-fill"
+                        type="circle"
+                        property="riverId"
+                        paint={riverPointPaint}
+                        enableHover
+                        tooltipRenderer={this.tooltipRenderer}
+                        tooltipRendererParams={this.tooltipRendererParams}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="real-time-eartquake-points"
+                    geoJson={earthquakeFeatureCollection}
+                    supportHover
+                >
+                    <MapLayer
+                        layerKey="real-time-earthquake-points-fill"
+                        type="circle"
+                        property="earthquakeId"
+                        paint={earthquakePointPaint}
+                        enableHover
+                        tooltipRenderer={this.earthquakeTooltipRenderer}
+                        tooltipRendererParams={this.earthquakeTooltipRendererParams}
                     />
                 </MapSource>
             </React.Fragment>

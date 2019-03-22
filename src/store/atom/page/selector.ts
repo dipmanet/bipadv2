@@ -184,3 +184,13 @@ export const realTimeRainListSelector = createSelector(
     realTimeMonitoringPageSelector,
     ({ realTimeRainList }) => realTimeRainList,
 );
+
+export const realTimeRiverListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ realTimeRiverList }) => realTimeRiverList,
+);
+
+export const realTimeEarthquakeListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
+);
