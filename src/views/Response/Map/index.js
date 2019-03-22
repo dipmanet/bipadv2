@@ -34,6 +34,8 @@ const defaultProps = {
     className: '',
 };
 
+const emptyObject = {};
+
 const resourceImages = [
     { name: 'health', icon: healthFacilityIcon },
     { name: 'volunteer', icon: groupIcon },

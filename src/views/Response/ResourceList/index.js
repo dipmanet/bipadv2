@@ -10,12 +10,20 @@ import { iconNames } from '#constants';
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
 
+import healthFacilityIcon from '#resources/icons/health-facility.svg';
+import educationIcon from '#resources/icons/Education.svg';
+import financeIcon from '#resources/icons/University.svg';
+import groupIcon from '#resources/icons/group.svg';
+
+import ResourceGroup from '../ResourceGroup';
+
 import TabularView from './TabularView';
 
-import Health from './resources/Health';
-import Volunteer from './resources/Volunteer';
-import Education from './resources/Education';
-import Finance from './resources/Finance';
+import HealthItem from '../resources/HealthItem';
+import VolunteerItem from '../resources/VolunteerItem';
+import EducationItem from '../resources/EducationItem';
+import FinanceItem from '../resources/FinanceItem';
+
 
 import styles from './styles.scss';
 
@@ -29,22 +37,36 @@ const defaultProps = {
     pending: false,
 };
 
-const resourceComponents = {
-    health: Health,
-    volunteer: Volunteer,
-    education: Education,
-    finance: Finance,
+const resourceComponentsProps = {
+    health: {
+        itemRenderer: HealthItem,
+        heading: 'Hospitals',
+        icon: healthFacilityIcon,
+    },
+    volunteer: {
+        itemRenderer: VolunteerItem,
+        heading: 'Volunteers',
+        icon: groupIcon,
+    },
+    education: {
+        itemRenderer: EducationItem,
+        heading: 'Schools',
+        icon: educationIcon,
+    },
+    finance: {
+        itemRenderer: FinanceItem,
+        heading: 'Finance Institutes',
+        icon: financeIcon,
+    },
 };
 
-const Resource = ({
-    type,
-    ...otherProps
-}) => {
-    const ResourceComponent = resourceComponents[type];
-    return (
-        <ResourceComponent {...otherProps} />
-    );
-};
+const Resource = ({ type, ...otherProps }) => (
+    <ResourceGroup
+        {...resourceComponentsProps[type] || {}}
+        {...otherProps}
+    />
+);
+
 Resource.propTypes = {
     type: PropTypes.string.isRequired,
 };
