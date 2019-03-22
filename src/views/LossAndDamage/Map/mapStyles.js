@@ -45,6 +45,7 @@ export const pointPaint = {
         'minor', 8,
         8,
     ],
+    /*
     'circle-opacity': [
         'match',
         ['get', 'severity'],
@@ -53,6 +54,11 @@ export const pointPaint = {
         'minor', 0.8,
         1,
     ],
+    */
+    'circle-opacity': 1,
+    'circle-opacity-transition': {
+        duration: 1000,
+    },
 };
 
 export const hoverPaint = {
