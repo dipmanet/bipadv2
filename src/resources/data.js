@@ -22,10 +22,10 @@ import highAltitudeIcon from '#resources/icons/High-altitude.svg';
 import otherIcon from '#resources/icons/Warning-Error.svg';
 import rainfallIcon from '#resources/icons/Rain.svg';
 import snakeBiteIcon from '#resources/icons/Snake.svg';
+import thunderboltIcon from '#resources/icons/Storm.svg';
 // import snowStormIcon from '#resources/icons/.svg';
 // import stormIcon from '#resources/icons/Storm.svg';
-import thunderboltIcon from '#resources/icons/Storm.svg';
-import windstormIcon from '#resources/icons/Storm-surge.svg';
+// import windstormIcon from '#resources/icons/Storm-surge.svg';
 
 
 export const hazardIcons = {

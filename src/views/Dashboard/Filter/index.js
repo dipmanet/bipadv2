@@ -31,9 +31,12 @@ const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     setFilters: PropTypes.func.isRequired,
     filters: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    className: PropTypes.string,
 };
 
-const defaultProps = {};
+const defaultProps = {
+    className: '',
+};
 
 const mapStateToProps = state => ({
     hazardTypeList: hazardTypeListAlertsDP(state),
@@ -44,10 +47,10 @@ const mapDispatchToProps = dispatch => ({
     setFilters: params => dispatch(setFiltersActionDP(params)),
 });
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class DashboardFilter extends React.PureComponent {
+class DashboardFilter extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
+
     static schema = {
         fields: {
             dateRange: [],
@@ -88,7 +91,7 @@ export default class DashboardFilter extends React.PureComponent {
     }
 
     handleFaramSuccess = (_, values) => {
-        console.warn(values);
+        console.warn('Filters', values);
     }
 
     render() {
@@ -163,3 +166,5 @@ export default class DashboardFilter extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardFilter);

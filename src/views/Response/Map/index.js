@@ -9,11 +9,11 @@ import MapSource from '#rscz/Map/MapSource';
 
 import DistanceOutput from '#components/DistanceOutput';
 
-import nepalGeoJson from '#resources/districts.json';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
+import { mapSources } from '#constants';
 
 import {
     districtsFill,
@@ -122,17 +122,19 @@ export default class ResponseMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    geoJson={nepalGeoJson}
+                    url={mapSources.district.url}
                     bounds={box}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={districtsFill}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
+                        sourceLayer={mapSources.district.sourceLayer}
                         paint={districtsOutline}
                     />
                 </MapSource>

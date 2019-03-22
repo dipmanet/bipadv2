@@ -47,13 +47,6 @@ export const setDistrictsAction = (
     districts,
 });
 
-export const setDistrictsGeoJsonAction = (
-    { districtGeoJson }: { districtGeoJson: Type.GeoJson },
-) => ({
-    type: Type.PageType.SET_DISTRICTS_GEO_JSON,
-    districtGeoJson,
-});
-
 export const setMunicipalitiesAction = (
     { municipalities }: { municipalities: Type.Municipality[] },
 ) => ({
@@ -184,15 +177,6 @@ const setDistricts = (state: Type.PageState, action: Type.SetDistricts) => {
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.districts = districts;
-    });
-    return newState;
-};
-
-const setDistrictsGeoJson = (state: Type.PageState, action: Type.SetDistrictGeoJson) => {
-    const { districtsGeoJson } = action;
-    const newState = produce(state, (deferedState) => {
-        /* eslint-disable no-param-reassign */
-        deferedState.geoJsons.district = districtsGeoJson;
     });
     return newState;
 };
@@ -414,8 +398,6 @@ export default function routeReducer(
             return setProvinces(state, action);
         case Type.PageType.SET_DISTRICTS:
             return setDistricts(state, action);
-        case Type.PageType.SET_DISTRICTS_GEO_JSON:
-            return setDistrictsGeoJson(state, action);
         case Type.PageType.SET_MUNICIPALITIES:
             return setMunicipalities(state, action);
         case Type.PageType.SET_WARDS:

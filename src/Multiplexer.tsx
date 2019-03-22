@@ -1,12 +1,10 @@
 import Loadable from 'react-loadable';
 import React, { Fragment } from 'react';
-import bbox from '@turf/bbox';
 import { Router } from '@reach/router';
 
 import Map from '#rscz/Map/index';
 
 import Navbar from '#components/Navbar';
-import nepalGeoJson from '#resources/districts.json';
 import { routeSettings } from '#constants';
 
 import errorBound from './errorBound';
@@ -49,10 +47,6 @@ const ErrorInPage = () => (
         Some problem occured.
     </div>
 );
-
-// BOUNDS
-
-const nepalBounds = bbox(nepalGeoJson);
 
 // ROUTES
 
@@ -112,7 +106,6 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
                 <div className="bipad-main-content">
                     <Map
                         className={styles.map}
-                        bounds={nepalBounds}
                         mapStyle={mapStyle}
                         boundsPadding={160}
                         fitBoundsDuration={200}

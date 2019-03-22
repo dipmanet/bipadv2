@@ -1,6 +1,12 @@
 export const districtsFill = {
     'fill-color': '#0081f0',
-    'fill-opacity': 0.1,
+    'fill-opacity': ['case',
+        ['boolean', ['feature-state', 'selected'], false],
+        0.8,
+        ['boolean', ['feature-state', 'hover'], false],
+        0.4,
+        0.1,
+    ],
 };
 
 export const districtsOutline = {
@@ -9,7 +15,7 @@ export const districtsOutline = {
     'line-width': 1,
 };
 
-export const polygonFill = {
+export const alertFill = {
     'fill-color': 'red',
     'fill-opacity': ['case',
         ['boolean', ['feature-state', 'hover'], false],

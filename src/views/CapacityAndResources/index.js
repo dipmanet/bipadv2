@@ -1,6 +1,15 @@
 import React from 'react';
-import Map from '#components/ProjectsMap';
 
+import DonutChart from '#rscz/DonutChart';
+import PieChart from '#rscz/PieChart';
+import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
+import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
+
+import ListSelection from '#components/ListSelection';
+import MultiListSelection from '#components/MultiListSelection';
+import Page from '#components/Page';
+import RegionSelectInput from '#components/RegionSelectInput';
+import { basicColor } from '#constants/colorScheme';
 import {
     barChartData,
     pieChartData,
@@ -10,23 +19,7 @@ import {
     resourceTypeList,
 } from '#resources/data';
 
-import Page from '#components/Page';
-import RegionSelectInput from '#components/RegionSelectInput';
-
-import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
-import Label from '#rsci/Label';
-import RadioInput from '#rsci/RadioInput';
-import MultiListSelection from '#components/MultiListSelection';
-import ListSelection from '#components/ListSelection';
-import PieChart from '#rscz/PieChart';
-import DonutChart from '#rscz/DonutChart';
-import { basicColor } from '#constants/colorScheme';
-
 import styles from './styles.scss';
-
-const emptyObject = {};
-const alertKeySelector = d => d.id;
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
@@ -37,102 +30,92 @@ const pieChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 
-export default class CapacityAndResources extends React.PureComponent {
-    renderKeyStatistics = ({ className }) => {
-        console.warn('rendering key statistics');
+const KeyStatistics = ({ className }) => (
+    <div className={className}>
+        <header className={styles.header}>
+            <h4 className={styles.heading}>
+                Key statistics
+            </h4>
+        </header>
+        <div className={styles.content}>
+            <SimpleVerticalBarChart
+                className={styles.barChart}
+                data={barChartData}
+                labelSelector={barChartLabelSelector}
+                valueSelector={barChartValueSelector}
+            />
+            <div className={styles.donutCharts}>
+                <DonutChart
+                    className={styles.donutChart1}
+                    data={donutChartData1}
+                    labelSelector={donutChartLabelSelector}
+                    valueSelector={donutChartValueSelector}
+                    colorScheme={basicColor}
+                    sideLengthRatio={0.3}
+                />
+                <DonutChart
+                    className={styles.donutChart2}
+                    data={donutChartData2}
+                    labelSelector={donutChartLabelSelector}
+                    colorScheme={basicColor}
+                    valueSelector={donutChartValueSelector}
+                    sideLengthRatio={0.3}
+                />
+            </div>
+            <SimpleHorizontalBarChart
+                className={styles.horizontalBarChart}
+                data={barChartData}
+                labelSelector={barChartLabelSelector}
+                valueSelector={barChartValueSelector}
+            />
+            <PieChart
+                className={styles.pieChart}
+                data={pieChartData}
+                labelSelector={pieChartLabelSelector}
+                colorScheme={basicColor}
+                valueSelector={pieChartValueSelector}
+            />
+        </div>
+    </div>
+);
 
-        return (
-            <div className={className}>
+const CapacityAndResources = () => (
+    <Page
+        className={styles.capacityAndResources}
+        leftContentClassName={styles.left}
+        leftContent={
+            <KeyStatistics
+                className={styles.keyStatistics}
+            />
+        }
+        mainContentClassName={styles.main}
+        mainContent={null}
+        rightContentClassName={styles.right}
+        rightContent={
+            <React.Fragment>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Key statistics
+                        Filters
                     </h4>
                 </header>
                 <div className={styles.content}>
-                    <SimpleVerticalBarChart
-                        className={styles.barChart}
-                        data={barChartData}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
+                    <RegionSelectInput />
+                    <MultiListSelection
+                        className={styles.resourceTypeSelection}
+                        label="Resources"
+                        options={resourceTypeList}
+                        value={['health', 'education']}
                     />
-                    <div className={styles.donutCharts}>
-                        <DonutChart
-                            className={styles.donutChart1}
-                            data={donutChartData1}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            colorScheme={basicColor}
-                            sideLengthRatio={0.3}
-                        />
-                        <DonutChart
-                            className={styles.donutChart2}
-                            data={donutChartData2}
-                            labelSelector={donutChartLabelSelector}
-                            colorScheme={basicColor}
-                            valueSelector={donutChartValueSelector}
-                            sideLengthRatio={0.3}
-                        />
-                    </div>
-                    <SimpleHorizontalBarChart
-                        className={styles.horizontalBarChart}
-                        data={barChartData}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
-                    />
-                    <PieChart
-                        className={styles.pieChart}
-                        data={pieChartData}
-                        labelSelector={pieChartLabelSelector}
-                        colorScheme={basicColor}
-                        valueSelector={pieChartValueSelector}
+                    <ListSelection
+                        className={styles.hazardTypeSelection}
+                        label="Hazard type"
+                        options={hazardTypeList}
+                        value="earthquake"
                     />
                 </div>
-            </div>
-        );
-    }
+            </React.Fragment>
+        }
+    />
+);
 
-    render() {
-        const KeyStatistics = this.renderKeyStatistics;
-
-        return (
-            <Page
-                className={styles.capacityAndResources}
-                leftContentClassName={styles.left}
-                leftContent={
-                    <KeyStatistics
-                        className={styles.keyStatistics}
-                    />
-                }
-                mainContentClassName={styles.main}
-                mainContent={
-                    <Map className={styles.map} />
-                }
-                rightContentClassName={styles.right}
-                rightContent={
-                    <React.Fragment>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Filters
-                            </h4>
-                        </header>
-                        <div className={styles.content}>
-                            <RegionSelectInput />
-                            <MultiListSelection
-                                className={styles.resourceTypeSelection}
-                                label="Resources"
-                                options={resourceTypeList}
-                                value={['health', 'education']}
-                            />
-                            <ListSelection
-                                className={styles.hazardTypeSelection}
-                                label="Hazard type"
-                                options={hazardTypeList}
-                                value="earthquake"
-                            />
-                        </div>
-                    </React.Fragment>
-                }
-            />
-        );
-    }
-}
+export default CapacityAndResources;

@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bbox from '@turf/bbox';
 import memoize from 'memoize-one';
+import bbox from '@turf/bbox';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
-import { createRequestClient } from '#request';
+import { mapSources } from '#constants';
 
 import {
     boundsFill,
-    boundsHoverFill,
     boundsOutline,
     pointPaint,
     activeBoundsFill,
@@ -32,7 +31,7 @@ const defaultProps = {
     pause: false,
 };
 
-class LossAndDamageMap extends React.PureComponent {
+export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -41,7 +40,7 @@ class LossAndDamageMap extends React.PureComponent {
 
         this.state = {
             currentRange: {},
-            selectedDistrict: undefined,
+            // selectedDistrict: undefined,
             selectedDistricts: [],
         };
     }
@@ -126,7 +125,7 @@ class LossAndDamageMap extends React.PureComponent {
         }
 
         this.setState({
-            selectedDistrict: district,
+            // selectedDistrict: district,
             selectedDistricts: newSelectedDistricts,
         });
 
@@ -185,21 +184,11 @@ class LossAndDamageMap extends React.PureComponent {
     render() {
         const {
             lossAndDamageList,
-            requests: {
-                districtsGeoJsonRequest: {
-                    pending,
-                    response: districtsGeoJson,
-                },
-            },
         } = this.props;
-
-        if (!districtsGeoJson) {
-            return null;
-        }
 
         const {
             currentRange,
-            selectedDistrict = 'none',
+            // selectedDistrict = 'none',
             selectedDistricts,
         } = this.state;
 
@@ -221,16 +210,17 @@ class LossAndDamageMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="district"
-                    geoJson={districtsGeoJson}
-                    bounds={this.getBounds(districtsGeoJson)}
+                    url={mapSources.district.url}
                     boundsPadding={districtsPadding}
                 >
+                    {/* FIXME: this selection method is obsolete */}
                     <MapLayer
                         layerKey="district-selected-fill"
                         type="fill"
                         paint={activeBoundsFill}
                         property="title"
                         filter={activeFilter}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                     <MapLayer
                         layerKey="district-fill"
@@ -238,11 +228,13 @@ class LossAndDamageMap extends React.PureComponent {
                         paint={boundsFill}
                         enableHover
                         onClick={this.handleDistrictClick}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                     <MapLayer
                         layerKey="district-outline"
                         type="line"
                         paint={boundsOutline}
+                        sourceLayer={mapSources.district.sourceLayer}
                     />
                 </MapSource>
                 <MapSource
@@ -261,12 +253,3 @@ class LossAndDamageMap extends React.PureComponent {
         );
     }
 }
-
-const requests = {
-    districtsGeoJsonRequest: {
-        url: '/district/?format=geojson',
-        onMount: true,
-    },
-};
-
-export default createRequestClient(requests)(LossAndDamageMap);

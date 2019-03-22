@@ -35,7 +35,10 @@ export const convertJsonToCsv = (data: Row[] | undefined | null, columnDelimiter
     return result;
 };
 
-export const convertCsvToLink = (csvRaw: string) => {
+export const convertCsvToLink = (csvRaw?: string) => {
+    if (!csvRaw) {
+        return undefined;
+    }
     let csv = csvRaw;
     if (!csv.match(/^data:text\/csv/i)) {
         csv = `data:text/csv;charset=utf-8,${csv}`;

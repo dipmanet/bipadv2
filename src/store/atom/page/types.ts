@@ -30,15 +30,6 @@ export interface Resource {
     title: string;
 }
 
-export interface GeoJson {
-    type: string;
-    features: {
-        id: number;
-        type: string;
-        geometry: object;
-    }[];
-}
-
 export interface MapStyle {
     name: string;
     style: string;
@@ -100,12 +91,6 @@ export interface PageState {
     hazardTypes: Obj<HazardType>;
     eventTypes: Obj<EventType>;
     filters: object;
-    geoJsons: {
-        district?: GeoJson;
-        municipality?: GeoJson;
-        province?: GeoJson;
-        ward?: GeoJson;
-    };
 
     dashboardPage: DashboardPage;
     incidentPage: IncidentPage;
@@ -122,7 +107,6 @@ export enum PageType {
     SET_MAP_STYLE = 'page/SET_MAP_STYLE',
     SET_PROVINCES = 'page/SET_PROVINCES',
     SET_DISTRICTS = 'page/SET_DISTRICTS',
-    SET_DISTRICTS_GEO_JSON = 'page/SET_DISTRICTS_GEO_JSON',
     SET_MUNICIPALITIES = 'page/SET_MUNICIPALITIES',
     SET_WARDS = 'page/SET_WARDS',
 
@@ -183,11 +167,6 @@ export interface SetWards {
     wards: Ward[];
 }
 
-export interface SetDistrictGeoJson {
-    type: typeof PageType.SET_DISTRICTS_GEO_JSON;
-    districtsGeoJson: GeoJson;
-}
-
 // dashboard
 
 export interface SetDashboardAlertList {
@@ -237,7 +216,7 @@ export interface SetRealTimeRainList {
 
 export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
-    SetDistricts | SetMunicipalities | SetWards | SetDistrictGeoJson |
+    SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList

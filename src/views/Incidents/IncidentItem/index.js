@@ -1,18 +1,25 @@
 import React from 'react';
-import { _cs, reverseRoute } from '@togglecorp/fujs';
+import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 
-import { iconNames } from '#constants';
+import { _cs, reverseRoute } from '@togglecorp/fujs';
 
+import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
+
 import styles from './styles.scss';
 
 const propTypes = {
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    data: PropTypes.object.isRequired,
 };
 
-const defaultProps = {};
+const defaultProps = {
+    className: undefined,
+};
 
 export default class Incidents extends React.PureComponent {
     static propTypes = propTypes
@@ -25,7 +32,6 @@ export default class Incidents extends React.PureComponent {
                 title,
                 incidentOn,
                 streetAddress,
-                geoareaName,
                 source,
                 verified,
                 id: incidentId,
@@ -50,7 +56,6 @@ export default class Incidents extends React.PureComponent {
                     </h3>
                 </header>
                 <DateOutput
-                    className={styles.dateOutput}
                     date={incidentOn}
                 />
                 <span className={verifiedIconClass} />

@@ -1,45 +1,11 @@
 @import '~base-scss/base';
 
 .tooltip {
-    border: $width-separator-thin solid $color-separator-light;
     background-color: $color-foreground;
-    padding: $spacing-large;
+    padding: $spacing-medium;
 
     .heading {
         padding-bottom: $spacing-small;
         font-weight: $font-weight-bold;
     }
-
-    .geoarea-name,
-    .incident-date {
-        padding: $spacing-extra-small 0;
-    }
-
-    .hr {
-        margin: $spacing-small 0;
-        border: $width-separator-thin solid $color-separator-light;
-    }
-
-    .inducer,
-    .cause {
-        line-height: 1.8;
-    }
-}
-
-.icon-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: $color-foreground;
-    width: $font-size-super-large;
-    height: $font-size-super-large;
-}
-
-.icon {
-    height: $font-size-small-alt;
-}
-
-.marker-popup {
-    margin-top: $spacing-small;
 }

@@ -1,6 +1,18 @@
 import { PageState } from './types';
 
 const state: PageState = {
+    filters: {
+        faramValues: {
+            dateRange: 30,
+            region: {
+                adminLevel: 1,
+            },
+        },
+        faramErrors: {},
+        pristine: true,
+    },
+    eventTypes: {},
+
     adminLevelList: [
         {
             id: 1,
@@ -15,6 +27,7 @@ const state: PageState = {
             title: 'Municipality',
         },
     ],
+
     provinces: [],
     districts: [],
     municipalities: [],
@@ -86,41 +99,8 @@ const state: PageState = {
         resourceList: [],
     },
 
-    filters: {
-        faramValues: {
-            dateRange: 30,
-            region: {
-                adminLevel: 1,
-            },
-        },
-        faramErrors: {},
-        pristine: true,
-    },
-
     realTimeMonitoringPage: {
         realTimeRainList: [],
-    },
-
-    // FIXME: Remove Geojson from redux
-    geoJsons: {
-        district: {
-            type: 'FeatureCollection',
-            features: [
-                {
-                    id: 1,
-                    type: 'Feature',
-                    geometry: {
-                        type: 'MultiPolygon',
-                        coordinates: [[[
-                            [87, 27],
-                            [87, 28],
-                            [86, 28],
-                            [87, 27],
-                        ]]],
-                    },
-                },
-            ],
-        },
     },
 };
 export default state;

@@ -1111,6 +1111,11 @@
   resolved "https://registry.yarnpkg.com/@togglecorp/fujs/-/fujs-1.4.0.tgz#f74e624d5c6ec3339b814043b2ebeab5a1589195"
   integrity sha512-M5grXX9YEusiybDsZQRCyBAPHopEwQPN1/WPubG1JML5qz0ySt9dTdoz9FwzwK9+tQwbRaZe4dr8mifmYepbow==
 
+"@togglecorp/fujs@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@togglecorp/fujs/-/fujs-1.5.0.tgz#89da32706bca51c4fe0ec34e694d698d9a3cef6d"
+  integrity sha512-OKwy3WmHQk8i1Cc6Rev9TeEPwq18HNt7NKQkKOx0RiaGZPw6FmV8R8B1BaPJ9ZH4BnqUr2HkptkJYoUJ7YQs0g==
+
 "@togglecorp/ravl@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@togglecorp/ravl/-/ravl-1.2.2.tgz#27906dd0e3ab1dd5ec8f7a70d36f72217f42429a"

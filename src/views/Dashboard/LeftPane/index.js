@@ -1,30 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import ReactSVG from 'react-svg';
 import {
     _cs,
     mapToList,
 } from '@togglecorp/fujs';
-import ReactSVG from 'react-svg';
 
-import { hazardIcons } from '#resources/data';
 import Button from '#rsca/Button';
-// import PieChart from '#rscz/PieChart';
-import DonutChart from '#rscz/DonutChart';
 import ListView from '#rscv/List/ListView';
-import Histogram from '#rscz/Histogram';
+import DonutChart from '#rscz/DonutChart';
 import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
+import { hazardIcons } from '#resources/data';
 
 import TabularView from './TabularView';
-
 import styles from './styles.scss';
 
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     pending: PropTypes.bool,
     className: PropTypes.string,
 };
@@ -32,6 +30,7 @@ const propTypes = {
 const defaultProps = {
     pending: false,
     alertList: [],
+    hazardTypes: {},
     className: undefined,
 };
 
@@ -117,7 +116,9 @@ export default class LeftPane extends React.PureComponent {
         */
 
         return (
-            <div className={className}>
+            <div
+                className={className}
+            >
                 { icon ? (
                     <ReactSVG
                         className={styles.svgContainer}
@@ -182,7 +183,6 @@ export default class LeftPane extends React.PureComponent {
         } = this.props;
 
         const alertFreq = this.groupByHazard(alertList, hazardTypes);
-        const alertTimeStamps = alertList.map(a => a.alertOn);
 
         return (
             <div className={className}>
@@ -200,11 +200,6 @@ export default class LeftPane extends React.PureComponent {
                         colorScheme={basicColor}
                         valueSelector={pieChartValueSelector}
                     />
-                    {/*
-                    <Histogram
-                        data={alertTimeStamps}
-                    />
-                    */}
                 </div>
             </div>
         );
