@@ -1,51 +1,89 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { _cs } from '@togglecorp/fujs';
-import Button from '#rsca/Button';
-import DistanceOutput from '#components/DistanceOutput';
+import TextOutput from '#components/TextOutput';
 
-import { iconNames } from '#constants';
+import ResourceItem from '../ResourceItem';
 
 import styles from './styles.scss';
 
-export default class Finance extends React.PureComponent {
+const propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    data: PropTypes.object,
+};
+
+const defaultProps = {
+    data: {},
+};
+
+const emptyObject = {};
+
+export default class HealthItem extends React.PureComponent {
+    static propTypes = propTypes;
+    static defaultProps = defaultProps;
+
     handleShareButton = () => {
     }
 
     render() {
         const {
-            className,
-            title,
-            distance,
-            point: {
-                coordinates,
-            },
+            // FIXME: This strucure might be changed i.e: there might not be data
+            data: rawdata,
+            showDetails = true,
+
+            ...commonProps
         } = this.props;
 
-        const googleLink = `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
+        let data;
+        if (typeof (data) === 'string') {
+            data = JSON.parse(rawdata);
+        } else {
+            data = rawdata;
+        }
+
+        const {
+            location,
+            contactPerson = 'KP Oli', // FIXME: Aesthetic purpose only
+            noOfBeds = 100, // FIXME: Aesthetic purpose only
+            noOfDoctors = 20, // FIXME: Aesthetic purpose only
+            noOfNurses = 30, // FIXME: Aesthetic purpose only
+            ...otherProperties
+        } = data;
+
 
         return (
-            <div className={_cs(styles.resource, className)}>
-                <div className={styles.leftContainer}>
-                    <div className={styles.title}>
-                        { title }
-                    </div>
-                    <DistanceOutput
-                        value={distance / 1000}
-                    />
-                </div>
-                <div className={styles.rightContainer}>
-                    <a
-                        className={styles.link}
-                        href={googleLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span className={iconNames.share} />
-                    </a>
-                </div>
-            </div>
+            <React.Fragment>
+                <ResourceItem {...commonProps} />
+                { showDetails && (
+                    <div>
+                        <TextOutput
+                            className={styles.info}
+                            label="Location"
+                            value={location}
+                        />
+                        <TextOutput
+                            className={styles.info}
+                            label="Number Of Beds"
+                            value={noOfBeds}
+                        />
+                        <TextOutput
+                            className={styles.info}
+                            label="Number of Doctors"
+                            value={noOfDoctors}
+                        />
+                        <TextOutput
+                            className={styles.info}
+                            label="Number of Nurses"
+                            value={noOfNurses}
+                        />
+                        <TextOutput
+                            className={styles.info}
+                            label="Contact Person"
+                            value={contactPerson}
+                        />
+                    </div>)
+                }
+            </React.Fragment>
         );
     }
 }

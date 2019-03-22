@@ -1,36 +1,10 @@
 @import '~base-scss/base';
 
-.resource {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: $spacing-small 0;
+.hr {
+    margin: $spacing-small 0;
+    border-bottom: $width-separator-thin solid $color-separator-light;
+}
 
-    .left-container {
-        .title {
-            color: $color-text-label;
-            font-weight: $font-weight-bold;
-        }
-
-        .distance {
-            display: flex;
-
-            .amount {
-                margin-right: $spacing-small;
-            }
-        }
-    }
-
-    .right-container {
-        .link {
-            outline: none;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: inherit;
-
-            >span {
-                color: $color-primary;
-            }
-        }
-    }
+.info {
+    line-height: 1.8;
 }

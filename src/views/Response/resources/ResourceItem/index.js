@@ -19,6 +19,8 @@ const defaultProps = {
     distance: 0,
 };
 
+const emptyObject = {};
+
 export default class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -31,12 +33,14 @@ export default class ResourceItem extends React.PureComponent {
             className,
             title,
             distance,
+            // FIXME: point = emptyobject is a hack. point should be present
+            // due to mapbox stringifying objects and so on
             point: {
                 coordinates,
-            },
+            } = emptyObject,
         } = this.props;
 
-        const googleLink = `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
+        const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
 
         return (
             <div className={_cs(styles.resource, className)}>
@@ -48,16 +52,20 @@ export default class ResourceItem extends React.PureComponent {
                         value={distance / 1000}
                     />
                 </div>
-                <div className={styles.rightContainer}>
-                    <a
-                        className={styles.link}
-                        href={googleLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span className={iconNames.share} />
-                    </a>
-                </div>
+                {
+                    googleLink && (
+                        <div className={styles.rightContainer}>
+                            <a
+                                className={styles.link}
+                                href={googleLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <span className={iconNames.share} />
+                            </a>
+                        </div>
+                    )
+                }
             </div>
         );
     }

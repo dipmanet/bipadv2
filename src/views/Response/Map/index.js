@@ -24,14 +24,32 @@ import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 
+import HealthItem from '../resources/HealthItem';
+import VolunteerItem from '../resources/VolunteerItem';
+import EducationItem from '../resources/EducationItem';
+import FinanceItem from '../resources/FinanceItem';
+
+import {
+    districtsFill,
+    districtsOutline,
+    pointPaint,
+    polygonFill,
+    resourceIconLayout,
+    resourcePointPaint,
+} from './mapStyles';
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    incident: PropTypes.object,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
 };
 
 const defaultProps = {
     className: '',
+    incident: {},
+    resourceList: [],
 };
 
 const emptyObject = {};
@@ -42,6 +60,13 @@ const resourceImages = [
     { name: 'education', icon: educationIcon },
     { name: 'finance', icon: financeIcon },
 ];
+
+const resourceComponents = {
+    finance: FinanceItem,
+    health: HealthItem,
+    volunteer: VolunteerItem,
+    education: EducationItem,
+};
 
 
 const mapStateToProps = state => ({
@@ -66,25 +91,24 @@ class ResponseMap extends React.PureComponent {
 
     getResourceFeatureCollection = memoize(resourceToGeojson);
 
-    tooltipRenderer = ({ title, distance }) => (
-        <div>
-            <h3 className={styles.title}>
-                { title }
-            </h3>
-            <DistanceOutput
-                value={distance / 1000}
-            />
-        </div>
-    )
+    tooltipRenderer = ({ type, ...otherParams }) => {
+        const ResourceComponent = resourceComponents[type];
 
-    tooltipRendererParams = (id, { title, distance }) => ({
+        if (!ResourceComponent) {
+            return null;
+        }
+        return <ResourceComponent {...otherParams} showDetails />;
+    }
+
+    tooltipRendererParams = (id, { title, distance, type, data }) => ({
         title,
         distance,
+        type,
+        data,
     })
 
     render() {
         const {
-            className,
             incident,
             resourceList,
             hazards,
