@@ -16,10 +16,10 @@ export const districtsOutline = {
 };
 
 export const alertFill = {
-    'fill-color': 'red',
+    'fill-color': ['get', 'hazardColor'],
     'fill-opacity': ['case',
         ['boolean', ['feature-state', 'hover'], false],
-        0.8,
         0.5,
+        0.8,
     ],
 };

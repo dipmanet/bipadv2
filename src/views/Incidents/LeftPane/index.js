@@ -15,14 +15,11 @@ import Spinner from '#rscz/Spinner';
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
+
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-
-import {
-    hazardTypesSelector,
-} from '#selectors';
-
-import { calculateCategorizedSeverity } from '../utils';
+import { hazardTypesSelector } from '#selectors';
+import { calculateCategorizedSeverity } from '#utils/domain';
 
 import IncidentItem from '../IncidentItem';
 import TabularView from './TabularView';
@@ -167,9 +164,10 @@ class LeftPane extends React.PureComponent {
             showTabular,
         } = this.state;
 
-        const incidentList = incidentListNoSeverity.map(
-            x => ({ ...x, severity: calculateCategorizedSeverity(x.loss) }),
-        );
+        const incidentList = incidentListNoSeverity.map(incident => ({
+            ...incident,
+            severity: calculateCategorizedSeverity(incident.loss),
+        }));
 
         const severitySummary = this.getSummaryForLabel(incidentList, 'severity');
         const inducerSummary = this.getSummaryForLabel(incidentList, 'inducer');
