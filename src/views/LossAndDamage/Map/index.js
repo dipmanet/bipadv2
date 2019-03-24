@@ -210,7 +210,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="district"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                     boundsPadding={districtsPadding}
                 >
                     {/* FIXME: this selection method is obsolete */}
@@ -220,7 +220,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                         paint={activeBoundsFill}
                         property="title"
                         filter={activeFilter}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="district-fill"
@@ -228,13 +228,13 @@ export default class LossAndDamageMap extends React.PureComponent {
                         paint={boundsFill}
                         enableHover
                         onClick={this.handleDistrictClick}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="district-outline"
                         type="line"
                         paint={boundsOutline}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
                 <MapSource

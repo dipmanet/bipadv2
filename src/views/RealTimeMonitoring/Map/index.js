@@ -163,18 +163,18 @@ export default class RealTimeMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="real-time-bounds"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                 >
                     <MapLayer
                         layerKey="real-time-bounds-fill"
                         type="fill"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={boundsFill}
                     />
                     <MapLayer
                         layerKey="real-time-bounds-outline"
                         type="line"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={boundsOutline}
                     />
                 </MapSource>

@@ -114,19 +114,19 @@ class IncidentMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
                         paint={districtsFill}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
                         paint={districtsOutline}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
                 <MapSource

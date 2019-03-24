@@ -122,19 +122,19 @@ export default class ResponseMap extends React.PureComponent {
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                     bounds={box}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={districtsFill}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={districtsOutline}
                     />
                 </MapSource>
