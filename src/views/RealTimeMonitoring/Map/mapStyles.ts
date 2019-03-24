@@ -14,13 +14,33 @@ export const boundsOutline = {
     'line-width': 1,
 };
 
-export const pointPaint = {
-    'circle-color': '#E71D36',
+export const rainPointPaint = {
+    'circle-color': '#EC7357',
     'circle-radius': 8,
     'circle-opacity': ['case',
         ['boolean', ['feature-state', 'hover'], false],
-        0.9,
         0.5,
+        0.9,
+    ],
+};
+
+export const riverPointPaint = {
+    'circle-color': '#6C49B8',
+    'circle-radius': 8,
+    'circle-opacity': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.5,
+        0.9,
+    ],
+};
+
+export const earthquakePointPaint = {
+    'circle-color': '#E41A1C',
+    'circle-radius': 8,
+    'circle-opacity': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.5,
+        0.9,
     ],
 };
 

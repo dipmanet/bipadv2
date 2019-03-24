@@ -116,6 +116,19 @@ export const setRealTimeRainListAction = (
     realTimeRainList,
 });
 
+export const setRealTimeRiverListAction = (
+    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]}) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
+    realTimeRiverList,
+});
+
+export const setRealTimeEarthquakeListAction = (
+    { realTimeEarthquakeList }:
+    { realTimeEarthquakeList: Type.RealTimeEarthquake[]}) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
+    realTimeEarthquakeList,
+});
+
 //  REDUCERS
 
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
@@ -380,6 +393,37 @@ export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealT
     return newState;
 };
 
+export const setRealTimeRiverList = (state: Type.PageState, action: Type.SetRealTimeRiverList) => {
+    const {
+        realTimeRiverList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.realTimeRiverList = realTimeRiverList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setRealTimeEarthquakeList = (
+    state: Type.PageState,
+    action: Type.SetRealTimeEarthquakeList,
+) => {
+    const {
+        realTimeEarthquakeList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.realTimeEarthquakeList = realTimeEarthquakeList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 export default function routeReducer(
     state = initialState,
@@ -416,6 +460,10 @@ export default function routeReducer(
             return setResourceList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
             return setRealTimeRainList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST:
+            return setRealTimeRiverList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:
+            return setRealTimeEarthquakeList(state, action);
         default:
             return state;
     }

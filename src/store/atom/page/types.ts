@@ -56,6 +56,12 @@ export interface Filters {
 export interface RealTimeRain {
     id: number;
 }
+export interface RealTimeRiver {
+    id: number;
+}
+export interface RealTimeEarthquake {
+    id: number;
+}
 
 export interface DashboardPage {
     alertList: Alert[];
@@ -74,6 +80,8 @@ export interface ResponsePage {
 
 export interface RealTimeMonitoringPage {
     realTimeRainList: RealTimeRain[];
+    realTimeRiverList: RealTimeRiver[];
+    realTimeEarthquakeList: RealTimeEarthquake[];
 }
 
 export interface PageState {
@@ -124,6 +132,8 @@ export enum PageType {
 
     // real time monitoring
     RTM__SET_REAL_TIME_RAIN_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RAIN',
+    RTM__SET_REAL_TIME_RIVER_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RIVER',
+    RTM__SET_REAL_TIME_EARTHQUAKE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_EARTHQUAKE_RIVER',
 }
 
 // ACTION CREATOR INTERFACE
@@ -214,10 +224,20 @@ export interface SetRealTimeRainList {
     realTimeRainList: RealTimeRain[];
 }
 
+export interface SetRealTimeRiverList {
+    type: typeof PageType.RTM__SET_REAL_TIME_RIVER_LIST;
+    realTimeRiverList: RealTimeRiver[];
+}
+
+export interface SetRealTimeEarthquakeList {
+    type: typeof PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST;
+    realTimeEarthquakeList: RealTimeEarthquake[];
+}
+
 export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
-    SetRealTimeRainList
+    SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList
 );
