@@ -45,8 +45,6 @@ export default class ResourceItem extends React.PureComponent {
             } = emptyObject,
         } = this.props;
 
-        console.warn('RENDERER ITEM PROPS', this.props);
-
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
 
         const attrs = resourceAttributes[resourceType] || [];

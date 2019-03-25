@@ -22,8 +22,8 @@ import {
 import Page from '#components/Page';
 import IncidentInfo from '#components/IncidentInfo';
 
+import ResponseFilter from './Filter';
 import Map from './Map';
-import ResourceList from './ResourceList';
 
 import styles from './styles.scss';
 
@@ -83,11 +83,16 @@ class Response extends React.PureComponent {
                     }
                     rightContentClassName={styles.resourceListContainer}
                     rightContent={
-                        <ResourceList
-                            // className={styles.resourceList}
-                            resourceList={resourceList}
-                            pending={pending}
-                        />
+                        <React.Fragment>
+                            {
+                                // <ResourceList
+                                // className={styles.resourceList}
+                                // resourceList={resourceList}
+                                // pending={pending}
+                                // />
+                            }
+                            <ResponseFilter />
+                        </React.Fragment>
                     }
                 />
             </React.Fragment>

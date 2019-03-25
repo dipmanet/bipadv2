@@ -36,6 +36,7 @@ const schemaList: Schema[] = [
             province: { type: 'number', required: true },
             bbox: { type: 'array.number', required: true },
             type: { type: 'string' },
+            bbox: { type: 'array.number', required: true },
         },
     },
     {
@@ -61,6 +62,7 @@ const schemaList: Schema[] = [
             district: { type: 'number', required: true },
             bbox: { type: 'array.number', required: true },
             type: { type: 'string' },
+            bbox: { type: 'array.number', required: true },
         },
     },
     {
@@ -86,6 +88,7 @@ const schemaList: Schema[] = [
             municipality: { type: 'number', required: true },
             bbox: { type: 'array.number', required: true },
             type: { type: 'string' },
+            bbox: { type: 'array.number', required: true },
         },
     },
     {
