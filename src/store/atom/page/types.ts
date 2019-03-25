@@ -1,13 +1,20 @@
 import { Obj } from '@togglecorp/fujs';
 
 export interface Province {
+    id: number;
+    bbox: number[];
 }
 export interface District {
+    id: number;
+    bbox: number[];
 }
 export interface Municipality {
+    id: number;
+    bbox: number[];
 }
 export interface Ward {
     id: number;
+    // bbox: number[];
 }
 export interface HazardType {
     id: number;
@@ -48,6 +55,7 @@ export interface AdminLevel {
 
 export interface Region {
     adminLevel: number;
+    geoarea?: number;
 }
 
 export interface Filters {

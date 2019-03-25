@@ -5,18 +5,22 @@ export const provincesOutline = {
 
 export const districtsOutline = {
     'line-color': '#a3b7e3',
-    'line-width': 1,
+    'line-width': 1.4,
 };
 
-export const districtsFill = {
+export const municipalitiesOutline = {
+    'line-color': '#a3b7e3',
+    'line-width': 0.8,
+};
+
+export const wardsOutline = {
+    'line-color': '#a3b7e3',
+    'line-width': 0.5,
+};
+
+export const provincesFill = {
     'fill-color': '#0081f0',
-    'fill-opacity': ['case',
-        ['boolean', ['feature-state', 'selected'], false],
-        0.8,
-        ['boolean', ['feature-state', 'hover'], false],
-        0.4,
-        0.1,
-    ],
+    'fill-opacity': 0.1,
 };
 
 export const alertFill = {
