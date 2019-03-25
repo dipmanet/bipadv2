@@ -6,91 +6,21 @@ import MapSource from '#rscz/Map/MapSource';
 
 import TextOutput from '#components/TextOutput';
 
-import { mapSources } from '#constants';
-
+import { mapSources, mapStyles } from '#constants';
 import {
-    boundsFill,
-    boundsOutline,
-    rainPointPaint,
-    riverPointPaint,
-    earthquakePointPaint,
-
-} from './mapStyles';
+    earthquakeToGeojson,
+    riverToGeojson,
+    rainToGeojson,
+} from '#utils/domain';
 
 import styles from './styles.scss';
 
 export default class RealTimeMap extends React.PureComponent {
-    getEarthquakeFeatureCollection = memoize((realTimeEarthquakeList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: realTimeEarthquakeList
-                .filter(earthquake => earthquake.point)
-                .map(earthquake => ({
-                    id: earthquake.id,
-                    type: 'Feature',
-                    geometry: {
-                        ...earthquake.point,
-                    },
-                    properties: {
-                        earthquakeId: earthquake.id,
-                        address: earthquake.address,
-                        description: earthquake.description,
-                        eventOn: earthquake.eventOn,
-                        magnitude: earthquake.magnitude,
-                    },
-                })),
-        };
+    getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
-        return geojson;
-    })
+    getRiverFeatureCollection = memoize(riverToGeojson)
 
-    getRiverFeatureCollection = memoize((realTimeRiverList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: realTimeRiverList
-                .filter(river => river.point)
-                .map(river => ({
-                    id: river.id,
-                    type: 'Feature',
-                    geometry: {
-                        ...river.point,
-                    },
-                    properties: {
-                        riverId: river.id,
-                        title: river.title,
-                        description: river.description,
-                        basin: river.basin,
-                        status: river.status,
-                    },
-                })),
-        };
-
-        return geojson;
-    })
-
-    getRainFeatureCollection = memoize((realTimeRainList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: realTimeRainList
-                .filter(rain => rain.point)
-                .map(rain => ({
-                    id: rain.id,
-                    type: 'Feature',
-                    geometry: {
-                        ...rain.point,
-                    },
-                    properties: {
-                        rainId: rain.id,
-                        title: rain.title,
-                        description: rain.description,
-                        basin: rain.basin,
-                        status: rain.status,
-                    },
-                })),
-        };
-
-        return geojson;
-    });
+    getRainFeatureCollection = memoize(rainToGeojson);
 
     tooltipRendererParams = (id, { title, description, basin, status }) => ({
         title,
@@ -156,8 +86,9 @@ export default class RealTimeMap extends React.PureComponent {
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
         const riverFeatureCollection = this.getRiverFeatureCollection(realTimeRiverList);
-        const earthquakeFeatureCollection =
-            this.getEarthquakeFeatureCollection(realTimeEarthquakeList);
+        const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
+            realTimeEarthquakeList,
+        );
 
         return (
             <React.Fragment>
@@ -169,13 +100,13 @@ export default class RealTimeMap extends React.PureComponent {
                         layerKey="real-time-bounds-fill"
                         type="fill"
                         sourceLayer={mapSources.nepal.layers.district}
-                        paint={boundsFill}
+                        paint={mapStyles.district.fill}
                     />
                     <MapLayer
                         layerKey="real-time-bounds-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.district}
-                        paint={boundsOutline}
+                        paint={mapStyles.district.outline}
                     />
                 </MapSource>
                 <MapSource
@@ -187,7 +118,7 @@ export default class RealTimeMap extends React.PureComponent {
                         layerKey="real-time-rain-points-fill"
                         type="circle"
                         property="rainId"
-                        paint={rainPointPaint}
+                        paint={mapStyles.rainPoint.fill}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -202,7 +133,7 @@ export default class RealTimeMap extends React.PureComponent {
                         layerKey="real-time-river-points-fill"
                         type="circle"
                         property="riverId"
-                        paint={riverPointPaint}
+                        paint={mapStyles.riverPoint.fill}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -217,7 +148,7 @@ export default class RealTimeMap extends React.PureComponent {
                         layerKey="real-time-earthquake-points-fill"
                         type="circle"
                         property="earthquakeId"
-                        paint={earthquakePointPaint}
+                        paint={mapStyles.earthquakePoint.fill}
                         enableHover
                         tooltipRenderer={this.earthquakeTooltipRenderer}
                         tooltipRendererParams={this.earthquakeTooltipRendererParams}

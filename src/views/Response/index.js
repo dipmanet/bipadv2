@@ -103,6 +103,9 @@ const requests = {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/`
         ),
+        query: {
+            expand: 'loss',
+        },
         onSuccess: ({ response, props: { setIncident } }) => {
             setIncident({ incident: response });
         },

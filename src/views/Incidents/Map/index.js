@@ -1,5 +1,4 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
@@ -10,31 +9,19 @@ import {
     hazardTypesSelector,
     wardsMapSelector,
 } from '#selectors';
-import { mapSources } from '#constants';
+import { mapSources, mapStyles } from '#constants';
 import Tooltip from '#components/Tooltip';
 
 import {
-    calculateSeverity,
-    getHazardColor,
+    incidentPointToGeojson,
+    incidentPolygonToGeojson,
 } from '#utils/domain';
-
-
-import {
-    districtsFill,
-    districtsOutline,
-    incidentPointPaint,
-    incidentPolygonPaint,
-} from './mapStyles';
 
 const propTypes = {
 };
 
 const defaultProps = {
 };
-
-// severityScaleFactor is to show severity as radius of circle in map, which is logarithmic
-// and for small values, all severities look same for which we need to scale
-const severityScaleFactor = 20000;
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
@@ -45,41 +32,9 @@ class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getPointFeatureCollection = memoize((incidentList, hazards) => ({
-        type: 'FeatureCollection',
-        features: incidentList
-            .filter(incident => incident.point)
-            .map(incident => ({
-                type: 'Feature',
-                id: incident.id,
-                geometry: {
-                    ...incident.point,
-                },
-                properties: {
-                    incidentId: incident.id,
-                    severity: calculateSeverity(incident.loss, severityScaleFactor),
-                    hazardColor: getHazardColor(hazards, incident.hazard),
-                },
-            })),
-    }))
+    getPointFeatureCollection = memoize(incidentPointToGeojson)
 
-    getPolygonFeatureCollection = memoize((incidentList, hazards) => ({
-        type: 'FeatureCollection',
-        features: incidentList
-            .filter(incident => incident.polygon)
-            .map(incident => ({
-                id: incident.id,
-                type: 'Feature',
-                geometry: {
-                    ...incident.polygon,
-                },
-                properties: {
-                    incidentId: incident.id,
-                    severity: calculateSeverity(incident.loss, severityScaleFactor),
-                    hazardColor: getHazardColor(hazards, incident.hazard),
-                },
-            })),
-    }));
+    getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
 
     tooltipRendererParams = (id) => {
         const {
@@ -113,13 +68,13 @@ class IncidentMap extends React.PureComponent {
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
-                        paint={districtsFill}
+                        paint={mapStyles.district.fill}
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
-                        paint={districtsOutline}
+                        paint={mapStyles.district.outline}
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
@@ -130,7 +85,7 @@ class IncidentMap extends React.PureComponent {
                     <MapLayer
                         layerKey="incident-points-fill"
                         type="circle"
-                        paint={incidentPointPaint}
+                        paint={mapStyles.incidentPoint.fill}
                         enableHover
                         tooltipRenderer={Tooltip}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -143,7 +98,7 @@ class IncidentMap extends React.PureComponent {
                     <MapLayer
                         layerKey="incident-polygon-fill"
                         type="fill"
-                        paint={incidentPolygonPaint}
+                        paint={mapStyles.incidentPolygon.fill}
                         enableHover
                         tooltipRenderer={Tooltip}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -154,4 +109,4 @@ class IncidentMap extends React.PureComponent {
     }
 }
 
-export default compose(connect(mapStateToProps))(IncidentMap);
+export default connect(mapStateToProps)(IncidentMap);

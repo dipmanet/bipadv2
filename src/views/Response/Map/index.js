@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
@@ -7,22 +8,21 @@ import buffer from '@turf/buffer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+import { mapSources, mapStyles } from '#constants';
+import { hazardTypesSelector } from '#selectors';
 import DistanceOutput from '#components/DistanceOutput';
+
+import {
+    incidentPointToGeojson,
+    incidentPolygonToGeojson,
+    resourceToGeojson,
+} from '#utils/domain';
 
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
-import { mapSources } from '#constants';
 
-import {
-    districtsFill,
-    districtsOutline,
-    pointPaint,
-    polygonFill,
-    resourceIconLayout,
-    resourcePointPaint,
-} from './mapStyles';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -40,52 +40,28 @@ const resourceImages = [
     { name: 'finance', icon: financeIcon },
 ];
 
-export default class ResponseMap extends React.PureComponent {
+
+const mapStateToProps = state => ({
+    hazards: hazardTypesSelector(state),
+});
+
+class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
-
-    getResourceFeatureCollection = memoize((resourceList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: resourceList
-                .filter(resource => resource.point)
-                .map((resource, i) => ({
-                    id: i,
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: resource.point.coordinates,
-                    },
-                    properties: {
-                        iconName: resource.resourceType,
-                        title: resource.title,
-                        distance: resource.distance,
-                    },
-                })),
-        };
-
-        return geojson;
-    });
-
-    getFeatureCollection = memoize((shape, incident, severity) => ({
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            geometry: {
-                ...shape,
-            },
-            properties: {
-                incident,
-                severity,
-            },
-        }],
-    }))
 
     getBuffer = memoize((shape) => {
         const buffered = buffer(shape, 32, { units: 'kilometers' });
         const box = bbox(buffered);
         return box;
     });
+
+    getIncidentList = memoize(incident => [incident]);
+
+    getPointFeatureCollection = memoize(incidentPointToGeojson)
+
+    getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
+
+    getResourceFeatureCollection = memoize(resourceToGeojson);
 
     tooltipRenderer = ({ title, distance }) => (
         <div>
@@ -108,15 +84,16 @@ export default class ResponseMap extends React.PureComponent {
             className,
             incident,
             resourceList,
+            hazards,
         } = this.props;
 
         const {
             point,
             polygon,
-            severity,
         } = incident;
 
         const box = this.getBuffer(point || polygon);
+        const incidentList = this.getIncidentList(incident);
 
         return (
             <React.Fragment>
@@ -129,13 +106,13 @@ export default class ResponseMap extends React.PureComponent {
                         layerKey="districts-fill"
                         type="fill"
                         sourceLayer={mapSources.nepal.layers.district}
-                        paint={districtsFill}
+                        paint={mapStyles.district.fill}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.district}
-                        paint={districtsOutline}
+                        paint={mapStyles.district.outline}
                     />
                 </MapSource>
 
@@ -147,7 +124,7 @@ export default class ResponseMap extends React.PureComponent {
                     <MapLayer
                         layerKey="resource-point"
                         type="circle"
-                        paint={resourcePointPaint}
+                        paint={mapStyles.resourcePoint.circle}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -155,33 +132,33 @@ export default class ResponseMap extends React.PureComponent {
                     <MapLayer
                         layerKey="resource-symbol"
                         type="symbol"
-                        layout={resourceIconLayout}
+                        layout={mapStyles.resourcePoint.layout}
                     />
                 </MapSource>
 
                 { point &&
                     <MapSource
                         sourceKey="points"
-                        geoJson={this.getFeatureCollection(point, incident, severity)}
+                        geoJson={this.getPointFeatureCollection(incidentList, hazards)}
                     >
                         <MapLayer
                             layerKey="points"
                             type="circle"
                             property="incident"
-                            paint={pointPaint}
+                            paint={mapStyles.incidentPoint.fill}
                         />
                     </MapSource>
                 }
                 { polygon &&
                     <MapSource
                         sourceKey="polygon"
-                        geoJson={this.getFeatureCollection(polygon, incident, severity)}
+                        geoJson={this.getPolygonFeatureCollection(incidentList, hazards)}
                     >
                         <MapLayer
                             layerKey="polygon"
                             type="fill"
                             property="incident"
-                            paint={polygonFill}
+                            paint={mapStyles.incidentPolygon.fill}
                         />
                     </MapSource>
                 }
@@ -189,3 +166,5 @@ export default class ResponseMap extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(ResponseMap);

@@ -208,7 +208,11 @@ const mapDispatchToProps = dispatch => ({
 
 const requests = {
     lossAndDamageRequest: {
-        url: '/incident/?expand=loss.peoples&limit=10000',
+        url: '/incident/',
+        query: {
+            expand: 'loss.peoples',
+            limit: 5000,
+        },
         onMount: true,
         extras: {
             schemaName: 'incidentWithPeopleResponse',
