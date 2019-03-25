@@ -28,6 +28,20 @@ export const transformDateRangeFilterParam = (
         ...other
     } = filters;
     let outputFilters = { ...other };
+    if (region && region.adminLevel && region.geoarea) {
+        const label = (
+            (region.adminLevel === 1 && 'province')
+            || (region.adminLevel === 2 && 'district')
+            || (region.adminLevel === 3 && 'municipality')
+            || undefined
+        );
+        if (label) {
+            outputFilters = {
+                ...outputFilters,
+                [label]: region.geoarea,
+            };
+        }
+    }
     if (dateRange) {
         /* Transforms object with dateRange key to {
          * <destParamName>__lt: <iso>

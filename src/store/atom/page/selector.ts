@@ -225,8 +225,8 @@ export const realTimeEarthquakeListSelector = createSelector(
     ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
 );
 
-// bounds
 
+// bounds
 export const boundsSelector = createSelector(
     regionSelector,
     provincesSelector,
@@ -250,3 +250,26 @@ export const boundsSelector = createSelector(
     },
 );
 
+// loss and damage page
+export const lossAndDamagePageSelector = ({ page }: AppState) =>
+    page.lossAndDamagePage;
+
+export const lossAndDamageFiltersSelector = createSelector(
+    lossAndDamagePageSelector,
+    regionSelector,
+    (lossAndDamagePage, region) => {
+        const { filters } = lossAndDamagePage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
+);
+
+export const lossAndDamageFilterValuesSelector = createSelector(
+    lossAndDamageFiltersSelector,
+    ({ faramValues }) => faramValues,
+);

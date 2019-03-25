@@ -14,8 +14,15 @@ import { iconNames } from '#constants';
 
 import Page from '#components/Page';
 
+import {
+    lossAndDamageFilterValuesSelector,
+} from '#selectors';
+
+import { transformDateRangeFilterParam } from '#utils/transformations';
+
 import Map from './Map';
 import LeftPane from './LeftPane';
+import LossAndDamageFilter from './Filter';
 
 import Seekbar from './Seekbar';
 import styles from './styles.scss';
@@ -61,6 +68,10 @@ const transformLossAndDamageDataToStreamFormat = (lossAndDamageList) => {
 
     return streamData;
 };
+
+const mapStateToProps = state => ({
+    filters: lossAndDamageFilterValuesSelector(state),
+});
 
 class LossAndDamage extends React.PureComponent {
     static propTypes = propTypes;
@@ -118,7 +129,6 @@ class LossAndDamage extends React.PureComponent {
                 },
             },
         } = this.props;
-
 
         return (
             <div className={styles.container}>
@@ -191,7 +201,9 @@ class LossAndDamage extends React.PureComponent {
                         />
                     }
                     rightContentClassName={styles.right}
-                    rightContent={null}
+                    rightContent={
+                        <LossAndDamageFilter />
+                    }
                     mainContentClassName={styles.main}
                     mainContent={this.renderMainContent()}
                 />
@@ -200,18 +212,22 @@ class LossAndDamage extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => ({
-});
-
 const mapDispatchToProps = dispatch => ({
 });
 
 const requests = {
     lossAndDamageRequest: {
         url: '/incident/',
-        query: {
-            expand: 'loss.peoples',
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            expand: ['loss.peoples'],
             limit: 5000,
+        }),
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { hazard, region } },
+                prevProps: { filters: { hazard: prevHazard, region: prevRegion } },
+            }) => (hazard !== prevHazard || region !== prevRegion),
         },
         onMount: true,
         extras: {
