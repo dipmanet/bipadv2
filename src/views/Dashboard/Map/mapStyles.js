@@ -1,3 +1,13 @@
+export const provincesOutline = {
+    'line-color': '#a3b7e3',
+    'line-width': 2,
+};
+
+export const districtsOutline = {
+    'line-color': '#a3b7e3',
+    'line-width': 1,
+};
+
 export const districtsFill = {
     'fill-color': '#0081f0',
     'fill-opacity': ['case',
@@ -9,17 +19,11 @@ export const districtsFill = {
     ],
 };
 
-export const districtsOutline = {
-    'line-color': '#4c4caa',
-    'line-opacity': 0.2,
-    'line-width': 1,
-};
-
 export const alertFill = {
-    'fill-color': 'red',
+    'fill-color': ['get', 'hazardColor'],
     'fill-opacity': ['case',
         ['boolean', ['feature-state', 'hover'], false],
-        0.8,
         0.5,
+        0.8,
     ],
 };

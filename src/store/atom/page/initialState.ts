@@ -33,8 +33,13 @@ const state: PageState = {
     municipalities: [],
     wards: [],
 
-    selectedMapStyle: 'mapbox://styles/mapbox/streets-v11',
+    selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
     mapStyles: [
+        {
+            name: 'custom',
+            style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+            color: '#ff8867',
+        },
         {
             name: 'light',
             style: 'mapbox://styles/mapbox/light-v10',

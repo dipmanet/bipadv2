@@ -42,6 +42,7 @@ export default class DateOutput extends React.PureComponent {
                 <FormattedDate
                     className={styles.formattedDate}
                     value={value}
+                    mode="yyyy-MM-dd"
                     {...otherProps}
                 />
             </div>

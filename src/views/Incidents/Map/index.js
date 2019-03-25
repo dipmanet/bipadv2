@@ -14,9 +14,9 @@ import { mapSources } from '#constants';
 import Tooltip from '#components/Tooltip';
 
 import {
-    calculateScaledSeverity,
+    calculateSeverity,
     getHazardColor,
-} from '../utils';
+} from '#utils/domain';
 
 
 import {
@@ -45,51 +45,41 @@ class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getPointFeatureCollection = memoize((incidentList) => {
-        const { hazards } = this.props;
-        const geojson = {
-            type: 'FeatureCollection',
-            features: incidentList
-                .filter(incident => incident.point)
-                .map(incident => ({
-                    type: 'Feature',
-                    id: incident.id,
-                    geometry: {
-                        ...incident.point,
-                    },
-                    properties: {
-                        incidentId: incident.id,
-                        severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
-                        hazardColor: getHazardColor(hazards[incident.hazard]),
-                    },
-                })),
-        };
+    getPointFeatureCollection = memoize((incidentList, hazards) => ({
+        type: 'FeatureCollection',
+        features: incidentList
+            .filter(incident => incident.point)
+            .map(incident => ({
+                type: 'Feature',
+                id: incident.id,
+                geometry: {
+                    ...incident.point,
+                },
+                properties: {
+                    incidentId: incident.id,
+                    severity: calculateSeverity(incident.loss, severityScaleFactor),
+                    hazardColor: getHazardColor(hazards, incident.hazard),
+                },
+            })),
+    }))
 
-        return geojson;
-    });
-
-    getPolygonFeatureCollection = memoize((incidentList) => {
-        const { hazards } = this.props;
-        const geojson = {
-            type: 'FeatureCollection',
-            features: incidentList
-                .filter(incident => incident.polygon)
-                .map(incident => ({
-                    id: incident.id,
-                    type: 'Feature',
-                    geometry: {
-                        ...incident.polygon,
-                    },
-                    properties: {
-                        incidentId: incident.id,
-                        severity: calculateScaledSeverity(severityScaleFactor, incident.loss),
-                        hazardColor: getHazardColor(hazards[incident.hazard]),
-                    },
-                })),
-        };
-
-        return geojson;
-    });
+    getPolygonFeatureCollection = memoize((incidentList, hazards) => ({
+        type: 'FeatureCollection',
+        features: incidentList
+            .filter(incident => incident.polygon)
+            .map(incident => ({
+                id: incident.id,
+                type: 'Feature',
+                geometry: {
+                    ...incident.polygon,
+                },
+                properties: {
+                    incidentId: incident.id,
+                    severity: calculateSeverity(incident.loss, severityScaleFactor),
+                    hazardColor: getHazardColor(hazards, incident.hazard),
+                },
+            })),
+    }));
 
     tooltipRendererParams = (id) => {
         const {
@@ -98,6 +88,7 @@ class IncidentMap extends React.PureComponent {
         } = this.props;
 
         const incident = incidentList.find(i => i.id === id);
+
         return {
             incident,
             wardsMap,
@@ -105,28 +96,31 @@ class IncidentMap extends React.PureComponent {
     }
 
     render() {
-        const { incidentList } = this.props;
+        const {
+            incidentList,
+            hazards,
+        } = this.props;
 
-        const pointFeatureCollection = this.getPointFeatureCollection(incidentList);
-        const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList);
+        const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
+        const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                 >
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
                         paint={districtsFill}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
                         paint={districtsOutline}
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
                 <MapSource

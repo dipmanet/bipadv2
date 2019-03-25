@@ -1,37 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { connect } from 'react-redux';
 
 import { isTruthy } from '@togglecorp/fujs';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-// import { filtersSelectorDP } from '#selectors';
+import { hazardTypesSelector } from '#selectors';
+
 import { mapSources } from '#constants';
+import { getHazardColor } from '#utils/domain';
 
 import {
     alertFill,
     districtsFill,
     districtsOutline,
+    provincesOutline,
 } from './mapStyles';
 
 import styles from './styles.scss';
 
+const Tooltip = ({ title, description }) => (
+    <div className={styles.tooltip}>
+        <h3 className={styles.heading}>
+            {title}
+        </h3>
+        <p>
+            {description}
+        </p>
+    </div>
+);
+Tooltip.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+};
+
+
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     alertList: PropTypes.array,
+    // eslint-disable-next-line react/forbid-prop-types
+    hazards: PropTypes.object,
 };
 
 const defaultProps = {
     alertList: [],
+    hazards: {},
 };
 
-export default class AlertMap extends React.PureComponent {
+const mapStateToProps = state => ({
+    hazards: hazardTypesSelector(state),
+});
+
+class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getFeatureCollection = memoize((alertList) => {
+    getFeatureCollection = memoize((alertList, hazards) => {
         const geojson = {
             type: 'FeatureCollection',
             features: alertList
@@ -53,6 +80,7 @@ export default class AlertMap extends React.PureComponent {
                         properties: {
                             title,
                             description,
+                            hazardColor: getHazardColor(hazards, alert.hazard),
                         },
                     };
                 }),
@@ -66,37 +94,35 @@ export default class AlertMap extends React.PureComponent {
         description,
     })
 
-    tooltipRenderer = ({ title, description }) => (
-        <div className={styles.tooltip}>
-            <h3 className={styles.heading}>
-                {title}
-            </h3>
-            <p>
-                {description}
-            </p>
-        </div>
-    )
-
     render() {
-        const { alertList } = this.props;
-        const featureCollection = this.getFeatureCollection(alertList);
+        const {
+            alertList,
+            hazards,
+        } = this.props;
+        const featureCollection = this.getFeatureCollection(alertList, hazards);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
-                    url={mapSources.district.url}
+                    url={mapSources.nepal.url}
                 >
+                    <MapLayer
+                        layerKey="province-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={provincesOutline}
+                    />
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={districtsFill}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
-                        sourceLayer={mapSources.district.sourceLayer}
+                        sourceLayer={mapSources.nepal.layers.district}
                         paint={districtsOutline}
                     />
                 </MapSource>
@@ -109,7 +135,7 @@ export default class AlertMap extends React.PureComponent {
                         type="fill"
                         enableHover
                         paint={alertFill}
-                        tooltipRenderer={this.tooltipRenderer}
+                        tooltipRenderer={Tooltip}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
@@ -118,9 +144,4 @@ export default class AlertMap extends React.PureComponent {
     }
 }
 
-/*
-const mapStateToProps = state => ({
-    filters: filtersSelectorDP(state),
-});
 export default connect(mapStateToProps)(AlertMap);
-*/

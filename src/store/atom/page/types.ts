@@ -13,6 +13,7 @@ export interface Ward {
 export interface HazardType {
     // TODO: fill this
     id: number;
+    color?: string;
 }
 export interface EventType {
     id: number;
@@ -28,6 +29,12 @@ export interface Incident {
 }
 export interface Resource {
     title: string;
+}
+export interface Loss {
+    estimatedLoss?: number;
+    peopleDeathCount?: number;
+    livestockDestroyedCount?: number;
+    infrastructureDestroyedCount?: number;
 }
 
 export interface MapStyle {

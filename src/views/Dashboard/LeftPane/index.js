@@ -16,6 +16,7 @@ import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 import { basicColor } from '#constants/colorScheme';
 import { hazardIcons } from '#resources/data';
+import { getHazardColor } from '#utils/domain';
 
 import TabularView from './TabularView';
 import styles from './styles.scss';
@@ -101,19 +102,7 @@ export default class LeftPane extends React.PureComponent {
         } = emptyObject,
     }) => {
         const { hazardTypes } = this.props;
-        const {
-            // icon,
-            label,
-        } = hazardTypes[hazard] || {};
         const icon = hazardIcons[hazard];
-
-        /*
-        <img
-            className={styles.icon}
-            src={icon}
-            alt={label}
-        />
-        */
 
         return (
             <div
@@ -124,6 +113,9 @@ export default class LeftPane extends React.PureComponent {
                         className={styles.svgContainer}
                         path={icon}
                         svgClassName={styles.icon}
+                        style={{
+                            color: getHazardColor(hazardTypes, hazard),
+                        }}
                     />
                 ) : (
                     <div

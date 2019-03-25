@@ -137,7 +137,7 @@ export default class Tooltip extends React.PureComponent {
                     label="Reported On"
                     value={
                         <FormattedDate
-                            mode="dd-MM-yyyy hh:mm:ss"
+                            mode="yyyy-MM-dd hh:mm"
                             value={reportedOn}
                         />
                     }
