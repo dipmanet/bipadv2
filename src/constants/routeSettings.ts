@@ -45,14 +45,6 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/Response'),
     },
     {
-        name: 'riskInfo',
-        title: 'Risk Information',
-        path: '/risk-info/',
-        load: () => import('../views/RiskInfo'),
-        navbar: true,
-        iconName: iconNames.riskMap,
-    },
-    {
         name: 'capacityAndResource',
         title: 'Capacity & Resource',
         path: '/capacity-and-resources/',
@@ -73,6 +65,14 @@ const routeSettings: SomeRoute[] = [
         iconName: iconNames.realtime,
         load: () => import('../views/RealTimeMonitoring'),
         navbar: true,
+    },
+    {
+        name: 'riskInfo',
+        title: 'Risk Information',
+        path: '/risk-info/',
+        load: () => import('../views/RiskInfo'),
+        navbar: true,
+        iconName: iconNames.riskMap,
     },
     {
         name: 'profileMapping',

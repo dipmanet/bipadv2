@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from '@reach/router';
+import { Router, Link } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
@@ -13,9 +13,20 @@ import { mapStylesSelector } from '#selectors';
 
 import styles from './styles.scss';
 
-const layerKeySelector = d => d.name;
-
 const pages = routeSettings.filter(setting => !!setting.navbar);
+
+const Title = ({ name, title }) => (
+    <div>
+        {title}
+    </div>
+);
+
+const titles = routeSettings.map(props => (
+    <Title
+        key={props.name}
+        {...props}
+    />
+));
 
 const MenuItem = ({
     className,
@@ -80,6 +91,8 @@ MenuItem.propTypes = {
     iconName: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
 };
+
+const layerKeySelector = d => d.name;
 
 MenuItem.defaultProps = {
     className: '',
@@ -178,18 +191,6 @@ class Navbar extends React.PureComponent {
                             )
                         }
                     >
-                        {/*
-                        <header>
-                            <Button
-                                className={styles.menuCloseButton}
-                                iconName={iconNames.close}
-                                onClick={this.handleMenuClose}
-                                transparent
-                                smallHorizontalPadding
-                                smallVerticalPadding
-                            />
-                        </header>
-                        */}
                         <ListView
                             data={pages}
                             keySelector={Navbar.menuKeySelector}
@@ -200,7 +201,7 @@ class Navbar extends React.PureComponent {
                         <button
                             className={styles.layerSwitchButton}
                             onClick={this.handleMenuClick}
-                            type="submit"
+                            type="button"
                         >
                             <span className={iconNames.layers} />
                         </button>
@@ -211,23 +212,11 @@ class Navbar extends React.PureComponent {
                             <div className={styles.right}>
                                 Bipad
                             </div>
-                            {/*
-                            <div className={styles.currentPage}>
-                                {this.props.routeKey}
-                            </div>
-                            */}
+                            <Router>
+                                {titles}
+                            </Router>
                         </div>
                     </div>
-                    {/*
-                    <Button
-                        className={styles.menuButton}
-                        iconName={iconNames.menu}
-                        onClick={this.handleMenuOpen}
-                        transparent
-                        smallHorizontalPadding
-                        smallVerticalPadding
-                    />
-                    */}
                 </nav>
                 {menuShown &&
                     <div className={styles.layerSwitchBox} >
