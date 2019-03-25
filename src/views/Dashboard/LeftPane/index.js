@@ -102,11 +102,21 @@ export default class LeftPane extends React.PureComponent {
     }
 
     handleShowAlertsButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showAlerts: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleHideAlertsButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showAlerts: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     renderAlert = ({

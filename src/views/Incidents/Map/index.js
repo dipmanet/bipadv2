@@ -28,10 +28,49 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
+const paddingLeftPaneExpaded = {
+    top: 24,
+    right: 24,
+    bottom: 24,
+    left: 300,
+};
+
+const paddingRightPaneExpaded = {
+    top: 24,
+    right: 300,
+    bottom: 24,
+    left: 24,
+};
+
+const paddingBothPaneExpanded = {
+    top: 24,
+    right: 300,
+    bottom: 24,
+    left: 300,
+};
+
+const paddingNoPaneExpanded = {
+    top: 24,
+    right: 24,
+    bottom: 24,
+    left: 24,
+};
+
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return paddingBothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return paddingLeftPaneExpaded;
+        } else if (rightPaneExpanded) {
+            return paddingRightPaneExpaded;
+        }
+
+        return paddingNoPaneExpanded;
+    });
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
     getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
@@ -54,16 +93,21 @@ class IncidentMap extends React.PureComponent {
         const {
             incidentList,
             hazards,
+            leftPaneExpanded,
+            rightPaneExpanded = true,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
+
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         return (
             <React.Fragment>
                 <MapSource
                     sourceKey="districts"
                     url={mapSources.nepal.url}
+                    boundsPadding={boundsPadding}
                 >
                     <MapLayer
                         layerKey="districts-fill"

@@ -9,20 +9,25 @@ import {
     mapToList,
 } from '@togglecorp/fujs';
 
-import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
 
+import { calculateCategorizedSeverity } from '#utils/domain';
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-import { hazardTypesSelector } from '#selectors';
-import { calculateCategorizedSeverity } from '#utils/domain';
 
-import IncidentItem from '../IncidentItem';
+
+import {
+    hazardTypesSelector,
+} from '#selectors';
+
+
 import TabularView from './TabularView';
+
+import IncidentListView from './ListView';
 
 import styles from './styles.scss';
 
@@ -64,75 +69,6 @@ class LeftPane extends React.PureComponent {
         };
     }
 
-    getSummaryForLabel = memoize((incidentList, labelName, labelModifier = k => k) => {
-        const summary = incidentList
-            .filter(v => v[labelName])
-            .reduce((acc, current) => {
-                if (acc[current[labelName]] === undefined) {
-                    acc[current[labelName]] = 0;
-                } else {
-                    acc[current[labelName]] += 1;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            summary,
-            (d, k) => ({
-                label: labelModifier(k),
-                value: d,
-                color: colors(labelModifier(k)),
-            }),
-        );
-    });
-
-    getSeveritySummary = memoize((incidentList) => {
-        const severity = incidentList
-            .filter(v => v.severity)
-            .reduce((acc, current) => {
-                if (acc[current.severity] === undefined) {
-                    acc[current.severity] = 0;
-                } else {
-                    acc[current.severity] += 1;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            severity,
-            (d, k) => ({
-                label: k,
-                value: d,
-                color: colors(k),
-            }),
-        );
-    });
-
-    getEventSummary = memoize((incidentList) => {
-        const hazardCount = incidentList
-            .filter(v => v.event)
-            .reduce((acc, current) => {
-                if (acc[current.event.title] === undefined) {
-                    acc[current.event.title] = 0;
-                } else {
-                    acc[current.event.title] += 1;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            hazardCount,
-            (d, k) => ({
-                label: k,
-                value: d,
-            }),
-        );
-    });
-
-    getIncidentRendererParams = (_, d) => ({
-        data: d,
-        className: styles.incident,
-    });
 
     handleCollapseTabularViewButtonClick = () => {
         this.setState({ showTabular: false });
@@ -142,14 +78,69 @@ class LeftPane extends React.PureComponent {
         this.setState({ showTabular: true });
     }
 
-
     handleShowIncidentsButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showIncidents: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleHideIncidentsButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showIncidents: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
+
+    renderListViewHeader = () => (
+        <header className={styles.header}>
+            <h4 className={styles.heading}>
+                Incidents
+            </h4>
+            <Spinner loading={this.props.pending} />
+            <Button
+                className={styles.expandTabularViewButton}
+                onClick={this.handleExpandButtonClick}
+                iconName={iconNames.expand}
+                title="Show detailed view"
+                transparent
+            />
+            <Button
+                className={styles.hideIncidentsButton}
+                onClick={this.handleHideIncidentsButtonClick}
+                iconName={iconNames.chevronUp}
+                title="Hide Incidents"
+                transparent
+            />
+        </header>
+    )
+
+    renderTabularViewHeader = () => (
+        <header className={styles.header}>
+            <h4 className={styles.heading}>
+                Incidents
+            </h4>
+            <Spinner loading={this.props.pending} />
+            <Button
+                className={styles.collapseTabularViewButton}
+                onClick={this.handleCollapseTabularViewButtonClick}
+                iconName={iconNames.shrink}
+                title="Hide detailed view"
+                transparent
+            />
+            <Button
+                className={styles.hideIncidentsButton}
+                onClick={this.handleHideIncidentsButtonClick}
+                iconName={iconNames.chevronUp}
+                title="Hide Incidents"
+                transparent
+            />
+        </header>
+    )
 
     render() {
         const {
@@ -169,11 +160,6 @@ class LeftPane extends React.PureComponent {
             severity: calculateCategorizedSeverity(incident.loss),
         }));
 
-        const severitySummary = this.getSummaryForLabel(incidentList, 'severity');
-        const inducerSummary = this.getSummaryForLabel(incidentList, 'inducer');
-        const hazardSummary = this.getSummaryForLabel(incidentList, 'hazard', k => hazardTypes[k].title);
-        const eventSummary = this.getEventSummary(incidentList);
-
         return (
             <CollapsibleView
                 className={_cs(className, styles.leftPane)}
@@ -187,117 +173,21 @@ class LeftPane extends React.PureComponent {
                             iconName={iconNames.incident}
                             title="Show alerts"
                         />
-                        <Spinner loading={pending} />
                     </React.Fragment>
                 }
-                expandedViewContainerClassName={styles.incidentListContainer}
+                expandedViewContainerClassName={styles.incidentsContainer}
                 expandedView={
                     <CollapsibleView
                         expanded={showTabular}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
                         collapsedView={
                             <React.Fragment>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Incidents
-                                    </h4>
-                                    <Spinner loading={pending} />
-                                    <Button
-                                        className={styles.expandTabularViewButton}
-                                        onClick={this.handleExpandButtonClick}
-                                        iconName={iconNames.expand}
-                                        title="Show detailed view"
-                                        transparent
-                                    />
-                                    <Button
-                                        className={styles.hideIncidentsButton}
-                                        onClick={this.handleHideIncidentsButtonClick}
-                                        iconName={iconNames.chevronUp}
-                                        title="Hide Incidents"
-                                        transparent
-                                    />
-                                </header>
+                                { this.renderListViewHeader() }
                                 <div className={styles.content}>
-                                    <div className={styles.barContainer}>
-                                        <header className={styles.header}>
-                                            <h4 className={styles.heading}>
-                                                Hazard Statistics
-                                            </h4>
-                                        </header>
-                                        <SimpleVerticalBarChart
-                                            className={styles.chart}
-                                            data={hazardSummary}
-                                            labelSelector={barChartLabelSelector}
-                                            valueSelector={barChartValueSelector}
-                                        />
-                                    </div>
-                                    <div className={styles.barContainer}>
-                                        <header className={styles.header}>
-                                            <h4 className={styles.heading}>
-                                                Event Statistics
-                                            </h4>
-                                        </header>
-                                        <SimpleVerticalBarChart
-                                            className={styles.chart}
-                                            data={eventSummary}
-                                            labelSelector={barChartLabelSelector}
-                                            valueSelector={barChartValueSelector}
-                                        />
-                                    </div>
-                                    <div className={styles.donutContainer}>
-                                        <div className={styles.severitySummary}>
-                                            <header className={styles.header}>
-                                                <h4 className={styles.heading}>
-                                                    Severity
-                                                </h4>
-                                            </header>
-                                            <DonutChart
-                                                sideLengthRatio={0.5}
-                                                className={styles.chart}
-                                                data={severitySummary}
-                                                labelSelector={donutChartLabelSelector}
-                                                valueSelector={donutChartValueSelector}
-                                                colorSelector={donutChartColorSelector}
-                                            />
-                                            <Legend
-                                                className={styles.legend}
-                                                data={severitySummary}
-                                                itemClassName={styles.legendItem}
-                                                keySelector={itemSelector}
-                                                labelSelector={legendLabelSelector}
-                                                colorSelector={legendColorSelector}
-                                            />
-                                        </div>
-                                        <div className={styles.inducerSummary}>
-                                            <header className={styles.header}>
-                                                <h4 className={styles.heading}>
-                                                    Inducers
-                                                </h4>
-                                            </header>
-                                            <DonutChart
-                                                sideLengthRatio={0.5}
-                                                className={styles.chart}
-                                                data={inducerSummary}
-                                                labelSelector={donutChartLabelSelector}
-                                                valueSelector={donutChartValueSelector}
-                                                colorSelector={donutChartColorSelector}
-                                            />
-                                            <Legend
-                                                className={styles.legend}
-                                                data={inducerSummary}
-                                                itemClassName={styles.legendItem}
-                                                keySelector={itemSelector}
-                                                labelSelector={legendLabelSelector}
-                                                colorSelector={legendColorSelector}
-                                            />
-                                        </div>
-                                    </div>
-                                    <ListView
+                                    <IncidentListView
+                                        hazardTypes={hazardTypes}
                                         className={styles.incidentList}
-                                        data={incidentList}
-                                        renderer={IncidentItem}
-                                        rendererParams={this.getIncidentRendererParams}
-                                        keySelector={incidentKeySelector}
+                                        incidentList={incidentList}
                                     />
                                 </div>
                             </React.Fragment>
@@ -305,26 +195,7 @@ class LeftPane extends React.PureComponent {
                         expandedViewContainerClassName={styles.tabularContainer}
                         expandedView={
                             <React.Fragment>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Incidents
-                                    </h4>
-                                    <Spinner loading={pending} />
-                                    <Button
-                                        className={styles.collapseTabularViewButton}
-                                        onClick={this.handleCollapseTabularViewButtonClick}
-                                        iconName={iconNames.shrink}
-                                        title="Hide detailed view"
-                                        transparent
-                                    />
-                                    <Button
-                                        className={styles.hideIncidentsButton}
-                                        onClick={this.handleHideIncidentsButtonClick}
-                                        iconName={iconNames.chevronUp}
-                                        title="Hide Incidents"
-                                        transparent
-                                    />
-                                </header>
+                                { this.renderTabularViewHeader() }
                                 <TabularView
                                     incidentList={incidentList}
                                     className={styles.tabularView}

@@ -55,9 +55,50 @@ const mapStateToProps = state => ({
     bounds: boundsSelector(state),
 });
 
+const paddingLeftPaneExpaded = {
+    top: 24,
+    right: 74,
+    bottom: 24,
+    left: 324,
+};
+
+const paddingRightPaneExpaded = {
+    top: 24,
+    right: 374,
+    bottom: 24,
+    left: 24,
+};
+
+const paddingBothPaneExpanded = {
+    top: 24,
+    right: 370,
+    bottom: 24,
+    left: 324,
+};
+
+const paddingNoPaneExpanded = {
+    top: 24,
+    right: 64,
+    bottom: 24,
+    left: 24,
+};
+
+
 class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
+
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return paddingBothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return paddingLeftPaneExpaded;
+        } else if (rightPaneExpanded) {
+            return paddingRightPaneExpaded;
+        }
+
+        return paddingNoPaneExpanded;
+    });
 
     getFeatureCollection = memoize(alertToGeojson);
 
@@ -72,9 +113,13 @@ class AlertMap extends React.PureComponent {
             hazards,
             regionLevel,
             bounds,
+            leftPaneExpanded,
+            rightPaneExpanded,
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazards);
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        console.warn(boundsPadding);
 
         return (
             <React.Fragment>
@@ -82,6 +127,7 @@ class AlertMap extends React.PureComponent {
                     sourceKey="districts"
                     url={mapSources.nepal.url}
                     bounds={bounds}
+                    boundsPadding={boundsPadding}
                 >
                     <MapLayer
                         layerKey="province-fill"
