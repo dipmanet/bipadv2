@@ -108,6 +108,18 @@ class LossAndDamage extends React.PureComponent {
             pauseMap,
         } = this.state;
 
+        const {
+            requests: {
+                lossAndDamageRequest: {
+                    pending,
+                    response: {
+                        results: lossAndDamageList = emptyList,
+                    } = emptyObject,
+                },
+            },
+        } = this.props;
+
+
         return (
             <div className={styles.container}>
                 <div className={styles.info}>
@@ -136,6 +148,7 @@ class LossAndDamage extends React.PureComponent {
                         className={styles.seekbar}
                         start={playbackStart}
                         end={playbackEnd}
+                        data={lossAndDamageList}
                     />
                 </div>
             </div>
@@ -195,7 +208,7 @@ const mapDispatchToProps = dispatch => ({
 
 const requests = {
     lossAndDamageRequest: {
-        url: '/incident/?expand=loss.peoples',
+        url: '/incident/?expand=loss.peoples&limit=10000',
         onMount: true,
         extras: {
             schemaName: 'incidentWithPeopleResponse',

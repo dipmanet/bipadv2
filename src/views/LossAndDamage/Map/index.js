@@ -31,6 +31,8 @@ const defaultProps = {
     pause: false,
 };
 
+const PLAYBACK_INTERVAL = 2000;
+
 export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -46,7 +48,7 @@ export default class LossAndDamageMap extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.timeout = setTimeout(this.playback, 1000);
+        this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
     }
 
     componentWillUnmount() {
@@ -72,7 +74,10 @@ export default class LossAndDamageMap extends React.PureComponent {
             type: 'FeatureCollection',
             features: lossAndDamageList
                 .filter(lossAndDamage => lossAndDamage.point)
-                .map(lossAndDamage => ({
+                .sort((a, b) => (
+                    (new Date(a.incidentOn)).getTime()
+                        - (new Date(b.incidentOn)).getTime()
+                )).map(lossAndDamage => ({
                     type: 'Feature',
                     geometry: {
                         ...lossAndDamage.point,
@@ -151,7 +156,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             } = this.state;
 
             const aDay = 1000 * 60 * 60 * 24;
-            const offset = aDay * 10;
+            const offset = aDay * 30;
 
             const timeExtent = this.getTimeExtent(lossAndDamageList);
             if (!start || end > timeExtent.max) {
@@ -178,7 +183,7 @@ export default class LossAndDamageMap extends React.PureComponent {
         }
 
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.playback, 1000);
+        this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
     }
 
     render() {
@@ -200,7 +205,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             pointsFilter = [
                 'all',
                 ['>=', 'incidentOn', currentRange.start],
-                ['<=', 'incidentOn', currentRange.end],
+                ['<', 'incidentOn', currentRange.end],
             ];
         }
 
