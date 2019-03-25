@@ -68,11 +68,9 @@ export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) 
     alertList,
 });
 
-export const setFiltersActionDP = ({ faramValues, faramErrors, pristine }: {
-    faramValues: object;
-    faramErrors: object;
-    pristine: boolean;
-}) => ({
+export const setFiltersActionDP = (
+    { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
+) => ({
     type: Type.PageType.DP__SET_FILTERS,
     faramValues,
     faramErrors,
@@ -91,11 +89,9 @@ export const setIncidentActionIP = ({ incident }: { incident: Type.Incident}) =>
     incident,
 });
 
-export const setFiltersActionIP = ({ faramValues, faramErrors, pristine }: {
-    faramValues: object;
-    faramErrors: object;
-    pristine: boolean;
-}) => ({
+export const setFiltersActionIP = (
+    { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
+) => ({
     type: Type.PageType.IP__SET_FILTERS,
     faramValues,
     faramErrors,
@@ -240,6 +236,7 @@ const setDashboardFilters = (state: Type.PageState, action: Type.SetDashboardFil
 
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
+        /*
         if (!deferedState.dashboardPage) {
             // FIXME: find a good way to handle this
             deferedState.dashboardPage = initialState.dashboardPage;
@@ -248,16 +245,18 @@ const setDashboardFilters = (state: Type.PageState, action: Type.SetDashboardFil
             // FIXME: find a good way to handle this
             deferedState.dashboardPage.filters = initialState.dashboardPage.filters;
         }
+        */
 
-        if (faramValues) {
-            deferedState.dashboardPage.filters.faramValues = faramValues;
-        }
-        if (faramErrors) {
-            deferedState.dashboardPage.filters.faramErrors = faramErrors;
-        }
-        if (pristine) {
-            deferedState.dashboardPage.filters.pristine = pristine;
-        }
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        deferedState.region = region;
+
+        deferedState.dashboardPage.filters.faramValues = faramValuesNoRegion;
+        deferedState.dashboardPage.filters.faramErrors = faramErrors;
+        deferedState.dashboardPage.filters.pristine = pristine;
         /* eslint-enable no-param-reassign */
     });
 
@@ -319,22 +318,25 @@ const setIncidentFilters = (state: Type.PageState, action: Type.SetIncidentFilte
 
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
+        /*
         if (!deferedState.incidentPage) {
             deferedState.incidentPage = initialState.incidentPage;
         }
         if (!deferedState.incidentPage.filters) {
             deferedState.incidentPage.filters = initialState.incidentPage.filters;
         }
+        */
 
-        if (faramValues) {
-            deferedState.incidentPage.filters.faramValues = faramValues;
-        }
-        if (faramErrors) {
-            deferedState.incidentPage.filters.faramErrors = faramErrors;
-        }
-        if (pristine) {
-            deferedState.incidentPage.filters.pristine = pristine;
-        }
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        deferedState.region = region;
+
+        deferedState.incidentPage.filters.faramValues = faramValuesNoRegion;
+        deferedState.incidentPage.filters.faramErrors = faramErrors;
+        deferedState.incidentPage.filters.pristine = pristine;
         /* eslint-enable no-param-reassign */
     });
 

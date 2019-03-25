@@ -1,17 +1,11 @@
 import { PageState } from './types';
 
 const state: PageState = {
-    filters: {
-        faramValues: {
-            dateRange: 30,
-            region: {
-                adminLevel: 1,
-            },
-        },
-        faramErrors: {},
-        pristine: true,
-    },
     eventTypes: {},
+
+    region: {
+        adminLevel: 1,
+    },
 
     adminLevelList: [
         {
@@ -77,9 +71,11 @@ const state: PageState = {
         filters: {
             faramValues: {
                 dateRange: 30,
+                /*
                 region: {
                     adminLevel: 1,
                 },
+                */
             },
             faramErrors: {},
             pristine: true,
@@ -91,9 +87,11 @@ const state: PageState = {
         filters: {
             faramValues: {
                 dateRange: 30,
+                /*
                 region: {
                     adminLevel: 1,
                 },
+                */
             },
             faramErrors: {},
             pristine: true,

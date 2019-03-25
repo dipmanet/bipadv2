@@ -1,3 +1,4 @@
+import produce from 'immer';
 import { createSelector } from 'reselect';
 import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
 
@@ -5,6 +6,8 @@ import { AppState } from '../../types';
 // import { incidentIdFromRouteSelector } from '../route/selector';
 
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
+
+export const regionSelector = ({ page }: AppState) => page.region;
 
 export const eventTypesSelector = ({ page }: AppState) =>
     page.eventTypes;
@@ -58,7 +61,17 @@ export const dashboardPageSelector = ({ page }: AppState) =>
 
 export const filtersSelectorDP = createSelector(
     dashboardPageSelector,
-    dashboardPage => dashboardPage.filters,
+    regionSelector,
+    (dashboardPage, region) => {
+        const { filters } = dashboardPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
 );
 
 export const filtersValuesSelectorDP = createSelector(
@@ -108,7 +121,17 @@ const incidentPageSelector = ({ page }: AppState) =>
 
 export const filtersSelectorIP = createSelector(
     incidentPageSelector,
-    incidentPage => incidentPage.filters,
+    regionSelector,
+    (incidentPage, region) => {
+        const { filters } = incidentPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
 );
 
 export const filtersValuesSelectorIP = createSelector(
@@ -138,7 +161,6 @@ export const hazardTypeListIncidentsIP = createSelector(
     },
 );
 
-
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
     hazardTypesSelector,
@@ -164,16 +186,14 @@ export const incidentSelector = createSelector(
 
 // responsePage
 
-const responsePageSelector = ({ page }: AppState) =>
-    page.responsePage;
+const responsePageSelector = ({ page }: AppState) => (
+    page.responsePage
+);
 
 export const resourceListSelectorRP = createSelector(
     responsePageSelector,
     ({ resourceList }) => resourceList,
 );
-
-export const dummyRP = '';
-
 
 // real time monitoring page
 
