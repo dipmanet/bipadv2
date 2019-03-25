@@ -24,18 +24,43 @@ const MenuItem = ({
     iconName,
     // routeKey,
     disabled,
-}) => (
-    !disabled ? (
+}) => {
+    if (disabled) {
+        return (
+            <div
+                className={
+                    _cs(
+                        className,
+                        styles.menuItem,
+                        // routeKey === link && styles.selected,
+                        disabled && styles.disabled,
+                    )
+                }
+            >
+                <span
+                    className={_cs(iconName, styles.icon)}
+                    title={title}
+                />
+                <div className={styles.menuTitle}>
+                    {title}
+                </div>
+            </div>
+        );
+    }
+
+    const getProps = ({ isCurrent }) => ({
+        className: _cs(
+            className,
+            styles.menuItem,
+            isCurrent && styles.selected,
+            disabled && styles.disabled,
+        ),
+    });
+
+    return (
         <Link
-            className={
-                _cs(
-                    className,
-                    styles.menuItem,
-                    // routeKey === link && styles.selected,
-                    disabled && styles.disabled,
-                )
-            }
             to={link}
+            getProps={getProps}
         >
             <div
                 className={_cs(iconName, styles.icon)}
@@ -45,27 +70,8 @@ const MenuItem = ({
                 {title}
             </div>
         </Link>
-    ) : (
-        <div
-            className={
-                _cs(
-                    className,
-                    styles.menuItem,
-                    // routeKey === link && styles.selected,
-                    disabled && styles.disabled,
-                )
-            }
-        >
-            <span
-                className={_cs(iconName, styles.icon)}
-                title={title}
-            />
-            <div className={styles.menuTitle}>
-                {title}
-            </div>
-        </div>
-    )
-);
+    );
+};
 
 MenuItem.propTypes = {
     className: PropTypes.string,
