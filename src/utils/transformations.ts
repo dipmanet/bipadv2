@@ -1,5 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
-import { Filters } from '#store/atom/page/types';
+import { FiltersWithRegion } from '#store/atom/page/types';
 
 
 const addDaysToDate = (date: Date, days: number) => {
@@ -19,7 +19,7 @@ const pastDaysToDateRange = (pastDays: number) => {
 
 // eslint-disable-next-line import/prefer-default-export, arrow-parens
 export const transformDateRangeFilterParam = (
-    filters: Filters['faramValues'],
+    filters: FiltersWithRegion['faramValues'],
     destParamName: string,
 ): Obj<string | number | undefined> => {
     const {

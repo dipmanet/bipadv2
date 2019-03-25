@@ -176,7 +176,6 @@ const schemaList: Schema[] = [
         },
         fields: {
             event: { type: 'uint' },
-            loss: { type: 'uint' },
         },
     },
     {

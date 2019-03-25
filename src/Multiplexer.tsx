@@ -68,12 +68,6 @@ const routes = routeSettings.map(({ load, ...settings }) => {
     );
 });
 
-const paths = routeSettings.map(settings => ({
-    path: settings.path,
-    name: settings.name,
-    title: settings.title,
-}));
-
 // MULTIPLEXER
 
 interface State {}
@@ -110,6 +104,7 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
                         boundsPadding={160}
                         fitBoundsDuration={200}
                         hideNavControl
+                        hideGeoLocationControl
                         minZoom={3}
                     >
                         {this.renderRoutes()}

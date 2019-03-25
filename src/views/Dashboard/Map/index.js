@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
-import { isTruthy } from '@togglecorp/fujs';
-
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
@@ -14,17 +12,8 @@ import {
     boundsSelector,
 } from '#selectors';
 
-import { mapSources } from '#constants';
-import { getHazardColor } from '#utils/domain';
-
-import {
-    alertFill,
-    provincesFill,
-    wardsOutline,
-    municipalitiesOutline,
-    districtsOutline,
-    provincesOutline,
-} from './mapStyles';
+import { mapSources, mapStyles } from '#constants';
+import { alertToGeojson } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -70,36 +59,7 @@ class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getFeatureCollection = memoize((alertList, hazards) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: alertList
-                .filter(alert => isTruthy(alert.polygon))
-                .map((alert) => {
-                    const {
-                        id,
-                        title,
-                        polygon,
-                        description,
-                    } = alert;
-
-                    return {
-                        id,
-                        type: 'Feature',
-                        geometry: {
-                            ...polygon,
-                        },
-                        properties: {
-                            title,
-                            description,
-                            hazardColor: getHazardColor(hazards, alert.hazard),
-                        },
-                    };
-                }),
-        };
-
-        return geojson;
-    });
+    getFeatureCollection = memoize(alertToGeojson);
 
     tooltipRendererParams = (id, { title, description }) => ({
         title,
@@ -124,23 +84,23 @@ class AlertMap extends React.PureComponent {
                     bounds={bounds}
                 >
                     <MapLayer
-                        layerKey="province-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={provincesOutline}
-                    />
-                    <MapLayer
                         layerKey="province-fill"
                         type="fill"
                         sourceLayer={mapSources.nepal.layers.province}
-                        paint={provincesFill}
+                        paint={mapStyles.province.fill}
+                    />
+                    <MapLayer
+                        layerKey="province-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={mapStyles.province.outline}
                     />
                     { regionLevel >= 1 &&
                         <MapLayer
                             layerKey="districts-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.district}
-                            paint={districtsOutline}
+                            paint={mapStyles.district.outline}
                         />
                     }
                     { regionLevel >= 2 &&
@@ -148,7 +108,7 @@ class AlertMap extends React.PureComponent {
                             layerKey="municipalities-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.municipality}
-                            paint={municipalitiesOutline}
+                            paint={mapStyles.municipality.outline}
                         />
                     }
                     { regionLevel >= 3 &&
@@ -156,7 +116,7 @@ class AlertMap extends React.PureComponent {
                             layerKey="wards-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.ward}
-                            paint={wardsOutline}
+                            paint={mapStyles.ward.outline}
                         />
                     }
                 </MapSource>
@@ -168,7 +128,7 @@ class AlertMap extends React.PureComponent {
                         layerKey="alerts-fill"
                         type="fill"
                         enableHover
-                        paint={alertFill}
+                        paint={mapStyles.alertPolygon.fill}
                         tooltipRenderer={Tooltip}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />

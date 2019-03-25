@@ -4,12 +4,7 @@ import PropTypes from 'prop-types';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { mapSources } from '#constants';
-
-import {
-    districtsFill,
-    districtsOutline,
-} from './mapStyles';
+import { mapSources, mapStyles } from '#constants';
 
 const propTypes = {
     className: PropTypes.string,
@@ -35,13 +30,13 @@ export default class ResponseMap extends React.PureComponent {
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"
-                        paint={districtsFill}
+                        paint={mapStyles.district.fill}
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                     <MapLayer
                         layerKey="districts-outline"
                         type="line"
-                        paint={districtsOutline}
+                        paint={mapStyles.district.outline}
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>

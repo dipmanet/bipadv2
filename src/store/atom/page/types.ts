@@ -26,15 +26,29 @@ export interface EventType {
 export interface ResourceType {
 }
 export interface Alert {
+    id: number;
+    title: string;
+    description?: string;
     hazard: number;
+    polygon: unknown;
 }
 export interface Incident {
     id: number;
     hazard: number;
+    point?: unknown;
+    polygon?: unknown;
+    loss: Loss;
+    incidentOn: string;
 }
 export interface Resource {
     title: string;
+    resourceType: string;
+    distance: number;
+    point: {
+        coordinates: unknown;
+    };
 }
+
 export interface Loss {
     estimatedLoss?: number;
     peopleDeathCount?: number;
@@ -76,14 +90,23 @@ export interface FiltersWithRegion {
     pristine: boolean;
 }
 
-export interface RealTimeRain {
-    id: number;
-}
 export interface RealTimeRiver {
     id: number;
+    point: unknown;
+    title: string;
+    description?: string;
+    basin?: string;
+    status?: string;
+}
+export interface RealTimeRain extends RealTimeRiver {
 }
 export interface RealTimeEarthquake {
     id: number;
+    point: unknown;
+    address?: string;
+    description?: string;
+    eventOn?: string;
+    magnitude?: number;
 }
 
 export interface DashboardPage {

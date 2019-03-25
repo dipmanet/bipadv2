@@ -202,6 +202,7 @@ class LeftPane extends React.PureComponent {
             <div className={styles.districtSummary}>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
+                        {/* FIXME: get name from district id */}
                         { district || 'Overall' }
                     </h4>
                 </header>

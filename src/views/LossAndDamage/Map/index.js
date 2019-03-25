@@ -1,20 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import bbox from '@turf/bbox';
+import { connect } from 'react-redux';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
-import { mapSources } from '#constants';
-
 import {
-    boundsFill,
-    boundsOutline,
-    pointPaint,
-    activeBoundsFill,
-} from './mapStyles';
+    hazardTypesSelector,
+    wardsMapSelector,
+} from '#selectors';
+import { mapSources, mapStyles } from '#constants';
+import {
+    incidentPointToGeojson,
+    incidentPolygonToGeojson,
+} from '#utils/domain';
+import Tooltip from '#components/Tooltip';
 
 const districtsPadding = {
     top: 0,
@@ -33,7 +35,13 @@ const defaultProps = {
 
 const PLAYBACK_INTERVAL = 2000;
 
-export default class LossAndDamageMap extends React.PureComponent {
+
+const mapStateToProps = state => ({
+    hazards: hazardTypesSelector(state),
+    wardsMap: wardsMapSelector(state),
+});
+
+class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -42,8 +50,7 @@ export default class LossAndDamageMap extends React.PureComponent {
 
         this.state = {
             currentRange: {},
-            // selectedDistrict: undefined,
-            selectedDistricts: [],
+            selectedIds: [],
         };
     }
 
@@ -55,9 +62,9 @@ export default class LossAndDamageMap extends React.PureComponent {
         clearTimeout(this.timeout);
     }
 
-    getBounds = memoize(geoJson => bbox(geoJson))
+    getPointFeatureCollection = memoize(incidentPointToGeojson)
 
-    getActiveFilter = memoize(districts => ['in', 'title', ...districts])
+    getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
 
     getTimeExtent = (lossAndDamageList) => {
         const timestamps = lossAndDamageList.filter(d => d.incidentOn)
@@ -69,74 +76,11 @@ export default class LossAndDamageMap extends React.PureComponent {
         });
     }
 
-    getPointFeatureCollection = memoize((lossAndDamageList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: lossAndDamageList
-                .filter(lossAndDamage => lossAndDamage.point)
-                .sort((a, b) => (
-                    (new Date(a.incidentOn)).getTime()
-                        - (new Date(b.incidentOn)).getTime()
-                )).map(lossAndDamage => ({
-                    type: 'Feature',
-                    geometry: {
-                        ...lossAndDamage.point,
-                    },
-                    properties: {
-                        lossAndDamage,
-                        severity: lossAndDamage.severity,
-                        incidentOn: (new Date(lossAndDamage.incidentOn)).getTime(),
-                    },
-                })),
-        };
-
-        return geojson;
-    });
-
-    /*
-    getPolygonFeatureCollection = memoize((lossAndDamageList) => {
-        const geojson = {
-            type: 'FeatureCollection',
-            features: lossAndDamageList
-                .filter(lossAndDamage => lossAndDamage.polygon)
-                .map(lossAndDamage => ({
-                    type: 'Feature',
-                    geometry: {
-                        ...lossAndDamage.polygon,
-                    },
-                    properties: {
-                        lossAndDamage,
-                        severity: lossAndDamage.severity,
-                    },
-                })),
-        };
-
-        return geojson;
-    });
-    */
-
-    handleDistrictClick = (id, item) => {
-        const district = item.title;
-
-        const { selectedDistricts } = this.state;
-        const newSelectedDistricts = [...selectedDistricts];
-
-        const districtIndex = selectedDistricts.findIndex(d => d === district);
-
-        if (districtIndex === -1) {
-            newSelectedDistricts.push(district);
-        } else {
-            newSelectedDistricts.splice(districtIndex, 1);
-        }
-
-        this.setState({
-            // selectedDistrict: district,
-            selectedDistricts: newSelectedDistricts,
-        });
-
+    handleSelectionChange = (ids) => {
         const { onDistrictSelect } = this.props;
+        this.setState({ selectedIds: ids });
         if (onDistrictSelect) {
-            onDistrictSelect(newSelectedDistricts);
+            onDistrictSelect(ids);
         }
     }
 
@@ -156,7 +100,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             } = this.state;
 
             const aDay = 1000 * 60 * 60 * 24;
-            const offset = aDay * 30;
+            const offset = aDay * 10;
 
             const timeExtent = this.getTimeExtent(lossAndDamageList);
             if (!start || end > timeExtent.max) {
@@ -186,19 +130,27 @@ export default class LossAndDamageMap extends React.PureComponent {
         this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
     }
 
-    render() {
+    tooltipRendererParams = (id) => {
         const {
+            wardsMap,
             lossAndDamageList,
         } = this.props;
 
-        const {
-            currentRange,
-            // selectedDistrict = 'none',
-            selectedDistricts,
-        } = this.state;
+        const incident = lossAndDamageList.find(i => i.id === id);
 
-        const pointFeatureCollection = this.getPointFeatureCollection(lossAndDamageList);
-        // const polygonFeatureCollection = this.getPolygonFeatureCollection(lossAndDamageList);
+        return {
+            incident,
+            wardsMap,
+            hideLink: true,
+        };
+    }
+
+    render() {
+        const {
+            lossAndDamageList,
+            hazards,
+        } = this.props;
+        const { currentRange } = this.state;
 
         let pointsFilter;
         if (currentRange.start) {
@@ -209,7 +161,14 @@ export default class LossAndDamageMap extends React.PureComponent {
             ];
         }
 
-        const activeFilter = this.getActiveFilter(selectedDistricts);
+        const pointFeatureCollection = this.getPointFeatureCollection(
+            lossAndDamageList,
+            hazards,
+        );
+        const polygonFeatureCollection = this.getPolygonFeatureCollection(
+            lossAndDamageList,
+            hazards,
+        );
 
         return (
             <React.Fragment>
@@ -218,27 +177,20 @@ export default class LossAndDamageMap extends React.PureComponent {
                     url={mapSources.nepal.url}
                     boundsPadding={districtsPadding}
                 >
-                    {/* FIXME: this selection method is obsolete */}
-                    <MapLayer
-                        layerKey="district-selected-fill"
-                        type="fill"
-                        paint={activeBoundsFill}
-                        property="title"
-                        filter={activeFilter}
-                        sourceLayer={mapSources.nepal.layers.district}
-                    />
                     <MapLayer
                         layerKey="district-fill"
                         type="fill"
-                        paint={boundsFill}
-                        enableHover
-                        onClick={this.handleDistrictClick}
+                        paint={mapStyles.district.fill}
                         sourceLayer={mapSources.nepal.layers.district}
+                        enableHover
+                        enableSelection
+                        selectedIds={this.state.selectedIds}
+                        onSelectionChange={this.handleSelectionChange}
                     />
                     <MapLayer
                         layerKey="district-outline"
                         type="line"
-                        paint={boundsOutline}
+                        paint={mapStyles.district.outline}
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
@@ -249,8 +201,24 @@ export default class LossAndDamageMap extends React.PureComponent {
                     <MapLayer
                         layerKey="points"
                         type="circle"
-                        paint={pointPaint}
+                        paint={mapStyles.incidentPoint.fill}
                         filter={pointsFilter}
+                        enableHover
+                        tooltipRenderer={Tooltip}
+                        tooltipRendererParams={this.tooltipRendererParams}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="polygons"
+                    geoJson={polygonFeatureCollection}
+                >
+                    <MapLayer
+                        layerKey="polygons"
+                        type="fill"
+                        paint={mapStyles.incidentPolygon.fill}
+                        enableHover
+                        tooltipRenderer={Tooltip}
+                        tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
                 <MapDraw />
@@ -258,3 +226,5 @@ export default class LossAndDamageMap extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(LossAndDamageMap);
