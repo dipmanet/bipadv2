@@ -17,6 +17,7 @@ import {
     alertFill,
     districtsFill,
     districtsOutline,
+    provincesOutline,
 } from './mapStyles';
 
 import styles from './styles.scss';
@@ -106,6 +107,12 @@ class AlertMap extends React.PureComponent {
                     sourceKey="districts"
                     url={mapSources.nepal.url}
                 >
+                    <MapLayer
+                        layerKey="province-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={provincesOutline}
+                    />
                     <MapLayer
                         layerKey="districts-fill"
                         type="fill"

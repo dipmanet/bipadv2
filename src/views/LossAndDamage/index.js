@@ -114,11 +114,17 @@ class LossAndDamage extends React.PureComponent {
                     <div>
                         Showing events from
                     </div>
-                    <FormattedDate value={currentRange.start} />
+                    <FormattedDate
+                        value={currentRange.start}
+                        mode="yyyy-MM-dd"
+                    />
                     <div>
                         to
                     </div>
-                    <FormattedDate value={currentRange.end} />
+                    <FormattedDate
+                        value={currentRange.end}
+                        mode="yyyy-MM-dd"
+                    />
                 </div>
                 <div className={styles.bottom}>
                     <Button

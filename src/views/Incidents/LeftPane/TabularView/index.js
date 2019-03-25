@@ -124,7 +124,7 @@ export default class TabularView extends React.PureComponent {
                 modifier: row => (
                     <FormattedDate
                         date={row.createdOn}
-                        mode="dd-MM-yyyy"
+                        mode="yyyy-MM-dd"
                     />
                 ),
             },
@@ -137,7 +137,7 @@ export default class TabularView extends React.PureComponent {
                 modifier: row => (
                     <FormattedDate
                         date={row.incidentOn}
-                        mode="dd-MM-yyyy"
+                        mode="yyyy-MM-dd"
                     />
                 ),
             },
