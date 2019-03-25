@@ -5,18 +5,18 @@ import TextOutput from '#components/TextOutput';
 
 import ResourceItem from '../ResourceItem';
 
+import resourceAttributes from '../../resourceAttributes';
+
 import styles from './styles.scss';
 
 const propTypes = {
-    // eslint-disable-next-line react/forbid-prop-types
-    data: PropTypes.object,
+    showDetails: PropTypes.bool,
+    resourceType: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
-    data: {},
+    showDetails: true,
 };
-
-const emptyObject = {};
 
 export default class HealthItem extends React.PureComponent {
     static propTypes = propTypes;
@@ -27,62 +27,31 @@ export default class HealthItem extends React.PureComponent {
 
     render() {
         const {
-            // FIXME: This strucure might be changed i.e: there might not be data
-            data: rawdata,
-            showDetails = true,
+            showDetails,
+            resourceType,
 
-            ...commonProps
+            ...commonProps // {title, distance, point}
         } = this.props;
 
-        let data;
-        if (typeof (data) === 'string') {
-            data = JSON.parse(rawdata);
-        } else {
-            data = rawdata;
-        }
-
-        const {
-            location,
-            contactPerson = 'KP Oli', // FIXME: Aesthetic purpose only
-            noOfBeds = 100, // FIXME: Aesthetic purpose only
-            noOfDoctors = 20, // FIXME: Aesthetic purpose only
-            noOfNurses = 30, // FIXME: Aesthetic purpose only
-            ...otherProperties
-        } = data;
-
+        const attrs = resourceAttributes[resourceType] || [];
 
         return (
             <React.Fragment>
                 <ResourceItem {...commonProps} />
                 { showDetails && (
                     <div>
-                        <TextOutput
-                            className={styles.info}
-                            label="Location"
-                            value={location}
-                        />
-                        <TextOutput
-                            className={styles.info}
-                            label="Number Of Beds"
-                            value={noOfBeds}
-                        />
-                        <TextOutput
-                            className={styles.info}
-                            label="Number of Doctors"
-                            value={noOfDoctors}
-                        />
-                        <TextOutput
-                            className={styles.info}
-                            label="Number of Nurses"
-                            value={noOfNurses}
-                        />
-                        <TextOutput
-                            className={styles.info}
-                            label="Contact Person"
-                            value={contactPerson}
-                        />
-                    </div>)
-                }
+                        {
+                            attrs.map(x => (
+                                <TextOutput
+                                    key={x.key}
+                                    className={styles.info}
+                                    label={x.label}
+                                    value={this.props[x.key]}
+                                />
+                            ))
+                        }
+                    </div>
+                )}
             </React.Fragment>
         );
     }

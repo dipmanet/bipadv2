@@ -24,10 +24,7 @@ import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 
-import HealthItem from '../resources/HealthItem';
-import VolunteerItem from '../resources/VolunteerItem';
-import EducationItem from '../resources/EducationItem';
-import FinanceItem from '../resources/FinanceItem';
+import ResourceItem from '../resources/ResourceItem';
 
 import {
     districtsFill,
@@ -37,6 +34,7 @@ import {
     resourceIconLayout,
     resourcePointPaint,
 } from './mapStyles';
+
 import styles from './styles.scss';
 
 const propTypes = {
@@ -68,7 +66,6 @@ const resourceComponents = {
     education: EducationItem,
 };
 
-
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
 });
@@ -91,21 +88,10 @@ class ResponseMap extends React.PureComponent {
 
     getResourceFeatureCollection = memoize(resourceToGeojson);
 
-    tooltipRenderer = ({ type, ...otherParams }) => {
-        const ResourceComponent = resourceComponents[type];
+    tooltipRenderer = params => <ResourceItem {...params} showDetails />
 
-        if (!ResourceComponent) {
-            return null;
-        }
-        return <ResourceComponent {...otherParams} showDetails />;
-    }
-
-    tooltipRendererParams = (id, { title, distance, type, data }) => ({
-        title,
-        distance,
-        type,
-        data,
-    })
+    tooltipRendererParams = id =>
+        this.props.resourceList.find(x => x.id === id) || emptyObject
 
     render() {
         const {

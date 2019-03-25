@@ -1,17 +1,26 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
-// import DistanceOutput from '#components/DistanceOutput';
 
-import ResourceElement from '../resources/ResourceItem';
+import ResourceItem from '../resources/ResourceItem';
+
 import styles from './styles.scss';
 
 const propTypes = {
+    heading: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    icon: PropTypes.string.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    // itemRenderer: PropTypes.object,
+    data: PropTypes.arrayOf(PropTypes.object),
 };
 
 const defaultProps = {
+    className: undefined,
+    // itemRenderer: null,
+    data: [],
 };
 
 export default class ResourceGroup extends React.PureComponent {
@@ -28,7 +37,7 @@ export default class ResourceGroup extends React.PureComponent {
             data,
             className,
             icon,
-            itemRenderer,
+            // itemRenderer,
         } = this.props;
 
         if (!data || data.length <= 0) {
@@ -53,7 +62,7 @@ export default class ResourceGroup extends React.PureComponent {
                 <ListView
                     className={styles.content}
                     data={newData}
-                    renderer={itemRenderer}
+                    renderer={ResourceItem}
                     rendererParams={this.getResourceElementRendererParams}
                     keySelector={ResourceGroup.keySelector}
                 />

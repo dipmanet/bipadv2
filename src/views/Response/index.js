@@ -27,16 +27,25 @@ import ResourceList from './ResourceList';
 
 import styles from './styles.scss';
 
+const emptyObject = {};
+
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     wardsMap: PropTypes.object,
+    // eslint-disable-next-line react/forbid-prop-types
+    incident: PropTypes.object,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
+    // eslint-disable-next-line react/forbid-prop-types
+    requests: PropTypes.object,
 };
 
 const defaultProps = {
-    wardsMap: {},
+    wardsMap: emptyObject,
+    incident: emptyObject,
+    resourceList: [],
+    requests: emptyObject,
 };
 
-const emptyObject = {};
 
 class Response extends React.PureComponent {
     static propTypes = propTypes
@@ -94,9 +103,7 @@ const requests = {
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });
         },
-        onMount: ({ props: { incidentId } }) => (
-            !!incidentId
-        ),
+        onMount: ({ props: { incidentId } }) => !!incidentId,
         // FIXME: write schema
     },
     incidentRequest: {

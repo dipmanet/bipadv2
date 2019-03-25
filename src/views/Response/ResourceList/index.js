@@ -30,31 +30,29 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     pending: PropTypes.bool,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
 };
 
 const defaultProps = {
     className: undefined,
+    resourceList: [],
     pending: false,
 };
 
 const resourceComponentsProps = {
     health: {
-        itemRenderer: HealthItem,
         heading: 'Hospitals',
         icon: healthFacilityIcon,
     },
     volunteer: {
-        itemRenderer: VolunteerItem,
         heading: 'Volunteers',
         icon: groupIcon,
     },
     education: {
-        itemRenderer: EducationItem,
         heading: 'Schools',
         icon: educationIcon,
     },
     finance: {
-        itemRenderer: FinanceItem,
         heading: 'Finance Institutes',
         icon: financeIcon,
     },
