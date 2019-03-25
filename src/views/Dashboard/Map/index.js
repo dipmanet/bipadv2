@@ -8,14 +8,20 @@ import { isTruthy } from '@togglecorp/fujs';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { hazardTypesSelector } from '#selectors';
+import {
+    hazardTypesSelector,
+    regionLevelSelector,
+    boundsSelector,
+} from '#selectors';
 
 import { mapSources } from '#constants';
 import { getHazardColor } from '#utils/domain';
 
 import {
     alertFill,
-    districtsFill,
+    provincesFill,
+    wardsOutline,
+    municipalitiesOutline,
     districtsOutline,
     provincesOutline,
 } from './mapStyles';
@@ -42,16 +48,22 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     alertList: PropTypes.array,
     // eslint-disable-next-line react/forbid-prop-types
+    bounds: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     hazards: PropTypes.object,
+    regionLevel: PropTypes.number,
 };
 
 const defaultProps = {
     alertList: [],
     hazards: {},
+    regionLevel: undefined,
 };
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
+    regionLevel: regionLevelSelector(state),
+    bounds: boundsSelector(state),
 });
 
 class AlertMap extends React.PureComponent {
@@ -98,7 +110,10 @@ class AlertMap extends React.PureComponent {
         const {
             alertList,
             hazards,
+            regionLevel,
+            bounds,
         } = this.props;
+
         const featureCollection = this.getFeatureCollection(alertList, hazards);
 
         return (
@@ -106,6 +121,7 @@ class AlertMap extends React.PureComponent {
                 <MapSource
                     sourceKey="districts"
                     url={mapSources.nepal.url}
+                    bounds={bounds}
                 >
                     <MapLayer
                         layerKey="province-outline"
@@ -114,17 +130,35 @@ class AlertMap extends React.PureComponent {
                         paint={provincesOutline}
                     />
                     <MapLayer
-                        layerKey="districts-fill"
+                        layerKey="province-fill"
                         type="fill"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={districtsFill}
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={provincesFill}
                     />
-                    <MapLayer
-                        layerKey="districts-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={districtsOutline}
-                    />
+                    { regionLevel >= 1 &&
+                        <MapLayer
+                            layerKey="districts-outline"
+                            type="line"
+                            sourceLayer={mapSources.nepal.layers.district}
+                            paint={districtsOutline}
+                        />
+                    }
+                    { regionLevel >= 2 &&
+                        <MapLayer
+                            layerKey="municipalities-outline"
+                            type="line"
+                            sourceLayer={mapSources.nepal.layers.municipality}
+                            paint={municipalitiesOutline}
+                        />
+                    }
+                    { regionLevel >= 3 &&
+                        <MapLayer
+                            layerKey="wards-outline"
+                            type="line"
+                            sourceLayer={mapSources.nepal.layers.ward}
+                            paint={wardsOutline}
+                        />
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="alerts"

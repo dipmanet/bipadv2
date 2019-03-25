@@ -1,10 +1,23 @@
+import produce from 'immer';
 import { createSelector } from 'reselect';
 import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
 // import { incidentIdFromRouteSelector } from '../route/selector';
 
+
+const nepalBounds = [
+    80.05858661752784, 26.347836996368667,
+    88.20166918432409, 30.44702867091792,
+];
+
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
+
+export const regionSelector = ({ page }: AppState) => page.region;
+export const regionLevelSelector = createSelector(
+    regionSelector,
+    region => region.adminLevel,
+);
 
 export const eventTypesSelector = ({ page }: AppState) =>
     page.eventTypes;
@@ -58,7 +71,17 @@ export const dashboardPageSelector = ({ page }: AppState) =>
 
 export const filtersSelectorDP = createSelector(
     dashboardPageSelector,
-    dashboardPage => dashboardPage.filters,
+    regionSelector,
+    (dashboardPage, region) => {
+        const { filters } = dashboardPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
 );
 
 export const filtersValuesSelectorDP = createSelector(
@@ -108,7 +131,17 @@ const incidentPageSelector = ({ page }: AppState) =>
 
 export const filtersSelectorIP = createSelector(
     incidentPageSelector,
-    incidentPage => incidentPage.filters,
+    regionSelector,
+    (incidentPage, region) => {
+        const { filters } = incidentPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
 );
 
 export const filtersValuesSelectorIP = createSelector(
@@ -138,7 +171,6 @@ export const hazardTypeListIncidentsIP = createSelector(
     },
 );
 
-
 export const incidentListSelectorIP = createSelector(
     incidentPageSelector,
     hazardTypesSelector,
@@ -164,16 +196,14 @@ export const incidentSelector = createSelector(
 
 // responsePage
 
-const responsePageSelector = ({ page }: AppState) =>
-    page.responsePage;
+const responsePageSelector = ({ page }: AppState) => (
+    page.responsePage
+);
 
 export const resourceListSelectorRP = createSelector(
     responsePageSelector,
     ({ resourceList }) => resourceList,
 );
-
-export const dummyRP = '';
-
 
 // real time monitoring page
 
@@ -194,3 +224,29 @@ export const realTimeEarthquakeListSelector = createSelector(
     realTimeMonitoringPageSelector,
     ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
 );
+
+// bounds
+
+export const boundsSelector = createSelector(
+    regionSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    (region, provinces, districts, municipalities) => {
+        const { adminLevel, geoarea } = region;
+        const geoAreas = (
+            (adminLevel === 1 && provinces) ||
+            (adminLevel === 2 && districts) ||
+            (adminLevel === 3 && municipalities)
+        );
+        if (!geoAreas) {
+            return nepalBounds;
+        }
+        const geoArea = geoAreas.find(g => g.id === geoarea);
+        if (!geoArea) {
+            return nepalBounds;
+        }
+        return geoArea.bbox;
+    },
+);
+

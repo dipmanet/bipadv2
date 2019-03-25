@@ -6,8 +6,9 @@ import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-import { routeSettings, iconNames } from '#constants';
 
+import RegionOutput from '#components/RegionOutput';
+import { routeSettings, iconNames } from '#constants';
 import { setMapStyleAction } from '#actionCreators';
 import { mapStylesSelector } from '#selectors';
 
@@ -16,9 +17,9 @@ import styles from './styles.scss';
 const pages = routeSettings.filter(setting => !!setting.navbar);
 
 const Title = ({ name, title }) => (
-    <div>
+    <span>
         {title}
-    </div>
+    </span>
 );
 
 const titles = routeSettings.map(props => (
@@ -210,11 +211,14 @@ class Navbar extends React.PureComponent {
                         <div className={styles.logo}>
                             <div className={styles.left} />
                             <div className={styles.right}>
-                                Bipad
+                                <span>
+                                    Bipad
+                                </span>
+                                <Router>
+                                    {titles}
+                                </Router>
+                                <RegionOutput />
                             </div>
-                            <Router>
-                                {titles}
-                            </Router>
                         </div>
                     </div>
                 </nav>

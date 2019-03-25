@@ -1,17 +1,22 @@
 import { Obj } from '@togglecorp/fujs';
 
 export interface Province {
+    id: number;
+    bbox: number[];
 }
 export interface District {
+    id: number;
+    bbox: number[];
 }
 export interface Municipality {
+    id: number;
+    bbox: number[];
 }
 export interface Ward {
-    // TODO: fill this
     id: number;
+    // bbox: number[];
 }
 export interface HazardType {
-    // TODO: fill this
     id: number;
     color?: string;
 }
@@ -48,13 +53,24 @@ export interface AdminLevel {
     title: string;
 }
 
+export interface Region {
+    adminLevel: number;
+    geoarea?: number;
+}
+
 export interface Filters {
     faramValues: {
         hazard?: number;
         dateRange?: number;
-        region?: {
-            adminLevel: number;
-        };
+    };
+    faramErrors: object;
+    pristine: boolean;
+}
+export interface FiltersWithRegion {
+    faramValues: {
+        hazard?: number;
+        dateRange?: number;
+        region: Region;
     };
     faramErrors: object;
     pristine: boolean;
@@ -95,6 +111,7 @@ export interface PageState {
     selectedMapStyle: string;
     mapStyles: MapStyle[];
 
+    region: Region;
     adminLevelList: AdminLevel[];
 
     provinces: Province[];
@@ -105,7 +122,6 @@ export interface PageState {
     resourceTypes: Obj<ResourceType>;
     hazardTypes: Obj<HazardType>;
     eventTypes: Obj<EventType>;
-    filters: object;
 
     dashboardPage: DashboardPage;
     incidentPage: IncidentPage;
@@ -191,11 +207,8 @@ export interface SetDashboardAlertList {
     alertList: Alert[];
 }
 
-export interface SetDashboardFilters {
+export interface SetDashboardFilters extends FiltersWithRegion {
     type: typeof PageType.DP__SET_FILTERS;
-    faramValues: object;
-    faramErrors: object;
-    pristine: boolean;
 }
 
 // incident
@@ -210,11 +223,8 @@ export interface SetIncident {
     incident: Incident;
 }
 
-export interface SetIncidentFilters {
+export interface SetIncidentFilters extends FiltersWithRegion {
     type: typeof PageType.IP__SET_FILTERS;
-    faramValues: object;
-    faramErrors: object;
-    pristine: boolean;
 }
 
 // response

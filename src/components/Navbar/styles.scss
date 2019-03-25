@@ -30,6 +30,7 @@ $height-menu: 160px;
             }
 
             .right {
+                display: flex;
                 background-color: #1080ff;
                 padding: $spacing-small;
                 color: #ffffff;

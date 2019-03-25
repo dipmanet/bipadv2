@@ -41,6 +41,21 @@ const emptyObject = {};
 const pieChartValueSelector = d => d.value;
 const pieChartLabelSelector = d => d.label;
 
+const groupList = (lst = [], getKey) => {
+    const mem = {};
+    lst.forEach((item) => {
+        const key = getKey(item);
+        if (!mem[key]) {
+            mem[key] = {
+                key,
+                value: [],
+            }; // eslint-disable-line no-param-reassign
+        }
+        mem[key].value.push(item);
+    });
+    return Object.values(mem);
+};
+
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -60,22 +75,22 @@ export default class LeftPane extends React.PureComponent {
     });
 
     groupByHazard = memoize((alerts, hazards) => {
-        const freqObj = alerts.reduce((total, obj) => {
-            const key = obj.hazard;
-            if (!total[key]) {
-                total[key] = []; // eslint-disable-line no-param-reassign
-            }
-            total[key].push(obj.hazard);
-            return total;
-        }, {});
-
-        return mapToList(
-            freqObj,
-            (d, k) => ({
-                label: (hazards[k] || {}).title,
-                value: d.length,
-            }),
+        const freqList = groupList(
+            alerts,
+            alert => alert.hazard,
         );
+
+        const alertFreq = freqList.map(item => ({
+            label: (hazards[item.key] || {}).title,
+            value: item.value.length,
+        }));
+
+        const alertColor = freqList.map(item => getHazardColor(hazards, item.key));
+
+        return {
+            alertFreq,
+            alertColor,
+        };
     });
 
     handleCollapseTabularViewButtonClick = () => {
@@ -174,7 +189,7 @@ export default class LeftPane extends React.PureComponent {
             hazardTypes,
         } = this.props;
 
-        const alertFreq = this.groupByHazard(alertList, hazardTypes);
+        const { alertFreq, alertColor } = this.groupByHazard(alertList, hazardTypes);
 
         return (
             <div className={className}>
@@ -185,11 +200,11 @@ export default class LeftPane extends React.PureComponent {
                 </header>
                 <div className={styles.content}>
                     <DonutChart
-                        sideLengthRatio={0.2}
+                        sideLengthRatio={0.4}
                         className={styles.pieChart}
                         data={alertFreq}
                         labelSelector={pieChartLabelSelector}
-                        colorScheme={basicColor}
+                        colorScheme={alertColor}
                         valueSelector={pieChartValueSelector}
                     />
                 </div>

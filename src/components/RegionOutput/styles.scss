@@ -1,0 +1,11 @@
+@import '~base-scss/base';
+
+.region-select-input {
+    .admin-level-select-input {
+        margin: 0 $spacing-small;
+    }
+
+    .geoarea-select-input {
+        margin: $spacing-small;
+    }
+}
