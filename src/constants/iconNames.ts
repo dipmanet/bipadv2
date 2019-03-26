@@ -31,6 +31,10 @@ const iconNames = {
 
     play: 'ion-ios-play',
     pause: 'ion-ios-pause',
+
+    list: 'ion-ios-list-outline',
+    pie: 'ion-ios-pie-outline',
+    pulse: 'ion-ios-pulse-strong',
 };
 
 export default iconNames;

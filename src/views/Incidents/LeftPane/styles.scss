@@ -17,7 +17,7 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
         }
     }
 
-    .incident-list-container {
+    .incidents-container {
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
         overflow: auto;
@@ -35,10 +35,11 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 display: flex;
                 align-items: center;
                 flex-shrink: 0;
+                padding: $spacing-small 0;
 
                 .heading {
                     flex-grow: 1;
-                    padding: $spacing-medium $spacing-medium-alt $spacing-extra-small $spacing-medium-alt;
+                    padding: 0 $spacing-medium;
                     color: $color-primary;
                 }
 
@@ -51,76 +52,11 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 }
             }
 
-            .container {
-                min-height: 240px;
-                min-width: 100px;
-                display: flex;
-                flex-direction: column;
-
-                .header {
-                    flex-shrink: 0;
-                    padding-top: $spacing-medium;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        text-align: flex-start;
-                        color: $color-primary;
-                    }
-                }
-
-                .chart {
-                    flex-grow: 1;
-                }
-
-                .legend {
-                    align-self: center;
-                    display: flex;
-                    flex-wrap: wrap;
-                    margin-top: $spacing-medium;
-
-                    .legend-item {
-                        margin-right: $spacing-medium;
-                    }
-                }
-            }
-
             .content {
                 display: flex;
                 flex-direction: column;
+                flex-grow: 1;
                 overflow: auto;
-
-                .bar-container {
-                    @extend .container;
-                }
-
-                .donut-container {
-                    min-height: 240px;
-                    display: flex;
-
-                    .severity-summary {
-                        @extend .container;
-                        flex-grow: 1;
-                    }
-
-                    .inducer-summary {
-                        @extend .container;
-                        flex-grow: 1;
-                    }
-                }
-
-                .incident-list {
-                    flex-direction: column;
-                    flex-grow: 1;
-
-                    .incident {
-                        cursor: pointer;
-                        padding: $spacing-medium $spacing-medium-alt;
-
-                        &:hover {
-                            background-color: rgba(0, 0, 0, .05);
-                        }
-                    }
-                }
             }
         }
 
@@ -151,8 +87,5 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 overflow: auto;
             }
         }
-
-
     }
-
 }

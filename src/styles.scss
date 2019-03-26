@@ -3,8 +3,10 @@
 .map {
     width: 100vw;
     height: 100vh;
+    font-family: inherit;
 
     :global {
+
         .mapboxgl-ctrl-bottom-right {
             right: $width-navbar;
         }

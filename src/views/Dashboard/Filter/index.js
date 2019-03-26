@@ -68,11 +68,21 @@ class DashboardFilter extends React.PureComponent {
     }
 
     handleShowFiltersButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showFilters: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleHideFiltersButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showFilters: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     handleFaramChange = (faramValues, faramErrors) => {

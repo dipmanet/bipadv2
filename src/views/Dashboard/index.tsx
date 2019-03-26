@@ -32,7 +32,10 @@ import DashboardFilter from './Filter';
 
 import styles from './styles.scss';
 
-interface State {}
+interface State {
+    leftPaneExpanded?: boolean;
+    rightPaneExpanded?: boolean;
+}
 interface Params {}
 interface OwnProps {}
 interface PropsFromState {
@@ -87,6 +90,23 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 class Dashboard extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            leftPaneExpanded: true,
+            rightPaneExpanded: true,
+        };
+    }
+
+    private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
+        this.setState({ rightPaneExpanded });
+    }
+
     public render() {
         const {
             alertList,
@@ -96,10 +116,17 @@ class Dashboard extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
+        const {
+            leftPaneExpanded,
+            rightPaneExpanded,
+        } = this.state;
+
         return (
             <React.Fragment>
                 <Map
                     alertList={alertList}
+                    leftPaneExpanded={leftPaneExpanded}
+                    rightPaneExpanded={rightPaneExpanded}
                 />
                 <Page
                     leftContent={
@@ -107,9 +134,14 @@ class Dashboard extends React.PureComponent<Props, State> {
                             alertList={alertList}
                             hazardTypes={hazardTypes}
                             pending={alertsPending}
+                            onExpandChange={this.handleLeftPaneExpandChange}
                         />
                     }
-                    rightContent={<DashboardFilter />}
+                    rightContent={
+                        <DashboardFilter
+                            onExpandChange={this.handleRightPaneExpandChange}
+                        />
+                    }
                 />
             </React.Fragment>
         );

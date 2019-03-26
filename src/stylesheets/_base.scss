@@ -2,12 +2,12 @@
 @import 'dimens';
 @import 'utils';
 
-$font-family-sans-serif: 'Source Sans Pro', sans-serif;
-$font-family-heading: 'Asap', sans-serif;
+$font-family-sans-serif: 'Source Sans Pro', 'Martel', sans-serif;
+$font-family-heading: 'Source Sans Pro', sans-serif;
 $font-family-monospace: 'Oxygen Mono', monospace;
 $font-family-icons: 'Ionicons';
 
-$font-weight-heading: 500;
+$font-weight-heading: 600;
 
 * {
     box-sizing: border-box;
@@ -41,6 +41,10 @@ body {
 
     .mapboxgl-ctrl-top-right {
         right: 48px !important;
+    }
+
+    .mapboxgl-map {
+        font: inherit !important;
     }
 }
 

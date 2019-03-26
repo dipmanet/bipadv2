@@ -1,0 +1,72 @@
+@import '~base-scss/base';
+
+.incident-item {
+    display: flex;
+    padding: $spacing-medium 0;
+    text-decoration: none;
+    color: inherit;
+
+    .left {
+        flex-shrink: 0;
+
+        .svg-container {
+            flex-shrink: 0;
+            margin: $spacing-small $spacing-medium;
+
+            .icon {
+                width: 20px;
+                height: auto;
+                height: $font-size-extra-large;
+
+                path {
+                    fill: currentColor;
+                }
+            }
+        }
+
+        .default-icon {
+            flex-shrink: 0;
+            margin: $spacing-small $spacing-medium;
+            width: 20px;
+            height: 20px;
+            color: $color-danger;
+            font-size: $font-size-extra-large;
+        }
+    }
+
+    .right {
+        flex-grow: 1;
+
+        .header {
+            display: flex;
+            align-items: center;
+
+            .heading {
+                flex-grow: 1;
+                padding: 0 $spacing-medium;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: $font-weight-bold;
+            }
+
+            .icon {
+                flex-shrink: 0;
+                padding: 0 $spacing-medium;
+
+                &.verified {
+                    color: $color-success;
+                }
+            }
+        }
+
+        .content {
+            padding: 0 $spacing-medium;
+        }
+    }
+
+    &:hover {
+        background-color: $color-background-hover;
+    }
+}
+

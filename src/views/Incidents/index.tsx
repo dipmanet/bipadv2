@@ -32,7 +32,9 @@ import LeftPane from './LeftPane';
 import styles from './styles.scss';
 
 
-interface State {}
+interface State {
+    leftPaneExpanded?: boolean;
+}
 
 interface Params {
 }
@@ -95,6 +97,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 class Incidents extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            leftPaneExpanded: true,
+        };
+    }
+
+    private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
+        this.setState({ leftPaneExpanded });
+    }
+
     public render() {
         const {
             incidentList,
@@ -103,15 +117,21 @@ class Incidents extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
+        const { leftPaneExpanded } = this.state;
+
         return (
             <React.Fragment>
-                <Map incidentList={incidentList} />
+                <Map
+                    leftPaneExpanded={leftPaneExpanded}
+                    incidentList={incidentList}
+                />
                 <Page
                     leftContentClassName={styles.left}
                     leftContent={
                         <LeftPane
                             incidentList={incidentList}
                             pending={incidentsPending}
+                            onExpandChange={this.handleLeftPaneExpandChange}
                         />
                     }
                     rightContentClassName={styles.right}
