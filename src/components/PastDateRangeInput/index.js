@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SegmentInput from '#rsci/SegmentInput';
 
@@ -25,13 +26,20 @@ const pastDateRangeOptions = [
 ];
 
 
-const PastDateRangeInput = props => (
+const PastDateRangeInput = ({ showHintAndError, ...otherProps }) => (
     <SegmentInput
         keySelector={pastDataKeySelector}
         labelSelector={pastDataLabelSelector}
         options={pastDateRangeOptions}
-        {...props}
+        showHintAndError={showHintAndError}
+        {...otherProps}
     />
 );
+PastDateRangeInput.propTypes = {
+    showHintAndError: PropTypes.bool,
+};
+PastDateRangeInput.defaultProps = {
+    showHintAndError: false,
+};
 
 export default PastDateRangeInput;

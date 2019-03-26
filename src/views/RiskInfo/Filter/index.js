@@ -123,11 +123,9 @@ export default class Filter extends React.PureComponent {
                                 className={styles.pastDataSelectInput}
                                 label="Data range"
                                 faramElementName="dateRange"
-                                showHintAndError={false}
                             />
                             <RegionSelectInput
                                 faramElementName="region"
-                                showHintAndError={false}
                             />
                             <MultiListSelection
                                 faramElementName="resources"

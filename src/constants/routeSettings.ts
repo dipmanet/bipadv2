@@ -45,12 +45,6 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/Response'),
     },
     {
-        name: 'capacityAndResource',
-        title: 'Capacity & Resource',
-        path: '/capacity-and-resources/',
-        load: () => import('../views/CapacityAndResources'),
-    },
-    {
         name: 'lossAndDamage',
         title: 'Loss & Damage',
         path: '/loss-and-damage/',
