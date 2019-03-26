@@ -84,3 +84,28 @@ export const sanitizeResponse = (data: unknown): any => {
     }
     return data;
 };
+
+interface KeyFunc<T> {
+    (val: T): string | number;
+}
+
+export function groupList<T>(lst: T[] = [], getKey: KeyFunc<T>) {
+    const mem: {
+        [key: string]: {
+            key: string | number;
+            value: T[];
+        };
+    } = {};
+    lst.forEach((item) => {
+        const key = getKey(item);
+        if (!mem[key]) {
+            mem[key] = {
+                key,
+                value: [],
+            }; // eslint-disable-line no-param-reassign
+        }
+        mem[key].value.push(item);
+    });
+    return Object.values(mem);
+}
+

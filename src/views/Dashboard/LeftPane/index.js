@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import ReactSVG from 'react-svg';
-import {
-    _cs,
-    mapToList,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
@@ -14,9 +11,9 @@ import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-import { basicColor } from '#constants/colorScheme';
 import { hazardIcons } from '#resources/data';
 import { getHazardColor } from '#utils/domain';
+import { groupList } from '#utils/common';
 
 import TabularView from './TabularView';
 import styles from './styles.scss';
@@ -40,21 +37,6 @@ const emptyObject = {};
 
 const pieChartValueSelector = d => d.value;
 const pieChartLabelSelector = d => d.label;
-
-const groupList = (lst = [], getKey) => {
-    const mem = {};
-    lst.forEach((item) => {
-        const key = getKey(item);
-        if (!mem[key]) {
-            mem[key] = {
-                key,
-                value: [],
-            }; // eslint-disable-line no-param-reassign
-        }
-        mem[key].value.push(item);
-    });
-    return Object.values(mem);
-};
 
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes

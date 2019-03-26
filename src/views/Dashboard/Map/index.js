@@ -119,7 +119,6 @@ class AlertMap extends React.PureComponent {
 
         const featureCollection = this.getFeatureCollection(alertList, hazards);
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        console.warn(boundsPadding);
 
         return (
             <React.Fragment>

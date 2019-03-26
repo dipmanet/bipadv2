@@ -42,6 +42,7 @@ export default class Visualizations extends React.PureComponent {
     static defaultProps = defaultProps
 
     getSummaryForLabel = memoize((incidentList, labelName, labelModifier = k => k) => {
+        // FIXME: use groupList
         const summary = incidentList
             .filter(v => v[labelName])
             .reduce((acc, current) => {
@@ -64,6 +65,7 @@ export default class Visualizations extends React.PureComponent {
     });
 
     getSeveritySummary = memoize((incidentList) => {
+        // FIXME: use groupList
         const severity = incidentList
             .filter(v => v.severity)
             .reduce((acc, current) => {
@@ -86,6 +88,7 @@ export default class Visualizations extends React.PureComponent {
     });
 
     getEventSummary = memoize((incidentList) => {
+        // FIXME: use groupList
         const hazardCount = incidentList
             .filter(v => v.event)
             .reduce((acc, current) => {
