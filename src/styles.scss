@@ -1,5 +1,53 @@
 @import '~base-scss/base';
 
+
+.splash-screen-modal {
+    display: flex;
+    height: 90vh;
+    width: 90vw;
+
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        padding: $spacing-large;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+
+        h1, h2 {
+            margin: $spacing-large 0;
+        }
+
+        .area-select {
+            display: flex;
+            flex-grow: 1;
+
+            .subtype {
+                display: flex;
+                flex-direction: column;
+                border: $width-separator-thin solid $color-separator;
+                border-style: dashed;
+                padding: $spacing-medium;
+                height: 300px;
+                width: 200px;
+                align-items: center;
+                justify-content: center;
+                margin: $spacing-large;
+            }
+        }
+
+        .disclaimer {
+            flex-shrink: 0;
+            padding: $spacing-large;
+            p {
+                text-align: justify;
+            }
+        }
+    }
+}
+
+
 .map {
     width: 100vw;
     height: 100vh;
