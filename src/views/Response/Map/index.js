@@ -8,9 +8,10 @@ import buffer from '@turf/buffer';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import { mapSources, mapStyles } from '#constants';
-import { hazardTypesSelector } from '#selectors';
 import DistanceOutput from '#components/DistanceOutput';
+import ZoomMap from '#components/ZoomMap';
+import { mapStyles } from '#constants';
+import { hazardTypesSelector } from '#selectors';
 
 import {
     incidentPointToGeojson,
@@ -97,25 +98,9 @@ class ResponseMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <MapSource
-                    sourceKey="districts"
-                    url={mapSources.nepal.url}
+                <ZoomMap
                     bounds={box}
-                >
-                    <MapLayer
-                        layerKey="districts-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.fill}
-                    />
-                    <MapLayer
-                        layerKey="districts-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.outline}
-                    />
-                </MapSource>
-
+                />
                 <MapSource
                     sourceKey="resource"
                     geoJson={this.getResourceFeatureCollection(resourceList)}

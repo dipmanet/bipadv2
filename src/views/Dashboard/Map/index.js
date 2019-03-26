@@ -6,17 +6,10 @@ import { connect } from 'react-redux';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import {
-    hazardTypesSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
-} from '#selectors';
-
-import { mapSources, mapStyles } from '#constants';
+import CommonMap from '#components/CommonMap';
+import { mapStyles } from '#constants';
 import { alertToGeojson } from '#utils/domain';
+import { hazardTypesSelector } from '#selectors';
 
 import styles from './styles.scss';
 
@@ -40,25 +33,16 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     alertList: PropTypes.array,
     // eslint-disable-next-line react/forbid-prop-types
-    bounds: PropTypes.array.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
     hazards: PropTypes.object,
-    regionLevel: PropTypes.number,
 };
 
 const defaultProps = {
     alertList: [],
     hazards: {},
-    regionLevel: undefined,
 };
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
-    regionLevel: regionLevelSelector(state),
-    bounds: boundsSelector(state),
-    selectedProvinceId: selectedProvinceIdSelector(state),
-    selectedDistrictId: selectedDistrictIdSelector(state),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state),
 });
 
 const paddingLeftPaneExpaded = {
@@ -116,13 +100,8 @@ class AlertMap extends React.PureComponent {
         const {
             alertList,
             hazards,
-            regionLevel,
-            bounds,
             leftPaneExpanded,
             rightPaneExpanded,
-            selectedProvinceId,
-            selectedDistrictId,
-            selectedMunicipalityId,
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazards);
@@ -130,72 +109,9 @@ class AlertMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <MapSource
-                    sourceKey="country"
-                    url={mapSources.nepal.url}
-                    bounds={bounds}
+                <CommonMap
                     boundsPadding={boundsPadding}
-                >
-                    { regionLevel === 1 &&
-                        <MapLayer
-                            layerKey="province-fill"
-                            type="fill"
-                            sourceLayer={mapSources.nepal.layers.province}
-                            paint={mapStyles.province.fill}
-                            hoveredId={selectedProvinceId}
-                        />
-                    }
-                    { regionLevel === 2 &&
-                        <MapLayer
-                            layerKey="district-fill"
-                            type="fill"
-                            sourceLayer={mapSources.nepal.layers.district}
-                            paint={mapStyles.district.fill}
-                            hoveredId={selectedDistrictId}
-                        />
-                    }
-                    { regionLevel === 3 &&
-                        <MapLayer
-                            layerKey="municipality-fill"
-                            type="fill"
-                            sourceLayer={mapSources.nepal.layers.municipality}
-                            paint={mapStyles.municipality.fill}
-                            hoveredId={selectedMunicipalityId}
-                        />
-                    }
-                    { regionLevel >= 0 &&
-                        <MapLayer
-                            layerKey="province-outline"
-                            type="line"
-                            sourceLayer={mapSources.nepal.layers.province}
-                            paint={mapStyles.province.outline}
-                        />
-                    }
-                    { regionLevel >= 1 &&
-                        <MapLayer
-                            layerKey="district-outline"
-                            type="line"
-                            sourceLayer={mapSources.nepal.layers.district}
-                            paint={mapStyles.district.outline}
-                        />
-                    }
-                    { regionLevel >= 2 &&
-                        <MapLayer
-                            layerKey="municipality-outline"
-                            type="line"
-                            sourceLayer={mapSources.nepal.layers.municipality}
-                            paint={mapStyles.municipality.outline}
-                        />
-                    }
-                    { regionLevel >= 3 &&
-                        <MapLayer
-                            layerKey="ward-outline"
-                            type="line"
-                            sourceLayer={mapSources.nepal.layers.ward}
-                            paint={mapStyles.ward.outline}
-                        />
-                    }
-                </MapSource>
+                />
                 <MapSource
                     sourceKey="alerts"
                     geoJson={featureCollection}

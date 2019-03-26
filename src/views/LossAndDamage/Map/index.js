@@ -7,6 +7,8 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
+import CommonMap from '#components/CommonMap';
+
 import {
     hazardTypesSelector,
     wardsMapSelector,
@@ -16,7 +18,7 @@ import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
-import Tooltip from '#components/Tooltip';
+import IncidentInfo from '#components/IncidentInfo';
 
 const districtsPadding = {
     top: 0,
@@ -172,6 +174,8 @@ class LossAndDamageMap extends React.PureComponent {
 
         return (
             <React.Fragment>
+                <CommonMap />
+                {/*
                 <MapSource
                     sourceKey="district"
                     url={mapSources.nepal.url}
@@ -194,6 +198,7 @@ class LossAndDamageMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
+                */}
                 <MapSource
                     sourceKey="points"
                     geoJson={pointFeatureCollection}
@@ -204,7 +209,7 @@ class LossAndDamageMap extends React.PureComponent {
                         paint={mapStyles.incidentPoint.fill}
                         filter={pointsFilter}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
@@ -217,7 +222,7 @@ class LossAndDamageMap extends React.PureComponent {
                         type="fill"
                         paint={mapStyles.incidentPolygon.fill}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>

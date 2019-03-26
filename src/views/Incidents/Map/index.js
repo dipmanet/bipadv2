@@ -5,12 +5,13 @@ import memoize from 'memoize-one';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+import CommonMap from '#components/CommonMap';
 import {
     hazardTypesSelector,
     wardsMapSelector,
 } from '#selectors';
-import { mapSources, mapStyles } from '#constants';
-import Tooltip from '#components/Tooltip';
+import { mapStyles } from '#constants';
+import IncidentInfo from '#components/IncidentInfo';
 
 import {
     incidentPointToGeojson,
@@ -104,24 +105,9 @@ class IncidentMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <MapSource
-                    sourceKey="districts"
-                    url={mapSources.nepal.url}
+                <CommonMap
                     boundsPadding={boundsPadding}
-                >
-                    <MapLayer
-                        layerKey="districts-fill"
-                        type="fill"
-                        paint={mapStyles.district.fill}
-                        sourceLayer={mapSources.nepal.layers.district}
-                    />
-                    <MapLayer
-                        layerKey="districts-outline"
-                        type="line"
-                        paint={mapStyles.district.outline}
-                        sourceLayer={mapSources.nepal.layers.district}
-                    />
-                </MapSource>
+                />
                 <MapSource
                     sourceKey="incident-points"
                     geoJson={pointFeatureCollection}
@@ -131,7 +117,7 @@ class IncidentMap extends React.PureComponent {
                         type="circle"
                         paint={mapStyles.incidentPoint.fill}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
@@ -144,7 +130,7 @@ class IncidentMap extends React.PureComponent {
                         type="fill"
                         paint={mapStyles.incidentPolygon.fill}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>

@@ -20,7 +20,7 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
-import Tooltip from '#components/Tooltip';
+import IncidentInfo from '#components/IncidentInfo';
 
 import Map from './Map';
 import ResourceList from './ResourceList';
@@ -65,7 +65,7 @@ class Response extends React.PureComponent {
                 <Page
                     leftContentClassName={styles.incidentDetails}
                     leftContent={
-                        <Tooltip
+                        <IncidentInfo
                             className={styles.info}
                             incident={incident}
                             wardsMap={wardsMap}
