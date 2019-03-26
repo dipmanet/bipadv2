@@ -10,6 +10,9 @@ import {
     hazardTypesSelector,
     regionLevelSelector,
     boundsSelector,
+    selectedProvinceIdSelector,
+    selectedDistrictIdSelector,
+    selectedMunicipalityIdSelector,
 } from '#selectors';
 
 import { mapSources, mapStyles } from '#constants';
@@ -53,6 +56,9 @@ const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
     regionLevel: regionLevelSelector(state),
     bounds: boundsSelector(state),
+    selectedProvinceId: selectedProvinceIdSelector(state),
+    selectedDistrictId: selectedDistrictIdSelector(state),
+    selectedMunicipalityId: selectedMunicipalityIdSelector(state),
 });
 
 const paddingLeftPaneExpaded = {
@@ -96,7 +102,6 @@ class AlertMap extends React.PureComponent {
         } else if (rightPaneExpanded) {
             return paddingRightPaneExpaded;
         }
-
         return paddingNoPaneExpanded;
     });
 
@@ -115,6 +120,9 @@ class AlertMap extends React.PureComponent {
             bounds,
             leftPaneExpanded,
             rightPaneExpanded,
+            selectedProvinceId,
+            selectedDistrictId,
+            selectedMunicipalityId,
         } = this.props;
 
         const featureCollection = this.getFeatureCollection(alertList, hazards);
@@ -123,26 +131,49 @@ class AlertMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <MapSource
-                    sourceKey="districts"
+                    sourceKey="country"
                     url={mapSources.nepal.url}
                     bounds={bounds}
                     boundsPadding={boundsPadding}
                 >
-                    <MapLayer
-                        layerKey="province-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.fill}
-                    />
-                    <MapLayer
-                        layerKey="province-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.outline}
-                    />
+                    { regionLevel === 1 &&
+                        <MapLayer
+                            layerKey="province-fill"
+                            type="fill"
+                            sourceLayer={mapSources.nepal.layers.province}
+                            paint={mapStyles.province.fill}
+                            hoveredId={selectedProvinceId}
+                        />
+                    }
+                    { regionLevel === 2 &&
+                        <MapLayer
+                            layerKey="district-fill"
+                            type="fill"
+                            sourceLayer={mapSources.nepal.layers.district}
+                            paint={mapStyles.district.fill}
+                            hoveredId={selectedDistrictId}
+                        />
+                    }
+                    { regionLevel === 3 &&
+                        <MapLayer
+                            layerKey="municipality-fill"
+                            type="fill"
+                            sourceLayer={mapSources.nepal.layers.municipality}
+                            paint={mapStyles.municipality.fill}
+                            hoveredId={selectedMunicipalityId}
+                        />
+                    }
+                    { regionLevel >= 0 &&
+                        <MapLayer
+                            layerKey="province-outline"
+                            type="line"
+                            sourceLayer={mapSources.nepal.layers.province}
+                            paint={mapStyles.province.outline}
+                        />
+                    }
                     { regionLevel >= 1 &&
                         <MapLayer
-                            layerKey="districts-outline"
+                            layerKey="district-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.district}
                             paint={mapStyles.district.outline}
@@ -150,7 +181,7 @@ class AlertMap extends React.PureComponent {
                     }
                     { regionLevel >= 2 &&
                         <MapLayer
-                            layerKey="municipalities-outline"
+                            layerKey="municipality-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.municipality}
                             paint={mapStyles.municipality.outline}
@@ -158,7 +189,7 @@ class AlertMap extends React.PureComponent {
                     }
                     { regionLevel >= 3 &&
                         <MapLayer
-                            layerKey="wards-outline"
+                            layerKey="ward-outline"
                             type="line"
                             sourceLayer={mapSources.nepal.layers.ward}
                             paint={mapStyles.ward.outline}

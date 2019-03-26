@@ -10,7 +10,7 @@ import {
     setFiltersActionDP,
 } from '#actionCreators';
 import {
-    hazardTypeListAlertsDP,
+    hazardTypeListSelector,
     filtersSelectorDP,
 } from '#selectors';
 
@@ -39,7 +39,7 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypeListAlertsDP(state),
+    hazardTypeList: hazardTypeListSelector(state),
     filters: filtersSelectorDP(state),
 });
 
