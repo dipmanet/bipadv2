@@ -1,5 +1,7 @@
 @import '~base-scss/base';
 
+$width-non-tabular-container: var(--width-left-panel);
+
 .left-pane {
     .show-detials-button-container {
         transform-origin: 0 0;
@@ -19,8 +21,7 @@
         border: $width-separator-thin solid $color-separator-light;
         border-radius: 5px;
         background-color: $color-foreground;
-        min-width: 320px;
-        max-width: calc(100vw - 200px);
+        width: $width-non-tabular-container;
         height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2) - 100px);
         overflow: auto;
 
@@ -98,7 +99,7 @@
                 .district-summary {
                     display: flex;
                     flex-direction: column;
-                    width: 320px;
+                    // width: $width-non-tabular-container;
 
                     &:not(:last-child) {
                         border-right: $width-separator-thin solid $color-separator;

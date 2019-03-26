@@ -86,7 +86,17 @@ class LossAndDamage extends React.PureComponent {
             timeExtent: {},
             pauseMap: false,
             selectedDistricts: [],
+            leftPaneExpanded: true,
+            rightPaneExpanded: true,
         };
+    }
+
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    handleRightPaneExpandChange = (rightPaneExpanded) => {
+        this.setState({ rightPaneExpanded });
     }
 
     handleMapPlaybackProgress = (current, extent) => {
@@ -181,6 +191,8 @@ class LossAndDamage extends React.PureComponent {
         const {
             pauseMap,
             selectedDistricts,
+            leftPaneExpanded,
+            rightPaneExpanded,
         } = this.state;
 
         return (
@@ -190,6 +202,8 @@ class LossAndDamage extends React.PureComponent {
                     lossAndDamageList={lossAndDamageList}
                     onPlaybackProgress={this.handleMapPlaybackProgress}
                     onDistrictSelect={this.handleMapDistrictSelect}
+                    leftPaneExpanded={leftPaneExpanded}
+                    rightPaneExpanded={rightPaneExpanded}
                 />
                 <Page
                     leftContentClassName={styles.left}
@@ -198,11 +212,14 @@ class LossAndDamage extends React.PureComponent {
                             pending={pending}
                             lossAndDamageList={lossAndDamageList}
                             selectedDistricts={selectedDistricts}
+                            onExpandChange={this.handleLeftPaneExpandChange}
                         />
                     }
                     rightContentClassName={styles.right}
                     rightContent={
-                        <LossAndDamageFilter />
+                        <LossAndDamageFilter
+                            onExpandChange={this.handleRightPaneExpandChange}
+                        />
                     }
                     mainContentClassName={styles.main}
                     mainContent={this.renderMainContent()}
@@ -222,7 +239,7 @@ const requests = {
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples'],
             // FIXME: this is bad
-            limit: 10000,
+            limit: 100,
         }),
         onPropsChanged: {
             filters: ({

@@ -13,7 +13,11 @@ import {
     hazardTypesSelector,
     wardsMapSelector,
 } from '#selectors';
-import { mapSources, mapStyles } from '#constants';
+import {
+    mapSources,
+    mapStyles,
+    getMapPaddings,
+} from '#constants';
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
@@ -63,6 +67,19 @@ class LossAndDamageMap extends React.PureComponent {
     componentWillUnmount() {
         clearTimeout(this.timeout);
     }
+
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        const mapPaddings = getMapPaddings();
+
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return mapPaddings.bothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return mapPaddings.leftPaneExpanded;
+        } else if (rightPaneExpanded) {
+            return mapPaddings.rightPaneExpanded;
+        }
+        return mapPaddings.noPaneExpanded;
+    });
 
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
@@ -151,7 +168,10 @@ class LossAndDamageMap extends React.PureComponent {
         const {
             lossAndDamageList,
             hazards,
+            leftPaneExpanded,
+            rightPaneExpanded,
         } = this.props;
+
         const { currentRange } = this.state;
 
         let pointsFilter;
@@ -172,9 +192,13 @@ class LossAndDamageMap extends React.PureComponent {
             hazards,
         );
 
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+
         return (
             <React.Fragment>
-                <CommonMap />
+                <CommonMap
+                    boundsPadding={boundsPadding}
+                />
                 {/*
                 <MapSource
                     sourceKey="district"

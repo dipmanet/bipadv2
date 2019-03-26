@@ -7,7 +7,10 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import CommonMap from '#components/CommonMap';
-import { mapStyles } from '#constants';
+import {
+    mapStyles,
+    getMapPaddings,
+} from '#constants';
 import { alertToGeojson } from '#utils/domain';
 import { hazardTypesSelector } from '#selectors';
 
@@ -23,6 +26,7 @@ const Tooltip = ({ title, description }) => (
         </p>
     </div>
 );
+
 Tooltip.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -45,48 +49,22 @@ const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
 });
 
-const paddingLeftPaneExpaded = {
-    top: 24,
-    right: 74,
-    bottom: 24,
-    left: 324,
-};
-
-const paddingRightPaneExpaded = {
-    top: 24,
-    right: 374,
-    bottom: 24,
-    left: 24,
-};
-
-const paddingBothPaneExpanded = {
-    top: 24,
-    right: 370,
-    bottom: 24,
-    left: 324,
-};
-
-const paddingNoPaneExpanded = {
-    top: 24,
-    right: 64,
-    bottom: 24,
-    left: 24,
-};
-
 
 class AlertMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        const mapPaddings = getMapPaddings();
+
         if (leftPaneExpanded && rightPaneExpanded) {
-            return paddingBothPaneExpanded;
+            return mapPaddings.bothPaneExpanded;
         } else if (leftPaneExpanded) {
-            return paddingLeftPaneExpaded;
+            return mapPaddings.leftPaneExpanded;
         } else if (rightPaneExpanded) {
-            return paddingRightPaneExpaded;
+            return mapPaddings.rightPaneExpanded;
         }
-        return paddingNoPaneExpanded;
+        return mapPaddings.noPaneExpanded;
     });
 
     getFeatureCollection = memoize(alertToGeojson);

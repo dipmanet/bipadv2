@@ -1,6 +1,6 @@
 @import '~base-scss/base';
 
-$width-filters-container: 250px;
+$width-right-panel: var(--width-right-panel);
 
 .filter {
     .show-filters-button-container {
@@ -15,7 +15,7 @@ $width-filters-container: 250px;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
         padding: 0 $spacing-small;
-        width: $width-filters-container;
+        width: $width-right-panel;
 
         .header {
             display: flex;

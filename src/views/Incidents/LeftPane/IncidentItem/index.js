@@ -85,7 +85,7 @@ export default class Incidents extends React.PureComponent {
                     </header>
                     <div className={styles.content}>
                         <DateOutput
-                            date={incidentOn}
+                            value={incidentOn}
                         />
                         <GeoOutput
                             className={styles.geoOutput}
