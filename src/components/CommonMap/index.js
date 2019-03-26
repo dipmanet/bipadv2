@@ -100,7 +100,7 @@ class CommonMap extends React.PureComponent {
                         paint={mapStyles.province.outline}
                     />
                 }
-                { regionLevel >= 1 &&
+                { regionLevel >= 2 && // NOTE: dont' show district in province level
                     <MapLayer
                         layerKey="district-outline"
                         type="line"

@@ -151,8 +151,8 @@ export const resourceToGeojson = (resourceList: Resource[]) => {
         type: 'FeatureCollection',
         features: resourceList
             .filter(resource => !!resource.point)
-            .map((resource, i) => ({
-                id: i,
+            .map(resource => ({
+                id: resource.id,
                 type: 'Feature',
                 geometry: {
                     type: 'Point',

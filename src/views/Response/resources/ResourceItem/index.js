@@ -14,9 +14,11 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    contactNumber: PropTypes.string.isRequired,
     distance: PropTypes.number.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     point: PropTypes.object.isRequired,
+    resourceType: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -37,6 +39,7 @@ export default class ResourceItem extends React.PureComponent {
             className,
             title,
             distance,
+            contactNumber = 'Unavailable',
             resourceType,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
@@ -48,7 +51,6 @@ export default class ResourceItem extends React.PureComponent {
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
 
         const attrs = resourceAttributes[resourceType] || [];
-        console.warn(attrs);
 
         return (
             <React.Fragment>
@@ -60,6 +62,12 @@ export default class ResourceItem extends React.PureComponent {
                         <DistanceOutput
                             value={distance / 1000}
                         />
+                        <div>
+                            <div className={styles.title}>
+                                <b> Contact Number </b>
+                                <span> { contactNumber } </span>
+                            </div>
+                        </div>
                     </div>
                     {
                         googleLink && (

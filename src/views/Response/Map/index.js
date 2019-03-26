@@ -114,6 +114,7 @@ class ResponseMap extends React.PureComponent {
                         layerKey="resource-symbol"
                         type="symbol"
                         layout={mapStyles.resourcePoint.layout}
+                        paint={mapStyles.resourcePoint.symbol}
                     />
                 </MapSource>
 

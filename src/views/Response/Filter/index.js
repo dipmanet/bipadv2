@@ -151,7 +151,7 @@ export default class ResponseFilter extends React.PureComponent {
                                             faramElementName="show"
                                             label={filterItem.key}
                                         />
-                                        <div>
+                                        <div style={{ marginLeft: 20 }}>
                                             {
                                                 filterItem.filterParams.map(param => (
                                                     faramValues[filterItem.key].show &&

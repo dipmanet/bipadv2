@@ -31,9 +31,43 @@ const resourceAttributes = {
         // { key: 'emailAddress', label: 'Email Address', type: 'string' },
         // { key: 'comments', label: 'Comments', type: 'string' },
     ],
-    finance: [],
+    finance: [
+        { key: 'cbsCode', label: 'Cbs Code', type: 'string' },
+        { key: 'population', label: 'Population', type: 'number', filter: {} },
+        { key: 'accessPointCount', label: 'Access Point Count', type: 'number', filter: {} },
+        { key: 'type', label: 'Type', type: 'string', filter: {} },
+        {
+            key: 'channel',
+            label: 'Channel',
+            type: 'string',
+            filter: {
+                type: 'select',
+                options: [
+                    { key: 'blb', label: 'Branchless Banking' },
+                    { key: 'branch', label: 'Branch' },
+                    { key: 'atm', label: 'ATM' },
+                ],
+            },
+        },
+    ],
     volunteer: [],
-    education: [],
+    education: [
+        { key: 'classroomCount', label: 'Classrooms', type: 'number', filter: {} },
+        { key: 'openSpace', label: 'Open Space', type: 'boolean', filter: {} },
+        { key: 'studentCount', label: 'Students', type: 'number' },
+        { key: 'teacherCount', label: 'Teacher', type: 'number' },
+        { key: 'firstAid', label: 'FirstAid', type: 'boolean' },
+    ],
+    openSpace: [
+        { key: 'area', label: 'Area', type: 'number' },
+        { key: 'capacity', label: 'Capacity', type: 'number' },
+    ],
+    hotel: [
+        { key: 'roomCount', label: 'Rooms', type: 'number', filter: {} },
+        { key: 'bedCount', label: 'Beds', type: 'number' },
+        { key: 'staffCount', label: 'Staffs', type: 'number' },
+        { key: 'facilities', label: 'Staffs', type: 'string' },
+    ],
 };
 
 
