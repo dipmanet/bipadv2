@@ -2,18 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { schemeAccent } from 'd3-scale-chromatic';
-import { scaleOrdinal } from 'd3-scale';
-import {
-    _cs,
-    mapToList,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
-import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
-import DonutChart from '#rscz/DonutChart';
-import Legend from '#rscz/Legend';
 
 import { calculateCategorizedSeverity } from '#utils/domain';
 import CollapsibleView from '#components/CollapsibleView';
@@ -26,8 +18,8 @@ import {
 
 
 import TabularView from './TabularView';
-
 import IncidentListView from './ListView';
+import Visualizations from './Visualizations';
 
 import styles from './styles.scss';
 
@@ -43,19 +35,6 @@ const defaultProps = {
     pending: false,
 };
 
-const colors = scaleOrdinal().range(schemeAccent);
-
-const barChartValueSelector = d => d.value;
-const barChartLabelSelector = d => d.label;
-const donutChartValueSelector = d => d.value;
-const donutChartLabelSelector = d => d.label;
-const donutChartColorSelector = d => d.color;
-const incidentKeySelector = d => d.id;
-
-const itemSelector = d => d.label;
-const legendColorSelector = d => d.color;
-const legendLabelSelector = d => d.label;
-
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -66,9 +45,16 @@ class LeftPane extends React.PureComponent {
         this.state = {
             showIncidents: true,
             showTabular: false,
+            showVisualizations: false,
         };
     }
 
+    handleToggleVisualizationButtonClick = () => {
+        const { showVisualizations } = this.state;
+        this.setState({
+            showVisualizations: !showVisualizations,
+        });
+    }
 
     handleCollapseTabularViewButtonClick = () => {
         this.setState({ showTabular: false });
@@ -102,6 +88,13 @@ class LeftPane extends React.PureComponent {
                 Incidents
             </h4>
             <Spinner loading={this.props.pending} />
+            <Button
+                className={styles.toggleVisualizationButton}
+                onClick={this.handleToggleVisualizationButtonClick}
+                iconName={this.state.showVisualizations ? iconNames.list : iconNames.pulse}
+                title="Toggle visualization"
+                transparent
+            />
             <Button
                 className={styles.expandTabularViewButton}
                 onClick={this.handleExpandButtonClick}
@@ -153,6 +146,7 @@ class LeftPane extends React.PureComponent {
         const {
             showIncidents,
             showTabular,
+            showVisualizations,
         } = this.state;
 
         const incidentList = incidentListNoSeverity.map(incident => ({
@@ -184,11 +178,19 @@ class LeftPane extends React.PureComponent {
                             <React.Fragment>
                                 { this.renderListViewHeader() }
                                 <div className={styles.content}>
-                                    <IncidentListView
-                                        hazardTypes={hazardTypes}
-                                        className={styles.incidentList}
-                                        incidentList={incidentList}
-                                    />
+                                    { showVisualizations ? (
+                                        <Visualizations
+                                            hazardTypes={hazardTypes}
+                                            className={styles.incidentVisualizations}
+                                            incidentList={incidentList}
+                                        />
+                                    ) : (
+                                        <IncidentListView
+                                            hazardTypes={hazardTypes}
+                                            className={styles.incidentList}
+                                            incidentList={incidentList}
+                                        />
+                                    )}
                                 </div>
                             </React.Fragment>
                         }

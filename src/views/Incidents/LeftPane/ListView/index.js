@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
 
@@ -39,7 +40,12 @@ export default class IncidentListView extends React.PureComponent {
 
         return (
             <ListView
-                className={styles.incidentList}
+                className={
+                    _cs(
+                        styles.incidentList,
+                        className,
+                    )
+                }
                 data={incidentList}
                 renderer={IncidentItem}
                 rendererParams={this.getIncidentRendererParams}

@@ -57,17 +57,6 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 flex-direction: column;
                 flex-grow: 1;
                 overflow: auto;
-
-                .header {
-                    flex-shrink: 0;
-                    padding-top: $spacing-medium;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        text-align: flex-start;
-                        color: $color-primary;
-                    }
-                }
             }
         }
 

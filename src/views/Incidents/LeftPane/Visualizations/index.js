@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { schemeAccent } from 'd3-scale-chromatic';
+import { scaleOrdinal } from 'd3-scale';
 
 import {
     _cs,
@@ -23,6 +25,17 @@ const defaultProps = {
     incidentList: [],
 };
 
+const barChartValueSelector = d => d.value;
+const barChartLabelSelector = d => d.label;
+const donutChartValueSelector = d => d.value;
+const donutChartLabelSelector = d => d.label;
+const donutChartColorSelector = d => d.color;
+
+const colors = scaleOrdinal().range(schemeAccent);
+
+const itemSelector = d => d.label;
+const legendColorSelector = d => d.color;
+const legendLabelSelector = d => d.label;
 
 export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
@@ -114,7 +127,7 @@ export default class Visualizations extends React.PureComponent {
                         </h4>
                     </header>
                     <SimpleHorizontalBarChart
-                        className={styles.hazardSummaryChart}
+                        className={styles.chart}
                         data={hazardSummary}
                         labelSelector={barChartLabelSelector}
                         valueSelector={barChartValueSelector}
@@ -127,59 +140,57 @@ export default class Visualizations extends React.PureComponent {
                         </h4>
                     </header>
                     <SimpleHorizontalBarChart
-                        className={styles.eventSummaryChart}
+                        className={styles.chart}
                         data={eventSummary}
                         labelSelector={barChartLabelSelector}
                         valueSelector={barChartValueSelector}
                     />
                 </div>
-                <div className={styles.donutContainer}>
-                    <div className={styles.severitySummary}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Severity
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.5}
-                            className={styles.chart}
-                            data={severitySummary}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            colorSelector={donutChartColorSelector}
-                        />
-                        <Legend
-                            className={styles.legend}
-                            data={severitySummary}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                        />
-                    </div>
-                    <div className={styles.inducerSummary}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Inducers
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.5}
-                            className={styles.chart}
-                            data={inducerSummary}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            colorSelector={donutChartColorSelector}
-                        />
-                        <Legend
-                            className={styles.legend}
-                            data={inducerSummary}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                        />
-                    </div>
+                <div className={styles.severitySummary}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Severity
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.5}
+                        className={styles.chart}
+                        data={severitySummary}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        colorSelector={donutChartColorSelector}
+                    />
+                    <Legend
+                        className={styles.legend}
+                        data={severitySummary}
+                        itemClassName={styles.legendItem}
+                        keySelector={itemSelector}
+                        labelSelector={legendLabelSelector}
+                        colorSelector={legendColorSelector}
+                    />
+                </div>
+                <div className={styles.inducerSummary}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Inducers
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.5}
+                        className={styles.chart}
+                        data={inducerSummary}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        colorSelector={donutChartColorSelector}
+                    />
+                    <Legend
+                        className={styles.legend}
+                        data={inducerSummary}
+                        itemClassName={styles.legendItem}
+                        keySelector={itemSelector}
+                        labelSelector={legendLabelSelector}
+                        colorSelector={legendColorSelector}
+                    />
                 </div>
             </div>
         );
