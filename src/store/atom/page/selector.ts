@@ -190,6 +190,11 @@ export const realTimeFiltersSelector = createSelector(
     },
 );
 
+export const realTimeFiltersValuesSelector = createSelector(
+    realTimeFiltersSelector,
+    ({ faramValues }) => faramValues,
+);
+
 // loss and damage page
 export const lossAndDamagePageSelector = ({ page }: AppState) =>
     page.lossAndDamagePage;

@@ -76,6 +76,7 @@ export interface Filters {
     faramValues: {
         hazard?: number;
         dateRange?: number;
+        realtimeSources?: number[];
     };
     faramErrors: object;
     pristine: boolean;
@@ -85,6 +86,7 @@ export interface FiltersWithRegion {
         hazard?: number;
         dateRange?: number;
         region: Region;
+        realtimeSources?: number[];
     };
     faramErrors: object;
     pristine: boolean;

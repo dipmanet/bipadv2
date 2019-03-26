@@ -71,11 +71,6 @@ const state: PageState = {
         filters: {
             faramValues: {
                 dateRange: 30,
-                /*
-                region: {
-                    adminLevel: 1,
-                },
-                */
             },
             faramErrors: {},
             pristine: true,
@@ -87,11 +82,6 @@ const state: PageState = {
         filters: {
             faramValues: {
                 dateRange: 30,
-                /*
-                region: {
-                    adminLevel: 1,
-                },
-                */
             },
             faramErrors: {},
             pristine: true,
@@ -108,6 +98,7 @@ const state: PageState = {
         realTimeEarthquakeList: [],
         filters: {
             faramValues: {
+                realtimeSources: [1, 2, 3],
             },
             faramErrors: {},
             pristine: true,

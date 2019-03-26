@@ -3,6 +3,7 @@ import memoize from 'memoize-one';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
 import CommonMap from '#components/CommonMap';
@@ -59,17 +60,21 @@ export default class RealTimeMap extends React.PureComponent {
 
     earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
         <div>
-            <TextOutput
-                label="Address"
-                value={address}
-            />
+            <h3>
+                {address}
+            </h3>
             <TextOutput
                 label="Description"
                 value={description}
             />
             <TextOutput
                 label="Event On"
-                value={eventOn}
+                value={
+                    <FormattedDate
+                        date={eventOn}
+                        mode="dd-MM-yyyy hh:mm"
+                    />
+                }
             />
             <TextOutput
                 label="Magnitude"
@@ -84,6 +89,9 @@ export default class RealTimeMap extends React.PureComponent {
             realTimeRiverList,
             realTimeEarthquakeList,
             selectedRealTime,
+            showRain,
+            showRiver,
+            showEarthquake,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -100,45 +108,51 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={rainFeatureCollection}
                     supportHover
                 >
-                    <MapLayer
-                        layerKey="real-time-rain-symbol"
-                        type="symbol"
-                        layout={mapStyles.rainPoint.layout}
-                        paint={mapStyles.rainPoint.paint}
-                        enableHover
-                        tooltipRenderer={this.tooltipRenderer}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                    />
+                    { showRain &&
+                        <MapLayer
+                            layerKey="real-time-rain-symbol"
+                            type="symbol"
+                            layout={mapStyles.rainPoint.layout}
+                            paint={mapStyles.rainPoint.paint}
+                            enableHover
+                            tooltipRenderer={this.tooltipRenderer}
+                            tooltipRendererParams={this.tooltipRendererParams}
+                        />
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-river-points"
                     geoJson={riverFeatureCollection}
                     supportHover
                 >
-                    <MapLayer
-                        layerKey="real-time-river-symbol"
-                        type="symbol"
-                        layout={mapStyles.riverPoint.layout}
-                        paint={mapStyles.riverPoint.paint}
-                        enableHover
-                        tooltipRenderer={this.tooltipRenderer}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                    />
+                    { showRiver &&
+                        <MapLayer
+                            layerKey="real-time-river-symbol"
+                            type="symbol"
+                            layout={mapStyles.riverPoint.layout}
+                            paint={mapStyles.riverPoint.paint}
+                            enableHover
+                            tooltipRenderer={this.tooltipRenderer}
+                            tooltipRendererParams={this.tooltipRendererParams}
+                        />
+                    }
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-eartquake-points"
                     geoJson={earthquakeFeatureCollection}
                     supportHover
                 >
-                    <MapLayer
-                        layerKey="real-time-earthquake-points-fill"
-                        type="circle"
-                        property="earthquakeId"
-                        paint={mapStyles.earthquakePoint.fill}
-                        enableHover
-                        tooltipRenderer={this.earthquakeTooltipRenderer}
-                        tooltipRendererParams={this.earthquakeTooltipRendererParams}
-                    />
+                    { showEarthquake &&
+                        <MapLayer
+                            layerKey="real-time-earthquake-points-fill"
+                            type="circle"
+                            property="earthquakeId"
+                            paint={mapStyles.earthquakePoint.fill}
+                            enableHover
+                            tooltipRenderer={this.earthquakeTooltipRenderer}
+                            tooltipRendererParams={this.earthquakeTooltipRendererParams}
+                        />
+                    }
                 </MapSource>
             </React.Fragment>
         );

@@ -28,8 +28,6 @@ const propTypes = {
     filters: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
     realTimeList: PropTypes.array.isRequired,
-    selectedRealTimeList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-    handleRealTimeListSelection: PropTypes.func.isRequired,
     rainPending: PropTypes.bool,
     riverPending: PropTypes.bool,
     earthquakePending: PropTypes.bool,
@@ -38,7 +36,6 @@ const propTypes = {
 
 const defaultProps = {
     className: '',
-    selectedRealTimeList: {},
     rainPending: true,
     riverPending: true,
     earthquakePending: true,
@@ -68,12 +65,6 @@ class RealTimeMonitoringFilter extends React.PureComponent {
         this.state = {
             showFilters: true,
         };
-    }
-
-    handleRealTimeChange = (newRealTime) => {
-        const { handleRealTimeListSelection } = this.props;
-
-        handleRealTimeListSelection(newRealTime);
     }
 
     handleShowFiltersButtonClick = () => {
@@ -114,7 +105,6 @@ class RealTimeMonitoringFilter extends React.PureComponent {
             riverPending,
             earthquakePending,
             realTimeList,
-            selectedRealTimeList,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -158,15 +148,15 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             <RegionSelectInput
                                 faramElementName="region"
                             />
+                            <ListSelection
+                                label="Realtime data"
+                                className={styles.rainListSelectInput}
+                                faramElementName="realtimeSources"
+                                options={realTimeList}
+                                keySelector={realTimeKeySelector}
+                                labelSelector={realTimeLabelSelector}
+                            />
                         </Faram>
-                        <ListSelection
-                            className={styles.rainListSelectInput}
-                            label="Type"
-                            options={realTimeList}
-                            keySelector={realTimeKeySelector}
-                            labelSelector={realTimeLabelSelector}
-                            onChange={this.handleRealTimeChange}
-                        />
                     </React.Fragment>
                 }
             />

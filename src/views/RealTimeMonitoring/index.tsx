@@ -10,6 +10,7 @@ import {
     createRequestClient,
     NewProps,
     ClientAttributes,
+    methods,
 } from '#request';
 
 import { transformDateRangeFilterParam } from '#utils/transformations';
@@ -23,7 +24,7 @@ import {
     realTimeRiverListSelector,
     realTimeRainListSelector,
     realTimeEarthquakeListSelector,
-    realTimeFiltersSelector,
+    realTimeFiltersValuesSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -46,6 +47,7 @@ interface PropsFromState {
     realTimeRainList: PageType.RealTimeRain[];
     realTimeRiverList: PageType.RealTimeRiver[];
     realTimeEarthquakeList: PageType.RealTimeEarthquake[];
+    filters: PageType.FiltersWithRegion['faramValues'];
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -56,7 +58,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeRainList: realTimeRainListSelector(state),
     realTimeRiverList: realTimeRiverListSelector(state),
     realTimeEarthquakeList: realTimeEarthquakeListSelector(state),
-    filters: realTimeFiltersSelector(state),
+    filters: realTimeFiltersValuesSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -68,6 +70,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimeRainRequest: {
         url: '/rain/',
+        method: methods.GET,
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
         }),
@@ -89,6 +92,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
     realTimeRiverRequest: {
         url: '/river/',
+        method: methods.GET,
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
         }),
@@ -110,6 +114,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
+        method: methods.GET,
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
         }),
@@ -131,28 +136,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-const realTimeList = [
-    { id: 1, title: 'earthquake' },
-    { id: 2, title: 'river' },
-    { id: 3, title: 'rain' },
+interface RealtimeSource {
+    id: number;
+    title: string;
+}
+
+const realTimeList: RealtimeSource[] = [
+    { id: 1, title: 'Earthquake' },
+    { id: 2, title: 'River' },
+    { id: 3, title: 'Rain' },
 ];
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            selectedRealTimeList: [],
-        };
-    }
-
-    private handleRealTimeListSelection = (id) => {
-        console.warn('id', id);
-        this.setState({
-            selectedRealTimeList: id,
-        });
-    }
-
     public render() {
         const {
             realTimeRainList,
@@ -163,16 +158,24 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 realTimeRiverRequest: { pending: riverPending },
                 realTimeEarthquakeRequest: { pending: earthquakePending },
             },
+            filters: {
+                realtimeSources,
+            },
         } = this.props;
 
-        const { selectedRealTimeList } = this.state;
+        const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
+        const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
+        const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
+
         return (
             <React.Fragment>
                 <Map
                     realTimeRainList={realTimeRainList}
                     realTimeRiverList={realTimeRiverList}
                     realTimeEarthquakeList={realTimeEarthquakeList}
-                    selectedRealTimeList={selectedRealTimeList}
+                    showRain={showRain}
+                    showRiver={showRiver}
+                    showEarthquake={showEarthquake}
                 />
                 <Page
                     rightContentClassName={styles.right}
@@ -181,9 +184,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             rainPending={rainPending}
                             riverPending={riverPending}
                             earthquakePending={earthquakePending}
-                            selectedRealTimeList={selectedRealTimeList}
                             realTimeList={realTimeList}
-                            handleRealTimeListSelection={this.handleRealTimeListSelection}
                         />
                     }
                 />
