@@ -5,8 +5,9 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import TextOutput from '#components/TextOutput';
+import CommonMap from '#components/CommonMap';
 
-import { mapSources, mapStyles } from '#constants';
+import { mapStyles } from '#constants';
 import {
     earthquakeToGeojson,
     riverToGeojson,
@@ -92,23 +93,7 @@ export default class RealTimeMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <MapSource
-                    sourceKey="real-time-bounds"
-                    url={mapSources.nepal.url}
-                >
-                    <MapLayer
-                        layerKey="real-time-bounds-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.fill}
-                    />
-                    <MapLayer
-                        layerKey="real-time-bounds-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.outline}
-                    />
-                </MapSource>
+                <CommonMap />
                 <MapSource
                     sourceKey="real-time-rain-points"
                     geoJson={rainFeatureCollection}

@@ -7,6 +7,8 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
+import CommonMap from '#components/CommonMap';
+
 import {
     hazardTypesSelector,
     wardsMapSelector,
@@ -172,6 +174,8 @@ class LossAndDamageMap extends React.PureComponent {
 
         return (
             <React.Fragment>
+                <CommonMap />
+                {/*
                 <MapSource
                     sourceKey="district"
                     url={mapSources.nepal.url}
@@ -194,6 +198,7 @@ class LossAndDamageMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.district}
                     />
                 </MapSource>
+                */}
                 <MapSource
                     sourceKey="points"
                     geoJson={pointFeatureCollection}

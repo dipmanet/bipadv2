@@ -5,6 +5,7 @@ import PieChart from '#rscz/PieChart';
 import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 
+import CommonMap from '#components/CommonMap';
 import ListSelection from '#components/ListSelection';
 import MultiListSelection from '#components/MultiListSelection';
 import Page from '#components/Page';
@@ -89,7 +90,9 @@ const CapacityAndResources = () => (
             />
         }
         mainContentClassName={styles.main}
-        mainContent={null}
+        mainContent={
+            <CommonMap />
+        }
         rightContentClassName={styles.right}
         rightContent={
             <React.Fragment>
