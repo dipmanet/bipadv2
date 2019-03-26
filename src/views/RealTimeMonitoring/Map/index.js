@@ -83,6 +83,7 @@ export default class RealTimeMap extends React.PureComponent {
             realTimeRainList,
             realTimeRiverList,
             realTimeEarthquakeList,
+            selectedRealTime,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);

@@ -10,8 +10,9 @@ import {
     createRequestClient,
     NewProps,
     ClientAttributes,
-    methods,
 } from '#request';
+
+import { transformDateRangeFilterParam } from '#utils/transformations';
 
 import {
     setRealTimeRainListAction,
@@ -22,9 +23,13 @@ import {
     realTimeRiverListSelector,
     realTimeRainListSelector,
     realTimeEarthquakeListSelector,
+    realTimeFiltersSelector,
 } from '#selectors';
 
+import Page from '#components/Page';
+
 import Map from './Map';
+import RealTimeMonitoringFilter from './Filter';
 
 import styles from './styles.scss';
 
@@ -51,6 +56,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeRainList: realTimeRainListSelector(state),
     realTimeRiverList: realTimeRiverListSelector(state),
     realTimeEarthquakeList: realTimeEarthquakeListSelector(state),
+    filters: realTimeFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -62,40 +68,91 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimeRainRequest: {
         url: '/rain/',
-        method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+        }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {
             interface Response { results: PageType.RealTimeRain[] }
             const { results: realTimeRainList = [] } = response as Response;
             setRealTimeRainList({ realTimeRainList });
+        },
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
         },
         onMount: true,
         // FIXME: write schema
     },
     realTimeRiverRequest: {
         url: '/river/',
-        method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+        }),
         onSuccess: ({ response, props: { setRealTimeRiverList } }) => {
             interface Response { results: PageType.RealTimeRiver[] }
             const { results: realTimeRiverList = [] } = response as Response;
             setRealTimeRiverList({ realTimeRiverList });
+        },
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
         },
         onMount: true,
         // FIXME: write schema
     },
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
-        method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+        }),
         onSuccess: ({ response, props: { setRealTimeEarthquakeList } }) => {
             interface Response { results: PageType.RealTimeEarthquake[] }
             const { results: realTimeEarthquakeList = [] } = response as Response;
             setRealTimeEarthquakeList({ realTimeEarthquakeList });
+        },
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
         },
         onMount: true,
         // FIXME: write schema
     },
 };
 
+const realTimeList = [
+    { id: 1, title: 'earthquake' },
+    { id: 2, title: 'river' },
+    { id: 3, title: 'rain' },
+];
+
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            selectedRealTimeList: [],
+        };
+    }
+
+    private handleRealTimeListSelection = (id) => {
+        console.warn('id', id);
+        this.setState({
+            selectedRealTimeList: id,
+        });
+    }
+
     public render() {
         const {
             realTimeRainList,
@@ -108,12 +165,29 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             },
         } = this.props;
 
+        const { selectedRealTimeList } = this.state;
         return (
-            <Map
-                realTimeRainList={realTimeRainList}
-                realTimeRiverList={realTimeRiverList}
-                realTimeEarthquakeList={realTimeEarthquakeList}
-            />
+            <React.Fragment>
+                <Map
+                    realTimeRainList={realTimeRainList}
+                    realTimeRiverList={realTimeRiverList}
+                    realTimeEarthquakeList={realTimeEarthquakeList}
+                    selectedRealTimeList={selectedRealTimeList}
+                />
+                <Page
+                    rightContentClassName={styles.right}
+                    rightContent={
+                        <RealTimeMonitoringFilter
+                            rainPending={rainPending}
+                            riverPending={riverPending}
+                            earthquakePending={earthquakePending}
+                            selectedRealTimeList={selectedRealTimeList}
+                            realTimeList={realTimeList}
+                            handleRealTimeListSelection={this.handleRealTimeListSelection}
+                        />
+                    }
+                />
+            </React.Fragment>
         );
     }
 }

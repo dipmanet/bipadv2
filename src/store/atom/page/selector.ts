@@ -175,6 +175,21 @@ export const realTimeEarthquakeListSelector = createSelector(
     ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
 );
 
+export const realTimeFiltersSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    regionSelector,
+    (realTimeMonitoringPage, region) => {
+        const { filters } = realTimeMonitoringPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
+);
+
 // loss and damage page
 export const lossAndDamagePageSelector = ({ page }: AppState) =>
     page.lossAndDamagePage;

@@ -106,6 +106,12 @@ const state: PageState = {
         realTimeRainList: [],
         realTimeRiverList: [],
         realTimeEarthquakeList: [],
+        filters: {
+            faramValues: {
+            },
+            faramErrors: {},
+            pristine: true,
+        },
     },
 
     lossAndDamagePage: {
