@@ -46,10 +46,23 @@ const defaultProps = {
     requests: emptyObject,
 };
 
+const trueFilter = () => true;
 
 class Response extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            filterFunction: trueFilter,
+        };
+    }
+
+    setFilter = (filterFunction) => {
+        this.setState({ filterFunction });
+    }
 
     render() {
         const {
@@ -61,6 +74,8 @@ class Response extends React.PureComponent {
             wardsMap,
         } = this.props;
 
+        const filteredResourceList = resourceList.filter(this.state.filterFunction);
+
         if (!incident.id) {
             return null;
         }
@@ -69,7 +84,7 @@ class Response extends React.PureComponent {
             <React.Fragment>
                 <Map
                     incident={incident}
-                    resourceList={resourceList}
+                    resourceList={filteredResourceList}
                 />
                 <Page
                     leftContentClassName={styles.incidentDetails}
@@ -91,7 +106,7 @@ class Response extends React.PureComponent {
                                 // pending={pending}
                                 // />
                             }
-                            <ResponseFilter />
+                            <ResponseFilter setFilter={this.setFilter} />
                         </React.Fragment>
                     }
                 />

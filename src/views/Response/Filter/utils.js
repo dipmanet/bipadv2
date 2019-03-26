@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TextInput from '#rsci/TextInput';
+import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
 
@@ -34,34 +35,55 @@ export const getSchema = (resourceAttributes) => {
     };
 };
 
+const getKey = x => x.key;
+const getLabel = x => x.label;
+
 
 export const getFilterInputElement = (filterParam) => {
-    const { type } = filterParam;
+    const {
+        key,
+        type: paramType,
+        label,
+        filter,
+    } = filterParam;
+
+    const type = filter.type || paramType;
 
     if (type === 'string') {
         return (
             <TextInput
-                key={filterParam.key}
-                faramElementName={filterParam.key}
-                label={filterParam.label}
+                key={key}
+                faramElementName={key}
+                label={label}
             />
         );
     } else if (type === 'number') {
         return (
             <NumberInput
-                key={filterParam.key}
-                faramElementName={filterParam.key}
-                label={filterParam.label}
-                title={filterParam.label}
+                key={key}
+                faramElementName={key}
+                label={label}
+                title={label}
                 separator=" "
             />
         );
     } else if (type === 'boolean') {
         return (
             <Checkbox
-                key={filterParam.key}
-                faramElementName={filterParam.key}
-                label={filterParam.label}
+                key={key}
+                faramElementName={key}
+                label={label}
+            />
+        );
+    } else if (type === 'select') {
+        return (
+            <SelectInput
+                key={key}
+                faramElementName={key}
+                keySelector={getKey}
+                labelSelector={getLabel}
+                options={filter.options}
+                // showLabel={false}
             />
         );
     }

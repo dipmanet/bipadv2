@@ -26,15 +26,6 @@ import educationIcon from '#resources/icons/Education.svg';
 
 import ResourceItem from '../resources/ResourceItem';
 
-import {
-    districtsFill,
-    districtsOutline,
-    pointPaint,
-    polygonFill,
-    resourceIconLayout,
-    resourcePointPaint,
-} from './mapStyles';
-
 import styles from './styles.scss';
 
 const propTypes = {
@@ -58,13 +49,6 @@ const resourceImages = [
     { name: 'education', icon: educationIcon },
     { name: 'finance', icon: financeIcon },
 ];
-
-const resourceComponents = {
-    finance: FinanceItem,
-    health: HealthItem,
-    volunteer: VolunteerItem,
-    education: EducationItem,
-};
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),

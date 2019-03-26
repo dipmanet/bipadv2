@@ -27,9 +27,15 @@ import {
 
 
 const propTypes = {
-    setFilters: PropTypes.func.isRequired,
     className: PropTypes.string,
+    setFilter: PropTypes.func.isRequired,
 };
+
+const checkFilters = (obj, attrVals) =>
+    Object.entries(attrVals).reduce(
+        (a, [k, v]) => a && (v === undefined || obj[k] === v),
+        true,
+    );
 
 const defaultProps = {
     className: '',
@@ -59,6 +65,18 @@ export default class ResponseFilter extends React.PureComponent {
         };
     }
 
+    createFilter = (faramValues) => {
+        // Only show types whose show attribute is true
+        const showTypes = Object.entries(faramValues).filter(([_, data]) => data.show);
+
+        const filterFunc = x => showTypes.reduce(
+            (currFilterStat, [type, { show, ...attrVals }]) =>
+                currFilterStat || (x.resourceType === type && checkFilters(x, attrVals)),
+            false,
+        );
+        return filterFunc;
+    }
+
     handleShowFiltersButtonClick = () => {
         this.setState({ showFilters: true });
     }
@@ -67,15 +85,13 @@ export default class ResponseFilter extends React.PureComponent {
         this.setState({ showFilters: false });
     }
 
-    handleFaramChange = (faramValues, faramErrors) => {
-        this.setState({ faramValues, faramErrors });
+    handleFaramChange = (faramValues) => {
+        this.setState({ faramValues });
+        const filterFunction = this.createFilter(faramValues);
+        this.props.setFilter(filterFunction);
     }
 
     handleFaramFailure = (faramErrors) => {
-        this.props.setFilters({
-            faramErrors,
-            pristine: true,
-        });
     }
 
     handleFaramSuccess = (_, values) => {
