@@ -29,8 +29,7 @@ const defaultProps = {
     wardsMap: {},
 };
 
-// FIXME: wards map should be loaded
-export default class Tooltip extends React.PureComponent {
+export default class IncidentInfo extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 

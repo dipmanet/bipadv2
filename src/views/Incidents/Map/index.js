@@ -10,7 +10,7 @@ import {
     wardsMapSelector,
 } from '#selectors';
 import { mapSources, mapStyles } from '#constants';
-import Tooltip from '#components/Tooltip';
+import IncidentInfo from '#components/IncidentInfo';
 
 import {
     incidentPointToGeojson,
@@ -131,7 +131,7 @@ class IncidentMap extends React.PureComponent {
                         type="circle"
                         paint={mapStyles.incidentPoint.fill}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
@@ -144,7 +144,7 @@ class IncidentMap extends React.PureComponent {
                         type="fill"
                         paint={mapStyles.incidentPolygon.fill}
                         enableHover
-                        tooltipRenderer={Tooltip}
+                        tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
