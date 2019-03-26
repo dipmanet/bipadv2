@@ -97,6 +97,7 @@ export interface RealTimeRiver {
     description?: string;
     basin?: string;
     status?: string;
+    steady?: string;
 }
 export interface RealTimeRain extends RealTimeRiver {
 }
