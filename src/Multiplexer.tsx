@@ -102,7 +102,10 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
                         className={styles.map}
                         mapStyle={mapStyle}
                         fitBoundsDuration={200}
-                        minZoom={3}
+                        minZoom={5}
+                        showScaleControl
+                        scaleControlPosition="bottom-right"
+                        logoPosition="bottom-left"
                     >
                         {this.renderRoutes()}
                     </Map>

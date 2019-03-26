@@ -150,7 +150,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             />
                             <ListSelection
                                 label="Realtime data"
-                                className={styles.rainListSelectInput}
+                                className={styles.realTimeSourcesInput}
                                 faramElementName="realtimeSources"
                                 options={realTimeList}
                                 keySelector={realTimeKeySelector}

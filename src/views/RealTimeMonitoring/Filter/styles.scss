@@ -59,12 +59,8 @@ $width-table-container: 250px;
         flex-grow: 1;
         overflow: auto;
 
-        .past-data-select-input {
-            padding: $spacing-small;
-        }
-
-        .list-selection-input {
-            padding: $spacing-small;
+        .real-time-sources-input {
+            margin: 0 $spacing-small;
         }
     }
 }
