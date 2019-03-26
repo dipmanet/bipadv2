@@ -45,7 +45,7 @@ interface PropsFromDispatch {
 }
 interface PropsFromState {
     incidentList: PageType.Incident[];
-    filters: PageType.Filters['faramValues'];
+    filters: PageType.FiltersWithRegion['faramValues'];
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -78,9 +78,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazard, dateRange } },
-                prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
-            }) => hazard !== prevHazard || dateRange !== prevDateRange,
+                props: { filters: { hazard, dateRange, region } },
+                prevProps: { filters: {
+                    hazard: prevHazard,
+                    dateRange: prevDateRange,
+                    region: prevRegion,
+                } },
+            }) => (
+                hazard !== prevHazard || dateRange !== prevDateRange || region !== prevRegion
+            ),
         },
         extras: {
             schemaName: 'incidentResponse',

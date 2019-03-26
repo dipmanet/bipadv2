@@ -221,13 +221,19 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples'],
-            limit: 5000,
+            // FIXME: this is bad
+            limit: 100,
         }),
         onPropsChanged: {
             filters: ({
                 props: { filters: { hazard, region } },
-                prevProps: { filters: { hazard: prevHazard, region: prevRegion } },
-            }) => (hazard !== prevHazard || region !== prevRegion),
+                prevProps: { filters: {
+                    hazard: prevHazard,
+                    region: prevRegion,
+                } },
+            }) => (
+                hazard !== prevHazard || region !== prevRegion
+            ),
         },
         onMount: true,
         extras: {
