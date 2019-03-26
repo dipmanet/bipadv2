@@ -104,6 +104,7 @@ export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Re
     type: Type.PageType.RP__SET_RESOURCE_LIST,
     resourceList,
 });
+
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
@@ -123,6 +124,16 @@ export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList: Type.RealTimeEarthquake[]}) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
     realTimeEarthquakeList,
+});
+
+// loss and damage action creator
+export const setLossAndDamageFiltersAction = (
+    { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
+) => ({
+    type: Type.PageType.LD__SET_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
 });
 
 //  REDUCERS
@@ -426,6 +437,40 @@ export const setRealTimeEarthquakeList = (
     return newState;
 };
 
+// loss and damage page
+export const setLossAndDamageFilters = (
+    state: Type.PageState,
+    action: Type.SetLossAndDamageFilters,
+) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        /* eslint-disable no-param-reassign */
+        deferedState.region = region;
+
+        if (faramValues) {
+            deferedState.lossAndDamagePage.filters.faramValues = faramValuesNoRegion;
+        }
+        if (faramErrors) {
+            deferedState.lossAndDamagePage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.lossAndDamagePage.filters.pristine = pristine;
+        }
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 export default function routeReducer(
     state = initialState,
@@ -466,6 +511,8 @@ export default function routeReducer(
             return setRealTimeRiverList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:
             return setRealTimeEarthquakeList(state, action);
+        case Type.PageType.LD__SET_FILTERS:
+            return setLossAndDamageFilters(state, action);
         default:
             return state;
     }

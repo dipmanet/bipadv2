@@ -38,7 +38,7 @@ interface OwnProps {}
 interface PropsFromState {
     alertList: PageTypes.Alert[];
     hazardTypes: Obj<PageTypes.HazardType>;
-    filters: PageTypes.Filters['faramValues'];
+    filters: PageTypes.FiltersWithRegion['faramValues'];
 }
 interface PropsFromDispatch {
     setAlertList: typeof setAlertListActionDP;
@@ -70,10 +70,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazard, dateRange } },
-                prevProps: { filters: { hazard: prevHazard, dateRange: prevDateRange } },
+                props: { filters: { hazard, dateRange, region } },
+                prevProps: { filters: {
+                    hazard: prevHazard,
+                    dateRange: prevDateRange,
+                    region: prevRegion,
+                } },
             }) => (
-                hazard !== prevHazard || dateRange !== prevDateRange
+                hazard !== prevHazard || dateRange !== prevDateRange || region !== prevRegion
             ),
         },
         extras: {
