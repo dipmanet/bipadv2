@@ -10,7 +10,7 @@ import {
     setFiltersActionIP,
 } from '#actionCreators';
 import {
-    hazardTypeListIncidentsIP,
+    hazardTypeListSelector,
     filtersSelectorIP,
 } from '#selectors';
 
@@ -36,7 +36,7 @@ const propTypes = {
 const defaultProps = {};
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypeListIncidentsIP(state),
+    hazardTypeList: hazardTypeListSelector(state),
     filters: filtersSelectorIP(state),
 });
 

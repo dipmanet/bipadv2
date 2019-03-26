@@ -95,30 +95,6 @@ export const filtersValuesSelectorDP = createSelector(
     ({ faramValues }) => faramValues,
 );
 
-export const hazardTypeListAlertsDP = createSelector(
-    dashboardPageSelector,
-    hazardTypesSelector,
-    ({ alertList }, hazardTypes) => {
-        const counts: {[ key: number]: number } = {};
-
-        alertList.forEach((alert) => {
-            const { hazard: hazardId } = alert;
-            const hazard = hazardTypes[hazardId];
-            if (hazard) {
-                const count = counts[hazardId];
-                counts[hazardId] = isDefined(count) ? count + 1 : 1;
-            }
-        });
-
-        const list = mapToList(hazardTypes);
-
-        return list.sort((a, b) => (
-            (isDefined(counts[b.id]) ? counts[b.id] : 0)
-                - (isDefined(counts[a.id]) ? counts[a.id] : 0)
-        ));
-    },
-);
-
 export const alertListSelectorDP = createSelector(
     dashboardPageSelector,
     hazardTypesSelector,
@@ -150,28 +126,6 @@ export const filtersSelectorIP = createSelector(
 export const filtersValuesSelectorIP = createSelector(
     filtersSelectorIP,
     ({ faramValues }) => faramValues,
-);
-
-export const hazardTypeListIncidentsIP = createSelector(
-    incidentPageSelector,
-    hazardTypesSelector,
-    ({ incidentList }, hazardTypes) => {
-        const counts: {[ key: number]: number } = {};
-
-        incidentList.forEach((incident) => {
-            const { hazard: hazardId } = incident;
-            const hazard = hazardTypes[hazardId];
-            if (hazard) {
-                const count = counts[hazardId];
-                counts[hazardId] = isDefined(count) ? count + 1 : 1;
-            }
-        });
-
-        return mapToList(hazardTypes).sort((a, b) => (
-            (isDefined(counts[b.id]) ? counts[b.id] : 0)
-            - (isDefined(counts[a.id]) ? counts[a.id] : 0)
-        ));
-    },
 );
 
 export const incidentListSelectorIP = createSelector(
