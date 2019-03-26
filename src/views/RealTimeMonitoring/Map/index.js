@@ -100,10 +100,10 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     <MapLayer
-                        layerKey="real-time-rain-points-fill"
-                        type="circle"
-                        property="rainId"
-                        paint={mapStyles.rainPoint.fill}
+                        layerKey="real-time-rain-symbol"
+                        type="symbol"
+                        layout={mapStyles.rainPoint.layout}
+                        paint={mapStyles.rainPoint.paint}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}
@@ -115,10 +115,10 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     <MapLayer
-                        layerKey="real-time-river-points-fill"
-                        type="circle"
-                        property="riverId"
-                        paint={mapStyles.riverPoint.fill}
+                        layerKey="real-time-river-symbol"
+                        type="symbol"
+                        layout={mapStyles.riverPoint.layout}
+                        paint={mapStyles.riverPoint.paint}
                         enableHover
                         tooltipRenderer={this.tooltipRenderer}
                         tooltipRendererParams={this.tooltipRendererParams}

@@ -208,6 +208,7 @@ export const riverToGeojson = (realTimeRiverList: RealTimeRiver[]) => {
                     description: river.description,
                     basin: river.basin,
                     status: river.status,
+                    steady: river.steady,
                 },
             })),
     };

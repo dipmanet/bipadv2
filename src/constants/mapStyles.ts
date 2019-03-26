@@ -108,35 +108,55 @@ export default {
         },
     },
     rainPoint: {
-        fill: {
-            'circle-color': '#EC7357',
-            'circle-radius': 6,
-            'circle-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.9,
+        layout: {
+            'text-field': '■',
+            'text-allow-overlap': true,
+            'text-size': 24,
+        },
+        paint: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#03A9F4',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#3F51B5',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9c27b0',
+                '#03A9F4',
             ],
         },
     },
     riverPoint: {
-        fill: {
-            'circle-color': '#6C49B8',
-            'circle-radius': 6,
-            'circle-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.9,
+        layout: {
+            'text-field': [
+                'case',
+                ['==', ['get', 'steady'], 'STEADY'], '●',
+                ['==', ['get', 'steady'], 'RISING'], '▲',
+                ['==', ['get', 'steady'], 'FALLING'], '▼',
+                '\u25CF',
+            ],
+            'text-allow-overlap': true,
+            'text-size': 24,
+        },
+        paint: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#00C853',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#304FFE',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
+                '#00C853',
             ],
         },
     },
     earthquakePoint: {
         fill: {
-            'circle-color': '#E41A1C',
+            'circle-color': '#D50000',
             'circle-radius': 6,
-            'circle-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
+            'circle-opacity': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 1,
+                ['>=', ['get', 'magnitude'], 7], 0.9,
+                ['>=', ['get', 'magnitude'], 6], 0.8,
+                ['>=', ['get', 'magnitude'], 5], 0.7,
+                ['>=', ['get', 'magnitude'], 4], 0.6,
                 0.5,
-                0.9,
             ],
         },
     },
