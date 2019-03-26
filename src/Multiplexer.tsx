@@ -102,8 +102,6 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
                         className={styles.map}
                         mapStyle={mapStyle}
                         fitBoundsDuration={200}
-                        hideNavControl
-                        hideGeoLocationControl
                         minZoom={3}
                     >
                         {this.renderRoutes()}

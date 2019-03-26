@@ -1,40 +1,34 @@
-import produce from 'immer';
 import { createSelector } from 'reselect';
 import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
-// import { incidentIdFromRouteSelector } from '../route/selector';
-
-
-const nepalBounds = [
-    80.05858661752784, 26.347836996368667,
-    88.20166918432409, 30.44702867091792,
-];
 
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
+const resourceTypesSelector = ({ page }: AppState) =>
+    page.resourceTypes;
+
+const dashboardPageSelector = ({ page }: AppState) =>
+    page.dashboardPage;
+
+const incidentPageSelector = ({ page }: AppState) =>
+    page.incidentPage;
+
+const responsePageSelector = ({ page }: AppState) => (
+    page.responsePage
+);
+
+const realTimeMonitoringPageSelector = ({ page }: AppState) =>
+    page.realTimeMonitoringPage;
+
+// geo
+
 export const regionSelector = ({ page }: AppState) => page.region;
+
 export const regionLevelSelector = createSelector(
     regionSelector,
     region => region.adminLevel,
 );
-
-export const eventTypesSelector = ({ page }: AppState) =>
-    page.eventTypes;
-export const hazardTypesSelector = ({ page }: AppState) =>
-    page.hazardTypes;
-
-export const hazardTypeListSelector = createSelector(
-    hazardTypesSelector,
-    hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
-);
-
-// NOTE: removed
-export const resourceTypesSelector = ({ page }: AppState) =>
-    page.resourceTypes;
-
-export const adminLevelListSelector = ({ page }: AppState) =>
-    page.adminLevelList;
 
 export const districtsSelector = ({ page }: AppState) =>
     page.districts;
@@ -53,10 +47,25 @@ export const wardsMapSelector = createSelector(
     wards => listToMap(wards, elem => elem.id),
 );
 
+export const adminLevelListSelector = ({ page }: AppState) =>
+    page.adminLevelList;
+
+// common
+
+export const hazardTypesSelector = ({ page }: AppState) =>
+    page.hazardTypes;
+
+export const hazardTypeListSelector = createSelector(
+    hazardTypesSelector,
+    hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
+);
+
 export const resourceTypeListSelector = createSelector(
     resourceTypesSelector,
     resources => mapToList(resources),
 );
+
+// map styles
 
 export const mapStylesSelector = ({ page }: AppState) =>
     page.mapStyles;
@@ -65,9 +74,6 @@ export const mapStyleSelector = ({ page }: AppState) =>
     page.selectedMapStyle;
 
 // dashboardPage
-
-export const dashboardPageSelector = ({ page }: AppState) =>
-    page.dashboardPage;
 
 export const filtersSelectorDP = createSelector(
     dashboardPageSelector,
@@ -125,9 +131,6 @@ export const alertListSelectorDP = createSelector(
 );
 
 // incidentPage
-
-const incidentPageSelector = ({ page }: AppState) =>
-    page.incidentPage;
 
 export const filtersSelectorIP = createSelector(
     incidentPageSelector,
@@ -194,21 +197,14 @@ export const incidentSelector = createSelector(
     },
 );
 
-// responsePage
-
-const responsePageSelector = ({ page }: AppState) => (
-    page.responsePage
-);
+// response
 
 export const resourceListSelectorRP = createSelector(
     responsePageSelector,
     ({ resourceList }) => resourceList,
 );
 
-// real time monitoring page
-
-const realTimeMonitoringPageSelector = ({ page }: AppState) =>
-    page.realTimeMonitoringPage;
+// realtime monitoring
 
 export const realTimeRainListSelector = createSelector(
     realTimeMonitoringPageSelector,
@@ -223,31 +219,6 @@ export const realTimeRiverListSelector = createSelector(
 export const realTimeEarthquakeListSelector = createSelector(
     realTimeMonitoringPageSelector,
     ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
-);
-
-
-// bounds
-export const boundsSelector = createSelector(
-    regionSelector,
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    (region, provinces, districts, municipalities) => {
-        const { adminLevel, geoarea } = region;
-        const geoAreas = (
-            (adminLevel === 1 && provinces) ||
-            (adminLevel === 2 && districts) ||
-            (adminLevel === 3 && municipalities)
-        );
-        if (!geoAreas) {
-            return nepalBounds;
-        }
-        const geoArea = geoAreas.find(g => g.id === geoarea);
-        if (!geoArea) {
-            return nepalBounds;
-        }
-        return geoArea.bbox;
-    },
 );
 
 // loss and damage page
@@ -272,4 +243,64 @@ export const lossAndDamageFiltersSelector = createSelector(
 export const lossAndDamageFilterValuesSelector = createSelector(
     lossAndDamageFiltersSelector,
     ({ faramValues }) => faramValues,
+);
+
+// bounds
+export const selectedProvinceIdSelector = createSelector(
+    regionSelector,
+    (region) => {
+        const { adminLevel, geoarea } = region;
+        if (adminLevel !== 1) {
+            return undefined;
+        }
+        return geoarea;
+    },
+);
+export const selectedDistrictIdSelector = createSelector(
+    regionSelector,
+    (region) => {
+        const { adminLevel, geoarea } = region;
+        if (adminLevel !== 2) {
+            return undefined;
+        }
+        return geoarea;
+    },
+);
+export const selectedMunicipalityIdSelector = createSelector(
+    regionSelector,
+    (region) => {
+        const { adminLevel, geoarea } = region;
+        if (adminLevel !== 3) {
+            return undefined;
+        }
+        return geoarea;
+    },
+);
+
+const nepalBounds = [
+    80.05858661752784, 26.347836996368667,
+    88.20166918432409, 30.44702867091792,
+];
+
+export const boundsSelector = createSelector(
+    regionSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    (region, provinces, districts, municipalities) => {
+        const { adminLevel, geoarea } = region;
+        const geoAreas = (
+            (adminLevel === 1 && provinces) ||
+            (adminLevel === 2 && districts) ||
+            (adminLevel === 3 && municipalities)
+        );
+        if (!geoAreas) {
+            return nepalBounds;
+        }
+        const geoArea = geoAreas.find(g => g.id === geoarea);
+        if (!geoArea) {
+            return nepalBounds;
+        }
+        return geoArea.bbox;
+    },
 );
