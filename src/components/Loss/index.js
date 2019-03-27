@@ -57,7 +57,7 @@ export default class Loss extends React.PureComponent {
                         value={infrastructureDestroyedCount}
                     />
                     <TextOutput
-                        label="Estimated Loss(NRs.)"
+                        label="Estimated Loss (NRs.)"
                         value={estimatedLoss}
                     />
                     <TextOutput

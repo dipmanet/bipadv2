@@ -4,7 +4,7 @@ $width-filter-container: var(--width-right-panel);
 $width-vertical-nav: var(--width-navbar-right);
 
 $width-non-tabular-container: var(--width-left-panel);
-$width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$width-vertical-nav} - #{$spacing-medium}) * 3);
+$width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
 .left-pane {
     .show-alerts-button-container {
@@ -34,7 +34,8 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
                 display: flex;
                 position: relative;
                 flex-direction: column;
-                height: 60%;
+                height: 100%;
+                // height: 60%;
                 overflow: auto;
 
                 .header {
@@ -102,7 +103,7 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
             .key-statistics {
                 display: flex;
                 flex-direction: column;
-                height: 40%;
+                // height: 40%;
                 overflow-y: auto;
 
                 .header {

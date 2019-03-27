@@ -39,7 +39,7 @@ export default class ResourceItem extends React.PureComponent {
             className,
             title,
             distance,
-            contactNumber = 'Unavailable',
+            contactNumber = '911',
             resourceType,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
@@ -59,14 +59,15 @@ export default class ResourceItem extends React.PureComponent {
                         <div className={styles.title}>
                             { title }
                         </div>
-                        <DistanceOutput
-                            value={distance / 1000}
-                        />
-                        <div>
-                            <div className={styles.title}>
-                                <b> Contact Number </b>
-                                <span> { contactNumber } </span>
-                            </div>
+                        <div className={styles.content}>
+                            <DistanceOutput
+                                value={distance / 1000}
+                            />
+                            <TextOutput
+                                label={iconNames.telephone}
+                                value={contactNumber}
+                                iconLabel
+                            />
                         </div>
                     </div>
                     {
@@ -84,7 +85,7 @@ export default class ResourceItem extends React.PureComponent {
                         )
                     }
                 </div>
-                <div>
+                <div className={styles.attributes}>
                     {
                         attrs.map(x => (
                             <TextOutput

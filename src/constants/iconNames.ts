@@ -35,6 +35,8 @@ const iconNames = {
     list: 'ion-ios-list-outline',
     pie: 'ion-ios-pie-outline',
     pulse: 'ion-ios-pulse-strong',
+
+    telephone: 'ion-ios-telephone',
 };
 
 export default iconNames;

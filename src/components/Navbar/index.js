@@ -17,9 +17,9 @@ import styles from './styles.scss';
 const pages = routeSettings.filter(setting => !!setting.navbar);
 
 const Title = ({ name, title }) => (
-    <span>
+    <div className={styles.pageTitle}>
         {title}
-    </span>
+    </div>
 );
 
 const titles = routeSettings.map(props => (
@@ -214,10 +214,14 @@ class Navbar extends React.PureComponent {
                                 <span>
                                     Bipad
                                 </span>
-                                <Router>
+                            </div>
+                            <div className={styles.extra}>
+                                <Router className={styles.titleContainer}>
                                     {titles}
                                 </Router>
-                                <RegionOutput />
+                                <RegionOutput
+                                    className={styles.region}
+                                />
                             </div>
                         </div>
                     </div>

@@ -44,7 +44,7 @@ export default class ResourceGroup extends React.PureComponent {
             return null;
         }
 
-        // TODO: only showing 10 outputs from client
+        // TODO: only showing 5 outputs from client
         const newData = data.slice(0, 5);
 
         return (
@@ -55,9 +55,9 @@ export default class ResourceGroup extends React.PureComponent {
                         src={icon}
                         alt={heading}
                     />
-                    <h2 className={styles.heading}>
+                    <h3 className={styles.heading}>
                         {heading}
-                    </h2>
+                    </h3>
                 </div>
                 <ListView
                     className={styles.content}

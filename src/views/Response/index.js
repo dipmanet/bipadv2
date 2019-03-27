@@ -59,11 +59,22 @@ class Response extends React.PureComponent {
 
         this.state = {
             filterFunction: trueFilter,
+
+            leftPaneExpanded: true,
+            rightPaneExpanded: true,
         };
     }
 
     setFilter = (filterFunction) => {
         this.setState({ filterFunction });
+    }
+
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    handleRightPaneExpandChange = (rightPaneExpanded) => {
+        this.setState({ rightPaneExpanded });
     }
 
     render() {
@@ -76,40 +87,52 @@ class Response extends React.PureComponent {
             wardsMap,
         } = this.props;
 
+        const {
+            leftPaneExpanded,
+            rightPaneExpanded,
+        } = this.state;
+
         const filteredResourceList = resourceList.filter(this.state.filterFunction);
 
         if (!incident.id) {
             return null;
         }
 
+        /*
+            <IncidentInfo
+                className={styles.info}
+                incident={incident}
+                wardsMap={wardsMap}
+                hideLink
+            />
+        */
+
         return (
             <React.Fragment>
                 <Map
                     incident={incident}
                     resourceList={filteredResourceList}
+                    leftPaneExpanded={leftPaneExpanded}
+                    rightPaneExpanded={rightPaneExpanded}
                 />
                 <Page
                     leftContentClassName={styles.incidentDetails}
                     leftContent={
-                        <IncidentInfo
-                            className={styles.info}
+                        <ResourceList
+                            className={styles.resourceList}
+                            resourceList={resourceList}
+                            pending={pending}
                             incident={incident}
                             wardsMap={wardsMap}
-                            hideLink
+                            onExpandChange={this.handleLeftPaneExpandChange}
                         />
                     }
                     rightContentClassName={styles.resourceListContainer}
                     rightContent={
-                        <React.Fragment>
-                            {
-                                <ResourceList
-                                    className={styles.resourceList}
-                                    resourceList={resourceList}
-                                    pending={pending}
-                                />
-                            }
-                            <ResponseFilter setFilter={this.setFilter} />
-                        </React.Fragment>
+                        <ResponseFilter
+                            setFilter={this.setFilter}
+                            onExpandChange={this.handleRightPaneExpandChange}
+                        />
                     }
                 />
             </React.Fragment>

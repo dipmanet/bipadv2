@@ -10,7 +10,10 @@ import MapSource from '#rscz/Map/MapSource';
 
 import DistanceOutput from '#components/DistanceOutput';
 import ZoomMap from '#components/ZoomMap';
-import { mapStyles } from '#constants';
+import {
+    mapStyles,
+    getMapPaddings,
+} from '#constants';
 import { hazardTypesSelector } from '#selectors';
 
 import {
@@ -58,6 +61,19 @@ class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        const mapPaddings = getMapPaddings();
+
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return mapPaddings.bothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return mapPaddings.leftPaneExpanded;
+        } else if (rightPaneExpanded) {
+            return mapPaddings.rightPaneExpanded;
+        }
+        return mapPaddings.noPaneExpanded;
+    });
+
     getBuffer = memoize((shape) => {
         const buffered = buffer(shape, 32, { units: 'kilometers' });
         const box = bbox(buffered);
@@ -82,6 +98,8 @@ class ResponseMap extends React.PureComponent {
             incident,
             resourceList,
             hazards,
+            leftPaneExpanded,
+            rightPaneExpanded,
         } = this.props;
 
         const {
@@ -92,9 +110,12 @@ class ResponseMap extends React.PureComponent {
         const box = this.getBuffer(point || polygon);
         const incidentList = this.getIncidentList(incident);
 
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+
         return (
             <React.Fragment>
                 <ZoomMap
+                    boundsPadding={boundsPadding}
                     bounds={box}
                 />
                 <MapSource

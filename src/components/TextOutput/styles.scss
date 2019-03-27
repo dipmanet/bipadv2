@@ -15,6 +15,12 @@
         }
     }
 
+    .icon-label {
+        flex-shrink: 0;
+        margin-right: $spacing-small;
+        color: $color-text-label;
+    }
+
     .value {
         flex-grow: 1;
     }

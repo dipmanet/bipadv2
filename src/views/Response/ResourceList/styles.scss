@@ -1,16 +1,15 @@
 @import '~base-scss/base';
 
-$width-filter-container: 260px;
-$width-vertical-nav: 64px;
+$width-filter-container: var(--width-right-panel);
+$width-vertical-nav: var(--width-navbar-right);
 
-$width-non-tabular-container: 300px;
-$width-tabular-container: 800px;
+$width-non-tabular-container: var(--width-left-panel);
+$width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
-.right-pane {
+
+.left-pane {
     .show-resource-button-container {
-        top: 0;
-        right: 0;
-        transform-origin: 100% 0;
+        transform-origin: 0 0;
 
         .show-resource-button {
             padding: $spacing-extra-small $spacing-small;
@@ -20,11 +19,10 @@ $width-tabular-container: 800px;
     }
 
     .resource-container {
-        transform-origin: 100% 0;
+        transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
         overflow: auto;
 
         .non-tabular-container {
@@ -39,29 +37,57 @@ $width-tabular-container: 800px;
                 display: flex;
                 position: relative;
                 flex-direction: column;
+                flex-grow: 1;
+                overflow: auto;
 
                 .header {
                     display: flex;
                     align-items: center;
                     flex-shrink: 0;
-                }
 
-                .heading {
-                    flex-grow: 1;
-                    padding: $spacing-medium $spacing-large;
-                    color: $color-primary;
+                    .heading {
+                        flex-grow: 1;
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                    }
                 }
 
                 .hide-resource-button {
                     flex-shrink: 0;
                     margin-right: $spacing-small;
                 }
+
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                    overflow: auto;
+
+                    .incident-info {
+                        flex-shrink: 0;
+                        margin-bottom: $spacing-medium;
+                        border-bottom: $width-separator-thin solid $color-separator;
+                        padding: $spacing-medium;
+                    }
+
+                    .resource-list-container {
+                        display: flex;
+                        flex-direction: column;
+                        flex-grow: 1;
+                        overflow: auto;
+
+                        .heading {
+                            padding: 0 $spacing-medium;
+                        }
+
+                        .resource-list {
+                            flex-grow: 1;
+                            overflow: auto;
+                        }
+                    }
+                }
             }
 
-            .resource-list {
-                flex-grow: 1;
-                overflow: auto;
-            }
         }
 
         .tabular-container {
@@ -89,19 +115,6 @@ $width-tabular-container: 800px;
                 flex-grow: 1;
                 overflow: auto;
             }
-        }
-    }
-
-    :global {
-        .expanded-container-ghost,
-        .collapsed-container-ghost {
-            top: 0;
-            right: 0;
-        }
-
-        .expanded-container-expanding {
-            top: 0;
-            right: 0;
         }
     }
 }

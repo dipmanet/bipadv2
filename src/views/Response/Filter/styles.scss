@@ -1,6 +1,6 @@
 @import '~base-scss/base';
 
-$width-table-container: 250px;
+$width-right-panel: var(--width-right-panel);
 
 .filter {
     display: flex;
@@ -37,8 +37,7 @@ $width-table-container: 250px;
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
-        width: $width-table-container;
+        width: $width-right-panel;
         overflow: auto;
     }
 
@@ -59,12 +58,33 @@ $width-table-container: 250px;
         flex-grow: 1;
         overflow: auto;
 
-        .past-data-select-input {
-            padding: $spacing-small;
-        }
+        .group {
+            padding: $spacing-medium;
 
-        .list-selection-input {
-            padding: $spacing-small;
+            > .checkbox {
+                display: flex;
+                align-items: center;
+                margin-bottom: $spacing-small;
+
+                :global {
+                    .label {
+                        font-size: $font-size-large;
+                        font-weight: $font-weight-bold;
+                    }
+                }
+            }
+
+            .filters {
+                padding: $spacing-small;
+            }
+
+            .past-data-select-input {
+                padding: $spacing-small;
+            }
+
+            .list-selection-input {
+                padding: $spacing-small;
+            }
         }
     }
 }

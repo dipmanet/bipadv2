@@ -60,6 +60,7 @@ export default class RegionOutput extends React.PureComponent {
             provinces,
             districts,
             municipalities,
+            className,
         } = this.props;
 
         const adminLevelItem = adminLevelList.find(
@@ -68,8 +69,6 @@ export default class RegionOutput extends React.PureComponent {
         if (!adminLevelItem) {
             return null;
         }
-        const adminLevelLabel = adminLevelLabelSelector(adminLevelItem);
-
         const geoAreas = (
             (adminLevel === 1 && provinces) ||
             (adminLevel === 2 && districts) ||
@@ -80,10 +79,12 @@ export default class RegionOutput extends React.PureComponent {
             area => geoareaKeySelector(area) === locationId,
         );
         if (!geoArea) {
-            return <span>{adminLevelLabel}</span>;
+            // const adminLevelLabel = adminLevelLabelSelector(adminLevelItem);
+            // return <div>{adminLevelLabel}</div>;
+            return <div className={className}>National</div>;
         }
         const name = geoareaLabelSelector(geoArea);
 
-        return <span>{`${name} ${adminLevelLabel}`}</span>;
+        return <div className={className}>{`${name}`}</div>;
     }
 }

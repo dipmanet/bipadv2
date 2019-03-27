@@ -79,6 +79,7 @@ export const getFilterInputElement = (filterParam) => {
         return (
             <SelectInput
                 key={key}
+                label={label}
                 faramElementName={key}
                 keySelector={getKey}
                 labelSelector={getLabel}

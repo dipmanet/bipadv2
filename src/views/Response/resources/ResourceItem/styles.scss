@@ -2,28 +2,33 @@
 
 .resource {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
     padding: $spacing-small 0;
 
     .left-container {
+        flex-grow: 1;
+
         .title {
-            color: $color-text-label;
+            color: $color-accent;
             font-weight: $font-weight-bold;
         }
 
-        .distance {
+        .content {
             display: flex;
+            flex-wrap: wrap;
 
-            .amount {
-                margin-right: $spacing-small;
+            >* {
+                padding-right: $spacing-medium;
             }
         }
     }
 
     .right-container {
+        flex-shrink: 0;
+
         .link {
             outline: none;
+            padding: $spacing-small;
             text-transform: uppercase;
             text-decoration: none;
             color: inherit;

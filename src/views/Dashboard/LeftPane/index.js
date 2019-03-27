@@ -176,6 +176,11 @@ export default class LeftPane extends React.PureComponent {
     )
 
     renderKeyStatistics = ({ className }) => {
+        // hide stats for now
+        if (true) {
+            return null;
+        }
+
         const {
             alertList,
             hazardTypes,
