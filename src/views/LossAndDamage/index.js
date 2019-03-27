@@ -238,7 +238,6 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples'],
-            // FIXME: this is bad
             limit: 10000,
         }),
         onPropsChanged: {
