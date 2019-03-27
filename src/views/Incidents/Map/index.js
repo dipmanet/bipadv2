@@ -10,7 +10,10 @@ import {
     hazardTypesSelector,
     wardsMapSelector,
 } from '#selectors';
-import { mapStyles } from '#constants';
+import {
+    mapStyles,
+    getMapPaddings,
+} from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
 
 import {
@@ -29,48 +32,21 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
-const paddingLeftPaneExpaded = {
-    top: 24,
-    right: 24,
-    bottom: 24,
-    left: 300,
-};
-
-const paddingRightPaneExpaded = {
-    top: 24,
-    right: 300,
-    bottom: 24,
-    left: 24,
-};
-
-const paddingBothPaneExpanded = {
-    top: 24,
-    right: 300,
-    bottom: 24,
-    left: 300,
-};
-
-const paddingNoPaneExpanded = {
-    top: 24,
-    right: 24,
-    bottom: 24,
-    left: 24,
-};
-
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        if (leftPaneExpanded && rightPaneExpanded) {
-            return paddingBothPaneExpanded;
-        } else if (leftPaneExpanded) {
-            return paddingLeftPaneExpaded;
-        } else if (rightPaneExpanded) {
-            return paddingRightPaneExpaded;
-        }
+        const mapPaddings = getMapPaddings();
 
-        return paddingNoPaneExpanded;
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return mapPaddings.bothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return mapPaddings.leftPaneExpanded;
+        } else if (rightPaneExpanded) {
+            return mapPaddings.rightPaneExpanded;
+        }
+        return mapPaddings.noPaneExpanded;
     });
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
@@ -95,7 +71,7 @@ class IncidentMap extends React.PureComponent {
             incidentList,
             hazards,
             leftPaneExpanded,
-            rightPaneExpanded = true,
+            rightPaneExpanded,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);

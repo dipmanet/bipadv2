@@ -34,6 +34,7 @@ import styles from './styles.scss';
 
 interface State {
     leftPaneExpanded?: boolean;
+    rightPaneExpanded?: boolean;
 }
 
 interface Params {
@@ -102,11 +103,16 @@ class Incidents extends React.PureComponent<Props, State> {
 
         this.state = {
             leftPaneExpanded: true,
+            rightPaneExpanded: true,
         };
     }
 
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
+    }
+
+    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
+        this.setState({ rightPaneExpanded });
     }
 
     public render() {
@@ -117,12 +123,16 @@ class Incidents extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        const { leftPaneExpanded } = this.state;
+        const {
+            leftPaneExpanded,
+            rightPaneExpanded,
+        } = this.state;
 
         return (
             <React.Fragment>
                 <Map
                     leftPaneExpanded={leftPaneExpanded}
+                    rightPaneExpanded={rightPaneExpanded}
                     incidentList={incidentList}
                 />
                 <Page
@@ -136,7 +146,9 @@ class Incidents extends React.PureComponent<Props, State> {
                     }
                     rightContentClassName={styles.right}
                     rightContent={
-                        <IncidentsFilter />
+                        <IncidentsFilter
+                            onExpandChange={this.handleRightPaneExpandChange}
+                        />
                     }
                 />
             </React.Fragment>

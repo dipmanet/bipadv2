@@ -2,10 +2,12 @@
 
 .text-output {
     display: flex;
+    align-items: center;
 
     .label {
         flex-shrink: 0;
         color: $color-text-label;
+        font-size: $font-size-small;
 
         &:after {
             margin-right: $spacing-small;

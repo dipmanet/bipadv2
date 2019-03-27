@@ -3,6 +3,8 @@
 .incident-item {
     display: flex;
     padding: $spacing-medium 0;
+    width: 100%;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
 
@@ -10,7 +12,6 @@
         flex-shrink: 0;
 
         .svg-container {
-            flex-shrink: 0;
             margin: $spacing-small $spacing-medium;
 
             .icon {
@@ -36,6 +37,7 @@
 
     .right {
         flex-grow: 1;
+        overflow: hidden;
 
         .header {
             display: flex;
@@ -61,7 +63,14 @@
         }
 
         .content {
-            padding: 0 $spacing-medium;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: $spacing-extra-small $spacing-medium;
+
+            >* {
+                padding-right: $spacing-medium;
+            }
         }
     }
 

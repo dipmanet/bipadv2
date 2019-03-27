@@ -169,11 +169,21 @@ class LeftPane extends React.PureComponent {
     });
 
     handleShowDetailsButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showDetails: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleCollapseDetailsView = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showDetails: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     renderLegend = colorMap => (
