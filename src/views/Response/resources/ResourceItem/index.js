@@ -19,13 +19,28 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     point: PropTypes.object.isRequired,
     resourceType: PropTypes.string.isRequired,
+    inventories: PropTypes.arrayOf(PropTypes.object),
 };
 
 const defaultProps = {
     distance: 0,
+    inventories: [
+        { type: 'health', name: 'X-Ray Machine', count: 50 },
+        { type: 'health', name: 'MRI Machine', count: 5 },
+        { type: 'health', name: 'Ultrasound Machine', count: 51 },
+        { type: 'health', name: 'Ambulances', count: 10 },
+    ],
 };
 
 const emptyObject = {};
+
+const inventoryToTextOutput = inventory => (
+    <TextOutput
+        key={inventory.id}
+        label={inventory.name}
+        value={inventory.count}
+    />
+);
 
 export default class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
@@ -41,6 +56,7 @@ export default class ResourceItem extends React.PureComponent {
             distance,
             contactNumber = '911',
             resourceType,
+            inventories,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
             point: {
@@ -97,6 +113,15 @@ export default class ResourceItem extends React.PureComponent {
                         ))
                     }
                 </div>
+                { inventories.length > 0 && (
+                    <React.Fragment>
+                        <div className={styles.hr} />
+                        <div> <b> Inventories </b> </div>
+                        {
+                            inventories.map(inventoryToTextOutput)
+                        }
+                    </React.Fragment>
+                )}
             </React.Fragment>
         );
     }
