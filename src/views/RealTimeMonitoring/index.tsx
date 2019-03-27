@@ -189,6 +189,27 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             realTimeList={realTimeList}
                         />
                     }
+                    mainContentClassName={styles.main}
+                    mainContent={
+                        <div className={styles.links}>
+                            <a
+                                className={styles.link}
+                                href="http://www.globalfloods.eu/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                GLOFAS
+                            </a>
+                            <a
+                                className={styles.link}
+                                href="https://www.usgs.gov/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                USGS
+                            </a>
+                        </div>
+                    }
                 />
             </React.Fragment>
         );
