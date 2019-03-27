@@ -41,6 +41,7 @@ export interface Incident {
     incidentOn: string;
 }
 export interface Resource {
+    id: number;
     title: string;
     resourceType: string;
     distance: number;

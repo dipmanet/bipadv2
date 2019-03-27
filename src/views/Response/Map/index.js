@@ -24,15 +24,24 @@ import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 
+import ResourceItem from '../resources/ResourceItem';
+
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    incident: PropTypes.object,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
 };
 
 const defaultProps = {
     className: '',
+    incident: {},
+    resourceList: [],
 };
+
+const emptyObject = {};
 
 const resourceImages = [
     { name: 'health', icon: healthFacilityIcon },
@@ -40,7 +49,6 @@ const resourceImages = [
     { name: 'education', icon: educationIcon },
     { name: 'finance', icon: financeIcon },
 ];
-
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
@@ -64,25 +72,13 @@ class ResponseMap extends React.PureComponent {
 
     getResourceFeatureCollection = memoize(resourceToGeojson);
 
-    tooltipRenderer = ({ title, distance }) => (
-        <div>
-            <h3 className={styles.title}>
-                { title }
-            </h3>
-            <DistanceOutput
-                value={distance / 1000}
-            />
-        </div>
-    )
+    tooltipRenderer = params => <ResourceItem {...params} showDetails />
 
-    tooltipRendererParams = (id, { title, distance }) => ({
-        title,
-        distance,
-    })
+    tooltipRendererParams = id =>
+        this.props.resourceList.find(x => x.id === id) || emptyObject
 
     render() {
         const {
-            className,
             incident,
             resourceList,
             hazards,
@@ -118,6 +114,7 @@ class ResponseMap extends React.PureComponent {
                         layerKey="resource-symbol"
                         type="symbol"
                         layout={mapStyles.resourcePoint.layout}
+                        paint={mapStyles.resourcePoint.symbol}
                     />
                 </MapSource>
 

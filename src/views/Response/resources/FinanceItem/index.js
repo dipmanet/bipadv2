@@ -9,7 +9,7 @@ import { iconNames } from '#constants';
 
 import styles from './styles.scss';
 
-export default class Resource extends React.PureComponent {
+export default class Finance extends React.PureComponent {
     handleShareButton = () => {
     }
 

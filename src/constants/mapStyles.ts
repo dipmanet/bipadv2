@@ -106,6 +106,7 @@ export default {
             'icon-image': ['get', 'iconName'],
             'icon-size': 1,
         },
+        symbol: {},
     },
     rainPoint: {
         layout: {
@@ -153,10 +154,10 @@ export default {
                 'case',
                 ['>=', ['get', 'magnitude'], 8], 1,
                 ['>=', ['get', 'magnitude'], 7], 0.9,
-                ['>=', ['get', 'magnitude'], 6], 0.8,
-                ['>=', ['get', 'magnitude'], 5], 0.7,
-                ['>=', ['get', 'magnitude'], 4], 0.6,
-                0.5,
+                ['>=', ['get', 'magnitude'], 6], 0.7,
+                ['>=', ['get', 'magnitude'], 5], 0.5,
+                ['>=', ['get', 'magnitude'], 4], 0.4,
+                0.3,
             ],
         },
     },

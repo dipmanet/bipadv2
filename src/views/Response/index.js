@@ -22,25 +22,49 @@ import {
 import Page from '#components/Page';
 import IncidentInfo from '#components/IncidentInfo';
 
-import Map from './Map';
 import ResourceList from './ResourceList';
 
+import ResponseFilter from './Filter';
+import Map from './Map';
+
 import styles from './styles.scss';
+
+const emptyObject = {};
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     wardsMap: PropTypes.object,
+    // eslint-disable-next-line react/forbid-prop-types
+    incident: PropTypes.object,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
+    // eslint-disable-next-line react/forbid-prop-types
+    requests: PropTypes.object,
 };
 
 const defaultProps = {
-    wardsMap: {},
+    wardsMap: emptyObject,
+    incident: emptyObject,
+    resourceList: [],
+    requests: emptyObject,
 };
 
-const emptyObject = {};
+const trueFilter = () => true;
 
 class Response extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            filterFunction: trueFilter,
+        };
+    }
+
+    setFilter = (filterFunction) => {
+        this.setState({ filterFunction });
+    }
 
     render() {
         const {
@@ -52,6 +76,8 @@ class Response extends React.PureComponent {
             wardsMap,
         } = this.props;
 
+        const filteredResourceList = resourceList.filter(this.state.filterFunction);
+
         if (!incident.id) {
             return null;
         }
@@ -60,7 +86,7 @@ class Response extends React.PureComponent {
             <React.Fragment>
                 <Map
                     incident={incident}
-                    resourceList={resourceList}
+                    resourceList={filteredResourceList}
                 />
                 <Page
                     leftContentClassName={styles.incidentDetails}
@@ -74,11 +100,16 @@ class Response extends React.PureComponent {
                     }
                     rightContentClassName={styles.resourceListContainer}
                     rightContent={
-                        <ResourceList
-                            // className={styles.resourceList}
-                            resourceList={resourceList}
-                            pending={pending}
-                        />
+                        <React.Fragment>
+                            {
+                                <ResourceList
+                                    className={styles.resourceList}
+                                    resourceList={resourceList}
+                                    pending={pending}
+                                />
+                            }
+                            <ResponseFilter setFilter={this.setFilter} />
+                        </React.Fragment>
                     }
                 />
             </React.Fragment>
@@ -94,9 +125,7 @@ const requests = {
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });
         },
-        onMount: ({ props: { incidentId } }) => (
-            !!incidentId
-        ),
+        onMount: ({ props: { incidentId } }) => !!incidentId,
         // FIXME: write schema
     },
     incidentRequest: {
