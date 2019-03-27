@@ -26,6 +26,7 @@ export function createConnectedRequestCoordinator<OwnProps>() {
                 method,
             } = data;
             return {
+                // credentials: 'include',
                 method: method || methods.GET,
                 body: JSON.stringify(body),
                 headers: {
