@@ -7,11 +7,13 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     label: PropTypes.string.isRequired,
+    iconLabel: PropTypes.boolean,
     // NOTE: PropTypes.object below because TextOutput sometimes gets <DateOutput> as value
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
 };
 
 const defaultProps = {
+    iconLabel: false,
     className: '',
     value: undefined,
 };
@@ -25,6 +27,7 @@ export default class TextOutput extends React.PureComponent {
             className: classNameFromProps,
             label,
             value,
+            iconLabel,
         } = this.props;
 
         if (!value) {
@@ -33,9 +36,17 @@ export default class TextOutput extends React.PureComponent {
 
         return (
             <div className={_cs(classNameFromProps, styles.textOutput)}>
-                <div className={styles.label}>
-                    { label }
-                </div>
+                { iconLabel ? (
+                    <div className={_cs(
+                        styles.iconLabel,
+                        label,
+                    )}
+                    />
+                ) : (
+                    <div className={styles.label}>
+                        { label }
+                    </div>
+                )}
                 <div className={styles.title}>
                     { value }
                 </div>

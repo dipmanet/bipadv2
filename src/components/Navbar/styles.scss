@@ -37,6 +37,35 @@ $height-menu: 160px;
                 font-size: $font-size-extra-large;
                 font-weight: $font-weight-bold;
             }
+
+            .extra {
+                display: flex;
+                align-items: center;
+                border: $width-separator-thin solid $color-separator-light;
+                padding: 0 $spacing-medium;
+
+                .title-container {
+                    display: flex;
+                    align-items: center;
+                    border-right: $width-separator-thin solid $color-separator-light;
+
+                    .page-title {
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                        font-size: $font-size-large;
+                        font-weight: $font-weight-bold;
+                    }
+                }
+
+                .region {
+                    display: flex;
+                    align-items: center;
+                    padding: $spacing-medium;
+                    color: $color-accent;
+                    font-size: $font-size-large;
+                    font-weight: $font-weight-bold;
+                }
+            }
         }
 
         .current-page {
@@ -45,6 +74,7 @@ $height-menu: 160px;
             font-size: $font-size-large;
             font-weight: $font-weight-bold;
         }
+
     }
 
     .menu-button {

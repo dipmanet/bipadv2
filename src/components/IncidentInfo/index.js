@@ -87,6 +87,7 @@ export default class IncidentInfo extends React.PureComponent {
                 </h2>
                 { !hideLink &&
                     <Link
+                        className={styles.gotoResponseLink}
                         to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
                     >
                         Go to response
@@ -146,24 +147,28 @@ export default class IncidentInfo extends React.PureComponent {
                     label="Loss"
                     loss={loss}
                 />
-                <div className={styles.hr} />
-                <b> Misc </b>
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Wards"
-                    value={wardNames.join(', ')}
-                />
-                {
-                    // FIXME: use List
-                    miscInfo.map(x => (
+                { miscInfo.length !== 0 && (
+                    <React.Fragment>
+                        <div className={styles.hr} />
+                        <b> Misc </b>
                         <TextOutput
                             className={styles.commonInfo}
-                            key={x.key}
-                            label={x.key}
-                            value={x.value}
+                            label="Wards"
+                            value={wardNames.join(', ')}
                         />
-                    ))
-                }
+                        {
+                            // FIXME: use List
+                            miscInfo.map(x => (
+                                <TextOutput
+                                    className={styles.commonInfo}
+                                    key={x.key}
+                                    label={x.key}
+                                    value={x.value}
+                                />
+                            ))
+                        }
+                    </React.Fragment>
+                )}
             </div>
         );
     }

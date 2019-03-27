@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Faram, {
     FaramGroup,
-//    FaramInputElement
+    // FaramInputElement,
 } from '@togglecorp/faram';
-
 
 import { _cs, listToMap } from '@togglecorp/fujs';
 
@@ -39,6 +38,15 @@ const checkFilters = (obj, attrVals) =>
 
 const defaultProps = {
     className: '',
+};
+
+const titles = {
+    health: 'Health facilities',
+    finance: 'Finance Institutes',
+    volunteer: 'Volunteers',
+    education: 'Education',
+    openSpace: 'Open spaces',
+    hotel: 'Hotel',
 };
 
 export default class ResponseFilter extends React.PureComponent {
@@ -78,11 +86,21 @@ export default class ResponseFilter extends React.PureComponent {
     }
 
     handleShowFiltersButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showFilters: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleHideFiltersButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showFilters: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     handleFaramChange = (faramValues) => {
@@ -143,23 +161,26 @@ export default class ResponseFilter extends React.PureComponent {
                         >
                             {
                                 this.filterItems.map(filterItem => (
-                                    <FaramGroup
-                                        key={filterItem.key}
-                                        faramElementName={filterItem.key}
-                                    >
-                                        <Checkbox
-                                            faramElementName="show"
-                                            label={filterItem.key}
-                                        />
-                                        <div style={{ marginLeft: 20 }}>
-                                            {
-                                                filterItem.filterParams.map(param => (
-                                                    faramValues[filterItem.key].show &&
-                                                        getFilterInputElement(param)
-                                                ))
-                                            }
-                                        </div>
-                                    </FaramGroup>
+                                    <div className={styles.group}>
+                                        <FaramGroup
+                                            key={filterItem.key}
+                                            faramElementName={filterItem.key}
+                                        >
+                                            <Checkbox
+                                                className={styles.checkbox}
+                                                faramElementName="show"
+                                                label={titles[filterItem.key] || filterItem.key}
+                                            />
+                                            <div className={styles.filters}>
+                                                {
+                                                    filterItem.filterParams.map(param => (
+                                                        faramValues[filterItem.key].show &&
+                                                            getFilterInputElement(param)
+                                                    ))
+                                                }
+                                            </div>
+                                        </FaramGroup>
+                                    </div>
                                 ))
                             }
                         </Faram>

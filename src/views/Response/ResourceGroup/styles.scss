@@ -1,11 +1,11 @@
 @import '~base-scss/base';
 
 .resources {
-    margin-bottom: $spacing-medium;
-    padding: $spacing-small 0;
+    padding: $spacing-medium;
 
     .header {
         display: flex;
+        align-items: center;
         margin-bottom: $spacing-small;
 
         .icon {

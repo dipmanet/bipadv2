@@ -5,6 +5,7 @@ import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
 
 import CollapsibleView from '#components/CollapsibleView';
+import IncidentInfo from '#components/IncidentInfo';
 import { iconNames } from '#constants';
 
 import Button from '#rsca/Button';
@@ -41,7 +42,7 @@ const defaultProps = {
 
 const resourceComponentsProps = {
     health: {
-        heading: 'Hospitals',
+        heading: 'Health facilities',
         icon: healthFacilityIcon,
     },
     volunteer: {
@@ -103,7 +104,21 @@ export default class Response extends React.PureComponent {
     }
 
     handleShowResourceButtonClick = () => {
+        const { onExpandChange } = this.props;
         this.setState({ showResource: true });
+
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
+    }
+
+    handleHideResourceButtonClick = () => {
+        const { onExpandChange } = this.props;
+        this.setState({ showResource: false });
+
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     handleExpandButtonClick = () => {
@@ -114,15 +129,13 @@ export default class Response extends React.PureComponent {
         this.setState({ showTabular: false });
     }
 
-    handleHideResourceButtonClick = () => {
-        this.setState({ showResource: false });
-    }
-
     render() {
         const {
             className,
             pending,
             resourceList,
+            incident,
+            wardsMap,
         } = this.props;
 
         const {
@@ -130,13 +143,12 @@ export default class Response extends React.PureComponent {
             showTabular,
         } = this.state;
 
-
         this.resources = this.getResources(resourceList);
         const resourceKeys = Object.keys(this.resources);
 
         return (
             <CollapsibleView
-                className={_cs(className, styles.rightPane)}
+                className={_cs(className, styles.leftPane)}
                 expanded={showResource}
                 collapsedViewContainerClassName={styles.showResourceButtonContainer}
                 collapsedView={
@@ -160,7 +172,7 @@ export default class Response extends React.PureComponent {
                             <div className={styles.resource}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        Resources
+                                        Incident details
                                     </h4>
                                     <Spinner loading={pending} />
                                     <Button
@@ -177,12 +189,24 @@ export default class Response extends React.PureComponent {
                                         transparent
                                     />
                                 </header>
-                                <div className={_cs(className, styles.resourceList)}>
-                                    <ListView
-                                        data={resourceKeys}
-                                        renderer={Resource}
-                                        rendererParams={this.getResourceRendererParams}
+                                <div className={_cs(className, styles.content)}>
+                                    <IncidentInfo
+                                        className={styles.incidentInfo}
+                                        incident={incident}
+                                        wardsMap={wardsMap}
+                                        hideLink
                                     />
+                                    <div className={styles.resourceListContainer}>
+                                        <h2 className={styles.heading}>
+                                            Resources
+                                        </h2>
+                                        <ListView
+                                            className={styles.resourceList}
+                                            data={resourceKeys}
+                                            renderer={Resource}
+                                            rendererParams={this.getResourceRendererParams}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         }

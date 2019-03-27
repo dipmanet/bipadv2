@@ -4,7 +4,7 @@ $width-filter-container: var(--width-right-panel);
 $width-vertical-nav: var(--width-navbar-right);
 
 $width-non-tabular-container: var(--width-left-panel);
-$width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$width-vertical-nav} - #{$spacing-medium}) * 3);
+$width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
 .left-pane {
     .show-incident-button-container {
@@ -20,6 +20,7 @@ $width-tabular-container: calc(100vw - calc(#{$width-filter-container} - #{$widt
     .incidents-container {
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
+        border-radius: $radius-border-large;
         overflow: auto;
 
         .non-tabular-container {
