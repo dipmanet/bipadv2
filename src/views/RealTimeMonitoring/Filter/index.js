@@ -196,6 +196,9 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             />
                         </Faram>
                         <div className={styles.legendsContainer}>
+                            { (showRain || showRiver || showEarthquake) &&
+                                <span>Legend</span>
+                            }
                             { showRain &&
                                 <div className={styles.container}>
                                     <h4 className={styles.heading}>

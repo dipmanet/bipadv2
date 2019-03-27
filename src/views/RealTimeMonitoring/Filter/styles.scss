@@ -68,9 +68,18 @@ $width-table-container: 250px;
         display: flex;
         flex-direction: column;
 
+        span {
+            border-bottom: 1px solid $color-separator;
+            color: $color-accent;
+            font-weight: $font-weight-bold;
+            padding: $spacing-small;
+        }
         .container {
             display: flex;
             flex-direction: column;
+            border-bottom: 1px solid $color-separator;
+            padding-bottom: $spacing-small;
+
 
             .heading {
                 flex-grow: 1;
