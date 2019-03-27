@@ -25,6 +25,7 @@ export const transformDateRangeFilterParam = (
     const {
         dateRange,
         region,
+        realtimeSources,
         ...other
     } = filters;
     let outputFilters = { ...other };

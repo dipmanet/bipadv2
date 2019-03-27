@@ -76,6 +76,7 @@ export interface Filters {
     faramValues: {
         hazard?: number;
         dateRange?: number;
+        realtimeSources?: number[];
     };
     faramErrors: object;
     pristine: boolean;
@@ -85,6 +86,7 @@ export interface FiltersWithRegion {
         hazard?: number;
         dateRange?: number;
         region: Region;
+        realtimeSources?: number[];
     };
     faramErrors: object;
     pristine: boolean;
@@ -137,6 +139,7 @@ export interface RealTimeMonitoringPage {
     realTimeRainList: RealTimeRain[];
     realTimeRiverList: RealTimeRiver[];
     realTimeEarthquakeList: RealTimeEarthquake[];
+    filters: Filters;
 }
 
 export interface PageState {
@@ -190,6 +193,7 @@ export enum PageType {
     RTM__SET_REAL_TIME_RAIN_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RAIN',
     RTM__SET_REAL_TIME_RIVER_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RIVER',
     RTM__SET_REAL_TIME_EARTHQUAKE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_EARTHQUAKE_RIVER',
+    RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -287,6 +291,10 @@ export interface SetRealTimeEarthquakeList {
     realTimeEarthquakeList: RealTimeEarthquake[];
 }
 
+export interface SetRealTimeFilters extends FiltersWithRegion {
+    type: typeof PageType.RTM__SET_REAL_TIME_FILTERS;
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -298,5 +306,5 @@ export type PageActionTypes = (
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
-    SetLossAndDamageFilters
+    SetLossAndDamageFilters | SetRealTimeFilters
 );

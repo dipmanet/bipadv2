@@ -126,6 +126,15 @@ export const setRealTimeEarthquakeListAction = (
     realTimeEarthquakeList,
 });
 
+export const setRealTimeFiltersAction = (
+    { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
+) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
+});
+
 // loss and damage action creator
 export const setLossAndDamageFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
@@ -437,6 +446,40 @@ export const setRealTimeEarthquakeList = (
     return newState;
 };
 
+export const setRealTimeFilters = (
+    state: Type.PageState,
+    action: Type.SetRealTimeFilters,
+) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        /* eslint-disable no-param-reassign */
+        deferedState.region = region;
+
+        if (faramValues) {
+            deferedState.realTimeMonitoringPage.filters.faramValues = faramValuesNoRegion;
+        }
+        if (faramErrors) {
+            deferedState.realTimeMonitoringPage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.realTimeMonitoringPage.filters.pristine = pristine;
+        }
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 // loss and damage page
 export const setLossAndDamageFilters = (
     state: Type.PageState,
@@ -513,6 +556,8 @@ export default function routeReducer(
             return setRealTimeEarthquakeList(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_FILTERS:
+            return setRealTimeFilters(state, action);
         default:
             return state;
     }
