@@ -144,6 +144,7 @@ export interface RealTimeMonitoringPage {
 }
 
 export interface PageState {
+    initialPopupShown: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
 
@@ -169,6 +170,7 @@ export interface PageState {
 // ACTION TYPES
 
 export enum PageType {
+    SET_INITIAL_POPUP_SHOWN = 'page/SET_INITIAL_POPUP_SHOWN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
     SET_MAP_STYLES = 'page/SET_MAP_STYLES',
@@ -201,6 +203,11 @@ export enum PageType {
 }
 
 // ACTION CREATOR INTERFACE
+
+export interface SetInitialPopupShown {
+    type: typeof PageType.SET_INITIAL_POPUP_SHOWN;
+    value: boolean;
+}
 
 export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
@@ -302,6 +309,7 @@ export interface SetLossAndDamageFilters extends FiltersWithRegion {
 }
 
 export type PageActionTypes = (
+    SetInitialPopupShown |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |

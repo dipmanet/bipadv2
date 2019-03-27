@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import MapSource from '#rscz/Map/MapSource';
@@ -43,6 +43,13 @@ const mapStateToProps = state => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state),
 });
 
+const visibleLayout = {
+    visibility: 'visible',
+};
+const noneLayout = {
+    visibility: 'none',
+};
+
 class CommonMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -59,13 +66,11 @@ class CommonMap extends React.PureComponent {
         } = this.props;
 
         return (
-            <MapSource
-                sourceKey={sourceKey}
-                url={mapSources.nepal.url}
-                bounds={bounds}
-                boundsPadding={boundsPadding}
-            >
-                { regionLevel === 1 &&
+            <Fragment>
+                <MapSource
+                    sourceKey={`${sourceKey}-province`}
+                    url={mapSources.nepal.url}
+                >
                     <MapLayer
                         layerKey="province-fill"
                         type="fill"
@@ -73,8 +78,11 @@ class CommonMap extends React.PureComponent {
                         paint={mapStyles.province.fill}
                         hoveredId={selectedProvinceId}
                     />
-                }
-                { regionLevel === 2 &&
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-district`}
+                    url={mapSources.nepal.url}
+                >
                     <MapLayer
                         layerKey="district-fill"
                         type="fill"
@@ -82,8 +90,11 @@ class CommonMap extends React.PureComponent {
                         paint={mapStyles.district.fill}
                         hoveredId={selectedDistrictId}
                     />
-                }
-                { regionLevel === 3 &&
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-municipality`}
+                    url={mapSources.nepal.url}
+                >
                     <MapLayer
                         layerKey="municipality-fill"
                         type="fill"
@@ -91,40 +102,44 @@ class CommonMap extends React.PureComponent {
                         paint={mapStyles.municipality.fill}
                         hoveredId={selectedMunicipalityId}
                     />
-                }
-                { regionLevel >= 0 &&
+                </MapSource>
+                <MapSource
+                    sourceKey={sourceKey}
+                    url={mapSources.nepal.url}
+                    bounds={bounds}
+                    boundsPadding={boundsPadding}
+                >
                     <MapLayer
                         layerKey="province-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.province}
                         paint={mapStyles.province.outline}
+                        layout={regionLevel >= 0 ? visibleLayout : noneLayout}
                     />
-                }
-                { regionLevel >= 2 && // NOTE: dont' show district in province level
                     <MapLayer
                         layerKey="district-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.district}
                         paint={mapStyles.district.outline}
+                        // NOTE: dont' show district in province level
+                        layout={regionLevel >= 2 ? visibleLayout : noneLayout}
                     />
-                }
-                { regionLevel >= 2 &&
                     <MapLayer
                         layerKey="municipality-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.municipality}
                         paint={mapStyles.municipality.outline}
+                        layout={regionLevel >= 2 ? visibleLayout : noneLayout}
                     />
-                }
-                { regionLevel >= 3 &&
                     <MapLayer
                         layerKey="ward-outline"
                         type="line"
                         sourceLayer={mapSources.nepal.layers.ward}
                         paint={mapStyles.ward.outline}
+                        layout={regionLevel >= 3 ? visibleLayout : noneLayout}
                     />
-                }
-            </MapSource>
+                </MapSource>
+            </Fragment>
         );
     }
 }

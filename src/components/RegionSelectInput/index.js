@@ -57,8 +57,6 @@ export default class RegionSelectInput extends React.PureComponent {
 
     handleAdminLevelChange = (newAdminLevel) => {
         const { onChange } = this.props;
-        console.warn(newAdminLevel);
-
         onChange({
             adminLevel: newAdminLevel,
             geoarea: undefined,
