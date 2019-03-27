@@ -239,7 +239,7 @@ const requests = {
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples'],
             // FIXME: this is bad
-            limit: 500,
+            limit: 10000,
         }),
         onPropsChanged: {
             filters: ({

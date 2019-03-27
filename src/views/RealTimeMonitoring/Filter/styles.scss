@@ -63,4 +63,40 @@ $width-table-container: 250px;
             margin: 0 $spacing-small;
         }
     }
+
+    .legends-container {
+        display: flex;
+        flex-direction: column;
+
+        span {
+            border-bottom: 1px solid $color-separator;
+            color: $color-accent;
+            font-weight: $font-weight-bold;
+            padding: $spacing-small;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid $color-separator;
+            padding-bottom: $spacing-small;
+
+
+            .heading {
+                flex-grow: 1;
+                padding: $spacing-medium $spacing-small;
+                color: $color-primary;
+            }
+
+            .legend {
+                flex-grow: 1;
+                display: flex;
+                flex-shrink: 0;
+                flex-wrap: wrap;
+
+                .legend-item {
+                    padding: 0 $spacing-small;
+                }
+            }
+        }
+    }
 }
