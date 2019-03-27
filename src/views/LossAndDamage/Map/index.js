@@ -4,7 +4,7 @@ import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
 import MapLayer from '#rscz/Map/MapLayer';
-import MapDraw from '#rscz/Map/MapDraw';
+// import MapDraw from '#rscz/Map/MapDraw';
 import MapSource from '#rscz/Map/MapSource';
 
 import CommonMap from '#components/CommonMap';
@@ -226,7 +226,6 @@ class LossAndDamageMap extends React.PureComponent {
                         tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
-                <MapDraw />
             </React.Fragment>
         );
     }

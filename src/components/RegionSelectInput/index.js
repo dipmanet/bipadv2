@@ -32,11 +32,13 @@ const propTypes = {
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     municipalities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     provinces: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    showHintAndError: PropTypes.bool,
 };
 
 const defaultProps = {
     className: '',
     value: {},
+    showHintAndError: false,
 };
 
 const mapStateToProps = state => ({

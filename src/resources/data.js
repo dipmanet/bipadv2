@@ -55,6 +55,7 @@ export const hazardIcons = {
     // 24: windstormIcon,
 };
 
+// NOTE: probably unused
 export const hazardTypeList = [
     { key: 'earthquake', label: 'Earthquake', icon: earthquakeIcon },
     { key: 'urbanFlood', label: 'Urban flood', icon: floodIcon },
@@ -66,6 +67,7 @@ export const hazardTypeList = [
     { key: 'cyclone', label: 'Cyclone', icon: cycloneIcon },
 ];
 
+// NOTE: remove all of the variables below
 
 export const donutChartData1 = [
     { label: 'Wildfire', value: 19 },

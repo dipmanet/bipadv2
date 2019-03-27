@@ -152,13 +152,13 @@ class DashboardFilter extends React.PureComponent {
                             error={faramErrors}
                             disabled={false}
                         >
+                            <RegionSelectInput
+                                faramElementName="region"
+                            />
                             <PastDateRangeInput
                                 label="Data range"
                                 faramElementName="dateRange"
                                 className={styles.pastDataSelectInput}
-                            />
-                            <RegionSelectInput
-                                faramElementName="region"
                             />
                             <MultiListSelection
                                 faramElementName="hazard"

@@ -137,15 +137,13 @@ export default class IncidentsFilter extends React.PureComponent {
                             />
                         </header>
                         <div className={styles.content}>
+                            <RegionSelectInput
+                                faramElementName="region"
+                            />
                             <PastDateRangeInput
                                 className={styles.pastDataSelectInput}
                                 label="Data range"
                                 faramElementName="dateRange"
-                                showHintAndError={false}
-                            />
-                            <RegionSelectInput
-                                faramElementName="region"
-                                showHintAndError={false}
                             />
                             <MultiListSelection
                                 faramElementName="hazard"

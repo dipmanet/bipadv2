@@ -83,7 +83,7 @@ export default class Seekbar extends React.PureComponent {
         const start = Math.min(100, Math.max(0, startFromProps));
         const end = Math.min(100, Math.max(0, endFromProps));
 
-        const groupedIncidents = this.groupByIncidentCount(data, 1000 * 60 * 60 * 24);
+        const groupedIncidents = this.groupByIncidentCount(data, 1000 * 60 * 60 * 24 * 7);
 
         return (
             <div className={_cs(className, styles.seekbar)}>
