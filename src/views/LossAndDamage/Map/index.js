@@ -2,37 +2,52 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
+import { listToMap, isDefined } from '@togglecorp/fujs';
 
-import MapLayer from '#rscz/Map/MapLayer';
-// import MapDraw from '#rscz/Map/MapDraw';
-import MapSource from '#rscz/Map/MapSource';
+import ChoroplethMap from '#components/ChoroplethMap';
+import { districtsSelector } from '#selectors';
+import { getMapPaddings } from '#constants';
+import { groupList } from '#utils/common';
 
-import CommonMap from '#components/CommonMap';
+const metric = (val) => {
+    if (!val) {
+        return 0;
+    }
+    return val.count || 0;
+};
 
-import {
-    hazardTypesSelector,
-    wardsMapSelector,
-} from '#selectors';
-import {
-    mapSources,
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
-import {
-    incidentPointToGeojson,
-    incidentPolygonToGeojson,
-} from '#utils/domain';
-import IncidentInfo from '#components/IncidentInfo';
+const sum = list => list.reduce(
+    (acc, val) => acc + (isDefined(val) ? val : 0),
+    0,
+);
 
-const districtsPadding = {
-    top: 0,
-    right: 64,
-    bottom: 0,
-    left: 330,
+const colorGrade = [
+    '#ffffcc',
+    '#ffeda0',
+    '#fed976',
+    '#feb24c',
+    '#fd8d3c',
+    '#fc4e2a',
+    '#e31a1c',
+    '#bd0026',
+    '#800026',
+];
+
+const generateColor = (maxValue, minValue, colorMapping) => {
+    const newColor = [];
+    const { length } = colorMapping;
+    const range = maxValue - minValue;
+    colorMapping.forEach((color, i) => {
+        const val = minValue + ((i * range) / (length - 1));
+        newColor.push(val);
+        newColor.push(color);
+    });
+    return newColor;
 };
 
 const propTypes = {
     pause: PropTypes.bool,
+    districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
@@ -41,10 +56,8 @@ const defaultProps = {
 
 const PLAYBACK_INTERVAL = 2000;
 
-
 const mapStateToProps = state => ({
-    hazards: hazardTypesSelector(state),
-    wardsMap: wardsMapSelector(state),
+    districts: districtsSelector(state),
 });
 
 class LossAndDamageMap extends React.PureComponent {
@@ -55,13 +68,19 @@ class LossAndDamageMap extends React.PureComponent {
         super(props);
 
         this.state = {
-            currentRange: {},
-            selectedIds: [],
+            currentIndex: -1,
         };
     }
 
     componentDidMount() {
-        this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
+        this.playback();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.lossAndDamageList !== nextProps.lossAndDamageList) {
+            this.setState({ currentIndex: -1 });
+            this.playback();
+        }
     }
 
     componentWillUnmount() {
@@ -81,27 +100,125 @@ class LossAndDamageMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    getPointFeatureCollection = memoize(incidentPointToGeojson)
-
-    getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
-
-    getTimeExtent = (lossAndDamageList) => {
-        const timestamps = lossAndDamageList.filter(d => d.incidentOn)
-            .map(d => (new Date(d.incidentOn)).getTime());
-
-        return ({
-            max: Math.max(...timestamps),
-            min: Math.min(...timestamps),
-        });
-    }
-
-    handleSelectionChange = (ids) => {
-        const { onDistrictSelect } = this.props;
-        this.setState({ selectedIds: ids });
-        if (onDistrictSelect) {
-            onDistrictSelect(ids);
+    generateDataset = memoize((incidents) => {
+        if (!incidents || incidents.length <= 0) {
+            return {
+                mapping: [],
+                maxCount: 0,
+                minTime: 0,
+                maxTime: 0,
+                onSpan: 0,
+                totalIteration: 0,
+            };
         }
-    }
+
+        const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
+            incidentOn && wards && wards.length > 0
+        )).map(incident => ({
+            ...incident,
+            incidentOn: new Date(incident.incidentOn).getTime(),
+            district: incident.wards[0].municipality.district,
+        }));
+
+        const timing = sanitizedIncidents.map(incident => incident.incidentOn);
+
+        const minTime = Math.min(...timing);
+        const maxTime = Math.max(...timing);
+
+        const daySpan = 1000 * 60 * 60 * 24;
+        const oneSpan = 7 * daySpan;
+
+        const totalSpan = maxTime - minTime;
+
+        const totalIteration = Math.ceil(totalSpan / oneSpan);
+
+        const mapping = [];
+
+        let maxStat = {
+            count: 0,
+            estimatedLoss: 0,
+            infrastructureDestroyedCount: 0,
+            livestockDestroyedCount: 0,
+            peopleDeathCount: 0,
+        };
+
+        for (let i = 0; i < totalIteration; i += 1) {
+            const start = minTime + (i * oneSpan);
+            const end = minTime + ((i + 1) * oneSpan);
+
+            const filteredIncidents = sanitizedIncidents.filter(({ incidentOn }) => (
+                incidentOn >= start && incidentOn < end
+            ));
+            const groupedIncidents = groupList(
+                filteredIncidents,
+                ({ district }) => district,
+            ).map(({ key, value }) => ({
+                key,
+                count: value.length,
+                estimatedLoss: sum(
+                    value.map(item => item.loss.estimatedLoss),
+                ),
+                infrastructureDestroyedCount: sum(value.map(
+                    item => item.loss.infrastructureDestroyedCount,
+                )),
+                livestockDestroyedCount: sum(
+                    value.map(item => item.loss.livestockDestroyedCount),
+                ),
+                peopleDeathCount: sum(
+                    value.map(item => item.loss.peopleDeathCount),
+                ),
+            }));
+
+
+            maxStat = groupedIncidents.reduce(
+                (acc, val) => ({
+                    count: Math.max(acc.count, val.count),
+                    estimatedLoss: Math.max(acc.estimatedLoss, val.estimatedLoss),
+                    infrastructureDestroyedCount: Math.max(
+                        acc.infrastructureDestroyedCount,
+                        val.infrastructureDestroyedCount,
+                    ),
+                    liveStockDestroyedCount: Math.max(
+                        acc.liveStockDestroyedCount,
+                        val.liveStockDestroyedCount,
+                    ),
+                    peopleDeathCount: Math.max(acc.peopleDeathCount, val.peopleDeathCount),
+                }),
+                maxStat,
+            );
+
+            const mappedIncidents = listToMap(
+                groupedIncidents,
+                incident => incident.key,
+                incident => incident,
+            );
+            mapping.push(mappedIncidents);
+        }
+
+        const val = { mapping, maxStat, minTime, maxTime, oneSpan, totalIteration };
+        return val;
+    });
+
+    generateColor = memoize(max => ({
+        'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['feature-state', 'count'],
+            ...generateColor(max, 0, colorGrade),
+        ],
+    }))
+
+    generateMapState = memoize((districts, groupedIncidentMapping, metricFn) => {
+        const value = districts.map(district => ({
+            id: district.id,
+            value: {
+                count: groupedIncidentMapping
+                    ? metricFn(groupedIncidentMapping[district.id])
+                    : 0,
+            },
+        }));
+        return value;
+    });
 
     playback = () => {
         const {
@@ -110,147 +227,56 @@ class LossAndDamageMap extends React.PureComponent {
             pause: isPaused,
         } = this.props;
 
-        if (!isPaused && (Object.keys(lossAndDamageList)).length > 0) {
+        clearTimeout(this.timeout);
+
+        if (!isPaused && lossAndDamageList.length > 0) {
+            const { currentIndex } = this.state;
             const {
-                currentRange: {
-                    start,
-                    end,
-                },
-            } = this.state;
+                totalIteration,
+                minTime,
+                maxTime,
+                oneSpan,
+            } = this.generateDataset(lossAndDamageList);
 
-            const aDay = 1000 * 60 * 60 * 24;
-            const offset = aDay * 10;
+            const newIndex = currentIndex + 1 < totalIteration
+                ? currentIndex + 1
+                : 0;
 
-            const timeExtent = this.getTimeExtent(lossAndDamageList);
-            if (!start || end > timeExtent.max) {
-                const currentRange = {
-                    start: timeExtent.min,
-                    end: timeExtent.min + offset,
-                };
-
-                this.setState({ currentRange });
-                if (onPlaybackProgress) {
-                    onPlaybackProgress(currentRange, timeExtent);
-                }
-            } else {
-                const currentRange = {
-                    start: end,
-                    end: end + offset,
-                };
-
-                this.setState({ currentRange });
-                if (onPlaybackProgress) {
-                    onPlaybackProgress(currentRange, timeExtent);
-                }
+            this.setState({ currentIndex: newIndex });
+            if (onPlaybackProgress) {
+                onPlaybackProgress(
+                    {
+                        start: minTime + (newIndex * oneSpan),
+                        end: Math.min(minTime + ((newIndex + 1) * oneSpan), maxTime),
+                    },
+                    { min: minTime, max: maxTime },
+                );
             }
         }
 
-        clearTimeout(this.timeout);
         this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
-    }
-
-    tooltipRendererParams = (id) => {
-        const {
-            wardsMap,
-            lossAndDamageList,
-        } = this.props;
-
-        const incident = lossAndDamageList.find(i => i.id === id);
-
-        return {
-            incident,
-            wardsMap,
-            hideLink: true,
-        };
     }
 
     render() {
         const {
             lossAndDamageList,
-            hazards,
             leftPaneExpanded,
             rightPaneExpanded,
+            districts,
         } = this.props;
-
-        const { currentRange } = this.state;
-
-        let pointsFilter;
-        if (currentRange.start) {
-            pointsFilter = [
-                'all',
-                ['>=', 'incidentOn', currentRange.start],
-                ['<', 'incidentOn', currentRange.end],
-            ];
-        }
-
-        const pointFeatureCollection = this.getPointFeatureCollection(
-            lossAndDamageList,
-            hazards,
-        );
-        const polygonFeatureCollection = this.getPolygonFeatureCollection(
-            lossAndDamageList,
-            hazards,
-        );
+        const { currentIndex } = this.state;
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const { mapping, maxStat } = this.generateDataset(lossAndDamageList);
+        const colorPaint = this.generateColor(Math.max(metric(maxStat), 1));
+        const mapState = this.generateMapState(districts, mapping[currentIndex], metric);
 
         return (
-            <React.Fragment>
-                <CommonMap
-                    boundsPadding={boundsPadding}
-                />
-                {/*
-                <MapSource
-                    sourceKey="district"
-                    url={mapSources.nepal.url}
-                    boundsPadding={districtsPadding}
-                >
-                    <MapLayer
-                        layerKey="district-fill"
-                        type="fill"
-                        paint={mapStyles.district.fill}
-                        sourceLayer={mapSources.nepal.layers.district}
-                        enableHover
-                        enableSelection
-                        selectedIds={this.state.selectedIds}
-                        onSelectionChange={this.handleSelectionChange}
-                    />
-                    <MapLayer
-                        layerKey="district-outline"
-                        type="line"
-                        paint={mapStyles.district.outline}
-                        sourceLayer={mapSources.nepal.layers.district}
-                    />
-                </MapSource>
-                */}
-                <MapSource
-                    sourceKey="points"
-                    geoJson={pointFeatureCollection}
-                >
-                    <MapLayer
-                        layerKey="points"
-                        type="circle"
-                        paint={mapStyles.incidentPoint.fill}
-                        filter={pointsFilter}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey="polygons"
-                    geoJson={polygonFeatureCollection}
-                >
-                    <MapLayer
-                        layerKey="polygons"
-                        type="fill"
-                        paint={mapStyles.incidentPolygon.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                    />
-                </MapSource>
-            </React.Fragment>
+            <ChoroplethMap
+                boundsPadding={boundsPadding}
+                paint={colorPaint}
+                mapState={mapState}
+            />
         );
     }
 }
