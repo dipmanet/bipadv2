@@ -3,6 +3,8 @@ import { PageState } from './types';
 const state: PageState = {
     eventTypes: {},
 
+    initialPopupShown: false,
+
     region: {
         adminLevel: 1,
     },

@@ -21,6 +21,10 @@ const responsePageSelector = ({ page }: AppState) => (
 const realTimeMonitoringPageSelector = ({ page }: AppState) =>
     page.realTimeMonitoringPage;
 
+// Popup
+
+export const initialPopupShownSelector = ({ page }: AppState) => page.initialPopupShown;
+
 // geo
 
 export const regionSelector = ({ page }: AppState) => page.region;

@@ -46,6 +46,26 @@ body {
     .mapboxgl-map {
         font: inherit !important;
     }
+
+    .portal-child-shown {
+        overflow: hidden;
+
+        #root {
+            filter: brightness(50%);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .focus-trap-wrapper {
+            .focus-trap {
+                .modal:not([data-last-modal="true"]) {
+                    filter: brightness(50%);
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+
 }
 
 %main-content {

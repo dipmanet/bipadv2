@@ -6,6 +6,14 @@ import initialState from './initialState';
 
 // ACTION CREATORS
 
+export const setInitialPopupShownAction = (
+    { value }: { value: boolean },
+) => ({
+    type: Type.PageType.SET_INITIAL_POPUP_SHOWN,
+    value,
+});
+
+
 export const setHazardTypesAction = (
     { hazardTypes }: { hazardTypes: Type.HazardType[] },
 ) => ({
@@ -146,6 +154,15 @@ export const setLossAndDamageFiltersAction = (
 });
 
 //  REDUCERS
+
+const setInitialPopupShown = (state: Type.PageState, action: Type.SetInitialPopupShown) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.initialPopupShown = value;
+    });
+    return newState;
+};
 
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     const { hazardTypes } = action;
@@ -520,6 +537,8 @@ export default function routeReducer(
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_INITIAL_POPUP_SHOWN:
+            return setInitialPopupShown(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_EVENT_TYPES:
