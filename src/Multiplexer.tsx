@@ -76,7 +76,23 @@ interface Props {
     mapStyle: string;
 }
 
+const geolocationControlOptions = {
+    showUserLocation: false,
+    trackUserLocation: false,
+};
+
+interface Coords {
+    coords: {
+        latitude: number;
+        longitude: number;
+    };
+}
+
 export default class Multiplexer extends React.PureComponent<Props, State> {
+    private handleGeolocationChange = (e: Coords) => {
+        console.warn('Getting user location info from:', [e.coords.longitude, e.coords.latitude]);
+    }
+
     private renderRoutes = () => {
         const { pending } = this.props;
         if (pending) {
@@ -94,6 +110,8 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
             mapStyle,
         } = this.props;
 
+        const noLocationInfo = false;
+
         return (
             <Fragment>
                 {/* FIXME: get route key for navbar */}
@@ -103,9 +121,19 @@ export default class Multiplexer extends React.PureComponent<Props, State> {
                         mapStyle={mapStyle}
                         fitBoundsDuration={200}
                         minZoom={5}
+                        logoPosition="bottom-left"
+
                         showScaleControl
                         scaleControlPosition="bottom-right"
-                        logoPosition="bottom-left"
+
+                        showGeolocationControl={noLocationInfo}
+                        locateOnStartup={noLocationInfo}
+                        geoControlPosition="bottom-right"
+                        geoOptions={geolocationControlOptions}
+                        onGeolocationChange={this.handleGeolocationChange}
+
+                        showNavControl
+                        navControlPosition="bottom-right"
                     >
                         {this.renderRoutes()}
                     </Map>
