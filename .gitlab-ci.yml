@@ -44,6 +44,8 @@ build:
         --tag ${DOCKER_IMAGE_B}\
         --tag ${DOCKER_IMAGE_B_SHA} .
     - docker push ${DOCKER_IMAGE_B_SHA}
+  only:
+  - gl-pages
 
 pages:
   stage: deploy
