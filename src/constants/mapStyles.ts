@@ -117,7 +117,7 @@ export default {
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#03A9F4',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#3F51B5',
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9c27b0',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
                 '#03A9F4',
             ],
         },
@@ -146,16 +146,15 @@ export default {
     },
     earthquakePoint: {
         fill: {
-            'circle-color': '#D50000',
             'circle-radius': 6,
-            'circle-opacity': [
+            'circle-color': [
                 'case',
-                ['>=', ['get', 'magnitude'], 8], 1,
-                ['>=', ['get', 'magnitude'], 7], 0.9,
-                ['>=', ['get', 'magnitude'], 6], 0.7,
-                ['>=', ['get', 'magnitude'], 5], 0.5,
-                ['>=', ['get', 'magnitude'], 4], 0.4,
-                0.3,
+                ['>=', ['get', 'magnitude'], 8], '#a50f15',
+                ['>=', ['get', 'magnitude'], 7], '#de2d26',
+                ['>=', ['get', 'magnitude'], 6], '#fb6a4a',
+                ['>=', ['get', 'magnitude'], 5], '#fc9272',
+                ['>=', ['get', 'magnitude'], 4], '#fcbba1',
+                '#fee5d9',
             ],
         },
     },

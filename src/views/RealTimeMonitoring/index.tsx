@@ -26,7 +26,6 @@ import {
     realTimeEarthquakeListSelector,
     realTimeFiltersValuesSelector,
 } from '#selectors';
-
 import Page from '#components/Page';
 
 import Map from './Map';
@@ -184,6 +183,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             rainPending={rainPending}
                             riverPending={riverPending}
                             earthquakePending={earthquakePending}
+                            showRain={showRain}
+                            showRiver={showRiver}
+                            showEarthquake={showEarthquake}
                             realTimeList={realTimeList}
                         />
                     }
