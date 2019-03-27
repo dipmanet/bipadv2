@@ -37,7 +37,13 @@ const defaultProps = {
     className: undefined,
     pending: false,
 };
-const colors = scaleOrdinal().range(schemeAccent);
+
+const margins = {
+    top: 30,
+    right: 20,
+    bottom: 20,
+    left: 20,
+};
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
@@ -85,7 +91,7 @@ class LeftPane extends React.PureComponent {
             (d, k) => ({
                 label: hazardTypes[k].title,
                 value: d,
-                color: colors(hazardTypes[k].title),
+                color: hazardTypes[k].color,
             }),
         );
     });
@@ -97,26 +103,21 @@ class LeftPane extends React.PureComponent {
             .filter(v => (
                 v.loss !== undefined && (
                     v.loss.peopleDeathCount ||
-                    v.loss.livestockDestroyedCount ||
-                    v.loss.infrastructureDestroyedCount
+                    v.loss.livestockDestroyedCount
                 )))
             .reduce((acc, current) => {
                 if (acc[current.hazard] === undefined) {
                     acc[current.hazard] = {
                         people: 0,
-                        infrastructure: 0,
                         livestock: 0,
                     };
                 } else {
                     const {
                         peopleDeathCount = 0,
                         livestockDestroyedCount = 0,
-                        infrastructureDestroyedCount = 0,
                     } = current.loss;
 
                     acc[current.hazard].people += peopleDeathCount;
-                    acc[current.hazard].infrastructure +=
-                        infrastructureDestroyedCount;
                     acc[current.hazard].livestock += livestockDestroyedCount;
                 }
                 return acc;
@@ -127,12 +128,12 @@ class LeftPane extends React.PureComponent {
             (d, k) => ({
                 ...d,
                 label: hazardTypes[k].title,
+                color: hazardTypes[k].color,
             }),
         ).filter(item => !(
             item.people === 0 &&
-            item.livestock === 0 &&
-            item.infrastructure === 0
-        )).map(item => ({ ...item, color: colors(item.label) }));
+            item.livestock === 0
+        ));
     });
 
     getLossTypeCount = memoize((lossAndDamageList) => {
@@ -141,6 +142,12 @@ class LeftPane extends React.PureComponent {
         if (losses.length === 0) {
             return [];
         }
+
+        const labelMap = {
+            peopleDeathCount: 'People Death Count',
+            livestockDestroyedCount: 'Livestock Destroyed Count',
+            infrastructureDestroyedCount: 'Infrastructure Destroyed Count',
+        };
 
         const acc = {
             peopleDeathCount: 0,
@@ -162,7 +169,7 @@ class LeftPane extends React.PureComponent {
         return mapToList(
             acc,
             (d, k) => ({
-                label: k,
+                label: labelMap[k],
                 value: d,
             }),
         );
@@ -220,7 +227,7 @@ class LeftPane extends React.PureComponent {
                     <div className={styles.parallelContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Hazard Loss Details
+                                Hazard Death Count
                             </h4>
                         </header>
                         <ParallelCoordinates
@@ -229,12 +236,7 @@ class LeftPane extends React.PureComponent {
                             ignoreProperties={['label', 'color']}
                             labelSelector={parallelLabelSelector}
                             colorSelector={parallelColorSelector}
-                            margins={{
-                                top: 20,
-                                right: 20,
-                                bottom: 20,
-                                left: 20,
-                            }}
+                            margins={margins}
                         />
                         { this.renderLegend(hazardLossType) }
                     </div>
@@ -257,7 +259,7 @@ class LeftPane extends React.PureComponent {
                     <div className={styles.barContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Loss count
+                                Total Loss Count
                             </h4>
                         </header>
                         <SimpleVerticalBarChart
@@ -279,10 +281,6 @@ class LeftPane extends React.PureComponent {
             pending,
             selectedDistricts,
         } = this.props;
-
-        const countData = this.getLossTypeCount(lossAndDamageList);
-        const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
-        const hazardLossType = this.getHazardLossType(lossAndDamageList);
 
         const {
             showDetails,

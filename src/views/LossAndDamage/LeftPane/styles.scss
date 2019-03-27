@@ -156,6 +156,7 @@ $width-non-tabular-container: var(--width-left-panel);
 
                         .bar-container {
                             @extend %container;
+                            height: 250px;
                         }
 
                         .donut-container {
@@ -164,6 +165,7 @@ $width-non-tabular-container: var(--width-left-panel);
 
                         .parallel-container {
                             @extend %container;
+                            height: 300px;
                         }
                     }
                 }
