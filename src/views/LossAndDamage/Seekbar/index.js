@@ -41,7 +41,7 @@ const groupList = (lst, getBucketValue) => {
 
     const output = [];
     for (let i = start; i <= end; i += 1) {
-        output.push(mem[i] || []);
+        output.push({ key: i, value: mem[i] || [] });
     }
     return output;
 };
@@ -66,7 +66,19 @@ export default class Seekbar extends React.PureComponent {
             mappedLst,
             item => Math.floor(item.timestamp / DAY),
         ).map(
-            item => ({ value: item.length, label: `Item length: ${item.count}` }),
+            item => ({
+                value: item.value.length,
+                label: (
+                    <div>
+                        <div>
+                            Incident count: <strong>{item.value.length}</strong>
+                        </div>
+                        <div>
+                            Date: {(new Date(item.key * DAY)).toLocaleDateString()}
+                        </div>
+                    </div>
+                ),
+            }),
         );
     })
 
@@ -89,7 +101,7 @@ export default class Seekbar extends React.PureComponent {
             <div className={_cs(className, styles.seekbar)}>
                 <div className={styles.graphContainer}>
                     <SparkLine
-                        circleRadius={0}
+                        circleRadius={3}
                         className={styles.sparkLine}
                         data={groupedIncidents}
                     />

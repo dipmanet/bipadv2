@@ -10,11 +10,23 @@
         background-color: #fff;
         padding: $spacing-medium $spacing-medium-alt;
 
-        .info {
+        .top {
             display: flex;
+            justify-content: space-between;
 
-            >* {
-                padding: $spacing-small;
+            .info {
+                display: flex;
+
+                >* {
+                    padding: $spacing-small;
+                }
+            }
+
+            .date-input-range {
+                display: flex;
+                >* {
+                    margin: 0 $spacing-small;
+                }
             }
         }
 
