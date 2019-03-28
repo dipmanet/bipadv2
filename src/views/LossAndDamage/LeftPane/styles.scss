@@ -22,7 +22,7 @@ $width-non-tabular-container: var(--width-left-panel);
         border-radius: 5px;
         background-color: $color-foreground;
         width: $width-non-tabular-container;
-        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2) - 100px);
+        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2) - 116px);
         overflow: auto;
 
         .visualizations {
