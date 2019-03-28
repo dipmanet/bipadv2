@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
+import DateInput from '#rsci/DateInput';
 
 import {
     createConnectedRequestCoordinator,
@@ -88,7 +89,59 @@ class LossAndDamage extends React.PureComponent {
             selectedDistricts: [],
             leftPaneExpanded: true,
             rightPaneExpanded: true,
+            start: undefined,
+            end: undefined,
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {
+            requests: {
+                lossAndDamageRequest: {
+                    response: {
+                        results: oldLossAndDamageList = emptyList,
+                    } = emptyObject,
+                },
+            },
+        } = this.props;
+
+        const {
+            requests: {
+                lossAndDamageRequest: {
+                    response: {
+                        results: newLossAndDamageList = emptyList,
+                    } = emptyObject,
+                },
+            },
+        } = nextProps;
+
+        if (oldLossAndDamageList !== newLossAndDamageList) {
+            let minDate = new Date().getTime();
+            let maxDate = new Date(0).getTime();
+
+            if (newLossAndDamageList.length > 0) {
+                newLossAndDamageList.forEach((l) => {
+                    const incidentDate = (new Date(l.incidentOn)).getTime();
+                    if (incidentDate > maxDate) {
+                        maxDate = incidentDate;
+                    }
+
+                    if (incidentDate < minDate) {
+                        minDate = incidentDate;
+                    }
+                });
+
+                const getYmd = (dateString) => {
+                    const date = new Date(dateString);
+                    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+                };
+
+                this.setState({
+                    start: getYmd(minDate),
+                    end: getYmd(maxDate),
+                });
+            }
+        }
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -121,12 +174,22 @@ class LossAndDamage extends React.PureComponent {
         this.setState({ pauseMap: !pauseMap });
     }
 
+    handleStartInputChange = (start) => {
+        this.setState({ start });
+    }
+
+    handleEndInputChange = (end) => {
+        this.setState({ end });
+    }
+
     renderMainContent = () => {
         const {
             playbackStart,
             playbackEnd,
             currentRange,
             pauseMap,
+            start,
+            end,
         } = this.state;
 
         const {
@@ -142,21 +205,37 @@ class LossAndDamage extends React.PureComponent {
 
         return (
             <div className={styles.container}>
-                <div className={styles.info}>
-                    <div>
-                        Showing events from
+                <div className={styles.top}>
+                    <div className={styles.info}>
+                        <div>
+                            Showing events from
+                        </div>
+                        <FormattedDate
+                            value={currentRange.start}
+                            mode="yyyy-MM-dd"
+                        />
+                        <div>
+                            to
+                        </div>
+                        <FormattedDate
+                            value={currentRange.end}
+                            mode="yyyy-MM-dd"
+                        />
                     </div>
-                    <FormattedDate
-                        value={currentRange.start}
-                        mode="yyyy-MM-dd"
-                    />
-                    <div>
-                        to
+                    <div className={styles.dateInputRange}>
+                        <DateInput
+                            label="Start"
+                            value={start}
+                            onChange={this.handleStartInputChange}
+                            showHintAndError={false}
+                        />
+                        <DateInput
+                            label="End"
+                            value={end}
+                            onChange={this.handleEndInputChange}
+                            showHintAndError={false}
+                        />
                     </div>
-                    <FormattedDate
-                        value={currentRange.end}
-                        mode="yyyy-MM-dd"
-                    />
                 </div>
                 <div className={styles.bottom}>
                     <Button
@@ -238,8 +317,9 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards.municipality'],
-            limit: 1000,
+            limit: 10000,
             ordering: '-incident_on',
+            lnd: true,
         }),
         onPropsChanged: {
             filters: ({

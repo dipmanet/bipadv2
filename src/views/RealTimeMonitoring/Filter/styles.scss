@@ -70,9 +70,9 @@ $width-table-container: 250px;
 
         span {
             border-bottom: 1px solid $color-separator;
+            padding: $spacing-small;
             color: $color-accent;
             font-weight: $font-weight-bold;
-            padding: $spacing-small;
         }
         .container {
             display: flex;
@@ -88,13 +88,19 @@ $width-table-container: 250px;
             }
 
             .legend {
-                flex-grow: 1;
                 display: flex;
+                flex-grow: 1;
                 flex-shrink: 0;
                 flex-wrap: wrap;
 
                 .legend-item {
                     padding: 0 $spacing-small;
+                    font-size: $font-size-small;
+                    font-weight: $font-weight-bold;
+
+                    >div:first-child {
+                        width: $font-size-medium;
+                    }
                 }
             }
         }
