@@ -1,22 +1,12 @@
 @import '~base-scss/base';
 
-.left {
-    // background-color: $color-foreground;
-
-    .graph {
-        border-radius: 5px;
-        width: 500px;
-        height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-    }
-}
-
 .main {
     left: $spacing-medium;
     transform: none;
     width: calc(100vw - 72px);
 
     .container {
-        border-radius: 3px;
+        border-radius: 5px;
         background-color: #fff;
         padding: $spacing-medium $spacing-medium-alt;
 

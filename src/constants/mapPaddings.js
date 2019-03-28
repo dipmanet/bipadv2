@@ -10,32 +10,35 @@ const getMapPaddings = () => {
     const widthRightPanel = convertValueToNumber(styleProperties.widthRightPanel);
     const widthNavbarRight = convertValueToNumber(styleProperties.widthNavbarRight);
 
+    const bottomPadding = 64;
+    const topPadding = 64;
+
     const mapPaddings = {
         leftPaneExpanded: {
-            top: spacingMedium,
+            top: spacingMedium + topPadding,
             right: spacingMedium + widthNavbarRight,
-            bottom: spacingMedium,
+            bottom: spacingMedium + bottomPadding,
             left: (2 * spacingMedium) + widthLeftPanel,
         },
 
         rightPaneExpanded: {
-            top: spacingMedium,
+            top: spacingMedium + topPadding,
             right: (2 * spacingMedium) + widthNavbarRight + widthRightPanel,
-            bottom: spacingMedium,
+            bottom: spacingMedium + bottomPadding,
             left: spacingMedium,
         },
 
         bothPaneExpanded: {
-            top: spacingMedium,
+            top: spacingMedium + topPadding,
             right: (2 * spacingMedium) + widthNavbarRight + widthRightPanel,
-            bottom: spacingMedium,
+            bottom: spacingMedium + bottomPadding,
             left: (2 * spacingMedium) + widthLeftPanel,
         },
 
         noPaneExpanded: {
-            top: spacingMedium,
+            top: spacingMedium + topPadding,
             right: spacingMedium + widthNavbarRight,
-            bottom: spacingMedium,
+            bottom: spacingMedium + bottomPadding,
             left: spacingMedium,
         },
     };

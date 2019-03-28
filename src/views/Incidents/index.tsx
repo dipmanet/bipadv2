@@ -1,9 +1,12 @@
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
+
+import Numeral from '#rscv/Numeral';
 
 import {
     createConnectedRequestCoordinator,
@@ -22,6 +25,8 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
+
+import HazardsLegend from '#components/HazardsLegend';
 
 import { transformDateRangeFilterParam } from '#utils/transformations';
 
@@ -135,7 +140,29 @@ class Incidents extends React.PureComponent<Props, State> {
                     rightPaneExpanded={rightPaneExpanded}
                     incidentList={incidentList}
                 />
+                <div className={
+                    _cs(
+                        rightPaneExpanded && styles.rightPaneExpanded,
+                        styles.incidentCount,
+                    )
+                }
+                >
+                    <Numeral
+                        className={styles.count}
+                        value={incidentList.length}
+                        precision={0}
+                    />
+                    <div className={styles.text}>
+                        Incidents
+                    </div>
+                </div>
                 <Page
+                    mainContent={
+                        <HazardsLegend
+                            className={styles.hazardLegend}
+                            itemClassName={styles.legendItem}
+                        />
+                    }
                     leftContentClassName={styles.left}
                     leftContent={
                         <LeftPane
