@@ -26,11 +26,7 @@ const propTypes = {
 const defaultProps = {
     distance: 0,
     showDetails: false,
-    inventories: [
-        { resourceType: 'health', item: { title: 'X-Ray Machine', category: 'machine' }, quantity: 30 },
-        { resourceType: 'health', item: { title: 'Ultrasound Machine', category: 'machine' }, quantity: 32 },
-        { resourceType: 'finance', item: { title: 'Branch', category: 'bank' }, quantity: 10 },
-    ],
+    inventories: [],
 };
 
 const emptyObject = {};
@@ -39,7 +35,7 @@ const inventoryToTextOutput = inventory => (
     <TextOutput
         key={inventory.id}
         label={inventory.item.title}
-        value={inventory.quantity}
+        value={`${inventory.quantity} ${inventory.item.unit}`}
     />
 );
 
