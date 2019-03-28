@@ -12,6 +12,7 @@ import {
 
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
+import HazardsLegend from '#components/HazardsLegend';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import DonutChart from '#rscz/DonutChart';
@@ -217,56 +218,66 @@ class LeftPane extends React.PureComponent {
 
         return (
             <div className={styles.districtSummary}>
+                {/*
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        {/* FIXME: get name from district id */}
+                        {/* FIXME: get name from district id /}
                         { district || 'Overall' }
                     </h4>
                 </header>
+                */}
                 <div className={styles.content}>
-                    <div className={styles.parallelContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Hazard Death Count
-                            </h4>
-                        </header>
-                        <ParallelCoordinates
-                            data={hazardLossType}
-                            className={styles.chart}
-                            ignoreProperties={['label', 'color']}
-                            labelSelector={parallelLabelSelector}
-                            colorSelector={parallelColorSelector}
-                            margins={margins}
-                        />
-                        { this.renderLegend(hazardLossType) }
+                    <div className={styles.visualizationContainer}>
+                        <div className={styles.parallelContainer}>
+                            <header className={styles.header}>
+                                <h4 className={styles.heading}>
+                                    Hazard Death Count
+                                </h4>
+                            </header>
+                            <ParallelCoordinates
+                                data={hazardLossType}
+                                className={styles.chart}
+                                ignoreProperties={['label', 'color']}
+                                labelSelector={parallelLabelSelector}
+                                colorSelector={parallelColorSelector}
+                                margins={margins}
+                            />
+                            {/* this.renderLegend(hazardLossType) */}
+                        </div>
+                        <div className={styles.donutContainer}>
+                            <header className={styles.header}>
+                                <h4 className={styles.heading}>
+                                    Estimated Monetary Loss
+                                </h4>
+                            </header>
+                            <DonutChart
+                                sideLengthRatio={0.4}
+                                className={styles.chart}
+                                data={hazardLossEstimate}
+                                labelSelector={donutChartLabelSelector}
+                                valueSelector={donutChartValueSelector}
+                                colorSelector={donutChartColorSelector}
+                            />
+                            {/* this.renderLegend(hazardLossEstimate) */}
+                        </div>
+                        <div className={styles.barContainer}>
+                            <header className={styles.header}>
+                                <h4 className={styles.heading}>
+                                    Total Loss Count
+                                </h4>
+                            </header>
+                            <SimpleVerticalBarChart
+                                className={styles.chart}
+                                data={countData}
+                                labelSelector={barChartLabelSelector}
+                                valueSelector={barChartValueSelector}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardLossEstimate}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            colorSelector={donutChartColorSelector}
-                        />
-                        { this.renderLegend(hazardLossEstimate) }
-                    </div>
-                    <div className={styles.barContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Total Loss Count
-                            </h4>
-                        </header>
-                        <SimpleVerticalBarChart
-                            className={styles.chart}
-                            data={countData}
-                            labelSelector={barChartLabelSelector}
-                            valueSelector={barChartValueSelector}
+                    <div className={styles.legendContainer}>
+                        <HazardsLegend
+                            className={styles.legend}
+                            itemClassName={styles.legendItem}
                         />
                     </div>
                 </div>

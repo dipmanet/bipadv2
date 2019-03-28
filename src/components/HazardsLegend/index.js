@@ -1,0 +1,56 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+
+import Legend from '#rscz/Legend';
+
+import {
+    hazardTypesSelector,
+} from '#selectors';
+
+const propTypes = {
+    className: PropTypes.string,
+    hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+const defaultProps = {
+    className: undefined,
+};
+
+const legendKeySelector = d => d.title;
+const legendColorSelector = d => d.color;
+const legendLabelSelector = d => d.title;
+
+class HazardsLegend extends React.PureComponent {
+    static propTypes = propTypes
+    static defaultProps = defaultProps
+
+    render() {
+        const {
+            className,
+            itemClassName,
+            hazardTypes,
+        } = this.props;
+
+        const hazardItems = Object.values(hazardTypes);
+
+        return (
+            <Legend
+                className={className}
+                data={hazardItems}
+                itemClassName={itemClassName}
+                keySelector={legendKeySelector}
+                labelSelector={legendLabelSelector}
+                colorSelector={legendColorSelector}
+                emptyComponent={() => ''}
+            />
+        );
+    }
+}
+
+const mapStateToProps = state => ({
+    hazardTypes: hazardTypesSelector(state),
+});
+
+export default connect(mapStateToProps)(HazardsLegend);
