@@ -317,7 +317,7 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards.municipality'],
-            limit: 10000,
+            limit: 12000,
             ordering: '-incident_on',
             lnd: true,
         }),

@@ -9,6 +9,8 @@ import { districtsSelector } from '#selectors';
 import { getMapPaddings } from '#constants';
 import { groupList } from '#utils/common';
 
+import styles from './styles.scss';
+
 const metric = (val) => {
     if (!val) {
         return 0;
@@ -22,27 +24,22 @@ const sum = list => list.reduce(
 );
 
 const colorGrade = [
-    '#ffffcc',
-    '#ffeda0',
-    '#fed976',
-    '#feb24c',
-    '#fd8d3c',
-    '#fc4e2a',
-    '#e31a1c',
-    '#bd0026',
-    '#800026',
+    '#fee5d9',
+    '#fcbba1',
+    '#fc9272',
+    '#fb6a4a',
+    '#ef3b2c',
+    '#cb181d',
+    '#99000d',
 ];
 
-const generateColor = (maxValue, minValue, colorMapping) => {
-    const newColor = [];
-    const { length } = colorMapping;
-    const range = maxValue - minValue;
-    colorMapping.forEach((color, i) => {
-        const val = minValue + ((i * range) / (length - 1));
-        newColor.push(val);
-        newColor.push(color);
-    });
-    return newColor;
+
+const pickList = (list, start, offset) => {
+    const newList = [];
+    for (let i = start; i < list.length; i += offset) {
+        newList.push(list[i]);
+    }
+    return newList;
 };
 
 const propTypes = {
@@ -199,12 +196,24 @@ class LossAndDamageMap extends React.PureComponent {
         return val;
     });
 
-    generateColor = memoize(max => ({
+    generateColor = memoize((maxValue, minValue, colorMapping) => {
+        const newColor = [];
+        const { length } = colorMapping;
+        const range = maxValue - minValue;
+        colorMapping.forEach((color, i) => {
+            const val = minValue + ((i * range) / (length - 1));
+            newColor.push(val);
+            newColor.push(color);
+        });
+        return newColor;
+    });
+
+    generatePaint = memoize(color => ({
         'fill-color': [
             'interpolate',
             ['linear'],
             ['feature-state', 'count'],
-            ...generateColor(max, 0, colorGrade),
+            ...color,
         ],
     }))
 
@@ -268,15 +277,40 @@ class LossAndDamageMap extends React.PureComponent {
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
         const { mapping, maxStat } = this.generateDataset(lossAndDamageList);
-        const colorPaint = this.generateColor(Math.max(metric(maxStat), 1));
+        const color = this.generateColor(Math.max(metric(maxStat), 1), 0, colorGrade);
+        const colorPaint = this.generatePaint(color);
         const mapState = this.generateMapState(districts, mapping[currentIndex], metric);
 
+        const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
+        const maxValue = Math.max(metric(maxStat), 1);
+
         return (
-            <ChoroplethMap
-                boundsPadding={boundsPadding}
-                paint={colorPaint}
-                mapState={mapState}
-            />
+            <React.Fragment>
+                <div className={styles.legend}>
+                    <h5 className={styles.heading}>
+                        Number of incidents
+                    </h5>
+                    <div className={styles.range}>
+                        <div className={styles.min}>
+                            0
+                        </div>
+                        <div className={styles.max}>
+                            { maxValue }
+                        </div>
+                    </div>
+                    <div
+                        className={styles.scale}
+                        style={{
+                            background: colorString,
+                        }}
+                    />
+                </div>
+                <ChoroplethMap
+                    boundsPadding={boundsPadding}
+                    paint={colorPaint}
+                    mapState={mapState}
+                />
+            </React.Fragment>
         );
     }
 }
