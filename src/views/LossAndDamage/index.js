@@ -237,8 +237,9 @@ const requests = {
         url: '/incident/',
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            expand: ['loss.peoples'],
-            limit: 10000,
+            expand: ['loss.peoples', 'wards.municipality'],
+            limit: 1000,
+            ordering: '-incident_on',
         }),
         onPropsChanged: {
             filters: ({

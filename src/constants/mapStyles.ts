@@ -4,6 +4,11 @@ export default {
             'line-color': '#a3b7e3',
             'line-width': 2,
         },
+        choroplethOutline: {
+            'line-color': '#000000',
+            'line-width': 1.5,
+            'line-opacity': 0.5,
+        },
         fill: {
             'fill-color': '#0081f0',
             'fill-opacity': ['case',
@@ -17,6 +22,11 @@ export default {
         outline: {
             'line-color': '#a3b7e3',
             'line-width': 1.4,
+        },
+        choroplethOutline: {
+            'line-color': '#000000',
+            'line-width': 1,
+            'line-opacity': 0.5,
         },
         fill: {
             // NOTE: hover and selection enabled in district
