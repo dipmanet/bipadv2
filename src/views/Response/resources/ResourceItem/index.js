@@ -20,15 +20,16 @@ const propTypes = {
     point: PropTypes.object.isRequired,
     resourceType: PropTypes.string.isRequired,
     inventories: PropTypes.arrayOf(PropTypes.object),
+    showDetails: PropTypes.bool,
 };
 
 const defaultProps = {
     distance: 0,
+    showDetails: false,
     inventories: [
-        { type: 'health', name: 'X-Ray Machine', count: 50 },
-        { type: 'health', name: 'MRI Machine', count: 5 },
-        { type: 'health', name: 'Ultrasound Machine', count: 51 },
-        { type: 'health', name: 'Ambulances', count: 10 },
+        { resourceType: 'health', item: { title: 'X-Ray Machine', category: 'machine' }, quantity: 30 },
+        { resourceType: 'health', item: { title: 'Ultrasound Machine', category: 'machine' }, quantity: 32 },
+        { resourceType: 'finance', item: { title: 'Branch', category: 'bank' }, quantity: 10 },
     ],
 };
 
@@ -37,8 +38,8 @@ const emptyObject = {};
 const inventoryToTextOutput = inventory => (
     <TextOutput
         key={inventory.id}
-        label={inventory.name}
-        value={inventory.count}
+        label={inventory.item.title}
+        value={inventory.quantity}
     />
 );
 
@@ -49,14 +50,37 @@ export default class ResourceItem extends React.PureComponent {
     handleShareButton = () => {
     }
 
+    renderDetails = () => {
+        const { resourceType, inventories } = this.props;
+        const attrs = resourceAttributes[resourceType] || [];
+        return (
+            <React.Fragment>
+                <div className={styles.attributes}>
+                    {
+                        attrs.map(x => (
+                            <TextOutput
+                                key={x.key}
+                                className={styles.info}
+                                label={x.label}
+                                value={this.props[x.key]}
+                            />
+                        ))
+                    }
+                </div>
+                <div className={styles.hr} />
+                { inventories.length > 0 && (<div> <b> Inventories </b> </div>) }
+                {inventories.map(inventoryToTextOutput)}
+            </React.Fragment>
+        );
+    }
+
     render() {
         const {
             className,
             title,
             distance,
             contactNumber = '911',
-            resourceType,
-            inventories,
+            showDetails,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
             point: {
@@ -65,8 +89,6 @@ export default class ResourceItem extends React.PureComponent {
         } = this.props;
 
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
-
-        const attrs = resourceAttributes[resourceType] || [];
 
         return (
             <React.Fragment>
@@ -101,27 +123,9 @@ export default class ResourceItem extends React.PureComponent {
                         )
                     }
                 </div>
-                <div className={styles.attributes}>
-                    {
-                        attrs.map(x => (
-                            <TextOutput
-                                key={x.key}
-                                className={styles.info}
-                                label={x.label}
-                                value={this.props[x.key]}
-                            />
-                        ))
-                    }
-                </div>
-                { inventories.length > 0 && (
-                    <React.Fragment>
-                        <div className={styles.hr} />
-                        <div> <b> Inventories </b> </div>
-                        {
-                            inventories.map(inventoryToTextOutput)
-                        }
-                    </React.Fragment>
-                )}
+                {
+                    showDetails && this.renderDetails()
+                }
             </React.Fragment>
         );
     }
