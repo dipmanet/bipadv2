@@ -61,6 +61,14 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
+        name: 'indicators',
+        title: 'Indicators',
+        path: '/indicators/',
+        iconName: iconNames.indicator,
+        load: () => import('../views/Indicator'),
+        navbar: true,
+    },
+    {
         name: 'riskInfo',
         title: 'Risk Information',
         path: '/risk-info/',

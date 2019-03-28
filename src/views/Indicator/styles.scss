@@ -1,0 +1,10 @@
+@import '~base-scss/base';
+
+.main {
+    display: flex;
+    flex-grow: 1;
+    height: 100vh;
+    background-color: #fff;
+    padding: $spacing-medium $spacing-medium-alt;
+    overflow: auto;
+}
