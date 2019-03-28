@@ -3,6 +3,8 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Obj } from '@togglecorp/fujs';
 
+import HazardsLegend from '#components/HazardsLegend';
+
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
 import {
@@ -135,6 +137,12 @@ class Dashboard extends React.PureComponent<Props, State> {
                             hazardTypes={hazardTypes}
                             pending={alertsPending}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                        />
+                    }
+                    mainContent={
+                        <HazardsLegend
+                            className={styles.hazardLegend}
+                            itemClassName={styles.legendItem}
                         />
                     }
                     rightContent={
