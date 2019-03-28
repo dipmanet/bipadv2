@@ -50,6 +50,7 @@ const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
+const donutChartLabelModifier = (label, value) => `<div>${label}</div><div>Rs.${value}</div>`;
 const donutChartColorSelector = d => d.color;
 const parallelLabelSelector = d => d.label;
 const parallelColorSelector = d => d.color;
@@ -219,13 +220,13 @@ class LeftPane extends React.PureComponent {
         return (
             <div className={styles.districtSummary}>
                 {/*
-                <header className={styles.header}>
+                    <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        {/* FIXME: get name from district id /}
-                        { district || 'Overall' }
+                    {/* FIXME: get name from district id /}
+                    { district || 'Overall' }
                     </h4>
-                </header>
-                */}
+                    </header>
+                  */}
                 <div className={styles.content}>
                     <div className={styles.visualizationContainer}>
                         <div className={styles.parallelContainer}>
@@ -256,6 +257,7 @@ class LeftPane extends React.PureComponent {
                                 data={hazardLossEstimate}
                                 labelSelector={donutChartLabelSelector}
                                 valueSelector={donutChartValueSelector}
+                                labelModifier={donutChartLabelModifier}
                                 colorSelector={donutChartColorSelector}
                             />
                             {/* this.renderLegend(hazardLossEstimate) */}
