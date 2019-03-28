@@ -1,0 +1,44 @@
+@import '~base-scss/base';
+
+.main {
+    display: flex;
+    left: $spacing-medium;
+    flex-grow: 1;
+    transform: none;
+    background-color: $color-foreground;
+    width: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--spacing-medium) * 2 - var(--height-navbar));
+    overflow: auto;
+
+    .table-container {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        table {
+            border: 0;
+            border-collapse: collapse;
+
+            th {
+                position: sticky;
+                top: 0;
+                border: 0;
+                background-color: $color-primary;
+                padding: $spacing-small-alt $spacing-medium;
+                color: $color-text-on-primary;
+            }
+
+            td {
+                border: 0;
+                border-bottom: 1px solid $color-separator-light;
+                padding: $spacing-small-alt $spacing-medium;
+            }
+
+            :global {
+                .priority {
+                    font-weight: $font-weight-bold;
+                }
+            }
+        }
+    }
+}
