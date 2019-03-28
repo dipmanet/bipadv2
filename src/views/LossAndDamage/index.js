@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -144,6 +145,20 @@ class LossAndDamage extends React.PureComponent {
         }
     }
 
+    getLossAndDamageListInRange = memoize((lossAndDamageList, startDate, endDate) => {
+        const getTimestamp = d => (new Date(d)).getTime();
+
+        const startTimestamp = getTimestamp(startDate);
+        const endTimestamp = getTimestamp(endDate);
+
+        const filteredList = lossAndDamageList.filter((lnd) => {
+            const incidentDate = getTimestamp(lnd.incidentOn);
+            return (incidentDate >= startTimestamp && incidentDate <= endTimestamp);
+        });
+
+        return filteredList;
+    })
+
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
         this.setState({ leftPaneExpanded });
     }
@@ -182,7 +197,7 @@ class LossAndDamage extends React.PureComponent {
         this.setState({ end });
     }
 
-    renderMainContent = () => {
+    renderMainContent = (lndList) => {
         const {
             playbackStart,
             playbackEnd,
@@ -191,17 +206,6 @@ class LossAndDamage extends React.PureComponent {
             start,
             end,
         } = this.state;
-
-        const {
-            requests: {
-                lossAndDamageRequest: {
-                    pending,
-                    response: {
-                        results: lossAndDamageList = emptyList,
-                    } = emptyObject,
-                },
-            },
-        } = this.props;
 
         return (
             <div className={styles.container}>
@@ -247,7 +251,7 @@ class LossAndDamage extends React.PureComponent {
                         className={styles.seekbar}
                         start={playbackStart}
                         end={playbackEnd}
-                        data={lossAndDamageList}
+                        data={lndList}
                     />
                 </div>
             </div>
@@ -272,13 +276,17 @@ class LossAndDamage extends React.PureComponent {
             selectedDistricts,
             leftPaneExpanded,
             rightPaneExpanded,
+            start,
+            end,
         } = this.state;
+
+        const lndList = this.getLossAndDamageListInRange(lossAndDamageList, start, end);
 
         return (
             <React.Fragment>
                 <Map
                     pause={pauseMap}
-                    lossAndDamageList={lossAndDamageList}
+                    lossAndDamageList={lndList}
                     onPlaybackProgress={this.handleMapPlaybackProgress}
                     onDistrictSelect={this.handleMapDistrictSelect}
                     leftPaneExpanded={leftPaneExpanded}
@@ -289,7 +297,7 @@ class LossAndDamage extends React.PureComponent {
                     leftContent={
                         <LeftPane
                             pending={pending}
-                            lossAndDamageList={lossAndDamageList}
+                            lossAndDamageList={lndList}
                             selectedDistricts={selectedDistricts}
                             onExpandChange={this.handleLeftPaneExpandChange}
                         />
@@ -301,7 +309,7 @@ class LossAndDamage extends React.PureComponent {
                         />
                     }
                     mainContentClassName={styles.main}
-                    mainContent={this.renderMainContent()}
+                    mainContent={this.renderMainContent(lndList)}
                 />
             </React.Fragment>
         );
