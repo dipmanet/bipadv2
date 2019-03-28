@@ -8,7 +8,12 @@ import styles from './styles.scss';
 const Indicator = () => (
     <Page
         mainContentClassName={styles.main}
-        mainContent={<div dangerouslySetInnerHTML={{ __html: template }} />}
+        mainContent={
+            <div
+                className={styles.tableContainer}
+                dangerouslySetInnerHTML={{ __html: template }}
+            />
+        }
     />
 );
 
