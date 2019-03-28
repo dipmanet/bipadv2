@@ -143,7 +143,7 @@ class Response extends React.PureComponent {
 const requests = {
     responseRequest: {
         url: ({ props: { incidentId } }) => (
-            `/incident/${incidentId}/response/?distance=12`
+            `/incident/${incidentId}/response/?distance=12&meta=true`
         ),
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });

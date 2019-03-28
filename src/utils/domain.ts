@@ -18,7 +18,7 @@ export const PEOPLE_LOSS_FACTOR = 0.4;
 export const LIVESTOCK_LOSS_FACTOR = 0.1;
 export const INFRASTRUCTURE_LOSS_FACTOR = 0.3;
 
-export const calculateSeverity = (loss: Loss, scaleFactor: number = 1) => {
+export const calculateSeverity = (loss: Loss, scaleFactor: number = 1): number => {
     const {
         estimatedLoss = 0,
         peopleDeathCount = 0,
@@ -26,6 +26,10 @@ export const calculateSeverity = (loss: Loss, scaleFactor: number = 1) => {
         infrastructureDestroyedCount = 0,
     } = loss;
 
+    // NOTE: for now just return peopleDeathCount
+    return peopleDeathCount;
+
+    /*
     const offset = 0.2;
 
     const severity = offset +
@@ -35,15 +39,19 @@ export const calculateSeverity = (loss: Loss, scaleFactor: number = 1) => {
         (INFRASTRUCTURE_LOSS_FACTOR * infrastructureDestroyedCount);
 
     return severity * scaleFactor;
+    */
 };
 
-export const calculateCategorizedSeverity = (loss: Loss, scaleFactor?: number) => {
+export const calculateCategorizedSeverity = (loss: Loss, scaleFactor?: number): string => {
     const severity = calculateSeverity(loss, scaleFactor);
-    if (severity < 4) {
+    if (!severity) {
         return 'Minor';
     }
-    if (severity < 50) {
+    if (severity < 10) {
         return 'Major';
+    }
+    if (severity < 100) {
+        return 'Severe';
     }
     return 'Catastrophic';
 };
@@ -112,7 +120,7 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
                 geometry: { ...point },
                 properties: {
                     incidentId: id,
-                    severity: calculateSeverity(loss, severityScaleFactor),
+                    severity: calculateCategorizedSeverity(loss, severityScaleFactor),
                     hazardColor: getHazardColor(hazards, hazard),
                     incidentOn: new Date(incidentOn).getTime(),
                 },

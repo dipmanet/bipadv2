@@ -75,14 +75,14 @@ export default {
     incidentPoint: {
         fill: {
             'circle-color': ['get', 'hazardColor'],
-            'circle-radius': {
-                property: 'severity',
-                type: 'exponential',
-                stops: [
-                    [124, 2],
-                    [34615, 10],
-                ],
-            },
+            'circle-radius': [
+                'case',
+                ['==', ['get', 'severity'], 'Minor'], 5,
+                ['==', ['get', 'severity'], 'Major'], 7,
+                ['==', ['get', 'severity'], 'Severe'], 9,
+                ['==', ['get', 'severity'], 'Catastrophic'], 11,
+                5,
+            ],
             'circle-opacity': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 0.5,
