@@ -134,6 +134,13 @@ export const setRealTimeEarthquakeListAction = (
     realTimeEarthquakeList,
 });
 
+export const setRealTimeFireListAction = (
+    { realTimeFireList }:
+    { realTimeFireList: Type.RealTimeFire[]}) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST,
+    realTimeFireList,
+});
+
 export const setRealTimeFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
@@ -463,6 +470,23 @@ export const setRealTimeEarthquakeList = (
     return newState;
 };
 
+export const setRealTimeFireList = (
+    state: Type.PageState,
+    action: Type.SetRealTimeFireList,
+) => {
+    const {
+        realTimeFireList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.realTimeFireList = realTimeFireList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 export const setRealTimeFilters = (
     state: Type.PageState,
     action: Type.SetRealTimeFilters,
@@ -573,6 +597,8 @@ export default function routeReducer(
             return setRealTimeRiverList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:
             return setRealTimeEarthquakeList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST:
+            return setRealTimeFireList(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_FILTERS:

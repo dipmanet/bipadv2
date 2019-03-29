@@ -113,6 +113,16 @@ export interface RealTimeEarthquake {
     magnitude?: number;
 }
 
+export interface RealTimeFire {
+    id: number;
+    point: unknown;
+    landCover?: string;
+    eventOn?: string;
+    confidence: number;
+    brightness: number;
+    scan?: unknown;
+}
+
 export interface DashboardPage {
     alertList: Alert[];
     filters: Filters;
@@ -140,6 +150,7 @@ export interface RealTimeMonitoringPage {
     realTimeRainList: RealTimeRain[];
     realTimeRiverList: RealTimeRiver[];
     realTimeEarthquakeList: RealTimeEarthquake[];
+    realTimeFireList: RealTimeFire[];
     filters: Filters;
 }
 
@@ -195,7 +206,8 @@ export enum PageType {
     // real time monitoring
     RTM__SET_REAL_TIME_RAIN_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RAIN',
     RTM__SET_REAL_TIME_RIVER_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RIVER',
-    RTM__SET_REAL_TIME_EARTHQUAKE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_EARTHQUAKE_RIVER',
+    RTM__SET_REAL_TIME_EARTHQUAKE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_EARTHQUAKE',
+    RTM__SET_REAL_TIME_FIRE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FIRE',
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
 
     // loss and damage page
@@ -299,6 +311,11 @@ export interface SetRealTimeEarthquakeList {
     realTimeEarthquakeList: RealTimeEarthquake[];
 }
 
+export interface SetRealTimeFireList {
+    type: typeof PageType.RTM__SET_REAL_TIME_FIRE_LIST;
+    realTimeFireList: RealTimeFire[];
+}
+
 export interface SetRealTimeFilters extends FiltersWithRegion {
     type: typeof PageType.RTM__SET_REAL_TIME_FILTERS;
 }
@@ -315,5 +332,5 @@ export type PageActionTypes = (
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
-    SetLossAndDamageFilters | SetRealTimeFilters
+    SetRealTimeFireList | SetLossAndDamageFilters | SetRealTimeFilters
 );
