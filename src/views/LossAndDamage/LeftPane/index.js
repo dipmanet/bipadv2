@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { schemeAccent } from 'd3-scale-chromatic';
-import { scaleOrdinal } from 'd3-scale';
+
+import { groupList, sum } from '#utils/common';
 import {
     _cs,
-    mapToList,
+    isDefined,
 } from '@togglecorp/fujs';
 
 import { hazardTypesList } from '#utils/domain';
@@ -16,7 +16,6 @@ import HazardsLegend from '#components/HazardsLegend';
 
 import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import DonutChart from '#rscz/DonutChart';
-import Legend from '#rscz/Legend';
 import ParallelCoordinates from '#rscz/ParallelCoordinates';
 
 import CollapsibleView from '#components/CollapsibleView';
@@ -32,11 +31,13 @@ const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     pending: PropTypes.bool,
+    lossAndDamageList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
     pending: false,
+    lossAndDamageList: [],
 };
 
 const margins = {
@@ -55,9 +56,9 @@ const donutChartColorSelector = d => d.color;
 const parallelLabelSelector = d => d.label;
 const parallelColorSelector = d => d.color;
 
-const itemSelector = d => d.label;
-const legendColorSelector = d => d.color;
-const legendLabelSelector = d => d.label;
+const mapStateToProps = state => ({
+    hazardTypes: hazardTypesSelector(state),
+});
 
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
@@ -78,73 +79,42 @@ class LeftPane extends React.PureComponent {
 
     getHazardLossEstimation = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
-
-        const lossEstimation = lossAndDamageList
-            .filter(v => (
-                v.loss !== undefined &&
-                v.loss.estimatedLoss
-            ))
-            .reduce((acc, current) => {
-                if (acc[current.hazard] === undefined) {
-                    acc[current.hazard] = 0;
-                } else {
-                    acc[current.hazard] += current.loss.estimatedLoss;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            lossEstimation,
-            (d, k) => ({
-                label: hazardTypes[k].title,
-                value: d,
-                color: hazardTypes[k].color,
-            }),
-        );
+        return groupList(
+            lossAndDamageList.filter(v => (
+                isDefined(v.loss) && isDefined(v.loss.estimatedLoss)
+            )),
+            incident => incident.hazard,
+        ).map(({ key, value }) => ({
+            // FIXME: potentially unsafe
+            label: hazardTypes[key].title,
+            color: hazardTypes[key].color,
+            value: sum(value.map(val => val.loss.estimatedLoss)),
+        })).filter(({ value }) => value > 0);
     });
 
     getHazardLossType = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
-
-        const hazardLossType = lossAndDamageList
-            .filter(v => (
-                v.loss !== undefined && (
-                    v.loss.peopleDeathCount ||
-                    v.loss.livestockDestroyedCount
-                )))
-            .reduce((acc, current) => {
-                if (acc[current.hazard] === undefined) {
-                    acc[current.hazard] = {
-                        people: 0,
-                        livestock: 0,
-                    };
-                } else {
-                    const {
-                        peopleDeathCount = 0,
-                        livestockDestroyedCount = 0,
-                    } = current.loss;
-
-                    acc[current.hazard].people += peopleDeathCount;
-                    acc[current.hazard].livestock += livestockDestroyedCount;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            hazardLossType,
-            (d, k) => ({
-                ...d,
-                label: hazardTypes[k].title,
-                color: hazardTypes[k].color,
-            }),
-        ).filter(item => !(
-            item.people === 0 &&
-            item.livestock === 0
-        ));
+        return groupList(
+            lossAndDamageList.filter(v => (
+                isDefined(v.loss) && (
+                    isDefined(v.loss.peopleDeathCount)
+                    || isDefined(v.loss.livestockDestroyedCount)
+                )
+            )),
+            incident => incident.hazard,
+        ).map(({ key, value }) => ({
+            // FIXME: potentially unsafe
+            label: hazardTypes[key].title,
+            color: hazardTypes[key].color,
+            people: sum(value.map(val => val.loss.peopleDeathCount).filter(isDefined)),
+            livestock: sum(value.map(val => val.loss.livestockDestroyedCount).filter(isDefined)),
+        })).filter(({ people, livestock }) => people > 0 || livestock > 0);
     });
 
     getLossTypeCount = memoize((lossAndDamageList) => {
-        const losses = lossAndDamageList.map(item => item.loss).filter(v => v !== undefined);
+        const losses = lossAndDamageList
+            .map(item => item.loss)
+            .filter(isDefined);
 
         if (losses.length === 0) {
             return [];
@@ -156,30 +126,15 @@ class LeftPane extends React.PureComponent {
             infrastructureDestroyedCount: 'Infrastructure Destroyed Count',
         };
 
-        const acc = {
-            peopleDeathCount: 0,
-            livestockDestroyedCount: 0,
-            infrastructureDestroyedCount: 0,
-        };
+        const people = sum(losses.map(loss => loss.peopleDeathCount).filter(isDefined));
+        const livestock = sum(losses.map(loss => loss.liveStockDestroyedCount).filter(isDefined));
+        const infra = sum(losses.map(loss => loss.infrastructureDestroyedCount).filter(isDefined));
 
-        losses.forEach((current) => {
-            const {
-                peopleDeathCount = 0,
-                livestockDestroyedCount = 0,
-                infrastructureDestroyedCount = 0,
-            } = current;
-            acc.peopleDeathCount += peopleDeathCount;
-            acc.livestockDestroyedCount += livestockDestroyedCount;
-            acc.infrastructureDestroyedCount += infrastructureDestroyedCount;
-        });
-
-        return mapToList(
-            acc,
-            (d, k) => ({
-                label: labelMap[k],
-                value: d,
-            }),
-        );
+        return [
+            { label: 'People death', value: people },
+            { label: 'Livestock death', value: livestock },
+            { label: 'Infrastructure destroyed', value: infra },
+        ].filter(({ value }) => value > 0);
     });
 
     handleShowDetailsButtonClick = () => {
@@ -200,18 +155,6 @@ class LeftPane extends React.PureComponent {
         }
     }
 
-    renderLegend = colorMap => (
-        <Legend
-            className={styles.legend}
-            data={colorMap}
-            itemClassName={styles.legendItem}
-            keySelector={itemSelector}
-            labelSelector={legendLabelSelector}
-            colorSelector={legendColorSelector}
-            emptyComponent={() => ''}
-        />
-    )
-
     renderSummary = ({ district }) => {
         const {
             lossAndDamageList,
@@ -225,14 +168,6 @@ class LeftPane extends React.PureComponent {
 
         return (
             <div className={styles.districtSummary}>
-                {/*
-                    <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                    {/* FIXME: get name from district id /}
-                    { district || 'Overall' }
-                    </h4>
-                    </header>
-                  */}
                 <div className={styles.content}>
                     <div className={styles.visualizationContainer}>
                         <div className={styles.parallelContainer}>
@@ -249,7 +184,6 @@ class LeftPane extends React.PureComponent {
                                 colorSelector={parallelColorSelector}
                                 margins={margins}
                             />
-                            {/* this.renderLegend(hazardLossType) */}
                         </div>
                         <div className={styles.donutContainer}>
                             <header className={styles.header}>
@@ -266,7 +200,6 @@ class LeftPane extends React.PureComponent {
                                 labelModifier={donutChartLabelModifier}
                                 colorSelector={donutChartColorSelector}
                             />
-                            {/* this.renderLegend(hazardLossEstimate) */}
                         </div>
                         <div className={styles.barContainer}>
                             <header className={styles.header}>
@@ -297,9 +230,7 @@ class LeftPane extends React.PureComponent {
     render() {
         const {
             className,
-            lossAndDamageList,
             pending,
-            selectedDistricts,
         } = this.props;
 
         const {
@@ -344,79 +275,13 @@ class LeftPane extends React.PureComponent {
                             />
                         </header>
                         <div className={styles.summaryList}>
-                            { selectedDistricts.map(district => (
-                                <DistrictSummary
-                                    key={district}
-                                    district={district}
-                                />
-                            )) }
-                            { selectedDistricts.length === 0 && (
-                                <DistrictSummary />
-                            )}
+                            <DistrictSummary />
                         </div>
-                        {/*
-                        <div className={styles.content}>
-                            <div className={styles.parallelContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Hazard Loss Details
-                                    </h4>
-                                </header>
-                                <ParallelCoordinates
-                                    data={hazardLossType}
-                                    className={styles.chart}
-                                    ignoreProperties={['label', 'color']}
-                                    labelSelector={parallelLabelSelector}
-                                    colorSelector={parallelColorSelector}
-                                    margins={{
-                                        top: 20,
-                                        right: 20,
-                                        bottom: 20,
-                                        left: 20,
-                                    }}
-                                />
-                                { this.renderLegend(hazardLossType) }
-                            </div>
-                            <div className={styles.donutContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Estimated Monetary Loss
-                                    </h4>
-                                </header>
-                                <DonutChart
-                                    sideLengthRatio={0.4}
-                                    className={styles.chart}
-                                    data={hazardLossEstimate}
-                                    labelSelector={donutChartLabelSelector}
-                                    valueSelector={donutChartValueSelector}
-                                    colorSelector={donutChartColorSelector}
-                                />
-                                { this.renderLegend(hazardLossEstimate) }
-                            </div>
-                            <div className={styles.barContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Loss count
-                                    </h4>
-                                </header>
-                                <SimpleVerticalBarChart
-                                    className={styles.chart}
-                                    data={countData}
-                                    labelSelector={barChartLabelSelector}
-                                    valueSelector={barChartValueSelector}
-                                />
-                            </div>
-                        </div>
-                        */}
                     </div>
                 }
             />
         );
     }
 }
-
-const mapStateToProps = state => ({
-    hazardTypes: hazardTypesSelector(state),
-});
 
 export default connect(mapStateToProps)(LeftPane);
