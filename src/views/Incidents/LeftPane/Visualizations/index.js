@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
+import { groupList } from '#utils/common';
 
 import {
     _cs,
@@ -41,72 +42,45 @@ export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
-    getSummaryForLabel = memoize((incidentList, labelName, labelModifier = k => k) => {
-        // FIXME: use groupList
-        const summary = incidentList
-            .filter(v => v[labelName])
-            .reduce((acc, current) => {
-                if (acc[current[labelName]] === undefined) {
-                    acc[current[labelName]] = 0;
-                } else {
-                    acc[current[labelName]] += 1;
-                }
-                return acc;
-            }, {});
+    getHazardSummary = memoize((incidentList) => {
+        const { hazardTypes } = this.props;
 
-        return mapToList(
-            summary,
-            (d, k) => ({
-                label: labelModifier(k),
-                value: d,
-                color: colors(labelModifier(k)),
-            }),
+        const freqCount = groupList(
+            incidentList.filter(i => i.hazard),
+            incident => incident.hazard,
         );
-    });
+
+        return freqCount.map(h => (
+            {
+                label: (hazardTypes[h.key] || {}).title,
+                value: h.value.length,
+                color: (hazardTypes[h.key] || {}).color,
+            }
+        ));
+    })
 
     getSeveritySummary = memoize((incidentList) => {
-        // FIXME: use groupList
-        const severity = incidentList
-            .filter(v => v.severity)
-            .reduce((acc, current) => {
-                if (acc[current.severity] === undefined) {
-                    acc[current.severity] = 0;
-                } else {
-                    acc[current.severity] += 1;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            severity,
-            (d, k) => ({
-                label: k,
-                value: d,
-                color: colors(k),
-            }),
+        const freqCount = groupList(
+            incidentList.filter(i => i.severity),
+            incident => incident.severity,
         );
+
+        return freqCount.map(s => (
+            {
+                label: s.key,
+                value: s.value.length,
+                color: colors(s.key),
+            }
+        ));
     });
 
     getEventSummary = memoize((incidentList) => {
-        // FIXME: use groupList
-        const hazardCount = incidentList
-            .filter(v => v.event)
-            .reduce((acc, current) => {
-                if (acc[current.event.title] === undefined) {
-                    acc[current.event.title] = 0;
-                } else {
-                    acc[current.event.title] += 1;
-                }
-                return acc;
-            }, {});
-
-        return mapToList(
-            hazardCount,
-            (d, k) => ({
-                label: k,
-                value: d,
-            }),
+        const freqCount = groupList(
+            incidentList.filter(i => i.event),
+            incident => incident.event.title,
         );
+
+        return freqCount.map(event => ({ label: event.key, value: event.value.length }));
     });
 
     render() {
@@ -116,9 +90,8 @@ export default class Visualizations extends React.PureComponent {
             hazardTypes,
         } = this.props;
 
-        const severitySummary = this.getSummaryForLabel(incidentList, 'severity');
-        const inducerSummary = this.getSummaryForLabel(incidentList, 'inducer');
-        const hazardSummary = this.getSummaryForLabel(incidentList, 'hazard', k => hazardTypes[k].title);
+        const severitySummary = this.getSeveritySummary(incidentList);
+        const hazardSummary = this.getHazardSummary(incidentList);
         const eventSummary = this.getEventSummary(incidentList);
 
         return (
@@ -166,29 +139,6 @@ export default class Visualizations extends React.PureComponent {
                     <Legend
                         className={styles.legend}
                         data={severitySummary}
-                        itemClassName={styles.legendItem}
-                        keySelector={itemSelector}
-                        labelSelector={legendLabelSelector}
-                        colorSelector={legendColorSelector}
-                    />
-                </div>
-                <div className={styles.inducerSummary}>
-                    <header className={styles.header}>
-                        <h4 className={styles.heading}>
-                            Inducers
-                        </h4>
-                    </header>
-                    <DonutChart
-                        sideLengthRatio={0.5}
-                        className={styles.chart}
-                        data={inducerSummary}
-                        labelSelector={donutChartLabelSelector}
-                        valueSelector={donutChartValueSelector}
-                        colorSelector={donutChartColorSelector}
-                    />
-                    <Legend
-                        className={styles.legend}
-                        data={inducerSummary}
                         itemClassName={styles.legendItem}
                         keySelector={itemSelector}
                         labelSelector={legendLabelSelector}
