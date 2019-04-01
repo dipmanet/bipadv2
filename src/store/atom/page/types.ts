@@ -123,6 +123,15 @@ export interface RealTimeFire {
     scan?: unknown;
 }
 
+export interface RealTimePollution {
+    id: number;
+    point: unknown;
+    location?: string;
+    measuredOn?: string;
+    measurements?: unknown;
+    city?: string;
+}
+
 export interface DashboardPage {
     alertList: Alert[];
     filters: Filters;
@@ -151,6 +160,7 @@ export interface RealTimeMonitoringPage {
     realTimeRiverList: RealTimeRiver[];
     realTimeEarthquakeList: RealTimeEarthquake[];
     realTimeFireList: RealTimeFire[];
+    realTimePollutionList: RealTimePollution[];
     filters: Filters;
 }
 
@@ -209,6 +219,7 @@ export enum PageType {
     RTM__SET_REAL_TIME_RIVER_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RIVER',
     RTM__SET_REAL_TIME_EARTHQUAKE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_EARTHQUAKE',
     RTM__SET_REAL_TIME_FIRE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FIRE',
+    RTM__SET_REAL_TIME_POLLUTION_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_POLLUTION',
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
 
     // loss and damage page
@@ -322,6 +333,11 @@ export interface SetRealTimeFireList {
     realTimeFireList: RealTimeFire[];
 }
 
+export interface SetRealTimePollutionList {
+    type: typeof PageType.RTM__SET_REAL_TIME_POLLUTION_LIST;
+    realTimePollutionList: RealTimePollution[];
+}
+
 export interface SetRealTimeFilters extends FiltersWithRegion {
     type: typeof PageType.RTM__SET_REAL_TIME_FILTERS;
 }
@@ -338,5 +354,5 @@ export type PageActionTypes = (
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
-    SetRealTimeFireList | SetLossAndDamageFilters | SetRealTimeFilters
+    SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters | SetRealTimeFilters
 );

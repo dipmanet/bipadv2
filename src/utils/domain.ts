@@ -8,6 +8,7 @@ import {
     RealTimeRain,
     RealTimeRiver,
     RealTimeFire,
+    RealTimePollution,
     Resource,
 } from '#store/atom/page/types';
 
@@ -265,6 +266,29 @@ export const fireToGeojson = (realTimeFireList: RealTimeFire[]) => {
                     eventOn: fire.eventOn,
                     scan: fire.scan,
                     landCover: fire.landCover,
+                },
+            })),
+    };
+    return geojson;
+};
+
+export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: realTimePollutionList
+            .filter(pollution => pollution.point)
+            .map(pollution => ({
+                id: pollution.id,
+                type: 'Feature',
+                geometry: {
+                    ...pollution.point,
+                },
+                properties: {
+                    pollutionId: pollution.id,
+                    location: pollution.location,
+                    city: pollution.city,
+                    measuredOn: pollution.measuredOn,
+                    measurements: pollution.measurements,
                 },
             })),
     };

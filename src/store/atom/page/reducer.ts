@@ -147,6 +147,13 @@ export const setRealTimeFireListAction = (
     realTimeFireList,
 });
 
+export const setRealTimePollutionListAction = (
+    { realTimePollutionList }:
+    { realTimePollutionList: Type.RealTimePollution[]}) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST,
+    realTimePollutionList,
+});
+
 export const setRealTimeFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
@@ -502,6 +509,23 @@ export const setRealTimeFireList = (
     return newState;
 };
 
+export const setRealTimePollutionList = (
+    state: Type.PageState,
+    action: Type.SetRealTimePollutionList,
+) => {
+    const {
+        realTimePollutionList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.realTimePollutionList = realTimePollutionList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 export const setRealTimeFilters = (
     state: Type.PageState,
     action: Type.SetRealTimeFilters,
@@ -616,6 +640,8 @@ export default function routeReducer(
             return setRealTimeEarthquakeList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST:
             return setRealTimeFireList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST:
+            return setRealTimePollutionList(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_FILTERS:
