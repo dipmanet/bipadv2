@@ -13,6 +13,7 @@ import {
     earthquakeToGeojson,
     riverToGeojson,
     rainToGeojson,
+    fireToGeojson,
 } from '#utils/domain';
 
 import styles from './styles.scss';
@@ -23,6 +24,8 @@ export default class RealTimeMap extends React.PureComponent {
     getRiverFeatureCollection = memoize(riverToGeojson)
 
     getRainFeatureCollection = memoize(rainToGeojson);
+
+    getFireFeatureCollection = memoize(fireToGeojson);
 
     tooltipRendererParams = (id, { title, description, basin, status }) => ({
         title,
@@ -58,6 +61,7 @@ export default class RealTimeMap extends React.PureComponent {
         magnitude,
     })
 
+
     earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
         <div>
             <h3>
@@ -83,15 +87,50 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
+    fireTooltipRendererParams = (id, { brightness, confidence, eventOn, landCover }) => ({
+        brightness,
+        confidence,
+        eventOn,
+        landCover,
+    })
+
+    fireTooltipRenderer = ({ brightness, confidence, eventOn, landCover }) => (
+        <div>
+            <TextOutput
+                label="Brightness"
+                value={brightness}
+            />
+            <TextOutput
+                label="Confidence"
+                value={confidence}
+            />
+            <TextOutput
+                label="Event On"
+                value={
+                    <FormattedDate
+                        date={eventOn}
+                        mode="dd-MM-yyyy hh:mm"
+                    />
+                }
+            />
+            <TextOutput
+                label="LandCover"
+                value={landCover}
+            />1
+        </div>
+    )
+
     render() {
         const {
             realTimeRainList,
             realTimeRiverList,
             realTimeEarthquakeList,
+            realTimeFireList,
             selectedRealTime,
             showRain,
             showRiver,
             showEarthquake,
+            showFire,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -99,6 +138,8 @@ export default class RealTimeMap extends React.PureComponent {
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
             realTimeEarthquakeList,
         );
+
+        const fireFeatureCollection = this.getFireFeatureCollection(realTimeFireList);
 
         return (
             <React.Fragment>
@@ -151,6 +192,24 @@ export default class RealTimeMap extends React.PureComponent {
                             enableHover
                             tooltipRenderer={this.earthquakeTooltipRenderer}
                             tooltipRendererParams={this.earthquakeTooltipRendererParams}
+                        />
+                    }
+                </MapSource>
+                <MapSource
+                    sourceKey="real-time-fire-points"
+                    geoJson={fireFeatureCollection}
+                    supportHover
+                >
+                    { showFire &&
+                        <MapLayer
+                            layerKey="real-time-fire-points-fill"
+                            type="symbol"
+                            property="fireId"
+                            layout={mapStyles.firePoint.layout}
+                            paint={mapStyles.firePoint.paint}
+                            enableHover
+                            tooltipRenderer={this.fireTooltipRenderer}
+                            tooltipRendererParams={this.fireTooltipRendererParams}
                         />
                     }
                 </MapSource>

@@ -154,6 +154,12 @@ export default {
             ],
         },
     },
+    firePoint: {
+        layout: {
+            'icon-image': 'fire-station-11',
+        },
+        paint: { 'icon-color': '#ffee58' },
+    },
     earthquakePoint: {
         fill: {
             'circle-radius': 6,

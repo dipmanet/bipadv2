@@ -98,9 +98,10 @@ const state: PageState = {
         realTimeRainList: [],
         realTimeRiverList: [],
         realTimeEarthquakeList: [],
+        realTimeFireList: [],
         filters: {
             faramValues: {
-                realtimeSources: [1, 2, 3],
+                realtimeSources: [1, 2, 3, 4],
             },
             faramErrors: {},
             pristine: true,

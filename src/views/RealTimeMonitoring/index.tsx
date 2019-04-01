@@ -19,11 +19,13 @@ import {
     setRealTimeRainListAction,
     setRealTimeRiverListAction,
     setRealTimeEarthquakeListAction,
+    setRealTimeFireListAction,
 } from '#actionCreators';
 import {
     realTimeRiverListSelector,
     realTimeRainListSelector,
     realTimeEarthquakeListSelector,
+    realTimeFireListSelector,
     realTimeFiltersValuesSelector,
 } from '#selectors';
 import Page from '#components/Page';
@@ -40,6 +42,7 @@ interface PropsFromDispatch {
     setRealTimeRainList: typeof setRealTimeRainListAction;
     setRealTimeRiverList: typeof setRealTimeRiverListAction;
     setRealTimeEarthquakeList: typeof setRealTimeEarthquakeListAction;
+    setRealTimeFireList: typeof setRealTimeFireListAction;
 }
 
 interface PropsFromState {
@@ -57,6 +60,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeRainList: realTimeRainListSelector(state),
     realTimeRiverList: realTimeRiverListSelector(state),
     realTimeEarthquakeList: realTimeEarthquakeListSelector(state),
+    realTimeFireList: realTimeFireListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
 });
 
@@ -64,6 +68,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setRealTimeRainList: params => dispatch(setRealTimeRainListAction(params)),
     setRealTimeRiverList: params => dispatch(setRealTimeRiverListAction(params)),
     setRealTimeEarthquakeList: params => dispatch(setRealTimeEarthquakeListAction(params)),
+    setRealTimeFireList: params => dispatch(setRealTimeFireListAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -133,6 +138,28 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // FIXME: write schema
     },
+    realTimeFireRequest: {
+        url: '/fire/',
+        method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+        }),
+        onSuccess: ({ response, props: { setRealTimeFireList } }) => {
+            interface Response { results: PageType.RealTimeFire[] }
+            const { results: realTimeFireList = [] } = response as Response;
+            setRealTimeFireList({ realTimeFireList });
+        },
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
+        },
+        onMount: true,
+        // FIXME: write schema
+    },
 };
 
 interface RealtimeSource {
@@ -144,6 +171,7 @@ const realTimeList: RealtimeSource[] = [
     { id: 1, title: 'Earthquake' },
     { id: 2, title: 'River' },
     { id: 3, title: 'Rain' },
+    { id: 4, title: 'Fire' },
 ];
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
@@ -152,10 +180,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             realTimeRainList,
             realTimeRiverList,
             realTimeEarthquakeList,
+            realTimeFireList,
             requests: {
                 realTimeRainRequest: { pending: rainPending },
                 realTimeRiverRequest: { pending: riverPending },
                 realTimeEarthquakeRequest: { pending: earthquakePending },
+                realTimeFireRequest: { pending: firePending },
             },
             filters: {
                 realtimeSources,
@@ -165,6 +195,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
+        const showFire = realtimeSources && realtimeSources.findIndex(v => v === 4) !== -1;
 
         return (
             <React.Fragment>
@@ -172,9 +203,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     realTimeRainList={realTimeRainList}
                     realTimeRiverList={realTimeRiverList}
                     realTimeEarthquakeList={realTimeEarthquakeList}
+                    realTimeFireList={realTimeFireList}
                     showRain={showRain}
                     showRiver={showRiver}
                     showEarthquake={showEarthquake}
+                    showFire={showFire}
                 />
                 <Page
                     rightContentClassName={styles.right}
@@ -183,9 +216,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             rainPending={rainPending}
                             riverPending={riverPending}
                             earthquakePending={earthquakePending}
+                            firePending={firePending}
                             showRain={showRain}
                             showRiver={showRiver}
                             showEarthquake={showEarthquake}
+                            showFire={showFire}
                             realTimeList={realTimeList}
                         />
                     }

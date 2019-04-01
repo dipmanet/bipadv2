@@ -179,6 +179,11 @@ export const realTimeEarthquakeListSelector = createSelector(
     ({ realTimeEarthquakeList }) => realTimeEarthquakeList,
 );
 
+export const realTimeFireListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ realTimeFireList }) => realTimeFireList,
+);
+
 export const realTimeFiltersSelector = createSelector(
     realTimeMonitoringPageSelector,
     regionSelector,
