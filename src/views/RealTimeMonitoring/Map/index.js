@@ -14,6 +14,7 @@ import {
     riverToGeojson,
     rainToGeojson,
     fireToGeojson,
+    pollutionToGeojson,
 } from '#utils/domain';
 
 import styles from './styles.scss';
@@ -26,6 +27,8 @@ export default class RealTimeMap extends React.PureComponent {
     getRainFeatureCollection = memoize(rainToGeojson);
 
     getFireFeatureCollection = memoize(fireToGeojson);
+
+    getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
     tooltipRendererParams = (id, { title, description, basin, status }) => ({
         title,
@@ -120,17 +123,61 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
+    pollutionTooltipRendererParams = (id, { location, measuredOn, measurements, city }) => ({
+        id,
+        location,
+        measuredOn,
+        city,
+    })
+
+    pollutionTooltipRenderer = ({ id, location, measuredOn, city }) => {
+        const { realTimePollutionList } = this.props;
+        const { measurements } = realTimePollutionList.find(m => m.id === id);
+
+        const measurement = measurements.flat().map(m => (
+            <TextOutput
+                label={`${m.parameter} measurement (${m.unit})`}
+                value={m.value}
+            />
+        ));
+
+        return (
+            <div>
+                <TextOutput
+                    label="city"
+                    value={city}
+                />
+                <TextOutput
+                    label="location"
+                    value={location}
+                />
+                <TextOutput
+                    label="Measured On"
+                    value={
+                        <FormattedDate
+                            date={measuredOn}
+                            mode="dd-MM-yyyy hh:mm"
+                        />
+                    }
+                />
+                { measurement }
+            </div>
+        );
+    }
+
     render() {
         const {
             realTimeRainList,
             realTimeRiverList,
             realTimeEarthquakeList,
             realTimeFireList,
+            realTimePollutionList,
             selectedRealTime,
             showRain,
             showRiver,
             showEarthquake,
             showFire,
+            showPollution,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -140,6 +187,10 @@ export default class RealTimeMap extends React.PureComponent {
         );
 
         const fireFeatureCollection = this.getFireFeatureCollection(realTimeFireList);
+
+        const pollutionFeatureCollection = this.getPollutionFeatureCollection(
+            realTimePollutionList,
+        );
 
         return (
             <React.Fragment>
@@ -210,6 +261,23 @@ export default class RealTimeMap extends React.PureComponent {
                             enableHover
                             tooltipRenderer={this.fireTooltipRenderer}
                             tooltipRendererParams={this.fireTooltipRendererParams}
+                        />
+                    }
+                </MapSource>
+                <MapSource
+                    sourceKey="real-time-pollution-points"
+                    geoJson={pollutionFeatureCollection}
+                    supportHover
+                >
+                    { showPollution &&
+                        <MapLayer
+                            layerKey="real-time-pollution-points-fill"
+                            type="circle"
+                            property="pollutionId"
+                            paint={mapStyles.pollutionPoint.fill}
+                            enableHover
+                            tooltipRenderer={this.pollutionTooltipRenderer}
+                            tooltipRendererParams={this.pollutionTooltipRendererParams}
                         />
                     }
                 </MapSource>

@@ -160,6 +160,12 @@ export default {
         },
         paint: { 'icon-color': '#ffee58' },
     },
+    pollutionPoint: {
+        fill: {
+            'circle-radius': 6,
+            'circle-color': '#804000',
+        },
+    },
     earthquakePoint: {
         fill: {
             'circle-radius': 6,

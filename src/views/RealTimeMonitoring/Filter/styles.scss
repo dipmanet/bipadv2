@@ -57,9 +57,10 @@ $width-table-container: 250px;
 
     .filter-form {
         flex-grow: 1;
-        overflow: auto;
 
         .real-time-sources-input {
+            display: flex;
+            flex-wrap: wrap;
             margin: 0 $spacing-small;
         }
     }
