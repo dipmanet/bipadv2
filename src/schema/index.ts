@@ -4,6 +4,7 @@ import { isProduction } from '#config/env';
 import alertSchemas from './alert';
 import commonSchemas from './common';
 import incidentSchemas from './incident';
+import realtimeSchemas from './realtime';
 
 const userDefinedSchemas: Schema[] = [
     {
@@ -28,6 +29,7 @@ const dict = new Dict({ warning });
     ...alertSchemas,
     ...commonSchemas,
     ...incidentSchemas,
+    ...realtimeSchemas,
 ].forEach(schema => dict.put(schema.doc.name, schema));
 
 export default dict;

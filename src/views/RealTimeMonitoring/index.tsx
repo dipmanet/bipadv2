@@ -99,7 +99,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }) => region !== prevRegion,
         },
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'rainResponse',
+        },
     },
     realTimeRiverRequest: {
         url: '/river/',
@@ -121,7 +123,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }) => region !== prevRegion,
         },
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'riverResponse',
+        },
     },
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
@@ -143,7 +147,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }) => region !== prevRegion,
         },
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'earthquakeResponse',
+        },
     },
     realTimeFireRequest: {
         url: '/fire/',
@@ -165,7 +171,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }) => region !== prevRegion,
         },
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'fireResponse',
+        },
     },
     realTimePollutionRequest: {
         url: '/pollution/',
@@ -187,7 +195,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }) => region !== prevRegion,
         },
         onMount: true,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'pollutionResponse',
+        },
     },
 };
 
