@@ -1,5 +1,23 @@
 @import '~base-scss/base';
 
+.subtype {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: $spacing-small;
+    border: $width-separator-thin solid $color-separator;
+    border-style: dashed;
+    background-color: $color-foreground-alt;
+    padding: $spacing-small;
+    width: 25%;
+    height: 160px;
+
+    &:hover {
+        background-color: $color-foreground;
+    }
+}
+
 .splash-screen-modal {
     display: flex;
     flex-direction: column;
@@ -29,19 +47,6 @@
             display: flex;
             flex-grow: 1;
             flex-shrink: 0;
-
-            .subtype {
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: center;
-                margin: $spacing-small;
-                border: $width-separator-thin solid $color-separator;
-                border-style: dashed;
-                padding: $spacing-small;
-                width: 25%;
-                height: 160px;
-            }
         }
 
         .disclaimer {

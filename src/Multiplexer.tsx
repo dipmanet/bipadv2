@@ -19,6 +19,7 @@ import {
 } from '#selectors';
 import {
     setInitialPopupShownAction,
+    setRegionAction,
 } from '#actionCreators';
 
 import FirstPopup from './FirstPopup';
@@ -107,12 +108,8 @@ interface PropsFromState {
 
 interface PropsFromDispatch {
     setInitialPopupShown: typeof setInitialPopupShownAction;
+    setRegion: typeof setRegionAction;
 }
-
-const geolocationControlOptions = {
-    showUserLocation: false,
-    trackUserLocation: false,
-};
 
 interface Coords {
     coords: {
@@ -133,11 +130,18 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupShown: params => dispatch(setInitialPopupShownAction(params)),
+    setRegion: params => dispatch(setRegionAction(params)),
 });
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    private handleGeolocationChange = (e: Coords) => {
-        console.warn('Getting user location info from:', [e.coords.longitude, e.coords.latitude]);
+    public componentDidMount() {
+        if (navigator.geolocation && this.props.initialPopupShown) {
+            navigator.geolocation.getCurrentPosition(this.handleSuccess);
+        }
+    }
+
+    private handleSuccess = (position: unknown) => {
+        console.warn(position);
     }
 
     private renderRoutes = () => {
@@ -160,18 +164,21 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
             initialPopupShown,
             setInitialPopupShown,
+            setRegion,
+            pending,
         } = this.props;
 
         return (
             <Fragment>
                 {/* FIXME: get route key for navbar */}
                 <div className="bipad-main-content">
-                    { initialPopupShown &&
+                    { initialPopupShown && !pending &&
                         <FirstPopup
                             districts={districts}
                             provinces={provinces}
                             municipalities={municipalities}
                             setInitialPopupShown={setInitialPopupShown}
+                            setRegion={setRegion}
                         />
                     }
                     <Map
@@ -183,12 +190,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
                         showScaleControl
                         scaleControlPosition="bottom-right"
-
-                        showGeolocationControl={initialPopupShown}
-                        locateOnStartup={initialPopupShown}
-                        geoControlPosition="bottom-right"
-                        geoOptions={geolocationControlOptions}
-                        onGeolocationChange={this.handleGeolocationChange}
 
                         showNavControl
                         navControlPosition="bottom-right"

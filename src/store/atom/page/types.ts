@@ -181,6 +181,7 @@ export interface PageState {
 // ACTION TYPES
 
 export enum PageType {
+    SET_REGION = 'page/SET_REGION',
     SET_INITIAL_POPUP_SHOWN = 'page/SET_INITIAL_POPUP_SHOWN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
@@ -215,6 +216,11 @@ export enum PageType {
 }
 
 // ACTION CREATOR INTERFACE
+
+export interface SetRegion {
+    type: typeof PageType.SET_REGION;
+    region: Region;
+}
 
 export interface SetInitialPopupShown {
     type: typeof PageType.SET_INITIAL_POPUP_SHOWN;
@@ -326,7 +332,7 @@ export interface SetLossAndDamageFilters extends FiltersWithRegion {
 }
 
 export type PageActionTypes = (
-    SetInitialPopupShown |
+    SetRegion | SetInitialPopupShown |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
