@@ -16,8 +16,13 @@ export interface Ward {
     id: number;
     // bbox: number[];
 }
+export interface WithHazard {
+    id: number;
+    hazard: number;
+}
 export interface HazardType {
     id: number;
+    title?: string;
     color?: string;
 }
 export interface EventType {
