@@ -2,6 +2,7 @@ import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Obj } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import HazardsLegend from '#components/HazardsLegend';
 
@@ -16,6 +17,7 @@ import {
 } from '#request';
 
 import { transformDateRangeFilterParam } from '#utils/transformations';
+import { hazardTypesList } from '#utils/domain';
 
 import {
     setAlertListActionDP,
@@ -101,6 +103,11 @@ class Dashboard extends React.PureComponent<Props, State> {
         };
     }
 
+    private getAlertHazardTypesList = memoize((alertList) => {
+        const { hazardTypes } = this.props;
+        return hazardTypesList(alertList, hazardTypes);
+    });
+
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }
@@ -117,6 +124,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 alertsRequest: { pending: alertsPending },
             },
         } = this.props;
+
+        const filteredHazardTypes = this.getAlertHazardTypesList(alertList);
 
         const {
             leftPaneExpanded,
@@ -141,6 +150,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     }
                     mainContent={
                         <HazardsLegend
+                            filteredHazardTypes={filteredHazardTypes}
                             className={styles.hazardLegend}
                             itemClassName={styles.legendItem}
                         />

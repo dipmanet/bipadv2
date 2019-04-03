@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
-
 import {
     _cs,
     mapToList,
 } from '@togglecorp/fujs';
 
+import { hazardTypesList } from '#utils/domain';
 import Button from '#rsca/Button';
 import Spinner from '#rscz/Spinner';
 import HazardsLegend from '#components/HazardsLegend';
@@ -70,6 +70,11 @@ class LeftPane extends React.PureComponent {
             showDetails: true,
         };
     }
+
+    getHazardTypes = memoize((lossAndDamageList) => {
+        const { hazardTypes } = this.props;
+        return hazardTypesList(lossAndDamageList, hazardTypes);
+    })
 
     getHazardLossEstimation = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
@@ -216,6 +221,7 @@ class LeftPane extends React.PureComponent {
         const countData = this.getLossTypeCount(lossAndDamageList);
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
         const hazardLossType = this.getHazardLossType(lossAndDamageList);
+        const filteredHazardTypesList = this.getHazardTypes(lossAndDamageList);
 
         return (
             <div className={styles.districtSummary}>
@@ -278,6 +284,7 @@ class LeftPane extends React.PureComponent {
                     </div>
                     <div className={styles.legendContainer}>
                         <HazardsLegend
+                            filteredHazardTypes={filteredHazardTypesList}
                             className={styles.legend}
                             itemClassName={styles.legendItem}
                         />

@@ -12,10 +12,12 @@ import {
 const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    filteredHazardTypes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
+    filteredHazardTypes: undefined,
 };
 
 const legendKeySelector = d => d.title;
@@ -31,9 +33,10 @@ class HazardsLegend extends React.PureComponent {
             className,
             itemClassName,
             hazardTypes,
+            filteredHazardTypes,
         } = this.props;
 
-        const hazardItems = Object.values(hazardTypes);
+        const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
 
         return (
             <Legend

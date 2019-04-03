@@ -2,6 +2,7 @@ import { Obj, isTruthy } from '@togglecorp/fujs';
 import {
     Loss,
     HazardType,
+    WithHazard,
     Alert,
     Incident,
     RealTimeEarthquake,
@@ -11,6 +12,10 @@ import {
     RealTimePollution,
     Resource,
 } from '#store/atom/page/types';
+import {
+    hazardTypesSelector,
+} from '#selectors';
+import { groupList } from '#utils/common';
 
 export const ONE_HUMAN_EQUIVALENT_MONEY = 50000;
 
@@ -293,4 +298,18 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
             })),
     };
     return geojson;
+};
+
+export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<HazardType>) => {
+    const group = groupList(
+        listWithHazard.filter(l => l.hazard),
+        item => item.hazard,
+    );
+
+    return group.map(h => (
+        {
+            title: (hazardTypes[h.key] || {}).title,
+            color: (hazardTypes[h.key] || {}).color,
+        }
+    ));
 };

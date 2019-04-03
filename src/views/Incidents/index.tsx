@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -22,8 +23,9 @@ import {
 import {
     incidentListSelectorIP,
     filtersValuesSelectorIP,
+    hazardTypesSelector,
 } from '#selectors';
-
+import { hazardTypesList } from '#utils/domain';
 import Page from '#components/Page';
 
 import HazardsLegend from '#components/HazardsLegend';
@@ -61,6 +63,7 @@ type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    hazardTypes: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
     filters: filtersValuesSelectorIP(state),
 });
@@ -111,7 +114,10 @@ class Incidents extends React.PureComponent<Props, State> {
             rightPaneExpanded: true,
         };
     }
-
+    private getIncidentHazardTypesList = memoize((incidentList) => {
+        const { hazardTypes } = this.props;
+        return hazardTypesList(incidentList, hazardTypes);
+    });
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }
@@ -133,6 +139,7 @@ class Incidents extends React.PureComponent<Props, State> {
             rightPaneExpanded,
         } = this.state;
 
+        const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
         return (
             <React.Fragment>
                 <Map
@@ -159,6 +166,7 @@ class Incidents extends React.PureComponent<Props, State> {
                 <Page
                     mainContent={
                         <HazardsLegend
+                            filteredHazardTypes={filteredHazardTypes}
                             className={styles.hazardLegend}
                             itemClassName={styles.legendItem}
                         />
