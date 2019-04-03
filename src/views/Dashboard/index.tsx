@@ -68,7 +68,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/alert/',
         method: methods.GET,
         // We have to transform dateRange to created_on__lt and created_on__gt
-        query: ({ props: { filters } }) => transformDateRangeFilterParam(filters, 'created_on'),
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'created_on'),
+            expand: ['event'],
+        }),
         onSuccess: ({ response, props: { setAlertList } }) => {
             interface Response { results: PageTypes.Alert[] }
             const { results: alertList = [] } = response as Response;

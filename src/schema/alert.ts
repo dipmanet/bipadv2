@@ -12,7 +12,7 @@ const schemaList: Schema[] = [
             source: { type: 'string', required: true },
             description: { type: 'string' },
             hazard: { type: 'uint' },
-            event: { type: 'uint' },
+            event: { type: 'object' },
             verified: { type: 'boolean' },
             polygon: { type: 'object' }, // geometry object
             public: { type: 'boolean' },
