@@ -2,6 +2,11 @@
 
 $width-non-tabular-container: var(--width-left-panel);
 
+$width-filter-container: var(--width-right-panel);
+$width-vertical-nav: var(--width-navbar-right);
+
+$width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
+
 .left-pane {
     .show-detials-button-container {
         transform-origin: 0 0;
@@ -12,7 +17,7 @@ $width-non-tabular-container: var(--width-left-panel);
             font-size: $font-size-extra-large;
         }
     }
-
+    
     .visualizations-container {
         display: flex;
         position: relative;
@@ -198,6 +203,34 @@ $width-non-tabular-container: var(--width-left-panel);
                         }
                     }
                 }
+            }
+        }
+
+        .tabular-container {
+            display: flex;
+            flex-direction: column;
+            transform-origin: 0 0;
+            background-color: $color-foreground;
+            width: $width-tabular-container;
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+
+            .header {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                justify-content: flex-end;
+
+                .heading {
+                    align-self: flex-start;
+                    flex-grow: 1;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
+            }
+
+            .tabular-view {
+                flex-grow: 1;
+                overflow: auto;
             }
         }
     }

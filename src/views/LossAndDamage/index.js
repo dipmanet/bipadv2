@@ -62,39 +62,6 @@ const metricMap = listToMap(
 
 const groupFn = val => val.district;
 
-// FIXME: save this on redux
-const requests = {
-    lossAndDamageRequest: {
-        url: '/incident/',
-        query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            expand: ['loss.peoples', 'wards.municipality'],
-            limit: 2000,
-            ordering: '-incident_on',
-            lnd: true,
-        }),
-        onPropsChanged: {
-            filters: ({
-                props: { filters: { hazard, region } },
-                prevProps: { filters: {
-                    hazard: prevHazard,
-                    region: prevRegion,
-                } },
-            }) => (
-                hazard !== prevHazard || region !== prevRegion
-            ),
-        },
-        onMount: true,
-        extras: {
-            schemaName: 'incidentWithPeopleResponse',
-        },
-    },
-};
-
-const mapStateToProps = state => ({
-    filters: lossAndDamageFilterValuesSelector(state),
-});
-
 const propTypes = {
 };
 
@@ -532,6 +499,42 @@ class LossAndDamage extends React.PureComponent {
         );
     }
 }
+
+// FIXME: save this on redux
+const requests = {
+    lossAndDamageRequest: {
+        url: '/incident/',
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            expand: ['loss.peoples', 'wards.municipality'],
+            limit: 120,
+            ordering: '-incident_on',
+            lnd: true,
+        }),
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { hazard, region } },
+                prevProps: { filters: {
+                    hazard: prevHazard,
+                    region: prevRegion,
+                } },
+            }) => (
+                hazard !== prevHazard || region !== prevRegion
+            ),
+        },
+        onMount: true,
+        extras: {
+            schemaName: 'incidentWithPeopleResponse',
+        },
+    },
+};
+
+const mapStateToProps = state => ({
+    filters: lossAndDamageFilterValuesSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+});
 
 export default compose(
     connect(mapStateToProps),
