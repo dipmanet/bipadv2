@@ -65,6 +65,22 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                         cursor: pointer;
                         padding: $spacing-medium $spacing-large;
 
+                        .latest {
+                            flex-shrink: 0;
+                            flex-grow: 0;
+                            flex-basis: 0.5em;
+                            height: 25px;
+                            background-color: #E71D36;
+                        }
+
+                        .old {
+                            flex-shrink: 0;
+                            flex-grow: 0;
+                            flex-basis: 0.5em;
+                            height: 25px;
+                            background-color: transparent;
+                        }
+
                         .svg-container {
                             flex-shrink: 0;
                             margin-right: $spacing-medium;
@@ -91,6 +107,10 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 
                         .title {
                             flex-grow: 1;
+                        }
+
+                        .start-date {
+                            flex-shrink: 0;
                         }
 
                         &:hover {
