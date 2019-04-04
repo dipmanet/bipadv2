@@ -1,10 +1,15 @@
 import { Obj, isTruthy } from '@togglecorp/fujs';
+import bboxPolygon from '@turf/bbox-polygon';
+import { BBox } from '@turf/helpers';
+import centroid from '@turf/centroid';
+
 import {
     Loss,
     HazardType,
     WithHazard,
     Alert,
     Incident,
+    AdminLevel,
     RealTimeEarthquake,
     RealTimeRain,
     RealTimeRiver,
@@ -314,4 +319,24 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
             color: (hazardTypes[h.key] || {}).color,
         }
     ));
+};
+
+export const getAdminLevelTitles = (adminLevel: AdminLevel[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: adminLevel
+            .map(level => ({
+                id: level.id,
+                type: 'Feature',
+                geometry: {
+                    ...centroid(bboxPolygon(level.bbox as BBox)).geometry,
+                },
+                properties: {
+                    adminLevelId: level.id,
+                    title: level.title,
+                },
+            })),
+    };
+
+    return geojson;
 };
