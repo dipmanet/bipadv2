@@ -5,6 +5,7 @@ import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import SelectInput from '#rsci/SelectInput';
 
 import {
     setLossAndDamageFiltersAction,
@@ -111,6 +112,9 @@ class LossAndDamageFilter extends React.PureComponent {
                 faramValues,
                 faramErrors,
             },
+            metricType,
+            onMetricChange,
+            metricOptions,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -162,6 +166,12 @@ class LossAndDamageFilter extends React.PureComponent {
                                 iconSelector={hazardTypeIconSelector}
                                 label="Hazard type"
                                 options={hazardTypeList}
+                            />
+                            <SelectInput
+                                label="Metric"
+                                onChange={onMetricChange}
+                                value={metricType}
+                                options={metricOptions}
                             />
                         </Faram>
                     </React.Fragment>

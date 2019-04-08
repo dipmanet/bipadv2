@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, bound } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import SparkLine from '#rscz/SparkLine';
+import { groupFilledList } from '#utils/common';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -19,67 +20,33 @@ const defaultProps = {
 };
 
 const emptyList = [];
-const emptyObject = {};
-
-const bucketDuration = 1000 * 60 * 60 * 24;
-const bucketedList = [];
-
-const groupList = (lst, getBucketValue) => {
-    const mem = {};
-
-    const identifierList = lst.map(getBucketValue);
-
-    identifierList.forEach((key, index) => {
-        if (mem[key]) {
-            mem[key].push(lst[index]);
-        } else {
-            mem[key] = [lst[index]];
-        }
-    });
-    const start = Math.min(...identifierList);
-    const end = Math.max(...identifierList);
-
-    const output = [];
-    for (let i = start; i <= end; i += 1) {
-        output.push({ key: i, value: mem[i] || [] });
-    }
-    return output;
-};
-
-const DAY = 1000 * 60 * 60 * 24;
 
 export default class Seekbar extends React.PureComponent {
-    groupByIncidentCount = memoize((incidentList, duration) => {
+    static propTypes = propTypes;
+    static defaultProps = defaultProps;
+
+    groupByIncidentCount = memoize((incidentList, metric, metricName) => {
         if (incidentList.length === 0) {
             return emptyList;
         }
+        const DAY = 1000 * 60 * 60 * 24;
 
-        const mappedLst = incidentList
-            .filter(incident => !!incident.incidentOn)
-            .map(incident => ({
-                ...incident,
-                timestamp: new Date(incident.incidentOn).getTime(),
-            }));
-
-
-        return groupList(
-            mappedLst,
-            item => Math.floor(item.timestamp / DAY),
-        ).map(
-            item => ({
-                value: item.value.length,
+        const mappedList = incidentList.map(
+            incident => ({
+                value: metric(incident),
                 label: (
                     <div>
                         <div>
-                            Incident count: <strong>{item.value.length}</strong>
+                            {metricName}: <strong>{metric(incident)}</strong>
                         </div>
                         <div>
-                            Date: {(new Date(item.key * DAY)).toLocaleDateString()}
+                            Date: {(new Date(incident.key * DAY)).toLocaleDateString()}
                         </div>
                     </div>
                 ),
             }),
         );
+        return mappedList;
     })
 
     render() {
@@ -89,13 +56,13 @@ export default class Seekbar extends React.PureComponent {
             start: startFromProps,
             end: endFromProps,
             data,
+            metric,
+            metricName,
         } = this.props;
 
-        // const progress = Math.min(100, Math.max(0, progressFromProps));
-        const start = Math.min(100, Math.max(0, startFromProps));
-        const end = Math.min(100, Math.max(0, endFromProps));
-
-        const groupedIncidents = this.groupByIncidentCount(data, 1000 * 60 * 60 * 24 * 7);
+        const start = bound(0, 100, startFromProps);
+        const end = bound(0, 100, endFromProps);
+        const groupedIncidents = this.groupByIncidentCount(data, metric, metricName);
 
         return (
             <div className={_cs(className, styles.seekbar)}>
@@ -110,7 +77,6 @@ export default class Seekbar extends React.PureComponent {
                     style={{
                         left: `${start}%`,
                         width: `${end - start}%`,
-                        // width: `${progress}%`,
                     }}
                     className={styles.progress}
                 />

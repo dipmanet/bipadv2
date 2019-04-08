@@ -85,11 +85,11 @@ export const sanitizeResponse = (data: unknown): any => {
     return data;
 };
 
-interface KeyFunc<T> {
-    (val: T): string | number;
+interface KeyFunc<T, Q> {
+    (val: T): Q;
 }
 
-export function groupList<T>(lst: T[] = [], getKey: KeyFunc<T>) {
+function groupListRaw<T>(lst: T[] = [], getKey: KeyFunc<T, string | number>) {
     const mem: {
         [key: string]: {
             key: string | number;
@@ -106,6 +106,38 @@ export function groupList<T>(lst: T[] = [], getKey: KeyFunc<T>) {
         }
         mem[key].value.push(item);
     });
+    return mem;
+}
+
+export function groupList<T>(lst: T[] = [], getKey: KeyFunc<T, string | number>) {
+    const mem = groupListRaw(lst, getKey);
     return Object.values(mem);
 }
 
+export function groupFilledList<T>(lst: T[] = [], getKey: KeyFunc<T, number>) {
+    const mem = groupListRaw(lst, getKey);
+
+    const identifierList = lst.map(getKey);
+    const start = Math.min(...identifierList);
+    const end = Math.max(...identifierList);
+    const output = [];
+    for (let i = start; i <= end; i += 1) {
+        output.push(mem[i] || { key: i, value: [] });
+    }
+    return output;
+}
+
+export function sum(list: number[]) {
+    return list.reduce(
+        (acc, val) => acc + (isDefined(val) ? val : 0),
+        0,
+    );
+}
+
+export function getYmd(dateString: string | number | undefined) {
+    if (!dateString) {
+        return undefined;
+    }
+    const date = new Date(dateString);
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}

@@ -2,26 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import { listToMap, isDefined } from '@togglecorp/fujs';
+import { listToMap } from '@togglecorp/fujs';
 
 import ChoroplethMap from '#components/ChoroplethMap';
 import { districtsSelector } from '#selectors';
 import { getMapPaddings } from '#constants';
-import { groupList } from '#utils/common';
+import { groupList, sum } from '#utils/common';
 
 import styles from './styles.scss';
-
-const metric = (val) => {
-    if (!val) {
-        return 0;
-    }
-    return val.count || 0;
-};
-
-const sum = list => list.reduce(
-    (acc, val) => acc + (isDefined(val) ? val : 0),
-    0,
-);
 
 const colorGrade = [
     '#fee5d9',
@@ -43,15 +31,11 @@ const pickList = (list, start, offset) => {
 };
 
 const propTypes = {
-    pause: PropTypes.bool,
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
-    pause: false,
 };
-
-const PLAYBACK_INTERVAL = 2000;
 
 const mapStateToProps = state => ({
     districts: districtsSelector(state),
@@ -60,29 +44,6 @@ const mapStateToProps = state => ({
 class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            currentIndex: -1,
-        };
-    }
-
-    componentDidMount() {
-        this.playback();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.lossAndDamageList !== nextProps.lossAndDamageList) {
-            this.setState({ currentIndex: -1 });
-            this.playback();
-        }
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.timeout);
-    }
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
         const mapPaddings = getMapPaddings();
@@ -95,105 +56,6 @@ class LossAndDamageMap extends React.PureComponent {
             return mapPaddings.rightPaneExpanded;
         }
         return mapPaddings.noPaneExpanded;
-    });
-
-    generateDataset = memoize((incidents) => {
-        if (!incidents || incidents.length <= 0) {
-            return {
-                mapping: [],
-                maxCount: 0,
-                minTime: 0,
-                maxTime: 0,
-                onSpan: 0,
-                totalIteration: 0,
-            };
-        }
-
-        const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
-            incidentOn && wards && wards.length > 0
-        )).map(incident => ({
-            ...incident,
-            incidentOn: new Date(incident.incidentOn).getTime(),
-            district: incident.wards[0].municipality.district,
-        }));
-
-        const timing = sanitizedIncidents.map(incident => incident.incidentOn);
-
-        const minTime = Math.min(...timing);
-        const maxTime = Math.max(...timing);
-
-        const daySpan = 1000 * 60 * 60 * 24;
-        const oneSpan = 7 * daySpan;
-
-        const totalSpan = maxTime - minTime;
-
-        const totalIteration = Math.ceil(totalSpan / oneSpan);
-
-        const mapping = [];
-
-        let maxStat = {
-            count: 0,
-            estimatedLoss: 0,
-            infrastructureDestroyedCount: 0,
-            livestockDestroyedCount: 0,
-            peopleDeathCount: 0,
-        };
-
-        for (let i = 0; i < totalIteration; i += 1) {
-            const start = minTime + (i * oneSpan);
-            const end = minTime + ((i + 1) * oneSpan);
-
-            const filteredIncidents = sanitizedIncidents.filter(({ incidentOn }) => (
-                incidentOn >= start && incidentOn < end
-            ));
-            const groupedIncidents = groupList(
-                filteredIncidents,
-                ({ district }) => district,
-            ).map(({ key, value }) => ({
-                key,
-                count: value.length,
-                estimatedLoss: sum(
-                    value.map(item => item.loss.estimatedLoss),
-                ),
-                infrastructureDestroyedCount: sum(value.map(
-                    item => item.loss.infrastructureDestroyedCount,
-                )),
-                livestockDestroyedCount: sum(
-                    value.map(item => item.loss.livestockDestroyedCount),
-                ),
-                peopleDeathCount: sum(
-                    value.map(item => item.loss.peopleDeathCount),
-                ),
-            }));
-
-
-            maxStat = groupedIncidents.reduce(
-                (acc, val) => ({
-                    count: Math.max(acc.count, val.count),
-                    estimatedLoss: Math.max(acc.estimatedLoss, val.estimatedLoss),
-                    infrastructureDestroyedCount: Math.max(
-                        acc.infrastructureDestroyedCount,
-                        val.infrastructureDestroyedCount,
-                    ),
-                    liveStockDestroyedCount: Math.max(
-                        acc.liveStockDestroyedCount,
-                        val.liveStockDestroyedCount,
-                    ),
-                    peopleDeathCount: Math.max(acc.peopleDeathCount, val.peopleDeathCount),
-                }),
-                maxStat,
-            );
-
-            const mappedIncidents = listToMap(
-                groupedIncidents,
-                incident => incident.key,
-                incident => incident,
-            );
-            mapping.push(mappedIncidents);
-        }
-
-        const val = { mapping, maxStat, minTime, maxTime, oneSpan, totalIteration };
-        return val;
     });
 
     generateColor = memoize((maxValue, minValue, colorMapping) => {
@@ -229,66 +91,30 @@ class LossAndDamageMap extends React.PureComponent {
         return value;
     });
 
-    playback = () => {
-        const {
-            lossAndDamageList,
-            onPlaybackProgress,
-            pause: isPaused,
-        } = this.props;
-
-        clearTimeout(this.timeout);
-
-        if (!isPaused && lossAndDamageList.length > 0) {
-            const { currentIndex } = this.state;
-            const {
-                totalIteration,
-                minTime,
-                maxTime,
-                oneSpan,
-            } = this.generateDataset(lossAndDamageList);
-
-            const newIndex = currentIndex + 1 < totalIteration
-                ? currentIndex + 1
-                : 0;
-
-            this.setState({ currentIndex: newIndex });
-            if (onPlaybackProgress) {
-                onPlaybackProgress(
-                    {
-                        start: minTime + (newIndex * oneSpan),
-                        end: Math.min(minTime + ((newIndex + 1) * oneSpan), maxTime),
-                    },
-                    { min: minTime, max: maxTime },
-                );
-            }
-        }
-
-        this.timeout = setTimeout(this.playback, PLAYBACK_INTERVAL);
-    }
-
     render() {
         const {
             lossAndDamageList,
             leftPaneExpanded,
             rightPaneExpanded,
             districts,
+            mapping,
+            metric,
+            maxValue,
+            metricName,
         } = this.props;
-        const { currentIndex } = this.state;
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { mapping, maxStat } = this.generateDataset(lossAndDamageList);
-        const color = this.generateColor(Math.max(metric(maxStat), 1), 0, colorGrade);
-        const colorPaint = this.generatePaint(color);
-        const mapState = this.generateMapState(districts, mapping[currentIndex], metric);
 
+        const color = this.generateColor(maxValue, 0, colorGrade);
+        const colorPaint = this.generatePaint(color);
+        const mapState = this.generateMapState(districts, mapping, metric);
         const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
-        const maxValue = Math.max(metric(maxStat), 1);
 
         return (
             <React.Fragment>
                 <div className={styles.legend}>
                     <h5 className={styles.heading}>
-                        Number of incidents
+                        {metricName}
                     </h5>
                     <div className={styles.range}>
                         <div className={styles.min}>
