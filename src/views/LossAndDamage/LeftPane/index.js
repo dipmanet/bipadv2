@@ -25,7 +25,10 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
+import TabularView from './TabularView';
 import styles from './styles.scss';
+
+const emptyList = [];
 
 const propTypes = {
     className: PropTypes.string,
@@ -69,6 +72,7 @@ class LeftPane extends React.PureComponent {
 
         this.state = {
             showDetails: true,
+            showTabular: false,
         };
     }
 
@@ -155,6 +159,14 @@ class LeftPane extends React.PureComponent {
         }
     }
 
+    handleTabularButtonClick = () => {
+        this.setState({ showTabular: true });
+    }
+
+    handleCollapseTabularViewButtonClick = () => {
+        this.setState({ showTabular: false });
+    }
+
     renderSummary = ({ district }) => {
         const {
             lossAndDamageList,
@@ -227,17 +239,85 @@ class LeftPane extends React.PureComponent {
         );
     }
 
+    renderParallelContainer = () => {
+        const hazardLossType = null;
+        const hazardLossEstimate = null;
+        const countData = [];
+        return (
+            <div className={styles.content}>
+                <div className={styles.parallelContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Hazard Loss Details
+                        </h4>
+                    </header>
+                    <ParallelCoordinates
+                        data={hazardLossType}
+                        className={styles.chart}
+                        ignoreProperties={['label', 'color']}
+                        labelSelector={parallelLabelSelector}
+                        colorSelector={parallelColorSelector}
+                        margins={{
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                        }}
+                    />
+                </div>
+                <div className={styles.donutContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.4}
+                        className={styles.chart}
+                        data={hazardLossEstimate}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        colorSelector={donutChartColorSelector}
+                    />
+                </div>
+                <div className={styles.barContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Loss count
+                        </h4>
+                    </header>
+                    <SimpleVerticalBarChart
+                        className={styles.chart}
+                        data={countData}
+                        labelSelector={barChartLabelSelector}
+                        valueSelector={barChartValueSelector}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const {
             className,
             pending,
+            // selectedDistricts,
+            hazardTypes,
+            lossAndDamageList = emptyList,
         } = this.props;
 
         const {
             showDetails,
+            showTabular,
         } = this.state;
 
         const DistrictSummary = this.renderSummary;
+
+        // Add hazard info to lossAndDamageList
+        const tabularLossAndDamageList = lossAndDamageList.map(x => ({
+            ...x,
+            hazardInfo: hazardTypes[x.hazard],
+        }));
 
         return (
             <CollapsibleView
@@ -257,27 +337,71 @@ class LeftPane extends React.PureComponent {
                 }
                 expandedViewContainerClassName={styles.visualizationsContainer}
                 expandedView={
-                    <div className={styles.visualizations}>
-                        <header className={styles.header}>
-                            <h3 className={styles.heading}>
-                                Summary
-                            </h3>
-                            <Spinner
-                                className={styles.spinner}
-                                loading={pending}
-                            />
-                            <Button
-                                className={styles.collapseDetailsButton}
-                                onClick={this.handleCollapseDetailsView}
-                                iconName={iconNames.chevronUp}
-                                title="Hide detailed view"
-                                transparent
-                            />
-                        </header>
-                        <div className={styles.summaryList}>
-                            <DistrictSummary />
-                        </div>
-                    </div>
+                    <CollapsibleView
+                        expanded={showTabular}
+                        collapsedViewContainerClassName={styles.showDetailsButtonContainer}
+                        collapsedView={
+                            <div className={styles.visualizations}>
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Summary
+                                    </h3>
+                                    <Spinner
+                                        className={styles.spinner}
+                                        loading={pending}
+                                    />
+                                    <Button
+                                        className={styles.showDetailsButton}
+                                        onClick={this.handleTabularButtonClick}
+                                        iconName={iconNames.expand}
+                                        title="Show detailed view"
+                                    />
+                                    <Button
+                                        className={styles.collapseDetailsButton}
+                                        onClick={this.handleCollapseDetailsView}
+                                        iconName={iconNames.chevronUp}
+                                        title="Hide detailed view"
+                                        transparent
+                                    />
+                                </header>
+                                <div className={styles.summaryList}>
+                                    <DistrictSummary />
+                                    {/*
+                                    { selectedDistricts.map(district => (
+                                        <DistrictSummary
+                                            key={district}
+                                            district={district}
+                                        />
+                                    )) }
+                                    { selectedDistricts.length === 0 && (
+                                        <DistrictSummary />
+                                    )}
+                                    */}
+                                </div>
+                            </div>
+                        }
+                        expandedViewContainerClassName={styles.tabularContainer}
+                        expandedView={
+                            <React.Fragment>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Loss and Damages
+                                    </h4>
+                                    <Button
+                                        className={styles.hideTabularButton} // TODO: fix style
+                                        onClick={this.handleCollapseTabularViewButtonClick}
+                                        iconName={iconNames.shrink}
+                                        title="Hide detailed view"
+                                        transparent
+                                    />
+                                </header>
+                                <TabularView
+                                    lossAndDamageList={tabularLossAndDamageList}
+                                    className={styles.tabularView} // TODO: fix style
+                                />
+                            </React.Fragment>
+                        }
+                    />
                 }
             />
         );
