@@ -28,6 +28,8 @@ import {
 import TabularView from './TabularView';
 import styles from './styles.scss';
 
+const emptyList = [];
+
 const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -158,29 +160,12 @@ class LeftPane extends React.PureComponent {
     }
 
     handleTabularButtonClick = () => {
-        const { onExpandChange } = this.props;
         this.setState({ showTabular: true });
-
-        if (onExpandChange) {
-            onExpandChange(false);
-        }
     }
 
     handleCollapseTabularViewButtonClick = () => {
         this.setState({ showTabular: false });
     }
-
-    renderLegend = colorMap => (
-        <Legend
-            className={styles.legend}
-            data={colorMap}
-            itemClassName={styles.legendItem}
-            keySelector={itemSelector}
-            labelSelector={legendLabelSelector}
-            colorSelector={legendColorSelector}
-            emptyComponent={() => ''}
-        />
-    )
 
     renderSummary = ({ district }) => {
         const {
@@ -279,7 +264,6 @@ class LeftPane extends React.PureComponent {
                             left: 20,
                         }}
                     />
-                    { this.renderLegend(hazardLossType) }
                 </div>
                 <div className={styles.donutContainer}>
                     <header className={styles.header}>
@@ -295,7 +279,6 @@ class LeftPane extends React.PureComponent {
                         valueSelector={donutChartValueSelector}
                         colorSelector={donutChartColorSelector}
                     />
-                    { this.renderLegend(hazardLossEstimate) }
                 </div>
                 <div className={styles.barContainer}>
                     <header className={styles.header}>
@@ -318,8 +301,9 @@ class LeftPane extends React.PureComponent {
         const {
             className,
             pending,
-            selectedDistricts,
+            // selectedDistricts,
             hazardTypes,
+            lossAndDamageList = emptyList,
         } = this.props;
 
         const {
@@ -367,20 +351,22 @@ class LeftPane extends React.PureComponent {
                                         loading={pending}
                                     />
                                     <Button
+                                        className={styles.showDetailsButton}
+                                        onClick={this.handleTabularButtonClick}
+                                        iconName={iconNames.expand}
+                                        title="Show detailed view"
+                                    />
+                                    <Button
                                         className={styles.collapseDetailsButton}
                                         onClick={this.handleCollapseDetailsView}
                                         iconName={iconNames.chevronUp}
                                         title="Hide detailed view"
                                         transparent
                                     />
-                                    <Button
-                                        className={styles.showDetailsButton}
-                                        onClick={this.handleTabularButtonClick}
-                                        iconName={iconNames.expand}
-                                        title="Show detailed view"
-                                    />
                                 </header>
                                 <div className={styles.summaryList}>
+                                    <DistrictSummary />
+                                    {/*
                                     { selectedDistricts.map(district => (
                                         <DistrictSummary
                                             key={district}
@@ -390,6 +376,7 @@ class LeftPane extends React.PureComponent {
                                     { selectedDistricts.length === 0 && (
                                         <DistrictSummary />
                                     )}
+                                    */}
                                 </div>
                             </div>
                         }
