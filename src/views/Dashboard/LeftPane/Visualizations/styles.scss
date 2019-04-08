@@ -40,12 +40,4 @@
         @extend %chart-container;
         height: 200px;
     }
-
-    .severity-summary {
-        @extend %chart-container;
-    }
-
-    .inducer-summary {
-        @extend %chart-container;
-    }
 }

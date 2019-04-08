@@ -17,6 +17,8 @@ import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
 
 import TabularView from './TabularView';
+import Visualizations from './Visualizations';
+
 import styles from './styles.scss';
 
 const propTypes = {
@@ -51,6 +53,7 @@ export default class LeftPane extends React.PureComponent {
         this.state = {
             showAlerts: true,
             showTabular: false,
+            showVisualizations: false,
         };
     }
 
@@ -77,6 +80,13 @@ export default class LeftPane extends React.PureComponent {
             alertColor,
         };
     });
+
+    handleToggleVisualizationButtonClick = () => {
+        const { showVisualizations } = this.state;
+        this.setState({
+            showVisualizations: !showVisualizations,
+        });
+    }
 
     handleCollapseTabularViewButtonClick = () => {
         this.setState({ showTabular: false });
@@ -131,7 +141,7 @@ export default class LeftPane extends React.PureComponent {
                 ) : (
                     <div className={styles.old} />
                 )}
-                { icon ? (
+                {icon ? (
                     <ReactSVG
                         className={styles.svgContainer}
                         path={icon}
@@ -149,7 +159,7 @@ export default class LeftPane extends React.PureComponent {
                     />
                 )}
                 <div className={styles.title}>
-                    { title }
+                    {title}
                 </div>
                 <div className={styles.startDate}>
                     <FormattedDate
@@ -165,37 +175,57 @@ export default class LeftPane extends React.PureComponent {
         className,
         data,
         pending,
-    }) => (
-        <div className={className}>
-            <header className={styles.header}>
-                <h4 className={styles.heading}>
-                    Alerts
-                </h4>
-                <Spinner loading={pending} />
-                <Button
-                    className={styles.expandTabularViewButton}
-                    onClick={this.handleExpandButtonClick}
-                    iconName={iconNames.expand}
-                    title="Show detailed view"
-                    transparent
-                />
-                <Button
-                    className={styles.hideAlertsButton}
-                    onClick={this.handleHideAlertsButtonClick}
-                    iconName={iconNames.chevronUp}
-                    title="Close Alerts"
-                    transparent
-                />
-            </header>
-            <ListView
-                className={styles.alertList}
-                data={data}
-                renderer={this.renderAlert}
-                rendererParams={this.getAlertRendererParams}
-                keySelector={alertKeySelector}
-            />
-        </div>
-    )
+    }) => {
+        const { hazardTypes } = this.props;
+        const { showVisualizations } = this.state;
+
+        return (
+            <div className={className}>
+                <header className={styles.header}>
+                    <h4 className={styles.heading}>
+                        Alerts
+                    </h4>
+                    <Spinner loading={pending} />
+                    <Button
+                        className={styles.toggleVisualizationButton}
+                        onClick={this.handleToggleVisualizationButtonClick}
+                        iconName={this.state.showVisualizations ? iconNames.list : iconNames.pulse}
+                        title="Toggle visualization"
+                        transparent
+                    />
+                    <Button
+                        className={styles.expandTabularViewButton}
+                        onClick={this.handleExpandButtonClick}
+                        iconName={iconNames.expand}
+                        title="Show detailed view"
+                        transparent
+                    />
+                    <Button
+                        className={styles.hideAlertsButton}
+                        onClick={this.handleHideAlertsButtonClick}
+                        iconName={iconNames.chevronUp}
+                        title="Close Alerts"
+                        transparent
+                    />
+                </header>
+                { showVisualizations ? (
+                    <Visualizations
+                        hazardTypes={hazardTypes}
+                        className={styles.alertVisualizations}
+                        alertList={data}
+                    />
+                ) : (
+                    <ListView
+                        className={styles.alertList}
+                        data={data}
+                        renderer={this.renderAlert}
+                        rendererParams={this.getAlertRendererParams}
+                        keySelector={alertKeySelector}
+                    />
+                )}
+            </div>
+        );
+    }
 
     renderKeyStatistics = ({ className }) => {
         // hide stats for now
