@@ -8,6 +8,7 @@ import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import DonutChart from '#rscz/DonutChart';
 import Spinner from '#rscz/Spinner';
+import FormattedDate from '#rscv/FormattedDate';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
@@ -34,6 +35,8 @@ const defaultProps = {
 
 const alertKeySelector = d => d.id;
 const emptyObject = {};
+const aday = 24 * 60 * 60 * 1000;
+const now = Date.now();
 
 const pieChartValueSelector = d => d.value;
 const pieChartLabelSelector = d => d.label;
@@ -101,20 +104,33 @@ export default class LeftPane extends React.PureComponent {
         }
     }
 
+    lessThanADayAgo = (date) => {
+        const timediff = now - new Date(date).getTime();
+        return timediff < aday;
+    }
+
     renderAlert = ({
         className,
         data: {
             title,
             hazard,
+            startedOn,
         } = emptyObject,
     }) => {
         const { hazardTypes } = this.props;
         const icon = hazardIcons[hazard];
 
+        const isLatest = this.lessThanADayAgo(startedOn);
+
         return (
             <div
                 className={className}
             >
+                { isLatest ? (
+                    <div className={styles.latest} />
+                ) : (
+                    <div className={styles.old} />
+                )}
                 { icon ? (
                     <ReactSVG
                         className={styles.svgContainer}
@@ -134,6 +150,12 @@ export default class LeftPane extends React.PureComponent {
                 )}
                 <div className={styles.title}>
                     { title }
+                </div>
+                <div className={styles.startDate}>
+                    <FormattedDate
+                        date={startedOn}
+                        mode="yyyy-MM-dd"
+                    />
                 </div>
             </div>
         );
