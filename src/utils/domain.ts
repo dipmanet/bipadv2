@@ -25,7 +25,9 @@ export const PEOPLE_LOSS_FACTOR = 0.4;
 export const LIVESTOCK_LOSS_FACTOR = 0.1;
 export const INFRASTRUCTURE_LOSS_FACTOR = 0.3;
 
-export const calculateSeverity = (loss: Loss, scaleFactor: number = 1): number => {
+const emptyObject = {};
+
+export const calculateSeverity = (loss: Loss = emptyObject, scaleFactor: number = 1): number => {
     const {
         estimatedLoss = 0,
         peopleDeathCount = 0,
