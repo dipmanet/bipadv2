@@ -180,4 +180,52 @@ export default {
             ],
         },
     },
+    provinceLabel: {
+        paint: {
+            'text-color': '#808080',
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 16,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    districtLabel: {
+        paint: {
+            'text-color': '#808080',
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 10,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    municipalityLabel: {
+        paint: {
+            'text-color': '#808080',
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 8,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    wardLabel: {
+        paint: {
+            'text-color': '#808080',
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 8,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
 };
