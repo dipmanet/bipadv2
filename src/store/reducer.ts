@@ -4,6 +4,7 @@ import localforage from 'localforage';
 
 import routeReducer from './atom/route/reducer';
 import pageReducer from './atom/page/reducer';
+import authReducer from './atom/auth/reducer';
 
 const filterPageContent = createFilter(
     'page',
@@ -32,6 +33,7 @@ const rootReducer = persistCombineReducers(
         // TODO: remove cast after latest update
         route: routeReducer as any,
         page: pageReducer as any,
+        auth: authReducer as any,
     },
 );
 

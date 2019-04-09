@@ -1,7 +1,10 @@
-import Cookies from 'js-cookies';
+import cookies from 'js-cookies';
 
-export const getSessionId = (): string => Cookies.get('sessionId');
+import { AuthState } from '#store/atom/auth/types';
 
-export const getCsrfToken = (): string => Cookies.get('csrftoken');
-
-export const isLoggedIn = (): boolean => !!Cookies.get('sessionId');
+// eslint-disable-next-line import/prefer-default-export
+export const getAuthState = (): AuthState => ({
+    sessionId: cookies.getItem('sessionid'),
+    csrftoken: cookies.getItem('csrftoken'),
+    authenticated: !!cookies.getItem('sessionid'),
+});
