@@ -74,7 +74,7 @@ const routeSettings: SomeRoute[] = [
         path: '/risk-info/',
         load: () => import('../views/RiskInfo'),
         navbar: true,
-        disabled: true,
+        disabled: false,
         iconName: iconNames.riskMap,
     },
     {

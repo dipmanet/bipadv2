@@ -8,7 +8,8 @@
         flex-wrap: wrap;
 
         .option {
-            flex-basis: calc(100% / 3);
+            flex-basis: calc(100% / 4);
+            padding: $spacing-small 0;
 
             .icon {
                 transition: $duration-transition-medium all ease-in-out;
@@ -17,8 +18,8 @@
                 filter: grayscale(77%);
 
                 .svg {
-                    width: 24px;
-                    height: 24px;
+                    width: 16px;
+                    height: 16px;
 
                     path {
                         fill: $color-text;
@@ -30,6 +31,7 @@
                 transition: $duration-transition-medium all ease-in-out;
                 text-transform: none;
                 color: $color-text-disabled;
+                font-size: $font-size-extra-small;
             }
 
             &:hover {

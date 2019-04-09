@@ -15,6 +15,7 @@ import {
 } from '#selectors';
 
 import { hazardIcons } from '#resources/data';
+import HazardSelectionInput from '#components/HazardSelectionInput';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import MultiListSelection from '#components/MultiListSelection';
@@ -160,14 +161,8 @@ class DashboardFilter extends React.PureComponent {
                                 faramElementName="dateRange"
                                 className={styles.pastDataSelectInput}
                             />
-                            <MultiListSelection
+                            <HazardSelectionInput
                                 faramElementName="hazard"
-                                className={styles.listSelectionInput}
-                                keySelector={hazardTypeKeySelector}
-                                labelSelector={hazardTypeLabelSelector}
-                                iconSelector={hazardTypeIconSelector}
-                                label="Hazard type"
-                                options={hazardTypeList}
                             />
                         </Faram>
                     </React.Fragment>

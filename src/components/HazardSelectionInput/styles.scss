@@ -1,0 +1,13 @@
+@import '~base-scss/base';
+
+.hazard-selection-input {
+    padding: $spacing-small;
+
+    .artificial-hazard-selection-input {
+        padding: $spacing-small 0;
+    }
+
+    .natural-hazard-selection-input {
+        padding: $spacing-small 0;
+    }
+}

@@ -194,7 +194,14 @@ const setInitialPopupShown = (state: Type.PageState, action: Type.SetInitialPopu
 };
 
 const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
-    const { hazardTypes } = action;
+    const { hazardTypes: hazardTypesFromAction } = action;
+
+    // TODO Remove this after we get type from server
+    const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
+        ...hazardType,
+        type: i % 2 === 0 ? 'natural' : 'artificial',
+    }));
+
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
         deferedState.hazardTypes = listToMap(

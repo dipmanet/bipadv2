@@ -59,9 +59,19 @@ $width-table-container: 250px;
         flex-grow: 1;
 
         .real-time-sources-input {
-            display: flex;
-            flex-wrap: wrap;
             margin: 0 $spacing-small;
+
+            :global {
+                .list-selection-options {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    label {
+                        padding: 0;
+                        padding-right: $spacing-medium;
+                    }
+                }
+            }
         }
     }
 
@@ -69,7 +79,7 @@ $width-table-container: 250px;
         display: flex;
         flex-direction: column;
 
-        span {
+        >h4 {
             border-bottom: 1px solid $color-separator;
             padding: $spacing-small;
             color: $color-accent;
@@ -78,14 +88,15 @@ $width-table-container: 250px;
         .container {
             display: flex;
             flex-direction: column;
-            border-bottom: 1px solid $color-separator;
+            border-bottom: $width-separator-thin solid $color-separator;
             padding-bottom: $spacing-small;
 
-
             .heading {
-                flex-grow: 1;
-                padding: $spacing-medium $spacing-small;
-                color: $color-primary;
+                flex-shrink: 0;
+                padding-top: $spacing-small;
+                text-transform: uppercase;
+                color: $color-text-label;
+                font-size: $font-size-small;
             }
 
             .legend {

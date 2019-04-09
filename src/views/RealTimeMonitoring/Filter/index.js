@@ -197,13 +197,13 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                         </Faram>
                         <div className={styles.legendsContainer}>
                             { (showRain || showRiver || showEarthquake) &&
-                                <span>Legend</span>
+                                <h4>Legend</h4>
                             }
                             { showRain &&
                                 <div className={styles.container}>
-                                    <h4 className={styles.heading}>
+                                    <h5 className={styles.heading}>
                                         Rain
-                                    </h4>
+                                    </h5>
                                     <Legend
                                         className={styles.legend}
                                         data={rainLegendItems}
@@ -218,9 +218,9 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             }
                             { showRiver &&
                                 <div className={styles.container}>
-                                    <h4 className={styles.heading}>
+                                    <h5 className={styles.heading}>
                                         River
-                                    </h4>
+                                    </h5>
                                     <Legend
                                         className={styles.legend}
                                         data={riverLegendItems}
@@ -235,9 +235,9 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             }
                             { showEarthquake &&
                                 <div className={styles.container}>
-                                    <h4 className={styles.heading}>
+                                    <h5 className={styles.heading}>
                                         Earthquake
-                                    </h4>
+                                    </h5>
                                     <Legend
                                         className={styles.legend}
                                         data={earthquakeLegendItems}

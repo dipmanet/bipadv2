@@ -106,7 +106,7 @@ export default class RegionSelectInput extends React.PureComponent {
         const adminLevelLabel = adminLevelItem ? adminLevelItem.title : 'Geo area';
 
         return (
-            <div className={className}>
+            <div className={_cs(className, styles.regionSelectInput)}>
                 <SegmentInput
                     className={styles.adminLevelSelectInput}
                     label="Admin level"
