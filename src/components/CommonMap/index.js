@@ -97,6 +97,7 @@ class CommonMap extends React.PureComponent {
         const districtLabels = this.getDistrictsFeatureCollection(districts);
         const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
         const wardLabels = this.getWardsFeatureCollection(wards);
+
         return (
             <Fragment>
                 <MapSource
@@ -156,6 +157,14 @@ class CommonMap extends React.PureComponent {
                         // NOTE: dont' show district in province level
                         layout={regionLevel >= 2 ? visibleLayout : noneLayout}
                     />
+                    <MapLayer
+                        layerKey="municipality-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.municipality}
+                        paint={mapStyles.municipality.outline}
+                        // NOTE: dont' show district in province level
+                        layout={regionLevel >= 3 ? visibleLayout : noneLayout}
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="province-label-source"
@@ -174,11 +183,12 @@ class CommonMap extends React.PureComponent {
                     geoJson={districtLabels}
                 >
                     <MapLayer
-                        layerKey="distrcit-label"
+                        layerKey="district-label"
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.districtLabel.paint}
                         layout={regionLevel === 2 ? mapStyles.districtLabel.layout : noneLayout}
+                        minzoom={6}
                     />
                 </MapSource>
                 <MapSource
@@ -191,6 +201,7 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.municipalityLabel.paint}
                         layout={regionLevel === 3 ? mapStyles.municipalityLabel.layout : noneLayout}
+                        minzoom={8}
                     />
                 </MapSource>
                 <MapSource
@@ -203,6 +214,7 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.wardLabel.paint}
                         layout={regionLevel === 4 ? mapStyles.wardLabel.layout : noneLayout}
+                        minzoom={9}
                     />
                 </MapSource>
             </Fragment>

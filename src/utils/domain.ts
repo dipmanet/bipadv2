@@ -321,7 +321,13 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
     ));
 };
 
-export const getAdminLevelTitles = (adminLevel: AdminLevel[]) => {
+interface Geo {
+    id: number;
+    centroid: object;
+    title: string;
+}
+
+export const getAdminLevelTitles = (adminLevel: Geo[]) => {
     const geojson = {
         type: 'FeatureCollection',
         features: adminLevel
@@ -329,7 +335,7 @@ export const getAdminLevelTitles = (adminLevel: AdminLevel[]) => {
                 id: level.id,
                 type: 'Feature',
                 geometry: {
-                    ...centroid(bboxPolygon(level.bbox as BBox)).geometry,
+                    ...level.centroid,
                 },
                 properties: {
                     adminLevelId: level.id,

@@ -1,10 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+// import { connect } from 'react-redux';
+// import memoize from 'memoize-one';
 
 import MapSource from '#rscz/Map/MapSource';
 import MapLayer from '#rscz/Map/MapLayer';
 
 import { mapSources, mapStyles } from '#constants';
+// import { getAdminLevelTitles } from '#utils/domain';
+
+import {
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector,
+} from '#selectors';
 
 const propTypes = {
     boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
@@ -18,52 +28,133 @@ const defaultProps = {
     sourceKey: 'country',
 };
 
-export default class ZoomMap extends React.PureComponent {
+const mapStateToProps = state => ({
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+});
+
+class ZoomMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
+
+    /*
+    getProvincesFeatureCollection = memoize(getAdminLevelTitles);
+    getDistrictsFeatureCollection = memoize(getAdminLevelTitles);
+    getMunicipalitiesFeatureCollection = memoize(getAdminLevelTitles);
+    getWardsFeatureCollection = memoize(getAdminLevelTitles);
+    */
 
     render() {
         const {
             boundsPadding,
             bounds,
             sourceKey,
+            /*
+            provinces,
+            districts,
+            municipalities,
+            wards,
+            */
         } = this.props;
 
+        /*
+        const provinceLabels = this.getProvincesFeatureCollection(provinces);
+        const districtLabels = this.getDistrictsFeatureCollection(districts);
+        const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
+        const wardLabels = this.getWardsFeatureCollection(wards);
+        */
+
         return (
-            <MapSource
-                sourceKey={sourceKey}
-                url={mapSources.nepal.url}
-                bounds={bounds}
-                boundsPadding={boundsPadding}
-            >
-                <MapLayer
-                    layerKey="province-outline"
-                    type="line"
-                    sourceLayer={mapSources.nepal.layers.province}
-                    paint={mapStyles.province.outline}
-                />
-                <MapLayer
-                    layerKey="district-outline"
-                    type="line"
-                    sourceLayer={mapSources.nepal.layers.district}
-                    paint={mapStyles.district.outline}
-                    minzoom={6}
-                />
-                <MapLayer
-                    layerKey="municipality-outline"
-                    type="line"
-                    sourceLayer={mapSources.nepal.layers.municipality}
-                    paint={mapStyles.municipality.outline}
-                    minzoom={8}
-                />
-                <MapLayer
-                    layerKey="ward-outline"
-                    type="line"
-                    sourceLayer={mapSources.nepal.layers.ward}
-                    paint={mapStyles.ward.outline}
-                    minzoom={9}
-                />
-            </MapSource>
+            <React.Fragment>
+                <MapSource
+                    sourceKey={sourceKey}
+                    url={mapSources.nepal.url}
+                    bounds={bounds}
+                    boundsPadding={boundsPadding}
+                >
+                    <MapLayer
+                        layerKey="province-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={mapStyles.province.outline}
+                    />
+                    <MapLayer
+                        layerKey="district-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.district}
+                        paint={mapStyles.district.outline}
+                        minzoom={6}
+                    />
+                    <MapLayer
+                        layerKey="municipality-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.municipality}
+                        paint={mapStyles.municipality.outline}
+                        minzoom={8}
+                    />
+                    <MapLayer
+                        layerKey="ward-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.ward}
+                        paint={mapStyles.ward.outline}
+                        minzoom={9}
+                    />
+                </MapSource>
+                {/*
+                <MapSource
+                    sourceKey="province-label-source"
+                    geoJson={provinceLabels}
+                >
+                    <MapLayer
+                        layerKey="province-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.provinceLabel.paint}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="district-label-source"
+                    geoJson={districtLabels}
+                >
+                    <MapLayer
+                        layerKey="district-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.districtLabel.paint}
+                        minzoom={6}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="municipality-label-source"
+                    geoJson={municipalityLabels}
+                >
+                    <MapLayer
+                        layerKey="municipality-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.municipalityLabel.paint}
+                        minzoom={8}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="ward-label-source"
+                    geoJson={wardLabels}
+                >
+                    <MapLayer
+                        layerKey="ward-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.wardLabel.paint}
+                        minzoom={9}
+                    />
+                </MapSource>
+                */}
+            </React.Fragment>
         );
     }
 }
+
+// export default connect(mapStateToProps)(ZoomMap);
+export default ZoomMap;
