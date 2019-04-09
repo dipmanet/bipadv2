@@ -110,6 +110,11 @@ export const alertListSelectorDP = createSelector(
     }),
 );
 
+export const eventListSelector = createSelector(
+    dashboardPageSelector,
+    ({ eventList }) => eventList,
+);
+
 // incidentPage
 
 export const filtersSelectorIP = createSelector(

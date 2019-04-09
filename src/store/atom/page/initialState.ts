@@ -69,6 +69,7 @@ const state: PageState = {
     // Page related
 
     dashboardPage: {
+        eventList: [],
         alertList: [],
         filters: {
             faramValues: {

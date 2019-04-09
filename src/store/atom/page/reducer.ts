@@ -82,6 +82,11 @@ export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) 
     alertList,
 });
 
+export const setEventListAction = ({ eventList }: { eventList: Type.Event[]}) => ({
+    type: Type.PageType.DP__SET_EVENTS,
+    eventList,
+});
+
 export const setFiltersActionDP = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
@@ -295,6 +300,21 @@ const setAlertList = (state: Type.PageState, action: Type.SetDashboardAlertList)
             deferedState.dashboardPage = initialState.dashboardPage;
         }
         deferedState.dashboardPage.alertList = alertList;
+        /* eslint-enable no-param-reassign */
+    });
+    return newState;
+};
+
+const setEventList = (state: Type.PageState, action: Type.SetEventList) => {
+    const { eventList } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.dashboardPage) {
+            // FIXME: find a good way to handle this
+            deferedState.dashboardPage = initialState.dashboardPage;
+        }
+        deferedState.dashboardPage.eventList = eventList;
         /* eslint-enable no-param-reassign */
     });
     return newState;
@@ -653,6 +673,8 @@ export default function routeReducer(
             return setLossAndDamageFilters(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_FILTERS:
             return setRealTimeFilters(state, action);
+        case Type.PageType.DP__SET_EVENTS:
+            return setEventList(state, action);
         default:
             return state;
     }

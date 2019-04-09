@@ -5,31 +5,72 @@ import { connect } from 'react-redux';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+import FormattedDate from '#rscv/FormattedDate';
 
 import CommonMap from '#components/CommonMap';
+import TextOutput from '#components/TextOutput';
+
 import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { alertToGeojson } from '#utils/domain';
+
+import {
+    alertToGeojson,
+    eventToGeojson,
+} from '#utils/domain';
+
 import { hazardTypesSelector } from '#selectors';
 
 import styles from './styles.scss';
 
-const Tooltip = ({ title, description }) => (
+const AlertTooltip = ({ title, description }) => (
     <div className={styles.tooltip}>
         <h3 className={styles.heading}>
             {title}
         </h3>
-        <p>
-            {description}
-        </p>
+        <TextOutput
+            label="Description"
+            value={description}
+        />
     </div>
 );
 
-Tooltip.propTypes = {
+const EventTooltip = ({ title, description, severity, createdOn }) => (
+    <div className={styles.tooltip}>
+        <h3 className={styles.heading}>
+            {title}
+        </h3>
+        <TextOutput
+            label="Description"
+            value={description}
+        />
+        <TextOutput
+            label="Severity"
+            value={severity}
+        />
+        <TextOutput
+            label="Created On"
+            value={
+                <FormattedDate
+                    date={createdOn}
+                    mode="dd-MM-yyyy hh:mm"
+                />
+            }
+        />
+    </div>
+);
+
+AlertTooltip.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+};
+
+EventTooltip.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    severity: PropTypes.string.isRequired,
+    createdOn: PropTypes.string.isRequired,
 };
 
 
@@ -37,11 +78,14 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     alertList: PropTypes.array,
     // eslint-disable-next-line react/forbid-prop-types
+    eventList: PropTypes.array,
+    // eslint-disable-next-line react/forbid-prop-types
     hazards: PropTypes.object,
 };
 
 const defaultProps = {
     alertList: [],
+    eventList: [],
     hazards: {},
 };
 
@@ -50,7 +94,7 @@ const mapStateToProps = state => ({
 });
 
 
-class AlertMap extends React.PureComponent {
+class AlertEventMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -67,22 +111,32 @@ class AlertMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    getFeatureCollection = memoize(alertToGeojson);
+    getAlertsFeatureCollection = memoize(alertToGeojson);
+    getEventsFeatureCollection = memoize(eventToGeojson);
 
-    tooltipRendererParams = (id, { title, description }) => ({
+    alertTooltipRendererParams = (id, { title, description }) => ({
         title,
         description,
+    })
+
+    eventTooltipRendererParams = (id, { title, description, severity, createdOn }) => ({
+        title,
+        description,
+        severity,
+        createdOn,
     })
 
     render() {
         const {
             alertList,
+            eventList,
             hazards,
             leftPaneExpanded,
             rightPaneExpanded,
         } = this.props;
 
-        const featureCollection = this.getFeatureCollection(alertList, hazards);
+        const featureCollection = this.getAlertsFeatureCollection(alertList, hazards);
+        const eventsFeatureCollection = this.getEventsFeatureCollection(eventList, hazards);
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         return (
@@ -99,8 +153,21 @@ class AlertMap extends React.PureComponent {
                         type="fill"
                         enableHover
                         paint={mapStyles.alertPolygon.fill}
-                        tooltipRenderer={Tooltip}
-                        tooltipRendererParams={this.tooltipRendererParams}
+                        tooltipRenderer={AlertTooltip}
+                        tooltipRendererParams={this.alertTooltipRendererParams}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="events"
+                    geoJson={eventsFeatureCollection}
+                >
+                    <MapLayer
+                        layerKey="events-fill"
+                        type="fill"
+                        enableHover
+                        paint={mapStyles.eventPolygon.fill}
+                        tooltipRenderer={EventTooltip}
+                        tooltipRendererParams={this.eventTooltipRendererParams}
                     />
                 </MapSource>
             </React.Fragment>
@@ -108,4 +175,4 @@ class AlertMap extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps)(AlertMap);
+export default connect(mapStateToProps)(AlertEventMap);

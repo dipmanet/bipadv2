@@ -30,6 +30,14 @@ export interface EventType {
 }
 export interface ResourceType {
 }
+export interface Event {
+    id: number;
+    title: string;
+    createdOn: string;
+    description: string;
+    polygon: unknown;
+    severity: string;
+}
 export interface Alert {
     id: number;
     title: string;
@@ -139,6 +147,7 @@ export interface RealTimePollution {
 
 export interface DashboardPage {
     alertList: Alert[];
+    eventList: Event[];
     filters: Filters;
 }
 
@@ -215,6 +224,7 @@ export enum PageType {
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
+    DP__SET_EVENTS = 'page/DASHBOARD/SET_EVENTS',
     DP__SET_FILTERS = 'page/DASHBOARD/SET_FILTERS',
 
     // incident
@@ -295,6 +305,11 @@ export interface SetDashboardAlertList {
     alertList: Alert[];
 }
 
+export interface SetEventList {
+    type: typeof PageType.DP__SET_EVENTS;
+    eventList: Event[];
+}
+
 export interface SetDashboardFilters extends FiltersWithRegion {
     type: typeof PageType.DP__SET_FILTERS;
 }
@@ -365,5 +380,6 @@ export type PageActionTypes = (
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
-    SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters | SetRealTimeFilters
+    SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
+    SetRealTimeFilters | SetEventList
 );

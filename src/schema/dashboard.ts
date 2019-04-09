@@ -29,7 +29,33 @@ const schemaList: Schema[] = [
             count: { type: 'number' },
             next: { type: 'string' },
             previous: { type: 'number' },
-            results: { type: 'array.alert' },
+            results: { type: 'array.event' },
+        },
+    },
+    {
+        extends: 'dbentity',
+        doc: {
+            name: 'event',
+            description: 'Event',
+        },
+        fields: {
+            createdOn: { type: 'string' }, // date
+            title: { type: 'string', required: true },
+            description: { type: 'string' },
+            polygon: { type: 'object' }, // geometry object
+            severity: { type: 'string' },
+        },
+    },
+    {
+        doc: {
+            name: 'eventResponse',
+            description: 'Response of event',
+        },
+        fields: {
+            count: { type: 'number' },
+            next: { type: 'string' },
+            previous: { type: 'number' },
+            results: { type: 'array.event' },
         },
     },
 ];

@@ -36,6 +36,7 @@ const defaultProps = {
 };
 
 const alertKeySelector = d => d.id;
+const eventKeySelector = d => d.id;
 const emptyObject = {};
 const aday = 24 * 60 * 60 * 1000;
 const now = Date.now();
@@ -58,8 +59,13 @@ export default class LeftPane extends React.PureComponent {
     }
 
     getAlertRendererParams = (_, d) => ({
-        data: d,
+        alerts: d,
         className: styles.alert,
+    });
+
+    getEventRendererParams = (_, d) => ({
+        events: d,
+        className: styles.event,
     });
 
     groupByHazard = memoize((alerts, hazards) => {
@@ -119,9 +125,31 @@ export default class LeftPane extends React.PureComponent {
         return timediff < aday;
     }
 
+    renderEvent = ({
+        className,
+        events: {
+            title,
+            createdOn,
+        } = emptyObject,
+    }) => (
+        <div
+            className={className}
+        >
+            <div className={styles.title}>
+                {title}
+            </div>
+            <div className={styles.startDate}>
+                <FormattedDate
+                    date={createdOn}
+                    mode="yyyy-MM-dd"
+                />
+            </div>
+        </div>
+    )
+
     renderAlert = ({
         className,
-        data: {
+        alerts: {
             title,
             hazard,
             startedOn,
@@ -171,9 +199,10 @@ export default class LeftPane extends React.PureComponent {
         );
     };
 
-    renderAlerts = ({
+    renderAlertsAndEvents = ({
         className,
-        data,
+        events,
+        alerts,
         pending,
     }) => {
         const { hazardTypes } = this.props;
@@ -183,7 +212,7 @@ export default class LeftPane extends React.PureComponent {
             <div className={className}>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Alerts
+                        Alerts And Events
                     </h4>
                     <Spinner loading={pending} />
                     <Button
@@ -204,7 +233,7 @@ export default class LeftPane extends React.PureComponent {
                         className={styles.hideAlertsButton}
                         onClick={this.handleHideAlertsButtonClick}
                         iconName={iconNames.chevronUp}
-                        title="Close Alerts"
+                        title="Close Alerts And Events"
                         transparent
                     />
                 </header>
@@ -212,16 +241,35 @@ export default class LeftPane extends React.PureComponent {
                     <Visualizations
                         hazardTypes={hazardTypes}
                         className={styles.alertVisualizations}
-                        alertList={data}
+                        alertList={alerts}
                     />
                 ) : (
-                    <ListView
-                        className={styles.alertList}
-                        data={data}
-                        renderer={this.renderAlert}
-                        rendererParams={this.getAlertRendererParams}
-                        keySelector={alertKeySelector}
-                    />
+                    <React.Fragment>
+                        <div className={styles.alerts}>
+                            <h4 className={styles.heading}>
+                                Alerts
+                            </h4>
+                            <ListView
+                                className={styles.alertList}
+                                data={alerts}
+                                renderer={this.renderAlert}
+                                rendererParams={this.getAlertRendererParams}
+                                keySelector={alertKeySelector}
+                            />
+                        </div>
+                        <div className={styles.events}>
+                            <h4 className={styles.heading}>
+                                Events
+                            </h4>
+                            <ListView
+                                className={styles.eventList}
+                                data={events}
+                                renderer={this.renderEvent}
+                                rendererParams={this.getEventRendererParams}
+                                keySelector={eventKeySelector}
+                            />
+                        </div>
+                    </React.Fragment>
                 )}
             </div>
         );
@@ -244,7 +292,7 @@ export default class LeftPane extends React.PureComponent {
             <div className={className}>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Alerts Overview
+                        Alerts And Events Overview
                     </h4>
                 </header>
                 <div className={styles.content}>
@@ -265,6 +313,7 @@ export default class LeftPane extends React.PureComponent {
         const {
             className,
             alertList,
+            eventList,
             pending,
         } = this.props;
 
@@ -273,7 +322,7 @@ export default class LeftPane extends React.PureComponent {
             showTabular,
         } = this.state;
 
-        const Alerts = this.renderAlerts;
+        const AlertsAndEvents = this.renderAlertsAndEvents;
         const KeyStatistics = this.renderKeyStatistics;
 
         return (
@@ -287,7 +336,7 @@ export default class LeftPane extends React.PureComponent {
                             className={styles.showAlertsButton}
                             onClick={this.handleShowAlertsButtonClick}
                             iconName={iconNames.alert}
-                            title="Show alerts"
+                            title="Show alerts & events"
                         />
                         <Spinner loading={pending} />
                     </React.Fragment>
@@ -299,9 +348,10 @@ export default class LeftPane extends React.PureComponent {
                         collapsedViewContainerClassName={styles.nonTabularContainer}
                         collapsedView={
                             <React.Fragment>
-                                <Alerts
+                                <AlertsAndEvents
                                     className={styles.alerts}
-                                    data={alertList}
+                                    alerts={alertList}
+                                    events={eventList}
                                     pending={pending}
                                 />
                                 <KeyStatistics
@@ -314,7 +364,7 @@ export default class LeftPane extends React.PureComponent {
                             <React.Fragment>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        Alerts
+                                         Alerts
                                     </h4>
                                     <Spinner loading={pending} />
                                     <Button

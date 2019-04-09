@@ -1,7 +1,7 @@
 import Dict, { basicTypes, Schema } from '@togglecorp/ravl';
 import { isProduction } from '#config/env';
 
-import alertSchemas from './alert';
+import dashboardSchemas from './dashboard';
 import commonSchemas from './common';
 import incidentSchemas from './incident';
 import realtimeSchemas from './realtime';
@@ -26,7 +26,7 @@ const dict = new Dict({ warning });
 [
     ...basicTypes,
     ...userDefinedSchemas,
-    ...alertSchemas,
+    ...dashboardSchemas,
     ...commonSchemas,
     ...incidentSchemas,
     ...realtimeSchemas,
