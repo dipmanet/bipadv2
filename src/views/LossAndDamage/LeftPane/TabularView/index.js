@@ -56,13 +56,6 @@ export default class TabularView extends React.PureComponent {
                 order: 3,
             },
             {
-                key: 'description',
-                label: 'Description',
-                order: 4,
-                sortable: true,
-                comparator: (a, b) => compareString(a.description, b.description),
-            },
-            {
                 key: 'source',
                 label: 'Source',
                 order: 5,
@@ -86,6 +79,61 @@ export default class TabularView extends React.PureComponent {
                 sortable: true,
                 // FIXME: potential problem
                 comparator: (a, b) => compareString(a.hazardInfo.title, b.hazardInfo.title),
+            },
+            {
+                key: 'count',
+                label: 'No. of incidents',
+                order: 7,
+                sortable: true,
+                comparator: (a, b) => compareString(a.count, b.count),
+            },
+            {
+                key: 'estimatedLoss',
+                label: 'Total estimated loss',
+                modifier: row => row.loss.estimatedLoss,
+                order: 8,
+                sortable: true,
+                comparator: (a, b) => compareString(a.loss.estimatedLoss, b.loss.estimatedLoss),
+            },
+            {
+                key: 'infrastructureDestroyedCount',
+                label: 'Total infrastructure destroyed',
+                modifier: row => row.loss.infrastructureDestroyedCount,
+                order: 9,
+                sortable: true,
+                comparator: (a, b) => compareString(
+                    a.loss ? a.loss.infrastructureDestroyedCount : 0,
+                    b.loss ? b.loss.infrastructureDestroyedCount : 0,
+                ),
+            },
+            {
+                key: 'livestockDestroyedCount',
+                label: 'Total livestock destroyed',
+                modifier: row => row.loss.livestockDestroyedCount,
+                order: 10,
+                sortable: true,
+                comparator: (a, b) => compareString(
+                    a.loss ? a.loss.livestockDestroyedCount : 0,
+                    b.loss ? b.loss.livestockDestroyedCount : 0,
+                ),
+            },
+            {
+                key: 'peopleDeathCount',
+                label: 'Total people death',
+                modifier: row => row.loss.peopleDeathCount,
+                order: 11,
+                sortable: true,
+                comparator: (a, b) => compareString(
+                    a.loss ? a.loss.peopleDeathCount : 0,
+                    b.loss ? b.loss.peopleDeathCount : 0,
+                ),
+            },
+            {
+                key: 'description',
+                label: 'Description',
+                order: 12,
+                sortable: true,
+                comparator: (a, b) => compareString(a.description, b.description),
             },
             {
                 key: 'createdOn',
@@ -115,6 +163,10 @@ export default class TabularView extends React.PureComponent {
             title: lossAndDamage.title,
             description: lossAndDamage.description,
             source: lossAndDamage.source,
+            'estimated loss': lossAndDamage.loss.estimatedLoss,
+            'infrastructure destroyed': lossAndDamage.loss.infrastructureDestroyedCount,
+            'livestock destroyed': lossAndDamage.loss.livestockDestroyedCount,
+            'people death': lossAndDamage.loss.peopleDeathCount,
             // FIXME: potential problem
             hazard: lossAndDamage.hazardInfo.title,
             'created on': lossAndDamage.createdOn,
