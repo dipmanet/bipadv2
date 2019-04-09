@@ -14,12 +14,12 @@ export default class RiskInfo extends React.PureComponent {
         return (
             <Page
                 className={styles.riskInfo}
-                leftContentClassName={styles.left}
-                leftContent={<LeftPane />}
-                rightContentClassName={styles.right}
-                rightContent={<Filter />}
+                mainContentClassName={styles.main}
                 mainContent={
-                    <CommonMap />
+                    <iframe
+                        title="Risk information"
+                        src="http://139.59.67.104:8004/risk_profile/mappage"
+                    />
                 }
             />
         );
