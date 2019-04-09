@@ -5,11 +5,6 @@ import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
 import { groupList } from '#utils/common';
 
-import {
-    _cs,
-    mapToList,
-} from '@togglecorp/fujs';
-
 import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
@@ -74,14 +69,14 @@ export default class Visualizations extends React.PureComponent {
         ));
     });
 
-    getEventSummary = memoize((incidentList) => {
-        const freqCount = groupList(
-            incidentList.filter(i => i.event),
-            incident => incident.event.title,
-        );
+    /* getEventSummary = memoize((incidentList) => {
+     *     const freqCount = groupList(
+     *         incidentList.filter(i => i.event),
+     *         incident => incident.event.title,
+     *     );
 
-        return freqCount.map(event => ({ label: event.key, value: event.value.length }));
-    });
+     *     return freqCount.map(event => ({ label: event.key, value: event.value.length }));
+     * }); */
 
     render() {
         const {
@@ -92,7 +87,7 @@ export default class Visualizations extends React.PureComponent {
 
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList);
-        const eventSummary = this.getEventSummary(incidentList);
+        // const eventSummary = this.getEventSummary(incidentList);
 
         return (
             <div className={styles.visualizations}>
@@ -109,19 +104,19 @@ export default class Visualizations extends React.PureComponent {
                         valueSelector={barChartValueSelector}
                     />
                 </div>
-                <div className={styles.eventStatisticsChart}>
+                {/* <div className={styles.eventStatisticsChart}>
                     <header className={styles.header}>
-                        <h4 className={styles.heading}>
-                            Event Statistics
-                        </h4>
+                    <h4 className={styles.heading}>
+                    Event Statistics
+                    </h4>
                     </header>
                     <SimpleHorizontalBarChart
-                        className={styles.chart}
-                        data={eventSummary}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
+                    className={styles.chart}
+                    data={eventSummary}
+                    labelSelector={barChartLabelSelector}
+                    valueSelector={barChartValueSelector}
                     />
-                </div>
+                    </div> */}
                 <div className={styles.severitySummary}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
