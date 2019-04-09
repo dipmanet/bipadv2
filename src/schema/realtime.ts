@@ -11,7 +11,7 @@ const schemaList: Schema[] = [
             createdOn: { type: 'string', required: true }, // date
             modifiedOn: { type: 'string' }, // date
             description: { type: 'string' },
-            point: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
             magnitude: { type: 'number' },
             address: { type: 'string' },
             eventOn: { type: 'string' }, // date
@@ -41,7 +41,7 @@ const schemaList: Schema[] = [
             title: { type: 'string' },
             basin: { type: 'string' },
             description: { type: 'string' },
-            point: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
             waterLevel: { type: 'number' },
             waterLevelOn: { type: 'string' },
             dangerLevel: { type: 'number' },
@@ -86,7 +86,7 @@ const schemaList: Schema[] = [
             basin: { type: 'string' },
             status: { type: 'string' },
             description: { type: 'string' },
-            point: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
             elevation: { type: 'number' },
             averages: { type: 'array.rainfall' },
         },
@@ -116,7 +116,7 @@ const schemaList: Schema[] = [
             eventOn: { type: 'string' }, // date
             basin: { type: 'string' },
             landCover: { type: 'string' },
-            point: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
             brightness: { type: 'number' },
             confidence: { type: 'number' },
         },
@@ -154,7 +154,7 @@ const schemaList: Schema[] = [
             createdOn: { type: 'string', required: true }, // date
             modifiedOn: { type: 'string' }, // date
             location: { type: 'string' },
-            point: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
             city: { type: 'string' },
             measuredOn: { type: 'string' }, // date
             measurements: { type: 'array.array.measures' },

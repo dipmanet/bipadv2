@@ -163,8 +163,8 @@ const schemaList: Schema[] = [
             reportedOn: { type: 'string' }, // date
             event: { type: 'event' },
             hazard: { type: 'uint', required: true },
-            point: { type: 'object' }, // FIXME: geometry object
-            polygon: { type: 'object' }, // FIXME: geometry object
+            point: { type: 'unknown' }, // FIXME: geometry object
+            polygon: { type: 'unknown' }, // FIXME: geometry object
             loss: { type: 'loss' },
         },
     },

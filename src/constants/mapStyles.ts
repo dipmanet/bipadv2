@@ -183,6 +183,9 @@ export default {
     provinceLabel: {
         paint: {
             'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
         },
         layout: {
             visibility: 'visible',
@@ -195,6 +198,9 @@ export default {
     districtLabel: {
         paint: {
             'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
         },
         layout: {
             visibility: 'visible',
@@ -207,6 +213,9 @@ export default {
     municipalityLabel: {
         paint: {
             'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
         },
         layout: {
             visibility: 'visible',
@@ -219,6 +228,9 @@ export default {
     wardLabel: {
         paint: {
             'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
         },
         layout: {
             visibility: 'visible',
