@@ -1,0 +1,35 @@
+@import '~base-scss/base';
+.about-us {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: $spacing-medium;
+    top: calc(#{$height-navbar} + #{$spacing-medium});
+    right: calc(#{$width-navbar} + #{$spacing-medium});
+    z-index: 1;
+
+    .disclaimer {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        border: $width-separator-thin solid $color-warning;
+        padding: $spacing-medium;
+        overflow: auto;
+        background-color: white;
+
+        .heading {
+            flex-shrink: 0;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: $spacing-medium;
+            overflow: auto;
+
+            p {
+                text-align: justify;
+            }
+        }
+    }
+}

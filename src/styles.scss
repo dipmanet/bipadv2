@@ -24,7 +24,7 @@
     border: $width-separator-thin solid $color-primary;
     padding: $spacing-large;
     width: 70vh;
-    height: 70vh;
+    height: 40vh;
     overflow: auto;
 
     .top {
@@ -47,29 +47,6 @@
             display: flex;
             flex-grow: 1;
             flex-shrink: 0;
-        }
-
-        .disclaimer {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            border: $width-separator-thin solid $color-warning;
-            padding: $spacing-medium;
-            overflow: auto;
-
-            .heading {
-                flex-shrink: 0;
-            }
-
-            .content {
-                flex-grow: 1;
-                padding: $spacing-medium;
-                overflow: auto;
-
-                p {
-                    text-align: justify;
-                }
-            }
         }
     }
 }

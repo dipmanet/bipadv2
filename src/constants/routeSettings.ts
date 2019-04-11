@@ -92,7 +92,6 @@ const routeSettings: SomeRoute[] = [
         path: '/about-us/',
         iconName: iconNames.aboutUs,
         load: () => import('../views/AboutUs'),
-        disabled: true,
         navbar: true,
     },
     {
