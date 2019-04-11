@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
+import Spinner from '#rscz/Spinner';
 
 import Map from '#rscz/Map/index';
 import { District, Province, Municipality } from '#store/atom/page/types';
@@ -49,12 +50,18 @@ const loadingStyle: React.CSSProperties = {
 
 const LoadingResources = () => (
     <div style={loadingStyle}>
-        Loading Resources...
+        <Spinner />
+        <span>
+            Loading Resources
+        </span>
     </div>
 );
 const LoadingPage = () => (
     <div style={loadingStyle}>
-        Loading Page...
+        <Spinner />
+        <span>
+            Loading Page
+        </span>
     </div>
 );
 const ErrorInPage = () => (

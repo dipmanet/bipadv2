@@ -99,6 +99,13 @@ export default {
                 0.9,
             ],
         },
+        animatedFill: {
+            'circle-color': ['get', 'hazardColor'],
+            'circle-radius': 0,
+            'circle-opacity': 1,
+            'circle-radius-transition': { duration: 0 },
+            'circle-opacity-transition': { duration: 0 },
+        },
     },
     incidentPolygon: {
         fill: {
