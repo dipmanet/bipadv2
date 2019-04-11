@@ -189,6 +189,11 @@ export const realTimePollutionListSelector = createSelector(
     ({ realTimePollutionList }) => realTimePollutionList,
 );
 
+export const realTimeSourceListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ realTimeSourceList }) => realTimeSourceList,
+);
+
 export const realTimeFiltersSelector = createSelector(
     realTimeMonitoringPageSelector,
     regionSelector,

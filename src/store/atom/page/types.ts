@@ -160,12 +160,18 @@ export interface LossAndDamagePage {
     filters: Filters;
 }
 
+export interface RealTimeSource {
+    id: number;
+    title: string;
+}
+
 export interface RealTimeMonitoringPage {
     realTimeRainList: RealTimeRain[];
     realTimeRiverList: RealTimeRiver[];
     realTimeEarthquakeList: RealTimeEarthquake[];
     realTimeFireList: RealTimeFire[];
     realTimePollutionList: RealTimePollution[];
+    realTimeSourceList: RealTimeSource[];
     filters: Filters;
 }
 
