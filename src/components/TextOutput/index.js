@@ -7,7 +7,7 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     label: PropTypes.string.isRequired,
-    iconLabel: PropTypes.boolean,
+    iconLabel: PropTypes.bool,
     // NOTE: PropTypes.object below because TextOutput sometimes gets <DateOutput> as value
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
 };

@@ -11,6 +11,7 @@ const schemaList: Schema[] = [
             title: { type: 'string', required: true },
             description: { type: 'string' },
             severity: { type: 'string' },
+            polygon: { type: 'unknown' }, // geometry object
         },
     },
     {

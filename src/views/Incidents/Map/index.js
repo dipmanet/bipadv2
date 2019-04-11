@@ -32,9 +32,32 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
+// a day
+const TRENDING_TIME = 10;
+
+const framize = (fn, duration = 2000) => {
+    let prevTimestamp;
+    return (timestamp) => {
+        if (!prevTimestamp) {
+            prevTimestamp = timestamp;
+        }
+        const diff = timestamp - prevTimestamp;
+        if (diff > duration) {
+            prevTimestamp = timestamp;
+        }
+        const percent = (timestamp - prevTimestamp) / duration;
+        return fn(percent, timestamp);
+    };
+};
+
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
+
+    constructor(props) {
+        super(props);
+        this.prevTimestamp = undefined;
+    }
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
         const mapPaddings = getMapPaddings();
@@ -48,9 +71,21 @@ class IncidentMap extends React.PureComponent {
         }
         return mapPaddings.noPaneExpanded;
     });
+
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
     getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
+
+    getFilter = memoize(() => {
+        const date = new Date();
+        date.setDate(date.getDate() - TRENDING_TIME);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        const timestamp = date.getTime();
+
+        return ['>', ['get', 'incidentOn'], timestamp];
+    })
 
     tooltipRendererParams = (id) => {
         const {
@@ -66,6 +101,17 @@ class IncidentMap extends React.PureComponent {
         };
     }
 
+    handleAnimationKeyframe = framize((percent) => {
+        const p = percent ** 3;
+        const radius = p * 20;
+        const opacity = (1 - p);
+        return {
+            'circle-radius': radius,
+            // 'circle-radius': ['+', mapStyles.incidentPoint.fill['circle-radius'], radius],
+            'circle-opacity': opacity,
+        };
+    })
+
     render() {
         const {
             incidentList,
@@ -78,6 +124,7 @@ class IncidentMap extends React.PureComponent {
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const filter = this.getFilter();
 
         return (
             <React.Fragment>
@@ -88,6 +135,13 @@ class IncidentMap extends React.PureComponent {
                     sourceKey="incident-points"
                     geoJson={pointFeatureCollection}
                 >
+                    <MapLayer
+                        layerKey="incident-points-animate"
+                        type="circle"
+                        filter={filter}
+                        paint={mapStyles.incidentPoint.animatedFill}
+                        onAnimationKeyframe={this.handleAnimationKeyframe}
+                    />
                     <MapLayer
                         layerKey="incident-points-fill"
                         type="circle"
