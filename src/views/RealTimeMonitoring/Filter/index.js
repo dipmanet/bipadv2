@@ -52,6 +52,15 @@ const earthquakeLegendItems = [
     { icon: '●', color: '#fee5d9', label: 'Minor (Magnitude 3 or more)' },
 ];
 
+const pollutionLegendItems = [
+    { icon: '●', color: '#009966', label: 'Good' },
+    { icon: '●', color: '#ffde33', label: 'Moderate' },
+    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups' },
+    { icon: '●', color: '#cc0033', label: 'Unhealthy' },
+    { icon: '●', color: '#660099', label: 'Very Unhealthy' },
+    { icon: '●', color: '#7e0023', label: 'Hazardous' },
+];
+
 const itemSelector = d => d.label;
 const iconSelector = d => d.icon;
 const legendColorSelector = d => d.color;
@@ -142,6 +151,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
             showRain,
             showRiver,
             showEarthquake,
+            showPollution,
             realTimeList,
         } = this.props;
 
@@ -196,7 +206,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             />
                         </Faram>
                         <div className={styles.legendsContainer}>
-                            { (showRain || showRiver || showEarthquake) &&
+                            { (showRain || showRiver || showEarthquake || showPollution) &&
                                 <h4>Legend</h4>
                             }
                             { showRain &&
@@ -241,6 +251,23 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                     <Legend
                                         className={styles.legend}
                                         data={earthquakeLegendItems}
+                                        itemClassName={styles.legendItem}
+                                        keySelector={itemSelector}
+                                        iconSelector={iconSelector}
+                                        labelSelector={legendLabelSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={() => ''}
+                                    />
+                                </div>
+                            }
+                            { showPollution &&
+                                <div className={styles.container}>
+                                    <h5 className={styles.heading}>
+                                        Pollution
+                                    </h5>
+                                    <Legend
+                                        className={styles.legend}
+                                        data={pollutionLegendItems}
                                         itemClassName={styles.legendItem}
                                         keySelector={itemSelector}
                                         iconSelector={iconSelector}
