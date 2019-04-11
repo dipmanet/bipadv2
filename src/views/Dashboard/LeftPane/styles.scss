@@ -55,66 +55,108 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                     }
                 }
 
-                .alert-list {
+                .events {
                     flex-grow: 1;
-                    overflow: auto;
-
-                    .alert {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
+                    .heading {
                         padding: $spacing-medium $spacing-large;
+                        color: $color-primary;
+                    }
 
-                        .latest {
-                            flex-shrink: 0;
-                            flex-grow: 0;
-                            flex-basis: 0.5em;
-                            height: 25px;
-                            background-color: #E71D36;
-                        }
+                    .event-list {
+                        flex-grow: 1;
+                        overflow: auto;
 
-                        .old {
-                            flex-shrink: 0;
-                            flex-grow: 0;
-                            flex-basis: 0.5em;
-                            height: 25px;
-                            background-color: transparent;
-                        }
+                        .event {
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            padding: $spacing-medium $spacing-large;
 
-                        .svg-container {
-                            flex-shrink: 0;
-                            margin-right: $spacing-medium;
+                            .title {
+                                flex-grow: 1;
+                            }
 
-                            .icon {
-                                width: 20px;
-                                height: auto;
-                                height: $font-size-extra-large;
+                            .start-date {
+                                flex-shrink: 0;
+                            }
 
-                                path {
-                                    fill: currentColor;
-                                }
+                            &:hover {
+                                background-color: rgba(0, 0, 0, .05);
                             }
                         }
+                    }
+                }
 
-                        .default-icon {
-                            flex-shrink: 0;
-                            margin-right: $spacing-medium;
-                            width: 20px;
-                            height: 20px;
-                            color: $color-danger;
-                            font-size: $font-size-extra-large;
-                        }
+                .alerts {
+                    flex-grow: 1;
 
-                        .title {
-                            flex-grow: 1;
-                        }
+                    .heading {
+                        padding: $spacing-medium $spacing-large;
+                        color: $color-primary;
+                    }
 
-                        .start-date {
-                            flex-shrink: 0;
-                        }
+                    .alert-list {
+                        flex-grow: 1;
+                        overflow: auto;
 
-                        &:hover {
-                            background-color: rgba(0, 0, 0, .05);
+                        .alert {
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            padding: $spacing-medium $spacing-large;
+
+                            .latest {
+                                flex-shrink: 0;
+                                flex-grow: 0;
+                                flex-basis: 0.5em;
+                                height: 25px;
+                                background-color: #E71D36;
+                            }
+
+                            .old {
+                                flex-shrink: 0;
+                                flex-grow: 0;
+                                flex-basis: 0.5em;
+                                height: 25px;
+                                background-color: transparent;
+                            }
+
+                            .svg-container {
+                                flex-shrink: 0;
+                                margin-right: $spacing-medium;
+
+                                .icon {
+                                    width: 20px;
+                                    height: auto;
+                                    height: $font-size-extra-large;
+
+                                    path {
+                                        fill: currentColor;
+                                    }
+                                }
+                            }
+
+
+                            .default-icon {
+                                flex-shrink: 0;
+                                margin-right: $spacing-medium;
+                                width: 20px;
+                                height: 20px;
+                                color: $color-danger;
+                                font-size: $font-size-extra-large;
+                            }
+
+                            .title {
+                                flex-grow: 1;
+                            }
+
+                            .start-date {
+                                flex-shrink: 0;
+                            }
+
+                            &:hover {
+                                background-color: rgba(0, 0, 0, .05);
+                            }
                         }
                     }
                 }

@@ -8,6 +8,7 @@ import {
     HazardType,
     WithHazard,
     Alert,
+    Event,
     Incident,
     AdminLevel,
     RealTimeEarthquake,
@@ -104,6 +105,39 @@ export const alertToGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => 
                         title,
                         description,
                         hazardColor: getHazardColor(hazards, alert.hazard),
+                    },
+                };
+            }),
+    };
+
+    return geojson;
+};
+export const eventToGeojson = (eventList: Event[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: eventList
+            .filter(event => isTruthy(event.polygon))
+            .map((event) => {
+                const {
+                    id,
+                    title,
+                    polygon,
+                    description,
+                    severity,
+                    createdOn,
+                } = event;
+
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: {
+                        ...polygon,
+                    },
+                    properties: {
+                        title,
+                        description,
+                        severity,
+                        createdOn,
                     },
                 };
             }),

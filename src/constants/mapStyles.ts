@@ -72,6 +72,16 @@ export default {
             ],
         },
     },
+    eventPolygon: {
+        fill: {
+            'fill-color': '#8dd3c7',
+            'fill-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                0.5,
+                0.8,
+            ],
+        },
+    },
     incidentPoint: {
         fill: {
             'circle-color': ['get', 'hazardColor'],
