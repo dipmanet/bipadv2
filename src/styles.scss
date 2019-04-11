@@ -61,5 +61,13 @@
         .mapboxgl-ctrl-bottom-right {
             right: $width-navbar;
         }
+
+        .mapboxgl-ctrl-attrib {
+            display: none;
+        }
+
+        .mapboxgl-ctrl-logo {
+            display: none;
+        }
     }
 }
