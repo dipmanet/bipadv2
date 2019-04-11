@@ -6,33 +6,37 @@
     overflow: auto;
 
     .table-container {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
         .alerts-table {
-            .verified {
-                color: $color-success-light;
-            }
+            flex-grow: 1;
 
-            .not-verified {
-                color: $color-danger-light;
-            }
+            // .verified {
+            //     color: $color-success-light;
+            // }
 
-            :global {
-                .header {
-                    border-right: none;
+            // .not-verified {
+            //     color: $color-danger-light;
+            // }
 
-                    &.description {
-                        >div {
-                            width: 300px;
-                        }
-                    }
-                }
+            // :global {
+            //     .header {
+            //         border-right: none;
 
-                .row {
-                    background-color: $color-foreground;
-                }
-            }
+            //         &.description {
+            //             >div {
+            //                 width: 300px;
+            //             }
+            //         }
+            //     }
+
+            //     .row {
+            //         background-color: $color-foreground;
+            //     }
+            // }
         }
     }
 

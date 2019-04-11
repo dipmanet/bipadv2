@@ -7,6 +7,10 @@ const iconNames = {
     layers: 'ion-social-buffer',
     share: 'ion-android-share-alt',
 
+    sort: 'fa fa-sort',
+    sortAscending: 'fa fa-sort-asc',
+    sortDescending: 'fa fa-sort-desc',
+
     dashboard: 'ion-android-home',
     riskMap: 'ion-android-map',
     incidents: 'ion-alert-circled', // TODO remove this
