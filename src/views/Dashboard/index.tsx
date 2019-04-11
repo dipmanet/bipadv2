@@ -42,7 +42,9 @@ interface State {
     leftPaneExpanded?: boolean;
     rightPaneExpanded?: boolean;
 }
-interface Params {}
+interface Params {
+    triggerAlertRequest: (timeout: number) => void;
+}
 interface OwnProps {}
 interface PropsFromState {
     alertList: PageTypes.Alert[];
@@ -78,10 +80,23 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ...transformDateRangeFilterParam(filters, 'created_on'),
             expand: ['event'],
         }),
-        onSuccess: ({ response, props: { setAlertList } }) => {
+        onSuccess: ({ response, props: { setAlertList }, params }) => {
             interface Response { results: PageTypes.Alert[] }
             const { results: alertList = [] } = response as Response;
             setAlertList({ alertList });
+            if (params && params.triggerAlertRequest) {
+                params.triggerAlertRequest(60 * 1000);
+            }
+        },
+        onFailure: ({ params }) => {
+            if (params && params.triggerAlertRequest) {
+                params.triggerAlertRequest(60 * 1000);
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.triggerAlertRequest) {
+                params.triggerAlertRequest(60 * 1000);
+            }
         },
         onMount: true,
         onPropsChanged: {
@@ -108,7 +123,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ...transformDateRangeFilterParam(filters, 'created_on'),
         }),
         onSuccess: ({ response, props: { setEventList } }) => {
-            interface Response { results: PageTypes.EventType[] }
+            interface Response { results: PageTypes.Event[] }
             const { results: eventList = [] } = response as Response;
             setEventList({ eventList });
         },
@@ -135,12 +150,29 @@ class Dashboard extends React.PureComponent<Props, State> {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
         };
+
+        this.props.requests.alertsRequest.setDefaultParams({
+            triggerAlertRequest: this.requestPoll,
+        });
     }
 
-    private getAlertHazardTypesList = memoize((alertList) => {
+    public componentWillUnmount(): void {
+        window.clearTimeout(this.timeout);
+    }
+
+    private getAlertHazardTypesList = memoize((alertList: PageTypes.Alert[]) => {
         const { hazardTypes } = this.props;
         return hazardTypesList(alertList, hazardTypes);
     });
+
+    private timeout?: number
+
+    private requestPoll = (delay: number) => {
+        this.timeout = window.setTimeout(
+            () => { this.props.requests.alertsRequest.do(); },
+            delay,
+        );
+    }
 
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
