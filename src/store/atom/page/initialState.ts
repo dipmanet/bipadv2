@@ -32,6 +32,11 @@ const state: PageState = {
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
     mapStyles: [
         {
+            name: 'none',
+            style: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
+            color: '#dddddd',
+        },
+        {
             name: 'custom',
             style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
             color: '#ff8867',

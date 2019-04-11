@@ -2,25 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import { listToMap } from '@togglecorp/fujs';
 
 import ChoroplethMap from '#components/ChoroplethMap';
 import { districtsSelector } from '#selectors';
 import { getMapPaddings } from '#constants';
-import { groupList, sum } from '#utils/common';
 
 import styles from './styles.scss';
 
 const colorGrade = [
-    '#fee5d9',
-    '#fcbba1',
-    '#fc9272',
-    '#fb6a4a',
-    '#ef3b2c',
-    '#cb181d',
-    '#99000d',
+    '#ffffcc',
+    '#ffeda0',
+    '#fed976',
+    '#feb24c',
+    '#fd8d3c',
+    '#fc4e2a',
+    '#e31a1c',
+    '#bd0026',
+    '#800026',
 ];
-
 
 const pickList = (list, start, offset) => {
     const newList = [];
