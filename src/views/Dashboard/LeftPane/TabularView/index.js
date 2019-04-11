@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { saveAs } from 'file-saver';
 
 import Button from '#rsca/Button';
 import NormalTaebul from '#rscv/Taebul';
@@ -16,6 +17,7 @@ import {
     compareDate,
     compareString,
     compareBoolean,
+    doesObjectHaveNoData,
 } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
@@ -66,6 +68,45 @@ const DateCell = ({ value }) => (
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
+class DownloadButton extends React.PureComponent {
+    static propTypes = {
+        name: PropTypes.string,
+        value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+        disabled: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        name: 'downloadFiled.csv',
+        disabled: false,
+        value: undefined,
+    }
+
+    handleClick = () => {
+        const { value, name } = this.props;
+        const csv = convertJsonToCsv(value);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        saveAs(blob, name);
+    }
+
+    render() {
+        const {
+            disabled,
+            value,
+            name, // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
+            ...otherProps
+        } = this.props;
+
+        return (
+            <Button
+                {...otherProps}
+                onClick={this.handleClick}
+                disabled={doesObjectHaveNoData(value) || disabled}
+            />
+        );
+    }
+}
+
+// eslint-disable-next-line react/no-multi-comp
 export default class TabularView extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -175,9 +216,6 @@ export default class TabularView extends React.PureComponent {
         } = this.props;
 
         const alertListForExport = this.convertValues(alertList, this.columns);
-        console.warn(alertListForExport);
-        const csv = convertJsonToCsv(alertListForExport);
-        const csvLink = convertCsvToLink(csv);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
@@ -193,13 +231,12 @@ export default class TabularView extends React.PureComponent {
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>
-                    <a
-                        className={styles.downloadLink}
-                        href={csvLink}
-                        download="export.csv"
+                    <DownloadButton
+                        onClick={this.handleClick}
+                        value={alertListForExport}
                     >
                         Download csv
-                    </a>
+                    </DownloadButton>
                 </div>
             </div>
         );

@@ -53,7 +53,7 @@ export default class LeftPane extends React.PureComponent {
 
         this.state = {
             showAlerts: true,
-            showTabular: true,
+            showTabular: false,
             showVisualizations: false,
         };
     }
