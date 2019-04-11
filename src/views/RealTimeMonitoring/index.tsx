@@ -29,6 +29,7 @@ import {
     realTimeFireListSelector,
     realTimePollutionListSelector,
     realTimeFiltersValuesSelector,
+    realTimeSourceListSelector,
 } from '#selectors';
 import Page from '#components/Page';
 
@@ -54,6 +55,7 @@ interface PropsFromState {
     realTimeEarthquakeList: PageType.RealTimeEarthquake[];
     realTimeFireList: PageType.RealTimeFire[];
     realTimePollutionList: PageType.RealTimePollution[];
+    realTimeSourceList: PageType.RealTimeSource[];
     filters: PageType.FiltersWithRegion['faramValues'];
 }
 
@@ -67,6 +69,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeEarthquakeList: realTimeEarthquakeListSelector(state),
     realTimeFireList: realTimeFireListSelector(state),
     realTimePollutionList: realTimePollutionListSelector(state),
+    realTimeSourceList: realTimeSourceListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
 });
 
@@ -201,19 +204,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-interface RealtimeSource {
-    id: number;
-    title: string;
-}
-
-const realTimeList: RealtimeSource[] = [
-    { id: 1, title: 'Earthquake' },
-    { id: 2, title: 'River' },
-    { id: 3, title: 'Rain' },
-    { id: 4, title: 'Fire' },
-    { id: 5, title: 'Pollution' },
-];
-
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
     public render() {
         const {
@@ -232,6 +222,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             filters: {
                 realtimeSources,
             },
+            realTimeSourceList,
         } = this.props;
 
         const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
@@ -268,7 +259,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             showEarthquake={showEarthquake}
                             showFire={showFire}
                             showPollution={showPollution}
-                            realTimeList={realTimeList}
+                            realTimeList={realTimeSourceList}
                         />
                     }
                     mainContentClassName={styles.main}
