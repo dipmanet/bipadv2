@@ -134,7 +134,7 @@ export default class CollapsibleView extends React.PureComponent {
             const ANIMATION_DURATION = 200;
 
             animationProgress = (currentTimestamp - initialTimestamp) / ANIMATION_DURATION;
-            animationProgress = animationProgress > 1 ? 1 : animationProgress;
+            animationProgress = Math.min(animationProgress, 1) ** 3;
 
             const { style: expandedContainerStyle } = expandedContainer;
             const { style: collapsedContainerStyle } = collapsedContainer;
