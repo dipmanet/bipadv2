@@ -235,15 +235,24 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     { showEarthquake &&
-                        <MapLayer
-                            layerKey="real-time-earthquake-points-fill"
-                            type="circle"
-                            property="earthquakeId"
-                            paint={mapStyles.earthquakePoint.fill}
-                            enableHover
-                            tooltipRenderer={this.earthquakeTooltipRenderer}
-                            tooltipRendererParams={this.earthquakeTooltipRendererParams}
-                        />
+                        <React.Fragment>
+                            <MapLayer
+                                layerKey="real-time-earthquake-points-fill"
+                                type="circle"
+                                property="earthquakeId"
+                                paint={mapStyles.earthquakePoint.fill}
+                                enableHover
+                                tooltipRenderer={this.earthquakeTooltipRenderer}
+                                tooltipRendererParams={this.earthquakeTooltipRendererParams}
+                            />
+                            <MapLayer
+                                layerKey="real-time-earthquake-text"
+                                type="symbol"
+                                property="earthquakeId"
+                                layout={mapStyles.earthquakeText.layout}
+                                paint={mapStyles.earthquakeText.paint}
+                            />
+                        </React.Fragment>
                     }
                 </MapSource>
                 <MapSource

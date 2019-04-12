@@ -208,7 +208,15 @@ export default {
     },
     earthquakePoint: {
         fill: {
-            'circle-radius': 6,
+            'circle-radius': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 12,
+                ['>=', ['get', 'magnitude'], 7], 11,
+                ['>=', ['get', 'magnitude'], 6], 10,
+                ['>=', ['get', 'magnitude'], 5], 9,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                7,
+            ],
             'circle-color': [
                 'case',
                 ['>=', ['get', 'magnitude'], 8], '#a50f15',
@@ -218,6 +226,27 @@ export default {
                 ['>=', ['get', 'magnitude'], 4], '#fcbba1',
                 '#fee5d9',
             ],
+        },
+    },
+    earthquakeText: {
+        layout: {
+            'text-field': ['get', 'magnitude'],
+            'text-allow-overlap': false,
+            'text-size': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 12,
+                ['>=', ['get', 'magnitude'], 7], 11,
+                ['>=', ['get', 'magnitude'], 6], 10,
+                ['>=', ['get', 'magnitude'], 5], 9,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                7,
+            ],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 3,
         },
     },
     provinceLabel: {
