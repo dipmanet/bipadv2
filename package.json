@@ -156,7 +156,7 @@
         "hoist-non-react-statics": "^3.3.0",
         "immer": "^3.2.0",
         "immutability-helper": "^2.7.0",
-        "js-cookies": "^1.0.4",
+        "js-cookie": "^2.2.0",
         "jwt-decode": "^2.2.0",
         "localforage": "^1.7.3",
         "localforage-observable": "^1.4.0",

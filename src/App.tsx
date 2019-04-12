@@ -152,9 +152,9 @@ class App extends React.Component<Props, State> {
         this.authPollId = undefined;
     }
 
-    public componentWillMount() {
+    public componentDidMount() {
         // Start polling
-        this.authPollId = window.setTimeout(this.pollAuthInfo, 5000);
+        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
     }
 
     public componentWillUnmount() {
@@ -165,11 +165,10 @@ class App extends React.Component<Props, State> {
 
     private authPollId?: number;
 
-    public pollAuthInfo() {
+    public pollAuthInfo = () => {
         const authState = getAuthState();
-        console.warn('AUTHSTATE', authState);
         this.props.setAuth(authState);
-        this.authPollId = window.setTimeout(this.pollAuthInfo, 5000);
+        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
     }
 
     public render() {
