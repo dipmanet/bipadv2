@@ -46,7 +46,7 @@ class HazardsLegend extends React.PureComponent {
                 keySelector={legendKeySelector}
                 labelSelector={legendLabelSelector}
                 colorSelector={legendColorSelector}
-                emptyComponent={() => ''}
+                emptyComponent={null}
             />
         );
     }

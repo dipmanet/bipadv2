@@ -44,21 +44,21 @@ const riverLegendItems = [
 ];
 
 const earthquakeLegendItems = [
-    { icon: '●', color: '#a50f15', label: 'Great (Magnitude 8 or more)' },
-    { icon: '●', color: '#de2d26', label: 'Major (Magnitude 7 or more)' },
-    { icon: '●', color: '#fb6a4a', label: 'Strong (Magnitude 6 or more)' },
-    { icon: '●', color: '#fc9272', label: 'Moderate (Magnitude 5 or more)' },
-    { icon: '●', color: '#fcbba1', label: 'Light (Magnitude 4 or more)' },
-    { icon: '●', color: '#fee5d9', label: 'Minor (Magnitude 3 or more)' },
+    { icon: '●', color: '#a50f15', label: 'Great (8 or more)' },
+    { icon: '●', color: '#de2d26', label: 'Major (7 or more)' },
+    { icon: '●', color: '#fb6a4a', label: 'Strong (6 or more)' },
+    { icon: '●', color: '#fc9272', label: 'Moderate (5 or more)' },
+    { icon: '●', color: '#fcbba1', label: 'Light (4 or more)' },
+    { icon: '●', color: '#fee5d9', label: 'Minor (3 or more)' },
 ];
 
 const pollutionLegendItems = [
-    { icon: '●', color: '#009966', label: 'Good' },
-    { icon: '●', color: '#ffde33', label: 'Moderate' },
-    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups' },
-    { icon: '●', color: '#cc0033', label: 'Unhealthy' },
-    { icon: '●', color: '#660099', label: 'Very Unhealthy' },
-    { icon: '●', color: '#7e0023', label: 'Hazardous' },
+    { icon: '●', color: '#009966', label: 'Good (12 or less)' },
+    { icon: '●', color: '#ffde33', label: 'Moderate (35.4 or less)' },
+    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups (55.4 or less)' },
+    { icon: '●', color: '#cc0033', label: 'Unhealthy (150.4 or less)' },
+    { icon: '●', color: '#660099', label: 'Very Unhealthy (350.4 or less)' },
+    { icon: '●', color: '#7e0023', label: 'Hazardous (500.4 or less)' },
 ];
 
 const itemSelector = d => d.label;
@@ -222,7 +222,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                         iconSelector={iconSelector}
                                         labelSelector={legendLabelSelector}
                                         colorSelector={legendColorSelector}
-                                        emptyComponent={() => ''}
+                                        emptyComponent={null}
                                     />
                                 </div>
                             }
@@ -239,7 +239,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                         iconSelector={iconSelector}
                                         labelSelector={legendLabelSelector}
                                         colorSelector={legendColorSelector}
-                                        emptyComponent={() => ''}
+                                        emptyComponent={null}
                                     />
                                 </div>
                             }
@@ -256,14 +256,14 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                         iconSelector={iconSelector}
                                         labelSelector={legendLabelSelector}
                                         colorSelector={legendColorSelector}
-                                        emptyComponent={() => ''}
+                                        emptyComponent={null}
                                     />
                                 </div>
                             }
                             { showPollution &&
                                 <div className={styles.container}>
                                     <h5 className={styles.heading}>
-                                        Pollution
+                                        Pollution (PM <sub>2.5</sub>)
                                     </h5>
                                     <Legend
                                         className={styles.legend}
@@ -273,7 +273,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                         iconSelector={iconSelector}
                                         labelSelector={legendLabelSelector}
                                         colorSelector={legendColorSelector}
-                                        emptyComponent={() => ''}
+                                        emptyComponent={null}
                                     />
                                 </div>
                             }

@@ -180,7 +180,7 @@ export default {
                 ['<=', ['get', 'pm25'], 55.4], '#ff9933',
                 ['<=', ['get', 'pm25'], 150.4], '#cc0033',
                 ['<=', ['get', 'pm25'], 250.4], '#660099',
-                ['<=', ['get', 'pm25'], 350.4], '#7e0023',
+                // ['<=', ['get', 'pm25'], 350.4], '#7e0023',
                 ['<=', ['get', 'pm25'], 500.4], '#7e0023',
                 '#7e0023',
             ],
@@ -195,7 +195,8 @@ export default {
         paint: {
             'text-color': '#000000',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 2,
+            'text-halo-width': 1,
+            'text-halo-blur': 3,
         },
     },
     earthquakePoint: {
