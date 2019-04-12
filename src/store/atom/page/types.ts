@@ -136,12 +136,18 @@ export interface RealTimeFire {
     scan?: unknown;
 }
 
+export interface Measurement {
+    unit: string;
+    value: number;
+    source: string;
+    parameter: string;
+}
 export interface RealTimePollution {
     id: number;
     point: unknown;
     location?: string;
     measuredOn?: string;
-    measurements?: unknown;
+    measurements: Measurement[];
     city?: string;
 }
 

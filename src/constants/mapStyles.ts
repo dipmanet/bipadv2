@@ -172,8 +172,31 @@ export default {
     },
     pollutionPoint: {
         fill: {
-            'circle-radius': 6,
-            'circle-color': '#804000',
+            'circle-radius': 10,
+            'circle-color': [
+                'case',
+                ['<=', ['get', 'pm25'], 12], '#009966',
+                ['<=', ['get', 'pm25'], 35.4], '#ffde33',
+                ['<=', ['get', 'pm25'], 55.4], '#ff9933',
+                ['<=', ['get', 'pm25'], 150.4], '#cc0033',
+                ['<=', ['get', 'pm25'], 250.4], '#660099',
+                // ['<=', ['get', 'pm25'], 350.4], '#7e0023',
+                ['<=', ['get', 'pm25'], 500.4], '#7e0023',
+                '#7e0023',
+            ],
+        },
+    },
+    pollutionText: {
+        layout: {
+            'text-field': ['get', 'pm25'],
+            'text-allow-overlap': false,
+            'text-size': 12,
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 3,
         },
     },
     earthquakePoint: {

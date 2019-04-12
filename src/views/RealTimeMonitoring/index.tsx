@@ -263,7 +263,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         />
                     }
                     mainContentClassName={styles.main}
-                    mainContent={
+                    mainContent={null/*
                         <div className={styles.links}>
                             <a
                                 className={styles.link}
@@ -282,7 +282,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 USGS
                             </a>
                         </div>
-                    }
+                    */}
                 />
             </React.Fragment>
         );

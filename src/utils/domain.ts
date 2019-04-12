@@ -335,9 +335,11 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
                     city: pollution.city,
                     measuredOn: pollution.measuredOn,
                     measurements: pollution.measurements,
+                    pm25: pollution.measurements.flat().find(d => d.parameter === 'pm25' && d.unit === 'µg/m³').value || 0,
                 },
             })),
     };
+    console.warn('geojson', geojson);
     return geojson;
 };
 

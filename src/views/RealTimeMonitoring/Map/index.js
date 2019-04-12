@@ -270,15 +270,24 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     { showPollution &&
-                        <MapLayer
-                            layerKey="real-time-pollution-points-fill"
-                            type="circle"
-                            property="pollutionId"
-                            paint={mapStyles.pollutionPoint.fill}
-                            enableHover
-                            tooltipRenderer={this.pollutionTooltipRenderer}
-                            tooltipRendererParams={this.pollutionTooltipRendererParams}
-                        />
+                        <React.Fragment>
+                            <MapLayer
+                                layerKey="real-time-pollution-points-fill"
+                                type="circle"
+                                property="pollutionId"
+                                paint={mapStyles.pollutionPoint.fill}
+                                enableHover
+                                tooltipRenderer={this.pollutionTooltipRenderer}
+                                tooltipRendererParams={this.pollutionTooltipRendererParams}
+                            />
+                            <MapLayer
+                                layerKey="real-time-pollution-text"
+                                type="symbol"
+                                property="pollutionId"
+                                layout={mapStyles.pollutionText.layout}
+                                paint={mapStyles.pollutionText.paint}
+                            />
+                        </React.Fragment>
                     }
                 </MapSource>
             </React.Fragment>
