@@ -28,7 +28,6 @@ const emptyArray = [];
 
 const propTypes = {
     className: PropTypes.string,
-    adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func.isRequired,
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -44,7 +43,6 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    adminLevelList: adminLevelListSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
@@ -72,7 +70,7 @@ export default class RegionSelectInput extends React.PureComponent {
 
         if (!key) {
             onChange({
-                adminLevel: 1,
+                adminLevel: undefined,
                 geoarea: undefined,
             });
         } else {
@@ -128,7 +126,6 @@ export default class RegionSelectInput extends React.PureComponent {
                 adminLevel,
                 geoarea,
             } = emptyObject,
-            adminLevelList,
             showHintAndError,
             provinces,
             districts,
@@ -163,7 +160,6 @@ export default class RegionSelectInput extends React.PureComponent {
                 */}
                 <SelectInput
                     key={adminLevel}
-                    disabled={!adminLevel}
                     className={styles.geoareaSelectInput}
                     label="Location"
                     options={options}

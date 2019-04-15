@@ -6,7 +6,7 @@ const state: PageState = {
     initialPopupShown: false,
 
     region: {
-        adminLevel: 1,
+        adminLevel: undefined,
     },
 
     adminLevelList: [

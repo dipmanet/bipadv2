@@ -42,7 +42,7 @@ const schemaList: Schema[] = [
             createdOn: { type: 'string' }, // date
             title: { type: 'string', required: true },
             description: { type: 'string' },
-            polygon: { type: 'object' }, // geometry object
+            polygon: { type: 'unknown' }, // geometry object
             severity: { type: 'string' },
         },
     },

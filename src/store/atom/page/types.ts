@@ -82,7 +82,7 @@ export interface AdminLevel {
 }
 
 export interface Region {
-    adminLevel: number;
+    adminLevel?: number;
     geoarea?: number;
 }
 

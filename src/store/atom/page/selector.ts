@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
+import { mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
 

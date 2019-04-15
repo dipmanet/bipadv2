@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { _cs } from '@togglecorp/fujs';
+// import { _cs } from '@togglecorp/fujs';
 
 import {
     regionSelector,
-    adminLevelListSelector,
+    // adminLevelListSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
@@ -14,17 +14,17 @@ import {
 
 import styles from './styles.scss';
 
-const adminLevelKeySelector = d => d.id;
-const adminLevelLabelSelector = d => d.title;
+// const adminLevelKeySelector = d => d.id;
+// const adminLevelLabelSelector = d => d.title;
 
 const geoareaKeySelector = d => d.id;
 const geoareaLabelSelector = d => d.title;
 
-const emptyObject = {};
+// const emptyObject = {};
 const emptyArray = [];
 
 const propTypes = {
-    adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    // adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     municipalities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -36,7 +36,7 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    adminLevelList: adminLevelListSelector(state),
+    // adminLevelList: adminLevelListSelector(state),
     value: regionSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -55,7 +55,7 @@ export default class RegionOutput extends React.PureComponent {
                 adminLevel,
                 geoarea: locationId,
             },
-            adminLevelList,
+            // adminLevelList,
 
             provinces,
             districts,
@@ -63,12 +63,11 @@ export default class RegionOutput extends React.PureComponent {
             className,
         } = this.props;
 
+        /*
         const adminLevelItem = adminLevelList.find(
             item => adminLevelKeySelector(item) === adminLevel,
         );
-        if (!adminLevelItem) {
-            return null;
-        }
+        */
         const geoAreas = (
             (adminLevel === 1 && provinces) ||
             (adminLevel === 2 && districts) ||

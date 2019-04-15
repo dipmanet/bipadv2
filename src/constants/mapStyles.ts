@@ -1,7 +1,8 @@
 export default {
     province: {
         outline: {
-            'line-color': '#a3b7e3',
+            // 'line-color': '#a3b7e3',
+            'line-color': 'red',
             'line-width': 2,
         },
         choroplethOutline: {
@@ -20,7 +21,8 @@ export default {
     },
     district: {
         outline: {
-            'line-color': '#a3b7e3',
+            'line-color': 'blue',
+            // 'line-color': '#a3b7e3',
             'line-width': 1.4,
         },
         choroplethOutline: {
@@ -40,7 +42,8 @@ export default {
     },
     municipality: {
         outline: {
-            'line-color': '#a3b7e3',
+            'line-color': 'green',
+            // 'line-color': '#a3b7e3',
             'line-width': 0.8,
         },
         fill: {
@@ -54,7 +57,8 @@ export default {
     },
     ward: {
         outline: {
-            'line-color': '#a3b7e3',
+            'line-color': 'yellow',
+            // 'line-color': '#a3b7e3',
             'line-width': 0.5,
         },
         fill: {

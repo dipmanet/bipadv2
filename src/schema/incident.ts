@@ -4,19 +4,6 @@ const schemaList: Schema[] = [
     {
         extends: 'dbentity',
         doc: {
-            name: 'event',
-            description: 'Event',
-        },
-        fields: {
-            title: { type: 'string', required: true },
-            description: { type: 'string' },
-            severity: { type: 'string' },
-            polygon: { type: 'unknown' }, // geometry object
-        },
-    },
-    {
-        extends: 'dbentity',
-        doc: {
             name: 'loss',
             description: 'Loss',
         },

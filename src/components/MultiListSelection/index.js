@@ -16,6 +16,7 @@ const propTypes = {
     showLabel: PropTypes.bool,
     labelSelector: PropTypes.func,
     keySelector: PropTypes.func,
+    titleSelector: PropTypes.func,
     iconSelector: PropTypes.func,
     value: PropTypes.array,
 };
@@ -23,6 +24,7 @@ const propTypes = {
 const defaultProps = {
     labelSelector: d => d.label,
     keySelector: d => d.key,
+    titleSelector: undefined,
     iconSelector: d => d.icon,
     showLabel: true,
     options: [],
@@ -40,6 +42,7 @@ export default class MultiListSelection extends React.PureComponent {
             labelSelector,
             iconSelector,
             keySelector,
+            titleSelector,
             value,
         } = this.props;
 
@@ -48,6 +51,7 @@ export default class MultiListSelection extends React.PureComponent {
         return {
             label: labelSelector(option, index, options),
             icon: iconSelector(option, index, options),
+            title: titleSelector ? titleSelector(option, index, options) : '',
             optionKey: key,
             className: styles.option,
             isActive: value.indexOf(key) !== -1,
@@ -79,12 +83,14 @@ export default class MultiListSelection extends React.PureComponent {
         optionKey,
         className,
         isActive,
+        title,
     }) => (
         <Button
             className={_cs(className, isActive && styles.active)}
             transparent
             onClickParams={{ optionKey }}
             onClick={this.handleOptionClick}
+            title={title}
         >
             { icon && (
                 <ReactSVG
