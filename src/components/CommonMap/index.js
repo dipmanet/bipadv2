@@ -147,6 +147,7 @@ class CommonMap extends React.PureComponent {
                         hoveredId={selectedProvinceId}
                     />
                 </MapSource>
+
                 <MapSource
                     sourceKey={`${sourceKey}-country-outline`}
                     url={mapSources.nepal.url}
@@ -205,7 +206,7 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.districtLabel.paint}
                         layout={showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout}
-                        minzoom={6}
+                        // minzoom={6}
                     />
                 </MapSource>
                 <MapSource
@@ -220,7 +221,7 @@ class CommonMap extends React.PureComponent {
                         layout={
                             showMunicipalityLabel ? mapStyles.municipalityLabel.layout : noneLayout
                         }
-                        minzoom={8}
+                        // minzoom={8}
                     />
                 </MapSource>
                 <MapSource
@@ -233,7 +234,7 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.wardLabel.paint}
                         layout={showWardLabel ? mapStyles.wardLabel.layout : noneLayout}
-                        minzoom={9}
+                        // minzoom={9}
                     />
                 </MapSource>
             </Fragment>

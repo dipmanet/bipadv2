@@ -293,7 +293,7 @@ export default {
         layout: {
             visibility: 'visible',
             'text-field': ['get', 'title'],
-            'text-size': 8,
+            'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -308,7 +308,7 @@ export default {
         layout: {
             visibility: 'visible',
             'text-field': ['get', 'title'],
-            'text-size': 8,
+            'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
