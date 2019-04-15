@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { listToMap, isDefined } from '@togglecorp/fujs';
+import { listToMap, isDefined, isNotDefined } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -21,6 +22,12 @@ import Page from '#components/Page';
 
 import {
     lossAndDamageFilterValuesSelector,
+    regionsSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector,
+    regionLevelSelector,
 } from '#selectors';
 
 import { transformDateRangeFilterParam } from '#utils/transformations';
@@ -60,15 +67,108 @@ const metricMap = listToMap(
 );
 
 
-const groupFn = val => val.district;
+const getProvince = val => val.province;
+const getDistrict = val => val.district;
+const getMunicipality = val => val.municipality;
+const getWard = val => val.ward;
 
-const propTypes = {
-};
-
-const defaultProps = {
+const getGroupMethod = (regionLevel) => {
+    if (regionLevel === 1) {
+        return getDistrict;
+    }
+    if (regionLevel === 2) {
+        return getMunicipality;
+    }
+    if (regionLevel === 3) {
+        return getWard;
+    }
+    // if (isNotDefined(regionLevel) || regionLevel === 0) {
+    return getProvince;
+    // }
 };
 
 const PLAYBACK_INTERVAL = 2000;
+
+// Get all information using ward
+const getRegionInfoFromWard = (wardId, regions) => {
+    const {
+        wards: wardMap,
+        municipalities: municipalityMap,
+        districts: districtMap,
+    } = regions;
+
+    const ward = wardMap[wardId];
+
+    const municipalityId = ward.municipality;
+    const municipality = municipalityMap[municipalityId];
+
+    const districtId = municipality.district;
+    const district = districtMap[districtId];
+
+    const provinceId = district.province;
+
+    return {
+        ward: wardId,
+        municipality: municipalityId,
+        district: districtId,
+        province: provinceId,
+    };
+};
+
+const propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    provinces: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    districts: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    municipalities: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    wards: PropTypes.array.isRequired,
+    regionLevel: PropTypes.number,
+};
+
+const defaultProps = {
+    regionLevel: undefined,
+};
+
+const mapStateToProps = state => ({
+    filters: lossAndDamageFilterValuesSelector(state),
+    regions: regionsSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    regionLevel: regionLevelSelector(state),
+});
+
+// FIXME: save this on redux
+const requests = {
+    lossAndDamageRequest: {
+        url: '/incident/',
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            expand: ['loss.peoples', 'wards'],
+            limit: 2000,
+            ordering: '-incident_on',
+            lnd: true,
+        }),
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { hazard, region } },
+                prevProps: { filters: {
+                    hazard: prevHazard,
+                    region: prevRegion,
+                } },
+            }) => (
+                hazard !== prevHazard || region !== prevRegion
+            ),
+        },
+        onMount: true,
+        extras: {
+            schemaName: 'incidentWithPeopleResponse',
+        },
+    },
+};
 
 class LossAndDamage extends React.PureComponent {
     static propTypes = propTypes;
@@ -108,8 +208,10 @@ class LossAndDamage extends React.PureComponent {
                     } = emptyObject,
                 },
             },
+            regions,
+            regionLevel,
         } = this.props;
-        this.playback(lossAndDamageList);
+        this.playback(lossAndDamageList, regions, regionLevel);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -121,6 +223,8 @@ class LossAndDamage extends React.PureComponent {
                     } = emptyObject,
                 },
             },
+            regions: oldRegions,
+            regionLevel: oldRegionLevel,
         } = this.props;
 
         const {
@@ -131,16 +235,22 @@ class LossAndDamage extends React.PureComponent {
                     } = emptyObject,
                 },
             },
+            regions: newRegions,
+            regionLevel: newRegionLevel,
         } = nextProps;
 
-        if (oldLossAndDamageList !== newLossAndDamageList) {
-            const { minTime, maxTime } = this.getMinMaxTime(newLossAndDamageList);
+        if (
+            oldLossAndDamageList !== newLossAndDamageList
+            || oldRegions !== newRegions
+            || oldRegionLevel !== newRegionLevel
+        ) {
+            const { minTime, maxTime } = this.getMinMaxTime(newLossAndDamageList, newRegions);
             this.setState({
                 start: getYmd(minTime),
                 end: getYmd(maxTime),
                 currentIndex: -1,
             });
-            this.playback(newLossAndDamageList);
+            this.playback(newLossAndDamageList, newRegions, newRegionLevel);
         }
     }
 
@@ -148,19 +258,22 @@ class LossAndDamage extends React.PureComponent {
         clearTimeout(this.timeout);
     }
 
-    getSanitizedIncidents = (incidents) => {
+    getSanitizedIncidents = (incidents, regions) => {
         const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
             incidentOn && wards && wards.length > 0
         )).map(incident => ({
             ...incident,
             incidentOn: new Date(incident.incidentOn).getTime(),
-            district: incident.wards[0].municipality.district,
+            ...getRegionInfoFromWard(
+                incident.wards[0].id,
+                regions,
+            ),
         }));
         return sanitizedIncidents;
     }
 
-    getMinMaxTime = (incidents) => {
-        const sanitizedIncidents = this.getSanitizedIncidents(incidents);
+    getMinMaxTime = (incidents, regions) => {
+        const sanitizedIncidents = this.getSanitizedIncidents(incidents, regions);
         const timing = sanitizedIncidents.map(incident => incident.incidentOn);
         const minTime = Math.min(...timing);
         const maxTime = Math.max(...timing);
@@ -217,7 +330,7 @@ class LossAndDamage extends React.PureComponent {
         )
     )
 
-    generateDataset = memoize((incidents, startTime, endTime) => {
+    generateDataset = memoize((incidents, startTime, endTime, regions, regionLevel) => {
         if (!incidents || incidents.length <= 0) {
             return {
                 mapping: [],
@@ -231,7 +344,7 @@ class LossAndDamage extends React.PureComponent {
             };
         }
 
-        const sanitizedIncidents = this.getSanitizedIncidents(incidents).filter(
+        const sanitizedIncidents = this.getSanitizedIncidents(incidents, regions).filter(
             ({ incidentOn }) => (
                 !(isDefined(startTime) && incidentOn < new Date(startTime).getTime())
                 && !(isDefined(endTime) && incidentOn > new Date(endTime).getTime())
@@ -239,7 +352,7 @@ class LossAndDamage extends React.PureComponent {
         );
 
         const bucketedIncidents = [];
-        const { minTime, maxTime } = this.getMinMaxTime(sanitizedIncidents);
+        const { minTime, maxTime } = this.getMinMaxTime(sanitizedIncidents, regions);
         const daySpan = 1000 * 60 * 60 * 24;
         const oneSpan = 7 * daySpan;
         const totalSpan = maxTime - minTime;
@@ -254,7 +367,8 @@ class LossAndDamage extends React.PureComponent {
             bucketedIncidents.push(filteredIncidents);
         }
 
-        const districtGroupedIncidents = bucketedIncidents.map(
+        const groupFn = getGroupMethod(regionLevel);
+        const regionGroupedIncidents = bucketedIncidents.map(
             incident => this.getGroupedIncidents(incident, groupFn),
         );
 
@@ -265,9 +379,9 @@ class LossAndDamage extends React.PureComponent {
                 incident => incident,
             )
         );
-        const mapping = districtGroupedIncidents.map(listToMapGroupedItem);
+        const mapping = regionGroupedIncidents.map(listToMapGroupedItem);
 
-        const aggregatedStat = this.getAggregatedStats(districtGroupedIncidents.flat());
+        const aggregatedStat = this.getAggregatedStats(regionGroupedIncidents.flat());
 
         const val = {
             mapping,
@@ -282,7 +396,7 @@ class LossAndDamage extends React.PureComponent {
         return val;
     });
 
-    playback = (lossAndDamageList) => {
+    playback = (lossAndDamageList, regions, regionLevel) => {
         const { pauseMap: isPaused } = this.state;
         clearTimeout(this.timeout);
 
@@ -296,7 +410,7 @@ class LossAndDamage extends React.PureComponent {
             minTime,
             maxTime,
             oneSpan,
-        } = this.generateDataset(lossAndDamageList, start, end);
+        } = this.generateDataset(lossAndDamageList, start, end, regions, regionLevel);
 
         if (!isPaused && sanitizedIncidents.length > 0) {
             const { currentIndex } = this.state;
@@ -320,7 +434,10 @@ class LossAndDamage extends React.PureComponent {
             });
         }
 
-        this.timeout = setTimeout(() => this.playback(lossAndDamageList), PLAYBACK_INTERVAL);
+        this.timeout = setTimeout(
+            () => this.playback(lossAndDamageList, regions, regionLevel),
+            PLAYBACK_INTERVAL,
+        );
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -428,6 +545,12 @@ class LossAndDamage extends React.PureComponent {
                     } = emptyObject,
                 },
             },
+            regions,
+            districts,
+            provinces,
+            wards,
+            municipalities,
+            regionLevel,
         } = this.props;
 
         const {
@@ -447,18 +570,24 @@ class LossAndDamage extends React.PureComponent {
             mapping,
             otherMapping,
             aggregatedStat,
-        } = this.generateDataset(lossAndDamageList, start, end);
+        } = this.generateDataset(lossAndDamageList, start, end, regions, regionLevel);
 
         // NOTE: this should always be defined
         const selectedMetric = metricMap[metricType];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
+
+        const geoareas = (
+            (regionLevel === 3 && wards)
+            || (regionLevel === 2 && municipalities)
+            || (regionLevel === 1 && districts)
+            || provinces
+        );
 
         return (
             <React.Fragment>
                 <Map
                     pause={pauseMap}
                     // onPlaybackProgress={this.handleMapPlaybackProgress}
-                    // onDistrictSelect={this.handleMapDistrictSelect}
                     lossAndDamageList={lossAndDamageList}
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
@@ -466,13 +595,13 @@ class LossAndDamage extends React.PureComponent {
                     maxValue={maxValue}
                     metric={selectedMetric.metricFn}
                     metricName={selectedMetric.label}
+                    geoareas={geoareas}
                 />
                 <Page
                     leftContentClassName={styles.left}
                     leftContent={
                         <LeftPane
                             pending={pending}
-                            // selectedDistricts={selectedDistricts}
                             lossAndDamageList={otherMapping[currentIndex]}
                             onExpandChange={this.handleLeftPaneExpandChange}
                         />
@@ -499,42 +628,6 @@ class LossAndDamage extends React.PureComponent {
         );
     }
 }
-
-// FIXME: save this on redux
-const requests = {
-    lossAndDamageRequest: {
-        url: '/incident/',
-        query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            expand: ['loss.peoples', 'wards.municipality'],
-            limit: 2001,
-            ordering: '-incident_on',
-            lnd: true,
-        }),
-        onPropsChanged: {
-            filters: ({
-                props: { filters: { hazard, region } },
-                prevProps: { filters: {
-                    hazard: prevHazard,
-                    region: prevRegion,
-                } },
-            }) => (
-                hazard !== prevHazard || region !== prevRegion
-            ),
-        },
-        onMount: true,
-        extras: {
-            schemaName: 'incidentWithPeopleResponse',
-        },
-    },
-};
-
-const mapStateToProps = state => ({
-    filters: lossAndDamageFilterValuesSelector(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-});
 
 export default compose(
     connect(mapStateToProps),

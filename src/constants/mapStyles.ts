@@ -46,6 +46,11 @@ export default {
             // 'line-color': '#a3b7e3',
             'line-width': 0.8,
         },
+        choroplethOutline: {
+            'line-color': '#000000',
+            'line-width': 1,
+            'line-opacity': 0.5,
+        },
         fill: {
             'fill-color': '#0081f0',
             'fill-opacity': ['case',
@@ -60,6 +65,11 @@ export default {
             'line-color': 'yellow',
             // 'line-color': '#a3b7e3',
             'line-width': 0.5,
+        },
+        choroplethOutline: {
+            'line-color': '#000000',
+            'line-width': 1,
+            'line-opacity': 0.5,
         },
         fill: {
             'fill-color': '#0081f0',

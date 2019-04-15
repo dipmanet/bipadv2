@@ -9,7 +9,7 @@ import SelectInput from '#rsci/SelectInput';
 // import SegmentInput from '#rsci/SegmentInput';
 
 import {
-    adminLevelListSelector,
+    // adminLevelListSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
@@ -24,7 +24,7 @@ const geoareaKeySelector = d => `${d.adminLevel}-${d.id}`;
 const geoareaLabelSelector = d => d.title;
 
 const emptyObject = {};
-const emptyArray = [];
+// const emptyArray = [];
 
 const propTypes = {
     className: PropTypes.string,
