@@ -142,8 +142,8 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#03A9F4',
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#3F51B5',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#6FD1FD',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#7482CF',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
                 '#03A9F4',
             ],
@@ -164,8 +164,8 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#00C853',
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#304FFE',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#53FF9A',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#5770FE',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
                 '#00C853',
             ],

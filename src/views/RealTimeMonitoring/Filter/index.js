@@ -25,20 +25,20 @@ const realTimeKeySelector = d => d.id;
 const realTimeLabelSelector = d => d.title;
 
 const rainLegendItems = [
-    { icon: '■', color: '#03A9F4', label: 'Below Warning Level' },
-    { icon: '■', color: '#3F51B5', label: 'Above Warning Level' },
+    { icon: '■', color: '#6FD1FD', label: 'Below Warning Level' },
+    { icon: '■', color: '#7482CF', label: 'Above Warning Level' },
     { icon: '■', color: '#9C27B0', label: 'Above Danger Level' },
 ];
 
 const riverLegendItems = [
-    { icon: '●', color: '#00C853', label: 'Steady & Below Warning Level' },
-    { icon: '●', color: '#304FFE', label: 'Steady & Above Warning Level' },
+    { icon: '●', color: '#53FF9A', label: 'Steady & Below Warning Level' },
+    { icon: '●', color: '#5770FE', label: 'Steady & Above Warning Level' },
     { icon: '●', color: '#C51162', label: 'Steady & Above Danger Level' },
-    { icon: '▲', color: '#00C853', label: 'Rising & Below Warning Level' },
-    { icon: '▲', color: '#304FFE', label: 'Rising & Above Warning Level' },
+    { icon: '▲', color: '#53FF9A', label: 'Rising & Below Warning Level' },
+    { icon: '▲', color: '#5770FE', label: 'Rising & Above Warning Level' },
     { icon: '▲', color: '#C51162', label: 'Rising & Above Danger Level' },
-    { icon: '▼', color: '#00C853', label: 'Falling & Below Warning Level' },
-    { icon: '▼', color: '#304FFE', label: 'Falling & Above Warning Level' },
+    { icon: '▼', color: '#53FF9A', label: 'Falling & Below Warning Level' },
+    { icon: '▼', color: '#5770FE', label: 'Falling & Above Warning Level' },
     { icon: '▼', color: '#C51162', label: 'Falling & Below Danger Level' },
 
 ];

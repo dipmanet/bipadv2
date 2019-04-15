@@ -84,12 +84,16 @@ $width-table-container: 250px;
             padding: $spacing-small;
             color: $color-accent;
             font-weight: $font-weight-bold;
+            flex-shrink: 0;
         }
         .container {
             display: flex;
             flex-direction: column;
             border-bottom: $width-separator-thin solid $color-separator;
             padding-bottom: $spacing-small;
+            flex-grow: 1;
+            flex-shrink: 0;
+
 
             .heading {
                 flex-shrink: 0;
