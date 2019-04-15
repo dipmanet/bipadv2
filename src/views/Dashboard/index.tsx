@@ -44,6 +44,7 @@ interface State {
 }
 interface Params {
     triggerAlertRequest: (timeout: number) => void;
+    triggerEventRequest: (timeout: number) => void;
 }
 interface OwnProps {}
 interface PropsFromState {
@@ -122,10 +123,23 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'created_on'),
         }),
-        onSuccess: ({ response, props: { setEventList } }) => {
+        onSuccess: ({ response, props: { setEventList }, params }) => {
             interface Response { results: PageTypes.Event[] }
             const { results: eventList = [] } = response as Response;
             setEventList({ eventList });
+            if (params && params.triggerAlertRequest) {
+                params.triggerEventRequest(60 * 1000);
+            }
+        },
+        onFailure: ({ params }) => {
+            if (params && params.triggerAlertRequest) {
+                params.triggerEventRequest(60 * 1000);
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.triggerAlertRequest) {
+                params.triggerEventRequest(60 * 1000);
+            }
         },
         onMount: true,
         onPropsChanged: {
@@ -152,12 +166,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         };
 
         this.props.requests.alertsRequest.setDefaultParams({
-            triggerAlertRequest: this.requestPoll,
+            triggerAlertRequest: this.alertPoll,
+            triggerEventRequest: this.eventPoll,
         });
     }
 
     public componentWillUnmount(): void {
-        window.clearTimeout(this.timeout);
+        window.clearTimeout(this.alertTimeout);
+        window.clearTimeout(this.eventTimeout);
     }
 
     private getAlertHazardTypesList = memoize((alertList: PageTypes.Alert[]) => {
@@ -165,11 +181,19 @@ class Dashboard extends React.PureComponent<Props, State> {
         return hazardTypesList(alertList, hazardTypes);
     });
 
-    private timeout?: number
+    private alertTimeout?: number
+    private eventTimeout?: number
 
-    private requestPoll = (delay: number) => {
-        this.timeout = window.setTimeout(
+    private alertPoll = (delay: number) => {
+        this.alertTimeout = window.setTimeout(
             () => { this.props.requests.alertsRequest.do(); },
+            delay,
+        );
+    }
+
+    private eventPoll = (delay: number) => {
+        this.eventTimeout = window.setTimeout(
+            () => { this.props.requests.eventsRequest.do(); },
             delay,
         );
     }
