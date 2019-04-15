@@ -11,9 +11,11 @@ import {
 } from '#actionCreators';
 import {
     hazardTypeListSelector,
+    eventListSelector,
     filtersSelectorIP,
 } from '#selectors';
 
+import SelectInput from '#rsci/SelectInput';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
@@ -22,6 +24,9 @@ import PastDateRangeInput from '#components/PastDateRangeInput';
 import { iconNames } from '#constants';
 
 import styles from './styles.scss';
+
+const eventKeySelector = d => d.id;
+const eventLabelSelector = d => d.title;
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -34,6 +39,7 @@ const defaultProps = {};
 const mapStateToProps = state => ({
     hazardTypeList: hazardTypeListSelector(state),
     filters: filtersSelectorIP(state),
+    eventList: eventListSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -45,6 +51,7 @@ const filterSchema = {
         hazard: [],
         region: [],
         dateRange: [],
+        event: undefined,
     },
 };
 
@@ -102,6 +109,7 @@ export default class IncidentsFilter extends React.PureComponent {
     render() {
         const {
             hazardTypeList,
+            eventList,
             filters: {
                 faramValues,
                 faramErrors,
@@ -153,6 +161,14 @@ export default class IncidentsFilter extends React.PureComponent {
                             />
                             <HazardSelectionInput
                                 faramElementName="hazard"
+                            />
+                            <SelectInput
+                                faramElementName="event"
+                                className={styles.eventSelectInput}
+                                label="event"
+                                options={eventList}
+                                keySelector={eventKeySelector}
+                                labelSelector={eventLabelSelector}
                             />
                         </div>
                     </Faram>

@@ -19,6 +19,7 @@ import {
 
 import {
     setIncidentListActionIP,
+    setEventListAction,
 } from '#actionCreators';
 import {
     incidentListSelectorIP,
@@ -52,6 +53,7 @@ interface OwnProps {
 
 interface PropsFromDispatch {
     setIncidentList: typeof setIncidentListActionIP;
+    setEventList: typeof setEventListAction;
 }
 interface PropsFromState {
     incidentList: PageType.Incident[];
@@ -71,6 +73,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setEventList: params => dispatch(setEventListAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -91,18 +94,37 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazard, dateRange, region } },
+                props: { filters: { hazard, dateRange, region, event } },
                 prevProps: { filters: {
                     hazard: prevHazard,
                     dateRange: prevDateRange,
                     region: prevRegion,
+                    event: prevEvent,
                 } },
             }) => (
-                hazard !== prevHazard || dateRange !== prevDateRange || region !== prevRegion
+                hazard !== prevHazard || dateRange !== prevDateRange ||
+                region !== prevRegion || event !== prevEvent
             ),
         },
         extras: {
             schemaName: 'incidentResponse',
+        },
+    },
+    eventsRequest: {
+        url: '/event/',
+        method: methods.GET,
+        // We have to transform dateRange to created_on__lt and created_on__gt
+        query: ({ props: { filters } }) => ({
+            ...transformDateRangeFilterParam(filters, 'created_on'),
+        }),
+        onSuccess: ({ response, props: { setEventList } }) => {
+            interface Response { results: PageTypes.Event[] }
+            const { results: eventList = [] } = response as Response;
+            setEventList({ eventList });
+        },
+        onMount: true,
+        extras: {
+            schemaName: 'eventResponse',
         },
     },
 };

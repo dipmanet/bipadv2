@@ -128,17 +128,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             interface Response { results: PageTypes.Event[] }
             const { results: eventList = [] } = response as Response;
             setEventList({ eventList });
-            if (params && params.triggerAlertRequest) {
+            if (params && params.triggerEventRequest) {
                 params.triggerEventRequest(60 * 1000);
             }
         },
         onFailure: ({ params }) => {
-            if (params && params.triggerAlertRequest) {
+            if (params && params.triggerEventRequest) {
                 params.triggerEventRequest(60 * 1000);
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.triggerAlertRequest) {
+            if (params && params.triggerEventRequest) {
                 params.triggerEventRequest(60 * 1000);
             }
         },
