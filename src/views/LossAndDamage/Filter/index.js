@@ -5,6 +5,7 @@ import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import HazardSelectionInput from '#components/HazardSelectionInput';
 import SelectInput from '#rsci/SelectInput';
 
 import {
@@ -18,14 +19,9 @@ import {
 import { hazardIcons } from '#resources/data';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
-import MultiListSelection from '#components/MultiListSelection';
 import { iconNames } from '#constants';
 
 import styles from './styles.scss';
-
-const hazardTypeLabelSelector = d => d.title;
-const hazardTypeKeySelector = d => d.id;
-const hazardTypeIconSelector = d => hazardIcons[d.id];
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -158,14 +154,8 @@ class LossAndDamageFilter extends React.PureComponent {
                             <RegionSelectInput
                                 faramElementName="region"
                             />
-                            <MultiListSelection
+                            <HazardSelectionInput
                                 faramElementName="hazard"
-                                className={styles.listSelectionInput}
-                                keySelector={hazardTypeKeySelector}
-                                labelSelector={hazardTypeLabelSelector}
-                                iconSelector={hazardTypeIconSelector}
-                                label="Hazard type"
-                                options={hazardTypeList}
                             />
                             <SelectInput
                                 label="Metric"
