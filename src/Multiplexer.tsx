@@ -51,17 +51,17 @@ const loadingStyle: React.CSSProperties = {
 const LoadingResources = () => (
     <div style={loadingStyle}>
         <Spinner />
-        <span>
+        <div style={{ marginLeft: 6 }}>
             Loading Resources
-        </span>
+        </div>
     </div>
 );
 const LoadingPage = () => (
     <div style={loadingStyle}>
         <Spinner />
-        <span>
+        <div style={{ marginLeft: 6 }}>
             Loading Page
-        </span>
+        </div>
     </div>
 );
 const ErrorInPage = () => (

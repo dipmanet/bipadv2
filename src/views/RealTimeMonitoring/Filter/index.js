@@ -113,10 +113,20 @@ class RealTimeMonitoringFilter extends React.PureComponent {
 
     handleShowFiltersButtonClick = () => {
         this.setState({ showFilters: true });
+
+        const { onExpandChange } = this.props;
+        if (onExpandChange) {
+            onExpandChange(true);
+        }
     }
 
     handleHideFiltersButtonClick = () => {
         this.setState({ showFilters: false });
+
+        const { onExpandChange } = this.props;
+        if (onExpandChange) {
+            onExpandChange(false);
+        }
     }
 
     handleFaramChange = (faramValues, faramErrors) => {
