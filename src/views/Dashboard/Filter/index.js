@@ -14,19 +14,13 @@ import {
     filtersSelectorDP,
 } from '#selectors';
 
-import { hazardIcons } from '#resources/data';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
-import MultiListSelection from '#components/MultiListSelection';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import { iconNames } from '#constants';
 
 import styles from './styles.scss';
-
-const hazardTypeLabelSelector = d => d.title;
-const hazardTypeKeySelector = d => d.id;
-const hazardTypeIconSelector = d => hazardIcons[d.id];
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -154,6 +148,7 @@ class DashboardFilter extends React.PureComponent {
                             disabled={false}
                         >
                             <RegionSelectInput
+                                className={styles.regionSelectInput}
                                 faramElementName="region"
                             />
                             <PastDateRangeInput

@@ -1,20 +1,23 @@
 @import '~base-scss/base';
 
 .multi-list-selection {
-    padding: 0;
+    .label {
+        margin-bottom: $spacing-extra-small;
+    }
 
     .options {
         display: flex;
         flex-wrap: wrap;
 
         .option {
-            flex-basis: calc(100% / 4);
-            padding: $spacing-small 0;
+            flex-basis: calc(100% / 4 - calc(var(--width-separator-thin) * 2));
+            flex-grow: 0;
+            margin: $width-separator-thin;
+            padding: $spacing-extra-small;
 
             .icon {
                 transition: $duration-transition-medium all ease-in-out;
                 opacity: .5;
-                padding: $spacing-small;
                 filter: grayscale(77%);
 
                 .svg {
@@ -45,19 +48,21 @@
             }
 
             &.active {
+                background-color: $color-accent;
+
                 .icon {
                     opacity: 1;
                     filter: none;
 
                     .svg {
                         path {
-                            fill: $color-accent;
+                            fill: $color-text-on-accent;
                         }
                     }
                 }
 
                 .title {
-                    color: $color-text;
+                    color: $color-text-on-accent;
                 }
             }
         }

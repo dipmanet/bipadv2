@@ -38,7 +38,9 @@ import RealTimeMonitoringFilter from './Filter';
 
 import styles from './styles.scss';
 
-interface State {}
+interface State {
+    rightPaneExpanded?: boolean;
+}
 interface Params {}
 interface OwnProps {}
 interface PropsFromDispatch {
@@ -205,6 +207,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            rightPaneExpanded: true,
+        };
+    }
+
+    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
+        this.setState({ rightPaneExpanded });
+    }
+
     public render() {
         const {
             realTimeRainList,
@@ -225,6 +239,10 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             realTimeSourceList,
         } = this.props;
 
+        const {
+            rightPaneExpanded,
+        } = this.state;
+
         const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
@@ -244,6 +262,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showEarthquake={showEarthquake}
                     showFire={showFire}
                     showPollution={showPollution}
+                    rightPaneExpanded={rightPaneExpanded}
                 />
                 <Page
                     rightContentClassName={styles.right}
@@ -260,6 +279,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             showFire={showFire}
                             showPollution={showPollution}
                             realTimeList={realTimeSourceList}
+                            onExpandChange={this.handleRightPaneExpandChange}
                         />
                     }
                     mainContentClassName={styles.main}

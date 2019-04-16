@@ -16,16 +16,12 @@ import {
 
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
-import MultiListSelection from '#components/MultiListSelection';
+import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
 import { iconNames } from '#constants';
 
 import styles from './styles.scss';
-
-const hazardTypeLabelSelector = d => d.title;
-const hazardTypeKeySelector = d => d.id;
-const hazardTypeIconSelector = d => hazardIcons[d.id];
 
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -155,14 +151,8 @@ export default class IncidentsFilter extends React.PureComponent {
                                 label="Data range"
                                 faramElementName="dateRange"
                             />
-                            <MultiListSelection
+                            <HazardSelectionInput
                                 faramElementName="hazard"
-                                className={styles.listSelectionInput}
-                                label="Hazard type"
-                                keySelector={hazardTypeKeySelector}
-                                labelSelector={hazardTypeLabelSelector}
-                                iconSelector={hazardTypeIconSelector}
-                                options={hazardTypeList}
                             />
                         </div>
                     </Faram>

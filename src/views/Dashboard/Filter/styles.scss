@@ -59,6 +59,11 @@ $width-right-panel: var(--width-right-panel);
         flex-grow: 1;
         overflow: auto;
 
+        .regions-select-input {
+            margin: $spacing-small 0;
+            border: 1px solid red;
+        }
+
         .past-data-select-input {
             padding: $spacing-small;
         }

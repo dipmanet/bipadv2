@@ -1,0 +1,50 @@
+@import '~base-scss/base';
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: $spacing-medium 0;
+
+    &.new {
+        background-color: rgba(128, 255, 128, .09);
+    }
+
+    .svg-container {
+        flex-shrink: 0;
+        margin: $spacing-small $spacing-medium;
+
+        .icon {
+            width: 20px;
+            height: auto;
+            height: $font-size-extra-large;
+
+            path {
+                fill: currentColor;
+            }
+        }
+    }
+
+
+    .default-icon {
+        flex-shrink: 0;
+        margin: $spacing-small $spacing-medium;
+        width: 20px;
+        height: 20px;
+        color: $color-danger;
+        font-size: $font-size-extra-large;
+    }
+
+    .right {
+        flex-grow: 1;
+        padding: 0 $spacing-medium;
+
+        .title {
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .05);
+    }
+}

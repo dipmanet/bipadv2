@@ -8,7 +8,10 @@ import FormattedDate from '#rscv/FormattedDate';
 import TextOutput from '#components/TextOutput';
 import CommonMap from '#components/CommonMap';
 
-import { mapStyles } from '#constants';
+import {
+    mapStyles,
+    getMapPaddings,
+} from '#constants';
 import {
     earthquakeToGeojson,
     riverToGeojson,
@@ -29,6 +32,19 @@ export default class RealTimeMap extends React.PureComponent {
     getFireFeatureCollection = memoize(fireToGeojson);
 
     getPollutionFeatureCollection = memoize(pollutionToGeojson);
+
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
+        const mapPaddings = getMapPaddings();
+
+        if (leftPaneExpanded && rightPaneExpanded) {
+            return mapPaddings.bothPaneExpanded;
+        } else if (leftPaneExpanded) {
+            return mapPaddings.leftPaneExpanded;
+        } else if (rightPaneExpanded) {
+            return mapPaddings.rightPaneExpanded;
+        }
+        return mapPaddings.noPaneExpanded;
+    });
 
     tooltipRendererParams = (id, { title, description, basin, status }) => ({
         title,
@@ -178,6 +194,7 @@ export default class RealTimeMap extends React.PureComponent {
             showEarthquake,
             showFire,
             showPollution,
+            rightPaneExpanded,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -192,9 +209,13 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
+        const boundsPadding = this.getBoundsPadding(false, rightPaneExpanded);
+
         return (
             <React.Fragment>
-                <CommonMap />
+                <CommonMap
+                    boundsPadding={boundsPadding}
+                />
                 <MapSource
                     sourceKey="real-time-rain-points"
                     geoJson={rainFeatureCollection}

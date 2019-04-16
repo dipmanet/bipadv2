@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import ReactSVG from 'react-svg';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import DonutChart from '#rscz/DonutChart';
 import Spinner from '#rscz/Spinner';
-import FormattedDate from '#rscv/FormattedDate';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-import { hazardIcons } from '#resources/data';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
 
+import AlertItem from './AlertItem';
+import EventItem from './EventItem';
 import TabularView from './TabularView';
 import Visualizations from './Visualizations';
 
@@ -37,9 +36,6 @@ const defaultProps = {
 
 const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
-const emptyObject = {};
-const aday = 24 * 60 * 60 * 1000;
-const now = Date.now();
 
 const pieChartValueSelector = d => d.value;
 const pieChartLabelSelector = d => d.label;
@@ -59,13 +55,12 @@ export default class LeftPane extends React.PureComponent {
     }
 
     getAlertRendererParams = (_, d) => ({
-        alerts: d,
-        className: styles.alert,
+        alert: d,
+        hazardTypes: this.props.hazardTypes,
     });
 
     getEventRendererParams = (_, d) => ({
-        events: d,
-        className: styles.event,
+        event: d,
     });
 
     groupByHazard = memoize((alerts, hazards) => {
@@ -120,87 +115,7 @@ export default class LeftPane extends React.PureComponent {
         }
     }
 
-    lessThanADayAgo = (date) => {
-        const timediff = now - new Date(date).getTime();
-        return timediff < aday;
-    }
-
-    renderEvent = ({
-        className,
-        events: {
-            title,
-            createdOn,
-        } = emptyObject,
-    }) => (
-        <div
-            className={className}
-        >
-            <div className={styles.title}>
-                {title}
-            </div>
-            <div className={styles.startDate}>
-                <FormattedDate
-                    date={createdOn}
-                    mode="yyyy-MM-dd"
-                />
-            </div>
-        </div>
-    )
-
-    renderAlert = ({
-        className,
-        alerts: {
-            title,
-            hazard,
-            startedOn,
-        } = emptyObject,
-    }) => {
-        const { hazardTypes } = this.props;
-        const icon = hazardIcons[hazard];
-
-        const isLatest = this.lessThanADayAgo(startedOn);
-
-        return (
-            <div
-                className={className}
-            >
-                { isLatest ? (
-                    <div className={styles.latest} />
-                ) : (
-                    <div className={styles.old} />
-                )}
-                {icon ? (
-                    <ReactSVG
-                        className={styles.svgContainer}
-                        path={icon}
-                        svgClassName={styles.icon}
-                        style={{
-                            color: getHazardColor(hazardTypes, hazard),
-                        }}
-                    />
-                ) : (
-                    <div
-                        className={_cs(
-                            iconNames.alert,
-                            styles.defaultIcon,
-                        )}
-                    />
-                )}
-                <div className={styles.title}>
-                    {title}
-                </div>
-                <div className={styles.startDate}>
-                    <FormattedDate
-                        date={startedOn}
-                        mode="yyyy-MM-dd"
-                    />
-                </div>
-            </div>
-        );
-    };
-
     renderAlertsAndEvents = ({
-        className,
         events,
         alerts,
         pending,
@@ -209,10 +124,10 @@ export default class LeftPane extends React.PureComponent {
         const { showVisualizations } = this.state;
 
         return (
-            <div className={className}>
+            <React.Fragment>
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Alerts And Events
+                        Overview
                     </h4>
                     <Spinner loading={pending} />
                     <Button
@@ -244,68 +159,34 @@ export default class LeftPane extends React.PureComponent {
                         alertList={alerts}
                     />
                 ) : (
-                    <React.Fragment>
-                        <div className={styles.alerts}>
+                    <div className={styles.alertsAndEvents}>
+                        <div className={styles.alertsContainer}>
                             <h4 className={styles.heading}>
                                 Alerts
                             </h4>
                             <ListView
                                 className={styles.alertList}
                                 data={alerts}
-                                renderer={this.renderAlert}
+                                renderer={AlertItem}
                                 rendererParams={this.getAlertRendererParams}
                                 keySelector={alertKeySelector}
                             />
                         </div>
-                        <div className={styles.events}>
+                        <div className={styles.eventsContainer}>
                             <h4 className={styles.heading}>
                                 Events
                             </h4>
                             <ListView
                                 className={styles.eventList}
                                 data={events}
-                                renderer={this.renderEvent}
+                                renderer={EventItem}
                                 rendererParams={this.getEventRendererParams}
                                 keySelector={eventKeySelector}
                             />
                         </div>
-                    </React.Fragment>
+                    </div>
                 )}
-            </div>
-        );
-    }
-
-    renderKeyStatistics = ({ className }) => {
-        // hide stats for now
-        if (true) {
-            return null;
-        }
-
-        const {
-            alertList,
-            hazardTypes,
-        } = this.props;
-
-        const { alertFreq, alertColor } = this.groupByHazard(alertList, hazardTypes);
-
-        return (
-            <div className={className}>
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Alerts And Events Overview
-                    </h4>
-                </header>
-                <div className={styles.content}>
-                    <DonutChart
-                        sideLengthRatio={0.4}
-                        className={styles.pieChart}
-                        data={alertFreq}
-                        labelSelector={pieChartLabelSelector}
-                        colorScheme={alertColor}
-                        valueSelector={pieChartValueSelector}
-                    />
-                </div>
-            </div>
+            </React.Fragment>
         );
     }
 
@@ -323,7 +204,6 @@ export default class LeftPane extends React.PureComponent {
         } = this.state;
 
         const AlertsAndEvents = this.renderAlertsAndEvents;
-        const KeyStatistics = this.renderKeyStatistics;
 
         return (
             <CollapsibleView
@@ -341,30 +221,24 @@ export default class LeftPane extends React.PureComponent {
                         <Spinner loading={pending} />
                     </React.Fragment>
                 }
-                expandedViewContainerClassName={styles.alertsContainer}
+                expandedViewContainerClassName={styles.overviewContainer}
                 expandedView={
                     <CollapsibleView
                         expanded={showTabular}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
                         collapsedView={
-                            <React.Fragment>
-                                <AlertsAndEvents
-                                    className={styles.alerts}
-                                    alerts={alertList}
-                                    events={eventList}
-                                    pending={pending}
-                                />
-                                <KeyStatistics
-                                    className={styles.keyStatistics}
-                                />
-                            </React.Fragment>
+                            <AlertsAndEvents
+                                alerts={alertList}
+                                events={eventList}
+                                pending={pending}
+                            />
                         }
                         expandedViewContainerClassName={styles.tabularContainer}
                         expandedView={
                             <React.Fragment>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                         Alerts
+                                        Alerts
                                     </h4>
                                     <Spinner loading={pending} />
                                     <Button

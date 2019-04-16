@@ -80,6 +80,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'created_on'),
             expand: ['event'],
+            ordering: '-created_on',
         }),
         onSuccess: ({ response, props: { setAlertList }, params }) => {
             interface Response { results: PageTypes.Alert[] }
