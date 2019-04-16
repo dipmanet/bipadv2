@@ -28,6 +28,7 @@ export default class IncidentListView extends React.PureComponent {
         data: d,
         className: styles.incident,
         hazardTypes: this.props.hazardTypes,
+        recentDay: this.props.recentDay,
     });
 
     render() {

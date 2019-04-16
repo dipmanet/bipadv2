@@ -5,6 +5,7 @@ import ReactSVG from 'react-svg';
 import { _cs } from '@togglecorp/fujs';
 import { hazardIcons } from '#resources/data';
 import { iconNames } from '#constants';
+import { getYesterday } from '#utils/common';
 import { getHazardColor } from '#utils/domain';
 import DateOutput from '#components/DateOutput';
 
@@ -18,11 +19,10 @@ const defaultProps = {
     className: undefined,
 };
 
-const DAY = 24 * 60 * 60 * 1000;
-const isLessThanADayAgo = (date) => {
-    const now = Date.now();
-    const timediff = now - (new Date(date)).getTime();
-    return timediff < DAY * 10;
+const isRecent = (date) => {
+    const yesterday = getYesterday(10);
+    const timestamp = new Date(date).getTime();
+    return timestamp > yesterday;
 };
 
 export default class AlertItem extends React.PureComponent {
@@ -43,7 +43,7 @@ export default class AlertItem extends React.PureComponent {
         } = alert;
 
         const icon = hazardIcons[hazard];
-        const isNew = isLessThanADayAgo(startedOn);
+        const isNew = isRecent(startedOn);
 
         return (
             <div

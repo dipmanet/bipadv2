@@ -8,6 +8,10 @@
     text-decoration: none;
     color: inherit;
 
+    &.new {
+        background-color: rgba(128, 255, 128, .09);
+    }
+
     .left {
         flex-shrink: 0;
 

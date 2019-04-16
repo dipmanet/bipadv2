@@ -141,6 +141,7 @@ class LeftPane extends React.PureComponent {
             incidentList: incidentListNoSeverity,
             hazardTypes,
             pending,
+            recentDay,
         } = this.props;
 
         const {
@@ -189,6 +190,7 @@ class LeftPane extends React.PureComponent {
                                             hazardTypes={hazardTypes}
                                             className={styles.incidentList}
                                             incidentList={incidentList}
+                                            recentDay={recentDay}
                                         />
                                     )}
                                 </div>
