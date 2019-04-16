@@ -32,9 +32,7 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
-// a day
-const TRENDING_TIME = 10;
-
+// FIXME: move somewhere else
 const framize = (fn, duration = 2000) => {
     let prevTimestamp;
     return (timestamp) => {
@@ -49,6 +47,16 @@ const framize = (fn, duration = 2000) => {
         return fn(percent, timestamp);
     };
 };
+
+// a day
+const TRENDING_TIME = 20;
+
+const date = new Date();
+date.setDate(date.getDate() - TRENDING_TIME);
+date.setHours(0);
+date.setMinutes(0);
+date.setSeconds(0);
+const trendingTimeTimestamp = date.getTime();
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -76,16 +84,9 @@ class IncidentMap extends React.PureComponent {
 
     getPolygonFeatureCollection = memoize(incidentPolygonToGeojson);
 
-    getFilter = memoize(() => {
-        const date = new Date();
-        date.setDate(date.getDate() - TRENDING_TIME);
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        const timestamp = date.getTime();
-
-        return ['>', ['get', 'incidentOn'], timestamp];
-    })
+    getFilter = memoize(timestamp => (
+        ['>', ['get', 'incidentOn'], timestamp]
+    ))
 
     tooltipRendererParams = (id) => {
         const {
@@ -124,7 +125,7 @@ class IncidentMap extends React.PureComponent {
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const filter = this.getFilter();
+        const filter = this.getFilter(trendingTimeTimestamp);
 
         return (
             <React.Fragment>
