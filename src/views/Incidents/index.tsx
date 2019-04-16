@@ -81,6 +81,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss', 'event'],
+            ordering: '-incident_on',
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
@@ -105,6 +106,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
     },
 };
+
+// FIXME: should be one day
+const RECENT_DAY = 14;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -148,6 +152,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
                     incidentList={incidentList}
+                    recentDay={RECENT_DAY}
                 />
                 <div className={
                     _cs(
@@ -179,6 +184,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             incidentList={incidentList}
                             pending={incidentsPending}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                            recentDay={RECENT_DAY}
                         />
                     }
                     rightContentClassName={styles.right}

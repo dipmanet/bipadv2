@@ -16,6 +16,7 @@ import {
 } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
 
+import { getYesterday } from '#utils/common';
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
@@ -47,16 +48,6 @@ const framize = (fn, duration = 2000) => {
         return fn(percent, timestamp);
     };
 };
-
-// a day
-const TRENDING_TIME = 20;
-
-const date = new Date();
-date.setDate(date.getDate() - TRENDING_TIME);
-date.setHours(0);
-date.setMinutes(0);
-date.setSeconds(0);
-const trendingTimeTimestamp = date.getTime();
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -119,13 +110,16 @@ class IncidentMap extends React.PureComponent {
             hazards,
             leftPaneExpanded,
             rightPaneExpanded,
+            recentDay,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const filter = this.getFilter(trendingTimeTimestamp);
+
+        const recentTimestamp = getYesterday(recentDay);
+        const filter = this.getFilter(recentTimestamp);
 
         return (
             <React.Fragment>

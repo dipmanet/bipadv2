@@ -141,3 +141,12 @@ export function getYmd(dateString: string | number | undefined) {
     const date = new Date(dateString);
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+
+export function getYesterday(days = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    return date.getTime();
+}

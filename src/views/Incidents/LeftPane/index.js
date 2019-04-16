@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
@@ -141,6 +140,7 @@ class LeftPane extends React.PureComponent {
             incidentList: incidentListNoSeverity,
             hazardTypes,
             pending,
+            recentDay,
         } = this.props;
 
         const {
@@ -189,6 +189,7 @@ class LeftPane extends React.PureComponent {
                                             hazardTypes={hazardTypes}
                                             className={styles.incidentList}
                                             incidentList={incidentList}
+                                            recentDay={recentDay}
                                         />
                                     )}
                                 </div>

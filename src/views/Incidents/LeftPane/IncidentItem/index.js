@@ -11,6 +11,7 @@ import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
 import { hazardIcons } from '#resources/data';
 import { getHazardColor } from '#utils/domain';
+import { getYesterday } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -22,6 +23,12 @@ const propTypes = {
 
 const defaultProps = {
     className: undefined,
+};
+
+const isRecent = (date, recentDay) => {
+    const yesterday = getYesterday(recentDay);
+    const timestamp = new Date(date).getTime();
+    return timestamp > yesterday;
 };
 
 export default class Incidents extends React.PureComponent {
@@ -41,6 +48,7 @@ export default class Incidents extends React.PureComponent {
                 id: incidentId,
             },
             hazardTypes,
+            recentDay,
         } = this.props;
 
         const verifiedIconClass = verified ?
@@ -49,9 +57,15 @@ export default class Incidents extends React.PureComponent {
 
         const icon = hazardIcons[hazard];
 
+        const isNew = isRecent(incidentOn, recentDay);
+
         return (
             <Link
-                className={_cs(className, styles.incidentItem)}
+                className={_cs(
+                    className,
+                    styles.incidentItem,
+                    isNew && styles.new,
+                )}
                 to={reverseRoute(':incidentId/response', { incidentId })}
             >
                 <div className={styles.left}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
-import ListView from '#rscv/List/ListView';
+import VirtualizedListView from '#rscv/VirtualizedListView';
 
 import IncidentItem from '../IncidentItem';
 
@@ -28,6 +28,7 @@ export default class IncidentListView extends React.PureComponent {
         data: d,
         className: styles.incident,
         hazardTypes: this.props.hazardTypes,
+        recentDay: this.props.recentDay,
     });
 
     render() {
@@ -39,7 +40,7 @@ export default class IncidentListView extends React.PureComponent {
         } = this.props;
 
         return (
-            <ListView
+            <VirtualizedListView
                 className={
                     _cs(
                         styles.incidentList,
