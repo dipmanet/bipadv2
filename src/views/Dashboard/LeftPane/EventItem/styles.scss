@@ -1,0 +1,9 @@
+@import '~base-scss/base';
+
+.event-item {
+    padding: $spacing-medium;
+
+    .title {
+        flex-grow: 1;
+    }
+}

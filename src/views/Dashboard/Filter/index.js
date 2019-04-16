@@ -148,6 +148,7 @@ class DashboardFilter extends React.PureComponent {
                             disabled={false}
                         >
                             <RegionSelectInput
+                                className={styles.regionSelectInput}
                                 faramElementName="region"
                             />
                             <PastDateRangeInput

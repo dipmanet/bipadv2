@@ -50,7 +50,7 @@ $height-menu: 160px;
                     border-right: $width-separator-thin solid $color-separator-light;
 
                     .page-title {
-                        padding: $spacing-medium;
+                        padding: 0 $spacing-medium;
                         color: $color-primary;
                         font-size: $font-size-large;
                         font-weight: $font-weight-bold;
@@ -60,7 +60,7 @@ $height-menu: 160px;
                 .region {
                     display: flex;
                     align-items: center;
-                    padding: $spacing-medium;
+                    padding: 0 $spacing-medium;
                     color: $color-accent;
                     font-size: $font-size-large;
                     font-weight: $font-weight-bold;

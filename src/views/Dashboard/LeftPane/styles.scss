@@ -6,6 +6,8 @@ $width-vertical-nav: var(--width-navbar-right);
 $width-non-tabular-container: var(--width-left-panel);
 $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
+$color-background: rgba(255, 255, 255, .9);
+
 .left-pane {
     .show-alerts-button-container {
         align-items: center;
@@ -18,176 +20,10 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
         }
     }
 
-    .alerts-container {
+    .overview-container {
         transform-origin: 0 0;
-        border: $width-separator-thin solid $color-separator-light;
+        border: $width-separator-thin solid $color-separator;
         border-radius: $radius-border-large;
-
-        .non-tabular-container {
-            transform-origin: 0 0;
-            border-radius: $radius-border-large;
-            background-color: rgba(255, 255, 255, .9);
-            width: $width-non-tabular-container;
-            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-
-            .alerts {
-                display: flex;
-                position: relative;
-                flex-direction: column;
-                height: 100%;
-                // height: 60%;
-                overflow: auto;
-
-                .header {
-                    display: flex;
-                    align-items: center;
-                    flex-shrink: 0;
-
-                    .heading {
-                        flex-grow: 1;
-                        padding: $spacing-medium $spacing-large;
-                        color: $color-primary;
-                    }
-
-                    .hide-alerts-button {
-                        flex-shrink: 0;
-                        margin-right: $spacing-small;
-                    }
-                }
-
-                .events {
-                    flex-grow: 1;
-                    .heading {
-                        padding: $spacing-medium $spacing-large;
-                        color: $color-primary;
-                    }
-
-                    .event-list {
-                        flex-grow: 1;
-                        overflow: auto;
-
-                        .event {
-                            display: flex;
-                            align-items: center;
-                            cursor: pointer;
-                            padding: $spacing-medium $spacing-large;
-
-                            .title {
-                                flex-grow: 1;
-                            }
-
-                            .start-date {
-                                flex-shrink: 0;
-                            }
-
-                            &:hover {
-                                background-color: rgba(0, 0, 0, .05);
-                            }
-                        }
-                    }
-                }
-
-                .alerts {
-                    flex-grow: 1;
-
-                    .heading {
-                        padding: $spacing-medium $spacing-large;
-                        color: $color-primary;
-                    }
-
-                    .alert-list {
-                        flex-grow: 1;
-                        overflow: auto;
-
-                        .alert {
-                            display: flex;
-                            align-items: center;
-                            cursor: pointer;
-                            padding: $spacing-medium $spacing-large;
-
-                            .latest {
-                                flex-shrink: 0;
-                                flex-grow: 0;
-                                flex-basis: 0.5em;
-                                height: 25px;
-                                background-color: #E71D36;
-                            }
-
-                            .old {
-                                flex-shrink: 0;
-                                flex-grow: 0;
-                                flex-basis: 0.5em;
-                                height: 25px;
-                                background-color: transparent;
-                            }
-
-                            .svg-container {
-                                flex-shrink: 0;
-                                margin-right: $spacing-medium;
-
-                                .icon {
-                                    width: 20px;
-                                    height: auto;
-                                    height: $font-size-extra-large;
-
-                                    path {
-                                        fill: currentColor;
-                                    }
-                                }
-                            }
-
-
-                            .default-icon {
-                                flex-shrink: 0;
-                                margin-right: $spacing-medium;
-                                width: 20px;
-                                height: 20px;
-                                color: $color-danger;
-                                font-size: $font-size-extra-large;
-                            }
-
-                            .title {
-                                flex-grow: 1;
-                            }
-
-                            .start-date {
-                                flex-shrink: 0;
-                            }
-
-                            &:hover {
-                                background-color: rgba(0, 0, 0, .05);
-                            }
-                        }
-                    }
-                }
-            }
-
-            .key-statistics {
-                display: flex;
-                flex-direction: column;
-                // height: 40%;
-                overflow-y: auto;
-
-                .header {
-                    flex-shrink: 0;
-                    padding-top: $spacing-large;
-
-                    .heading {
-                        padding: $spacing-medium;
-                        text-align: center;
-                        color: $color-primary;
-                    }
-                }
-
-                .content {
-                    padding: $spacing-medium;
-
-                    .pie-chart {
-                        height: 200px;
-                    }
-                }
-            }
-        }
 
         .tabular-container {
             display: flex;
@@ -214,6 +50,77 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
             .tabular-view {
                 flex-grow: 1;
                 overflow: auto;
+            }
+        }
+
+        .non-tabular-container {
+            display: flex;
+            flex-direction: column;
+            transform-origin: 0 0;
+            border-radius: $radius-border-large;
+            background-color: $color-background;
+            width: $width-non-tabular-container;
+            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+            overflow: auto;
+
+            >.header {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+
+                .heading {
+                    flex-grow: 1;
+                    padding: $spacing-medium;
+                    color: $color-primary;
+                }
+
+                .hide-alerts-button {
+                    flex-shrink: 0;
+                    margin-right: $spacing-small;
+                }
+            }
+
+            .alerts-and-events {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                overflow: auto;
+
+                .alerts-container {
+                    display: flex;
+                    flex-basis: 50%;
+                    flex-direction: column;
+                    border-top: $width-separator-thin solid $color-separator-light;
+                    overflow: auto;
+
+                    .heading {
+                        flex-shrink: 0;
+                        padding: $spacing-medium;
+                    }
+
+                    .alert-list {
+                        flex-grow: 1;
+                        overflow: auto;
+                    }
+                }
+
+                .events-container {
+                    display: flex;
+                    flex-basis: 50%;
+                    flex-direction: column;
+                    border-top: $width-separator-thin solid $color-separator-light;
+                    overflow: auto;
+
+                    .heading {
+                        flex-shrink: 0;
+                        padding: $spacing-medium;
+                    }
+
+                    .event-list {
+                        flex-grow: 1;
+                        overflow: auto;
+                    }
+                }
             }
         }
     }
