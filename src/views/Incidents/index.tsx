@@ -107,7 +107,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-const RECENT_DAY = 20;
+// FIXME: should be one day
+const RECENT_DAY = 14;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {

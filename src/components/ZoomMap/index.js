@@ -75,17 +75,11 @@ class ZoomMap extends React.PureComponent {
                     boundsPadding={boundsPadding}
                 >
                     <MapLayer
-                        layerKey="province-outline"
+                        layerKey="ward-outline"
                         type="line"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.outline}
-                    />
-                    <MapLayer
-                        layerKey="district-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.outline}
-                        minzoom={6}
+                        sourceLayer={mapSources.nepal.layers.ward}
+                        paint={mapStyles.ward.outline}
+                        minzoom={9}
                     />
                     <MapLayer
                         layerKey="municipality-outline"
@@ -95,11 +89,17 @@ class ZoomMap extends React.PureComponent {
                         minzoom={8}
                     />
                     <MapLayer
-                        layerKey="ward-outline"
+                        layerKey="district-outline"
                         type="line"
-                        sourceLayer={mapSources.nepal.layers.ward}
-                        paint={mapStyles.ward.outline}
-                        minzoom={9}
+                        sourceLayer={mapSources.nepal.layers.district}
+                        paint={mapStyles.district.outline}
+                        minzoom={6}
+                    />
+                    <MapLayer
+                        layerKey="province-outline"
+                        type="line"
+                        sourceLayer={mapSources.nepal.layers.province}
+                        paint={mapStyles.province.outline}
                     />
                 </MapSource>
                 {/*
