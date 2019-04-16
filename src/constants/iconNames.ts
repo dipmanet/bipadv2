@@ -16,7 +16,7 @@ const iconNames = {
     incidents: 'ion-alert-circled', // TODO remove this
     incident: 'ion-alert-circled',
     lossAndDamange: 'ion-ios-clock',
-    drrProfileMapping: 'ion-briefcase',
+    drrProjectsProfile: 'ion-briefcase',
     aboutUs: 'ion-ios-information',
     realtime: 'ion-android-wifi',
     indicator: 'ion-ios-speedometer',

@@ -258,6 +258,25 @@ export const lossAndDamageFilterValuesSelector = createSelector(
     ({ faramValues }) => faramValues,
 );
 
+// projects profile page
+export const projectsProfilePageSelector = ({ page }: AppState) =>
+    page.projectsProfilePage;
+
+export const projectsProfileFiltersSelector = createSelector(
+    projectsProfilePageSelector,
+    regionSelector,
+    (projectsProfilePage, region) => {
+        const { filters } = projectsProfilePage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
+);
+
 // bounds
 export const selectedProvinceIdSelector = createSelector(
     regionSelector,
