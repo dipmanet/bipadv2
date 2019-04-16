@@ -12,6 +12,7 @@ import Checkbox from '#rsci/Checkbox';
 import Button from '#rsca/Button';
 
 import CollapsibleView from '#components/CollapsibleView';
+import RangeInput from '#components/RangeInput';
 import { iconNames } from '#constants';
 
 import styles from './styles.scss';
@@ -28,11 +29,16 @@ import {
 const propTypes = {
     className: PropTypes.string,
     setFilter: PropTypes.func.isRequired,
+    setDistanceFilter: PropTypes.func.isRequired,
 };
 
 const checkFilters = (obj, attrVals) =>
     Object.entries(attrVals).reduce(
-        (a, [k, v]) => a && (v === undefined || obj[k] === v),
+        (a, [k, v]) => a && (
+            v === undefined ||
+            (v === false && !obj[k]) || // if compare value is false, show null values
+            obj[k] === v
+        ),
         true,
     );
 
@@ -104,8 +110,22 @@ export default class ResponseFilter extends React.PureComponent {
     }
 
     handleFaramChange = (faramValues) => {
+        // This should do two things, call api when distance changes and set
+        // local filter when other params change
+        const {
+            faramValues: {
+                distance: { min: currMin, max: currMax } = {},
+            },
+        } = this.state;
+
+        const { distance: { min, max } = {}, ...other } = faramValues;
+
+        // if distance changes, call distance filter
+        if (min !== currMin || max !== currMax) {
+            this.props.setDistanceFilter({ min, max });
+        }
         this.setState({ faramValues });
-        const filterFunction = this.createFilter(faramValues);
+        const filterFunction = this.createFilter(other);
         this.props.setFilter(filterFunction);
     }
 
@@ -119,6 +139,7 @@ export default class ResponseFilter extends React.PureComponent {
     render() {
         const {
             className,
+            setDistanceFilter,
         } = this.props;
 
         const { showFilters, faramValues, faramErrors } = this.state;
@@ -159,6 +180,15 @@ export default class ResponseFilter extends React.PureComponent {
                             error={faramErrors}
                             disabled={false}
                         >
+                            <RangeInput
+                                label=""
+                                key="distance"
+                                onChange={setDistanceFilter}
+                                minLimit={1}
+                                maxLimit={50}
+                                noMin
+                                maxLabel="Responses Within(Km)"
+                            />
                             {
                                 this.filterItems.map(filterItem => (
                                     <div className={styles.group}>
