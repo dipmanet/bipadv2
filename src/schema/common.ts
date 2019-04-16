@@ -112,6 +112,7 @@ const schemaList: Schema[] = [
         fields: {
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
+            description: { type: 'string' },
             icon: { type: 'string' }, // FIXME: should be required
             color: { type: 'string' }, // FIXME: should be required
         },

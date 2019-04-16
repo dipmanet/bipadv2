@@ -97,7 +97,6 @@ interface State {
 interface OwnProps {
     pending: boolean;
     mapStyle: string;
-    showHintAndError: boolean;
 }
 
 interface PropsFromState {

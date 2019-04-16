@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-import { connect } from 'react-redux';
 
 import ChoroplethMap from '#components/ChoroplethMap';
-import { districtsSelector } from '#selectors';
 import { getMapPaddings } from '#constants';
 
 import styles from './styles.scss';
@@ -30,17 +28,14 @@ const pickList = (list, start, offset) => {
 };
 
 const propTypes = {
-    districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    geoareas: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
+    geoareas: [],
 };
 
-const mapStateToProps = state => ({
-    districts: districtsSelector(state),
-});
-
-class LossAndDamageMap extends React.PureComponent {
+export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -78,12 +73,12 @@ class LossAndDamageMap extends React.PureComponent {
         ],
     }))
 
-    generateMapState = memoize((districts, groupedIncidentMapping, metricFn) => {
-        const value = districts.map(district => ({
-            id: district.id,
+    generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
+        const value = geoareas.map(geoarea => ({
+            id: geoarea.id,
             value: {
                 count: groupedIncidentMapping
-                    ? metricFn(groupedIncidentMapping[district.id])
+                    ? metricFn(groupedIncidentMapping[geoarea.id])
                     : 0,
             },
         }));
@@ -95,7 +90,7 @@ class LossAndDamageMap extends React.PureComponent {
             lossAndDamageList,
             leftPaneExpanded,
             rightPaneExpanded,
-            districts,
+            geoareas,
             mapping,
             metric,
             maxValue,
@@ -106,7 +101,7 @@ class LossAndDamageMap extends React.PureComponent {
 
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-        const mapState = this.generateMapState(districts, mapping, metric);
+        const mapState = this.generateMapState(geoareas, mapping, metric);
         const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
 
         return (
@@ -139,5 +134,3 @@ class LossAndDamageMap extends React.PureComponent {
         );
     }
 }
-
-export default connect(mapStateToProps)(LossAndDamageMap);

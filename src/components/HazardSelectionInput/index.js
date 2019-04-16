@@ -27,16 +27,11 @@ const propTypes = {
 };
 
 const defaultProps = {
-    labelSelector: d => d.label,
-    keySelector: d => d.key,
-    iconSelector: d => d.icon,
-    showLabel: true,
-    options: [],
-    value: [],
     className: '',
 };
 
 const hazardTypeLabelSelector = d => d.title;
+const hazardTypeTitleSelector = d => d.description;
 const hazardTypeKeySelector = d => d.id;
 const hazardTypeIconSelector = d => hazardIcons[d.id];
 
@@ -51,7 +46,7 @@ class HazardSelectionInput extends React.PureComponent {
         this.naturalInputValue = [];
     }
 
-    getGroupedHazardTypeValues = (hazardTypeValues) => {
+    getGroupedHazardTypeValues = (hazardTypeValues = []) => {
         const { hazardTypes } = this.props;
 
         const groupedHazardTypes = {
@@ -72,7 +67,7 @@ class HazardSelectionInput extends React.PureComponent {
         return groupedHazardTypes;
     }
 
-    getGroupedHazardTypes = (hazardList) => {
+    getGroupedHazardTypes = (hazardList = []) => {
         const groupedHazardTypes = {
             natural: [],
             artificial: [],
@@ -123,6 +118,7 @@ class HazardSelectionInput extends React.PureComponent {
             <div className={_cs(className, styles.hazardSelectionInput)}>
                 <MultiListSelection
                     className={styles.naturalHazardSelectionInput}
+                    titleSelector={hazardTypeTitleSelector}
                     keySelector={hazardTypeKeySelector}
                     labelSelector={hazardTypeLabelSelector}
                     iconSelector={hazardTypeIconSelector}

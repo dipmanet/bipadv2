@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SelectInput from '#rsci/SelectInput';
-import SegmentInput from '#rsci/SegmentInput';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, listToMap } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
+import memoize from 'memoize-one';
+
+import SelectInput from '#rsci/SelectInput';
+// import SegmentInput from '#rsci/SegmentInput';
 
 import {
-    adminLevelListSelector,
+    // adminLevelListSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
@@ -16,17 +18,16 @@ import {
 import styles from './styles.scss';
 
 const adminLevelKeySelector = d => d.id;
-const adminLevelLabelSelector = d => d.title;
+// const adminLevelLabelSelector = d => d.title;
 
-const geoareaKeySelector = d => d.id;
+const geoareaKeySelector = d => `${d.adminLevel}-${d.id}`;
 const geoareaLabelSelector = d => d.title;
 
 const emptyObject = {};
-const emptyArray = [];
+// const emptyArray = [];
 
 const propTypes = {
     className: PropTypes.string,
-    adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func.isRequired,
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -42,7 +43,6 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    adminLevelList: adminLevelListSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
@@ -55,6 +55,7 @@ export default class RegionSelectInput extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
+    /*
     handleAdminLevelChange = (newAdminLevel) => {
         const { onChange } = this.props;
         onChange({
@@ -62,20 +63,61 @@ export default class RegionSelectInput extends React.PureComponent {
             geoarea: undefined,
         });
     }
+    */
 
-    handleGeoAreaChange = (newGeoarea) => {
-        const {
-            value: {
-                adminLevel,
-            } = emptyObject,
-            onChange,
-        } = this.props;
+    handleGeoAreaChange = (key) => {
+        const { onChange } = this.props;
 
-        onChange({
-            adminLevel,
-            geoarea: newGeoarea,
-        });
+        if (!key) {
+            onChange({
+                adminLevel: undefined,
+                geoarea: undefined,
+            });
+        } else {
+            const [adminLevel, geoarea] = key.split('-');
+            onChange({
+                adminLevel: +adminLevel,
+                geoarea: +geoarea,
+            });
+        }
     }
+
+    createSingleList = memoize((provinces, districts, municipalities) => {
+        const provinceList = provinces.map(province => ({ ...province, adminLevel: 1 }));
+
+        const provinceMap = listToMap(
+            provinces,
+            adminLevelKeySelector,
+            province => province,
+        );
+
+        const districtList = districts.map((district) => {
+            const province = provinceMap[district.province];
+            return {
+                ...district,
+                adminLevel: 2,
+                title: `${district.title}, ${province.title}`,
+            };
+        });
+
+        const districtMap = listToMap(
+            districts,
+            adminLevelKeySelector,
+            province => province,
+        );
+
+        const municipalityList = municipalities.map((municipality) => {
+            const district = districtMap[municipality.district];
+            const province = provinceMap[district.province];
+            return {
+                ...municipality,
+                adminLevel: 3,
+                title: `${municipality.title}, ${district.title}, ${province.title}`,
+            };
+        });
+
+        return [...provinceList, ...districtList, ...municipalityList];
+    })
 
     render() {
         const {
@@ -84,7 +126,6 @@ export default class RegionSelectInput extends React.PureComponent {
                 adminLevel,
                 geoarea,
             } = emptyObject,
-            adminLevelList,
             showHintAndError,
             provinces,
             districts,
@@ -96,17 +137,16 @@ export default class RegionSelectInput extends React.PureComponent {
             styles.regionSelectInput,
         );
 
-        const geoArea = (
-            (adminLevel === 1 && provinces) ||
-            (adminLevel === 2 && districts) ||
-            (adminLevel === 3 && municipalities) ||
-            emptyArray
-        );
-        const adminLevelItem = adminLevelList.find(item => item.id === adminLevel);
-        const adminLevelLabel = adminLevelItem ? adminLevelItem.title : 'Geo area';
+        let value;
+        if (adminLevel && geoarea) {
+            value = `${adminLevel}-${geoarea}`;
+        }
+
+        const options = this.createSingleList(provinces, districts, municipalities);
 
         return (
             <div className={_cs(className, styles.regionSelectInput)}>
+                {/*
                 <SegmentInput
                     className={styles.adminLevelSelectInput}
                     label="Admin level"
@@ -117,13 +157,13 @@ export default class RegionSelectInput extends React.PureComponent {
                     onChange={this.handleAdminLevelChange}
                     showHintAndError={showHintAndError}
                 />
+                */}
                 <SelectInput
                     key={adminLevel}
-                    disabled={!adminLevel}
                     className={styles.geoareaSelectInput}
-                    label={adminLevelLabel}
-                    options={geoArea}
-                    value={geoarea}
+                    label="Location"
+                    options={options}
+                    value={value}
                     keySelector={geoareaKeySelector}
                     labelSelector={geoareaLabelSelector}
                     onChange={this.handleGeoAreaChange}

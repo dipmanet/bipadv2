@@ -113,7 +113,7 @@ export default class ResourceItem extends React.PureComponent {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <span className={iconNames.share} />
+                                    Get direction
                                 </a>
                             </div>
                         )

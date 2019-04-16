@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { isDefined, mapToList, listToMap } from '@togglecorp/fujs';
+import { mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
 
@@ -35,20 +35,35 @@ export const regionLevelSelector = createSelector(
 );
 
 export const districtsSelector = ({ page }: AppState) =>
-    page.districts;
+    page.districts || [];
 
 export const provincesSelector = ({ page }: AppState) =>
-    page.provinces;
+    page.provinces || [];
 
 export const municipalitiesSelector = ({ page }: AppState) =>
-    page.municipalities;
+    page.municipalities || [];
 
 export const wardsSelector = ({ page }: AppState) =>
-    page.wards;
+    page.wards || [];
+
+const getId = (val: { id: number }) => val.id;
+
+export const regionsSelector = createSelector(
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector,
+    (provinces, districts, municipalities, wards) => ({
+        provinces: listToMap(provinces, getId),
+        districts: listToMap(districts, getId),
+        municipalities: listToMap(municipalities, getId),
+        wards: listToMap(wards, getId),
+    }),
+);
 
 export const wardsMapSelector = createSelector(
     wardsSelector,
-    wards => listToMap(wards, elem => elem.id),
+    wards => listToMap(wards, getId),
 );
 
 export const adminLevelListSelector = ({ page }: AppState) =>

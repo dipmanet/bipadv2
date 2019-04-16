@@ -1,7 +1,4 @@
 import { Obj, isTruthy } from '@togglecorp/fujs';
-import bboxPolygon from '@turf/bbox-polygon';
-import { BBox } from '@turf/helpers';
-import centroid from '@turf/centroid';
 
 import {
     Loss,
@@ -10,7 +7,6 @@ import {
     Alert,
     Event,
     Incident,
-    AdminLevel,
     RealTimeEarthquake,
     RealTimeRain,
     RealTimeRiver,
@@ -18,9 +14,6 @@ import {
     RealTimePollution,
     Resource,
 } from '#store/atom/page/types';
-import {
-    hazardTypesSelector,
-} from '#selectors';
 import { groupList } from '#utils/common';
 
 export const ONE_HUMAN_EQUIVALENT_MONEY = 50000;
@@ -35,18 +28,20 @@ const emptyObject = {};
 
 export const calculateSeverity = (loss: Loss = emptyObject, scaleFactor: number = 1): number => {
     const {
-        estimatedLoss = 0,
         peopleDeathCount = 0,
+        /*
+        estimatedLoss = 0,
         livestockDestroyedCount = 0,
         infrastructureDestroyedCount = 0,
+         */
     } = loss;
 
+    const offset = 0;
+
     // NOTE: for now just return peopleDeathCount
-    return peopleDeathCount;
+    return offset + (peopleDeathCount * scaleFactor);
 
     /*
-    const offset = 0.2;
-
     const severity = offset +
         ((MONEY_LOSS_FACTOR * estimatedLoss) / ONE_HUMAN_EQUIVALENT_MONEY) +
         (PEOPLE_LOSS_FACTOR * peopleDeathCount) +
@@ -363,10 +358,10 @@ interface Geo {
     title: string;
 }
 
-export const getAdminLevelTitles = (adminLevel: Geo[]) => {
+export const getAdminLevelTitles = (adminLevels: Geo[]) => {
     const geojson = {
         type: 'FeatureCollection',
-        features: adminLevel
+        features: adminLevels
             .map(level => ({
                 id: level.id,
                 type: 'Feature',

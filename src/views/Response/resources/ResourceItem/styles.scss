@@ -32,15 +32,14 @@
         flex-shrink: 0;
 
         .link {
-            outline: none;
-            padding: $spacing-small;
+            border-radius: 2px;
+            background-color: $color-primary;
+            padding: $spacing-extra-small $spacing-small;
             text-transform: uppercase;
             text-decoration: none;
-            color: inherit;
-
-            >span {
-                color: $color-primary;
-            }
+            color: $color-text-on-primary;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
         }
     }
 }

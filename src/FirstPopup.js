@@ -99,7 +99,7 @@ export default class FirstPopup extends React.PureComponent {
     handleNationalLevelClick = () => {
         this.props.setRegion({
             region: {
-                adminLevel: 1,
+                adminLevel: undefined,
                 geoarea: undefined,
             },
         });

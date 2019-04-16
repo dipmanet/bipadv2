@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, Obj } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { AppState } from '#store/types';
@@ -56,6 +56,7 @@ interface PropsFromDispatch {
 interface PropsFromState {
     incidentList: PageType.Incident[];
     filters: PageType.FiltersWithRegion['faramValues'];
+    hazardTypes: Obj<PageType.HazardType>;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -118,6 +119,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const { hazardTypes } = this.props;
         return hazardTypesList(incidentList, hazardTypes);
     });
+
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }

@@ -1,6 +1,6 @@
 export default {
     nepal: {
-        url: 'mapbox://adityakhatri.29zl7210',
+        url: 'mapbox://adityakhatri.8xnhn137',
         layers: {
             province: 'provincegeo',
             district: 'districtgeo',
