@@ -111,7 +111,7 @@ export default class TabularView extends React.PureComponent {
                 key: 'people-loss',
                 label: 'Deaths',
                 order: 11,
-                modifier: (d = {}) => d.peopleDeathCount,
+                modifier: ({ loss = {} } = {}) => loss.peopleDeathCount,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.loss, b.loss),
             },
