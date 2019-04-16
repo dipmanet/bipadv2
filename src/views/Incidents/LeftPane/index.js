@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';

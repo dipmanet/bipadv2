@@ -58,6 +58,10 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                 flex-direction: column;
                 flex-grow: 1;
                 overflow: auto;
+
+                .incident-list {
+                    flex-grow: 1;
+                }
             }
         }
 
