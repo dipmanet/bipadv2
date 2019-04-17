@@ -51,7 +51,7 @@ const filterSchema = {
         hazard: [],
         region: [],
         dateRange: [],
-        event: undefined,
+        event: [],
     },
 };
 

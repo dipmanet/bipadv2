@@ -95,6 +95,9 @@ export default {
             'circle-opacity': 1,
             'circle-radius-transition': { duration: 0 },
             'circle-opacity-transition': { duration: 0 },
+            'circle-stroke-opacity': 0.2,
+            'circle-stroke-color': ['get', 'hazardColor'],
+            'circle-stroke-width': 1,
         },
     },
     alertConvex: {
@@ -161,7 +164,7 @@ export default {
                 ['==', ['get', 'severity'], 'Catastrophic'], 11,
                 5,
             ],
-            'circle-opacity': 0.9,
+            'circle-opacity': 0.95,
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 1,
@@ -174,6 +177,9 @@ export default {
             'circle-opacity': 1,
             'circle-radius-transition': { duration: 0 },
             'circle-opacity-transition': { duration: 0 },
+            'circle-stroke-opacity': 0.2,
+            'circle-stroke-color': ['get', 'hazardColor'],
+            'circle-stroke-width': 1,
         },
     },
     incidentPolygon: {
