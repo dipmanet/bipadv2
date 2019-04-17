@@ -76,26 +76,80 @@ export default {
             'fill-opacity': 0.1,
         },
     },
+
+    alertPoint: {
+        circle: {
+            'circle-color': ['get', 'hazardColor'],
+            'circle-radius': 8,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0,
+            ],
+            'circle-opacity': 0.9,
+        },
+        animatedCircle: {
+            'circle-color': ['get', 'hazardColor'],
+            'circle-radius': 100,
+            'circle-opacity': 1,
+            'circle-radius-transition': { duration: 0 },
+            'circle-opacity-transition': { duration: 0 },
+        },
+    },
+    alertConvex: {
+        outline: {
+            'line-color': ['get', 'hazardColor'],
+            'line-width': 2,
+            'line-dasharray': [2, 2],
+            'line-offset': -6,
+        },
+    },
     alertPolygon: {
         fill: {
             'fill-color': ['get', 'hazardColor'],
-            'fill-opacity': ['case',
+            'fill-opacity': 0.3,
+        },
+        outline: {
+            'line-color': ['get', 'hazardColor'],
+            'line-width': 1,
+            'line-dasharray': [2, 3],
+        },
+    },
+
+    eventPoint: {
+        circle: {
+            'circle-color': '#8dd3c7',
+            'circle-radius': 8,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.8,
+                1,
+                0,
             ],
+            'circle-opacity': 0.9,
+        },
+    },
+    eventConvex: {
+        outline: {
+            'line-color': '#8dd3c7',
+            'line-width': 2,
+            'line-dasharray': [2, 2],
+            'line-offset': -6,
         },
     },
     eventPolygon: {
         fill: {
             'fill-color': '#8dd3c7',
-            'fill-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.8,
-            ],
+            'fill-opacity': 0.3,
+        },
+        outline: {
+            'line-color': '#8dd3c7',
+            'line-width': 1,
+            'line-dasharray': [2, 3],
         },
     },
+
     incidentPoint: {
         fill: {
             'circle-color': ['get', 'hazardColor'],
@@ -107,10 +161,11 @@ export default {
                 ['==', ['get', 'severity'], 'Catastrophic'], 11,
                 5,
             ],
-            'circle-opacity': ['case',
+            'circle-opacity': 0.9,
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.9,
+                1,
+                0,
             ],
         },
         animatedFill: {
@@ -124,21 +179,24 @@ export default {
     incidentPolygon: {
         fill: {
             'fill-color': ['get', 'hazardColor'],
-            'fill-opacity': ['case',
+            'fill-opacity': 0.9,
+            'fill-outline-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.9,
+                '#000000',
+                ['get', 'hazardColor'],
             ],
         },
     },
+
     resourcePoint: {
         circle: {
             'circle-color': '#ffffff',
             'circle-radius': 10,
-            'circle-opacity': ['case',
+            'circle-opacity': 0.9,
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.5,
-                0.9,
+                1,
+                0,
             ],
         },
         layout: {

@@ -1,4 +1,5 @@
 import { Obj, isTruthy } from '@togglecorp/fujs';
+import { centroid, AllGeoJSON, convex } from '@turf/turf';
 
 import {
     Loss,
@@ -77,7 +78,7 @@ export const getHazardColor = (hazards: Obj<HazardType>, hazardId?: number) => {
     return hazard.color;
 };
 
-export const alertToGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
+export const alertToPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: alertList
@@ -88,6 +89,7 @@ export const alertToGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => 
                     title,
                     polygon,
                     description,
+                    createdOn,
                 } = alert;
 
                 return {
@@ -100,6 +102,7 @@ export const alertToGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => 
                         title,
                         description,
                         hazardColor: getHazardColor(hazards, alert.hazard),
+                        createdOn,
                     },
                 };
             }),
@@ -107,7 +110,108 @@ export const alertToGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => 
 
     return geojson;
 };
-export const eventToGeojson = (eventList: Event[]) => {
+
+interface Shape {
+    type: string;
+    coordinates: unknown[];
+}
+
+const hasMultiplePolygon = (polygon: Shape) => (
+    polygon.type === 'MultiPolygon' && polygon.coordinates.length > 1
+);
+
+export const alertToConvexPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: alertList
+            .filter(alert => isTruthy(alert.polygon) && hasMultiplePolygon(alert.polygon as Shape))
+            .map((alert) => {
+                const {
+                    id,
+                    polygon,
+                } = alert;
+
+                const convexPolygon = convex(polygon as AllGeoJSON).geometry;
+
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: {
+                        ...convexPolygon,
+                    },
+                    properties: {
+                        hazardColor: getHazardColor(hazards, alert.hazard),
+                    },
+                };
+            }),
+    };
+
+    return geojson;
+};
+
+export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: alertList
+            .filter(alert => isTruthy(alert.polygon) || isTruthy(alert.point))
+            .map((alert) => {
+                const {
+                    id,
+                    title,
+                    polygon,
+                    point,
+                    description,
+                    createdOn,
+                } = alert;
+
+                const geometry = polygon
+                    ? centroid(polygon as AllGeoJSON).geometry
+                    : point;
+
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: { ...geometry },
+                    properties: {
+                        title,
+                        description,
+                        hazardColor: getHazardColor(hazards, alert.hazard),
+                        createdOn: new Date(createdOn).getTime(),
+                    },
+                };
+            }),
+    };
+
+    return geojson;
+};
+
+export const eventToConvexPolygonGeojson = (eventList: Event[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: eventList
+            .filter(event => isTruthy(event.polygon) && hasMultiplePolygon(event.polygon as Shape))
+            .map((event) => {
+                const {
+                    id,
+                    polygon,
+                } = event;
+
+                const convexPolygon = convex(polygon as AllGeoJSON).geometry;
+
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: {
+                        ...convexPolygon,
+                    },
+                };
+            }),
+    };
+
+    return geojson;
+};
+
+export const eventToPolygonGeojson = (eventList: Event[]) => {
     const geojson = {
         type: 'FeatureCollection',
         features: eventList
@@ -119,7 +223,6 @@ export const eventToGeojson = (eventList: Event[]) => {
                     polygon,
                     description,
                     severity,
-                    createdOn,
                 } = event;
 
                 return {
@@ -132,12 +235,47 @@ export const eventToGeojson = (eventList: Event[]) => {
                         title,
                         description,
                         severity,
-                        createdOn,
                     },
                 };
             }),
     };
 
+    return geojson;
+};
+
+export const eventToPointGeojson = (eventList: Event[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: eventList
+            .filter(event => isTruthy(event.polygon) || isTruthy(event.point))
+            .map((event) => {
+                const {
+                    id,
+                    title,
+                    polygon,
+                    point,
+                    description,
+                    severity,
+                    createdOn,
+                } = event;
+
+                const geometry = polygon
+                    ? centroid(polygon as AllGeoJSON).geometry
+                    : point;
+
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: { ...geometry },
+                    properties: {
+                        title,
+                        description,
+                        severity,
+                        createdOn,
+                    },
+                };
+            }),
+    };
     return geojson;
 };
 

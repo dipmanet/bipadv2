@@ -39,6 +39,7 @@ const schemaList: Schema[] = [
             description: 'Event',
         },
         fields: {
+            startedOn: { type: 'string' }, // date
             createdOn: { type: 'string' }, // date
             title: { type: 'string', required: true },
             description: { type: 'string' },
