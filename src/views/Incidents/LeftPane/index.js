@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, listToMap } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { calculateCategorizedSeverity } from '#utils/domain';
 import { iconNames } from '#constants';
+import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
 
 import {
@@ -32,6 +33,14 @@ const defaultProps = {
     className: undefined,
     pending: false,
 };
+
+const metricOptions = [
+    { key: 'estimatedLoss', label: 'Total estimated loss(Rs)' },
+    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
+    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
+    { key: 'peopleDeathCount', label: 'Total people death' },
+];
+
 
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
@@ -151,6 +160,19 @@ class LeftPane extends React.PureComponent {
             severity: calculateCategorizedSeverity(incident.loss),
         }));
 
+        // Calculate summary
+        const summaryData = {};
+        incidentList.forEach((incident) => {
+            metricOptions.forEach((metric) => {
+                const { key } = metric;
+                const { loss } = incident;
+                if (!loss) {
+                    return;
+                }
+                summaryData[key] = (summaryData[key] || 0) + (loss[key] || 0);
+            });
+        });
+
         return (
             <CollapsibleView
                 className={_cs(className, styles.leftPane)}
@@ -183,12 +205,30 @@ class LeftPane extends React.PureComponent {
                                             incidentList={incidentList}
                                         />
                                     ) : (
-                                        <IncidentListView
-                                            hazardTypes={hazardTypes}
-                                            className={styles.incidentList}
-                                            incidentList={incidentList}
-                                            recentDay={recentDay}
-                                        />
+                                        <React.Fragment>
+                                            <IncidentListView
+                                                hazardTypes={hazardTypes}
+                                                className={styles.incidentList}
+                                                incidentList={incidentList}
+                                                recentDay={recentDay}
+                                            />
+                                            <div>
+                                                <h3> Incidents Summary </h3>
+                                                <TextOutput
+                                                    label="Total incidents"
+                                                    value={incidentList.length}
+                                                />
+                                                {
+                                                    metricOptions.map(metric => (
+                                                        <TextOutput
+                                                            key={metric.key}
+                                                            label={metric.label}
+                                                            value={summaryData[metric.key]}
+                                                        />
+                                                    ))
+                                                }
+                                            </div>
+                                        </React.Fragment>
                                     )}
                                 </div>
                             </React.Fragment>
