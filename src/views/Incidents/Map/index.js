@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
@@ -23,6 +24,11 @@ import {
 } from '#utils/domain';
 
 const propTypes = {
+    incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    hazards: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    leftPaneExpanded: PropTypes.boolean.isRequired,
+    rightPaneExpanded: PropTypes.boolean.isRequired,
+    recentDay: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
