@@ -78,12 +78,11 @@ const routeSettings: SomeRoute[] = [
         iconName: iconNames.riskMap,
     },
     {
-        name: 'profileMapping',
-        title: 'Profile Mapping',
-        path: 'drr-profile-mapping/',
-        iconName: iconNames.drrProfileMapping,
-        load: () => import('../views/ProfileMapping'),
-        disabled: true,
+        name: 'projectProfile',
+        title: 'Projects Profile',
+        path: 'drr-project-profile/',
+        iconName: iconNames.drrProjectsProfile,
+        load: () => import('../views/ProjectsProfile'),
         navbar: true,
     },
     {

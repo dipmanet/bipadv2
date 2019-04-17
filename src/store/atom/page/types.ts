@@ -98,6 +98,7 @@ export interface Filters {
     faramErrors: object;
     pristine: boolean;
 }
+
 export interface FiltersWithRegion {
     faramValues: {
         hazard?: number;
@@ -193,6 +194,24 @@ export interface RealTimeMonitoringPage {
     filters: Filters;
 }
 
+export interface ProjectsProfileFilters {
+    faramValues: {
+        region: Region;
+        priority?: string;
+        subPriority?: string;
+        activities?: string;
+        drrCycle?: string;
+        elements?: string;
+        organization?: string;
+        status?: string;
+    };
+    faramErrors: object;
+    pristine: boolean;
+}
+export interface ProjectsProfilePage {
+    filters: ProjectsProfileFilters;
+}
+
 export interface PageState {
     initialPopupShown: boolean;
     selectedMapStyle: string;
@@ -215,6 +234,7 @@ export interface PageState {
     responsePage: ResponsePage;
     realTimeMonitoringPage: RealTimeMonitoringPage;
     lossAndDamagePage: LossAndDamagePage;
+    projectsProfilePage: ProjectsProfilePage;
 }
 
 // ACTION TYPES
@@ -254,6 +274,9 @@ export enum PageType {
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
+
+    // projects profile page
+    PP__SET_FILTERS = 'page/PROJECTS_PROFILE/SET_FILTERS',
 }
 
 // ACTION CREATOR INTERFACE
@@ -382,6 +405,11 @@ export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
 }
 
+// projects profile page
+export interface SetProjectsProfileFilterss extends ProjectsProfileFilters {
+    type: typeof PageType.PP__SET_FILTERS;
+}
+
 export type PageActionTypes = (
     SetRegion | SetInitialPopupShown |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
@@ -390,5 +418,5 @@ export type PageActionTypes = (
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
-    SetRealTimeFilters | SetEventList
+    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters
 );

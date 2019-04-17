@@ -178,6 +178,16 @@ export const setLossAndDamageFiltersAction = (
     pristine,
 });
 
+// projects profile action creator
+export const setProjectsProfileFiltersAction = (
+    { faramValues, faramErrors, pristine }: Type.ProjectsProfileFilters,
+) => ({
+    type: Type.PageType.PP__SET_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
+});
+
 //  REDUCERS
 
 const setRegion = (state: Type.PageState, action: Type.SetRegion) => {
@@ -621,6 +631,40 @@ export const setLossAndDamageFilters = (
 
     return newState;
 };
+// projects profile page
+export const setProjectsProfileFilters = (
+    state: Type.PageState,
+    action: Type.SetProjectsProfileFilters,
+) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        /* eslint-disable no-param-reassign */
+        deferedState.region = region;
+
+        if (faramValues) {
+            deferedState.projectsProfilePage.filters.faramValues = faramValuesNoRegion;
+        }
+        if (faramErrors) {
+            deferedState.projectsProfilePage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.projectsProfilePage.filters.pristine = pristine;
+        }
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 export default function routeReducer(
     state = initialState,
@@ -675,6 +719,8 @@ export default function routeReducer(
             return setRealTimeFilters(state, action);
         case Type.PageType.DP__SET_EVENTS:
             return setEventList(state, action);
+        case Type.PageType.PP__SET_FILTERS:
+            return setProjectsProfileFilters(state, action);
         default:
             return state;
     }

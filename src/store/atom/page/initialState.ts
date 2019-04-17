@@ -125,8 +125,14 @@ const state: PageState = {
     lossAndDamagePage: {
         lossAndDamageList: [],
         filters: {
-            faramValues: {
-            },
+            faramValues: {},
+            faramErrors: {},
+            pristine: true,
+        },
+    },
+    projectsProfilePage: {
+        filters: {
+            faramValues: {},
             faramErrors: {},
             pristine: true,
         },
