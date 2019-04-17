@@ -4,6 +4,7 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListView from '#rscv/List/ListView';
 
 import CollapsibleView from '#components/CollapsibleView';
@@ -207,12 +208,12 @@ export default class LeftPane extends React.PureComponent {
                 collapsedViewContainerClassName={styles.showAlertsButtonContainer}
                 collapsedView={
                     <React.Fragment>
-                        <Button
-                            className={styles.showAlertsButton}
+                        <PrimaryButton
                             onClick={this.handleShowAlertsButtonClick}
-                            iconName={iconNames.alert}
-                            title="Show alerts & events"
-                        />
+                            title="Show alerts and events"
+                        >
+                            Alerts and Events
+                        </PrimaryButton>
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.overviewContainer}

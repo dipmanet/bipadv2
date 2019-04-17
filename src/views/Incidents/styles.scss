@@ -47,7 +47,8 @@ $width-left-pane: var(--width-left-panel);
     display: flex;
     position: absolute;
     top: $spacing-medium;
-    right: calc(var(--width-navbar-right) + calc(var(--spacing-medium) * 2) + var(--font-size-super-large));
+    right: calc(var(--width-navbar-right) + calc(var(--spacing-medium) * 2) +
+calc(var(--font-size-small) * 10));
     align-items: center;
     z-index: 1;
     border: $width-separator-thin solid $color-separator-light;

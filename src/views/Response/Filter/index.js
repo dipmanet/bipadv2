@@ -10,6 +10,7 @@ import { _cs, listToMap } from '@togglecorp/fujs';
 import Checkbox from '#rsci/Checkbox';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import CollapsibleView from '#components/CollapsibleView';
 import RangeInput from '#components/RangeInput';
@@ -150,11 +151,12 @@ export default class ResponseFilter extends React.PureComponent {
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
                 collapsedView={
-                    <Button
+                    <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
-                        iconName={iconNames.filter}
                         title="Show filters"
-                    />
+                    >
+                        Show Filters
+                    </PrimaryButton>
                 }
                 expandedViewContainerClassName={styles.filtersContainer}
                 expandedView={

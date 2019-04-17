@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { calculateCategorizedSeverity } from '#utils/domain';
 import { iconNames } from '#constants';
@@ -157,12 +158,13 @@ class LeftPane extends React.PureComponent {
                 collapsedViewContainerClassName={styles.showIncidentsButtonContainer}
                 collapsedView={
                     <React.Fragment>
-                        <Button
+                        <PrimaryButton
                             className={styles.showIncidentsButton}
                             onClick={this.handleShowIncidentsButtonClick}
-                            iconName={iconNames.incident}
-                            title="Show alerts"
-                        />
+                            title="Show incidents"
+                        >
+                            Show Incidents
+                        </PrimaryButton>
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.incidentsContainer}

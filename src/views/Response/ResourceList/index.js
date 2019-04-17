@@ -9,6 +9,7 @@ import IncidentInfo from '#components/IncidentInfo';
 import { iconNames } from '#constants';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import educationIcon from '#resources/icons/Education.svg';
@@ -146,13 +147,12 @@ export default class ResourceList extends React.PureComponent {
                 collapsedViewContainerClassName={styles.showResourceButtonContainer}
                 collapsedView={
                     <React.Fragment>
-                        <Button
-                            className={styles.showResourceButton}
+                        <PrimaryButton
                             onClick={this.handleShowResourceButtonClick}
-                            iconName={iconNames.resource}
                             title="Show Resources"
-
-                        />
+                        >
+                            Show Resources
+                        </PrimaryButton>
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.resourceContainer}

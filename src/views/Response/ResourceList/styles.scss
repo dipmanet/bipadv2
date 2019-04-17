@@ -10,12 +10,6 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 .left-pane {
     .show-resource-button-container {
         transform-origin: 0 0;
-
-        .show-resource-button {
-            padding: $spacing-extra-small $spacing-small;
-            color: $color-primary;
-            font-size: $font-size-extra-large;
-        }
     }
 
     .resource-container {
