@@ -133,7 +133,9 @@ const state: PageState = {
 
     projectsProfilePage: {
         filters: {
-            faramValues: {},
+            faramValues: {
+                metric: 'count',
+            },
             faramErrors: {},
             pristine: true,
         },

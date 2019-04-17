@@ -1,46 +1,8 @@
 @import '~base-scss/base';
 
-.main {
-    left: $spacing-medium;
-    transform: none;
-    width: calc(100vw - 96px);
-
-    .container {
-        border-radius: 5px;
-        background-color: #fff;
-        padding: $spacing-medium $spacing-medium-alt;
-
-        .top {
-            display: flex;
-            justify-content: space-between;
-
-            .info {
-                display: flex;
-
-                >* {
-                    padding: $spacing-small;
-                }
-            }
-
-            .date-input-range {
-                display: flex;
-                >* {
-                    margin: 0 $spacing-small;
-                }
-            }
-        }
-
-        .bottom {
-            display: flex;
-
-            .play-button {
-                flex-shrink: 0;
-                font-size: $font-size-super-large;
-            }
-
-            .seekbar {
-                flex-grow: 1;
-            }
-        }
-    }
+.tabs {
+    position: absolute;
+    z-index: 1;
+    background-color: #c0c0c0;
+    padding: $spacing-large;
 }

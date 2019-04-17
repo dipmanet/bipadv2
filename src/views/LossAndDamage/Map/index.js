@@ -87,7 +87,6 @@ export default class LossAndDamageMap extends React.PureComponent {
 
     render() {
         const {
-            lossAndDamageList,
             leftPaneExpanded,
             rightPaneExpanded,
             geoareas,

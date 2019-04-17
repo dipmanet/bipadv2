@@ -24,7 +24,7 @@ import { iconNames } from '#constants';
 import styles from './styles.scss';
 
 const propTypes = {
-    hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    // hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     setFilters: PropTypes.func.isRequired,
     filters: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
@@ -35,7 +35,7 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    hazardTypeList: hazardTypeListSelector(state),
+    // hazardTypeList: hazardTypeListSelector(state),
     filters: lossAndDamageFiltersSelector(state),
 });
 
@@ -52,6 +52,7 @@ class LossAndDamageFilter extends React.PureComponent {
             dateRange: [],
             region: [],
             hazard: [],
+            metric: 'count',
         },
     }
 
@@ -103,7 +104,6 @@ class LossAndDamageFilter extends React.PureComponent {
     render() {
         const {
             className,
-            hazardTypeList,
             filters: {
                 faramValues,
                 faramErrors,
@@ -151,17 +151,16 @@ class LossAndDamageFilter extends React.PureComponent {
                             error={faramErrors}
                             disabled={false}
                         >
+                            <SelectInput
+                                label="Metric"
+                                faramElementName="metric"
+                                options={metricOptions}
+                            />
                             <RegionSelectInput
                                 faramElementName="region"
                             />
                             <HazardSelectionInput
                                 faramElementName="hazard"
-                            />
-                            <SelectInput
-                                label="Metric"
-                                onChange={onMetricChange}
-                                value={metricType}
-                                options={metricOptions}
                             />
                         </Faram>
                     </React.Fragment>

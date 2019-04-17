@@ -6,6 +6,7 @@ const styleProperties = {
     widthNavbarRight: '50px',
     heightNavbarTop: '50px',
     colorAccentLight: '#e9f3f0',
+    panelBorderRadius: '5px',
 };
 
 export default styleProperties;
