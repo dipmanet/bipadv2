@@ -35,7 +35,8 @@ export interface Event {
     title: string;
     createdOn: string;
     description: string;
-    polygon: unknown;
+    polygon?: unknown;
+    point?: unknown;
     severity: string;
 }
 export interface Alert {
@@ -43,7 +44,9 @@ export interface Alert {
     title: string;
     description?: string;
     hazard: number;
-    polygon: unknown;
+    polygon?: unknown;
+    point?: unknown;
+    createdOn: string;
 }
 export interface Incident {
     id: number;

@@ -5,7 +5,6 @@ import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-import DonutChart from '#rscz/DonutChart';
 import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
@@ -13,9 +12,9 @@ import { iconNames } from '#constants';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
 
-import AlertItem from './AlertItem';
 import EventItem from './EventItem';
-import TabularView from './TabularView';
+import AlertItem from './AlertItem';
+import AlertTable from './AlertTable';
 import Visualizations from './Visualizations';
 
 import styles from './styles.scss';
@@ -37,9 +36,6 @@ const defaultProps = {
 const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
 
-const pieChartValueSelector = d => d.value;
-const pieChartLabelSelector = d => d.label;
-
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -57,6 +53,7 @@ export default class LeftPane extends React.PureComponent {
     getAlertRendererParams = (_, d) => ({
         alert: d,
         hazardTypes: this.props.hazardTypes,
+        recentDay: this.props.recentDay,
     });
 
     getEventRendererParams = (_, d) => ({
@@ -148,7 +145,7 @@ export default class LeftPane extends React.PureComponent {
                         className={styles.hideAlertsButton}
                         onClick={this.handleHideAlertsButtonClick}
                         iconName={iconNames.chevronUp}
-                        title="Close Alerts And Events"
+                        title="Close overview"
                         transparent
                     />
                 </header>
@@ -256,7 +253,7 @@ export default class LeftPane extends React.PureComponent {
                                         transparent
                                     />
                                 </header>
-                                <TabularView
+                                <AlertTable
                                     alertList={alertList}
                                     className={styles.tabularView}
                                 />

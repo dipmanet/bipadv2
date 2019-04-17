@@ -157,6 +157,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
+// FIXME: should be one day
+const RECENT_DAY = 30;
+
 class Dashboard extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -233,6 +236,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     eventList={eventList}
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
+                    recentDay={RECENT_DAY}
                 />
                 <Page
                     leftContent={
@@ -242,6 +246,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             hazardTypes={hazardTypes}
                             pending={pending}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                            recentDay={RECENT_DAY}
                         />
                     }
                     mainContent={

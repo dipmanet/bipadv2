@@ -19,8 +19,8 @@ const defaultProps = {
     className: undefined,
 };
 
-const isRecent = (date) => {
-    const yesterday = getYesterday(10);
+const isRecent = (date, recentDay) => {
+    const yesterday = getYesterday(recentDay);
     const timestamp = new Date(date).getTime();
     return timestamp > yesterday;
 };
@@ -34,6 +34,7 @@ export default class AlertItem extends React.PureComponent {
             alert,
             className,
             hazardTypes,
+            recentDay,
         } = this.props;
 
         const {
@@ -43,7 +44,7 @@ export default class AlertItem extends React.PureComponent {
         } = alert;
 
         const icon = hazardIcons[hazard];
-        const isNew = isRecent(startedOn);
+        const isNew = isRecent(startedOn, recentDay);
 
         return (
             <div

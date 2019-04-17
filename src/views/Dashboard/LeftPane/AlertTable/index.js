@@ -68,6 +68,7 @@ const DateCell = ({ value }) => (
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
+// FIXME: move this somewhere nice
 class DownloadButton extends React.PureComponent {
     static propTypes = {
         name: PropTypes.string,
@@ -107,7 +108,7 @@ class DownloadButton extends React.PureComponent {
 }
 
 // eslint-disable-next-line react/no-multi-comp
-export default class TabularView extends React.PureComponent {
+export default class AlertTable extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
@@ -223,7 +224,7 @@ export default class TabularView extends React.PureComponent {
                     <Taebul
                         className={styles.alertsTable}
                         data={alertList}
-                        keySelector={TabularView.tableKeySelector}
+                        keySelector={AlertTable.tableKeySelector}
                         columns={this.columns}
 
                         settings={this.state.settings}
