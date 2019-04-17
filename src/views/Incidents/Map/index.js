@@ -94,7 +94,7 @@ class IncidentMap extends React.PureComponent {
     }
 
     handleAnimationKeyframe = framize((percent) => {
-        const p = percent ** 3;
+        const p = percent;
         const radius = p * 20;
         const opacity = (1 - p);
         return {
@@ -120,6 +120,8 @@ class IncidentMap extends React.PureComponent {
 
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
+
+        console.warn(pointFeatureCollection);
 
         return (
             <React.Fragment>

@@ -94,6 +94,7 @@ export interface Filters {
         hazard?: number;
         dateRange?: number;
         realtimeSources?: number[];
+        event?: number;
     };
     faramErrors: object;
     pristine: boolean;
@@ -105,6 +106,7 @@ export interface FiltersWithRegion {
         dateRange?: number;
         region: Region;
         realtimeSources?: number[];
+        event?: number;
     };
     faramErrors: object;
     pristine: boolean;
