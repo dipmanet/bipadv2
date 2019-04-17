@@ -187,11 +187,11 @@ export default class ResponseFilter extends React.PureComponent {
                                 minLimit={1}
                                 maxLimit={50}
                                 noMin
-                                maxLabel="Responses Within(Km)"
+                                maxLabel="Resources Within(Km)"
                             />
                             {
                                 this.filterItems.map(filterItem => (
-                                    <div className={styles.group}>
+                                    <div key={filterItem.key} className={styles.group}>
                                         <FaramGroup
                                             key={filterItem.key}
                                             faramElementName={filterItem.key}

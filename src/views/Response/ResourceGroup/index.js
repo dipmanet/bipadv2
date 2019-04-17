@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
 
+import Button from '#rsca/Button';
+
 import ResourceItem from '../resources/ResourceItem';
 
 import styles from './styles.scss';
@@ -29,7 +31,25 @@ export default class ResourceGroup extends React.PureComponent {
 
     static keySelector = (d, id) => `${d.title}-${id}`;
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            showResources: false,
+            showMore: true,
+        };
+    }
+
     getResourceElementRendererParams = (_, d) => d
+
+    handleExpandToggleClick = () => {
+        const { showResources } = this.state;
+        this.setState({ showResources: !showResources });
+    }
+
+    handleShowMoreToggle = () => {
+        const { showMore } = this.state;
+        this.setState({ showMore: !showMore });
+    }
 
     render() {
         const {
@@ -40,12 +60,18 @@ export default class ResourceGroup extends React.PureComponent {
             // itemRenderer,
         } = this.props;
 
+        const { showResources, showMore } = this.state;
+
         if (!data || data.length <= 0) {
             return null;
         }
 
-        // TODO: only showing 5 outputs from client
-        const newData = data.slice(0, 5);
+        const displayData = showMore ? data.slice(0, 5) : data;
+
+        const itemsCount = data.length;
+
+        const buttonText = showResources ? 'Hide' : 'Expand';
+        const showMoreText = showMore ? 'Show All' : 'Show Fewer';
 
         return (
             <div className={_cs(className, styles.resources)}>
@@ -56,16 +82,33 @@ export default class ResourceGroup extends React.PureComponent {
                         alt={heading}
                     />
                     <h3 className={styles.heading}>
-                        {heading}
+                        { heading } ({ itemsCount })
                     </h3>
+                    <Button
+                        onClick={this.handleExpandToggleClick}
+                        type="button"
+                    >
+                        { buttonText }
+                    </Button>
                 </div>
-                <ListView
-                    className={styles.content}
-                    data={newData}
-                    renderer={ResourceItem}
-                    rendererParams={this.getResourceElementRendererParams}
-                    keySelector={ResourceGroup.keySelector}
-                />
+                { showResources && (
+                    <React.Fragment>
+                        <ListView
+                            className={styles.content}
+                            data={displayData}
+                            renderer={ResourceItem}
+                            rendererParams={this.getResourceElementRendererParams}
+                            keySelector={ResourceGroup.keySelector}
+                        />
+                        <Button
+                            onClick={this.handleShowMoreToggle}
+                            type="button"
+                        >
+                            { showMoreText }
+                        </Button>
+                    </React.Fragment>
+                )
+                }
             </div>
         );
     }

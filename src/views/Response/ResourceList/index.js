@@ -20,12 +20,6 @@ import ResourceGroup from '../ResourceGroup';
 
 import TabularView from './TabularView';
 
-import HealthItem from '../resources/HealthItem';
-import VolunteerItem from '../resources/VolunteerItem';
-import EducationItem from '../resources/EducationItem';
-import FinanceItem from '../resources/FinanceItem';
-
-
 import styles from './styles.scss';
 
 const propTypes = {
