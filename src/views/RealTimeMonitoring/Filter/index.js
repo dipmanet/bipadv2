@@ -5,6 +5,7 @@ import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListSelection from '#rsci/ListSelection';
 import Legend from '#rscz/Legend';
 
@@ -173,11 +174,12 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
                 collapsedView={
-                    <Button
+                    <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
-                        iconName={iconNames.filter}
                         title="Show filters"
-                    />
+                    >
+                        Show Filters
+                    </PrimaryButton>
                 }
                 expandedViewContainerClassName={styles.filtersContainer}
                 expandedView={

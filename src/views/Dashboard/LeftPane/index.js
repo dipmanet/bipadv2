@@ -212,7 +212,7 @@ export default class LeftPane extends React.PureComponent {
                             onClick={this.handleShowAlertsButtonClick}
                             title="Show alerts and events"
                         >
-                            Alerts and Events
+                            Show Overview
                         </PrimaryButton>
                     </React.Fragment>
                 }
