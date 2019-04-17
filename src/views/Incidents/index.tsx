@@ -27,11 +27,11 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
-import Page from '#components/Page';
-
-import HazardsLegend from '#components/HazardsLegend';
-
 import { transformDateRangeFilterParam } from '#utils/transformations';
+
+import Page from '#components/Page';
+import Loading from '#components/Loading';
+import HazardsLegend from '#components/HazardsLegend';
 
 import IncidentsFilter from './Filter';
 import Map from './Map';
@@ -158,7 +158,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             incidentList,
             requests: {
-                incidentsRequest: { pending: incidentsPending },
+                incidentsRequest: { pending },
             },
         } = this.props;
 
@@ -192,6 +192,7 @@ class Incidents extends React.PureComponent<Props, State> {
                         Incidents
                     </div>
                 </div>
+                <Loading pending={pending} />
                 <Page
                     mainContent={
                         <HazardsLegend
@@ -204,7 +205,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     leftContent={
                         <LeftPane
                             incidentList={incidentList}
-                            pending={incidentsPending}
+                            pending={pending}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                         />

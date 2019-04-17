@@ -22,6 +22,7 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
+import Loading from '#components/Loading';
 import IncidentInfo from '#components/IncidentInfo';
 
 import ResourceList from './ResourceList';
@@ -121,6 +122,7 @@ class Response extends React.PureComponent {
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
                 />
+                <Loading pending={pending} />
                 <Page
                     leftContentClassName={styles.incidentDetails}
                     leftContent={

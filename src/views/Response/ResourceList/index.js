@@ -9,7 +9,6 @@ import IncidentInfo from '#components/IncidentInfo';
 import { iconNames } from '#constants';
 
 import Button from '#rsca/Button';
-import Spinner from '#rscz/Spinner';
 
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import educationIcon from '#resources/icons/Education.svg';
@@ -64,7 +63,7 @@ Resource.propTypes = {
     type: PropTypes.string.isRequired,
 };
 
-export default class Response extends React.PureComponent {
+export default class ResourceList extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
@@ -154,7 +153,6 @@ export default class Response extends React.PureComponent {
                             title="Show Resources"
 
                         />
-                        <Spinner loading={pending} />
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.resourceContainer}
@@ -168,7 +166,6 @@ export default class Response extends React.PureComponent {
                                     <h4 className={styles.heading}>
                                         Incident details
                                     </h4>
-                                    <Spinner loading={pending} />
                                     <Button
                                         onClick={this.handleExpandButtonClick}
                                         iconName={iconNames.expand}
@@ -211,7 +208,6 @@ export default class Response extends React.PureComponent {
                                     <h4 className={styles.heading}>
                                         Resources
                                     </h4>
-                                    <Spinner loading={pending} />
                                     <Button
                                         className={styles.hideResourceButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}

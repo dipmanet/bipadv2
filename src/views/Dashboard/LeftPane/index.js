@@ -5,7 +5,6 @@ import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-import Spinner from '#rscz/Spinner';
 
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
@@ -126,7 +125,6 @@ export default class LeftPane extends React.PureComponent {
                     <h4 className={styles.heading}>
                         Overview
                     </h4>
-                    <Spinner loading={pending} />
                     <Button
                         className={styles.toggleVisualizationButton}
                         onClick={this.handleToggleVisualizationButtonClick}
@@ -215,7 +213,6 @@ export default class LeftPane extends React.PureComponent {
                             iconName={iconNames.alert}
                             title="Show alerts & events"
                         />
-                        <Spinner loading={pending} />
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.overviewContainer}
@@ -237,7 +234,6 @@ export default class LeftPane extends React.PureComponent {
                                     <h4 className={styles.heading}>
                                         Alerts
                                     </h4>
-                                    <Spinner loading={pending} />
                                     <Button
                                         className={styles.hideAlertsButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}

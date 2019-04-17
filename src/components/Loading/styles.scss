@@ -1,0 +1,16 @@
+@import '~base-scss/base';
+
+.loading {
+    display: flex;
+    position: absolute;
+    top: $spacing-medium;
+    left: 50%;
+    align-items: center;
+    z-index: 1;
+    border: $width-separator-thin solid $color-separator-light;
+    border-radius: 5px;
+    background-color: $color-foreground;
+    padding: $spacing-small $spacing-large;
+    font-size: $font-size-large;
+    text-align: center;
+}

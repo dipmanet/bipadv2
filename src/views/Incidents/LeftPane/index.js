@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
-import Spinner from '#rscz/Spinner';
 
 import { calculateCategorizedSeverity } from '#utils/domain';
-import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-
+import CollapsibleView from '#components/CollapsibleView';
 
 import {
     hazardTypesSelector,
@@ -86,7 +84,6 @@ class LeftPane extends React.PureComponent {
             <h4 className={styles.heading}>
                 Incidents
             </h4>
-            <Spinner loading={this.props.pending} />
             <Button
                 className={styles.toggleVisualizationButton}
                 onClick={this.handleToggleVisualizationButtonClick}
@@ -116,7 +113,6 @@ class LeftPane extends React.PureComponent {
             <h4 className={styles.heading}>
                 Incidents
             </h4>
-            <Spinner loading={this.props.pending} />
             <Button
                 className={styles.collapseTabularViewButton}
                 onClick={this.handleCollapseTabularViewButtonClick}
