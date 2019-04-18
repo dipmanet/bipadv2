@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import MapSource from '#rscz/Map/MapSource';
@@ -9,30 +10,67 @@ import MapLayer from '#rscz/Map/MapLayer';
 import { mapSources, mapStyles } from '#constants';
 
 import {
+    regionLabelToGeojson,
+
+    getWardFilter,
+    getMunicipalityFilter,
+    getDistrictFilter,
+    getProvinceFilter,
+} from '#utils/domain';
+
+import {
+    provincesSelector,
+    municipalitiesSelector,
+    districtsSelector,
+    wardsSelector,
+
     regionLevelSelector,
     boundsSelector,
+    selectedProvinceIdSelector,
+    selectedDistrictIdSelector,
+    selectedMunicipalityIdSelector,
 } from '#selectors';
 
 const propTypes = {
     boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    regionLevel: PropTypes.number,
+
+    // eslint-disable-next-line react/forbid-prop-types
+    provinces: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    districts: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    municipalities: PropTypes.array.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    wards: PropTypes.array.isRequired,
+
     // eslint-disable-next-line react/forbid-prop-types
     bounds: PropTypes.array.isRequired,
+    selectedProvinceId: PropTypes.number,
+    selectedDistrictId: PropTypes.number,
+    selectedMunicipalityId: PropTypes.number,
     sourceKey: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    mapState: PropTypes.array,
-    regionLevel: PropTypes.number,
 };
 
 const defaultProps = {
     boundsPadding: undefined,
-    sourceKey: 'country',
-    mapState: undefined,
     regionLevel: undefined,
+    selectedProvinceId: undefined,
+    selectedDistrictId: undefined,
+    selectedMunicipalityId: undefined,
+    sourceKey: 'country',
 };
 
 const mapStateToProps = state => ({
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
     regionLevel: regionLevelSelector(state),
     bounds: boundsSelector(state),
+    selectedProvinceId: selectedProvinceIdSelector(state),
+    selectedDistrictId: selectedDistrictIdSelector(state),
+    selectedMunicipalityId: selectedMunicipalityIdSelector(state),
 });
 
 const visibleLayout = {
@@ -46,32 +84,67 @@ class ChoroplethMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
+    getProvincesFeatureCollection = memoize(regionLabelToGeojson);
+    getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
+    getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
+    getWardsFeatureCollection = memoize(regionLabelToGeojson);
+
+    getWardFilter = memoize(getWardFilter);
+    getMunicipalityFilter = memoize(getMunicipalityFilter);
+    getDistrictFilter = memoize(getDistrictFilter);
+    getProvinceFilter = memoize(getProvinceFilter);
+
     render() {
         const {
-            regionLevel,
-
             boundsPadding,
+            regionLevel,
             bounds,
+            provinces,
+            districts,
+            municipalities,
+            wards,
+
+            selectedProvinceId: provinceId,
+            selectedDistrictId: districtId,
+            selectedMunicipalityId: municipalityId,
             sourceKey,
 
-            mapState,
             paint,
+            mapState,
         } = this.props;
 
-        const showProvince = isNotDefined(regionLevel) || regionLevel >= 0;
-        const showDistrict = regionLevel >= 1;
-        const showMunicipality = regionLevel >= 2;
-        const showWard = regionLevel >= 3;
+        const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
+        const showDistrict = [1, 2].includes(regionLevel);
+        const showMunicipality = [2, 3].includes(regionLevel);
+        const showWard = [3, 4].includes(regionLevel);
 
         const showProvinceFill = isNotDefined(regionLevel) || regionLevel === 0;
         const showDistrictFill = regionLevel === 1;
         const showMunicipalityFill = regionLevel === 2;
         const showWardFill = regionLevel === 3;
 
+        const wardFilter = showWard
+            ? this.getWardFilter(provinceId, districtId, municipalityId, wards)
+            : undefined;
+        const municipalityFilter = showMunicipality
+            ? this.getMunicipalityFilter(provinceId, districtId, municipalityId, municipalities)
+            : undefined;
+        const districtFilter = showDistrict
+            ? this.getDistrictFilter(provinceId, districtId, districts)
+            : undefined;
+        const provinceFilter = showProvince
+            ? this.getProvinceFilter(provinceId)
+            : undefined;
+
         const provinceMapState = showProvinceFill ? mapState : undefined;
         const districtMapState = showDistrictFill ? mapState : undefined;
         const municipalityWardState = showMunicipalityFill ? mapState : undefined;
         const wardMapState = showWardFill ? mapState : undefined;
+
+        const provinceLabels = this.getProvincesFeatureCollection(provinces);
+        const districtLabels = this.getDistrictsFeatureCollection(districts);
+        const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
+        const wardLabels = this.getWardsFeatureCollection(wards);
 
         return (
             <Fragment>
@@ -86,6 +159,7 @@ class ChoroplethMap extends React.PureComponent {
                         paint={paint}
                         mapState={wardMapState}
                         layout={showWardFill ? visibleLayout : noneLayout}
+                        filter={wardFilter}
                     />
                 </MapSource>
                 <MapSource
@@ -99,6 +173,7 @@ class ChoroplethMap extends React.PureComponent {
                         paint={paint}
                         mapState={municipalityWardState}
                         layout={showMunicipalityFill ? visibleLayout : noneLayout}
+                        filter={municipalityFilter}
                     />
                 </MapSource>
                 <MapSource
@@ -112,6 +187,7 @@ class ChoroplethMap extends React.PureComponent {
                         paint={paint}
                         mapState={districtMapState}
                         layout={showDistrictFill ? visibleLayout : noneLayout}
+                        filter={districtFilter}
                     />
                 </MapSource>
                 <MapSource
@@ -125,11 +201,12 @@ class ChoroplethMap extends React.PureComponent {
                         paint={paint}
                         mapState={provinceMapState}
                         layout={showProvinceFill ? visibleLayout : noneLayout}
+                        filter={provinceFilter}
                     />
                 </MapSource>
 
                 <MapSource
-                    sourceKey={`${sourceKey}-outline`}
+                    sourceKey={`${sourceKey}-country-outline`}
                     url={mapSources.nepal.url}
                     bounds={bounds}
                     boundsPadding={boundsPadding}
@@ -140,6 +217,7 @@ class ChoroplethMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.ward}
                         paint={mapStyles.ward.choroplethOutline}
                         layout={showWard ? visibleLayout : noneLayout}
+                        filter={wardFilter}
                     />
                     <MapLayer
                         layerKey="municipality-outline"
@@ -147,6 +225,7 @@ class ChoroplethMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.municipality}
                         paint={mapStyles.municipality.choroplethOutline}
                         layout={showMunicipality ? visibleLayout : noneLayout}
+                        filter={municipalityFilter}
                     />
                     <MapLayer
                         layerKey="district-outline"
@@ -154,6 +233,7 @@ class ChoroplethMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.district}
                         paint={mapStyles.district.choroplethOutline}
                         layout={showDistrict ? visibleLayout : noneLayout}
+                        filter={districtFilter}
                     />
                     <MapLayer
                         layerKey="province-outline"
@@ -161,6 +241,62 @@ class ChoroplethMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.province}
                         paint={mapStyles.province.choroplethOutline}
                         layout={showProvince ? visibleLayout : noneLayout}
+                        filter={provinceFilter}
+                    />
+                </MapSource>
+
+                <MapSource
+                    sourceKey={`${sourceKey}-ward-label`}
+                    geoJson={wardLabels}
+                >
+                    <MapLayer
+                        layerKey="ward-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.wardLabel.paint}
+                        layout={showWard ? mapStyles.wardLabel.layout : noneLayout}
+                        filter={wardFilter}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-municipality-label`}
+                    geoJson={municipalityLabels}
+                >
+                    <MapLayer
+                        layerKey="municipality-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.municipalityLabel.paint}
+                        layout={
+                            showMunicipality ? mapStyles.municipalityLabel.layout : noneLayout
+                        }
+                        filter={municipalityFilter}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-district-label`}
+                    geoJson={districtLabels}
+                >
+                    <MapLayer
+                        layerKey="district-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.districtLabel.paint}
+                        layout={showDistrict ? mapStyles.districtLabel.layout : noneLayout}
+                        filter={districtFilter}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-province-label`}
+                    geoJson={provinceLabels}
+                >
+                    <MapLayer
+                        layerKey="province-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.provinceLabel.paint}
+                        layout={showProvince ? mapStyles.provinceLabel.layout : noneLayout}
+                        filter={provinceFilter}
                     />
                 </MapSource>
             </Fragment>
