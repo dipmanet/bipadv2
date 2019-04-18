@@ -20,6 +20,8 @@ const schemaList: Schema[] = [
             channel: { type: 'string' },
             population: { type: 'uint' },
             accessPointCount: { type: 'uint' },
+
+            createdOn: { type: 'string' }, // NOTE: overriding dbentity
         },
     },
     {

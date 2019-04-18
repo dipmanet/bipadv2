@@ -156,7 +156,7 @@ const requests = {
         ),
         query: { distance: 12, meta: true },
         onSuccess: ({ response, props: { setResourceList } }) => {
-            setResourceList({ resourceList: response });
+            setResourceList({ resourceList: response.results });
         },
         onMount: ({ props: { incidentId } }) => !!incidentId,
         extras: {
@@ -173,7 +173,7 @@ const requests = {
             meta: true,
         }),
         onSuccess: ({ response, props: { setResourceList } }) => {
-            setResourceList({ resourceList: response });
+            setResourceList({ resourceList: response.results });
         },
         extras: {
             schemaName: 'responseResponse',
