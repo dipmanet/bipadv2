@@ -15,7 +15,7 @@ const resourceAttributes = {
                 options: operatorOptions,
             },
         },
-        { key: 'openingHours', label: 'Opening Hours', type: 'string', filter: {} },
+        { key: 'openingHours', label: 'Opening Hours', type: 'string' },
         { key: 'phoneNumber', label: 'Phone Number', type: 'string' },
 
         { key: 'bedCount', label: 'Number of Beds', type: 'number', filter: {} },
@@ -35,7 +35,7 @@ const resourceAttributes = {
         { key: 'cbsCode', label: 'Cbs Code', type: 'string' },
         { key: 'population', label: 'Population', type: 'number', filter: {} },
         { key: 'accessPointCount', label: 'Access Point Count', type: 'number', filter: {} },
-        { key: 'type', label: 'Type', type: 'string', filter: {} },
+        { key: 'type', label: 'Type', type: 'string' },
         {
             key: 'channel',
             label: 'Channel',

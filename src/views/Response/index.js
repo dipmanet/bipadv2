@@ -8,6 +8,8 @@ import {
     createRequestClient,
 } from '#request';
 
+import { transformDateRangeFilterParam } from '#utils/transformations';
+
 import {
     setIncidentActionIP,
     setResourceListActionRP,
@@ -67,6 +69,10 @@ class Response extends React.PureComponent {
 
     setFilter = (filterFunction) => {
         this.setState({ filterFunction });
+    }
+
+    setDistanceFilter = ({ min, max }) => {
+        this.props.requests.filteredResponseRequest.do({ min, max });
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -131,6 +137,7 @@ class Response extends React.PureComponent {
                     rightContent={
                         <ResponseFilter
                             setFilter={this.setFilter}
+                            setDistanceFilter={this.setDistanceFilter}
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
                     }
@@ -143,13 +150,32 @@ class Response extends React.PureComponent {
 const requests = {
     responseRequest: {
         url: ({ props: { incidentId } }) => (
-            `/incident/${incidentId}/response/?distance=12&meta=true`
+            `/incident/${incidentId}/response/`
         ),
+        query: { distance: 12, meta: true },
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });
         },
         onMount: ({ props: { incidentId } }) => !!incidentId,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'responseResponse',
+        },
+    },
+    filteredResponseRequest: {
+        url: ({ props: { incidentId } }) => (
+            `/incident/${incidentId}/response/`
+        ),
+        query: ({ params: { max, min } }) => ({
+            distance__gte: min, // eslint-disable-line @typescript-eslint/camelcase
+            distance__lte: max, // eslint-disable-line @typescript-eslint/camelcase
+            meta: true,
+        }),
+        onSuccess: ({ response, props: { setResourceList } }) => {
+            setResourceList({ resourceList: response });
+        },
+        extras: {
+            schemaName: 'responseResponse',
+        },
     },
     incidentRequest: {
         url: ({ props: { incidentId } }) => (

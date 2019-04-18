@@ -5,6 +5,7 @@ import dashboardSchemas from './dashboard';
 import commonSchemas from './common';
 import incidentSchemas from './incident';
 import realtimeSchemas from './realtime';
+import responseSchemas from './response';
 
 const userDefinedSchemas: Schema[] = [
     {
@@ -30,6 +31,7 @@ const dict = new Dict({ warning });
     ...commonSchemas,
     ...incidentSchemas,
     ...realtimeSchemas,
+    ...responseSchemas,
 ].forEach(schema => dict.put(schema.doc.name, schema));
 
 export default dict;
