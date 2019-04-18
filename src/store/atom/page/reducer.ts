@@ -109,7 +109,7 @@ export const setIncidentActionIP = ({ incident }: { incident: Type.Incident}) =>
 });
 
 export const setFiltersActionIP = (
-    { faramValues, faramErrors, pristine }: Type.IncidentPageFilter,
+    { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
     type: Type.PageType.IP__SET_FILTERS,
     faramValues,

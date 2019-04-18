@@ -13,9 +13,10 @@ import { getAdminLevelTitles } from '#utils/domain';
 
 import {
     provincesSelector,
-    districtsSelector,
     municipalitiesSelector,
+    districtsSelector,
     wardsSelector,
+
     regionLevelSelector,
     boundsSelector,
     selectedProvinceIdSelector,
@@ -26,6 +27,7 @@ import {
 const propTypes = {
     boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     regionLevel: PropTypes.number,
+
     // eslint-disable-next-line react/forbid-prop-types
     provinces: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
@@ -34,6 +36,7 @@ const propTypes = {
     municipalities: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     wards: PropTypes.array.isRequired,
+
     // eslint-disable-next-line react/forbid-prop-types
     bounds: PropTypes.array.isRequired,
     selectedProvinceId: PropTypes.number,
@@ -75,9 +78,107 @@ class CommonMap extends React.PureComponent {
     static defaultProps = defaultProps;
 
     getProvincesFeatureCollection = memoize(getAdminLevelTitles);
+
     getDistrictsFeatureCollection = memoize(getAdminLevelTitles);
+
     getMunicipalitiesFeatureCollection = memoize(getAdminLevelTitles);
+
     getWardsFeatureCollection = memoize(getAdminLevelTitles);
+
+    getWardFilter = (
+        selectedProvinceId, selectedDistrictId, selectedMunicipalityId, wards,
+    ) => {
+        if (selectedMunicipalityId) {
+            return [
+                'match',
+                ['id'],
+                wards
+                    .filter(w => w.municipality === selectedMunicipalityId)
+                    .map(w => w.id),
+                true,
+                false,
+            ];
+        }
+        if (selectedDistrictId) {
+            return [
+                'match',
+                ['id'],
+                wards
+                    .filter(w => w.district === selectedDistrictId)
+                    .map(w => w.id),
+                true,
+                false,
+            ];
+        }
+        if (selectedProvinceId) {
+            return [
+                'match',
+                ['id'],
+                wards
+                    .filter(w => w.province === selectedProvinceId)
+                    .map(w => w.id),
+                true,
+                false,
+            ];
+        }
+        return undefined;
+    }
+
+    getMunicipalityFilter = (
+        selectedProvinceId, selectedDistrictId, selectedMunicipalityId, municipalities,
+    ) => {
+        if (selectedMunicipalityId) {
+            return ['==', ['id'], selectedMunicipalityId];
+        }
+        if (selectedDistrictId) {
+            return [
+                'match',
+                ['id'],
+                municipalities
+                    .filter(m => m.district === selectedDistrictId)
+                    .map(m => m.id),
+                true,
+                false,
+            ];
+        }
+        if (selectedProvinceId) {
+            return [
+                'match',
+                ['id'],
+                municipalities
+                    .filter(m => m.province === selectedProvinceId)
+                    .map(m => m.id),
+                true,
+                false,
+            ];
+        }
+        return undefined;
+    }
+
+    getDistrictFilter = (selectedProvinceId, selectedDistrictId, districts) => {
+        if (selectedDistrictId) {
+            return ['==', ['id'], selectedDistrictId];
+        }
+        if (selectedProvinceId) {
+            return [
+                'match',
+                ['id'],
+                districts
+                    .filter(d => d.province === selectedProvinceId)
+                    .map(d => d.id),
+                true,
+                false,
+            ];
+        }
+        return undefined;
+    }
+
+    getProvinceFilter = (selectedProvinceId) => {
+        if (selectedProvinceId) {
+            return ['==', ['id'], selectedProvinceId];
+        }
+        return undefined;
+    }
 
     render() {
         const {
@@ -88,66 +189,38 @@ class CommonMap extends React.PureComponent {
             districts,
             municipalities,
             wards,
-            selectedProvinceId,
-            selectedDistrictId,
-            selectedMunicipalityId,
+
+            selectedProvinceId: provinceId,
+            selectedDistrictId: districtId,
+            selectedMunicipalityId: municipalityId,
             sourceKey,
         } = this.props;
+
+        const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
+        const showDistrict = [1, 2].includes(regionLevel);
+        const showMunicipality = [2, 3].includes(regionLevel);
+        const showWard = [3, 4].includes(regionLevel);
+
+        const wardFilter = showWard
+            ? this.getWardFilter(provinceId, districtId, municipalityId, wards)
+            : undefined;
+        const municipalityFilter = showMunicipality
+            ? this.getMunicipalityFilter(provinceId, districtId, municipalityId, municipalities)
+            : undefined;
+        const districtFilter = showDistrict
+            ? this.getDistrictFilter(provinceId, districtId, districts)
+            : undefined;
+        const provinceFilter = showProvince
+            ? this.getProvinceFilter(provinceId)
+            : undefined;
 
         const provinceLabels = this.getProvincesFeatureCollection(provinces);
         const districtLabels = this.getDistrictsFeatureCollection(districts);
         const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
         const wardLabels = this.getWardsFeatureCollection(wards);
 
-        const showProvince = isNotDefined(regionLevel) || regionLevel >= 0;
-        const showDistrict = regionLevel >= 1;
-        const showMunicipality = regionLevel >= 2;
-        const showWard = regionLevel >= 3;
-
-        const showProvinceLabel = isNotDefined(regionLevel) || regionLevel === 0;
-        const showDistrictLabel = regionLevel === 1;
-        const showMunicipalityLabel = regionLevel === 2;
-        const showWardLabel = regionLevel === 3;
-
         return (
             <Fragment>
-                <MapSource
-                    sourceKey={`${sourceKey}-municipality-fill`}
-                    url={mapSources.nepal.url}
-                >
-                    <MapLayer
-                        layerKey="municipality-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.municipality}
-                        paint={mapStyles.municipality.fill}
-                        hoveredId={selectedMunicipalityId}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-district-fill`}
-                    url={mapSources.nepal.url}
-                >
-                    <MapLayer
-                        layerKey="district-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.fill}
-                        hoveredId={selectedDistrictId}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-province-fill`}
-                    url={mapSources.nepal.url}
-                >
-                    <MapLayer
-                        layerKey="province-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.fill}
-                        hoveredId={selectedProvinceId}
-                    />
-                </MapSource>
-
                 <MapSource
                     sourceKey={`${sourceKey}-country-outline`}
                     url={mapSources.nepal.url}
@@ -160,6 +233,7 @@ class CommonMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.ward}
                         paint={mapStyles.ward.outline}
                         layout={showWard ? visibleLayout : noneLayout}
+                        filter={wardFilter}
                     />
                     <MapLayer
                         layerKey="municipality-outline"
@@ -167,6 +241,7 @@ class CommonMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.municipality}
                         paint={mapStyles.municipality.outline}
                         layout={showMunicipality ? visibleLayout : noneLayout}
+                        filter={municipalityFilter}
                     />
                     <MapLayer
                         layerKey="district-outline"
@@ -174,6 +249,7 @@ class CommonMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.district}
                         paint={mapStyles.district.outline}
                         layout={showDistrict ? visibleLayout : noneLayout}
+                        filter={districtFilter}
                     />
                     <MapLayer
                         layerKey="province-outline"
@@ -181,32 +257,21 @@ class CommonMap extends React.PureComponent {
                         sourceLayer={mapSources.nepal.layers.province}
                         paint={mapStyles.province.outline}
                         layout={showProvince ? visibleLayout : noneLayout}
+                        filter={provinceFilter}
                     />
                 </MapSource>
 
                 <MapSource
-                    sourceKey={`${sourceKey}-province-label`}
-                    geoJson={provinceLabels}
+                    sourceKey={`${sourceKey}-ward-label`}
+                    geoJson={wardLabels}
                 >
                     <MapLayer
-                        layerKey="province-label"
+                        layerKey="ward-label"
                         type="symbol"
                         property="adminLevelId"
-                        paint={mapStyles.provinceLabel.paint}
-                        layout={showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-district-label`}
-                    geoJson={districtLabels}
-                >
-                    <MapLayer
-                        layerKey="district-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.districtLabel.paint}
-                        layout={showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout}
-                        // minzoom={6}
+                        paint={mapStyles.wardLabel.paint}
+                        layout={showWard ? mapStyles.wardLabel.layout : noneLayout}
+                        filter={wardFilter}
                     />
                 </MapSource>
                 <MapSource
@@ -219,22 +284,35 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.municipalityLabel.paint}
                         layout={
-                            showMunicipalityLabel ? mapStyles.municipalityLabel.layout : noneLayout
+                            showMunicipality ? mapStyles.municipalityLabel.layout : noneLayout
                         }
-                        // minzoom={8}
+                        filter={municipalityFilter}
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey={`${sourceKey}-ward-label`}
-                    geoJson={wardLabels}
+                    sourceKey={`${sourceKey}-district-label`}
+                    geoJson={districtLabels}
                 >
                     <MapLayer
-                        layerKey="ward-label"
+                        layerKey="district-label"
                         type="symbol"
                         property="adminLevelId"
-                        paint={mapStyles.wardLabel.paint}
-                        layout={showWardLabel ? mapStyles.wardLabel.layout : noneLayout}
-                        // minzoom={9}
+                        paint={mapStyles.districtLabel.paint}
+                        layout={showDistrict ? mapStyles.districtLabel.layout : noneLayout}
+                        filter={districtFilter}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-province-label`}
+                    geoJson={provinceLabels}
+                >
+                    <MapLayer
+                        layerKey="province-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.provinceLabel.paint}
+                        layout={showProvince ? mapStyles.provinceLabel.layout : noneLayout}
+                        filter={provinceFilter}
                     />
                 </MapSource>
             </Fragment>

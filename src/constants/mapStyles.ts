@@ -1,8 +1,7 @@
 export default {
     province: {
         outline: {
-            // 'line-color': '#a3b7e3',
-            'line-color': 'red',
+            'line-color': '#a3b7e3',
             'line-width': 2,
         },
         choroplethOutline: {
@@ -21,8 +20,7 @@ export default {
     },
     district: {
         outline: {
-            'line-color': 'blue',
-            // 'line-color': '#a3b7e3',
+            'line-color': '#a3b7e3',
             'line-width': 1.4,
         },
         choroplethOutline: {
@@ -42,8 +40,7 @@ export default {
     },
     municipality: {
         outline: {
-            'line-color': 'green',
-            // 'line-color': '#a3b7e3',
+            'line-color': '#a3b7e3',
             'line-width': 0.8,
         },
         choroplethOutline: {
@@ -62,8 +59,7 @@ export default {
     },
     ward: {
         outline: {
-            'line-color': 'yellow',
-            // 'line-color': '#a3b7e3',
+            'line-color': '#a3b7e3',
             'line-width': 0.5,
         },
         choroplethOutline: {
@@ -91,8 +87,10 @@ export default {
         },
         animatedCircle: {
             'circle-color': ['get', 'hazardColor'],
-            'circle-radius': 100,
-            'circle-opacity': 1,
+
+            'circle-radius': 0,
+            'circle-opacity': 0,
+
             'circle-radius-transition': { duration: 0 },
             'circle-opacity-transition': { duration: 0 },
             'circle-stroke-opacity': 0.2,
@@ -173,8 +171,10 @@ export default {
         },
         animatedFill: {
             'circle-color': ['get', 'hazardColor'],
+
             'circle-radius': 0,
-            'circle-opacity': 1,
+            'circle-opacity': 0,
+
             'circle-radius-transition': { duration: 0 },
             'circle-opacity-transition': { duration: 0 },
             'circle-stroke-opacity': 0.2,
@@ -337,7 +337,8 @@ export default {
         layout: {
             visibility: 'visible',
             'text-field': ['get', 'title'],
-            'text-size': 16,
+            'text-size': 18,
+            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -352,7 +353,8 @@ export default {
         layout: {
             visibility: 'visible',
             'text-field': ['get', 'title'],
-            'text-size': 10,
+            'text-size': 14,
+            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -367,7 +369,8 @@ export default {
         layout: {
             visibility: 'visible',
             'text-field': ['get', 'title'],
-            'text-size': 10,
+            'text-size': 12,
+            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -383,6 +386,7 @@ export default {
             visibility: 'visible',
             'text-field': ['get', 'title'],
             'text-size': 10,
+            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },

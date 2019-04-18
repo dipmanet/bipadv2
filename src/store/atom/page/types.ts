@@ -3,18 +3,32 @@ import { Obj } from '@togglecorp/fujs';
 export interface Province {
     id: number;
     bbox: number[];
+    centroid: unknown;
+    title: string;
 }
 export interface District {
     id: number;
     bbox: number[];
+    centroid: unknown;
+    title: string;
+    province: number;
 }
 export interface Municipality {
     id: number;
     bbox: number[];
+    centroid: unknown;
+    title: string;
+    province?: number;
+    district: number;
 }
 export interface Ward {
     id: number;
     // bbox: number[];
+    centroid: unknown;
+    title: string;
+    province?: number;
+    district?: number;
+    municipality: number;
 }
 export interface WithHazard {
     id: number;
@@ -198,7 +212,7 @@ export interface RealTimeMonitoringPage {
 
 export interface ProjectsProfileFilters {
     faramValues: {
-        region: Region;
+        region?: Region;
         priority?: string;
         subPriority?: string;
         activities?: string;
@@ -408,7 +422,7 @@ export interface SetLossAndDamageFilters extends FiltersWithRegion {
 }
 
 // projects profile page
-export interface SetProjectsProfileFilterss extends ProjectsProfileFilters {
+export interface SetProjectsProfileFilters extends ProjectsProfileFilters {
     type: typeof PageType.PP__SET_FILTERS;
 }
 
@@ -420,5 +434,5 @@ export type PageActionTypes = (
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
-    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters
+    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters
 );

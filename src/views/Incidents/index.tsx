@@ -118,7 +118,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ...transformDateRangeFilterParam(filters, 'created_on'),
         }),
         onSuccess: ({ response, props: { setEventList } }) => {
-            interface Response { results: PageTypes.Event[] }
+            interface Response { results: PageType.Event[] }
             const { results: eventList = [] } = response as Response;
             setEventList({ eventList });
         },

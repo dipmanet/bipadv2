@@ -3,10 +3,7 @@ import { mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
 
-const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
-
-const resourceTypesSelector = ({ page }: AppState) =>
-    page.resourceTypes;
+const emptyList: unknown[] = [];
 
 const dashboardPageSelector = ({ page }: AppState) =>
     page.dashboardPage;
@@ -21,6 +18,12 @@ const responsePageSelector = ({ page }: AppState) => (
 const realTimeMonitoringPageSelector = ({ page }: AppState) =>
     page.realTimeMonitoringPage;
 
+const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
+
+const resourceTypesSelector = ({ page }: AppState) => (
+    page.resourceTypes || emptyList
+);
+
 // Popup
 
 export const initialPopupShownSelector = ({ page }: AppState) => page.initialPopupShown;
@@ -34,36 +37,79 @@ export const regionLevelSelector = createSelector(
     region => region.adminLevel,
 );
 
-export const districtsSelector = ({ page }: AppState) =>
-    page.districts || [];
-
-export const provincesSelector = ({ page }: AppState) =>
-    page.provinces || [];
-
-export const municipalitiesSelector = ({ page }: AppState) =>
-    page.municipalities || [];
-
-export const wardsSelector = ({ page }: AppState) =>
-    page.wards || [];
-
 const getId = (val: { id: number }) => val.id;
 
-export const regionsSelector = createSelector(
+export const provincesSelector = ({ page }: AppState) =>
+    page.provinces || emptyList;
+
+export const provincesMapSelector = createSelector(
     provincesSelector,
+    provinces => listToMap(provinces, getId),
+);
+
+export const districtsSelector = ({ page }: AppState) =>
+    page.districts || emptyList;
+
+export const districtsMapSelector = createSelector(
     districtsSelector,
+    districts => listToMap(districts, getId),
+);
+
+const municipalitiesRawSelector = ({ page }: AppState) =>
+    page.municipalities || emptyList;
+
+export const municipalitiesSelector = createSelector(
+    municipalitiesRawSelector,
+    districtsMapSelector,
+    (municipalities, districts) => (
+        municipalities.map((m) => {
+            const district = districts[m.district];
+            if (!district) {
+                return m;
+            }
+            return { ...m, province: district.province };
+        })
+    ),
+);
+
+export const municipalitiesMapSelector = createSelector(
     municipalitiesSelector,
-    wardsSelector,
-    (provinces, districts, municipalities, wards) => ({
-        provinces: listToMap(provinces, getId),
-        districts: listToMap(districts, getId),
-        municipalities: listToMap(municipalities, getId),
-        wards: listToMap(wards, getId),
-    }),
+    municipalities => listToMap(municipalities, getId),
+);
+
+const wardsRawSelector = ({ page }: AppState) =>
+    page.wards || emptyList;
+
+export const wardsSelector = createSelector(
+    wardsRawSelector,
+    municipalitiesMapSelector,
+    (wards, municipalities) => (
+        wards.map((w) => {
+            const municipality = municipalities[w.municipality];
+            if (!municipality) {
+                return w;
+            }
+            return { ...w, province: municipality.province, district: municipality.district };
+        })
+    ),
 );
 
 export const wardsMapSelector = createSelector(
     wardsSelector,
     wards => listToMap(wards, getId),
+);
+
+export const regionsSelector = createSelector(
+    provincesMapSelector,
+    districtsMapSelector,
+    municipalitiesMapSelector,
+    wardsMapSelector,
+    (provinces, districts, municipalities, wards) => ({
+        provinces,
+        districts,
+        municipalities,
+        wards,
+    }),
 );
 
 export const adminLevelListSelector = ({ page }: AppState) =>
