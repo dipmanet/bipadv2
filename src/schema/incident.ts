@@ -154,6 +154,8 @@ const schemaList: Schema[] = [
             point: { type: 'unknown' }, // FIXME: geometry object
             polygon: { type: 'unknown' }, // FIXME: geometry object
             loss: { type: 'loss' },
+            createdBy: { type: 'number' },
+            updatedBy: { type: 'number' },
         },
     },
     {
@@ -216,6 +218,7 @@ const schemaList: Schema[] = [
                                                 age: { type: 'uint' },
                                                 belowPoverty: { type: 'boolean' },
                                                 count: { type: 'uint' },
+                                                address: { type: 'string' },
                                                 // disabled:
                                                 status: { type: 'peopleStatus', required: true },
                                                 gender: { type: 'gender' },

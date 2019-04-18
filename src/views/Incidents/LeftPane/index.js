@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs, listToMap } from '@togglecorp/fujs';
+import { _cs, isDefined } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import { calculateCategorizedSeverity } from '#utils/domain';
+import { calculateCategorizedSeverity, lossMetrics } from '#utils/domain';
+import { sum } from '#utils/common';
+
 import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
@@ -33,14 +35,6 @@ const defaultProps = {
     className: undefined,
     pending: false,
 };
-
-const metricOptions = [
-    { key: 'estimatedLoss', label: 'Total estimated loss(Rs)' },
-    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
-    { key: 'peopleDeathCount', label: 'Total people death' },
-];
-
 
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
@@ -161,17 +155,15 @@ class LeftPane extends React.PureComponent {
         }));
 
         // Calculate summary
-        const summaryData = {};
-        incidentList.forEach((incident) => {
-            metricOptions.forEach((metric) => {
-                const { key } = metric;
-                const { loss } = incident;
-                if (!loss) {
-                    return;
-                }
-                summaryData[key] = (summaryData[key] || 0) + (loss[key] || 0);
-            });
-        });
+        const summaryData = lossMetrics.reduce((acc, { key }) => ({
+            ...acc,
+            [key]: sum(
+                incidentList
+                    .filter(incident => incident.loss)
+                    .map(incident => incident.loss[key])
+                    .filter(isDefined),
+            ),
+        }), {});
 
         return (
             <CollapsibleView
@@ -218,15 +210,13 @@ class LeftPane extends React.PureComponent {
                                                     label="Total incidents"
                                                     value={incidentList.length}
                                                 />
-                                                {
-                                                    metricOptions.map(metric => (
-                                                        <TextOutput
-                                                            key={metric.key}
-                                                            label={metric.label}
-                                                            value={summaryData[metric.key]}
-                                                        />
-                                                    ))
-                                                }
+                                                { lossMetrics.map(metric => (
+                                                    <TextOutput
+                                                        key={metric.key}
+                                                        label={metric.label}
+                                                        value={summaryData[metric.key]}
+                                                    />
+                                                ))}
                                             </div>
                                         </React.Fragment>
                                     )}

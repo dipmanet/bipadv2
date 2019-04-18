@@ -105,8 +105,6 @@ class IncidentMap extends React.PureComponent {
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
 
-        console.warn(pointFeatureCollection);
-
         return (
             <React.Fragment>
                 <CommonMap

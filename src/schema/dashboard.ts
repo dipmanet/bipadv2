@@ -14,10 +14,12 @@ const schemaList: Schema[] = [
             hazard: { type: 'uint' },
             event: { type: 'object' },
             verified: { type: 'boolean' },
-            polygon: { type: 'object' }, // geometry object
+            point: { type: 'unknown' }, // geometry object
+            polygon: { type: 'unknown' }, // geometry object
             public: { type: 'boolean' },
             expireOn: { type: 'string' }, // date
             startedOn: { type: 'string', required: true }, // date
+            wards: { type: 'array.number' },
         },
     },
     {
@@ -29,7 +31,7 @@ const schemaList: Schema[] = [
             count: { type: 'number' },
             next: { type: 'string' },
             previous: { type: 'number' },
-            results: { type: 'array.event' },
+            results: { type: 'array.alert' },
         },
     },
     {
@@ -40,9 +42,11 @@ const schemaList: Schema[] = [
         },
         fields: {
             startedOn: { type: 'string' }, // date
+            endedOn: { type: 'string' }, // date
             createdOn: { type: 'string' }, // date
             title: { type: 'string', required: true },
             description: { type: 'string' },
+            point: { type: 'unknown' }, // geometry object
             polygon: { type: 'unknown' }, // geometry object
             severity: { type: 'string' },
         },

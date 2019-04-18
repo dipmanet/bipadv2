@@ -115,6 +115,15 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
     ));
 };
 
+// FIXME: use this everywhere
+export const lossMetrics = [
+    { key: 'count', label: 'No. of incidents' },
+    { key: 'estimatedLoss', label: 'Total estimated loss' },
+    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
+    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
+    { key: 'peopleDeathCount', label: 'Total people death' },
+];
+
 // CONVERSION TO GEOJSON
 
 export const alertToPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
@@ -498,7 +507,6 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
                 },
             })),
     };
-    console.warn('geojson', geojson);
     return geojson;
 };
 
