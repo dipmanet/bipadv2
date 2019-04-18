@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-// import { connect } from 'react-redux';
-// import memoize from 'memoize-one';
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 
 import MapSource from '#rscz/Map/MapSource';
 import MapLayer from '#rscz/Map/MapLayer';
 
 import { mapSources, mapStyles } from '#constants';
-// import { regionLabelToGeojson } from '#utils/domain';
+import { regionLabelToGeojson } from '#utils/domain';
 
 import {
     provincesSelector,
@@ -39,32 +39,26 @@ class ZoomMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    /*
     getProvincesFeatureCollection = memoize(regionLabelToGeojson);
     getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
     getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
     getWardsFeatureCollection = memoize(regionLabelToGeojson);
-    */
 
     render() {
         const {
             boundsPadding,
             bounds,
             sourceKey,
-            /*
             provinces,
             districts,
             municipalities,
             wards,
-            */
         } = this.props;
 
-        /*
         const provinceLabels = this.getProvincesFeatureCollection(provinces);
         const districtLabels = this.getDistrictsFeatureCollection(districts);
         const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
         const wardLabels = this.getWardsFeatureCollection(wards);
-        */
 
         return (
             <React.Fragment>
@@ -102,44 +96,9 @@ class ZoomMap extends React.PureComponent {
                         paint={mapStyles.province.outline}
                     />
                 </MapSource>
-                {/*
+
                 <MapSource
-                    sourceKey="province-label-source"
-                    geoJson={provinceLabels}
-                >
-                    <MapLayer
-                        layerKey="province-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.provinceLabel.paint}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey="district-label-source"
-                    geoJson={districtLabels}
-                >
-                    <MapLayer
-                        layerKey="district-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.districtLabel.paint}
-                        minzoom={6}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey="municipality-label-source"
-                    geoJson={municipalityLabels}
-                >
-                    <MapLayer
-                        layerKey="municipality-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.municipalityLabel.paint}
-                        minzoom={8}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey="ward-label-source"
+                    sourceKey={`${sourceKey}-ward-label`}
                     geoJson={wardLabels}
                 >
                     <MapLayer
@@ -147,14 +106,51 @@ class ZoomMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.wardLabel.paint}
+                        layout={mapStyles.wardLabel.layout}
                         minzoom={9}
                     />
                 </MapSource>
-                */}
+                <MapSource
+                    sourceKey={`${sourceKey}-municipality-label`}
+                    geoJson={municipalityLabels}
+                >
+                    <MapLayer
+                        layerKey="municipality-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.municipalityLabel.paint}
+                        layout={mapStyles.municipalityLabel.layout}
+                        minzoom={8}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-district-label`}
+                    geoJson={districtLabels}
+                >
+                    <MapLayer
+                        layerKey="district-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.districtLabel.paint}
+                        layout={mapStyles.districtLabel.layout}
+                        minzoom={6}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-province-label`}
+                    geoJson={provinceLabels}
+                >
+                    <MapLayer
+                        layerKey="province-label"
+                        type="symbol"
+                        property="adminLevelId"
+                        paint={mapStyles.provinceLabel.paint}
+                        layout={mapStyles.provinceLabel.layout}
+                    />
+                </MapSource>
             </React.Fragment>
         );
     }
 }
 
-// export default connect(mapStateToProps)(ZoomMap);
-export default ZoomMap;
+export default connect(mapStateToProps)(ZoomMap);
