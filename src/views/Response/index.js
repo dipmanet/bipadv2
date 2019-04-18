@@ -22,6 +22,7 @@ import {
 } from '#selectors';
 
 import Page from '#components/Page';
+import Loading from '#components/Loading';
 import IncidentInfo from '#components/IncidentInfo';
 
 import ResourceList from './ResourceList';
@@ -121,6 +122,7 @@ class Response extends React.PureComponent {
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
                 />
+                <Loading pending={pending} />
                 <Page
                     leftContentClassName={styles.incidentDetails}
                     leftContent={
@@ -154,7 +156,7 @@ const requests = {
         ),
         query: { distance: 12, meta: true },
         onSuccess: ({ response, props: { setResourceList } }) => {
-            setResourceList({ resourceList: response });
+            setResourceList({ resourceList: response.results });
         },
         onMount: ({ props: { incidentId } }) => !!incidentId,
         extras: {
@@ -171,7 +173,7 @@ const requests = {
             meta: true,
         }),
         onSuccess: ({ response, props: { setResourceList } }) => {
-            setResourceList({ resourceList: response });
+            setResourceList({ resourceList: response.results });
         },
         extras: {
             schemaName: 'responseResponse',

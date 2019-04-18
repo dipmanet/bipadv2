@@ -5,6 +5,7 @@ import { Obj } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import HazardsLegend from '#components/HazardsLegend';
+import Loading from '#components/Loading';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
@@ -238,6 +239,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     rightPaneExpanded={rightPaneExpanded}
                     recentDay={RECENT_DAY}
                 />
+                <Loading pending={pending} />
                 <Page
                     leftContent={
                         <LeftPane

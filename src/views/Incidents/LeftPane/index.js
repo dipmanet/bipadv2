@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
-import Spinner from '#rscz/Spinner';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { calculateCategorizedSeverity } from '#utils/domain';
-import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
-
+import CollapsibleView from '#components/CollapsibleView';
 
 import {
     hazardTypesSelector,
@@ -86,7 +85,6 @@ class LeftPane extends React.PureComponent {
             <h4 className={styles.heading}>
                 Incidents
             </h4>
-            <Spinner loading={this.props.pending} />
             <Button
                 className={styles.toggleVisualizationButton}
                 onClick={this.handleToggleVisualizationButtonClick}
@@ -116,7 +114,6 @@ class LeftPane extends React.PureComponent {
             <h4 className={styles.heading}>
                 Incidents
             </h4>
-            <Spinner loading={this.props.pending} />
             <Button
                 className={styles.collapseTabularViewButton}
                 onClick={this.handleCollapseTabularViewButtonClick}
@@ -161,12 +158,13 @@ class LeftPane extends React.PureComponent {
                 collapsedViewContainerClassName={styles.showIncidentsButtonContainer}
                 collapsedView={
                     <React.Fragment>
-                        <Button
+                        <PrimaryButton
                             className={styles.showIncidentsButton}
                             onClick={this.handleShowIncidentsButtonClick}
-                            iconName={iconNames.incident}
-                            title="Show alerts"
-                        />
+                            title="Show incidents"
+                        >
+                            Show Incidents
+                        </PrimaryButton>
                     </React.Fragment>
                 }
                 expandedViewContainerClassName={styles.incidentsContainer}

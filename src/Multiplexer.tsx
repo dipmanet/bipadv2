@@ -3,11 +3,11 @@ import React, { Fragment } from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
-import Spinner from '#rscz/Spinner';
 
 import Map from '#rscz/Map/index';
 import { District, Province, Municipality } from '#store/atom/page/types';
 
+import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import { routeSettings } from '#constants';
 import { AppState } from '#store/types';
@@ -48,22 +48,6 @@ const loadingStyle: React.CSSProperties = {
     borderRadius: '3px',
 };
 
-const LoadingResources = () => (
-    <div style={loadingStyle}>
-        <Spinner />
-        <div style={{ marginLeft: 6 }}>
-            Loading Resources
-        </div>
-    </div>
-);
-const LoadingPage = () => (
-    <div style={loadingStyle}>
-        <Spinner />
-        <div style={{ marginLeft: 6 }}>
-            Loading Page
-        </div>
-    </div>
-);
 const ErrorInPage = () => (
     <div style={loadingStyle}>
         Some problem occured.
@@ -72,6 +56,12 @@ const ErrorInPage = () => (
 
 // ROUTES
 
+const LoadingPage = () => (
+    <Loading
+        text="Loading Page"
+        pending
+    />
+);
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Component = errorBound<typeof settings>(ErrorInPage)(
         helmetify(
@@ -153,7 +143,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private renderRoutes = () => {
         const { pending } = this.props;
         if (pending) {
-            return (<LoadingResources />);
+            return (
+                <Loading
+                    text="Loading Resources"
+                    pending
+                />
+            );
         }
         return (
             <Router>

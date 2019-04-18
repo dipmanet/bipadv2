@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Faram from '@togglecorp/faram';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import { hazardIcons } from '#resources/data';
 
 import {
@@ -124,10 +125,12 @@ export default class IncidentsFilter extends React.PureComponent {
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFiltersButtonContainer}
                 collapsedView={
-                    <Button
-                        iconName={iconNames.filter}
+                    <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
-                    />
+                        title="Show filters"
+                    >
+                        Show Filters
+                    </PrimaryButton>
                 }
                 expandedViewContainerClassName={styles.filtersContainer}
                 expandedView={

@@ -12,12 +12,6 @@ $color-background: rgba(255, 255, 255, .9);
     .show-alerts-button-container {
         align-items: center;
         transform-origin: 0 0;
-
-        .show-alerts-button {
-            padding: $spacing-extra-small $spacing-small;
-            color: $color-danger;
-            font-size: $font-size-extra-large;
-        }
     }
 
     .overview-container {
