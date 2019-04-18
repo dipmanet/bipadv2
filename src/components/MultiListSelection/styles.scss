@@ -1,8 +1,21 @@
 @import '~base-scss/base';
 
 .multi-list-selection {
-    .label {
-        margin-bottom: $spacing-extra-small;
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .label {
+            margin-bottom: $spacing-extra-small;
+            padding: $spacing-extra-small;
+        }
+
+        .clear-button {
+            padding: $spacing-extra-small;
+            color: $color-danger;
+            font-size: $font-size-extra-small;
+        }
     }
 
     .options {
@@ -48,7 +61,7 @@
             }
 
             &.active {
-                background-color: $color-accent;
+                background-color: var(--color-accent-light);
 
                 .icon {
                     opacity: 1;
@@ -56,13 +69,13 @@
 
                     .svg {
                         path {
-                            fill: $color-text-on-accent;
+                            fill: $color-accent;
                         }
                     }
                 }
 
                 .title {
-                    color: $color-text-on-accent;
+                    color: $color-accent;
                 }
             }
         }

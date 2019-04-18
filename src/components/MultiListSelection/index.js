@@ -4,6 +4,8 @@ import ReactSVG from 'react-svg';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
+import { iconNames } from '#constants';
+
 import Button from '#rsca/Button';
 import Label from '#rsci/Label';
 import ListView from '#rscv/List/ListView';
@@ -11,14 +13,16 @@ import ListView from '#rscv/List/ListView';
 import styles from './styles.scss';
 
 const propTypes = {
-    options: PropTypes.array,
+    options: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    value: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    onChange: PropTypes.func,
     className: PropTypes.string,
     showLabel: PropTypes.bool,
+    label: PropTypes.string,
     labelSelector: PropTypes.func,
     keySelector: PropTypes.func,
     titleSelector: PropTypes.func,
     iconSelector: PropTypes.func,
-    value: PropTypes.array,
 };
 
 const defaultProps = {
@@ -26,11 +30,15 @@ const defaultProps = {
     keySelector: d => d.key,
     titleSelector: undefined,
     iconSelector: d => d.icon,
+    label: '',
     showLabel: true,
     options: [],
     value: [],
+    onChange: () => {},
     className: '',
 };
+
+const emptyArray = [];
 
 @FaramInputElement
 export default class MultiListSelection extends React.PureComponent {
@@ -60,7 +68,6 @@ export default class MultiListSelection extends React.PureComponent {
 
     handleOptionClick = ({ params: { optionKey } }) => {
         const {
-            keySelector,
             value,
             onChange,
         } = this.props;
@@ -75,6 +82,12 @@ export default class MultiListSelection extends React.PureComponent {
         }
 
         onChange(newValue);
+    }
+
+    handleClearButtonClick = () => {
+        const { onChange } = this.props;
+
+        onChange(emptyArray);
     }
 
     renderOption = ({
@@ -112,15 +125,28 @@ export default class MultiListSelection extends React.PureComponent {
             label,
             showLabel,
             keySelector,
+            value,
         } = this.props;
+
+        const showClearButton = value.length > 0;
 
         return (
             <div className={_cs(styles.multiListSelection, className)}>
-                <Label
-                    className={styles.label}
-                    text={label}
-                    show={showLabel}
-                />
+                <div className={styles.headerContainer}>
+                    <Label
+                        className={styles.label}
+                        text={label}
+                        show={showLabel}
+                    />
+                    {showClearButton &&
+                        <Button
+                            className={styles.clearButton}
+                            onClick={this.handleClearButtonClick}
+                            transparent
+                            iconName={iconNames.close}
+                        />
+                    }
+                </div>
                 <ListView
                     className={styles.options}
                     data={options}
