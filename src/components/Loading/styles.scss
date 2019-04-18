@@ -10,7 +10,11 @@
     border: $width-separator-thin solid $color-separator-light;
     border-radius: 5px;
     background-color: $color-foreground;
-    padding: $spacing-small $spacing-large;
-    font-size: $font-size-large;
+    padding: $spacing-medium;
     text-align: center;
+    font-size: $font-size-large;
+
+    .spinner {
+        margin-right: 6px;
+    }
 }
