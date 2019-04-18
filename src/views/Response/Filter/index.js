@@ -185,7 +185,7 @@ export default class ResponseFilter extends React.PureComponent {
                                 key="distance"
                                 onChange={setDistanceFilter}
                                 minLimit={1}
-                                maxLimit={50}
+                                maxLimit={100}
                                 noMin
                                 maxLabel="Resources Within(Km)"
                             />

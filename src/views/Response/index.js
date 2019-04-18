@@ -157,7 +157,9 @@ const requests = {
             setResourceList({ resourceList: response });
         },
         onMount: ({ props: { incidentId } }) => !!incidentId,
-        // FIXME: write schema
+        extras: {
+            schemaName: 'responseResponse',
+        },
     },
     filteredResponseRequest: {
         url: ({ props: { incidentId } }) => (
@@ -170,6 +172,9 @@ const requests = {
         }),
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response });
+        },
+        extras: {
+            schemaName: 'responseResponse',
         },
     },
     incidentRequest: {

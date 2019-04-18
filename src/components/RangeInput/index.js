@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaramInputElement } from '@togglecorp/faram';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import { NormalNumberInput } from '#rsci/NumberInput';
