@@ -125,7 +125,9 @@ const state: PageState = {
     lossAndDamagePage: {
         lossAndDamageList: [],
         filters: {
-            faramValues: {},
+            faramValues: {
+                metric: 'count',
+            },
             faramErrors: {},
             pristine: true,
         },
@@ -134,7 +136,6 @@ const state: PageState = {
     projectsProfilePage: {
         filters: {
             faramValues: {
-                metric: 'count',
             },
             faramErrors: {},
             pristine: true,
