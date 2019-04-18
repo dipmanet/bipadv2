@@ -16,7 +16,7 @@ import {
 } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
 
-import { getYesterday } from '#utils/common';
+import { getYesterday, framize } from '#utils/common';
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
@@ -32,22 +32,6 @@ const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
     wardsMap: wardsMapSelector(state),
 });
-
-// FIXME: move somewhere else
-const framize = (fn, duration = 2000) => {
-    let prevTimestamp;
-    return (timestamp) => {
-        if (!prevTimestamp) {
-            prevTimestamp = timestamp;
-        }
-        const diff = timestamp - prevTimestamp;
-        if (diff > duration) {
-            prevTimestamp = timestamp;
-        }
-        const percent = (timestamp - prevTimestamp) / duration;
-        return fn(percent, timestamp);
-    };
-};
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;

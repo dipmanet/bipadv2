@@ -9,7 +9,14 @@ import MapLayer from '#rscz/Map/MapLayer';
 
 import { mapSources, mapStyles } from '#constants';
 
-import { getAdminLevelTitles } from '#utils/domain';
+import {
+    regionLabelToGeojson,
+
+    getWardFilter,
+    getMunicipalityFilter,
+    getDistrictFilter,
+    getProvinceFilter,
+} from '#utils/domain';
 
 import {
     provincesSelector,
@@ -77,108 +84,15 @@ class CommonMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getProvincesFeatureCollection = memoize(getAdminLevelTitles);
+    getProvincesFeatureCollection = memoize(regionLabelToGeojson);
+    getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
+    getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
+    getWardsFeatureCollection = memoize(regionLabelToGeojson);
 
-    getDistrictsFeatureCollection = memoize(getAdminLevelTitles);
-
-    getMunicipalitiesFeatureCollection = memoize(getAdminLevelTitles);
-
-    getWardsFeatureCollection = memoize(getAdminLevelTitles);
-
-    getWardFilter = (
-        selectedProvinceId, selectedDistrictId, selectedMunicipalityId, wards,
-    ) => {
-        if (selectedMunicipalityId) {
-            return [
-                'match',
-                ['id'],
-                wards
-                    .filter(w => w.municipality === selectedMunicipalityId)
-                    .map(w => w.id),
-                true,
-                false,
-            ];
-        }
-        if (selectedDistrictId) {
-            return [
-                'match',
-                ['id'],
-                wards
-                    .filter(w => w.district === selectedDistrictId)
-                    .map(w => w.id),
-                true,
-                false,
-            ];
-        }
-        if (selectedProvinceId) {
-            return [
-                'match',
-                ['id'],
-                wards
-                    .filter(w => w.province === selectedProvinceId)
-                    .map(w => w.id),
-                true,
-                false,
-            ];
-        }
-        return undefined;
-    }
-
-    getMunicipalityFilter = (
-        selectedProvinceId, selectedDistrictId, selectedMunicipalityId, municipalities,
-    ) => {
-        if (selectedMunicipalityId) {
-            return ['==', ['id'], selectedMunicipalityId];
-        }
-        if (selectedDistrictId) {
-            return [
-                'match',
-                ['id'],
-                municipalities
-                    .filter(m => m.district === selectedDistrictId)
-                    .map(m => m.id),
-                true,
-                false,
-            ];
-        }
-        if (selectedProvinceId) {
-            return [
-                'match',
-                ['id'],
-                municipalities
-                    .filter(m => m.province === selectedProvinceId)
-                    .map(m => m.id),
-                true,
-                false,
-            ];
-        }
-        return undefined;
-    }
-
-    getDistrictFilter = (selectedProvinceId, selectedDistrictId, districts) => {
-        if (selectedDistrictId) {
-            return ['==', ['id'], selectedDistrictId];
-        }
-        if (selectedProvinceId) {
-            return [
-                'match',
-                ['id'],
-                districts
-                    .filter(d => d.province === selectedProvinceId)
-                    .map(d => d.id),
-                true,
-                false,
-            ];
-        }
-        return undefined;
-    }
-
-    getProvinceFilter = (selectedProvinceId) => {
-        if (selectedProvinceId) {
-            return ['==', ['id'], selectedProvinceId];
-        }
-        return undefined;
-    }
+    getWardFilter = memoize(getWardFilter);
+    getMunicipalityFilter = memoize(getMunicipalityFilter);
+    getDistrictFilter = memoize(getDistrictFilter);
+    getProvinceFilter = memoize(getProvinceFilter);
 
     render() {
         const {

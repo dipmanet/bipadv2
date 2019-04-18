@@ -150,3 +150,21 @@ export function getYesterday(days = 0) {
     date.setSeconds(0);
     return date.getTime();
 }
+
+interface FrameFunction<T> {
+    (percent: number, timestamp: number): T;
+}
+export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
+    let prevTimestamp: number;
+    return (timestamp: number) => {
+        if (!prevTimestamp) {
+            prevTimestamp = timestamp;
+        }
+        const diff = timestamp - prevTimestamp;
+        if (diff > duration) {
+            prevTimestamp = timestamp;
+        }
+        const percent = (timestamp - prevTimestamp) / duration;
+        return fn(percent, timestamp);
+    };
+}

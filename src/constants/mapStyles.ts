@@ -9,6 +9,7 @@ export default {
             'line-width': 1.5,
             'line-opacity': 0.5,
         },
+        // FIXME: obsolete
         fill: {
             'fill-color': '#0081f0',
             'fill-opacity': ['case',
@@ -28,6 +29,7 @@ export default {
             'line-width': 1,
             'line-opacity': 0.5,
         },
+        // FIXME: obsolete
         fill: {
             // NOTE: hover and selection enabled in district
             'fill-color': '#0081f0',
@@ -48,6 +50,7 @@ export default {
             'line-width': 1,
             'line-opacity': 0.5,
         },
+        // FIXME: obsolete
         fill: {
             'fill-color': '#0081f0',
             'fill-opacity': ['case',
@@ -67,9 +70,74 @@ export default {
             'line-width': 1,
             'line-opacity': 0.5,
         },
+        // FIXME: obsolete
         fill: {
             'fill-color': '#0081f0',
             'fill-opacity': 0.1,
+        },
+    },
+    provinceLabel: {
+        paint: {
+            'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 18,
+            'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    districtLabel: {
+        paint: {
+            'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 14,
+            'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    municipalityLabel: {
+        paint: {
+            'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 12,
+            'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    wardLabel: {
+        paint: {
+            'text-color': '#808080',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1,
+            'text-halo-blur': 1,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'title'],
+            'text-size': 10,
+            'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
         },
     },
 
@@ -325,70 +393,6 @@ export default {
             'text-halo-color': '#ffffff',
             'text-halo-width': 1,
             'text-halo-blur': 3,
-        },
-    },
-    provinceLabel: {
-        paint: {
-            'text-color': '#808080',
-            'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
-        },
-        layout: {
-            visibility: 'visible',
-            'text-field': ['get', 'title'],
-            'text-size': 18,
-            'text-transform': 'uppercase',
-            'text-justify': 'center',
-            'text-anchor': 'center',
-        },
-    },
-    districtLabel: {
-        paint: {
-            'text-color': '#808080',
-            'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
-        },
-        layout: {
-            visibility: 'visible',
-            'text-field': ['get', 'title'],
-            'text-size': 14,
-            'text-transform': 'uppercase',
-            'text-justify': 'center',
-            'text-anchor': 'center',
-        },
-    },
-    municipalityLabel: {
-        paint: {
-            'text-color': '#808080',
-            'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
-        },
-        layout: {
-            visibility: 'visible',
-            'text-field': ['get', 'title'],
-            'text-size': 12,
-            'text-transform': 'uppercase',
-            'text-justify': 'center',
-            'text-anchor': 'center',
-        },
-    },
-    wardLabel: {
-        paint: {
-            'text-color': '#808080',
-            'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
-        },
-        layout: {
-            visibility: 'visible',
-            'text-field': ['get', 'title'],
-            'text-size': 10,
-            'text-transform': 'uppercase',
-            'text-justify': 'center',
-            'text-anchor': 'center',
         },
     },
 };
