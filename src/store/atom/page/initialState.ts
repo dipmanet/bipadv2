@@ -130,6 +130,7 @@ const state: PageState = {
             pristine: true,
         },
     },
+
     projectsProfilePage: {
         filters: {
             faramValues: {},

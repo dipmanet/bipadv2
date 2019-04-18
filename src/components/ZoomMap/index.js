@@ -7,7 +7,7 @@ import MapSource from '#rscz/Map/MapSource';
 import MapLayer from '#rscz/Map/MapLayer';
 
 import { mapSources, mapStyles } from '#constants';
-// import { getAdminLevelTitles } from '#utils/domain';
+// import { regionLabelToGeojson } from '#utils/domain';
 
 import {
     provincesSelector,
@@ -40,10 +40,10 @@ class ZoomMap extends React.PureComponent {
     static defaultProps = defaultProps;
 
     /*
-    getProvincesFeatureCollection = memoize(getAdminLevelTitles);
-    getDistrictsFeatureCollection = memoize(getAdminLevelTitles);
-    getMunicipalitiesFeatureCollection = memoize(getAdminLevelTitles);
-    getWardsFeatureCollection = memoize(getAdminLevelTitles);
+    getProvincesFeatureCollection = memoize(regionLabelToGeojson);
+    getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
+    getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
+    getWardsFeatureCollection = memoize(regionLabelToGeojson);
     */
 
     render() {

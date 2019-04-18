@@ -13,21 +13,41 @@ import {
     RealTimeRiver,
     RealTimeFire,
     RealTimePollution,
+    Ward,
+    Municipality,
+    District,
     Resource,
 } from '#store/atom/page/types';
 import { groupList } from '#utils/common';
 
-export const ONE_HUMAN_EQUIVALENT_MONEY = 50000;
+// NOTE: interface for Ward, Municipality, ...
+interface Geo {
+    id: number;
+    centroid: object;
+    title: string;
+}
+
+interface Shape {
+    type: string;
+    coordinates: unknown[];
+}
+
+const hasMultiplePolygon = (polygon: Shape) => (
+    polygon.type === 'MultiPolygon' && polygon.coordinates.length > 1
+);
+
+// export const ONE_HUMAN_EQUIVALENT_MONEY = 50000;
 
 // The following give the effect of loss. NOTE: They sum to 1
-export const MONEY_LOSS_FACTOR = 0.2;
-export const PEOPLE_LOSS_FACTOR = 0.4;
-export const LIVESTOCK_LOSS_FACTOR = 0.1;
-export const INFRASTRUCTURE_LOSS_FACTOR = 0.3;
+// export const MONEY_LOSS_FACTOR = 0.2;
+// export const PEOPLE_LOSS_FACTOR = 0.4;
+// export const LIVESTOCK_LOSS_FACTOR = 0.1;
+// export const INFRASTRUCTURE_LOSS_FACTOR = 0.3;
 
-const emptyObject = {};
-
-export const calculateSeverity = (loss: Loss = emptyObject, scaleFactor: number = 1): number => {
+export const calculateSeverity = (loss: Loss | undefined, scaleFactor: number = 1): number => {
+    if (!loss) {
+        return 0;
+    }
     const {
         peopleDeathCount = 0,
         /*
@@ -53,6 +73,9 @@ export const calculateSeverity = (loss: Loss = emptyObject, scaleFactor: number 
     */
 };
 
+// severityScaleFactor is to show severity as radius of circle in map, which is logarithmic
+// and for small values, all severities look same for which we need to scale
+const severityScaleFactor = 20000;
 export const calculateCategorizedSeverity = (loss: Loss, scaleFactor?: number): string => {
     const severity = calculateSeverity(loss, scaleFactor);
     if (!severity) {
@@ -77,6 +100,22 @@ export const getHazardColor = (hazards: Obj<HazardType>, hazardId?: number) => {
     }
     return hazard.color;
 };
+
+export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<HazardType>) => {
+    const group = groupList(
+        listWithHazard.filter(l => l.hazard),
+        item => item.hazard,
+    );
+
+    return group.map(h => (
+        {
+            title: (hazardTypes[h.key] || {}).title,
+            color: (hazardTypes[h.key] || {}).color,
+        }
+    ));
+};
+
+// CONVERSION TO GEOJSON
 
 export const alertToPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
     const geojson = {
@@ -110,15 +149,6 @@ export const alertToPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardTyp
 
     return geojson;
 };
-
-interface Shape {
-    type: string;
-    coordinates: unknown[];
-}
-
-const hasMultiplePolygon = (polygon: Shape) => (
-    polygon.type === 'MultiPolygon' && polygon.coordinates.length > 1
-);
 
 export const alertToConvexPolygonGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
     const geojson = {
@@ -278,10 +308,6 @@ export const eventToPointGeojson = (eventList: Event[]) => {
     };
     return geojson;
 };
-
-// severityScaleFactor is to show severity as radius of circle in map, which is logarithmic
-// and for small values, all severities look same for which we need to scale
-const severityScaleFactor = 20000;
 
 export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<HazardType>) => ({
     type: 'FeatureCollection',
@@ -476,27 +502,7 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
     return geojson;
 };
 
-export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<HazardType>) => {
-    const group = groupList(
-        listWithHazard.filter(l => l.hazard),
-        item => item.hazard,
-    );
-
-    return group.map(h => (
-        {
-            title: (hazardTypes[h.key] || {}).title,
-            color: (hazardTypes[h.key] || {}).color,
-        }
-    ));
-};
-
-interface Geo {
-    id: number;
-    centroid: object;
-    title: string;
-}
-
-export const getAdminLevelTitles = (adminLevels: Geo[]) => {
+export const regionLabelToGeojson = (adminLevels: Geo[]) => {
     const geojson = {
         type: 'FeatureCollection',
         features: adminLevels
@@ -515,3 +521,109 @@ export const getAdminLevelTitles = (adminLevels: Geo[]) => {
 
     return geojson;
 };
+
+// GEOJSON FILTER
+export function getWardFilter(
+    selectedProvinceId: number | undefined,
+    selectedDistrictId: number | undefined,
+    selectedMunicipalityId: number | undefined,
+    wards: Ward[],
+) {
+    if (selectedMunicipalityId) {
+        return [
+            'match',
+            ['id'],
+            wards
+                .filter(w => w.municipality === selectedMunicipalityId)
+                .map(w => w.id),
+            true,
+            false,
+        ];
+    }
+    if (selectedDistrictId) {
+        return [
+            'match',
+            ['id'],
+            wards
+                .filter(w => w.district === selectedDistrictId)
+                .map(w => w.id),
+            true,
+            false,
+        ];
+    }
+    if (selectedProvinceId) {
+        return [
+            'match',
+            ['id'],
+            wards
+                .filter(w => w.province === selectedProvinceId)
+                .map(w => w.id),
+            true,
+            false,
+        ];
+    }
+    return undefined;
+}
+
+export function getMunicipalityFilter(
+    selectedProvinceId: number | undefined,
+    selectedDistrictId: number | undefined,
+    selectedMunicipalityId: number | undefined,
+    municipalities: Municipality[],
+) {
+    if (selectedMunicipalityId) {
+        return ['==', ['id'], selectedMunicipalityId];
+    }
+    if (selectedDistrictId) {
+        return [
+            'match',
+            ['id'],
+            municipalities
+                .filter(m => m.district === selectedDistrictId)
+                .map(m => m.id),
+            true,
+            false,
+        ];
+    }
+    if (selectedProvinceId) {
+        return [
+            'match',
+            ['id'],
+            municipalities
+                .filter(m => m.province === selectedProvinceId)
+                .map(m => m.id),
+            true,
+            false,
+        ];
+    }
+    return undefined;
+}
+
+export function getDistrictFilter(
+    selectedProvinceId: number | undefined,
+    selectedDistrictId: number | undefined,
+    districts: District[],
+) {
+    if (selectedDistrictId) {
+        return ['==', ['id'], selectedDistrictId];
+    }
+    if (selectedProvinceId) {
+        return [
+            'match',
+            ['id'],
+            districts
+                .filter(d => d.province === selectedProvinceId)
+                .map(d => d.id),
+            true,
+            false,
+        ];
+    }
+    return undefined;
+}
+
+export function getProvinceFilter(selectedProvinceId: number | undefined) {
+    if (selectedProvinceId) {
+        return ['==', ['id'], selectedProvinceId];
+    }
+    return undefined;
+}

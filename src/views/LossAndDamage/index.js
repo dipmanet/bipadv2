@@ -3,7 +3,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { listToMap, isDefined, isNotDefined } from '@togglecorp/fujs';
+import { listToMap, isDefined } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -89,6 +89,7 @@ const getGroupMethod = (regionLevel) => {
 
 const PLAYBACK_INTERVAL = 2000;
 
+// FIXME: obsolete use ward directly
 // Get all information using ward
 const getRegionInfoFromWard = (wardId, regions) => {
     const {

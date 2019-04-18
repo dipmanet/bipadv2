@@ -24,27 +24,11 @@ import {
     eventToPolygonGeojson,
     eventToPointGeojson,
 } from '#utils/domain';
-import { getYesterday } from '#utils/common';
+import { getYesterday, framize } from '#utils/common';
 
 import { hazardTypesSelector } from '#selectors';
 
 import styles from './styles.scss';
-
-// FIXME: move somewhere else
-const framize = (fn, duration = 2000) => {
-    let prevTimestamp;
-    return (timestamp) => {
-        if (!prevTimestamp) {
-            prevTimestamp = timestamp;
-        }
-        const diff = timestamp - prevTimestamp;
-        if (diff > duration) {
-            prevTimestamp = timestamp;
-        }
-        const percent = (timestamp - prevTimestamp) / duration;
-        return fn(percent, timestamp);
-    };
-};
 
 const AlertTooltip = ({ title, description }) => (
     <div className={styles.tooltip}>
@@ -57,6 +41,10 @@ const AlertTooltip = ({ title, description }) => (
         />
     </div>
 );
+AlertTooltip.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+};
 
 const EventTooltip = ({ title, description, severity, createdOn }) => (
     <div className={styles.tooltip}>
@@ -82,12 +70,6 @@ const EventTooltip = ({ title, description, severity, createdOn }) => (
         />
     </div>
 );
-
-AlertTooltip.propTypes = {
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-};
-
 EventTooltip.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -114,7 +96,6 @@ const defaultProps = {
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
 });
-
 
 class AlertEventMap extends React.PureComponent {
     static propTypes = propTypes;
