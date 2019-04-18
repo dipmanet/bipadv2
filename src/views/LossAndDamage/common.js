@@ -3,6 +3,7 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    groupFilledList,
     groupList,
     sum,
 } from '#utils/common';
@@ -143,5 +144,9 @@ export const getStat = ({ key, value }) => ({
 
 export const getGroupedIncidents = (incidents, groupingFn) => (
     groupList(incidents, groupingFn).map(getStat)
+);
+
+export const getFilledGroupedIncidents = (incidents, groupingFn) => (
+    groupFilledList(incidents, groupingFn).map(getStat)
 );
 

@@ -10,16 +10,15 @@ import styles from './styles.scss';
 const propTypes = {
     start: PropTypes.number,
     end: PropTypes.number,
-    progress: PropTypes.number,
 };
 
 const defaultProps = {
     start: 0,
     end: 0,
-    progress: 0,
 };
 
 const emptyList = [];
+const DAY = 1000 * 60 * 60 * 24;
 
 export default class Seekbar extends React.PureComponent {
     static propTypes = propTypes;
@@ -29,7 +28,6 @@ export default class Seekbar extends React.PureComponent {
         if (incidentList.length === 0) {
             return emptyList;
         }
-        const DAY = 1000 * 60 * 60 * 24;
 
         const mappedList = incidentList.map(
             incident => ({
@@ -52,12 +50,11 @@ export default class Seekbar extends React.PureComponent {
     render() {
         const {
             className,
-            progress: progressFromProps,
-            start: startFromProps,
-            end: endFromProps,
             data,
+            end: endFromProps,
             metric,
             metricName,
+            start: startFromProps,
         } = this.props;
 
         const start = bound(0, 100, startFromProps);

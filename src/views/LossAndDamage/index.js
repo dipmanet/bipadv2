@@ -9,13 +9,6 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';
 
 import {
-    groupFilledList,
-    groupList,
-    sum,
-    getYmd,
-} from '#utils/common';
-
-import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
@@ -147,7 +140,7 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards'],
-            limit: 2000,
+            limit: 3000,
             ordering: '-incident_on',
             lnd: true,
         }),
@@ -167,6 +160,10 @@ const requests = {
             schemaName: 'incidentWithPeopleResponse',
         },
     },
+    eventsRequest: {
+        url: '/event/',
+        onMount: true,
+    },
 };
 
 class LossAndDamage extends React.PureComponent {
@@ -177,7 +174,6 @@ class LossAndDamage extends React.PureComponent {
         super(props);
 
         this.state = {
-            pauseMap: false,
         };
 
         this.tabs = {
@@ -193,9 +189,15 @@ class LossAndDamage extends React.PureComponent {
                     const {
                         requests: {
                             lossAndDamageRequest: {
-                                pending,
+                                pending: lossAndDamageRequestPending,
                                 response: {
                                     results: lossAndDamageList = emptyList,
+                                } = emptyObject,
+                            },
+                            eventsRequest: {
+                                pending: eventsRequestPending,
+                                response: {
+                                    results: eventList = emptyList,
                                 } = emptyObject,
                             },
                         },
@@ -215,11 +217,12 @@ class LossAndDamage extends React.PureComponent {
                         lossAndDamageList,
                         metric,
                         municipalities,
-                        pending,
+                        pending: lossAndDamageRequestPending || eventsRequestPending,
                         provinces,
                         regionLevel,
                         regions,
                         wards,
+                        eventList,
                     };
                 },
             },
@@ -265,19 +268,6 @@ class LossAndDamage extends React.PureComponent {
                 },
             },
         };
-    }
-
-    handlePlayPauseButtonClick = () => {
-        const { pauseMap } = this.state;
-        this.setState({ pauseMap: !pauseMap });
-    }
-
-    handleStartInputChange = (start) => {
-        this.setState({ start });
-    }
-
-    handleEndInputChange = (end) => {
-        this.setState({ end });
     }
 
     render() {

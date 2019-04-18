@@ -7,23 +7,30 @@ import {
     isDefined,
 } from '@togglecorp/fujs';
 
+import Page from '#components/Page';
+
 import {
     getYmd,
 } from '#utils/common';
 
 import Map from '../Map';
+import LeftPane from './LeftPane';
 import Seekbar from './Seekbar';
+import Filter from '../Filter';
+
 import {
-    getMinMaxTime,
-    getGroupMethod,
     getAggregatedStats,
-    getSanitizedIncidents,
-    metricName,
-    metricMap,
-    metricType,
-    metricOptions,
+    getGroupMethod,
     getGroupedIncidents,
+    getMinMaxTime,
+    getSanitizedIncidents,
+    metricMap,
+    metricOptions,
+    metricType,
+    getFilledGroupedIncidents,
 } from '../common';
+
+import styles from './styles.scss';
 
 const propTypes = {
 };
@@ -92,6 +99,8 @@ export default class Timeline extends React.PureComponent {
             } = getMinMaxTime(newLossAndDamageList, newRegions);
 
             this.setState({
+                startTimestamp: minTime,
+                endTimestamp: maxTime,
                 start: getYmd(minTime),
                 end: getYmd(maxTime),
                 currentIndex: -1,
@@ -215,6 +224,62 @@ export default class Timeline extends React.PureComponent {
         );
     }
 
+    renderEventTimeline = ({
+        start,
+        end,
+        eventList,
+    }) => {
+        if (!start || !end || eventList.length === 0) {
+            return null;
+        }
+
+        const {
+            startTimestamp,
+            endTimestamp,
+        } = this.state;
+
+        const DAY = 1000 * 60 * 60 * 24;
+
+        const sanitizedEventList = eventList
+            .filter(d => d.startedOn)
+            .map((d) => {
+                const startedOn = (new Date(d.startedOn)).getTime();
+                const endedOn = d.endedOn
+                    ? (new Date(d.endedOn)).getTime()
+                    : startedOn + (DAY * 30);
+
+                return {
+                    ...d,
+                    startedOn,
+                    endedOn,
+                };
+            })
+            .filter(d => d.startedOn >= startTimestamp && d.startedOn <= endTimestamp);
+
+        return (
+            <div className={styles.eventList}>
+                { sanitizedEventList.map((e) => {
+                    const timelineBandwidth = endTimestamp - startTimestamp;
+                    const left = 100 * ((e.startedOn - startTimestamp) / timelineBandwidth);
+                    const right = 100 * ((e.endedOn - startTimestamp) / timelineBandwidth);
+
+                    return (
+                        <div
+                            key={e.id}
+                            className={styles.eventTitle}
+                            style={{
+                                left: `${left}%`,
+                                width: `${right - left}%`,
+                            }}
+                            title={`${e.startedOn} ${e.endedOn}`}
+                        >
+                            { e.title }
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
 
     render() {
         const {
@@ -228,6 +293,7 @@ export default class Timeline extends React.PureComponent {
             regionLevel,
             regions,
             wards,
+            eventList,
         } = this.props;
 
         const {
@@ -236,11 +302,14 @@ export default class Timeline extends React.PureComponent {
             leftPaneExpanded,
             rightPaneExpanded,
             currentIndex,
+            playbackStart,
+            playbackEnd,
         } = this.state;
 
         const {
             mapping,
             aggregatedStat,
+            sanitizedIncidents,
         } = this.generateDataset(lossAndDamageList, start, end, regions, regionLevel);
 
         const selectedMetric = metricMap[metric];
@@ -253,16 +322,61 @@ export default class Timeline extends React.PureComponent {
             || provinces
         );
 
+        const DAY = 1000 * 60 * 60 * 24;
+        const groupedIncidents = getFilledGroupedIncidents(
+            sanitizedIncidents,
+            item => Math.floor(item.incidentOn / DAY),
+        );
+
+        const EventTimeline = this.renderEventTimeline;
+
         return (
-            <Map
-                leftPaneExpanded={leftPaneExpanded}
-                rightPaneExpanded={rightPaneExpanded}
-                mapping={mapping[currentIndex]}
-                maxValue={maxValue}
-                metric={selectedMetric.metricFn}
-                metricName={selectedMetric.label}
-                geoareas={geoareas}
-            />
+            <React.Fragment>
+                <Map
+                    leftPaneExpanded={leftPaneExpanded}
+                    rightPaneExpanded={rightPaneExpanded}
+                    mapping={mapping[currentIndex]}
+                    maxValue={maxValue}
+                    metric={selectedMetric.metricFn}
+                    metricName={selectedMetric.label}
+                    geoareas={geoareas}
+                />
+                <Page
+                    leftContentClassName={styles.left}
+                    leftContent={
+                        <LeftPane
+                            pending={pending}
+                            lossAndDamageList={lossAndDamageList}
+                            onExpandChange={this.handleLeftPaneExpandChange}
+                        />
+                    }
+                    rightContent={
+                        <Filter
+                            onExpandChange={this.handleRightPaneExpandChange}
+                            metricOptions={metricOptions}
+                            metricType={metricType}
+                        />
+                    }
+                    mainContentClassName={styles.main}
+                    mainContent={
+                        <div className={styles.seekbarContainer}>
+                            <EventTimeline
+                                eventList={eventList}
+                                start={start}
+                                end={end}
+                            />
+                            <Seekbar
+                                className={styles.seekbar}
+                                data={groupedIncidents}
+                                metric={selectedMetric.metricFn}
+                                metricName={selectedMetric.label}
+                                start={playbackStart}
+                                end={playbackEnd}
+                            />
+                        </div>
+                    }
+                />
+            </React.Fragment>
         );
     }
 }

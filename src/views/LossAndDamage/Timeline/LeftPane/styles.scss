@@ -38,7 +38,6 @@ $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2)
 
         .content {
             flex-grow: 1;
-            border: 1px solid red;
         }
     }
 }

@@ -1,0 +1,34 @@
+@import '~base-scss/base';
+
+.main {
+    left: 0;
+    transform: none;
+    z-index: 111;
+    width: 100vw;
+    height: 108px;
+
+    .seekbar-container {
+        width: 100%;
+        height: 100%;
+
+        .seekbar {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .event-list {
+        position: relative;
+        width: 100%;
+
+        .event-title {
+            position: absolute;
+            top: -24px;
+            z-index: 11;
+            border: $width-separator-thin dotted $color-separator;
+            border-right: $width-separator-thin solid $color-danger;
+            border-left: $width-separator-thin solid $color-danger;
+            text-align: center;
+        }
+    }
+}

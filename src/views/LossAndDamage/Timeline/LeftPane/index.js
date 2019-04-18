@@ -31,12 +31,6 @@ export default class LeftPane extends React.PureComponent {
         };
     }
 
-    transformData = () => {
-        const {
-            lossAndDamageList = emptyList,
-        } = this.props;
-    }
-
     handleExpandChange = (isExpanded) => {
         this.setState({ isExpanded });
 
@@ -88,8 +82,6 @@ export default class LeftPane extends React.PureComponent {
         const { isExpanded } = this.state;
         const Header = this.renderHeader;
 
-        this.transformData();
-
         return (
             <CollapsibleView
                 className={_cs(className, styles.leftPane)}
@@ -108,7 +100,7 @@ export default class LeftPane extends React.PureComponent {
                     <React.Fragment>
                         <Header />
                         <div className={styles.content}>
-                            zZzZzZzzZ
+                                Stats? Visualizations?
                         </div>
                     </React.Fragment>
                 }

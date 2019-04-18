@@ -12,7 +12,6 @@ import LeftPane from './LeftPane';
 import Filter from '../Filter';
 
 import {
-    metricName,
     metricMap,
     metricType,
     metricOptions,
@@ -73,6 +72,13 @@ export default class Overview extends React.PureComponent {
         };
     })
 
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    handleRightPaneExpandChange = (rightPaneExpanded) => {
+        this.setState({ rightPaneExpanded });
+    }
 
     render() {
         const {
