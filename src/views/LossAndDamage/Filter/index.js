@@ -16,7 +16,6 @@ import {
     lossAndDamageFiltersSelector,
 } from '#selectors';
 
-import { hazardIcons } from '#resources/data';
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 import { iconNames } from '#constants';

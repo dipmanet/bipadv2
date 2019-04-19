@@ -43,7 +43,7 @@ export default class AlertItem extends React.PureComponent {
             startedOn,
         } = alert;
 
-        const icon = hazardIcons[hazard];
+        const icon = hazardIcons[hazard] || hazardIcons.unknown;
         const isNew = isRecent(startedOn, recentDay);
 
         return (

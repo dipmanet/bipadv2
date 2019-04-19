@@ -80,13 +80,13 @@ export default {
         paint: {
             'text-color': '#808080',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
+            'text-halo-width': 0.3,
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
-            'text-size': 18,
+            'text-size': 16,
             'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -96,11 +96,11 @@ export default {
         paint: {
             'text-color': '#808080',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
+            'text-halo-width': 0.3,
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
             'text-size': 14,
             'text-transform': 'uppercase',
@@ -112,11 +112,11 @@ export default {
         paint: {
             'text-color': '#808080',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
+            'text-halo-width': 0.3,
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
             'text-size': 12,
             'text-transform': 'uppercase',
@@ -128,11 +128,11 @@ export default {
         paint: {
             'text-color': '#808080',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 1,
+            'text-halo-width': 0.3,
         },
         layout: {
             visibility: 'visible',
+            'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-transform': 'uppercase',
@@ -383,17 +383,17 @@ export default {
     },
     pollutionText: {
         layout: {
+            'text-font': ['League Mono Regular'],
             'text-field': ['get', 'pm25'],
             'text-allow-overlap': false,
-            'text-size': 12,
+            'text-size': 10,
             // NOTE: should negate idk why
             'symbol-sort-key': ['-', ['get', 'pm25']],
         },
         paint: {
             'text-color': '#000000',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 3,
+            'text-halo-width': 1.5,
         },
     },
 
@@ -427,6 +427,7 @@ export default {
     },
     earthquakeText: {
         layout: {
+            'text-font': ['League Mono Regular'],
             'text-field': ['get', 'magnitude'],
             'text-allow-overlap': false,
             'text-size': [
@@ -444,8 +445,7 @@ export default {
         paint: {
             'text-color': '#000000',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 1,
-            'text-halo-blur': 3,
+            'text-halo-width': 1.5,
         },
     },
 };
