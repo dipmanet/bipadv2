@@ -2,7 +2,6 @@ import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import Loading from '#components/Loading';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
@@ -32,7 +31,9 @@ import {
     realTimeFiltersValuesSelector,
     realTimeSourceListSelector,
 } from '#selectors';
+
 import Page from '#components/Page';
+import Loading from '#components/Loading';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
@@ -270,6 +271,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showPollution={showPollution}
                     rightPaneExpanded={rightPaneExpanded}
                 />
+                <Loading pending={pending} />
                 <Page
                     rightContentClassName={styles.right}
                     rightContent={
