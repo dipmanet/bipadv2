@@ -196,6 +196,24 @@ export interface LossAndDamagePage {
     filters: Filters;
 }
 
+export interface Risk {
+    id: number;
+    district: string;
+    remoteness: number;
+    hdi: number;
+    riskScore: number;
+}
+
+export interface LpGasCook {
+    lpgasCook: number;
+    name: string;
+}
+
+export interface DisasterProfilePage {
+    riskList: Risk[];
+    lpGasCookList: LpGasCook[];
+}
+
 export interface RealTimeSource {
     id: number;
     title: string;
@@ -252,6 +270,7 @@ export interface PageState {
     realTimeMonitoringPage: RealTimeMonitoringPage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
+    disasterProfilePage: DisasterProfilePage;
 }
 
 // ACTION TYPES
@@ -294,6 +313,10 @@ export enum PageType {
 
     // projects profile page
     PP__SET_FILTERS = 'page/PROJECTS_PROFILE/SET_FILTERS',
+
+    // // disaster profile page
+    DPP__SET_RISK_LIST = 'page/DISASTER_PROFILE/SET_RISK_LIST',
+    DPP__SET_LP_GAS_COOK_LIST = 'page/DISASTER_PROFILE/SET_LP_GAS_COOK_LIST',
 }
 
 // ACTION CREATOR INTERFACE
@@ -427,6 +450,16 @@ export interface SetProjectsProfileFilters extends ProjectsProfileFilters {
     type: typeof PageType.PP__SET_FILTERS;
 }
 
+// disaster profile page
+export interface SetRiskList {
+    type: typeof PageType.DPP__SET_RISK_LIST;
+    riskList: Risk[];
+}
+export interface SetLpGasCookList {
+    type: typeof PageType.DPP__SET_LP_GAS_COOK_LIST;
+    lpGasCookList: LpGasCook[];
+}
+
 export type PageActionTypes = (
     SetRegion | SetInitialPopupShown |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
@@ -435,5 +468,6 @@ export type PageActionTypes = (
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
-    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters
+    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters |
+    SetProjectsProfileFilters | SetLpGasCookList | SetRiskList
 );

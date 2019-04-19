@@ -143,5 +143,10 @@ const state: PageState = {
             pristine: true,
         },
     },
+
+    disasterProfilePage: {
+        riskList: [],
+        lpGasCookList: [],
+    },
 };
 export default state;

@@ -323,6 +323,20 @@ export const projectsProfileFiltersSelector = createSelector(
     },
 );
 
+// diaster profile page
+export const disasterProfilePageSelector = ({ page }: AppState) =>
+    page.disasterProfilePage;
+
+export const riskListSelector = createSelector(
+    disasterProfilePageSelector,
+    ({ riskList }) => riskList,
+);
+
+export const lpGasCookListSelector = createSelector(
+    disasterProfilePageSelector,
+    ({ lpGasCookList }) => lpGasCookList,
+);
+
 // bounds
 export const selectedProvinceIdSelector = createSelector(
     regionSelector,
