@@ -7,6 +7,7 @@ import { Router } from '@reach/router';
 import Map from '#rscz/Map/index';
 import { District, Province, Municipality } from '#store/atom/page/types';
 
+import DangerButton from '#rsca/Button/DangerButton';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import { routeSettings } from '#constants';
@@ -36,15 +37,16 @@ const loadingStyle: React.CSSProperties = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '200px',
-    height: '60px',
+    // width: '300px',
+    // height: '60px',
     display: 'flex',
+    padding: 10,
     textAlign: 'center',
-    alignItems: 'center',
+    alignItems: 'baseline',
     justifyContent: 'center',
     fontSize: '18px',
     backgroundColor: '#ffffff',
-    border: '1px solid rgba(0, 0, 0, 0.2)',
+    border: '1px solid rgba(255, 0, 0, 0.2)',
     borderRadius: '3px',
 };
 
@@ -54,14 +56,42 @@ const ErrorInPage = () => (
     </div>
 );
 
+const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
+    <div style={loadingStyle}>
+        Some problem occured.
+        <DangerButton
+            onClick={retry}
+            transparent
+        >
+            Reload
+        </DangerButton>
+    </div>
+);
 // ROUTES
 
-const LoadingPage = () => (
-    <Loading
-        text="Loading Page"
-        pending
-    />
-);
+interface LoadOptions {
+    error: string;
+    retry: () => void;
+}
+
+const LoadingPage = ({ error, retry }: LoadOptions) => {
+    if (error) {
+        // NOTE: show error while loading page
+        console.error(error);
+        return (
+            <RetryableErrorInPage
+                error={error}
+                retry={retry}
+            />
+        );
+    }
+    return (
+        <Loading
+            text="Loading Page"
+            pending
+        />
+    );
+};
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Component = errorBound<typeof settings>(ErrorInPage)(
         helmetify(
