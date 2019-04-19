@@ -1,13 +1,31 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import Faram, {
     FaramGroup,
     // FaramInputElement,
 } from '@togglecorp/faram';
 
-import { _cs, listToMap } from '@togglecorp/fujs';
+import { _cs, listToMap, isNotDefined } from '@togglecorp/fujs';
+
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+} from '#request';
+
+import {
+    setInventoryCategoryListActionRP,
+} from '#actionCreators';
+
+import {
+    inventoryCategoryListSelectorRP,
+} from '#selectors';
 
 import Checkbox from '#rsci/Checkbox';
+
+import SelectInput from '#rsci/SelectInput';
+import NumberInput from '#rsci/NumberInput';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -18,7 +36,7 @@ import { iconNames } from '#constants';
 
 import styles from './styles.scss';
 
-import resourceAttributes from '../resourceAttributes';
+import resourceAttributes, { operatorOptions } from '../resourceAttributes';
 
 import {
     getFilterItems,
@@ -31,6 +49,8 @@ const propTypes = {
     className: PropTypes.string,
     setFilter: PropTypes.func.isRequired,
     setDistanceFilter: PropTypes.func.isRequired,
+    inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
+    // setInventoryCategories: PropTypes.func.isRequired,
 };
 
 const checkFilters = (obj, attrVals) =>
@@ -45,6 +65,7 @@ const checkFilters = (obj, attrVals) =>
 
 const defaultProps = {
     className: '',
+    inventoryCategoryList: [],
 };
 
 const titles = {
@@ -54,9 +75,31 @@ const titles = {
     education: 'Education',
     openSpace: 'Open spaces',
     hotel: 'Hotel',
+    governance: 'Governance',
 };
 
-export default class ResponseFilter extends React.PureComponent {
+const requests = {
+    getInventoryCagetoriesRequest: {
+        url: '/inventory-category/',
+        onSuccess: ({ response, props: { setInventoryCategories } }) => {
+            setInventoryCategories({ inventoryCategoryList: response.results });
+        },
+        onMount: true,
+        extras: {
+            // schemaName:
+        },
+    },
+};
+
+const mapStateToProps = state => ({
+    inventoryCategoryList: inventoryCategoryListSelectorRP(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setInventoryCategories: params => dispatch(setInventoryCategoryListActionRP(params)),
+});
+
+class ResponseFilter extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
@@ -65,6 +108,13 @@ export default class ResponseFilter extends React.PureComponent {
 
         this.filterItems = getFilterItems(resourceAttributes);
         this.schema = getSchema(resourceAttributes);
+        this.schema.fields.inventory = {
+            fields: {
+                quantity: [],
+                category: [],
+                operatorType: [],
+            },
+        };
 
         // Set show = true for each resource filter
         const defaultFaramValues = listToMap(
@@ -80,7 +130,7 @@ export default class ResponseFilter extends React.PureComponent {
         };
     }
 
-    createFilter = (faramValues) => {
+    createResourceFilter = (faramValues) => {
         // Only show types whose show attribute is true
         const showTypes = Object.entries(faramValues).filter(([_, data]) => data.show);
 
@@ -89,6 +139,19 @@ export default class ResponseFilter extends React.PureComponent {
                 currFilterStat || (x.resourceType === type && checkFilters(x, attrVals)),
             false,
         );
+        return filterFunc;
+    }
+
+    createStockPileFilter = (filter) => {
+        const { operatorType, category, quantity } = filter;
+        const filterFunc = resource =>
+            (!operatorType || resource.operatorType === operatorType) &&
+            (!category || (resource.inventories && (
+                !!resource.inventories.find(inv => inv.item.category === category)))
+            ) &&
+            (!quantity || (resource.inventories && (
+                !!resource.inventories.find(inv => inv.quantity === quantity)))
+            );
         return filterFunc;
     }
 
@@ -119,15 +182,21 @@ export default class ResponseFilter extends React.PureComponent {
             },
         } = this.state;
 
-        const { distance: { min, max } = {}, ...other } = faramValues;
+        const {
+            distance: { min, max } = {},
+            inventory,
+            ...otherFilters
+        } = faramValues;
 
         // if distance changes, call distance filter
         if (min !== currMin || max !== currMax) {
             this.props.setDistanceFilter({ min, max });
         }
         this.setState({ faramValues });
-        const filterFunction = this.createFilter(other);
-        this.props.setFilter(filterFunction);
+        const stockpileFilter = this.createStockPileFilter(inventory) || (() => true);
+        const resourceFilter = this.createResourceFilter(otherFilters);
+        const combinedFilter = x => stockpileFilter(x) && resourceFilter(x);
+        this.props.setFilter(combinedFilter);
     }
 
     handleFaramFailure = (faramErrors) => {
@@ -141,6 +210,7 @@ export default class ResponseFilter extends React.PureComponent {
         const {
             className,
             setDistanceFilter,
+            inventoryCategoryList,
         } = this.props;
 
         const { showFilters, faramValues, faramErrors } = this.state;
@@ -191,6 +261,35 @@ export default class ResponseFilter extends React.PureComponent {
                                 noMin
                                 maxLabel="Resources Within(Km)"
                             />
+                            <FaramGroup
+                                key="inventory"
+                                faramElementName="inventory"
+                            >
+                                <h3> Stockpile </h3>
+                                <SelectInput
+                                    key="operatorType"
+                                    label="Operator"
+                                    faramElementName="operatorType"
+                                    keySelector={x => x.key}
+                                    labelSelector={x => x.label}
+                                    options={operatorOptions}
+                                />
+                                <SelectInput
+                                    key="category"
+                                    label="Category"
+                                    faramElementName="category"
+                                    keySelector={x => x.title}
+                                    labelSelector={x => x.title}
+                                    options={inventoryCategoryList}
+                                />
+                                <NumberInput
+                                    key="quantity"
+                                    faramElementName="quantity"
+                                    label="Quantity"
+                                    title="Quantity"
+                                    separator=" "
+                                />
+                            </FaramGroup>
                             {
                                 this.filterItems.map(filterItem => (
                                     <div key={filterItem.key} className={styles.group}>
@@ -222,3 +321,9 @@ export default class ResponseFilter extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(ResponseFilter),
+    ),
+);

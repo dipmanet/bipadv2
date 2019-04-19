@@ -81,6 +81,12 @@ export interface Resource {
     };
 }
 
+export interface InventoryCategory {
+    id: number;
+    title: string;
+    description: string;
+}
+
 export interface Loss {
     estimatedLoss?: number;
     peopleDeathCount?: number;
@@ -185,6 +191,7 @@ export interface IncidentPage {
 
 export interface ResponsePage {
     resourceList: Resource[];
+    inventoryCategoryList: InventoryCategory[];
 }
 
 export interface LossAndDamage {
@@ -299,6 +306,7 @@ export enum PageType {
 
     // response
     RP__SET_RESOURCE_LIST = 'page/RESOURCE_PAGE/SET_RESOURCE',
+    RP__SET_INVENTORY_CATEGOIRES = 'page/RESOURCE_PAGE/SET_INVENTORY_CATEGORIES',
 
     // real time monitoring
     RTM__SET_REAL_TIME_RAIN_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_RAIN',
@@ -409,6 +417,11 @@ export interface SetResourceList {
     resourceList: Resource[];
 }
 
+export interface SetInventoryCategoryList {
+    type: typeof PageType.RP__SET_INVENTORY_CATEGOIRES;
+    inventoryCategoryList: InventoryCategory[];
+}
+
 // real time monitoring
 
 export interface SetRealTimeRainList {
@@ -468,6 +481,6 @@ export type PageActionTypes = (
     SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
-    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters |
-    SetProjectsProfileFilters | SetLpGasCookList | SetRiskList
+    SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
+    SetInventoryCategoryList | SetLpGasCookList | SetRiskList
 );

@@ -1,4 +1,4 @@
-const operatorOptions = [
+export const operatorOptions = [
     { key: 'government', label: 'Government' },
     { key: 'private', label: 'Private' },
     { key: 'community', label: 'Community' },
@@ -18,6 +18,7 @@ const resourceAttributes = {
         { key: 'openingHours', label: 'Opening Hours', type: 'string' },
         { key: 'phoneNumber', label: 'Phone Number', type: 'string' },
 
+        { key: 'cbsCode', label: 'Cbs Code', type: 'string' },
         { key: 'bedCount', label: 'Number of Beds', type: 'number', filter: {} },
         { key: 'staffCount', label: 'Number of Staffs', type: 'number', filter: {} },
         { key: 'icu', label: 'ICU', type: 'boolean' },
@@ -67,6 +68,19 @@ const resourceAttributes = {
         { key: 'bedCount', label: 'Beds', type: 'number' },
         { key: 'staffCount', label: 'Staffs', type: 'number' },
         { key: 'facilities', label: 'Staffs', type: 'string' },
+    ],
+    governance: [
+        {
+            key: 'operatorType',
+            label: 'Operator',
+            type: 'string',
+            filter: {
+                type: 'select',
+                options: operatorOptions,
+            },
+        },
+        { key: 'source', label: 'Source', type: 'string' },
+        // { key: 'staffCount', label: 'Staffs', type: 'number' },
     ],
 };
 
