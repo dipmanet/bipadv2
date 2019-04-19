@@ -198,26 +198,31 @@ class LeftPane extends React.PureComponent {
                                         />
                                     ) : (
                                         <React.Fragment>
+                                            <div className={styles.statsContainer}>
+                                                <TextOutput
+                                                    className={styles.stat}
+                                                    label="Total incidents"
+                                                    value={incidentList.length}
+                                                    type="block"
+                                                    isNumericValue
+                                                />
+                                                { lossMetrics.map(metric => (
+                                                    <TextOutput
+                                                        className={styles.stat}
+                                                        key={metric.key}
+                                                        type="block"
+                                                        label={metric.label}
+                                                        value={summaryData[metric.key]}
+                                                        isNumericValue
+                                                    />
+                                                ))}
+                                            </div>
                                             <IncidentListView
                                                 hazardTypes={hazardTypes}
                                                 className={styles.incidentList}
                                                 incidentList={incidentList}
                                                 recentDay={recentDay}
                                             />
-                                            <div>
-                                                <h3> Incidents Summary </h3>
-                                                <TextOutput
-                                                    label="Total incidents"
-                                                    value={incidentList.length}
-                                                />
-                                                { lossMetrics.map(metric => (
-                                                    <TextOutput
-                                                        key={metric.key}
-                                                        label={metric.label}
-                                                        value={summaryData[metric.key]}
-                                                    />
-                                                ))}
-                                            </div>
                                         </React.Fragment>
                                     )}
                                 </div>

@@ -1,6 +1,6 @@
 @import '~base-scss/base';
 
-.text-output {
+.table {
     display: flex;
     align-items: center;
 
@@ -23,5 +23,21 @@
 
     .value {
         flex-grow: 1;
+    }
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+        color: $color-text-label;
+        font-weight: $font-weight-bold;
+    }
+
+    .value {
+        color: $color-accent;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
     }
 }

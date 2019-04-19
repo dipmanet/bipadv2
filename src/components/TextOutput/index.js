@@ -2,20 +2,26 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 import React from 'react';
 
+import Numeral from '#rscv/Numeral';
+
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
     label: PropTypes.string.isRequired,
     iconLabel: PropTypes.bool,
+    type: PropTypes.string,
     // NOTE: PropTypes.object below because TextOutput sometimes gets <DateOutput> as value
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+    isNumericValue: PropTypes.bool,
 };
 
 const defaultProps = {
     iconLabel: false,
     className: '',
     value: undefined,
+    type: 'table',
+    isNumericValue: false,
 };
 
 export default class TextOutput extends React.PureComponent {
@@ -27,15 +33,34 @@ export default class TextOutput extends React.PureComponent {
             className: classNameFromProps,
             label,
             value,
+            type,
             iconLabel,
+            isNumericValue,
         } = this.props;
 
         if (!value) {
             return null;
         }
 
+        const valueComponent = isNumericValue ? (
+            <Numeral
+                className={styles.value}
+                value={value}
+                precision={0}
+            />
+        ) : (
+            <div className={styles.value}>
+                { value }
+            </div>
+        );
+
         return (
-            <div className={_cs(classNameFromProps, styles.textOutput)}>
+            <div className={
+                _cs(
+                    classNameFromProps,
+                    styles[type],
+                )}
+            >
                 { iconLabel ? (
                     <div className={_cs(
                         styles.iconLabel,
@@ -47,9 +72,7 @@ export default class TextOutput extends React.PureComponent {
                         { label }
                     </div>
                 )}
-                <div className={styles.title}>
-                    { value }
-                </div>
+                {valueComponent}
             </div>
         );
     }
