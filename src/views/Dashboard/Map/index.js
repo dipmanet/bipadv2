@@ -260,14 +260,15 @@ class AlertEventMap extends React.PureComponent {
                     />
                 </MapSource>
                 <MapSource
-                    sourceKey="events-point"
+                    sourceKey="events-symbol"
                     geoJson={eventsPointFeatureCollection}
                 >
                     <MapLayer
-                        layerKey="events-point"
-                        type="circle"
+                        layerKey="events-symbol"
+                        type="symbol"
                         enableHover
-                        paint={mapStyles.eventPoint.circle}
+                        layout={mapStyles.eventSymbol.layout}
+                        paint={mapStyles.eventSymbol.paint}
                         tooltipRenderer={EventTooltip}
                         tooltipRendererParams={this.eventTooltipRendererParams}
                     />

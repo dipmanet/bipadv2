@@ -143,7 +143,7 @@ export interface RealTimeEarthquake {
     address?: string;
     description?: string;
     eventOn?: string;
-    magnitude?: number;
+    magnitude: number;
 }
 
 export interface RealTimeFire {

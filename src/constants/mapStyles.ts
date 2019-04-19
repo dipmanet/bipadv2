@@ -148,7 +148,7 @@ export default {
             'circle-stroke-color': '#000000',
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                1,
+                2,
                 0,
             ],
             'circle-opacity': 0.9,
@@ -186,17 +186,24 @@ export default {
         },
     },
 
-    eventPoint: {
-        circle: {
-            'circle-color': '#8dd3c7',
-            'circle-radius': 8,
-            'circle-stroke-color': '#000000',
-            'circle-stroke-width': ['case',
+    eventSymbol: {
+        layout: {
+            'text-field': '■',
+            'text-allow-overlap': true,
+            'text-size': 32,
+        },
+        paint: {
+            'text-color': '#8dd3c7',
+            'text-halo-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'text-halo-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 1,
                 0,
             ],
-            'circle-opacity': 0.9,
         },
     },
     eventConvex: {
@@ -233,7 +240,7 @@ export default {
             'circle-opacity': 0.95,
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                1,
+                2,
                 0,
             ],
         },
@@ -250,6 +257,7 @@ export default {
             'circle-stroke-width': 1,
         },
     },
+    // FIXME: remove incident polygon
     incidentPolygon: {
         fill: {
             'fill-color': ['get', 'hazardColor'],
@@ -269,16 +277,21 @@ export default {
             'circle-opacity': 0.9,
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                1,
+                2,
                 0,
             ],
         },
+    },
+    resourceSymbol: {
         layout: {
             'icon-image': ['get', 'iconName'],
             'icon-size': 1,
         },
-        symbol: {},
+        symbol: {
+            // 'icon-color': 'red',
+        },
     },
+
     rainPoint: {
         layout: {
             'text-field': '■',
@@ -293,8 +306,19 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
                 '#03A9F4',
             ],
+            'text-halo-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'text-halo-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0,
+            ],
         },
     },
+
     riverPoint: {
         layout: {
             'text-field': [
@@ -315,14 +339,26 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
                 '#00C853',
             ],
+            'text-halo-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'text-halo-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0,
+            ],
         },
     },
+
     firePoint: {
         layout: {
             'icon-image': 'fire-station-11',
         },
         paint: { 'icon-color': '#ffee58' },
     },
+
     pollutionPoint: {
         fill: {
             'circle-radius': 10,
@@ -337,6 +373,12 @@ export default {
                 ['<=', ['get', 'pm25'], 500.4], '#7e0023',
                 '#7e0023',
             ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                0,
+            ],
         },
     },
     pollutionText: {
@@ -344,6 +386,8 @@ export default {
             'text-field': ['get', 'pm25'],
             'text-allow-overlap': false,
             'text-size': 12,
+            // NOTE: should negate idk why
+            'symbol-sort-key': ['-', ['get', 'pm25']],
         },
         paint: {
             'text-color': '#000000',
@@ -352,6 +396,7 @@ export default {
             'text-halo-blur': 3,
         },
     },
+
     earthquakePoint: {
         fill: {
             'circle-radius': [
@@ -372,6 +417,12 @@ export default {
                 ['>=', ['get', 'magnitude'], 4], '#fcbba1',
                 '#fee5d9',
             ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                0,
+            ],
         },
     },
     earthquakeText: {
@@ -387,6 +438,8 @@ export default {
                 ['>=', ['get', 'magnitude'], 4], 8,
                 7,
             ],
+            // NOTE: should negate idk why
+            'symbol-sort-key': ['-', ['get', 'magnitude']],
         },
         paint: {
             'text-color': '#000000',

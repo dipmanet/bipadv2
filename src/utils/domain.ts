@@ -322,6 +322,8 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
     type: 'FeatureCollection',
     features: incidentList
         .filter(incident => !!incident.point)
+        .map(incident => ({ ...incident, severityValue: calculateSeverity(incident.loss) }))
+        .sort((a, b) => (b.severityValue - a.severityValue))
         .map((incident) => {
             const {
                 id,
@@ -362,6 +364,7 @@ export const incidentPolygonToGeojson = (incidentList: Incident[], hazards: Obj<
                 geometry: { ...polygon },
                 properties: {
                     incidentId: id,
+                    // FIXME: why use this here
                     severity: calculateSeverity(loss, severityScaleFactor),
                     hazardColor: getHazardColor(hazards, hazard),
                     incidentOn: new Date(incidentOn).getTime(),
@@ -387,7 +390,8 @@ export const resourceToGeojson = (resourceList: Resource[]) => {
                     title: resource.title,
                     distance: resource.distance,
                 },
-            })),
+            }))
+            .sort((a, b) => (a.properties.distance - b.properties.distance)),
     };
     return geojson;
 };
@@ -410,7 +414,8 @@ export const earthquakeToGeojson = (realTimeEarthquakeList: RealTimeEarthquake[]
                     eventOn: earthquake.eventOn,
                     magnitude: earthquake.magnitude,
                 },
-            })),
+            }))
+            .sort((a, b) => (a.properties.magnitude - b.properties.magnitude)),
     };
     return geojson;
 };
@@ -503,9 +508,10 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
                     city: pollution.city,
                     measuredOn: pollution.measuredOn,
                     measurements: pollution.measurements,
-                    pm25: pollution.measurements.flat().find(d => d.parameter === 'pm25' && d.unit === 'µg/m³').value || 0,
+                    pm25: +pollution.measurements.flat().find(d => d.parameter === 'pm25' && d.unit === 'µg/m³').value || 0,
                 },
-            })),
+            }))
+            .sort((a, b) => (a.properties.pm25 - b.properties.pm25)),
     };
     return geojson;
 };
