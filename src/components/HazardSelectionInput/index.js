@@ -33,7 +33,7 @@ const defaultProps = {
 const hazardTypeLabelSelector = d => d.title;
 const hazardTypeTitleSelector = d => d.description;
 const hazardTypeKeySelector = d => d.id;
-const hazardTypeIconSelector = d => hazardIcons[d.id];
+const hazardTypeIconSelector = d => hazardIcons[d.id] || hazardIcons.unknown;
 
 class HazardSelectionInput extends React.PureComponent {
     static propTypes = propTypes;

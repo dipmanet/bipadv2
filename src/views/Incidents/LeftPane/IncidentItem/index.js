@@ -55,7 +55,7 @@ export default class Incidents extends React.PureComponent {
             _cs(styles.icon, iconNames.check, styles.verified) :
             _cs(styles.icon, iconNames.close, styles.notVerified);
 
-        const icon = hazardIcons[hazard];
+        const icon = hazardIcons[hazard] || hazardIcons.unknown;
 
         const isNew = isRecent(incidentOn, recentDay);
 

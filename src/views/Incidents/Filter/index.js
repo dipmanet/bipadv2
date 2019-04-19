@@ -5,7 +5,6 @@ import Faram from '@togglecorp/faram';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import { hazardIcons } from '#resources/data';
 
 import {
     setFiltersActionIP,

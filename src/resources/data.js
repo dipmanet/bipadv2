@@ -3,6 +3,7 @@ import landslideIcon from '#resources/icons/landslide.svg';
 import waterIcon from '#resources/icons/water.svg';
 import cycloneIcon from '#resources/icons/cyclone.svg';
 
+import alertIcon from '#resources/icons/Alert.svg';
 import airCrashIcon from '#resources/icons/Airport-destroyed.svg';
 import animalTerrorIcon from '#resources/icons/Animal-terror.svg';
 import avalancheIcon from '#resources/icons/Snow-avalanche.svg';
@@ -53,6 +54,8 @@ export const hazardIcons = {
     // 22: stormIcon,
     23: thunderboltIcon,
     // 24: windstormIcon,
+
+    unknown: alertIcon,
 };
 
 // NOTE: probably unused
