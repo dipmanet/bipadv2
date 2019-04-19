@@ -224,10 +224,18 @@ export default class Timeline extends React.PureComponent {
         );
     }
 
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    handleRightPaneExpandChange = (rightPaneExpanded) => {
+        this.setState({ rightPaneExpanded });
+    }
+
     renderEventTimeline = ({
         start,
         end,
-        eventList,
+        eventList = emptyList,
     }) => {
         if (!start || !end || eventList.length === 0) {
             return null;

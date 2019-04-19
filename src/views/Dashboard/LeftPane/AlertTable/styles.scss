@@ -14,29 +14,22 @@
         .alerts-table {
             flex-grow: 1;
 
-            // .verified {
-            //     color: $color-success-light;
-            // }
+            %cell {
+                display: block;
+                padding: $spacing-small;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
 
-            // .not-verified {
-            //     color: $color-danger-light;
-            // }
+            .cell {
+                @extend %cell;
+            }
 
-            // :global {
-            //     .header {
-            //         border-right: none;
-
-            //         &.description {
-            //             >div {
-            //                 width: 300px;
-            //             }
-            //         }
-            //     }
-
-            //     .row {
-            //         background-color: $color-foreground;
-            //     }
-            // }
+            .date-cell {
+                @extend %cell;
+            }
         }
     }
 
