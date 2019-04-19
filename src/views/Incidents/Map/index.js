@@ -28,7 +28,7 @@ const propTypes = {
     hazards: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     leftPaneExpanded: PropTypes.bool.isRequired,
     rightPaneExpanded: PropTypes.bool.isRequired,
-    recentDay: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {

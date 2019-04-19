@@ -29,7 +29,7 @@ const state: PageState = {
     municipalities: [],
     wards: [],
 
-    selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+    selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
     mapStyles: [
         {
             name: 'none',
@@ -41,6 +41,7 @@ const state: PageState = {
             style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
             color: '#ff8867',
         },
+        /*
         {
             name: 'light',
             style: 'mapbox://styles/mapbox/light-v10',
@@ -66,6 +67,7 @@ const state: PageState = {
             style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
             color: '#671076',
         },
+        */
     ],
 
     hazardTypes: {},
