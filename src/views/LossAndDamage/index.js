@@ -189,6 +189,42 @@ class LossAndDamage extends React.PureComponent {
                     const {
                         requests: {
                             lossAndDamageRequest: {
+                                pending,
+                                response: {
+                                    results: lossAndDamageList = emptyList,
+                                } = emptyObject,
+                            },
+                        },
+                        regions,
+                        districts,
+                        provinces,
+                        wards,
+                        municipalities,
+                        regionLevel,
+                        filters: {
+                            metric,
+                        },
+                    } = this.props;
+
+                    return {
+                        districts,
+                        lossAndDamageList,
+                        metric,
+                        municipalities,
+                        pending,
+                        provinces,
+                        regionLevel,
+                        regions,
+                        wards,
+                    };
+                },
+            },
+            timeline: {
+                component: Timeline,
+                rendererParams: () => {
+                    const {
+                        requests: {
+                            lossAndDamageRequest: {
                                 pending: lossAndDamageRequestPending,
                                 response: {
                                     results: lossAndDamageList = emptyList,
@@ -223,42 +259,6 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         wards,
                         eventList,
-                    };
-                },
-            },
-            timeline: {
-                component: Timeline,
-                rendererParams: () => {
-                    const {
-                        requests: {
-                            lossAndDamageRequest: {
-                                pending,
-                                response: {
-                                    results: lossAndDamageList = emptyList,
-                                } = emptyObject,
-                            },
-                        },
-                        regions,
-                        districts,
-                        provinces,
-                        wards,
-                        municipalities,
-                        regionLevel,
-                        filters: {
-                            metric,
-                        },
-                    } = this.props;
-
-                    return {
-                        districts,
-                        lossAndDamageList,
-                        metric,
-                        municipalities,
-                        pending,
-                        provinces,
-                        regionLevel,
-                        regions,
-                        wards,
                     };
                 },
             },

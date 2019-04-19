@@ -7,6 +7,7 @@ const styleProperties = {
     heightNavbarTop: '50px',
     colorAccentLight: '#e9f3f0',
     panelBorderRadius: '5px',
+    heightTimelineMainContent: '108px',
 };
 
 export default styleProperties;

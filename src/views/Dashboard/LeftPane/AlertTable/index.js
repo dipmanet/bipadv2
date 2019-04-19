@@ -10,7 +10,7 @@ import ColumnWidth from '#rscv/Taebul/ColumnWidth';
 
 import FormattedDate from '#rscv/FormattedDate';
 import { iconNames } from '#constants';
-import { convertJsonToCsv, convertCsvToLink } from '#utils/common';
+import { convertJsonToCsv } from '#utils/common';
 
 import {
     _cs,
@@ -59,11 +59,20 @@ const Header = ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
 );
 
 const Cell = ({ value }) => (
-    value || null
+    <div
+        className={styles.cell}
+        title={value}
+    >
+        { value }
+    </div>
 );
 
 const DateCell = ({ value }) => (
-    <FormattedDate value={value} mode="yyyy-MM-dd" />
+    <FormattedDate
+        className={styles.dateCell}
+        value={value}
+        mode="yyyy-MM-dd"
+    />
 );
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
@@ -72,7 +81,7 @@ const Taebul = Sortable(ColumnWidth(NormalTaebul));
 class DownloadButton extends React.PureComponent {
     static propTypes = {
         name: PropTypes.string,
-        value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+        value: PropTypes.array, // eslint-disable-line react/forbid-prop-types
         disabled: PropTypes.bool,
     };
 
@@ -173,8 +182,10 @@ export default class AlertTable extends React.PureComponent {
 
         this.state = {
             settings: {
-                columnWidths: {},
-                defaultColumnWidth: 200,
+                columnWidths: {
+                    title: 160,
+                },
+                defaultColumnWidth: 108,
             },
         };
     }
