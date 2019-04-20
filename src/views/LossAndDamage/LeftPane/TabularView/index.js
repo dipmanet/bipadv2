@@ -1,19 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Table from '#rscv/Table';
-import FormattedDate from '#rscv/FormattedDate';
-import { iconNames } from '#constants';
-import { convertJsonToCsv, convertCsvToLink } from '#utils/common';
-
+import memoize from 'memoize-one';
 import {
     _cs,
     compareDate,
+    compareNumber,
     compareString,
     compareBoolean,
 } from '@togglecorp/fujs';
 
+import NormalTaebul from '#rscv/Taebul';
+import Sortable from '#rscv/Taebul/Sortable';
+import ColumnWidth from '#rscv/Taebul/ColumnWidth';
+
+import DownloadButton from '#components/DownloadButton';
+import TableDateCell from '#components/TableDateCell';
+
+import {
+    convertTableToCsv,
+    prepareColumns,
+    defaultState,
+} from '#utils/table';
+
 import styles from './styles.scss';
+
+const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
 const propTypes = {
     lossAndDamageList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
@@ -33,123 +44,103 @@ export default class TabularView extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.lossAndDamagesTableHeader = [
+
+        const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
+        const getEstimatedLoss = ({ hazardInfo: { estimatedLoss } = {} }) => estimatedLoss;
+        const getInfraCount = ({ hazardInfo: { infrastructureDestroyedCount } = {} }) => (
+            infrastructureDestroyedCount
+        );
+        const getLiveCount = ({ hazardInfo: { livestockDestroyedCount } = {} }) => (
+            livestockDestroyedCount
+        );
+        const getPeopleCount = ({ hazardInfo: { peopleDeathCount } = {} }) => (
+            peopleDeathCount
+        );
+
+        this.columns = prepareColumns([
             {
                 key: 'verified',
-                label: 'Verified',
-                order: 1,
-                sortable: true,
-                comparator: (a, b) => compareBoolean(a.verified, b.verified),
-                modifier: (row) => {
-                    const iconClass = row.verified ? `
-                    ${iconNames.check} ${styles.verified}` : `
-                    ${iconNames.close} ${styles.notVerified}
-                    `;
-                    return <span className={iconClass} />;
-                },
+                value: { title: 'Verified' },
+
+                comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
+
+                transformer: value => (value ? 'y' : 'n'),
             },
             {
                 key: 'title',
-                label: 'Title',
-                sortable: true,
-                comparator: (a, b) => compareString(a.title, b.title),
-                order: 3,
-            },
-            {
-                key: 'source',
-                label: 'Source',
-                order: 5,
-                sortable: true,
-                comparator: (a, b) => compareString(a.source, b.source),
-            },
-            /*
-            {
-                key: 'event',
-                label: 'Event',
-                order: 6,
-                sortable: true,
-                comparator: (a, b) => compareString(a.source, b.source),
-            },
-            */
-            {
-                key: 'hazardInfo',
-                label: 'Hazard',
-                order: 6,
-                modifier: row => row.hazardInfo.title,
-                sortable: true,
-                // FIXME: potential problem
-                comparator: (a, b) => compareString(a.hazardInfo.title, b.hazardInfo.title),
-            },
-            {
-                key: 'count',
-                label: 'No. of incidents',
-                order: 7,
-                sortable: true,
-                comparator: (a, b) => compareString(a.count, b.count),
-            },
-            {
-                key: 'estimatedLoss',
-                label: 'Total estimated loss',
-                modifier: row => row.loss.estimatedLoss,
-                order: 8,
-                sortable: true,
-                comparator: (a, b) => compareString(a.loss.estimatedLoss, b.loss.estimatedLoss),
-            },
-            {
-                key: 'infrastructureDestroyedCount',
-                label: 'Total infrastructure destroyed',
-                modifier: row => row.loss.infrastructureDestroyedCount,
-                order: 9,
-                sortable: true,
-                comparator: (a, b) => compareString(
-                    a.loss ? a.loss.infrastructureDestroyedCount : 0,
-                    b.loss ? b.loss.infrastructureDestroyedCount : 0,
-                ),
-            },
-            {
-                key: 'livestockDestroyedCount',
-                label: 'Total livestock destroyed',
-                modifier: row => row.loss.livestockDestroyedCount,
-                order: 10,
-                sortable: true,
-                comparator: (a, b) => compareString(
-                    a.loss ? a.loss.livestockDestroyedCount : 0,
-                    b.loss ? b.loss.livestockDestroyedCount : 0,
-                ),
-            },
-            {
-                key: 'peopleDeathCount',
-                label: 'Total people death',
-                modifier: row => row.loss.peopleDeathCount,
-                order: 11,
-                sortable: true,
-                comparator: (a, b) => compareString(
-                    a.loss ? a.loss.peopleDeathCount : 0,
-                    b.loss ? b.loss.peopleDeathCount : 0,
-                ),
+                value: { title: 'Title' },
+
+                comparator: (a, b, d) => compareString(a.title, b.title, d),
             },
             {
                 key: 'description',
-                label: 'Description',
-                order: 12,
-                sortable: true,
-                comparator: (a, b) => compareString(a.description, b.description),
+                value: { title: 'Description' },
+                comparator: (a, b, d) => compareString(a.description, b.description, d),
+            },
+            {
+                key: 'source',
+                value: { title: 'Source' },
+                comparator: (a, b, d) => compareString(a.source, b.source, d),
+            },
+            {
+                key: 'hazardInfo',
+                value: { title: 'Hazard' },
+                comparator: (a, b, d) => compareString(getHazardTitle(a), getHazardTitle(b), d),
+
+                transformer: getHazardTitle,
+            },
+            {
+                key: 'count',
+                value: { title: 'No. of incidents' },
+                comparator: (a, b, d) => compareString(a.count, b.count, d),
+            },
+            {
+                key: 'estimatedLoss',
+                value: { title: 'Total estimated loss' },
+
+                comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
+                transformer: getEstimatedLoss,
+            },
+            {
+                key: 'infrastructureDestroyedCount',
+                value: { title: 'Total infrastructure destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getInfraCount(a), getInfraCount(b), d),
+                transformer: getInfraCount,
+            },
+            {
+                key: 'livestockDestroyedCount',
+                value: { title: 'Total livestock destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getLiveCount(a), getLiveCount(b), d),
+                transformer: getLiveCount,
+            },
+            {
+                key: 'peopleDeathCount',
+                value: { title: 'Total people death' },
+
+                comparator: (a, b, d) => compareNumber(getPeopleCount(a), getPeopleCount(b), d),
+                transformer: getPeopleCount,
             },
             {
                 key: 'createdOn',
-                label: 'Created On',
-                order: 7,
-                sortable: true,
-                comparator: (a, b) => compareDate(a.createdOn, b.createdOn),
-                modifier: row => (
-                    <FormattedDate
-                        date={row.createdOn}
-                        mode="yyyy-MM-dd"
-                    />
-                ),
+                value: { title: 'Created on' },
+                comparator: (a, b, d) => compareDate(a.createdOn, b.createdOn, d),
+
+                cellRenderer: TableDateCell,
             },
-        ];
+        ], styles);
+
+        this.state = {
+            settings: defaultState,
+        };
     }
+
+    handleSettingsChange = (val) => {
+        this.setState({ settings: val });
+    }
+
+    convertValues = memoize(convertTableToCsv)
 
     render() {
         const {
@@ -157,42 +148,29 @@ export default class TabularView extends React.PureComponent {
             lossAndDamageList,
         } = this.props;
 
-        // need to transform data
-        const lossAndDamageListForExport = lossAndDamageList.map(lossAndDamage => ({
-            verified: lossAndDamage.verified,
-            title: lossAndDamage.title,
-            description: lossAndDamage.description,
-            source: lossAndDamage.source,
-            'estimated loss': lossAndDamage.loss.estimatedLoss,
-            'infrastructure destroyed': lossAndDamage.loss.infrastructureDestroyedCount,
-            'livestock destroyed': lossAndDamage.loss.livestockDestroyedCount,
-            'people death': lossAndDamage.loss.peopleDeathCount,
-            // FIXME: potential problem
-            hazard: lossAndDamage.hazardInfo.title,
-            'created on': lossAndDamage.createdOn,
-            'expire on': lossAndDamage.expireOn,
-        }));
-        const csv = convertJsonToCsv(lossAndDamageListForExport);
-        const data = convertCsvToLink(csv);
+        const lossAndDamageListForExport = this.convertValues(lossAndDamageList, this.columns);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
                 <div className={styles.tableContainer}>
-                    <Table
+                    <Taebul
                         className={styles.lossAndDamagesTable}
                         data={lossAndDamageList}
-                        headers={this.lossAndDamagesTableHeader}
+                        headClassName={styles.head}
                         keySelector={TabularView.tableKeySelector}
+                        columns={this.columns}
+
+                        settings={this.state.settings}
+                        onChange={this.handleSettingsChange}
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>
-                    <a
-                        className={styles.downloadLink}
-                        href={data}
-                        download="export.csv"
+                    <DownloadButton
+                        onClick={this.handleClick}
+                        value={lossAndDamageList}
                     >
                         Download csv
-                    </a>
+                    </DownloadButton>
                 </div>
             </div>
         );

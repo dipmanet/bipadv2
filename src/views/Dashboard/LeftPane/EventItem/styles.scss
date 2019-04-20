@@ -1,12 +1,8 @@
 @import '~base-scss/base';
 
 .event-item {
-    border-bottom: $width-separator-thin solid $color-separator;
+    border-bottom: $width-separator-thin solid $color-separator-light;
     padding: $spacing-medium;
-
-    &:first-child {
-        border-top: $width-separator-thin solid $color-separator;
-    }
 
     .title {
         flex-grow: 1;

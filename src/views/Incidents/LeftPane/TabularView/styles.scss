@@ -6,41 +6,24 @@
     overflow: auto;
 
     .table-container {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
         .incidents-table {
-            .verified {
-                color: $color-success-light;
-            }
+            flex-grow: 1;
 
-            .not-verified {
-                color: $color-danger-light;
-            }
-
-            :global {
-                .header {
-                    &.description {
-                        >div {
-                            width: 300px;
-                        }
-                    }
-                }
+            .head {
+                background-color: $color-background-header;
+                padding: $spacing-small 0;
             }
         }
     }
 
-
     .download-link-container {
         flex-shrink: 0;
         padding: $spacing-medium;
-
-        .download-link {
-            background-color: $color-accent;
-            padding: $spacing-small $spacing-medium;
-            text-decoration: none;
-            color: $color-foreground;
-        }
     }
 }
 

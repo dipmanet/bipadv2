@@ -6,34 +6,24 @@
     overflow: auto;
 
     .table-container {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
         .resources-table {
             flex-grow: 1;
 
-            .resource {
-                text-transform: capitalize;
-
-                .icon {
-                    padding-right: $spacing-medium;
-                    height: $font-size-medium;
-                }
+            .head {
+                background-color: $color-background-header;
+                padding: $spacing-small 0;
             }
         }
     }
 
-
     .download-link-container {
         flex-shrink: 0;
         padding: $spacing-medium;
-
-        .download-link {
-            background-color: $color-accent;
-            padding: $spacing-small $spacing-medium;
-            text-decoration: none;
-            color: $color-foreground;
-        }
     }
 }
 

@@ -151,7 +151,7 @@ class LeftPane extends React.PureComponent {
 
         summaryData.count = incidentList.length;
 
-        const ListViewHeader = this.renderListViewHeader;
+        const Header = this.renderListViewHeader;
 
         return (
             <CollapsibleView
@@ -176,7 +176,7 @@ class LeftPane extends React.PureComponent {
                         collapsedViewContainerClassName={styles.nonTabularContainer}
                         collapsedView={
                             <React.Fragment>
-                                <ListViewHeader />
+                                <Header />
                                 <div className={styles.content}>
                                     <div className={styles.statsContainer}>
                                         { lossMetrics.map(metric => (

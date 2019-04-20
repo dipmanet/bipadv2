@@ -1,0 +1,10 @@
+@import '~base-scss/base';
+
+.date-cell {
+    display: block;
+    padding: $spacing-small;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
