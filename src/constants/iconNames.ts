@@ -17,6 +17,7 @@ const iconNames = {
     incident: 'ion-alert-circled',
     lossAndDamange: 'ion-ios-clock',
     drrProjectsProfile: 'ion-briefcase',
+    disasterProfile: 'ion-ios-bolt',
     aboutUs: 'ion-ios-information',
     realtime: 'ion-android-wifi',
     indicator: 'ion-ios-speedometer',

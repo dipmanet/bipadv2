@@ -86,6 +86,14 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
+        name: 'disasterProfile',
+        title: 'Disaster Profile',
+        path: 'disaster-profile/',
+        iconName: iconNames.disasterProfile,
+        load: () => import('../views/DisasterProfile'),
+        navbar: true,
+    },
+    {
         name: 'aboutUs',
         title: 'About Us',
         path: '/about-us/',

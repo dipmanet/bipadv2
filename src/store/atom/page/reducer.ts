@@ -188,6 +188,19 @@ export const setProjectsProfileFiltersAction = (
     pristine,
 });
 
+// disaster profile action creator
+export const setRiskListAction = (
+    { riskList }: { riskList: Type.Risk[] }) => ({
+    type: Type.PageType.DPP__SET_RISK_LIST,
+    riskList,
+});
+
+export const setLpGasCookListAction = (
+    { lpGasCookList }: { lpGasCookList: Type.LpGasCook[] }) => ({
+    type: Type.PageType.DPP__SET_LP_GAS_COOK_LIST,
+    lpGasCookList,
+});
+
 //  REDUCERS
 
 const setRegion = (state: Type.PageState, action: Type.SetRegion) => {
@@ -666,6 +679,38 @@ export const setProjectsProfileFilters = (
     return newState;
 };
 
+// disaster profile page
+export const setRiskList = (
+    state: Type.PageState,
+    action: Type.SetRiskList,
+) => {
+    const {
+        riskList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable-next-line no-param-reassign */
+        deferedState.disasterProfilePage.riskList = riskList;
+    });
+
+    return newState;
+};
+export const setLpGasCookList = (
+    state: Type.PageState,
+    action: Type.SetLpGasCookList,
+) => {
+    const {
+        lpGasCookList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable-next-line no-param-reassign */
+        deferedState.disasterProfilePage.lpGasCookList = lpGasCookList;
+    });
+
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
@@ -721,6 +766,10 @@ export default function routeReducer(
             return setEventList(state, action);
         case Type.PageType.PP__SET_FILTERS:
             return setProjectsProfileFilters(state, action);
+        case Type.PageType.DPP__SET_RISK_LIST:
+            return setRiskList(state, action);
+        case Type.PageType.DPP__SET_LP_GAS_COOK_LIST:
+            return setLpGasCookList(state, action);
         default:
             return state;
     }
