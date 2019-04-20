@@ -195,6 +195,7 @@ export default class RealTimeMap extends React.PureComponent {
             showFire,
             showPollution,
             rightPaneExpanded,
+            leftPaneExpanded,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -209,7 +210,7 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
-        const boundsPadding = this.getBoundsPadding(false, rightPaneExpanded);
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         return (
             <React.Fragment>

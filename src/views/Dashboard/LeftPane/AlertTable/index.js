@@ -192,6 +192,7 @@ export default class AlertTable extends React.PureComponent {
 
     headerRendererParams = ({ column, columnKey }) => ({
         title: column.value.title,
+        className: styles.header,
         sortOrder: column.sortOrder,
         onSortClick: column.onSortClick,
         sortable: column.sortable,
@@ -234,6 +235,7 @@ export default class AlertTable extends React.PureComponent {
                 <div className={styles.tableContainer}>
                     <Taebul
                         className={styles.alertsTable}
+                        headClassName={styles.head}
                         data={alertList}
                         keySelector={AlertTable.tableKeySelector}
                         columns={this.columns}

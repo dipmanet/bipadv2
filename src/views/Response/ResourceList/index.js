@@ -211,14 +211,8 @@ export default class ResourceList extends React.PureComponent {
                                     <Button
                                         className={styles.hideResourceButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}
-                                        iconName={iconNames.shrink}
-                                        title="Hide detailed view"
-                                        transparent
-                                    />
-                                    <Button
-                                        onClick={this.handleHideResourceButtonClick}
                                         iconName={iconNames.chevronUp}
-                                        title="Close Resources"
+                                        title="Hide detailed view"
                                         transparent
                                     />
                                 </header>

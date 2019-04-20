@@ -4,9 +4,11 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListView from '#rscv/List/ListView';
 
+import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 import { getHazardColor } from '#utils/domain';
@@ -127,13 +129,6 @@ export default class LeftPane extends React.PureComponent {
                         Overview
                     </h4>
                     <Button
-                        className={styles.toggleVisualizationButton}
-                        onClick={this.handleToggleVisualizationButtonClick}
-                        iconName={this.state.showVisualizations ? iconNames.list : iconNames.pulse}
-                        title="Toggle visualization"
-                        transparent
-                    />
-                    <Button
                         className={styles.expandTabularViewButton}
                         onClick={this.handleExpandButtonClick}
                         iconName={iconNames.expand}
@@ -148,6 +143,34 @@ export default class LeftPane extends React.PureComponent {
                         transparent
                     />
                 </header>
+                <div className={styles.statsContainer}>
+                    <TextOutput
+                        className={styles.stat}
+                        type="block"
+                        label="No. of Alerts"
+                        value={alerts.length}
+                        isNumericValue
+                    />
+                    <TextOutput
+                        className={styles.stat}
+                        type="block"
+                        label="No. of Events"
+                        value={events.length}
+                        isNumericValue
+                    />
+                </div>
+                <div className={styles.listHeaderContainer}>
+                    <AccentButton
+                        transparent
+                        onClick={this.handleToggleVisualizationButtonClick}
+                    >
+                        {
+                            showVisualizations
+                                ? 'Show list'
+                                : 'Show charts'
+                        }
+                    </AccentButton>
+                </div>
                 { showVisualizations ? (
                     <Visualizations
                         hazardTypes={hazardTypes}
@@ -238,15 +261,8 @@ export default class LeftPane extends React.PureComponent {
                                     <Button
                                         className={styles.hideAlertsButton}
                                         onClick={this.handleCollapseTabularViewButtonClick}
-                                        iconName={iconNames.shrink}
-                                        title="Hide detailed view"
-                                        transparent
-                                    />
-                                    <Button
-                                        className={styles.collapseTabularViewButton}
-                                        onClick={this.handleHideAlertsButtonClick}
                                         iconName={iconNames.chevronUp}
-                                        title="Close Alerts"
+                                        title="Hide detailed view"
                                         transparent
                                     />
                                 </header>

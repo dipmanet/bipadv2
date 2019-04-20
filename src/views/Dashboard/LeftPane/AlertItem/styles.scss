@@ -3,11 +3,24 @@
 .alert-item {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    border-bottom: $width-separator-thin solid $color-separator;
     padding: $spacing-medium 0;
 
+    &:first-child {
+        border-top: $width-separator-thin solid $color-separator;
+    }
+
+    // cursor: pointer;
+    // &:hover {
+    //     background-color: $color-background-hover;
+    // }
+
     &.new {
-        background-color: rgba(128, 255, 128, .09);
+        background-color: var(--color-background-new-item);
+
+        // &:hover {
+        //     background-color: var(--color-background-new-item-hover);
+        // }
     }
 
     .svg-container {
@@ -25,7 +38,6 @@
         }
     }
 
-
     .default-icon {
         flex-shrink: 0;
         margin: $spacing-small $spacing-medium;
@@ -42,9 +54,5 @@
         .title {
             font-weight: $font-weight-bold;
         }
-    }
-
-    &:hover {
-        background-color: rgba(0, 0, 0, .05);
     }
 }

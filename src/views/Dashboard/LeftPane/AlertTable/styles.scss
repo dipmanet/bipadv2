@@ -23,6 +23,11 @@
                 white-space: nowrap;
             }
 
+            .head {
+                background-color: $color-background-header;
+                padding: $spacing-small 0;
+            }
+
             .cell {
                 @extend %cell;
             }
