@@ -161,9 +161,6 @@ export default class IncidentsFilter extends React.PureComponent {
                                 label="Data range"
                                 faramElementName="dateRange"
                             />
-                            <HazardSelectionInput
-                                faramElementName="hazard"
-                            />
                             <SelectInput
                                 faramElementName="event"
                                 className={styles.eventSelectInput}
@@ -171,6 +168,9 @@ export default class IncidentsFilter extends React.PureComponent {
                                 options={eventList}
                                 keySelector={eventKeySelector}
                                 labelSelector={eventLabelSelector}
+                            />
+                            <HazardSelectionInput
+                                faramElementName="hazard"
                             />
                         </div>
                     </Faram>

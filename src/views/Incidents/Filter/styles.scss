@@ -45,7 +45,7 @@ $width-right-panel: var(--width-right-panel);
                 margin: $spacing-medium $spacing-small;
             }
             .event-select-input {
-                margin: $spacing-medium $spacing-small;
+                margin: $spacing-medium $spacing-small 0;
             }
         }
     }

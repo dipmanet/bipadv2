@@ -168,6 +168,7 @@ class Incidents extends React.PureComponent<Props, State> {
         } = this.state;
 
         const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
+
         return (
             <React.Fragment>
                 <Map
