@@ -69,15 +69,6 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
-        name: 'riskInfo',
-        title: 'Risk Information',
-        path: '/risk-info/',
-        load: () => import('../views/RiskInfo'),
-        navbar: true,
-        disabled: false,
-        iconName: iconNames.riskMap,
-    },
-    {
         name: 'projectProfile',
         title: 'Projects Profile',
         path: 'drr-project-profile/',
@@ -92,6 +83,15 @@ const routeSettings: SomeRoute[] = [
         iconName: iconNames.disasterProfile,
         load: () => import('../views/DisasterProfile'),
         navbar: true,
+    },
+    {
+        name: 'riskInfo',
+        title: 'Risk Information',
+        path: '/risk-info/',
+        load: () => import('../views/RiskInfo'),
+        navbar: true,
+        disabled: false,
+        iconName: iconNames.riskMap,
     },
     {
         name: 'aboutUs',
