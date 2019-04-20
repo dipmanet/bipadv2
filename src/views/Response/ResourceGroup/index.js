@@ -19,7 +19,7 @@ const propTypes = {
     heading: PropTypes.string.isRequired,
     className: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    showSummary: PropTypes.boolean,
+    showSummary: PropTypes.bool,
     // eslint-disable-next-line react/forbid-prop-types
     // itemRenderer: PropTypes.object,
     data: PropTypes.arrayOf(PropTypes.object),

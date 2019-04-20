@@ -5,9 +5,9 @@ export const operatorOptions = [
 ];
 
 export const filterOperations = {
-    EQ: (x, y) => x === y,
-    GTE: (x, y) => x >= y,
-    LTE: (x, y) => x <= y,
+    EQ: (objVal, compareVal) => objVal === compareVal,
+    GTE: (objVal, compareVal) => objVal >= compareVal,
+    LTE: (objVal, compareVal) => objVal <= compareVal,
 };
 
 const resourceAttributes = {
@@ -42,8 +42,8 @@ const resourceAttributes = {
                 operation: filterOperations.GTE,
             },
         },
-        { key: 'icu', label: 'ICU', type: 'boolean' },
-        { key: 'nicu', label: 'NICU', type: 'boolean' },
+        { key: 'icu', label: 'ICU', type: 'boolean', filter: {} },
+        { key: 'nicu', label: 'NICU', type: 'boolean', filter: {} },
         {
             key: 'emergencyService',
             label: 'Emergency Service',

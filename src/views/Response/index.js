@@ -8,8 +8,6 @@ import {
     createRequestClient,
 } from '#request';
 
-import { transformDateRangeFilterParam } from '#utils/transformations';
-
 import {
     setIncidentActionIP,
     setResourceListActionRP,
@@ -23,7 +21,6 @@ import {
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
-import IncidentInfo from '#components/IncidentInfo';
 
 import ResourceList from './ResourceList';
 
@@ -73,7 +70,7 @@ const requests = {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/response/`
         ),
-        query: { distance: 12, meta: true },
+        query: { distance: DEFAULT_RESOURCES_DISTANCE, meta: true },
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response.results });
         },
@@ -193,6 +190,7 @@ class Response extends React.PureComponent {
                             rightContentClassName={styles.resourceListContainer}
                             rightContent={
                                 <ResponseFilter
+                                    distance={DEFAULT_RESOURCES_DISTANCE}
                                     setFilter={this.setFilter}
                                     setDistanceFilter={this.setDistanceFilter}
                                     onExpandChange={this.handleRightPaneExpandChange}

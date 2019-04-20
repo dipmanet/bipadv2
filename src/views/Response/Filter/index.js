@@ -41,6 +41,7 @@ import resourceAttributes, { operatorOptions } from '../resourceAttributes';
 import {
     getFilterItems,
     getSchema,
+    getFilterOperations,
     getFilterInputElement,
 } from './utils';
 
@@ -54,12 +55,14 @@ const propTypes = {
     // setInventoryCategories: PropTypes.func.isRequired,
 };
 
-const checkFilters = (obj, attrVals) =>
+const equalityOperator = (x, y) => x === y;
+
+const checkFilters = (obj, attrVals, filterOperations = {}) =>
     Object.entries(attrVals).reduce(
         (a, [k, v]) => a && (
             v === undefined ||
             (v === false && !obj[k]) || // if compare value is false, show null values
-            obj[k] === v
+            (filterOperations[k] || equalityOperator)(obj[k], v)
         ),
         true,
     );
@@ -109,6 +112,10 @@ class ResponseFilter extends React.PureComponent {
 
         this.filterItems = getFilterItems(resourceAttributes);
         this.schema = getSchema(resourceAttributes);
+
+        // The operations for filtering attributes
+        this.filterOperations = getFilterOperations(resourceAttributes);
+
         this.schema.fields.inventory = {
             fields: {
                 quantity: [],
@@ -137,7 +144,8 @@ class ResponseFilter extends React.PureComponent {
 
         const filterFunc = x => showTypes.reduce(
             (currFilterStat, [type, { show, ...attrVals }]) =>
-                currFilterStat || (x.resourceType === type && checkFilters(x, attrVals)),
+                currFilterStat || (x.resourceType === type &&
+                                   checkFilters(x, attrVals, this.filterOperations[type])),
             false,
         );
         return filterFunc;
