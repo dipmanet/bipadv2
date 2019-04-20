@@ -111,6 +111,11 @@ export default class Overview extends React.PureComponent {
     handleRightPaneExpandChange = (rightPaneExpanded) => {
         this.setState({ rightPaneExpanded });
         this.setPlacementForMapControls(rightPaneExpanded);
+
+        const { onRightPaneExpandChange } = this.props;
+        if (onRightPaneExpandChange) {
+            onRightPaneExpandChange(rightPaneExpanded);
+        }
     }
 
     render() {

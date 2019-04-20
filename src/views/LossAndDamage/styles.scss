@@ -3,10 +3,19 @@
 .tabs {
     position: absolute;
     top: var(--spacing-medium);
-    right: calc(var(--width-right-panel) + var(--spacing-medium) * 2 + var(--width-navbar-right));
+    right: calc(var(--spacing-medium) * 2 + var(--width-navbar-right) + 28px);
+    transition: .2s all ease-in;
     z-index: 1;
     background-color: $color-foreground;
     padding: 0 $spacing-small;
+
+    &.right-pane-expanded {
+        right: calc(var(--width-right-panel) + var(--spacing-medium) * 2 + var(--width-navbar-right));
+    }
+
+    &.comparative {
+        right: calc(var(--spacing-medium) + var(--width-navbar-right));
+    }
 
     a {
         text-decoration: none;

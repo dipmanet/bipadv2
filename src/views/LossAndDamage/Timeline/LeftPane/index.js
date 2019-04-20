@@ -92,7 +92,7 @@ export default class LeftPane extends React.PureComponent {
                         onClick={this.handleExpandButtonClick}
                         className={styles.expandButton}
                     >
-                        Hello
+                        Show overview
                     </Button>
                 }
                 expandedViewContainerClassName={styles.overviewContainer}

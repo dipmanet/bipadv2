@@ -126,10 +126,10 @@ export default class RegionSelectInput extends React.PureComponent {
                 adminLevel,
                 geoarea,
             } = emptyObject,
-            showHintAndError,
             provinces,
             districts,
             municipalities,
+            ...otherProps
         } = this.props;
 
         const className = _cs(
@@ -159,15 +159,15 @@ export default class RegionSelectInput extends React.PureComponent {
                 />
                 */}
                 <SelectInput
-                    key={adminLevel}
-                    className={styles.geoareaSelectInput}
                     label="Location"
+                    key={adminLevel}
+                    {...otherProps}
+                    className={styles.geoareaSelectInput}
                     options={options}
                     value={value}
                     keySelector={geoareaKeySelector}
                     labelSelector={geoareaLabelSelector}
                     onChange={this.handleGeoAreaChange}
-                    showHintAndError={showHintAndError}
                 />
             </div>
         );

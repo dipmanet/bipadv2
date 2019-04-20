@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';
@@ -48,14 +49,14 @@ const defaultProps = {
     regionLevel: undefined,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
     filters: lossAndDamageFilterValuesSelector(state),
     regions: regionsSelector(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevel: regionLevelSelector(state),
+    regionLevel: regionLevelSelector(state, props),
 });
 
 // FIXME: save this on redux
@@ -99,6 +100,8 @@ class LossAndDamage extends React.PureComponent {
         super(props);
 
         this.state = {
+            isOverviewRightPaneExpanded: true,
+            isTimelineRightPaneExpanded: true,
         };
 
         this.tabs = {
@@ -141,6 +144,7 @@ class LossAndDamage extends React.PureComponent {
                         regionLevel,
                         regions,
                         wards,
+                        onRightPaneExpandChange: this.handleOverviewRightPaneExpandChange,
                     };
                 },
             },
@@ -162,11 +166,11 @@ class LossAndDamage extends React.PureComponent {
                                 } = emptyObject,
                             },
                         },
-                        regions,
                         districts,
                         provinces,
                         wards,
                         municipalities,
+                        regions,
                         regionLevel,
                         filters: {
                             metric,
@@ -184,15 +188,52 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         wards,
                         eventList,
+                        onRightPaneExpandChange: this.handleTimelineRightPaneExpandChange,
                     };
                 },
             },
             comparative: {
                 component: Comparative,
                 rendererParams: () => {
+                    const {
+                        requests: {
+                            lossAndDamageRequest: {
+                                pending,
+                                response: {
+                                    results: lossAndDamageList = emptyList,
+                                } = emptyObject,
+                            },
+                        },
+                        regions,
+                        regionLevel,
+                    } = this.props;
+
+                    return {
+                        pending,
+                        lossAndDamageList,
+                        regions,
+                        regionLevel,
+                    };
                 },
             },
         };
+    }
+
+    handleOverviewRightPaneExpandChange = (isExpanded) => {
+        this.setState({
+            isOverviewRightPaneExpanded: isExpanded,
+        });
+    }
+
+    handleTimelineRightPaneExpandChange = (isExpanded) => {
+        this.setState({ isTimelineRightPaneExpanded: isExpanded });
+    }
+
+    handleHashChange = () => {
+        this.setState({
+            isOverviewRightPaneExpanded: true,
+            isTimelineRightPaneExpanded: true,
+        });
     }
 
     render() {
@@ -204,13 +245,32 @@ class LossAndDamage extends React.PureComponent {
         } = this.props;
 
         const pending = eventsPending || lossAndDamagePending;
+        const currentPage = window.location.hash.substring(2);
+        let rightPaneExpanded = false;
+
+        const {
+            isOverviewRightPaneExpanded,
+            isTimelineRightPaneExpanded,
+        } = this.state;
+
+        if (currentPage === 'overview') {
+            rightPaneExpanded = isOverviewRightPaneExpanded;
+        } else if (currentPage === 'timeline') {
+            rightPaneExpanded = isTimelineRightPaneExpanded;
+        }
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
                 <FixedTabs
-                    className={styles.tabs}
+                    className={_cs(
+                        styles.tabs,
+                        rightPaneExpanded && styles.rightPaneExpanded,
+                        currentPage === 'comparative' && styles.comparative,
+                    )}
                     tabs={this.tabs}
                     useHash
+                    onHashChange={this.handleHashChange}
                 />
                 <MultiViewContainer
                     views={this.views}

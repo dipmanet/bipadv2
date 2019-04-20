@@ -1,0 +1,75 @@
+@import '~base-scss/base';
+
+.comparative {
+    display: flex;
+    position: absolute;
+    top: calc(var(--height-navbar) + var(--spacing-medium));
+    right: calc(var(--width-navbar-right) + var(--spacing-medium));
+    bottom: var(--spacing-medium);
+    left: var(--spacing-medium);
+    flex-direction: column;
+    z-index: 1;
+    border: $width-separator-thin solid $color-separator;
+    border-radius: var(--radius-panel-border);
+    background-color: $color-foreground;
+
+    .region-selection-form {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .region-input {
+            margin: $spacing-medium;
+        }
+    }
+
+    .comparision-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .map-container {
+            display: flex;
+            flex-shrink: 0;
+            height: 320px;
+
+            .map-1 {
+                flex-basis: 50%;
+                border-right: $width-separator-thin solid $color-separator;
+                height: 100%;
+            }
+
+            .map-2 {
+                flex-basis: 50%;
+                height: 100%;
+            }
+        }
+
+        .visualizations {
+            flex-grow: 1;
+            overflow: auto;
+
+            .aggregated-stats {
+                display: flex;
+
+                %aggregated-stat {
+                    display: flex;
+                    flex-basis: 50%;
+                    flex-wrap: wrap;
+
+                    .stat-metric {
+                        padding: $spacing-large;
+                    }
+                } 
+
+                .aggregated-stat1 {
+                    @extend %aggregated-stat;
+                }
+
+                .aggregated-stat2 {
+                    @extend %aggregated-stat;
+                }
+            }
+        }
+    }
+}
