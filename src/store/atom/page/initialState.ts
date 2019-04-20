@@ -37,9 +37,19 @@ const state: PageState = {
             color: '#dddddd',
         },
         {
-            name: 'custom',
+            name: 'light',
             style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
             color: '#ff8867',
+        },
+        {
+            name: 'roads',
+            style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
+            color: '#671076',
+        },
+        {
+            name: 'satellite',
+            style: 'mapbox://styles/mapbox/satellite-streets-v11',
+            color: '#c89966',
         },
         /*
         {
@@ -48,24 +58,14 @@ const state: PageState = {
             color: '#cdcdcd',
         },
         {
-            name: 'street',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            color: '#ece0ca',
-        },
-        {
             name: 'outdoor',
             style: 'mapbox://styles/mapbox/outdoors-v11',
             color: '#c8dd97',
         },
         {
-            name: 'satellite',
-            style: 'mapbox://styles/mapbox/satellite-streets-v11',
-            color: '#c89966',
-        },
-        {
-            name: 'roads',
-            style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
-            color: '#671076',
+            name: 'street',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            color: '#ece0ca',
         },
         */
     ],

@@ -14,26 +14,9 @@
         .alerts-table {
             flex-grow: 1;
 
-            %cell {
-                display: block;
-                padding: $spacing-small;
-                width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
             .head {
                 background-color: $color-background-header;
                 padding: $spacing-small 0;
-            }
-
-            .cell {
-                @extend %cell;
-            }
-
-            .date-cell {
-                @extend %cell;
             }
         }
     }
@@ -41,12 +24,5 @@
     .download-link-container {
         flex-shrink: 0;
         padding: $spacing-medium;
-
-        .download-link {
-            background-color: $color-accent;
-            padding: $spacing-small $spacing-medium;
-            text-decoration: none;
-            color: $color-foreground;
-        }
     }
 }

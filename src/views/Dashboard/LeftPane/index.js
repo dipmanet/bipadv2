@@ -6,7 +6,7 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import AccentButton from '#rsca/Button/AccentButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import ListView from '#rscv/List/ListView';
+import VirtualizedListView from '#rscv/VirtualizedListView';
 
 import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
@@ -183,7 +183,7 @@ export default class LeftPane extends React.PureComponent {
                             <h4 className={styles.heading}>
                                 Alerts
                             </h4>
-                            <ListView
+                            <VirtualizedListView
                                 className={styles.alertList}
                                 data={alerts}
                                 renderer={AlertItem}
@@ -195,7 +195,7 @@ export default class LeftPane extends React.PureComponent {
                             <h4 className={styles.heading}>
                                 Events
                             </h4>
-                            <ListView
+                            <VirtualizedListView
                                 className={styles.eventList}
                                 data={events}
                                 renderer={EventItem}

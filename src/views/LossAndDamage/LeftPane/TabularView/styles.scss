@@ -1,2 +1,29 @@
+@import '~base-scss/base';
+
 .tabular-view {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .table-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .loss-and-damages-table {
+            flex-grow: 1;
+
+            .head {
+                background-color: $color-background-header;
+                padding: $spacing-small 0;
+            }
+        }
+    }
+
+    .download-link-container {
+        flex-shrink: 0;
+        padding: $spacing-medium;
+    }
 }
+

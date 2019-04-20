@@ -3,24 +3,12 @@
 .alert-item {
     display: flex;
     align-items: center;
-    border-bottom: $width-separator-thin solid $color-separator;
+    border-bottom: $width-separator-thin solid $color-separator-light;
     padding: $spacing-medium 0;
 
-    &:first-child {
-        border-top: $width-separator-thin solid $color-separator;
-    }
-
-    // cursor: pointer;
-    // &:hover {
-    //     background-color: $color-background-hover;
-    // }
 
     &.new {
         background-color: var(--color-background-new-item);
-
-        // &:hover {
-        //     background-color: var(--color-background-new-item-hover);
-        // }
     }
 
     .svg-container {
