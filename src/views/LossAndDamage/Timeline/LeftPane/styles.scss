@@ -1,13 +1,14 @@
 @import '~base-scss/base';
 
 $width-left-pane: var(--width-left-panel);
-$height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+$height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 3) - var(--height-timeline-main-content));
 
 .left-pane {
     .overview-container {
         display: flex;
         flex-direction: column;
         transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator;
         background-color: $color-foreground;
         width: $width-left-pane;
         height: $height-left-pane;

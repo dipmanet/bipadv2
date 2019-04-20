@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { _cs } from '@togglecorp/fujs';
 
 import ChoroplethMap from '#components/ChoroplethMap';
 import { getMapPaddings } from '#constants';
+import Numeral from '#rscv/Numeral';
 
 import styles from './styles.scss';
 
@@ -19,14 +21,6 @@ const colorGrade = [
     '#800026',
 ];
 
-const pickList = (list, start, offset) => {
-    const newList = [];
-    for (let i = start; i < list.length; i += offset) {
-        newList.push(list[i]);
-    }
-    return newList;
-};
-
 const propTypes = {
     geoareas: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
@@ -39,8 +33,8 @@ export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        const mapPaddings = getMapPaddings();
+    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded, isTimeline) => {
+        const mapPaddings = getMapPaddings(isTimeline);
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
@@ -94,35 +88,57 @@ export default class LossAndDamageMap extends React.PureComponent {
             metric,
             maxValue,
             metricName,
+            isTimeline,
         } = this.props;
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const boundsPadding = this.getBoundsPadding(
+            leftPaneExpanded,
+            rightPaneExpanded,
+            isTimeline,
+        );
 
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         const mapState = this.generateMapState(geoareas, mapping, metric);
-        const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
+        const colorUnitWidth = `${100 / colorGrade.length}%`;
+        // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
 
         return (
             <React.Fragment>
-                <div className={styles.legend}>
+                <div
+                    className={_cs(
+                        styles.legend,
+                        leftPaneExpanded && styles.leftPaneExpanded,
+                        isTimeline && styles.timeline,
+                    )}
+                >
                     <h5 className={styles.heading}>
                         {metricName}
                     </h5>
                     <div className={styles.range}>
-                        <div className={styles.min}>
-                            0
-                        </div>
-                        <div className={styles.max}>
-                            { maxValue }
-                        </div>
+                        <Numeral
+                            className={styles.min}
+                            value={0}
+                            precision={0}
+                        />
+                        <Numeral
+                            className={styles.max}
+                            value={maxValue}
+                            precision={0}
+                        />
                     </div>
-                    <div
-                        className={styles.scale}
-                        style={{
-                            background: colorString,
-                        }}
-                    />
+                    <div className={styles.scale}>
+                        { colorGrade.map(c => (
+                            <div
+                                key={c}
+                                className={styles.colorUnit}
+                                style={{
+                                    width: colorUnitWidth,
+                                    backgroundColor: c,
+                                }}
+                            />
+                        ))}
+                    </div>
                 </div>
                 <ChoroplethMap
                     boundsPadding={boundsPadding}

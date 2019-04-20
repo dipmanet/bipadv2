@@ -1,11 +1,18 @@
 @import '~base-scss/base';
 
 $width-right-panel: var(--width-right-panel);
+$height-left-pane: calc(100vh - var(--spacing-medium) * 2);
+$height-left-pane-with-timeline: calc(100vh - var(--spacing-medium) * 3 - var(--height-timeline-main-content));
 
 .filter {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
+    height: $height-left-pane;
+    overflow: auto;
+
+    &.timeline {
+        height: $height-left-pane-with-timeline;
+    }
 
     .header {
         display: flex;

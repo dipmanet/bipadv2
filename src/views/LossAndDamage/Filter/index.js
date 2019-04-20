@@ -110,13 +110,18 @@ class LossAndDamageFilter extends React.PureComponent {
             metricType,
             onMetricChange,
             metricOptions,
+            isTimeline,
         } = this.props;
 
         const { showFilters } = this.state;
 
         return (
             <CollapsibleView
-                className={_cs(styles.filter, className)}
+                className={_cs(
+                    styles.filter,
+                    className,
+                    isTimeline && styles.timeline,
+                )}
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
                 collapsedView={
