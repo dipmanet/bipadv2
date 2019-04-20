@@ -43,19 +43,18 @@ $width-left-pane: var(--width-left-panel);
     }
 }
 
-.incident-count {
+.incident-detail-box {
     display: flex;
     position: absolute;
     top: $spacing-medium;
     right: calc(var(--width-navbar-right) + calc(var(--spacing-medium) * 2) +
-calc(var(--font-size-small) * 10));
-    align-items: center;
+    calc(var(--font-size-small) * 10));
+    flex-direction: column;
     z-index: 1;
     border: $width-separator-thin solid $color-separator-light;
     border-radius: 3px;
     background-color: $color-foreground;
     padding: $spacing-small $spacing-large;
-    text-align: center;
 
     .count {
         margin-right: $spacing-medium;
