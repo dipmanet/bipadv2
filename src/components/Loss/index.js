@@ -47,18 +47,22 @@ export default class Loss extends React.PureComponent {
                     <TextOutput
                         label="People Dead"
                         value={peopleDeathCount}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Livestock Destroyed"
                         value={livestockDestroyedCount}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Infrastructures Destroyed"
                         value={infrastructureDestroyedCount}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Estimated Loss (NRs.)"
                         value={estimatedLoss}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Description"

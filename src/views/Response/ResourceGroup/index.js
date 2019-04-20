@@ -102,6 +102,7 @@ export default class ResourceGroup extends React.PureComponent {
                             key={group.key}
                             label={group.key}
                             value={group.value.length}
+                            isNumericValue
                         />
                     ))
                 }
@@ -112,6 +113,7 @@ export default class ResourceGroup extends React.PureComponent {
                             key={label}
                             label={label}
                             value={aggregatedAttributes[label]}
+                            isNumericValue
                         />
                     ))
                 }
