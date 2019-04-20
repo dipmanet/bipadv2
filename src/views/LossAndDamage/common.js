@@ -112,17 +112,16 @@ export const getAggregatedStats = incidents => (
 
 export const getGroupMethod = (regionLevel) => {
     if (regionLevel === 1) {
+        return getProvince;
+    } else if (regionLevel === 2) {
         return getDistrict;
-    }
-    if (regionLevel === 2) {
+    } else if (regionLevel === 3) {
         return getMunicipality;
-    }
-    if (regionLevel === 3) {
+    } else if (regionLevel === 4) {
         return getWard;
     }
-    // if (isNotDefined(regionLevel) || regionLevel === 0) {
+
     return getProvince;
-    // }
 };
 
 export const getStat = ({ key, value }) => ({

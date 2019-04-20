@@ -61,16 +61,17 @@ const defaultProps = {
     sourceKey: 'country',
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevel: regionLevelSelector(state),
-    bounds: boundsSelector(state),
-    selectedProvinceId: selectedProvinceIdSelector(state),
-    selectedDistrictId: selectedDistrictIdSelector(state),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state),
+
+    regionLevel: regionLevelSelector(state, props),
+    bounds: boundsSelector(state, props),
+    selectedProvinceId: selectedProvinceIdSelector(state, props),
+    selectedDistrictId: selectedDistrictIdSelector(state, props),
+    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
 const visibleLayout = {
@@ -204,7 +205,6 @@ class ChoroplethMap extends React.PureComponent {
                         filter={provinceFilter}
                     />
                 </MapSource>
-
                 <MapSource
                     sourceKey={`${sourceKey}-country-outline`}
                     url={mapSources.nepal.url}

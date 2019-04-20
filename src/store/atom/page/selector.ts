@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { mapToList, listToMap } from '@togglecorp/fujs';
 
 import { AppState } from '../../types';
+import { Region } from './types';
 
 const emptyList: unknown[] = [];
 
@@ -20,6 +21,8 @@ const realTimeMonitoringPageSelector = ({ page }: AppState) =>
 
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
+const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
+
 const resourceTypesSelector = ({ page }: AppState) => (
     page.resourceTypes || emptyList
 );
@@ -33,8 +36,9 @@ export const initialPopupShownSelector = ({ page }: AppState) => page.initialPop
 export const regionSelector = ({ page }: AppState) => page.region;
 
 export const regionLevelSelector = createSelector(
+    regionByPropSelector,
     regionSelector,
-    region => region.adminLevel,
+    (regionFromProps, region) => (regionFromProps || region).adminLevel,
 );
 
 const getId = (val: { id: number }) => val.id;
@@ -345,9 +349,10 @@ export const lpGasCookListSelector = createSelector(
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(
+    regionByPropSelector,
     regionSelector,
-    (region) => {
-        const { adminLevel, geoarea } = region;
+    (regionFromProps, region) => {
+        const { adminLevel, geoarea } = regionFromProps || region;
         if (adminLevel !== 1) {
             return undefined;
         }
@@ -355,9 +360,10 @@ export const selectedProvinceIdSelector = createSelector(
     },
 );
 export const selectedDistrictIdSelector = createSelector(
+    regionByPropSelector,
     regionSelector,
-    (region) => {
-        const { adminLevel, geoarea } = region;
+    (regionFromProps, region) => {
+        const { adminLevel, geoarea } = regionFromProps || region;
         if (adminLevel !== 2) {
             return undefined;
         }
@@ -365,9 +371,10 @@ export const selectedDistrictIdSelector = createSelector(
     },
 );
 export const selectedMunicipalityIdSelector = createSelector(
+    regionByPropSelector,
     regionSelector,
-    (region) => {
-        const { adminLevel, geoarea } = region;
+    (regionFromProps, region) => {
+        const { adminLevel, geoarea } = regionFromProps || region;
         if (adminLevel !== 3) {
             return undefined;
         }
@@ -381,12 +388,13 @@ const nepalBounds = [
 ];
 
 export const boundsSelector = createSelector(
+    regionByPropSelector,
     regionSelector,
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    (region, provinces, districts, municipalities) => {
-        const { adminLevel, geoarea } = region;
+    (regionFromProps, region, provinces, districts, municipalities) => {
+        const { adminLevel, geoarea } = regionFromProps || region;
         const geoAreas = (
             (adminLevel === 1 && provinces) ||
             (adminLevel === 2 && districts) ||
