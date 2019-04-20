@@ -3,7 +3,12 @@
 .alert-item {
     display: flex;
     align-items: center;
+    border-bottom: $width-separator-thin solid $color-separator;
     padding: $spacing-medium 0;
+
+    &:first-child {
+        border-top: $width-separator-thin solid $color-separator;
+    }
 
     // cursor: pointer;
     // &:hover {

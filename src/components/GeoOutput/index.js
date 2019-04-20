@@ -8,11 +8,13 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     geoareaName: PropTypes.string,
+    alwaysVisible: PropTypes.bool,
 };
 
 const defaultProps = {
     className: '',
     geoareaName: '',
+    alwaysVisible: false,
 };
 
 export default class DateOutput extends React.PureComponent {
@@ -23,9 +25,10 @@ export default class DateOutput extends React.PureComponent {
         const {
             className: classNameFromProps,
             geoareaName,
+            alwaysVisible,
         } = this.props;
 
-        if (!geoareaName) {
+        if (!geoareaName && !alwaysVisible) {
             return null;
         }
 
@@ -39,7 +42,7 @@ export default class DateOutput extends React.PureComponent {
                     )}
                 />
                 <div className={styles.title}>
-                    {geoareaName}
+                    {geoareaName || '-'}
                 </div>
             </div>
         );

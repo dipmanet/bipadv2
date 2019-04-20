@@ -2,11 +2,17 @@
 
 .incident-item {
     display: flex;
+    border-bottom: $width-separator-thin solid $color-separator;
     padding: $spacing-medium 0;
     width: 100%;
+    height: 97px;
     overflow: hidden;
     text-decoration: none;
     color: inherit;
+
+    &:first-child {
+        border-top: $width-separator-thin solid $color-separator;
+    }
 
     &:hover {
         background-color: $color-background-hover;
@@ -76,8 +82,7 @@
 
         .content {
             display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
             padding: $spacing-extra-small $spacing-medium;
 
             >* {

@@ -7,7 +7,6 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListSelection from '#rsci/ListSelection';
-import Legend from '#rscz/Legend';
 
 import {
     setRealTimeFiltersAction,
@@ -25,55 +24,12 @@ import styles from './styles.scss';
 const realTimeKeySelector = d => d.id;
 const realTimeLabelSelector = d => d.title;
 
-const rainLegendItems = [
-    { icon: '■', color: '#6FD1FD', label: 'Below Warning Level' },
-    { icon: '■', color: '#7482CF', label: 'Above Warning Level' },
-    { icon: '■', color: '#9C27B0', label: 'Above Danger Level' },
-];
-
-const riverLegendItems = [
-    { icon: '●', color: '#53FF9A', label: 'Steady & Below Warning Level' },
-    { icon: '●', color: '#5770FE', label: 'Steady & Above Warning Level' },
-    { icon: '●', color: '#C51162', label: 'Steady & Above Danger Level' },
-    { icon: '▲', color: '#53FF9A', label: 'Rising & Below Warning Level' },
-    { icon: '▲', color: '#5770FE', label: 'Rising & Above Warning Level' },
-    { icon: '▲', color: '#C51162', label: 'Rising & Above Danger Level' },
-    { icon: '▼', color: '#53FF9A', label: 'Falling & Below Warning Level' },
-    { icon: '▼', color: '#5770FE', label: 'Falling & Above Warning Level' },
-    { icon: '▼', color: '#C51162', label: 'Falling & Below Danger Level' },
-
-];
-
-const earthquakeLegendItems = [
-    { icon: '●', color: '#a50f15', label: 'Great (8 or more)' },
-    { icon: '●', color: '#de2d26', label: 'Major (7 or more)' },
-    { icon: '●', color: '#fb6a4a', label: 'Strong (6 or more)' },
-    { icon: '●', color: '#fc9272', label: 'Moderate (5 or more)' },
-    { icon: '●', color: '#fcbba1', label: 'Light (4 or more)' },
-    { icon: '●', color: '#fee5d9', label: 'Minor (3 or more)' },
-];
-
-const pollutionLegendItems = [
-    { icon: '●', color: '#009966', label: 'Good (12 or less)' },
-    { icon: '●', color: '#ffde33', label: 'Moderate (35.4 or less)' },
-    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups (55.4 or less)' },
-    { icon: '●', color: '#cc0033', label: 'Unhealthy (150.4 or less)' },
-    { icon: '●', color: '#660099', label: 'Very Unhealthy (350.4 or less)' },
-    { icon: '●', color: '#7e0023', label: 'Hazardous (500.4 or less)' },
-];
-
-const itemSelector = d => d.label;
-const iconSelector = d => d.icon;
-const legendColorSelector = d => d.color;
-const legendLabelSelector = d => d.label;
-
 const propTypes = {
     setFilters: PropTypes.func.isRequired,
     filters: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
-    realTimeList: PropTypes.array.isRequired,
+    realTimeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
 
 const defaultProps = {
     className: '',
@@ -200,7 +156,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                 faramElementName="region"
                             />
                             <ListSelection
-                                label="Realtime data"
+                                label="Layers"
                                 className={styles.realTimeSourcesInput}
                                 faramElementName="realtimeSources"
                                 options={realTimeList}
@@ -208,79 +164,6 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                                 labelSelector={realTimeLabelSelector}
                             />
                         </Faram>
-                        <div className={styles.legendsContainer}>
-                            { (showRain || showRiver || showEarthquake || showPollution) &&
-                                <h4>Legend</h4>
-                            }
-                            { showRain &&
-                                <div className={styles.container}>
-                                    <h5 className={styles.heading}>
-                                        Rain
-                                    </h5>
-                                    <Legend
-                                        className={styles.legend}
-                                        data={rainLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                        iconSelector={iconSelector}
-                                        labelSelector={legendLabelSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                </div>
-                            }
-                            { showRiver &&
-                                <div className={styles.container}>
-                                    <h5 className={styles.heading}>
-                                        River
-                                    </h5>
-                                    <Legend
-                                        className={styles.legend}
-                                        data={riverLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                        iconSelector={iconSelector}
-                                        labelSelector={legendLabelSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                </div>
-                            }
-                            { showEarthquake &&
-                                <div className={styles.container}>
-                                    <h5 className={styles.heading}>
-                                        Earthquake (Richter scale)
-                                    </h5>
-                                    <Legend
-                                        className={styles.legend}
-                                        data={earthquakeLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                        iconSelector={iconSelector}
-                                        labelSelector={legendLabelSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                </div>
-                            }
-                            { showPollution &&
-                                <div className={styles.container}>
-                                    <h5 className={styles.heading}>
-                                        Pollution (PM <sub>2.5</sub>)
-                                    </h5>
-                                    <Legend
-                                        className={styles.legend}
-                                        data={pollutionLegendItems}
-                                        itemClassName={styles.legendItem}
-                                        keySelector={itemSelector}
-                                        iconSelector={iconSelector}
-                                        labelSelector={legendLabelSelector}
-                                        colorSelector={legendColorSelector}
-                                        emptyComponent={null}
-                                    />
-                                </div>
-                            }
-                        </div>
                     </React.Fragment>
                 }
             />

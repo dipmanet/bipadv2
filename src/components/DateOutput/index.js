@@ -9,10 +9,12 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    alwaysVisible: PropTypes.bool,
 };
 
 const defaultProps = {
     className: '',
+    alwaysVisible: false,
 };
 
 export default class DateOutput extends React.PureComponent {
@@ -23,10 +25,11 @@ export default class DateOutput extends React.PureComponent {
         const {
             className: classNameFromProps,
             value,
+            alwaysVisible,
             ...otherProps
         } = this.props;
 
-        if (!value) {
+        if (!value && !alwaysVisible) {
             return null;
         }
 

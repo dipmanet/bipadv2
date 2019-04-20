@@ -100,14 +100,17 @@ export default class Incidents extends React.PureComponent {
                     <div className={styles.content}>
                         <DateOutput
                             value={incidentOn}
+                            alwaysVisible
                         />
                         <GeoOutput
                             className={styles.geoOutput}
                             geoareaName={streetAddress}
+                            alwaysVisible
                         />
                         <TextOutput
                             label="Source"
                             value={source}
+                            alwaysVisible
                         />
                     </div>
                 </div>
