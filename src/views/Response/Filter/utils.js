@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { mapToMap } from '@togglecorp/fujs';
+
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
@@ -34,6 +36,15 @@ export const getSchema = (resourceAttributes) => {
         fields,
     };
 };
+
+export const getFilterOperations = resourceAttributes => mapToMap(
+    resourceAttributes,
+    key => key,
+    attrs => attrs.filter(attr => !!attr.filter).reduce(
+        (acc, attr) => ({ ...acc, [attr.key]: attr.filter.operation }),
+        {},
+    ),
+);
 
 const getKey = x => x.key;
 const getLabel = x => x.label;

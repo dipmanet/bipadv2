@@ -133,7 +133,7 @@ export default class RealTimeMap extends React.PureComponent {
                 }
             />
             <TextOutput
-                label="LandCover"
+                label="Land Cover"
                 value={landCover}
             />1
         </div>

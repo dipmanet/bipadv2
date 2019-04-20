@@ -1,8 +1,14 @@
-const operatorOptions = [
+export const operatorOptions = [
     { key: 'government', label: 'Government' },
     { key: 'private', label: 'Private' },
     { key: 'community', label: 'Community' },
 ];
+
+export const filterOperations = {
+    EQ: (objVal, compareVal) => objVal === compareVal,
+    GTE: (objVal, compareVal) => objVal >= compareVal,
+    LTE: (objVal, compareVal) => objVal <= compareVal,
+};
 
 const resourceAttributes = {
     health: [
@@ -18,11 +24,34 @@ const resourceAttributes = {
         { key: 'openingHours', label: 'Opening Hours', type: 'string' },
         { key: 'phoneNumber', label: 'Phone Number', type: 'string' },
 
-        { key: 'bedCount', label: 'Number of Beds', type: 'number', filter: {} },
-        { key: 'staffCount', label: 'Number of Staffs', type: 'number', filter: {} },
-        { key: 'icu', label: 'ICU', type: 'boolean' },
-        { key: 'nicu', label: 'NICU', type: 'boolean' },
-        { key: 'emergencyService', label: 'Emergency Service', type: 'boolean', filter: {} },
+        { key: 'cbsCode', label: 'Cbs Code', type: 'string' },
+        {
+            key: 'bedCount',
+            label: 'Number of Beds',
+            type: 'number',
+            aggregate: true,
+            filter: {
+                operation: filterOperations.GTE,
+            },
+        },
+        {
+            key: 'staffCount',
+            label: 'Number of Staffs',
+            type: 'number',
+            filter: {
+                operation: filterOperations.GTE,
+            },
+        },
+        { key: 'icu', label: 'ICU', type: 'boolean', filter: {} },
+        { key: 'nicu', label: 'NICU', type: 'boolean', filter: {} },
+        {
+            key: 'emergencyService',
+            label: 'Emergency Service',
+            type: 'boolean',
+            filter: {
+                operation: filterOperations.EQ,
+            },
+        },
         { key: 'operatingTheatre', label: 'Operating Theatre', type: 'boolean' },
         { key: 'ambulanceService', label: 'Ambulance Service', type: 'boolean' },
         { key: 'contactPerson', label: 'Contact Person', type: 'string' },
@@ -33,8 +62,23 @@ const resourceAttributes = {
     ],
     finance: [
         { key: 'cbsCode', label: 'Cbs Code', type: 'string' },
-        { key: 'population', label: 'Population', type: 'number', filter: {} },
-        { key: 'accessPointCount', label: 'Access Point Count', type: 'number', filter: {} },
+        {
+            key: 'population',
+            label: 'Population',
+            type: 'number',
+            filter: {
+                operation: filterOperations.GTE,
+            },
+        },
+        {
+            key: 'accessPointCount',
+            label: 'Access Points',
+            aggregate: true,
+            type: 'number',
+            filter: {
+                operation: filterOperations.GTE,
+            },
+        },
         { key: 'type', label: 'Type', type: 'string' },
         {
             key: 'channel',
@@ -63,10 +107,29 @@ const resourceAttributes = {
         { key: 'capacity', label: 'Capacity', type: 'number' },
     ],
     hotel: [
-        { key: 'roomCount', label: 'Rooms', type: 'number', filter: {} },
+        {
+            key: 'roomCount',
+            label: 'Rooms',
+            type: 'number',
+            aggregate: true,
+            filter: {},
+        },
         { key: 'bedCount', label: 'Beds', type: 'number' },
         { key: 'staffCount', label: 'Staffs', type: 'number' },
         { key: 'facilities', label: 'Staffs', type: 'string' },
+    ],
+    governance: [
+        {
+            key: 'operatorType',
+            label: 'Operator',
+            type: 'string',
+            filter: {
+                type: 'select',
+                options: operatorOptions,
+            },
+        },
+        { key: 'source', label: 'Source', type: 'string' },
+        // { key: 'staffCount', label: 'Staffs', type: 'number' },
     ],
 };
 

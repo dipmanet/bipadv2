@@ -55,6 +55,7 @@ const resourceComponentsProps = {
 
 const Resource = ({ type, ...otherProps }) => (
     <ResourceGroup
+        type={type}
         {...resourceComponentsProps[type] || {}}
         {...otherProps}
     />

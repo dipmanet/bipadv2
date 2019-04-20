@@ -228,6 +228,12 @@ export const resourceListSelectorRP = createSelector(
     ({ resourceList }) => resourceList,
 );
 
+
+export const inventoryCategoryListSelectorRP = createSelector(
+    responsePageSelector,
+    ({ inventoryCategoryList }) => inventoryCategoryList,
+);
+
 // realtime monitoring
 
 export const realTimeRainListSelector = createSelector(

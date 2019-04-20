@@ -57,14 +57,17 @@ export default class PeopleLoss extends React.PureComponent {
                     <TextOutput
                         label="Dead"
                         value={lossData.dead}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Injured"
                         value={lossData.injured}
+                        isNumericValue
                     />
                     <TextOutput
                         label="Missing"
                         value={lossData.missing}
+                        isNumericValue
                     />
                 </div>
             </div>
