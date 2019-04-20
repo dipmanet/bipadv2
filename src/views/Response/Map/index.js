@@ -106,8 +106,8 @@ class ResponseMap extends React.PureComponent {
             point,
             polygon,
         } = incident;
-
         const box = this.getBuffer(point || polygon);
+
         const incidentList = this.getIncidentList(incident);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);

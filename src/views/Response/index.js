@@ -53,101 +53,18 @@ const defaultProps = {
 
 const trueFilter = () => true;
 
-class Response extends React.PureComponent {
-    static propTypes = propTypes
-    static defaultProps = defaultProps
+const mapStateToProps = (state, props) => ({
+    // incidentId: incidentIdFromRouteSelector(state),
+    incident: incidentSelector(state, props),
+    resourceList: resourceListSelectorRP(state),
+    wardsMap: wardsMapSelector(state),
+    // incidentList: incidentListSelectorIP(state),
+});
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            filterFunction: trueFilter,
-
-            leftPaneExpanded: true,
-            rightPaneExpanded: true,
-        };
-    }
-
-    setFilter = (filterFunction) => {
-        this.setState({ filterFunction });
-    }
-
-    setDistanceFilter = ({ min, max }) => {
-        this.props.requests.filteredResponseRequest.do({ min, max });
-    }
-
-    handleLeftPaneExpandChange = (leftPaneExpanded) => {
-        this.setState({ leftPaneExpanded });
-    }
-
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-    }
-
-    render() {
-        const {
-            incident = emptyObject,
-            resourceList,
-            requests: {
-                responseRequest: { pending },
-            },
-            wardsMap,
-        } = this.props;
-
-        const {
-            leftPaneExpanded,
-            rightPaneExpanded,
-        } = this.state;
-
-        const filteredResourceList = resourceList.filter(this.state.filterFunction);
-
-        if (!incident.id) {
-            return null;
-        }
-
-        /*
-            <IncidentInfo
-                className={styles.info}
-                incident={incident}
-                wardsMap={wardsMap}
-                hideLink
-            />
-        */
-
-        return (
-            <React.Fragment>
-                <Map
-                    incident={incident}
-                    resourceList={filteredResourceList}
-                    leftPaneExpanded={leftPaneExpanded}
-                    rightPaneExpanded={rightPaneExpanded}
-                />
-                <Loading pending={pending} />
-                <Page
-                    leftContentClassName={styles.incidentDetails}
-                    leftContent={
-                        <ResourceList
-                            className={styles.resourceList}
-                            resourceList={resourceList}
-                            pending={pending}
-                            incident={incident}
-                            wardsMap={wardsMap}
-                            onExpandChange={this.handleLeftPaneExpandChange}
-                        />
-                    }
-                    rightContentClassName={styles.resourceListContainer}
-                    rightContent={
-                        <ResponseFilter
-                            setFilter={this.setFilter}
-                            setDistanceFilter={this.setDistanceFilter}
-                            onExpandChange={this.handleRightPaneExpandChange}
-                        />
-                    }
-                />
-            </React.Fragment>
-        );
-    }
-}
+const mapDispatchToProps = dispatch => ({
+    setResourceList: params => dispatch(setResourceListActionRP(params)),
+    setIncident: params => dispatch(setIncidentActionIP(params)),
+});
 
 const requests = {
     responseRequest: {
@@ -189,27 +106,103 @@ const requests = {
         onSuccess: ({ response, props: { setIncident } }) => {
             setIncident({ incident: response });
         },
-        onMount: ({ props: { incidentId } }) => (
-            !!incidentId
-        ),
+        onMount: ({ props: { incidentId } }) => !!incidentId,
         extras: {
             schemaName: 'singleIncidentResponse',
         },
     },
 };
 
-const mapStateToProps = (state, props) => ({
-    // incidentId: incidentIdFromRouteSelector(state),
-    incident: incidentSelector(state, props),
-    resourceList: resourceListSelectorRP(state),
-    wardsMap: wardsMapSelector(state),
-    // incidentList: incidentListSelectorIP(state),
-});
+class Response extends React.PureComponent {
+    static propTypes = propTypes
+    static defaultProps = defaultProps
 
-const mapDispatchToProps = dispatch => ({
-    setResourceList: params => dispatch(setResourceListActionRP(params)),
-    setIncident: params => dispatch(setIncidentActionIP(params)),
-});
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            filterFunction: trueFilter,
+
+            leftPaneExpanded: true,
+            rightPaneExpanded: true,
+        };
+    }
+
+    setFilter = (filterFunction) => {
+        this.setState({ filterFunction });
+    }
+
+    setDistanceFilter = ({ min, max }) => {
+        this.props.requests.filteredResponseRequest.do({ min, max });
+    }
+
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
+    handleRightPaneExpandChange = (rightPaneExpanded) => {
+        this.setState({ rightPaneExpanded });
+    }
+
+    render() {
+        const {
+            incident = emptyObject,
+            resourceList,
+            requests: {
+                responseRequest: { pending: pendingResponse },
+                filteredResponseRequest: { pending: pendingFilteredResponse },
+                incidentRequest: { pending: pendingIncident },
+            },
+            wardsMap,
+        } = this.props;
+
+        const {
+            leftPaneExpanded,
+            rightPaneExpanded,
+            filterFunction,
+        } = this.state;
+
+        const filteredResourceList = resourceList.filter(filterFunction);
+        const pending = pendingResponse || pendingFilteredResponse || pendingIncident;
+
+        return (
+            <React.Fragment>
+                <Loading pending={pending} />
+                { incident.id &&
+                    <React.Fragment>
+                        <Map
+                            incident={incident}
+                            resourceList={filteredResourceList}
+                            leftPaneExpanded={leftPaneExpanded}
+                            rightPaneExpanded={rightPaneExpanded}
+                        />
+                        <Page
+                            leftContentClassName={styles.incidentDetails}
+                            leftContent={
+                                <ResourceList
+                                    className={styles.resourceList}
+                                    resourceList={resourceList}
+                                    pending={pending}
+                                    incident={incident}
+                                    wardsMap={wardsMap}
+                                    onExpandChange={this.handleLeftPaneExpandChange}
+                                />
+                            }
+                            rightContentClassName={styles.resourceListContainer}
+                            rightContent={
+                                <ResponseFilter
+                                    setFilter={this.setFilter}
+                                    setDistanceFilter={this.setDistanceFilter}
+                                    onExpandChange={this.handleRightPaneExpandChange}
+                                />
+                            }
+                        />
+                    </React.Fragment>
+                }
+            </React.Fragment>
+        );
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator()(

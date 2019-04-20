@@ -72,17 +72,11 @@ const propTypes = {
     filters: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
     realTimeList: PropTypes.array.isRequired,
-    rainPending: PropTypes.bool,
-    riverPending: PropTypes.bool,
-    earthquakePending: PropTypes.bool,
 };
 
 
 const defaultProps = {
     className: '',
-    rainPending: true,
-    riverPending: true,
-    earthquakePending: true,
 };
 
 const mapStateToProps = state => ({
@@ -156,9 +150,6 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                 faramValues,
                 faramErrors,
             },
-            rainPending,
-            riverPending,
-            earthquakePending,
             showRain,
             showRiver,
             showEarthquake,
@@ -258,7 +249,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             { showEarthquake &&
                                 <div className={styles.container}>
                                     <h5 className={styles.heading}>
-                                        Earthquake
+                                        Earthquake (Richter scale)
                                     </h5>
                                     <Legend
                                         className={styles.legend}
