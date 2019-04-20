@@ -130,7 +130,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 // FIXME: should be one day
-const RECENT_DAY = 14;
+const RECENT_DAY = 1;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -158,7 +158,8 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             incidentList,
             requests: {
-                incidentsRequest: { pending },
+                incidentsRequest: { pending: pendingIncidents },
+                eventsRequest: { pending: pendingEvents },
             },
         } = this.props;
 
@@ -169,8 +170,11 @@ class Incidents extends React.PureComponent<Props, State> {
 
         const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
 
+        const pending = pendingEvents || pendingIncidents;
+
         return (
             <React.Fragment>
+                <Loading pending={pending} />
                 <Map
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
@@ -193,7 +197,6 @@ class Incidents extends React.PureComponent<Props, State> {
                         Incidents
                     </div>
                 </div>
-                <Loading pending={pending} />
                 <Page
                     mainContent={
                         <HazardsLegend
@@ -206,7 +209,6 @@ class Incidents extends React.PureComponent<Props, State> {
                     leftContent={
                         <LeftPane
                             incidentList={incidentList}
-                            pending={pending}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                         />

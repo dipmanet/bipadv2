@@ -20,6 +20,7 @@ const schemaList: Schema[] = [
             channel: { type: 'string' },
             population: { type: 'uint' },
             accessPointCount: { type: 'uint' },
+            inventories: { type: 'array.unknown' },
 
             createdOn: { type: 'string' }, // NOTE: overriding dbentity
         },

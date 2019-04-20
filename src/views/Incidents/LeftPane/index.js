@@ -28,13 +28,11 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-    pending: PropTypes.bool,
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
-    pending: false,
 };
 
 class LeftPane extends React.PureComponent {
@@ -133,7 +131,6 @@ class LeftPane extends React.PureComponent {
             className,
             incidentList: incidentListNoSeverity,
             hazardTypes,
-            pending,
             recentDay,
         } = this.props;
 

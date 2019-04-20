@@ -6,6 +6,7 @@
     top: $spacing-medium;
     left: 50%;
     align-items: center;
+    transform: translateX(-50%);
     z-index: 1;
     border: $width-separator-thin solid $color-separator-light;
     border-radius: 5px;

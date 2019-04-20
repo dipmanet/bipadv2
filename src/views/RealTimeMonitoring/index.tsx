@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
+import Loading from '#components/Loading';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
@@ -249,8 +250,13 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showFire = realtimeSources && realtimeSources.findIndex(v => v === 4) !== -1;
         const showPollution = realtimeSources && realtimeSources.findIndex(v => v === 5) !== -1;
 
+        const pending = (
+            rainPending || riverPending || earthquakePending || firePending || pollutionPending
+        );
+
         return (
             <React.Fragment>
+                <Loading pending={pending} />
                 <Map
                     realTimeRainList={realTimeRainList}
                     realTimeRiverList={realTimeRiverList}
@@ -268,11 +274,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     rightContentClassName={styles.right}
                     rightContent={
                         <RealTimeMonitoringFilter
-                            rainPending={rainPending}
-                            riverPending={riverPending}
-                            earthquakePending={earthquakePending}
-                            firePending={firePending}
-                            pollutionPending={pollutionPending}
+                            // rainPending={rainPending}
+                            // riverPending={riverPending}
+                            // earthquakePending={earthquakePending}
+                            // firePending={firePending}
+                            // pollutionPending={pollutionPending}
                             showRain={showRain}
                             showRiver={showRiver}
                             showEarthquake={showEarthquake}
