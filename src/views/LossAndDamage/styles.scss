@@ -2,7 +2,13 @@
 
 .tabs {
     position: absolute;
+    top: var(--spacing-medium);
+    right: calc(var(--width-right-panel) + var(--spacing-medium) * 2 + var(--width-navbar-right));
     z-index: 1;
-    background-color: #c0c0c0;
-    padding: $spacing-large;
+    background-color: $color-foreground;
+    padding: 0 $spacing-small;
+
+    a {
+        text-decoration: none;
+    }
 }

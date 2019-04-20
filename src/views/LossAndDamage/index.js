@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
-import { listToMap, isDefined } from '@togglecorp/fujs';
+import { styleProperties } from '#constants';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';
@@ -32,80 +31,6 @@ import styles from './styles.scss';
 
 const emptyObject = {};
 const emptyList = [];
-
-const createMetric = type => (val) => {
-    if (!val) {
-        return 0;
-    }
-    return val[type] || 0;
-};
-
-const metricOptions = [
-    { key: 'count', label: 'No. of incidents' },
-    { key: 'estimatedLoss', label: 'Total estimated loss' },
-    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
-    { key: 'peopleDeathCount', label: 'Total people death' },
-];
-
-const metricMap = listToMap(
-    metricOptions,
-    item => item.key,
-    (item, key) => ({
-        ...item,
-        metricFn: createMetric(key),
-    }),
-);
-
-
-const getProvince = val => val.province;
-const getDistrict = val => val.district;
-const getMunicipality = val => val.municipality;
-const getWard = val => val.ward;
-
-const getGroupMethod = (regionLevel) => {
-    if (regionLevel === 1) {
-        return getDistrict;
-    }
-    if (regionLevel === 2) {
-        return getMunicipality;
-    }
-    if (regionLevel === 3) {
-        return getWard;
-    }
-    // if (isNotDefined(regionLevel) || regionLevel === 0) {
-    return getProvince;
-    // }
-};
-
-const PLAYBACK_INTERVAL = 2000;
-
-// FIXME: obsolete use ward directly
-// Get all information using ward
-const getRegionInfoFromWard = (wardId, regions) => {
-    const {
-        wards: wardMap,
-        municipalities: municipalityMap,
-        districts: districtMap,
-    } = regions;
-
-    const ward = wardMap[wardId];
-
-    const municipalityId = ward.municipality;
-    const municipality = municipalityMap[municipalityId];
-
-    const districtId = municipality.district;
-    const district = districtMap[districtId];
-
-    const provinceId = district.province;
-
-    return {
-        ward: wardId,
-        municipality: municipalityId,
-        district: districtId,
-        province: provinceId,
-    };
-};
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -140,7 +65,7 @@ const requests = {
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards'],
-            limit: 3000,
+            limit: 5000,
             ordering: '-incident_on',
             lnd: true,
         }),

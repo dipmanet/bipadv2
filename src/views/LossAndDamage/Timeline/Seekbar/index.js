@@ -24,6 +24,12 @@ export default class Seekbar extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
+    constructor(props) {
+        super(props);
+
+        this.containerRef = React.createRef();
+    }
+
     groupByIncidentCount = memoize((incidentList, metric, metricName) => {
         if (incidentList.length === 0) {
             return emptyList;
@@ -47,6 +53,20 @@ export default class Seekbar extends React.PureComponent {
         return mappedList;
     })
 
+    handleClick = (e) => {
+        const { current: container } = this.containerRef;
+        const { onClick } = this.props;
+
+        if (container) {
+            const bcr = container.getBoundingClientRect();
+            const left = e.pageX - bcr.left;
+            const { width } = bcr;
+
+            const seekPercentage = 100 * (left / width);
+            onClick(seekPercentage);
+        }
+    }
+
     render() {
         const {
             className,
@@ -62,12 +82,18 @@ export default class Seekbar extends React.PureComponent {
         const groupedIncidents = this.groupByIncidentCount(data, metric, metricName);
 
         return (
-            <div className={_cs(className, styles.seekbar)}>
+            <div
+                ref={this.containerRef}
+                className={_cs(className, styles.seekbar)}
+                role="presentation"
+                onClick={this.handleClick}
+            >
                 <div className={styles.graphContainer}>
                     <SparkLine
                         circleRadius={3}
                         className={styles.sparkLine}
                         data={groupedIncidents}
+                        tooltipRenderer={d => d.label}
                     />
                 </div>
                 <div

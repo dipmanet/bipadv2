@@ -2,17 +2,26 @@
 
 .legend {
     position: absolute;
-    top: $spacing-medium;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: $spacing-medium;
+    left: var(--spacing-medium);
+    transition: .2s all ease-in-out;
     z-index: 11;
-    border: $width-separator-thin solid $color-separator-light;
+    border: $width-separator-thin solid $color-separator;
+    border-radius: var(--radius-border-pane);
     background-color: $color-foreground;
-    padding: $spacing-small;
+    padding: $spacing-medium;
     width: 240px;
 
+    &.left-pane-expanded {
+        left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+    }
+
+    &.timeline {
+        bottom: calc(var(--height-timeline-main-content) + var(--spacing-medium) * 2);
+    }
+
     .heading {
-        text-align: center;
+        padding-bottom: $spacing-medium;
     }
 
     .range {
@@ -20,7 +29,20 @@
         justify-content: space-between;
     }
 
+    .min {
+        font-size: $font-size-small;
+    }
+
+    .max {
+        font-size: $font-size-small;
+    }
+
     .scale {
+        display: flex;
         height: $font-size-medium;
+
+        .color-unit-width {
+            border: 1px solid red;
+        }
     }
 }

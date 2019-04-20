@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
-import {
-    listToMap,
-} from '@togglecorp/fujs';
+import { listToMap } from '@togglecorp/fujs';
+import { styleProperties } from '#constants';
+import { currentStyle } from '#rsu/styles';
 
 import Page from '#components/Page';
 
@@ -29,6 +29,8 @@ const propTypes = {
 const defaultProps = {
 };
 
+const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
+
 export default class Overview extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -40,6 +42,36 @@ export default class Overview extends React.PureComponent {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
         };
+    }
+
+    componentDidMount() {
+        const { rightPaneExpanded } = this.state;
+
+        this.setPlacementForMapControls(rightPaneExpanded);
+    }
+
+    componentWillUnmount() {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        if (mapControls) {
+            mapControls.style.right = this.previousMapContorlStyle;
+        }
+    }
+
+    setPlacementForMapControls = (rightPaneExpanded) => {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+
+        if (mapControls) {
+            const widthRightPanel = rightPaneExpanded
+                ? convertValueToNumber(styleProperties.widthRightPanel)
+                : 0;
+            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
+
+            if (!this.previousMapContorlStyle) {
+                this.previousMapContorlStyle = mapControls.style.right;
+            }
+            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
+        }
     }
 
     generateOverallDataset = memoize((incidents, regions, regionLevel) => {
@@ -78,6 +110,7 @@ export default class Overview extends React.PureComponent {
 
     handleRightPaneExpandChange = (rightPaneExpanded) => {
         this.setState({ rightPaneExpanded });
+        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     render() {
