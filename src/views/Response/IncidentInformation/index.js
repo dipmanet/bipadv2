@@ -40,7 +40,7 @@ export default class IncidentInformation extends React.PureComponent {
         } = this.props;
 
         const inducerText = {
-            artificial: 'Artificial',
+            artificial: 'Non Natural',
             natural: 'Natural',
         };
 

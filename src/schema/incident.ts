@@ -95,7 +95,7 @@ const schemaList: Schema[] = [
         doc: {
             name: 'inducer',
             description: 'Inducer Enum',
-            example: ['natural', 'artificial'],
+            example: ['Natural', 'Non Natural'],
         },
     },
     {
