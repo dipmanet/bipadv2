@@ -214,7 +214,7 @@ const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
     // TODO Remove this after we get type from server
     const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
         ...hazardType,
-        type: i % 2 === 0 ? 'natural' : 'artificial',
+        type: hazardType.type === 'Natural' ? 'natural' : 'artificial',
     }));
 
     const newState = produce(state, (deferedState) => {

@@ -70,7 +70,7 @@ export default class IncidentInfo extends React.PureComponent {
 
         // FIXME: move to constants
         const inducerText = {
-            artificial: 'Artificial',
+            artificial: 'Non Natural',
             natural: 'Natural',
         };
 

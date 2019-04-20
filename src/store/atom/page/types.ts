@@ -38,6 +38,7 @@ export interface HazardType {
     id: number;
     title?: string;
     color?: string;
+    type?: string;
 }
 export interface EventType {
     id: number;
