@@ -22,6 +22,7 @@ import {
 } from '#selectors';
 
 import { transformDateRangeFilterParam } from '#utils/transformations';
+import Loading from '#components/Loading';
 
 import Overview from './Overview';
 import Timeline from './Timeline';
@@ -195,8 +196,17 @@ class LossAndDamage extends React.PureComponent {
     }
 
     render() {
+        const {
+            requests: {
+                eventsRequest: { pending: eventsPending },
+                lossAndDamageRequest: { pending: lossAndDamagePending },
+            },
+        } = this.props;
+
+        const pending = eventsPending || lossAndDamagePending;
         return (
             <React.Fragment>
+                <Loading pending={pending} />
                 <FixedTabs
                     className={styles.tabs}
                     tabs={this.tabs}
