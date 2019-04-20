@@ -34,6 +34,8 @@ import styles from './styles.scss';
 
 const emptyObject = {};
 
+const DEFAULT_RESOURCES_DISTANCE = 12;
+
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     wardsMap: PropTypes.object,

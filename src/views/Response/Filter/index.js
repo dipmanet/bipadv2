@@ -50,6 +50,7 @@ const propTypes = {
     setFilter: PropTypes.func.isRequired,
     setDistanceFilter: PropTypes.func.isRequired,
     inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
+    distance: PropTypes.number.isRequired,
     // setInventoryCategories: PropTypes.func.isRequired,
 };
 
@@ -211,6 +212,7 @@ class ResponseFilter extends React.PureComponent {
             className,
             setDistanceFilter,
             inventoryCategoryList,
+            distance,
         } = this.props;
 
         const { showFilters, faramValues, faramErrors } = this.state;
@@ -258,6 +260,7 @@ class ResponseFilter extends React.PureComponent {
                                 onChange={setDistanceFilter}
                                 minLimit={1}
                                 maxLimit={100}
+                                value={{ max: distance }}
                                 noMin
                                 maxLabel="Resources Within(Km)"
                             />
