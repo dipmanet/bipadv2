@@ -216,12 +216,12 @@ class Navbar extends React.PureComponent {
                                 </span>
                             </div>
                             <div className={styles.extra}>
-                                <Router className={styles.titleContainer}>
-                                    {titles}
-                                </Router>
                                 <RegionOutput
                                     className={styles.region}
                                 />
+                                <Router className={styles.titleContainer}>
+                                    {titles}
+                                </Router>
                             </div>
                         </div>
                     </div>
