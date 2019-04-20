@@ -59,9 +59,16 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                 flex-grow: 1;
                 overflow: auto;
 
+                .list-header-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    border-bottom: $width-separator-thin solid $color-separator;
+                    padding: $spacing-extra-small $spacing-medium;
+                }
+
                 .incident-list {
                     flex-grow: 1;
-                    border-top: $width-separator-thin solid $color-separator;
                 }
             }
         }

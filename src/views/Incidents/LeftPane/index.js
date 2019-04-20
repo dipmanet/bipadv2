@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { calculateCategorizedSeverity, lossMetrics } from '#utils/domain';
@@ -89,13 +90,6 @@ class LeftPane extends React.PureComponent {
                 Incidents
             </h4>
             <Button
-                className={styles.toggleVisualizationButton}
-                onClick={this.handleToggleVisualizationButtonClick}
-                iconName={this.state.showVisualizations ? iconNames.list : iconNames.pulse}
-                title="Toggle visualization"
-                transparent
-            />
-            <Button
                 className={styles.expandTabularViewButton}
                 onClick={this.handleExpandButtonClick}
                 iconName={iconNames.expand}
@@ -165,6 +159,10 @@ class LeftPane extends React.PureComponent {
             ),
         }), {});
 
+        summaryData.count = incidentList.length;
+
+        const ListViewHeader = this.renderListViewHeader;
+
         return (
             <CollapsibleView
                 className={_cs(className, styles.leftPane)}
@@ -188,8 +186,33 @@ class LeftPane extends React.PureComponent {
                         collapsedViewContainerClassName={styles.nonTabularContainer}
                         collapsedView={
                             <React.Fragment>
-                                { this.renderListViewHeader() }
+                                <ListViewHeader />
                                 <div className={styles.content}>
+                                    <div className={styles.statsContainer}>
+                                        { lossMetrics.map(metric => (
+                                            <TextOutput
+                                                className={styles.stat}
+                                                key={metric.key}
+                                                type="block"
+                                                label={metric.label}
+                                                value={summaryData[metric.key]}
+                                                isNumericValue
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className={styles.listHeaderContainer}>
+                                        <AccentButton
+                                            transparent
+                                            className={styles.toggleVisualizationButton}
+                                            onClick={this.handleToggleVisualizationButtonClick}
+                                        >
+                                            {
+                                                showVisualizations
+                                                    ? 'Show list'
+                                                    : 'Show visualization'
+                                            }
+                                        </AccentButton>
+                                    </div>
                                     { showVisualizations ? (
                                         <Visualizations
                                             hazardTypes={hazardTypes}
@@ -197,33 +220,12 @@ class LeftPane extends React.PureComponent {
                                             incidentList={incidentList}
                                         />
                                     ) : (
-                                        <React.Fragment>
-                                            <div className={styles.statsContainer}>
-                                                <TextOutput
-                                                    className={styles.stat}
-                                                    label="Total incidents"
-                                                    value={incidentList.length}
-                                                    type="block"
-                                                    isNumericValue
-                                                />
-                                                { lossMetrics.map(metric => (
-                                                    <TextOutput
-                                                        className={styles.stat}
-                                                        key={metric.key}
-                                                        type="block"
-                                                        label={metric.label}
-                                                        value={summaryData[metric.key]}
-                                                        isNumericValue
-                                                    />
-                                                ))}
-                                            </div>
-                                            <IncidentListView
-                                                hazardTypes={hazardTypes}
-                                                className={styles.incidentList}
-                                                incidentList={incidentList}
-                                                recentDay={recentDay}
-                                            />
-                                        </React.Fragment>
+                                        <IncidentListView
+                                            hazardTypes={hazardTypes}
+                                            className={styles.incidentList}
+                                            incidentList={incidentList}
+                                            recentDay={recentDay}
+                                        />
                                     )}
                                 </div>
                             </React.Fragment>

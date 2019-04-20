@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isFalsy,
+} from '@togglecorp/fujs';
 import React from 'react';
 
 import Numeral from '#rscv/Numeral';
@@ -14,6 +17,7 @@ const propTypes = {
     // NOTE: PropTypes.object below because TextOutput sometimes gets <DateOutput> as value
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
     isNumericValue: PropTypes.bool,
+    alwaysVisible: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -22,6 +26,7 @@ const defaultProps = {
     value: undefined,
     type: 'table',
     isNumericValue: false,
+    alwaysVisible: false,
 };
 
 export default class TextOutput extends React.PureComponent {
@@ -36,9 +41,10 @@ export default class TextOutput extends React.PureComponent {
             type,
             iconLabel,
             isNumericValue,
+            alwaysVisible,
         } = this.props;
 
-        if (!value) {
+        if (isFalsy(value) && !alwaysVisible) {
             return null;
         }
 
