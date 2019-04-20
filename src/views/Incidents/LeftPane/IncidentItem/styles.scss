@@ -8,8 +8,16 @@
     text-decoration: none;
     color: inherit;
 
+    &:hover {
+        background-color: $color-background-hover;
+    }
+
     &.new {
-        background-color: rgba(128, 255, 128, .09);
+        background-color: var(--color-background-new-item);
+
+        &:hover {
+            background-color: var(--color-background-new-item-hover);
+        }
     }
 
     .left {
@@ -76,10 +84,6 @@
                 padding-right: $spacing-medium;
             }
         }
-    }
-
-    &:hover {
-        background-color: $color-background-hover;
     }
 }
 

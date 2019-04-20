@@ -3,11 +3,19 @@
 .alert-item {
     display: flex;
     align-items: center;
-    cursor: pointer;
     padding: $spacing-medium 0;
 
+    // cursor: pointer;
+    // &:hover {
+    //     background-color: $color-background-hover;
+    // }
+
     &.new {
-        background-color: rgba(128, 255, 128, .09);
+        background-color: var(--color-background-new-item);
+
+        // &:hover {
+        //     background-color: var(--color-background-new-item-hover);
+        // }
     }
 
     .svg-container {
@@ -25,7 +33,6 @@
         }
     }
 
-
     .default-icon {
         flex-shrink: 0;
         margin: $spacing-small $spacing-medium;
@@ -42,9 +49,5 @@
         .title {
             font-weight: $font-weight-bold;
         }
-    }
-
-    &:hover {
-        background-color: rgba(0, 0, 0, .05);
     }
 }

@@ -50,6 +50,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 
                 .hide-incidents-button {
                     flex-shrink: 0;
+                    margin-right: $spacing-small;
                 }
             }
 
@@ -64,7 +65,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                     align-items: center;
                     justify-content: flex-end;
                     border-bottom: $width-separator-thin solid $color-separator;
-                    padding: $spacing-extra-small $spacing-medium;
+                    padding: $spacing-extra-small $spacing-small;
                 }
 
                 .incident-list {
@@ -93,6 +94,10 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                     padding: $spacing-medium;
                     color: $color-primary;
                 }
+
+                .collapse-tabular-view-button {
+                    margin-right: $spacing-small;
+                }
             }
 
             .tabular-view {
@@ -106,7 +111,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
         display: flex;
         flex-shrink: 0;
         flex-wrap: wrap;
-        padding: $spacing-extra-small $spacing-small;
+        padding: $spacing-extra-small $spacing-medium;
 
         .stat {
             flex-basis: 50%;

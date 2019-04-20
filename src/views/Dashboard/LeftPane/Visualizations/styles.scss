@@ -1,6 +1,8 @@
 @import '~base-scss/base';
 
 .visualizations {
+    padding-top: $spacing-small;
+
     %chart-container {
         display: flex;
         flex-direction: column;

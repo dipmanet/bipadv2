@@ -112,15 +112,8 @@ class LeftPane extends React.PureComponent {
             <Button
                 className={styles.collapseTabularViewButton}
                 onClick={this.handleCollapseTabularViewButtonClick}
-                iconName={iconNames.shrink}
-                title="Hide detailed view"
-                transparent
-            />
-            <Button
-                className={styles.hideIncidentsButton}
-                onClick={this.handleHideIncidentsButtonClick}
                 iconName={iconNames.chevronUp}
-                title="Hide Incidents"
+                title="Hide detailed view"
                 transparent
             />
         </header>
@@ -206,7 +199,7 @@ class LeftPane extends React.PureComponent {
                                             {
                                                 showVisualizations
                                                     ? 'Show list'
-                                                    : 'Show visualization'
+                                                    : 'Show charts'
                                             }
                                         </AccentButton>
                                     </div>
