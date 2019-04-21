@@ -1,6 +1,10 @@
 @import '~base-scss/base';
 $width-main-content: calc(100vw - calc(var(--spacing-medium) * 2) - var(--width-navbar-right));
 
+.left {
+    z-index: 11;
+}
+
 .main {
     display: flex;
     left: $spacing-medium;
