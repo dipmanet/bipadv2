@@ -45,23 +45,7 @@ export default {
     },
     provinceLabel: {
         paint: {
-            'text-color': '#808080',
-            'text-halo-color': '#ffffff',
-            'text-halo-width': 0.3,
-        },
-        layout: {
-            visibility: 'visible',
-            'text-font': ['Rubik Regular'],
-            'text-field': ['get', 'title'],
-            'text-size': 16,
-            'text-transform': 'uppercase',
-            'text-justify': 'center',
-            'text-anchor': 'center',
-        },
-    },
-    districtLabel: {
-        paint: {
-            'text-color': '#808080',
+            'text-color': 'rgba(0, 0, 0, 0.9)',
             'text-halo-color': '#ffffff',
             'text-halo-width': 0.3,
         },
@@ -75,9 +59,9 @@ export default {
             'text-anchor': 'center',
         },
     },
-    municipalityLabel: {
+    districtLabel: {
         paint: {
-            'text-color': '#808080',
+            'text-color': 'rgba(0, 0, 0, 0.6)',
             'text-halo-color': '#ffffff',
             'text-halo-width': 0.3,
         },
@@ -85,7 +69,23 @@ export default {
             visibility: 'visible',
             'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
-            'text-size': 12,
+            'text-size': 11,
+            'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    municipalityLabel: {
+        paint: {
+            'text-color': 'rgba(0, 0, 0, 0.4)',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 0.3,
+        },
+        layout: {
+            visibility: 'visible',
+            'text-font': ['Rubik Regular'],
+            'text-field': ['get', 'title'],
+            'text-size': 9,
             'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -93,7 +93,7 @@ export default {
     },
     wardLabel: {
         paint: {
-            'text-color': '#808080',
+            'text-color': 'rgba(0, 0, 0, 0.4)',
             'text-halo-color': '#ffffff',
             'text-halo-width': 0.3,
         },
@@ -101,7 +101,7 @@ export default {
             visibility: 'visible',
             'text-font': ['Rubik Regular'],
             'text-field': ['get', 'title'],
-            'text-size': 10,
+            'text-size': 8,
             'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',

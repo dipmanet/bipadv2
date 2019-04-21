@@ -2,12 +2,13 @@
 
 .visualization-container {
     display: flex;
-    flex-direction: column;
     flex-grow: 1;
+    flex-wrap: wrap;
     overflow: auto;
 
     %visualization-container {
         display: flex;
+        flex-basis: calc(100% / 3);
         flex-direction: column;
         padding: $spacing-small 0;
 
@@ -26,23 +27,20 @@
 
     .bar-container {
         @extend %visualization-container;
-        flex-basis: 160px;
-        flex-grow: 2;
-        min-height: 200px;
+        min-width: 200px;
+        height: 200px;
     }
 
     .donut-container {
         @extend %visualization-container;
-        flex-basis: 160px;
-        flex-grow: 2;
-        min-height: 200px;
+        min-width: 200px;
+        height: 200px;
     }
 
     .parallel-container {
         @extend %visualization-container;
-        flex-basis: 256px;
-        flex-grow: 3;
-        min-height: 256px;
+        min-width: 200px;
+        height: 256px;
     }
 }
 

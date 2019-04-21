@@ -216,13 +216,15 @@ class LossAndDamage extends React.PureComponent {
                         hazardTypes,
                     } = this.props;
 
+                    /*
                     const modifiedList = this.filterValues(
                         filters, regions, hazardTypes, lossAndDamageList,
                     );
+                    */
 
                     return {
                         pending,
-                        lossAndDamageList: modifiedList,
+                        lossAndDamageList,
                         regions,
                         regionLevel,
                     };
