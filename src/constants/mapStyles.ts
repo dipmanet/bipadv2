@@ -47,7 +47,7 @@ export default {
         paint: {
             'text-color': 'rgba(0, 0, 0, 0.9)',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 0.3,
+            'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
@@ -63,7 +63,7 @@ export default {
         paint: {
             'text-color': 'rgba(0, 0, 0, 0.6)',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 0.3,
+            'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
@@ -79,7 +79,7 @@ export default {
         paint: {
             'text-color': 'rgba(0, 0, 0, 0.4)',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 0.3,
+            'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
@@ -95,7 +95,7 @@ export default {
         paint: {
             'text-color': 'rgba(0, 0, 0, 0.4)',
             'text-halo-color': '#ffffff',
-            'text-halo-width': 0.3,
+            'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',

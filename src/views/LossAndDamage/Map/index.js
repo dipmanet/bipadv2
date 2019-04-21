@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
+import Numeral from '#rscv/Numeral';
+
 import ChoroplethMap from '#components/ChoroplethMap';
 import { getMapPaddings } from '#constants';
-import Numeral from '#rscv/Numeral';
 
 import styles from './styles.scss';
 

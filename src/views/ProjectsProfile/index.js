@@ -5,10 +5,13 @@ import {
     mapToList,
     isNotDefined,
     listToMap,
+    getHexFromString,
 } from '@togglecorp/fujs';
+import { schemeSet3 } from 'd3-scale-chromatic';
 
 import {
     regionsSelector,
+    regionLevelSelector,
     projectsProfileFiltersSelector,
 } from '#selectors';
 
@@ -67,6 +70,12 @@ const emptyObject = {};
 
 const ndrrsapKeySelector = item => item.ndrrsapid;
 const ndrrsapParentSelector = item => item.parent;
+
+const drrCyclesLabelSelector = item => item.title;
+const drrCyclesKeySelector = item => item.drrcycleid;
+
+const categoryLabelSelector = item => item.title;
+const categoryKeySelector = item => item.categoryid;
 
 const sanitize = (projectList, regions, ndrrsapMap) => {
     const mapped = projectList.map((project) => {
@@ -230,6 +239,7 @@ const filter = (projectList, filters) => projectList.filter(project => (
 
 const mapStateToProps = (state, props) => ({
     regions: regionsSelector(state),
+    regionLevel: regionLevelSelector(state, props),
     filters: projectsProfileFiltersSelector(state),
 });
 
@@ -324,6 +334,7 @@ class ProjectsProfile extends React.PureComponent {
             filters: {
                 faramValues = emptyObject,
             } = {},
+            regionLevel,
         } = this.props;
 
         const pending = (
@@ -360,12 +371,29 @@ class ProjectsProfile extends React.PureComponent {
         const realProjects = sanitize(projects, regions, ndrrsapMap);
         const filteredProjects = filter(realProjects, faramValues);
 
+        const drrPieData = drrcycle.map(item => ({
+            key: drrCyclesKeySelector(item),
+            label: drrCyclesLabelSelector(item),
+            value: filteredProjects.filter(p => p.drrcycle[drrCyclesKeySelector(item)]).length,
+            color: getHexFromString(drrCyclesLabelSelector(item)),
+        }));
+
+        const categoryPieData = category.map(item => ({
+            key: categoryKeySelector(item),
+            label: categoryLabelSelector(item),
+            value: filteredProjects.filter(p => p.category[categoryKeySelector(item)]).length,
+            color: getHexFromString(categoryLabelSelector(item)),
+        }));
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
                 <Map
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
+                    projects={filteredProjects}
+                    regions={regions}
+                    regionLevel={regionLevel}
                 />
                 <Page
                     mainContent={null}
@@ -375,7 +403,8 @@ class ProjectsProfile extends React.PureComponent {
                             leftPaneExpanded={leftPaneExpanded}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             projects={filteredProjects}
-                            drrCycleOptions={drrcycle}
+                            drrCycleData={drrPieData}
+                            categoryData={categoryPieData}
                         />
                     }
                     rightContentClassName={styles.right}

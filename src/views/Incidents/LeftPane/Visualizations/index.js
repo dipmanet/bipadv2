@@ -152,6 +152,7 @@ export default class Visualizations extends React.PureComponent {
                         itemClassName={styles.legendItem}
                         keySelector={itemSelector}
                         labelSelector={legendLabelSelector}
+                        valueSelector={donutChartValueSelector}
                         colorSelector={legendColorSelector}
                     />
                 </div>
