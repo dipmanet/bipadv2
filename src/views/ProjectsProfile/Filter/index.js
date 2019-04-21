@@ -39,6 +39,22 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setFilters: params => dispatch(setProjectsProfileFiltersAction(params)),
 });
+
+const emptyList = [];
+const emptyObject = {};
+
+const ndrrsapLabelSelector = item => item.title;
+const ndrrsapKeySelector = item => item.ndrrsapid;
+
+const drrCyclesLabelSelector = item => item.title;
+const drrCyclesKeySelector = item => item.drrcycleid;
+
+const elementsLabelSelector = item => item.title;
+const elementsKeySelector = item => item.categoryid;
+
+const organizationLabelSelector = item => item.oname;
+const organizationKeySelector = item => item.oid;
+
 class ProjectsProfileFilter extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -48,11 +64,12 @@ class ProjectsProfileFilter extends React.PureComponent {
             region: [],
             priority: [],
             subPriority: [],
-            activities: [],
-            drrCycle: [],
+            activity: [],
+
+            drrCycles: [],
             elements: [],
             organization: [],
-            status: [],
+            // status: [],
         },
     }
 
@@ -65,8 +82,28 @@ class ProjectsProfileFilter extends React.PureComponent {
     }
 
     handleFaramChange = (faramValues, faramErrors) => {
+        const {
+            filters: {
+                faramValues: oldFaramValues = emptyObject,
+            } = {},
+        } = this.props;
+        let newFaramValues = faramValues;
+
+        if (oldFaramValues.priority !== faramValues.priority) {
+            newFaramValues = {
+                ...faramValues,
+                subPriority: undefined,
+                activity: undefined,
+            };
+        } else if (oldFaramValues.subPriority !== faramValues.subPriority) {
+            newFaramValues = {
+                ...faramValues,
+                activity: undefined,
+            };
+        }
+
         this.props.setFilters({
-            faramValues,
+            faramValues: newFaramValues,
             faramErrors,
             pristine: false,
         });
@@ -105,19 +142,36 @@ class ProjectsProfileFilter extends React.PureComponent {
         const {
             className,
             filters: {
-                faramValues = {},
-                faramErrors = {},
+                faramValues = emptyObject,
+                faramErrors = emptyObject,
             } = {},
-            priorityOptions = [],
-            subPriorityOptions = [],
-            activitiesOptions = [],
-            drrCycleOptions = [],
-            elementsOptions = [],
-            organizationOptions = [],
+
+            ndrrsapOptions: priorityOptions,
+
+            drrCycleOptions,
+            elementsOptions,
+            organizationOptions,
             // projectStatusOptions = [],
         } = this.props;
 
         const { showFilters } = this.state;
+
+        let subPriorityOptions = emptyList;
+        const selectedPriority = priorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.priority,
+        );
+        if (selectedPriority) {
+            subPriorityOptions = selectedPriority.children;
+        }
+
+        let activityOptions = emptyList;
+        const selectedSubPriority = subPriorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.subPriority,
+        );
+        if (selectedSubPriority) {
+            activityOptions = selectedSubPriority.children;
+        }
+
         return (
             <CollapsibleView
                 className={_cs(styles.filter, className)}
@@ -161,31 +215,45 @@ class ProjectsProfileFilter extends React.PureComponent {
                                 faramElementName="priority"
                                 label="priority"
                                 options={priorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
                             />
                             <SelectInput
                                 faramElementName="subPriority"
                                 label="sub priority"
+                                disabled={!faramValues.priority}
                                 options={subPriorityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
                             />
                             <SelectInput
-                                faramElementName="activities"
-                                label="activities"
-                                options={activitiesOptions}
+                                faramElementName="activity"
+                                label="activity"
+                                disabled={!faramValues.subPriority}
+                                options={activityOptions}
+                                keySelector={ndrrsapKeySelector}
+                                labelSelector={ndrrsapLabelSelector}
                             />
                             <MultiSelectInput
-                                label="drr cycle"
-                                faramElementName="drrCycle"
+                                label="drr cycles"
+                                faramElementName="drrCycles"
+                                keySelector={drrCyclesKeySelector}
+                                labelSelector={drrCyclesLabelSelector}
                                 options={drrCycleOptions}
                             />
                             <MultiSelectInput
                                 label="elements"
                                 faramElementName="elements"
                                 options={elementsOptions}
+                                keySelector={elementsKeySelector}
+                                labelSelector={elementsLabelSelector}
                             />
                             <MultiSelectInput
                                 label="organization"
                                 faramElementName="organization"
                                 options={organizationOptions}
+                                keySelector={organizationKeySelector}
+                                labelSelector={organizationLabelSelector}
                             />
                             {/*
                             <SelectInput
