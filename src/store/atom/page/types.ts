@@ -38,6 +38,7 @@ export interface HazardType {
     id: number;
     title?: string;
     color?: string;
+    icon?: string;
     type?: string;
 }
 export interface EventType {
@@ -52,6 +53,7 @@ export interface Event {
     description: string;
     polygon?: unknown;
     point?: unknown;
+    hazard?: number;
     severity: string;
 }
 export interface Alert {

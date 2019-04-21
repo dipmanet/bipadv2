@@ -1,8 +1,4 @@
-import heatwaveIcon from '#resources/icons/heatwave.svg';
 import landslideIcon from '#resources/icons/landslide.svg';
-import waterIcon from '#resources/icons/water.svg';
-import cycloneIcon from '#resources/icons/cyclone.svg';
-
 import alertIcon from '#resources/icons/Alert.svg';
 import airCrashIcon from '#resources/icons/Airport-destroyed.svg';
 import animalTerrorIcon from '#resources/icons/Animal-terror.svg';
@@ -29,6 +25,7 @@ import thunderboltIcon from '#resources/icons/Storm.svg';
 // import windstormIcon from '#resources/icons/Storm-surge.svg';
 
 
+// eslint-disable-next-line import/prefer-default-export
 export const hazardIcons = {
     1: airCrashIcon,
     2: animalTerrorIcon,
@@ -57,44 +54,3 @@ export const hazardIcons = {
 
     unknown: alertIcon,
 };
-
-// NOTE: probably unused
-export const hazardTypeList = [
-    { key: 'earthquake', label: 'Earthquake', icon: earthquakeIcon },
-    { key: 'urbanFlood', label: 'Urban flood', icon: floodIcon },
-    { key: 'costalFlood', label: 'Costal flood', icon: floodIcon },
-    { key: 'landslide', label: 'Landslide', icon: landslideIcon },
-    { key: 'wildfire', label: 'Wildfire', icon: fireIcon },
-    { key: 'waterScarcity', label: 'Water scarcity', icon: waterIcon },
-    { key: 'extremeHeat', label: 'Extreme heat', icon: heatwaveIcon },
-    { key: 'cyclone', label: 'Cyclone', icon: cycloneIcon },
-];
-
-// NOTE: remove all of the variables below
-
-export const donutChartData1 = [
-    { label: 'Wildfire', value: 19 },
-    { label: 'Cyclone', value: 5 },
-    { label: 'Landslides', value: 13 },
-];
-
-export const donutChartData2 = [
-    { label: 'Earthquake', value: 10 },
-    { label: 'Flood', value: 15 },
-    { label: 'Landslides', value: 23 },
-];
-
-export const pieChartData = [
-    { label: 'Earthquake', value: 19 },
-    { label: 'Flood', value: 5 },
-    { label: 'Landslides', value: 13 },
-];
-
-export const barChartData = [
-    { label: 'Health', value: 19 },
-    { label: 'Pollution', value: 5 },
-    { label: 'Disasters', value: 13 },
-    { label: 'Refugees', value: 17 },
-    { label: 'Crisis', value: 19 },
-    { label: 'Environment', value: 27 },
-];
