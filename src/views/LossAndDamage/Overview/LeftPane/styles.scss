@@ -1,6 +1,8 @@
 @import '~base-scss/base';
 
 $width-left-pane: var(--width-left-panel);
+$width-tabular-left-pane: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 3 - var(--width-right-panel));
+$width-tabular-extended-left-pane: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
 $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
 
 .left-pane {
@@ -8,37 +10,94 @@ $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2)
         display: flex;
         flex-direction: column;
         transform-origin: 0 0;
+        border: $width-separator-thin solid $color-separator;
+        border-radius: var(--radius-panel-border);
         background-color: $color-foreground;
-        width: $width-left-pane;
         height: $height-left-pane;
+        overflow: auto;
 
-        .header {
+        .overview {
             display: flex;
-            align-items: center;
-            flex-shrink: 0;
-
-            .heading {
-                flex-grow: 1;
-                padding: $spacing-medium;
-                color: $color-primary;
-            }
-
-            .spinner {
-                flex-shrink: 0;
-            }
-
-            .show-details-button {
-                flex-shrink: 0;
-            }
-
-            .collapse-button {
-                flex-shrink: 0;
-            }
-        }
-
-        .content {
+            flex-direction: column;
             flex-grow: 1;
-            border: 1px solid red;
+            overflow: auto;
+
+            .non-tabular-container {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                width: $width-left-pane;
+
+                >.header {
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+
+                    .heading {
+                        flex-grow: 1;
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                    }
+
+                    .spinner {
+                        flex-shrink: 0;
+                    }
+
+                    .show-details-button {
+                        flex-shrink: 0;
+                    }
+
+                    .collapse-button {
+                        flex-shrink: 0;
+                    }
+                }
+
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                }
+            }
+
+            .tabular-container {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                width: $width-tabular-extended-left-pane;
+                overflow: auto;
+
+                &.right-pane-expanded {
+                    width: $width-tabular-left-pane;
+                }
+
+                >.header {
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+
+                    .heading {
+                        flex-grow: 1;
+                        padding: $spacing-medium;
+                        color: $color-primary;
+                    }
+
+                    .spinner {
+                        flex-shrink: 0;
+                    }
+
+                    .show-details-button {
+                        flex-shrink: 0;
+                    }
+
+                    .collapse-button {
+                        flex-shrink: 0;
+                    }
+                }
+
+                .table {
+                    flex-grow: 1;
+                }
+            }
         }
     }
 }

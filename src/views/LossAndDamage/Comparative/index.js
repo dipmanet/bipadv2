@@ -127,7 +127,7 @@ class Comparative extends React.PureComponent {
     })
 
     renderAggregatedStat = ({
-        data,
+        data = emptyObject,
         className,
     }) => (
         <div className={className}>
