@@ -1,17 +1,10 @@
 import React from 'react';
-/*
-import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
-import { _cs } from '@togglecorp/fujs';
-*/
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-/*
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
-*/
 
 import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
@@ -26,30 +19,6 @@ const propTypes = {
 const defaultProps = {
 };
 
-/*
-const testDrrCyclesData = [
-    {
-        key: 1,
-        label: 'Cycle 1',
-        value: 22,
-        color: '#a6cee3',
-    },
-    {
-        key: 2,
-        label: 'Cycle 2',
-        value: 12,
-        color: '#1f78b4',
-    },
-    {
-        key: 3,
-        label: 'Cycle 3',
-        value: 9,
-        color: '#b2df8a',
-    },
-];
-*/
-
-/*
 const itemSelector = d => d.label;
 const legendColorSelector = d => d.color;
 const legendLabelSelector = d => d.label;
@@ -57,7 +26,6 @@ const legendLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 const donutChartColorSelector = d => d.color;
-*/
 
 const projectKeySelector = p => p.pid;
 
@@ -91,6 +59,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
         const {
             leftPaneExpanded,
             projects,
+            drrCycleData,
         } = this.props;
 
         return (
@@ -126,24 +95,23 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                     value={projects.length}
                                     isNumericValue
                                 />
-                                {/*
                                 <DonutChart
                                     sideLengthRatio={0.5}
                                     className={styles.chart}
-                                    data={testDrrCyclesData}
+                                    data={drrCycleData}
                                     labelSelector={donutChartLabelSelector}
                                     valueSelector={donutChartValueSelector}
                                     colorSelector={donutChartColorSelector}
                                 />
                                 <Legend
                                     className={styles.legend}
-                                    data={testDrrCyclesData}
+                                    data={drrCycleData}
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     labelSelector={legendLabelSelector}
+                                    valueSelector={donutChartValueSelector}
                                     colorSelector={legendColorSelector}
                                 />
-                                */}
                             </div>
                             <div className={styles.projectsList}>
                                 <h3 className={styles.heading}>

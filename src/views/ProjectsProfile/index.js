@@ -5,7 +5,9 @@ import {
     mapToList,
     isNotDefined,
     listToMap,
+    getHexFromString,
 } from '@togglecorp/fujs';
+import { schemeSet3 } from 'd3-scale-chromatic';
 
 import {
     regionsSelector,
@@ -68,6 +70,9 @@ const emptyObject = {};
 
 const ndrrsapKeySelector = item => item.ndrrsapid;
 const ndrrsapParentSelector = item => item.parent;
+
+const drrCyclesLabelSelector = item => item.title;
+const drrCyclesKeySelector = item => item.drrcycleid;
 
 const sanitize = (projectList, regions, ndrrsapMap) => {
     const mapped = projectList.map((project) => {
@@ -363,6 +368,15 @@ class ProjectsProfile extends React.PureComponent {
         const realProjects = sanitize(projects, regions, ndrrsapMap);
         const filteredProjects = filter(realProjects, faramValues);
 
+        const drrPieData = drrcycle.map(item => ({
+            key: drrCyclesKeySelector(item),
+            label: drrCyclesLabelSelector(item),
+            value: filteredProjects.filter(p => p.drrcycle[drrCyclesKeySelector(item)]).length,
+            color: getHexFromString(drrCyclesLabelSelector(item)),
+        }));
+
+        console.warn(drrPieData);
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
@@ -381,7 +395,7 @@ class ProjectsProfile extends React.PureComponent {
                             leftPaneExpanded={leftPaneExpanded}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             projects={filteredProjects}
-                            drrCycleOptions={drrcycle}
+                            drrCycleData={drrPieData}
                         />
                     }
                     rightContentClassName={styles.right}
