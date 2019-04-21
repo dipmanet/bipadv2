@@ -84,8 +84,6 @@ export default class LeftPane extends React.PureComponent {
             rightPaneExpanded,
         } = this.props;
 
-        console.warn(lossAndDamageList);
-
         const {
             isExpanded,
             showTabularView,

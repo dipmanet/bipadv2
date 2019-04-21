@@ -70,16 +70,15 @@ class Comparative extends React.PureComponent {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {
+            this.mapControls = mapControls;
             this.previousMapControlDisplay = mapControls.style.display;
             mapControls.style.display = 'none';
         }
     }
 
     componentWillUnmount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-
-        if (mapControls) {
-            mapControls.style.display = this.previousMapControlDisplay;
+        if (this.mapControls) {
+            this.mapControls.style.display = this.previousMapControlDisplay;
         }
     }
 

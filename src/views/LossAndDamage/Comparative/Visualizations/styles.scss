@@ -8,7 +8,7 @@
 
     %visualization-container {
         display: flex;
-        flex-basis: calc(100% / 3);
+        flex-basis: calc(100% / 2);
         flex-direction: column;
         padding: $spacing-small 0;
 
@@ -25,22 +25,16 @@
         }
     }
 
-    .bar-container {
-        @extend %visualization-container;
-        min-width: 200px;
-        height: 200px;
-    }
-
     .donut-container {
         @extend %visualization-container;
-        min-width: 200px;
-        height: 200px;
+        min-width: 256px;
+        height: 320px;
     }
 
     .parallel-container {
         @extend %visualization-container;
-        min-width: 200px;
-        height: 256px;
+        min-width: 256px;
+        height: 320px;
     }
 }
 
