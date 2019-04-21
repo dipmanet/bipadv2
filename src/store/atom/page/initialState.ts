@@ -109,11 +109,11 @@ const state: PageState = {
         realTimeFireList: [],
         realTimePollutionList: [],
         realTimeSourceList: [
-            { id: 1, title: 'Earthquake' },
-            { id: 2, title: 'River' },
             { id: 3, title: 'Rain' },
-            { id: 4, title: 'Forest Fire' },
+            { id: 2, title: 'River' },
+            { id: 1, title: 'Earthquake' },
             { id: 5, title: 'Pollution' },
+            { id: 4, title: 'Forest Fire' },
         ],
         filters: {
             faramValues: {

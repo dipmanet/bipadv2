@@ -1,4 +1,4 @@
-import { Obj, isTruthy } from '@togglecorp/fujs';
+import { Obj, isTruthy, isDefined, normalize } from '@togglecorp/fujs';
 import { centroid, AllGeoJSON, convex } from '@turf/turf';
 
 import { hazardIcons } from '#resources/data';
@@ -504,6 +504,7 @@ export const fireToGeojson = (realTimeFireList: RealTimeFire[]) => {
                     eventOn: fire.eventOn,
                     scan: fire.scan,
                     landCover: fire.landCover,
+                    opacity: fire.confidence / 100,
                 },
             })),
     };

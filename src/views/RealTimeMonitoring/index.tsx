@@ -253,6 +253,10 @@ const pollutionLegendItems = [
     { icon: '●', color: '#7e0023', label: 'Hazardous (500.4 or less)' },
 ];
 
+const fireLegendItems = [
+    { icon: '◆', color: '#e64a19', label: 'Forest Fire' },
+];
+
 const itemSelector = (d: { label: string }) => d.label;
 const iconSelector = (d: { icon: string }) => d.icon;
 const legendColorSelector = (d: { color: string }) => d.color;
@@ -305,7 +309,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         transparent
                     />
                 </div>
-                { !(showRain || showRiver || showEarthquake || showPollution) &&
+                { !(showRain || showRiver || showEarthquake || showPollution || showFire) &&
                     <div className={styles.noLegend}>
                         <Message>
                             Please select at least one source
@@ -371,6 +375,23 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         <Legend
                             className={styles.legend}
                             data={pollutionLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                }
+                { showFire &&
+                    <div className={styles.container}>
+                        <h5 className={styles.heading}>
+                            Forest Fire
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={fireLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             iconSelector={iconSelector}

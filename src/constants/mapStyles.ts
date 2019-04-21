@@ -273,6 +273,11 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
                 '#03A9F4',
             ],
+            'text-opacity': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.5,
+                1,
+            ],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -306,6 +311,11 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
                 '#00C853',
             ],
+            'text-opacity': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.5,
+                1,
+            ],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -321,9 +331,24 @@ export default {
 
     firePoint: {
         layout: {
-            'icon-image': 'fire-station-11',
+            'text-field': '◆',
+            'text-allow-overlap': true,
+            'text-size': 24,
         },
-        paint: { 'icon-color': '#ffee58' },
+        paint: {
+            'text-color': '#e64a19',
+            'text-opacity': ['get', 'opacity'],
+            'text-halo-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'text-halo-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0,
+            ],
+        },
     },
 
     pollutionPoint: {
