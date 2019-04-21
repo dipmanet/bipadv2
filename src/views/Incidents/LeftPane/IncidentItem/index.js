@@ -9,8 +9,7 @@ import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
-import { hazardIcons } from '#resources/data';
-import { getHazardColor } from '#utils/domain';
+import { getHazardColor, getHazardIcon } from '#utils/domain';
 import { getYesterday } from '#utils/common';
 
 import styles from './styles.scss';
@@ -31,7 +30,7 @@ const isRecent = (date, recentDay) => {
     return timestamp > yesterday;
 };
 
-export default class Incidents extends React.PureComponent {
+export default class IncidentItem extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
 
@@ -55,8 +54,7 @@ export default class Incidents extends React.PureComponent {
             _cs(styles.icon, iconNames.check, styles.verified) :
             _cs(styles.icon, iconNames.close, styles.notVerified);
 
-        const icon = hazardIcons[hazard] || hazardIcons.unknown;
-
+        const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(incidentOn, recentDay);
 
         return (
@@ -69,23 +67,14 @@ export default class Incidents extends React.PureComponent {
                 to={reverseRoute(':incidentId/response', { incidentId })}
             >
                 <div className={styles.left}>
-                    { icon ? (
-                        <ReactSVG
-                            className={styles.svgContainer}
-                            path={icon}
-                            svgClassName={styles.icon}
-                            style={{
-                                color: getHazardColor(hazardTypes, hazard),
-                            }}
-                        />
-                    ) : (
-                        <div
-                            className={_cs(
-                                iconNames.alert,
-                                styles.defaultIcon,
-                            )}
-                        />
-                    )}
+                    <ReactSVG
+                        className={styles.svgContainer}
+                        path={icon}
+                        svgClassName={styles.icon}
+                        style={{
+                            color: getHazardColor(hazardTypes, hazard),
+                        }}
+                    />
                 </div>
                 <div className={styles.right}>
                     <header className={styles.header}>

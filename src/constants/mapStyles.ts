@@ -160,7 +160,7 @@ export default {
             'text-size': 32,
         },
         paint: {
-            'text-color': '#8dd3c7',
+            'text-color': ['get', 'hazardColor'],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -175,7 +175,7 @@ export default {
     },
     eventConvex: {
         outline: {
-            'line-color': '#8dd3c7',
+            'line-color': ['get', 'hazardColor'],
             'line-width': 2,
             'line-dasharray': [2, 2],
             'line-offset': -6,
@@ -183,11 +183,11 @@ export default {
     },
     eventPolygon: {
         fill: {
-            'fill-color': '#8dd3c7',
+            'fill-color': ['get', 'hazardColor'],
             'fill-opacity': 0.3,
         },
         outline: {
-            'line-color': '#8dd3c7',
+            'line-color': ['get', 'hazardColor'],
             'line-width': 1,
             'line-dasharray': [2, 3],
         },

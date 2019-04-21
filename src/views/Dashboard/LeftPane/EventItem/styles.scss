@@ -1,10 +1,32 @@
 @import '~base-scss/base';
 
 .event-item {
+    display: flex;
+    align-items: center;
     border-bottom: $width-separator-thin solid $color-separator-light;
-    padding: $spacing-medium;
+    padding: $spacing-medium 0;
 
-    .title {
+    .svg-container {
+        flex-shrink: 0;
+        margin: $spacing-small $spacing-medium;
+
+        .icon {
+            width: 20px;
+            height: auto;
+            height: $font-size-extra-large;
+
+            path {
+                fill: currentColor;
+            }
+        }
+    }
+
+    .right {
         flex-grow: 1;
+        padding: 0 $spacing-medium;
+
+        .title {
+            font-weight: $font-weight-bold;
+        }
     }
 }

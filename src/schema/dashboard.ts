@@ -19,7 +19,7 @@ const schemaList: Schema[] = [
             public: { type: 'boolean' },
             expireOn: { type: 'string' }, // date
             startedOn: { type: 'string', required: true }, // date
-            wards: { type: 'array.number' },
+            wards: { type: 'array.uint' },
         },
     },
     {
@@ -49,6 +49,7 @@ const schemaList: Schema[] = [
             point: { type: 'unknown' }, // geometry object
             polygon: { type: 'unknown' }, // geometry object
             severity: { type: 'string' },
+            hazard: { type: 'uint' },
         },
     },
     {

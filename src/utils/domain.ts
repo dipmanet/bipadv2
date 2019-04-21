@@ -1,6 +1,7 @@
 import { Obj, isTruthy } from '@togglecorp/fujs';
 import { centroid, AllGeoJSON, convex } from '@turf/turf';
 
+import { hazardIcons } from '#resources/data';
 import {
     Loss,
     HazardType,
@@ -99,6 +100,17 @@ export const getHazardColor = (hazards: Obj<HazardType>, hazardId?: number) => {
         return '#4666b0';
     }
     return hazard.color;
+};
+
+export const getHazardIcon = (hazards: Obj<HazardType>, hazardId?: number) => {
+    if (!hazardId) {
+        return hazardIcons.unknown;
+    }
+    const hazard = hazards[hazardId];
+    if (!hazard || !hazard.icon) {
+        return hazardIcons.unknown;
+    }
+    return hazard.icon;
 };
 
 export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<HazardType>) => {
@@ -223,7 +235,7 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
     return geojson;
 };
 
-export const eventToConvexPolygonGeojson = (eventList: Event[]) => {
+export const eventToConvexPolygonGeojson = (eventList: Event[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: eventList
@@ -232,6 +244,7 @@ export const eventToConvexPolygonGeojson = (eventList: Event[]) => {
                 const {
                     id,
                     polygon,
+                    hazard,
                 } = event;
 
                 const convexPolygon = convex(polygon as AllGeoJSON).geometry;
@@ -242,6 +255,9 @@ export const eventToConvexPolygonGeojson = (eventList: Event[]) => {
                     geometry: {
                         ...convexPolygon,
                     },
+                    properties: {
+                        hazardColor: getHazardColor(hazards, hazard),
+                    },
                 };
             }),
     };
@@ -249,7 +265,7 @@ export const eventToConvexPolygonGeojson = (eventList: Event[]) => {
     return geojson;
 };
 
-export const eventToPolygonGeojson = (eventList: Event[]) => {
+export const eventToPolygonGeojson = (eventList: Event[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: eventList
@@ -261,6 +277,7 @@ export const eventToPolygonGeojson = (eventList: Event[]) => {
                     polygon,
                     description,
                     severity,
+                    hazard,
                 } = event;
 
                 return {
@@ -273,6 +290,7 @@ export const eventToPolygonGeojson = (eventList: Event[]) => {
                         title,
                         description,
                         severity,
+                        hazardColor: getHazardColor(hazards, hazard),
                     },
                 };
             }),
@@ -281,7 +299,7 @@ export const eventToPolygonGeojson = (eventList: Event[]) => {
     return geojson;
 };
 
-export const eventToPointGeojson = (eventList: Event[]) => {
+export const eventToPointGeojson = (eventList: Event[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: eventList
@@ -295,6 +313,7 @@ export const eventToPointGeojson = (eventList: Event[]) => {
                     description,
                     severity,
                     createdOn,
+                    hazard,
                 } = event;
 
                 const geometry = polygon
@@ -310,6 +329,7 @@ export const eventToPointGeojson = (eventList: Event[]) => {
                         description,
                         severity,
                         createdOn,
+                        hazardColor: getHazardColor(hazards, hazard),
                     },
                 };
             }),

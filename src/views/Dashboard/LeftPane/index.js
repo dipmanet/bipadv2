@@ -60,6 +60,7 @@ export default class LeftPane extends React.PureComponent {
 
     getEventRendererParams = (_, d) => ({
         event: d,
+        hazardTypes: this.props.hazardTypes,
     });
 
     groupByHazard = memoize((alerts, hazards) => {

@@ -144,7 +144,7 @@ const schemaList: Schema[] = [
             inducer: { type: 'inducer' },
             severity: { type: 'string' },
             verified: { type: 'boolean' },
-            wards: { type: 'array' }, // FIXME: why is this sent
+            wards: { type: 'array.unknown' }, // FIXME: why is this sent
             streetAddress: { type: 'string' },
             source: { type: 'string', required: true },
             incidentOn: { type: 'string', required: true }, // date

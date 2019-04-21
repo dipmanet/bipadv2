@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import ReactSVG from 'react-svg';
 
 import { _cs } from '@togglecorp/fujs';
-import { hazardIcons } from '#resources/data';
-import { iconNames } from '#constants';
 import { getYesterday } from '#utils/common';
-import { getHazardColor } from '#utils/domain';
+import { getHazardColor, getHazardIcon } from '#utils/domain';
 import DateOutput from '#components/DateOutput';
 
 import styles from './styles.scss';
@@ -43,7 +41,7 @@ export default class AlertItem extends React.PureComponent {
             startedOn,
         } = alert;
 
-        const icon = hazardIcons[hazard] || hazardIcons.unknown;
+        const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(startedOn, recentDay);
 
         return (
@@ -54,23 +52,14 @@ export default class AlertItem extends React.PureComponent {
                     isNew && styles.new,
                 )}
             >
-                {icon ? (
-                    <ReactSVG
-                        className={styles.svgContainer}
-                        path={icon}
-                        svgClassName={styles.icon}
-                        style={{
-                            color: getHazardColor(hazardTypes, hazard),
-                        }}
-                    />
-                ) : (
-                    <div
-                        className={_cs(
-                            iconNames.alert,
-                            styles.defaultIcon,
-                        )}
-                    />
-                )}
+                <ReactSVG
+                    className={styles.svgContainer}
+                    path={icon}
+                    svgClassName={styles.icon}
+                    style={{
+                        color: getHazardColor(hazardTypes, hazard),
+                    }}
+                />
                 <div className={styles.right}>
                     <div className={styles.title}>
                         {title}

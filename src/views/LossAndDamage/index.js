@@ -94,6 +94,9 @@ const requests = {
     eventsRequest: {
         url: '/event/',
         onMount: true,
+        extras: {
+            schemaName: 'eventResponse',
+        },
     },
 };
 
