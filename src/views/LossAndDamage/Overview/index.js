@@ -82,7 +82,7 @@ export default class Overview extends React.PureComponent {
             };
         }
 
-        const groupFn = getGroupMethod(regionLevel);
+        const groupFn = getGroupMethod(regionLevel + 1);
         const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
         const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
 
