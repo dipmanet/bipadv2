@@ -35,17 +35,6 @@ export const convertJsonToCsv = (data: Row[] | undefined | null, columnDelimiter
     return result;
 };
 
-export const convertCsvToLink = (csvRaw?: string) => {
-    if (!csvRaw) {
-        return undefined;
-    }
-    let csv = csvRaw;
-    if (!csv.match(/^data:text\/csv/i)) {
-        csv = `data:text/csv;charset=utf-8,${csv}`;
-    }
-    return encodeURI(csv);
-};
-
 export const toTitleCase = (str: string | undefined | null) => {
     if (isNotDefined(str)) {
         return undefined;
@@ -119,6 +108,7 @@ export function groupFilledList<T>(lst: T[] = [], getKey: KeyFunc<T, number>) {
 
     const identifierList = lst.map(getKey);
     const start = Math.min(...identifierList);
+
     const end = Math.max(...identifierList);
     const output = [];
     for (let i = start; i <= end; i += 1) {

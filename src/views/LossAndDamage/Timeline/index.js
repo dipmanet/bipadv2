@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
 import { currentStyle } from '#rsu/styles';
+import { lossMetrics } from '#utils/domain';
 
 import {
     listToMap,
@@ -19,7 +19,6 @@ import {
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
-import DateInput from '#rsci/DateInput';
 import SelectInput from '#rsci/SelectInput';
 
 import Map from '../Map';
@@ -34,7 +33,6 @@ import {
     getMinMaxTime,
     getSanitizedIncidents,
     metricMap,
-    metricOptions,
     metricType,
     getFilledGroupedIncidents,
 } from '../common';
@@ -81,65 +79,70 @@ export default class Timeline extends React.PureComponent {
         this.state = {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
-            pauseMap: false,
-            start: undefined,
-            end: undefined,
-            currentIndex: -1,
+
+            timeBucket: '7d',
+            isPlaying: true,
+            // For seekbar
             playbackStart: 0,
             playbackEnd: 0,
+
+            currentIndex: -1,
             currentRange: {
                 start: 0,
                 end: 0,
             },
-            timeBucket: '7d',
-            isPlaying: true,
         };
     }
 
     componentDidMount() {
         const {
             lossAndDamageList,
-            regions,
             regionLevel,
         } = this.props;
         const { rightPaneExpanded } = this.state;
 
-        this.playback(lossAndDamageList, regions, regionLevel);
+        this.playback(lossAndDamageList, regionLevel);
         this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     componentWillReceiveProps(nextProps) {
         const {
             lossAndDamageList: oldLossAndDamageList,
-            regions: oldRegions,
             regionLevel: oldRegionLevel,
         } = this.props;
 
         const {
             lossAndDamageList: newLossAndDamageList,
-            regions: newRegions,
             regionLevel: newRegionLevel,
         } = nextProps;
 
         if (
             oldLossAndDamageList !== newLossAndDamageList
-            || oldRegions !== newRegions
             || oldRegionLevel !== newRegionLevel
         ) {
             const {
                 minTime,
                 maxTime,
-            } = getMinMaxTime(newLossAndDamageList, newRegions);
+            } = getMinMaxTime(newLossAndDamageList);
 
             this.setState({
                 startTimestamp: minTime,
                 endTimestamp: maxTime,
                 start: getYmd(minTime),
                 end: getYmd(maxTime),
-                currentIndex: -1,
-            });
 
-            this.playback(newLossAndDamageList, newRegions, newRegionLevel);
+                playbackStart: 0,
+                playbackEnd: 0,
+
+                currentIndex: -1,
+                currentRange: {
+                    start: 0,
+                    end: 0,
+                },
+            }, () => {
+                clearTimeout(this.timeout);
+                this.playback(newLossAndDamageList, newRegionLevel);
+            });
         }
     }
 
@@ -179,7 +182,6 @@ export default class Timeline extends React.PureComponent {
         startTime,
         endTime,
         bucketValue,
-        regions,
         regionLevel,
     ) => {
         if (!incidents || incidents.length <= 0) {
@@ -189,23 +191,15 @@ export default class Timeline extends React.PureComponent {
                 minTime: 0,
                 maxTime: 0,
                 totalIteration: 0,
-                sanitizedIncidents: [],
                 otherMapping: [],
             };
         }
-
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions).filter(
-            ({ incidentOn }) => (
-                !(isDefined(startTime) && incidentOn < new Date(startTime).getTime())
-                && !(isDefined(endTime) && incidentOn > new Date(endTime).getTime())
-            ),
-        );
 
         const bucketedIncidents = [];
         const {
             minTime,
             maxTime,
-        } = getMinMaxTime(sanitizedIncidents, regions);
+        } = getMinMaxTime(incidents);
 
         const totalSpan = maxTime - minTime;
 
@@ -216,13 +210,13 @@ export default class Timeline extends React.PureComponent {
             const start = minTime + (i * bucketValue);
             const end = minTime + ((i + 1) * bucketValue);
 
-            const filteredIncidents = sanitizedIncidents.filter(({ incidentOn }) => (
+            const filteredIncidents = incidents.filter(({ incidentOn }) => (
                 incidentOn >= start && incidentOn < end
             ));
             bucketedIncidents.push(filteredIncidents);
         }
 
-        const groupFn = getGroupMethod(regionLevel);
+        const groupFn = getGroupMethod(regionLevel + 1);
         const regionGroupedIncidents = bucketedIncidents.map(
             incident => getGroupedIncidents(incident, groupFn),
         );
@@ -245,14 +239,12 @@ export default class Timeline extends React.PureComponent {
             minTime,
             maxTime,
             totalIteration,
-            sanitizedIncidents,
         };
         return val;
     });
 
-    playback = (lossAndDamageList, regions, regionLevel, currentIndexFromArg = -1) => {
+    playback = (lossAndDamageList, regionLevel, currentIndexFromArg = -1) => {
         clearTimeout(this.timeout);
-
         const {
             start,
             end,
@@ -264,12 +256,11 @@ export default class Timeline extends React.PureComponent {
 
         const {
             totalIteration,
-            sanitizedIncidents,
             minTime,
             maxTime,
-        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regions, regionLevel);
+        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regionLevel);
 
-        if (isPlaying && sanitizedIncidents.length > 0) {
+        if (isPlaying && lossAndDamageList.length > 0) {
             let currentIndex = currentIndexFromArg;
             let newIndex = currentIndex;
 
@@ -291,15 +282,16 @@ export default class Timeline extends React.PureComponent {
             const range = maxTime - minTime;
 
             this.setState({
-                currentIndex: newIndex,
-                currentRange: current,
                 playbackStart: (100 * (current.start - minTime)) / range,
                 playbackEnd: (100 * (current.end - minTime)) / range,
+
+                currentIndex: newIndex,
+                currentRange: current,
             });
         }
 
         this.timeout = setTimeout(
-            () => this.playback(lossAndDamageList, regions, regionLevel),
+            () => this.playback(lossAndDamageList, regionLevel),
             PLAYBACK_INTERVAL,
         );
     }
@@ -333,11 +325,10 @@ export default class Timeline extends React.PureComponent {
 
         const {
             lossAndDamageList,
-            regions,
             regionLevel,
         } = this.props;
 
-        this.playback(lossAndDamageList, regions, regionLevel, currentIndex);
+        this.playback(lossAndDamageList, regionLevel, currentIndex);
     }
 
     renderEventTimeline = ({
@@ -356,6 +347,7 @@ export default class Timeline extends React.PureComponent {
 
         const DAY = 1000 * 60 * 60 * 24;
 
+        // FIXME: memoize this
         const sanitizedEventList = eventList
             .filter(d => d.startedOn)
             .map((d) => {
@@ -407,7 +399,6 @@ export default class Timeline extends React.PureComponent {
             pending,
             provinces,
             regionLevel,
-            regions,
             wards,
             eventList,
         } = this.props;
@@ -430,8 +421,7 @@ export default class Timeline extends React.PureComponent {
         const {
             mapping,
             aggregatedStat,
-            sanitizedIncidents,
-        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regions, regionLevel);
+        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regionLevel);
 
         const selectedMetric = metricMap[metric];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
@@ -445,7 +435,7 @@ export default class Timeline extends React.PureComponent {
 
         const DAY = 1000 * 60 * 60 * 24;
         const groupedIncidents = getFilledGroupedIncidents(
-            sanitizedIncidents,
+            lossAndDamageList,
             item => Math.floor(item.incidentOn / DAY),
         );
 
@@ -475,7 +465,7 @@ export default class Timeline extends React.PureComponent {
                     rightContent={
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={metricOptions}
+                            metricOptions={lossMetrics}
                             metricType={metricType}
                             isTimeline
                         />

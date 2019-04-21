@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
@@ -6,6 +5,7 @@ import { styleProperties } from '#constants';
 import { currentStyle } from '#rsu/styles';
 
 import Page from '#components/Page';
+import { lossMetrics } from '#utils/domain';
 
 import Map from '../Map';
 import LeftPane from './LeftPane';
@@ -14,7 +14,6 @@ import Filter from '../Filter';
 import {
     metricMap,
     metricType,
-    metricOptions,
     getGroupMethod,
     getSanitizedIncidents,
     getGroupedIncidents,
@@ -78,14 +77,12 @@ export default class Overview extends React.PureComponent {
         if (!incidents || incidents.length <= 0) {
             return {
                 mapping: [],
-                sanitizedIncidents: [],
+                aggregatedStat: {},
             };
         }
 
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions);
-
-        const groupFn = getGroupMethod(regionLevel);
-        const regionGroupedIncidents = getGroupedIncidents(sanitizedIncidents, groupFn);
+        const groupFn = getGroupMethod(regionLevel + 1);
+        const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
         const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
 
         const listToMapGroupedItem = groupedIncidents => (
@@ -99,7 +96,6 @@ export default class Overview extends React.PureComponent {
 
         return {
             mapping,
-            sanitizedIncidents,
             aggregatedStat,
         };
     })
@@ -175,7 +171,7 @@ export default class Overview extends React.PureComponent {
                     rightContent={
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={metricOptions}
+                            metricOptions={lossMetrics}
                             metricType={metricType}
                         />
                     }

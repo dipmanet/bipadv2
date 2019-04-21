@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, isDefined, isNotDefined, listToMap } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';
@@ -22,8 +22,11 @@ import {
     regionLevelSelector,
 } from '#selectors';
 
-import { transformDateRangeFilterParam } from '#utils/transformations';
 import Loading from '#components/Loading';
+
+import {
+    getSanitizedIncidents,
+} from './common';
 
 import Overview from './Overview';
 import Timeline from './Timeline';
@@ -63,13 +66,14 @@ const mapStateToProps = (state, props) => ({
 const requests = {
     lossAndDamageRequest: {
         url: '/incident/',
-        query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
+        query: {
+            // ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards'],
             limit: 5000,
             ordering: '-incident_on',
             lnd: true,
-        }),
+        },
+        /*
         onPropsChanged: {
             filters: ({
                 props: { filters: { hazard, region } },
@@ -81,6 +85,7 @@ const requests = {
                 hazard !== prevHazard || region !== prevRegion
             ),
         },
+        */
         onMount: true,
         extras: {
             schemaName: 'incidentWithPeopleResponse',
@@ -92,6 +97,7 @@ const requests = {
     },
 };
 
+// TODO: filter loss and damage page
 class LossAndDamage extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -129,14 +135,15 @@ class LossAndDamage extends React.PureComponent {
                         wards,
                         municipalities,
                         regionLevel,
-                        filters: {
-                            metric,
-                        },
+                        filters,
                     } = this.props;
+
+                    const { metric } = filters;
+                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
 
                     return {
                         districts,
-                        lossAndDamageList,
+                        lossAndDamageList: modifiedList,
                         metric,
                         municipalities,
                         pending,
@@ -172,14 +179,15 @@ class LossAndDamage extends React.PureComponent {
                         municipalities,
                         regions,
                         regionLevel,
-                        filters: {
-                            metric,
-                        },
+                        filters,
                     } = this.props;
+
+                    const { metric } = filters;
+                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
 
                     return {
                         districts,
-                        lossAndDamageList,
+                        lossAndDamageList: modifiedList,
                         metric,
                         municipalities,
                         pending: lossAndDamageRequestPending || eventsRequestPending,
@@ -206,17 +214,71 @@ class LossAndDamage extends React.PureComponent {
                         },
                         regions,
                         regionLevel,
+                        filters,
                     } = this.props;
+
+                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
 
                     return {
                         pending,
-                        lossAndDamageList,
+                        lossAndDamageList: modifiedList,
                         regions,
                         regionLevel,
                     };
                 },
             },
         };
+    }
+
+    filterValues = (filters, regions, incidents = []) => {
+        const {
+            start,
+            end,
+            hazard: hazardFilter = [],
+            region,
+        } = filters;
+
+        const startTime = start ? new Date(start).getTime() : start;
+        const endTime = end ? new Date(end).getTime() : end;
+
+        const hazardMap = listToMap(
+            hazardFilter,
+            item => item,
+            () => true,
+        );
+
+        const isValidIncident = (
+            { ward, district, municipality, province },
+            { adminLevel, geoarea },
+        ) => {
+            switch (adminLevel) {
+                case 1:
+                    return geoarea === province;
+                case 2:
+                    return geoarea === district;
+                case 3:
+                    return geoarea === municipality;
+                case 4:
+                    return geoarea === ward;
+                default:
+                    return false;
+            }
+        };
+
+        const sanitizedIncidents = getSanitizedIncidents(incidents, regions).filter(
+            ({ incidentOn, hazard, ...otherProps }) => (
+                (isNotDefined(startTime) || incidentOn >= startTime)
+                && (isNotDefined(endTime) || incidentOn <= endTime)
+                && (isNotDefined(hazardFilter) || hazardFilter.length <= 0 || hazardMap[hazard])
+                && (
+                    isNotDefined(region)
+                    || isNotDefined(region.adminLevel)
+                    || isValidIncident(otherProps, region)
+                )
+            ),
+        );
+
+        return sanitizedIncidents;
     }
 
     handleOverviewRightPaneExpandChange = (isExpanded) => {

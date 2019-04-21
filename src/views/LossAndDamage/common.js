@@ -8,13 +8,7 @@ import {
     sum,
 } from '#utils/common';
 
-export const metricOptions = [
-    { key: 'count', label: 'No. of incidents' },
-    { key: 'estimatedLoss', label: 'Total estimated loss' },
-    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
-    { key: 'peopleDeathCount', label: 'Total people death' },
-];
+import { lossMetrics } from '#utils/domain';
 
 export const createMetric = type => (val) => {
     if (!val) {
@@ -24,7 +18,7 @@ export const createMetric = type => (val) => {
 };
 
 export const metricMap = listToMap(
-    metricOptions,
+    lossMetrics,
     item => item.key,
     (item, key) => ({
         ...item,
@@ -65,7 +59,7 @@ export const getRegionInfoFromWard = (wardId, regions) => {
 
 export const getSanitizedIncidents = (incidents, regions) => {
     const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
-        incidentOn && wards && wards.length > 0
+        incidentOn && (wards && wards.length > 0)
     )).map(incident => ({
         ...incident,
         incidentOn: new Date(incident.incidentOn).getTime(),
@@ -77,9 +71,8 @@ export const getSanitizedIncidents = (incidents, regions) => {
     return sanitizedIncidents;
 };
 
-export const getMinMaxTime = (incidents, regions) => {
-    const sanitizedIncidents = getSanitizedIncidents(incidents, regions);
-    const timing = sanitizedIncidents.map(incident => incident.incidentOn);
+export const getMinMaxTime = (incidents) => {
+    const timing = incidents.map(incident => incident.incidentOn);
     const minTime = Math.min(...timing);
     const maxTime = Math.max(...timing);
     return { minTime, maxTime };
