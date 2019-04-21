@@ -1,6 +1,6 @@
 @import '~base-scss/base';
 
-$width-filter-container: var(--width-right-panel);
+$width-filter-container: var(--width-right-panel-large);
 $width-vertical-nav: var(--width-navbar-right);
 
 $width-non-tabular-container: var(--width-left-panel);
@@ -25,7 +25,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
             flex-direction: column;
             background-color: $color-foreground;
             width: $width-non-tabular-container;
-            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+            height: auto;
             overflow: auto;
 
             .resource {
@@ -61,24 +61,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                     .incident-info {
                         flex-shrink: 0;
                         margin-bottom: $spacing-medium;
-                        border-bottom: $width-separator-thin solid $color-separator;
                         padding: $spacing-medium;
-                    }
-
-                    .resource-list-container {
-                        display: flex;
-                        flex-direction: column;
-                        flex-grow: 1;
-                        overflow: auto;
-
-                        .heading {
-                            padding: 0 $spacing-medium;
-                        }
-
-                        .resource-list {
-                            flex-grow: 1;
-                            overflow: auto;
-                        }
                     }
                 }
             }

@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { _cs } from '@togglecorp/fujs';
+
 import ListView from '#rscv/List/ListView';
-
-import TextOutput from '#components/TextOutput';
-
 import Button from '#rsca/Button';
-
+import TextOutput from '#components/TextOutput';
 import { groupList } from '#utils/common';
 
 import ResourceItem from '../resources/ResourceItem';
@@ -24,6 +21,8 @@ const propTypes = {
     // itemRenderer: PropTypes.object,
     data: PropTypes.arrayOf(PropTypes.object),
     type: PropTypes.string.isRequired,
+    isFilterShown: PropTypes.bool.isRequired,
+    onFilterShowClick: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -41,10 +40,7 @@ export default class ResourceGroup extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.state = {
-            showResources: false,
-            showMore: true,
-        };
+        this.state = { showResources: false };
     }
 
     getResourceElementRendererParams = (_, d) => d
@@ -54,12 +50,27 @@ export default class ResourceGroup extends React.PureComponent {
         this.setState({ showResources: !showResources });
     }
 
-    handleShowMoreToggle = () => {
-        const { showMore } = this.state;
-        this.setState({ showMore: !showMore });
+    handleFilterButtonClick = () => {
+        const {
+            type,
+            isFilterShown,
+            onFilterShowClick,
+        } = this.props;
+
+        if (isFilterShown) {
+            onFilterShowClick(undefined);
+        } else {
+            onFilterShowClick(type);
+        }
     }
 
     renderSummary = () => {
+        const { showSummary } = this.props;
+
+        if (!showSummary) {
+            return null;
+        }
+
         const { data: temp, type } = this.props;
         const data = temp.map(x => ({ ...x, bedCount: 5 }));
 
@@ -140,21 +151,21 @@ export default class ResourceGroup extends React.PureComponent {
             className,
             icon,
             showSummary,
+            isFilterShown,
             // itemRenderer,
         } = this.props;
 
-        const { showResources, showMore } = this.state;
+        const { showResources } = this.state;
 
         if (!data || data.length <= 0) {
             return null;
         }
 
-        const displayData = showMore ? data.slice(0, 5) : data;
-
         const itemsCount = data.length;
-
         const buttonText = showResources ? 'Hide' : 'Expand';
-        const showMoreText = showMore ? 'Show All' : 'Show Fewer';
+        const filterButtonText = isFilterShown ? 'Hide Filters' : 'Show Filters';
+
+        const Summary = this.renderSummary;
 
         return (
             <div className={_cs(className, styles.resources)}>
@@ -168,29 +179,29 @@ export default class ResourceGroup extends React.PureComponent {
                         { heading } ({ itemsCount })
                     </h3>
                     <Button
+                        className={_cs(styles.filterButton, styles.button)}
+                        onClick={this.handleFilterButtonClick}
+                        type="button"
+                    >
+                        { filterButtonText }
+                    </Button>
+                    <Button
+                        className={styles.button}
                         onClick={this.handleExpandToggleClick}
                         type="button"
                     >
                         { buttonText }
                     </Button>
                 </div>
-                { showSummary && this.renderSummary() }
+                <Summary />
                 { showResources && (
-                    <React.Fragment>
-                        <ListView
-                            className={styles.content}
-                            data={displayData}
-                            renderer={ResourceItem}
-                            rendererParams={this.getResourceElementRendererParams}
-                            keySelector={ResourceGroup.keySelector}
-                        />
-                        <Button
-                            onClick={this.handleShowMoreToggle}
-                            type="button"
-                        >
-                            { showMoreText }
-                        </Button>
-                    </React.Fragment>
+                    <ListView
+                        className={styles.content}
+                        data={data}
+                        renderer={ResourceItem}
+                        rendererParams={this.getResourceElementRendererParams}
+                        keySelector={ResourceGroup.keySelector}
+                    />
                 )
                 }
             </div>

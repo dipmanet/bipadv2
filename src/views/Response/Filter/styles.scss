@@ -1,7 +1,5 @@
 @import '~base-scss/base';
 
-$width-right-panel: var(--width-right-panel);
-
 .filter {
     display: flex;
     flex-direction: column;
@@ -37,7 +35,8 @@ $width-right-panel: var(--width-right-panel);
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
-        width: $width-right-panel;
+        padding-bottom: $spacing-small;
+        width: var(--width-right-panel-large);
         overflow: auto;
     }
 
@@ -53,15 +52,35 @@ $width-right-panel: var(--width-right-panel);
             right: 0;
         }
     }
-    
+
     .filter-form {
         flex-grow: 1;
+        padding: 0 $spacing-medium;
         overflow: auto;
 
-        .group {
-            padding: $spacing-medium;
+        .heading {
+            padding-bottom: $spacing-small;
+        }
 
-            > .checkbox {
+        .resource-list-container {
+            padding-bottom: $spacing-medium;
+        }
+    }
+}
+
+.floating-container {
+    box-shadow: none;
+
+    .filter-container {
+        background-color: $color-foreground;
+        padding: $spacing-medium;
+        width: var(--width-response-filters);
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+
+            >.checkbox {
                 display: flex;
                 align-items: center;
                 margin-bottom: $spacing-small;
@@ -72,18 +91,6 @@ $width-right-panel: var(--width-right-panel);
                         font-weight: $font-weight-bold;
                     }
                 }
-            }
-
-            .filters {
-                padding: $spacing-small;
-            }
-
-            .past-data-select-input {
-                padding: $spacing-small;
-            }
-
-            .list-selection-input {
-                padding: $spacing-small;
             }
         }
     }
