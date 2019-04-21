@@ -5,7 +5,7 @@ import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
 import { groupList } from '#utils/common';
 
-import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
+import HorizontalBar from '#rscz/HorizontalBar';
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
 
@@ -32,6 +32,21 @@ const colors = scaleOrdinal().range(schemeAccent);
 const itemSelector = d => d.label;
 const legendColorSelector = d => d.color;
 const legendLabelSelector = d => d.label;
+
+const chartColorScheme = [
+    '#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#fdbf6f',
+    '#ff7f00',
+    '#cab2d6',
+    '#6a3d9a',
+    '#ffff99',
+    '#b15928',
+];
 
 export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
@@ -97,7 +112,7 @@ export default class Visualizations extends React.PureComponent {
                             Hazard Statistics
                         </h4>
                     </header>
-                    <SimpleHorizontalBarChart
+                    <HorizontalBar
                         className={styles.chart}
                         data={hazardSummary}
                         labelSelector={barChartLabelSelector}

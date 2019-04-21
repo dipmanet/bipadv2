@@ -134,6 +134,7 @@ export default class IncidentsFilter extends React.PureComponent {
                 expandedViewContainerClassName={styles.filtersContainer}
                 expandedView={
                     <Faram
+                        className={styles.form}
                         onChange={this.handleFaramChange}
                         onValidationFailure={this.handleFaramFailure}
                         onValidationSuccess={this.handleFaramSuccess}
@@ -154,6 +155,7 @@ export default class IncidentsFilter extends React.PureComponent {
                         </header>
                         <div className={styles.content}>
                             <RegionSelectInput
+                                className={styles.locationSelectInput}
                                 faramElementName="region"
                             />
                             <PastDateRangeInput
@@ -166,6 +168,7 @@ export default class IncidentsFilter extends React.PureComponent {
                                 className={styles.eventSelectInput}
                                 label="event"
                                 options={eventList}
+                                showHintAndError={false}
                                 keySelector={eventKeySelector}
                                 labelSelector={eventLabelSelector}
                             />

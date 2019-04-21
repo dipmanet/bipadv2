@@ -14,12 +14,13 @@ $width-right-panel: var(--width-right-panel);
 
         .heading {
             flex-grow: 1;
-            padding: $spacing-medium $spacing-small;
+            padding: $spacing-medium;
             color: $color-primary;
         }
 
         button {
             flex-shrink: 0;
+            margin-right: $spacing-small;
         }
     }
 
@@ -37,9 +38,8 @@ $width-right-panel: var(--width-right-panel);
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
         width: $width-right-panel;
-        overflow: auto;
+        overflow-y: auto;
     }
 
     :global {
@@ -54,22 +54,15 @@ $width-right-panel: var(--width-right-panel);
             right: 0;
         }
     }
-    
+
     .filter-form {
         flex-grow: 1;
+        padding: 0 $spacing-medium;
         overflow: auto;
 
-        .regions-select-input {
-            margin: $spacing-small 0;
-            border: 1px solid red;
-        }
-
+        .region-select-input,
         .past-data-select-input {
-            padding: $spacing-small;
-        }
-
-        .list-selection-input {
-            padding: $spacing-small;
+            margin-bottom: $spacing-medium;
         }
     }
 }

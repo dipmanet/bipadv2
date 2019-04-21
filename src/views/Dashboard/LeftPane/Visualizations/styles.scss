@@ -4,12 +4,7 @@
     padding-top: $spacing-small;
 
     %chart-container {
-        display: flex;
-        flex-direction: column;
-
         .header {
-            flex-shrink: 0;
-
             .heading {
                 padding: 0 $spacing-medium;
                 color: $color-accent;
@@ -17,29 +12,12 @@
         }
 
         .chart {
-            flex-grow: 1;
-        }
-
-        .legend {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            justify-content: center;
-            padding: 0 $spacing-medium;
-
-            .legend-item {
-                padding: $spacing-small;
-            }
+            height: 320px;
         }
     }
 
-    .hazard-statistics-chart {
-        @extend %chart-container;
-        height: 320px;
-    }
-
+    .hazard-statistics-chart,
     .event-statistics-chart {
         @extend %chart-container;
-        height: 200px;
     }
 }
