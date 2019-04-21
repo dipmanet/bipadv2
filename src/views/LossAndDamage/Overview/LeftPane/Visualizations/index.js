@@ -164,19 +164,6 @@ class Visualizations extends React.PureComponent {
                             colorSelector={donutChartColorSelector}
                         />
                     </div>
-                    <div className={styles.barContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                    Total Loss Count
-                            </h4>
-                        </header>
-                        <SimpleVerticalBarChart
-                            className={styles.chart}
-                            data={countData}
-                            labelSelector={barChartLabelSelector}
-                            valueSelector={barChartValueSelector}
-                        />
-                    </div>
                 </div>
                 <div className={styles.legendContainer}>
                     <HazardsLegend

@@ -2,12 +2,13 @@
 
 .visualization-container {
     display: flex;
-    flex-direction: column;
     flex-grow: 1;
+    flex-wrap: wrap;
     overflow: auto;
 
     %visualization-container {
         display: flex;
+        flex-basis: calc(100% / 2);
         flex-direction: column;
         padding: $spacing-small 0;
 
@@ -26,16 +27,14 @@
 
     .donut-container {
         @extend %visualization-container;
-        flex-basis: 160px;
-        flex-grow: 1;
-        min-height: 200px;
+        min-width: 200px;
+        height: 320px;
     }
 
     .parallel-container {
         @extend %visualization-container;
-        flex-basis: 256px;
-        flex-grow: 1;
-        min-height: 256px;
+        min-width: 200px;
+        height: 320px;
     }
 }
 
@@ -47,7 +46,7 @@
         flex-wrap: wrap;
 
         .legend-item {
-            flex-basis: calc(100% / 3);
+            flex-basis: calc(100% / 9);
             padding: $spacing-small;
             color: $color-text-label;
             font-size: $font-size-small;

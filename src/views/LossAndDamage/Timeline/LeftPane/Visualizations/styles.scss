@@ -24,24 +24,17 @@
         }
     }
 
-    .bar-container {
-        @extend %visualization-container;
-        flex-basis: 160px;
-        flex-grow: 2;
-        min-height: 200px;
-    }
-
     .donut-container {
         @extend %visualization-container;
         flex-basis: 160px;
-        flex-grow: 2;
+        flex-grow: 1;
         min-height: 200px;
     }
 
     .parallel-container {
         @extend %visualization-container;
         flex-basis: 256px;
-        flex-grow: 3;
+        flex-grow: 1;
         min-height: 256px;
     }
 }
