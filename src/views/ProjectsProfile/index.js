@@ -74,6 +74,9 @@ const ndrrsapParentSelector = item => item.parent;
 const drrCyclesLabelSelector = item => item.title;
 const drrCyclesKeySelector = item => item.drrcycleid;
 
+const categoryLabelSelector = item => item.title;
+const categoryKeySelector = item => item.categoryid;
+
 const sanitize = (projectList, regions, ndrrsapMap) => {
     const mapped = projectList.map((project) => {
         // get locations for project
@@ -375,7 +378,12 @@ class ProjectsProfile extends React.PureComponent {
             color: getHexFromString(drrCyclesLabelSelector(item)),
         }));
 
-        console.warn(drrPieData);
+        const categoryPieData = category.map(item => ({
+            key: categoryKeySelector(item),
+            label: categoryLabelSelector(item),
+            value: filteredProjects.filter(p => p.category[categoryKeySelector(item)]).length,
+            color: getHexFromString(categoryLabelSelector(item)),
+        }));
 
         return (
             <React.Fragment>
@@ -396,6 +404,7 @@ class ProjectsProfile extends React.PureComponent {
                             onExpandChange={this.handleLeftPaneExpandChange}
                             projects={filteredProjects}
                             drrCycleData={drrPieData}
+                            categoryData={categoryPieData}
                         />
                     }
                     rightContentClassName={styles.right}

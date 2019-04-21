@@ -60,6 +60,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
             leftPaneExpanded,
             projects,
             drrCycleData,
+            categoryData,
         } = this.props;
 
         return (
@@ -106,6 +107,23 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                 <Legend
                                     className={styles.legend}
                                     data={drrCycleData}
+                                    itemClassName={styles.legendItem}
+                                    keySelector={itemSelector}
+                                    labelSelector={legendLabelSelector}
+                                    valueSelector={donutChartValueSelector}
+                                    colorSelector={legendColorSelector}
+                                />
+                                <DonutChart
+                                    sideLengthRatio={0.5}
+                                    className={styles.chart}
+                                    data={categoryData}
+                                    labelSelector={donutChartLabelSelector}
+                                    valueSelector={donutChartValueSelector}
+                                    colorSelector={donutChartColorSelector}
+                                />
+                                <Legend
+                                    className={styles.legend}
+                                    data={categoryData}
                                     itemClassName={styles.legendItem}
                                     keySelector={itemSelector}
                                     labelSelector={legendLabelSelector}
