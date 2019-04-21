@@ -68,7 +68,7 @@ class ProjectsProfileFilter extends React.PureComponent {
 
             drrCycles: [],
             elements: [],
-            organization: [],
+            organizations: [],
             // status: [],
         },
     }
@@ -146,7 +146,9 @@ class ProjectsProfileFilter extends React.PureComponent {
                 faramErrors = emptyObject,
             } = {},
 
-            ndrrsapOptions: priorityOptions,
+            priorityOptions,
+            subPriorityOptions,
+            activityOptions,
 
             drrCycleOptions,
             elementsOptions,
@@ -155,22 +157,6 @@ class ProjectsProfileFilter extends React.PureComponent {
         } = this.props;
 
         const { showFilters } = this.state;
-
-        let subPriorityOptions = emptyList;
-        const selectedPriority = priorityOptions.find(
-            item => ndrrsapKeySelector(item) === faramValues.priority,
-        );
-        if (selectedPriority) {
-            subPriorityOptions = selectedPriority.children;
-        }
-
-        let activityOptions = emptyList;
-        const selectedSubPriority = subPriorityOptions.find(
-            item => ndrrsapKeySelector(item) === faramValues.subPriority,
-        );
-        if (selectedSubPriority) {
-            activityOptions = selectedSubPriority.children;
-        }
 
         return (
             <CollapsibleView
@@ -250,7 +236,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                             />
                             <MultiSelectInput
                                 label="organization"
-                                faramElementName="organization"
+                                faramElementName="organizations"
                                 options={organizationOptions}
                                 keySelector={organizationKeySelector}
                                 labelSelector={organizationLabelSelector}

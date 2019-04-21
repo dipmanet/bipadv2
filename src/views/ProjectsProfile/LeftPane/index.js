@@ -1,15 +1,20 @@
 import React from 'react';
+/*
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+*/
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import TextOutput from '#components/TextOutput';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
+/*
 import DonutChart from '#rscz/DonutChart';
-import CollapsibleView from '#components/CollapsibleView';
 import Legend from '#rscz/Legend';
+*/
+
+import TextOutput from '#components/TextOutput';
+import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 
 import Project from './ProjectItem';
@@ -21,21 +26,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-const testProjects = [
-    {
-        key: 1,
-        title: 'Project 1',
-    },
-    {
-        key: 2,
-        title: 'Project 2',
-    },
-    {
-        key: 3,
-        title: 'Project 3',
-    },
-];
-
+/*
 const testDrrCyclesData = [
     {
         key: 1,
@@ -56,7 +47,9 @@ const testDrrCyclesData = [
         color: '#b2df8a',
     },
 ];
+*/
 
+/*
 const itemSelector = d => d.label;
 const legendColorSelector = d => d.color;
 const legendLabelSelector = d => d.label;
@@ -64,8 +57,9 @@ const legendLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 const donutChartColorSelector = d => d.color;
+*/
 
-const projectKeySelector = p => p.key;
+const projectKeySelector = p => p.pid;
 
 class ProjectsProfileLeftPane extends React.PureComponent {
     static propTypes = propTypes;
@@ -86,13 +80,17 @@ class ProjectsProfileLeftPane extends React.PureComponent {
     }
 
     projectRendererParams = (projectId, project) => ({
-        title: project.title,
+        title: project.ptitle,
+        start: project.pdurfrom,
+        end: project.pdurto,
+        budget: project.budget_local,
         projectId,
     });
 
     render() {
         const {
             leftPaneExpanded,
+            projects,
         } = this.props;
 
         return (
@@ -125,9 +123,10 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                 <TextOutput
                                     type="block"
                                     label="No. of Projects"
-                                    value={testProjects.length}
+                                    value={projects.length}
                                     isNumericValue
                                 />
+                                {/*
                                 <DonutChart
                                     sideLengthRatio={0.5}
                                     className={styles.chart}
@@ -144,13 +143,14 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                     labelSelector={legendLabelSelector}
                                     colorSelector={legendColorSelector}
                                 />
+                                */}
                             </div>
                             <div className={styles.projectsList}>
                                 <h3 className={styles.heading}>
                                     Projects
                                 </h3>
                                 <ListView
-                                    data={testProjects}
+                                    data={projects}
                                     renderer={Project}
                                     keySelector={projectKeySelector}
                                     rendererParams={this.projectRendererParams}

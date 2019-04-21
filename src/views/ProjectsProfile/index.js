@@ -1,9 +1,16 @@
 import React from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import {
     mapToList,
     isNotDefined,
+    listToMap,
 } from '@togglecorp/fujs';
+
+import {
+    regionsSelector,
+    projectsProfileFiltersSelector,
+} from '#selectors';
 
 import Loading from '#components/Loading';
 import Page from '#components/Page';
@@ -20,6 +27,7 @@ import styles from './styles.scss';
 
 const emptyList = [];
 
+// NOTE: private function
 const unflat = (nodes, memory = {}, idSelector, parentSelector) => {
     const mem = memory;
     if (nodes.length <= 0) {
@@ -55,35 +63,175 @@ const unflatten = (nodes, idSelector, parentSelector) => {
     return valueList.filter(val => isNotDefined(parentSelector(val)));
 };
 
-/*
-const items = [
-    {
-        id: 1000,
-        title: 'Chor',
-        parent: 101,
-    },
-    {
-        id: 11,
-        title: 'Handey',
-        parent: null,
-    },
-    {
-        id: 12,
-        title: 'Pandey',
-        parent: null,
-    },
-    {
-        id: 102,
-        title: 'Hari',
-        parent: 12,
-    },
-    {
-        id: 101,
-        title: 'Shyam',
-        parent: 12,
-    },
-];
-*/
+const emptyObject = {};
+
+const ndrrsapKeySelector = item => item.ndrrsapid;
+const ndrrsapParentSelector = item => item.parent;
+
+const sanitize = (projectList, regions, ndrrsapMap) => {
+    const mapped = projectList.map((project) => {
+        // get locations for project
+        const {
+            location: { province, district, municipality, ward },
+            output,
+            oid,
+            donor,
+            partner,
+        } = project;
+        const provinces = new Set(province);
+        const districts = new Set(district);
+        const municipalities = new Set(municipality);
+        const wards = new Set(ward);
+
+        const categories = new Set();
+        const drrcycles = new Set();
+        const ndrrsaps = new Set();
+
+        const organizations = new Set([oid]);
+        if (donor.length > 0) {
+            organizations.add(...donor);
+        }
+        if (partner.length > 0) {
+            organizations.add(...partner);
+        }
+
+        // union locations from output
+        output.forEach((item) => {
+            const {
+                location,
+                category,
+                drrcycle,
+                ndrrsap,
+            } = item;
+            if (location.province.length > 0) {
+                provinces.add(...location.province);
+            }
+            if (location.district.length > 0) {
+                districts.add(...location.district);
+            }
+            if (location.municipality.length > 0) {
+                municipalities.add(...location.municipality);
+            }
+            if (location.ward.length > 0) {
+                wards.add(...location.ward);
+            }
+
+            if (category.length > 0) {
+                categories.add(...category);
+            }
+            if (drrcycle.length > 0) {
+                drrcycles.add(...drrcycle);
+            }
+            if (ndrrsap.length > 0) {
+                ndrrsap.forEach((id) => {
+                    let child = id;
+                    while (child) {
+                        ndrrsaps.add(child);
+                        const parent = ndrrsapParentSelector(ndrrsapMap[child] || {});
+                        if (parent) {
+                            child = parent;
+                        } else {
+                            child = undefined;
+                        }
+                    }
+                });
+            }
+        });
+
+        // Bubble up
+        wards.forEach((id) => {
+            if (regions.wards[id]) {
+                municipalities.add(regions.wards[id].municipality);
+            }
+        });
+        municipalities.forEach((id) => {
+            if (regions.municipalities[id]) {
+                districts.add(regions.municipalities[id].district);
+            }
+        });
+        districts.forEach((id) => {
+            if (regions.districts[id]) {
+                provinces.add(regions.districts[id].province);
+            }
+        });
+
+        return {
+            ...project,
+            province: listToMap([...provinces], item => item, () => true),
+            district: listToMap([...districts], item => item, () => true),
+            municipality: listToMap([...municipalities], item => item, () => true),
+            ward: listToMap([...wards], item => item, () => true),
+
+            category: listToMap([...categories], item => item, () => true),
+            drrcycle: listToMap([...drrcycles], item => item, () => true),
+            ndrrsap: listToMap([...ndrrsaps], item => item, () => true),
+            organization: listToMap([...organizations], item => item, () => true),
+        };
+    });
+    return mapped;
+};
+
+const isValidRegion = (region, project) => {
+    if (!region || !region.adminLevel) {
+        return true;
+    }
+    const { adminLevel, geoarea } = region;
+    if (adminLevel === 1) {
+        return project.province[geoarea];
+    }
+    if (adminLevel === 2) {
+        return project.district[geoarea];
+    }
+    if (adminLevel === 3) {
+        return project.municipality[geoarea];
+    }
+    if (adminLevel === 4) {
+        return project.ward[geoarea];
+    }
+    return false;
+};
+
+const isValidNdrrsap = (priority, subPriority, activity, project) => (
+    !(
+        (activity && !project.ndrrsap[activity])
+        || (subPriority && !project.ndrrsap[subPriority])
+        || (priority && !project.ndrrsap[priority])
+    )
+);
+
+const isValidOrganization = (organization, project) => {
+    if (!organization || organization.length <= 0) {
+        return true;
+    }
+    return organization.some(id => project.organization[id]);
+};
+
+const isValidCategory = (category, project) => {
+    if (!category || category.length <= 0) {
+        return true;
+    }
+    return category.some(id => project.category[id]);
+};
+
+const isValidDrrCycle = (drrCycle, project) => {
+    if (!drrCycle || drrCycle.length <= 0) {
+        return true;
+    }
+    return drrCycle.some(id => project.drrcycle[id]);
+};
+
+const filter = (projectList, filters) => projectList.filter(project => (
+    isValidRegion(filters.region, project)
+    && isValidNdrrsap(filters.priority, filters.subPriority, filters.activity, project)
+    && isValidOrganization(filters.organizations, project)
+    && isValidCategory(filters.elements, project)
+    && isValidDrrCycle(filters.drrCycles, project)
+));
+
+const mapStateToProps = (state, props) => ({
+    regions: regionsSelector(state),
+    filters: projectsProfileFiltersSelector(state),
+});
 
 const requests = {
     ndrrsapRequest: {
@@ -103,6 +251,11 @@ const requests = {
     },
     organizationRequest: {
         url: 'http://54.185.195.189/pims/api/v1/organization',
+        onMount: true,
+        // TODO: add schema
+    },
+    projectRequest: {
+        url: 'http://54.185.195.189/pims/api/v1/project',
         onMount: true,
         // TODO: add schema
     },
@@ -131,6 +284,9 @@ class ProjectsProfile extends React.PureComponent {
             leftPaneExpanded,
             rightPaneExpanded,
         } = this.state;
+        const {
+            regions,
+        } = this.props;
 
         const {
             requests: {
@@ -158,14 +314,51 @@ class ProjectsProfile extends React.PureComponent {
                         results: organization = emptyList,
                     } = {},
                 },
+                projectRequest: {
+                    pending: projectPending,
+                    response: {
+                        results: projects = emptyList,
+                    } = {},
+                },
             },
+            filters: {
+                faramValues = emptyObject,
+            } = {},
         } = this.props;
 
         const pending = (
-            ndrrsapPending || drrcyclePending || categoryPending || organizationPending
+            ndrrsapPending
+            || drrcyclePending
+            || categoryPending
+            || organizationPending
+            || projectPending
         );
 
-        const ndrrsapOptions = unflatten(ndrrsap, item => item.ndrrsapid, item => item.parent);
+        // NDRRSAP
+
+        const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
+        const priorityOptions = unflatten(ndrrsap, ndrrsapKeySelector, ndrrsapParentSelector);
+
+        let subPriorityOptions = emptyList;
+        const selectedPriority = priorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.priority,
+        );
+        if (selectedPriority) {
+            subPriorityOptions = selectedPriority.children;
+        }
+
+        let activityOptions = emptyList;
+        const selectedSubPriority = subPriorityOptions.find(
+            item => ndrrsapKeySelector(item) === faramValues.subPriority,
+        );
+        if (selectedSubPriority) {
+            activityOptions = selectedSubPriority.children;
+        }
+
+        // PROJECTS
+
+        const realProjects = sanitize(projects, regions, ndrrsapMap);
+        const filteredProjects = filter(realProjects, faramValues);
 
         return (
             <React.Fragment>
@@ -181,6 +374,8 @@ class ProjectsProfile extends React.PureComponent {
                         <LeftPane
                             leftPaneExpanded={leftPaneExpanded}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                            projects={filteredProjects}
+                            drrCycleOptions={drrcycle}
                         />
                     }
                     rightContentClassName={styles.right}
@@ -190,7 +385,9 @@ class ProjectsProfile extends React.PureComponent {
                             drrCycleOptions={drrcycle}
                             elementsOptions={category}
                             organizationOptions={organization}
-                            ndrrsapOptions={ndrrsapOptions}
+                            priorityOptions={priorityOptions}
+                            subPriorityOptions={subPriorityOptions}
+                            activityOptions={activityOptions}
                         />
                     }
                 />
@@ -200,7 +397,7 @@ class ProjectsProfile extends React.PureComponent {
 }
 
 export default compose(
-    // connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps),
     createConnectedRequestCoordinator(),
     createRequestClient(requests),
 )(ProjectsProfile);
