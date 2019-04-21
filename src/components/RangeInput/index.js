@@ -73,6 +73,7 @@ class RangeInput extends React.PureComponent {
             noMin,
             value: { min, max } = {},
         } = this.props;
+
         return (
             <div className={classNameFromProps}>
                 <span> { label } </span>

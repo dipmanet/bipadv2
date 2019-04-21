@@ -124,6 +124,7 @@ class Response extends React.PureComponent {
 
             leftPaneExpanded: true,
             rightPaneExpanded: true,
+            distance: DEFAULT_RESOURCES_DISTANCE,
         };
     }
 
@@ -132,7 +133,9 @@ class Response extends React.PureComponent {
     }
 
     setDistanceFilter = ({ min, max }) => {
-        this.props.requests.filteredResponseRequest.do({ min, max });
+        this.setState({
+            distance: max,
+        }, () => this.props.requests.filteredResponseRequest.do({ min, max }));
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -159,6 +162,7 @@ class Response extends React.PureComponent {
             leftPaneExpanded,
             rightPaneExpanded,
             filterFunction,
+            distance,
         } = this.state;
 
         const filteredResourceList = resourceList.filter(filterFunction);
@@ -191,7 +195,8 @@ class Response extends React.PureComponent {
                             rightContent={
                                 <ResponseFilter
                                     resourceList={resourceList}
-                                    distance={DEFAULT_RESOURCES_DISTANCE}
+                                    filteredList={filteredResourceList}
+                                    distance={distance}
                                     setFilter={this.setFilter}
                                     setDistanceFilter={this.setDistanceFilter}
                                     onExpandChange={this.handleRightPaneExpandChange}
