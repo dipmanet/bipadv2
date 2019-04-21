@@ -85,6 +85,7 @@ const propTypes = {
     eventList: PropTypes.array,
     // eslint-disable-next-line react/forbid-prop-types
     hazards: PropTypes.object,
+    onHoverChange: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -149,6 +150,14 @@ class AlertEventMap extends React.PureComponent {
         };
     })
 
+    handleAlertHover = (alertId) => {
+        this.props.onHoverChange('alert', alertId);
+    }
+
+    handleEventHover = (eventId) => {
+        this.props.onHoverChange('event', eventId);
+    }
+
     render() {
         const {
             alertList,
@@ -195,7 +204,9 @@ class AlertEventMap extends React.PureComponent {
                     <MapLayer
                         layerKey="alerts-convex-outline"
                         type="line"
+                        enableHover
                         paint={mapStyles.alertConvex.outline}
+                        onHoverChange={this.handleAlertHover}
                     />
                 </MapSource>
                 <MapSource
@@ -205,7 +216,9 @@ class AlertEventMap extends React.PureComponent {
                     <MapLayer
                         layerKey="alerts-polygon-fill"
                         type="fill"
+                        enableHover
                         paint={mapStyles.alertPolygon.fill}
+                        onHoverChange={this.handleAlertHover}
                     />
                     <MapLayer
                         layerKey="alerts-polygon-outline"
@@ -231,6 +244,7 @@ class AlertEventMap extends React.PureComponent {
                         enableHover
                         tooltipRenderer={AlertTooltip}
                         tooltipRendererParams={this.alertTooltipRendererParams}
+                        onHoverChange={this.handleAlertHover}
                     />
                 </MapSource>
 
@@ -241,7 +255,9 @@ class AlertEventMap extends React.PureComponent {
                     <MapLayer
                         layerKey="events-convex-outline"
                         type="line"
+                        enableHover
                         paint={mapStyles.eventConvex.outline}
+                        onHoverChange={this.handleEventHover}
                     />
                 </MapSource>
                 <MapSource
@@ -251,7 +267,9 @@ class AlertEventMap extends React.PureComponent {
                     <MapLayer
                         layerKey="events-polygon-fill"
                         type="fill"
+                        enableHover
                         paint={mapStyles.eventPolygon.fill}
+                        onHoverChange={this.handleEventHover}
                     />
                     <MapLayer
                         layerKey="events-polygon-outline"
@@ -271,6 +289,7 @@ class AlertEventMap extends React.PureComponent {
                         paint={mapStyles.eventSymbol.paint}
                         tooltipRenderer={EventTooltip}
                         tooltipRendererParams={this.eventTooltipRendererParams}
+                        onHoverChange={this.handleEventHover}
                     />
                 </MapSource>
             </React.Fragment>

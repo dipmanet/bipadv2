@@ -180,7 +180,7 @@ class Incidents extends React.PureComponent<Props, State> {
         this.setState({ selectedIncidentId });
     }
 
-    private renderIncidentDetail = () => {
+    private renderHoverItemDetail = () => {
         const {
             selectedIncidentId,
             rightPaneExpanded,
@@ -199,7 +199,7 @@ class Incidents extends React.PureComponent<Props, State> {
             <div className={
                 _cs(
                     rightPaneExpanded && styles.rightPaneExpanded,
-                    styles.incidentDetailBox,
+                    styles.hoverDetailBox,
                 )
             }
             >
@@ -242,7 +242,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
 
         const pending = pendingEvents || pendingIncidents;
-        const IncidentDetail = this.renderIncidentDetail;
+        const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
@@ -254,7 +254,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
                 />
-                <IncidentDetail />
+                <HoverItemDetail />
                 <Page
                     mainContent={
                         <HazardsLegend

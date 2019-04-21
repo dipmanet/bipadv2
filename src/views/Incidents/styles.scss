@@ -43,7 +43,7 @@ $width-left-pane: var(--width-left-panel);
     }
 }
 
-.incident-detail-box {
+.hover-detail-box {
     display: flex;
     position: absolute;
     top: $spacing-medium;
@@ -55,11 +55,6 @@ $width-left-pane: var(--width-left-panel);
     border-radius: 3px;
     background-color: $color-foreground;
     padding: $spacing-small $spacing-large;
-
-    .count {
-        margin-right: $spacing-medium;
-        font-size: $font-size-super-large;
-    }
 
     &.right-pane-expanded {
         right: calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 2));
