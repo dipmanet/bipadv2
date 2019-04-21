@@ -70,6 +70,9 @@ const emptyObject = {};
 
 const ndrrsapKeySelector = item => item.ndrrsapid;
 const ndrrsapParentSelector = item => item.parent;
+const organizationKeySelector = item => item.oid;
+const projectKeySelector = item => item.pid;
+const drrCycleKeySelector = item => item.drrcycleid;
 
 const drrCyclesLabelSelector = item => item.title;
 const drrCyclesKeySelector = item => item.drrcycleid;
@@ -385,6 +388,13 @@ class ProjectsProfile extends React.PureComponent {
             color: getHexFromString(categoryLabelSelector(item)),
         }));
 
+        // AGGREGATIONS
+
+        const organizationMap = listToMap(organization, organizationKeySelector, item => item);
+        const projectMap = listToMap(projects, projectKeySelector, item => item);
+        const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
+        const categoryMap = listToMap(category, categoryKeySelector, item => item);
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
@@ -405,6 +415,10 @@ class ProjectsProfile extends React.PureComponent {
                             projects={filteredProjects}
                             drrCycleData={drrPieData}
                             categoryData={categoryPieData}
+                            drrCycleMap={drrCycleMap}
+                            categoryMap={categoryMap}
+                            organizationMap={organizationMap}
+                            projectMap={projectMap}
                         />
                     }
                     rightContentClassName={styles.right}

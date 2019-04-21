@@ -33,12 +33,6 @@ class ProjectsProfileLeftPane extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
-
     handleExpand = () => {
         this.props.onExpandChange(true);
     }
@@ -47,13 +41,26 @@ class ProjectsProfileLeftPane extends React.PureComponent {
         this.props.onExpandChange(false);
     }
 
-    projectRendererParams = (projectId, project) => ({
-        title: project.ptitle,
-        start: project.pdurfrom,
-        end: project.pdurto,
-        budget: project.budget_local,
-        projectId,
-    });
+    projectRendererParams = (projectId, project) => {
+        const {
+            projectMap,
+            organizationMap,
+            drrCycleMap,
+            categoryMap,
+        } = this.props;
+
+        return ({
+            title: project.ptitle,
+            start: project.pdurfrom,
+            end: project.pdurto,
+            budget: project.budget_local,
+            projectId,
+            ...projectMap[projectId],
+            organizationMap,
+            drrCycleMap,
+            categoryMap,
+        });
+    }
 
     render() {
         const {
@@ -61,6 +68,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
             projects,
             drrCycleData,
             categoryData,
+            projectMap,
         } = this.props;
 
         return (

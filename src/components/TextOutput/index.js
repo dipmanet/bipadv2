@@ -11,6 +11,7 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    valueClassName: PropTypes.string,
     label: PropTypes.string.isRequired,
     iconLabel: PropTypes.bool,
     type: PropTypes.string,
@@ -23,8 +24,9 @@ const propTypes = {
 const defaultProps = {
     iconLabel: false,
     className: '',
+    valueClassName: '',
     value: undefined,
-    type: 'table',
+    type: 'normal',
     isNumericValue: false,
     alwaysVisible: false,
 };
@@ -41,6 +43,7 @@ export default class TextOutput extends React.PureComponent {
             type,
             iconLabel,
             isNumericValue,
+            valueClassName,
             alwaysVisible,
             ...otherProps
         } = this.props;
@@ -51,13 +54,13 @@ export default class TextOutput extends React.PureComponent {
 
         const valueComponent = isNumericValue ? (
             <Numeral
-                className={styles.value}
+                className={_cs(styles.value, valueClassName)}
                 value={value}
                 precision={0}
                 {...otherProps}
             />
         ) : (
-            <div className={styles.value}>
+            <div className={_cs(styles.value, valueClassName)}>
                 { value }
             </div>
         );
