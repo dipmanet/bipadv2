@@ -6,7 +6,7 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1.5,
+            'line-width': 2,
             'line-opacity': 0.5,
         },
         // FIXME: obsolete
@@ -26,7 +26,7 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 1.4,
             'line-opacity': 0.5,
         },
         // FIXME: obsolete
@@ -47,7 +47,7 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.8,
             'line-opacity': 0.5,
         },
         // FIXME: obsolete
@@ -67,7 +67,7 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.5,
             'line-opacity': 0.5,
         },
         // FIXME: obsolete

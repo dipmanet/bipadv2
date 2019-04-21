@@ -8,13 +8,7 @@ import {
     sum,
 } from '#utils/common';
 
-export const metricOptions = [
-    { key: 'count', label: 'No. of incidents' },
-    { key: 'estimatedLoss', label: 'Total estimated loss' },
-    { key: 'infrastructureDestroyedCount', label: 'Total infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'Total livestock destroyed' },
-    { key: 'peopleDeathCount', label: 'Total people death' },
-];
+import { lossMetrics } from '#utils/domain';
 
 export const createMetric = type => (val) => {
     if (!val) {
@@ -24,7 +18,7 @@ export const createMetric = type => (val) => {
 };
 
 export const metricMap = listToMap(
-    metricOptions,
+    lossMetrics,
     item => item.key,
     (item, key) => ({
         ...item,

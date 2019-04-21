@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
 import { currentStyle } from '#rsu/styles';
+import { lossMetrics } from '#utils/domain';
 
 import {
     listToMap,
@@ -19,7 +19,6 @@ import {
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
-import DateInput from '#rsci/DateInput';
 import SelectInput from '#rsci/SelectInput';
 
 import Map from '../Map';
@@ -34,7 +33,6 @@ import {
     getMinMaxTime,
     getSanitizedIncidents,
     metricMap,
-    metricOptions,
     metricType,
     getFilledGroupedIncidents,
 } from '../common';
@@ -467,7 +465,7 @@ export default class Timeline extends React.PureComponent {
                     rightContent={
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={metricOptions}
+                            metricOptions={lossMetrics}
                             metricType={metricType}
                             isTimeline
                         />

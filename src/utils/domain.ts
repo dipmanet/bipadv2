@@ -115,7 +115,6 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
     ));
 };
 
-// FIXME: use this everywhere
 export const lossMetrics = [
     { key: 'count', label: 'No. of incidents' },
     { key: 'estimatedLoss', label: 'Total estimated loss' },

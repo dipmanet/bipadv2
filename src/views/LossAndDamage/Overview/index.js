@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
@@ -6,6 +5,7 @@ import { styleProperties } from '#constants';
 import { currentStyle } from '#rsu/styles';
 
 import Page from '#components/Page';
+import { lossMetrics } from '#utils/domain';
 
 import Map from '../Map';
 import LeftPane from './LeftPane';
@@ -14,7 +14,6 @@ import Filter from '../Filter';
 import {
     metricMap,
     metricType,
-    metricOptions,
     getGroupMethod,
     getSanitizedIncidents,
     getGroupedIncidents,
@@ -172,7 +171,7 @@ export default class Overview extends React.PureComponent {
                     rightContent={
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={metricOptions}
+                            metricOptions={lossMetrics}
                             metricType={metricType}
                         />
                     }
