@@ -1,12 +1,13 @@
 @import '~base-scss/base';
 
 .resources {
-    padding: $spacing-medium;
+    &:not(:first-child) {
+        margin-top: $spacing-large;
+    }
 
     .header {
         display: flex;
         align-items: center;
-        margin-bottom: $spacing-small;
 
         .icon {
             padding-right: $spacing-medium;
@@ -16,5 +17,20 @@
         .heading {
             flex-grow: 1;
         }
+
+        .button {
+            flex-shrink: 0;
+            font-size: $font-size-small;
+        }
+
+        .filter-button {
+            margin-right: $spacing-small;
+        }
+    }
+
+    .content {
+        border: $width-separator-thin solid $color-separator;
+        height: 200px;
+        overflow-y: auto;
     }
 }

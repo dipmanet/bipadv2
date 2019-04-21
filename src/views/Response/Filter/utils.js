@@ -50,7 +50,7 @@ const getKey = x => x.key;
 const getLabel = x => x.label;
 
 
-export const getFilterInputElement = (filterParam) => {
+export const getFilterInputElement = (filterParam, show) => {
     const {
         key,
         type: paramType,
@@ -66,6 +66,7 @@ export const getFilterInputElement = (filterParam) => {
                 key={key}
                 faramElementName={key}
                 label={label}
+                disabled={!show}
             />
         );
     } else if (type === 'number') {
@@ -76,6 +77,7 @@ export const getFilterInputElement = (filterParam) => {
                 label={label}
                 title={label}
                 separator=" "
+                disabled={!show}
             />
         );
     } else if (type === 'boolean') {
@@ -84,6 +86,7 @@ export const getFilterInputElement = (filterParam) => {
                 key={key}
                 faramElementName={key}
                 label={label}
+                disabled={!show}
             />
         );
     } else if (type === 'select') {
@@ -95,6 +98,7 @@ export const getFilterInputElement = (filterParam) => {
                 keySelector={getKey}
                 labelSelector={getLabel}
                 options={filter.options}
+                disabled={!show}
                 // showLabel={false}
             />
         );
@@ -104,6 +108,7 @@ export const getFilterInputElement = (filterParam) => {
             key={filterParam.key}
             faramElementName={filterParam.key}
             label={filterParam.label}
+            disabled={!show}
         />
     );
 };

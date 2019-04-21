@@ -3,7 +3,9 @@
 const styleProperties = {
     widthLeftPanel: '320px',
     widthRightPanel: '256px',
+    widthRightPanelLarge: '360px',
     widthNavbarRight: '50px',
+    widthResponseFilters: '240px',
     heightNavbar: '56px',
     colorAccentLight: '#e9f3f0',
     radiusPanelBorder: '5px',
