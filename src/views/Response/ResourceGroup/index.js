@@ -123,7 +123,9 @@ export default class ResourceGroup extends React.PureComponent {
                         <TextOutput
                             key={itemName}
                             label={itemName}
-                            value={`${inventoriesSummary[itemName]} ${inventoryUnits[itemName]}`}
+                            isNumericValue
+                            value={inventoriesSummary[itemName]}
+                            suffix={` ${inventoryUnits[itemName]}`}
                         />
                     ))
                 }

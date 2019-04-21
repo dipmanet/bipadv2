@@ -35,7 +35,9 @@ const inventoryToTextOutput = inventory => (
     <TextOutput
         key={inventory.id}
         label={inventory.item.title}
-        value={`${inventory.quantity} ${inventory.item.unit}`}
+        value={inventory.quantity}
+        isNumericValue
+        suffix={` ${inventory.item.unit}`}
     />
 );
 
