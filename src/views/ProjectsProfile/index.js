@@ -13,6 +13,7 @@ import {
 } from '#request';
 
 import ProjectsProfileFilter from './Filter';
+import LeftPane from './LeftPane';
 import Map from './Map';
 
 import styles from './styles.scss';
@@ -121,6 +122,10 @@ class ProjectsProfile extends React.PureComponent {
         this.setState({ rightPaneExpanded });
     }
 
+    handleLeftPaneExpandChange = (leftPaneExpanded) => {
+        this.setState({ leftPaneExpanded });
+    }
+
     render() {
         const {
             leftPaneExpanded,
@@ -172,7 +177,12 @@ class ProjectsProfile extends React.PureComponent {
                 <Page
                     mainContent={null}
                     leftContentClassName={styles.left}
-                    leftContent={null}
+                    leftContent={
+                        <LeftPane
+                            leftPaneExpanded={leftPaneExpanded}
+                            onExpandChange={this.handleLeftPaneExpandChange}
+                        />
+                    }
                     rightContentClassName={styles.right}
                     rightContent={
                         <ProjectsProfileFilter
