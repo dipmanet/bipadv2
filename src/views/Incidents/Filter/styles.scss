@@ -14,8 +14,14 @@ $width-right-panel: var(--width-right-panel);
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
         width: $width-right-panel;
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+            overflow-y: auto;
+        }
 
         .header {
             display: flex;
@@ -24,28 +30,26 @@ $width-right-panel: var(--width-right-panel);
 
             .heading {
                 flex-grow: 1;
-                padding: $spacing-medium $spacing-small;
+                padding: $spacing-medium;
                 color: $color-primary;
             }
 
             button {
                 flex-shrink: 0;
+                margin-right: $spacing-small;
             }
         }
 
         .content {
             flex-grow: 1;
-            overflow: auto;
+            padding: 0 $spacing-medium;
+            overflow-y: auto;
 
+            .location-select-input,
+            .event-select-input,
+            .past-data-select-input,
             .list-selection-input {
-                margin: $spacing-medium $spacing-small;
-            }
-
-            .past-data-select-input {
-                margin: $spacing-medium $spacing-small;
-            }
-            .event-select-input {
-                margin: $spacing-medium $spacing-small 0;
+                margin-bottom: $spacing-medium;
             }
         }
     }
