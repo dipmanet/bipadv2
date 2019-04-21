@@ -23,7 +23,6 @@ import Button from '#rsca/Button';
 
 import {
     getGroupMethod,
-    getSanitizedIncidents,
     getGroupedIncidents,
     getAggregatedStats,
 } from '../common';
@@ -98,19 +97,17 @@ class Comparative extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
-    generateOverallDataset = memoize((incidents, regions, region) => {
+    generateOverallDataset = memoize((incidents, region) => {
         if (!incidents || incidents.length <= 0) {
             return {
                 mapping: [],
-                sanitizedIncidents: [],
+                aggregatedStat: {},
             };
         }
 
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions);
-
         const groupFn = getGroupMethod(region.adminLevel);
         const regionGroupedIncidents = getGroupedIncidents(
-            sanitizedIncidents,
+            incidents,
             groupFn,
         );
 
@@ -125,7 +122,6 @@ class Comparative extends React.PureComponent {
 
         return {
             mapping,
-            sanitizedIncidents,
             aggregatedStat: regionGroupedIncidents[region.geoarea],
         };
     })
@@ -153,7 +149,6 @@ class Comparative extends React.PureComponent {
             className,
             mapStyle,
             lossAndDamageList,
-            regions,
         } = this.props;
 
         const {
@@ -168,10 +163,10 @@ class Comparative extends React.PureComponent {
         } = faramValues;
 
         const dataset1 = region1
-            ? this.generateOverallDataset(lossAndDamageList, regions, region1)
+            ? this.generateOverallDataset(lossAndDamageList, region1)
             : emptyObject;
         const dataset2 = region2
-            ? this.generateOverallDataset(lossAndDamageList, regions, region2)
+            ? this.generateOverallDataset(lossAndDamageList, region2)
             : emptyObject;
 
 

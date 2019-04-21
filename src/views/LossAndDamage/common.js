@@ -65,7 +65,7 @@ export const getRegionInfoFromWard = (wardId, regions) => {
 
 export const getSanitizedIncidents = (incidents, regions) => {
     const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
-        incidentOn && wards && wards.length > 0
+        incidentOn && (wards && wards.length > 0)
     )).map(incident => ({
         ...incident,
         incidentOn: new Date(incident.incidentOn).getTime(),
@@ -77,9 +77,8 @@ export const getSanitizedIncidents = (incidents, regions) => {
     return sanitizedIncidents;
 };
 
-export const getMinMaxTime = (incidents, regions) => {
-    const sanitizedIncidents = getSanitizedIncidents(incidents, regions);
-    const timing = sanitizedIncidents.map(incident => incident.incidentOn);
+export const getMinMaxTime = (incidents) => {
+    const timing = incidents.map(incident => incident.incidentOn);
     const minTime = Math.min(...timing);
     const maxTime = Math.max(...timing);
     return { minTime, maxTime };

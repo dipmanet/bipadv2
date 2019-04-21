@@ -5,6 +5,7 @@ import Faram from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import DateInput from '#rsci/DateInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import SelectInput from '#rsci/SelectInput';
 
@@ -155,13 +156,21 @@ class LossAndDamageFilter extends React.PureComponent {
                             error={faramErrors}
                             disabled={false}
                         >
+                            <RegionSelectInput
+                                faramElementName="region"
+                            />
                             <SelectInput
                                 label="Metric"
                                 faramElementName="metric"
                                 options={metricOptions}
                             />
-                            <RegionSelectInput
-                                faramElementName="region"
+                            <DateInput
+                                label="Start Date"
+                                faramElementName="start"
+                            />
+                            <DateInput
+                                label="End Date"
+                                faramElementName="end"
                             />
                             <HazardSelectionInput
                                 faramElementName="hazard"

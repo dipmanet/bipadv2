@@ -78,14 +78,12 @@ export default class Overview extends React.PureComponent {
         if (!incidents || incidents.length <= 0) {
             return {
                 mapping: [],
-                sanitizedIncidents: [],
+                aggregatedStat: {},
             };
         }
 
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions);
-
         const groupFn = getGroupMethod(regionLevel);
-        const regionGroupedIncidents = getGroupedIncidents(sanitizedIncidents, groupFn);
+        const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
         const aggregatedStat = getAggregatedStats(regionGroupedIncidents.flat());
 
         const listToMapGroupedItem = groupedIncidents => (
@@ -99,7 +97,6 @@ export default class Overview extends React.PureComponent {
 
         return {
             mapping,
-            sanitizedIncidents,
             aggregatedStat,
         };
     })
