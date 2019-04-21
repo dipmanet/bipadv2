@@ -15,7 +15,6 @@ import {
     metricMap,
     metricType,
     getGroupMethod,
-    getSanitizedIncidents,
     getGroupedIncidents,
     getAggregatedStats,
 } from '../common';

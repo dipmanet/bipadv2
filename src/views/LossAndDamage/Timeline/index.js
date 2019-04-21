@@ -31,7 +31,6 @@ import {
     getGroupMethod,
     getGroupedIncidents,
     getMinMaxTime,
-    getSanitizedIncidents,
     metricMap,
     metricType,
     getFilledGroupedIncidents,

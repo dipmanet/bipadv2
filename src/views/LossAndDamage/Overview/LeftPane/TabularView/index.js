@@ -9,6 +9,7 @@ import {
     compareBoolean,
 } from '@togglecorp/fujs';
 
+import Numeral from '#rscv/Numeral';
 import NormalTaebul from '#rscv/Taebul';
 import Sortable from '#rscv/Taebul/Sortable';
 import ColumnWidth from '#rscv/Taebul/ColumnWidth';
@@ -46,14 +47,14 @@ export default class TabularView extends React.PureComponent {
         super(props);
 
         const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
-        const getEstimatedLoss = ({ hazardInfo: { estimatedLoss } = {} }) => estimatedLoss;
-        const getInfraCount = ({ hazardInfo: { infrastructureDestroyedCount } = {} }) => (
+        const getEstimatedLoss = ({ loss: { estimatedLoss } = {} }) => estimatedLoss;
+        const getInfraCount = ({ loss: { infrastructureDestroyedCount } = {} }) => (
             infrastructureDestroyedCount
         );
-        const getLiveCount = ({ hazardInfo: { livestockDestroyedCount } = {} }) => (
+        const getLiveCount = ({ loss: { livestockDestroyedCount } = {} }) => (
             livestockDestroyedCount
         );
-        const getPeopleCount = ({ hazardInfo: { peopleDeathCount } = {} }) => (
+        const getPeopleCount = ({ loss: { peopleDeathCount } = {} }) => (
             peopleDeathCount
         );
 
@@ -88,16 +89,18 @@ export default class TabularView extends React.PureComponent {
                 transformer: getHazardTitle,
             },
             {
-                key: 'count',
-                value: { title: 'No. of incidents' },
-                comparator: (a, b, d) => compareString(a.count, b.count, d),
-            },
-            {
                 key: 'estimatedLoss',
                 value: { title: 'Total estimated loss' },
 
                 comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
                 transformer: getEstimatedLoss,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        value={value}
+                        precision={0}
+                    />
+                ),
             },
             {
                 key: 'infrastructureDestroyedCount',
@@ -105,6 +108,13 @@ export default class TabularView extends React.PureComponent {
 
                 comparator: (a, b, d) => compareNumber(getInfraCount(a), getInfraCount(b), d),
                 transformer: getInfraCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        value={value}
+                        precision={0}
+                    />
+                ),
             },
             {
                 key: 'livestockDestroyedCount',
@@ -112,6 +122,13 @@ export default class TabularView extends React.PureComponent {
 
                 comparator: (a, b, d) => compareNumber(getLiveCount(a), getLiveCount(b), d),
                 transformer: getLiveCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        value={value}
+                        precision={0}
+                    />
+                ),
             },
             {
                 key: 'peopleDeathCount',
@@ -119,6 +136,13 @@ export default class TabularView extends React.PureComponent {
 
                 comparator: (a, b, d) => compareNumber(getPeopleCount(a), getPeopleCount(b), d),
                 transformer: getPeopleCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        value={value}
+                        precision={0}
+                    />
+                ),
             },
             {
                 key: 'createdOn',
