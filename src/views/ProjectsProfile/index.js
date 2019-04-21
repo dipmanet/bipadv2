@@ -9,6 +9,7 @@ import {
 
 import {
     regionsSelector,
+    regionLevelSelector,
     projectsProfileFiltersSelector,
 } from '#selectors';
 
@@ -230,6 +231,7 @@ const filter = (projectList, filters) => projectList.filter(project => (
 
 const mapStateToProps = (state, props) => ({
     regions: regionsSelector(state),
+    regionLevel: regionLevelSelector(state, props),
     filters: projectsProfileFiltersSelector(state),
 });
 
@@ -324,6 +326,7 @@ class ProjectsProfile extends React.PureComponent {
             filters: {
                 faramValues = emptyObject,
             } = {},
+            regionLevel,
         } = this.props;
 
         const pending = (
@@ -366,6 +369,9 @@ class ProjectsProfile extends React.PureComponent {
                 <Map
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
+                    projects={filteredProjects}
+                    regions={regions}
+                    regionLevel={regionLevel}
                 />
                 <Page
                     mainContent={null}

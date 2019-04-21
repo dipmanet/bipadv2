@@ -1,1 +1,40 @@
 @import '~base-scss/base';
+
+.legend {
+    position: absolute;
+    bottom: $spacing-medium;
+    left: var(--spacing-medium);
+    transition: .2s all ease-in-out;
+    z-index: 11;
+    border: $width-separator-thin solid $color-separator;
+    border-radius: var(--radius-border-pane);
+    background-color: $color-foreground;
+    padding: $spacing-medium;
+    width: 240px;
+
+    &.left-pane-expanded {
+        left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+    }
+
+    .heading {
+        padding-bottom: $spacing-medium;
+    }
+
+    .range {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .min {
+        font-size: $font-size-small;
+    }
+
+    .max {
+        font-size: $font-size-small;
+    }
+
+    .scale {
+        display: flex;
+        height: $font-size-medium;
+    }
+}
