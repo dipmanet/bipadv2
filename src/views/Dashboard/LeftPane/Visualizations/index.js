@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
 import { groupList } from '#utils/common';
-
-import SimpleHorizontalBarChart from '#rscz/SimpleHorizontalBarChart';
+import HorizontalBar from '#rscz/HorizontalBar';
 
 import styles from './styles.scss';
 
@@ -20,6 +19,21 @@ const defaultProps = {
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
+
+const chartColorScheme = [
+    '#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#fdbf6f',
+    '#ff7f00',
+    '#cab2d6',
+    '#6a3d9a',
+    '#ffff99',
+    '#b15928',
+];
 
 export default class Visualization extends React.PureComponent {
     static propTypes = propTypes;
@@ -69,26 +83,29 @@ export default class Visualization extends React.PureComponent {
                             Hazard Statistics
                         </h4>
                     </header>
-                    <SimpleHorizontalBarChart
+                    <HorizontalBar
                         className={styles.chart}
                         data={hazardSummary}
                         labelSelector={barChartLabelSelector}
                         valueSelector={barChartValueSelector}
+                        colorScheme={chartColorScheme}
                     />
                 </div>
-                <div className={styles.eventStatisticsChart}>
-                    <header className={styles.header}>
-                        <h4 className={styles.heading}>
-                            Event Statistics
-                        </h4>
-                    </header>
-                    <SimpleHorizontalBarChart
-                        className={styles.chart}
-                        data={eventSummary}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
-                    />
-                </div>
+                {eventSummary.length > 0 &&
+                    <div className={styles.eventStatisticsChart}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Event Statistics
+                            </h4>
+                        </header>
+                        <HorizontalBar
+                            className={styles.chart}
+                            data={eventSummary}
+                            labelSelector={barChartLabelSelector}
+                            valueSelector={barChartValueSelector}
+                        />
+                    </div>
+                }
             </div>
         );
     }
