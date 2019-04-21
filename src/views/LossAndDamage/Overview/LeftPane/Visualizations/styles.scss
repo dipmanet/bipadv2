@@ -1,0 +1,65 @@
+@import '~base-scss/base';
+
+.visualization-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+
+    %visualization-container {
+        display: flex;
+        flex-direction: column;
+        padding: $spacing-small 0;
+
+        .header {
+            flex-shrink: 0;
+
+            .heading {
+                padding: $spacing-small $spacing-medium;
+            }
+        }
+
+        .chart {
+            flex-grow: 1;
+        }
+    }
+
+    .bar-container {
+        @extend %visualization-container;
+        flex-basis: 160px;
+        flex-grow: 2;
+        min-height: 200px;
+    }
+
+    .donut-container {
+        @extend %visualization-container;
+        flex-basis: 160px;
+        flex-grow: 2;
+        min-height: 200px;
+    }
+
+    .parallel-container {
+        @extend %visualization-container;
+        flex-basis: 256px;
+        flex-grow: 3;
+        min-height: 256px;
+    }
+}
+
+.legend-container {
+    flex-shrink: 0;
+    background-color: $color-foreground-alt;
+
+    .legend {
+        display: flex;
+        flex-wrap: wrap;
+
+        .legend-item {
+            flex-basis: calc(100% / 3);
+            padding: $spacing-small;
+            color: $color-text-label;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+        }
+    }
+}

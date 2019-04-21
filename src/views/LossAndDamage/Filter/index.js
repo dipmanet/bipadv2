@@ -157,22 +157,27 @@ class LossAndDamageFilter extends React.PureComponent {
                             disabled={false}
                         >
                             <RegionSelectInput
+                                className={styles.regionSelectionInput}
                                 faramElementName="region"
                             />
                             <SelectInput
+                                className={styles.metricSelectionInput}
                                 label="Metric"
                                 faramElementName="metric"
                                 options={metricOptions}
                             />
                             <DateInput
+                                className={styles.startDateInput}
                                 label="Start Date"
                                 faramElementName="start"
                             />
                             <DateInput
+                                className={styles.endDateInput}
                                 label="End Date"
                                 faramElementName="end"
                             />
                             <HazardSelectionInput
+                                className={styles.hazardSelectionInput}
                                 faramElementName="hazard"
                             />
                         </Faram>

@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { _cs } from '@togglecorp/fujs';
 
 import CollapsibleView from '#components/CollapsibleView';
 import Button from '#rsca/Button';
-import Spinner from '#rscz/Spinner';
 import { iconNames } from '#constants';
 
+import Visualizations from './Visualizations';
+import TabularView from './TabularView';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -28,13 +30,8 @@ export default class LeftPane extends React.PureComponent {
 
         this.state = {
             isExpanded: true,
+            showTabularView: false,
         };
-    }
-
-    transformData = () => {
-        const {
-            lossAndDamageList = emptyList,
-        } = this.props;
     }
 
     handleExpandChange = (isExpanded) => {
@@ -54,19 +51,19 @@ export default class LeftPane extends React.PureComponent {
         this.handleExpandChange(true);
     }
 
+    handleShowTabularButtonClick = () => {
+        this.setState({ showTabularView: !this.state.showTabularView });
+    }
+
     renderHeader = () => (
         <header className={styles.header}>
             <h3 className={styles.heading}>
                 Summary
             </h3>
-            <Spinner
-                className={styles.spinner}
-                loading={this.props.pending}
-            />
             <Button
-                className={styles.showDetailsButton}
-                onClick={this.handleShowDetailsButtonClick}
-                iconName={iconNames.expand}
+                className={styles.showTabularButton}
+                onClick={this.handleShowTabularButtonClick}
+                iconName={this.state.showTabularView ? iconNames.shrink : iconNames.expand}
                 title="Show detailed view"
             />
             <Button
@@ -83,12 +80,15 @@ export default class LeftPane extends React.PureComponent {
         const {
             className,
             lossAndDamageList = emptyList,
+            pending,
+            rightPaneExpanded,
         } = this.props;
 
-        const { isExpanded } = this.state;
+        const {
+            isExpanded,
+            showTabularView,
+        } = this.state;
         const Header = this.renderHeader;
-
-        this.transformData();
 
         return (
             <CollapsibleView
@@ -100,17 +100,41 @@ export default class LeftPane extends React.PureComponent {
                         onClick={this.handleExpandButtonClick}
                         className={styles.expandButton}
                     >
-                        Hello
+                        Show summary
                     </Button>
                 }
                 expandedViewContainerClassName={styles.overviewContainer}
                 expandedView={
-                    <React.Fragment>
-                        <Header />
-                        <div className={styles.content}>
-                            zZzZzZzzZ
-                        </div>
-                    </React.Fragment>
+                    <CollapsibleView
+                        className={styles.overview}
+                        expanded={showTabularView}
+                        collapsedViewContainerClassName={styles.nonTabularContainer}
+                        collapsedView={
+                            <React.Fragment>
+                                <Header />
+                                <div className={styles.content}>
+                                    { !pending && (
+                                        <Visualizations
+                                            lossAndDamageList={lossAndDamageList}
+                                        />
+                                    ) }
+                                </div>
+                            </React.Fragment>
+                        }
+                        expandedViewContainerClassName={_cs(
+                            styles.tabularContainer,
+                            rightPaneExpanded && styles.rightPaneExpanded,
+                        )}
+                        expandedView={
+                            <React.Fragment>
+                                <Header />
+                                <TabularView
+                                    className={styles.table}
+                                    lossAndDamageList={lossAndDamageList}
+                                />
+                            </React.Fragment>
+                        }
+                    />
                 }
             />
         );

@@ -1,9 +1,7 @@
 @import '~base-scss/base';
 
 .cell {
-    display: block;
     padding: $spacing-small;
-    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

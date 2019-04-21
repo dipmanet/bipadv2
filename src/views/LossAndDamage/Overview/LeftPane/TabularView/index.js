@@ -4,9 +4,9 @@ import memoize from 'memoize-one';
 import {
     _cs,
     compareDate,
+    compareNumber,
     compareString,
     compareBoolean,
-    compareNumber,
 } from '@togglecorp/fujs';
 
 import NormalTaebul from '#rscv/Taebul';
@@ -27,26 +27,35 @@ import styles from './styles.scss';
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
 const propTypes = {
-    incidentList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    lossAndDamageList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
 };
 
 const defaultProps = {
-    incidentList: [],
+    lossAndDamageList: [],
     className: undefined,
 };
 
 export default class TabularView extends React.PureComponent {
-    static propTypes = propTypes
-    static defaultProps = defaultProps
+    static propTypes = propTypes;
+    static defaultProps = defaultProps;
 
     static tableKeySelector = data => data.id;
 
     constructor(props) {
         super(props);
 
-        const getPeopleDeathCount = ({ loss: { peopleDeathCount } = {} }) => peopleDeathCount;
         const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
+        const getEstimatedLoss = ({ hazardInfo: { estimatedLoss } = {} }) => estimatedLoss;
+        const getInfraCount = ({ hazardInfo: { infrastructureDestroyedCount } = {} }) => (
+            infrastructureDestroyedCount
+        );
+        const getLiveCount = ({ hazardInfo: { livestockDestroyedCount } = {} }) => (
+            livestockDestroyedCount
+        );
+        const getPeopleCount = ({ hazardInfo: { peopleDeathCount } = {} }) => (
+            peopleDeathCount
+        );
 
         this.columns = prepareColumns([
             {
@@ -54,13 +63,11 @@ export default class TabularView extends React.PureComponent {
                 value: { title: 'Verified' },
 
                 comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
-
                 transformer: value => (value ? 'Yes' : 'No'),
             },
             {
                 key: 'title',
                 value: { title: 'Title' },
-
                 comparator: (a, b, d) => compareString(a.title, b.title, d),
             },
             {
@@ -81,35 +88,37 @@ export default class TabularView extends React.PureComponent {
                 transformer: getHazardTitle,
             },
             {
-                key: 'streetAddress',
-                value: { title: 'Street Address' },
-                comparator: (a, b, d) => compareString(a.streetAddress, b.streetAddress, d),
+                key: 'count',
+                value: { title: 'No. of incidents' },
+                comparator: (a, b, d) => compareString(a.count, b.count, d),
             },
             {
-                key: 'cause',
-                value: { title: 'Cause' },
-                comparator: (a, b, d) => compareString(a.cause, b.cause, d),
-            },
-            {
-                key: 'inducer',
-                value: { title: 'Inducer' },
-                comparator: (a, b, d) => compareString(a.inducer, b.inducer, d),
-            },
-            {
-                key: 'severity',
-                value: { title: 'Severity' },
-                comparator: (a, b, d) => compareString(a.severity, b.severity, d),
-            },
-            {
-                key: 'people-death',
-                value: { title: 'People death' },
-                comparator: (a, b, d) => compareNumber(
-                    getPeopleDeathCount(a),
-                    getPeopleDeathCount(b),
-                    d,
-                ),
+                key: 'estimatedLoss',
+                value: { title: 'Total estimated loss' },
 
-                transformer: getPeopleDeathCount,
+                comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
+                transformer: getEstimatedLoss,
+            },
+            {
+                key: 'infrastructureDestroyedCount',
+                value: { title: 'Total infrastructure destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getInfraCount(a), getInfraCount(b), d),
+                transformer: getInfraCount,
+            },
+            {
+                key: 'livestockDestroyedCount',
+                value: { title: 'Total livestock destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getLiveCount(a), getLiveCount(b), d),
+                transformer: getLiveCount,
+            },
+            {
+                key: 'peopleDeathCount',
+                value: { title: 'Total people death' },
+
+                comparator: (a, b, d) => compareNumber(getPeopleCount(a), getPeopleCount(b), d),
+                transformer: getPeopleCount,
             },
             {
                 key: 'createdOn',
@@ -118,17 +127,15 @@ export default class TabularView extends React.PureComponent {
 
                 cellRenderer: TableDateCell,
             },
-            {
-                key: 'incidentOn',
-                value: { title: 'Incident on' },
-                comparator: (a, b, d) => compareDate(a.incidentOn, b.incidentOn, d),
-                cellRenderer: TableDateCell,
-            },
         ], styles);
 
         this.state = {
             settings: defaultState,
         };
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
     }
 
     handleSettingsChange = (val) => {
@@ -140,21 +147,20 @@ export default class TabularView extends React.PureComponent {
     render() {
         const {
             className,
-            incidentList,
+            lossAndDamageList,
         } = this.props;
 
-        const incidentListForExport = this.convertValues(incidentList, this.columns);
+        const lossAndDamageListForExport = this.convertValues(lossAndDamageList, this.columns);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
                 <div className={styles.tableContainer}>
                     <Taebul
-                        className={styles.incidentsTable}
+                        className={styles.lossAndDamagesTable}
+                        data={lossAndDamageList}
                         headClassName={styles.head}
-                        data={incidentList}
                         keySelector={TabularView.tableKeySelector}
                         columns={this.columns}
-
                         settings={this.state.settings}
                         onChange={this.handleSettingsChange}
                         rowHeight={30}
@@ -163,7 +169,7 @@ export default class TabularView extends React.PureComponent {
                 <div className={styles.downloadLinkContainer}>
                     <DownloadButton
                         onClick={this.handleClick}
-                        value={incidentListForExport}
+                        value={lossAndDamageList}
                     >
                         Download csv
                     </DownloadButton>
@@ -172,4 +178,3 @@ export default class TabularView extends React.PureComponent {
         );
     }
 }
-

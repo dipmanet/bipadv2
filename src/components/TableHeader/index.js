@@ -14,7 +14,7 @@ const getSortIcon = (sortOrder) => {
 };
 
 export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
-    <React.Fragment>
+    <div className={styles.tableHeader}>
         { sortable &&
             <Button
                 className={styles.sortButton}
@@ -24,7 +24,12 @@ export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
                 smallVerticalPadding
             />
         }
-        <b>{title}</b>
-    </React.Fragment>
+        <div
+            title={title}
+            className={styles.title}
+        >
+            {title}
+        </div>
+    </div>
 );
 

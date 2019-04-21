@@ -166,6 +166,7 @@ export default class Overview extends React.PureComponent {
                             pending={pending}
                             lossAndDamageList={lossAndDamageList}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                            rightPaneExpanded={rightPaneExpanded}
                         />
                     }
                     rightContent={

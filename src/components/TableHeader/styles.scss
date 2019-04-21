@@ -1,1 +1,17 @@
 @import '~base-scss/base';
+
+.table-header {
+    display: flex;
+    padding: $spacing-small 0;
+
+    .sort-button {
+        flex-shrink: 0;
+    }
+
+    .title {
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
