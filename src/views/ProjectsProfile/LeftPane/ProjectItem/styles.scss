@@ -2,5 +2,58 @@
 
 .project {
     border-bottom: $width-separator-thin solid $color-separator;
+    cursor: pointer;
     padding: $spacing-small $spacing-medium;
+
+    .heading {
+        padding-bottom: $spacing-small;
+        text-transform: capitalize;
+    }
+
+    .date-container {
+        display: flex;
+        justify-content: space-between;
+        padding-top: $spacing-extra-small;
+    }
+
+    &:hover {
+        background-color: $color-background-hover;
+    }
+}
+
+.modal {
+    .modal-header {
+        >h2 {
+            text-transform: capitalize;
+            font-weight: $font-weight-bold;
+        }
+
+        >button {
+            cursor: pointer;
+        }
+    }
+
+    .modal-body {
+        height: 540px;
+        overflow-y: auto;
+
+        .table {
+            display: table;
+        }
+
+
+        .capitalize-value {
+            text-transform: capitalize;
+        }
+
+        .outputs {
+            .output {
+                margin-top: $spacing-large;
+
+                h3 {
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
 }

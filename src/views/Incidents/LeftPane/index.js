@@ -18,7 +18,6 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
-
 import TabularView from './TabularView';
 import IncidentListView from './ListView';
 import Visualizations from './Visualizations';
