@@ -55,7 +55,7 @@ export default class TabularView extends React.PureComponent {
 
                 comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
 
-                transformer: value => (value ? 'y' : 'n'),
+                transformer: value => (value ? 'Yes' : 'No'),
             },
             {
                 key: 'title',
@@ -157,6 +157,7 @@ export default class TabularView extends React.PureComponent {
 
                         settings={this.state.settings}
                         onChange={this.handleSettingsChange}
+                        rowHeight={30}
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>

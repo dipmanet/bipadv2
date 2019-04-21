@@ -67,25 +67,11 @@ const requests = {
     lossAndDamageRequest: {
         url: '/incident/',
         query: {
-            // ...transformDateRangeFilterParam(filters, 'incident_on'),
             expand: ['loss.peoples', 'wards'],
-            limit: 5000,
+            limit: 12000,
             ordering: '-incident_on',
             lnd: true,
         },
-        /*
-        onPropsChanged: {
-            filters: ({
-                props: { filters: { hazard, region } },
-                prevProps: { filters: {
-                    hazard: prevHazard,
-                    region: prevRegion,
-                } },
-            }) => (
-                hazard !== prevHazard || region !== prevRegion
-            ),
-        },
-        */
         onMount: true,
         extras: {
             schemaName: 'incidentWithPeopleResponse',
