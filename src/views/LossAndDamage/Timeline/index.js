@@ -3,19 +3,14 @@ import memoize from 'memoize-one';
 import { currentStyle } from '#rsu/styles';
 import { lossMetrics } from '#utils/domain';
 
-import {
-    listToMap,
-    isDefined,
-} from '@togglecorp/fujs';
+import { listToMap } from '@togglecorp/fujs';
 
 import {
     iconNames,
     styleProperties,
 } from '#constants';
 import Page from '#components/Page';
-import {
-    getYmd,
-} from '#utils/common';
+import { getYmd } from '#utils/common';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -178,8 +173,6 @@ export default class Timeline extends React.PureComponent {
 
     generateDataset = memoize((
         incidents,
-        startTime,
-        endTime,
         bucketValue,
         regionLevel,
     ) => {
@@ -195,6 +188,7 @@ export default class Timeline extends React.PureComponent {
         }
 
         const bucketedIncidents = [];
+
         const {
             minTime,
             maxTime,
@@ -233,7 +227,7 @@ export default class Timeline extends React.PureComponent {
 
         const val = {
             mapping,
-            otherMapping: bucketedIncidents,
+            bucketedIncidents,
             aggregatedStat,
             minTime,
             maxTime,
@@ -245,8 +239,6 @@ export default class Timeline extends React.PureComponent {
     playback = (lossAndDamageList, regionLevel, currentIndexFromArg = -1) => {
         clearTimeout(this.timeout);
         const {
-            start,
-            end,
             timeBucket,
             isPlaying,
         } = this.state;
@@ -257,9 +249,9 @@ export default class Timeline extends React.PureComponent {
             totalIteration,
             minTime,
             maxTime,
-        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regionLevel);
+        } = this.generateDataset(lossAndDamageList, bucketValue, regionLevel);
 
-        if (isPlaying && lossAndDamageList.length > 0) {
+        if (lossAndDamageList.length > 0) {
             let currentIndex = currentIndexFromArg;
             let newIndex = currentIndex;
 
@@ -289,10 +281,12 @@ export default class Timeline extends React.PureComponent {
             });
         }
 
-        this.timeout = setTimeout(
-            () => this.playback(lossAndDamageList, regionLevel),
-            PLAYBACK_INTERVAL,
-        );
+        if (isPlaying) {
+            this.timeout = setTimeout(
+                () => this.playback(lossAndDamageList, regionLevel),
+                PLAYBACK_INTERVAL,
+            );
+        }
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -312,6 +306,15 @@ export default class Timeline extends React.PureComponent {
     handlePlaybackButtonClick = () => {
         const { isPlaying } = this.state;
         this.setState({ isPlaying: !isPlaying });
+
+        if (!isPlaying) {
+            const {
+                lossAndDamageList,
+                regionLevel,
+            } = this.props;
+
+            this.playback(lossAndDamageList, regionLevel);
+        }
     }
 
     handleBucketInputChange = (timeBucket) => {
@@ -320,7 +323,6 @@ export default class Timeline extends React.PureComponent {
 
     handleSeekbarClick = (progressPercent) => {
         const currentIndex = Math.round(((this.totalIteration - 1) * progressPercent) / 100);
-        // this.setState({ currentIndex });
 
         const {
             lossAndDamageList,
@@ -420,7 +422,8 @@ export default class Timeline extends React.PureComponent {
         const {
             mapping,
             aggregatedStat,
-        } = this.generateDataset(lossAndDamageList, start, end, bucketValue, regionLevel);
+            bucketedIncidents = [],
+        } = this.generateDataset(lossAndDamageList, bucketValue, regionLevel);
 
         const selectedMetric = metricMap[metric];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
@@ -457,7 +460,7 @@ export default class Timeline extends React.PureComponent {
                     leftContent={
                         <LeftPane
                             pending={pending}
-                            lossAndDamageList={lossAndDamageList}
+                            lossAndDamageList={bucketedIncidents[currentIndex]}
                             onExpandChange={this.handleLeftPaneExpandChange}
                         />
                     }
