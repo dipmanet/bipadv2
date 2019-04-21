@@ -1,11 +1,9 @@
 import React from 'react';
 import { compose } from 'redux';
-/*
 import {
     mapToList,
     isNotDefined,
 } from '@togglecorp/fujs';
-*/
 
 import Loading from '#components/Loading';
 import Page from '#components/Page';
@@ -19,38 +17,44 @@ import Map from './Map';
 
 import styles from './styles.scss';
 
-/*
-const unflat = (nodes, memory = {}) => {
+const emptyList = [];
+
+const unflat = (nodes, memory = {}, idSelector, parentSelector) => {
     const mem = memory;
     if (nodes.length <= 0) {
         return mem;
     }
 
     const [firstItem, ...otherItems] = nodes;
-    const { id, parent, flagged } = firstItem;
+    const id = idSelector(firstItem);
+    const parent = parentSelector(firstItem);
+    const { $flagged } = firstItem;
     if (isNotDefined(parent)) {
         mem[id] = { ...firstItem, children: [] };
-        return unflat(otherItems, mem);
+        return unflat(otherItems, mem, idSelector, parentSelector);
     } else if (!mem[parent]) {
         return unflat(
-            !flagged ? [...otherItems, { ...firstItem, flagged: true }] : otherItems,
+            !$flagged ? [...otherItems, { ...firstItem, $flagged: true }] : otherItems,
             mem,
+            idSelector,
+            parentSelector,
         );
     }
     mem[id] = { ...firstItem, children: [] };
     mem[parent].children.push(mem[id]);
-    return unflat(otherItems, mem);
+    return unflat(otherItems, mem, idSelector, parentSelector);
 };
 
-const unflatten = (nodes) => {
-    const value = unflat(nodes);
+const unflatten = (nodes, idSelector, parentSelector) => {
+    const value = unflat(nodes, {}, idSelector, parentSelector);
     const valueList = mapToList(
         value,
         val => val,
     );
-    return valueList.filter(val => isNotDefined(val.parent));
+    return valueList.filter(val => isNotDefined(parentSelector(val)));
 };
 
+/*
 const items = [
     {
         id: 1000,
@@ -125,16 +129,38 @@ class ProjectsProfile extends React.PureComponent {
 
         const {
             requests: {
-                ndrrsapRequest: { pending: ndrrsapPending },
-                drrcycleRequest: { pending: drrcyclePending },
-                categoryRequest: { pending: categoryPending },
-                organizationRequest: { pending: organizationPending },
+                ndrrsapRequest: {
+                    pending: ndrrsapPending,
+                    response: {
+                        results: ndrrsap = emptyList,
+                    } = {},
+                },
+                drrcycleRequest: {
+                    pending: drrcyclePending,
+                    response: {
+                        results: drrcycle = emptyList,
+                    } = {},
+                },
+                categoryRequest: {
+                    pending: categoryPending,
+                    response: {
+                        results: category = emptyList,
+                    } = {},
+                },
+                organizationRequest: {
+                    pending: organizationPending,
+                    response: {
+                        results: organization = emptyList,
+                    } = {},
+                },
             },
         } = this.props;
 
         const pending = (
             ndrrsapPending || drrcyclePending || categoryPending || organizationPending
         );
+
+        const ndrrsapOptions = unflatten(ndrrsap, item => item.ndrrsapid, item => item.parent);
 
         return (
             <React.Fragment>
@@ -151,6 +177,10 @@ class ProjectsProfile extends React.PureComponent {
                     rightContent={
                         <ProjectsProfileFilter
                             onExpandChange={this.handleRightPaneExpandChange}
+                            drrCycleOptions={drrcycle}
+                            elementsOptions={category}
+                            organizationOptions={organization}
+                            ndrrsapOptions={ndrrsapOptions}
                         />
                     }
                 />
