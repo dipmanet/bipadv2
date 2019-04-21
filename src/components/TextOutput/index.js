@@ -42,6 +42,7 @@ export default class TextOutput extends React.PureComponent {
             iconLabel,
             isNumericValue,
             alwaysVisible,
+            ...otherProps
         } = this.props;
 
         if (isFalsy(value) && !alwaysVisible) {
@@ -53,6 +54,7 @@ export default class TextOutput extends React.PureComponent {
                 className={styles.value}
                 value={value}
                 precision={0}
+                {...otherProps}
             />
         ) : (
             <div className={styles.value}>

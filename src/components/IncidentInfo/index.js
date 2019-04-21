@@ -158,6 +158,7 @@ export default class IncidentInfo extends React.PureComponent {
                         />
                         {
                             // FIXME: use List
+                            // FIXME: may need to differentiate number and string
                             miscInfo.map(x => (
                                 <TextOutput
                                     className={styles.commonInfo}

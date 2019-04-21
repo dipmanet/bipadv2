@@ -102,6 +102,8 @@ export default class RealTimeMap extends React.PureComponent {
             <TextOutput
                 label="Magnitude"
                 value={magnitude}
+                isNumericValue
+                precision={1}
             />
         </div>
     )
@@ -118,10 +120,14 @@ export default class RealTimeMap extends React.PureComponent {
             <TextOutput
                 label="Brightness"
                 value={brightness}
+                isNumericValue
+                precision={2}
             />
             <TextOutput
                 label="Confidence"
                 value={confidence}
+                isNumericValue
+                precision={2}
             />
             <TextOutput
                 label="Event On"
@@ -135,7 +141,7 @@ export default class RealTimeMap extends React.PureComponent {
             <TextOutput
                 label="Land Cover"
                 value={landCover}
-            />1
+            />
         </div>
     )
 
@@ -154,6 +160,8 @@ export default class RealTimeMap extends React.PureComponent {
             <TextOutput
                 label={`${m.parameter} measurement (${m.unit})`}
                 value={m.value}
+                precision={3}
+                isNumericValue
             />
         ));
 
