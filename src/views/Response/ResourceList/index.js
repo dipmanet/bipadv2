@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
-import ListView from '#rscv/List/ListView';
 
 import CollapsibleView from '#components/CollapsibleView';
 import IncidentInfo from '#components/IncidentInfo';
@@ -10,13 +9,6 @@ import { iconNames } from '#constants';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-
-import healthFacilityIcon from '#resources/icons/health-facility.svg';
-import educationIcon from '#resources/icons/Education.svg';
-import financeIcon from '#resources/icons/University.svg';
-import groupIcon from '#resources/icons/group.svg';
-
-import ResourceGroup from '../ResourceGroup';
 
 import TabularView from './TabularView';
 
@@ -34,37 +26,6 @@ const defaultProps = {
     pending: false,
 };
 
-const resourceComponentsProps = {
-    health: {
-        heading: 'Health facilities',
-        icon: healthFacilityIcon,
-    },
-    volunteer: {
-        heading: 'Volunteers',
-        icon: groupIcon,
-    },
-    education: {
-        heading: 'Schools',
-        icon: educationIcon,
-    },
-    finance: {
-        heading: 'Finance Institutes',
-        icon: financeIcon,
-    },
-};
-
-const Resource = ({ type, ...otherProps }) => (
-    <ResourceGroup
-        type={type}
-        {...resourceComponentsProps[type] || {}}
-        {...otherProps}
-    />
-);
-
-Resource.propTypes = {
-    type: PropTypes.string.isRequired,
-};
-
 export default class ResourceList extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -76,26 +37,6 @@ export default class ResourceList extends React.PureComponent {
             showResource: true,
             showTabular: false,
         };
-    }
-
-    getResourceRendererParams = d => ({
-        type: d,
-        data: this.resources[d],
-    })
-
-    getResources = (resourceList) => {
-        const resources = {
-            health: [],
-            volunteer: [],
-            education: [],
-            finance: [],
-        };
-
-        resourceList.forEach((r) => {
-            resources[r.resourceType].push(r);
-        });
-
-        return resources;
     }
 
     handleShowResourceButtonClick = () => {
@@ -137,9 +78,6 @@ export default class ResourceList extends React.PureComponent {
             showResource,
             showTabular,
         } = this.state;
-
-        this.resources = this.getResources(resourceList);
-        const resourceKeys = Object.keys(this.resources);
 
         return (
             <CollapsibleView
@@ -188,17 +126,6 @@ export default class ResourceList extends React.PureComponent {
                                         wardsMap={wardsMap}
                                         hideLink
                                     />
-                                    <div className={styles.resourceListContainer}>
-                                        <h2 className={styles.heading}>
-                                            Resources
-                                        </h2>
-                                        <ListView
-                                            className={styles.resourceList}
-                                            data={resourceKeys}
-                                            renderer={Resource}
-                                            rendererParams={this.getResourceRendererParams}
-                                        />
-                                    </div>
                                 </div>
                             </div>
                         }

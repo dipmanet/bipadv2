@@ -1,26 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import memoize from 'memoize-one';
 
+import { _cs, listToMap } from '@togglecorp/fujs';
 import Faram, {
     FaramGroup,
-    // FaramInputElement,
 } from '@togglecorp/faram';
-
-import { _cs, listToMap, isNotDefined } from '@togglecorp/fujs';
 
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
-
-import {
-    setInventoryCategoryListActionRP,
-} from '#actionCreators';
-
-import {
-    inventoryCategoryListSelectorRP,
-} from '#selectors';
+import { setInventoryCategoryListActionRP } from '#actionCreators';
+import { inventoryCategoryListSelectorRP } from '#selectors';
 
 import Checkbox from '#rsci/Checkbox';
 
@@ -29,15 +22,19 @@ import NumberInput from '#rsci/NumberInput';
 
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import ListView from '#rscv/List/ListView';
 
 import CollapsibleView from '#components/CollapsibleView';
 import RangeInput from '#components/RangeInput';
 import { iconNames } from '#constants';
 
-import styles from './styles.scss';
+import healthFacilityIcon from '#resources/icons/health-facility.svg';
+import educationIcon from '#resources/icons/Education.svg';
+import financeIcon from '#resources/icons/University.svg';
+import groupIcon from '#resources/icons/group.svg';
 
+import ResourceGroup from '../ResourceGroup';
 import resourceAttributes, { operatorOptions } from '../resourceAttributes';
-
 import {
     getFilterItems,
     getSchema,
@@ -45,6 +42,7 @@ import {
     getFilterInputElement,
 } from './utils';
 
+import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
@@ -95,6 +93,37 @@ const requests = {
     },
 };
 
+const resourceComponentsProps = {
+    health: {
+        heading: 'Health facilities',
+        icon: healthFacilityIcon,
+    },
+    volunteer: {
+        heading: 'Volunteers',
+        icon: groupIcon,
+    },
+    education: {
+        heading: 'Schools',
+        icon: educationIcon,
+    },
+    finance: {
+        heading: 'Finance Institutes',
+        icon: financeIcon,
+    },
+};
+
+const Resource = ({ type, ...otherProps }) => (
+    <ResourceGroup
+        type={type}
+        {...resourceComponentsProps[type] || {}}
+        {...otherProps}
+    />
+);
+
+Resource.propTypes = {
+    type: PropTypes.string.isRequired,
+};
+
 const mapStateToProps = state => ({
     inventoryCategoryList: inventoryCategoryListSelectorRP(state),
 });
@@ -137,6 +166,26 @@ class ResponseFilter extends React.PureComponent {
             faramErrors: {},
         };
     }
+
+    getResourceRendererParams = d => ({
+        type: d,
+        data: this.resources[d],
+    })
+
+    getResources = memoize((resourceList) => {
+        const resources = {
+            health: [],
+            volunteer: [],
+            education: [],
+            finance: [],
+        };
+
+        resourceList.forEach((r) => {
+            resources[r.resourceType].push(r);
+        });
+
+        return resources;
+    });
 
     createResourceFilter = (faramValues) => {
         // Only show types whose show attribute is true
@@ -218,12 +267,15 @@ class ResponseFilter extends React.PureComponent {
     render() {
         const {
             className,
+            resourceList,
             setDistanceFilter,
             inventoryCategoryList,
             distance,
         } = this.props;
 
         const { showFilters, faramValues, faramErrors } = this.state;
+        this.resources = this.getResources(resourceList);
+        const resourceKeys = Object.keys(this.resources);
 
         return (
             <CollapsibleView
@@ -252,6 +304,17 @@ class ResponseFilter extends React.PureComponent {
                                 transparent
                             />
                         </header>
+                        <div className={styles.resourceListContainer}>
+                            <h2 className={styles.heading}>
+                                Resources
+                            </h2>
+                            <ListView
+                                className={styles.resourceList}
+                                data={resourceKeys}
+                                renderer={Resource}
+                                rendererParams={this.getResourceRendererParams}
+                            />
+                        </div>
                         <Faram
                             className={styles.filterForm}
                             onChange={this.handleFaramChange}

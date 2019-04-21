@@ -190,6 +190,7 @@ class Response extends React.PureComponent {
                             rightContentClassName={styles.resourceListContainer}
                             rightContent={
                                 <ResponseFilter
+                                    resourceList={resourceList}
                                     distance={DEFAULT_RESOURCES_DISTANCE}
                                     setFilter={this.setFilter}
                                     setDistanceFilter={this.setDistanceFilter}
