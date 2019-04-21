@@ -30,7 +30,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
             background-color: $color-foreground;
             width: $width-non-tabular-container;
             height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-            overflow: auto;
+            overflow-y: auto;
 
             .header {
                 display: flex;
@@ -58,11 +58,12 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
-                overflow: auto;
+                overflow-y: auto;
 
                 .list-header-container {
                     display: flex;
                     align-items: center;
+                    flex-shrink: 0;
                     justify-content: flex-end;
                     border-bottom: $width-separator-thin solid $color-separator;
                     padding: $spacing-extra-small $spacing-small;
@@ -70,6 +71,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 
                 .incident-list {
                     flex-grow: 1;
+                    overflow-y: auto;
                 }
             }
         }
