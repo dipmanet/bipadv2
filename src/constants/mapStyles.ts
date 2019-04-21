@@ -9,15 +9,6 @@ export default {
             'line-width': 2,
             'line-opacity': 0.5,
         },
-        // FIXME: obsolete
-        fill: {
-            'fill-color': '#0081f0',
-            'fill-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.2,
-                0.1,
-            ],
-        },
     },
     district: {
         outline: {
@@ -28,16 +19,6 @@ export default {
             'line-color': '#000000',
             'line-width': 1.4,
             'line-opacity': 0.5,
-        },
-        // FIXME: obsolete
-        fill: {
-            // NOTE: hover and selection enabled in district
-            'fill-color': '#0081f0',
-            'fill-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.2,
-                0,
-            ],
         },
     },
     municipality: {
@@ -50,15 +31,6 @@ export default {
             'line-width': 0.8,
             'line-opacity': 0.5,
         },
-        // FIXME: obsolete
-        fill: {
-            'fill-color': '#0081f0',
-            'fill-opacity': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                0.2,
-                0,
-            ],
-        },
     },
     ward: {
         outline: {
@@ -69,11 +41,6 @@ export default {
             'line-color': '#000000',
             'line-width': 0.5,
             'line-opacity': 0.5,
-        },
-        // FIXME: obsolete
-        fill: {
-            'fill-color': '#0081f0',
-            'fill-opacity': 0.1,
         },
     },
     provinceLabel: {
