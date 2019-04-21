@@ -20,6 +20,7 @@ import {
     municipalitiesSelector,
     wardsSelector,
     regionLevelSelector,
+    hazardTypesSelector,
 } from '#selectors';
 
 import Loading from '#components/Loading';
@@ -46,6 +47,7 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     wards: PropTypes.array.isRequired,
     regionLevel: PropTypes.number,
+    hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
@@ -60,6 +62,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     regionLevel: regionLevelSelector(state, props),
+    hazardTypes: hazardTypesSelector(state),
 });
 
 // FIXME: save this on redux
@@ -125,10 +128,13 @@ class LossAndDamage extends React.PureComponent {
                         municipalities,
                         regionLevel,
                         filters,
+                        hazardTypes,
                     } = this.props;
 
                     const { metric } = filters;
-                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
+                    const modifiedList = this.filterValues(
+                        filters, regions, hazardTypes, lossAndDamageList,
+                    );
 
                     return {
                         districts,
@@ -169,10 +175,13 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         regionLevel,
                         filters,
+                        hazardTypes,
                     } = this.props;
 
                     const { metric } = filters;
-                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
+                    const modifiedList = this.filterValues(
+                        filters, regions, hazardTypes, lossAndDamageList,
+                    );
 
                     return {
                         districts,
@@ -204,9 +213,12 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         regionLevel,
                         filters,
+                        hazardTypes,
                     } = this.props;
 
-                    const modifiedList = this.filterValues(filters, regions, lossAndDamageList);
+                    const modifiedList = this.filterValues(
+                        filters, regions, hazardTypes, lossAndDamageList,
+                    );
 
                     return {
                         pending,
@@ -219,7 +231,7 @@ class LossAndDamage extends React.PureComponent {
         };
     }
 
-    filterValues = (filters, regions, incidents = []) => {
+    filterValues = (filters, regions, hazardTypes, incidents = []) => {
         const {
             start,
             end,
@@ -254,7 +266,7 @@ class LossAndDamage extends React.PureComponent {
             }
         };
 
-        const sanitizedIncidents = getSanitizedIncidents(incidents, regions).filter(
+        const sanitizedIncidents = getSanitizedIncidents(incidents, regions, hazardTypes).filter(
             ({ incidentOn, hazard, ...otherProps }) => (
                 (isNotDefined(startTime) || incidentOn >= startTime)
                 && (isNotDefined(endTime) || incidentOn <= endTime)

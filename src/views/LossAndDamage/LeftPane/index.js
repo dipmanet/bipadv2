@@ -124,12 +124,6 @@ class LeftPane extends React.PureComponent {
             return [];
         }
 
-        const labelMap = {
-            peopleDeathCount: 'People Death Count',
-            livestockDestroyedCount: 'Livestock Destroyed Count',
-            infrastructureDestroyedCount: 'Infrastructure Destroyed Count',
-        };
-
         const people = sum(losses.map(loss => loss.peopleDeathCount).filter(isDefined));
         const livestock = sum(losses.map(loss => loss.liveStockDestroyedCount).filter(isDefined));
         const infra = sum(losses.map(loss => loss.infrastructureDestroyedCount).filter(isDefined));
@@ -302,7 +296,6 @@ class LeftPane extends React.PureComponent {
             className,
             pending,
             // selectedDistricts,
-            hazardTypes,
             lossAndDamageList = emptyList,
         } = this.props;
 
@@ -312,12 +305,6 @@ class LeftPane extends React.PureComponent {
         } = this.state;
 
         const DistrictSummary = this.renderSummary;
-
-        // Add hazard info to lossAndDamageList
-        const tabularLossAndDamageList = lossAndDamageList.map(x => ({
-            ...x,
-            hazardInfo: hazardTypes[x.hazard],
-        }));
 
         return (
             <CollapsibleView
@@ -396,7 +383,7 @@ class LeftPane extends React.PureComponent {
                                     />
                                 </header>
                                 <TabularView
-                                    lossAndDamageList={tabularLossAndDamageList}
+                                    lossAndDamageList={lossAndDamageList}
                                     className={styles.tabularView} // TODO: fix style
                                 />
                             </React.Fragment>

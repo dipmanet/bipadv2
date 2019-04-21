@@ -57,7 +57,7 @@ export const getRegionInfoFromWard = (wardId, regions) => {
     };
 };
 
-export const getSanitizedIncidents = (incidents, regions) => {
+export const getSanitizedIncidents = (incidents, regions, hazardTypes) => {
     const sanitizedIncidents = incidents.filter(({ incidentOn, wards }) => (
         incidentOn && (wards && wards.length > 0)
     )).map(incident => ({
@@ -67,6 +67,7 @@ export const getSanitizedIncidents = (incidents, regions) => {
             incident.wards[0].id,
             regions,
         ),
+        hazardInfo: hazardTypes[incident.hazard],
     }));
     return sanitizedIncidents;
 };

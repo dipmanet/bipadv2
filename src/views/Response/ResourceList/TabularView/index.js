@@ -75,13 +75,11 @@ export default class TabularView extends React.PureComponent {
                 cellRenderer: ({ value }) => (
                     <React.Fragment>
                         <Numeral
-                            normal
                             precision={4}
                             value={value[0]}
                         />
                         ,
                         <Numeral
-                            normal
                             precision={4}
                             value={value[1]}
                         />
@@ -97,7 +95,6 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
-                        normal
                         value={value}
                         precision={null}
                         suffix=" m"
