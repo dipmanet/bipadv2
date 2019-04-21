@@ -119,7 +119,7 @@ class ChoroplethMap extends React.PureComponent {
         const showMunicipality = [2, 3].includes(regionLevel);
         const showWard = [3, 4].includes(regionLevel);
 
-        const showProvinceFill = isNotDefined(regionLevel) || regionLevel === 0;
+        const showProvinceFill = isNotDefined(regionLevel);
         const showDistrictFill = regionLevel === 1;
         const showMunicipalityFill = regionLevel === 2;
         const showWardFill = regionLevel === 3;
@@ -254,7 +254,7 @@ class ChoroplethMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.wardLabel.paint}
-                        layout={showWard ? mapStyles.wardLabel.layout : noneLayout}
+                        layout={showWardFill ? mapStyles.wardLabel.layout : noneLayout}
                         filter={wardFilter}
                     />
                 </MapSource>
@@ -268,7 +268,7 @@ class ChoroplethMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.municipalityLabel.paint}
                         layout={
-                            showMunicipality ? mapStyles.municipalityLabel.layout : noneLayout
+                            showMunicipalityFill ? mapStyles.municipalityLabel.layout : noneLayout
                         }
                         filter={municipalityFilter}
                     />
@@ -282,7 +282,7 @@ class ChoroplethMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.districtLabel.paint}
-                        layout={showDistrict ? mapStyles.districtLabel.layout : noneLayout}
+                        layout={showDistrictFill ? mapStyles.districtLabel.layout : noneLayout}
                         filter={districtFilter}
                     />
                 </MapSource>
@@ -295,7 +295,7 @@ class ChoroplethMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.provinceLabel.paint}
-                        layout={showProvince ? mapStyles.provinceLabel.layout : noneLayout}
+                        layout={showProvinceFill ? mapStyles.provinceLabel.layout : noneLayout}
                         filter={provinceFilter}
                     />
                 </MapSource>
