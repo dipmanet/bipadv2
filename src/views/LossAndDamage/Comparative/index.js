@@ -4,6 +4,7 @@ import memoize from 'memoize-one';
 import {
     _cs,
     listToMap,
+    isNotDefined,
 } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import Faram, {
@@ -22,10 +23,12 @@ import RegionSelectInput from '#components/RegionSelectInput';
 import Button from '#rsca/Button';
 
 import {
+    getSanitizedIncidents,
     getGroupMethod,
     getGroupedIncidents,
-    getAggregatedStats,
 } from '../common';
+
+import Visualizations from './Visualizations';
 
 import styles from './styles.scss';
 
@@ -40,6 +43,7 @@ const mapStateToProps = state => ({
 });
 
 const emptyObject = {};
+const emptyList = [];
 
 class Comparative extends React.PureComponent {
     static propTypes = propTypes;
@@ -79,6 +83,40 @@ class Comparative extends React.PureComponent {
         }
     }
 
+    filterIncidents = (incidents = emptyList, regions, region) => {
+        if (!region) {
+            return [];
+        }
+
+        const isValidIncident = (
+            { ward, district, municipality, province },
+            { adminLevel, geoarea },
+        ) => {
+            switch (adminLevel) {
+                case 1:
+                    return geoarea === province;
+                case 2:
+                    return geoarea === district;
+                case 3:
+                    return geoarea === municipality;
+                case 4:
+                    return geoarea === ward;
+                default:
+                    return false;
+            }
+        };
+
+        const sanitizedIncidents = getSanitizedIncidents(incidents, regions, {}).filter(
+            params => (
+                isNotDefined(region)
+                    || isNotDefined(region.adminLevel)
+                    || isValidIncident(params, region)
+            ),
+        );
+
+        return sanitizedIncidents;
+    }
+
     handleFaramChange = (faramValues, faramErrors) => {
         this.setState({
             faramValues,
@@ -97,10 +135,10 @@ class Comparative extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
-    generateOverallDataset = memoize((incidents, region) => {
+    generateDataset = (incidents, region) => {
         if (!incidents || incidents.length <= 0) {
             return {
-                mapping: [],
+                // mapping: [],
                 aggregatedStat: {},
             };
         }
@@ -111,20 +149,23 @@ class Comparative extends React.PureComponent {
             groupFn,
         );
 
-        const listToMapGroupedItem = groupedIncidents => (
-            listToMap(
-                groupedIncidents,
-                incident => incident.key,
-                incident => incident,
-            )
-        );
-        const mapping = listToMapGroupedItem(regionGroupedIncidents);
+        // console.warn(regionGroupedIncidents);
+
+        // const listToMapGroupedItem = groupedIncidents => (
+        //     listToMap(
+        //         groupedIncidents,
+        //         incident => incident.key,
+        //         incident => incident,
+        //     )
+        // );
+
+        // const mapping = listToMapGroupedItem(regionGroupedIncidents);
 
         return {
-            mapping,
-            aggregatedStat: regionGroupedIncidents[region.geoarea],
+            // mapping,
+            aggregatedStat: regionGroupedIncidents[0],
         };
-    })
+    }
 
     renderAggregatedStat = ({
         data = emptyObject,
@@ -149,6 +190,7 @@ class Comparative extends React.PureComponent {
             className,
             mapStyle,
             lossAndDamageList,
+            regions,
         } = this.props;
 
         const {
@@ -162,13 +204,15 @@ class Comparative extends React.PureComponent {
             region2,
         } = faramValues;
 
+        const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
+        const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
+
         const dataset1 = region1
-            ? this.generateOverallDataset(lossAndDamageList, region1)
+            ? this.generateDataset(region1Incidents, region1)
             : emptyObject;
         const dataset2 = region2
-            ? this.generateOverallDataset(lossAndDamageList, region2)
+            ? this.generateDataset(region2Incidents, region2)
             : emptyObject;
-
 
         const AggregatedStat = this.renderAggregatedStat;
 
@@ -204,7 +248,7 @@ class Comparative extends React.PureComponent {
                         Start comparision
                     </Button>
                 </Faram>
-                { comparisionStarted && (
+                { comparisionStarted ? (
                     <div className={styles.comparisionContainer}>
                         <div className={styles.mapContainer}>
                             <Map
@@ -253,7 +297,23 @@ class Comparative extends React.PureComponent {
                                     data={dataset2.aggregatedStat}
                                 />
                             </div>
+                            <div className={styles.otherVisualizations}>
+                                <div className={styles.region1Container}>
+                                    <Visualizations
+                                        lossAndDamageList={region1Incidents}
+                                    />
+                                </div>
+                                <div className={styles.region2Container}>
+                                    <Visualizations
+                                        lossAndDamageList={region2Incidents}
+                                    />
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                ) : (
+                    <div className={styles.preComparisionMessage}>
+                        Select regions to start comparision
                     </div>
                 )}
             </div>
