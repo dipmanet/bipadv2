@@ -114,7 +114,7 @@ class ProjectsProfileFilter extends React.PureComponent {
             drrCycleOptions = [],
             elementsOptions = [],
             organizationOptions = [],
-            projectStatusOptions = [],
+            // projectStatusOptions = [],
         } = this.props;
 
         const { showFilters } = this.state;
@@ -187,11 +187,13 @@ class ProjectsProfileFilter extends React.PureComponent {
                                 faramElementName="organization"
                                 options={organizationOptions}
                             />
+                            {/*
                             <SelectInput
                                 faramElementName="status"
                                 label="project status"
                                 options={projectStatusOptions}
                             />
+                            */}
                         </Faram>
                     </React.Fragment>
                 }

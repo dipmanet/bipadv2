@@ -117,6 +117,11 @@ class CommonMap extends React.PureComponent {
         const showMunicipality = [2, 3].includes(regionLevel);
         const showWard = [3, 4].includes(regionLevel);
 
+        const showProvinceLabel = isNotDefined(regionLevel);
+        const showDistrictLabel = regionLevel === 1;
+        const showMunicipalityLabel = regionLevel === 2;
+        const showWardLabel = regionLevel === 3;
+
         const wardFilter = showWard
             ? this.getWardFilter(provinceId, districtId, municipalityId, wards)
             : undefined;
@@ -186,7 +191,7 @@ class CommonMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.wardLabel.paint}
-                        layout={showWard ? mapStyles.wardLabel.layout : noneLayout}
+                        layout={showWardLabel ? mapStyles.wardLabel.layout : noneLayout}
                         filter={wardFilter}
                     />
                 </MapSource>
@@ -200,7 +205,7 @@ class CommonMap extends React.PureComponent {
                         property="adminLevelId"
                         paint={mapStyles.municipalityLabel.paint}
                         layout={
-                            showMunicipality ? mapStyles.municipalityLabel.layout : noneLayout
+                            showMunicipalityLabel ? mapStyles.municipalityLabel.layout : noneLayout
                         }
                         filter={municipalityFilter}
                     />
@@ -214,7 +219,7 @@ class CommonMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.districtLabel.paint}
-                        layout={showDistrict ? mapStyles.districtLabel.layout : noneLayout}
+                        layout={showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout}
                         filter={districtFilter}
                     />
                 </MapSource>
@@ -227,7 +232,7 @@ class CommonMap extends React.PureComponent {
                         type="symbol"
                         property="adminLevelId"
                         paint={mapStyles.provinceLabel.paint}
-                        layout={showProvince ? mapStyles.provinceLabel.layout : noneLayout}
+                        layout={showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout}
                         filter={provinceFilter}
                     />
                 </MapSource>
