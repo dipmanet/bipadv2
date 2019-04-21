@@ -21,6 +21,7 @@ const propTypes = {
     // itemRenderer: PropTypes.object,
     data: PropTypes.arrayOf(PropTypes.object),
     type: PropTypes.string.isRequired,
+    totalSize: PropTypes.number.isRequired,
     isFilterShown: PropTypes.bool.isRequired,
     onFilterShowClick: PropTypes.func.isRequired,
 };
@@ -71,8 +72,7 @@ export default class ResourceGroup extends React.PureComponent {
             return null;
         }
 
-        const { data: temp, type } = this.props;
-        const data = temp.map(x => ({ ...x, bedCount: 5 }));
+        const { data, type } = this.props;
 
         // Aggregate type of resources
         const groupedTypes = groupList(data, item => item.type);
@@ -151,18 +151,19 @@ export default class ResourceGroup extends React.PureComponent {
             className,
             icon,
             showSummary,
+            totalSize,
             isFilterShown,
             // itemRenderer,
         } = this.props;
 
         const { showResources } = this.state;
 
-        if (!data || data.length <= 0) {
+        if (!data || totalSize <= 0) {
             return null;
         }
 
         const itemsCount = data.length;
-        const buttonText = showResources ? 'Hide' : 'Expand';
+        const buttonText = showResources ? 'Collapse' : 'Expand';
         const filterButtonText = isFilterShown ? 'Hide Filters' : 'Show Filters';
 
         const Summary = this.renderSummary;
@@ -176,7 +177,7 @@ export default class ResourceGroup extends React.PureComponent {
                         alt={heading}
                     />
                     <h3 className={styles.heading}>
-                        { heading } ({ itemsCount })
+                        { heading } ({ itemsCount } / { totalSize })
                     </h3>
                     <Button
                         className={_cs(styles.filterButton, styles.button)}

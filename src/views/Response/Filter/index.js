@@ -47,6 +47,8 @@ const propTypes = {
     setFilter: PropTypes.func.isRequired,
     setDistanceFilter: PropTypes.func.isRequired,
     inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
+    resourceList: PropTypes.arrayOf(PropTypes.object),
+    filteredList: PropTypes.arrayOf(PropTypes.object),
     distance: PropTypes.number.isRequired,
     // setInventoryCategories: PropTypes.func.isRequired,
 };
@@ -66,6 +68,8 @@ const checkFilters = (obj, attrVals, filterOperations = {}) =>
 const defaultProps = {
     className: '',
     inventoryCategoryList: [],
+    resourceList: [],
+    filteredList: [],
 };
 
 const titles = {
@@ -173,7 +177,8 @@ class ResponseFilter extends React.PureComponent {
         type: d,
         isFilterShown: this.state.selectedFilter === d,
         onFilterShowClick: this.handleFilterClick,
-        data: this.resources[d],
+        data: this.filteredResources[d],
+        totalSize: this.resources[d].length,
     })
 
     getResources = memoize((resourceList) => {
@@ -340,6 +345,7 @@ class ResponseFilter extends React.PureComponent {
         const {
             className,
             resourceList,
+            filteredList,
             setDistanceFilter,
             inventoryCategoryList,
             distance,
@@ -353,6 +359,7 @@ class ResponseFilter extends React.PureComponent {
         } = this.state;
 
         this.resources = this.getResources(resourceList);
+        this.filteredResources = this.getResources(filteredList);
         const resourceKeys = Object.keys(this.resources);
         const Filters = this.renderFilters;
 
