@@ -29,6 +29,7 @@ const propTypes = {
     leftPaneExpanded: PropTypes.bool.isRequired,
     rightPaneExpanded: PropTypes.bool.isRequired,
     recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
+    onIncidentHover: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -101,6 +102,7 @@ class IncidentMap extends React.PureComponent {
             leftPaneExpanded,
             rightPaneExpanded,
             recentDay,
+            onIncidentHover,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -134,6 +136,7 @@ class IncidentMap extends React.PureComponent {
                         enableHover
                         tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
+                        onHoverChange={onIncidentHover}
                     />
                 </MapSource>
                 <MapSource

@@ -1,11 +1,19 @@
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
-import { Obj } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
+import {
+    listToMap,
+    _cs,
+    Obj,
+} from '@togglecorp/fujs';
 
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
+
+import TextOutput from '#components/TextOutput';
+import DateOutput from '#components/DateOutput';
+import GeoOutput from '#components/GeoOutput';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
@@ -42,6 +50,8 @@ import styles from './styles.scss';
 interface State {
     leftPaneExpanded?: boolean;
     rightPaneExpanded?: boolean;
+    hoverItemId?: number;
+    hoverType?: string;
 }
 interface Params {
     triggerAlertRequest: (timeout: number) => void;
@@ -168,6 +178,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.state = {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
+            hoverItemId: undefined,
+            hoverType: undefined,
         };
 
         this.props.requests.alertsRequest.setDefaultParams({
@@ -185,6 +197,32 @@ class Dashboard extends React.PureComponent<Props, State> {
         const { hazardTypes } = this.props;
         return hazardTypesList(alertList, hazardTypes);
     });
+
+    private getAlertMap = memoize(alertList =>
+        listToMap(
+            alertList,
+            (d: {
+                id: number;
+                title: string;
+                startedOn: string;
+                source: string;
+            }) => d.id,
+            d => d,
+        ),
+    );
+
+    private getEventMap = memoize(eventList =>
+        listToMap(
+            eventList,
+            (d: {
+                id: number;
+                title: string;
+                startedOn: string;
+                source: string;
+            }) => d.id,
+            d => d,
+        ),
+    );
 
     private alertTimeout?: number
     private eventTimeout?: number
@@ -211,6 +249,80 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ rightPaneExpanded });
     }
 
+    private handleHoverChange = (hoverType: string, hoverItemId: number) => {
+        this.setState({
+            hoverItemId,
+            hoverType,
+        });
+    }
+    private renderHoverItemDetail = () => {
+        const {
+            hoverItemId,
+            hoverType,
+            rightPaneExpanded,
+        } = this.state;
+
+        const {
+            alertList,
+            eventList,
+        } = this.props;
+
+        let title = '';
+        let date = '';
+        let source = '';
+
+        if (!hoverItemId || !hoverType) {
+            return null;
+        }
+
+        if (hoverType === 'alert') {
+            const alertMap = this.getAlertMap(alertList);
+            const hoverDetail = alertMap[hoverItemId];
+
+            if (!hoverDetail) {
+                return null;
+            }
+
+            title = hoverDetail.title;
+            date = hoverDetail.startedOn;
+            source = hoverDetail.source;
+        }
+
+        if (hoverType === 'event') {
+            const eventMap = this.getEventMap(eventList);
+            const hoverDetail = eventMap[hoverItemId];
+
+            if (!hoverDetail) {
+                return null;
+            }
+
+            title = hoverDetail.title;
+            date = hoverDetail.startedOn;
+            source = hoverDetail.source;
+        }
+
+        return (
+            <div className={
+                _cs(
+                    rightPaneExpanded && styles.rightPaneExpanded,
+                    styles.hoverDetailBox,
+                )
+            }
+            >
+                <h3>
+                    {title}
+                </h3>
+                <DateOutput
+                    value={date}
+                />
+                <TextOutput
+                    label="Source"
+                    value={source}
+                />
+            </div>
+        );
+    }
+
     public render() {
         const {
             alertList,
@@ -229,6 +341,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             leftPaneExpanded,
             rightPaneExpanded,
         } = this.state;
+        const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
@@ -238,8 +351,10 @@ class Dashboard extends React.PureComponent<Props, State> {
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
                     recentDay={RECENT_DAY}
+                    onHoverChange={this.handleHoverChange}
                 />
                 <Loading pending={pending} />
+                <HoverItemDetail />
                 <Page
                     leftContent={
                         <LeftPane

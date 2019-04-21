@@ -1,13 +1,19 @@
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { _cs, Obj } from '@togglecorp/fujs';
+import {
+    _cs,
+    Obj,
+    listToMap,
+} from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
-import Numeral from '#rscv/Numeral';
+import TextOutput from '#components/TextOutput';
+import DateOutput from '#components/DateOutput';
+import GeoOutput from '#components/GeoOutput';
 
 import {
     createConnectedRequestCoordinator,
@@ -43,6 +49,7 @@ import styles from './styles.scss';
 interface State {
     leftPaneExpanded?: boolean;
     rightPaneExpanded?: boolean;
+    selectedIncidentId?: number;
 }
 
 interface Params {
@@ -139,6 +146,7 @@ class Incidents extends React.PureComponent<Props, State> {
         this.state = {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
+            selectedIncidentId: undefined,
         };
     }
     private getIncidentHazardTypesList = memoize((incidentList) => {
@@ -146,12 +154,74 @@ class Incidents extends React.PureComponent<Props, State> {
         return hazardTypesList(incidentList, hazardTypes);
     });
 
+    private getIncidentMap = memoize(incidentList =>
+        listToMap(
+            incidentList,
+            (d: {
+                id: number;
+                title: string;
+                streetAddress: string;
+                incidentOn: string;
+                source: string;
+            }) => d.id,
+            d => d,
+        ),
+    );
+
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
         this.setState({ rightPaneExpanded });
+    }
+
+    private handleIncidentHover = (selectedIncidentId: number) => {
+        this.setState({ selectedIncidentId });
+    }
+
+    private renderHoverItemDetail = () => {
+        const {
+            selectedIncidentId,
+            rightPaneExpanded,
+        } = this.state;
+
+        const { incidentList } = this.props;
+        const incidentMap = this.getIncidentMap(incidentList);
+
+        if (!selectedIncidentId || !incidentMap[selectedIncidentId]) {
+            return null;
+        }
+
+        const selectedIncident = incidentMap[selectedIncidentId];
+
+        return (
+            <div className={
+                _cs(
+                    rightPaneExpanded && styles.rightPaneExpanded,
+                    styles.hoverDetailBox,
+                )
+            }
+            >
+                <h3 title={selectedIncident.title} >
+                    {selectedIncident.title}
+                </h3>
+                <DateOutput
+                    value={selectedIncident.incidentOn}
+                    alwaysVisible
+                />
+                <GeoOutput
+                    className={styles.geoOutput}
+                    geoareaName={selectedIncident.streetAddress}
+                    alwaysVisible
+                />
+                <TextOutput
+                    label="Source"
+                    value={selectedIncident.source}
+                    alwaysVisible
+                />
+            </div>
+        );
     }
 
     public render() {
@@ -166,11 +236,13 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             leftPaneExpanded,
             rightPaneExpanded,
+            selectedIncidentId,
         } = this.state;
 
         const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
 
         const pending = pendingEvents || pendingIncidents;
+        const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
@@ -180,23 +252,9 @@ class Incidents extends React.PureComponent<Props, State> {
                     rightPaneExpanded={rightPaneExpanded}
                     incidentList={incidentList}
                     recentDay={RECENT_DAY}
+                    onIncidentHover={this.handleIncidentHover}
                 />
-                <div className={
-                    _cs(
-                        rightPaneExpanded && styles.rightPaneExpanded,
-                        styles.incidentCount,
-                    )
-                }
-                >
-                    <Numeral
-                        className={styles.count}
-                        value={incidentList.length}
-                        precision={0}
-                    />
-                    <div className={styles.text}>
-                        Incidents
-                    </div>
-                </div>
+                <HoverItemDetail />
                 <Page
                     mainContent={
                         <HazardsLegend
