@@ -127,6 +127,10 @@ class Navbar extends React.PureComponent {
         this.setState({ menuShown: !this.state.menuShown });
     }
 
+    handleUserClick = () => {
+        console.warn('I am loggin in');
+    }
+
     handleMenuClose = () => {
         this.setState({ menuShown: false });
     }
@@ -199,13 +203,25 @@ class Navbar extends React.PureComponent {
                             rendererParams={this.menuRendererParams}
                             className={styles.menuItems}
                         />
-                        <button
-                            className={styles.layerSwitchButton}
-                            onClick={this.handleMenuClick}
-                            type="button"
-                        >
-                            <span className={iconNames.layers} />
-                        </button>
+                        <div className={styles.bottomButtonContainer}>
+                            <a
+                                className={styles.layerSwitchButton}
+                                href="https://bipad.nepware.com/admin"
+                                type="button"
+                                title="login"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <span className={iconNames.login} />
+                            </a>
+                            <button
+                                className={styles.layerSwitchButton}
+                                onClick={this.handleMenuClick}
+                                type="button"
+                            >
+                                <span className={iconNames.layers} />
+                            </button>
+                        </div>
                     </div>
                     <div className={styles.navbarLeftContainer}>
                         <div className={styles.logo}>

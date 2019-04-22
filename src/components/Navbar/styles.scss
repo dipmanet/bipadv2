@@ -168,14 +168,20 @@ $height-menu: 160px;
         }
     }
 
-    .layer-switch-button {
-        margin-bottom: $spacing-small;
-        outline: 0;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        color: $color-text;
-        font-size: $font-size-super-large;
+    .bottom-button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .layer-switch-button {
+            margin-bottom: $spacing-small;
+            outline: 0;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            color: $color-text;
+            font-size: $font-size-super-large;
+        }
     }
 }
 

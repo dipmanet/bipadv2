@@ -43,6 +43,9 @@ const iconNames = {
     pulse: 'ion-ios-pulse-strong',
 
     telephone: 'ion-ios-telephone',
+    user: 'ion-android-person',
+
+    login: 'ion-log-in',
 };
 
 export default iconNames;
