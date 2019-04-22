@@ -24,6 +24,7 @@ const legendKeySelector = d => d.title;
 const legendColorSelector = d => d.color;
 const legendLabelSelector = d => d.title;
 
+
 class HazardsLegend extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -34,6 +35,7 @@ class HazardsLegend extends React.PureComponent {
             itemClassName,
             hazardTypes,
             filteredHazardTypes,
+            ...otherProps
         } = this.props;
 
         const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
@@ -47,6 +49,7 @@ class HazardsLegend extends React.PureComponent {
                 labelSelector={legendLabelSelector}
                 colorSelector={legendColorSelector}
                 emptyComponent={null}
+                {...otherProps}
             />
         );
     }

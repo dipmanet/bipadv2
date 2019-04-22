@@ -83,6 +83,8 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEventList: params => dispatch(setEventListAction(params)),
 });
 
+const iconSelector = (d: { icon: string }) => d.icon;
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     alertsRequest: {
         url: '/alert/',
@@ -196,6 +198,15 @@ class Dashboard extends React.PureComponent<Props, State> {
     private getAlertHazardTypesList = memoize((alertList: PageTypes.Alert[]) => {
         const { hazardTypes } = this.props;
         return hazardTypesList(alertList, hazardTypes);
+    });
+
+    private getEventHazardTypesList = memoize((eventList: PageTypes.Event[]) => {
+        const { hazardTypes } = this.props;
+        return hazardTypesList(eventList, hazardTypes)
+            .map(event => ({
+                ...event,
+                icon: '■',
+            }));
     });
 
     private getAlertMap = memoize(alertList =>
@@ -335,6 +346,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         } = this.props;
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList);
+        const filteredEventTypes = this.getEventHazardTypesList(eventList);
         const pending = alertsPending || eventsPending;
 
         const {
@@ -367,11 +379,19 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     }
                     mainContent={
-                        <HazardsLegend
-                            filteredHazardTypes={filteredHazardTypes}
-                            className={styles.hazardLegend}
-                            itemClassName={styles.legendItem}
-                        />
+                        <React.Fragment>
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                            />
+                            <HazardsLegend
+                                filteredHazardTypes={filteredEventTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                                iconSelector={iconSelector}
+                            />
+                        </React.Fragment>
                     }
                     rightContent={
                         <DashboardFilter
