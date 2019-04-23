@@ -43,6 +43,69 @@ $width-left-pane: var(--width-left-panel);
     }
 }
 
+.point-size-legend-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: $width-separator-thin solid $color-separator-light;
+    border-radius: 5px;
+    background-color: $color-foreground;
+    padding: $spacing-small;
+    max-width: calc(100vw - calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4)));
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: flex-end;
+
+        .heading {
+            align-self: flex-start;
+            flex-grow: 1;
+            padding: $spacing-medium;
+            color: $color-primary;
+        }
+    }
+
+    .point-size-legend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    .legend-symbol {
+        padding: $spacing-extra-small $spacing-small;
+    }
+
+    .minor {
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        background-color: $color-text-label;
+    }
+
+    .major {
+        height: 14px;
+        width: 14px;
+        border-radius: 50%;
+        background-color: $color-text-label;
+    }
+
+    .severe {
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        background-color: $color-text-label;
+    }
+
+    .catastrophic {
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        background-color: $color-text-label;
+    }
+}
+}
+
+
 .hover-detail-box {
     display: flex;
     position: absolute;
