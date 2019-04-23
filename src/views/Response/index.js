@@ -83,9 +83,12 @@ const requests = {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/response/`
         ),
-        query: ({ params: { max, min } }) => ({
+        query: ({ params: { max, min, quantity, inventoryItem, operatorType } }) => ({
+            quantity,
+            inventory_item: inventoryItem, // eslint-disable-line @typescript-eslint/camelcase
             distance__gte: min, // eslint-disable-line @typescript-eslint/camelcase
             distance__lte: max, // eslint-disable-line @typescript-eslint/camelcase
+            operator_type: operatorType, // eslint-disable-line @typescript-eslint/camelcase
             meta: true,
         }),
         onSuccess: ({ response, props: { setResourceList } }) => {
@@ -136,6 +139,14 @@ class Response extends React.PureComponent {
         this.setState({
             distance: max,
         }, () => this.props.requests.filteredResponseRequest.do({ min, max }));
+    }
+
+    setStockPileFilter = ({ item, quantity, operatorType }) => {
+        this.props.requests.filteredResponseRequest.do({
+            quantity,
+            operatorType,
+            inventoryItem: item,
+        });
     }
 
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
@@ -196,9 +207,8 @@ class Response extends React.PureComponent {
                                 <ResponseFilter
                                     resourceList={resourceList}
                                     filteredList={filteredResourceList}
-                                    distance={distance}
                                     setFilter={this.setFilter}
-                                    setDistanceFilter={this.setDistanceFilter}
+                                    setStockPileFilter={this.setStockPileFilter}
                                     onExpandChange={this.handleRightPaneExpandChange}
                                 />
                             }

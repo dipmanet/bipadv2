@@ -238,6 +238,11 @@ export const inventoryCategoryListSelectorRP = createSelector(
     ({ inventoryCategoryList }) => inventoryCategoryList,
 );
 
+export const inventoryItemListSelectorRP = createSelector(
+    responsePageSelector,
+    ({ inventoryItemList }) => inventoryItemList,
+);
+
 // realtime monitoring
 
 export const realTimeRainListSelector = createSelector(
