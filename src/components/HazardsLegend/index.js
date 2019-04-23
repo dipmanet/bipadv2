@@ -34,6 +34,7 @@ class HazardsLegend extends React.PureComponent {
             itemClassName,
             hazardTypes,
             filteredHazardTypes,
+            ...otherProps
         } = this.props;
 
         const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
@@ -47,6 +48,7 @@ class HazardsLegend extends React.PureComponent {
                 labelSelector={legendLabelSelector}
                 colorSelector={legendColorSelector}
                 emptyComponent={null}
+                {...otherProps}
             />
         );
     }

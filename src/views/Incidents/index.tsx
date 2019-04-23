@@ -8,12 +8,10 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import Legend from '#rscz/Legend';
+
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-
-import TextOutput from '#components/TextOutput';
-import DateOutput from '#components/DateOutput';
-import GeoOutput from '#components/GeoOutput';
 
 import {
     createConnectedRequestCoordinator,
@@ -37,6 +35,9 @@ import { transformDateRangeFilterParam } from '#utils/transformations';
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
+import TextOutput from '#components/TextOutput';
+import DateOutput from '#components/DateOutput';
+import GeoOutput from '#components/GeoOutput';
 import HazardsLegend from '#components/HazardsLegend';
 
 import IncidentsFilter from './Filter';
@@ -138,6 +139,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 // FIXME: should be one day
 const RECENT_DAY = 1;
+const incidentPointSizeData = [
+    { label: 'Minor (0)', style: styles.minor, color: '#DCDCDC' },
+    { label: 'Major (<10)', style: styles.major, color: '#DCDCDC' },
+    { label: 'Severe (<100)', style: styles.severe, color: '#DCDCDC' },
+    { label: 'Catastrophic (>100)', style: styles.catastrophic, color: '#DCDCDC' },
+];
+
+const labelSelector = d => d.label;
+const keySelector = d => d.label;
+const classNameSelector = d => d.style;
+const colorSelector = d => d.color;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -257,11 +269,30 @@ class Incidents extends React.PureComponent<Props, State> {
                 <HoverItemDetail />
                 <Page
                     mainContent={
-                        <HazardsLegend
-                            filteredHazardTypes={filteredHazardTypes}
-                            className={styles.hazardLegend}
-                            itemClassName={styles.legendItem}
-                        />
+                        <React.Fragment>
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                            />
+                            <div className={styles.pointSizeLegendContainer}>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        Incident circle size (people deaths count)
+                                    </h4>
+                                </header>
+                                <Legend
+                                    className={styles.pointSizeLegend}
+                                    data={incidentPointSizeData}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    colorSelector={colorSelector}
+                                    itemClassName={styles.legendSymbol}
+                                    symbolClassNameSelector={classNameSelector}
+                                    emptyComponent={null}
+                                />
+                            </div>
+                        </React.Fragment>
                     }
                     leftContentClassName={styles.left}
                     leftContent={

@@ -268,15 +268,10 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#6FD1FD',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#A9E4FE',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#7482CF',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
-                '#03A9F4',
-            ],
-            'text-opacity': [
-                'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.5,
-                1,
+                '#A9E4FE',
             ],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -306,16 +301,12 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#53FF9A',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#A2FFC8',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#5770FE',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
-                '#00C853',
+                '#A2FFC8',
             ],
-            'text-opacity': [
-                'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.5,
-                1,
-            ],
+
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
