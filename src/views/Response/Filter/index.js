@@ -52,10 +52,11 @@ const propTypes = {
     className: PropTypes.string,
     setFilter: PropTypes.func.isRequired,
     setStockPileFilter: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
     inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
     resourceList: PropTypes.arrayOf(PropTypes.object),
     filteredList: PropTypes.arrayOf(PropTypes.object),
-    distance: PropTypes.number.isRequired,
+    // distance: PropTypes.number.isRequired,
     // setInventoryCategories: PropTypes.func.isRequired,
 };
 
@@ -88,6 +89,7 @@ const titles = {
     governance: 'Governance',
 };
 
+// TODO: show pending message while loading these requests
 const requests = {
     getInventoryCagetoriesRequest: {
         url: '/inventory-category/',
@@ -95,9 +97,7 @@ const requests = {
             setInventoryCategories({ inventoryCategoryList: response.results });
         },
         onMount: true,
-        extras: {
-            // schemaName:
-        },
+        // TODO: write schema
     },
 
     getInventoryItemsRequest: {
@@ -106,9 +106,7 @@ const requests = {
             setInventoryItems({ inventoryItemList: response.results });
         },
         onMount: true,
-        extras: {
-            // schemaName:
-        },
+        // TODO: write schema
     },
 };
 
@@ -166,11 +164,10 @@ class ResponseFilter extends React.PureComponent {
         super(props);
 
         this.filterItems = getFilterItems(resourceAttributes);
-        this.schema = getSchema(resourceAttributes);
-
         // The operations for filtering attributes
         this.filterOperations = getFilterOperations(resourceAttributes);
 
+        this.schema = getSchema(resourceAttributes);
         this.schema.fields.inventory = {
             fields: {
                 quantity: [],
@@ -230,7 +227,6 @@ class ResponseFilter extends React.PureComponent {
         } = this.state;
         this.props.setStockPileFilter(inventory);
     }
-
 
     createResourceFilter = (faramValues) => {
         // Only show types whose show attribute is true
@@ -307,13 +303,8 @@ class ResponseFilter extends React.PureComponent {
         // const stockpileFilter = this.createStockPileFilter(inventory) || (() => true);
         const resourceFilter = this.createResourceFilter(otherFilters);
         // const combinedFilter = x => stockpileFilter(x) && resourceFilter(x);
+        // TODO: don't pass function to parent
         this.props.setFilter(resourceFilter);
-    }
-
-    handleFaramFailure = () => {}
-
-    handleFaramSuccess = (_, values) => {
-        console.warn('Filters', values);
     }
 
     handleInvalidate = () => {
@@ -333,7 +324,7 @@ class ResponseFilter extends React.PureComponent {
         return optionsContainerPosition;
     }
 
-    renderFilters = () => {
+    renderFilter = () => {
         const {
             faramValues,
             selectedFilter,
@@ -379,9 +370,9 @@ class ResponseFilter extends React.PureComponent {
             className,
             resourceList,
             filteredList,
-            inventoryCategoryList,
+            // inventoryCategoryList,
             inventoryItemList,
-            distance,
+            // distance,
         } = this.props;
 
         const {
@@ -392,9 +383,12 @@ class ResponseFilter extends React.PureComponent {
         } = this.state;
 
         this.resources = this.getResources(resourceList);
+        // FIXME: using same method on two different list will cause cache miss everytime
         this.filteredResources = this.getResources(filteredList);
+        // TODO: memoize
         const resourceKeys = Object.keys(this.resources);
-        const Filters = this.renderFilters;
+
+        const Filter = this.renderFilter;
 
         const itemUnits = this.getItemsUnits(inventoryItemList);
 
@@ -410,9 +404,8 @@ class ResponseFilter extends React.PureComponent {
                 collapsedView={
                     <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
-                        title="Show filters"
                     >
-                        Show Filters
+                        Show filters
                     </PrimaryButton>
                 }
                 expandedViewContainerClassName={styles.filtersContainer}
@@ -432,12 +425,9 @@ class ResponseFilter extends React.PureComponent {
                         <Faram
                             className={styles.filterForm}
                             onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramValidationFailure}
-                            onValidationSuccess={this.handleFaramValidationSuccess}
                             schema={this.schema}
                             value={faramValues}
                             error={faramErrors}
-                            disabled={false}
                         >
                             <FaramGroup
                                 key="inventory"
@@ -474,7 +464,6 @@ class ResponseFilter extends React.PureComponent {
                                 >
                                     Search
                                 </PrimaryButton>
-                                <hr />
                             </FaramGroup>
                             <div className={styles.resourceListContainer}>
                                 {resourceList.length > 0 &&
@@ -488,12 +477,12 @@ class ResponseFilter extends React.PureComponent {
                                     rendererParams={this.getResourceRendererParams}
                                 />
                             </div>
-                            {selectedFilter &&
+                            { selectedFilter &&
                                 <FloatingContainer
                                     className={styles.floatingContainer}
                                     onInvalidate={this.handleInvalidate}
                                 >
-                                    <Filters />
+                                    <Filter />
                                 </FloatingContainer>
                             }
                         </Faram>

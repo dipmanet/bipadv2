@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
+import { convex } from '@turf/turf';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
@@ -88,6 +89,24 @@ class ResponseMap extends React.PureComponent {
 
     getResourceFeatureCollection = memoize(resourceToGeojson);
 
+    getConvex = memoize((incidentShape, resourceList) => {
+        const v = {
+            ...resourceList,
+            features: [
+                ...resourceList.features,
+                {
+                    // id: 99999999999,
+                    type: 'Feature',
+                    properties: {},
+                    geometry: incidentShape,
+                },
+            ],
+        };
+        // NOTE: at least have 10km space around the incident point
+        const bufferedV = buffer(v, 10, { units: 'kilometers' });
+        return bbox(bufferedV);
+    })
+
     tooltipRenderer = params => <ResourceItem {...params} showDetails />
 
     tooltipRendererParams = id =>
@@ -106,21 +125,25 @@ class ResponseMap extends React.PureComponent {
             point,
             polygon,
         } = incident;
-        const box = this.getBuffer(point || polygon);
+        // const box = this.getBuffer(point || polygon);
 
         const incidentList = this.getIncidentList(incident);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
+        const resourceGeoJson = this.getResourceFeatureCollection(resourceList);
+
+        const mybox = this.getConvex(point || polygon, resourceGeoJson);
+
         return (
             <React.Fragment>
                 <ZoomMap
                     boundsPadding={boundsPadding}
-                    bounds={box}
+                    bounds={mybox}
                 />
                 <MapSource
                     sourceKey="resource"
-                    geoJson={this.getResourceFeatureCollection(resourceList)}
+                    geoJson={resourceGeoJson}
                     images={resourceImages}
                 >
                     <MapLayer
