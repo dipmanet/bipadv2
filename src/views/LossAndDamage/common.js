@@ -122,16 +122,16 @@ export const getStat = ({ key, value }) => ({
     key,
     count: value.length,
     estimatedLoss: sum(
-        value.map(item => item.loss.estimatedLoss),
+        value.map(item => (item.loss || {}).estimatedLoss),
     ),
     infrastructureDestroyedCount: sum(value.map(
-        item => item.loss.infrastructureDestroyedCount,
+        item => (item.loss || {}).infrastructureDestroyedCount,
     )),
     livestockDestroyedCount: sum(
-        value.map(item => item.loss.livestockDestroyedCount),
+        value.map(item => (item.loss || {}).livestockDestroyedCount),
     ),
     peopleDeathCount: sum(
-        value.map(item => item.loss.peopleDeathCount),
+        value.map(item => (item.loss || {}).peopleDeathCount),
     ),
 });
 
