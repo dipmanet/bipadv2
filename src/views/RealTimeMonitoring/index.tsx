@@ -236,21 +236,21 @@ const riverLegendItems = [
 ];
 
 const earthquakeLegendItems = [
-    { icon: '●', color: '#a50f15', label: 'Great (8 or more)' },
-    { icon: '●', color: '#de2d26', label: 'Major (7 or more)' },
-    { icon: '●', color: '#fb6a4a', label: 'Strong (6 or more)' },
-    { icon: '●', color: '#fc9272', label: 'Moderate (5 or more)' },
-    { icon: '●', color: '#fcbba1', label: 'Light (4 or more)' },
-    { icon: '●', color: '#fee5d9', label: 'Minor (3 or more)' },
+    { icon: '●', color: '#a50f15', label: 'Great (>= 8)' },
+    { icon: '●', color: '#de2d26', label: 'Major (>= 7)' },
+    { icon: '●', color: '#fb6a4a', label: 'Strong (>= 6)' },
+    { icon: '●', color: '#fc9272', label: 'Moderate (>= 5)' },
+    { icon: '●', color: '#fcbba1', label: 'Light (>= 4)' },
+    { icon: '●', color: '#fee5d9', label: 'Minor (>= 3)' },
 ];
 
 const pollutionLegendItems = [
-    { icon: '●', color: '#009966', label: 'Good (12 or less)' },
-    { icon: '●', color: '#ffde33', label: 'Moderate (35.4 or less)' },
-    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups (55.4 or less)' },
-    { icon: '●', color: '#cc0033', label: 'Unhealthy (150.4 or less)' },
-    { icon: '●', color: '#660099', label: 'Very Unhealthy (350.4 or less)' },
-    { icon: '●', color: '#7e0023', label: 'Hazardous (500.4 or less)' },
+    { icon: '●', color: '#009966', label: 'Good (<= 12)' },
+    { icon: '●', color: '#ffde33', label: 'Moderate (<= 35.4)' },
+    { icon: '●', color: '#ff9933', label: 'Unhealthy for Sensitive Groups (<= 55.4)' },
+    { icon: '●', color: '#cc0033', label: 'Unhealthy (<= 150.4)' },
+    { icon: '●', color: '#660099', label: 'Very Unhealthy (<= 350.4)' },
+    { icon: '●', color: '#7e0023', label: 'Hazardous (<= 500.4)' },
 ];
 
 const fireLegendItems = [

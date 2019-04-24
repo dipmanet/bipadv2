@@ -1,7 +1,7 @@
 import localforage from 'localforage';
 
 const storeConfig = {
-    blacklist: ['route', 'siloDomainData'],
+    blacklist: ['route'],
     key: 'bipad',
     version: 2,
     storage: localforage,

@@ -137,19 +137,25 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-// FIXME: should be one day
 const RECENT_DAY = 1;
-const incidentPointSizeData = [
+
+interface LegendItem {
+    label: string;
+    style: string;
+    color: string;
+}
+
+const incidentPointSizeData: LegendItem[] = [
     { label: 'Minor (0)', style: styles.minor, color: '#DCDCDC' },
     { label: 'Major (<10)', style: styles.major, color: '#DCDCDC' },
     { label: 'Severe (<100)', style: styles.severe, color: '#DCDCDC' },
     { label: 'Catastrophic (>100)', style: styles.catastrophic, color: '#DCDCDC' },
 ];
 
-const labelSelector = d => d.label;
-const keySelector = d => d.label;
-const classNameSelector = d => d.style;
-const colorSelector = d => d.color;
+const labelSelector = (d: LegendItem) => d.label;
+const keySelector = (d: LegendItem) => d.label;
+const classNameSelector = (d: LegendItem) => d.style;
+const colorSelector = (d: LegendItem) => d.color;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -278,7 +284,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        Incident circle size (people deaths count)
+                                        Incident radius (people deaths count)
                                     </h4>
                                 </header>
                                 <Legend
