@@ -100,6 +100,8 @@ const state: PageState = {
 
     responsePage: {
         resourceList: [],
+        inventoryCategoryList: [],
+        inventoryItemList: [],
     },
 
     realTimeMonitoringPage: {

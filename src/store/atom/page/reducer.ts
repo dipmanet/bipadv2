@@ -131,6 +131,13 @@ export const setInventoryCategoryListActionRP = (
         inventoryCategoryList,
     });
 
+export const setInventoryItemListActionRP = (
+    { inventoryItemList }: { inventoryItemList: Type.InventoryItem[]}) =>
+    ({
+        type: Type.PageType.RP__SET_INVENTORY_ITEMS,
+        inventoryItemList,
+    });
+
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
@@ -514,6 +521,19 @@ export const setInventoryCategoryListAction = (
     return newState;
 };
 
+
+export const setInventoryItemListAction = (
+    state: Type.PageState,
+    action: Type.SetInventoryItemList,
+) => {
+    const { inventoryItemList } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.responsePage.inventoryItemList = inventoryItemList;
+    });
+    return newState;
+};
+
 // real time monitoring page
 
 export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealTimeRainList) => {
@@ -769,6 +789,8 @@ export default function routeReducer(
             return setResourceList(state, action);
         case Type.PageType.RP__SET_INVENTORY_CATEGOIRES:
             return setInventoryCategoryListAction(state, action);
+        case Type.PageType.RP__SET_INVENTORY_ITEMS:
+            return setInventoryItemListAction(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
             return setRealTimeRainList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST:

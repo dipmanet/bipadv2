@@ -22,8 +22,14 @@ import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
-import { setInventoryCategoryListActionRP } from '#actionCreators';
-import { inventoryCategoryListSelectorRP } from '#selectors';
+import {
+    setInventoryCategoryListActionRP,
+    setInventoryItemListActionRP,
+} from '#actionCreators';
+import {
+    inventoryCategoryListSelectorRP,
+    inventoryItemListSelectorRP,
+} from '#selectors';
 import { iconNames } from '#constants';
 
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
@@ -45,7 +51,7 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     setFilter: PropTypes.func.isRequired,
-    setDistanceFilter: PropTypes.func.isRequired,
+    setStockPileFilter: PropTypes.func.isRequired,
     inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
     resourceList: PropTypes.arrayOf(PropTypes.object),
     filteredList: PropTypes.arrayOf(PropTypes.object),
@@ -93,6 +99,17 @@ const requests = {
             // schemaName:
         },
     },
+
+    getInventoryItemsRequest: {
+        url: '/inventory-item/',
+        onSuccess: ({ response, props: { setInventoryItems } }) => {
+            setInventoryItems({ inventoryItemList: response.results });
+        },
+        onMount: true,
+        extras: {
+            // schemaName:
+        },
+    },
 };
 
 const resourceComponentsProps = {
@@ -128,15 +145,18 @@ Resource.propTypes = {
 
 const mapStateToProps = state => ({
     inventoryCategoryList: inventoryCategoryListSelectorRP(state),
+    inventoryItemList: inventoryItemListSelectorRP(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setInventoryCategories: params => dispatch(setInventoryCategoryListActionRP(params)),
+    setInventoryItems: params => dispatch(setInventoryItemListActionRP(params)),
 });
 
 const labelSelector = x => x.label;
 const titleSelector = x => x.title;
 const keySelector = x => x.key;
+const idSelector = x => x.id;
 
 class ResponseFilter extends React.PureComponent {
     static propTypes = propTypes
@@ -154,7 +174,7 @@ class ResponseFilter extends React.PureComponent {
         this.schema.fields.inventory = {
             fields: {
                 quantity: [],
-                category: [],
+                item: [],
                 operatorType: [],
             },
         };
@@ -181,6 +201,12 @@ class ResponseFilter extends React.PureComponent {
         totalSize: this.resources[d].length,
     })
 
+    getItemsUnits = memoize(inventoryItemList => listToMap(
+        inventoryItemList,
+        item => item.id,
+        item => item.unit,
+    ))
+
     getResources = memoize((resourceList) => {
         const resources = {
             health: [],
@@ -196,6 +222,16 @@ class ResponseFilter extends React.PureComponent {
         return resources;
     });
 
+    handleSearchClick = () => {
+        const {
+            faramValues: {
+                inventory = {},
+            } = {},
+        } = this.state;
+        this.props.setStockPileFilter(inventory);
+    }
+
+
     createResourceFilter = (faramValues) => {
         // Only show types whose show attribute is true
         const showTypes = Object.entries(faramValues).filter(([_, data]) => data.show);
@@ -209,6 +245,7 @@ class ResponseFilter extends React.PureComponent {
         return filterFunc;
     }
 
+    // This might be redundant, since filter happens in server side
     createStockPileFilter = (filter) => {
         const { operatorType, category, quantity } = filter;
         const filterFunc = resource =>
@@ -262,19 +299,15 @@ class ResponseFilter extends React.PureComponent {
 
         const {
             distance: { min, max } = {},
-            inventory,
+            inventory, // ignore inventory
             ...otherFilters
         } = faramValues;
 
-        // if distance changes, call distance filter
-        if (min !== currMin || max !== currMax) {
-            this.props.setDistanceFilter({ min, max });
-        }
         this.setState({ faramValues });
-        const stockpileFilter = this.createStockPileFilter(inventory) || (() => true);
+        // const stockpileFilter = this.createStockPileFilter(inventory) || (() => true);
         const resourceFilter = this.createResourceFilter(otherFilters);
-        const combinedFilter = x => stockpileFilter(x) && resourceFilter(x);
-        this.props.setFilter(combinedFilter);
+        // const combinedFilter = x => stockpileFilter(x) && resourceFilter(x);
+        this.props.setFilter(resourceFilter);
     }
 
     handleFaramFailure = () => {}
@@ -346,8 +379,8 @@ class ResponseFilter extends React.PureComponent {
             className,
             resourceList,
             filteredList,
-            setDistanceFilter,
             inventoryCategoryList,
+            inventoryItemList,
             distance,
         } = this.props;
 
@@ -362,6 +395,12 @@ class ResponseFilter extends React.PureComponent {
         this.filteredResources = this.getResources(filteredList);
         const resourceKeys = Object.keys(this.resources);
         const Filters = this.renderFilters;
+
+        const itemUnits = this.getItemsUnits(inventoryItemList);
+
+        const { inventory: { item } = {} } = faramValues;
+        const unit = itemUnits[item];
+        const unitText = unit ? `(${unit})` : '';
 
         return (
             <CollapsibleView
@@ -400,23 +439,28 @@ class ResponseFilter extends React.PureComponent {
                             error={faramErrors}
                             disabled={false}
                         >
-                            <RangeInput
-                                label=""
-                                key="distance"
-                                onChange={setDistanceFilter}
-                                minLimit={0}
-                                maxLimit={150}
-                                value={{ max: distance }}
-                                noMin
-                                maxLabel="Resources Within(Km)"
-                            />
                             <FaramGroup
                                 key="inventory"
                                 faramElementName="inventory"
                             >
                                 <h3 className={styles.heading}>
-                                    Stockpile
+                                    Stockpile Items
                                 </h3>
+                                <SelectInput
+                                    key="item"
+                                    label="Item"
+                                    faramElementName="item"
+                                    keySelector={idSelector}
+                                    labelSelector={titleSelector}
+                                    options={inventoryItemList}
+                                />
+                                <NumberInput
+                                    key="quantity"
+                                    faramElementName="quantity"
+                                    label={`Quantity${unitText}`}
+                                    title="Quantity"
+                                    separator=" "
+                                />
                                 <SelectInput
                                     key="operatorType"
                                     label="Operator"
@@ -425,21 +469,12 @@ class ResponseFilter extends React.PureComponent {
                                     labelSelector={labelSelector}
                                     options={operatorOptions}
                                 />
-                                <SelectInput
-                                    key="category"
-                                    label="Category"
-                                    faramElementName="category"
-                                    keySelector={titleSelector}
-                                    labelSelector={titleSelector}
-                                    options={inventoryCategoryList}
-                                />
-                                <NumberInput
-                                    key="quantity"
-                                    faramElementName="quantity"
-                                    label="Quantity"
-                                    title="Quantity"
-                                    separator=" "
-                                />
+                                <PrimaryButton
+                                    onClick={this.handleSearchClick}
+                                >
+                                    Search
+                                </PrimaryButton>
+                                <hr />
                             </FaramGroup>
                             <div className={styles.resourceListContainer}>
                                 {resourceList.length > 0 &&
