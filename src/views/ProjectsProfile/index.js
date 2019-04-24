@@ -99,6 +99,7 @@ const sanitize = (projectList, regions, ndrrsapMap) => {
         const drrcycles = new Set();
         const ndrrsaps = new Set();
 
+        // NOTE: donor, partner and owner organization
         const organizations = new Set([oid]);
         if (donor.length > 0) {
             organizations.add(...donor);
@@ -135,6 +136,7 @@ const sanitize = (projectList, regions, ndrrsapMap) => {
                 drrcycles.add(...drrcycle);
             }
             if (ndrrsap.length > 0) {
+                // Add all parent to ndrrsaps
                 ndrrsap.forEach((id) => {
                     let child = id;
                     while (child) {
@@ -166,6 +168,8 @@ const sanitize = (projectList, regions, ndrrsapMap) => {
                 provinces.add(regions.districts[id].province);
             }
         });
+
+        // TODO: Bubble down
 
         return {
             ...project,

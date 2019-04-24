@@ -29,7 +29,7 @@ const defaultProps = {
 
 const margins = {
     top: 30,
-    right: 20,
+    right: 30,
     bottom: 20,
     left: 20,
 };
@@ -74,13 +74,14 @@ class Visualizations extends React.PureComponent {
         })).filter(({ value }) => value > 0);
     });
 
+    // NOTE: should have common util
     getHazardLossType = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
         return groupList(
             lossAndDamageList.filter(v => (
                 isDefined(v.loss) && (
                     isDefined(v.loss.peopleDeathCount)
-                    || isDefined(v.loss.livestockDestroyedCount)
+                    || isDefined(v.loss.estimatedLoss)
                 )
             )),
             incident => incident.hazard,
@@ -89,8 +90,8 @@ class Visualizations extends React.PureComponent {
             label: hazardTypes[key].title,
             color: hazardTypes[key].color,
             people: sum(value.map(val => val.loss.peopleDeathCount).filter(isDefined)),
-            livestock: sum(value.map(val => val.loss.livestockDestroyedCount).filter(isDefined)),
-        })).filter(({ people, livestock }) => people > 0 || livestock > 0);
+            'estimated loss': sum(value.map(val => val.loss.estimatedLoss).filter(isDefined)),
+        })).filter(({ people, 'estimated loss': estimatedLoss }) => people > 0 || estimatedLoss > 0);
     });
 
     getLossTypeCount = memoize((lossAndDamageList) => {
