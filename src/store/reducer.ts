@@ -6,7 +6,7 @@ import pageReducer from './atom/page/reducer';
 
 const rootReducer = persistCombineReducers(
     {
-        blacklist: ['route', 'page'],
+        blacklist: ['route'],
         key: 'bipad',
         version: 1,
         storage: localforage,
