@@ -250,29 +250,31 @@ const mapStateToProps = (state, props) => ({
     filters: projectsProfileFiltersSelector(state),
 });
 
+const wsEndpoint = process.env.REACT_APP_PROJECT_SERVER_URL || 'http://54.185.195.189';
+
 const requests = {
     ndrrsapRequest: {
-        url: 'http://54.185.195.189/pims/api/v1/ndrrsap',
+        url: `${wsEndpoint}/pims/api/v1/ndrrsap`,
         onMount: true,
         // TODO: add schema
     },
     drrcycleRequest: {
-        url: 'http://54.185.195.189/pims/api/v1/drrcycle',
+        url: `${wsEndpoint}/pims/api/v1/drrcycle`,
         onMount: true,
         // TODO: add schema
     },
     categoryRequest: {
-        url: 'http://54.185.195.189/pims/api/v1/category',
+        url: `${wsEndpoint}/pims/api/v1/category`,
         onMount: true,
         // TODO: add schema
     },
     organizationRequest: {
-        url: 'http://54.185.195.189/pims/api/v1/organization',
+        url: `${wsEndpoint}/pims/api/v1/organization`,
         onMount: true,
         // TODO: add schema
     },
     projectRequest: {
-        url: 'http://54.185.195.189/pims/api/v1/project',
+        url: `${wsEndpoint}/pims/api/v1/project`,
         onMount: true,
         // TODO: add schema
     },

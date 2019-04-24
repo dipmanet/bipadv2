@@ -66,9 +66,11 @@ const mapDispatchToProps = dispatch => ({
     setRegion: params => dispatch(setRegionAction(params)),
 });
 
+const wsEndpoint = process.env.REACT_APP_GEO_SERVER_URL || 'http://139.59.67.104:8004';
+
 const requests = {
     riskRequest: {
-        url: 'http://139.59.67.104:8004/risk_profile/Risk',
+        url: `${wsEndpoint}/risk_profile/Risk`,
         onMount: false,
         onSuccess: ({ response, props: { setRiskList } }) => {
             const { results: riskList } = response;
@@ -77,7 +79,7 @@ const requests = {
         // TODO: add schema
     },
     lpgasCookRequest: {
-        url: 'http://139.59.67.104:8004/risk_profile/Newfile/lpgas_cook',
+        url: `${wsEndpoint}/risk_profile/Newfile/lpgas_cook`,
         onMount: false,
         onSuccess: ({ response, props: { setLpGasCookList } }) => {
             const { data: lpGasCookList } = response;
