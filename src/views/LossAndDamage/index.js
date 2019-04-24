@@ -69,6 +69,24 @@ const mapStateToProps = (state, props) => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
+const isValidIncident = (
+    { ward, district, municipality, province },
+    { adminLevel, geoarea },
+) => {
+    switch (adminLevel) {
+        case 1:
+            return geoarea === province;
+        case 2:
+            return geoarea === district;
+        case 3:
+            return geoarea === municipality;
+        case 4:
+            return geoarea === ward;
+        default:
+            return false;
+    }
+};
+
 // FIXME: save this on redux
 const requests = {
     lossAndDamageRequest: {
@@ -253,24 +271,6 @@ class LossAndDamage extends React.PureComponent {
             item => item,
             () => true,
         );
-
-        const isValidIncident = (
-            { ward, district, municipality, province },
-            { adminLevel, geoarea },
-        ) => {
-            switch (adminLevel) {
-                case 1:
-                    return geoarea === province;
-                case 2:
-                    return geoarea === district;
-                case 3:
-                    return geoarea === municipality;
-                case 4:
-                    return geoarea === ward;
-                default:
-                    return false;
-            }
-        };
 
         const sanitizedIncidents = getSanitizedIncidents(incidents, regions, hazardTypes).filter(
             ({ incidentOn, hazard, ...otherProps }) => (

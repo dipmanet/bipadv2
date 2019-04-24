@@ -14,6 +14,8 @@ import { mapStylesSelector } from '#selectors';
 
 import styles from './styles.scss';
 
+const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL || 'https://bipad.nepware.com/admin';
+
 const pages = routeSettings.filter(setting => !!setting.navbar);
 
 const Title = ({ name, title }) => (
@@ -206,7 +208,7 @@ class Navbar extends React.PureComponent {
                         <div className={styles.bottomButtonContainer}>
                             <a
                                 className={styles.adminLink}
-                                href="https://bipad.nepware.com/admin"
+                                href={adminEndpoint}
                                 type="button"
                                 title="login"
                                 target="_blank"
