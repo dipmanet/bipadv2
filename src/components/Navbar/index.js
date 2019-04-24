@@ -205,7 +205,7 @@ class Navbar extends React.PureComponent {
                         />
                         <div className={styles.bottomButtonContainer}>
                             <a
-                                className={styles.layerSwitchButton}
+                                className={styles.adminLink}
                                 href="https://bipad.nepware.com/admin"
                                 type="button"
                                 title="login"
