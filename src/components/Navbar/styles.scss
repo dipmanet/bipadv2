@@ -168,14 +168,28 @@ $height-menu: 160px;
         }
     }
 
-    .layer-switch-button {
-        margin-bottom: $spacing-small;
-        outline: 0;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        color: $color-text;
-        font-size: $font-size-super-large;
+    .bottom-button-container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .admin-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $color-text;
+            font-size: $font-size-super-large;
+        }
+
+        .layer-switch-button {
+            margin-bottom: $spacing-small;
+            outline: 0;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            color: $color-text;
+            font-size: $font-size-super-large;
+        }
     }
 }
 
