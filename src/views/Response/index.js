@@ -31,7 +31,7 @@ import styles from './styles.scss';
 
 const emptyObject = {};
 
-const DEFAULT_RESOURCES_DISTANCE = 12;
+const DEFAULT_RESOURCES_DISTANCE = 12 * 1000; // distance in meter
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -70,7 +70,8 @@ const requests = {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/response/`
         ),
-        query: { distance: DEFAULT_RESOURCES_DISTANCE, meta: true },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        query: { distance__lte: DEFAULT_RESOURCES_DISTANCE, meta: true },
         onSuccess: ({ response, props: { setResourceList } }) => {
             setResourceList({ resourceList: response.results });
         },
@@ -84,11 +85,12 @@ const requests = {
             `/incident/${incidentId}/response/`
         ),
         query: ({ params: { max, min, quantity, inventoryItem, operatorType } }) => ({
-            quantity,
+            [`${inventoryItem}_count`]: quantity,
             inventory_item: inventoryItem, // eslint-disable-line @typescript-eslint/camelcase
             distance__gte: min, // eslint-disable-line @typescript-eslint/camelcase
             distance__lte: max, // eslint-disable-line @typescript-eslint/camelcase
             operator_type: operatorType, // eslint-disable-line @typescript-eslint/camelcase
+            expand: 'inventories',
             meta: true,
         }),
         onSuccess: ({ response, props: { setResourceList } }) => {
