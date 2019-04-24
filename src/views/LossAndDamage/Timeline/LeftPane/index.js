@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
 import CollapsibleView from '#components/CollapsibleView';
+import LossDetails from '#components/LossDetails';
+
 import Button from '#rsca/Button';
 import { iconNames } from '#constants';
 
@@ -114,6 +116,7 @@ export default class LeftPane extends React.PureComponent {
                             <React.Fragment>
                                 <Header />
                                 <div className={styles.content}>
+                                    <LossDetails data={lossAndDamageList} />
                                     { !pending && (
                                         <Visualizations
                                             lossAndDamageList={lossAndDamageList}
