@@ -10,7 +10,7 @@
     border-style: dashed;
     background-color: $color-foreground-alt;
     padding: $spacing-small;
-    width: 25%;
+    width: calc(25% - 2 * #{$spacing-small});
     height: 160px;
 
     &:hover {
@@ -22,13 +22,14 @@
     display: flex;
     flex-direction: column;
     border: $width-separator-thin solid $color-primary;
-    padding: $spacing-large;
-    width: 70vh;
-    height: 40vh;
+    padding: 0;
+    width: 80vw;
+    height: 60vh;
     overflow: auto;
 
     .top {
         flex-shrink: 0;
+        padding: 0 $spacing-medium;
 
         h1, h2 {
             margin: $spacing-medium 0;
@@ -43,10 +44,14 @@
         flex-grow: 1;
         overflow: auto;
 
-        .area-select {
-            display: flex;
-            flex-grow: 1;
-            flex-shrink: 0;
+        .first-page {
+            padding: 0 $spacing-medium;
+
+            .area-select {
+                display: flex;
+                flex-grow: 1;
+                flex-shrink: 0;
+            }
         }
     }
 }
@@ -69,5 +74,37 @@
         .mapboxgl-ctrl-logo {
             display: none;
         }
+    }
+}
+
+.selection-page {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .selection-page-header {
+        flex-shrink: 0;
+        padding: 0 $spacing-medium;
+
+        .bottom-container {
+            display: flex;
+            align-items: center;
+
+            .search-input {
+                flex-grow: 1;
+            }
+
+            .button {
+                flex-shrink: 0;
+                margin-left: $spacing-small;
+            }
+        }
+    }
+
+    .selection-page-list {
+        display: flex;
+        flex-grow: 1;
+        flex-wrap: wrap;
+        overflow-y: auto;
     }
 }
