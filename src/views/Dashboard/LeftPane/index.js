@@ -181,9 +181,12 @@ export default class LeftPane extends React.PureComponent {
                 ) : (
                     <div className={styles.alertsAndEvents}>
                         <div className={styles.alertsContainer}>
-                            <h4 className={styles.heading}>
-                                Alerts
-                            </h4>
+                            <header className={styles.header}>
+                                <div className={styles.alertIcon} />
+                                <h4 className={styles.heading}>
+                                    Alerts
+                                </h4>
+                            </header>
                             <VirtualizedListView
                                 className={styles.alertList}
                                 data={alerts}
@@ -193,9 +196,12 @@ export default class LeftPane extends React.PureComponent {
                             />
                         </div>
                         <div className={styles.eventsContainer}>
-                            <h4 className={styles.heading}>
-                                Events
-                            </h4>
+                            <header className={styles.header}>
+                                <div className={styles.eventIcon} />
+                                <h4 className={styles.heading}>
+                                    Events
+                                </h4>
+                            </header>
                             <VirtualizedListView
                                 className={styles.eventList}
                                 data={events}

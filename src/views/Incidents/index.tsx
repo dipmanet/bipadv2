@@ -8,6 +8,12 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import {
+    styleProperties,
+} from '#constants';
+
+import { currentStyle } from '#rsu/styles';
+
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -46,6 +52,7 @@ import LeftPane from './LeftPane';
 
 import styles from './styles.scss';
 
+const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 interface State {
     leftPaneExpanded?: boolean;
@@ -146,10 +153,10 @@ interface LegendItem {
 }
 
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', style: styles.minor, color: '#DCDCDC' },
-    { label: 'Major (<10)', style: styles.major, color: '#DCDCDC' },
-    { label: 'Severe (<100)', style: styles.severe, color: '#DCDCDC' },
-    { label: 'Catastrophic (>100)', style: styles.catastrophic, color: '#DCDCDC' },
+    { label: 'Minor (0)', style: styles.minor, color: '#a3a3a3' },
+    { label: 'Major (<10)', style: styles.major, color: '#a3a3a3' },
+    { label: 'Severe (<100)', style: styles.severe, color: '#a3a3a3' },
+    { label: 'Catastrophic (>100)', style: styles.catastrophic, color: '#a3a3a3' },
 ];
 
 const labelSelector = (d: LegendItem) => d.label;
@@ -167,6 +174,20 @@ class Incidents extends React.PureComponent<Props, State> {
             selectedIncidentId: undefined,
         };
     }
+
+    public componentDidMount(): void {
+        const { rightPaneExpanded } = this.state;
+
+        this.setPlacementForMapControls(rightPaneExpanded);
+    }
+
+    public componentWillUnmount(): void {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        if (mapControls) {
+            mapControls.style.right = this.previousMapContorlStyle;
+        }
+    }
+
     private getIncidentHazardTypesList = memoize((incidentList) => {
         const { hazardTypes } = this.props;
         return hazardTypesList(incidentList, hazardTypes);
@@ -186,12 +207,30 @@ class Incidents extends React.PureComponent<Props, State> {
         ),
     );
 
+    public setPlacementForMapControls = (rightPaneExpanded) => {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+
+        if (mapControls) {
+            const widthRightPanel = rightPaneExpanded
+                ? convertValueToNumber(styleProperties.widthRightPanel)
+                : 0;
+            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
+
+            if (!this.previousMapContorlStyle) {
+                this.previousMapContorlStyle = mapControls.style.right;
+            }
+            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
+        }
+    }
+
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
         this.setState({ rightPaneExpanded });
+        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     private handleIncidentHover = (selectedIncidentId: number) => {
@@ -274,6 +313,11 @@ class Incidents extends React.PureComponent<Props, State> {
                 />
                 <HoverItemDetail />
                 <Page
+                    mainContentClassName={_cs(
+                        styles.main,
+                        leftPaneExpanded && styles.leftPaneExpanded,
+                        rightPaneExpanded && styles.rightPaneExpanded,
+                    )}
                     mainContent={
                         <React.Fragment>
                             <HazardsLegend

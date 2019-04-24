@@ -20,91 +20,129 @@ $width-left-pane: var(--width-left-panel);
     animation: fade-in $duration-transition-slow ease-in forwards;
 }
 
-.hazard-legend {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: 5px;
-    background-color: $color-foreground;
-    padding: $spacing-small;
-    max-width: calc(100vw - calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4)));
+.main {
+    left: var(--spacing-medium);
+    transform: none;
 
-    .legend-item {
-        padding: $spacing-extra-small $spacing-small;
-        color: $color-text-label;
-        font-size: $font-size-small;
-        font-weight: $font-weight-bold;
-
-        >div:first-child {
-            border-radius: 50%;
-        }
-    }
-}
-
-.point-size-legend-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: 5px;
-    background-color: $color-foreground;
-    padding: $spacing-small;
-    max-width: calc(100vw - calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4)));
-
-    .header {
+    .hazard-legend {
         display: flex;
         align-items: center;
-        flex-shrink: 0;
-        justify-content: flex-end;
+        flex-wrap: wrap;
+        justify-content: center;
+        border: $width-separator-thin solid $color-separator-light;
+        border-radius: 5px;
+        background-color: $color-foreground;
+        padding: $spacing-small;
 
-        .heading {
-            align-self: flex-start;
-            flex-grow: 1;
-            padding: $spacing-medium;
-            color: $color-primary;
+        .legend-item {
+            padding: $spacing-extra-small $spacing-small;
+            color: $color-text-label;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+
+            >div:first-child {
+                border-radius: 50%;
+            }
         }
     }
 
-    .point-size-legend {
+    .point-size-legend-container {
         display: flex;
         align-items: center;
         justify-content: center;
-    .legend-symbol {
-        padding: $spacing-extra-small $spacing-small;
+        border: $width-separator-thin solid $color-separator-light;
+        border-radius: 5px;
+        background-color: $color-foreground;
+        padding: $spacing-small;
+        max-width: calc(100vw - calc(var(--width-left-panel) + var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4)));
+
+        .header {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            justify-content: flex-end;
+
+            .heading {
+                align-self: flex-start;
+                flex-grow: 1;
+                padding: $spacing-medium;
+                color: $color-primary;
+            }
+        }
+
+        .point-size-legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .legend-symbol {
+                padding: $spacing-extra-small $spacing-small;
+            }
+
+            .minor {
+                border-radius: 50%;
+                background-color: $color-text-label;
+                width: 10px;
+                height: 10px;
+            }
+
+            .major {
+                border-radius: 50%;
+                background-color: $color-text-label;
+                width: 14px;
+                height: 14px;
+            }
+
+            .severe {
+                border-radius: 50%;
+                background-color: $color-text-label;
+                width: 18px;
+                height: 18px;
+            }
+
+            .catastrophic {
+                border-radius: 50%;
+                background-color: $color-text-label;
+                width: 22px;
+                height: 22px;
+            }
+        }
     }
 
-    .minor {
-        height: 10px;
-        width: 10px;
-        border-radius: 50%;
-        background-color: $color-text-label;
+    &.left-pane-expanded {
+        left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+
+        .hazard-legend {
+            max-width: calc(100vw - calc(var(--width-left-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 3) + 100px));
+        }
+
+        .point-size-legend-container {
+            max-width: calc(100vw - calc(var(--width-left-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 3) + 100px));
+        }
+
+        &.right-pane-expanded {
+            .hazard-legend {
+                max-width: calc(100vw - calc(var(--width-left-panel) + var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4) + 100px));
+            }
+
+            .point-size-legend-container {
+                max-width: calc(100vw - calc(var(--width-left-panel) + var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 4) + 100px));
+            }
+        }
     }
 
-    .major {
-        height: 14px;
-        width: 14px;
-        border-radius: 50%;
-        background-color: $color-text-label;
+    &:not(.left-pane-expanded) {
+        &.right-pane-expanded {
+            .hazard-legend {
+                max-width: calc(100vw - calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 3) + 100px));
+            }
+
+            .point-size-legend-container {
+                max-width: calc(100vw - calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 3) + 100px));
+            }
+        }
     }
 
-    .severe {
-        height: 18px;
-        width: 18px;
-        border-radius: 50%;
-        background-color: $color-text-label;
-    }
-
-    .catastrophic {
-        height: 22px;
-        width: 22px;
-        border-radius: 50%;
-        background-color: $color-text-label;
-    }
 }
-}
-
 
 .hover-detail-box {
     display: flex;

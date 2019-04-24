@@ -8,6 +8,12 @@ import {
     Obj,
 } from '@togglecorp/fujs';
 
+import {
+    styleProperties,
+} from '#constants';
+
+import { currentStyle } from '#rsu/styles';
+
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
 
@@ -46,6 +52,8 @@ import LeftPane from './LeftPane';
 import DashboardFilter from './Filter';
 
 import styles from './styles.scss';
+
+const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 interface State {
     leftPaneExpanded?: boolean;
@@ -190,9 +198,20 @@ class Dashboard extends React.PureComponent<Props, State> {
         });
     }
 
+    public componentDidMount(): void {
+        const { rightPaneExpanded } = this.state;
+
+        this.setPlacementForMapControls(rightPaneExpanded);
+    }
+
     public componentWillUnmount(): void {
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
+
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        if (mapControls) {
+            mapControls.style.right = this.previousMapContorlStyle;
+        }
     }
 
     private getAlertHazardTypesList = memoize((alertList: PageTypes.Alert[]) => {
@@ -235,6 +254,23 @@ class Dashboard extends React.PureComponent<Props, State> {
         ),
     );
 
+    public setPlacementForMapControls = (rightPaneExpanded) => {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+
+        if (mapControls) {
+            const widthRightPanel = rightPaneExpanded
+                ? convertValueToNumber(styleProperties.widthRightPanel)
+                : 0;
+            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
+
+            if (!this.previousMapContorlStyle) {
+                this.previousMapContorlStyle = mapControls.style.right;
+            }
+            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
+        }
+    }
+
     private alertTimeout?: number
     private eventTimeout?: number
 
@@ -258,6 +294,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
         this.setState({ rightPaneExpanded });
+        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     private handleHoverChange = (hoverType: string, hoverItemId: number) => {
@@ -266,6 +303,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             hoverType,
         });
     }
+
     private renderHoverItemDetail = () => {
         const {
             hoverItemId,
@@ -379,19 +417,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     }
                     mainContent={
-                        <React.Fragment>
-                            <HazardsLegend
-                                filteredHazardTypes={filteredHazardTypes}
-                                className={styles.hazardLegend}
-                                itemClassName={styles.legendItem}
-                            />
-                            <HazardsLegend
-                                filteredHazardTypes={filteredEventTypes}
-                                className={styles.hazardLegend}
-                                itemClassName={styles.legendItem}
-                                iconSelector={iconSelector}
-                            />
-                        </React.Fragment>
+                        <HazardsLegend
+                            filteredHazardTypes={filteredHazardTypes}
+                            className={styles.hazardLegend}
+                            itemClassName={styles.legendItem}
+                        />
                     }
                     rightContent={
                         <DashboardFilter

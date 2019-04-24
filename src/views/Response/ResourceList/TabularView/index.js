@@ -134,6 +134,7 @@ export default class TabularView extends React.PureComponent {
 
                         settings={this.state.settings}
                         onChange={this.handleSettingsChange}
+                        rowHeight={30}
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>

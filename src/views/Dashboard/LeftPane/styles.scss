@@ -112,9 +112,22 @@ $color-background: rgba(255, 255, 255, .9);
                     flex-direction: column;
                     overflow: auto;
 
-                    .heading {
+                    >.header {
+                        display: flex;
+                        align-items: center;
                         flex-shrink: 0;
-                        padding: $spacing-medium;
+
+                        .heading {
+                            padding: $spacing-medium;
+                        }
+
+                        .alert-icon {
+                            margin: 0 $spacing-medium;
+                            border-radius: 50%;
+                            background-color: $color-text;
+                            width: $font-size-small;
+                            height: $font-size-small;
+                        }
                     }
 
                     .alert-list {
@@ -130,9 +143,21 @@ $color-background: rgba(255, 255, 255, .9);
                     border-top: $width-separator-thin solid $color-separator-light;
                     overflow: auto;
 
-                    .heading {
+                    >.header {
+                        display: flex;
+                        align-items: center;
                         flex-shrink: 0;
-                        padding: $spacing-medium;
+
+                        .heading {
+                            padding: $spacing-medium;
+                        }
+
+                        .event-icon {
+                            margin: 0 $spacing-medium;
+                            background-color: $color-text;
+                            width: $font-size-small;
+                            height: $font-size-small;
+                        }
                     }
 
                     .event-list {

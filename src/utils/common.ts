@@ -1,4 +1,9 @@
-import { isDefined, isNotDefined, isObject, isList } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+    isObject,
+    isList,
+} from '@togglecorp/fujs';
 
 interface Row {
     [key: string]: string | number | boolean | undefined | null;
@@ -144,6 +149,7 @@ export function getYesterday(days = 0) {
 interface FrameFunction<T> {
     (percent: number, timestamp: number): T;
 }
+
 export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
     let prevTimestamp: number;
     return (timestamp: number) => {

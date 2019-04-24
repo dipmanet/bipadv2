@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import {
+    styleProperties,
+} from '#constants';
+
+import { currentStyle } from '#rsu/styles';
 
 import {
     createConnectedRequestCoordinator,
@@ -28,6 +33,8 @@ import ResponseFilter from './Filter';
 import Map from './Map';
 
 import styles from './styles.scss';
+
+const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 const emptyObject = {};
 
@@ -133,6 +140,19 @@ class Response extends React.PureComponent {
         };
     }
 
+    componentDidMount() {
+        const { rightPaneExpanded } = this.state;
+
+        this.setPlacementForMapControls(rightPaneExpanded);
+    }
+
+    componentWillUnmount() {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        if (mapControls) {
+            mapControls.style.right = this.previousMapContorlStyle;
+        }
+    }
+
     setFilter = (filterFunction) => {
         this.setState({ filterFunction });
     }
@@ -153,12 +173,30 @@ class Response extends React.PureComponent {
         });
     }
 
+    setPlacementForMapControls = (rightPaneExpanded) => {
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+
+        if (mapControls) {
+            const widthRightPanel = rightPaneExpanded
+                ? convertValueToNumber(styleProperties.widthRightPanelLarge)
+                : 0;
+            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
+
+            if (!this.previousMapContorlStyle) {
+                this.previousMapContorlStyle = mapControls.style.right;
+            }
+            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
+        }
+    }
+
     handleLeftPaneExpandChange = (leftPaneExpanded) => {
         this.setState({ leftPaneExpanded });
     }
 
     handleRightPaneExpandChange = (rightPaneExpanded) => {
         this.setState({ rightPaneExpanded });
+        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     render() {
