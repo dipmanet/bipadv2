@@ -88,9 +88,9 @@ export default class ResourceList extends React.PureComponent {
                     <React.Fragment>
                         <PrimaryButton
                             onClick={this.handleShowResourceButtonClick}
-                            title="Show Resources"
+                            title="Show details"
                         >
-                            Show Resources
+                            Show details
                         </PrimaryButton>
                     </React.Fragment>
                 }
@@ -115,7 +115,7 @@ export default class ResourceList extends React.PureComponent {
                                         className={styles.hideResourceButton}
                                         onClick={this.handleHideResourceButtonClick}
                                         iconName={iconNames.chevronUp}
-                                        title="Close Resources"
+                                        title="Hide details"
                                         transparent
                                     />
                                 </header>

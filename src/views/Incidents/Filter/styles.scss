@@ -19,7 +19,7 @@ $width-right-panel: var(--width-right-panel);
         .form {
             display: flex;
             flex-direction: column;
-            max-height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
+            height: calc(100vh - #{$spacing-medium} * 2);
             overflow-y: auto;
         }
 

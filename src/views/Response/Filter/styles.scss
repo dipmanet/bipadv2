@@ -3,7 +3,8 @@
 .filter {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--spacing-medium) * 2);
+    overflow: auto;
 
     .header {
         display: flex;

@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs, isDefined, isNotDefined, listToMap } from '@togglecorp/fujs';
+import {
+    _cs,
+    isNotDefined,
+    listToMap,
+} from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';

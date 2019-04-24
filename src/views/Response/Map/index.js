@@ -66,10 +66,12 @@ class ResponseMap extends React.PureComponent {
         const mapPaddings = getMapPaddings();
 
         if (leftPaneExpanded && rightPaneExpanded) {
+            mapPaddings.right += (360 - 256);
             return mapPaddings.bothPaneExpanded;
         } else if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
         } else if (rightPaneExpanded) {
+            mapPaddings.right += (360 - 256);
             return mapPaddings.rightPaneExpanded;
         }
         return mapPaddings.noPaneExpanded;

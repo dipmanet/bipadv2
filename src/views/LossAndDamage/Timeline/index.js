@@ -42,7 +42,6 @@ const defaultProps = {
 const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 const emptyList = [];
-const emptyObject = {};
 const PLAYBACK_INTERVAL = 2000;
 
 const timeBucketOptions = [
