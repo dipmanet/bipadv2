@@ -20,19 +20,20 @@ import Loading from '#components/Loading';
 import {
     setRiskListAction,
     setLpGasCookListAction,
+    setRegionAction,
 } from '#actionCreators';
 
 import {
     riskListSelector,
     lpGasCookListSelector,
     regionsSelector,
+    regionSelector,
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     wardsSelector,
     regionLevelSelector,
     mapStyleSelector,
-    hazardTypesSelector,
 } from '#selectors';
 
 import {
@@ -50,6 +51,7 @@ const mapStateToProps = (state, props) => ({
     riskList: riskListSelector(state),
     lpGasCookList: lpGasCookListSelector(state),
     regions: regionsSelector(state),
+    region: regionSelector(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -61,6 +63,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = dispatch => ({
     setRiskList: params => dispatch(setRiskListAction(params)),
     setLpGasCookList: params => dispatch(setLpGasCookListAction(params)),
+    setRegion: params => dispatch(setRegionAction(params)),
 });
 
 const requests = {
@@ -100,15 +103,26 @@ const requests = {
 const emptyList = [];
 const emptyObject = {};
 
-class DisasterProfile extends React.PureComponent {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            region: undefined,
-        };
+const isValidIncident = (
+    { ward, district, municipality, province },
+    { adminLevel, geoarea },
+) => {
+    switch (adminLevel) {
+        case 1:
+            return geoarea === province;
+        case 2:
+            return geoarea === district;
+        case 3:
+            return geoarea === municipality;
+        case 4:
+            return geoarea === ward;
+        default:
+            return false;
     }
+};
 
+class DisasterProfile extends React.PureComponent {
     componentDidMount() {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
@@ -129,24 +143,6 @@ class DisasterProfile extends React.PureComponent {
         if (!region) {
             return incidents;
         }
-
-        const isValidIncident = (
-            { ward, district, municipality, province },
-            { adminLevel, geoarea },
-        ) => {
-            switch (adminLevel) {
-                case 1:
-                    return geoarea === province;
-                case 2:
-                    return geoarea === district;
-                case 3:
-                    return geoarea === municipality;
-                case 4:
-                    return geoarea === ward;
-                default:
-                    return false;
-            }
-        };
 
         const sanitizedIncidents = getSanitizedIncidents(incidents, regions, {}).filter(
             params => (
@@ -192,7 +188,7 @@ class DisasterProfile extends React.PureComponent {
     }
 
     handleRegionInputChange = (region) => {
-        this.setState({ region });
+        this.props.setRegion({ region });
     }
 
     renderAggregatedStat = ({
@@ -228,11 +224,8 @@ class DisasterProfile extends React.PureComponent {
             regionLevel,
             mapStyle,
             regions,
-        } = this.props;
-
-        const {
             region,
-        } = this.state;
+        } = this.props;
 
         const pending = lossAndDamageRequestPending !== undefined
             ? lossAndDamageRequestPending : true;
@@ -256,43 +249,35 @@ class DisasterProfile extends React.PureComponent {
                             className={styles.regionInput}
                             value={region}
                             onChange={this.handleRegionInputChange}
-                            disabled={pending}
+                            // disabled={pending}
                         />
                     </div>
-                    { pending ? (
-                        <div className={styles.pendingMessage}>
-                            Loading...
-                        </div>
-                    ) : (
-                        <React.Fragment>
-                            <Map
-                                className={styles.map}
-                                mapStyle={mapStyle}
-                                fitBoundsDuration={200}
-                                minZoom={5}
-                                logoPosition="bottom-left"
+                    <Map
+                        className={styles.map}
+                        mapStyle={mapStyle}
+                        fitBoundsDuration={200}
+                        minZoom={5}
+                        logoPosition="bottom-left"
 
-                                showScaleControl
-                                scaleControlPosition="bottom-right"
+                        showScaleControl
+                        scaleControlPosition="bottom-right"
 
-                                showNavControl
-                                navControlPosition="bottom-right"
-                            >
-                                <CommonMap
-                                    region={region}
-                                />
-                            </Map>
-                            <AggregatedStat
-                                className={styles.aggregatedStat}
-                                data={dataset.aggregatedStat}
-                            />
-                            <div className={styles.visualizations}>
-                                <Visualizations
-                                    lossAndDamageList={filteredIncidents}
-                                />
-                            </div>
-                        </React.Fragment>
-                    )}
+                        showNavControl
+                        navControlPosition="bottom-right"
+                    >
+                        <CommonMap
+                            region={region}
+                        />
+                    </Map>
+                    <AggregatedStat
+                        className={styles.aggregatedStat}
+                        data={dataset.aggregatedStat}
+                    />
+                    <div className={styles.visualizations}>
+                        <Visualizations
+                            lossAndDamageList={filteredIncidents}
+                        />
+                    </div>
                 </div>
             </React.Fragment>
         );
