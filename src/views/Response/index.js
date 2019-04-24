@@ -137,11 +137,13 @@ class Response extends React.PureComponent {
         this.setState({ filterFunction });
     }
 
+    /*
     setDistanceFilter = ({ min, max }) => {
         this.setState({
             distance: max,
         }, () => this.props.requests.filteredResponseRequest.do({ min, max }));
     }
+    */
 
     setStockPileFilter = ({ item, quantity, operatorType }) => {
         this.props.requests.filteredResponseRequest.do({
@@ -178,7 +180,9 @@ class Response extends React.PureComponent {
             distance,
         } = this.state;
 
+        // TODO: memoize this
         const filteredResourceList = resourceList.filter(filterFunction);
+
         const pending = pendingResponse || pendingFilteredResponse || pendingIncident;
 
         return (

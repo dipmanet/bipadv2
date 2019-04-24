@@ -23,7 +23,7 @@ const Block = ({ onClick, children }) => (
 );
 
 const FirstPage = ({ onJump, onClick }) => (
-    <Fragment>
+    <div className={styles.firstPage}>
         <h3>Please select your area of interest:</h3>
         <div className={styles.areaSelect}>
             <Block onClick={onClick}>
@@ -39,7 +39,7 @@ const FirstPage = ({ onJump, onClick }) => (
                 Municipal Level
             </Block>
         </div>
-    </Fragment>
+    </div>
 );
 
 class SelectionPage extends React.PureComponent {
@@ -69,27 +69,32 @@ class SelectionPage extends React.PureComponent {
         const { filterText } = this.state;
 
         return (
-            <Fragment>
-                <h3>Select one of the {title}</h3>
-                <div>
-                    <TextInput
-                        label="Search"
-                        onChange={this.handleSearch}
-                        value={filterText}
-                    />
-                    <Button
-                        onClick={() => onJump(0)}
-                    >
-                        Cancel
-                    </Button>
-                    <ListView
-                        keySelector={keySelector}
-                        data={this.filter(data, filterText)}
-                        renderer={Block}
-                        rendererParams={this.rendererParams}
-                    />
-                </div>
-            </Fragment>
+            <div className={styles.selectionPage}>
+                <header className={styles.selectionPageHeader}>
+                    <h3>Select one of the {title}</h3>
+                    <div className={styles.bottomContainer}>
+                        <TextInput
+                            className={styles.searchInput}
+                            label="Search"
+                            onChange={this.handleSearch}
+                            value={filterText}
+                        />
+                        <Button
+                            className={styles.button}
+                            onClick={() => onJump(0)}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                </header>
+                <ListView
+                    className={styles.selectionPageList}
+                    keySelector={keySelector}
+                    data={this.filter(data, filterText)}
+                    renderer={Block}
+                    rendererParams={this.rendererParams}
+                />
+            </div>
         );
     }
 }
