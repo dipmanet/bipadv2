@@ -53,13 +53,17 @@ export default class LossDetails extends React.PureComponent {
         return (
             <div className={_cs(className, styles.statsContainer)}>
                 { isDefined(minDate) &&
-                    <div>
-                        Data available from
-                        <FormattedDate
-                            value={minDate}
-                            mode="yyyy-MM-dd"
-                        />
-                    </div>
+                    <TextOutput
+                        className={styles.stat}
+                        label="Data available from"
+                        type="block"
+                        value={
+                            <FormattedDate
+                                value={minDate}
+                                mode="yyyy-MM-dd"
+                            />
+                        }
+                    />
                 }
                 { lossMetrics.map(metric => (
                     <TextOutput

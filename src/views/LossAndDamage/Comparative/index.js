@@ -145,6 +145,7 @@ class Comparative extends React.PureComponent {
             mapStyle,
             lossAndDamageList,
             regions,
+            minDate,
         } = this.props;
 
         const {
@@ -158,9 +159,9 @@ class Comparative extends React.PureComponent {
             region2,
         } = faramValues;
 
-
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
+        console.warn(region1);
 
         return (
             <div className={_cs(styles.comparative, className)}>
@@ -189,6 +190,14 @@ class Comparative extends React.PureComponent {
                     />
                 </Faram>
                 <div className={styles.comparisionContainer}>
+                    <div className={styles.titleContainer}>
+                        { isRegionValid(faramValues.region1) &&
+                            <h2>Akasjdn</h2>
+                        }
+                        { isRegionValid(faramValues.region2) &&
+                            <h2>akasjdn</h2>
+                        }
+                    </div>
                     <div className={styles.mapContainer}>
                         { isRegionValid(faramValues.region1) &&
                             <Map
@@ -233,14 +242,16 @@ class Comparative extends React.PureComponent {
                         <div className={styles.aggregatedStats}>
                             { isRegionValid(faramValues.region1) &&
                                 <LossDetails
+                                    className={styles.aggregatedStat}
                                     data={region1Incidents}
-                                    minDate={this.props.minDate}
+                                    minDate={minDate}
                                 />
                             }
                             { isRegionValid(faramValues.region2) &&
                                 <LossDetails
+                                    className={styles.aggregatedStat}
                                     data={region2Incidents}
-                                    minDate={this.props.minDate}
+                                    minDate={minDate}
                                 />
                             }
                         </div>

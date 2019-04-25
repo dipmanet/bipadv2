@@ -64,7 +64,7 @@
                 display: flex;
                 flex-shrink: 0;
 
-                %aggregated-stat {
+                .aggregated-stat {
                     display: flex;
                     flex-basis: 50%;
                     flex-wrap: wrap;
@@ -73,14 +73,6 @@
                         padding: $spacing-large;
                     }
                 } 
-
-                .aggregated-stat1 {
-                    @extend %aggregated-stat;
-                }
-
-                .aggregated-stat2 {
-                    @extend %aggregated-stat;
-                }
             }
 
             .other-visualizations {
