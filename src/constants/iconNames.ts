@@ -26,6 +26,7 @@ const iconNames = {
 
     filter: 'ion-android-funnel',
     chevronUp: 'ion-chevron-up',
+    chevronDown: 'ion-chevron-down',
     chevronRight: 'ion-chevron-right',
     chevronLeft: 'ion-chevron-left',
 

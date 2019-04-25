@@ -16,7 +16,14 @@ $width-table-container: 250px;
     flex-direction: column;
     justify-content: space-between;
     max-height: calc(100vh - var(--spacing-medium) * 2);
+    overflow-y: auto;
     animation: fade-in $duration-transition-slow ease-in forwards;
+
+    .legend {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
 
     .legends-container {
         display: flex;
@@ -27,11 +34,12 @@ $width-table-container: 250px;
         border-radius: $radius-border-large;
         background-color: rgba(255, 255, 255, .9);
         width: $width-table-container;
-        overflow: auto;
+        overflow-y: auto;
 
         .header {
             display: flex;
             align-items: center;
+            flex-shrink: 0;
             justify-content: space-between;
             padding-right: $spacing-small;
 
@@ -47,6 +55,11 @@ $width-table-container: 250px;
             height: 120px;
         }
 
+        .legend-items {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -54,6 +67,7 @@ $width-table-container: 250px;
             flex-shrink: 0;
             border-bottom: $width-separator-thin solid $color-separator;
             padding: $spacing-small;
+            overflow-y: auto;
 
             .heading {
                 flex-shrink: 0;

@@ -315,7 +315,7 @@ class ResponseFilter extends React.PureComponent {
                     <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
                     >
-                        Show filters
+                        Show Resources
                     </PrimaryButton>
                 }
                 expandedViewContainerClassName={styles.filtersContainer}
@@ -323,12 +323,12 @@ class ResponseFilter extends React.PureComponent {
                     <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Filters
+                                Resources
                             </h4>
                             <Button
                                 onClick={this.handleHideFiltersButtonClick}
                                 iconName={iconNames.chevronUp}
-                                title="Hide Filters"
+                                title="Hide resources"
                                 transparent
                             />
                         </header>
@@ -340,11 +340,6 @@ class ResponseFilter extends React.PureComponent {
                             error={faramErrors}
                         >
                             <div className={styles.resourceListContainer}>
-                                {resourceList.length > 0 &&
-                                    <h2 className={styles.heading}>
-                                        Resources
-                                    </h2>
-                                }
                                 <ListView
                                     data={resourceKeys}
                                     renderer={Resource}

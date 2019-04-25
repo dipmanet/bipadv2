@@ -29,7 +29,8 @@
     }
 
     .content {
-        border: $width-separator-thin solid $color-separator;
+        // border-top: $width-separator-thin solid $color-separator;
+        // border-bottom: $width-separator-thin solid $color-separator;
         height: 200px;
         overflow-y: auto;
     }
