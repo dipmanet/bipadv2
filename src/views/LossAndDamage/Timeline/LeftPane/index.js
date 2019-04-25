@@ -65,16 +65,19 @@ export default class LeftPane extends React.PureComponent {
             <Button
                 className={styles.showTabularButton}
                 onClick={this.handleShowTabularButtonClick}
-                iconName={this.state.showTabularView ? iconNames.shrink : iconNames.expand}
+                iconName={this.state.showTabularView ? iconNames.chevronUp : iconNames.expand}
                 title="Show detailed view"
-            />
-            <Button
-                className={styles.collapseButton}
-                onClick={this.handleCollapseButtonClick}
-                iconName={iconNames.chevronUp}
-                title="Collapse overview"
                 transparent
             />
+            {!this.state.showTabularView &&
+                <Button
+                    className={styles.collapseButton}
+                    onClick={this.handleCollapseButtonClick}
+                    iconName={iconNames.chevronUp}
+                    title="Collapse overview"
+                    transparent
+                />
+            }
         </header>
     )
 

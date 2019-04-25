@@ -131,7 +131,6 @@ class StockPileFilter extends React.PureComponent {
         const unit = itemUnits[item];
         const unitText = unit ? `(${unit})` : '';
         const quantityDisabled = !faramValues.item;
-        const submitDisabled = isFalsy(faramValues.item) || isFalsy(faramValues.quantity);
 
         return (
             <Faram
@@ -172,7 +171,6 @@ class StockPileFilter extends React.PureComponent {
                 <div className={styles.bottomContainer}>
                     <PrimaryButton
                         type="submit"
-                        disabled={submitDisabled}
                     >
                         Search
                     </PrimaryButton>
