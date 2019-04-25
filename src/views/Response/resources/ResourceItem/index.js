@@ -78,7 +78,7 @@ export default class ResourceItem extends React.PureComponent {
             className,
             title,
             distance,
-            contactNumber = '911',
+            contactNumber = 'Not Available',
             showDetails,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
