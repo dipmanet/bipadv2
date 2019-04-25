@@ -328,7 +328,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        Incident radius (people deaths count)
+                                        Incident circle size (people death count)
                                     </h4>
                                 </header>
                                 <Legend

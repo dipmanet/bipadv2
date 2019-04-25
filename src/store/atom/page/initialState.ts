@@ -3,7 +3,7 @@ import { PageState } from './types';
 const state: PageState = {
     eventTypes: {},
 
-    initialPopupShown: true,
+    initialPopupShown: false,
 
     region: {
         adminLevel: undefined,

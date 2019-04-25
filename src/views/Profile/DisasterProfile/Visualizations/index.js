@@ -81,7 +81,7 @@ class Visualizations extends React.PureComponent {
         ).sort((a, b) => b.value - a.value);
     })
 
-    getHazardOccurence = memoize((lossAndDamageList) => {
+    getHazardOccurrence = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
 
         const freqCount = groupList(
@@ -175,7 +175,7 @@ class Visualizations extends React.PureComponent {
         const hazardLossType = this.getHazardLossType(lossAndDamageList);
         const filteredHazardTypesList = this.getHazardTypes(lossAndDamageList);
         const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
-        const topHazards = this.getHazardOccurence(lossAndDamageList);
+        const topHazards = this.getHazardOccurrence(lossAndDamageList);
 
 
         return (
@@ -230,7 +230,7 @@ class Visualizations extends React.PureComponent {
                     <div className={styles.hazardsBarContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Top five hazards by occurence
+                                Top five hazards by occurrence
                             </h4>
                         </header>
                         <HorizontalBar
