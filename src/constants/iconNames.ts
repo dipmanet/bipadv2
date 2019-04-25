@@ -18,6 +18,7 @@ const iconNames = {
     lossAndDamange: 'ion-ios-clock',
     drrProjectsProfile: 'ion-filing',
     disasterProfile: 'ion-podium',
+    profile: 'ion-podium',
     aboutUs: 'ion-ios-information',
     realtime: 'ion-android-wifi',
     indicator: 'ion-ios-speedometer',

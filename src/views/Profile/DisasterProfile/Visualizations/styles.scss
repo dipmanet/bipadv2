@@ -34,18 +34,23 @@
     .parallel-container {
         @extend %visualization-container;
         min-width: 200px;
-        height: 320px;
     }
     .bar-container {
         @extend %visualization-container;
         min-width: 200px;
-        height: 380px;
+
+        .chart {
+            height: 480px;
+        }
     }
 
     .hazards-bar-container {
         @extend %visualization-container;
         min-width: 200px;
-        height: 380px;
+
+        .chart {
+            height: 480px;
+        }
     }
 }
 

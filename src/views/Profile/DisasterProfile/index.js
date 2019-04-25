@@ -40,7 +40,7 @@ import {
     getSanitizedIncidents,
     getGroupMethod,
     getGroupedIncidents,
-} from '../LossAndDamage/common';
+} from '../../LossAndDamage/common';
 
 
 import Visualizations from './Visualizations';
@@ -125,22 +125,6 @@ const isValidIncident = (
 };
 
 class DisasterProfile extends React.PureComponent {
-    componentDidMount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-
-        if (mapControls) {
-            this.mapControls = mapControls;
-            this.previousMapControlDisplay = mapControls.style.display;
-            mapControls.style.display = 'none';
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.mapControls) {
-            this.mapControls.style.display = this.previousMapControlDisplay;
-        }
-    }
-
     filterIncidents = (incidents = emptyList, regions, region) => {
         if (!region) {
             return incidents;
