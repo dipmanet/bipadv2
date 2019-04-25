@@ -176,7 +176,7 @@ export default {
     eventConvex: {
         outline: {
             'line-color': ['get', 'hazardColor'],
-            'line-width': 2,
+            'line-width': 1,
             'line-dasharray': [2, 2],
             'line-offset': -6,
         },

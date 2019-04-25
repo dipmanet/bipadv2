@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { FaramInputElement } from '@togglecorp/faram';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, compareString } from '@togglecorp/fujs';
 
 import { hazardIcons } from '#resources/data';
 import MultiListSelection from '#components/MultiListSelection';
@@ -34,6 +34,11 @@ const hazardTypeLabelSelector = d => d.title;
 const hazardTypeTitleSelector = d => d.description;
 const hazardTypeKeySelector = d => d.id;
 const hazardTypeIconSelector = d => d.icon || hazardIcons.unknown;
+
+const compareHazard = (a, b) => compareString(
+    hazardTypeLabelSelector(a),
+    hazardTypeLabelSelector(b),
+);
 
 class HazardSelectionInput extends React.PureComponent {
     static propTypes = propTypes;
@@ -73,7 +78,9 @@ class HazardSelectionInput extends React.PureComponent {
             artificial: [],
         };
 
-        hazardList.forEach((hazard, i) => {
+        // NOTE: sort hazards
+        const sortedHazardList = [...hazardList].sort(compareHazard);
+        sortedHazardList.forEach((hazard, i) => {
             if (!groupedHazardTypes[hazard.type]) {
                 console.warn('Unknown hazard type', hazard.type);
             } else {
