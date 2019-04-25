@@ -49,6 +49,7 @@ $width-left-pane: var(--width-left-panel);
     .point-size-legend-container {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         justify-content: center;
         border: $width-separator-thin solid $color-separator-light;
         border-radius: 5px;

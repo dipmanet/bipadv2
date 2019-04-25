@@ -1,0 +1,12 @@
+@import '~base-scss/base';
+
+.tabs {
+    position: absolute;
+    top: var(--spacing-medium);
+    right: calc(var(--spacing-medium) + var(--width-navbar-right));
+    z-index: 1;
+
+    a {
+        text-decoration: none;
+    }
+}
