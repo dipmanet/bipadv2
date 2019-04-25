@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs, isDefined } from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import AccentButton from '#rsca/Button/AccentButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import { calculateCategorizedSeverity, lossMetrics } from '#utils/domain';
-import { sum } from '#utils/common';
+import { calculateCategorizedSeverity } from '#utils/domain';
+import LossDetails from '#components/LossDetails';
 
 import { iconNames } from '#constants';
-import TextOutput from '#components/TextOutput';
 import CollapsibleView from '#components/CollapsibleView';
 
 import {
@@ -137,19 +136,6 @@ class LeftPane extends React.PureComponent {
             severity: calculateCategorizedSeverity(incident.loss),
         }));
 
-        // Calculate summary
-        const summaryData = lossMetrics.reduce((acc, { key }) => ({
-            ...acc,
-            [key]: sum(
-                incidentList
-                    .filter(incident => incident.loss)
-                    .map(incident => incident.loss[key])
-                    .filter(isDefined),
-            ),
-        }), {});
-
-        summaryData.count = incidentList.length;
-
         const Header = this.renderListViewHeader;
 
         return (
@@ -177,18 +163,7 @@ class LeftPane extends React.PureComponent {
                             <React.Fragment>
                                 <Header />
                                 <div className={styles.content}>
-                                    <div className={styles.statsContainer}>
-                                        { lossMetrics.map(metric => (
-                                            <TextOutput
-                                                className={styles.stat}
-                                                key={metric.key}
-                                                type="block"
-                                                label={metric.label}
-                                                value={summaryData[metric.key]}
-                                                isNumericValue
-                                            />
-                                        ))}
-                                    </div>
+                                    <LossDetails data={incidentList} />
                                     <div className={styles.listHeaderContainer}>
                                         <AccentButton
                                             transparent

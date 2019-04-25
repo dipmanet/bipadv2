@@ -72,6 +72,18 @@ export const getSanitizedIncidents = (incidents, regions, hazardTypes) => {
     return sanitizedIncidents;
 };
 
+export const getMinDate = (incidents) => {
+    if (!incidents || incidents.length <= 0) {
+        return undefined;
+    }
+
+    const sanitizedIncidents = incidents
+        .filter(({ incidentOn }) => incidentOn)
+        .map(incident => new Date(incident.incidentOn).getTime());
+
+    return Math.min(...sanitizedIncidents);
+};
+
 export const getMinMaxTime = (incidents) => {
     const timing = incidents.map(incident => incident.incidentOn);
     const minTime = Math.min(...timing);

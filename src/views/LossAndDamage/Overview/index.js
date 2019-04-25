@@ -166,6 +166,7 @@ export default class Overview extends React.PureComponent {
                             lossAndDamageList={lossAndDamageList}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             rightPaneExpanded={rightPaneExpanded}
+                            minDate={this.props.minDate}
                         />
                     }
                     rightContent={

@@ -63,8 +63,8 @@ const EventTooltip = ({ title, description, severity, createdOn }) => (
             label="Created On"
             value={
                 <FormattedDate
-                    date={createdOn}
-                    mode="dd-MM-yyyy hh:mm"
+                    value={createdOn}
+                    mode="yyyy-MM-dd hh:mm"
                 />
             }
         />

@@ -142,12 +142,22 @@ class ProjectItem extends React.PureComponent {
                     <div className={styles.dateContainer}>
                         <TextOutput
                             label="Start Date"
-                            value={<FormattedDate value={start} />}
+                            value={
+                                <FormattedDate
+                                    value={start}
+                                    mode="yyyy-MM-dd"
+                                />
+                            }
                             alwaysVisible
                         />
                         <TextOutput
                             label="End Date"
-                            value={<FormattedDate value={end} />}
+                            value={
+                                <FormattedDate
+                                    value={end}
+                                    mode="yyyy-MM-dd"
+                                />
+                            }
                             alwaysVisible
                         />
                     </div>
@@ -188,12 +198,22 @@ class ProjectItem extends React.PureComponent {
                                 <TextOutput
                                     type="table"
                                     label="Start Date"
-                                    value={<FormattedDate value={start} />}
+                                    value={
+                                        <FormattedDate
+                                            value={start}
+                                            mode="yyyy-MM-dd"
+                                        />
+                                    }
                                 />
                                 <TextOutput
                                     type="table"
                                     label="End Date"
-                                    value={<FormattedDate value={end} />}
+                                    value={
+                                        <FormattedDate
+                                            value={end}
+                                            mode="yyyy-MM-dd"
+                                        />
+                                    }
                                 />
                                 <TextOutput
                                     valueClassName={styles.capitalizeValue}
