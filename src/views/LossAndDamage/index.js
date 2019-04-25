@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import memoize from 'memoize-one';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -31,6 +32,7 @@ import Loading from '#components/Loading';
 
 import {
     getSanitizedIncidents,
+    getMinDate,
 } from './common';
 
 import Overview from './Overview';
@@ -93,7 +95,7 @@ const requests = {
         url: '/incident/',
         query: {
             expand: ['loss.peoples', 'wards'],
-            limit: 12000,
+            limit: 9999999999,
             ordering: '-incident_on',
             lnd: true,
         },
@@ -169,6 +171,7 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         wards,
                         onRightPaneExpandChange: this.handleOverviewRightPaneExpandChange,
+                        minDate: this.getMinDate(lossAndDamageList),
                     };
                 },
             },
@@ -217,6 +220,7 @@ class LossAndDamage extends React.PureComponent {
                         wards,
                         eventList,
                         onRightPaneExpandChange: this.handleTimelineRightPaneExpandChange,
+                        minDate: this.getMinDate(lossAndDamageList),
                     };
                 },
             },
@@ -249,11 +253,14 @@ class LossAndDamage extends React.PureComponent {
                         lossAndDamageList,
                         regions,
                         regionLevel,
+                        minDate: this.getMinDate(lossAndDamageList),
                     };
                 },
             },
         };
     }
+
+    getMinDate = memoize(getMinDate)
 
     filterValues = (filters, regions, hazardTypes, incidents = []) => {
         const {

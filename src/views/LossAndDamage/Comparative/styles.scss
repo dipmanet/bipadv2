@@ -39,6 +39,15 @@
         flex-grow: 1;
         overflow: auto;
 
+        .title-container {
+            display: flex;
+
+            >h2 {
+                flex-basis: 50%;
+                padding: 0 $spacing-medium;
+            }
+        }
+
         .map-container {
             display: flex;
             flex-shrink: 0;
@@ -64,7 +73,7 @@
                 display: flex;
                 flex-shrink: 0;
 
-                %aggregated-stat {
+                .aggregated-stat {
                     display: flex;
                     flex-basis: 50%;
                     flex-wrap: wrap;
@@ -73,14 +82,6 @@
                         padding: $spacing-large;
                     }
                 } 
-
-                .aggregated-stat1 {
-                    @extend %aggregated-stat;
-                }
-
-                .aggregated-stat2 {
-                    @extend %aggregated-stat;
-                }
             }
 
             .other-visualizations {

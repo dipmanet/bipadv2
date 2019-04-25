@@ -94,8 +94,8 @@ export default class RealTimeMap extends React.PureComponent {
                 label="Event On"
                 value={
                     <FormattedDate
-                        date={eventOn}
-                        mode="dd-MM-yyyy hh:mm"
+                        value={eventOn}
+                        mode="yyyy-MM-dd hh:mm"
                     />
                 }
             />
@@ -133,8 +133,8 @@ export default class RealTimeMap extends React.PureComponent {
                 label="Event On"
                 value={
                     <FormattedDate
-                        date={eventOn}
-                        mode="dd-MM-yyyy hh:mm"
+                        value={eventOn}
+                        mode="yyyy-MM-dd hh:mm"
                     />
                 }
             />
@@ -179,8 +179,8 @@ export default class RealTimeMap extends React.PureComponent {
                     label="Measured On"
                     value={
                         <FormattedDate
-                            date={measuredOn}
-                            mode="dd-MM-yyyy hh:mm"
+                            value={measuredOn}
+                            mode="yyyy-MM-dd hh:mm"
                         />
                     }
                 />

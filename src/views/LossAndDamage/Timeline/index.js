@@ -462,6 +462,7 @@ export default class Timeline extends React.PureComponent {
                             lossAndDamageList={bucketedIncidents[currentIndex]}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             rightPaneExpanded={rightPaneExpanded}
+                            minDate={this.props.minDate}
                         />
                     }
                     rightContent={

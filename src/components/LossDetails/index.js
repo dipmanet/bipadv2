@@ -4,8 +4,9 @@ import memoize from 'memoize-one';
 
 import { _cs, isDefined } from '@togglecorp/fujs';
 
-import TextOutput from '#components/TextOutput';
+import FormattedDate from '#rscv/FormattedDate';
 
+import TextOutput from '#components/TextOutput';
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
 
@@ -26,8 +27,8 @@ export default class LossDetails extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
-    calculateSummary = memoize(lossAndDamageList => (
-        lossMetrics.reduce((acc, { key }) => ({
+    calculateSummary = memoize((lossAndDamageList) => {
+        const stat = lossMetrics.reduce((acc, { key }) => ({
             ...acc,
             [key]: sum(
                 lossAndDamageList
@@ -35,21 +36,35 @@ export default class LossDetails extends React.PureComponent {
                     .map(incident => incident.loss[key])
                     .filter(isDefined),
             ),
-        }), {})
-    ));
+        }), {});
+        stat.count = lossAndDamageList.length;
+        return stat;
+    });
 
     render() {
         const {
             className,
             data = emptyList,
+            minDate,
         } = this.props;
 
         const summaryData = this.calculateSummary(data);
-        summaryData.count = data.length;
-
 
         return (
             <div className={_cs(className, styles.statsContainer)}>
+                { isDefined(minDate) &&
+                    <TextOutput
+                        className={styles.stat}
+                        label="Data available from"
+                        type="block"
+                        value={
+                            <FormattedDate
+                                value={minDate}
+                                mode="yyyy-MM-dd"
+                            />
+                        }
+                    />
+                }
                 { lossMetrics.map(metric => (
                     <TextOutput
                         className={styles.stat}

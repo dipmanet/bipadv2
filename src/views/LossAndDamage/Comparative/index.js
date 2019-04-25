@@ -11,6 +11,8 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 import { lossMetrics } from '#utils/domain';
+import LossDetails from '#components/LossDetails';
+import GeoResolve from '#components/GeoResolve';
 
 import Map from '#rscz/Map';
 
@@ -45,6 +47,28 @@ const mapStateToProps = state => ({
 const emptyObject = {};
 const emptyList = [];
 
+const isValidIncident = (
+    { ward, district, municipality, province },
+    { adminLevel, geoarea },
+) => {
+    switch (adminLevel) {
+        case 1:
+            return geoarea === province;
+        case 2:
+            return geoarea === district;
+        case 3:
+            return geoarea === municipality;
+        case 4:
+            return geoarea === ward;
+        default:
+            return false;
+    }
+};
+
+const isRegionValid = region => (
+    region && region.adminLevel && region.geoarea
+);
+
 class Comparative extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -55,7 +79,7 @@ class Comparative extends React.PureComponent {
         this.state = {
             faramValues: {},
             faramErrors: {},
-            comparisionStarted: false,
+            // comparisionStarted: false,
         };
 
         this.schema = {
@@ -87,24 +111,6 @@ class Comparative extends React.PureComponent {
             return [];
         }
 
-        const isValidIncident = (
-            { ward, district, municipality, province },
-            { adminLevel, geoarea },
-        ) => {
-            switch (adminLevel) {
-                case 1:
-                    return geoarea === province;
-                case 2:
-                    return geoarea === district;
-                case 3:
-                    return geoarea === municipality;
-                case 4:
-                    return geoarea === ward;
-                default:
-                    return false;
-            }
-        };
-
         const sanitizedIncidents = getSanitizedIncidents(incidents, regions, {}).filter(
             params => (
                 isNotDefined(region)
@@ -126,7 +132,7 @@ class Comparative extends React.PureComponent {
     handleFaramValidationSuccess = (faramValues) => {
         this.setState({
             faramValues,
-            comparisionStarted: true,
+            // comparisionStarted: true,
         });
     }
 
@@ -134,68 +140,19 @@ class Comparative extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
-    generateDataset = (incidents, region) => {
-        if (!incidents || incidents.length <= 0) {
-            return {
-                // mapping: [],
-                aggregatedStat: {},
-            };
-        }
-
-        const groupFn = getGroupMethod(region.adminLevel);
-        const regionGroupedIncidents = getGroupedIncidents(
-            incidents,
-            groupFn,
-        );
-
-        // console.warn(regionGroupedIncidents);
-
-        // const listToMapGroupedItem = groupedIncidents => (
-        //     listToMap(
-        //         groupedIncidents,
-        //         incident => incident.key,
-        //         incident => incident,
-        //     )
-        // );
-
-        // const mapping = listToMapGroupedItem(regionGroupedIncidents);
-
-        return {
-            // mapping,
-            aggregatedStat: regionGroupedIncidents[0],
-        };
-    }
-
-    renderAggregatedStat = ({
-        data = emptyObject,
-        className,
-    }) => (
-        <div className={className}>
-            { lossMetrics.map(metric => (
-                <TextOutput
-                    className={styles.statMetric}
-                    key={metric.key}
-                    label={metric.label}
-                    value={data[metric.key]}
-                    isNumericValue
-                    type="block"
-                />
-            ))}
-        </div>
-    )
-
     render() {
         const {
             className,
             mapStyle,
             lossAndDamageList,
             regions,
+            minDate,
         } = this.props;
 
         const {
             faramValues,
             faramErrors,
-            comparisionStarted,
+            // comparisionStarted,
         } = this.state;
 
         const {
@@ -206,22 +163,13 @@ class Comparative extends React.PureComponent {
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
 
-        const dataset1 = region1
-            ? this.generateDataset(region1Incidents, region1)
-            : emptyObject;
-        const dataset2 = region2
-            ? this.generateDataset(region2Incidents, region2)
-            : emptyObject;
-
-        const AggregatedStat = this.renderAggregatedStat;
-
         return (
             <div className={_cs(styles.comparative, className)}>
                 <Faram
                     className={styles.regionSelectionForm}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
+                    // onValidationSuccess={this.handleFaramValidationSuccess}
                     schema={this.schema}
                     value={faramValues}
                     error={faramErrors}
@@ -240,16 +188,22 @@ class Comparative extends React.PureComponent {
                         showHintAndError
                         disabled={!faramValues.region1}
                     />
-                    <Button
-                        type="submit"
-                        disabled={!faramValues.region1 || !faramValues.region2}
-                    >
-                        Start comparision
-                    </Button>
                 </Faram>
-                { comparisionStarted ? (
-                    <div className={styles.comparisionContainer}>
-                        <div className={styles.mapContainer}>
+                <div className={styles.comparisionContainer}>
+                    <div className={styles.titleContainer}>
+                        { isRegionValid(faramValues.region1) &&
+                            <h2>
+                                <GeoResolve data={region1} />
+                            </h2>
+                        }
+                        { isRegionValid(faramValues.region2) &&
+                            <h2>
+                                <GeoResolve data={region2} />
+                            </h2>
+                        }
+                    </div>
+                    <div className={styles.mapContainer}>
+                        { isRegionValid(faramValues.region1) &&
                             <Map
                                 className={styles.map1}
                                 mapStyle={mapStyle}
@@ -267,6 +221,8 @@ class Comparative extends React.PureComponent {
                                     region={faramValues.region1}
                                 />
                             </Map>
+                        }
+                        { isRegionValid(faramValues.region2) &&
                             <Map
                                 className={styles.map2}
                                 mapStyle={mapStyle}
@@ -284,37 +240,43 @@ class Comparative extends React.PureComponent {
                                     region={faramValues.region2}
                                 />
                             </Map>
+                        }
+                    </div>
+                    <div className={styles.visualizations}>
+                        <div className={styles.aggregatedStats}>
+                            { isRegionValid(faramValues.region1) &&
+                                <LossDetails
+                                    className={styles.aggregatedStat}
+                                    data={region1Incidents}
+                                    minDate={minDate}
+                                />
+                            }
+                            { isRegionValid(faramValues.region2) &&
+                                <LossDetails
+                                    className={styles.aggregatedStat}
+                                    data={region2Incidents}
+                                    minDate={minDate}
+                                />
+                            }
                         </div>
-                        <div className={styles.visualizations}>
-                            <div className={styles.aggregatedStats}>
-                                <AggregatedStat
-                                    className={styles.aggregatedStat1}
-                                    data={dataset1.aggregatedStat}
-                                />
-                                <AggregatedStat
-                                    className={styles.aggregatedStat1}
-                                    data={dataset2.aggregatedStat}
-                                />
-                            </div>
-                            <div className={styles.otherVisualizations}>
+                        <div className={styles.otherVisualizations}>
+                            { isRegionValid(faramValues.region1) &&
                                 <div className={styles.region1Container}>
                                     <Visualizations
                                         lossAndDamageList={region1Incidents}
                                     />
                                 </div>
+                            }
+                            { isRegionValid(faramValues.region2) &&
                                 <div className={styles.region2Container}>
                                     <Visualizations
                                         lossAndDamageList={region2Incidents}
                                     />
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
-                ) : (
-                    <div className={styles.preComparisionMessage}>
-                        Select regions to start comparision
-                    </div>
-                )}
+                </div>
             </div>
         );
     }
