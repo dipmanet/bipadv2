@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
@@ -9,27 +8,12 @@ import Faram, {
 } from '@togglecorp/faram';
 
 import Checkbox from '#rsci/Checkbox';
-import SelectInput from '#rsci/SelectInput';
-import NumberInput from '#rsci/NumberInput';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListView from '#rscv/List/ListView';
 import FloatingContainer from '#rscv/FloatingContainer';
 
 import CollapsibleView from '#components/CollapsibleView';
-import RangeInput from '#components/RangeInput';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-} from '#request';
-import {
-    setInventoryCategoryListActionRP,
-    setInventoryItemListActionRP,
-} from '#actionCreators';
-import {
-    inventoryCategoryListSelectorRP,
-    inventoryItemListSelectorRP,
-} from '#selectors';
 import { iconNames } from '#constants';
 
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
@@ -38,7 +22,7 @@ import financeIcon from '#resources/icons/University.svg';
 import groupIcon from '#resources/icons/group.svg';
 
 import ResourceGroup from '../ResourceGroup';
-import resourceAttributes, { operatorOptions } from '../resourceAttributes';
+import resourceAttributes from '../resourceAttributes';
 import {
     getFilterItems,
     getSchema,
@@ -51,13 +35,8 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     setFilter: PropTypes.func.isRequired,
-    setStockPileFilter: PropTypes.func.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    inventoryCategoryList: PropTypes.arrayOf(PropTypes.object),
     resourceList: PropTypes.arrayOf(PropTypes.object),
     filteredList: PropTypes.arrayOf(PropTypes.object),
-    // distance: PropTypes.number.isRequired,
-    // setInventoryCategories: PropTypes.func.isRequired,
 };
 
 const equalityOperator = (x, y) => x === y;
@@ -74,7 +53,6 @@ const checkFilters = (obj, attrVals, filterOperations = {}) =>
 
 const defaultProps = {
     className: '',
-    inventoryCategoryList: [],
     resourceList: [],
     filteredList: [],
 };
@@ -87,27 +65,6 @@ const titles = {
     openSpace: 'Open spaces',
     hotel: 'Hotel',
     governance: 'Governance',
-};
-
-// TODO: show pending message while loading these requests
-const requests = {
-    getInventoryCagetoriesRequest: {
-        url: '/inventory-category/',
-        onSuccess: ({ response, props: { setInventoryCategories } }) => {
-            setInventoryCategories({ inventoryCategoryList: response.results });
-        },
-        onMount: true,
-        // TODO: write schema
-    },
-
-    getInventoryItemsRequest: {
-        url: '/inventory-item/',
-        onSuccess: ({ response, props: { setInventoryItems } }) => {
-            setInventoryItems({ inventoryItemList: response.results });
-        },
-        onMount: true,
-        // TODO: write schema
-    },
 };
 
 const resourceComponentsProps = {
@@ -141,21 +98,6 @@ Resource.propTypes = {
     type: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-    inventoryCategoryList: inventoryCategoryListSelectorRP(state),
-    inventoryItemList: inventoryItemListSelectorRP(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    setInventoryCategories: params => dispatch(setInventoryCategoryListActionRP(params)),
-    setInventoryItems: params => dispatch(setInventoryItemListActionRP(params)),
-});
-
-const labelSelector = x => x.label;
-const titleSelector = x => x.title;
-const keySelector = x => x.key;
-const idSelector = x => x.id;
-
 class ResponseFilter extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
@@ -168,13 +110,6 @@ class ResponseFilter extends React.PureComponent {
         this.filterOperations = getFilterOperations(resourceAttributes);
 
         this.schema = getSchema(resourceAttributes);
-        this.schema.fields.inventory = {
-            fields: {
-                quantity: [],
-                item: [],
-                operatorType: [],
-            },
-        };
 
         // Set show = true for each resource filter
         const defaultFaramValues = listToMap(
@@ -198,12 +133,6 @@ class ResponseFilter extends React.PureComponent {
         totalSize: this.resources[d].length,
     })
 
-    getItemsUnits = memoize(inventoryItemList => listToMap(
-        inventoryItemList,
-        item => item.id,
-        item => item.unit,
-    ))
-
     getResources = memoize((resourceList) => {
         const resources = {
             health: [],
@@ -219,15 +148,6 @@ class ResponseFilter extends React.PureComponent {
         return resources;
     });
 
-    handleSearchClick = () => {
-        const {
-            faramValues: {
-                inventory = {},
-            } = {},
-        } = this.state;
-        this.props.setStockPileFilter(inventory);
-    }
-
     createResourceFilter = (faramValues) => {
         // Only show types whose show attribute is true
         const showTypes = Object.entries(faramValues).filter(([_, data]) => data.show);
@@ -238,20 +158,6 @@ class ResponseFilter extends React.PureComponent {
                                    checkFilters(x, attrVals, this.filterOperations[type])),
             false,
         );
-        return filterFunc;
-    }
-
-    // This might be redundant, since filter happens in server side
-    createStockPileFilter = (filter) => {
-        const { operatorType, category, quantity } = filter;
-        const filterFunc = resource =>
-            (!operatorType || resource.operatorType === operatorType) &&
-            (!category || (resource.inventories && (
-                !!resource.inventories.find(inv => inv.item.category === category)))
-            ) &&
-            (!quantity || (resource.inventories && (
-                !!resource.inventories.find(inv => inv.quantity === quantity)))
-            );
         return filterFunc;
     }
 
@@ -295,12 +201,10 @@ class ResponseFilter extends React.PureComponent {
 
         const {
             distance: { min, max } = {},
-            inventory, // ignore inventory
             ...otherFilters
         } = faramValues;
 
         this.setState({ faramValues });
-        // const stockpileFilter = this.createStockPileFilter(inventory) || (() => true);
         const resourceFilter = this.createResourceFilter(otherFilters);
         // const combinedFilter = x => stockpileFilter(x) && resourceFilter(x);
         // TODO: don't pass function to parent
@@ -370,8 +274,6 @@ class ResponseFilter extends React.PureComponent {
             className,
             resourceList,
             filteredList,
-            // inventoryCategoryList,
-            inventoryItemList,
             // distance,
         } = this.props;
 
@@ -389,12 +291,6 @@ class ResponseFilter extends React.PureComponent {
         const resourceKeys = Object.keys(this.resources);
 
         const Filter = this.renderFilter;
-
-        const itemUnits = this.getItemsUnits(inventoryItemList);
-
-        const { inventory: { item } = {} } = faramValues;
-        const unit = itemUnits[item];
-        const unitText = unit ? `(${unit})` : '';
 
         return (
             <CollapsibleView
@@ -429,42 +325,6 @@ class ResponseFilter extends React.PureComponent {
                             value={faramValues}
                             error={faramErrors}
                         >
-                            <FaramGroup
-                                key="inventory"
-                                faramElementName="inventory"
-                            >
-                                <h3 className={styles.heading}>
-                                    Stockpile Items
-                                </h3>
-                                <SelectInput
-                                    key="item"
-                                    label="Item"
-                                    faramElementName="item"
-                                    keySelector={idSelector}
-                                    labelSelector={titleSelector}
-                                    options={inventoryItemList}
-                                />
-                                <NumberInput
-                                    key="quantity"
-                                    faramElementName="quantity"
-                                    label={`Quantity${unitText}`}
-                                    title="Quantity"
-                                    separator=" "
-                                />
-                                <SelectInput
-                                    key="operatorType"
-                                    label="Operator"
-                                    faramElementName="operatorType"
-                                    keySelector={keySelector}
-                                    labelSelector={labelSelector}
-                                    options={operatorOptions}
-                                />
-                                <PrimaryButton
-                                    onClick={this.handleSearchClick}
-                                >
-                                    Search
-                                </PrimaryButton>
-                            </FaramGroup>
                             <div className={styles.resourceListContainer}>
                                 {resourceList.length > 0 &&
                                     <h2 className={styles.heading}>
@@ -493,8 +353,4 @@ class ResponseFilter extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    createConnectedRequestCoordinator()(
-        createRequestClient(requests)(ResponseFilter),
-    ),
-);
+export default ResponseFilter;

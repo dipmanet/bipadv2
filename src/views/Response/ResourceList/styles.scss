@@ -7,7 +7,6 @@ $width-non-tabular-container: var(--width-left-panel);
 $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
 .left-pane {
-    border-radius: $radius-border-large;
 
     .show-resource-button-container {
         transform-origin: 0 0;
@@ -16,6 +15,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
     .resource-container {
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
+        border-radius: $radius-border-medium;
         background-color: rgba(255, 255, 255, .9);
         overflow: auto;
 
@@ -59,8 +59,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 
                     .incident-info {
                         flex-shrink: 0;
-                        margin-bottom: $spacing-medium;
-                        padding: $spacing-medium;
+                        padding: 0 $spacing-medium $spacing-medium $spacing-medium;
                     }
                 }
             }

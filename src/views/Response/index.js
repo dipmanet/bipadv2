@@ -28,6 +28,7 @@ import Page from '#components/Page';
 import Loading from '#components/Loading';
 
 import ResourceList from './ResourceList';
+import StockPileFilter from './Filter/StockPileFilter';
 
 import ResponseFilter from './Filter';
 import Map from './Map';
@@ -237,14 +238,19 @@ class Response extends React.PureComponent {
                         <Page
                             leftContentClassName={styles.incidentDetails}
                             leftContent={
-                                <ResourceList
-                                    className={styles.resourceList}
-                                    resourceList={resourceList}
-                                    pending={pending}
-                                    incident={incident}
-                                    wardsMap={wardsMap}
-                                    onExpandChange={this.handleLeftPaneExpandChange}
-                                />
+                                <React.Fragment>
+                                    <ResourceList
+                                        className={styles.resourceList}
+                                        resourceList={resourceList}
+                                        pending={pending}
+                                        incident={incident}
+                                        wardsMap={wardsMap}
+                                        onExpandChange={this.handleLeftPaneExpandChange}
+                                    />
+                                    <StockPileFilter
+                                        setStockPileFilter={this.setStockPileFilter}
+                                    />
+                                </React.Fragment>
                             }
                             rightContentClassName={styles.resourceListContainer}
                             rightContent={
