@@ -19,7 +19,9 @@ import { iconNames } from '#constants';
 import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import educationIcon from '#resources/icons/Education.svg';
 import financeIcon from '#resources/icons/University.svg';
+import governanceIcon from '#resources/icons/Government-office.svg';
 import groupIcon from '#resources/icons/group.svg';
+import openSpaceIcon from '#resources/icons/Soap.svg';
 
 import ResourceGroup from '../ResourceGroup';
 import resourceAttributes from '../resourceAttributes';
@@ -81,8 +83,16 @@ const resourceComponentsProps = {
         icon: educationIcon,
     },
     finance: {
-        heading: 'Finance Institutes',
+        heading: 'Financial institutes',
         icon: financeIcon,
+    },
+    governance: {
+        heading: 'Governance',
+        icon: governanceIcon,
+    },
+    openSpace: {
+        heading: 'Open space',
+        icon: openSpaceIcon,
     },
 };
 
@@ -139,10 +149,14 @@ class ResponseFilter extends React.PureComponent {
             volunteer: [],
             education: [],
             finance: [],
+            governance: [],
+            openSpace: [],
         };
 
         resourceList.forEach((r) => {
-            resources[r.resourceType].push(r);
+            if (resources[r.resourceType]) {
+                resources[r.resourceType].push(r);
+            }
         });
 
         return resources;

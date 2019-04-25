@@ -68,9 +68,9 @@ export default class ResourceList extends React.PureComponent {
     render() {
         const {
             className,
+            incident,
             pending,
             resourceList,
-            incident,
             wardsMap,
         } = this.props;
 

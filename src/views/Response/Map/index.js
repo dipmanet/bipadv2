@@ -27,6 +27,8 @@ import healthFacilityIcon from '#resources/icons/health-facility.svg';
 import groupIcon from '#resources/icons/group.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
+import governanceIcon from '#resources/icons/Government-office.svg';
+import openSpaceIcon from '#resources/icons/Soap.svg';
 
 import ResourceItem from '../resources/ResourceItem';
 
@@ -52,6 +54,8 @@ const resourceImages = [
     { name: 'volunteer', icon: groupIcon },
     { name: 'education', icon: educationIcon },
     { name: 'finance', icon: financeIcon },
+    { name: 'governance', icon: governanceIcon },
+    { name: 'openSpace', icon: openSpaceIcon },
 ];
 
 const mapStateToProps = state => ({
