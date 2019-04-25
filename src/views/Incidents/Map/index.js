@@ -119,6 +119,19 @@ class IncidentMap extends React.PureComponent {
                     boundsPadding={boundsPadding}
                 />
                 <MapSource
+                    sourceKey="incident-polygons"
+                    geoJson={polygonFeatureCollection}
+                >
+                    <MapLayer
+                        layerKey="incident-polygon-fill"
+                        type="fill"
+                        paint={mapStyles.incidentPolygon.fill}
+                        enableHover
+                        tooltipRenderer={IncidentInfo}
+                        tooltipRendererParams={this.tooltipRendererParams}
+                    />
+                </MapSource>
+                <MapSource
                     sourceKey="incident-points"
                     geoJson={pointFeatureCollection}
                 >
@@ -137,19 +150,6 @@ class IncidentMap extends React.PureComponent {
                         tooltipRenderer={IncidentInfo}
                         tooltipRendererParams={this.tooltipRendererParams}
                         onHoverChange={onIncidentHover}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey="incident-polygons"
-                    geoJson={polygonFeatureCollection}
-                >
-                    <MapLayer
-                        layerKey="incident-polygon-fill"
-                        type="fill"
-                        paint={mapStyles.incidentPolygon.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
                     />
                 </MapSource>
             </React.Fragment>
