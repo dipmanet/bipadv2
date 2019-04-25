@@ -1,0 +1,18 @@
+@import '~base-scss/base';
+
+.filter-form {
+    margin-top: $spacing-small-alt;
+    border: $width-separator-thin solid $color-separator-light;
+    border-radius: $radius-border-medium;
+    background-color: rgba(255, 255, 255, .9);
+    padding: $spacing-small $spacing-medium;
+
+    .heading {
+        padding-bottom: $spacing-medium;
+    }
+
+    .bottom-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
