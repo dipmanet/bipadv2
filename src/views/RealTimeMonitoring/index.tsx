@@ -309,98 +309,100 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         transparent
                     />
                 </div>
-                { !(showRain || showRiver || showEarthquake || showPollution || showFire) &&
-                    <div className={styles.noLegend}>
-                        <Message>
-                            Please select at least one source
-                        </Message>
-                    </div>
-                }
-                { showRain &&
-                    <div className={styles.container}>
-                        <h5 className={styles.heading}>
-                            Rain
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={rainLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
-                }
-                { showRiver &&
-                    <div className={styles.container}>
-                        <h5 className={styles.heading}>
-                            River
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={riverLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
-                }
-                { showEarthquake &&
-                    <div className={styles.container}>
-                        <h5 className={styles.heading}>
-                            Earthquake (Richter Scale)
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={earthquakeLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
-                }
-                { showPollution &&
-                    <div className={styles.container}>
-                        <h5 className={styles.heading}>
-                            Pollution (PM <sub>2.5</sub>)
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={pollutionLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
-                }
-                { showFire &&
-                    <div className={styles.container}>
-                        <h5 className={styles.heading}>
-                            Forest Fire
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={fireLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
-                }
+                <div className={styles.legendItems}>
+                    { !(showRain || showRiver || showEarthquake || showPollution || showFire) &&
+                        <div className={styles.noLegend}>
+                            <Message>
+                                Please select at least one source
+                            </Message>
+                        </div>
+                    }
+                    { showRain &&
+                        <div className={styles.container}>
+                            <h5 className={styles.heading}>
+                                Rain
+                            </h5>
+                            <Legend
+                                className={styles.legend}
+                                data={rainLegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        </div>
+                    }
+                    { showRiver &&
+                        <div className={styles.container}>
+                            <h5 className={styles.heading}>
+                                River
+                            </h5>
+                            <Legend
+                                className={styles.legend}
+                                data={riverLegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        </div>
+                    }
+                    { showEarthquake &&
+                        <div className={styles.container}>
+                            <h5 className={styles.heading}>
+                                Earthquake (Richter Scale)
+                            </h5>
+                            <Legend
+                                className={styles.legend}
+                                data={earthquakeLegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        </div>
+                    }
+                    { showPollution &&
+                        <div className={styles.container}>
+                            <h5 className={styles.heading}>
+                                Pollution (PM <sub>2.5</sub>)
+                            </h5>
+                            <Legend
+                                className={styles.legend}
+                                data={pollutionLegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        </div>
+                    }
+                    { showFire &&
+                        <div className={styles.container}>
+                            <h5 className={styles.heading}>
+                                Forest Fire
+                            </h5>
+                            <Legend
+                                className={styles.legend}
+                                data={fireLegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        </div>
+                    }
+                </div>
             </React.Fragment>
         );
     }

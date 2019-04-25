@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
-import { _cs, listToMap } from '@togglecorp/fujs';
+import {
+    listToMap,
+    isFalsy,
+} from '@togglecorp/fujs';
 import Faram, {
     FaramGroup,
 } from '@togglecorp/faram';
@@ -95,7 +98,16 @@ class StockPileFilter extends React.PureComponent {
     ))
 
     handleFaramChange = (faramValues) => {
-        this.setState({ faramValues });
+        if (!faramValues.item) {
+            this.setState({
+                faramValues: {
+                    ...faramValues,
+                    quantity: undefined,
+                },
+            });
+        } else {
+            this.setState({ faramValues });
+        }
     }
 
     handleFaramValidationSuccess = (_, faramValues) => {
@@ -118,6 +130,8 @@ class StockPileFilter extends React.PureComponent {
         const { inventory: { item } = {} } = faramValues;
         const unit = itemUnits[item];
         const unitText = unit ? `(${unit})` : '';
+        const quantityDisabled = !faramValues.item;
+        const submitDisabled = isFalsy(faramValues.item) || isFalsy(faramValues.quantity);
 
         return (
             <Faram
@@ -144,6 +158,7 @@ class StockPileFilter extends React.PureComponent {
                     faramElementName="quantity"
                     label={`Quantity${unitText}`}
                     title="Quantity"
+                    disabled={quantityDisabled}
                     separator=" "
                 />
                 <SelectInput
@@ -157,6 +172,7 @@ class StockPileFilter extends React.PureComponent {
                 <div className={styles.bottomContainer}>
                     <PrimaryButton
                         type="submit"
+                        disabled={submitDisabled}
                     >
                         Search
                     </PrimaryButton>

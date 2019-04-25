@@ -6,6 +6,7 @@ import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import TextOutput from '#components/TextOutput';
 import { groupList } from '#utils/common';
+import { iconNames } from '#constants';
 
 import ResourceItem from '../resources/ResourceItem';
 import resourceAttributes from '../resourceAttributes';
@@ -41,7 +42,7 @@ export default class ResourceGroup extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.state = { showResources: false };
+        this.state = { showResources: true };
     }
 
     getResourceElementRendererParams = (_, d) => d
@@ -163,7 +164,7 @@ export default class ResourceGroup extends React.PureComponent {
         }
 
         const itemsCount = data.length;
-        const buttonText = showResources ? 'Collapse' : 'Expand';
+        const buttonIcon = showResources ? iconNames.chevronUp : iconNames.chevronDown;
         const filterButtonText = isFilterShown ? 'Hide Filters' : 'Show Filters';
 
         const Summary = this.renderSummary;
@@ -189,10 +190,9 @@ export default class ResourceGroup extends React.PureComponent {
                     <Button
                         className={styles.button}
                         onClick={this.handleExpandToggleClick}
+                        iconName={buttonIcon}
                         type="button"
-                    >
-                        { buttonText }
-                    </Button>
+                    />
                 </div>
                 <Summary />
                 { showResources && (
