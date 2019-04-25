@@ -12,6 +12,7 @@ import Faram, {
 } from '@togglecorp/faram';
 import { lossMetrics } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
+import GeoResolve from '#components/GeoResolve';
 
 import Map from '#rscz/Map';
 
@@ -161,7 +162,6 @@ class Comparative extends React.PureComponent {
 
         const region1Incidents = this.filterIncidents(lossAndDamageList, regions, region1);
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
-        console.warn(region1);
 
         return (
             <div className={_cs(styles.comparative, className)}>
@@ -192,10 +192,14 @@ class Comparative extends React.PureComponent {
                 <div className={styles.comparisionContainer}>
                     <div className={styles.titleContainer}>
                         { isRegionValid(faramValues.region1) &&
-                            <h2>Akasjdn</h2>
+                            <h2>
+                                <GeoResolve data={region1} />
+                            </h2>
                         }
                         { isRegionValid(faramValues.region2) &&
-                            <h2>akasjdn</h2>
+                            <h2>
+                                <GeoResolve data={region2} />
+                            </h2>
                         }
                     </div>
                     <div className={styles.mapContainer}>
