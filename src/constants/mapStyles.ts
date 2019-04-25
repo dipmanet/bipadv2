@@ -7,7 +7,6 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 2,
-            'line-opacity': 0.5,
         },
     },
     district: {
@@ -18,7 +17,6 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 1.4,
-            'line-opacity': 0.5,
         },
     },
     municipality: {
@@ -29,7 +27,6 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 0.8,
-            'line-opacity': 0.5,
         },
     },
     ward: {
@@ -40,7 +37,6 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 0.5,
-            'line-opacity': 0.5,
         },
     },
     provinceLabel: {
@@ -273,6 +269,11 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
                 '#A9E4FE',
             ],
+            'text-opacity': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
+                1,
+            ],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -305,6 +306,11 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#5770FE',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
                 '#A2FFC8',
+            ],
+            'text-opacity': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
+                1,
             ],
 
             'text-halo-color': ['case',
