@@ -13,6 +13,7 @@ const styleProperties = {
     panelBorderRadius: '5px',
     colorBackgroundNewItem: 'rgba(79, 195, 247, .09)',
     colorBackgroundNewItemHover: 'rgba(79, 195, 247, .2)',
+    fontSizeUltraLarge: '32px',
 };
 
 export default styleProperties;

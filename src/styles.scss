@@ -1,41 +1,51 @@
 @import '~base-scss/base';
 
-.subtype {
+.block {
     display: flex;
     align-items: center;
+    flex-basis: calc(25% - var(--spacing-large) * 2);
     flex-direction: column;
     justify-content: center;
-    margin: $spacing-small;
+    margin: $spacing-large;
     border: $width-separator-thin solid $color-separator;
-    border-style: dashed;
-    background-color: $color-foreground-alt;
-    padding: $spacing-small;
-    width: calc(25% - 2 * #{$spacing-small});
-    height: 160px;
+    border-radius: 5px;
+    background-color: $color-foreground;
+    cursor: pointer;
+    padding: $spacing-medium;
+    min-width: 320px;
+    min-height: 240px;
+    font-size: var(--font-size-extra-large);
 
     &:hover {
-        background-color: $color-foreground;
+        background-color: $color-foreground-alt;
     }
 }
 
 .splash-screen-modal {
     display: flex;
     flex-direction: column;
-    border: $width-separator-thin solid $color-primary;
+    border-radius: 5px;
     padding: 0;
     width: 80vw;
-    height: 60vh;
+    height: 90vh;
     overflow: auto;
 
-    .top {
+    >.top {
         flex-shrink: 0;
-        padding: 0 $spacing-medium;
+        background-color: var(--color-primary);
+        padding: $spacing-super-large;
+        color: var(--color-text-on-primary);
 
-        h1, h2 {
-            margin: $spacing-medium 0;
-            color: $color-primary;
+        .heading {
+            .welcome-text {
+                margin-bottom: var(--spacing-medium);
+                font-size: var(-font-size-large);
+            }
+
+            .platform-name {
+                font-size: var(--font-size-ultra-large);
+            }
         }
-
     }
 
     .wizard {
@@ -45,12 +55,25 @@
         overflow: auto;
 
         .first-page {
-            padding: 0 $spacing-medium;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+
+            .heading {
+                flex-shrink: 0;
+                margin-top: $spacing-large;
+                padding: $spacing-medium $spacing-super-large;
+            }
 
             .area-select {
                 display: flex;
+                align-items: center;
                 flex-grow: 1;
-                flex-shrink: 0;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: $spacing-large;
+                overflow: auto;
             }
         }
     }
@@ -83,28 +106,44 @@
     overflow-y: auto;
 
     .selection-page-header {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
-        padding: 0 $spacing-medium;
+        background-color: var(--color-foreground-alt);
+        padding: var(--spacing-medium);
 
-        .bottom-container {
-            display: flex;
-            align-items: center;
+        .heading {
+            flex-grow: 1;
+            padding: var(--spacing-medium);
+        }
 
-            .search-input {
-                flex-grow: 1;
-            }
+        .search-input {
+            flex-shrink: 0;
+            margin: 0 var(--spacing-large);
+        }
 
-            .button {
-                flex-shrink: 0;
-                margin-left: $spacing-small;
-            }
+        .button {
+            flex-shrink: 0;
+            margin-right: var(--spacing-medium);
+            margin-left: var(--spacing-large);
+            font-size: var(--font-size-large);
         }
     }
 
     .selection-page-list {
         display: flex;
+        align-items: center;
         flex-grow: 1;
         flex-wrap: wrap;
+        justify-content: center;
+        margin: var(--spacing-medium) 0;
         overflow-y: auto;
+
+        .selection-page-block {
+            flex-basis: 240px;
+            margin: var(--spacing-medium);
+            height: 108px;
+            min-height: auto;
+        }
     }
 }
