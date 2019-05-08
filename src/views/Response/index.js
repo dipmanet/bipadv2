@@ -21,6 +21,9 @@ import {
     // incidentIdFromRouteSelector,
     incidentSelector,
     resourceListSelectorRP,
+    provincesMapSelector,
+    districtsMapSelector,
+    municipalitiesMapSelector,
     wardsMapSelector,
 } from '#selectors';
 
@@ -45,6 +48,12 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     wardsMap: PropTypes.object,
     // eslint-disable-next-line react/forbid-prop-types
+    provincesMap: PropTypes.object,
+    // eslint-disable-next-line react/forbid-prop-types
+    districtsMap: PropTypes.object,
+    // eslint-disable-next-line react/forbid-prop-types
+    municipalitiesMap: PropTypes.object,
+    // eslint-disable-next-line react/forbid-prop-types
     incident: PropTypes.object,
     resourceList: PropTypes.arrayOf(PropTypes.object),
     // eslint-disable-next-line react/forbid-prop-types
@@ -52,7 +61,10 @@ const propTypes = {
 };
 
 const defaultProps = {
-    wardsMap: emptyObject,
+    wardsMap: {},
+    provincesMap: {},
+    districtsMap: {},
+    municipalitiesMap: {},
     incident: emptyObject,
     resourceList: [],
     requests: emptyObject,
@@ -64,8 +76,11 @@ const mapStateToProps = (state, props) => ({
     // incidentId: incidentIdFromRouteSelector(state),
     incident: incidentSelector(state, props),
     resourceList: resourceListSelectorRP(state),
-    wardsMap: wardsMapSelector(state),
     // incidentList: incidentListSelectorIP(state),
+    provincesMap: provincesMapSelector(state),
+    districtsMap: districtsMapSelector(state),
+    municipalitiesMap: municipalitiesMapSelector(state),
+    wardsMap: wardsMapSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -113,7 +128,7 @@ const requests = {
             `/incident/${incidentId}/`
         ),
         query: {
-            expand: 'loss',
+            expand: ['loss', 'event', 'wards'],
         },
         onSuccess: ({ response, props: { setIncident } }) => {
             setIncident({ incident: response });
@@ -210,6 +225,9 @@ class Response extends React.PureComponent {
                 incidentRequest: { pending: pendingIncident },
             },
             wardsMap,
+            provincesMap,
+            districtsMap,
+            municipalitiesMap,
         } = this.props;
 
         const {
@@ -245,6 +263,9 @@ class Response extends React.PureComponent {
                                         pending={pending}
                                         incident={incident}
                                         wardsMap={wardsMap}
+                                        provincesMap={provincesMap}
+                                        districtsMap={districtsMap}
+                                        municipalitiesMap={municipalitiesMap}
                                         onExpandChange={this.handleLeftPaneExpandChange}
                                     />
                                     <StockPileFilter

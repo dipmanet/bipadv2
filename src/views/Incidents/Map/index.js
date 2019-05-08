@@ -9,6 +9,10 @@ import MapSource from '#rscz/Map/MapSource';
 import CommonMap from '#components/CommonMap';
 import {
     hazardTypesSelector,
+    // wardsMapSelector,
+    provincesMapSelector,
+    districtsMapSelector,
+    municipalitiesMapSelector,
     wardsMapSelector,
 } from '#selectors';
 import {
@@ -37,6 +41,9 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
+    provincesMap: provincesMapSelector(state),
+    districtsMap: districtsMapSelector(state),
+    municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
 });
 
@@ -72,8 +79,11 @@ class IncidentMap extends React.PureComponent {
 
     tooltipRendererParams = (id) => {
         const {
-            wardsMap,
             incidentList,
+            wardsMap,
+            provincesMap,
+            districtsMap,
+            municipalitiesMap,
         } = this.props;
 
         const incident = incidentList.find(i => i.id === id);
@@ -81,6 +91,9 @@ class IncidentMap extends React.PureComponent {
         return {
             incident,
             wardsMap,
+            provincesMap,
+            districtsMap,
+            municipalitiesMap,
         };
     }
 
