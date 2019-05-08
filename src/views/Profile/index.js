@@ -1,8 +1,5 @@
 import React from 'react';
-
-import {
-    _cs,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import FixedTabs from '#rscv/FixedTabs';

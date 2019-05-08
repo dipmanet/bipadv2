@@ -1,35 +1,41 @@
 @import '~base-scss/base';
+
 .about-us {
-    position: absolute;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    left: $spacing-medium;
-    top: calc(#{$height-navbar} + #{$spacing-medium});
-    right: calc(#{$width-navbar} + #{$spacing-medium});
+    position: absolute;
+    top: calc(var(--height-navbar) + var(--spacing-medium));
+    left: var(--spacing-medium); 
     z-index: 1;
+    border: var(--width-separator-thin) solid var(--color-separator);
+    background-color: var(--color-foreground);
+    width: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--height-navbar) - var(--spacing-medium) * 2);
 
-    .disclaimer {
+    .left {
         display: flex;
+        flex-basis: 50%;
         flex-direction: column;
-        flex-grow: 1;
-        border: $width-separator-thin solid $color-warning;
-        padding: $spacing-medium;
-        overflow: auto;
-        background-color: white;
 
-        .heading {
+        .tabs {
             flex-shrink: 0;
+
+            :global {
+                .fixed-tab {
+                    text-decoration: none;
+                }
+            }
         }
 
         .content {
             flex-grow: 1;
-            padding: $spacing-medium;
             overflow: auto;
-
-            p {
-                text-align: justify;
-            }
         }
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+        flex-basis: 50%;
+        justify-content: center;
     }
 }
