@@ -46,7 +46,7 @@ const routeSettings: SomeRoute[] = [
     },
     {
         name: 'lossAndDamage',
-        title: 'Loss & Damage',
+        title: 'Damage & Loss',
         path: '/loss-and-damage/',
         load: () => import('../views/LossAndDamage'),
         navbar: true,
