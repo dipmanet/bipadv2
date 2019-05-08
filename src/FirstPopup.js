@@ -123,7 +123,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: undefined,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleProvincialLevelClick = (id) => {
@@ -133,7 +133,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleDistrictLevelClick = (id) => {
@@ -143,7 +143,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleMunicipalLevelClick = (id) => {
@@ -153,7 +153,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     render() {

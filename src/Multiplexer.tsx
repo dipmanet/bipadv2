@@ -17,10 +17,10 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-    initialPopupShownSelector,
+    hidePopupSelector,
 } from '#selectors';
 import {
-    setInitialPopupShownAction,
+    setInitialPopupHiddenAction,
     setRegionAction,
 } from '#actionCreators';
 
@@ -129,11 +129,11 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
-    initialPopupShown: boolean;
+    hidePopup: boolean;
 }
 
 interface PropsFromDispatch {
-    setInitialPopupShown: typeof setInitialPopupShownAction;
+    setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
 }
 
@@ -151,20 +151,22 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    initialPopupShown: initialPopupShownSelector(state),
+    hidePopup: hidePopupSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setInitialPopupShown: params => dispatch(setInitialPopupShownAction(params)),
+    setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
 });
 
 class Multiplexer extends React.PureComponent<Props, State> {
+    /*
     public componentDidMount() {
-        if (navigator.geolocation && this.props.initialPopupShown) {
+        if (navigator.geolocation && !this.props.hidePopup) {
             navigator.geolocation.getCurrentPosition(this.handleSuccess);
         }
     }
+    */
 
     private handleSuccess = (position: unknown) => {
         console.warn(position);
@@ -193,8 +195,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             districts,
             provinces,
             municipalities,
-            initialPopupShown,
-            setInitialPopupShown,
+            hidePopup,
+            setInitialPopupHidden,
             setRegion,
             pending,
         } = this.props;
@@ -203,12 +205,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
             <Fragment>
                 {/* FIXME: get route key for navbar */}
                 <div className="bipad-main-content">
-                    { initialPopupShown && !pending &&
+                    { !hidePopup && !pending &&
                         <FirstPopup
                             districts={districts}
                             provinces={provinces}
                             municipalities={municipalities}
-                            setInitialPopupShown={setInitialPopupShown}
+                            setInitialPopupHidden={setInitialPopupHidden}
                             setRegion={setRegion}
                         />
                     }

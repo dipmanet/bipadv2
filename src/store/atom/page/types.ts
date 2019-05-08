@@ -266,7 +266,7 @@ export interface ProjectsProfilePage {
 }
 
 export interface PageState {
-    initialPopupShown: boolean;
+    hidePopup: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
 
@@ -295,7 +295,7 @@ export interface PageState {
 
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
-    SET_INITIAL_POPUP_SHOWN = 'page/SET_INITIAL_POPUP_SHOWN',
+    SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
     SET_MAP_STYLES = 'page/SET_MAP_STYLES',
@@ -346,8 +346,8 @@ export interface SetRegion {
     region: Region;
 }
 
-export interface SetInitialPopupShown {
-    type: typeof PageType.SET_INITIAL_POPUP_SHOWN;
+export interface SetInitialPopupHidden {
+    type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
     value: boolean;
 }
 
@@ -491,7 +491,7 @@ export interface SetLpGasCookList {
 }
 
 export type PageActionTypes = (
-    SetRegion | SetInitialPopupShown |
+    SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
