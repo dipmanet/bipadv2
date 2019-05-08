@@ -1,0 +1,20 @@
+.disclaimer {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        flex-shrink: 0;
+
+        .heading {
+            padding: var(--spacing-large);
+        }
+    }
+    
+    .content {
+        flex-grow: 1;
+        padding: 0 var(--spacing-large);
+        overflow: auto;
+        text-align: justify;
+        font-size: var(--font-size-large);
+    }
+}

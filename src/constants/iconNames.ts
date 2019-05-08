@@ -48,6 +48,7 @@ const iconNames = {
     user: 'ion-android-person',
 
     login: 'ion-log-in',
+    back: 'ion-android-arrow-back',
 };
 
 export default iconNames;

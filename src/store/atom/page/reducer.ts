@@ -13,10 +13,10 @@ export const setRegionAction = (
     region,
 });
 
-export const setInitialPopupShownAction = (
+export const setInitialPopupHiddenAction = (
     { value }: { value: boolean },
 ) => ({
-    type: Type.PageType.SET_INITIAL_POPUP_SHOWN,
+    type: Type.PageType.SET_INITIAL_POPUP_HIDDEN,
     value,
 });
 
@@ -226,11 +226,11 @@ const setRegion = (state: Type.PageState, action: Type.SetRegion) => {
     return newState;
 };
 
-const setInitialPopupShown = (state: Type.PageState, action: Type.SetInitialPopupShown) => {
+const setInitialPopupHidden = (state: Type.PageState, action: Type.SetInitialPopupHidden) => {
     const { value } = action;
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
-        deferedState.initialPopupShown = value;
+        deferedState.hidePopup = value;
     });
     return newState;
 };
@@ -757,8 +757,8 @@ export default function routeReducer(
     switch (action.type) {
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
-        case Type.PageType.SET_INITIAL_POPUP_SHOWN:
-            return setInitialPopupShown(state, action);
+        case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
+            return setInitialPopupHidden(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
         case Type.PageType.SET_EVENT_TYPES:

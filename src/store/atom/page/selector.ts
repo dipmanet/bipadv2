@@ -29,7 +29,7 @@ const resourceTypesSelector = ({ page }: AppState) => (
 
 // Popup
 
-export const initialPopupShownSelector = ({ page }: AppState) => page.initialPopupShown;
+export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
 
 // geo
 

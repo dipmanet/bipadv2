@@ -2,79 +2,81 @@
 
 $height-menu: 160px;
 
-.navbar {
+.navbar-left-container {
     display: flex;
     position: absolute;
     top: 0;
     left: 0;
+    pointer-events: none;
+    padding: $spacing-medium;
+
+    .logo {
+        display: flex;
+        align-items: stretch;
+        flex-shrink: 0;
+        background-color: $color-foreground;
+
+        .left {
+            background-color: #f04656;
+            width: 12px;
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            background-color: #1080ff;
+            padding: $spacing-small;
+            color: $color-foreground;
+            font-size: $font-size-extra-large;
+            font-weight: $font-weight-bold;
+        }
+
+        .extra {
+            display: flex;
+            align-items: center;
+            border: $width-separator-thin solid $color-separator;
+
+            .title-container {
+                display: flex;
+                align-items: center;
+
+                .page-title {
+                    padding: 0 $spacing-medium;
+                    color: $color-primary;
+                    font-size: $font-size-large;
+                    font-weight: $font-weight-bold;
+                }
+            }
+
+            .region {
+                display: flex;
+                align-items: center;
+                border-right: $width-separator-thin solid $color-separator-light;
+                padding: $spacing-small $spacing-medium;
+                color: $color-accent;
+                font-size: $font-size-super-large;
+                font-weight: $font-weight-medium;
+            }
+        }
+    }
+
+    .current-page {
+        padding: $spacing-medium;
+        text-transform: capitalize;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+    }
+}
+
+
+.navbar {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
     align-items: flex-end;
     justify-content: space-between;
     z-index: 0;
-    padding: 0;
-    padding: 0 $spacing-medium;
-    width: 100%;
-    height: $height-navbar;
-
-    .navbar-left-container {
-        display: flex;
-
-        .logo {
-            display: flex;
-            align-items: stretch;
-            flex-shrink: 0;
-            background-color: $color-foreground;
-
-            .left {
-                background-color: #f04656;
-                width: 12px;
-            }
-
-            .right {
-                display: flex;
-                align-items: center;
-                background-color: #1080ff;
-                padding: $spacing-small;
-                color: $color-foreground;
-                font-size: $font-size-extra-large;
-                font-weight: $font-weight-bold;
-            }
-
-            .extra {
-                display: flex;
-                align-items: center;
-                border: $width-separator-thin solid $color-separator;
-
-                .title-container {
-                    display: flex;
-                    align-items: center;
-
-                    .page-title {
-                        padding: 0 $spacing-medium;
-                        color: $color-primary;
-                        font-size: $font-size-large;
-                        font-weight: $font-weight-bold;
-                    }
-                }
-
-                .region {
-                    display: flex;
-                    align-items: center;
-                    border-right: $width-separator-thin solid $color-separator-light;
-                    padding: $spacing-small $spacing-medium;
-                    color: $color-accent;
-                    font-size: $font-size-super-large;
-                    font-weight: $font-weight-medium;
-                }
-            }
-        }
-
-        .current-page {
-            padding: $spacing-medium;
-            text-transform: capitalize;
-            font-size: $font-size-large;
-            font-weight: $font-weight-bold;
-        }
-    }
 
     .menu-button {
         padding: $spacing-extra-small $spacing-medium;

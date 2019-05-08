@@ -225,25 +225,25 @@ class Navbar extends React.PureComponent {
                             </button>
                         </div>
                     </div>
-                    <div className={styles.navbarLeftContainer}>
-                        <div className={styles.logo}>
-                            <div className={styles.left} />
-                            <div className={styles.right}>
-                                <span>
-                                    Bipad
-                                </span>
-                            </div>
-                            <div className={styles.extra}>
-                                <RegionOutput
-                                    className={styles.region}
-                                />
-                                <Router className={styles.titleContainer}>
-                                    {titles}
-                                </Router>
-                            </div>
+                </nav>
+                <div className={styles.navbarLeftContainer}>
+                    <div className={styles.logo}>
+                        <div className={styles.left} />
+                        <div className={styles.right}>
+                            <span>
+                                Bipad
+                            </span>
+                        </div>
+                        <div className={styles.extra}>
+                            <RegionOutput
+                                className={styles.region}
+                            />
+                            <Router className={styles.titleContainer}>
+                                {titles}
+                            </Router>
                         </div>
                     </div>
-                </nav>
+                </div>
                 {menuShown &&
                     <div className={styles.layerSwitchBox} >
                         <div className={styles.header}>

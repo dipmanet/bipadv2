@@ -1,9 +1,14 @@
-import React, { Fragment } from 'react';
-import { caseInsensitiveSubmatch } from '@togglecorp/fujs';
+import React from 'react';
+import {
+    caseInsensitiveSubmatch,
+    _cs,
+} from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import Button from '#rsca/Button';
 
-import TextInput from '#rsci/TextInput';
+import { iconNames } from '#constants';
+
+import SearchInput from '#rsci/SearchInput';
 import ListView from '#rscv/List/ListView';
 import Wizard from '#rscv/Wizard';
 import Modal from '#rscv/Modal';
@@ -12,9 +17,13 @@ import styles from './styles.scss';
 
 const keySelector = item => item.id;
 
-const Block = ({ onClick, children }) => (
+const Block = ({
+    onClick,
+    children,
+    className,
+}) => (
     <button
-        className={styles.subtype}
+        className={_cs(className, styles.block)}
         type="button"
         onClick={onClick}
     >
@@ -24,7 +33,9 @@ const Block = ({ onClick, children }) => (
 
 const FirstPage = ({ onJump, onClick }) => (
     <div className={styles.firstPage}>
-        <h3>Please select your area of interest:</h3>
+        <h3 className={styles.heading}>
+            Please select your area of interest:
+        </h3>
         <div className={styles.areaSelect}>
             <Block onClick={onClick}>
                 National Level
@@ -62,6 +73,7 @@ class SelectionPage extends React.PureComponent {
         // FIXME: this onClick is bad
         onClick: () => this.props.onClick(key),
         children: data.title,
+        className: styles.selectionPageBlock,
     });
 
     render() {
@@ -71,21 +83,24 @@ class SelectionPage extends React.PureComponent {
         return (
             <div className={styles.selectionPage}>
                 <header className={styles.selectionPageHeader}>
-                    <h3>Select one of the {title}</h3>
-                    <div className={styles.bottomContainer}>
-                        <TextInput
-                            className={styles.searchInput}
-                            label="Search"
-                            onChange={this.handleSearch}
-                            value={filterText}
-                        />
-                        <Button
-                            className={styles.button}
-                            onClick={() => onJump(0)}
-                        >
-                            Cancel
-                        </Button>
-                    </div>
+                    <Button
+                        className={styles.button}
+                        onClick={() => onJump(0)}
+                        iconName={iconNames.back}
+                        transparent
+                    />
+                    <h3 className={styles.heading}>
+                        Select one of the {title}
+                    </h3>
+                    <SearchInput
+                        className={styles.searchInput}
+                        label="Search"
+                        onChange={this.handleSearch}
+                        value={filterText}
+                        placeholder="Search for regions"
+                        showLabel={false}
+                        showHintAndError={false}
+                    />
                 </header>
                 <ListView
                     className={styles.selectionPageList}
@@ -108,7 +123,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: undefined,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleProvincialLevelClick = (id) => {
@@ -118,7 +133,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleDistrictLevelClick = (id) => {
@@ -128,7 +143,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     handleMunicipalLevelClick = (id) => {
@@ -138,7 +153,7 @@ export default class FirstPopup extends React.PureComponent {
                 geoarea: id,
             },
         });
-        this.props.setInitialPopupShown({ value: false });
+        this.props.setInitialPopupHidden({ value: true });
     }
 
     render() {
@@ -155,12 +170,16 @@ export default class FirstPopup extends React.PureComponent {
                 className={styles.splashScreenModal}
             >
                 <div className={styles.top}>
-                    <h1>Welcome to BIPAD</h1>
-                    <h2>Disaster Information Management System (DIMS)</h2>
+                    <h1 className={styles.heading}>
+                        <div className={styles.welcomeText}>
+                            Welcome to
+                        </div>
+                        <div className={styles.platformName}>
+                            BIPAD: Building Information Platform Against Disaster
+                        </div>
+                    </h1>
                 </div>
-                <Wizard
-                    className={styles.wizard}
-                >
+                <Wizard className={styles.wizard}>
                     <FirstPage
                         onClick={this.handleNationalLevelClick}
                     />
