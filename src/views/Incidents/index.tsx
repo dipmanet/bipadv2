@@ -98,7 +98,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // We have to transform dateRange to incident_on__lt and incident_on__gt
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            expand: ['loss', 'event'],
+            expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {

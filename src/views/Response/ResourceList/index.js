@@ -72,6 +72,9 @@ export default class ResourceList extends React.PureComponent {
             pending,
             resourceList,
             wardsMap,
+            provincesMap,
+            districtsMap,
+            municipalitiesMap,
         } = this.props;
 
         const {
@@ -124,6 +127,9 @@ export default class ResourceList extends React.PureComponent {
                                         className={styles.incidentInfo}
                                         incident={incident}
                                         wardsMap={wardsMap}
+                                        provincesMap={provincesMap}
+                                        districtsMap={districtsMap}
+                                        municipalitiesMap={municipalitiesMap}
                                         hideLink
                                     />
                                 </div>

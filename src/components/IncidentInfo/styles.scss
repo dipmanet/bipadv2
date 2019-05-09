@@ -2,17 +2,20 @@
 
 .tooltip {
     background-color: $color-foreground;
+    padding: var(--spacing-small);
     max-width: var(--width-left-sidebar);
 
     .heading {
-        padding-bottom: $spacing-small;
         font-weight: $font-weight-bold;
     }
 
     .goto-response-link {
-        border-radius: 2px;
+        display: inline-block;
+        margin: var(--spacing-small) 0;
+        border-radius: 3px;
         background-color: $color-primary;
-        padding: $spacing-extra-small $spacing-small;
+        padding: $spacing-small;
+        width: auto;
         text-transform: uppercase;
         text-decoration: none;
         color: $color-text-on-primary;
@@ -30,10 +33,9 @@
         border-bottom: $width-separator-thin solid $color-separator-light;
     }
 
-    .common-info,
-    .inducer,
-    .cause {
-        line-height: 1.8;
+    .ward-list {
+        max-height: 74px;
+        overflow: auto;
     }
 
     .loss {
