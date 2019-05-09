@@ -96,6 +96,10 @@ export default class IncidentInfo extends React.PureComponent {
                 <h2 className={styles.heading}>
                     {title}
                 </h2>
+                <GeoOutput
+                    geoareaName={geoareaName}
+                    className={styles.geoareaName}
+                />
                 { !hideLink &&
                     <Link
                         className={styles.gotoResponseLink}
@@ -107,10 +111,6 @@ export default class IncidentInfo extends React.PureComponent {
                 <DateOutput
                     className={styles.incidentDate}
                     date={incidentOn}
-                />
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
                 />
                 <div className={styles.hr} />
                 <TextOutput
@@ -157,9 +157,11 @@ export default class IncidentInfo extends React.PureComponent {
                     <React.Fragment>
                         <div className={styles.hr} />
                         <b> Wards </b>
-                        { wardNames.map(wardName => (
-                            <div>{wardName}</div>
-                        ))}
+                        <div className={styles.wardList}>
+                            { wardNames.map(wardName => (
+                                <div>{wardName}</div>
+                            ))}
+                        </div>
                     </React.Fragment>
                 }
                 <Loss
@@ -167,7 +169,7 @@ export default class IncidentInfo extends React.PureComponent {
                     label="Loss"
                     loss={loss}
                 />
-                { miscInfo.length !== 0 && (
+                {/* miscInfo.length !== 0 && (
                     <React.Fragment>
                         <div className={styles.hr} />
                         <b> Misc </b>
@@ -184,7 +186,7 @@ export default class IncidentInfo extends React.PureComponent {
                             ))
                         }
                     </React.Fragment>
-                )}
+                ) */}
             </div>
         );
     }
