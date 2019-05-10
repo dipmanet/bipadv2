@@ -65,7 +65,7 @@ export default class AboutUs extends React.PureComponent {
 
         return (
             <div className={_cs(styles.aboutUs, className)}>
-                <div className={styles.left}>
+                <div className={styles.content}>
                     <FixedTabs
                         className={_cs(
                             styles.tabs,
@@ -79,9 +79,18 @@ export default class AboutUs extends React.PureComponent {
                         useHash
                     />
                 </div>
+                {/*
                 <div className={styles.right}>
-                    Bipad
+                    <div className={styles.platformName}>
+                        <div className={styles.abbr}>
+                            BIPAD
+                        </div>
+                        <div className={styles.fullForm}>
+                            Building Information Platform Against Disaster
+                        </div>
+                    </div>
                 </div>
+                */}
             </div>
         );
     }
