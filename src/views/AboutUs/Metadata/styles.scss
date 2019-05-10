@@ -1,0 +1,35 @@
+.metadata-list {
+    .metadata-item {
+        .heading {
+            margin-top: var(-spacing-small) var(--spacing-medium);
+            padding: var(--spacing-medium);
+        }
+
+        .row {
+            display: flex;
+
+            .key {
+                flex-shrink: 0;
+                padding: var(--spacing-medium);
+                width: 240px;
+                color: var(--color-text-label);
+                font-weight: var(--font-weight-bold);
+
+                &:after {
+                    content: ':';
+                }
+            }
+
+            .value {
+                flex-grow: 1;
+                padding: var(--spacing-medium);
+                color: var(--color-text);
+                font-size: var(--font-size-large);
+            }
+
+            &:hover {
+                background-color: var(--color-background-hover);
+            }
+        }
+    }
+}

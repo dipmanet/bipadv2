@@ -11,7 +11,7 @@ const getMapPaddings = (hasTimeline = false) => {
     const widthNavbarRight = convertValueToNumber(styleProperties.widthNavbarRight);
     const heightTimeline = hasTimeline
         ? convertValueToNumber(styleProperties.heightTimelineMainContent)
-        : 0;
+        : 64;
 
     const bottomPadding = 64;
     const topPadding = 64;

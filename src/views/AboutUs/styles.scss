@@ -11,17 +11,23 @@
     width: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
     height: calc(100vh - var(--height-navbar) - var(--spacing-medium) * 2);
 
-    .left {
+    .content {
         display: flex;
-        flex-basis: 50%;
         flex-direction: column;
+        margin: var(--spacing-medium) auto;
+        width: 100%;
+        max-width: 900px;
+        overflow: auto;
 
         .tabs {
             flex-shrink: 0;
 
             :global {
                 .fixed-tab {
+                    padding: var(--spacing-large);
                     text-decoration: none;
+                    font-size: var(--font-size-large);
+                    font-weight: var(--font-weight-bold);
                 }
             }
         }
@@ -35,7 +41,19 @@
     .right {
         display: flex;
         align-items: center;
-        flex-basis: 50%;
+        flex-grow: 1;
         justify-content: center;
+        padding: var(--spacing-large);
+
+        .platform-name {
+            .abbr {
+                color: var(--color-accent);
+                font-size: var(--font-size-ultra-large-alt);
+            }
+
+            .full-form {
+                font-size: var(--font-size-extra-large);
+            }
+        }
     }
 }

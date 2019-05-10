@@ -85,17 +85,28 @@
     font-family: inherit;
 
     :global {
-
         .mapboxgl-ctrl-bottom-right {
             right: $width-navbar;
         }
 
+        .mapbox-ctrl-bottom-left {
+            margin: 0;
+        }
+
         .mapboxgl-ctrl-attrib {
-            display: none;
+            opacity: .1;
+
+            &:hover {
+                opacity: .6;
+            }
         }
 
         .mapboxgl-ctrl-logo {
-            display: none;
+            opacity: .1;
+
+            &:hover {
+                opacity: .6;
+            }
         }
     }
 }

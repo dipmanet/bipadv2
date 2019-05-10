@@ -8,7 +8,7 @@ export default class PrivacyPolicy extends React.PureComponent {
         const { className } = this.props;
 
         return (
-            <div className={_cs(styles.about, className)}>
+            <div className={_cs(styles.privacyPolicy, className)}>
                 Privacy Policy
             </div>
         );
