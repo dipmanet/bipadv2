@@ -1,57 +1,42 @@
 @import '~base-scss/base';
 
-.visualization-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow: auto;
-
+.visualizations-container {
     %visualization-container {
-        display: flex;
-        flex-direction: column;
         padding: $spacing-small 0;
 
         .header {
-            flex-shrink: 0;
-
             .heading {
                 padding: $spacing-small $spacing-medium;
             }
         }
 
         .chart {
-            flex-grow: 1;
+            height: 240px;
         }
     }
 
     .donut-container {
         @extend %visualization-container;
-        flex-basis: 160px;
-        flex-grow: 1;
-        min-height: 200px;
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+
+            .legend-item {
+                flex-basis: calc(100% / 3);
+                padding: $spacing-small;
+                color: $color-text-label;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+            }
+        }
     }
 
-    .parallel-container {
+    .bar-chart-container {
         @extend %visualization-container;
-        flex-basis: 256px;
-        flex-grow: 1;
-        min-height: 256px;
-    }
-}
 
-.legend-container {
-    flex-shrink: 0;
-
-    .legend {
-        display: flex;
-        flex-wrap: wrap;
-
-        .legend-item {
-            flex-basis: calc(100% / 3);
-            padding: $spacing-small;
-            color: $color-text-label;
-            font-size: $font-size-small;
-            font-weight: $font-weight-bold;
+        .chart {
+            height: 320px;
         }
     }
 }

@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 
 import { isDefined } from '@togglecorp/fujs';
 
-import SimpleVerticalBarChart from '#rscz/SimpleVerticalBarChart';
 import DonutChart from '#rscz/DonutChart';
-import ParallelCoordinates from '#rscz/ParallelCoordinates';
 
 import { hazardTypesList } from '#utils/domain';
 import { groupList, sum } from '#utils/common';
@@ -27,22 +25,11 @@ const defaultProps = {
     className: undefined,
 };
 
-const margins = {
-    top: 30,
-    right: 30,
-    bottom: 20,
-    left: 20,
-};
-
 const emptyList = [];
-const barChartValueSelector = d => d.value;
-const barChartLabelSelector = d => d.label;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 const donutChartLabelModifier = (label, value) => `<div>${label}</div><div>Rs.${value}</div>`;
 const donutChartColorSelector = d => d.color;
-const parallelLabelSelector = d => d.label;
-const parallelColorSelector = d => d.color;
 
 
 const mapStateToProps = state => ({
@@ -74,85 +61,22 @@ class Visualizations extends React.PureComponent {
         })).filter(({ value }) => value > 0);
     });
 
-    // NOTE: should have common util
-    getHazardLossType = memoize((lossAndDamageList) => {
-        const { hazardTypes } = this.props;
-        return groupList(
-            lossAndDamageList.filter(v => (
-                isDefined(v.loss) && (
-                    isDefined(v.loss.peopleDeathCount)
-                    || isDefined(v.loss.estimatedLoss)
-                )
-            )),
-            incident => incident.hazard,
-        ).map(({ key, value }) => ({
-            // FIXME: potentially unsafe
-            label: hazardTypes[key].title,
-            color: hazardTypes[key].color,
-            people: sum(value.map(val => val.loss.peopleDeathCount).filter(isDefined)),
-            'estimated loss': sum(value.map(val => val.loss.estimatedLoss).filter(isDefined)),
-        })).filter(({ people, 'estimated loss': estimatedLoss }) => people > 0 || estimatedLoss > 0);
-    });
-
-    getLossTypeCount = memoize((lossAndDamageList) => {
-        const losses = lossAndDamageList
-            .map(item => item.loss)
-            .filter(isDefined);
-
-        if (losses.length === 0) {
-            return [];
-        }
-
-        const labelMap = {
-            peopleDeathCount: 'People Death Count',
-            livestockDestroyedCount: 'Livestock Destroyed Count',
-            infrastructureDestroyedCount: 'Infrastructure Destroyed Count',
-        };
-
-        const people = sum(losses.map(loss => loss.peopleDeathCount).filter(isDefined));
-        const livestock = sum(losses.map(loss => loss.liveStockDestroyedCount).filter(isDefined));
-        const infra = sum(losses.map(loss => loss.infrastructureDestroyedCount).filter(isDefined));
-
-        return [
-            { label: 'People death', value: people },
-            { label: 'Livestock death', value: livestock },
-            { label: 'Infrastructure destroyed', value: infra },
-        ].filter(({ value }) => value > 0);
-    });
-
     render() {
         const {
             className,
             lossAndDamageList = emptyList,
         } = this.props;
 
-        const countData = this.getLossTypeCount(lossAndDamageList);
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
-        const hazardLossType = this.getHazardLossType(lossAndDamageList);
         const filteredHazardTypesList = this.getHazardTypes(lossAndDamageList);
 
         return (
             <React.Fragment>
                 <div className={styles.visualizationContainer}>
-                    <div className={styles.parallelContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Hazard Death Count
-                            </h4>
-                        </header>
-                        <ParallelCoordinates
-                            data={hazardLossType}
-                            className={styles.chart}
-                            ignoreProperties={['label', 'color']}
-                            labelSelector={parallelLabelSelector}
-                            colorSelector={parallelColorSelector}
-                            margins={margins}
-                        />
-                    </div>
                     <div className={styles.donutContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                    Estimated Monetary Loss
+                                Estimated Monetary Loss by Hazard
                             </h4>
                         </header>
                         <DonutChart

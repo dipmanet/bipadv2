@@ -90,7 +90,7 @@ export default class TabularView extends React.PureComponent {
             },
             {
                 key: 'estimatedLoss',
-                value: { title: 'Total estimated loss' },
+                value: { title: 'Total estimated loss (NPR)' },
 
                 comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
                 transformer: getEstimatedLoss,
