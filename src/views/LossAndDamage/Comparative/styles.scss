@@ -34,8 +34,6 @@
     }
 
     .comparision-container {
-        display: flex;
-        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
@@ -51,7 +49,7 @@
         .map-container {
             display: flex;
             flex-shrink: 0;
-            height: 320px;
+            height: 360px;
 
             .map-1 {
                 flex-basis: 50%;
@@ -67,16 +65,14 @@
         }
 
         .visualizations {
-            flex-grow: 1;
-
             .aggregated-stats {
                 display: flex;
-                flex-shrink: 0;
 
                 .aggregated-stat {
                     display: flex;
                     flex-basis: 50%;
                     flex-wrap: wrap;
+                    padding: var(--spacing-large);
 
                     .stat-metric {
                         padding: $spacing-large;
@@ -86,7 +82,6 @@
 
             .other-visualizations {
                 display: flex;
-                flex-grow: 1;
 
                 .region1-container {
                     flex-basis: 50%;

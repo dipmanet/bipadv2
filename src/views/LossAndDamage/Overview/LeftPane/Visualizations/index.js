@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    _cs,
+} from '@togglecorp/fujs';
 
 import Numeral from '#rscv/Numeral';
 import HorizontalBar from '#rscz/HorizontalBar';
@@ -30,8 +33,12 @@ const defaultProps = {
 
 const emptyList = [];
 
-const chartColorScheme = [
-    '#a6cee3',
+const peopleDeathChartColorScheme = [
+    '#e53935',
+];
+
+const estimatedLossChartColorScheme = [
+    '#ffefc3',
 ];
 
 const estimatedLossValueSelector = d => d.estimatedLoss;
@@ -60,6 +67,13 @@ const donutChartColorSelector = d => d.color;
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
+
+const barChartMargins = {
+    left: 48,
+    top: 10,
+    right: 10,
+    bottom: 48,
+};
 
 
 class Visualizations extends React.PureComponent {
@@ -108,64 +122,62 @@ class Visualizations extends React.PureComponent {
         const lossSummary = this.getLossSummary(lossAndDamageList);
 
         return (
-            <React.Fragment>
-                <div className={styles.visualizationContainer}>
-                    <div className={styles.parallelContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                People death count
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={deathCountLabelSelector}
-                            valueSelector={deathCountValueSelector}
-                            colorScheme={chartColorScheme}
-                            tiltLabels
-                        />
-                    </div>
-                    <div className={styles.parallelContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={estimatedLossLabelSelector}
-                            valueSelector={estimatedLossValueSelector}
-                            valueLabelFormat={estimatedLossValueLabelSelector}
-                            colorScheme={chartColorScheme}
-                            tiltLabels
-                        />
-                    </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss by Hazard
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardLossEstimate}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={donutChartLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                        />
-                    </div>
+            <div className={_cs(className, styles.visualizationsContainer)}>
+                <div className={styles.barChartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            People death count
+                        </h4>
+                    </header>
+                    <HorizontalBar
+                        className={styles.chart}
+                        data={lossSummary}
+                        labelSelector={deathCountLabelSelector}
+                        valueSelector={deathCountValueSelector}
+                        colorScheme={peopleDeathChartColorScheme}
+                        tiltLabels
+                        margins={barChartMargins}
+                    />
                 </div>
-                <div className={styles.legendContainer}>
+                <div className={styles.barChartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss
+                        </h4>
+                    </header>
+                    <HorizontalBar
+                        className={styles.chart}
+                        data={lossSummary}
+                        labelSelector={estimatedLossLabelSelector}
+                        valueSelector={estimatedLossValueSelector}
+                        valueLabelFormat={estimatedLossValueLabelSelector}
+                        colorScheme={estimatedLossChartColorScheme}
+                        tiltLabels
+                        margins={barChartMargins}
+                    />
+                </div>
+                <div className={styles.donutContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss by Hazard
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.4}
+                        className={styles.chart}
+                        data={hazardLossEstimate}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        labelModifier={donutChartLabelModifier}
+                        colorSelector={donutChartColorSelector}
+                    />
                     <HazardsLegend
                         filteredHazardTypes={filteredHazardTypesList}
                         className={styles.legend}
                         itemClassName={styles.legendItem}
                     />
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 }

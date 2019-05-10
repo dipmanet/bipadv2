@@ -20,26 +20,27 @@
         padding: $spacing-medium;
     }
 
-    .map {
-        flex-shrink: 0;
-        height: 400px;
-    }
-
-    .aggregated-stat {
-        display: flex;
-        flex-wrap: wrap;
-        flex-shrink: 0;
+    .content {
         flex-grow: 1;
+        overflow: auto;
 
-        .stat-metric {
-            padding: $spacing-large;
+        .map {
+            height: 480px;
+        }
+
+        .aggregated-stat {
+            display: flex;
+            flex-wrap: wrap;
+
+            .stat-metric {
+                padding: $spacing-large;
+            }
+        }
+
+        .visualizations {
         }
     }
 
-
-    .visualizations {
-        flex-grow: 1;
-    }
 
     .pending-message {
         display: flex;

@@ -238,31 +238,33 @@ class DisasterProfile extends React.PureComponent {
                             // disabled={pending}
                         />
                     </div>
-                    <Map
-                        className={styles.map}
-                        mapStyle={mapStyle}
-                        fitBoundsDuration={200}
-                        minZoom={5}
-                        logoPosition="bottom-left"
+                    <div className={styles.content}>
+                        <Map
+                            className={styles.map}
+                            mapStyle={mapStyle}
+                            fitBoundsDuration={200}
+                            minZoom={5}
+                            logoPosition="bottom-left"
 
-                        showScaleControl
-                        scaleControlPosition="bottom-right"
+                            showScaleControl
+                            scaleControlPosition="bottom-right"
 
-                        showNavControl
-                        navControlPosition="bottom-right"
-                    >
-                        <CommonMap
-                            region={region}
+                            showNavControl
+                            navControlPosition="bottom-right"
+                        >
+                            <CommonMap
+                                region={region}
+                            />
+                        </Map>
+                        <AggregatedStat
+                            className={styles.aggregatedStat}
+                            data={dataset.aggregatedStat}
                         />
-                    </Map>
-                    <AggregatedStat
-                        className={styles.aggregatedStat}
-                        data={dataset.aggregatedStat}
-                    />
-                    <div className={styles.visualizations}>
-                        <Visualizations
-                            lossAndDamageList={filteredIncidents}
-                        />
+                        <div className={styles.visualizations}>
+                            <Visualizations
+                                lossAndDamageList={filteredIncidents}
+                            />
+                        </div>
                     </div>
                 </div>
             </React.Fragment>

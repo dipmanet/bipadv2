@@ -6,6 +6,8 @@ $width-tabular-extended-left-pane: calc(100vw - var(--width-navbar-right) - var(
 $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
 
 .left-pane {
+    overflow: auto;
+
     .overview-container {
         display: flex;
         flex-direction: column;
@@ -27,6 +29,7 @@ $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2)
                 flex-direction: column;
                 flex-grow: 1;
                 width: $width-left-pane;
+                overflow: auto;
 
                 >.header {
                     display: flex;
@@ -53,9 +56,8 @@ $height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2)
                 }
 
                 .content {
-                    display: flex;
-                    flex-direction: column;
                     flex-grow: 1;
+                    overflow: auto;
                 }
             }
 

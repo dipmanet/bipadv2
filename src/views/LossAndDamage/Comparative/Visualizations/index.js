@@ -29,9 +29,20 @@ const defaultProps = {
 
 const emptyList = [];
 
-const chartColorScheme = [
-    '#a6cee3',
+const peopleDeathChartColorScheme = [
+    '#e53935',
 ];
+
+const estimatedLossChartColorScheme = [
+    '#ffefc3',
+];
+
+const barChartMargins = {
+    left: 48,
+    top: 10,
+    right: 10,
+    bottom: 48,
+};
 
 const estimatedLossValueSelector = d => d.estimatedLoss;
 const estimatedLossValueLabelSelector = (d) => {
@@ -109,7 +120,7 @@ class Visualizations extends React.PureComponent {
         return (
             <React.Fragment>
                 <div className={styles.visualizationContainer}>
-                    <div className={styles.parallelContainer}>
+                    <div className={styles.barChartContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
                                 People death count
@@ -120,15 +131,15 @@ class Visualizations extends React.PureComponent {
                             data={lossSummary}
                             labelSelector={deathCountLabelSelector}
                             valueSelector={deathCountValueSelector}
-                            colorScheme={chartColorScheme}
+                            colorScheme={peopleDeathChartColorScheme}
                             tiltLabels
+                            margins={barChartMargins}
                         />
                     </div>
-                    <div className={styles.parallelContainer}>
+                    <div className={styles.barChartContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
                                 Estimated Monetary Loss
-                                Estimated Monetary Loss by Hazard
                             </h4>
                         </header>
                         <HorizontalBar
@@ -137,33 +148,34 @@ class Visualizations extends React.PureComponent {
                             labelSelector={estimatedLossLabelSelector}
                             valueSelector={estimatedLossValueSelector}
                             valueLabelFormat={estimatedLossValueLabelSelector}
-                            colorScheme={chartColorScheme}
+                            colorScheme={estimatedLossChartColorScheme}
+                            margins={barChartMargins}
                             tiltLabels
                         />
                     </div>
                     <div className={styles.donutContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                    Estimated Monetary Loss
+                                Estimated Monetary Loss by Hazard
                             </h4>
                         </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardLossEstimate}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={donutChartLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                        />
+                        <div className={styles.content}>
+                            <DonutChart
+                                sideLengthRatio={0.4}
+                                className={styles.chart}
+                                data={hazardLossEstimate}
+                                labelSelector={donutChartLabelSelector}
+                                valueSelector={donutChartValueSelector}
+                                labelModifier={donutChartLabelModifier}
+                                colorSelector={donutChartColorSelector}
+                            />
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypesList}
+                                className={styles.legend}
+                                itemClassName={styles.legendItem}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={styles.legendContainer}>
-                    <HazardsLegend
-                        filteredHazardTypes={filteredHazardTypesList}
-                        className={styles.legend}
-                        itemClassName={styles.legendItem}
-                    />
                 </div>
             </React.Fragment>
         );
