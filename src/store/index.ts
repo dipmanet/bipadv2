@@ -9,6 +9,7 @@ import reducer from './reducer';
 
 const actionsToSkipLogging: string[] = [
     // Add action to skip logging
+    'auth/SET_AUTH',
 ];
 
 const middleware = [
