@@ -23,6 +23,7 @@ const defaultProps = {
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
+const barChartColorSelector = d => d.color;
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
 const donutChartColorSelector = d => d.color;
@@ -32,21 +33,6 @@ const colors = scaleOrdinal().range(schemeAccent);
 const itemSelector = d => d.label;
 const legendColorSelector = d => d.color;
 const legendLabelSelector = d => d.label;
-
-const chartColorScheme = [
-    '#a6cee3',
-    '#1f78b4',
-    '#b2df8a',
-    '#33a02c',
-    '#fb9a99',
-    '#e31a1c',
-    '#fdbf6f',
-    '#ff7f00',
-    '#cab2d6',
-    '#6a3d9a',
-    '#ffff99',
-    '#b15928',
-];
 
 export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
@@ -66,7 +52,7 @@ export default class Visualizations extends React.PureComponent {
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
             }
-        ));
+        )).sort((a, b) => (a.value - b.value));
     })
 
     getSeveritySummary = memoize((incidentList) => {
@@ -117,6 +103,7 @@ export default class Visualizations extends React.PureComponent {
                         data={hazardSummary}
                         labelSelector={barChartLabelSelector}
                         valueSelector={barChartValueSelector}
+                        colorSelector={barChartColorSelector}
                     />
                 </div>
                 {/* <div className={styles.eventStatisticsChart}>
