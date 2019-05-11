@@ -53,7 +53,7 @@ export default class Visualization extends React.PureComponent {
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
             }
-        ));
+        )).sort((a, b) => (a.value - b.value));
     })
 
     getEventSummary = memoize((alertList) => {
@@ -62,7 +62,12 @@ export default class Visualization extends React.PureComponent {
             alert => alert.event.title,
         );
 
-        return freqCount.map(event => ({ label: event.key, value: event.value.length }));
+        return freqCount.map(event => (
+            {
+                label: event.key,
+                value: event.value.length,
+            }
+        )).sort((a, b) => (a.value - b.value));
     });
 
     render() {

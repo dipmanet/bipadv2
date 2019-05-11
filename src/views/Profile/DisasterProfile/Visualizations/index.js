@@ -89,6 +89,7 @@ class Visualizations extends React.PureComponent {
     static defaultProps = defaultProps
 
     getHazardPeopleDeathCount = memoize((lossAndDamageList) => {
+        // FIXME: use group list
         const { hazardTypes } = this.props;
         const hazardDeaths = lossAndDamageList
             .filter(item => (item.loss && item.hazard))
@@ -101,6 +102,7 @@ class Visualizations extends React.PureComponent {
                 };
                 return out;
             }, {});
+
         return mapToList(
             hazardDeaths,
             (value, key) => ({
@@ -108,7 +110,7 @@ class Visualizations extends React.PureComponent {
                 color: hazardTypes[key].color,
                 value,
             }),
-        ).sort((a, b) => b.value - a.value);
+        ).filter(a => a.value > 0).sort((a, b) => a.value - b.value);
     })
 
     getHazardOccurrence = memoize((lossAndDamageList) => {
@@ -125,7 +127,7 @@ class Visualizations extends React.PureComponent {
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
             }
-        )).sort((a, b) => b.value - a.value).slice(0, 5);
+        )).sort((a, b) => a.value - b.value).slice(0, 5);
     })
 
     getHazardTypes = memoize((lossAndDamageList) => {
