@@ -1,5 +1,29 @@
 .metadata-list {
+    display: flex;
+    flex-direction: column;
+
+    >.header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .heading {
+            padding: var(--spacing-medium);
+            color: var(--color-accent);
+            font-size: var(--font-size-large);
+        }
+
+        .select-input {
+            flex-grow: 1;
+            margin: var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+    }
+
     .metadata-item {
+        flex-grow: 1;
+        overflow: auto;
+
         .heading {
             margin-top: var(-spacing-small) var(--spacing-medium);
             padding: var(--spacing-medium);
