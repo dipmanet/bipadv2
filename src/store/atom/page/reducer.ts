@@ -192,6 +192,14 @@ export const setLossAndDamageFiltersAction = (
     pristine,
 });
 
+export const setLossAndDamageListAction = (
+    { lossAndDamageList }: { lossAndDamageList: Type.LossAndDamage[] },
+) => ({
+    type: Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST,
+    lossAndDamageList,
+});
+
+
 // projects profile action creator
 export const setProjectsProfileFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.ProjectsProfileFilters,
@@ -683,6 +691,24 @@ export const setLossAndDamageFilters = (
 
     return newState;
 };
+
+export const setLossAndDamageList = (
+    state: Type.PageState,
+    action: Type.SetLossAndDamageList,
+) => {
+    const {
+        lossAndDamageList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.lossAndDamagePage.lossAndDamageList = lossAndDamageList;
+    });
+
+    return newState;
+};
+
+
 // projects profile page
 export const setProjectsProfileFilters = (
     state: Type.PageState,
@@ -803,6 +829,8 @@ export default function routeReducer(
             return setRealTimePollutionList(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
+        case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:
+            return setLossAndDamageList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_FILTERS:
             return setRealTimeFilters(state, action);
         case Type.PageType.DP__SET_EVENTS:

@@ -13,7 +13,6 @@ import {
     setLossAndDamageFiltersAction,
 } from '#actionCreators';
 import {
-    hazardTypeListSelector,
     lossAndDamageFiltersSelector,
 } from '#selectors';
 
@@ -165,6 +164,7 @@ class LossAndDamageFilter extends React.PureComponent {
                                 label="Metric"
                                 faramElementName="metric"
                                 options={metricOptions}
+                                hideClearButton
                             />
                             <DateInput
                                 className={styles.startDateInput}

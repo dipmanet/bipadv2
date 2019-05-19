@@ -18,6 +18,7 @@ import {
 } from '#request';
 
 import {
+    lossAndDamageListSelector,
     lossAndDamageFilterValuesSelector,
     regionsSelector,
     provincesSelector,
@@ -27,6 +28,10 @@ import {
     regionLevelSelector,
     hazardTypesSelector,
 } from '#selectors';
+
+import {
+    setLossAndDamageListAction,
+} from '#actionCreators';
 
 import Loading from '#components/Loading';
 
@@ -69,6 +74,11 @@ const mapStateToProps = (state, props) => ({
     wards: wardsSelector(state),
     regionLevel: regionLevelSelector(state, props),
     hazardTypes: hazardTypesSelector(state),
+    lossAndDamageList: lossAndDamageListSelector(state, props),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setLossAndDamageList: params => dispatch(setLossAndDamageListAction(params)),
 });
 
 const isValidIncident = (
@@ -100,6 +110,11 @@ const requests = {
             lnd: true,
         },
         onMount: true,
+        onSuccess: ({ response, props: { setLossAndDamageList } }) => {
+            const { results: lossAndDamageList = [] } = response;
+
+            setLossAndDamageList({ lossAndDamageList });
+        },
         extras: {
             schemaName: 'incidentWithPeopleResponse',
         },
@@ -140,9 +155,6 @@ class LossAndDamage extends React.PureComponent {
                         requests: {
                             lossAndDamageRequest: {
                                 pending,
-                                response: {
-                                    results: lossAndDamageList = emptyList,
-                                } = emptyObject,
                             },
                         },
                         regions,
@@ -153,6 +165,7 @@ class LossAndDamage extends React.PureComponent {
                         regionLevel,
                         filters,
                         hazardTypes,
+                        lossAndDamageList,
                     } = this.props;
 
                     const { metric } = filters;
@@ -182,9 +195,6 @@ class LossAndDamage extends React.PureComponent {
                         requests: {
                             lossAndDamageRequest: {
                                 pending: lossAndDamageRequestPending,
-                                response: {
-                                    results: lossAndDamageList = emptyList,
-                                } = emptyObject,
                             },
                             eventsRequest: {
                                 pending: eventsRequestPending,
@@ -201,6 +211,7 @@ class LossAndDamage extends React.PureComponent {
                         regionLevel,
                         filters,
                         hazardTypes,
+                        lossAndDamageList,
                     } = this.props;
 
                     const { metric } = filters;
@@ -231,15 +242,13 @@ class LossAndDamage extends React.PureComponent {
                         requests: {
                             lossAndDamageRequest: {
                                 pending,
-                                response: {
-                                    results: lossAndDamageList = emptyList,
-                                } = emptyObject,
                             },
                         },
                         regions,
                         regionLevel,
                         filters,
                         hazardTypes,
+                        lossAndDamageList,
                     } = this.props;
 
                     /*
@@ -358,7 +367,7 @@ class LossAndDamage extends React.PureComponent {
 }
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator(),
     createRequestClient(requests),
 )(LossAndDamage);

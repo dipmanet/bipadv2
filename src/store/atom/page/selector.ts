@@ -314,6 +314,16 @@ export const lossAndDamageFiltersSelector = createSelector(
     },
 );
 
+
+export const lossAndDamageListSelector = createSelector(
+    lossAndDamagePageSelector,
+    (lossAndDamagePage) => {
+        const { lossAndDamageList } = lossAndDamagePage;
+
+        return lossAndDamageList || emptyList;
+    },
+);
+
 export const lossAndDamageFilterValuesSelector = createSelector(
     lossAndDamageFiltersSelector,
     ({ faramValues }) => faramValues,
