@@ -25,6 +25,7 @@ import {
     districtsMapSelector,
     municipalitiesMapSelector,
     wardsMapSelector,
+    authStateSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -81,6 +82,7 @@ const mapStateToProps = (state, props) => ({
     districtsMap: districtsMapSelector(state),
     municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
+    authState: authStateSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -228,6 +230,9 @@ class Response extends React.PureComponent {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            authState: {
+                authenticated,
+            },
         } = this.props;
 
         const {
@@ -267,9 +272,11 @@ class Response extends React.PureComponent {
                                         municipalitiesMap={municipalitiesMap}
                                         onExpandChange={this.handleLeftPaneExpandChange}
                                     />
-                                    <StockPileFilter
-                                        setStockPileFilter={this.setStockPileFilter}
-                                    />
+                                    { authenticated && (
+                                        <StockPileFilter
+                                            setStockPileFilter={this.setStockPileFilter}
+                                        />
+                                    ) }
                                 </React.Fragment>
                             )}
                             rightContentClassName={styles.resourceListContainer}
