@@ -139,6 +139,7 @@ class LossAndDamage extends React.PureComponent {
         this.state = {
             isOverviewRightPaneExpanded: true,
             isTimelineRightPaneExpanded: true,
+            isComparativeRightPaneExpanded: true,
         };
 
         this.tabs = {
@@ -261,6 +262,7 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         regionLevel,
                         minDate: this.getMinDate(modifiedList),
+                        onRightPaneExpandChange: this.handleComparativeRightPaneExpandChange,
                     };
                 },
             },
@@ -312,10 +314,15 @@ class LossAndDamage extends React.PureComponent {
         this.setState({ isTimelineRightPaneExpanded: isExpanded });
     }
 
+    handleComparativeRightPaneExpandChange = (isExpanded) => {
+        this.setState({ isComparativeRightPaneExpanded: isExpanded });
+    }
+
     handleHashChange = () => {
         this.setState({
             isOverviewRightPaneExpanded: true,
             isTimelineRightPaneExpanded: true,
+            isComparativeRightPaneExpanded: true,
         });
     }
 
@@ -334,12 +341,15 @@ class LossAndDamage extends React.PureComponent {
         const {
             isOverviewRightPaneExpanded,
             isTimelineRightPaneExpanded,
+            isComparativeRightPaneExpanded,
         } = this.state;
 
         if (currentPage === 'overview') {
             rightPaneExpanded = isOverviewRightPaneExpanded;
         } else if (currentPage === 'timeline') {
             rightPaneExpanded = isTimelineRightPaneExpanded;
+        } else if (currentPage === 'comparative') {
+            rightPaneExpanded = isComparativeRightPaneExpanded;
         }
 
         return (
@@ -349,7 +359,7 @@ class LossAndDamage extends React.PureComponent {
                     className={_cs(
                         styles.tabs,
                         rightPaneExpanded && styles.rightPaneExpanded,
-                        currentPage === 'comparative' && styles.comparative,
+                        // currentPage === 'comparative' && styles.comparative,
                     )}
                     tabs={this.tabs}
                     useHash

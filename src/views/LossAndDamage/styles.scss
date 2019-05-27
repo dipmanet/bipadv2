@@ -13,10 +13,6 @@
         right: calc(var(--width-right-panel) + var(--spacing-medium) * 2 + var(--width-navbar-right));
     }
 
-    &.comparative {
-        right: calc(var(--spacing-medium) + var(--width-navbar-right));
-    }
-
     a {
         text-decoration: none;
     }
