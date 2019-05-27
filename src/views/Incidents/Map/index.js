@@ -29,7 +29,7 @@ import {
 
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-    hazards: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    hazards: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     leftPaneExpanded: PropTypes.bool.isRequired,
     rightPaneExpanded: PropTypes.bool.isRequired,
     recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
