@@ -81,35 +81,6 @@ export default class About extends React.PureComponent {
                     system coming from local level. The system is committed
                     for the same.
                 </p>
-                <h3>
-                    National Emergency Operation Centre (NEOC)
-                </h3>
-                <p>
-                    The National Emergency Operations Centre (NEOC) was opened
-                    on the 17 December 2010, by the Minister of Home Affairs
-                    and is operated under the Planning and Special Services
-                    Division. It has been  running by a nine-member
-                    personnel team under the leadership of under-secretary.
-                    The NEOC is a coordination and communication point for
-                    disaster information across Nepal, including government
-                    agencies and other response and recovery stakeholders
-                    such as Nepal Red Cross Society, UN agencies, INGOS
-                    and NGOs. The {'NEOC\'s'} working time is round the clock.
-                </p>
-                <h4>
-                    Major Functions of NEOC
-                </h4>
-                <ul>
-                    <li>Provide a central coordination point in response to disasters</li>
-                    <li>Provide a central coordination point for humanitarian assistance</li>
-                    <li>To enhance coordination among all responding agencies</li>
-                    <li>To collect and analyze information on the disaster</li>
-                    <li>Disseminate information on disasters to stakeholders</li>
-                    <li>
-                        Promote preparedness activities to central and local
-                        levels of government
-                    </li>
-                </ul>
             </div>
         );
     }
