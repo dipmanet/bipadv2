@@ -109,7 +109,7 @@ export default class Visualizations extends React.PureComponent {
                 {/* <div className={styles.eventStatisticsChart}>
                     <header className={styles.header}>
                     <h4 className={styles.heading}>
-                    Event Statistics
+                    Major Event Statistics
                     </h4>
                     </header>
                     <SimpleHorizontalBarChart
