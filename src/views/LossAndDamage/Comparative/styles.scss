@@ -100,7 +100,9 @@ $width-extended-left-pane: calc(100vw - var(--width-navbar-right) - var(--spacin
     }
 
     &.extended {
-        width: $width-extended-left-pane;
+        .comparative {
+            width: $width-extended-left-pane;
+        }
     }
 }
 

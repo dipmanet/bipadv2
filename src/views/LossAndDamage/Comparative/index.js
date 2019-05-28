@@ -82,6 +82,7 @@ class Comparative extends React.PureComponent {
         this.state = {
             faramValues: {},
             faramErrors: {},
+            rightPaneExpanded: true,
             // comparisionStarted: false,
         };
 

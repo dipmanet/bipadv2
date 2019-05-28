@@ -33,18 +33,12 @@
         @extend %visualization-container;
 
         .content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
             .chart {
-                flex-basis: 50%;
-                flex-shrink: 0;
+                height: 320px;
             }
 
             .legend {
                 display: flex;
-                flex-basis: 50%;
                 flex-grow: 1;
                 flex-wrap: wrap;
 
