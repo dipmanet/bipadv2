@@ -35,25 +35,7 @@ const estimatedLossChartColorScheme = [
     '#ffefc3',
 ];
 
-const barChartMargins = {
-    left: 48,
-    top: 10,
-    right: 10,
-    bottom: 48,
-};
-
-const hazardDeathsChartMargins = {
-    top: 10,
-    right: 10,
-    bottom: 48,
-    left: 108,
-};
-
 const emptyList = [];
-
-const chartColorScheme = [
-    '#a6cee3',
-];
 
 const estimatedLossValueSelector = d => d.estimatedLoss;
 const estimatedLossValueLabelSelector = (d) => {
@@ -72,46 +54,30 @@ const estimatedLossLabelSelector = d => d.label;
 const deathCountValueSelector = d => d.peopleDeathCount;
 const deathCountLabelSelector = d => d.label;
 
-
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
 const barChartColorSelector = d => d.color;
+
 const donutChartValueSelector = d => d.value;
 const donutChartLabelSelector = d => d.label;
-const donutChartLabelModifier = (label, value) => `<div>${label}</div><div>Rs.${value}</div>`;
 const donutChartColorSelector = d => d.color;
+
+const estimatedMonetaryLossLabelModifier = (label, value) => (
+    `<div>${label}</div>`
+    + `<div>${Numeral.renderText({ prefix: 'Rs. ', value, precision: 0 })}</div>`
+);
+const deathsLabelModifier = (label, value) => (
+    `<div>${label}</div>`
+    + `<div>${value}</div>`
+);
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
+
 class Visualizations extends React.PureComponent {
     static propTypes = propTypes
     static defaultProps = defaultProps
-
-    getHazardPeopleDeathCount = memoize((lossAndDamageList) => {
-        // FIXME: use group list
-        const { hazardTypes } = this.props;
-        const hazardDeaths = lossAndDamageList
-            .filter(item => (item.loss && item.hazard))
-            .reduce((acc, { hazard, loss }) => {
-                const { peopleDeathCount = 0 } = loss;
-                const out = {
-                    ...acc,
-                    [hazard]: acc[hazard] ? acc[hazard] + peopleDeathCount :
-                        peopleDeathCount,
-                };
-                return out;
-            }, {});
-
-        return mapToList(
-            hazardDeaths,
-            (value, key) => ({
-                label: hazardTypes[key].title,
-                color: hazardTypes[key].color,
-                value,
-            }),
-        ).filter(a => a.value > 0).sort((a, b) => a.value - b.value);
-    })
 
     getHazardOccurrence = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
@@ -135,6 +101,24 @@ class Visualizations extends React.PureComponent {
         return hazardTypesList(lossAndDamageList, hazardTypes);
     })
 
+    getHazardPeopleDeathCount = memoize((lossAndDamageList) => {
+        const { hazardTypes } = this.props;
+        return groupList(
+            lossAndDamageList.filter(v => (
+                isDefined(v.loss) && isDefined(v.loss.peopleDeathCount)
+            )),
+            loss => loss.hazard,
+        )
+            .map(({ key, value }) => ({
+                // FIXME: potentially unsafe
+                label: hazardTypes[key].title,
+                color: hazardTypes[key].color,
+                value: sum(value.map(val => val.loss.peopleDeathCount)),
+            }))
+            .filter(({ value }) => value > 0)
+            .sort((a, b) => a.value - b.value);
+    })
+
     getHazardLossEstimation = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
         return groupList(
@@ -142,12 +126,15 @@ class Visualizations extends React.PureComponent {
                 isDefined(v.loss) && isDefined(v.loss.estimatedLoss)
             )),
             loss => loss.hazard,
-        ).map(({ key, value }) => ({
-            // FIXME: potentially unsafe
-            label: hazardTypes[key].title,
-            color: hazardTypes[key].color,
-            value: sum(value.map(val => val.loss.estimatedLoss)),
-        })).filter(({ value }) => value > 0);
+        )
+            .map(({ key, value }) => ({
+                // FIXME: potentially unsafe
+                label: hazardTypes[key].title,
+                color: hazardTypes[key].color,
+                value: sum(value.map(val => val.loss.estimatedLoss)),
+            }))
+            .filter(({ value }) => value > 0)
+            .sort((a, b) => a.value - b.value);
     });
 
     getLossSummary = memoize(lossAndDamageList => (
@@ -207,6 +194,22 @@ class Visualizations extends React.PureComponent {
                             tiltLabels
                         />
                     </div>
+                    <div className={styles.hazardDeathChartContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Total number of deaths per hazards
+                            </h4>
+                        </header>
+                        <DonutChart
+                            sideLengthRatio={0.4}
+                            className={styles.chart}
+                            data={hazardDeaths}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            labelModifier={deathsLabelModifier}
+                            colorSelector={donutChartColorSelector}
+                        />
+                    </div>
                     <div className={styles.donutContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -219,23 +222,8 @@ class Visualizations extends React.PureComponent {
                             data={hazardLossEstimate}
                             labelSelector={donutChartLabelSelector}
                             valueSelector={donutChartValueSelector}
-                            labelModifier={donutChartLabelModifier}
+                            labelModifier={estimatedMonetaryLossLabelModifier}
                             colorSelector={donutChartColorSelector}
-                        />
-                    </div>
-                    <div className={styles.hazardDeathChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Total number of deaths per hazards
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={hazardDeaths}
-                            labelSelector={barChartLabelSelector}
-                            valueSelector={barChartValueSelector}
-                            colorSelector={barChartColorSelector}
-                            margins={hazardDeathsChartMargins}
                         />
                     </div>
                     <div className={styles.hazardsBarContainer}>

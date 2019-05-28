@@ -184,7 +184,7 @@ class LossAndDamage extends React.PureComponent {
                         regions,
                         wards,
                         onRightPaneExpandChange: this.handleOverviewRightPaneExpandChange,
-                        minDate: this.getMinDate(lossAndDamageList),
+                        minDate: this.getMinDate(modifiedList),
                     };
                 },
             },
@@ -231,7 +231,7 @@ class LossAndDamage extends React.PureComponent {
                         wards,
                         eventList,
                         onRightPaneExpandChange: this.handleTimelineRightPaneExpandChange,
-                        minDate: this.getMinDate(lossAndDamageList),
+                        minDate: this.getMinDate(modifiedList),
                     };
                 },
             },
@@ -251,18 +251,16 @@ class LossAndDamage extends React.PureComponent {
                         lossAndDamageList,
                     } = this.props;
 
-                    /*
                     const modifiedList = this.filterValues(
                         filters, regions, hazardTypes, lossAndDamageList,
                     );
-                    */
 
                     return {
                         pending,
-                        lossAndDamageList,
+                        lossAndDamageList: modifiedList,
                         regions,
                         regionLevel,
-                        minDate: this.getMinDate(lossAndDamageList),
+                        minDate: this.getMinDate(modifiedList),
                     };
                 },
             },
