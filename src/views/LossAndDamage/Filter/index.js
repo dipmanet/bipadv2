@@ -111,6 +111,8 @@ class LossAndDamageFilter extends React.PureComponent {
             onMetricChange,
             metricOptions,
             isTimeline,
+            disabledRegionSelect,
+            disabledMetricSelect,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -153,11 +155,11 @@ class LossAndDamageFilter extends React.PureComponent {
                             schema={LossAndDamageFilter.schema}
                             value={faramValues}
                             error={faramErrors}
-                            disabled={false}
                         >
                             <RegionSelectInput
                                 className={styles.regionSelectionInput}
                                 faramElementName="region"
+                                disabled={disabledRegionSelect}
                             />
                             <SelectInput
                                 className={styles.metricSelectionInput}
@@ -165,6 +167,7 @@ class LossAndDamageFilter extends React.PureComponent {
                                 faramElementName="metric"
                                 options={metricOptions}
                                 hideClearButton
+                                disabled={disabledMetricSelect}
                             />
                             <DateInput
                                 className={styles.startDateInput}

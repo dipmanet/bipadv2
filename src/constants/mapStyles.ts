@@ -265,15 +265,17 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#A9E4FE',
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#7482CF',
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#9C27B0',
-                '#A9E4FE',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
             ],
             'text-opacity': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
-                1,
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
+                0.2,
             ],
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -303,15 +305,17 @@ export default {
         paint: {
             'text-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#A2FFC8',
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#5770FE',
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#C51162',
-                '#A2FFC8',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
             ],
             'text-opacity': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
-                1,
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
+                0.2,
             ],
 
             'text-halo-color': ['case',

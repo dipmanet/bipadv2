@@ -99,7 +99,6 @@ const isValidIncident = (
     }
 };
 
-// FIXME: save this on redux
 const requests = {
     lossAndDamageRequest: {
         url: '/incident/',
@@ -128,7 +127,6 @@ const requests = {
     },
 };
 
-// TODO: filter loss and damage page
 class LossAndDamage extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -252,8 +250,14 @@ class LossAndDamage extends React.PureComponent {
                         lossAndDamageList,
                     } = this.props;
 
+                    // No filter using region in comparative page
+                    const {
+                        region,
+                        ...otherFilters
+                    } = filters;
+
                     const modifiedList = this.filterValues(
-                        filters, regions, hazardTypes, lossAndDamageList,
+                        otherFilters, regions, hazardTypes, lossAndDamageList,
                     );
 
                     return {
