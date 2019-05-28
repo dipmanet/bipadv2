@@ -503,6 +503,7 @@ export default class Timeline extends React.PureComponent {
                                         onChange={this.handleBucketInputChange}
                                         showHintAndError={false}
                                         showLabel={false}
+                                        hideClearButton
                                     />
                                 </div>
                             </div>
