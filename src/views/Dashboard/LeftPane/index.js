@@ -193,6 +193,7 @@ export default class LeftPane extends React.PureComponent {
                                 renderer={AlertItem}
                                 rendererParams={this.getAlertRendererParams}
                                 keySelector={alertKeySelector}
+                                itemHeight={57}
                             />
                         </div>
                         <div className={styles.eventsContainer}>
@@ -208,6 +209,7 @@ export default class LeftPane extends React.PureComponent {
                                 renderer={EventItem}
                                 rendererParams={this.getEventRendererParams}
                                 keySelector={eventKeySelector}
+                                itemHeight={60}
                             />
                         </div>
                     </div>

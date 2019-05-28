@@ -154,8 +154,10 @@ $height-menu: 160px;
 
                 // TODO: should be active
                 &.selected {
-                    background-color: $color-background-selected;
-                    color: $color-accent;
+                    background-color: $color-accent;
+                    color: $color-text-on-accent;
+                    // background-color: $color-background-selected;
+                    // color: $color-accent;
 
                     .icon {
                         opacity: 1;

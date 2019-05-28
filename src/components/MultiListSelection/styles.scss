@@ -12,7 +12,7 @@
         }
 
         .clear-button {
-            padding: $spacing-extra-small;
+            padding: 0;
             color: $color-danger;
             font-size: $font-size-extra-small;
         }
@@ -61,7 +61,9 @@
             }
 
             &.active {
-                background-color: var(--color-accent-light);
+                // background-color: var(--color-accent-light);
+                background-color: var(--color-accent);
+                color: var(--color-text-on-accent);
 
                 .icon {
                     opacity: 1;
@@ -69,13 +71,13 @@
 
                     .svg {
                         path {
-                            fill: $color-accent;
+                            fill: currentColor;
                         }
                     }
                 }
 
                 .title {
-                    color: $color-accent;
+                    color: currentColor;
                 }
             }
         }

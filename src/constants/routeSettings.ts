@@ -70,7 +70,7 @@ const routeSettings: SomeRoute[] = [
     },
     {
         name: 'riskInfo',
-        title: 'Risk Information',
+        title: 'Risk Info',
         path: '/risk-info/',
         load: () => import('../views/RiskInfo'),
         navbar: true,
