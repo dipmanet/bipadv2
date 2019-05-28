@@ -15,8 +15,8 @@ $width-table-container: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
-    overflow-y: auto;
+    max-height: calc(100vh - var(--height-navbar) - var(--spacing-medium) * 2);
+    overflow: auto;
     animation: fade-in $duration-transition-slow ease-in forwards;
 
     .legend {
