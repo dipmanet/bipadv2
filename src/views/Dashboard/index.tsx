@@ -214,18 +214,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
     }
 
-    private getAlertHazardTypesList = memoize((alertList: PageTypes.Alert[]) => {
+    private getAlertHazardTypesList = memoize((
+        alertList: PageTypes.Alert[],
+        eventList: PageTypes.Event[],
+    ) => {
         const { hazardTypes } = this.props;
-        return hazardTypesList(alertList, hazardTypes);
-    });
-
-    private getEventHazardTypesList = memoize((eventList: PageTypes.Event[]) => {
-        const { hazardTypes } = this.props;
-        return hazardTypesList(eventList, hazardTypes)
-            .map(event => ({
-                ...event,
-                icon: '■',
-            }));
+        const items = [...alertList, ...eventList.filter(event => event.hazard)];
+        return hazardTypesList(items, hazardTypes);
     });
 
     private getAlertMap = memoize(alertList =>
@@ -383,8 +378,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        const filteredHazardTypes = this.getAlertHazardTypesList(alertList);
-        const filteredEventTypes = this.getEventHazardTypesList(eventList);
+        const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);
         const pending = alertsPending || eventsPending;
 
         const {
