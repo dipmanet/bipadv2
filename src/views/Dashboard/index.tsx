@@ -254,7 +254,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         ),
     );
 
-    public setPlacementForMapControls = (rightPaneExpanded) => {
+    public setPlacementForMapControls = (rightPaneExpanded: boolean | undefined) => {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {

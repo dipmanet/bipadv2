@@ -50,9 +50,19 @@ const loadingStyle: React.CSSProperties = {
     borderRadius: '3px',
 };
 
+function reloadPage() {
+    window.location.reload(false);
+}
+
 const ErrorInPage = () => (
     <div style={loadingStyle}>
         Some problem occured.
+        <DangerButton
+            transparent
+            onClick={reloadPage}
+        >
+            Reload
+        </DangerButton>
     </div>
 );
 
