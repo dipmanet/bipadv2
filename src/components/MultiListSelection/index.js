@@ -143,8 +143,10 @@ export default class MultiListSelection extends React.PureComponent {
                             className={styles.clearButton}
                             onClick={this.handleClearButtonClick}
                             transparent
-                            iconName={iconNames.close}
-                        />
+                            // iconName={iconNames.close}
+                        >
+                            Clear
+                        </Button>
                     }
                 </div>
                 <ListView
