@@ -125,11 +125,9 @@ export default class LeftPane extends React.PureComponent {
                                         data={lossAndDamageList}
                                         minDate={this.props.minDate}
                                     />
-                                    { !pending && (
-                                        <Visualizations
-                                            lossAndDamageList={lossAndDamageList}
-                                        />
-                                    ) }
+                                    <Visualizations
+                                        lossAndDamageList={lossAndDamageList}
+                                    />
                                 </div>
                             </React.Fragment>
                         }

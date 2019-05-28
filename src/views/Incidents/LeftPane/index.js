@@ -7,7 +7,7 @@ import Button from '#rsca/Button';
 import AccentButton from '#rsca/Button/AccentButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import { calculateCategorizedSeverity } from '#utils/domain';
+import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
 
 import { iconNames } from '#constants';
@@ -133,7 +133,9 @@ class LeftPane extends React.PureComponent {
 
         const incidentList = incidentListNoSeverity.map(incident => ({
             ...incident,
-            severity: calculateCategorizedSeverity(incident.loss),
+            severity: calculateCategorizedSeverity(
+                calculateSeverity(incident.loss, severityScaleFactor),
+            ),
         }));
 
         const Header = this.renderListViewHeader;

@@ -66,11 +66,18 @@ const donutChartLabelSelector = d => d.label;
 const donutChartLabelModifier = (label, value) => `<div>${label}</div><div>Rs.${value}</div>`;
 const donutChartColorSelector = d => d.color;
 
+const estimatedMonetaryLossLabelModifier = (label, value) => (
+    `<div>${label}</div>`
+    + `<div>${Numeral.renderText({ prefix: 'Rs. ', value, precision: 0 })}</div>`
+);
+const deathsLabelModifier = (label, value) => (
+    `<div>${label}</div>`
+    + `<div>${value}</div>`
+);
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
-
 
 class Visualizations extends React.PureComponent {
     static propTypes = propTypes
@@ -81,19 +88,40 @@ class Visualizations extends React.PureComponent {
         return hazardTypesList(lossAndDamageList, hazardTypes);
     })
 
+    getHazardPeopleDeathCount = memoize((lossAndDamageList) => {
+        const { hazardTypes } = this.props;
+        return groupList(
+            lossAndDamageList.filter(v => (
+                isDefined(v.loss) && isDefined(v.loss.peopleDeathCount)
+            )),
+            loss => loss.hazard,
+        )
+            .map(({ key, value }) => ({
+                // FIXME: potentially unsafe
+                label: hazardTypes[key].title,
+                color: hazardTypes[key].color,
+                value: sum(value.map(val => val.loss.peopleDeathCount)),
+            }))
+            .filter(({ value }) => value > 0)
+            .sort((a, b) => a.value - b.value);
+    })
+
     getHazardLossEstimation = memoize((lossAndDamageList) => {
         const { hazardTypes } = this.props;
         return groupList(
             lossAndDamageList.filter(v => (
                 isDefined(v.loss) && isDefined(v.loss.estimatedLoss)
             )),
-            incident => incident.hazard,
-        ).map(({ key, value }) => ({
-            // FIXME: potentially unsafe
-            label: hazardTypes[key].title,
-            color: hazardTypes[key].color,
-            value: sum(value.map(val => val.loss.estimatedLoss)),
-        })).filter(({ value }) => value > 0);
+            loss => loss.hazard,
+        )
+            .map(({ key, value }) => ({
+                // FIXME: potentially unsafe
+                label: hazardTypes[key].title,
+                color: hazardTypes[key].color,
+                value: sum(value.map(val => val.loss.estimatedLoss)),
+            }))
+            .filter(({ value }) => value > 0)
+            .sort((a, b) => a.value - b.value);
     });
 
     getLossSummary = memoize(lossAndDamageList => (
@@ -114,6 +142,7 @@ class Visualizations extends React.PureComponent {
         } = this.props;
 
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
+        const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
         const filteredHazardTypesList = this.getHazardTypes(lossAndDamageList);
         const lossSummary = this.getLossSummary(lossAndDamageList);
 
@@ -151,6 +180,22 @@ class Visualizations extends React.PureComponent {
                             colorScheme={estimatedLossChartColorScheme}
                             margins={barChartMargins}
                             tiltLabels
+                        />
+                    </div>
+                    <div className={styles.donutContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Total number of deaths per hazards
+                            </h4>
+                        </header>
+                        <DonutChart
+                            sideLengthRatio={0.4}
+                            className={styles.chart}
+                            data={hazardDeaths}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            labelModifier={deathsLabelModifier}
+                            colorSelector={donutChartColorSelector}
                         />
                     </div>
                     <div className={styles.donutContainer}>

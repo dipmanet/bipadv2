@@ -155,7 +155,7 @@ export default class LeftPane extends React.PureComponent {
                     <TextOutput
                         className={styles.stat}
                         type="block"
-                        label="No. of Events"
+                        label="No. of Major Events"
                         value={events.length}
                         isNumericValue
                     />
@@ -199,7 +199,7 @@ export default class LeftPane extends React.PureComponent {
                             <header className={styles.header}>
                                 <div className={styles.eventIcon} />
                                 <h4 className={styles.heading}>
-                                    Events
+                                    Major Events
                                 </h4>
                             </header>
                             <VirtualizedListView

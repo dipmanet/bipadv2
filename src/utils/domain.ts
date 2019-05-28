@@ -74,11 +74,9 @@ export const calculateSeverity = (loss: Loss | undefined, scaleFactor: number = 
     */
 };
 
-// severityScaleFactor is to show severity as radius of circle in map, which is logarithmic
-// and for small values, all severities look same for which we need to scale
-const severityScaleFactor = 20000;
-export const calculateCategorizedSeverity = (loss: Loss, scaleFactor?: number): string => {
-    const severity = calculateSeverity(loss, scaleFactor);
+const severityScaleFactor = 1;
+
+export const calculateCategorizedSeverity = (severity: number): string => {
     if (!severity) {
         return 'Minor';
     }
@@ -341,15 +339,18 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
     type: 'FeatureCollection',
     features: incidentList
         .filter(incident => !!incident.point)
-        .map(incident => ({ ...incident, severityValue: calculateSeverity(incident.loss) }))
+        .map(incident => ({
+            ...incident,
+            severityValue: calculateSeverity(incident.loss, severityScaleFactor),
+        }))
         .sort((a, b) => (b.severityValue - a.severityValue))
         .map((incident) => {
             const {
                 id,
                 point,
-                loss,
                 hazard,
                 incidentOn,
+                severityValue,
             } = incident;
             return {
                 id,
@@ -357,7 +358,7 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
                 geometry: { ...point },
                 properties: {
                     incidentId: id,
-                    severity: calculateCategorizedSeverity(loss, severityScaleFactor),
+                    severity: calculateCategorizedSeverity(severityValue),
                     hazardColor: getHazardColor(hazards, hazard),
                     incidentOn: new Date(incidentOn).getTime(),
                 },
@@ -369,13 +370,18 @@ export const incidentPolygonToGeojson = (incidentList: Incident[], hazards: Obj<
     type: 'FeatureCollection',
     features: incidentList
         .filter(incident => !!incident.polygon)
+        .map(incident => ({
+            ...incident,
+            severityValue: calculateSeverity(incident.loss, severityScaleFactor),
+        }))
+        .sort((a, b) => (b.severityValue - a.severityValue))
         .map((incident) => {
             const {
                 id,
                 polygon,
-                loss,
                 hazard,
                 incidentOn,
+                severityValue,
             } = incident;
             return {
                 id,
@@ -384,7 +390,7 @@ export const incidentPolygonToGeojson = (incidentList: Incident[], hazards: Obj<
                 properties: {
                     incidentId: id,
                     // FIXME: why use this here
-                    severity: calculateSeverity(loss, severityScaleFactor),
+                    severity: calculateCategorizedSeverity(severityValue),
                     hazardColor: getHazardColor(hazards, hazard),
                     incidentOn: new Date(incidentOn).getTime(),
                 },

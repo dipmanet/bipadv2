@@ -271,6 +271,7 @@ export interface PageState {
     mapStyles: MapStyle[];
 
     region: Region;
+
     adminLevelList: AdminLevel[];
 
     provinces: Province[];
@@ -330,6 +331,7 @@ export enum PageType {
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
+    LD__SET_LOSS_AND_DAMAGE_LIST = 'page/LOSS_AND_DAMAGE/SET_LOSS_AND_DAMAGE_LIST',
 
     // projects profile page
     PP__SET_FILTERS = 'page/PROJECTS_PROFILE/SET_FILTERS',
@@ -474,6 +476,12 @@ export interface SetRealTimeFilters extends FiltersWithRegion {
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
 }
+
+export interface SetLossAndDamageList {
+    type: typeof PageType.LD__SET_LOSS_AND_DAMAGE_LIST;
+    lossAndDamageList: LossAndDamage[];
+}
+
 
 // projects profile page
 export interface SetProjectsProfileFilters extends ProjectsProfileFilters {
