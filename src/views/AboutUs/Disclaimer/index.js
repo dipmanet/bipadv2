@@ -16,9 +16,8 @@ export default class Disclaimer extends React.PureComponent {
                 </header>
                 <div className={styles.content}>
                     <p>
-                        The data/information used in the system is verified
-                        by the Government of Nepal (GoN) and some are
-                        still under the process of verification.
+                        The data/information used in the system are under
+                        the process of verification.
                     </p>
                 </div>
             </div>
