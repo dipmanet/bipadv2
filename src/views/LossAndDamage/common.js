@@ -37,6 +37,7 @@ export const getRegionInfoFromWard = (wardId, regions) => {
         wards: wardMap,
         municipalities: municipalityMap,
         districts: districtMap,
+        provinces: provinceMap,
     } = regions;
 
     const ward = wardMap[wardId];
@@ -48,12 +49,18 @@ export const getRegionInfoFromWard = (wardId, regions) => {
     const district = districtMap[districtId];
 
     const provinceId = district.province;
+    const province = provinceMap[provinceId];
 
     return {
         ward: wardId,
         municipality: municipalityId,
         district: districtId,
         province: provinceId,
+
+        wardTitle: ward.title,
+        municipalityTitle: municipality.title,
+        districtTitle: district.title,
+        provinceTitle: province.title,
     };
 };
 

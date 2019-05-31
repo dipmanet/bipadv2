@@ -196,18 +196,12 @@ class Incidents extends React.PureComponent<Props, State> {
     private getIncidentMap = memoize(incidentList =>
         listToMap(
             incidentList,
-            (d: {
-                id: number;
-                title: string;
-                streetAddress: string;
-                incidentOn: string;
-                source: string;
-            }) => d.id,
+            (d: { id: number }) => d.id,
             d => d,
         ),
     );
 
-    public setPlacementForMapControls = (rightPaneExpanded) => {
+    public setPlacementForMapControls = (rightPaneExpanded?: boolean) => {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {
