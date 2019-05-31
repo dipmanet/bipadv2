@@ -2,6 +2,7 @@
 
 .visualizations {
     padding-top: $spacing-small;
+    overflow: auto;
 
     %chart-container {
         .header {
