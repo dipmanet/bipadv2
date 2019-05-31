@@ -67,6 +67,9 @@ export interface Alert {
 }
 export interface Incident {
     id: number;
+    title: string;
+    streetAddress: string;
+    source: string;
     hazard: number;
     point?: unknown;
     polygon?: unknown;

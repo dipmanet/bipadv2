@@ -131,6 +131,7 @@ class LeftPane extends React.PureComponent {
             showVisualizations,
         } = this.state;
 
+        // FIXME: fix this
         const incidentList = incidentListNoSeverity.map(incident => ({
             ...incident,
             severity: calculateCategorizedSeverity(
