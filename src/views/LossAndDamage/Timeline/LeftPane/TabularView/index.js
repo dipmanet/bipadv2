@@ -21,11 +21,26 @@ import {
     convertTableToCsv,
     prepareColumns,
     defaultState,
+    readNestedValue,
 } from '#utils/table';
 
 import styles from './styles.scss';
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
+
+const NumeralCell = ({ value }) => (
+    <Numeral
+        className={styles.numeral}
+        value={value}
+        precision={0}
+    />
+);
+
+const createComparator = (comparator, key) => (a, b, d) => comparator(
+    readNestedValue(a, key),
+    readNestedValue(b, key),
+    d,
+);
 
 const propTypes = {
     lossAndDamageList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
@@ -46,142 +61,200 @@ export default class TabularView extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
-        const getEstimatedLoss = ({ loss: { estimatedLoss } = {} }) => estimatedLoss;
-        const getInfraCount = ({ loss: { infrastructureDestroyedCount } = {} }) => (
-            infrastructureDestroyedCount
-        );
-        const getLiveCount = ({ loss: { livestockDestroyedCount } = {} }) => (
-            livestockDestroyedCount
-        );
-        const getPeopleCount = ({ loss: { peopleDeathCount } = {} }) => (
-            peopleDeathCount
-        );
-
         this.columns = prepareColumns([
             {
                 key: 'verified',
                 value: { title: 'Verified' },
 
-                comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
+                comparator: createComparator(compareBoolean, 'verified'),
                 transformer: value => (value ? 'Yes' : 'No'),
-            },
-            {
-                key: 'provinceTitle',
-                value: { title: 'Province' },
-                comparator: (a, b, d) => compareString(a.provinceTitle, b.provinceTitle, d),
-            },
-            {
-                key: 'districtTitle',
-                value: { title: 'District' },
-                comparator: (a, b, d) => compareString(a.districtTitle, b.districtTitle, d),
-            },
-            {
-                key: 'municipalityTitle',
-                value: { title: 'Municipality' },
-                comparator: (a, b, d) => compareString(a.municipalityTitle, b.municipalityTitle, d),
-            },
-            {
-                key: 'wardTitle',
-                value: { title: 'Ward' },
-                comparator: (a, b, d) => compareString(a.wardTitle, b.wardTitle, d),
             },
             {
                 key: 'title',
                 value: { title: 'Title' },
-                comparator: (a, b, d) => compareString(a.title, b.title, d),
+                comparator: createComparator(compareString, 'title'),
             },
             {
                 key: 'description',
                 value: { title: 'Description' },
-                comparator: (a, b, d) => compareString(a.description, b.description, d),
+                comparator: createComparator(compareString, 'description'),
             },
             {
                 key: 'source',
                 value: { title: 'Source' },
-                comparator: (a, b, d) => compareString(a.source, b.source, d),
+                comparator: createComparator(compareString, 'source'),
             },
             {
-                key: 'hazardInfo',
+                key: 'hazardInfo.title',
                 value: { title: 'Hazard' },
-                comparator: (a, b, d) => compareString(getHazardTitle(a), getHazardTitle(b), d),
-
-                transformer: getHazardTitle,
-            },
-
-            {
-                key: 'estimatedLoss',
-                value: { title: 'Total estimated loss (NPR)' },
-
-                comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
-                transformer: getEstimatedLoss,
-                // FIXME: add styling
-                cellRenderer: ({ value }) => (
-                    <Numeral
-                        className={styles.numeral}
-                        value={value}
-                        precision={0}
-                    />
-                ),
-            },
-            {
-                key: 'infrastructureDestroyedCount',
-                value: { title: 'Total infrastructure destroyed' },
-
-                comparator: (a, b, d) => compareNumber(getInfraCount(a), getInfraCount(b), d),
-                transformer: getInfraCount,
-                // FIXME: add styling
-                cellRenderer: ({ value }) => (
-                    <Numeral
-                        className={styles.numeral}
-                        value={value}
-                        precision={0}
-                    />
-                ),
-            },
-            {
-                key: 'livestockDestroyedCount',
-                value: { title: 'Total livestock destroyed' },
-
-                comparator: (a, b, d) => compareNumber(getLiveCount(a), getLiveCount(b), d),
-                transformer: getLiveCount,
-                // FIXME: add styling
-                cellRenderer: ({ value }) => (
-                    <Numeral
-                        className={styles.numeral}
-                        value={value}
-                        precision={0}
-                    />
-                ),
-            },
-            {
-                key: 'peopleDeathCount',
-                value: { title: 'Total people death' },
-
-                comparator: (a, b, d) => compareNumber(getPeopleCount(a), getPeopleCount(b), d),
-                transformer: getPeopleCount,
-                // FIXME: add styling
-                cellRenderer: ({ value }) => (
-                    <Numeral
-                        className={styles.numeral}
-                        value={value}
-                        precision={0}
-                    />
-                ),
+                comparator: createComparator(compareString, 'hazardInfo.title'),
             },
             {
                 key: 'incidentOn',
                 value: { title: 'Incident on' },
-                comparator: (a, b, d) => compareDate(a.incidentOn, b.incidentOn, d),
-
                 cellRenderer: TableDateCell,
+                comparator: createComparator(compareDate, 'incidentOn'),
             },
             {
                 key: 'createdOn',
                 value: { title: 'Created on' },
-                comparator: (a, b, d) => compareDate(a.createdOn, b.createdOn, d),
-
                 cellRenderer: TableDateCell,
+                comparator: createComparator(compareDate, 'createdOn'),
+            },
+            {
+                key: 'provinceTitle',
+                value: { title: 'Province' },
+                comparator: createComparator(compareString, 'provinceTitle'),
+            },
+            {
+                key: 'districtTitle',
+                value: { title: 'District' },
+                comparator: createComparator(compareString, 'districtTitle'),
+            },
+            {
+                key: 'municipalityTitle',
+                value: { title: 'Municipality' },
+                comparator: createComparator(compareString, 'municipalityTitle'),
+            },
+            {
+                key: 'wardTitle',
+                value: { title: 'Ward' },
+                comparator: createComparator(compareString, 'wardTitle'),
+            },
+
+            {
+                key: 'loss.estimatedLoss',
+                value: { title: 'Total estimated loss (NPR)' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.estimatedLoss'),
+            },
+            {
+                key: 'loss.agricultureEconomicLoss',
+                value: { title: 'Agriculture economic loss (NPR)' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.agricultureEconomicLoss'),
+            },
+            {
+                key: 'loss.infrastructureEconomicLoss',
+                value: { title: 'Infrastructur economic loss (NPR)' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.infrastructureEconomicLoss'),
+            },
+            {
+                key: 'loss.infrastructureDestroyedCount',
+                value: { title: 'Total infrastructure destroyed' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedCount'),
+            },
+            {
+                key: 'loss.infrastructureDestroyedHouseCount',
+                value: { title: 'House destroyed' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedHouseCount'),
+            },
+            {
+                key: 'loss.infrastructureAffectedHouseCount',
+                value: { title: 'House affected' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.infrastructureAffectedHouseCount'),
+            },
+
+            {
+                key: 'loss.livestockDestroyedCount',
+                value: { title: 'Total livestock destroyed' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.livestockDestroyedCount'),
+            },
+
+            {
+                key: 'loss.peopleDeathCount',
+                value: { title: 'Total - People Death' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleDeathCount'),
+            },
+            {
+                key: 'loss.peopleDeathMaleCount',
+                value: { title: 'Male - People Death' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleDeathMaleCount'),
+            },
+            {
+                key: 'loss.peopleDeathFemaleCount',
+                value: { title: 'Female - People Death' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleDeathFemaleCount'),
+            },
+            {
+                key: 'loss.peopleDeathUnknownCount',
+                value: { title: 'Unknown - People Death' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleDeathUnknownCount'),
+            },
+            {
+                key: 'loss.peopleDeathDisabledCount',
+                value: { title: 'Disabled - People Death' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleDeathDisabledCount'),
+            },
+            {
+                key: 'loss.peopleMissingCount',
+                value: { title: 'Total - People Missing' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleMissingCount'),
+            },
+            {
+                key: 'loss.peopleMissingMaleCount',
+                value: { title: 'Male - People Missing' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleMissingMaleCount'),
+            },
+            {
+                key: 'loss.peopleMissingFemaleCount',
+                value: { title: 'Female - People Missing' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleMissingFemaleCount'),
+            },
+            {
+                key: 'loss.peopleMissingUnknownCount',
+                value: { title: 'Unknown - People Missing' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleMissingUnknownCount'),
+            },
+            {
+                key: 'loss.peopleMissingDisabledCount',
+                value: { title: 'Disabled - People Missing' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleMissingDisabledCount'),
+            },
+            {
+                key: 'loss.peopleInjuredCount',
+                value: { title: 'Total - People Injured' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleInjuredCount'),
+            },
+            {
+                key: 'loss.peopleInjuredMaleCount',
+                value: { title: 'Male - People Injured' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleInjuredMaleCount'),
+            },
+            {
+                key: 'loss.peopleInjuredFemaleCount',
+                value: { title: 'Female - People Injured' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleInjuredFemaleCount'),
+            },
+            {
+                key: 'loss.peopleInjuredUnknownCount',
+                value: { title: 'Unknown - People Injured' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleInjuredUnknownCount'),
+            },
+            {
+                key: 'loss.peopleInjuredDisabledCount',
+                value: { title: 'Disabled - People Injured' },
+                cellRenderer: NumeralCell,
+                comparator: createComparator(compareNumber, 'loss.peopleInjuredDisabledCount'),
             },
         ], styles);
 
@@ -225,7 +298,7 @@ export default class TabularView extends React.PureComponent {
                 <div className={styles.downloadLinkContainer}>
                     <DownloadButton
                         onClick={this.handleClick}
-                        value={lossAndDamageList}
+                        value={lossAndDamageListForExport}
                     >
                         Download csv
                     </DownloadButton>

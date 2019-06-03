@@ -1,5 +1,21 @@
+import { isNotDefined } from '@togglecorp/fujs';
+
 import TableHeader from '#components/TableHeader';
 import TableCell from '#components/TableCell';
+
+export const readNestedValue = (obj, keystring) => {
+    const keylist = keystring.split('.');
+    let op = obj;
+    for (let i = 0; i < keylist.length; i += 1) {
+        const key = keylist[i];
+
+        if (isNotDefined(op)) {
+            return undefined;
+        }
+        op = op[key];
+    }
+    return op;
+};
 
 export const convertTableToCsv = (data, columns) => (
     data.map((datum) => {
@@ -14,14 +30,14 @@ export const convertTableToCsv = (data, columns) => (
 
             const finalTransformer = csvTransformer || transformer;
 
-            val[title] = finalTransformer ? finalTransformer(datum) : datum[key];
+            val[title] = finalTransformer ? finalTransformer(datum) : readNestedValue(datum, key);
         });
         return val;
     })
 );
 
 const cellRendererParams = ({ datum, column, columnKey }) => ({
-    value: column.transformer ? column.transformer(datum) : datum[columnKey],
+    value: column.transformer ? column.transformer(datum) : readNestedValue(datum, columnKey),
 });
 
 const headerRendererParams = styles => ({ column, columnKey }) => ({
