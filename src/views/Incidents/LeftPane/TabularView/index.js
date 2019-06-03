@@ -118,6 +118,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -132,6 +133,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -146,6 +148,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -160,6 +163,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
