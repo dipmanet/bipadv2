@@ -104,6 +104,7 @@ export default class Visualizations extends React.PureComponent {
                         labelSelector={barChartLabelSelector}
                         valueSelector={barChartValueSelector}
                         colorSelector={barChartColorSelector}
+                        tiltLabels
                     />
                 </div>
                 {/* <div className={styles.eventStatisticsChart}>
