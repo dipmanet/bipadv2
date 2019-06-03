@@ -309,7 +309,9 @@ class Comparative extends React.PureComponent {
                         onExpandChange={this.handleRightPaneExpandChange}
                         metricOptions={lossMetrics}
                         metricType={metricType}
+                        hideRegionSelect
                         disabledRegionSelect
+                        hideMetricSelect
                         disabledMetricSelect
                     />
                 }

@@ -113,6 +113,8 @@ class LossAndDamageFilter extends React.PureComponent {
             isTimeline,
             disabledRegionSelect,
             disabledMetricSelect,
+            hideRegionSelect,
+            hideMetricSelect,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -156,19 +158,23 @@ class LossAndDamageFilter extends React.PureComponent {
                             value={faramValues}
                             error={faramErrors}
                         >
-                            <RegionSelectInput
-                                className={styles.regionSelectionInput}
-                                faramElementName="region"
-                                disabled={disabledRegionSelect}
-                            />
-                            <SelectInput
-                                className={styles.metricSelectionInput}
-                                label="Metric"
-                                faramElementName="metric"
-                                options={metricOptions}
-                                hideClearButton
-                                disabled={disabledMetricSelect}
-                            />
+                            { !hideRegionSelect && (
+                                <RegionSelectInput
+                                    className={styles.regionSelectionInput}
+                                    faramElementName="region"
+                                    disabled={disabledRegionSelect}
+                                />
+                            )}
+                            { !hideMetricSelect && (
+                                <SelectInput
+                                    className={styles.metricSelectionInput}
+                                    label="Metric"
+                                    faramElementName="metric"
+                                    options={metricOptions}
+                                    hideClearButton
+                                    disabled={disabledMetricSelect}
+                                />
+                            )}
                             <DateInput
                                 className={styles.startDateInput}
                                 label="Start Date"

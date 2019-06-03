@@ -106,7 +106,7 @@ class Visualizations extends React.PureComponent {
                     <div className={styles.donutContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Total number of deaths per hazards
+                                Total number of deaths per hazard
                             </h4>
                         </header>
                         <DonutChart
@@ -122,7 +122,7 @@ class Visualizations extends React.PureComponent {
                     <div className={styles.donutContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                Estimated Monetary Loss by Hazard
+                                Estimated monetary loss by hazard
                             </h4>
                         </header>
                         <DonutChart
