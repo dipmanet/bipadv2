@@ -17,14 +17,14 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-    hidePopupSelector,
+    // hidePopupSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
 } from '#actionCreators';
 
-import FirstPopup from './FirstPopup';
+// import FirstPopup from './FirstPopup';
 import errorBound from './errorBound';
 import helmetify from './helmetify';
 
@@ -139,7 +139,7 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
-    hidePopup: boolean;
+    // hidePopup: boolean;
 }
 
 interface PropsFromDispatch {
@@ -161,7 +161,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    hidePopup: hidePopupSelector(state),
+    // hidePopup: hidePopupSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -205,7 +205,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             districts,
             provinces,
             municipalities,
-            hidePopup,
+            // hidePopup,
             setInitialPopupHidden,
             setRegion,
             pending,
@@ -215,7 +215,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             <Fragment>
                 {/* FIXME: get route key for navbar */}
                 <div className="bipad-main-content">
-                    { !hidePopup && !pending &&
+                    {/* !hidePopup && !pending &&
                         <FirstPopup
                             districts={districts}
                             provinces={provinces}
@@ -223,7 +223,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             setInitialPopupHidden={setInitialPopupHidden}
                             setRegion={setRegion}
                         />
-                    }
+                    */}
                     <Map
                         className={styles.map}
                         mapStyle={mapStyle}
