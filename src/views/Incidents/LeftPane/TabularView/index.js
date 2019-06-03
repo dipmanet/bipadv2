@@ -9,6 +9,7 @@ import {
     compareNumber,
 } from '@togglecorp/fujs';
 
+import Numeral from '#rscv/Numeral';
 import NormalTaebul from '#rscv/Taebul';
 import Sortable from '#rscv/Taebul/Sortable';
 import ColumnWidth from '#rscv/Taebul/ColumnWidth';
@@ -45,8 +46,17 @@ export default class TabularView extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const getPeopleDeathCount = ({ loss: { peopleDeathCount } = {} }) => peopleDeathCount;
         const getHazardTitle = ({ hazardInfo: { title } = {} }) => title;
+        const getEstimatedLoss = ({ loss: { estimatedLoss } = {} }) => estimatedLoss;
+        const getInfraCount = ({ loss: { infrastructureDestroyedCount } = {} }) => (
+            infrastructureDestroyedCount
+        );
+        const getLiveCount = ({ loss: { livestockDestroyedCount } = {} }) => (
+            livestockDestroyedCount
+        );
+        const getPeopleCount = ({ loss: { peopleDeathCount } = {} }) => (
+            peopleDeathCount
+        );
 
         this.columns = prepareColumns([
             {
@@ -54,13 +64,31 @@ export default class TabularView extends React.PureComponent {
                 value: { title: 'Verified' },
 
                 comparator: (a, b, d) => compareBoolean(a.verified, b.verified, d),
-
                 transformer: value => (value ? 'Yes' : 'No'),
+            },
+            {
+                key: 'provinceTitle',
+                value: { title: 'Province' },
+                comparator: (a, b, d) => compareString(a.provinceTitle, b.provinceTitle, d),
+            },
+            {
+                key: 'districtTitle',
+                value: { title: 'District' },
+                comparator: (a, b, d) => compareString(a.districtTitle, b.districtTitle, d),
+            },
+            {
+                key: 'municipalityTitle',
+                value: { title: 'Municipality' },
+                comparator: (a, b, d) => compareString(a.municipalityTitle, b.municipalityTitle, d),
+            },
+            {
+                key: 'wardTitle',
+                value: { title: 'Ward' },
+                comparator: (a, b, d) => compareString(a.wardTitle, b.wardTitle, d),
             },
             {
                 key: 'title',
                 value: { title: 'Title' },
-
                 comparator: (a, b, d) => compareString(a.title, b.title, d),
             },
             {
@@ -80,48 +108,79 @@ export default class TabularView extends React.PureComponent {
 
                 transformer: getHazardTitle,
             },
-            {
-                key: 'streetAddress',
-                value: { title: 'Street Address' },
-                comparator: (a, b, d) => compareString(a.streetAddress, b.streetAddress, d),
-            },
-            {
-                key: 'cause',
-                value: { title: 'Cause' },
-                comparator: (a, b, d) => compareString(a.cause, b.cause, d),
-            },
-            {
-                key: 'inducer',
-                value: { title: 'Inducer' },
-                comparator: (a, b, d) => compareString(a.inducer, b.inducer, d),
-            },
-            {
-                key: 'severity',
-                value: { title: 'Severity' },
-                comparator: (a, b, d) => compareString(a.severity, b.severity, d),
-            },
-            {
-                key: 'people-death',
-                value: { title: 'People death' },
-                comparator: (a, b, d) => compareNumber(
-                    getPeopleDeathCount(a),
-                    getPeopleDeathCount(b),
-                    d,
-                ),
 
-                transformer: getPeopleDeathCount,
+            {
+                key: 'estimatedLoss',
+                value: { title: 'Total estimated loss (NPR)' },
+
+                comparator: (a, b, d) => compareNumber(getEstimatedLoss(a), getEstimatedLoss(b), d),
+                transformer: getEstimatedLoss,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        className={styles.numeral}
+                        value={value}
+                        precision={0}
+                    />
+                ),
+            },
+            {
+                key: 'infrastructureDestroyedCount',
+                value: { title: 'Total infrastructure destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getInfraCount(a), getInfraCount(b), d),
+                transformer: getInfraCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        className={styles.numeral}
+                        value={value}
+                        precision={0}
+                    />
+                ),
+            },
+            {
+                key: 'livestockDestroyedCount',
+                value: { title: 'Total livestock destroyed' },
+
+                comparator: (a, b, d) => compareNumber(getLiveCount(a), getLiveCount(b), d),
+                transformer: getLiveCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        className={styles.numeral}
+                        value={value}
+                        precision={0}
+                    />
+                ),
+            },
+            {
+                key: 'peopleDeathCount',
+                value: { title: 'Total people death' },
+
+                comparator: (a, b, d) => compareNumber(getPeopleCount(a), getPeopleCount(b), d),
+                transformer: getPeopleCount,
+                // FIXME: add styling
+                cellRenderer: ({ value }) => (
+                    <Numeral
+                        className={styles.numeral}
+                        value={value}
+                        precision={0}
+                    />
+                ),
+            },
+            {
+                key: 'incidentOn',
+                value: { title: 'Incident on' },
+                comparator: (a, b, d) => compareDate(a.incidentOn, b.incidentOn, d),
+
+                cellRenderer: TableDateCell,
             },
             {
                 key: 'createdOn',
                 value: { title: 'Created on' },
                 comparator: (a, b, d) => compareDate(a.createdOn, b.createdOn, d),
 
-                cellRenderer: TableDateCell,
-            },
-            {
-                key: 'incidentOn',
-                value: { title: 'Incident on' },
-                comparator: (a, b, d) => compareDate(a.incidentOn, b.incidentOn, d),
                 cellRenderer: TableDateCell,
             },
         ], styles);

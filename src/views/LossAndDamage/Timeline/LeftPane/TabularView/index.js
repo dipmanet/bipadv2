@@ -67,6 +67,26 @@ export default class TabularView extends React.PureComponent {
                 transformer: value => (value ? 'Yes' : 'No'),
             },
             {
+                key: 'provinceTitle',
+                value: { title: 'Province' },
+                comparator: (a, b, d) => compareString(a.provinceTitle, b.provinceTitle, d),
+            },
+            {
+                key: 'districtTitle',
+                value: { title: 'District' },
+                comparator: (a, b, d) => compareString(a.districtTitle, b.districtTitle, d),
+            },
+            {
+                key: 'municipalityTitle',
+                value: { title: 'Municipality' },
+                comparator: (a, b, d) => compareString(a.municipalityTitle, b.municipalityTitle, d),
+            },
+            {
+                key: 'wardTitle',
+                value: { title: 'Ward' },
+                comparator: (a, b, d) => compareString(a.wardTitle, b.wardTitle, d),
+            },
+            {
                 key: 'title',
                 value: { title: 'Title' },
                 comparator: (a, b, d) => compareString(a.title, b.title, d),
@@ -88,6 +108,7 @@ export default class TabularView extends React.PureComponent {
 
                 transformer: getHazardTitle,
             },
+
             {
                 key: 'estimatedLoss',
                 value: { title: 'Total estimated loss (NPR)' },
@@ -97,6 +118,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -111,6 +133,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -125,6 +148,7 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
@@ -139,10 +163,18 @@ export default class TabularView extends React.PureComponent {
                 // FIXME: add styling
                 cellRenderer: ({ value }) => (
                     <Numeral
+                        className={styles.numeral}
                         value={value}
                         precision={0}
                     />
                 ),
+            },
+            {
+                key: 'incidentOn',
+                value: { title: 'Incident on' },
+                comparator: (a, b, d) => compareDate(a.incidentOn, b.incidentOn, d),
+
+                cellRenderer: TableDateCell,
             },
             {
                 key: 'createdOn',

@@ -35,6 +35,7 @@ import {
     incidentListSelectorIP,
     filtersValuesSelectorIP,
     hazardTypesSelector,
+    regionsSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
 import { transformDateRangeFilterParam } from '#utils/transformations';
@@ -49,6 +50,8 @@ import HazardsLegend from '#components/HazardsLegend';
 import IncidentsFilter from './Filter';
 import Map from './Map';
 import LeftPane from './LeftPane';
+
+import { getSanitizedIncidents } from '../LossAndDamage/common';
 
 import styles from './styles.scss';
 
@@ -74,6 +77,12 @@ interface PropsFromState {
     incidentList: PageType.Incident[];
     filters: PageType.FiltersWithRegion['faramValues'];
     hazardTypes: Obj<PageType.HazardType>;
+    regions: {
+        provinces: object;
+        districts: object;
+        municipalities: object;
+        wards: object;
+    };
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -84,6 +93,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     hazardTypes: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
     filters: filtersValuesSelectorIP(state),
+    regions: regionsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -188,6 +198,8 @@ class Incidents extends React.PureComponent<Props, State> {
         }
     }
 
+    private getSanitizedIncidents = memoize(getSanitizedIncidents)
+
     private getIncidentHazardTypesList = memoize((incidentList) => {
         const { hazardTypes } = this.props;
         return hazardTypesList(incidentList, hazardTypes);
@@ -196,18 +208,12 @@ class Incidents extends React.PureComponent<Props, State> {
     private getIncidentMap = memoize(incidentList =>
         listToMap(
             incidentList,
-            (d: {
-                id: number;
-                title: string;
-                streetAddress: string;
-                incidentOn: string;
-                source: string;
-            }) => d.id,
+            (d: PageType.Incident) => d.id,
             d => d,
         ),
     );
 
-    public setPlacementForMapControls = (rightPaneExpanded) => {
+    public setPlacementForMapControls = (rightPaneExpanded?: boolean) => {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {
@@ -243,8 +249,13 @@ class Incidents extends React.PureComponent<Props, State> {
             rightPaneExpanded,
         } = this.state;
 
-        const { incidentList } = this.props;
-        const incidentMap = this.getIncidentMap(incidentList);
+        const { incidentList, regions, hazardTypes } = this.props;
+        const sanitizedIncidentList = this.getSanitizedIncidents(
+            incidentList,
+            regions,
+            hazardTypes,
+        );
+        const incidentMap = this.getIncidentMap(sanitizedIncidentList);
 
         if (!selectedIncidentId || !incidentMap[selectedIncidentId]) {
             return null;
@@ -288,6 +299,8 @@ class Incidents extends React.PureComponent<Props, State> {
                 incidentsRequest: { pending: pendingIncidents },
                 eventsRequest: { pending: pendingEvents },
             },
+            regions,
+            hazardTypes,
         } = this.props;
 
         const {
@@ -296,7 +309,13 @@ class Incidents extends React.PureComponent<Props, State> {
             selectedIncidentId,
         } = this.state;
 
-        const filteredHazardTypes = this.getIncidentHazardTypesList(incidentList);
+        const sanitizedIncidentList = this.getSanitizedIncidents(
+            incidentList,
+            regions,
+            hazardTypes,
+        );
+
+        const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
 
         const pending = pendingEvents || pendingIncidents;
         const HoverItemDetail = this.renderHoverItemDetail;
@@ -307,7 +326,7 @@ class Incidents extends React.PureComponent<Props, State> {
                 <Map
                     leftPaneExpanded={leftPaneExpanded}
                     rightPaneExpanded={rightPaneExpanded}
-                    incidentList={incidentList}
+                    incidentList={sanitizedIncidentList}
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
                 />
@@ -347,7 +366,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     leftContentClassName={styles.left}
                     leftContent={
                         <LeftPane
-                            incidentList={incidentList}
+                            incidentList={sanitizedIncidentList}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                         />

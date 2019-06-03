@@ -1,6 +1,7 @@
 @import '~base-scss/base';
 
 .date-cell {
+    display: block;
     padding: $spacing-small;
     overflow: hidden;
     text-overflow: ellipsis;
