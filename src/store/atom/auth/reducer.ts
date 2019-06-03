@@ -18,6 +18,16 @@ export function setAuth(
     action: Type.SetAuthAction,
 ): Type.AuthState {
     const { authState } = action;
+    // FIXME: this code is fragile, will break with change
+    // in auth state structure
+    if (
+        state.authenticated === authState.authenticated
+        || state.csrftoken === authState.csrftoken
+        || state.sessionId === authState.sessionId
+    ) {
+        // NOTE: don't change state if all of the values are same
+        return state;
+    }
     return authState;
 }
 

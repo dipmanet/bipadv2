@@ -10,13 +10,13 @@ This is web client for the *Bipad*
 ## Getting started
 
 ### Install react-store
-```
+```bash
 mkdir -p src/vendor
 git clone https://github.com/toggle-corp/react-store --branch=bipad src/vendor/react-store
 ```
 
 ### Start server
-```
+```bash
 yarn install # Install dependencies from package.json
 yarn start # Start development server
 ```
@@ -27,15 +27,17 @@ Note that, this is necessary in order to "simulate" our client and api server to
 This is necessary to display the UI buttons depending upon if user is logged in server or not.
 
 ### Install Nginx
-```
+```bash
 sudo pacman -S nginx
 ```
 
 ### Updating Hostnames
-We will be using `bipad-client.localhost.com` and `bipad-admin.localhost.com` for client and server. In your `/etc/hosts` file, add the following
+We will be using `bipad-client.localhost.com` and `bipad-admin.localhost.com` for client and server.
+In `/etc/hosts` file, add the following:
+
 ```
-127.0.0.1	bipad-client.localhost.com
-127.0.0.1	bipad-admin.localhost.com
+127.0.0.1    bipad-client.localhost.com
+127.0.0.1    bipad-admin.localhost.com
 ```
 
 ### Setting up Nginx
@@ -45,26 +47,27 @@ Create `/etc/nginx/custom.conf` file with following content:
 # custom.conf, included by nginx.conf
 
 server {
-	listen 80;
-	server_name bipad-client.localhost.com;
-	location / {
-		proxy_pass http://localhost:3050;
-	}
-	# proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
-	proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
+    listen 80;
+    server_name bipad-client.localhost.com;
+    location / {
+        proxy_pass http://localhost:3050;
+    }
+    # proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
+    proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
 
 }
 
 server {
-	listen 80;
-	server_name bipad-admin.localhost.com;
-	location / {
-		proxy_pass http://bipad.nepware.com;
-	}
-	# proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
-	proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
+    listen 80;
+    server_name bipad-admin.localhost.com;
+    location / {
+        proxy_pass http://bipad.nepware.com;
+    }
+    # proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
+    proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
 }
 ```
+
 And, update our `/etc/nginx/nginx.conf` file to have the following:
 ```
 # /etc/nginx/nginx.conf
@@ -87,14 +90,14 @@ http {
     include custom.conf;
 }
 ```
-Then restart nginx: `sudo systemctl restart nginx`
+Then restart nginx:
+```bash
+sudo systemctl restart nginx
+```
 
 Also, add the following to `.env` file:
 ```
-...
-
 REACT_APP_API_SERVER_URL=http://bipad-admin.localhost.com/api/v1
 
 REACT_APP_ADMIN_LOGIN_URL=http://bipad-admin.localhost.com/admin
-...
 ```

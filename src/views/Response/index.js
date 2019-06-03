@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 
 import {
     styleProperties,
@@ -171,6 +172,10 @@ class Response extends React.PureComponent {
         }
     }
 
+    getFilteredList = memoize((list, filterFunction) => (
+        list.filter(filterFunction)
+    ))
+
     setFilter = (filterFunction) => {
         this.setState({ filterFunction });
     }
@@ -242,7 +247,7 @@ class Response extends React.PureComponent {
         } = this.state;
 
         // TODO: memoize this
-        const filteredResourceList = resourceList.filter(filterFunction);
+        const filteredResourceList = this.getFilteredList(resourceList, filterFunction);
 
         const pending = pendingResponse || pendingFilteredResponse || pendingIncident;
 
