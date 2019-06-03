@@ -9,10 +9,29 @@ const schemaList: Schema[] = [
         },
         fields: {
             description: { type: 'string' },
+
             estimatedLoss: { type: 'uint' },
+            agricultureEconomicLoss: { type: 'uint' },
+            infrastructureEconomicLoss: { type: 'uint' },
             infrastructureDestroyedCount: { type: 'uint' },
+            infrastructureDestroyedHouseCount: { type: 'uint' },
+            infrastructureAffectedHouseCount: { type: 'uint' },
             livestockDestroyedCount: { type: 'uint' },
             peopleDeathCount: { type: 'uint' },
+            peopleDeathMaleCount: { type: 'uint' },
+            peopleDeathFemaleCount: { type: 'uint' },
+            peopleDeathUnknownCount: { type: 'uint' },
+            peopleDeathDisabledCount: { type: 'uint' },
+            peopleMissingCount: { type: 'uint' },
+            peopleMissingMaleCount: { type: 'uint' },
+            peopleMissingFemaleCount: { type: 'uint' },
+            peopleMissingUnknownCount: { type: 'uint' },
+            peopleMissingDisabledCount: { type: 'uint' },
+            peopleInjuredCount: { type: 'uint' },
+            peopleInjuredMaleCount: { type: 'uint' },
+            peopleInjuredFemaleCount: { type: 'uint' },
+            peopleInjuredUnknownCount: { type: 'uint' },
+            peopleInjuredDisabledCount: { type: 'uint' },
             /*
             families: {
                 arrayType: {
