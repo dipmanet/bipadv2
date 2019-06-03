@@ -51,9 +51,9 @@ const headerRendererParams = styles => ({ column, columnKey }) => ({
 
 export const defaultState = {
     columnWidths: {
-        title: 160,
+        title: 220,
     },
-    defaultColumnWidth: 108,
+    defaultColumnWidth: 180,
 };
 
 export const prepareColumns = (columns, styles) => (

@@ -17,6 +17,7 @@ $width-left-pane: var(--width-left-panel);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 111;
     animation: fade-in $duration-transition-slow ease-in forwards;
 }
 
