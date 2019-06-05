@@ -118,6 +118,7 @@ const requests = {
             schemaName: 'incidentWithPeopleResponse',
         },
     },
+    /*
     eventsRequest: {
         url: '/event/',
         onMount: true,
@@ -125,6 +126,7 @@ const requests = {
             schemaName: 'eventResponse',
         },
     },
+    */
 };
 
 class LossAndDamage extends React.PureComponent {
@@ -195,12 +197,14 @@ class LossAndDamage extends React.PureComponent {
                             lossAndDamageRequest: {
                                 pending: lossAndDamageRequestPending,
                             },
+                            /*
                             eventsRequest: {
                                 pending: eventsRequestPending,
                                 response: {
                                     results: eventList = emptyList,
                                 } = emptyObject,
                             },
+                            */
                         },
                         districts,
                         provinces,
@@ -223,12 +227,12 @@ class LossAndDamage extends React.PureComponent {
                         lossAndDamageList: modifiedList,
                         metric,
                         municipalities,
-                        pending: lossAndDamageRequestPending || eventsRequestPending,
+                        pending: lossAndDamageRequestPending, // || eventsRequestPending,
                         provinces,
                         regionLevel,
                         regions,
                         wards,
-                        eventList,
+                        // eventList,
                         onRightPaneExpandChange: this.handleTimelineRightPaneExpandChange,
                         minDate: this.getMinDate(modifiedList),
                     };
@@ -333,12 +337,12 @@ class LossAndDamage extends React.PureComponent {
     render() {
         const {
             requests: {
-                eventsRequest: { pending: eventsPending },
+                // eventsRequest: { pending: eventsPending },
                 lossAndDamageRequest: { pending: lossAndDamagePending },
             },
         } = this.props;
 
-        const pending = eventsPending || lossAndDamagePending;
+        const pending = lossAndDamagePending; // eventsPending;
         const currentPage = window.location.hash.substring(2);
         let rightPaneExpanded = false;
 
