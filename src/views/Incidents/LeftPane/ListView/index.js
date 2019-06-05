@@ -51,6 +51,7 @@ export default class IncidentListView extends React.PureComponent {
                 renderer={IncidentItem}
                 rendererParams={this.getIncidentRendererParams}
                 keySelector={incidentKeySelector}
+                emptyMessage="There are no incidents at the moment."
             />
         );
     }
