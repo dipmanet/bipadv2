@@ -65,10 +65,16 @@ export default class ResourceItem extends React.PureComponent {
                         ))
                     }
                 </div>
-                <hr />
-                <div className={styles.hr} />
-                { inventories.length > 0 && (<div> <b> Inventories </b> </div>) }
-                {inventories.map(inventoryToTextOutput)}
+                { inventories.length > 0 &&
+                    <React.Fragment>
+                        <hr />
+                        <div className={styles.hr} />
+                        <div>
+                            <b> Inventories </b>
+                        </div>
+                        {inventories.map(inventoryToTextOutput)}
+                    </React.Fragment>
+                }
             </React.Fragment>
         );
     }
