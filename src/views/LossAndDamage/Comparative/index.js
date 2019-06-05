@@ -209,7 +209,7 @@ class Comparative extends React.PureComponent {
                         </Faram>
                         { (!region1 && !region2) ? (
                             <div className={styles.preComparisionMessage}>
-                                Please select regions to start the comparision
+                                Please select locations to start the comparison
                             </div>
                         ) : (
                             <div className={styles.comparisionContainer}>

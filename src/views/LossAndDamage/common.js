@@ -107,9 +107,9 @@ export const getAggregatedStats = incidents => (
                 acc.infrastructureDestroyedCount,
                 val.infrastructureDestroyedCount,
             ),
-            liveStockDestroyedCount: Math.max(
-                acc.liveStockDestroyedCount,
-                val.liveStockDestroyedCount,
+            livestockDestroyedCount: Math.max(
+                acc.livestockDestroyedCount,
+                val.livestockDestroyedCount,
             ),
             peopleDeathCount: Math.max(acc.peopleDeathCount, val.peopleDeathCount),
         }),
