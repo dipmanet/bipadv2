@@ -10,7 +10,7 @@ import {
     styleProperties,
 } from '#constants';
 import Page from '#components/Page';
-import { getYmd } from '#utils/common';
+// import { getYmd } from '#utils/common';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -41,7 +41,7 @@ const defaultProps = {
 
 const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
-const emptyList = [];
+// const emptyList = [];
 const PLAYBACK_INTERVAL = 2000;
 
 const timeBucketOptions = [
@@ -121,8 +121,9 @@ export default class Timeline extends React.PureComponent {
             this.setState({
                 startTimestamp: minTime,
                 endTimestamp: maxTime,
-                start: getYmd(minTime),
-                end: getYmd(maxTime),
+
+                // start: getYmd(minTime),
+                // end: getYmd(maxTime),
 
                 playbackStart: 0,
                 playbackEnd: 0,
@@ -331,6 +332,7 @@ export default class Timeline extends React.PureComponent {
         this.playback(lossAndDamageList, regionLevel, currentIndex);
     }
 
+    /*
     renderEventTimeline = ({
         start,
         end,
@@ -388,6 +390,7 @@ export default class Timeline extends React.PureComponent {
             </div>
         );
     }
+    */
 
     render() {
         const {
@@ -400,12 +403,12 @@ export default class Timeline extends React.PureComponent {
             provinces,
             regionLevel,
             wards,
-            eventList,
+            // eventList,
         } = this.props;
 
         const {
-            start,
-            end,
+            // start,
+            // end,
             leftPaneExpanded,
             rightPaneExpanded,
             currentIndex,
@@ -440,7 +443,7 @@ export default class Timeline extends React.PureComponent {
             item => Math.floor(item.incidentOn / DAY),
         );
 
-        const EventTimeline = this.renderEventTimeline;
+        // const EventTimeline = this.renderEventTimeline;
 
         return (
             <React.Fragment>
@@ -516,11 +519,13 @@ export default class Timeline extends React.PureComponent {
                                     />
                                 </div>
                                 <div className={styles.right}>
+                                    {/*
                                     <EventTimeline
                                         eventList={eventList}
                                         start={start}
                                         end={end}
                                     />
+                                    */}
                                     <Seekbar
                                         className={styles.seekbar}
                                         data={groupedIncidents}
