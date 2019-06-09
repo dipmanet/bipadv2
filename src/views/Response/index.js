@@ -152,7 +152,6 @@ class Response extends React.PureComponent {
 
             leftPaneExpanded: true,
             rightPaneExpanded: true,
-            distance: DEFAULT_RESOURCES_DISTANCE,
         };
     }
 
@@ -234,7 +233,6 @@ class Response extends React.PureComponent {
             leftPaneExpanded,
             rightPaneExpanded,
             filterFunction,
-            distance,
         } = this.state;
 
         // TODO: memoize this

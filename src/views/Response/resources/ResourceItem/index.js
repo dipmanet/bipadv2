@@ -12,9 +12,9 @@ import resourceAttributes from '../../resourceAttributes';
 import styles from './styles.scss';
 
 const propTypes = {
-    className: PropTypes.string.isRequired,
+    className: PropTypes.string,
     title: PropTypes.string.isRequired,
-    contactNumber: PropTypes.string.isRequired,
+    contactNumber: PropTypes.string,
     distance: PropTypes.number.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     point: PropTypes.object.isRequired,
@@ -24,7 +24,9 @@ const propTypes = {
 };
 
 const defaultProps = {
+    className: undefined,
     distance: 0,
+    contactNumber: undefined,
     showDetails: false,
     inventories: [],
 };

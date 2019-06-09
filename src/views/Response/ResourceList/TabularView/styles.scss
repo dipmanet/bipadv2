@@ -18,6 +18,15 @@
                 background-color: $color-background-header;
                 padding: $spacing-small 0;
             }
+
+            .location {
+                padding: $spacing-small;
+            }
+
+            .numeral {
+                display: block;
+                padding: $spacing-small;
+            }
         }
     }
 

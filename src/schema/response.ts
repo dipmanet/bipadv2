@@ -21,6 +21,11 @@ const schemaList: Schema[] = [
             population: { type: 'uint' },
             accessPointCount: { type: 'uint' },
             inventories: { type: 'array.unknown' },
+            noOfStaffs: { type: 'uint' },
+            religion: { type: 'string' },
+            atmAvailable: { type: 'unknown' },
+            noOfEmployee: { type: 'uint' },
+            noOfStudent: { type: 'uint' },
 
             createdOn: { type: 'string' }, // NOTE: overriding dbentity
         },
