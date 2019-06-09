@@ -159,7 +159,7 @@ export default class IncidentInfo extends React.PureComponent {
                         <b> Wards </b>
                         <div className={styles.wardList}>
                             { wardNames.map(wardName => (
-                                <div>{wardName}</div>
+                                <div key={wardName}>{wardName}</div>
                             ))}
                         </div>
                     </React.Fragment>

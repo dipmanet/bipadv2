@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
-import { convex } from '@turf/turf';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
-import DistanceOutput from '#components/DistanceOutput';
 import ZoomMap from '#components/ZoomMap';
 import {
     mapStyles,
@@ -29,10 +27,14 @@ import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
 import openSpaceIcon from '#resources/icons/Soap.svg';
+import hinduTemplateIcon from '#resources/icons/Hindu-temple.svg';
+import satelliteIcon from '#resources/icons/Satellite-dish.svg';
+import buildingIcon from '#resources/icons/Building.svg';
+import mapIcon from '#resources/icons/Map.svg';
 
 import ResourceItem from '../resources/ResourceItem';
 
-import styles from './styles.scss';
+// import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
@@ -50,12 +52,16 @@ const defaultProps = {
 const emptyObject = {};
 
 const resourceImages = [
-    { name: 'health', icon: healthFacilityIcon },
-    { name: 'volunteer', icon: groupIcon },
+    { name: 'Communication', icon: satelliteIcon },
+    { name: 'cultural', icon: hinduTemplateIcon },
     { name: 'education', icon: educationIcon },
     { name: 'finance', icon: financeIcon },
     { name: 'governance', icon: governanceIcon },
+    { name: 'health', icon: healthFacilityIcon },
+    { name: 'industry', icon: buildingIcon },
     { name: 'openSpace', icon: openSpaceIcon },
+    { name: 'tourism', icon: mapIcon },
+    { name: 'volunteer', icon: groupIcon },
 ];
 
 const mapStateToProps = state => ({
