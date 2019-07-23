@@ -7,16 +7,16 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import SelectInput from '#rsci/SelectInput';
-import MultiSelectInput from '#rsci/MultiSelectInput';
+import TextInput from '#rsci/TextInput';
 
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
 
 import {
-    setProjectsProfileFiltersAction,
+    setProfileContactFiltersAction,
 } from '#actionCreators';
 import {
-    projectsProfileFiltersSelector,
+    profileContactFiltersSelector,
 } from '#selectors';
 import { iconNames } from '#constants';
 
@@ -33,43 +33,26 @@ const defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    filters: projectsProfileFiltersSelector(state),
+    filters: profileContactFiltersSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-    setFilters: params => dispatch(setProjectsProfileFiltersAction(params)),
+    setFilters: params => dispatch(setProfileContactFiltersAction(params)),
 });
 
 const emptyList = [];
 const emptyObject = {};
 
-const ndrrsapLabelSelector = item => item.title;
-const ndrrsapKeySelector = item => item.ndrrsapid;
-
-const drrCyclesLabelSelector = item => item.title;
-const drrCyclesKeySelector = item => item.drrcycleid;
-
-const elementsLabelSelector = item => item.title;
-const elementsKeySelector = item => item.categoryid;
-
-const organizationLabelSelector = item => item.oname;
-const organizationKeySelector = item => item.oid;
-
-class ProjectsProfileFilter extends React.PureComponent {
+class ProfileContactFilter extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
     static schema = {
         fields: {
             region: [],
-            priority: [],
-            subPriority: [],
-            activity: [],
-
-            drrCycles: [],
-            elements: [],
-            organizations: [],
-            // status: [],
+            committee: [],
+            position: [],
+            training: [],
         },
     }
 
@@ -146,14 +129,8 @@ class ProjectsProfileFilter extends React.PureComponent {
                 faramErrors = emptyObject,
             } = {},
 
-            priorityOptions,
-            subPriorityOptions,
-            activityOptions,
-
-            drrCycleOptions,
-            elementsOptions,
-            organizationOptions,
-            // projectStatusOptions = [],
+            committeeValueList,
+            trainingValueList,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -190,7 +167,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                             onChange={this.handleFaramChange}
                             onValidationFailure={this.handleFaramFailure}
                             onValidationSuccess={this.handleFaramSuccess}
-                            schema={ProjectsProfileFilter.schema}
+                            schema={ProfileContactFilter.schema}
                             value={faramValues}
                             error={faramErrors}
                         >
@@ -199,56 +176,19 @@ class ProjectsProfileFilter extends React.PureComponent {
                                 faramElementName="region"
                             />
                             <SelectInput
-                                faramElementName="priority"
-                                label="priority"
-                                options={priorityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
+                                label="Committee"
+                                faramElementName="committee"
+                                options={committeeValueList}
                             />
                             <SelectInput
-                                faramElementName="subPriority"
-                                label="sub priority"
-                                disabled={!faramValues.priority}
-                                options={subPriorityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
+                                label="Training"
+                                faramElementName="training"
+                                options={trainingValueList}
                             />
-                            <SelectInput
-                                faramElementName="activity"
-                                label="activity"
-                                disabled={!faramValues.subPriority}
-                                options={activityOptions}
-                                keySelector={ndrrsapKeySelector}
-                                labelSelector={ndrrsapLabelSelector}
+                            <TextInput
+                                label="Position"
+                                faramElementName="position"
                             />
-                            <MultiSelectInput
-                                label="drr cycles"
-                                faramElementName="drrCycles"
-                                keySelector={drrCyclesKeySelector}
-                                labelSelector={drrCyclesLabelSelector}
-                                options={drrCycleOptions}
-                            />
-                            <MultiSelectInput
-                                label="elements"
-                                faramElementName="elements"
-                                options={elementsOptions}
-                                keySelector={elementsKeySelector}
-                                labelSelector={elementsLabelSelector}
-                            />
-                            <MultiSelectInput
-                                label="organization"
-                                faramElementName="organizations"
-                                options={organizationOptions}
-                                keySelector={organizationKeySelector}
-                                labelSelector={organizationLabelSelector}
-                            />
-                            {/*
-                            <SelectInput
-                                faramElementName="status"
-                                label="project status"
-                                options={projectStatusOptions}
-                            />
-                            */}
                         </Faram>
                     </React.Fragment>
                 }
@@ -257,4 +197,4 @@ class ProjectsProfileFilter extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectsProfileFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileContactFilter);

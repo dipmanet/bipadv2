@@ -329,6 +329,27 @@ export const lossAndDamageFilterValuesSelector = createSelector(
     ({ faramValues }) => faramValues,
 );
 
+// profile contact page
+
+export const profileContactPageSelector = ({ page }: AppState) =>
+    page.profileContactPage;
+
+export const profileContactFiltersSelector = createSelector(
+    profileContactPageSelector,
+    regionSelector,
+    (profileContactPage, region) => {
+        const { filters } = profileContactPage;
+        return {
+            ...filters,
+            faramValues: {
+                ...filters.faramValues,
+                region,
+            },
+        };
+    },
+);
+
+
 // projects profile page
 export const projectsProfilePageSelector = ({ page }: AppState) =>
     page.projectsProfilePage;
@@ -360,6 +381,11 @@ export const riskListSelector = createSelector(
 export const lpGasCookListSelector = createSelector(
     disasterProfilePageSelector,
     ({ lpGasCookList }) => lpGasCookList,
+);
+
+export const profileContactListSelector = createSelector(
+    profileContactPageSelector,
+    ({ contactList }) => contactList,
 );
 
 // bounds

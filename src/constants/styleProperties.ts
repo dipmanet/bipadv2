@@ -15,6 +15,9 @@ const styleProperties = {
     colorBackgroundNewItemHover: 'rgba(79, 195, 247, .2)',
     fontSizeUltraLarge: '32px',
     fontSizeUltraLargeAlt: '48px',
+
+    widthContactDisplayPicture: '96px',
+    heightContactDisplayPicture: '96px',
 };
 
 export default styleProperties;
