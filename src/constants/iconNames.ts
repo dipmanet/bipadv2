@@ -51,6 +51,7 @@ const iconNames = {
     back: 'ion-android-arrow-back',
 
     email: 'ion-ios-email',
+    star: 'ion-ios-star',
 };
 
 export default iconNames;

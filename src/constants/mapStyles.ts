@@ -442,4 +442,31 @@ export default {
             'text-halo-width': 1.5,
         },
     },
+    contactPoint: {
+        circle: {
+            'circle-color': '#1565c0',
+            'circle-radius': 7,
+            'circle-opacity': 1,
+        },
+        clusteredCircle: {
+            'circle-color': '#1565c0',
+            'circle-radius': [
+                'interpolate',
+                ['linear'],
+                ['get', 'point_count'],
+                2,
+                10,
+                40,
+                100,
+            ],
+            'circle-opacity': 1,
+        },
+        clusterLabelLayout: {
+            'text-field': '{point_count_abbreviated}',
+            'text-size': 12,
+        },
+        clusterLabelPaint: {
+            'text-color': '#ffffff',
+        },
+    },
 };

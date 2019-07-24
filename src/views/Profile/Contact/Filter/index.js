@@ -131,6 +131,7 @@ class ProfileContactFilter extends React.PureComponent {
 
             committeeValueList,
             trainingValueList,
+            positionValueList,
         } = this.props;
 
         const { showFilters } = this.state;
@@ -185,9 +186,10 @@ class ProfileContactFilter extends React.PureComponent {
                                 faramElementName="training"
                                 options={trainingValueList}
                             />
-                            <TextInput
+                            <SelectInput
                                 label="Position"
                                 faramElementName="position"
+                                options={positionValueList}
                             />
                         </Faram>
                     </React.Fragment>

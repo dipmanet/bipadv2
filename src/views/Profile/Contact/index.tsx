@@ -5,7 +5,11 @@ import memoize from 'memoize-one';
 import {
     _cs,
     mapToList,
+    listToMap,
 } from '@togglecorp/fujs';
+
+import MapLayer from '#rscz/Map/MapLayer';
+import MapSource from '#rscz/Map/MapSource';
 
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
@@ -22,7 +26,6 @@ import {
     municipalitiesSelector,
     profileContactFiltersSelector,
 } from '#selectors';
-
 import {
     AppState,
 } from '#store/types';
@@ -38,6 +41,7 @@ import {
 import {
     iconNames,
     getMapPaddings,
+    mapStyles,
 } from '#constants';
 
 import Filter from './Filter';
@@ -83,9 +87,7 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
             interface Response { results: Contact[] }
             const { results: contactList = [] } = response as Response;
 
-            setProfileContactList({
-                contactList,
-            });
+            setProfileContactList({ contactList });
         },
         onMount: true,
         query: {
@@ -107,6 +109,7 @@ interface Contact {
     trainings: Training[];
     ward?: string;
     workNumber: string;
+    isDrrFocalPerson: boolean;
 }
 
 interface Training {
@@ -132,13 +135,64 @@ const trainingValues = {
 
 const trainingValueList = mapToList(trainingValues, (v, k) => ({ key: k, label: v }));
 
-const emptyList = [];
+interface SelectInputOption {
+    key: string;
+    label: string;
+}
+
+interface Municipality {
+    id: number;
+    centroid: number[];
+    province: number;
+    district: number;
+}
+
+const emptyList = [] as [];
 
 class Contact extends React.PureComponent<Props> {
+    private getPositionOptions = memoize((contactList: Contact[]) => {
+        const contactPositionList = [...new Set(
+            contactList
+                .map(d => d.position)
+                .filter(d => !!d),
+        )];
+
+        const options = [] as SelectInputOption[];
+        contactPositionList.forEach(d => options.push({ key: d, label: d }));
+
+        return options;
+    })
+
+    private getPointsGeoJson = memoize((
+        contactList: Contact[],
+        municipalityList: Municipality[],
+    ) => {
+        const municipalityBounds = listToMap(municipalityList, d => d.id, d => d.centroid);
+
+        const pointList = contactList
+            .filter(d => d.point || d.municipality)
+            .map(d => (
+                d.point || municipalityBounds[d.municipality]
+            ));
+
+        const geojson = {
+            type: 'FeatureCollection',
+            features: pointList.map((p, i) => ({
+                id: i,
+                type: 'Feature',
+                geometry: {
+                    ...p,
+                },
+            })),
+        };
+
+        return geojson;
+    })
+
     private getFilteredContactList = memoize((
-        contactList,
+        contactList: Contact[],
         region,
-        municipalityList,
+        municipalityList: Municipality[],
         filterOptions,
     ) => {
         const {
@@ -147,24 +201,29 @@ class Contact extends React.PureComponent<Props> {
             position,
         } = filterOptions;
 
-        let newContactList = contactList;
+        let newContactList = contactList.sort((a: Contact, b: Contact) => {
+            const aWeight = a.isDrrFocalPerson ? 1 : 0;
+            const bWeight = b.isDrrFocalPerson ? 1 : 0;
+
+            return (bWeight - aWeight);
+        });
 
         if (committee) {
             newContactList = newContactList.filter(d => d.committee === committee);
         }
 
         if (training) {
-            newContactList = newContactList.filter(d => d.training === training);
+            newContactList = newContactList.filter((d) => {
+                if (!d.trainings) {
+                    return false;
+                }
+
+                return d.trainings.some(t => t.title === training);
+            });
         }
 
         if (position) {
-            newContactList = newContactList.filter((d) => {
-                if (d.position) {
-                    return d.position.toLowerCase().includes(position.toLowerCase());
-                }
-
-                return false;
-            });
+            newContactList = newContactList.filter(d => d.position === position);
         }
 
         if (!region.adminLevel) {
@@ -196,7 +255,6 @@ class Contact extends React.PureComponent<Props> {
         if (region.adminLevel === 3) {
             return newContactList.filter(d => d.municipality === region.geoarea);
         }
-
 
         return emptyList;
     })
@@ -263,6 +321,7 @@ class Contact extends React.PureComponent<Props> {
             position,
             trainings = [],
             mobileNumber,
+            isDrrFocalPerson,
         } = contact;
 
         const Detail = this.renderDetail;
@@ -276,20 +335,31 @@ class Contact extends React.PureComponent<Props> {
                     <div className={styles.displayImageContainer}>
                         { image ? (
                             <img
+                                className={styles.image}
                                 src={image}
                                 alt="img"
                             />
                         ) : (
-                            <span className={_cs(
-                                styles.icon,
-                                iconNames.user,
-                            )}
+                            <span
+                                className={_cs(
+                                    styles.icon,
+                                    iconNames.user,
+                                )}
                             />
                         )}
                     </div>
                     <div className={styles.right}>
                         <h4 className={styles.name}>
                             { name }
+                            { isDrrFocalPerson && (
+                                <span
+                                    className={_cs(
+                                        styles.focalPersonIcon,
+                                        iconNames.star,
+                                    )}
+                                    title="DRR focal person"
+                                />
+                            )}
                         </h4>
                         <IconDetail
                             iconName={iconNames.telephone}
@@ -340,6 +410,12 @@ class Contact extends React.PureComponent<Props> {
             filterValues,
         );
 
+        const pointsGeoJson = this.getPointsGeoJson(filteredContactList, municipalityList);
+        const clusteredPointFilter = ['has', 'point_count'];
+        const nonClusteredPointFilter = ['!', clusteredPointFilter];
+
+        const positionOptions = this.getPositionOptions(contactList);
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
@@ -347,6 +423,31 @@ class Contact extends React.PureComponent<Props> {
                     region={region}
                     boundsPadding={getMapPaddings().leftPaneExpanded}
                 />
+                <MapSource
+                    sourceKey="profile-contact-points"
+                    geoJson={pointsGeoJson}
+                    cluster
+                >
+                    <MapLayer
+                        layerKey="contact-point-clusters"
+                        type="circle"
+                        paint={mapStyles.contactPoint.clusteredCircle}
+                        filter={clusteredPointFilter}
+                    />
+                    <MapLayer
+                        layerKey="contact-point-cluster-count"
+                        type="symbol"
+                        paint={mapStyles.contactPoint.clusterLabelPaint}
+                        layout={mapStyles.contactPoint.clusterLabelLayout}
+                        filter={clusteredPointFilter}
+                    />
+                    <MapLayer
+                        layerKey="contact-points"
+                        type="circle"
+                        paint={mapStyles.contactPoint.circle}
+                        filter={nonClusteredPointFilter}
+                    />
+                </MapSource>
                 <Page
                     leftContentClassName={styles.left}
                     leftContent={
@@ -370,6 +471,7 @@ class Contact extends React.PureComponent<Props> {
                         <Filter
                             committeeValueList={committeeValueList}
                             trainingValueList={trainingValueList}
+                            positionValueList={positionOptions}
                         />
                     }
                 />
