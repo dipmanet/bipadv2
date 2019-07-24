@@ -88,6 +88,9 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
             });
         },
         onMount: true,
+        query: {
+            expand: 'trainings',
+        },
     },
 };
 
@@ -101,15 +104,21 @@ interface Contact {
     name: string;
     point?: number[];
     position: string;
-    training: string;
+    trainings: Training[];
     ward?: string;
     workNumber: string;
+}
+
+interface Training {
+    id: string;
+    title: string;
 }
 
 const committeeValues = {
     LDMC: 'Local Disaster Management Committee',
     WDMC: 'Ward Disaster Management Committee',
     CDMC: 'Community Disaster Management Committee',
+    non_comittee_member: 'Non comittee members', // eslint-disable-line @typescript-eslint/camelcase
 };
 
 const committeeValueList = mapToList(committeeValues, (v, k) => ({ key: k, label: v }));
@@ -252,12 +261,14 @@ class Contact extends React.PureComponent<Props> {
             email,
             committee,
             position,
-            training,
+            trainings = [],
             mobileNumber,
         } = contact;
 
         const Detail = this.renderDetail;
         const IconDetail = this.renderIconDetail;
+
+        const trainingValueString = trainings.map(d => trainingValues[d.title]).join(', ') || '-';
 
         return (
             <div className={styles.contactDetails}>
@@ -292,7 +303,7 @@ class Contact extends React.PureComponent<Props> {
                 </div>
                 <Detail
                     label="Comittee"
-                    value={committeeValues[committee] || 'Non comittee member'}
+                    value={committeeValues[committee] || '-'}
                 />
                 <Detail
                     label="Position"
@@ -300,7 +311,7 @@ class Contact extends React.PureComponent<Props> {
                 />
                 <Detail
                     label="Training"
-                    value={trainingValues[training] || '-'}
+                    value={trainingValueString}
                 />
             </div>
         );
