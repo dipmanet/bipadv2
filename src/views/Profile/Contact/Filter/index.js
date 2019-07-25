@@ -7,7 +7,7 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import SelectInput from '#rsci/SelectInput';
-import TextInput from '#rsci/TextInput';
+import Checkbox from '#rsci/Checkbox';
 
 import CollapsibleView from '#components/CollapsibleView';
 import RegionSelectInput from '#components/RegionSelectInput';
@@ -53,6 +53,7 @@ class ProfileContactFilter extends React.PureComponent {
             committee: [],
             position: [],
             training: [],
+            drrFocalPerson: [],
         },
     }
 
@@ -175,6 +176,11 @@ class ProfileContactFilter extends React.PureComponent {
                             <RegionSelectInput
                                 className={styles.regionSelectInput}
                                 faramElementName="region"
+                            />
+                            <Checkbox
+                                className={styles.drrFocalPersonCheckbox}
+                                label="Show DRR Focal Person"
+                                faramElementName="drrFocalPerson"
                             />
                             <SelectInput
                                 label="Committee"

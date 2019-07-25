@@ -199,6 +199,7 @@ class Contact extends React.PureComponent<Props> {
             committee,
             training,
             position,
+            drrFocalPerson,
         } = filterOptions;
 
         let newContactList = contactList.sort((a: Contact, b: Contact) => {
@@ -207,6 +208,8 @@ class Contact extends React.PureComponent<Props> {
 
             return (bWeight - aWeight);
         });
+
+        newContactList = newContactList.filter(d => d.isDrrFocalPerson !== (!drrFocalPerson));
 
         if (committee) {
             newContactList = newContactList.filter(d => d.committee === committee);

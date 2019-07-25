@@ -155,6 +155,7 @@ const state: PageState = {
         contactList: [],
         filters: {
             faramValues: {
+                drrFocalPerson: true,
             },
             faramErrors: {},
             pristine: true,
