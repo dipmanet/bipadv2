@@ -121,7 +121,7 @@ const committeeValues = {
     LDMC: 'Local Disaster Management Committee',
     WDMC: 'Ward Disaster Management Committee',
     CDMC: 'Community Disaster Management Committee',
-    non_comittee_member: 'Non comittee members', // eslint-disable-line @typescript-eslint/camelcase
+    non_committee: 'Non committee members', // eslint-disable-line @typescript-eslint/camelcase
 };
 
 const committeeValueList = mapToList(committeeValues, (v, k) => ({ key: k, label: v }));
@@ -199,7 +199,7 @@ class Contact extends React.PureComponent<Props> {
             committee,
             training,
             position,
-            drrFocalPerson,
+            drrFocalPersonOnly,
         } = filterOptions;
 
         let newContactList = contactList.sort((a: Contact, b: Contact) => {
@@ -209,7 +209,9 @@ class Contact extends React.PureComponent<Props> {
             return (bWeight - aWeight);
         });
 
-        newContactList = newContactList.filter(d => d.isDrrFocalPerson !== (!drrFocalPerson));
+        if (drrFocalPersonOnly) {
+            newContactList = newContactList.filter(d => d.isDrrFocalPerson);
+        }
 
         if (committee) {
             newContactList = newContactList.filter(d => d.committee === committee);

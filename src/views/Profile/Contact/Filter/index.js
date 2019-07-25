@@ -53,7 +53,7 @@ class ProfileContactFilter extends React.PureComponent {
             committee: [],
             position: [],
             training: [],
-            drrFocalPerson: [],
+            drrFocalPersonOnly: [],
         },
     }
 
@@ -179,8 +179,8 @@ class ProfileContactFilter extends React.PureComponent {
                             />
                             <Checkbox
                                 className={styles.drrFocalPersonCheckbox}
-                                label="Show DRR Focal Person"
-                                faramElementName="drrFocalPerson"
+                                label="Show DRR Focal Person Only"
+                                faramElementName="drrFocalPersonOnly"
                             />
                             <SelectInput
                                 label="Committee"
