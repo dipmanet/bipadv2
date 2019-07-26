@@ -58,11 +58,26 @@
                         .focal-person-icon {
                             display: inline-block;
                             margin-left: var(--spacing-medium);
-                            color: var(--color-accent);
+                            color: var(--color-danger);
                         }
                     }
                 }
             }
+
+            &.focal-person {
+                .position {
+                    color: var(--color-danger);
+                }
+
+                .personal-details {
+                    .right {
+                        .name {
+                            color: var(--color-danger);
+                        }
+                    }
+                }
+            }
+
         }
     }
 

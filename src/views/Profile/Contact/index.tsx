@@ -60,6 +60,7 @@ interface PropsFromDispatch {
     setProfileContactList: typeof setProfileContactListAction;
 }
 interface PropsFromState {
+    municipalityList: Municipality[];
     contactList: Contact[];
 }
 
@@ -110,6 +111,7 @@ interface Contact {
     ward?: string;
     workNumber: string;
     isDrrFocalPerson: boolean;
+    organization: string;
 }
 
 interface Training {
@@ -145,11 +147,16 @@ interface Municipality {
     centroid: number[];
     province: number;
     district: number;
+    title: string;
 }
 
 const emptyList = [] as [];
 
 class Contact extends React.PureComponent<Props> {
+    private getMunicipalityMap = (municipalityList: Municipality[]) => (
+        listToMap(municipalityList, d => d.id, d => d.title)
+    )
+
     private getPositionOptions = memoize((contactList: Contact[]) => {
         const contactPositionList = [...new Set(
             contactList
@@ -266,6 +273,7 @@ class Contact extends React.PureComponent<Props> {
 
     private contactRendererParams = (_: string, data: Contact) => ({
         contact: data,
+        municipalityList: this.props.municipalityList,
     })
 
     private renderDetail = (p: {
@@ -312,7 +320,10 @@ class Contact extends React.PureComponent<Props> {
         );
     }
     private renderContactDetails = (p: { contact: Contact }) => {
-        const { contact } = p;
+        const {
+            contact,
+            municipalityList,
+        } = p;
 
         if (!contact) {
             return null;
@@ -327,15 +338,22 @@ class Contact extends React.PureComponent<Props> {
             trainings = [],
             mobileNumber,
             isDrrFocalPerson,
+            municipality,
+            organization,
         } = contact;
 
         const Detail = this.renderDetail;
         const IconDetail = this.renderIconDetail;
 
         const trainingValueString = trainings.map(d => trainingValues[d.title]).join(', ') || '-';
+        const municipalities = this.getMunicipalityMap(municipalityList);
 
         return (
-            <div className={styles.contactDetails}>
+            <div className={_cs(
+                styles.contactDetails,
+                isDrrFocalPerson && styles.focalPerson,
+            )}
+            >
                 <div className={styles.personalDetails}>
                     <div className={styles.displayImageContainer}>
                         { image ? (
@@ -377,10 +395,19 @@ class Contact extends React.PureComponent<Props> {
                     </div>
                 </div>
                 <Detail
+                    label="Municipality"
+                    value={municipalities[municipality]}
+                />
+                <Detail
+                    label="Organization"
+                    value={organization || '-'}
+                />
+                <Detail
                     label="Comittee"
                     value={committeeValues[committee] || '-'}
                 />
                 <Detail
+                    className={styles.position}
                     label="Position"
                     value={position}
                 />
