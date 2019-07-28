@@ -92,7 +92,7 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
         },
         onMount: true,
         query: {
-            expand: 'trainings',
+            expand: ['trainings', 'organization'],
         },
     },
 };
@@ -111,7 +111,9 @@ interface Contact {
     ward?: string;
     workNumber: string;
     isDrrFocalPerson: boolean;
-    organization: string;
+    organization: {
+        title: string;
+    };
 }
 
 interface Training {
@@ -339,7 +341,7 @@ class Contact extends React.PureComponent<Props> {
             mobileNumber,
             isDrrFocalPerson,
             municipality,
-            organization,
+            organization = {},
         } = contact;
 
         const Detail = this.renderDetail;
@@ -400,7 +402,7 @@ class Contact extends React.PureComponent<Props> {
                 />
                 <Detail
                     label="Organization"
-                    value={organization || '-'}
+                    value={organization.title || '-'}
                 />
                 <Detail
                     label="Comittee"
