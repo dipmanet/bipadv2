@@ -152,8 +152,6 @@ interface Municipality {
     title: string;
 }
 
-const emptyList = [] as [];
-
 class Contact extends React.PureComponent<Props> {
     private getMunicipalityMap = (municipalityList: Municipality[]) => (
         listToMap(municipalityList, d => d.id, d => d.title)
@@ -270,7 +268,7 @@ class Contact extends React.PureComponent<Props> {
             return newContactList.filter(d => d.municipality === region.geoarea);
         }
 
-        return emptyList;
+        return [];
     })
 
     private contactRendererParams = (_: string, data: Contact) => ({

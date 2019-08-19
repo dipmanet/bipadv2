@@ -40,9 +40,6 @@ const mapDispatchToProps = dispatch => ({
     setFilters: params => dispatch(setProfileContactFiltersAction(params)),
 });
 
-const emptyList = [];
-const emptyObject = {};
-
 class ProfileContactFilter extends React.PureComponent {
     static propTypes = propTypes;
     static defaultProps = defaultProps;
@@ -66,42 +63,11 @@ class ProfileContactFilter extends React.PureComponent {
     }
 
     handleFaramChange = (faramValues, faramErrors) => {
-        const {
-            filters: {
-                faramValues: oldFaramValues = emptyObject,
-            } = {},
-        } = this.props;
-        let newFaramValues = faramValues;
-
-        if (oldFaramValues.priority !== faramValues.priority) {
-            newFaramValues = {
-                ...faramValues,
-                subPriority: undefined,
-                activity: undefined,
-            };
-        } else if (oldFaramValues.subPriority !== faramValues.subPriority) {
-            newFaramValues = {
-                ...faramValues,
-                activity: undefined,
-            };
-        }
-
         this.props.setFilters({
-            faramValues: newFaramValues,
+            faramValues,
             faramErrors,
             pristine: false,
         });
-    }
-
-    handleFaramFailure = (faramErrors) => {
-        this.props.setFilters({
-            faramErrors,
-            pristine: true,
-        });
-    }
-
-    handleFaramSuccess = (_, values) => {
-        console.warn(values);
     }
 
     handleShowFiltersButtonClick = () => {
@@ -126,9 +92,9 @@ class ProfileContactFilter extends React.PureComponent {
         const {
             className,
             filters: {
-                faramValues = emptyObject,
-                faramErrors = emptyObject,
-            } = {},
+                faramValues,
+                faramErrors,
+            },
 
             committeeValueList,
             trainingValueList,
@@ -167,8 +133,6 @@ class ProfileContactFilter extends React.PureComponent {
                         <Faram
                             className={styles.filterForm}
                             onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramFailure}
-                            onValidationSuccess={this.handleFaramSuccess}
                             schema={ProfileContactFilter.schema}
                             value={faramValues}
                             error={faramErrors}
