@@ -218,9 +218,27 @@ export const setRiskListAction = (
 });
 
 export const setLpGasCookListAction = (
-    { lpGasCookList }: { lpGasCookList: Type.LpGasCook[] }) => ({
+    { lpGasCookList }: { lpGasCookList: Type.LpGasCook[] },
+) => ({
     type: Type.PageType.DPP__SET_LP_GAS_COOK_LIST,
     lpGasCookList,
+});
+
+// profile contact action creator
+export const setProfileContactListAction = (
+    { contactList }: { contactList: Type.Contact[] },
+) => ({
+    type: Type.PageType.PCP__SET_CONTACT_LIST,
+    contactList,
+});
+
+export const setProfileContactFiltersAction = (
+    { faramValues, faramErrors, pristine }: Type.ProfileContactFilters,
+) => ({
+    type: Type.PageType.PCP__SET_FILTERS,
+    faramValues,
+    faramErrors,
+    pristine,
 });
 
 //  REDUCERS
@@ -776,6 +794,57 @@ export const setLpGasCookList = (
     return newState;
 };
 
+// profile contact page
+export const setProfileContactList = (
+    state: Type.PageState,
+    action: Type.SetProfileContactList,
+) => {
+    const {
+        contactList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable-next-line no-param-reassign */
+        deferedState.profileContactPage.contactList = contactList;
+    });
+
+    return newState;
+};
+
+export const setProfileContactFilters = (
+    state: Type.PageState,
+    action: Type.SetProfileContactFilters,
+) => {
+    const {
+        faramValues,
+        faramErrors,
+        pristine,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        const {
+            region,
+            ...faramValuesNoRegion
+        } = faramValues;
+
+        /* eslint-disable no-param-reassign */
+        deferedState.region = region;
+
+        if (faramValues) {
+            deferedState.profileContactPage.filters.faramValues = faramValuesNoRegion;
+        }
+        if (faramErrors) {
+            deferedState.profileContactPage.filters.faramErrors = faramErrors;
+        }
+        if (pristine) {
+            deferedState.profileContactPage.filters.pristine = pristine;
+        }
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
@@ -841,6 +910,10 @@ export default function routeReducer(
             return setRiskList(state, action);
         case Type.PageType.DPP__SET_LP_GAS_COOK_LIST:
             return setLpGasCookList(state, action);
+        case Type.PageType.PCP__SET_CONTACT_LIST:
+            return setProfileContactList(state, action);
+        case Type.PageType.PCP__SET_FILTERS:
+            return setProfileContactFilters(state, action);
         default:
             return state;
     }

@@ -36,7 +36,7 @@ build:
   script:
     # clone libs
     - mkdir -p $(dirname "${REACT_STORE_DIR}")
-    - git clone https://github.com/toggle-corp/react-store.git --branch bipad ${REACT_STORE_DIR}
+    - git clone https://github.com/toggle-corp/react-store.git --branch bipad-v1.2 ${REACT_STORE_DIR}
     # Build docker image
     - |
       docker build\

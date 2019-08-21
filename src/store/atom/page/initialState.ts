@@ -150,5 +150,16 @@ const state: PageState = {
         riskList: [],
         lpGasCookList: [],
     },
+
+    profileContactPage: {
+        contactList: [],
+        filters: {
+            faramValues: {
+                drrFocalPersonOnly: false,
+            },
+            faramErrors: {},
+            pristine: true,
+        },
+    },
 };
 export default state;

@@ -235,6 +235,19 @@ export interface DisasterProfilePage {
     lpGasCookList: LpGasCook[];
 }
 
+export interface ProfileContactFilters {
+    faramValues: {
+        region?: Region;
+    };
+    faramErrors: object;
+    pristine: boolean;
+}
+
+export interface ProfileContactPage {
+    contactList: Contact[];
+    filters: ProfileContactFilters;
+}
+
 export interface RealTimeSource {
     id: number;
     title: string;
@@ -293,6 +306,7 @@ export interface PageState {
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
+    profileContactPage: ProfileContactPage;
 }
 
 // ACTION TYPES
@@ -342,6 +356,10 @@ export enum PageType {
     // // disaster profile page
     DPP__SET_RISK_LIST = 'page/DISASTER_PROFILE/SET_RISK_LIST',
     DPP__SET_LP_GAS_COOK_LIST = 'page/DISASTER_PROFILE/SET_LP_GAS_COOK_LIST',
+
+    // Profile contact page
+    PCP__SET_CONTACT_LIST = 'page/PROFILE_CONTACT/SET_CONTACT_LIST',
+    PCP__SET_FILTERS = 'page/PROFILE_CONTACT/SET_FILTERS',
 }
 
 // ACTION CREATOR INTERFACE
@@ -500,6 +518,29 @@ export interface SetLpGasCookList {
     type: typeof PageType.DPP__SET_LP_GAS_COOK_LIST;
     lpGasCookList: LpGasCook[];
 }
+export interface Contact {
+    committee: string;
+    email: string;
+    id: string;
+    image?: string;
+    mobileNumber: string;
+    municipality: string;
+    name: string;
+    point?: number[];
+    position: string;
+    training: string;
+    ward?: string;
+    workNumber: string;
+}
+
+export interface SetProfileContactList {
+    type: typeof PageType.PCP__SET_CONTACT_LIST;
+    contactList: Contact[];
+}
+
+export interface SetProfileContactFilters extends ProfileContactFilters {
+    type: typeof PageType.PCP__SET_FILTERS;
+}
 
 export type PageActionTypes = (
     SetRegion | SetInitialPopupHidden |
@@ -510,5 +551,6 @@ export type PageActionTypes = (
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
-    SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList
+    SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
+    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters
 );

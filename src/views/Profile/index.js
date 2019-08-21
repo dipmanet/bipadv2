@@ -7,6 +7,7 @@ import FixedTabs from '#rscv/FixedTabs';
 import DisasterProfile from './DisasterProfile';
 import ProjectsProfile from './ProjectsProfile';
 import Indicator from './Indicator';
+import Contact from './Contact';
 
 import styles from './styles.scss';
 
@@ -26,6 +27,7 @@ export default class Profile extends React.PureComponent {
         this.tabs = {
             projectsProfile: 'Projects',
             disasterProfile: 'Disaster',
+            contact: 'Contact',
             indicator: 'Indicator',
         };
 
@@ -35,6 +37,9 @@ export default class Profile extends React.PureComponent {
             },
             projectsProfile: {
                 component: ProjectsProfile,
+            },
+            contact: {
+                component: Contact,
             },
             indicator: {
                 component: Indicator,

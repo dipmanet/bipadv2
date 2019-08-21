@@ -1,6 +1,7 @@
 @import '~base-scss/base';
 
 $width-right-panel: var(--width-right-panel);
+
 .filter {
     display: flex;
     flex-direction: column;
@@ -46,6 +47,10 @@ $width-right-panel: var(--width-right-panel);
             overflow: auto;
 
             .region-select-input {
+                margin-bottom: var(--spacing-medium);
+            }
+
+            .drr-focal-person-checkbox {
                 margin-bottom: var(--spacing-medium);
             }
         }

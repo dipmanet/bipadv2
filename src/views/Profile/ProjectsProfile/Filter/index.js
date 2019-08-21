@@ -195,6 +195,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                             error={faramErrors}
                         >
                             <RegionSelectInput
+                                className={styles.regionSelectInput}
                                 faramElementName="region"
                             />
                             <SelectInput
