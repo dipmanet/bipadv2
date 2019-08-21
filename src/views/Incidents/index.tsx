@@ -220,7 +220,7 @@ class Incidents extends React.PureComponent<Props, State> {
             const widthRightPanel = rightPaneExpanded
                 ? convertValueToNumber(styleProperties.widthRightPanel)
                 : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
             const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
 
             if (!this.previousMapContorlStyle) {
