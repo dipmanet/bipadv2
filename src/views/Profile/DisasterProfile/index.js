@@ -5,8 +5,10 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
-import { lossMetrics } from '#utils/domain';
 import Map from '#rscz/Map';
+import MapContainer from '#rscz/Map/MapContainer';
+
+import { lossMetrics } from '#utils/domain';
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 import TextOutput from '#components/TextOutput';
@@ -240,7 +242,6 @@ class DisasterProfile extends React.PureComponent {
                     </div>
                     <div className={styles.content}>
                         <Map
-                            className={styles.map}
                             mapStyle={mapStyle}
                             fitBoundsDuration={200}
                             minZoom={5}
@@ -252,6 +253,7 @@ class DisasterProfile extends React.PureComponent {
                             showNavControl
                             navControlPosition="bottom-right"
                         >
+                            <MapContainer className={styles.map} />
                             <CommonMap
                                 region={region}
                             />

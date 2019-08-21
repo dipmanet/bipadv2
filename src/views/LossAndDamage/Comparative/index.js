@@ -15,6 +15,7 @@ import Page from '#components/Page';
 import LossDetails from '#components/LossDetails';
 import GeoResolve from '#components/GeoResolve';
 
+import MapContainer from '#rscz/Map/MapContainer';
 import Map from '#rscz/Map';
 
 import {
@@ -228,7 +229,6 @@ class Comparative extends React.PureComponent {
                                 <div className={styles.mapContainer}>
                                     { isRegionValid(faramValues.region1) &&
                                         <Map
-                                            className={styles.map1}
                                             mapStyle={mapStyle}
                                             fitBoundsDuration={200}
                                             minZoom={5}
@@ -240,6 +240,7 @@ class Comparative extends React.PureComponent {
                                             showNavControl
                                             navControlPosition="bottom-right"
                                         >
+                                            <MapContainer className={styles.map1} />
                                             <CommonMap
                                                 region={faramValues.region1}
                                             />
@@ -247,7 +248,6 @@ class Comparative extends React.PureComponent {
                                     }
                                     { isRegionValid(faramValues.region2) &&
                                         <Map
-                                            className={styles.map2}
                                             mapStyle={mapStyle}
                                             fitBoundsDuration={200}
                                             minZoom={5}
@@ -259,6 +259,7 @@ class Comparative extends React.PureComponent {
                                             showNavControl
                                             navControlPosition="bottom-right"
                                         >
+                                            <MapContainer className={styles.map2} />
                                             <CommonMap
                                                 region={faramValues.region2}
                                             />

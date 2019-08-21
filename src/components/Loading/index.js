@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Spinner from '#rscz/Spinner';
+import Spinner from '#rscv/Spinner';
 
 import styles from './styles.scss';
 
