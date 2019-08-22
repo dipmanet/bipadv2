@@ -18,12 +18,6 @@ import styles from './styles.scss';
 const propTypes = {
     hazardTypeList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
-    // iconSelector: PropTypes.func,
-    // keySelector: PropTypes.func,
-    // labelSelector: PropTypes.func,
-    // options: PropTypes.array,
-    // showLabel: PropTypes.bool,
-    // value: PropTypes.array,
 };
 
 const defaultProps = {
@@ -42,6 +36,7 @@ const compareHazard = (a, b) => compareString(
 
 class HazardSelectionInput extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {

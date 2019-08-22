@@ -25,6 +25,7 @@ const isRecent = (date, recentDay) => {
 
 export default class AlertItem extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     render() {

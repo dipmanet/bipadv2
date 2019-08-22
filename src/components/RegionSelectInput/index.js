@@ -53,6 +53,7 @@ const mapStateToProps = state => ({
 @FaramInputElement
 export default class RegionSelectInput extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     /*

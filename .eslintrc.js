@@ -67,6 +67,16 @@ module.exports = {
         'react/jsx-filename-extension': ['error', {'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
         'react/prop-types': [1, { 'ignore': [], 'customValidators': [], 'skipUndeclared': false }],
         'react/forbid-prop-types': [1],
+        'react/destructuring-assignment': [1, "always", { "ignoreClassFields": true }],
+        'react/sort-comp': [1, {
+            order: [
+                'static-methods',
+                'constructor',
+                'lifecycle',
+                'everything-else',
+                'render',
+            ],
+        }],
 
         'jsx-a11y/anchor-is-valid': [ 'error', {
             'components': [ 'Link' ],
@@ -91,6 +101,8 @@ module.exports = {
         'jsx-a11y/label-has-for': 'warn',
 
         '@typescript-eslint/no-empty-interface': 0,
+        '@typescript-eslint/explicit-function-return-type': 0,
+
 
         'react/no-unused-state': 'warn',
         'react/default-props-match-prop-types': ['warn', {

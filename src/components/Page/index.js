@@ -20,6 +20,7 @@ const defaultProps = {
 
 export default class Page extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     render() {
@@ -34,7 +35,7 @@ export default class Page extends React.PureComponent {
         } = this.props;
 
         return (
-            <React.Fragment >
+            <React.Fragment>
                 { mainContent && (
                     <main className={_cs(styles.mainContent, mainContentClassName)}>
                         { mainContent }

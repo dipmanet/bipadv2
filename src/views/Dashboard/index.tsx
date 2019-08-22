@@ -223,8 +223,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         return hazardTypesList(items, hazardTypes);
     });
 
-    private getAlertMap = memoize(alertList =>
-        listToMap(
+    private getAlertMap = memoize(
+        alertList => listToMap(
             alertList,
             (d: {
                 id: number;
@@ -236,8 +236,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         ),
     );
 
-    private getEventMap = memoize(eventList =>
-        listToMap(
+    private getEventMap = memoize(
+        eventList => listToMap(
             eventList,
             (d: {
                 id: number;
@@ -256,7 +256,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             const widthRightPanel = rightPaneExpanded
                 ? convertValueToNumber(styleProperties.widthRightPanel)
                 : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
             const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
 
             if (!this.previousMapContorlStyle) {
@@ -267,6 +267,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     private alertTimeout?: number
+
     private eventTimeout?: number
 
     private alertPoll = (delay: number) => {
@@ -400,7 +401,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <Loading pending={pending} />
                 <HoverItemDetail />
                 <Page
-                    leftContent={
+                    leftContent={(
                         <LeftPane
                             alertList={alertList}
                             eventList={eventList}
@@ -409,19 +410,19 @@ class Dashboard extends React.PureComponent<Props, State> {
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                         />
-                    }
-                    mainContent={
+                    )}
+                    mainContent={(
                         <HazardsLegend
                             filteredHazardTypes={filteredHazardTypes}
                             className={styles.hazardLegend}
                             itemClassName={styles.legendItem}
                         />
-                    }
-                    rightContent={
+                    )}
+                    rightContent={(
                         <DashboardFilter
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
-                    }
+                    )}
                 />
             </React.Fragment>
         );

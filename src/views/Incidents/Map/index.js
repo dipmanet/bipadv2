@@ -49,6 +49,7 @@ const mapStateToProps = state => ({
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -61,11 +62,16 @@ class IncidentMap extends React.PureComponent {
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 

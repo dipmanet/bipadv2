@@ -40,6 +40,7 @@ const eventKeySelector = d => d.id;
 
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -240,7 +241,7 @@ export default class LeftPane extends React.PureComponent {
                 className={_cs(className, styles.leftPane)}
                 expanded={showAlerts}
                 collapsedViewContainerClassName={styles.showAlertsButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <React.Fragment>
                         <PrimaryButton
                             onClick={this.handleShowAlertsButtonClick}
@@ -249,21 +250,21 @@ export default class LeftPane extends React.PureComponent {
                             Show Overview
                         </PrimaryButton>
                     </React.Fragment>
-                }
+                )}
                 expandedViewContainerClassName={styles.overviewContainer}
-                expandedView={
+                expandedView={(
                     <CollapsibleView
                         expanded={showTabular}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
-                        collapsedView={
+                        collapsedView={(
                             <AlertsAndEvents
                                 alerts={alertList}
                                 events={eventList}
                                 pending={pending}
                             />
-                        }
+                        )}
                         expandedViewContainerClassName={styles.tabularContainer}
-                        expandedView={
+                        expandedView={(
                             <React.Fragment>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -282,9 +283,9 @@ export default class LeftPane extends React.PureComponent {
                                     className={styles.tabularView}
                                 />
                             </React.Fragment>
-                        }
+                        )}
                     />
-                }
+                )}
             />
         );
     }

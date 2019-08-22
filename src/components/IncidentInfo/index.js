@@ -31,11 +31,11 @@ const propTypes = {
 };
 
 const defaultProps = {
-    incident: {},
 };
 
 export default class IncidentInfo extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     render() {
@@ -100,14 +100,14 @@ export default class IncidentInfo extends React.PureComponent {
                     geoareaName={geoareaName}
                     className={styles.geoareaName}
                 />
-                { !hideLink &&
+                { !hideLink && (
                     <Link
                         className={styles.gotoResponseLink}
                         to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
                     >
                         Go to response
                     </Link>
-                }
+                )}
                 <DateOutput
                     className={styles.incidentDate}
                     date={incidentOn}
@@ -146,14 +146,14 @@ export default class IncidentInfo extends React.PureComponent {
                 <TextOutput
                     className={styles.commonInfo}
                     label="Reported On"
-                    value={
+                    value={(
                         <FormattedDate
                             mode="yyyy-MM-dd hh:mm"
                             value={reportedOn}
                         />
-                    }
+                    )}
                 />
-                { wardNames.length > 0 &&
+                { wardNames.length > 0 && (
                     <React.Fragment>
                         <div className={styles.hr} />
                         <b> Wards </b>
@@ -163,7 +163,7 @@ export default class IncidentInfo extends React.PureComponent {
                             ))}
                         </div>
                     </React.Fragment>
-                }
+                )}
                 <Loss
                     className={styles.loss}
                     label="Loss"

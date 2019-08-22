@@ -36,6 +36,7 @@ const legendLabelSelector = d => d.label;
 
 export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     getHazardSummary = memoize((incidentList) => {

@@ -2,13 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
-import NormalTaebul from '#rscv/Taebul';
-import Sortable from '#rscv/Taebul/Sortable';
-import ColumnWidth from '#rscv/Taebul/ColumnWidth';
-
-import DownloadButton from '#components/DownloadButton';
-import TableDateCell from '#components/TableDateCell';
-
 import {
     _cs,
     compareDate,
@@ -16,6 +9,13 @@ import {
     compareBoolean,
 } from '@togglecorp/fujs';
 
+
+import NormalTaebul from '#rscv/Taebul';
+import Sortable from '#rscv/Taebul/Sortable';
+import ColumnWidth from '#rscv/Taebul/ColumnWidth';
+
+import DownloadButton from '#components/DownloadButton';
+import TableDateCell from '#components/TableDateCell';
 import {
     convertTableToCsv,
     prepareColumns,
@@ -39,6 +39,7 @@ const defaultProps = {
 // eslint-disable-next-line react/no-multi-comp
 export default class AlertTable extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     static tableKeySelector = data => data.id;

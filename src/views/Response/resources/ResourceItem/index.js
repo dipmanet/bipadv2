@@ -15,7 +15,7 @@ const propTypes = {
     className: PropTypes.string,
     title: PropTypes.string.isRequired,
     contactNumber: PropTypes.string,
-    distance: PropTypes.number.isRequired,
+    distance: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     point: PropTypes.object.isRequired,
     resourceType: PropTypes.string.isRequired,
@@ -45,10 +45,8 @@ const inventoryToTextOutput = inventory => (
 
 export default class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
-    static defaultProps = defaultProps;
 
-    handleShareButton = () => {
-    }
+    static defaultProps = defaultProps;
 
     renderDetails = () => {
         const { resourceType, inventories } = this.props;
@@ -67,7 +65,7 @@ export default class ResourceItem extends React.PureComponent {
                         ))
                     }
                 </div>
-                { inventories.length > 0 &&
+                { inventories.length > 0 && (
                     <React.Fragment>
                         <hr />
                         <div className={styles.hr} />
@@ -76,7 +74,7 @@ export default class ResourceItem extends React.PureComponent {
                         </div>
                         {inventories.map(inventoryToTextOutput)}
                     </React.Fragment>
-                }
+                )}
             </React.Fragment>
         );
     }

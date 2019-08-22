@@ -125,18 +125,18 @@ export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Re
 });
 
 export const setInventoryCategoryListActionRP = (
-    { inventoryCategoryList }: { inventoryCategoryList: Type.InventoryCategory[]}) =>
-    ({
-        type: Type.PageType.RP__SET_INVENTORY_CATEGOIRES,
-        inventoryCategoryList,
-    });
+    { inventoryCategoryList }: { inventoryCategoryList: Type.InventoryCategory[] },
+) => ({
+    type: Type.PageType.RP__SET_INVENTORY_CATEGOIRES,
+    inventoryCategoryList,
+});
 
 export const setInventoryItemListActionRP = (
-    { inventoryItemList }: { inventoryItemList: Type.InventoryItem[]}) =>
-    ({
-        type: Type.PageType.RP__SET_INVENTORY_ITEMS,
-        inventoryItemList,
-    });
+    { inventoryItemList }: { inventoryItemList: Type.InventoryItem[] },
+) => ({
+    type: Type.PageType.RP__SET_INVENTORY_ITEMS,
+    inventoryItemList,
+});
 
 // real time monitoring action creator
 

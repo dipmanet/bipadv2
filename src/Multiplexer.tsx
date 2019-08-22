@@ -4,7 +4,8 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
 
-import Map from '#rscz/Map/index';
+import Map from '#rscz/Map';
+import MapContainer from '#rscz/Map/MapContainer';
 import { District, Province, Municipality } from '#store/atom/page/types';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -225,7 +226,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         />
                     */}
                     <Map
-                        className={styles.map}
                         mapStyle={mapStyle}
                         fitBoundsDuration={200}
                         minZoom={5}
@@ -237,6 +237,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         showNavControl
                         navControlPosition="bottom-right"
                     >
+                        <MapContainer className={styles.map} />
                         {this.renderRoutes()}
                     </Map>
                 </div>

@@ -157,7 +157,7 @@ export default class Timeline extends React.PureComponent {
             const widthRightPanel = rightPaneExpanded
                 ? convertValueToNumber(styleProperties.widthRightPanel)
                 : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
             const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
             const heightTimeline = convertValueToNumber(styleProperties.heightTimelineMainContent);
 

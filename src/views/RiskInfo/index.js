@@ -28,12 +28,12 @@ export default class RiskInfo extends React.PureComponent {
             <Page
                 className={styles.riskInfo}
                 mainContentClassName={styles.main}
-                mainContent={
+                mainContent={(
                     <iframe
                         title="Risk information"
                         src="https://bipad.naxa.com.np"
                     />
-                }
+                )}
             />
         );
     }

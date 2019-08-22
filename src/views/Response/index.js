@@ -142,6 +142,7 @@ const requests = {
 
 class Response extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -195,7 +196,7 @@ class Response extends React.PureComponent {
             const widthRightPanel = rightPaneExpanded
                 ? convertValueToNumber(styleProperties.widthRightPanelLarge)
                 : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.dimens.spacingMedium);
+            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
             const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
 
             if (!this.previousMapContorlStyle) {
@@ -243,7 +244,7 @@ class Response extends React.PureComponent {
         return (
             <React.Fragment>
                 <Loading pending={pending} />
-                { incident.id &&
+                { incident.id && (
                     <React.Fragment>
                         <Map
                             incident={incident}
@@ -253,7 +254,7 @@ class Response extends React.PureComponent {
                         />
                         <Page
                             leftContentClassName={styles.incidentDetails}
-                            leftContent={
+                            leftContent={(
                                 <React.Fragment>
                                     <ResourceList
                                         className={styles.resourceList}
@@ -270,9 +271,9 @@ class Response extends React.PureComponent {
                                         setStockPileFilter={this.setStockPileFilter}
                                     />
                                 </React.Fragment>
-                            }
+                            )}
                             rightContentClassName={styles.resourceListContainer}
-                            rightContent={
+                            rightContent={(
                                 <ResponseFilter
                                     resourceList={resourceList}
                                     filteredList={filteredResourceList}
@@ -280,10 +281,10 @@ class Response extends React.PureComponent {
                                     setStockPileFilter={this.setStockPileFilter}
                                     onExpandChange={this.handleRightPaneExpandChange}
                                 />
-                            }
+                            )}
                         />
                     </React.Fragment>
-                }
+                )}
             </React.Fragment>
         );
     }

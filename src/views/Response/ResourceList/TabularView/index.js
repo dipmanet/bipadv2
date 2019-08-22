@@ -47,6 +47,7 @@ const defaultProps = {
 
 export default class TabularView extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     static tableKeySelector = data => data.title;

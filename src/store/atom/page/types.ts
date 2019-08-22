@@ -311,6 +311,7 @@ export interface PageState {
 
 // ACTION TYPES
 
+// eslint-disable-next-line import/prefer-default-export
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',

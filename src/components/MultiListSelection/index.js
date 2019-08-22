@@ -43,6 +43,7 @@ const emptyArray = [];
 @FaramInputElement
 export default class MultiListSelection extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getRendererParams = (index, option, options) => {
@@ -138,16 +139,15 @@ export default class MultiListSelection extends React.PureComponent {
                         text={label}
                         show={showLabel}
                     />
-                    {showClearButton &&
+                    {showClearButton && (
                         <Button
                             className={styles.clearButton}
                             onClick={this.handleClearButtonClick}
                             transparent
-                            // iconName={iconNames.close}
                         >
                             Clear
                         </Button>
-                    }
+                    )}
                 </div>
                 <ListView
                     className={styles.options}

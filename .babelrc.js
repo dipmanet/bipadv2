@@ -8,12 +8,20 @@ module.exports = {
     },
     'presets': [
         '@babel/preset-typescript',
-        '@babel/preset-env',
         '@babel/preset-react',
+        ['@babel/preset-env', {
+            'useBuiltIns': "usage",
+            'corejs': 3,
+            'debug': true,
+        }],
     ],
+
     'plugins': [
         // Reuse babel's injected headers
-        ['@babel/plugin-transform-runtime', { 'regenerator': true }],
+        ['@babel/plugin-transform-runtime', {
+            'corejs': 3,
+            'regenerator': true,
+        }],
 
         // Stage 2
         ['@babel/plugin-proposal-decorators', { 'legacy': true }],

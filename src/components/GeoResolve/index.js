@@ -31,6 +31,7 @@ const mapStateToProps = state => ({
 @connect(mapStateToProps)
 export default class GeoResolve extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getRegionDetails = ({ adminLevel, geoarea } = {}) => {
@@ -42,9 +43,13 @@ export default class GeoResolve extends React.PureComponent {
 
         if (adminLevel === 1) {
             return provinces.find(p => p.id === geoarea);
-        } else if (adminLevel === 2) {
+        }
+
+        if (adminLevel === 2) {
             return districts.find(p => p.id === geoarea);
-        } else if (adminLevel === 3) {
+        }
+
+        if (adminLevel === 3) {
             return municipalities.find(p => p.id === geoarea);
         }
 
@@ -62,4 +67,3 @@ export default class GeoResolve extends React.PureComponent {
         );
     }
 }
-

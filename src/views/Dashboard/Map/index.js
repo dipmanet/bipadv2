@@ -41,6 +41,7 @@ const AlertTooltip = ({ title, description }) => (
         />
     </div>
 );
+
 AlertTooltip.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -61,15 +62,16 @@ const EventTooltip = ({ title, description, severity, createdOn }) => (
         />
         <TextOutput
             label="Created On"
-            value={
+            value={(
                 <FormattedDate
                     value={createdOn}
                     mode="yyyy-MM-dd hh:mm"
                 />
-            }
+            )}
         />
     </div>
 );
+
 EventTooltip.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -100,6 +102,7 @@ const mapStateToProps = state => ({
 
 class AlertEventMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
@@ -107,20 +110,29 @@ class AlertEventMap extends React.PureComponent {
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 
     getConvexAlertsFeatureCollection = memoize(alertToConvexPolygonGeojson);
+
     getPolygonAlertsFeatureCollection = memoize(alertToPolygonGeojson);
+
     getPointAlertsFeatureCollection = memoize(alertToPointGeojson);
 
     getConvexEventsFeatureCollection = memoize(eventToConvexPolygonGeojson);
+
     getPolygonEventsFeatureCollection = memoize(eventToPolygonGeojson);
+
     getPointEventsFeatureCollection = memoize(eventToPointGeojson);
 
     getFilter = memoize(timestamp => (

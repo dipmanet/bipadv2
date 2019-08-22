@@ -15,7 +15,7 @@ const getSortIcon = (sortOrder) => {
 
 export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
     <div className={styles.tableHeader}>
-        { sortable &&
+        { sortable && (
             <Button
                 className={styles.sortButton}
                 onClick={() => onSortClick(columnKey)}
@@ -23,7 +23,7 @@ export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
                 transparent
                 smallVerticalPadding
             />
-        }
+        )}
         <div
             title={title}
             className={styles.title}
@@ -32,4 +32,3 @@ export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
         </div>
     </div>
 );
-

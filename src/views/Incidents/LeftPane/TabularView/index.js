@@ -54,6 +54,7 @@ const createComparator = (comparator, key) => (a, b, d) => comparator(
 
 export default class TabularView extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     static tableKeySelector = data => data.id;
@@ -304,4 +305,3 @@ export default class TabularView extends React.PureComponent {
         );
     }
 }
-

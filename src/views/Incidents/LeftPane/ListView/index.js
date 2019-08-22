@@ -22,6 +22,7 @@ const incidentKeySelector = d => d.id;
 
 export default class IncidentListView extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     getIncidentRendererParams = (_, d) => ({

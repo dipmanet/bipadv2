@@ -25,6 +25,7 @@ const emptyList = [];
 
 export default class LossDetails extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     calculateSummary = memoize((lossAndDamageList) => {
@@ -52,19 +53,19 @@ export default class LossDetails extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.statsContainer)}>
-                { isDefined(minDate) &&
+                { isDefined(minDate) && (
                     <TextOutput
                         className={styles.stat}
                         label="Data available from"
                         type="block"
-                        value={
+                        value={(
                             <FormattedDate
                                 value={minDate}
                                 mode="yyyy-MM-dd"
                             />
-                        }
+                        )}
                     />
-                }
+                )}
                 { lossMetrics.map(metric => (
                     <TextOutput
                         className={styles.stat}

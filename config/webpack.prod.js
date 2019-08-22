@@ -3,9 +3,11 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const StylishPlugin = require('eslint/lib/cli-engine/formatters/stylish');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const dotenv = require('dotenv').config({
     path: '.env',
 });
@@ -18,7 +20,6 @@ const appDist = path.resolve(appBase, 'build/');
 const appIndexJs = path.resolve(appBase, 'src/index.tsx');
 const appIndexHtml = path.resolve(appBase, 'public/index.html');
 const appFavicon = path.resolve(appBase, 'public/favicon.ico');
-const appLogo = path.resolve(appBase, 'public/favicon.png');
 
 module.exports = (env) => {
     const ENV_VARS = { ...dotenv.pared, ...getEnvVariables(env) };
@@ -29,7 +30,7 @@ module.exports = (env) => {
             path: appDist,
             publicPath: '/',
             chunkFilename: 'js/[name].[chunkhash].js',
-            filename: 'js/[name].[chunkhash].js',
+            filename: 'js/[name].[contenthash].js',
             sourceMapFilename: 'sourcemaps/[file].map',
         },
 
@@ -51,10 +52,21 @@ module.exports = (env) => {
 
         optimization: {
             minimizer: [
+                /*
+                // NOTE: Using TerserPlugin instead of UglifyJsPlugin as es6 support deprecated
                 new UglifyJsPlugin({
                     sourceMap: true,
                     parallel: true,
                     uglifyOptions: {
+                        mangle: true,
+                        compress: { typeofs: false },
+                    },
+                }),
+                */
+                new TerserPlugin({
+                    parallel: true,
+                    sourceMap: true,
+                    terserOptions: {
                         mangle: true,
                         compress: { typeofs: false },
                     },
@@ -74,7 +86,8 @@ module.exports = (env) => {
                     },
                 },
             },
-            runtimeChunk: true,
+            runtimeChunk: 'single',
+            moduleIds: 'hashed',
         },
 
         module: {
@@ -88,6 +101,9 @@ module.exports = (env) => {
                             loader: 'eslint-loader',
                             options: {
                                 configFile: eslintFile,
+                                // NOTE: adding this because eslint 6 cannot find this
+                                // https://github.com/webpack-contrib/eslint-loader/issues/271
+                                formatter: StylishPlugin,
                             },
                         },
                     ],
@@ -110,10 +126,10 @@ module.exports = (env) => {
                             loader: require.resolve('css-loader'),
                             options: {
                                 importLoaders: 1,
-                                modules: true,
-                                camelCase: true,
-                                localIdentName: '[name]_[local]_[hash:base64]',
-                                minimize: true,
+                                modules: {
+                                    localIdentName: '[name]_[local]_[hash:base64]',
+                                },
+                                localsConvention: 'camelCase',
                                 sourceMap: true,
                             },
                         },
@@ -148,7 +164,7 @@ module.exports = (env) => {
                 allowAsyncCycles: false,
                 cwd: appBase,
             }),
-            new CleanWebpackPlugin([appDist], { root: appBase }),
+            new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
                 template: appIndexHtml,
                 filename: './index.html',
@@ -160,6 +176,7 @@ module.exports = (env) => {
                 filename: 'css/[name].css',
                 chunkFilename: 'css/[id].css',
             }),
+            new webpack.HashedModuleIdsPlugin(),
         ],
     };
 };
