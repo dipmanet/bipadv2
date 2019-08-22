@@ -81,6 +81,7 @@ const mapStateToProps = state => ({
 
 class Visualizations extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     getHazardTypes = memoize((lossAndDamageList) => {

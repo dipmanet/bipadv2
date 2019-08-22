@@ -21,6 +21,7 @@ const emptyObject = {};
 
 export default class EventItem extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     render() {

@@ -6,18 +6,13 @@ import { Region } from './types';
 
 const emptyList: unknown[] = [];
 
-const dashboardPageSelector = ({ page }: AppState) =>
-    page.dashboardPage;
+const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
-const incidentPageSelector = ({ page }: AppState) =>
-    page.incidentPage;
+const incidentPageSelector = ({ page }: AppState) => page.incidentPage;
 
-const responsePageSelector = ({ page }: AppState) => (
-    page.responsePage
-);
+const responsePageSelector = ({ page }: AppState) => page.responsePage;
 
-const realTimeMonitoringPageSelector = ({ page }: AppState) =>
-    page.realTimeMonitoringPage;
+const realTimeMonitoringPageSelector = ({ page }: AppState) => page.realTimeMonitoringPage;
 
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
@@ -43,24 +38,21 @@ export const regionLevelSelector = createSelector(
 
 const getId = (val: { id: number }) => val.id;
 
-export const provincesSelector = ({ page }: AppState) =>
-    page.provinces || emptyList;
+export const provincesSelector = ({ page }: AppState) => page.provinces || emptyList;
 
 export const provincesMapSelector = createSelector(
     provincesSelector,
     provinces => listToMap(provinces, getId),
 );
 
-export const districtsSelector = ({ page }: AppState) =>
-    page.districts || emptyList;
+export const districtsSelector = ({ page }: AppState) => page.districts || emptyList;
 
 export const districtsMapSelector = createSelector(
     districtsSelector,
     districts => listToMap(districts, getId),
 );
 
-const municipalitiesRawSelector = ({ page }: AppState) =>
-    page.municipalities || emptyList;
+const municipalitiesRawSelector = ({ page }: AppState) => page.municipalities || emptyList;
 
 export const municipalitiesSelector = createSelector(
     municipalitiesRawSelector,
@@ -81,8 +73,7 @@ export const municipalitiesMapSelector = createSelector(
     municipalities => listToMap(municipalities, getId),
 );
 
-const wardsRawSelector = ({ page }: AppState) =>
-    page.wards || emptyList;
+const wardsRawSelector = ({ page }: AppState) => page.wards || emptyList;
 
 export const wardsSelector = createSelector(
     wardsRawSelector,
@@ -116,13 +107,11 @@ export const regionsSelector = createSelector(
     }),
 );
 
-export const adminLevelListSelector = ({ page }: AppState) =>
-    page.adminLevelList;
+export const adminLevelListSelector = ({ page }: AppState) => page.adminLevelList;
 
 // common
 
-export const hazardTypesSelector = ({ page }: AppState) =>
-    page.hazardTypes;
+export const hazardTypesSelector = ({ page }: AppState) => page.hazardTypes;
 
 export const hazardTypeListSelector = createSelector(
     hazardTypesSelector,
@@ -136,11 +125,9 @@ export const resourceTypeListSelector = createSelector(
 
 // map styles
 
-export const mapStylesSelector = ({ page }: AppState) =>
-    page.mapStyles;
+export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
 
-export const mapStyleSelector = ({ page }: AppState) =>
-    page.selectedMapStyle;
+export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
 
 // dashboardPage
 
@@ -296,8 +283,7 @@ export const realTimeFiltersValuesSelector = createSelector(
 );
 
 // loss and damage page
-export const lossAndDamagePageSelector = ({ page }: AppState) =>
-    page.lossAndDamagePage;
+export const lossAndDamagePageSelector = ({ page }: AppState) => page.lossAndDamagePage;
 
 export const lossAndDamageFiltersSelector = createSelector(
     lossAndDamagePageSelector,
@@ -331,8 +317,7 @@ export const lossAndDamageFilterValuesSelector = createSelector(
 
 // profile contact page
 
-export const profileContactPageSelector = ({ page }: AppState) =>
-    page.profileContactPage;
+export const profileContactPageSelector = ({ page }: AppState) => page.profileContactPage;
 
 export const profileContactFiltersSelector = createSelector(
     profileContactPageSelector,
@@ -351,8 +336,7 @@ export const profileContactFiltersSelector = createSelector(
 
 
 // projects profile page
-export const projectsProfilePageSelector = ({ page }: AppState) =>
-    page.projectsProfilePage;
+export const projectsProfilePageSelector = ({ page }: AppState) => page.projectsProfilePage;
 
 export const projectsProfileFiltersSelector = createSelector(
     projectsProfilePageSelector,
@@ -370,8 +354,7 @@ export const projectsProfileFiltersSelector = createSelector(
 );
 
 // diaster profile page
-export const disasterProfilePageSelector = ({ page }: AppState) =>
-    page.disasterProfilePage;
+export const disasterProfilePageSelector = ({ page }: AppState) => page.disasterProfilePage;
 
 export const riskListSelector = createSelector(
     disasterProfilePageSelector,
@@ -437,9 +420,9 @@ export const boundsSelector = createSelector(
     (regionFromProps, region, provinces, districts, municipalities) => {
         const { adminLevel, geoarea } = regionFromProps || region;
         const geoAreas = (
-            (adminLevel === 1 && provinces) ||
-            (adminLevel === 2 && districts) ||
-            (adminLevel === 3 && municipalities)
+            (adminLevel === 1 && provinces)
+            || (adminLevel === 2 && districts)
+            || (adminLevel === 3 && municipalities)
         );
         if (!geoAreas) {
             return nepalBounds;

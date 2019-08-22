@@ -13,7 +13,6 @@ import Filter from '../Filter';
 
 import {
     metricMap,
-    metricType,
     getGroupMethod,
     getGroupedIncidents,
     getAggregatedStats,
@@ -31,6 +30,7 @@ const convertValueToNumber = (value = '') => +(value.substring(0, value.length -
 
 export default class Overview extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -160,7 +160,7 @@ export default class Overview extends React.PureComponent {
                 />
                 <Page
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <LeftPane
                             pending={pending}
                             lossAndDamageList={lossAndDamageList}
@@ -168,17 +168,15 @@ export default class Overview extends React.PureComponent {
                             rightPaneExpanded={rightPaneExpanded}
                             minDate={this.props.minDate}
                         />
-                    }
-                    rightContent={
+                    )}
+                    rightContent={(
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
                             metricOptions={lossMetrics}
-                            metricType={metricType}
                         />
-                    }
+                    )}
                 />
             </React.Fragment>
         );
     }
 }
-

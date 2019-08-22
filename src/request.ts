@@ -84,6 +84,6 @@ export function createConnectedRequestCoordinator<OwnProps>() {
     });
 
     return requestor;
-};
+}
 
 export * from '@togglecorp/react-rest-request';

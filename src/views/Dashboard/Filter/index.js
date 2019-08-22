@@ -45,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
 
 class DashboardFilter extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     static schema = {
@@ -117,17 +118,16 @@ class DashboardFilter extends React.PureComponent {
                 className={_cs(styles.filter, className)}
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
                         title="Show filters"
                     >
                         Show Filters
                     </PrimaryButton>
-
-                }
+                )}
                 expandedViewContainerClassName={styles.filtersContainer}
-                expandedView={
+                expandedView={(
                     <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -164,7 +164,7 @@ class DashboardFilter extends React.PureComponent {
                             />
                         </Faram>
                     </React.Fragment>
-                }
+                )}
             />
         );
     }

@@ -59,6 +59,7 @@ const filterSchema = {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class IncidentsFilter extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -123,16 +124,16 @@ export default class IncidentsFilter extends React.PureComponent {
                 className={styles.filter}
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFiltersButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
                         title="Show filters"
                     >
                         Show Filters
                     </PrimaryButton>
-                }
+                )}
                 expandedViewContainerClassName={styles.filtersContainer}
-                expandedView={
+                expandedView={(
                     <Faram
                         className={styles.form}
                         onChange={this.handleFaramChange}
@@ -177,7 +178,7 @@ export default class IncidentsFilter extends React.PureComponent {
                             />
                         </div>
                     </Faram>
-                }
+                )}
             />
         );
     }

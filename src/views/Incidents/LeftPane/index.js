@@ -35,6 +35,7 @@ const defaultProps = {
 
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -146,7 +147,7 @@ class LeftPane extends React.PureComponent {
                 className={_cs(className, styles.leftPane)}
                 expanded={showIncidents}
                 collapsedViewContainerClassName={styles.showIncidentsButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <React.Fragment>
                         <PrimaryButton
                             className={styles.showIncidentsButton}
@@ -156,13 +157,13 @@ class LeftPane extends React.PureComponent {
                             Show Incidents
                         </PrimaryButton>
                     </React.Fragment>
-                }
+                )}
                 expandedViewContainerClassName={styles.incidentsContainer}
-                expandedView={
+                expandedView={(
                     <CollapsibleView
                         expanded={showTabular}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
-                        collapsedView={
+                        collapsedView={(
                             <React.Fragment>
                                 <Header />
                                 <div className={styles.content}>
@@ -196,9 +197,9 @@ class LeftPane extends React.PureComponent {
                                     )}
                                 </div>
                             </React.Fragment>
-                        }
+                        )}
                         expandedViewContainerClassName={styles.tabularContainer}
-                        expandedView={
+                        expandedView={(
                             <React.Fragment>
                                 { this.renderTabularViewHeader() }
                                 <TabularView
@@ -206,9 +207,9 @@ class LeftPane extends React.PureComponent {
                                     className={styles.tabularView}
                                 />
                             </React.Fragment>
-                        }
+                        )}
                     />
-                }
+                )}
             />
         );
     }

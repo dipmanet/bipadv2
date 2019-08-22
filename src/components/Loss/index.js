@@ -21,6 +21,7 @@ const emptyObject = {};
 
 export default class Loss extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     render() {
@@ -41,7 +42,9 @@ export default class Loss extends React.PureComponent {
         return (
             <div className={_cs(className, styles.loss)}>
                 <div className={styles.label}>
-                    <b> { label } </b>
+                    <b>
+                        { label }
+                    </b>
                 </div>
                 <div>
                     <TextOutput

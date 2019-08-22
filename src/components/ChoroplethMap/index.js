@@ -83,16 +83,23 @@ const noneLayout = {
 
 class ChoroplethMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getProvincesFeatureCollection = memoize(regionLabelToGeojson);
+
     getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
+
     getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
+
     getWardsFeatureCollection = memoize(regionLabelToGeojson);
 
     getWardFilter = memoize(getWardFilter);
+
     getMunicipalityFilter = memoize(getMunicipalityFilter);
+
     getDistrictFilter = memoize(getDistrictFilter);
+
     getProvinceFilter = memoize(getProvinceFilter);
 
     render() {

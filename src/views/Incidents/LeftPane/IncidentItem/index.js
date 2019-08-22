@@ -32,6 +32,7 @@ const isRecent = (date, recentDay) => {
 
 export default class IncidentItem extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     render() {
@@ -50,9 +51,9 @@ export default class IncidentItem extends React.PureComponent {
             recentDay,
         } = this.props;
 
-        const verifiedIconClass = verified ?
-            _cs(styles.icon, iconNames.check, styles.verified) :
-            _cs(styles.icon, iconNames.close, styles.notVerified);
+        const verifiedIconClass = verified
+            ? _cs(styles.icon, iconNames.check, styles.verified)
+            : _cs(styles.icon, iconNames.close, styles.notVerified);
 
         const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(incidentOn, recentDay);

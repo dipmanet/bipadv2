@@ -37,11 +37,15 @@ const mapStateToProps = state => ({
 
 class ZoomMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getProvincesFeatureCollection = memoize(regionLabelToGeojson);
+
     getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
+
     getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
+
     getWardsFeatureCollection = memoize(regionLabelToGeojson);
 
     render() {

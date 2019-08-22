@@ -36,7 +36,6 @@ const MenuItem = ({
     title,
     link,
     iconName,
-    // routeKey,
     disabled,
 }) => {
     if (disabled) {
@@ -115,6 +114,7 @@ const defaultProps = {
 
 class Navbar extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     static menuKeySelector = d => d.name;
@@ -126,7 +126,9 @@ class Navbar extends React.PureComponent {
     }
 
     handleMenuClick = () => {
-        this.setState({ menuShown: !this.state.menuShown });
+        this.setState(state => ({
+            menuShown: !state.menuShown,
+        }));
     }
 
     handleUserClick = () => {
@@ -244,8 +246,8 @@ class Navbar extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-                {menuShown &&
-                    <div className={styles.layerSwitchBox} >
+                {menuShown && (
+                    <div className={styles.layerSwitchBox}>
                         <div className={styles.header}>
                             <h4>
                                 Map Layers
@@ -264,7 +266,7 @@ class Navbar extends React.PureComponent {
                             emptyComponent={null}
                         />
                     </div>
-                }
+                )}
             </React.Fragment>
         );
     }

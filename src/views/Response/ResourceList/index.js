@@ -28,6 +28,7 @@ const defaultProps = {
 
 export default class ResourceList extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -87,7 +88,7 @@ export default class ResourceList extends React.PureComponent {
                 className={_cs(className, styles.leftPane)}
                 expanded={showResource}
                 collapsedViewContainerClassName={styles.showResourceButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <React.Fragment>
                         <PrimaryButton
                             onClick={this.handleShowResourceButtonClick}
@@ -96,13 +97,13 @@ export default class ResourceList extends React.PureComponent {
                             Show details
                         </PrimaryButton>
                     </React.Fragment>
-                }
+                )}
                 expandedViewContainerClassName={styles.resourceContainer}
-                expandedView={
+                expandedView={(
                     <CollapsibleView
                         expanded={showTabular}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
-                        collapsedView={
+                        collapsedView={(
                             <div className={styles.resource}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -134,9 +135,9 @@ export default class ResourceList extends React.PureComponent {
                                     />
                                 </div>
                             </div>
-                        }
+                        )}
                         expandedViewContainerClassName={styles.tabularContainer}
-                        expandedView={
+                        expandedView={(
                             <React.Fragment>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -155,9 +156,9 @@ export default class ResourceList extends React.PureComponent {
                                     className={styles.tabularView}
                                 />
                             </React.Fragment>
-                        }
+                        )}
                     />
-                }
+                )}
             />
         );
     }

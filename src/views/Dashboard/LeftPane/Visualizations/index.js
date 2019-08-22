@@ -37,6 +37,7 @@ const chartColorScheme = [
 
 export default class Visualization extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getHazardSummary = memoize((alertList) => {
@@ -96,7 +97,7 @@ export default class Visualization extends React.PureComponent {
                         colorScheme={chartColorScheme}
                     />
                 </div>
-                {eventSummary.length > 0 &&
+                {eventSummary.length > 0 && (
                     <div className={styles.eventStatisticsChart}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -110,7 +111,7 @@ export default class Visualization extends React.PureComponent {
                             valueSelector={barChartValueSelector}
                         />
                     </div>
-                }
+                )}
             </div>
         );
     }

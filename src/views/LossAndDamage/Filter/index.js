@@ -44,6 +44,7 @@ const mapDispatchToProps = dispatch => ({
 
 class LossAndDamageFilter extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     static schema = {
@@ -107,7 +108,6 @@ class LossAndDamageFilter extends React.PureComponent {
                 faramValues,
                 faramErrors,
             },
-            metricType,
             onMetricChange,
             metricOptions,
             isTimeline,
@@ -128,15 +128,15 @@ class LossAndDamageFilter extends React.PureComponent {
                 )}
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <Button
                         onClick={this.handleShowFiltersButtonClick}
                         iconName={iconNames.filter}
                         title="Show filters"
                     />
-                }
+                )}
                 expandedViewContainerClassName={styles.filtersContainer}
-                expandedView={
+                expandedView={(
                     <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -191,7 +191,7 @@ class LossAndDamageFilter extends React.PureComponent {
                             />
                         </Faram>
                     </React.Fragment>
-                }
+                )}
             />
         );
     }

@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import memoize from 'memoize-one';
 import {
     _cs,
-    listToMap,
     isNotDefined,
 } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
@@ -22,16 +19,11 @@ import {
     mapStyleSelector,
 } from '#selectors';
 import CommonMap from '#components/CommonMap';
-import TextOutput from '#components/TextOutput';
 import RegionSelectInput from '#components/RegionSelectInput';
-import Button from '#rsca/Button';
 
 import Filter from '../Filter';
 import {
     getSanitizedIncidents,
-    getGroupMethod,
-    getGroupedIncidents,
-    metricType,
 } from '../common';
 
 import Visualizations from './Visualizations';
@@ -48,7 +40,6 @@ const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
 });
 
-const emptyObject = {};
 const emptyList = [];
 
 const isValidIncident = (
@@ -75,6 +66,7 @@ const isRegionValid = region => (
 
 class Comparative extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -182,7 +174,7 @@ class Comparative extends React.PureComponent {
             <Page
                 className={className}
                 leftContentClassName={_cs(styles.left, !rightPaneExpanded && styles.extended)}
-                leftContent={
+                leftContent={(
                     <div className={styles.comparative}>
                         <Faram
                             className={styles.regionSelectionForm}
@@ -215,19 +207,19 @@ class Comparative extends React.PureComponent {
                         ) : (
                             <div className={styles.comparisionContainer}>
                                 <div className={styles.titleContainer}>
-                                    { isRegionValid(faramValues.region1) &&
+                                    { isRegionValid(faramValues.region1) && (
                                         <h2>
                                             <GeoResolve data={region1} />
                                         </h2>
-                                    }
-                                    { isRegionValid(faramValues.region2) &&
+                                    )}
+                                    { isRegionValid(faramValues.region2) && (
                                         <h2>
                                             <GeoResolve data={region2} />
                                         </h2>
-                                    }
+                                    )}
                                 </div>
                                 <div className={styles.mapContainer}>
-                                    { isRegionValid(faramValues.region1) &&
+                                    { isRegionValid(faramValues.region1) && (
                                         <Map
                                             mapStyle={mapStyle}
                                             fitBoundsDuration={200}
@@ -245,8 +237,8 @@ class Comparative extends React.PureComponent {
                                                 region={faramValues.region1}
                                             />
                                         </Map>
-                                    }
-                                    { isRegionValid(faramValues.region2) &&
+                                    )}
+                                    { isRegionValid(faramValues.region2) && (
                                         <Map
                                             mapStyle={mapStyle}
                                             fitBoundsDuration={200}
@@ -264,58 +256,57 @@ class Comparative extends React.PureComponent {
                                                 region={faramValues.region2}
                                             />
                                         </Map>
-                                    }
+                                    )}
                                 </div>
                                 <div className={styles.visualizations}>
                                     <div className={styles.aggregatedStats}>
-                                        { isRegionValid(faramValues.region1) &&
+                                        { isRegionValid(faramValues.region1) && (
                                             <LossDetails
                                                 className={styles.aggregatedStat}
                                                 data={region1Incidents}
                                                 minDate={minDate}
                                             />
-                                        }
-                                        { isRegionValid(faramValues.region2) &&
+                                        )}
+                                        { isRegionValid(faramValues.region2) && (
                                             <LossDetails
                                                 className={styles.aggregatedStat}
                                                 data={region2Incidents}
                                                 minDate={minDate}
                                             />
-                                        }
+                                        )}
                                     </div>
                                     <div className={styles.otherVisualizations}>
-                                        { isRegionValid(faramValues.region1) &&
+                                        { isRegionValid(faramValues.region1) && (
                                             <div className={styles.region1Container}>
                                                 <Visualizations
                                                     lossAndDamageList={region1Incidents}
                                                 />
                                             </div>
-                                        }
-                                        { isRegionValid(faramValues.region2) &&
+                                        )}
+                                        { isRegionValid(faramValues.region2) && (
                                             <div className={styles.region2Container}>
                                                 <Visualizations
                                                     lossAndDamageList={region2Incidents}
                                                 />
                                             </div>
-                                        }
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         )}
                     </div>
-                }
+                )}
                 rightContentClassName={styles.right}
-                rightContent={
+                rightContent={(
                     <Filter
                         onExpandChange={this.handleRightPaneExpandChange}
                         metricOptions={lossMetrics}
-                        metricType={metricType}
                         hideRegionSelect
                         disabledRegionSelect
                         hideMetricSelect
                         disabledMetricSelect
                     />
-                }
+                )}
             />
         );
     }

@@ -27,11 +27,11 @@ const propTypes = {
 };
 
 const defaultProps = {
-    geoareas: [],
 };
 
 export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded, isTimeline) => {
@@ -39,11 +39,16 @@ export default class LossAndDamageMap extends React.PureComponent {
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 

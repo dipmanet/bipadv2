@@ -19,6 +19,7 @@ const defaultProps = {
 
 export default class DateOutput extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     render() {

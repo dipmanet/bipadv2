@@ -127,8 +127,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                     event: prevEvent,
                 } },
             }) => (
-                hazard !== prevHazard || dateRange !== prevDateRange ||
-                region !== prevRegion || event !== prevEvent
+                hazard !== prevHazard || dateRange !== prevDateRange
+                    || region !== prevRegion || event !== prevEvent
             ),
         },
         extras: {
@@ -205,8 +205,8 @@ class Incidents extends React.PureComponent<Props, State> {
         return hazardTypesList(incidentList, hazardTypes);
     });
 
-    private getIncidentMap = memoize(incidentList =>
-        listToMap(
+    private getIncidentMap = memoize(
+        incidentList => listToMap(
             incidentList,
             (d: PageType.Incident) => d.id,
             d => d,
@@ -271,7 +271,7 @@ class Incidents extends React.PureComponent<Props, State> {
                 )
             }
             >
-                <h3 title={selectedIncident.title} >
+                <h3 title={selectedIncident.title}>
                     {selectedIncident.title}
                 </h3>
                 <DateOutput
@@ -337,7 +337,7 @@ class Incidents extends React.PureComponent<Props, State> {
                         leftPaneExpanded && styles.leftPaneExpanded,
                         rightPaneExpanded && styles.rightPaneExpanded,
                     )}
-                    mainContent={
+                    mainContent={(
                         <React.Fragment>
                             <HazardsLegend
                                 filteredHazardTypes={filteredHazardTypes}
@@ -362,21 +362,21 @@ class Incidents extends React.PureComponent<Props, State> {
                                 />
                             </div>
                         </React.Fragment>
-                    }
+                    )}
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <LeftPane
                             incidentList={sanitizedIncidentList}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                         />
-                    }
+                    )}
                     rightContentClassName={styles.right}
-                    rightContent={
+                    rightContent={(
                         <IncidentsFilter
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
-                    }
+                    )}
                 />
             </React.Fragment>
         );

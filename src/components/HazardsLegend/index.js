@@ -26,6 +26,7 @@ const legendLabelSelector = d => d.title;
 
 class HazardsLegend extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     render() {

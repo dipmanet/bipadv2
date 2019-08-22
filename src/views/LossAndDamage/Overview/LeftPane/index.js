@@ -27,6 +27,7 @@ const emptyList = [];
 
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -56,7 +57,7 @@ export default class LeftPane extends React.PureComponent {
     }
 
     handleShowTabularButtonClick = () => {
-        this.setState({ showTabularView: !this.state.showTabularView });
+        this.setState(state => ({ showTabularView: !state.showTabularView }));
     }
 
     renderHeader = () => (
@@ -71,7 +72,7 @@ export default class LeftPane extends React.PureComponent {
                 title="Show detailed view"
                 transparent
             />
-            {!this.state.showTabularView &&
+            {!this.state.showTabularView && (
                 <Button
                     className={styles.collapseButton}
                     onClick={this.handleCollapseButtonClick}
@@ -79,7 +80,7 @@ export default class LeftPane extends React.PureComponent {
                     title="Collapse overview"
                     transparent
                 />
-            }
+            )}
         </header>
     )
 
@@ -103,21 +104,21 @@ export default class LeftPane extends React.PureComponent {
                 className={_cs(className, styles.leftPane)}
                 expanded={isExpanded}
                 collapsedViewContainerClassName={styles.expandButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <Button
                         onClick={this.handleExpandButtonClick}
                         className={styles.expandButton}
                     >
                         Show summary
                     </Button>
-                }
+                )}
                 expandedViewContainerClassName={styles.overviewContainer}
-                expandedView={
+                expandedView={(
                     <CollapsibleView
                         className={styles.overview}
                         expanded={showTabularView}
                         collapsedViewContainerClassName={styles.nonTabularContainer}
-                        collapsedView={
+                        collapsedView={(
                             <React.Fragment>
                                 <Header />
                                 <div className={styles.content}>
@@ -130,12 +131,12 @@ export default class LeftPane extends React.PureComponent {
                                     />
                                 </div>
                             </React.Fragment>
-                        }
+                        )}
                         expandedViewContainerClassName={_cs(
                             styles.tabularContainer,
                             rightPaneExpanded && styles.rightPaneExpanded,
                         )}
-                        expandedView={
+                        expandedView={(
                             <React.Fragment>
                                 <Header />
                                 <TabularView
@@ -143,9 +144,9 @@ export default class LeftPane extends React.PureComponent {
                                     lossAndDamageList={lossAndDamageList}
                                 />
                             </React.Fragment>
-                        }
+                        )}
                     />
-                }
+                )}
             />
         );
     }
