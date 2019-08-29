@@ -65,6 +65,7 @@ const outputKeySelector = o => o.outputid;
 
 class ProjectItem extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -142,27 +143,27 @@ class ProjectItem extends React.PureComponent {
                     <div className={styles.dateContainer}>
                         <TextOutput
                             label="Start Date"
-                            value={
+                            value={(
                                 <FormattedDate
                                     value={start}
                                     mode="yyyy-MM-dd"
                                 />
-                            }
+                            )}
                             alwaysVisible
                         />
                         <TextOutput
                             label="End Date"
-                            value={
+                            value={(
                                 <FormattedDate
                                     value={end}
                                     mode="yyyy-MM-dd"
                                 />
-                            }
+                            )}
                             alwaysVisible
                         />
                     </div>
                 </div>
-                {showModal &&
+                {showModal && (
                     <Modal
                         className={styles.modal}
                         closeOnEscape
@@ -171,13 +172,13 @@ class ProjectItem extends React.PureComponent {
                         <ModalHeader
                             className={styles.modalHeader}
                             title={title}
-                            rightComponent={
+                            rightComponent={(
                                 <Button
                                     transparent
                                     iconName={iconNames.close}
                                     onClick={this.handleModalClose}
                                 />
-                            }
+                            )}
                         />
                         <ModalBody className={styles.modalBody}>
                             <div className={styles.table}>
@@ -198,22 +199,22 @@ class ProjectItem extends React.PureComponent {
                                 <TextOutput
                                     type="table"
                                     label="Start Date"
-                                    value={
+                                    value={(
                                         <FormattedDate
                                             value={start}
                                             mode="yyyy-MM-dd"
                                         />
-                                    }
+                                    )}
                                 />
                                 <TextOutput
                                     type="table"
                                     label="End Date"
-                                    value={
+                                    value={(
                                         <FormattedDate
                                             value={end}
                                             mode="yyyy-MM-dd"
                                         />
-                                    }
+                                    )}
                                 />
                                 <TextOutput
                                     valueClassName={styles.capitalizeValue}
@@ -243,7 +244,7 @@ class ProjectItem extends React.PureComponent {
                             />
                         </ModalBody>
                     </Modal>
-                }
+                )}
             </React.Fragment>
         );
     }

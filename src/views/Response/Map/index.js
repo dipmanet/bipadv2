@@ -70,6 +70,7 @@ const mapStateToProps = state => ({
 
 class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
@@ -78,12 +79,17 @@ class ResponseMap extends React.PureComponent {
         if (leftPaneExpanded && rightPaneExpanded) {
             mapPaddings.bothPaneExpanded.right += (360 - 256);
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             mapPaddings.rightPaneExpanded.right += (360 - 256);
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 
@@ -121,8 +127,8 @@ class ResponseMap extends React.PureComponent {
 
     tooltipRenderer = params => <ResourceItem {...params} showDetails />
 
-    tooltipRendererParams = id =>
-        this.props.resourceList.find(x => x.id === id) || emptyObject
+    tooltipRendererParams = id => this
+        .props.resourceList.find(x => x.id === id) || emptyObject
 
     render() {
         const {
@@ -174,7 +180,7 @@ class ResponseMap extends React.PureComponent {
                     />
                 </MapSource>
 
-                { point &&
+                { point && (
                     <MapSource
                         sourceKey="points"
                         geoJson={this.getPointFeatureCollection(incidentList, hazards)}
@@ -186,8 +192,8 @@ class ResponseMap extends React.PureComponent {
                             paint={mapStyles.incidentPoint.fill}
                         />
                     </MapSource>
-                }
-                { polygon &&
+                )}
+                { polygon && (
                     <MapSource
                         sourceKey="polygon"
                         geoJson={this.getPolygonFeatureCollection(incidentList, hazards)}
@@ -199,7 +205,7 @@ class ResponseMap extends React.PureComponent {
                             paint={mapStyles.incidentPolygon.fill}
                         />
                     </MapSource>
-                }
+                )}
             </React.Fragment>
         );
     }

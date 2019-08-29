@@ -69,7 +69,9 @@ export const getFilterInputElement = (filterParam, show) => {
                 disabled={!show}
             />
         );
-    } else if (type === 'number') {
+    }
+
+    if (type === 'number') {
         return (
             <NumberInput
                 key={key}
@@ -80,7 +82,9 @@ export const getFilterInputElement = (filterParam, show) => {
                 disabled={!show}
             />
         );
-    } else if (type === 'boolean') {
+    }
+
+    if (type === 'boolean') {
         return (
             <Checkbox
                 key={key}
@@ -89,7 +93,9 @@ export const getFilterInputElement = (filterParam, show) => {
                 disabled={!show}
             />
         );
-    } else if (type === 'select') {
+    }
+
+    if (type === 'select') {
         return (
             <SelectInput
                 key={key}
@@ -103,6 +109,7 @@ export const getFilterInputElement = (filterParam, show) => {
             />
         );
     }
+
     return (
         <TextInput
             key={filterParam.key}

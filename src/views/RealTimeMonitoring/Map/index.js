@@ -38,11 +38,16 @@ export default class RealTimeMap extends React.PureComponent {
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 
@@ -92,12 +97,12 @@ export default class RealTimeMap extends React.PureComponent {
             />
             <TextOutput
                 label="Event On"
-                value={
+                value={(
                     <FormattedDate
                         value={eventOn}
                         mode="yyyy-MM-dd hh:mm"
                     />
-                }
+                )}
             />
             <TextOutput
                 label="Magnitude"
@@ -131,12 +136,12 @@ export default class RealTimeMap extends React.PureComponent {
             />
             <TextOutput
                 label="Event On"
-                value={
+                value={(
                     <FormattedDate
                         value={eventOn}
                         mode="yyyy-MM-dd hh:mm"
                     />
-                }
+                )}
             />
             <TextOutput
                 label="Land Cover"
@@ -177,12 +182,12 @@ export default class RealTimeMap extends React.PureComponent {
                 />
                 <TextOutput
                     label="Measured On"
-                    value={
+                    value={(
                         <FormattedDate
                             value={measuredOn}
                             mode="yyyy-MM-dd hh:mm"
                         />
-                    }
+                    )}
                 />
                 { measurement }
             </div>
@@ -230,7 +235,7 @@ export default class RealTimeMap extends React.PureComponent {
                     geoJson={rainFeatureCollection}
                     supportHover
                 >
-                    { showRain &&
+                    { showRain && (
                         <MapLayer
                             layerKey="real-time-rain-symbol"
                             type="symbol"
@@ -240,14 +245,14 @@ export default class RealTimeMap extends React.PureComponent {
                             tooltipRenderer={this.tooltipRenderer}
                             tooltipRendererParams={this.tooltipRendererParams}
                         />
-                    }
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-river-points"
                     geoJson={riverFeatureCollection}
                     supportHover
                 >
-                    { showRiver &&
+                    { showRiver && (
                         <MapLayer
                             layerKey="real-time-river-symbol"
                             type="symbol"
@@ -257,14 +262,14 @@ export default class RealTimeMap extends React.PureComponent {
                             tooltipRenderer={this.tooltipRenderer}
                             tooltipRendererParams={this.tooltipRendererParams}
                         />
-                    }
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-eartquake-points"
                     geoJson={earthquakeFeatureCollection}
                     supportHover
                 >
-                    { showEarthquake &&
+                    { showEarthquake && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
@@ -283,14 +288,14 @@ export default class RealTimeMap extends React.PureComponent {
                                 paint={mapStyles.earthquakeText.paint}
                             />
                         </React.Fragment>
-                    }
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-fire-points"
                     geoJson={fireFeatureCollection}
                     supportHover
                 >
-                    { showFire &&
+                    { showFire && (
                         <MapLayer
                             layerKey="real-time-fire-points-fill"
                             type="symbol"
@@ -301,14 +306,14 @@ export default class RealTimeMap extends React.PureComponent {
                             tooltipRenderer={this.fireTooltipRenderer}
                             tooltipRendererParams={this.fireTooltipRendererParams}
                         />
-                    }
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-pollution-points"
                     geoJson={pollutionFeatureCollection}
                     supportHover
                 >
-                    { showPollution &&
+                    { showPollution && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
@@ -327,7 +332,7 @@ export default class RealTimeMap extends React.PureComponent {
                                 paint={mapStyles.pollutionText.paint}
                             />
                         </React.Fragment>
-                    }
+                    )}
                 </MapSource>
             </React.Fragment>
         );

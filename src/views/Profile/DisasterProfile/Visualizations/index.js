@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
-import { isDefined, mapToList } from '@togglecorp/fujs';
+import { isDefined } from '@togglecorp/fujs';
 
 import Numeral from '#rscv/Numeral';
 import HorizontalBar from '#rscz/HorizontalBar';
@@ -77,6 +77,7 @@ const mapStateToProps = state => ({
 
 class Visualizations extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     getHazardOccurrence = memoize((lossAndDamageList) => {

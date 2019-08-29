@@ -1,0 +1,32 @@
+.menu-item {
+    display: flex;
+    align-items: center;
+    border-top: var(--width-separator-thick) solid transparent;
+    border-bottom: var(--width-separator-thick) solid transparent;
+    padding: 0 var(--spacing-medium);
+    text-decoration: none;
+    color: var(--color-text);
+
+    .icon {
+        margin: 0 var(--spacing-extra-small-alt);
+    }
+
+    .title {
+        padding: 0 var(--spacing-extra-small-alt);
+        font-weight: bold;
+    }
+
+    &:hover {
+        color: var(--color-accent);
+    }
+
+    &.active {
+        border-bottom-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    &.disabled {
+        color: var(--color-text-disabled);
+        pointer-events: none;
+    }
+}

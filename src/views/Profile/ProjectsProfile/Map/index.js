@@ -23,11 +23,16 @@ export default class ProjectsProfileMap extends React.PureComponent {
 
         if (leftPaneExpanded && rightPaneExpanded) {
             return mapPaddings.bothPaneExpanded;
-        } else if (leftPaneExpanded) {
+        }
+
+        if (leftPaneExpanded) {
             return mapPaddings.leftPaneExpanded;
-        } else if (rightPaneExpanded) {
+        }
+
+        if (rightPaneExpanded) {
             return mapPaddings.rightPaneExpanded;
         }
+
         return mapPaddings.noPaneExpanded;
     });
 

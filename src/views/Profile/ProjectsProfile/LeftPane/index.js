@@ -31,6 +31,7 @@ const projectKeySelector = p => p.pid;
 
 class ProjectsProfileLeftPane extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     handleExpand = () => {
@@ -76,16 +77,16 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                 className={styles.legend}
                 expanded={leftPaneExpanded}
                 collapsedViewContainerClassName={styles.showLegendButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <PrimaryButton
                         onClick={this.handleExpand}
                         title="Show filters"
                     >
                         Show Summary
                     </PrimaryButton>
-                }
+                )}
                 expandedViewContainerClassName={styles.summary}
-                expandedView={
+                expandedView={(
                     <React.Fragment>
                         <header className={styles.header}>
                             <h4>Summary</h4>
@@ -152,7 +153,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                             </div>
                         </div>
                     </React.Fragment>
-                }
+                )}
             />
         );
     }

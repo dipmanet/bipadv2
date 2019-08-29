@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
 import {
     listToMap,
-    isFalsy,
 } from '@togglecorp/fujs';
-import Faram, {
-    FaramGroup,
-} from '@togglecorp/faram';
+
+import Faram from '@togglecorp/faram';
 
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
@@ -73,6 +70,7 @@ const mapDispatchToProps = dispatch => ({
 
 class StockPileFilter extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {

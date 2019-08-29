@@ -43,15 +43,22 @@ const propTypes = {
 
 const equalityOperator = (x, y) => x === y;
 
-const checkFilters = (obj, attrVals, filterOperations = {}) =>
-    Object.entries(attrVals).reduce(
-        (a, [k, v]) => a && (
-            v === undefined ||
-            (v === false && !obj[k]) || // if compare value is false, show null values
-            (filterOperations[k] || equalityOperator)(obj[k], v)
+const checkFilters = (
+    obj,
+    attrVals,
+    filterOperations = {},
+) => (
+    Object
+        .entries(attrVals)
+        .reduce((a, [k, v]) => (
+            a && (
+                v === undefined
+                    || (v === false && !obj[k])
+                    || (filterOperations[k] || equalityOperator)(obj[k], v)
+            )
         ),
-        true,
-    );
+        true)
+);
 
 const defaultProps = {
     className: '',
@@ -110,6 +117,7 @@ Resource.propTypes = {
 
 class ResponseFilter extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     constructor(props) {
@@ -167,9 +175,9 @@ class ResponseFilter extends React.PureComponent {
         const showTypes = Object.entries(faramValues).filter(([_, data]) => data.show);
 
         const filterFunc = x => showTypes.reduce(
-            (currFilterStat, [type, { show, ...attrVals }]) =>
-                currFilterStat || (x.resourceType === type &&
-                                   checkFilters(x, attrVals, this.filterOperations[type])),
+            (currFilterStat, [type, { show, ...attrVals }]) => currFilterStat || (
+                x.resourceType === type && checkFilters(x, attrVals, this.filterOperations[type])
+            ),
             false,
         );
         return filterFunc;
@@ -311,15 +319,15 @@ class ResponseFilter extends React.PureComponent {
                 className={_cs(styles.filter, className)}
                 expanded={showFilters}
                 collapsedViewContainerClassName={styles.showFilterButtonContainer}
-                collapsedView={
+                collapsedView={(
                     <PrimaryButton
                         onClick={this.handleShowFiltersButtonClick}
                     >
                         Show Resources
                     </PrimaryButton>
-                }
+                )}
                 expandedViewContainerClassName={styles.filtersContainer}
-                expandedView={
+                expandedView={(
                     <React.Fragment>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -346,17 +354,17 @@ class ResponseFilter extends React.PureComponent {
                                     rendererParams={this.getResourceRendererParams}
                                 />
                             </div>
-                            { selectedFilter &&
+                            { selectedFilter && (
                                 <FloatingContainer
                                     className={styles.floatingContainer}
                                     onInvalidate={this.handleInvalidate}
                                 >
                                     <Filter />
                                 </FloatingContainer>
-                            }
+                            )}
                         </Faram>
                     </React.Fragment>
-                }
+                )}
             />
         );
     }

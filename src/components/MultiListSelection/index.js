@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactSVG from 'react-svg';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
-import { iconNames } from '#constants';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import Button from '#rsca/Button';
 import Label from '#rsci/Label';
@@ -107,10 +106,9 @@ export default class MultiListSelection extends React.PureComponent {
             title={title}
         >
             { icon && (
-                <ReactSVG
+                <ScalableVectorGraphics
                     className={styles.icon}
-                    svgClassName={styles.svg}
-                    path={icon}
+                    src={icon}
                 />
             )}
             <div className={styles.title}>

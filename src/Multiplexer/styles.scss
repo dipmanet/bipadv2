@@ -1,0 +1,22 @@
+.multiplexer {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100vh;
+    overflow: auto;
+
+    .navbar {
+        flex-shrink: 0;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .map {
+            flex-grow: 1;
+        }
+    }
+}

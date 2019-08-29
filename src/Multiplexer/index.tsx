@@ -1,8 +1,9 @@
 import Loadable from 'react-loadable';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
+import { _cs } from '@togglecorp/fujs';
 
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
@@ -18,28 +19,23 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-    // hidePopupSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
 } from '#actionCreators';
 
-// import FirstPopup from './FirstPopup';
-import errorBound from './errorBound';
-import helmetify from './helmetify';
+import errorBound from '../errorBound';
+import helmetify from '../helmetify';
 
 import styles from './styles.scss';
 
-// LOADING
 const loadingStyle: React.CSSProperties = {
     zIndex: 1111,
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    // width: '300px',
-    // height: '60px',
     display: 'flex',
     padding: 10,
     textAlign: 'center',
@@ -78,7 +74,6 @@ const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
         </DangerButton>
     </div>
 );
-// ROUTES
 
 interface LoadOptions {
     error: string;
@@ -103,6 +98,7 @@ const LoadingPage = ({ error, retry }: LoadOptions) => {
         />
     );
 };
+
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Component = errorBound<typeof settings>(ErrorInPage)(
         helmetify(
@@ -140,7 +136,6 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
-    // hidePopup: boolean;
 }
 
 interface PropsFromDispatch {
@@ -162,7 +157,6 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    // hidePopup: hidePopupSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -171,14 +165,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    /*
-    public componentDidMount() {
-        if (navigator.geolocation && !this.props.hidePopup) {
-            navigator.geolocation.getCurrentPosition(this.handleSuccess);
-        }
-    }
-    */
-
     private handleSuccess = (position: unknown) => {
         console.warn(position);
     }
@@ -203,28 +189,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
     public render() {
         const {
             mapStyle,
-            districts,
-            provinces,
-            municipalities,
-            // hidePopup,
-            setInitialPopupHidden,
-            setRegion,
-            pending,
         } = this.props;
 
         return (
-            <Fragment>
-                {/* FIXME: get route key for navbar */}
-                <div className="bipad-main-content">
-                    {/* !hidePopup && !pending &&
-                        <FirstPopup
-                            districts={districts}
-                            provinces={provinces}
-                            municipalities={municipalities}
-                            setInitialPopupHidden={setInitialPopupHidden}
-                            setRegion={setRegion}
-                        />
-                    */}
+            <div className={styles.multiplexer}>
+                <Navbar className={styles.navbar} />
+                <div className={_cs(styles.content, 'bipad-main-content')}>
                     <Map
                         mapStyle={mapStyle}
                         fitBoundsDuration={200}
@@ -241,8 +211,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         {this.renderRoutes()}
                     </Map>
                 </div>
-                <Navbar />
-            </Fragment>
+            </div>
         );
     }
 }

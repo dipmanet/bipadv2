@@ -4,26 +4,23 @@ import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 
-const propTypes = {
-    className: PropTypes.string,
-    leftContent: PropTypes.node,
-    rightContent: PropTypes.node,
-    mainContent: PropTypes.node,
-};
+interface Props {
+    className?: string;
 
-const defaultProps = {
-    className: '',
-    leftContent: undefined,
-    rightContent: undefined,
-    mainContent: undefined,
-};
+    leftContent?: React.ReactElement;
+    rightContent?: React.ReactElement;
+    mainContent?: React.ReactElement;
 
-export default class Page extends React.PureComponent {
-    static propTypes = propTypes;
+    leftContentClassName?: string;
+    rightContentClassName?: string;
+    mainContentClassName?: string;
+}
 
-    static defaultProps = defaultProps;
+interface State {
+}
 
-    render() {
+export default class Page extends React.PureComponent<Props, State> {
+    public render() {
         const {
             className,
             leftContent,
@@ -36,15 +33,15 @@ export default class Page extends React.PureComponent {
 
         return (
             <React.Fragment>
-                { mainContent && (
-                    <main className={_cs(styles.mainContent, mainContentClassName)}>
-                        { mainContent }
-                    </main>
-                ) }
                 { leftContent && (
                     <aside className={_cs(styles.leftContent, leftContentClassName)}>
                         { leftContent }
                     </aside>
+                ) }
+                { mainContent && (
+                    <main className={_cs(styles.mainContent, mainContentClassName)}>
+                        { mainContent }
+                    </main>
                 ) }
                 { rightContent && (
                     <aside className={_cs(styles.rightContent, rightContentClassName)}>

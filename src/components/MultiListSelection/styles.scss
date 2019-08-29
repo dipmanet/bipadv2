@@ -23,23 +23,20 @@
         flex-wrap: wrap;
 
         .option {
-            flex-basis: calc(100% / 4 - calc(var(--width-separator-thin) * 2));
+            flex-basis: calc(100% / 10);
             flex-grow: 0;
-            margin: $width-separator-thin;
-            padding: $spacing-extra-small;
+            margin: $spacing-small;
+            padding: $spacing-small;
 
             .icon {
                 transition: $duration-transition-medium all ease-in-out;
                 opacity: .5;
+                width: 16px;
+                height: 16px;
                 filter: grayscale(77%);
 
-                .svg {
-                    width: 16px;
-                    height: 16px;
-
-                    path {
-                        fill: $color-text;
-                    }
+                path {
+                    fill: $color-text;
                 }
             }
 
@@ -69,10 +66,8 @@
                     opacity: 1;
                     filter: none;
 
-                    .svg {
-                        path {
-                            fill: currentColor;
-                        }
+                    path {
+                        fill: currentColor;
                     }
                 }
 

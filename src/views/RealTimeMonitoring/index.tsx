@@ -302,7 +302,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         return (
             <React.Fragment>
-                <div className={styles.header} >
+                <div className={styles.header}>
                     <h4>Legend</h4>
                     <Button
                         onClick={this.handleCloseLegendsClick}
@@ -312,14 +312,14 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     />
                 </div>
                 <div className={styles.legendItems}>
-                    { !(showRain || showRiver || showEarthquake || showPollution || showFire) &&
+                    { !(showRain || showRiver || showEarthquake || showPollution || showFire) && (
                         <div className={styles.noLegend}>
                             <Message>
                                 Please select at least one source
                             </Message>
                         </div>
-                    }
-                    { showRain &&
+                    )}
+                    { showRain && (
                         <div className={styles.container}>
                             <h5 className={styles.heading}>
                                 Rain
@@ -335,8 +335,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 emptyComponent={null}
                             />
                         </div>
-                    }
-                    { showRiver &&
+                    )}
+                    { showRiver && (
                         <div className={styles.container}>
                             <h5 className={styles.heading}>
                                 River
@@ -352,8 +352,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 emptyComponent={null}
                             />
                         </div>
-                    }
-                    { showEarthquake &&
+                    )}
+                    { showEarthquake && (
                         <div className={styles.container}>
                             <h5 className={styles.heading}>
                                 Earthquake (Richter Scale)
@@ -369,11 +369,15 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 emptyComponent={null}
                             />
                         </div>
-                    }
-                    { showPollution &&
+                    )}
+                    { showPollution && (
                         <div className={styles.container}>
                             <h5 className={styles.heading}>
-                                Pollution (PM <sub>2.5</sub>)
+                                Pollution (PM&nbsp;
+                                <sub>
+                                    2.5
+                                </sub>
+                                )
                             </h5>
                             <Legend
                                 className={styles.legend}
@@ -386,8 +390,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 emptyComponent={null}
                             />
                         </div>
-                    }
-                    { showFire &&
+                    )}
+                    { showFire && (
                         <div className={styles.container}>
                             <h5 className={styles.heading}>
                                 Forest Fire
@@ -403,7 +407,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 emptyComponent={null}
                             />
                         </div>
-                    }
+                    )}
                 </div>
             </React.Fragment>
         );
@@ -466,26 +470,26 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 <Page
                     rightContentClassName={styles.right}
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <CollapsibleView
                             className={styles.legend}
                             expanded={leftPaneExpanded}
                             collapsedViewContainerClassName={styles.showLegendButtonContainer}
-                            collapsedView={
+                            collapsedView={(
                                 <PrimaryButton
                                     onClick={this.handleShowLegendsButtonClick}
                                     title="Show filters"
                                 >
                                     Show Legend
                                 </PrimaryButton>
-                            }
+                            )}
                             expandedViewContainerClassName={styles.legendsContainer}
                             expandedView={
                                 <LegendView />
                             }
                         />
-                    }
-                    rightContent={
+                    )}
+                    rightContent={(
                         <RealTimeMonitoringFilter
                             // rainPending={rainPending}
                             // riverPending={riverPending}
@@ -495,28 +499,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             realTimeList={realTimeSourceList}
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
-                    }
+                    )}
                     mainContentClassName={styles.main}
-                    mainContent={null/*
-                        <div className={styles.links}>
-                            <a
-                                className={styles.link}
-                                href="http://www.globalfloods.eu/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                GLOFAS
-                            </a>
-                            <a
-                                className={styles.link}
-                                href="https://www.usgs.gov/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                USGS
-                            </a>
-                        </div>
-                    */}
+                    mainContent={null}
                 />
             </React.Fragment>
         );
