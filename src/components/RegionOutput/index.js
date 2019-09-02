@@ -47,6 +47,7 @@ const mapStateToProps = state => ({
 @connect(mapStateToProps)
 export default class RegionOutput extends React.PureComponent {
     static propTypes = propTypes
+
     static defaultProps = defaultProps
 
     render() {
@@ -69,10 +70,10 @@ export default class RegionOutput extends React.PureComponent {
         );
         */
         const geoAreas = (
-            (adminLevel === 1 && provinces) ||
-            (adminLevel === 2 && districts) ||
-            (adminLevel === 3 && municipalities) ||
-            emptyArray
+            (adminLevel === 1 && provinces)
+            || (adminLevel === 2 && districts)
+            || (adminLevel === 3 && municipalities)
+            || emptyArray
         );
         const geoArea = geoAreas.find(
             area => geoareaKeySelector(area) === locationId,

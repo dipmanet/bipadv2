@@ -319,6 +319,7 @@ class Contact extends React.PureComponent<Props> {
             </div>
         );
     }
+
     private renderContactDetails = (p: { contact: Contact }) => {
         const {
             contact,
@@ -482,7 +483,7 @@ class Contact extends React.PureComponent<Props> {
                 </MapSource>
                 <Page
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <React.Fragment>
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
@@ -497,15 +498,15 @@ class Contact extends React.PureComponent<Props> {
                                 keySelector={contactKeySelector}
                             />
                         </React.Fragment>
-                    }
+                    )}
                     rightContentClassName={styles.right}
-                    rightContent={
+                    rightContent={(
                         <Filter
                             committeeValueList={committeeValueList}
                             trainingValueList={trainingValueList}
                             positionValueList={positionOptions}
                         />
-                    }
+                    )}
                 />
             </React.Fragment>
         );

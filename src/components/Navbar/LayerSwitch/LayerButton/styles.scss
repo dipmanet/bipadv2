@@ -1,0 +1,15 @@
+.layer-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .color-preview {
+        margin: var(--spacing-extra-small-alt) var(--spacing-small);
+        width: var(--font-size-medium);
+        height: var(--font-size-medium);
+    }
+
+    .title {
+        padding: var(--spacing-extra-small-alt) var(--spacing-small);
+    }
+}

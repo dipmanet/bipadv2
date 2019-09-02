@@ -22,6 +22,7 @@ const DAY = 1000 * 60 * 60 * 24;
 
 export default class Seekbar extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -41,10 +42,15 @@ export default class Seekbar extends React.PureComponent {
                 label: (
                     <div>
                         <div>
-                            {metricName}: <strong>{metric(incident)}</strong>
+                            {metricName}
+                            :&nbsp;
+                            <strong>
+                                {metric(incident)}
+                            </strong>
                         </div>
                         <div>
-                            Date: {(new Date(incident.key * DAY)).toLocaleDateString()}
+                            Date:
+                            {(new Date(incident.key * DAY)).toLocaleDateString()}
                         </div>
                     </div>
                 ),

@@ -126,11 +126,17 @@ export const getAggregatedStats = incidents => (
 export const getGroupMethod = (regionLevel) => {
     if (regionLevel === 1) {
         return getProvince;
-    } else if (regionLevel === 2) {
+    }
+
+    if (regionLevel === 2) {
         return getDistrict;
-    } else if (regionLevel === 3) {
+    }
+
+    if (regionLevel === 3) {
         return getMunicipality;
-    } else if (regionLevel === 4) {
+    }
+
+    if (regionLevel === 4) {
         return getWard;
     }
 
@@ -161,4 +167,3 @@ export const getGroupedIncidents = (incidents, groupingFn) => (
 export const getFilledGroupedIncidents = (incidents, groupingFn) => (
     groupFilledList(incidents, groupingFn).map(getStat)
 );
-

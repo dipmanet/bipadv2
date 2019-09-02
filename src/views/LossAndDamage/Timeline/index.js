@@ -1,9 +1,10 @@
 import React from 'react';
 import memoize from 'memoize-one';
+import { listToMap } from '@togglecorp/fujs';
+
 import { currentStyle } from '#rsu/styles';
 import { lossMetrics } from '#utils/domain';
 
-import { listToMap } from '@togglecorp/fujs';
 
 import {
     iconNames,
@@ -27,7 +28,6 @@ import {
     getGroupedIncidents,
     getMinMaxTime,
     metricMap,
-    metricType,
     getFilledGroupedIncidents,
 } from '../common';
 
@@ -64,6 +64,7 @@ const timeBucketValues = {
 
 export default class Timeline extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
@@ -459,7 +460,7 @@ export default class Timeline extends React.PureComponent {
                 />
                 <Page
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <LeftPane
                             pending={pending}
                             lossAndDamageList={bucketedIncidents[currentIndex]}
@@ -467,17 +468,16 @@ export default class Timeline extends React.PureComponent {
                             rightPaneExpanded={rightPaneExpanded}
                             minDate={this.props.minDate}
                         />
-                    }
-                    rightContent={
+                    )}
+                    rightContent={(
                         <Filter
                             onExpandChange={this.handleRightPaneExpandChange}
                             metricOptions={lossMetrics}
-                            metricType={metricType}
                             isTimeline
                         />
-                    }
+                    )}
                     mainContentClassName={styles.main}
-                    mainContent={
+                    mainContent={(
                         <React.Fragment>
                             <div className={styles.top}>
                                 <div className={styles.info}>
@@ -538,7 +538,7 @@ export default class Timeline extends React.PureComponent {
                                 </div>
                             </div>
                         </React.Fragment>
-                    }
+                    )}
                 />
             </React.Fragment>
         );

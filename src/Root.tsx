@@ -4,6 +4,9 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import styleProperties from '#constants/styleProperties';
 
+import { addIcon } from '#rscg/Icon';
+import { iconNames } from '#constants';
+
 import store from '#store';
 import { AppState } from '#store/types';
 import {
@@ -30,6 +33,11 @@ export default class Root extends React.Component<Props, State> {
 
         initializeStyles();
         setStyleProperties(styleProperties);
+
+        // Add icons
+        Object.keys(iconNames).forEach((key) => {
+            addIcon('font', key, iconNames[key]);
+        });
 
         console.info('React version:', React.version);
     }

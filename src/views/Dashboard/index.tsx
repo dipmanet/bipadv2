@@ -19,7 +19,6 @@ import Loading from '#components/Loading';
 
 import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
-import GeoOutput from '#components/GeoOutput';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
@@ -49,7 +48,7 @@ import Page from '#components/Page';
 
 import Map from './Map';
 import LeftPane from './LeftPane';
-import DashboardFilter from './Filter';
+import RightPane from './RightPane';
 
 import styles from './styles.scss';
 
@@ -419,7 +418,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     )}
                     rightContent={(
-                        <DashboardFilter
+                        <RightPane
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
                     )}

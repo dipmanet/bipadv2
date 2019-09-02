@@ -7,7 +7,6 @@ import {
     listToMap,
     getHexFromString,
 } from '@togglecorp/fujs';
-import { schemeSet3 } from 'd3-scale-chromatic';
 
 import {
     regionsSelector,
@@ -44,7 +43,9 @@ const unflat = (nodes, memory = {}, idSelector, parentSelector) => {
     if (isNotDefined(parent)) {
         mem[id] = { ...firstItem, children: [] };
         return unflat(otherItems, mem, idSelector, parentSelector);
-    } else if (!mem[parent]) {
+    }
+
+    if (!mem[parent]) {
         return unflat(
             !$flagged ? [...otherItems, { ...firstItem, $flagged: true }] : otherItems,
             mem,
@@ -414,7 +415,7 @@ class ProjectsProfile extends React.PureComponent {
                 <Page
                     mainContent={null}
                     leftContentClassName={styles.left}
-                    leftContent={
+                    leftContent={(
                         <LeftPane
                             leftPaneExpanded={leftPaneExpanded}
                             onExpandChange={this.handleLeftPaneExpandChange}
@@ -426,9 +427,9 @@ class ProjectsProfile extends React.PureComponent {
                             organizationMap={organizationMap}
                             projectMap={projectMap}
                         />
-                    }
+                    )}
                     rightContentClassName={styles.right}
-                    rightContent={
+                    rightContent={(
                         <ProjectsProfileFilter
                             onExpandChange={this.handleRightPaneExpandChange}
                             drrCycleOptions={drrcycle}
@@ -438,7 +439,7 @@ class ProjectsProfile extends React.PureComponent {
                             subPriorityOptions={subPriorityOptions}
                             activityOptions={activityOptions}
                         />
-                    }
+                    )}
                 />
             </React.Fragment>
         );

@@ -5,14 +5,18 @@ export interface Route {
     name: string;
     title: string;
     load: any;
+    navbar: boolean;
 }
+
 export interface NavbarRoute extends Route {
     navbar: true;
     iconName: string;
     disabled?: boolean;
 }
+
 export interface FallbackRoute {
     default: true;
+    navbar: true;
     title: string;
     name: string;
     load: any;

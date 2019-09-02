@@ -131,6 +131,7 @@ const requests = {
 
 class LossAndDamage extends React.PureComponent {
     static propTypes = propTypes;
+
     static defaultProps = defaultProps;
 
     constructor(props) {
