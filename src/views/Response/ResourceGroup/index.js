@@ -35,8 +35,9 @@ const defaultProps = {
 };
 
 export default class ResourceGroup extends React.PureComponent {
-    static propTypes = propTypes
-    static defaultProps = defaultProps
+    static propTypes = propTypes;
+
+    static defaultProps = defaultProps;
 
     static keySelector = (d, id) => `${d.title}-${id}`;
 
@@ -109,14 +110,14 @@ export default class ResourceGroup extends React.PureComponent {
             <div>
                 {
                     // Aggregation of types
-                    groupedTypes.map(group => (group.key &&
+                    groupedTypes.map(group => (group.key && (
                         <TextOutput
                             key={group.key}
                             label={group.key}
                             value={group.value.length}
                             isNumericValue
                         />
-                    ))
+                    )))
                 }
                 {
                     // Aggregation of resource attributes
@@ -151,7 +152,6 @@ export default class ResourceGroup extends React.PureComponent {
             data,
             className,
             icon,
-            showSummary,
             totalSize,
             isFilterShown,
             // itemRenderer,
@@ -178,7 +178,12 @@ export default class ResourceGroup extends React.PureComponent {
                         alt={heading}
                     />
                     <h3 className={styles.heading}>
-                        { heading } ({ itemsCount } / { totalSize })
+                        { heading }
+                        (
+                        { itemsCount }
+                        /
+                        { totalSize }
+                        )
                     </h3>
                     <Button
                         className={_cs(styles.filterButton, styles.button)}

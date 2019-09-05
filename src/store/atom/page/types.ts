@@ -155,6 +155,52 @@ export interface RealTimeRiver {
     status?: string;
     steady?: string;
 }
+
+export interface Point {
+    type: string;
+    coordinates: number[];
+}
+export interface RealTimeRiverDetails {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    title: string;
+    basin: string;
+    point: Point;
+    waterLevel: number;
+    image: string;
+    status: string;
+    steady: string;
+    description: string;
+    elevation?: number;
+    dangerLevel?: number;
+    warningLevel?: number;
+    waterLevelOn: string;
+}
+
+export interface WaterLevelAverage {
+    value: number;
+    status: {
+        danger: boolean;
+        warning: boolean;
+    };
+    interval: number;
+}
+
+export interface RealTimeRainDetails {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    title: string;
+    basin: string;
+    point: Point;
+    image: string;
+    status: string;
+    description: string;
+    elevation?: number;
+    averages: WaterLevelAverage[];
+}
+
 export interface RealTimeRain extends RealTimeRiver {
 }
 export interface RealTimeEarthquake {

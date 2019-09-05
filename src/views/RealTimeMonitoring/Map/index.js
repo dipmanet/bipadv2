@@ -20,7 +20,10 @@ import {
     pollutionToGeojson,
 } from '#utils/domain';
 
+import RiverDetails from './RiverDetails';
+import RainDetails from './RainDetails';
 import styles from './styles.scss';
+
 
 export default class RealTimeMap extends React.PureComponent {
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -51,31 +54,20 @@ export default class RealTimeMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    tooltipRendererParams = (id, { title, description, basin, status }) => ({
+    tooltipRendererParams = (id, { title }) => ({
         title,
-        description,
-        basin,
-        status,
     })
 
-    tooltipRenderer = ({ title, description, basin, status }) => (
-        <div>
-            <h3>
-                {title}
-            </h3>
-            <TextOutput
-                label="Description"
-                value={description}
-            />
-            <TextOutput
-                label="Basin"
-                value={basin}
-            />
-            <TextOutput
-                label="Status"
-                value={status}
-            />
-        </div>
+    rainTooltipRenderer = ({ title }) => (
+        <RainDetails
+            title={title}
+        />
+    )
+
+    riverTooltipRenderer = ({ title }) => (
+        <RiverDetails
+            title={title}
+        />
     )
 
     earthquakeTooltipRendererParams = (id, { address, description, eventOn, magnitude }) => ({
@@ -242,7 +234,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.rainPoint.layout}
                             paint={mapStyles.rainPoint.paint}
                             enableHover
-                            tooltipRenderer={this.tooltipRenderer}
+                            tooltipRenderer={this.rainTooltipRenderer}
                             tooltipRendererParams={this.tooltipRendererParams}
                         />
                     )}
@@ -259,7 +251,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.riverPoint.layout}
                             paint={mapStyles.riverPoint.paint}
                             enableHover
-                            tooltipRenderer={this.tooltipRenderer}
+                            tooltipRenderer={this.riverTooltipRenderer}
                             tooltipRendererParams={this.tooltipRendererParams}
                         />
                     )}

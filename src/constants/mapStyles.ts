@@ -312,10 +312,10 @@ export default {
             ],
             'text-opacity': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
-                0.2,
+                ['==', ['get', 'steady'], 'STEADY'], 0.3,
+                ['==', ['get', 'steady'], 'RISING'], 1,
+                ['==', ['get', 'steady'], 'FALLING'], 1,
+                0.3,
             ],
 
             'text-halo-color': ['case',
