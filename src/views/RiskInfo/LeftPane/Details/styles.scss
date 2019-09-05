@@ -1,0 +1,26 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        .back-button {
+            flex-shrink: 0;
+            padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+
+        .heading {
+            flex-grow: 1;
+            padding: var(--spacing-medium);
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+    }
+}

@@ -1,16 +1,14 @@
-@import '~base-scss/base';
+.left-container {
+    display: flex;
+    flex-direction: column;
+    z-index: 11;
+    border: var(--width-separator-thin) solid var(--color-separator);
+    background-color: var(--color-foreground);
+    width: var(--width-left-panel);
+    height: calc(100% - var(--spacing-medium) * 2);
+    overflow: auto;
 
-.main {
-    left: 0;
-    transform: none;
-    width: calc(100vw - (var(--width-navbar)));
-    height: 100vh;
-
-    iframe {
-        border: 0;
-        background-color: $color-foreground;
-        width: 100%;
-        height: 100%;
+    .left-pane {
+        flex-grow: 1;
     }
 }
-

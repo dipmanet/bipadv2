@@ -1,0 +1,25 @@
+.radio-option {
+    display: flex;
+    align-items: baseline;
+    cursor: pointer;
+
+    .input {
+        display: none;
+    }
+
+    .icon {
+        margin: 0 var(--spacing-medium);
+    }
+
+    .label {
+        padding: var(--spacing-small) var(--spacing-medium);
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
+
+    &.checked {
+        color: var(--color-accent);
+    }
+}

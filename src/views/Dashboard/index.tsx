@@ -392,6 +392,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             leftPaneExpanded,
             rightPaneExpanded,
         } = this.state;
+
         const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
