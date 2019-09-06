@@ -175,7 +175,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-// FIXME: should be one day
 const RECENT_DAY = 1;
 
 class Dashboard extends React.PureComponent<Props, State> {
