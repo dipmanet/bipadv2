@@ -1,0 +1,86 @@
+.rain-detail-modal {
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .rain-details {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+
+            .top {
+                display: flex;
+                flex-shrink: 0;
+                height: 40vh;
+
+                .image {
+                    flex-basis: 60%;
+                    flex-shrink: 0;
+                }
+
+                .no-image {
+                    display: flex;
+                    align-items: center;
+                    flex-basis: 60%;
+                    flex-shrink: 0;
+                    justify-content: center;
+                    font-size: var(--font-size-large);
+                }
+
+                .details {
+                    flex-grow: 1;
+                    overflow: auto;
+
+                    .detail {
+                        display: block;
+                        padding: var(--spacing-medium) var(--spacing-large);
+
+                        .label {
+                            color: var(--color-accent);
+                        }
+
+                        .value {
+                            font-size: var(--font-size-large);
+                            font-weight: var(--font-weight-bold);
+                        }
+                    }
+                }
+            }
+
+            .bottom {
+                display: flex;
+                flex-grow: 1;
+                overflow: auto;
+
+                .latest-rainfall,
+                .accumulated-rainfall {
+                    display: flex;
+                    flex-basis: 50%;
+                    flex-direction: column;
+                    overflow: auto;
+
+                    .header {
+                        flex-shrink: 0;
+                        padding: var(--spacing-medium);
+
+                        .heading {
+                            font-size: var(--font-size-large);
+                        }
+                    }
+
+                    .content {
+                        flex-grow: 1;
+                        padding: 0 var(--spacing-medium);
+                        overflow: auto;
+                    }
+                }
+            }
+        }
+    }
+}

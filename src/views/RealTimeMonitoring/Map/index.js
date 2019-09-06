@@ -235,7 +235,7 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, true);
 
         const {
             showRiverModal,

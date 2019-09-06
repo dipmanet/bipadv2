@@ -154,6 +154,7 @@ class RealTimeMonitoringFilter extends React.PureComponent {
                             disabled={false}
                         >
                             <RegionSelectInput
+                                className={styles.regionSelectInput}
                                 faramElementName="region"
                             />
                             <ListSelection
