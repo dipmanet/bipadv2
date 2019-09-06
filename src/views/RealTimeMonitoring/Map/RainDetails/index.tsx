@@ -7,11 +7,16 @@ import {
     listToGroupList,
 } from '@togglecorp/fujs';
 
+import DangerButton from '#rsca/Button/DangerButton';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 import Table from '#rscv/Table';
 import Image from '#rscv/Image';
 import FormattedDate from '#rscv/FormattedDate';
 import TextOutput from '#components/TextOutput';
 import Loading from '#components/Loading';
+
 import {
     RealTimeRainDetails,
     WaterLevelAverage,
@@ -30,6 +35,7 @@ import styles from './styles.scss';
 
 interface Params {}
 interface OwnProps {
+    handleModalClose: () => void;
     title: string;
 }
 interface State {}
@@ -97,7 +103,7 @@ class RainDetails extends React.PureComponent<Props> {
                 modifier: row => (
                     <FormattedDate
                         value={row.createdOn}
-                        mode="yyyy-MM-dd hh:mm:aaa"
+                        mode="yyyy-MM-dd hh:mm aaa"
                     />
                 ),
             },
@@ -120,7 +126,7 @@ class RainDetails extends React.PureComponent<Props> {
     private rainHeader: Header<RealTimeRainDetails>[];
 
     private getSortedRainData = memoize((rainDetails: RealTimeRainDetails[]) => {
-        const sortedData = rainDetails.sort((a, b) => compareDate(b.createdOn, b.createdOn));
+        const sortedData = rainDetails.sort((a, b) => compareDate(b.createdOn, a.createdOn));
         return sortedData;
     })
 
@@ -159,6 +165,8 @@ class RainDetails extends React.PureComponent<Props> {
                     pending,
                 },
             },
+            title = '',
+            handleModalClose,
         } = this.props;
 
         let rainDetails: RealTimeRainDetails[] = [];
@@ -177,69 +185,83 @@ class RainDetails extends React.PureComponent<Props> {
         return (
             <>
                 <Loading pending={pending} />
-                {
-                    latestRainDetail && (
-                        <div>
-                            <h3>
-                                {latestRainDetail.title}
-                            </h3>
-                            {latestRainDetail.image && (
-                                <Image
-                                    src={latestRainDetail.image}
-                                    alt="image"
-                                />
-                            )}
-                            <TextOutput
-                                label="Description"
-                                value={latestRainDetail.description}
+                <Modal
+                    closeOnEscape
+                    onClose={handleModalClose}
+                >
+                    <ModalHeader
+                        title={title}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={handleModalClose}
                             />
-                            <TextOutput
-                                label="Basin"
-                                value={latestRainDetail.basin}
-                            />
-                            <TextOutput
-                                label="Status"
-                                value={latestRainDetail.status}
-                            />
-                            <TextOutput
-                                label="Latitude"
-                                value={latestRainDetail.point.coordinates[1]}
-                            />
-                            <TextOutput
-                                label="Longitude"
-                                value={latestRainDetail.point.coordinates[0]}
-                            />
-                            <TextOutput
-                                label="Measured On"
-                                value={(
-                                    <FormattedDate
-                                        value={latestRainDetail.createdOn}
-                                        mode="yyyy-MM-dd hh:mm:aaa"
+                        )}
+                    />
+                    <ModalBody>
+                        {
+                            latestRainDetail && (
+                                <div>
+                                    {latestRainDetail.image && (
+                                        <Image
+                                            src={latestRainDetail.image}
+                                            alt="image"
+                                        />
+                                    )}
+                                    <TextOutput
+                                        label="Description"
+                                        value={latestRainDetail.description}
                                     />
-                                )}
-                            />
-                            <div>
-                                <h4>
-                                    Latest Rainfall
-                                </h4>
-                                <Table
-                                    data={latestRainDetail.averages}
-                                    headers={this.latestWaterLevelHeader}
-                                    keySelector={waterLevelKeySelector}
-                                />
-                            </div>
-                            <div>
-                                <h4>
-                                    Accumulated Rainfall
-                                </h4>
-                                <Table
-                                    data={hourlyRainDetails}
-                                    headers={this.rainHeader}
-                                    keySelector={rainKeySelector}
-                                />
-                            </div>
-                        </div>
-                    )}
+                                    <TextOutput
+                                        label="Basin"
+                                        value={latestRainDetail.basin}
+                                    />
+                                    <TextOutput
+                                        label="Status"
+                                        value={latestRainDetail.status}
+                                    />
+                                    <TextOutput
+                                        label="Latitude"
+                                        value={latestRainDetail.point.coordinates[1]}
+                                    />
+                                    <TextOutput
+                                        label="Longitude"
+                                        value={latestRainDetail.point.coordinates[0]}
+                                    />
+                                    <TextOutput
+                                        label="Measured On"
+                                        value={(
+                                            <FormattedDate
+                                                value={latestRainDetail.createdOn}
+                                                mode="yyyy-MM-dd hh:mm:aaa"
+                                            />
+                                        )}
+                                    />
+                                    <div>
+                                        <h4>
+                                            Latest Rainfall
+                                        </h4>
+                                        <Table
+                                            data={latestRainDetail.averages}
+                                            headers={this.latestWaterLevelHeader}
+                                            keySelector={waterLevelKeySelector}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            Accumulated Rainfall
+                                        </h4>
+                                        <Table
+                                            data={hourlyRainDetails}
+                                            headers={this.rainHeader}
+                                            keySelector={rainKeySelector}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                    </ModalBody>
+                </Modal>
             </>
         );
     }

@@ -7,11 +7,16 @@ import {
     listToGroupList,
 } from '@togglecorp/fujs';
 
+import DangerButton from '#rsca/Button/DangerButton';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 import Table from '#rscv/Table';
 import Image from '#rscv/Image';
 import FormattedDate from '#rscv/FormattedDate';
 import TextOutput from '#components/TextOutput';
 import Loading from '#components/Loading';
+
 import { RealTimeRiverDetails } from '#store/atom/page/types';
 import { MultiResponse } from '#store/atom/response/types';
 import { Header } from '#store/atom/table/types';
@@ -27,9 +32,11 @@ import styles from './styles.scss';
 
 interface Params {}
 interface OwnProps {
+    handleModalClose: () => void;
     title: string;
 }
-interface State {}
+interface State {
+}
 
 type Props = NewProps<OwnProps, Params>;
 
@@ -64,7 +71,7 @@ class RiverDetails extends React.PureComponent<Props> {
                 modifier: row => (
                     <FormattedDate
                         value={row.waterLevelOn}
-                        mode="yyyy-MM-dd hh:mm:aaa"
+                        mode="yyyy-MM-dd hh:mm aaa"
                     />
                 ),
             },
@@ -129,6 +136,8 @@ class RiverDetails extends React.PureComponent<Props> {
                     pending,
                 },
             },
+            title = '',
+            handleModalClose,
         } = this.props;
 
         let riverDetails: RealTimeRiverDetails[] = [];
@@ -147,78 +156,92 @@ class RiverDetails extends React.PureComponent<Props> {
         return (
             <>
                 <Loading pending={pending} />
-                {latestRiverDetail && (
-                    <div className={styles.details}>
-                        <h3>
-                            {latestRiverDetail.title}
-                        </h3>
-                        {latestRiverDetail.image && (
-                            <Image
-                                src={latestRiverDetail.image}
-                                alt="image"
+                <Modal
+                    closeOnEscape
+                    onClose={handleModalClose}
+                >
+                    <ModalHeader
+                        title={title}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={handleModalClose}
                             />
                         )}
-                        <TextOutput
-                            label="Description"
-                            value={latestRiverDetail.description}
-                        />
-                        <TextOutput
-                            label="Basin"
-                            value={latestRiverDetail.basin}
-                        />
-                        <TextOutput
-                            label="Status"
-                            value={latestRiverDetail.status}
-                        />
-                        <TextOutput
-                            label="Latitude"
-                            value={latestRiverDetail.point.coordinates[1]}
-                        />
-                        <TextOutput
-                            label="Longitude"
-                            value={latestRiverDetail.point.coordinates[0]}
-                        />
-                        <TextOutput
-                            label="Flow"
-                            value={latestRiverDetail.steady}
-                        />
-                        <TextOutput
-                            label="Elevation"
-                            value={latestRiverDetail.elevation}
-                        />
-                        <TextOutput
-                            label="Water Level"
-                            value={latestRiverDetail.waterLevel}
-                        />
-                        <TextOutput
-                            label="Danger Level"
-                            value={latestRiverDetail.dangerLevel}
-                        />
-                        <TextOutput
-                            label="Warning Level"
-                            value={latestRiverDetail.warningLevel}
-                        />
-                        <TextOutput
-                            label="Measured On"
-                            value={(
-                                <FormattedDate
-                                    value={latestRiverDetail.waterLevelOn}
-                                    mode="yyyy-MM-dd hh:mm:aaa"
+                    />
+                    <ModalBody>
+                        {latestRiverDetail && (
+                            <div className={styles.details}>
+                                {latestRiverDetail.image && (
+                                    <Image
+                                        src={latestRiverDetail.image}
+                                        alt="image"
+                                    />
+                                )}
+                                <TextOutput
+                                    label="Description"
+                                    value={latestRiverDetail.description}
                                 />
-                            )}
-                        />
-                        <div>
-                            <h4>
-                                Hourly Water Level
-                            </h4>
-                            <Table
-                                data={hourlyRiverDetails}
-                                headers={this.riverHeader}
-                                keySelector={riverKeySelector}
-                            />
-                        </div>
-                    </div>
-                )}
+                                <TextOutput
+                                    label="Basin"
+                                    value={latestRiverDetail.basin}
+                                />
+                                <TextOutput
+                                    label="Status"
+                                    value={latestRiverDetail.status}
+                                />
+                                <TextOutput
+                                    label="Latitude"
+                                    value={latestRiverDetail.point.coordinates[1]}
+                                />
+                                <TextOutput
+                                    label="Longitude"
+                                    value={latestRiverDetail.point.coordinates[0]}
+                                />
+                                <TextOutput
+                                    label="Flow"
+                                    value={latestRiverDetail.steady}
+                                />
+                                <TextOutput
+                                    label="Elevation"
+                                    value={latestRiverDetail.elevation}
+                                />
+                                <TextOutput
+                                    label="Water Level"
+                                    value={latestRiverDetail.waterLevel}
+                                />
+                                <TextOutput
+                                    label="Danger Level"
+                                    value={latestRiverDetail.dangerLevel}
+                                />
+                                <TextOutput
+                                    label="Warning Level"
+                                    value={latestRiverDetail.warningLevel}
+                                />
+                                <TextOutput
+                                    label="Measured On"
+                                    value={(
+                                        <FormattedDate
+                                            value={latestRiverDetail.waterLevelOn}
+                                            mode="yyyy-MM-dd hh:mm:aaa"
+                                        />
+                                    )}
+                                />
+                                <div>
+                                    <h4>
+                                        Hourly Water Level
+                                    </h4>
+                                    <Table
+                                        data={hourlyRiverDetails}
+                                        headers={this.riverHeader}
+                                        keySelector={riverKeySelector}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </ModalBody>
+                </Modal>
             </>
         );
     }

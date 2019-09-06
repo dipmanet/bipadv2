@@ -26,6 +26,17 @@ import styles from './styles.scss';
 
 
 export default class RealTimeMap extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rainTitle: undefined,
+            riverTitle: undefined,
+            showRiverModal: false,
+            showRainModal: false,
+        };
+    }
+
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
     getRiverFeatureCollection = memoize(riverToGeojson)
@@ -54,21 +65,30 @@ export default class RealTimeMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    tooltipRendererParams = (id, { title }) => ({
-        title,
-    })
+    handleRainClick = (id, { title }) => {
+        this.setState({
+            rainTitle: title,
+            showRainModal: true,
+            showRiverModal: false,
+        });
+    }
 
-    rainTooltipRenderer = ({ title }) => (
-        <RainDetails
-            title={title}
-        />
-    )
+    handleRiverClick = (id, { title }) => {
+        this.setState({
+            riverTitle: title,
+            showRainModal: false,
+            showRiverModal: true,
+        });
+    }
 
-    riverTooltipRenderer = ({ title }) => (
-        <RiverDetails
-            title={title}
-        />
-    )
+    handleModalClose = () => {
+        this.setState({
+            rainTitle: undefined,
+            riverTitle: undefined,
+            showRiverModal: false,
+            showRainModal: false,
+        });
+    }
 
     earthquakeTooltipRendererParams = (id, { address, description, eventOn, magnitude }) => ({
         address,
@@ -217,6 +237,13 @@ export default class RealTimeMap extends React.PureComponent {
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
+        const {
+            showRiverModal,
+            showRainModal,
+            riverTitle,
+            rainTitle,
+        } = this.state;
+
         return (
             <React.Fragment>
                 <CommonMap
@@ -234,8 +261,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.rainPoint.layout}
                             paint={mapStyles.rainPoint.paint}
                             enableHover
-                            tooltipRenderer={this.rainTooltipRenderer}
-                            tooltipRendererParams={this.tooltipRendererParams}
+                            onClick={this.handleRainClick}
                         />
                     )}
                 </MapSource>
@@ -251,8 +277,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.riverPoint.layout}
                             paint={mapStyles.riverPoint.paint}
                             enableHover
-                            tooltipRenderer={this.riverTooltipRenderer}
-                            tooltipRendererParams={this.tooltipRendererParams}
+                            onClick={this.handleRiverClick}
                         />
                     )}
                 </MapSource>
@@ -326,6 +351,18 @@ export default class RealTimeMap extends React.PureComponent {
                         </React.Fragment>
                     )}
                 </MapSource>
+                {showRiverModal && (
+                    <RiverDetails
+                        title={riverTitle}
+                        handleModalClose={this.handleModalClose}
+                    />
+                )}
+                {showRainModal && (
+                    <RainDetails
+                        title={rainTitle}
+                        handleModalClose={this.handleModalClose}
+                    />
+                )}
             </React.Fragment>
         );
     }
