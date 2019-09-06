@@ -6,16 +6,18 @@ import ListView from '#rscv/List/ListView';
 import Attribute from './Attribute';
 import styles from './styles.scss';
 
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+
 interface Props {
     className?: string;
-    onAttributeClick: (key: string) => void;
+    onAttributeClick: (key: AttributeKey) => void;
 }
 
 interface State {
 }
 
 interface AttributeItem {
-    key: string;
+    key: AttributeKey;
     title: string;
     description?: string;
 }

@@ -179,9 +179,9 @@ export default class ResourceGroup extends React.PureComponent {
                     />
                     <h3 className={styles.heading}>
                         { heading }
-                        (
+                        &npsp;(
                         { itemsCount }
-                        /
+                        &nbsp;/&nbsp;
                         { totalSize }
                         )
                     </h3>

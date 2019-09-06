@@ -364,9 +364,10 @@ class Incidents extends React.PureComponent<Props, State> {
                             </div>
                         </React.Fragment>
                     )}
-                    leftContentClassName={styles.left}
+                    leftContentClassName={styles.container}
                     leftContent={(
                         <LeftPane
+                            className={styles.leftPane}
                             incidentList={sanitizedIncidentList}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}

@@ -13,12 +13,19 @@ $width-left-pane: var(--width-left-panel);
     to { opacity: 1; }
 }
 
-.left {
+.left-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     z-index: 111;
+    height: calc(100% - var(--spacing-medium) * 2);
+    overflow: auto;
     animation: fade-in $duration-transition-slow ease-in forwards;
+
+    .left-pane {
+        border: 1px solid green;
+        flex-grow: 1;
+    }
 }
 
 .main {

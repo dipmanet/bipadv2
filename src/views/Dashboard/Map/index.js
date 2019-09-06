@@ -197,7 +197,7 @@ class AlertEventMap extends React.PureComponent {
             hazards,
         );
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, false);
 
 
         const recentTimestamp = getYesterday(recentDay);

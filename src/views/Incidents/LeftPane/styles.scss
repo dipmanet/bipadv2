@@ -7,6 +7,11 @@ $width-non-tabular-container: var(--width-left-panel);
 $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
 
 .left-pane {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+    overflow: auto;
+
     .show-incident-button-container {
         transform-origin: 0 0;
 
@@ -18,6 +23,9 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
     }
 
     .incidents-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
         transform-origin: 0 0;
         border: $width-separator-thin solid $color-separator-light;
         border-radius: $radius-border-large;
@@ -26,10 +34,10 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
         .non-tabular-container {
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
             transform-origin: 0 0;
             background-color: $color-foreground;
             width: $width-non-tabular-container;
-            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
             overflow-y: auto;
 
             .header {
@@ -71,6 +79,7 @@ $width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-ver
 
                 .incident-list {
                     flex-grow: 1;
+                    border: 1px solid blue;
                     overflow-y: auto;
                 }
             }

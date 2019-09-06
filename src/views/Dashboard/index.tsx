@@ -204,7 +204,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     public componentDidMount(): void {
         const { rightPaneExpanded } = this.state;
 
-        this.setPlacementForMapControls(rightPaneExpanded);
+        // this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     public componentWillUnmount(): void {
@@ -298,7 +298,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
         this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
+        // this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     private handleHoverChange = (hoverType: string, hoverItemId: number) => {

@@ -10,10 +10,10 @@ interface Props {
     className?: string;
 }
 
-type Attribute = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
 
 interface State {
-    activeAttribute: Attribute | undefined;
+    activeAttribute: AttributeKey | undefined;
 }
 
 export default class RiskInfoLeftPane extends React.PureComponent<Props, State> {
@@ -25,7 +25,7 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
         };
     }
 
-    private handleAttributeClick = (key: Attribute) => {
+    private handleAttributeClick = (key: AttributeKey) => {
         this.setState({ activeAttribute: key });
     }
 
