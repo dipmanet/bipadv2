@@ -16,7 +16,7 @@ export interface NavbarRoute extends Route {
 
 export interface FallbackRoute {
     default: true;
-    navbar: true;
+    navbar: false;
     title: string;
     name: string;
     load: any;
@@ -47,6 +47,7 @@ const routeSettings: SomeRoute[] = [
         title: 'Incident Response',
         path: '/incidents/:incidentId/response/',
         load: () => import('../views/Response'),
+        navbar: false,
     },
     {
         name: 'lossAndDamage',
@@ -94,6 +95,7 @@ const routeSettings: SomeRoute[] = [
         title: '403',
         path: '/403/',
         load: () => import('../views/FourHundredThree'),
+        navbar: false,
     },
 
     {
@@ -102,6 +104,7 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/FourHundredFour'),
         default: true,
         path: undefined,
+        navbar: false,
     },
 ];
 

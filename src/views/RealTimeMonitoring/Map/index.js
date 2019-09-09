@@ -20,9 +20,23 @@ import {
     pollutionToGeojson,
 } from '#utils/domain';
 
+import RiverDetails from './RiverDetails';
+import RainDetails from './RainDetails';
 import styles from './styles.scss';
 
+
 export default class RealTimeMap extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rainTitle: undefined,
+            riverTitle: undefined,
+            showRiverModal: false,
+            showRainModal: false,
+        };
+    }
+
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
     getRiverFeatureCollection = memoize(riverToGeojson)
@@ -51,32 +65,35 @@ export default class RealTimeMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    tooltipRendererParams = (id, { title, description, basin, status }) => ({
-        title,
-        description,
-        basin,
-        status,
-    })
+    handleRainClick = (id, { title }) => {
+        this.setState({
+            riverTitle: undefined,
+            showRiverModal: false,
 
-    tooltipRenderer = ({ title, description, basin, status }) => (
-        <div>
-            <h3>
-                {title}
-            </h3>
-            <TextOutput
-                label="Description"
-                value={description}
-            />
-            <TextOutput
-                label="Basin"
-                value={basin}
-            />
-            <TextOutput
-                label="Status"
-                value={status}
-            />
-        </div>
-    )
+            rainTitle: title,
+            showRainModal: true,
+        });
+    }
+
+    handleRiverClick = (id, { title }) => {
+        this.setState({
+            riverTitle: title,
+            showRiverModal: true,
+
+            rainTitle: undefined,
+            showRainModal: false,
+        });
+    }
+
+    handleModalClose = () => {
+        this.setState({
+            riverTitle: undefined,
+            showRiverModal: false,
+
+            rainTitle: undefined,
+            showRainModal: false,
+        });
+    }
 
     earthquakeTooltipRendererParams = (id, { address, description, eventOn, magnitude }) => ({
         address,
@@ -223,7 +240,14 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
+        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, true);
+
+        const {
+            showRiverModal,
+            showRainModal,
+            riverTitle,
+            rainTitle,
+        } = this.state;
 
         return (
             <React.Fragment>
@@ -242,8 +266,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.rainPoint.layout}
                             paint={mapStyles.rainPoint.paint}
                             enableHover
-                            tooltipRenderer={this.tooltipRenderer}
-                            tooltipRendererParams={this.tooltipRendererParams}
+                            onClick={this.handleRainClick}
                         />
                     )}
                 </MapSource>
@@ -259,8 +282,7 @@ export default class RealTimeMap extends React.PureComponent {
                             layout={mapStyles.riverPoint.layout}
                             paint={mapStyles.riverPoint.paint}
                             enableHover
-                            tooltipRenderer={this.tooltipRenderer}
-                            tooltipRendererParams={this.tooltipRendererParams}
+                            onClick={this.handleRiverClick}
                         />
                     )}
                 </MapSource>
@@ -334,6 +356,18 @@ export default class RealTimeMap extends React.PureComponent {
                         </React.Fragment>
                     )}
                 </MapSource>
+                {showRiverModal && (
+                    <RiverDetails
+                        title={riverTitle}
+                        handleModalClose={this.handleModalClose}
+                    />
+                )}
+                {showRainModal && (
+                    <RainDetails
+                        title={rainTitle}
+                        handleModalClose={this.handleModalClose}
+                    />
+                )}
             </React.Fragment>
         );
     }

@@ -303,7 +303,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         return (
             <React.Fragment>
                 <div className={styles.header}>
-                    <h4>Legend</h4>
+                    <h4 className={styles.heading}>Legend</h4>
                     <Button
                         onClick={this.handleCloseLegendsClick}
                         iconName={iconNames.chevronUp}
@@ -491,17 +491,10 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     )}
                     rightContent={(
                         <RealTimeMonitoringFilter
-                            // rainPending={rainPending}
-                            // riverPending={riverPending}
-                            // earthquakePending={earthquakePending}
-                            // firePending={firePending}
-                            // pollutionPending={pollutionPending}
                             realTimeList={realTimeSourceList}
                             onExpandChange={this.handleRightPaneExpandChange}
                         />
                     )}
-                    mainContentClassName={styles.main}
-                    mainContent={null}
                 />
             </React.Fragment>
         );

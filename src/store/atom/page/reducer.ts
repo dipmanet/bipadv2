@@ -745,7 +745,7 @@ export const setProjectsProfileFilters = (
         } = faramValues;
 
         /* eslint-disable no-param-reassign */
-        deferedState.region = region;
+        deferedState.region = region || {};
 
         if (faramValues) {
             deferedState.projectsProfilePage.filters.faramValues = faramValuesNoRegion;
@@ -828,7 +828,7 @@ export const setProfileContactFilters = (
         } = faramValues;
 
         /* eslint-disable no-param-reassign */
-        deferedState.region = region;
+        deferedState.region = region || {};
 
         if (faramValues) {
             deferedState.profileContactPage.filters.faramValues = faramValuesNoRegion;

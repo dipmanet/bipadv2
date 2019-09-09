@@ -90,8 +90,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEventList: params => dispatch(setEventListAction(params)),
 });
 
-const iconSelector = (d: { icon: string }) => d.icon;
-
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     alertsRequest: {
         url: '/alert/',
@@ -191,7 +189,13 @@ class Dashboard extends React.PureComponent<Props, State> {
             hoverType: undefined,
         };
 
-        this.props.requests.alertsRequest.setDefaultParams({
+        const {
+            requests: {
+                alertsRequest,
+            },
+        } = this.props;
+
+        alertsRequest.setDefaultParams({
             triggerAlertRequest: this.alertPoll,
             triggerEventRequest: this.eventPoll,
         });
@@ -207,18 +211,23 @@ class Dashboard extends React.PureComponent<Props, State> {
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
 
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
         if (mapControls) {
             mapControls.style.right = this.previousMapContorlStyle;
         }
     }
+
+    private previousMapContorlStyle: string | null = null;
 
     private getAlertHazardTypesList = memoize((
         alertList: PageTypes.Alert[],
         eventList: PageTypes.Event[],
     ) => {
         const { hazardTypes } = this.props;
-        const items = [...alertList, ...eventList.filter(event => event.hazard)];
+        const items = [
+            ...alertList,
+            ...eventList.filter(event => event.hazard),
+        ];
         return hazardTypesList(items, hazardTypes);
     });
 
@@ -249,7 +258,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     );
 
     public setPlacementForMapControls = (rightPaneExpanded: boolean | undefined) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
 
         if (mapControls) {
             const widthRightPanel = rightPaneExpanded
@@ -327,9 +336,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 return null;
             }
 
-            title = hoverDetail.title;
+            ({ title, source } = hoverDetail);
             date = hoverDetail.startedOn;
-            source = hoverDetail.source;
         }
 
         if (hoverType === 'event') {
@@ -340,9 +348,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 return null;
             }
 
-            title = hoverDetail.title;
+            ({ title, source } = hoverDetail);
             date = hoverDetail.startedOn;
-            source = hoverDetail.source;
         }
 
         return (

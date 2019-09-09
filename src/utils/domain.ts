@@ -112,8 +112,10 @@ export const getHazardIcon = (hazards: Obj<HazardType>, hazardId?: number) => {
 };
 
 export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<HazardType>) => {
+    const listWithHazardFiltered = listWithHazard.filter(l => isDefined(l.hazard));
+
     const group = groupList(
-        listWithHazard.filter(l => l.hazard),
+        listWithHazardFiltered as Required<WithHazard>[],
         item => item.hazard,
     );
 

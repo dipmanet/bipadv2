@@ -58,18 +58,27 @@ $width-table-container: 250px;
     .filter-form {
         flex-grow: 1;
 
+        .region-select-input {
+            margin: var(--spacing-small);
+        }
+
         .real-time-sources-input {
             margin: 0 $spacing-small;
             padding-top: $spacing-medium;
 
             :global {
+                .input-label {
+                    margin-bottom: var(--spacing-small);
+                    font-size: var(--font-size-small);
+                }
+
                 .list-selection-options {
                     display: flex;
                     flex-direction: column;
                     flex-wrap: wrap;
 
                     label {
-                        padding: $spacing-extra-small $spacing-small;
+                        padding: $spacing-extra-small 0;
                     }
                 }
             }
