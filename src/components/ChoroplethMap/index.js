@@ -33,6 +33,7 @@ import {
 
 const propTypes = {
     boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    regionLevelFromAppState: PropTypes.number,
     regionLevel: PropTypes.number,
 
     // eslint-disable-next-line react/forbid-prop-types
@@ -54,6 +55,7 @@ const propTypes = {
 
 const defaultProps = {
     boundsPadding: undefined,
+    regionLevelFromAppState: undefined,
     regionLevel: undefined,
     selectedProvinceId: undefined,
     selectedDistrictId: undefined,
@@ -67,7 +69,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
 
-    regionLevel: regionLevelSelector(state, props),
+    regionLevelFromAppState: regionLevelSelector(state, props),
     bounds: boundsSelector(state, props),
     selectedProvinceId: selectedProvinceIdSelector(state, props),
     selectedDistrictId: selectedDistrictIdSelector(state, props),
@@ -105,7 +107,6 @@ class ChoroplethMap extends React.PureComponent {
     render() {
         const {
             boundsPadding,
-            regionLevel,
             bounds,
             provinces,
             districts,
@@ -119,6 +120,8 @@ class ChoroplethMap extends React.PureComponent {
 
             paint,
             mapState,
+            regionLevelFromAppState,
+            regionLevel = regionLevelFromAppState,
         } = this.props;
 
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;

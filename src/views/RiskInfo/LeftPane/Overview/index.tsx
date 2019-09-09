@@ -6,7 +6,7 @@ import ListView from '#rscv/List/ListView';
 import Attribute from './Attribute';
 import styles from './styles.scss';
 
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 interface Props {
     className?: string;
@@ -44,6 +44,11 @@ const attributeList: AttributeItem[] = [
         key: 'capacity-and-resources',
         title: 'Capacity & resources',
         description: 'The strengths, attributes and resources available within the administrative area to manage and reduce disaster risks and strengthen resilience',
+    },
+    {
+        key: 'climate-change',
+        title: 'Climate change',
+        description: 'Climate change occurs when changes in Earth\'s climate system result in new weather patterns that last for at least a few decades, and maybe for millions of years.',
     },
 ];
 
