@@ -29,6 +29,12 @@ import {
 import {
     AppState,
 } from '#store/types';
+import {
+    Contact,
+    Municipality,
+    Region,
+    Training,
+} from '#store/atom/page/types';
 
 import {
     createConnectedRequestCoordinator,
@@ -62,6 +68,10 @@ interface PropsFromDispatch {
 interface PropsFromState {
     municipalityList: Municipality[];
     contactList: Contact[];
+    region: Region;
+    filters: {
+        faramValues: unknown;
+    };
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -69,8 +79,8 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     contactList: profileContactListSelector(state),
-    region: regionSelector(state),
     municipalityList: municipalitiesSelector(state),
+    region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
 });
 
@@ -97,62 +107,40 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
     },
 };
 
-interface Contact {
-    committee: string;
-    email: string;
-    id: string;
-    image?: string;
-    mobileNumber: string;
-    municipality: string;
-    name: string;
-    point?: number[];
-    position: string;
-    trainings: Training[];
-    ward?: string;
-    workNumber: string;
-    isDrrFocalPerson: boolean;
-    organization: {
-        title: string;
-    };
-}
-
-interface Training {
-    id: string;
-    title: string;
-}
-
-const committeeValues = {
+const committeeValues: {
+    [key in Contact['committee']]: string;
+} = {
     LDMC: 'Local Disaster Management Committee',
     WDMC: 'Ward Disaster Management Committee',
     CDMC: 'Community Disaster Management Committee',
     non_committee: 'Non committee members', // eslint-disable-line @typescript-eslint/camelcase
 };
 
-const committeeValueList = mapToList(committeeValues, (v, k) => ({ key: k, label: v }));
+const committeeValueList = mapToList(
+    committeeValues,
+    (v, k) => ({ key: k, label: v }),
+);
 
-const trainingValues = {
+const trainingValues: {
+    [key in Training['title']]: string;
+} = {
     LSAR: 'Lite Search and Rescue',
     rapid_assessment: 'Rapid Assessment', // eslint-disable-line @typescript-eslint/camelcase
     first_aid: 'First Aid', // eslint-disable-line @typescript-eslint/camelcase
     fire_fighting: 'Fire Fighting', // eslint-disable-line @typescript-eslint/camelcase
 };
 
-const trainingValueList = mapToList(trainingValues, (v, k) => ({ key: k, label: v }));
+const trainingValueList = mapToList(
+    trainingValues,
+    (v, k) => ({ key: k, label: v }),
+);
 
 interface SelectInputOption {
     key: string;
     label: string;
 }
 
-interface Municipality {
-    id: number;
-    centroid: number[];
-    province: number;
-    district: number;
-    title: string;
-}
-
-class Contact extends React.PureComponent<Props> {
+class ContactPage extends React.PureComponent<Props> {
     private getMunicipalityMap = (municipalityList: Municipality[]) => (
         listToMap(municipalityList, d => d.id, d => d.title)
     )
@@ -209,7 +197,7 @@ class Contact extends React.PureComponent<Props> {
             drrFocalPersonOnly,
         } = filterOptions;
 
-        let newContactList = contactList.sort((a: Contact, b: Contact) => {
+        let newContactList = [...contactList].sort((a: Contact, b: Contact) => {
             const aWeight = a.isDrrFocalPerson ? 1 : 0;
             const bWeight = b.isDrrFocalPerson ? 1 : 0;
 
@@ -243,7 +231,9 @@ class Contact extends React.PureComponent<Props> {
         }
 
         if (region.adminLevel === 1) {
-            const municipalities = {};
+            const municipalities: {
+                [key: string]: boolean;
+            } = {};
             municipalityList.forEach((d) => {
                 if (d.province === region.geoarea) {
                     municipalities[d.id] = true;
@@ -254,7 +244,9 @@ class Contact extends React.PureComponent<Props> {
         }
 
         if (region.adminLevel === 2) {
-            const municipalities = {};
+            const municipalities: {
+                [key: string]: boolean;
+            } = {};
             municipalityList.forEach((d) => {
                 if (d.district === region.geoarea) {
                     municipalities[d.id] = true;
@@ -320,7 +312,7 @@ class Contact extends React.PureComponent<Props> {
         );
     }
 
-    private renderContactDetails = (p: { contact: Contact }) => {
+    private renderContactDetails = (p: { contact: Contact; municipalityList: Municipality[] }) => {
         const {
             contact,
             municipalityList,
@@ -340,13 +332,15 @@ class Contact extends React.PureComponent<Props> {
             mobileNumber,
             isDrrFocalPerson,
             municipality,
-            organization = {},
+            organization,
         } = contact;
 
         const Detail = this.renderDetail;
         const IconDetail = this.renderIconDetail;
 
-        const trainingValueString = trainings.map(d => trainingValues[d.title]).join(', ') || '-';
+        const trainingValueString = trainings.map(
+            d => trainingValues[d.title],
+        ).join(', ') || '-';
         const municipalities = this.getMunicipalityMap(municipalityList);
 
         return (
@@ -401,7 +395,7 @@ class Contact extends React.PureComponent<Props> {
                 />
                 <Detail
                     label="Organization"
-                    value={organization.title || '-'}
+                    value={(organization ? organization.title : undefined) || '-'}
                 />
                 <Detail
                     label="Comittee"
@@ -422,7 +416,6 @@ class Contact extends React.PureComponent<Props> {
 
     public render() {
         const {
-            className,
             contactList,
             region,
             municipalityList,
@@ -431,7 +424,7 @@ class Contact extends React.PureComponent<Props> {
             },
             requests: {
                 municipalityContactRequest: {
-                    pending,
+                    pending = false,
                 } = {},
             },
         } = this.props;
@@ -517,4 +510,4 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),
     createRequestClient(requests),
-)(Contact);
+)(ContactPage);

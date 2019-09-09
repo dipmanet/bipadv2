@@ -3,20 +3,20 @@ import { Obj } from '@togglecorp/fujs';
 export interface Province {
     id: number;
     bbox: number[];
-    centroid: unknown;
+    centroid: number[];
     title: string;
 }
 export interface District {
     id: number;
     bbox: number[];
-    centroid: unknown;
+    centroid: number[];
     title: string;
     province: number;
 }
 export interface Municipality {
     id: number;
     bbox: number[];
-    centroid: unknown;
+    centroid: number[];
     title: string;
     province?: number;
     district: number;
@@ -24,7 +24,7 @@ export interface Municipality {
 export interface Ward {
     id: number;
     // bbox: number[];
-    centroid: unknown;
+    centroid: number[];
     title: string;
     province?: number;
     district?: number;
@@ -32,7 +32,7 @@ export interface Ward {
 }
 export interface WithHazard {
     id: number;
-    hazard: number;
+    hazard?: number;
 }
 export interface HazardType {
     id: number;
@@ -566,7 +566,7 @@ export interface SetLpGasCookList {
     lpGasCookList: LpGasCook[];
 }
 export interface Contact {
-    committee: string;
+    committee: 'LDMC' | 'WDMC' | 'CDMC' | 'non_committee';
     email: string;
     id: string;
     image?: string;
@@ -575,9 +575,18 @@ export interface Contact {
     name: string;
     point?: number[];
     position: string;
-    training: string;
+    trainings: Training[];
     ward?: string;
     workNumber: string;
+    isDrrFocalPerson: boolean;
+    organization: {
+        title: string;
+    };
+}
+
+export interface Training {
+    id: string;
+    title: 'LSAR' | 'rapid_assessment' | 'first_aid' | 'fire_fighting';
 }
 
 export interface SetProfileContactList {

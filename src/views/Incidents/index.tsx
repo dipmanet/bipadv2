@@ -192,11 +192,13 @@ class Incidents extends React.PureComponent<Props, State> {
     }
 
     public componentWillUnmount(): void {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
         if (mapControls) {
             mapControls.style.right = this.previousMapContorlStyle;
         }
     }
+
+    private previousMapContorlStyle: string | null = null;
 
     private getSanitizedIncidents = memoize(getSanitizedIncidents)
 
@@ -214,7 +216,7 @@ class Incidents extends React.PureComponent<Props, State> {
     );
 
     public setPlacementForMapControls = (rightPaneExpanded?: boolean) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
 
         if (mapControls) {
             const widthRightPanel = rightPaneExpanded
@@ -306,7 +308,6 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             leftPaneExpanded,
             rightPaneExpanded,
-            selectedIncidentId,
         } = this.state;
 
         const sanitizedIncidentList = this.getSanitizedIncidents(
