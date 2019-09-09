@@ -170,3 +170,10 @@ $width-left-pane: var(--width-left-panel);
         right: calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 2));
     }
 }
+
+.map-download-button {
+    position: absolute;
+    top: var(--spacing-medium);
+    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+    z-index: 11;
+}
