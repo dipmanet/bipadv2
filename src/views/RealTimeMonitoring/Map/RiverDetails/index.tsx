@@ -1,10 +1,11 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import {
-    _cs,
     compareDate,
     getDate,
     listToGroupList,
+    mapToList,
+    isDefined,
 } from '@togglecorp/fujs';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -51,9 +52,6 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             format: 'json',
             title,
         }),
-        onSuccess: ({ response }) => {
-            // console.warn('response', response);
-        },
         onMount: true,
         onPropsChanged: ['title'],
     },
@@ -96,7 +94,7 @@ class RiverDetails extends React.PureComponent<Props> {
     private riverHeader: Header<RealTimeRiverDetails>[];
 
     private getSortedRiverData = memoize((riverDetails: RealTimeRiverDetails[]) => {
-        const sortedData = riverDetails.sort((a, b) => compareDate(b.createdOn, a.createdOn));
+        const sortedData = [...riverDetails].sort((a, b) => compareDate(b.createdOn, a.createdOn));
         return sortedData;
     })
 
@@ -120,10 +118,14 @@ class RiverDetails extends React.PureComponent<Props> {
             };
         });
 
-        const groupedRiver = listToGroupList(riverWithoutMinutes, river => river.waterLevelOn);
-        const riverHours = Object.values(groupedRiver)
-            .map(river => river[0])
-            .filter(v => v !== undefined);
+        const groupedRiver = listToGroupList(
+            riverWithoutMinutes,
+            river => river.waterLevelOn,
+        );
+        const riverHours = mapToList(
+            groupedRiver,
+            value => value[0],
+        ).filter(isDefined);
 
         return riverHours;
     })

@@ -175,7 +175,7 @@ export interface RealTimeRiverDetails {
     elevation?: number;
     dangerLevel?: number;
     warningLevel?: number;
-    waterLevelOn: string;
+    waterLevelOn: string | number;
 }
 
 export interface WaterLevelAverage {
@@ -189,7 +189,7 @@ export interface WaterLevelAverage {
 
 export interface RealTimeRainDetails {
     id: number;
-    createdOn: string;
+    createdOn: string | number;
     modifiedOn: string;
     title: string;
     basin: string;

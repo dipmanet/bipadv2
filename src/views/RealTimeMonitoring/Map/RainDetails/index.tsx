@@ -5,6 +5,8 @@ import {
     compareDate,
     getDate,
     listToGroupList,
+    isDefined,
+    mapToList,
 } from '@togglecorp/fujs';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -37,6 +39,7 @@ interface Params {}
 interface OwnProps {
     handleModalClose: () => void;
     title: string;
+    className?: string;
 }
 interface State {}
 
@@ -54,13 +57,12 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             format: 'json',
             title,
         }),
-        onSuccess: ({ response }) => {
-            // console.warn('response', response);
-        },
         onMount: true,
         onPropsChanged: ['title'],
     },
 };
+
+const emptyArray: any[] = [];
 
 class RainDetails extends React.PureComponent<Props> {
     public constructor(props: Props) {
@@ -87,10 +89,17 @@ class RainDetails extends React.PureComponent<Props> {
                         danger: dangerStatus,
                         warning: warningStatus,
                     } = row.status;
+
                     if (dangerStatus && warningStatus) {
                         return 'danger, warning';
                     }
-                    return `${dangerStatus ? 'danger' : ''}${warningStatus ? 'warning' : ''}`;
+                    if (dangerStatus) {
+                        return 'danger';
+                    }
+                    if (warningStatus) {
+                        return 'warning';
+                    }
+                    return null;
                 },
             },
         ];
@@ -115,7 +124,8 @@ class RainDetails extends React.PureComponent<Props> {
                     const {
                         averages = [],
                     } = row;
-                    return averages.find(average => average.interval === 1).value || '';
+                    const average = averages.find(av => av.interval === 1);
+                    return average ? average.value : undefined;
                 },
             },
         ];
@@ -126,7 +136,7 @@ class RainDetails extends React.PureComponent<Props> {
     private rainHeader: Header<RealTimeRainDetails>[];
 
     private getSortedRainData = memoize((rainDetails: RealTimeRainDetails[]) => {
-        const sortedData = rainDetails.sort((a, b) => compareDate(b.createdOn, a.createdOn));
+        const sortedData = [...rainDetails].sort((a, b) => compareDate(b.createdOn, a.createdOn));
         return sortedData;
     })
 
@@ -149,10 +159,15 @@ class RainDetails extends React.PureComponent<Props> {
                 createdOn: dateWithoutMinutes,
             };
         });
-        const groupedRain = listToGroupList(rainWithoutMinutes, rain => rain.createdOn);
-        const rainHours = Object.values(groupedRain)
-            .map(rain => rain[0])
-            .filter(v => v !== undefined);
+
+        const groupedRain = listToGroupList(
+            rainWithoutMinutes,
+            rain => rain.createdOn,
+        );
+        const rainHours = mapToList(
+            groupedRain,
+            value => value[0],
+        ).filter(isDefined);
 
         return rainHours;
     })
@@ -165,12 +180,12 @@ class RainDetails extends React.PureComponent<Props> {
                     pending,
                 },
             },
-            title = '',
+            title,
             handleModalClose,
             className,
         } = this.props;
 
-        let rainDetails: RealTimeRainDetails[] = [];
+        let rainDetails: RealTimeRainDetails[] = emptyArray;
         if (!pending && response) {
             const {
                 results,

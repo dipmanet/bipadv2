@@ -67,25 +67,30 @@ export default class RealTimeMap extends React.PureComponent {
 
     handleRainClick = (id, { title }) => {
         this.setState({
+            riverTitle: undefined,
+            showRiverModal: false,
+
             rainTitle: title,
             showRainModal: true,
-            showRiverModal: false,
         });
     }
 
     handleRiverClick = (id, { title }) => {
         this.setState({
             riverTitle: title,
-            showRainModal: false,
             showRiverModal: true,
+
+            rainTitle: undefined,
+            showRainModal: false,
         });
     }
 
     handleModalClose = () => {
         this.setState({
-            rainTitle: undefined,
             riverTitle: undefined,
             showRiverModal: false,
+
+            rainTitle: undefined,
             showRainModal: false,
         });
     }
