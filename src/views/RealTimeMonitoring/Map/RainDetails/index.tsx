@@ -33,6 +33,9 @@ import {
     methods,
 } from '#request';
 
+import waterLevelChartImage from '#resources/images/river-water-level-chart.png';
+import accumulatedRainfallChartImage from '#resources/images/accumulated-rainfall-chart.png';
+
 import styles from './styles.scss';
 
 interface Params {}
@@ -288,12 +291,20 @@ class RainDetails extends React.PureComponent<Props> {
                                             Latest Rainfall
                                         </h4>
                                     </header>
-                                    <Table
-                                        className={styles.content}
-                                        data={latestRainDetail.averages}
-                                        headers={this.latestWaterLevelHeader}
-                                        keySelector={waterLevelKeySelector}
-                                    />
+                                    <div className={styles.content}>
+                                        <Table
+                                            className={styles.table}
+                                            data={latestRainDetail.averages}
+                                            headers={this.latestWaterLevelHeader}
+                                            keySelector={waterLevelKeySelector}
+                                        />
+                                        <div className={styles.chartContainer}>
+                                            <img
+                                                src={waterLevelChartImage}
+                                                alt="chart"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className={styles.accumulatedRainfall}>
                                     <header className={styles.header}>
@@ -301,12 +312,20 @@ class RainDetails extends React.PureComponent<Props> {
                                             Accumulated Rainfall
                                         </h4>
                                     </header>
-                                    <Table
-                                        className={styles.content}
-                                        data={hourlyRainDetails}
-                                        headers={this.rainHeader}
-                                        keySelector={rainKeySelector}
-                                    />
+                                    <div className={styles.content}>
+                                        <Table
+                                            className={styles.table}
+                                            data={hourlyRainDetails}
+                                            headers={this.rainHeader}
+                                            keySelector={rainKeySelector}
+                                        />
+                                        <div className={styles.chartContainer}>
+                                            <img
+                                                src={accumulatedRainfallChartImage}
+                                                alt="chart"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

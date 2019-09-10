@@ -29,6 +29,8 @@ import {
     methods,
 } from '#request';
 
+import waterLevelChartImage from '#resources/images/river-water-level-chart.png';
+
 import styles from './styles.scss';
 
 interface Params {}
@@ -285,6 +287,13 @@ class RiverDetails extends React.PureComponent<Props> {
                                         data={hourlyRiverDetails}
                                         headers={this.riverHeader}
                                         keySelector={riverKeySelector}
+                                    />
+                                </div>
+                                <div className={styles.waterLevelChartContainer}>
+                                    <img
+                                        className={styles.waterLevelChart}
+                                        src={waterLevelChartImage}
+                                        alt="chart"
                                     />
                                 </div>
                             </div>
