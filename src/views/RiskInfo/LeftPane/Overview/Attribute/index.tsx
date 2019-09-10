@@ -14,6 +14,7 @@ interface Props {
     color?: string;
     attributeKey: AttributeKey;
     onClick: (key: AttributeKey) => void;
+    icon: string;
 }
 
 interface State {
