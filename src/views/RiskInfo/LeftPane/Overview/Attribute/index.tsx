@@ -3,12 +3,14 @@ import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+
 interface Props {
     className?: string;
     title: string;
     description?: string;
-    attributeKey: string;
-    onClick: (key: string) => void;
+    attributeKey: AttributeKey;
+    onClick: (key: AttributeKey) => void;
 }
 
 interface State {

@@ -129,7 +129,7 @@ export default class Hazard extends React.PureComponent<Props, State> {
 
     private views ={
         flood: {
-            component: ({ data }) => (
+            component: () => (
                 <>
                     <NewRadioInput
                         className={styles.floodMapRadioInput}
@@ -169,7 +169,7 @@ export default class Hazard extends React.PureComponent<Props, State> {
         },
     }
 
-    private handleFloodMapChange = (newFloodMapValue) => {
+    private handleFloodMapChange = (newFloodMapValue: string) => {
         this.setState({ floodMapValue: newFloodMapValue });
     }
 

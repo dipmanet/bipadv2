@@ -13,9 +13,6 @@ interface Props {
     onAttributeClick: (key: AttributeKey) => void;
 }
 
-interface State {
-}
-
 interface AttributeItem {
     key: AttributeKey;
     title: string;
@@ -52,7 +49,7 @@ const attributeList: AttributeItem[] = [
 
 const attributeListKeySelector = (d: AttributeItem) => d.key;
 
-export default class Overview extends React.PureComponent<Props, State> {
+export default class Overview extends React.PureComponent<Props> {
     private getAttributeRendererParams = (_: string, attribute: AttributeItem) => ({
         attributeKey: attribute.key,
         title: attribute.title,

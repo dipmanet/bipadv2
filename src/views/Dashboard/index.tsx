@@ -296,11 +296,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ leftPaneExpanded });
     }
 
-    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
-        this.setState({ rightPaneExpanded });
-        // this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
     private handleHoverChange = (hoverType: string, hoverItemId: number) => {
         this.setState({
             hoverItemId,
@@ -426,9 +421,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     )}
                     rightContent={(
-                        <RightPane
-                            onExpandChange={this.handleRightPaneExpandChange}
-                        />
+                        <RightPane />
                     )}
                 />
             </React.Fragment>
