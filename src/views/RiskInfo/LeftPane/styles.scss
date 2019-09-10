@@ -1,0 +1,9 @@
+.left-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .content {
+        flex-grow: 1;
+    }
+}

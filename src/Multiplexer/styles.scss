@@ -7,6 +7,7 @@
 
     .navbar {
         flex-shrink: 0;
+        border-bottom: var(--width-separator-thin) solid var(--color-separator);
     }
 
     .content {

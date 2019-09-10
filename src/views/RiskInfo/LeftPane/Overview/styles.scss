@@ -1,0 +1,17 @@
+.overview {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .header {
+        flex-shrink: 0;
+        padding: var(--spacing-medium-alt);
+        font-size: var(--font-size-large);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: auto;
+    }
+}

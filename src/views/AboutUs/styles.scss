@@ -3,13 +3,13 @@
 .about-us {
     display: flex;
     position: absolute;
-    top: calc(var(--height-navbar) + var(--spacing-medium));
+    top: var(--spacing-medium);
     left: var(--spacing-medium); 
     z-index: 1;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
-    width: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
-    height: calc(100vh - var(--height-navbar) - var(--spacing-medium) * 2);
+    width: calc(100vw - var(--spacing-medium) * 2);
+    height: calc(100% - var(--spacing-medium) * 2);
 
     .content {
         display: flex;

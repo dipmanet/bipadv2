@@ -204,7 +204,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     public componentDidMount(): void {
         const { rightPaneExpanded } = this.state;
 
-        this.setPlacementForMapControls(rightPaneExpanded);
+        // this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     public componentWillUnmount(): void {
@@ -294,11 +294,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
-    }
-
-    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
-        this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     private handleHoverChange = (hoverType: string, hoverItemId: number) => {
@@ -392,6 +387,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             leftPaneExpanded,
             rightPaneExpanded,
         } = this.state;
+
         const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
@@ -425,9 +421,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     )}
                     rightContent={(
-                        <RightPane
-                            onExpandChange={this.handleRightPaneExpandChange}
-                        />
+                        <RightPane />
                     )}
                 />
             </React.Fragment>
