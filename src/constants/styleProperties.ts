@@ -18,6 +18,9 @@ const styleProperties = {
 
     widthContactDisplayPicture: '96px',
     heightContactDisplayPicture: '96px',
+
+    widthRiskInfoAttributeIcon: '56px',
+    heightRiskInfoAttributeIcon: '56px',
 };
 
 export default styleProperties;
