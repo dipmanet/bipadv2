@@ -9,12 +9,13 @@ import Exposure from './Exposure';
 import Vulnerability from './Vulnerability';
 import Risk from './Risk';
 import CapacityAndResources from './CapacityAndResources';
+import ClimateChange from './ClimateChange';
 
 import styles from './styles.scss';
 
 interface Props {
     className?: string;
-    attribute: 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+    attribute: 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
     onBackButtonClick: () => void;
 }
 
@@ -50,6 +51,11 @@ export default class Details extends React.PureComponent<Props, State> {
         'capacity-and-resources': {
             title: 'Capacity & resources',
             component: CapacityAndResources,
+            rendererParams,
+        },
+        'climate-change': {
+            title: 'Climate change',
+            component: ClimateChange,
             rendererParams,
         },
     }

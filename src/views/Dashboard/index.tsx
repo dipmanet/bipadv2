@@ -8,6 +8,8 @@ import {
     Obj,
 } from '@togglecorp/fujs';
 
+import MapDownload from '#rscz/Map/MapDownload';
+
 import {
     styleProperties,
 } from '#constants';
@@ -175,7 +177,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-// FIXME: should be one day
 const RECENT_DAY = 1;
 
 class Dashboard extends React.PureComponent<Props, State> {
@@ -400,6 +401,12 @@ class Dashboard extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onHoverChange={this.handleHoverChange}
                 />
+                <MapDownload
+                    className={styles.mapDownloadButton}
+                    iconName="download"
+                >
+                    Download this map
+                </MapDownload>
                 <Loading pending={pending} />
                 <HoverItemDetail />
                 <Page

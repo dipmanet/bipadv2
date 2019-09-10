@@ -10,7 +10,6 @@ import { filtersSelectorDP } from '#selectors';
 
 import RegionSelectInput from '#components/RegionSelectInput';
 
-
 import styles from './styles.scss';
 
 interface OwnProps {

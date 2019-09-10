@@ -2,6 +2,8 @@ import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
+import MapDownload from '#rscz/Map/MapDownload';
+
 import Legend from '#rscz/Legend';
 import Message from '#rscv/Message';
 import Button from '#rsca/Button';
@@ -452,6 +454,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         return (
             <React.Fragment>
                 <Loading pending={pending} />
+                <MapDownload
+                    className={styles.mapDownloadButton}
+                    iconName="download"
+                >
+                    Download this map
+                </MapDownload>
                 <Map
                     realTimeRainList={realTimeRainList}
                     realTimeRiverList={realTimeRiverList}

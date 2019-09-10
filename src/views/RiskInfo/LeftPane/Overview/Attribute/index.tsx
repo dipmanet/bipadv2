@@ -3,7 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 interface Props {
     className?: string;

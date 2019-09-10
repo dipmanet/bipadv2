@@ -12,3 +12,14 @@
         flex-grow: 1;
     }
 }
+
+.main-content {
+    position: absolute;
+    bottom: var(--spacing-medium);
+    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+    transform: none;
+
+    .legend {
+        border: var(--width-separator-thin) solid var(--color-separator);
+    }
+}

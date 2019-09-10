@@ -8,9 +8,10 @@ import styles from './styles.scss';
 
 interface Props {
     className?: string;
+    onViewChange: (key: AttributeKey | undefined) => void;
 }
 
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 interface State {
     activeAttribute: AttributeKey | undefined;
@@ -26,11 +27,21 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
     }
 
     private handleAttributeClick = (key: AttributeKey) => {
+        const {
+            onViewChange,
+        } = this.props;
+
         this.setState({ activeAttribute: key });
+        onViewChange(key);
     }
 
     private handleDetailsBackButtonClick = () => {
+        const {
+            onViewChange,
+        } = this.props;
+
         this.setState({ activeAttribute: undefined });
+        onViewChange(undefined);
     }
 
     public render() {

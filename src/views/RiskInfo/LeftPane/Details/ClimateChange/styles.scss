@@ -1,0 +1,28 @@
+.climate-change {
+    display: flex;
+    flex-direction: column;
+
+    .top {
+        flex-grow: 1;
+
+        .measurement-type-input {
+            margin: var(--spacing-medium);
+        }
+
+        .time-period-input {
+            margin: var(--spacing-medium);
+        }
+
+        .scenario-input {
+            margin: var(--spacing-medium);
+        }
+    }
+
+    .bottom {
+        flex-shrink: 0;
+
+        .chart {
+            width: 100%;
+        }
+    }
+}
