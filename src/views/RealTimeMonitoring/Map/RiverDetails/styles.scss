@@ -65,6 +65,7 @@
                     display: flex;
                     flex-basis: 50%;
                     flex-direction: column;
+                    flex-shrink: 0;
                     overflow: auto;
 
                     .header {
@@ -80,6 +81,19 @@
                         flex-grow: 1;
                         padding: 0 var(--spacing-medium);
                         overflow: auto;
+                    }
+                }
+
+                .water-level-chart-container {
+                    display: flex;
+                    align-items: center;
+                    flex-basis: 50%;
+                    flex-grow: 0;
+                    justify-content: center;
+
+                    .water-level-chart-container {
+                        object-fit: contain;
+                        object-position: center center;
                     }
                 }
             }

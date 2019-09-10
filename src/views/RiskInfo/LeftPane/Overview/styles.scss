@@ -11,7 +11,14 @@
     }
 
     .content {
+        display: flex;
         flex-grow: 1;
+        flex-wrap: wrap;
         overflow: auto;
+
+        .attribute {
+            flex-basis: 50%;
+            border: var(--width-separator-thin) solid var(--color-separator);
+        }
     }
 }
