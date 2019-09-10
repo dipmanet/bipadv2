@@ -39,7 +39,7 @@ export default class RiskInfo extends React.PureComponent<Props, State> {
                 />
             </div>
         ) : (
-            null
+            <div />
         );
 
         return (

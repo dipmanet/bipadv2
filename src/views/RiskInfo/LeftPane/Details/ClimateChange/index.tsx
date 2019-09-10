@@ -6,11 +6,17 @@ import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
 
+import {
+    Province,
+    District,
+    Municipality,
+    Ward,
+} from '#store/atom/page/types';
+
 import chartImage from '#resources/images/mean-anual-precipitation-chart.png';
 import legendImage from '#resources/images/mean-anual-precipitation-legend.png';
 
 import {
-    regionsSelector,
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -26,6 +32,10 @@ interface OwnProps {
 }
 
 interface PropsFromAppState {
+    provinces: Province[];
+    districts: District[];
+    municipalities: Municipality[];
+    ward: Ward[];
 }
 
 interface PropsFromDispatch {
@@ -37,7 +47,6 @@ interface State {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    regions: regionsSelector(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -111,4 +120,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps)(ClimateChange);
+export default connect(mapStateToProps)(
+    ClimateChange,
+);

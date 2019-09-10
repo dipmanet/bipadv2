@@ -15,7 +15,7 @@ import styles from './styles.scss';
 
 interface Props {
     className?: string;
-    attribute: 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources';
+    attribute: 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
     onBackButtonClick: () => void;
 }
 

@@ -1,6 +1,10 @@
 import React from 'react';
 import memoize from 'memoize-one';
 
+import {
+    District,
+} from '#store/atom/page/types';
+
 import ChoroplethMap from '#components/ChoroplethMap';
 
 import {
@@ -10,6 +14,7 @@ import {
 import styles from './styles.scss';
 
 interface Props {
+    districts: District[];
 }
 
 interface State {
