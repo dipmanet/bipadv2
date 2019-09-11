@@ -119,7 +119,7 @@ const state: PageState = {
         ],
         filters: {
             faramValues: {
-                realtimeSources: [1, 2, 3, 5],
+                realtimeSources: [3, 2],
             },
             faramErrors: {},
             pristine: true,

@@ -3,7 +3,6 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import MapDownload from '#rscz/Map/MapDownload';
-
 import Legend from '#rscz/Legend';
 import Message from '#rscv/Message';
 import Button from '#rsca/Button';
@@ -46,10 +45,14 @@ import { iconNames } from '#constants';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
+import RainWatch from './RainWatch';
+import RiverWatch from './RiverWatch';
 
 import styles from './styles.scss';
 
 interface State {
+    showRainWatch: boolean;
+    showRiverWatch: boolean;
     rightPaneExpanded?: boolean;
     leftPaneExpanded?: boolean;
 }
@@ -271,9 +274,37 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         super(props);
 
         this.state = {
+            showRainWatch: false,
+            showRiverWatch: false,
             rightPaneExpanded: true,
             leftPaneExpanded: true,
         };
+    }
+
+    private handleShowRainWatch = () => {
+        this.setState({
+            showRiverWatch: false,
+            showRainWatch: true,
+        });
+    }
+
+    private handleShowRiverWatch = () => {
+        this.setState({
+            showRainWatch: false,
+            showRiverWatch: true,
+        });
+    }
+
+    private closeRainWatch = () => {
+        this.setState({
+            showRainWatch: false,
+        });
+    }
+
+    private closeRiverWatch = () => {
+        this.setState({
+            showRiverWatch: false,
+        });
     }
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
@@ -293,7 +324,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             filters: {
                 realtimeSources,
             },
-            realTimeSourceList,
         } = this.props;
 
         const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
@@ -301,6 +331,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
         const showFire = realtimeSources && realtimeSources.findIndex(v => v === 4) !== -1;
         const showPollution = realtimeSources && realtimeSources.findIndex(v => v === 5) !== -1;
+
 
         return (
             <React.Fragment>
@@ -436,6 +467,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         } = this.props;
 
         const {
+            showRainWatch,
+            showRiverWatch,
             rightPaneExpanded,
             leftPaneExpanded,
         } = this.state;
@@ -498,10 +531,36 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         />
                     )}
                     rightContent={(
-                        <RealTimeMonitoringFilter
-                            realTimeList={realTimeSourceList}
-                            onExpandChange={this.handleRightPaneExpandChange}
-                        />
+                        <>
+                            <RealTimeMonitoringFilter
+                                realTimeList={realTimeSourceList}
+                                onExpandChange={this.handleRightPaneExpandChange}
+                            />
+                            <Button
+                                onClick={this.handleShowRainWatch}
+                                disabled={rainPending || showRainWatch}
+                            >
+                                Rainfall Watch
+                            </Button>
+                            <Button
+                                onClick={this.handleShowRiverWatch}
+                                disabled={riverPending || showRiverWatch}
+                            >
+                                River Watch
+                            </Button>
+                            {showRainWatch && (
+                                <RainWatch
+                                    realTimeRain={realTimeRainList}
+                                    handleModalClose={this.closeRainWatch}
+                                />
+                            )}
+                            {showRiverWatch && (
+                                <RiverWatch
+                                    realTimeRiver={realTimeRiverList}
+                                    handleModalClose={this.closeRiverWatch}
+                                />
+                            )}
+                        </>
                     )}
                 />
             </React.Fragment>

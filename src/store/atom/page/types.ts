@@ -148,12 +148,22 @@ export interface FiltersWithRegion {
 
 export interface RealTimeRiver {
     id: number;
-    point: unknown;
+    createdOn: string;
+    modifiedOn: string;
     title: string;
-    description?: string;
-    basin?: string;
-    status?: string;
-    steady?: string;
+    basin: string;
+    stationId?: number; // TODO: remove ? when station id is sent by api
+    district?: string; // TODO: remove ? when district is sent by a
+    waterLevel: number;
+    point: Point;
+    image: string;
+    status: string;
+    steady: string;
+    description: string;
+    elevation?: number;
+    dangerLevel?: number;
+    warningLevel?: number;
+    waterLevelOn: string | number;
 }
 
 export interface Point {
@@ -197,11 +207,23 @@ export interface RealTimeRainDetails {
     image: string;
     status: string;
     description: string;
-    elevation?: number;
+    elevation: number;
     averages: WaterLevelAverage[];
 }
 
-export interface RealTimeRain extends RealTimeRiver {
+export interface RealTimeRain {
+    id: number;
+    createdOn: string | number;
+    modifiedOn: string;
+    title: string;
+    basin: string;
+    point: Point;
+    image: string;
+    status: string;
+    description: string;
+    elevation?: number;
+    averages: WaterLevelAverage[];
+
 }
 export interface RealTimeEarthquake {
     id: number;
