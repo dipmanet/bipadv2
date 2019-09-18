@@ -29,7 +29,7 @@ const state: PageState = {
     municipalities: [],
     wards: [],
 
-    selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
+    selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
     mapStyles: [
         {
             name: 'none',
@@ -113,6 +113,8 @@ const state: PageState = {
         realTimeSourceList: [
             { id: 3, title: 'Rain' },
             { id: 2, title: 'River' },
+        ],
+        otherSourceList: [
             { id: 1, title: 'Earthquake' },
             { id: 5, title: 'Pollution' },
             { id: 4, title: 'Forest Fire' },

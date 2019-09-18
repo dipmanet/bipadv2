@@ -262,6 +262,11 @@ export const realTimeSourceListSelector = createSelector(
     ({ realTimeSourceList }) => realTimeSourceList,
 );
 
+export const otherSourceListSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ otherSourceList }) => otherSourceList,
+);
+
 export const realTimeFiltersSelector = createSelector(
     realTimeMonitoringPageSelector,
     regionSelector,

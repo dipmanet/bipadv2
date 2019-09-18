@@ -4,128 +4,54 @@
     padding: 0;
 }
 
-@keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.left {
+    padding: 0;
 }
 
-.left {
+.main {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: var(--width-left-panel);
-    max-height: calc(100vh - var(--height-navbar) - var(--spacing-medium) * 2);
-    overflow: auto;
-    animation: fade-in $duration-transition-slow ease-in forwards;
+    width: 100%;
 
-    .legend {
+    .legend-container {
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
-    }
+        border: var(--width-separator-thin) solid var(--color-separator);
+        background-color: var(--color-foreground);
+        width: 200px;
+        height: 160px;
+        overflow: auto;
 
-    .legends-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        transform-origin: 0 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
-        background-color: rgba(255, 255, 255, .9);
-        overflow-y: auto;
-
-        .header {
-            display: flex;
-            align-items: center;
+        .heading {
             flex-shrink: 0;
-            justify-content: space-between;
-            padding-right: $spacing-small;
-
-            .heading {
-                flex-shrink: 0;
-                padding: $spacing-medium;
-                color: $color-primary;
-                font-weight: $font-weight-bold;
-            }
+            padding: var(--spacing-medium);
+            text-transform: uppercase;
+            color: $color-text;
+            font-size: $font-size-small;
         }
 
-        .no-legend {
-            height: 120px;
-        }
-
-        .legend-items {
+        .legend {
             flex-grow: 1;
-            overflow-y: auto;
-        }
+            overflow: auto;
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            flex-shrink: 0;
-            padding: var(--spacing-medium) 0;
-            overflow-y: auto;
-
-            .heading {
-                flex-shrink: 0;
-                padding: var(--spacing-medium);
-                text-transform: uppercase;
-                color: $color-text;
-                font-size: $font-size-small;
-            }
-
-            .legend {
+            .legend-item {
                 display: flex;
-                flex-direction: column;
-                flex-grow: 1;
-                flex-shrink: 0;
+                align-items: center;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
 
-                .legend-item {
-                    font-size: $font-size-small;
-                    font-weight: $font-weight-bold;
+                >div:first-child {
+                    margin: 0 var(--spacing-medium);
+                }
 
-                    >div:first-child {
-                        margin: var(--spacing-extra-small) var(--spacing-medium);
-                        width: $font-size-medium;
-                    }
+                >div:last-child {
+                    padding: var(--spacing-extra-small-alt) var(--spacing-medium);
+                }
 
-                    >div:last-child {
-                        padding: var(--spacing-extra-small) var(--spacing-medium);
-                        width: $font-size-medium;
-                    }
-
-                    &:hover {
-                        background-color: var(--color-background-hover);
-                    }
+                &:hover {
+                    background-color: var(--color-background-hover);
                 }
             }
         }
     }
 }
 
-.show-legend-button-container {
-    transform-origin: 0 0;
-}
-
-.main {
-    bottom: 40px;
-    left: $spacing-medium;
-    transform: none;
-
-    .links {
-        background-color: #fff;
-
-        .link {
-            display: flex;
-            color: $color-primary;
-            font-size: $font-size-large;
-        }
-    }
-}
-
-.map-download-button {
-    position: absolute;
-    top: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
-    z-index: 11;
-}

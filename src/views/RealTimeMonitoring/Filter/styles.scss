@@ -1,84 +1,32 @@
 @import '~base-scss/base';
 
-$width-table-container: 250px;
-
 .filter {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
+    border: var(--width-separator-thin) solid var(--color-separator);
+    background-color: var(--color-foreground);
+    padding: 0 var(--spacing-extra-small-alt);
 
-    .header {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-
-        .heading {
-            flex-grow: 1;
-            padding: $spacing-medium $spacing-small;
-            color: $color-primary;
-        }
-
-        button {
-            flex-shrink: 0;
-        }
+    .region-select-input {
+        margin: calc(var(--spacing-medium) + var(--spacing-extra-small-alt)) var(--spacing-medium);
     }
 
-    .show-filter-button-container {
-        top: 0;
-        right: 0;
-        transform-origin: 100% 0;
+    .real-time-sources-input {
+        margin: var(--spacing-medium);
     }
 
-    .filters-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        transform-origin: 100% 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
-        background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
-        width: $width-table-container;
-        overflow: auto;
+    .other-sources-input {
+        margin: var(--spacing-medium);
     }
 
     :global {
-        .expanded-container-ghost,
-        .collapsed-container-ghost {
-            top: 0;
-            right: 0;
-        }
+        .list-selection {
+            .list-selection-options {
+                .checkbox {
+                    .checkmark {
+                        margin-right: var(--spacing-extra-small-alt);
+                    }
 
-        .expanded-container-expanding {
-            top: 0;
-            right: 0;
-        }
-    }
-
-    .filter-form {
-        flex-grow: 1;
-
-        .region-select-input {
-            margin: var(--spacing-small);
-        }
-
-        .real-time-sources-input {
-            margin: 0 $spacing-small;
-            padding-top: $spacing-medium;
-
-            :global {
-                .input-label {
-                    margin-bottom: var(--spacing-small);
-                    font-size: var(--font-size-small);
-                }
-
-                .list-selection-options {
-                    display: flex;
-                    flex-direction: column;
-                    flex-wrap: wrap;
-
-                    label {
-                        padding: $spacing-extra-small 0;
+                    .label {
+                        margin-right: var(--spacing-small-alt);
                     }
                 }
             }

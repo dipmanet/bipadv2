@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 
 import MapDownload from '#rscz/Map/MapDownload';
 import Legend from '#rscz/Legend';
-import Message from '#rscv/Message';
 import Button from '#rsca/Button';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -28,6 +26,7 @@ import {
     setRealTimeFireListAction,
     setRealTimePollutionListAction,
 } from '#actionCreators';
+
 import {
     realTimeRiverListSelector,
     realTimeRainListSelector,
@@ -36,12 +35,11 @@ import {
     realTimePollutionListSelector,
     realTimeFiltersValuesSelector,
     realTimeSourceListSelector,
+    otherSourceListSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
-import CollapsibleView from '#components/CollapsibleView';
-import { iconNames } from '#constants';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
@@ -87,6 +85,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeFireList: realTimeFireListSelector(state),
     realTimePollutionList: realTimePollutionListSelector(state),
     realTimeSourceList: realTimeSourceListSelector(state),
+    otherSourceList: otherSourceListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
 });
 
@@ -276,8 +275,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.state = {
             showRainWatch: false,
             showRiverWatch: false,
-            rightPaneExpanded: true,
-            leftPaneExpanded: true,
+            rightPaneExpanded: false,
+            leftPaneExpanded: false,
         };
     }
 
@@ -323,126 +322,109 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const {
             filters: {
                 realtimeSources,
+                otherSources,
             },
         } = this.props;
 
-        const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
-        const showFire = realtimeSources && realtimeSources.findIndex(v => v === 4) !== -1;
-        const showPollution = realtimeSources && realtimeSources.findIndex(v => v === 5) !== -1;
+        const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
+        const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
+        const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
 
 
         return (
-            <React.Fragment>
-                <div className={styles.header}>
-                    <h4 className={styles.heading}>Legend</h4>
-                    <Button
-                        onClick={this.handleCloseLegendsClick}
-                        iconName={iconNames.chevronUp}
-                        title="Hide Filters"
-                        transparent
-                    />
-                </div>
-                <div className={styles.legendItems}>
-                    { !(showRain || showRiver || showEarthquake || showPollution || showFire) && (
-                        <div className={styles.noLegend}>
-                            <Message>
-                                Please select at least one source
-                            </Message>
-                        </div>
-                    )}
-                    { showRain && (
-                        <div className={styles.container}>
-                            <h5 className={styles.heading}>
-                                Rain
-                            </h5>
-                            <Legend
-                                className={styles.legend}
-                                data={rainLegendItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
-                        </div>
-                    )}
-                    { showRiver && (
-                        <div className={styles.container}>
-                            <h5 className={styles.heading}>
-                                River
-                            </h5>
-                            <Legend
-                                className={styles.legend}
-                                data={riverLegendItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
-                        </div>
-                    )}
-                    { showEarthquake && (
-                        <div className={styles.container}>
-                            <h5 className={styles.heading}>
-                                Earthquake (Richter Scale)
-                            </h5>
-                            <Legend
-                                className={styles.legend}
-                                data={earthquakeLegendItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
-                        </div>
-                    )}
-                    { showPollution && (
-                        <div className={styles.container}>
-                            <h5 className={styles.heading}>
-                                Pollution (PM&nbsp;
-                                <sub>
-                                    2.5
-                                </sub>
-                                )
-                            </h5>
-                            <Legend
-                                className={styles.legend}
-                                data={pollutionLegendItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
-                        </div>
-                    )}
-                    { showFire && (
-                        <div className={styles.container}>
-                            <h5 className={styles.heading}>
-                                Forest Fire
-                            </h5>
-                            <Legend
-                                className={styles.legend}
-                                data={fireLegendItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
-                        </div>
-                    )}
-                </div>
-            </React.Fragment>
+            <>
+                { showRain && (
+                    <div className={styles.legendContainer}>
+                        <h5 className={styles.heading}>
+                            Rain
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={rainLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
+                { showRiver && (
+                    <div className={styles.legendContainer}>
+                        <h5 className={styles.heading}>
+                            River
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={riverLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
+                { showEarthquake && (
+                    <div className={styles.legendContainer}>
+                        <h5 className={styles.heading}>
+                            Earthquake (Richter Scale)
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={earthquakeLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
+                { showPollution && (
+                    <div className={styles.legendContainer}>
+                        <h5 className={styles.heading}>
+                            Pollution (PM&nbsp;
+                            <sub>
+                                2.5
+                            </sub>
+                            )
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={pollutionLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
+                { showFire && (
+                    <div className={styles.legendContainer}>
+                        <h5 className={styles.heading}>
+                            Forest Fire
+                        </h5>
+                        <Legend
+                            className={styles.legend}
+                            data={fireLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
+            </>
         );
     }
 
@@ -464,6 +446,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 realtimeSources,
             },
             realTimeSourceList,
+            otherSourceList,
         } = this.props;
 
         const {
@@ -485,14 +468,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         );
 
         return (
-            <React.Fragment>
+            <>
                 <Loading pending={pending} />
-                <MapDownload
-                    className={styles.mapDownloadButton}
-                    iconName="download"
-                >
-                    Download this map
-                </MapDownload>
                 <Map
                     realTimeRainList={realTimeRainList}
                     realTimeRiverList={realTimeRiverList}
@@ -507,34 +484,23 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     rightPaneExpanded={rightPaneExpanded}
                     leftPaneExpanded={leftPaneExpanded}
                 />
-                <Loading pending={pending} />
                 <Page
                     rightContentClassName={styles.right}
                     leftContentClassName={styles.left}
+                    mainContentClassName={styles.main}
                     leftContent={(
-                        <CollapsibleView
-                            className={styles.legend}
-                            expanded={leftPaneExpanded}
-                            collapsedViewContainerClassName={styles.showLegendButtonContainer}
-                            collapsedView={(
-                                <PrimaryButton
-                                    onClick={this.handleShowLegendsButtonClick}
-                                    title="Show filters"
-                                >
-                                    Show Legend
-                                </PrimaryButton>
-                            )}
-                            expandedViewContainerClassName={styles.legendsContainer}
-                            expandedView={
-                                <LegendView />
-                            }
-                        />
+                        <MapDownload
+                            className={styles.mapDownloadButton}
+                            iconName="download"
+                        >
+                            Download this map
+                        </MapDownload>
                     )}
                     rightContent={(
                         <>
                             <RealTimeMonitoringFilter
-                                realTimeList={realTimeSourceList}
-                                onExpandChange={this.handleRightPaneExpandChange}
+                                realTimeSourceList={realTimeSourceList}
+                                otherSourceList={otherSourceList}
                             />
                             <Button
                                 onClick={this.handleShowRainWatch}
@@ -562,8 +528,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             )}
                         </>
                     )}
+                    mainContent={(
+                        <LegendView />
+                    )}
                 />
-            </React.Fragment>
+            </>
         );
     }
 }
