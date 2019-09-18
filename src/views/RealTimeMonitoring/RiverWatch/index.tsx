@@ -1,0 +1,134 @@
+import React from 'react';
+import {
+    compareString,
+    compareNumber,
+} from '@togglecorp/fujs';
+
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import Table from '#rscv/Table';
+import DangerButton from '#rsca/Button/DangerButton';
+
+import { Header } from '#store/atom/table/types';
+import { RealTimeRiver } from '#store/atom/page/types';
+
+import styles from './styles.scss';
+
+interface Props {
+    realTimeRiver: RealTimeRiver[];
+    handleModalClose: () => void;
+}
+
+const riverWatchKeySelector = (river: RealTimeRiver) => river.id;
+
+class RiverWatch extends React.PureComponent<Props> {
+    public constructor(props: Props) {
+        super(props);
+
+        // TODO: add OandM by to riverWatch
+        this.riverWatchHeader = [
+            {
+                key: 'basin',
+                label: 'Basin',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareString(a.basin, b.basin),
+            },
+            {
+                key: 'title',
+                label: 'Station Name',
+                order: 2,
+                sortable: true,
+                comparator: (a, b) => compareString(a.title, b.title),
+            },
+            {
+                key: 'stationId',
+                label: 'Station Id',
+                order: 3,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.stationId, b.stationId),
+            },
+            {
+                key: 'district',
+                label: 'District',
+                order: 4,
+                sortable: true,
+                comparator: (a, b) => compareString(a.district, b.district),
+            },
+            {
+                key: 'waterLevel',
+                label: 'Water Level (m)',
+                order: 5,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.waterLevel, b.waterLevel),
+            },
+            {
+                key: 'warningLevel',
+                label: 'Warning Level',
+                order: 6,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.warningLevel, b.warningLevel),
+            },
+            {
+                key: 'dangerLevel',
+                label: 'Danger Level',
+                order: 7,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.dangerLevel, b.dangerLevel),
+            },
+            {
+                key: 'steady',
+                label: 'Steady',
+                order: 8,
+                sortable: true,
+                comparator: (a, b) => compareString(a.steady, b.steady),
+            },
+            {
+                key: 'status',
+                label: 'Status',
+                order: 9,
+                sortable: true,
+                comparator: (a, b) => compareString(a.status, b.status),
+            },
+        ];
+    }
+
+    private riverWatchHeader: Header<RealTimeRiver>[];
+
+    public render() {
+        const {
+            realTimeRiver,
+            handleModalClose,
+        } = this.props;
+
+        return (
+            <Modal
+                closeOnEscape
+                onClose={handleModalClose}
+                className={styles.riverWatchModal}
+            >
+                <ModalHeader
+                    title="River Watch"
+                    rightComponent={(
+                        <DangerButton
+                            transparent
+                            iconName="close"
+                            onClick={handleModalClose}
+                        />
+                    )}
+                />
+                <ModalBody className={styles.body}>
+                    <Table
+                        className={styles.riverWatchTable}
+                        data={realTimeRiver}
+                        headers={this.riverWatchHeader}
+                        keySelector={riverWatchKeySelector}
+                    />
+                </ModalBody>
+            </Modal>
+        );
+    }
+}
+
+export default RiverWatch;

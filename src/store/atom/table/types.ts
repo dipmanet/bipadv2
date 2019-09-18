@@ -3,6 +3,7 @@ export interface HeaderWithModifier<T> {
     label: string;
     order: number;
     sortable?: boolean;
+    comparator?: (a:T, b:T) => number;
     modifier: (leave: T) => React.ReactNode;
 }
 

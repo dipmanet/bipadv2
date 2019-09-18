@@ -1,0 +1,18 @@
+.rain-watch-modal {
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .rain-watch-table {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
