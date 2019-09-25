@@ -143,6 +143,20 @@ class RainWatch extends React.PureComponent<Props> {
         ];
     }
 
+    private getClassName = (row: RealTimeRain) => {
+        const { status } = row;
+        if (status === 'BELOW WARNING LEVEL') {
+            return styles.below;
+        }
+        if (status === 'ABOVE WARNING LEVEL') {
+            return styles.above;
+        }
+        if (status === 'ABOVE DANGER LEVEL') {
+            return styles.danger;
+        }
+        return styles.below;
+    }
+
     private rainWatchHeader: Header<RealTimeRain>[];
 
     public render() {
@@ -169,6 +183,7 @@ class RainWatch extends React.PureComponent<Props> {
                 />
                 <ModalBody className={styles.body}>
                     <Table
+                        rowClassNameSelector={this.getClassName}
                         className={styles.rainWatchTable}
                         data={realTimeRain}
                         headers={this.rainWatchHeader}

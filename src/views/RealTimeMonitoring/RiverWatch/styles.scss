@@ -13,6 +13,18 @@
             flex-direction: column;
             flex-grow: 1;
             overflow: auto;
+
+            .below {
+                background-color: #78e08f;
+            }
+
+            .above {
+                background-color: #fa983a;
+            }
+
+            .danger {
+                background-color: #eb2f06;
+            }
         }
     }
 }
