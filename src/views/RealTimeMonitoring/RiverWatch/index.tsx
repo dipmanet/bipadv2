@@ -94,6 +94,20 @@ class RiverWatch extends React.PureComponent<Props> {
         ];
     }
 
+    private getClassName = (row: RealTimeRain) => {
+        const { status } = row;
+        if (status === 'BELOW WARNING LEVEL') {
+            return styles.below;
+        }
+        if (status === 'ABOVE WARNING LEVEL') {
+            return styles.above;
+        }
+        if (status === 'ABOVE DANGER LEVEL') {
+            return styles.danger;
+        }
+        return styles.below;
+    }
+
     private riverWatchHeader: Header<RealTimeRiver>[];
 
     public render() {
@@ -120,6 +134,7 @@ class RiverWatch extends React.PureComponent<Props> {
                 />
                 <ModalBody className={styles.body}>
                     <Table
+                        rowClassNameSelector={this.getClassName}
                         className={styles.riverWatchTable}
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}
