@@ -1,0 +1,40 @@
+@import '~base-scss/base';
+
+.rain-watch {
+    display: flex;
+    flex-direction: column;
+    margin-top: $spacing-medium;
+    background-color: $color-foreground;
+    height: 30vh;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: space-between;
+
+        .heading {
+            align-self: flex-start;
+            flex-grow: 1;
+            padding: $spacing-medium;
+            color: $color-text;
+        }
+
+        .show-details-button {
+            margin-right: $spacing-medium;
+            border: $width-separator-thin solid $color-separator;
+            color: $color-primary;
+        }
+    }
+
+    .input {
+        display: flex;
+        flex-grow: 1;
+    }
+
+    .rain-watch-table {
+        display: flex;
+        overflow: auto;
+    }
+}

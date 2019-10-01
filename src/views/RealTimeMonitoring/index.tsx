@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import MapDownload from '#rscz/Map/MapDownload';
 import Legend from '#rscz/Legend';
-import Button from '#rsca/Button';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -43,8 +42,8 @@ import Loading from '#components/Loading';
 
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
-import RainWatch from './RainWatch';
-import RiverWatch from './RiverWatch';
+import MiniRiverWatch from './MiniRiverWatch';
+import MiniRainWatch from './MiniRainWatch';
 
 import styles from './styles.scss';
 
@@ -273,37 +272,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         super(props);
 
         this.state = {
-            showRainWatch: false,
-            showRiverWatch: false,
             rightPaneExpanded: false,
             leftPaneExpanded: false,
         };
-    }
-
-    private handleShowRainWatch = () => {
-        this.setState({
-            showRiverWatch: false,
-            showRainWatch: true,
-        });
-    }
-
-    private handleShowRiverWatch = () => {
-        this.setState({
-            showRainWatch: false,
-            showRiverWatch: true,
-        });
-    }
-
-    private closeRainWatch = () => {
-        this.setState({
-            showRainWatch: false,
-        });
-    }
-
-    private closeRiverWatch = () => {
-        this.setState({
-            showRiverWatch: false,
-        });
     }
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
@@ -450,8 +421,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         } = this.props;
 
         const {
-            showRainWatch,
-            showRiverWatch,
             rightPaneExpanded,
             leftPaneExpanded,
         } = this.state;
@@ -502,30 +471,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 realTimeSourceList={realTimeSourceList}
                                 otherSourceList={otherSourceList}
                             />
-                            <Button
-                                onClick={this.handleShowRainWatch}
-                                disabled={rainPending || showRainWatch}
-                            >
-                                Rainfall Watch
-                            </Button>
-                            <Button
-                                onClick={this.handleShowRiverWatch}
-                                disabled={riverPending || showRiverWatch}
-                            >
-                                River Watch
-                            </Button>
-                            {showRainWatch && (
-                                <RainWatch
-                                    realTimeRain={realTimeRainList}
-                                    handleModalClose={this.closeRainWatch}
-                                />
-                            )}
-                            {showRiverWatch && (
-                                <RiverWatch
-                                    realTimeRiver={realTimeRiverList}
-                                    handleModalClose={this.closeRiverWatch}
-                                />
-                            )}
+                            <MiniRiverWatch
+                                realTimeRiver={realTimeRiverList}
+                            />
+                            <MiniRainWatch
+                                realTimeRain={realTimeRainList}
+                            />
                         </>
                     )}
                     mainContent={(
