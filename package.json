@@ -164,7 +164,7 @@
         "memoize-one": "^5.0.5",
         "prop-types": "^15.7.2",
         "raven-js": "^3.25.2",
-        "react": "^16.8.6",
+        "react": "16.8.6",
         "react-color": "^2.17.3",
         "react-dom": "^16.8.6",
         "react-focus-trap": "^2.7.1",

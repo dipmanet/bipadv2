@@ -25,6 +25,7 @@ const emptyArray = [];
 
 const propTypes = {
     // adminLevelList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    className: PropTypes.string,
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     municipalities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -33,6 +34,7 @@ const propTypes = {
 
 const defaultProps = {
     value: {},
+    className: undefined,
 };
 
 const mapStateToProps = state => ({
@@ -52,10 +54,7 @@ export default class RegionOutput extends React.PureComponent {
 
     render() {
         const {
-            value: {
-                adminLevel,
-                geoarea: locationId,
-            },
+            value,
             // adminLevelList,
 
             provinces,
@@ -63,6 +62,11 @@ export default class RegionOutput extends React.PureComponent {
             municipalities,
             className,
         } = this.props;
+
+        const {
+            adminLevel,
+            geoarea: locationId,
+        } = value;
 
         /*
         const adminLevelItem = adminLevelList.find(

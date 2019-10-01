@@ -5,6 +5,7 @@ export interface AuthState {
     csrftoken?: string;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export enum AuthType {
     SET_AUTH = 'auth/SET_AUTH',
 }
