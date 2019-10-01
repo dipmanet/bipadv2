@@ -9,6 +9,7 @@ const schemaList: Schema[] = [
         fields: {
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
+            code: { type: 'string', required: true },
             // eslint-disable-next-line @typescript-eslint/camelcase
             title_en: { type: 'string' },
             bbox: { type: 'array.number', required: true },
@@ -36,6 +37,7 @@ const schemaList: Schema[] = [
         fields: {
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
+            code: { type: 'string', required: true },
             // eslint-disable-next-line @typescript-eslint/camelcase
             title_en: { type: 'string' },
             province: { type: 'number', required: true },
@@ -64,6 +66,7 @@ const schemaList: Schema[] = [
         fields: {
             id: { type: 'number', required: true },
             title: { type: 'string', required: true },
+            code: { type: 'string', required: true },
             // eslint-disable-next-line @typescript-eslint/camelcase
             title_en: { type: 'string' },
             district: { type: 'number', required: true },
