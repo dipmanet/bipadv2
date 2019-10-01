@@ -22,8 +22,8 @@ export function setAuth(
     // in auth state structure
     if (
         state.authenticated === authState.authenticated
-        || state.csrftoken === authState.csrftoken
-        || state.sessionId === authState.sessionId
+        && state.csrftoken === authState.csrftoken
+        && state.sessionId === authState.sessionId
     ) {
         // NOTE: don't change state if all of the values are same
         return state;
