@@ -104,10 +104,7 @@ class LossAndDamageFilter extends React.PureComponent {
     render() {
         const {
             className,
-            filters: {
-                faramValues,
-                faramErrors,
-            },
+            filters,
             onMetricChange,
             metricOptions,
             isTimeline,
@@ -116,6 +113,11 @@ class LossAndDamageFilter extends React.PureComponent {
             hideRegionSelect,
             hideMetricSelect,
         } = this.props;
+
+        const {
+            faramValues,
+            faramErrors,
+        } = filters;
 
         const { showFilters } = this.state;
 

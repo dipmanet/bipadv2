@@ -17,11 +17,14 @@ import {
     setMunicipalitiesAction,
     setWardsAction,
     setHazardTypesAction,
+    setAuthAction,
     // setEventTypesAction,
 } from '#actionCreators';
 import {
     mapStyleSelector,
 } from '#selectors';
+
+import { getAuthState } from '#utils/session';
 
 import Multiplexer from './Multiplexer';
 
@@ -38,6 +41,7 @@ interface PropsFromDispatch {
     setWards: typeof setWardsAction;
     setHazardTypes: typeof setHazardTypesAction;
     // setEventTypes: typeof setEventTypesAction;
+    setAuth: typeof setAuthAction;
 }
 type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -52,6 +56,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
     setWards: params => dispatch(setWardsAction(params)),
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
+    setAuth: params => dispatch(setAuthAction(params)),
     // setEventTypes: params => dispatch(setEventTypesAction(params)),
 });
 
@@ -142,6 +147,30 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 /* Loads required info from server */
 // eslint-disable-next-line react/prefer-stateless-function
 class App extends React.Component<Props, State> {
+    public constructor(props: any) {
+        super(props);
+        this.authPollId = undefined;
+    }
+
+    public componentDidMount() {
+        // Start polling
+        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
+    }
+
+    public componentWillUnmount() {
+        if (this.authPollId) {
+            window.clearTimeout(this.authPollId);
+        }
+    }
+
+    private authPollId?: number;
+
+    public pollAuthInfo = () => {
+        const authState = getAuthState();
+        this.props.setAuth(authState);
+        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
+    }
+
     public render() {
         const {
             requests: {

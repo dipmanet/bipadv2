@@ -38,18 +38,20 @@ export default class IncidentItem extends React.PureComponent {
     render() {
         const {
             className,
-            data: {
-                title,
-                incidentOn,
-                streetAddress,
-                source,
-                verified,
-                hazard,
-                id: incidentId,
-            },
+            data,
             hazardTypes,
             recentDay,
         } = this.props;
+
+        const {
+            title,
+            incidentOn,
+            streetAddress,
+            source,
+            verified,
+            hazard,
+            id: incidentId,
+        } = data;
 
         const verifiedIconClass = verified
             ? _cs(styles.icon, iconNames.check, styles.verified)

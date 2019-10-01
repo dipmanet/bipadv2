@@ -111,11 +111,12 @@ export default class IncidentsFilter extends React.PureComponent {
         const {
             hazardTypeList,
             eventList,
-            filters: {
-                faramValues,
-                faramErrors,
-            },
+            filters,
         } = this.props;
+        const {
+            faramValues,
+            faramErrors,
+        } = filters;
 
         const { showFilters } = this.state;
 

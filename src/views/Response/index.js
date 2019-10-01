@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 
 import {
     styleProperties,
@@ -25,6 +26,7 @@ import {
     districtsMapSelector,
     municipalitiesMapSelector,
     wardsMapSelector,
+    authStateSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -81,6 +83,7 @@ const mapStateToProps = (state, props) => ({
     districtsMap: districtsMapSelector(state),
     municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
+    authState: authStateSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -169,6 +172,10 @@ class Response extends React.PureComponent {
         }
     }
 
+    getFilteredList = memoize((list, filterFunction) => (
+        list.filter(filterFunction)
+    ))
+
     setFilter = (filterFunction) => {
         this.setState({ filterFunction });
     }
@@ -228,6 +235,9 @@ class Response extends React.PureComponent {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            authState: {
+                authenticated,
+            },
         } = this.props;
 
         const {
@@ -237,7 +247,7 @@ class Response extends React.PureComponent {
         } = this.state;
 
         // TODO: memoize this
-        const filteredResourceList = resourceList.filter(filterFunction);
+        const filteredResourceList = this.getFilteredList(resourceList, filterFunction);
 
         const pending = pendingResponse || pendingFilteredResponse || pendingIncident;
 
@@ -267,9 +277,11 @@ class Response extends React.PureComponent {
                                         municipalitiesMap={municipalitiesMap}
                                         onExpandChange={this.handleLeftPaneExpandChange}
                                     />
-                                    <StockPileFilter
-                                        setStockPileFilter={this.setStockPileFilter}
-                                    />
+                                    { authenticated && (
+                                        <StockPileFilter
+                                            setStockPileFilter={this.setStockPileFilter}
+                                        />
+                                    ) }
                                 </React.Fragment>
                             )}
                             rightContentClassName={styles.resourceListContainer}

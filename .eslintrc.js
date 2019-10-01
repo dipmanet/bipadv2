@@ -108,5 +108,8 @@ module.exports = {
         'react/default-props-match-prop-types': ['warn', {
             'allowRequiredDefaults': true,
         }],
+
+        // NOTE: disabling this rignt now because of bug in eslint-plugin-react
+        'react/jsx-curly-brace-presence': 0,
     },
 };

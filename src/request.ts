@@ -12,7 +12,7 @@ import {
 import schema from '#schema';
 import { sanitizeResponse } from '#utils/common';
 
-const wsEndpoint = process.env.REACT_APP_API_SERVER_URL || 'https://bipad.nepware.com/api/v1';
+const wsEndpoint = process.env.REACT_APP_API_SERVER_URL || 'bipad-admin.localhost.com/api/v1';
 
 // FIXME: don't know why eslint disable is required right now
 // eslint-disable-next-line arrow-parens

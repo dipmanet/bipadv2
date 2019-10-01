@@ -92,15 +92,16 @@ class ProfileContactFilter extends React.PureComponent {
     render() {
         const {
             className,
-            filters: {
-                faramValues,
-                faramErrors,
-            },
+            filters,
 
             committeeValueList,
             trainingValueList,
             positionValueList,
         } = this.props;
+        const {
+            faramValues,
+            faramErrors,
+        } = filters;
 
         const { showFilters } = this.state;
 

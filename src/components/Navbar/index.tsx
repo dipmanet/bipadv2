@@ -1,25 +1,22 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
 
 import { routeSettings, iconNames } from '#constants';
+import { authStateSelector } from '#selectors';
+import { AppState } from '#store/types';
+import { AuthState } from '#store/atom/auth/types';
 
 import Logo from './Logo';
 import MenuItem from './MenuItem';
 
 import styles from './styles.scss';
 
-const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL || 'https://bipad.nepware.com/admin';
+const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL || 'http://bipad-admin.localhost.com/admin';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
-
-interface Props {
-    className?: string;
-}
-
-interface State {
-}
 
 interface Menu {
     title: string;
@@ -29,17 +26,26 @@ interface Menu {
     disabled: boolean;
 }
 
+interface OwnProps {
+    className?: string;
+}
+
+interface PropsFromState {
+    authState: AuthState;
+}
+
+type Props = OwnProps & PropsFromState;
+
+interface State {
+}
+
 const menuKeySelector = (d: {name: string}) => d.name;
 
-export default class Navbar extends React.PureComponent<Props, State> {
-    private handleUserClick = () => {
-        console.warn('I am loggin in');
-    }
+const mapStateToProps = (state: AppState) => ({
+    authState: authStateSelector(state),
+});
 
-    private handleMenuClose = () => {
-        this.setState({ menuShown: false });
-    }
-
+class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
         title: data.title,
         link: data.path,
@@ -50,7 +56,18 @@ export default class Navbar extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
+            authState,
         } = this.props;
+
+        const { authenticated } = authState;
+
+        const linkContent = (
+            <span
+                className={authenticated ? iconNames.user : iconNames.login}
+                title={authenticated ? 'Go to admin panel' : 'Login'}
+            />
+        );
+
 
         return (
             <React.Fragment>
@@ -72,7 +89,7 @@ export default class Navbar extends React.PureComponent<Props, State> {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <span className={iconNames.login} />
+                            {linkContent}
                         </a>
                     </div>
                 </nav>
@@ -80,3 +97,9 @@ export default class Navbar extends React.PureComponent<Props, State> {
         );
     }
 }
+
+// check for map styles
+
+export default connect(mapStateToProps)(
+    Navbar,
+);

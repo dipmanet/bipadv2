@@ -143,6 +143,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // We have to transform dateRange to created_on__lt and created_on__gt
         query: ({ props: { filters } }) => ({
             ...transformDateRangeFilterParam(filters, 'created_on'),
+            ordering: '-created_on',
         }),
         onSuccess: ({ response, props: { setEventList }, params }) => {
             interface Response { results: PageTypes.Event[] }
