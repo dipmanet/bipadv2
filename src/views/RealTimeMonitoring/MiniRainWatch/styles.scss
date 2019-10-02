@@ -39,5 +39,19 @@
         display: flex;
         flex-grow: 1;
         overflow: auto;
+
+        .rainfall-value {
+            &.below {
+                color: var(--color-success);
+            }
+
+            &.above {
+                color: var(--color-warning);
+            }
+
+            &.danger {
+                color: var(--color-danger);
+            }
+        }
     }
 }

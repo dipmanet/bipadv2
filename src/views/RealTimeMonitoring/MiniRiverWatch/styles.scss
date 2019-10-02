@@ -32,5 +32,19 @@
     .river-watch-table {
         display: flex;
         overflow: auto;
+
+        .water-level {
+            &.below {
+                color: var(--color-success);
+            }
+
+            &.above {
+                color: var(--color-warning);
+            }
+
+            &.danger {
+                color: var(--color-danger);
+            }
+        }
     }
 }

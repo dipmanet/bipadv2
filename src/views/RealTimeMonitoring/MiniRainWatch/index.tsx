@@ -2,6 +2,7 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
@@ -91,14 +92,28 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         },
         {
             key: 'lastHour',
-            label: 'Rainfall (mm)',
+            label: 'Rainfall',
             order: 2,
             modifier: (row: RealTimeRain) => {
                 const {
+                    status,
                     averages = [],
                 } = row;
+
+                const className = _cs(
+                    styles.rainfallValue,
+                    status === 'BELOW WARNING LEVEL' && styles.below,
+                    status === 'ABOVE WARNING LEVEL' && styles.above,
+                    status === 'ABOVE DANGER LEVEL' && styles.danger,
+                );
+
                 const average = averages.find(av => av.interval === duration);
-                return average ? average.value : {};
+                return (average && average.value) ? (
+                    <div className={className}>
+                        {average.value}
+                        mm
+                    </div>
+                ) : undefined;
             },
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => (

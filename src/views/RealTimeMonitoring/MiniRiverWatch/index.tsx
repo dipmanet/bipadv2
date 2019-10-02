@@ -2,6 +2,7 @@ import React from 'react';
 import {
     compareString,
     compareNumber,
+    _cs,
 } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
@@ -37,10 +38,30 @@ class MiniRiverWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'waterLevel',
-                label: 'Water Level (m)',
+                label: 'Water level',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.waterLevel, b.waterLevel),
+                modifier: (row: RealTimeRiver) => {
+                    const {
+                        status,
+                        waterLevel,
+                    } = row;
+
+                    const className = _cs(
+                        styles.waterLevel,
+                        status === 'BELOW WARNING LEVEL' && styles.below,
+                        status === 'ABOVE WARNING LEVEL' && styles.above,
+                        status === 'ABOVE DANGER LEVEL' && styles.danger,
+                    );
+
+                    return (waterLevel) ? (
+                        <div className={className}>
+                            {waterLevel}
+                            m
+                        </div>
+                    ) : undefined;
+                },
             },
         ];
     }

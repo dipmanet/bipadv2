@@ -154,6 +154,7 @@
         "d3-transition": "^1.2.0",
         "file-saver": "^2.0.2",
         "hoist-non-react-statics": "^3.3.0",
+        "html2canvas": "^1.0.0-rc.5",
         "immer": "^3.2.0",
         "immutability-helper": "^2.7.0",
         "js-cookie": "^2.2.0",

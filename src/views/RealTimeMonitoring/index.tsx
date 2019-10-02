@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 
 import MapDownload from '#rscz/Map/MapDownload';
 import Legend from '#rscz/Legend';
@@ -303,11 +304,10 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
 
-
         return (
             <>
                 { showRain && (
-                    <div className={styles.legendContainer}>
+                    <div className={_cs('map-legend-container', styles.legendContainer)}>
                         <h5 className={styles.heading}>
                             Rain
                         </h5>
@@ -324,7 +324,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     </div>
                 )}
                 { showRiver && (
-                    <div className={styles.legendContainer}>
+                    <div className={_cs('map-legend-container', styles.legendContainer)}>
                         <h5 className={styles.heading}>
                             River
                         </h5>
@@ -461,6 +461,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         <MapDownload
                             className={styles.mapDownloadButton}
                             iconName="download"
+                            legendContainerClassName="map-legend-container"
                         >
                             Download this map
                         </MapDownload>
