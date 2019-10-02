@@ -20,7 +20,7 @@ import styles from './styles.scss';
 
 interface Props {
     realTimeRain: RealTimeRain[];
-    handleModalClose: () => void;
+    closeModal?: () => void;
 }
 
 const rainWatchKeySelector = (rain: RealTimeRain) => rain.id;
@@ -162,13 +162,13 @@ class RainWatch extends React.PureComponent<Props> {
     public render() {
         const {
             realTimeRain,
-            handleModalClose,
+            closeModal,
         } = this.props;
 
         return (
             <Modal
                 closeOnEscape
-                onClose={handleModalClose}
+                onClose={closeModal}
                 className={styles.rainWatchModal}
             >
                 <ModalHeader
@@ -177,7 +177,7 @@ class RainWatch extends React.PureComponent<Props> {
                         <DangerButton
                             transparent
                             iconName="close"
-                            onClick={handleModalClose}
+                            onClick={closeModal}
                         />
                     )}
                 />

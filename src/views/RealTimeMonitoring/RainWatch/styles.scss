@@ -25,6 +25,21 @@
             .danger {
                 background-color: #eb2f06;
             }
+
+            :global {
+                .table-header {
+                    text-overflow: initital;
+                    white-space: initial;
+                }
+
+                .status {
+                    width: 156px;
+                }
+
+                .description {
+                    width: 156px;
+                }
+            }
         }
     }
 }

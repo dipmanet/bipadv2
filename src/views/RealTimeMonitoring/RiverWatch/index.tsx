@@ -17,7 +17,7 @@ import styles from './styles.scss';
 
 interface Props {
     realTimeRiver: RealTimeRiver[];
-    handleModalClose: () => void;
+    closeModal?: () => void;
 }
 
 const riverWatchKeySelector = (river: RealTimeRiver) => river.id;
@@ -113,13 +113,13 @@ class RiverWatch extends React.PureComponent<Props> {
     public render() {
         const {
             realTimeRiver,
-            handleModalClose,
+            closeModal,
         } = this.props;
 
         return (
             <Modal
                 closeOnEscape
-                onClose={handleModalClose}
+                onClose={closeModal}
                 className={styles.riverWatchModal}
             >
                 <ModalHeader
@@ -128,7 +128,7 @@ class RiverWatch extends React.PureComponent<Props> {
                         <DangerButton
                             transparent
                             iconName="close"
-                            onClick={handleModalClose}
+                            onClick={closeModal}
                         />
                     )}
                 />

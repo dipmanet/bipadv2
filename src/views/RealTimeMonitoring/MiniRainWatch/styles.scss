@@ -1,0 +1,43 @@
+@import '~base-scss/base';
+
+.rain-watch {
+    display: flex;
+    flex-direction: column;
+    margin-top: $spacing-medium;
+    border: var(--width-separator-thin) solid var(--color-separator);
+    background-color: $color-foreground;
+    height: 26vh;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: space-between;
+
+        .heading {
+            align-self: flex-start;
+            flex-grow: 1;
+            padding: $spacing-medium;
+            color: $color-text;
+        }
+
+        .show-details-button {
+            margin-right: $spacing-medium;
+            border: $width-separator-thin solid $color-separator;
+            color: $color-primary;
+        }
+    }
+
+    .input {
+        display: flex;
+        flex-shrink: 0;
+        margin: 0 var(--spacing-small);
+    }
+
+    .rain-watch-table {
+        display: flex;
+        flex-grow: 1;
+        overflow: auto;
+    }
+}
