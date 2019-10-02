@@ -272,7 +272,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         super(props);
 
         this.state = {
-            rightPaneExpanded: false,
+            rightPaneExpanded: true,
             leftPaneExpanded: false,
         };
     }
