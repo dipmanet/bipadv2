@@ -32,39 +32,42 @@ sudo pacman -S nginx
 ```
 
 ### Updating Hostnames
-We will be using `bipad-client.localhost.com` and `bipad-admin.localhost.com` for client and server.
+We will be using `bipad-admin.localhost.com` for client and server.
 In `/etc/hosts` file, add the following:
 
 ```
-127.0.0.1    bipad-client.localhost.com
 127.0.0.1    bipad-admin.localhost.com
 ```
 
 ### Setting up Nginx
-But, our client will be running at `http://localhost:3050` and our server on `bipad.nepware.com` so, we need to set up proxying in our nginx.
+But, our client will be running at `http://localhost:3050` and our server on `bipad.staging.nepware.com` so, we need to set up proxying in our nginx.
 Create `/etc/nginx/custom.conf` file with following content:
 ```
 # custom.conf, included by nginx.conf
 
 server {
     listen 80;
-    server_name bipad-client.localhost.com;
+    server_name bipad-admin.localhost.com;
+    location /api {
+        proxy_pass http://bipad.staging.nepware.com;
+    }
+    location /media {
+        proxy_pass http://bipad.staging.nepware.com;
+    }
+    location /static {
+        proxy_pass http://bipad.staging.nepware.com;
+    }
+    location /admin {
+        proxy_pass http://bipad.staging.nepware.com;
+    }
+    location /en/admin {
+        proxy_pass http://bipad.staging.nepware.com;
+    }
     location / {
         proxy_pass http://localhost:3050;
     }
     # proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
-    proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
-
-}
-
-server {
-    listen 80;
-    server_name bipad-admin.localhost.com;
-    location / {
-        proxy_pass http://bipad.nepware.com;
-    }
-    # proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
-    proxy_cookie_path ~^(.+)$ "$1; domain=.localhost.com";
+    proxy_cookie_path ~^(.+)$ "$1; Domain=.localhost.com";
 }
 ```
 

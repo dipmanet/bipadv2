@@ -21,7 +21,7 @@ const filterPageContent = createFilter(
 
 const rootReducer = persistCombineReducers(
     {
-        blacklist: ['route'],
+        blacklist: ['auth', 'route'],
         key: 'bipad',
         version: 1,
         storage: localforage,

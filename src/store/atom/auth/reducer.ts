@@ -11,6 +11,12 @@ export function setAuthAction(authState: Type.AuthState): Type.SetAuthAction {
     };
 }
 
+export function setUserDetailAction(user: Type.User): Type.SetUserDetailAction {
+    return {
+        type: Type.AuthType.SET_USER_DETAIL,
+        user,
+    };
+}
 
 // REDUCERS
 export function setAuth(
@@ -26,9 +32,22 @@ export function setAuth(
         && state.sessionId === authState.sessionId
     ) {
         // NOTE: don't change state if all of the values are same
+        // NOTE: this will clear out all user detail
         return state;
     }
     return authState;
+}
+
+export function setUserDetail(
+    state: Type.AuthState,
+    action: Type.SetUserDetailAction,
+): Type.AuthState {
+    const { user } = action;
+
+    return {
+        ...state,
+        user,
+    };
 }
 
 export default function routeReducer(
@@ -38,6 +57,8 @@ export default function routeReducer(
     switch (action.type) {
         case Type.AuthType.SET_AUTH:
             return setAuth(state, action);
+        case Type.AuthType.SET_USER_DETAIL:
+            return setUserDetail(state, action);
         default:
             return state;
     }
