@@ -25,6 +25,7 @@ import {
     setRegionAction,
 } from '#actionCreators';
 
+import authRoute from '#components/authRoute';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 
@@ -100,7 +101,7 @@ const LoadingPage = ({ error, retry }: LoadOptions) => {
 };
 
 const routes = routeSettings.map(({ load, ...settings }) => {
-    const Component = errorBound<typeof settings>(ErrorInPage)(
+    const Com = authRoute<typeof settings>()(
         helmetify(
             Loadable({
                 loader: load,
@@ -108,6 +109,8 @@ const routes = routeSettings.map(({ load, ...settings }) => {
             }),
         ),
     );
+
+    const Component = errorBound<typeof settings>(ErrorInPage)(Com);
 
     return (
         <Component
@@ -123,6 +126,7 @@ interface State {
 }
 interface OwnProps {
     pending: boolean;
+    hasError: boolean;
     mapStyle: string;
 }
 
@@ -165,12 +169,13 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    private handleSuccess = (position: unknown) => {
-        console.warn(position);
-    }
-
     private renderRoutes = () => {
-        const { pending } = this.props;
+        const { pending, hasError } = this.props;
+        if (hasError) {
+            return (
+                <ErrorInPage />
+            );
+        }
         if (pending) {
             return (
                 <Loading

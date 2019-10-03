@@ -1,13 +1,21 @@
+export interface User {
+    id: number;
+    email?: string;
+    username: string;
+    // TODO: fill other data
+}
 // eslint-disable-next-line import/prefer-default-export
 export interface AuthState {
     authenticated: boolean;
     sessionId?: string;
     csrftoken?: string;
+    user?: User;
 }
 
 // eslint-disable-next-line import/prefer-default-export
 export enum AuthType {
     SET_AUTH = 'auth/SET_AUTH',
+    SET_USER_DETAIL = 'auth/SET_USER_DETAIL',
 }
 
 export interface SetAuthAction {
@@ -15,4 +23,9 @@ export interface SetAuthAction {
     authState: AuthState;
 }
 
-export type AuthActionTypes = SetAuthAction
+export interface SetUserDetailAction {
+    type: typeof AuthType.SET_USER_DETAIL;
+    user: User;
+}
+
+export type AuthActionTypes = SetAuthAction | SetUserDetailAction;

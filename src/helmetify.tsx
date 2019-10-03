@@ -1,11 +1,12 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-interface Props {
+interface HelmetifyProps {
     title: string;
 }
 
-const helmetify = (WrappedComponent: React.ComponentType<Props>) => (props: Props) => (
+// eslint-disable-next-line max-len
+const helmetify = <T extends HelmetifyProps>(WrappedComponent: React.ComponentType<T>) => (props: T) => (
     <React.Fragment>
         <Helmet>
             <meta charSet="utf-8" />

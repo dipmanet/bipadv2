@@ -1,0 +1,12 @@
+.form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--color-foreground);
+    padding: var(--spacing-extra-large);
+
+    // FIXME: this
+    min-width: 400px;
+}

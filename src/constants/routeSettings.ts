@@ -6,6 +6,9 @@ export interface Route {
     title: string;
     load: any;
     navbar: boolean;
+
+    disableIfAuth?: boolean;
+    disableIfNoAuth?: boolean;
 }
 
 export interface NavbarRoute extends Route {
@@ -21,15 +24,18 @@ export interface FallbackRoute {
     name: string;
     load: any;
     path: undefined;
+
+    disableIfAuth?: boolean;
+    disableIfNoAuth?: boolean;
 }
 
 export type SomeRoute = Route | NavbarRoute | FallbackRoute;
 
 const routeSettings: SomeRoute[] = [
     {
-        path: '/',
         name: 'dashboard',
         title: 'Dashboard',
+        path: '/',
         load: () => import('../views/Dashboard'),
         navbar: true,
         iconName: iconNames.dashboard,
@@ -96,6 +102,14 @@ const routeSettings: SomeRoute[] = [
         path: '/403/',
         load: () => import('../views/FourHundredThree'),
         navbar: false,
+    },
+    {
+        name: 'login',
+        title: 'Login',
+        path: '/login/',
+        load: () => import('../views/Login'),
+        navbar: false,
+        disableIfAuth: true,
     },
 
     {

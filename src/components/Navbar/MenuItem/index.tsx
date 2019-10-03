@@ -8,8 +8,8 @@ interface Props {
     className?: string;
     title: string;
     link: string;
-    iconName: string;
-    disabled: boolean;
+    iconName?: string;
+    disabled?: boolean;
 }
 
 interface State {

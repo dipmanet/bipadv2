@@ -1,20 +1,32 @@
 import React from 'react';
+import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
+import Button from '#rsca/Button';
 
 import { routeSettings, iconNames } from '#constants';
 import { authStateSelector } from '#selectors';
+import { setAuthAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
+
+import { getAuthState } from '#utils/session';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 import Logo from './Logo';
 import MenuItem from './MenuItem';
 
 import styles from './styles.scss';
 
-const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL || 'http://bipad-admin.localhost.com/admin';
+const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL;
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
@@ -26,6 +38,12 @@ interface Menu {
     disabled: boolean;
 }
 
+interface State {
+}
+
+interface Params {
+}
+
 interface OwnProps {
     className?: string;
 }
@@ -33,17 +51,42 @@ interface OwnProps {
 interface PropsFromState {
     authState: AuthState;
 }
-
-type Props = OwnProps & PropsFromState;
-
-interface State {
+interface PropsFromDispatch {
+    setAuth: typeof setAuthAction;
 }
 
-const menuKeySelector = (d: {name: string}) => d.name;
+type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
+
+type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
 });
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setAuth: params => dispatch(setAuthAction(params)),
+});
+
+const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    logoutRequest: {
+        url: '/auth/logout/',
+        method: methods.POST,
+        onSuccess: ({ props }) => {
+            const authState = getAuthState();
+            const { setAuth } = props;
+            setAuth(authState);
+        },
+        onFailure: ({ error }) => {
+            // TODO: handle error
+            console.warn('failure', error);
+        },
+        onFatal: () => {
+            console.warn('fatal');
+        },
+    },
+};
+
+const menuKeySelector = (d: {name: string}) => d.name;
 
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
@@ -57,17 +100,12 @@ class Navbar extends React.PureComponent<Props, State> {
         const {
             className,
             authState,
+            requests: {
+                logoutRequest,
+            },
         } = this.props;
 
-        const { authenticated } = authState;
-
-        const linkContent = (
-            <span
-                className={authenticated ? iconNames.user : iconNames.login}
-                title={authenticated ? 'Go to admin panel' : 'Login'}
-            />
-        );
-
+        const { authenticated, user } = authState;
 
         return (
             <React.Fragment>
@@ -81,16 +119,37 @@ class Navbar extends React.PureComponent<Props, State> {
                         className={styles.middle}
                     />
                     <div className={styles.right}>
+                        { !authenticated && (
+                            <MenuItem
+                                title="Login"
+                                link="/login/"
+                            />
+                        )}
+                        { user && (
+                            <div className={styles.username}>
+                                {`Hello ${user.username}`}
+                            </div>
+                        )}
+                        { authenticated && (
+                            <Button
+                                onClick={logoutRequest.do}
+                                pending={logoutRequest.pending}
+                                transparent
+                            >
+                                Logout
+                            </Button>
+                        )}
+                        {/*
                         <a
                             className={styles.adminLink}
                             href={adminEndpoint}
                             type="button"
-                            title="login"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            {linkContent}
+                            Admin Panel
                         </a>
+                        */}
                     </div>
                 </nav>
             </React.Fragment>
@@ -100,6 +159,10 @@ class Navbar extends React.PureComponent<Props, State> {
 
 // check for map styles
 
-export default connect(mapStateToProps)(
-    Navbar,
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requestOptions)(
+            Navbar,
+        ),
+    ),
 );

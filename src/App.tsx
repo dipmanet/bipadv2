@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
+import { AuthState, User } from '#store/atom/auth/types';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -18,10 +19,11 @@ import {
     setWardsAction,
     setHazardTypesAction,
     setAuthAction,
-    // setEventTypesAction,
+    setUserDetailAction,
 } from '#actionCreators';
 import {
     mapStyleSelector,
+    authStateSelector,
 } from '#selectors';
 
 import { getAuthState } from '#utils/session';
@@ -33,6 +35,7 @@ interface Params {}
 interface OwnProps {}
 interface PropsFromState {
     mapStyle: string;
+    authState: AuthState;
 }
 interface PropsFromDispatch {
     setProvinces: typeof setProvincesAction;
@@ -42,12 +45,14 @@ interface PropsFromDispatch {
     setHazardTypes: typeof setHazardTypesAction;
     // setEventTypes: typeof setEventTypesAction;
     setAuth: typeof setAuthAction;
+    setUserDetail: typeof setUserDetailAction;
 }
 type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     mapStyle: mapStyleSelector(state),
+    authState: authStateSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -58,9 +63,24 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
     setAuth: params => dispatch(setAuthAction(params)),
     // setEventTypes: params => dispatch(setEventTypesAction(params)),
+    setUserDetail: params => dispatch(setUserDetailAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    meRequest: {
+        url: '/me/',
+        method: methods.GET,
+        onSuccess: ({ response, props }) => {
+            const {
+                setUserDetail,
+            } = props;
+            setUserDetail(response as User);
+        },
+        onMount: () => {
+            const authState = getAuthState();
+            return authState.authenticated;
+        },
+    },
     provinceListRequest: {
         url: '/province/',
         method: methods.GET,
@@ -149,36 +169,39 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 class App extends React.Component<Props, State> {
     public constructor(props: any) {
         super(props);
-        this.authPollId = undefined;
-    }
 
-    public componentDidMount() {
-        // Start polling
-        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
-    }
-
-    public componentWillUnmount() {
-        if (this.authPollId) {
-            window.clearTimeout(this.authPollId);
-        }
-    }
-
-    private authPollId?: number;
-
-    public pollAuthInfo = () => {
         const authState = getAuthState();
-        this.props.setAuth(authState);
-        this.authPollId = window.setTimeout(this.pollAuthInfo, 2000);
+        const { setAuth } = this.props;
+        setAuth(authState);
     }
 
     public render() {
         const {
             requests: {
-                provinceListRequest: { pending: provincePending },
-                districtListRequest: { pending: districtPending },
-                municipalityListRequest: { pending: municipalityPending },
-                wardListRequest: { pending: wardListPending },
-                hazardTypesRequest: { pending: hazardTypePending },
+                provinceListRequest: {
+                    pending: provincePending,
+                    responseError: provinceResponseError,
+                },
+                districtListRequest: {
+                    pending: districtPending,
+                    responseError: districtResponseError,
+                },
+                municipalityListRequest: {
+                    pending: municipalityPending,
+                    responseError: municipalityResponseError,
+                },
+                wardListRequest: {
+                    pending: wardListPending,
+                    responseError: wardListResponseError,
+                },
+                hazardTypesRequest: {
+                    pending: hazardTypePending,
+                    responseError: hazardTypeResponseError,
+                },
+                meRequest: {
+                    pending: mePending,
+                    responseError: meResponseError,
+                },
             },
             mapStyle,
         } = this.props;
@@ -189,11 +212,22 @@ class App extends React.Component<Props, State> {
             || municipalityPending
             || wardListPending
             || hazardTypePending
+            || mePending
+        );
+
+        const hasError = (
+            !!provinceResponseError
+            || !!districtResponseError
+            || !!municipalityResponseError
+            || !!wardListResponseError
+            || !!hazardTypeResponseError
+            || !!meResponseError
         );
 
         return (
             <Multiplexer
                 pending={pending}
+                hasError={hasError}
                 mapStyle={mapStyle}
             />
         );
