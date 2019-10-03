@@ -9,8 +9,10 @@ import store from '#store';
 import {
     mapStyleSelector,
 } from '#selectors';
+
 import schema from '#schema';
 import { sanitizeResponse } from '#utils/common';
+import { getAuthState } from '#utils/session';
 
 const wsEndpoint = process.env.REACT_APP_API_SERVER_URL;
 
@@ -25,12 +27,15 @@ export function createConnectedRequestCoordinator<OwnProps>() {
                 body,
                 method,
             } = data;
+            const cookies = getAuthState();
+
             return {
                 method: method || methods.GET,
                 body: JSON.stringify(body),
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json; charset=utf-8',
+                    'X-CSRFToken': cookies.csrftoken,
                 },
             };
         },
