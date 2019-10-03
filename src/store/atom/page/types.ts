@@ -255,7 +255,7 @@ export interface RealTimePollution {
     point: unknown;
     location?: string;
     measuredOn?: string;
-    measurements: Measurement[];
+    measurements?: Measurement[];
     city?: string;
 }
 

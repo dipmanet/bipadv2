@@ -524,21 +524,32 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
         type: 'FeatureCollection',
         features: realTimePollutionList
             .filter(pollution => pollution.point)
-            .map(pollution => ({
-                id: pollution.id,
-                type: 'Feature',
-                geometry: {
-                    ...pollution.point,
-                },
-                properties: {
-                    pollutionId: pollution.id,
-                    location: pollution.location,
-                    city: pollution.city,
-                    measuredOn: pollution.measuredOn,
-                    measurements: pollution.measurements,
-                    pm25: +pollution.measurements.flat().find(d => d.parameter === 'pm25' && d.unit === 'µg/m³').value || 0,
-                },
-            }))
+            .map((pollution) => {
+                const pollutionMeasurement = pollution.measurements
+                    ? pollution
+                        .measurements
+                        .flat()
+                        .find(d => d.parameter === 'pm25' && d.unit === 'µg/m³')
+                    : undefined;
+
+                const pm25 = pollutionMeasurement ? +pollutionMeasurement.value : undefined;
+
+                return {
+                    id: pollution.id,
+                    type: 'Feature',
+                    geometry: {
+                        ...pollution.point,
+                    },
+                    properties: {
+                        pollutionId: pollution.id,
+                        location: pollution.location,
+                        city: pollution.city,
+                        measuredOn: pollution.measuredOn,
+                        measurements: pollution.measurements,
+                        pm25: pm25 || 0,
+                    },
+                };
+            })
             .sort((a, b) => (a.properties.pm25 - b.properties.pm25)),
     };
     return geojson;
