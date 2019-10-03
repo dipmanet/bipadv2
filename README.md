@@ -100,6 +100,8 @@ sudo systemctl restart nginx
 
 Also, add the following to `.env` file:
 ```
+REACT_APP_SESSION_COOKIE_NAME=bipad.staging.nepware.com
+
 REACT_APP_API_SERVER_URL=http://bipad-admin.localhost.com/api/v1
 
 REACT_APP_ADMIN_LOGIN_URL=http://bipad-admin.localhost.com/admin
