@@ -44,9 +44,24 @@ We will be using `PROXY_DOMAIN` for client and server. In
 `/etc/hosts` file, add the following:
 
 ```
+# national level
 127.0.0.1    PROXY_DOMAIN
-127.0.0.1    pokhara.PROXY_DOMAIN
-127.0.0.1    kathmandu.PROXY_DOMAIN
+
+# province level
+127.0.0.1    p1.PROXY_DOMAIN
+127.0.0.1    p2.PROXY_DOMAIN
+127.0.0.1    p3.PROXY_DOMAIN
+127.0.0.1    gandaki.PROXY_DOMAIN
+127.0.0.1    karnali.PROXY_DOMAIN
+127.0.0.1    sudurpaschim.PROXY_DOMAIN
+
+# district level
+127.0.0.1    taplejung.PROXY_DOMAIN
+127.0.0.1    panchthar.PROXY_DOMAIN
+
+# municipality level
+127.0.0.1    aathraitribenimun.PROXY_DOMAIN
+127.0.0.1    maiwakholamun.PROXY_DOMAIN
 ```
 
 ### Install Nginx

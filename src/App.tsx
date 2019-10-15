@@ -163,8 +163,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     */
 };
 
-const domain = process.env.REACT_APP_DOMAIN;
-
 // NOTE: BrowserRouter is acting weird so not using React.PureComponent
 /* Loads required info from server */
 // eslint-disable-next-line react/prefer-stateless-function
@@ -174,16 +172,6 @@ class App extends React.Component<Props, State> {
 
         const authState = getAuthState();
         const { setAuth } = this.props;
-
-        const { hostname } = window.location;
-
-        const index = hostname.search(`.${domain}`);
-        if (index !== -1) {
-            const subdomain = hostname.substring(0, index);
-            console.warn('Setting', subdomain);
-        } else {
-            console.warn('Setting nepal');
-        }
 
         setAuth(authState);
     }

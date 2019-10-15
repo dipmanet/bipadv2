@@ -7,7 +7,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
-import { District, Province, Municipality } from '#store/atom/page/types';
+import { District, Province, Municipality, Region } from '#store/atom/page/types';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import Loading from '#components/Loading';
@@ -19,10 +19,12 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
+    filtersSelectorDP,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
+    setFiltersActionDP,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
@@ -122,6 +124,8 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 // MULTIPLEXER
 
+const domain = process.env.REACT_APP_DOMAIN;
+
 interface State {
 }
 interface OwnProps {
@@ -140,11 +144,18 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
+    filters: {
+        faramValues: {
+            region: Region;
+        };
+        faramErrors: {};
+    };
 }
 
 interface PropsFromDispatch {
     setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
+    setFilters: typeof setFiltersActionDP;
 }
 
 interface Coords {
@@ -158,6 +169,7 @@ interface OwnProps {}
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    filters: filtersSelectorDP(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
@@ -166,10 +178,144 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
+    setFilters: params => dispatch(setFiltersActionDP(params)),
 });
 
+const getMatchingRegion = (
+    subdomain: string | undefined,
+    provinces: Province[],
+    districts: District[],
+    municipalities: Municipality[],
+): Region => {
+    if (!subdomain) {
+        return {};
+    }
+
+    const province = provinces.find(p => p.code === subdomain);
+    if (province) {
+        return {
+            adminLevel: 1,
+            geoarea: province.id,
+        };
+    }
+    const district = districts.find(p => p.code === subdomain);
+    if (district) {
+        return {
+            adminLevel: 1,
+            geoarea: district.id,
+        };
+    }
+    const municipality = municipalities.find(p => p.code === subdomain);
+    if (municipality) {
+        return {
+            adminLevel: 1,
+            geoarea: municipality.id,
+        };
+    }
+
+    return {};
+};
+
+const getMatchingSubdomain = (
+    region: Region,
+    provinces: Province[],
+    districts: District[],
+    municipalities: Municipality[],
+): string | undefined => {
+    if (!region.adminLevel || !region.geoarea) {
+        return undefined;
+    }
+
+    switch (region.adminLevel) {
+        case 1: {
+            const province = provinces.find(p => p.id === region.geoarea);
+            return province ? province.code : undefined;
+        } case 2: {
+            const district = districts.find(p => p.id === region.geoarea);
+            return district ? district.code : undefined;
+        } case 3: {
+            const municipality = municipalities.find(p => p.id === region.geoarea);
+            return municipality ? municipality.code : undefined;
+        } default:
+            return undefined;
+    }
+};
+
 class Multiplexer extends React.PureComponent<Props, State> {
+    public componentWillReceiveProps(nextProps: Props) {
+        const {
+            pending: oldPending,
+            filters: {
+                faramValues: oldFaramValues,
+            },
+        } = this.props;
+        const {
+            pending: newPending,
+            filters: {
+                faramValues: newFaramValues,
+            },
+            provinces,
+            municipalities,
+            districts,
+            setFilters,
+        } = nextProps;
+
+        const { region: newRegion } = newFaramValues;
+        const { region: oldRegion } = oldFaramValues;
+
+        // NOTE: setting url according to change in filters
+        if (
+            domain && (
+                oldRegion.geoarea !== newRegion.geoarea
+                || oldRegion.adminLevel !== newRegion.adminLevel
+            )
+        ) {
+            const subdomain = getMatchingSubdomain(
+                newRegion,
+                provinces,
+                districts,
+                municipalities,
+            );
+            if (subdomain) {
+                const { href } = window.location;
+                const escapedDomain = domain.replace(/\./g, '\\.');
+                const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`);
+                if (newUrl !== href) {
+                    window.location.href = newUrl;
+                }
+            } else {
+                const { href } = window.location;
+                const escapedDomain = domain.replace(/\./g, '\\.');
+                const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), domain);
+                if (newUrl !== href) {
+                    window.location.href = newUrl;
+                }
+            }
+        }
+
+        // NOTE: setting filters according to url
+        if (oldPending !== newPending && newPending) {
+            const { hostname } = window.location;
+
+            const index = hostname.search(`.${domain}`);
+            const subdomain = index !== -1
+                ? hostname.substring(0, index)
+                : undefined;
+            const region = getMatchingRegion(subdomain, provinces, districts, municipalities);
+
+            setFilters({
+                faramValues: {
+                    ...newFaramValues,
+                    region,
+                },
+                faramErrors: {},
+                pristine: true,
+            });
+        }
+    }
+
     private renderRoutes = () => {
+        console.warn('rendering route');
         const { pending, hasError } = this.props;
         if (hasError) {
             return (

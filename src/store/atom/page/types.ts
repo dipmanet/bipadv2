@@ -5,6 +5,7 @@ export interface Province {
     bbox: number[];
     centroid: number[];
     title: string;
+    code?: string;
 }
 export interface District {
     id: number;
@@ -12,6 +13,7 @@ export interface District {
     centroid: number[];
     title: string;
     province: number;
+    code?: string;
 }
 export interface Municipality {
     id: number;
@@ -20,6 +22,7 @@ export interface Municipality {
     title: string;
     province?: number;
     district: number;
+    code?: string;
 }
 export interface Ward {
     id: number;
