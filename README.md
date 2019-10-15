@@ -3,78 +3,103 @@
 [![pipeline status](https://gitlab.com/bipad/client/badges/develop/pipeline.svg)](https://gitlab.com/bipad/client/commits/develop) [![coverage status](https://gitlab.com/bipad/client/badges/develop/coverage.svg)](https://gitlab.com/bipad/client/commits/develop)
 
 
-
-This is web client for the *Bipad*
+This is the web client for *Bipad*
 
 
 ## Getting started
 
 ### Install react-store
+
 ```bash
 mkdir -p src/vendor
 git clone https://github.com/toggle-corp/react-store --branch=bipad src/vendor/react-store
 ```
 
 ### Start server
+
 ```bash
-yarn install # Install dependencies from package.json
-yarn start # Start development server
+# Install dependencies from package.json
+yarn install
+
+# Start development server
+yarn start
 ```
 
-
 ## Setting up proxy server locally
-Note that, this is necessary in order to "simulate" our client and api server to be in same domain.
-This is necessary to display the UI buttons depending upon if user is logged in server or not.
+
+Note that, this is necessary in order to "simulate" our client and api server
+to be in same domain.
+
+### Variables used in this document for ease
+
+```ini
+SERVER_ENDPOINT=http://bipad.staging.nepware.com
+CLIENT_ENDPOINT=http://localhost:3050
+PROXY_DOMAIN=bipad.localhost.com
+```
+
+### Updating Hostnames
+
+We will be using `PROXY_DOMAIN` for client and server. In
+`/etc/hosts` file, add the following:
+
+```
+127.0.0.1    PROXY_DOMAIN
+127.0.0.1    pokhara.PROXY_DOMAIN
+127.0.0.1    kathmandu.PROXY_DOMAIN
+```
 
 ### Install Nginx
+
 ```bash
 sudo pacman -S nginx
 ```
 
-### Updating Hostnames
-We will be using `bipad-admin.localhost.com` for client and server.
-In `/etc/hosts` file, add the following:
-
-```
-127.0.0.1    bipad-admin.localhost.com
-```
-
 ### Setting up Nginx
-But, our client will be running at `http://localhost:3050` and our server on `bipad.staging.nepware.com` so, we need to set up proxying in our nginx.
-Create `/etc/nginx/custom.conf` file with following content:
+
+Our client will be running at `CLIENT_ENDPOINT` and our server on
+`SERVER_ENDPOINT` so we need to set up proxy in our nginx. Create
+`/etc/nginx/custom.conf` file with following content:
+
+
 ```
-# custom.conf, included by nginx.conf
+server {
+    listen 81;
+    server_name PROXY_DOMAIN;
+    location /api {
+        proxy_pass http://SERVER_ENDPOINT;
+    }
+    location /media {
+        proxy_pass http://SERVER_ENDPOINT;
+    }
+    location /static {
+        proxy_pass http://SERVER_ENDPOINT;
+    }
+    location /admin {
+        proxy_pass http://SERVER_ENDPOINT;
+    }
+    location /en/admin {
+        proxy_pass http://SERVER_ENDPOINT;
+    }
+    location / {
+        proxy_pass CLIENT_ENDPOINT;
+    }
+    proxy_cookie_path ~^(.+)$ "$1; Domain=.PROXY_DOMAIN";
+}
 
 server {
     listen 80;
-    server_name bipad-admin.localhost.com;
-    location /api {
-        proxy_pass http://bipad.staging.nepware.com;
-    }
-    location /media {
-        proxy_pass http://bipad.staging.nepware.com;
-    }
-    location /static {
-        proxy_pass http://bipad.staging.nepware.com;
-    }
-    location /admin {
-        proxy_pass http://bipad.staging.nepware.com;
-    }
-    location /en/admin {
-        proxy_pass http://bipad.staging.nepware.com;
-    }
+    server_name ~^([a-zA-Z0-9]+)\.PROXY_DOMAIN;
     location / {
         proxy_pass http://localhost:3050;
     }
-    # proxy_cookie_domain ~^(.+)(domain=localhost.com)(.+)$ "$1 domain=.localhost.com $3";
-    proxy_cookie_path ~^(.+)$ "$1; Domain=.localhost.com";
+    proxy_cookie_path ~^(.+)$ "$1; Domain=.PROXY_DOMAIN";
 }
 ```
 
-And, update our `/etc/nginx/nginx.conf` file to have the following:
-```
-# /etc/nginx/nginx.conf
+And, update `/etc/nginx/nginx.conf` file to have the following:
 
+```
 worker_processes  1;
 
 #error_log  logs/error.log;
@@ -93,16 +118,21 @@ http {
     include custom.conf;
 }
 ```
-Then restart nginx:
+
+Then, restart nginx:
+
 ```bash
 sudo systemctl restart nginx
 ```
 
-Also, add the following to `.env` file:
+Also, add the following environment variables to `.env` file:
+
 ```
-REACT_APP_SESSION_COOKIE_NAME=bipad.staging.nepware.com
+REACT_APP_SESSION_COOKIE_NAME=SERVER_ENDPOINT
 
-REACT_APP_API_SERVER_URL=http://bipad-admin.localhost.com/api/v1
+REACT_APP_DOMAIN=PROXY_DOMAIN
 
-REACT_APP_ADMIN_LOGIN_URL=http://bipad-admin.localhost.com/admin
+REACT_APP_API_SERVER_URL=http://PROXY_DOMAIN/api/v1
+
+REACT_APP_ADMIN_LOGIN_URL=http://PROXY_DOMAIN/admin
 ```
