@@ -4,6 +4,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
@@ -198,17 +199,19 @@ const getMatchingRegion = (
             geoarea: province.id,
         };
     }
+
     const district = districts.find(p => p.code === subdomain);
     if (district) {
         return {
-            adminLevel: 1,
+            adminLevel: 2,
             geoarea: district.id,
         };
     }
+
     const municipality = municipalities.find(p => p.code === subdomain);
     if (municipality) {
         return {
-            adminLevel: 1,
+            adminLevel: 3,
             geoarea: municipality.id,
         };
     }
@@ -242,81 +245,98 @@ const getMatchingSubdomain = (
 };
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    public componentWillReceiveProps(nextProps: Props) {
-        const {
-            pending: oldPending,
-            filters: {
-                faramValues: oldFaramValues,
-            },
-        } = this.props;
-        const {
-            pending: newPending,
-            filters: {
-                faramValues: newFaramValues,
-            },
-            provinces,
-            municipalities,
-            districts,
-            setFilters,
-        } = nextProps;
+    private filtersSetFromUrl = false;
 
-        const { region: newRegion } = newFaramValues;
-        const { region: oldRegion } = oldFaramValues;
-
-        // NOTE: setting url according to change in filters
-        if (
-            domain && (
-                oldRegion.geoarea !== newRegion.geoarea
-                || oldRegion.adminLevel !== newRegion.adminLevel
-            )
-        ) {
-            const subdomain = getMatchingSubdomain(
-                newRegion,
-                provinces,
-                districts,
-                municipalities,
-            );
-            if (subdomain) {
-                const { href } = window.location;
-                const escapedDomain = domain.replace(/\./g, '\\.');
-                const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`);
-                if (newUrl !== href) {
-                    window.location.href = newUrl;
-                }
-            } else {
-                const { href } = window.location;
-                const escapedDomain = domain.replace(/\./g, '\\.');
-                const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), domain);
-                if (newUrl !== href) {
-                    window.location.href = newUrl;
-                }
-            }
+    // NOTE: this isn't used currently
+    private setUrlFromFilter = memoize((
+        region,
+        provinces,
+        districts,
+        municipalities,
+    ) => {
+        if (!domain) {
+            return;
         }
 
-        // NOTE: setting filters according to url
-        if (oldPending !== newPending && newPending) {
-            const { hostname } = window.location;
+        const subdomain = getMatchingSubdomain(
+            region,
+            provinces,
+            districts,
+            municipalities,
+        );
 
-            const index = hostname.search(`.${domain}`);
-            const subdomain = index !== -1
-                ? hostname.substring(0, index)
-                : undefined;
-            const region = getMatchingRegion(subdomain, provinces, districts, municipalities);
+        if (subdomain) {
+            const { href } = window.location;
+            const escapedDomain = domain.replace(/\./g, '\\.');
+
+            const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`);
+            if (newUrl !== href) {
+                window.location.href = newUrl;
+            }
+        } else {
+            const { href } = window.location;
+            const escapedDomain = domain.replace(/\./g, '\\.');
+            const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), domain);
+            if (newUrl !== href) {
+                window.location.href = newUrl;
+            }
+        }
+    })
+
+    private setFilterFromUrl = memoize((
+        provinces,
+        districts,
+        municipalities,
+        setFilters,
+        faramValues,
+    ) => {
+        if (provinces.length === 0 && districts.length === 0 && municipalities.length === 0) {
+            return;
+        }
+
+        if (this.filtersSetFromUrl) {
+            return;
+        }
+
+        const { hostname } = window.location;
+
+        const index = hostname.search(`.${domain}`);
+        const subdomain = index !== -1
+            ? hostname.substring(0, index)
+            : undefined;
+
+        const region = getMatchingRegion(subdomain, provinces, districts, municipalities);
+
+        const {
+            geoarea: currentGeoarea,
+            adminLevel: currentAdminLevel,
+        } = region || {};
+
+        const {
+            geoarea: oldGeoarea,
+            adminLevel: oldAdminLevel,
+        } = faramValues.region || {};
+
+        if (currentGeoarea && currentAdminLevel && (
+            currentGeoarea !== oldGeoarea || oldAdminLevel !== currentAdminLevel
+        )) {
+            this.filtersSetFromUrl = true;
 
             setFilters({
                 faramValues: {
-                    ...newFaramValues,
+                    ...faramValues,
                     region,
                 },
                 faramErrors: {},
                 pristine: true,
             });
         }
-    }
+    })
+
 
     private renderRoutes = () => {
-        console.warn('rendering route');
         const { pending, hasError } = this.props;
+
         if (hasError) {
             return (
                 <ErrorInPage />
@@ -340,7 +360,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
     public render() {
         const {
             mapStyle,
+            filters: {
+                faramValues,
+            },
+            provinces,
+            municipalities,
+            districts,
+            setFilters,
         } = this.props;
+
+        this.setFilterFromUrl(provinces, districts, municipalities, setFilters, faramValues);
 
         return (
             <div className={styles.multiplexer}>
