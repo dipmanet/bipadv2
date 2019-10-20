@@ -172,6 +172,7 @@ class App extends React.Component<Props, State> {
 
         const authState = getAuthState();
         const { setAuth } = this.props;
+
         setAuth(authState);
     }
 
