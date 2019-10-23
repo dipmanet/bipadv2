@@ -1,8 +1,39 @@
+export interface UserPermission {
+    codename: string;
+}
+
+export interface GroupPermission {
+    id: number;
+    name: string;
+    permission: UserPermission[];
+}
+
 export interface User {
     id: number;
     email?: string;
     username: string;
-    // TODO: fill other data
+
+    dateJoined?: string; // date
+    firstName?: string;
+    groups: GroupPermission[];
+    isActive: boolean;
+    isStaff: boolean;
+    isSuperuser: boolean;
+    lastLogin?: string; // date
+    lastName?: string;
+    profile: {
+        district?: number;
+        id: number;
+        municipality?: number;
+        optEmailNotification: boolean;
+        optSmsNotification: boolean;
+        organization?: number;
+        phoneNumber?: string;
+        province?: number;
+        region?: unknown;
+        user: number;
+    };
+    userPermissions: UserPermission[];
 }
 // eslint-disable-next-line import/prefer-default-export
 export interface AuthState {
