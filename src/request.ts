@@ -15,6 +15,7 @@ import { sanitizeResponse } from '#utils/common';
 import { getAuthState } from '#utils/session';
 
 const wsEndpoint = process.env.REACT_APP_API_SERVER_URL;
+const domain = process.env.REACT_APP_DOMAIN;
 
 // FIXME: don't know why eslint disable is required right now
 // eslint-disable-next-line arrow-parens
@@ -50,7 +51,28 @@ export function createConnectedRequestCoordinator<OwnProps>() {
                 return url;
             }
 
-            return `${wsEndpoint}${url}`;
+            if (!wsEndpoint || !domain) {
+                return '';
+            }
+
+            // Get current client sub-domain and prefix api endpoint with
+            // that sub-domain
+
+            const { hostname } = window.location;
+            const index = hostname.search(`.${domain}`);
+            const subDomain = index !== -1
+                ? hostname.substring(0, index)
+                : undefined;
+
+            if (!subDomain) {
+                return `${wsEndpoint}${url}`;
+            }
+
+            const escapedDomain = domain.replace(/\./g, '\\.');
+            const newWsEndpoint = wsEndpoint.replace(
+                new RegExp(escapedDomain), `${subDomain}.${domain}`,
+            );
+            return `${newWsEndpoint}${url}`;
         },
 
         transformResponse: (body: object, request: CoordinatorAttributes) => {

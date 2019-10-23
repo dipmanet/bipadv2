@@ -62,6 +62,7 @@ module.exports = (env) => {
         devServer: {
             host: '0.0.0.0',
             allowedHosts: ['.localhost.com'],
+            disableHostCheck: true,
             port: 3050,
             overlay: true,
             watchOptions: {

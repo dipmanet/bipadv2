@@ -128,7 +128,6 @@ class Login extends React.PureComponent<Props, State> {
             username: faramValues.username,
             password: faramValues.password,
         });
-        // TODO: on success, patch user data
     };
 
     private static schema = {
