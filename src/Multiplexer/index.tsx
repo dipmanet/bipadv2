@@ -4,7 +4,6 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
-import memoize from 'memoize-one';
 
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
@@ -219,7 +218,7 @@ const getMatchingRegion = (
     return {};
 };
 
-const getMatchingSubdomain = (
+const getMatchingSubDomain = (
     region: Region,
     provinces: Province[],
     districts: District[],
@@ -248,6 +247,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private filtersSetFromUrl = false;
 
     // NOTE: this isn't used currently
+    /*
     private setUrlFromFilter = memoize((
         region,
         provinces,
@@ -258,7 +258,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             return;
         }
 
-        const subdomain = getMatchingSubdomain(
+        const subdomain = getMatchingSubDomain(
             region,
             provinces,
             districts,
@@ -269,7 +269,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             const { href } = window.location;
             const escapedDomain = domain.replace(/\./g, '\\.');
 
-            const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`);
+            const newUrl = href.replace(
+                new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`
+            );
             if (newUrl !== href) {
                 window.location.href = newUrl;
             }
@@ -282,30 +284,24 @@ class Multiplexer extends React.PureComponent<Props, State> {
             }
         }
     })
+    */
 
-    private setFilterFromUrl = memoize((
-        provinces,
-        districts,
-        municipalities,
-        setFilters,
-        faramValues,
+    private setFilterFromUrl = (
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+        filters: PropsFromState['filters'],
+        setFilters: PropsFromDispatch['setFilters'],
     ) => {
-        if (provinces.length === 0 && districts.length === 0 && municipalities.length === 0) {
-            return;
-        }
-
-        if (this.filtersSetFromUrl) {
-            return;
-        }
-
+        const { faramValues } = filters;
         const { hostname } = window.location;
 
         const index = hostname.search(`.${domain}`);
-        const subdomain = index !== -1
+        const subDomain = index !== -1
             ? hostname.substring(0, index)
             : undefined;
 
-        const region = getMatchingRegion(subdomain, provinces, districts, municipalities);
+        const region = getMatchingRegion(subDomain, provinces, districts, municipalities);
 
         const {
             geoarea: currentGeoarea,
@@ -320,8 +316,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (currentGeoarea && currentAdminLevel && (
             currentGeoarea !== oldGeoarea || oldAdminLevel !== currentAdminLevel
         )) {
-            this.filtersSetFromUrl = true;
-
             setFilters({
                 faramValues: {
                     ...faramValues,
@@ -331,8 +325,43 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 pristine: true,
             });
         }
-    })
+    }
 
+    public componentDidMount() {
+        // NOTE: this means everything has loaded before mounting this page,
+        // which is highly unlikely
+        const {
+            pending,
+            provinces,
+            districts,
+            municipalities,
+            filters,
+            setFilters,
+        } = this.props;
+
+        if (!pending) {
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+        }
+    }
+
+    public componentWillReceiveProps(nextProps: Props) {
+        const {
+            pending: oldPending,
+        } = this.props;
+        const {
+            pending: newPending,
+            provinces,
+            municipalities,
+            districts,
+            filters,
+            setFilters,
+        } = nextProps;
+
+        // NOTE: this means data has been loaded
+        if (oldPending !== newPending && newPending) {
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+        }
+    }
 
     private renderRoutes = () => {
         const { pending, hasError } = this.props;
@@ -358,18 +387,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const {
-            mapStyle,
-            filters: {
-                faramValues,
-            },
-            provinces,
-            municipalities,
-            districts,
-            setFilters,
-        } = this.props;
-
-        this.setFilterFromUrl(provinces, districts, municipalities, setFilters, faramValues);
+        const { mapStyle } = this.props;
 
         return (
             <div className={styles.multiplexer}>
