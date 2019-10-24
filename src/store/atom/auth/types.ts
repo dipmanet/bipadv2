@@ -30,7 +30,7 @@ export interface User {
         organization?: number;
         phoneNumber?: string;
         province?: number;
-        region?: unknown;
+        region?: 'national' | 'province' | 'district' | 'municipality';
         user: number;
     };
     userPermissions: UserPermission[];
