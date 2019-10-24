@@ -33,9 +33,9 @@ to be in same domain.
 ### Variables used in this document for ease
 
 ```ini
-SERVER_ENDPOINT=http://bipad.staging.nepware.com
-CLIENT_ENDPOINT=http://localhost:3050
-PROXY_DOMAIN=bipad.localhost.com
+DEV_SERVER_URL=http://localhost:3050
+ACTUAL_DOMAIN=bipad.staging.nepware.com
+PROXY_DOMAIN=bipad-localhost.com
 ```
 
 ### Updating Hostnames
@@ -72,8 +72,8 @@ sudo pacman -S nginx
 
 ### Setting up Nginx
 
-Our client will be running at `CLIENT_ENDPOINT` and our server on
-`SERVER_ENDPOINT` so we need to set up proxy in our nginx. Create
+Our client will be running at `DEV_SERVER_URL` and our server on
+`ACTUAL_DOMAIN` so we need to set up proxy in our nginx. Create
 `/etc/nginx/custom.conf` file with following content:
 
 
@@ -81,34 +81,37 @@ Our client will be running at `CLIENT_ENDPOINT` and our server on
 server {
     listen 81;
     server_name PROXY_DOMAIN;
-    location /api {
-        proxy_pass http://SERVER_ENDPOINT;
-    }
     location /media {
-        proxy_pass http://SERVER_ENDPOINT;
+        proxy_pass http://ACTUAL_DOMAIN;
     }
     location /static {
-        proxy_pass http://SERVER_ENDPOINT;
+        proxy_pass http://ACTUAL_DOMAIN;
     }
     location /admin {
-        proxy_pass http://SERVER_ENDPOINT;
+        proxy_pass http://ACTUAL_DOMAIN;
     }
     location /en/admin {
-        proxy_pass http://SERVER_ENDPOINT;
+        proxy_pass http://ACTUAL_DOMAIN;
+    }
+    location /api {
+        proxy_pass http://ACTUAL_DOMAIN;
     }
     location / {
-        proxy_pass CLIENT_ENDPOINT;
+        proxy_pass DEV_SERVER_URL;
     }
-    proxy_cookie_path ~^(.+)$ "$1; Domain=.PROXY_DOMAIN";
+    proxy_cookie_domain ~^(.+)$ .PROXY_DOMAIN;
 }
 
 server {
     listen 80;
     server_name ~^([a-zA-Z0-9]+)\.PROXY_DOMAIN;
-    location / {
-        proxy_pass http://localhost:3050;
+    location /api {
+        proxy_pass http://ACTUAL_DOMAIN;
     }
-    proxy_cookie_path ~^(.+)$ "$1; Domain=.PROXY_DOMAIN";
+    location / {
+        proxy_pass DEV_SERVER_URL;
+    }
+    proxy_cookie_domain ~^(.+)$ .PROXY_DOMAIN;
 }
 ```
 
@@ -143,11 +146,11 @@ sudo systemctl restart nginx
 Also, add the following environment variables to `.env` file:
 
 ```
-REACT_APP_SESSION_COOKIE_NAME=SERVER_ENDPOINT
+REACT_APP_SESSION_COOKIE_NAME=ACTUAL_DOMAIN
 
 REACT_APP_DOMAIN=PROXY_DOMAIN
 
-REACT_APP_API_SERVER_URL=http://PROXY_DOMAIN/api/v1
+REACT_APP_API_SERVER_URL=http://$REACT_APP_DOMAIN/api/v1
 
-REACT_APP_ADMIN_LOGIN_URL=http://PROXY_DOMAIN/admin
+REACT_APP_ADMIN_LOGIN_URL=http://$REACT_APP_DOMAIN/admin
 ```
