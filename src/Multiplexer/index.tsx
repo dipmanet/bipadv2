@@ -218,6 +218,7 @@ const getMatchingRegion = (
     return {};
 };
 
+/*
 const getMatchingSubDomain = (
     region: Region,
     provinces: Province[],
@@ -242,9 +243,10 @@ const getMatchingSubDomain = (
             return undefined;
     }
 };
+*/
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    private filtersSetFromUrl = false;
+    // private filtersSetFromUrl = false;
 
     // NOTE: this isn't used currently
     /*
@@ -286,6 +288,42 @@ class Multiplexer extends React.PureComponent<Props, State> {
     })
     */
 
+    public componentDidMount() {
+        // NOTE: this means everything has loaded before mounting this page,
+        // which is highly unlikely
+        const {
+            pending,
+            provinces,
+            districts,
+            municipalities,
+            filters,
+            setFilters,
+        } = this.props;
+
+        if (!pending) {
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+        }
+    }
+
+    public componentWillReceiveProps(nextProps: Props) {
+        const {
+            pending: oldPending,
+        } = this.props;
+        const {
+            pending: newPending,
+            provinces,
+            municipalities,
+            districts,
+            filters,
+            setFilters,
+        } = nextProps;
+
+        // NOTE: this means data has been loaded
+        if (oldPending !== newPending && !newPending) {
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+        }
+    }
+
     private setFilterFromUrl = (
         provinces: Province[],
         districts: District[],
@@ -324,42 +362,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 faramErrors: {},
                 pristine: true,
             });
-        }
-    }
-
-    public componentDidMount() {
-        // NOTE: this means everything has loaded before mounting this page,
-        // which is highly unlikely
-        const {
-            pending,
-            provinces,
-            districts,
-            municipalities,
-            filters,
-            setFilters,
-        } = this.props;
-
-        if (!pending) {
-            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
-        }
-    }
-
-    public componentWillReceiveProps(nextProps: Props) {
-        const {
-            pending: oldPending,
-        } = this.props;
-        const {
-            pending: newPending,
-            provinces,
-            municipalities,
-            districts,
-            filters,
-            setFilters,
-        } = nextProps;
-
-        // NOTE: this means data has been loaded
-        if (oldPending !== newPending && newPending) {
-            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
         }
     }
 
