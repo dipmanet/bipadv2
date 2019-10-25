@@ -103,7 +103,7 @@ class Cloak extends React.Component<Props> {
                 mapping = {
                     ...mapping,
                     ...listToMap(
-                        group.permission,
+                        group.permissions,
                         p => p.codename,
                         () => true,
                     ),

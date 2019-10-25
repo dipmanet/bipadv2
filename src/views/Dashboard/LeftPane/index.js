@@ -13,6 +13,7 @@ import CollapsibleView from '#components/CollapsibleView';
 import { iconNames } from '#constants';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
+import Cloak from '#components/Cloak';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
@@ -130,6 +131,7 @@ export default class LeftPane extends React.PureComponent {
                     <h4 className={styles.heading}>
                         Overview
                     </h4>
+
                     <Button
                         className={styles.expandTabularViewButton}
                         onClick={this.handleExpandButtonClick}
@@ -145,6 +147,7 @@ export default class LeftPane extends React.PureComponent {
                         transparent
                     />
                 </header>
+
                 <div className={styles.statsContainer}>
                     <TextOutput
                         className={styles.stat}

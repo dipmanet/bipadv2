@@ -5,7 +5,7 @@ export interface UserPermission {
 export interface GroupPermission {
     id: number;
     name: string;
-    permission: UserPermission[];
+    permissions: UserPermission[];
 }
 
 export interface User {
