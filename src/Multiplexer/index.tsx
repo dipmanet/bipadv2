@@ -138,12 +138,6 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
-}
-
-interface PropsFromState {
-    districts: District[];
-    provinces: Province[];
-    municipalities: Municipality[];
     filters: {
         faramValues: {
             region: Region;
