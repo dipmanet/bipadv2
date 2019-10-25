@@ -180,30 +180,34 @@ class Cloak extends React.Component<Props> {
         districts: District[],
         municipalities: Municipality[],
     ) => {
+        // Get no access if there is no user
+        if (!user) {
+            return false;
+        }
         // Get full access if resource is not associated with region
         if (isNotDefined(regionLevel)) {
             return true;
         }
 
-        // Get no access if there is no user
-        if (!user) {
-            return false;
-        }
-
         const {
             profile: {
-                region,
+                region: userRegion,
             },
         } = user;
 
-        // Get no access if there is no region
-        if (isNotDefined(region)) {
+        // Get no access if there is no user.profile.region
+        if (isNotDefined(userRegion)) {
             return false;
         }
 
-        // Get access to national level if user is national user
-        if (regionLevel === 'national' && region === 'national') {
+        // NOTE: Get access to national level if user is national user
+        if (regionLevel === 'national' && userRegion === 'national') {
             return true;
+        }
+
+        // NOTE: Get no access if regionLevel is not national, and there is no region id
+        if (isNotDefined(regionId)) {
+            return false;
         }
 
         const mapping = this.getAccessibleRegionMapping(
@@ -213,17 +217,11 @@ class Cloak extends React.Component<Props> {
         );
 
         // Get access to other regional level, if they are in the mapping
-        if (regionLevel === 'province' && region === 'province' && isDefined(regionId) && mapping.province[regionId]) {
-            return true;
-        }
-        if (regionLevel === 'district' && region === 'district' && isDefined(regionId) && mapping.district[regionId]) {
-            return true;
-        }
-        if (regionLevel === 'municipality' && region === 'municipality' && isDefined(regionId) && mapping.municipality[regionId]) {
-            return true;
-        }
-
-        return false;
+        return (
+            (regionLevel === 'province' && mapping.province[regionId])
+            || (regionLevel === 'district' && mapping.district[regionId])
+            || (regionLevel === 'municipality' && mapping.municipality[regionId])
+        );
     })
 
     public render() {
@@ -250,7 +248,7 @@ class Cloak extends React.Component<Props> {
 
         const params = this.getParams(user);
 
-        const hidden = (hiddenIf && hiddenIf(params)) || this.isRegionAccessible(
+        const hidden = (hiddenIf && hiddenIf(params)) || !this.isRegionAccessible(
             regionLevel,
             regionId,
 
