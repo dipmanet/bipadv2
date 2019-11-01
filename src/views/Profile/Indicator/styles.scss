@@ -2,12 +2,12 @@
 
 .main {
     display: flex;
-    left: $spacing-medium;
+    top: 54px;
+    bottom: 0;
+    left: 0;
     flex-grow: 1;
     transform: none;
-    background-color: $color-foreground;
-    width: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
-    height: calc(100vh - var(--spacing-medium) * 2 - var(--height-navbar));
+    background-color: var(--color-foreground);
     overflow: auto;
 
     .table-container {

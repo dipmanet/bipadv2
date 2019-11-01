@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
 
-import { routeSettings, iconNames } from '#constants';
+import { routeSettings } from '#constants';
 import { authStateSelector } from '#selectors';
 import { setAuthAction } from '#actionCreators';
 import { AppState } from '#store/types';
@@ -21,7 +20,6 @@ import {
     methods,
 } from '#request';
 
-import Logo from './Logo';
 import MenuItem from './MenuItem';
 
 import styles from './styles.scss';
@@ -94,6 +92,7 @@ class Navbar extends React.PureComponent<Props, State> {
         link: data.path,
         iconName: data.iconName,
         disabled: data.disabled,
+        titleClassName: styles.title,
     });
 
     public render() {
@@ -106,29 +105,29 @@ class Navbar extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { authenticated, user } = authState;
+        // <Logo />
 
         return (
-            <React.Fragment>
-                <nav className={_cs(styles.navbar, className)}>
-                    <Logo />
-                    <ListView
-                        data={pages}
-                        keySelector={menuKeySelector}
-                        renderer={MenuItem}
-                        rendererParams={this.menuRendererParams}
-                        className={styles.middle}
-                    />
+            <nav className={_cs(styles.navbar, className)}>
+                <ListView
+                    data={pages}
+                    keySelector={menuKeySelector}
+                    renderer={MenuItem}
+                    rendererParams={this.menuRendererParams}
+                    className={styles.menuItemList}
+                />
+                {/*
                     <div className={styles.right}>
                         { !authenticated && (
                             <MenuItem
                                 title="Login"
                                 link="/login/"
-                            />
+                                />
                         )}
                         { user && (
                             <div className={styles.username}>
                                 {`Hello ${user.username}`}
-                            </div>
+                                </div>
                         )}
                         { authenticated && (
                             <Button
@@ -137,22 +136,11 @@ class Navbar extends React.PureComponent<Props, State> {
                                 transparent
                             >
                                 Logout
-                            </Button>
+                                </Button>
                         )}
-                        {/*
-                        <a
-                            className={styles.adminLink}
-                            href={adminEndpoint}
-                            type="button"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Admin Panel
-                        </a>
-                        */}
-                    </div>
-                </nav>
-            </React.Fragment>
+                        </div>
+                  */}
+            </nav>
         );
     }
 }

@@ -45,18 +45,29 @@ export default class AboutUs extends React.PureComponent {
     }
 
     componentDidMount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControlsBottomRight = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControlsTopLeft = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
 
-        if (mapControls) {
-            this.mapControls = mapControls;
-            this.previousMapControlDisplay = mapControls.style.display;
-            mapControls.style.display = 'none';
+        if (mapControlsBottomRight) {
+            this.mapControlsBottomRight = mapControlsBottomRight;
+            this.previousMapControlBottomRightDisplay = mapControlsBottomRight.style.display;
+            mapControlsBottomRight.style.display = 'none';
+        }
+
+        if (mapControlsTopLeft) {
+            this.mapControlsTopLeft = mapControlsTopLeft;
+            this.previousMapControlTopLeftDisplay = mapControlsTopLeft.style.display;
+            mapControlsTopLeft.style.display = 'none';
         }
     }
 
     componentWillUnmount() {
-        if (this.mapControls) {
-            this.mapControls.style.display = this.previousMapControlDisplay;
+        if (this.mapControlsBottomRight) {
+            this.mapControlsBottomRight.style.display = this.previousMapControlBottomRightDisplay;
+        }
+
+        if (this.mapControlsTopLeft) {
+            this.mapControlsTopLeft.style.display = this.previousMapControlTopLeftDisplay;
         }
     }
 

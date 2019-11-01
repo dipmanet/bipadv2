@@ -1,6 +1,8 @@
 .left-pane {
     display: flex;
     flex-direction: column;
+    background-color: var(--color-foreground);
+    width: var(--width-left-panel);
     overflow: auto;
 
     .content {

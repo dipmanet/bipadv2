@@ -1,54 +1,24 @@
-@import '~base-scss/base';
-
-$width-summary-container: var(--width-left-panel);
-
-.summary {
+.left-pane {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    transform-origin: 0 0;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: $radius-border-large;
-    background-color: rgba(255, 255, 255, .9);
-    width: $width-summary-container;
-    height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-    overflow-x: hidden;
+    background-color: var(--color-foreground);
+    width: var(--width-left-pane);
     overflow-y: auto;
 
-    .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-right: $spacing-small;
-
-        h4 {
-            flex-shrink: 0;
-            padding: $spacing-small;
-            color: $color-primary;
-            font-weight: $font-weight-bold;
-        }
+    .stats-container {
+        flex-shrink: 0;
+        padding: var(--spacing-small) var(--spacing-medium);
     }
 
-    .content {
-        display: flex;
-        flex-direction: column;
+    .projects-list {
+        flex-grow: 1;
+        margin-top: var(--spacing-medium);
         overflow-y: auto;
 
-        .stats-container {
-            flex-shrink: 0;
-            padding: $spacing-small $spacing-medium;
-        }
-
-        .projects-list {
-            flex-grow: 1;
-            margin-top: $spacing-medium;
-            overflow-y: auto;
-
-            .heading {
-                border-bottom: $width-separator-thin solid $color-separator;
-                padding: $spacing-small $spacing-medium;
-                color: $color-accent;
-            }
+        .heading {
+            border-bottom: var(--width-separator-thin) solid var(--color-separator);
+            padding: var(--spacing-small) var(--spacing-medium);
+            color: var(--color-accent);
         }
     }
 }

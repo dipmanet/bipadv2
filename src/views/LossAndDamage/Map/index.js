@@ -6,7 +6,6 @@ import { _cs } from '@togglecorp/fujs';
 import Numeral from '#rscv/Numeral';
 
 import ChoroplethMap from '#components/ChoroplethMap';
-import { getMapPaddings } from '#constants';
 
 import styles from './styles.scss';
 
@@ -33,24 +32,6 @@ export default class LossAndDamageMap extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
-
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded, isTimeline) => {
-        const mapPaddings = getMapPaddings(isTimeline);
-
-        if (leftPaneExpanded && rightPaneExpanded) {
-            return mapPaddings.bothPaneExpanded;
-        }
-
-        if (leftPaneExpanded) {
-            return mapPaddings.leftPaneExpanded;
-        }
-
-        if (rightPaneExpanded) {
-            return mapPaddings.rightPaneExpanded;
-        }
-
-        return mapPaddings.noPaneExpanded;
-    });
 
     generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
@@ -87,8 +68,6 @@ export default class LossAndDamageMap extends React.PureComponent {
 
     render() {
         const {
-            leftPaneExpanded,
-            rightPaneExpanded,
             geoareas,
             mapping,
             metric,
@@ -96,12 +75,6 @@ export default class LossAndDamageMap extends React.PureComponent {
             metricName,
             isTimeline,
         } = this.props;
-
-        const boundsPadding = this.getBoundsPadding(
-            leftPaneExpanded,
-            rightPaneExpanded,
-            isTimeline,
-        );
 
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
@@ -114,7 +87,6 @@ export default class LossAndDamageMap extends React.PureComponent {
                 <div
                     className={_cs(
                         styles.legend,
-                        leftPaneExpanded && styles.leftPaneExpanded,
                         isTimeline && styles.timeline,
                     )}
                 >
@@ -147,7 +119,6 @@ export default class LossAndDamageMap extends React.PureComponent {
                     </div>
                 </div>
                 <ChoroplethMap
-                    boundsPadding={boundsPadding}
                     paint={colorPaint}
                     mapState={mapState}
                 />

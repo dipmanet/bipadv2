@@ -1,13 +1,24 @@
-@import '~base-scss/base';
-
-.stats-container {
+.loss-details {
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
-    padding: $spacing-extra-small $spacing-medium;
 
     .stat {
+        display: flex;
         flex-basis: 50%;
-        padding: $spacing-small 0;
+        flex-direction: column;
+        padding: var(--spacing-medium);
+
+        .label {
+            order: 2;
+            text-transform: uppercase;
+            font-size: var(--font-size-extra-small);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .value {
+            order: 1;
+            font-size: var(--font-size-super-large)
+        }
     }
 }

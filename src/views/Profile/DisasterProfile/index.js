@@ -1,17 +1,13 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import {
-    isNotDefined,
-} from '@togglecorp/fujs';
-
-import Map from '#rscz/Map';
-import MapContainer from '#rscz/Map/MapContainer';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import { lossMetrics } from '#utils/domain';
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 import TextOutput from '#components/TextOutput';
+import Page from '#components/Page';
 
 import {
     createConnectedRequestCoordinator,
@@ -190,6 +186,9 @@ class DisasterProfile extends React.PureComponent {
                     key={metric.key}
                     label={metric.label}
                     value={data[metric.key]}
+                    valueClassName={styles.value}
+                    labelClassName={styles.label}
+                    normal
                     isNumericValue
                     type="block"
                 />
@@ -228,48 +227,35 @@ class DisasterProfile extends React.PureComponent {
         const AggregatedStat = this.renderAggregatedStat;
 
         return (
-            <React.Fragment>
+            <>
                 <Loading pending={pending} />
-                <div className={styles.disasterProfile}>
-                    <div className={styles.filters}>
+                <CommonMap
+                    region={region}
+                />
+                <Page
+                    leftContentClassName={styles.leftContainer}
+                    leftContent={(
+                        <>
+                            <AggregatedStat
+                                className={styles.aggregatedStat}
+                                data={dataset.aggregatedStat}
+                            />
+                            <Visualizations
+                                lossAndDamageList={filteredIncidents}
+                            />
+                        </>
+                    )}
+                    rightContentClassName={styles.rightContainer}
+                    rightContent={(
                         <RegionSelectInput
                             label="Select region"
                             className={styles.regionInput}
                             value={region}
                             onChange={this.handleRegionInputChange}
-                            // disabled={pending}
                         />
-                    </div>
-                    <div className={styles.content}>
-                        <Map
-                            mapStyle={mapStyle}
-                            fitBoundsDuration={200}
-                            minZoom={5}
-                            logoPosition="bottom-left"
-
-                            showScaleControl
-                            scaleControlPosition="bottom-right"
-
-                            showNavControl
-                            navControlPosition="bottom-right"
-                        >
-                            <MapContainer className={styles.map} />
-                            <CommonMap
-                                region={region}
-                            />
-                        </Map>
-                        <AggregatedStat
-                            className={styles.aggregatedStat}
-                            data={dataset.aggregatedStat}
-                        />
-                        <div className={styles.visualizations}>
-                            <Visualizations
-                                lossAndDamageList={filteredIncidents}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </React.Fragment>
+                    )}
+                />
+            </>
         );
     }
 }

@@ -1,12 +1,6 @@
 .left-container {
     display: flex;
     flex-direction: column;
-    z-index: 11;
-    border: var(--width-separator-thin) solid var(--color-separator);
-    background-color: var(--color-foreground);
-    width: var(--width-left-panel);
-    height: calc(100% - var(--spacing-medium) * 2);
-    overflow: auto;
 
     .left-pane {
         flex-grow: 1;

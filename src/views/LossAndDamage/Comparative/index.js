@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
-import { lossMetrics } from '#utils/domain';
+
 import Page from '#components/Page';
 import LossDetails from '#components/LossDetails';
 import GeoResolve from '#components/GeoResolve';
@@ -21,10 +21,7 @@ import {
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 
-import Filter from '../Filter';
-import {
-    getSanitizedIncidents,
-} from '../common';
+import { getSanitizedIncidents } from '../common';
 
 import Visualizations from './Visualizations';
 
@@ -88,18 +85,29 @@ class Comparative extends React.PureComponent {
     }
 
     componentDidMount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControlsBottomRight = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+        const mapControlsTopLeft = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
 
-        if (mapControls) {
-            this.mapControls = mapControls;
-            this.previousMapControlDisplay = mapControls.style.display;
-            mapControls.style.display = 'none';
+        if (mapControlsBottomRight) {
+            this.mapControlsBottomRight = mapControlsBottomRight;
+            this.previousMapControlBottomRightDisplay = mapControlsBottomRight.style.display;
+            mapControlsBottomRight.style.display = 'none';
+        }
+
+        if (mapControlsTopLeft) {
+            this.mapControlsTopLeft = mapControlsTopLeft;
+            this.previousMapControlTopLeftDisplay = mapControlsTopLeft.style.display;
+            mapControlsTopLeft.style.display = 'none';
         }
     }
 
     componentWillUnmount() {
-        if (this.mapControls) {
-            this.mapControls.style.display = this.previousMapControlDisplay;
+        if (this.mapControlsBottomRight) {
+            this.mapControlsBottomRight.style.display = this.previousMapControlBottomRightDisplay;
+        }
+
+        if (this.mapControlsTopLeft) {
+            this.mapControlsTopLeft.style.display = this.previousMapControlTopLeftDisplay;
         }
     }
 
@@ -137,16 +145,6 @@ class Comparative extends React.PureComponent {
         this.setState({ faramErrors });
     }
 
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-        // this.setPlacementForMapControls(rightPaneExpanded);
-
-        const { onRightPaneExpandChange } = this.props;
-        if (onRightPaneExpandChange) {
-            onRightPaneExpandChange(rightPaneExpanded);
-        }
-    }
-
     render() {
         const {
             className,
@@ -171,143 +169,129 @@ class Comparative extends React.PureComponent {
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
 
         return (
-            <Page
-                className={className}
-                leftContentClassName={_cs(styles.left, !rightPaneExpanded && styles.extended)}
-                leftContent={(
-                    <div className={styles.comparative}>
-                        <Faram
-                            className={styles.regionSelectionForm}
-                            onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramValidationFailure}
-                            // onValidationSuccess={this.handleFaramValidationSuccess}
-                            schema={this.schema}
-                            value={faramValues}
-                            error={faramErrors}
-                            disabled={false}
-                        >
-                            <RegionSelectInput
-                                label="First location"
-                                className={styles.regionInput}
-                                faramElementName="region1"
-                                showHintAndError
-                            />
-                            <RegionSelectInput
-                                label="Second location"
-                                className={styles.regionInput}
-                                faramElementName="region2"
-                                showHintAndError
-                                disabled={!faramValues.region1}
-                            />
-                        </Faram>
-                        { (!region1 && !region2) ? (
-                            <div className={styles.preComparisionMessage}>
-                                Please select locations to start the comparison
+            <div className={_cs(className, styles.comparative)}>
+                <Page
+                    leftContent={null}
+                />
+                <Faram
+                    className={styles.regionSelectionForm}
+                    onChange={this.handleFaramChange}
+                    onValidationFailure={this.handleFaramValidationFailure}
+                    // onValidationSuccess={this.handleFaramValidationSuccess}
+                    schema={this.schema}
+                    value={faramValues}
+                    error={faramErrors}
+                    disabled={false}
+                >
+                    <RegionSelectInput
+                        label="First location"
+                        className={styles.regionInput}
+                        faramElementName="region1"
+                        showHintAndError
+                    />
+                    <RegionSelectInput
+                        label="Second location"
+                        className={styles.regionInput}
+                        faramElementName="region2"
+                        showHintAndError
+                        disabled={!faramValues.region1}
+                    />
+                </Faram>
+                { (!region1 && !region2) ? (
+                    <div className={styles.preComparisionMessage}>
+                        Please select locations to start the comparison
+                    </div>
+                ) : (
+                    <div className={styles.comparisionContainer}>
+                        <div className={styles.titleContainer}>
+                            { isRegionValid(faramValues.region1) && (
+                                <h2>
+                                    <GeoResolve data={region1} />
+                                </h2>
+                            )}
+                            { isRegionValid(faramValues.region2) && (
+                                <h2>
+                                    <GeoResolve data={region2} />
+                                </h2>
+                            )}
+                        </div>
+                        <div className={styles.mapContainer}>
+                            { isRegionValid(faramValues.region1) && (
+                                <Map
+                                    mapStyle={mapStyle}
+                                    fitBoundsDuration={200}
+                                    minZoom={5}
+                                    logoPosition="bottom-left"
+
+                                    showScaleControl
+                                    scaleControlPosition="bottom-right"
+
+                                    showNavControl
+                                    navControlPosition="bottom-right"
+                                >
+                                    <MapContainer className={styles.map1} />
+                                    <CommonMap
+                                        region={faramValues.region1}
+                                    />
+                                </Map>
+                            )}
+                            { isRegionValid(faramValues.region2) && (
+                                <Map
+                                    mapStyle={mapStyle}
+                                    fitBoundsDuration={200}
+                                    minZoom={5}
+                                    logoPosition="bottom-left"
+
+                                    showScaleControl
+                                    scaleControlPosition="bottom-right"
+
+                                    showNavControl
+                                    navControlPosition="bottom-right"
+                                >
+                                    <MapContainer className={styles.map2} />
+                                    <CommonMap
+                                        region={faramValues.region2}
+                                    />
+                                </Map>
+                            )}
+                        </div>
+                        <div className={styles.visualizations}>
+                            <div className={styles.aggregatedStats}>
+                                { isRegionValid(faramValues.region1) && (
+                                    <LossDetails
+                                        className={styles.aggregatedStat}
+                                        data={region1Incidents}
+                                        minDate={minDate}
+                                    />
+                                )}
+                                { isRegionValid(faramValues.region2) && (
+                                    <LossDetails
+                                        className={styles.aggregatedStat}
+                                        data={region2Incidents}
+                                        minDate={minDate}
+                                    />
+                                )}
                             </div>
-                        ) : (
-                            <div className={styles.comparisionContainer}>
-                                <div className={styles.titleContainer}>
-                                    { isRegionValid(faramValues.region1) && (
-                                        <h2>
-                                            <GeoResolve data={region1} />
-                                        </h2>
-                                    )}
-                                    { isRegionValid(faramValues.region2) && (
-                                        <h2>
-                                            <GeoResolve data={region2} />
-                                        </h2>
-                                    )}
-                                </div>
-                                <div className={styles.mapContainer}>
-                                    { isRegionValid(faramValues.region1) && (
-                                        <Map
-                                            mapStyle={mapStyle}
-                                            fitBoundsDuration={200}
-                                            minZoom={5}
-                                            logoPosition="bottom-left"
-
-                                            showScaleControl
-                                            scaleControlPosition="bottom-right"
-
-                                            showNavControl
-                                            navControlPosition="bottom-right"
-                                        >
-                                            <MapContainer className={styles.map1} />
-                                            <CommonMap
-                                                region={faramValues.region1}
-                                            />
-                                        </Map>
-                                    )}
-                                    { isRegionValid(faramValues.region2) && (
-                                        <Map
-                                            mapStyle={mapStyle}
-                                            fitBoundsDuration={200}
-                                            minZoom={5}
-                                            logoPosition="bottom-left"
-
-                                            showScaleControl
-                                            scaleControlPosition="bottom-right"
-
-                                            showNavControl
-                                            navControlPosition="bottom-right"
-                                        >
-                                            <MapContainer className={styles.map2} />
-                                            <CommonMap
-                                                region={faramValues.region2}
-                                            />
-                                        </Map>
-                                    )}
-                                </div>
-                                <div className={styles.visualizations}>
-                                    <div className={styles.aggregatedStats}>
-                                        { isRegionValid(faramValues.region1) && (
-                                            <LossDetails
-                                                className={styles.aggregatedStat}
-                                                data={region1Incidents}
-                                                minDate={minDate}
-                                            />
-                                        )}
-                                        { isRegionValid(faramValues.region2) && (
-                                            <LossDetails
-                                                className={styles.aggregatedStat}
-                                                data={region2Incidents}
-                                                minDate={minDate}
-                                            />
-                                        )}
+                            <div className={styles.otherVisualizations}>
+                                { isRegionValid(faramValues.region1) && (
+                                    <div className={styles.region1Container}>
+                                        <Visualizations
+                                            lossAndDamageList={region1Incidents}
+                                        />
                                     </div>
-                                    <div className={styles.otherVisualizations}>
-                                        { isRegionValid(faramValues.region1) && (
-                                            <div className={styles.region1Container}>
-                                                <Visualizations
-                                                    lossAndDamageList={region1Incidents}
-                                                />
-                                            </div>
-                                        )}
-                                        { isRegionValid(faramValues.region2) && (
-                                            <div className={styles.region2Container}>
-                                                <Visualizations
-                                                    lossAndDamageList={region2Incidents}
-                                                />
-                                            </div>
-                                        )}
+                                )}
+                                { isRegionValid(faramValues.region2) && (
+                                    <div className={styles.region2Container}>
+                                        <Visualizations
+                                            lossAndDamageList={region2Incidents}
+                                        />
                                     </div>
-                                </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 )}
-                rightContentClassName={styles.right}
-                rightContent={(
-                    <Filter
-                        onExpandChange={this.handleRightPaneExpandChange}
-                        metricOptions={lossMetrics}
-                        hideRegionSelect
-                        disabledRegionSelect
-                        hideMetricSelect
-                        disabledMetricSelect
-                    />
-                )}
-            />
+            </div>
         );
     }
 }

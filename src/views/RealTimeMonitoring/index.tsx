@@ -3,7 +3,6 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
-import MapDownload from '#rscz/Map/MapDownload';
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -51,8 +50,6 @@ import styles from './styles.scss';
 interface State {
     showRainWatch: boolean;
     showRiverWatch: boolean;
-    rightPaneExpanded?: boolean;
-    leftPaneExpanded?: boolean;
 }
 interface Params {}
 interface OwnProps {}
@@ -263,33 +260,19 @@ const fireLegendItems = [
     { icon: '◆', color: '#e64a19', label: 'Forest Fire' },
 ];
 
+const rainAndRiverSymbolItems = [
+    { icon: '■ ', color: '#414141', label: 'Rain' },
+    { icon: '●', color: '#414141', label: 'River steady' },
+    { icon: '▲', color: '#414141', label: 'River rising' },
+    { icon: '▼', color: '#414141', label: 'River falling' },
+];
+
 const itemSelector = (d: { label: string }) => d.label;
 const iconSelector = (d: { icon: string }) => d.icon;
 const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            rightPaneExpanded: true,
-            leftPaneExpanded: false,
-        };
-    }
-
-    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
-        this.setState({ rightPaneExpanded });
-    }
-
-    private handleShowLegendsButtonClick = () => {
-        this.setState({ leftPaneExpanded: true });
-    }
-
-    private handleCloseLegendsClick = () => {
-        this.setState({ leftPaneExpanded: false });
-    }
-
     private renderLegend = () => {
         const {
             filters: {
@@ -306,39 +289,36 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         return (
             <>
-                { showRain && (
+                {(showRain || showRiver) && (
                     <div className={_cs('map-legend-container', styles.legendContainer)}>
-                        <h5 className={styles.heading}>
-                            Rain
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={rainLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        <h4 className={styles.heading}>
+                            Rain & River
+                        </h4>
+                        <div className={styles.content}>
+                            <Legend
+                                className={styles.legend}
+                                data={rainAndRiverSymbolItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                                iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                            <div className={styles.colorLegend}>
+                                <div className={_cs(styles.item, styles.belowWarning)}>
+                                    Below warning
+                                </div>
+                                <div className={_cs(styles.item, styles.aboveWarning)}>
+                                    Above warning
+                                </div>
+                                <div className={_cs(styles.item, styles.aboveDanger)}>
+                                    Above danger
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                )}
-                { showRiver && (
-                    <div className={_cs('map-legend-container', styles.legendContainer)}>
-                        <h5 className={styles.heading}>
-                            River
-                        </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={riverLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
-                    </div>
+
                 )}
                 { showEarthquake && (
                     <div className={styles.legendContainer}>
@@ -420,11 +400,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             otherSourceList,
         } = this.props;
 
-        const {
-            rightPaneExpanded,
-            leftPaneExpanded,
-        } = this.state;
-
         const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
@@ -450,36 +425,29 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showEarthquake={showEarthquake}
                     showFire={showFire}
                     showPollution={showPollution}
-                    rightPaneExpanded={rightPaneExpanded}
-                    leftPaneExpanded={leftPaneExpanded}
                 />
                 <Page
-                    rightContentClassName={styles.right}
                     leftContentClassName={styles.left}
-                    mainContentClassName={styles.main}
                     leftContent={(
-                        <MapDownload
-                            className={styles.mapDownloadButton}
-                            iconName="download"
-                            legendContainerClassName="map-legend-container"
-                        >
-                            Download this map
-                        </MapDownload>
-                    )}
-                    rightContent={(
                         <>
-                            <RealTimeMonitoringFilter
-                                realTimeSourceList={realTimeSourceList}
-                                otherSourceList={otherSourceList}
-                            />
                             <MiniRiverWatch
+                                className={styles.miniRiverWatch}
                                 realTimeRiver={realTimeRiverList}
                             />
                             <MiniRainWatch
+                                className={styles.miniRainWatch}
                                 realTimeRain={realTimeRainList}
                             />
                         </>
                     )}
+                    rightContentClassName={styles.right}
+                    rightContent={(
+                        <RealTimeMonitoringFilter
+                            realTimeSourceList={realTimeSourceList}
+                            otherSourceList={otherSourceList}
+                        />
+                    )}
+                    mainContentClassName={styles.main}
                     mainContent={(
                         <LegendView />
                     )}

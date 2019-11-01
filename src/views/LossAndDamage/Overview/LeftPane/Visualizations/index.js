@@ -48,6 +48,7 @@ const estimatedLossValueLabelSelector = (d) => {
         normal: true,
         precision: 0,
     });
+
     if (normalizeSuffix) {
         return `${number}${normalizeSuffix}`;
     }
@@ -201,6 +202,7 @@ class Visualizations extends React.PureComponent {
                         valueSelector={donutChartValueSelector}
                         labelModifier={deathsLabelModifier}
                         colorSelector={donutChartColorSelector}
+                        hideLabel
                     />
                 </div>
                 <div className={styles.donutContainer}>
@@ -217,6 +219,7 @@ class Visualizations extends React.PureComponent {
                         valueSelector={donutChartValueSelector}
                         labelModifier={estimatedMonetaryLossLabelModifier}
                         colorSelector={donutChartColorSelector}
+                        hideLabel
                     />
                     <HazardsLegend
                         filteredHazardTypes={filteredHazardTypesList}

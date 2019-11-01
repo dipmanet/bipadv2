@@ -1,107 +1,93 @@
 @import '~base-scss/base';
 
-$width-left-pane: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 3 - var(--width-right-panel));
-$height-left-pane: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-$width-extended-left-pane: calc(100vw - var(--width-navbar-right) - var(--spacing-medium) * 2);
+.comparative {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 
-.left {
-    z-index: 1;
-
-    .comparative {
+    .region-selection-form {
         display: flex;
-        bottom: var(--spacing-medium);
-        flex-direction: column;
-        border: $width-separator-thin solid $color-separator;
-        border-radius: var(--radius-panel-border);
-        background-color: $color-foreground;
-        width: $width-left-pane;
-        height: $height-left-pane;
-        overflow: auto;
+        align-items: center;
+        flex-shrink: 0;
 
-        .region-selection-form {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-
-            .region-input {
-                margin: $spacing-medium;
-            }
-        }
-
-        .pre-comparision-message {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-            justify-content: center;
-            opacity: .3;
-            font-size: $font-size-super-large;
-        }
-
-        .comparision-container {
-            flex-grow: 1;
-            overflow: auto;
-
-            .title-container {
-                display: flex;
-
-                >h2 {
-                    flex-basis: 50%;
-                    padding: 0 $spacing-medium;
-                }
-            }
-
-            .map-container {
-                display: flex;
-                flex-shrink: 0;
-                height: 360px;
-
-                .map-1 {
-                    flex-basis: 50%;
-                    margin: $spacing-medium;
-                    height: 100%;
-                }
-
-                .map-2 {
-                    flex-basis: 50%;
-                    margin: $spacing-medium;
-                    height: 100%;
-                }
-            }
-
-            .visualizations {
-                .aggregated-stats {
-                    display: flex;
-
-                    .aggregated-stat {
-                        display: flex;
-                        flex-basis: 50%;
-                        flex-wrap: wrap;
-                        padding: var(--spacing-large);
-
-                        .stat-metric {
-                            padding: $spacing-large;
-                        }
-                    } 
-                }
-
-                .other-visualizations {
-                    display: flex;
-
-                    .region1-container {
-                        flex-basis: 50%;
-                    }
-
-                    .region2-container {
-                        flex-basis: 50%;
-                    }
-                }
-            }
+        .region-input {
+            margin: $spacing-medium;
         }
     }
 
-    &.extended {
-        .comparative {
-            width: $width-extended-left-pane;
+    .pre-comparision-message {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        justify-content: center;
+        opacity: .3;
+        font-size: $font-size-super-large;
+    }
+
+    .comparision-container {
+        flex-grow: 1;
+        overflow: auto;
+
+        .title-container {
+            display: flex;
+
+            >h2 {
+                flex-basis: 50%;
+                padding: 0 $spacing-medium;
+            }
+        }
+
+        .map-container {
+            display: flex;
+            flex-shrink: 0;
+            height: 360px;
+
+            .map-1 {
+                flex-basis: 50%;
+                margin: $spacing-medium;
+                height: 100%;
+            }
+
+            .map-2 {
+                flex-basis: 50%;
+                margin: $spacing-medium;
+                height: 100%;
+            }
+        }
+
+        .visualizations {
+            .aggregated-stats {
+                display: flex;
+
+                .aggregated-stat {
+                    display: flex;
+                    flex-basis: 50%;
+                    flex-wrap: wrap;
+                    padding: var(--spacing-large);
+
+                    .stat-metric {
+                        padding: $spacing-large;
+                    }
+                } 
+            }
+
+            .other-visualizations {
+                display: flex;
+
+                .region1-container {
+                    flex-basis: 50%;
+                }
+
+                .region2-container {
+                    flex-basis: 50%;
+                }
+            }
         }
     }
 }

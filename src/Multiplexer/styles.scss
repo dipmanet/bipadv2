@@ -1,23 +1,62 @@
 .multiplexer {
     display: flex;
-    flex-direction: column;
-    padding: 0;
+    width: 100vw;
     height: 100vh;
     overflow: auto;
 
     .navbar {
         flex-shrink: 0;
-        border-bottom: var(--width-separator-thin) solid var(--color-separator);
+        z-index: 1;
+        box-shadow: -3px 0 5px -3px rgba(0, 0, 0, 0.3);
     }
 
     .content {
         display: flex;
-        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
+        .left-pane-container {
+            flex-shrink: 0;
+            z-index: 1;
+            box-shadow: 3px 0 5px -3px rgba(0, 0, 0, 0.3);
+            width: var(--width-left-panel);
+            overflow: auto;
+        }
+
         .map {
             flex-grow: 1;
+            background-color: transparent;
+
+            &.hidden {
+                display: none;
+            }
+        }
+    }
+}
+
+.error-in-page,
+.retryable-error-in-page {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    align-items: baseline;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    z-index: 1111;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    border-radius: 3px;
+    background-color: #ffffff;
+    padding: 10;
+    text-align: center;
+    font-size: 18px;
+}
+
+:global {
+    .mapboxgl-ctrl-bottom-right {
+        .mapboxgl-ctrl-attrib {
+            margin-right: var(--spacing-medium)!important;
+            padding: 0!important;
         }
     }
 }

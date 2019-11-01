@@ -1,23 +1,16 @@
-@import '~base-scss/base';
-
 .legend {
     position: absolute;
-    bottom: $spacing-medium;
-    left: var(--spacing-medium);
-    transition: .2s all ease-in-out;
+    bottom: var(--spacing-medium);
+    left: calc(var(--width-left-panel) + var(--spacing-medium));
     z-index: 11;
-    border: $width-separator-thin solid $color-separator;
+    border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--radius-border-pane);
-    background-color: $color-foreground;
-    padding: $spacing-medium;
+    background-color: var(--color-foreground);
+    padding: var(--spacing-medium);
     width: 240px;
 
-    &.left-pane-expanded {
-        left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
-    }
-
     .heading {
-        padding-bottom: $spacing-medium;
+        padding-bottom: var(--spacing-medium);
     }
 
     .range {
@@ -26,15 +19,15 @@
     }
 
     .min {
-        font-size: $font-size-small;
+        font-size: var(--font-size-small);
     }
 
     .max {
-        font-size: $font-size-small;
+        font-size: var(--font-size-small);
     }
 
     .scale {
         display: flex;
-        height: $font-size-medium;
+        height: var(--font-size-medium);
     }
 }

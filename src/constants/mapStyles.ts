@@ -1,56 +1,56 @@
 export default {
     province: {
         outline: {
-            'line-color': '#a3b7e3',
-            'line-width': 2,
+            'line-color': '#004d40',
+            'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 2,
+            'line-width': 1,
         },
     },
     district: {
         outline: {
-            'line-color': '#a3b7e3',
-            'line-width': 1.4,
+            'line-color': '#004d40',
+            'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1.4,
+            'line-width': 1,
         },
     },
     municipality: {
         outline: {
-            'line-color': '#a3b7e3',
-            'line-width': 0.8,
+            'line-color': '#72b6ac',
+            'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 0.8,
+            'line-width': 1,
         },
     },
     ward: {
         outline: {
-            'line-color': '#a3b7e3',
-            'line-width': 0.5,
+            'line-color': '#d0e8e4',
+            'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 0.5,
+            'line-width': 1,
         },
     },
     provinceLabel: {
         paint: {
-            'text-color': 'rgba(0, 0, 0, 0.9)',
-            'text-halo-color': '#ffffff',
+            'text-color': '#002121',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
             'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
             'text-allow-overlap': true,
-            'text-font': ['Rubik Regular'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
-            'text-size': 14,
+            'text-size': 12,
             'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -58,48 +58,45 @@ export default {
     },
     districtLabel: {
         paint: {
-            'text-color': 'rgba(0, 0, 0, 0.6)',
-            'text-halo-color': '#ffffff',
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
             'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Regular'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 11,
-            'text-transform': 'uppercase',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
     },
     municipalityLabel: {
         paint: {
-            'text-color': 'rgba(0, 0, 0, 0.4)',
-            'text-halo-color': '#ffffff',
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
             'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Regular'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
-            'text-size': 9,
-            'text-transform': 'uppercase',
+            'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
     },
     wardLabel: {
         paint: {
-            'text-color': 'rgba(0, 0, 0, 0.4)',
-            'text-halo-color': '#ffffff',
+            'text-color': '#1c9688',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
             'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Regular'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
-            'text-size': 8,
-            'text-transform': 'uppercase',
+            'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -113,7 +110,7 @@ export default {
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 2,
-                0,
+                1,
             ],
             'circle-opacity': 0.9,
         },
@@ -205,7 +202,7 @@ export default {
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 2,
-                0,
+                1,
             ],
         },
         animatedFill: {

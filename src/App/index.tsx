@@ -28,7 +28,8 @@ import {
 
 import { getAuthState } from '#utils/session';
 
-import Multiplexer from './Multiplexer';
+import Multiplexer from '../Multiplexer';
+import styles from './styles.scss';
 
 interface State {}
 interface Params {}
@@ -167,7 +168,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 /* Loads required info from server */
 // eslint-disable-next-line react/prefer-stateless-function
 class App extends React.Component<Props, State> {
-    public constructor(props: any) {
+    public constructor(props: Props) {
         super(props);
 
         const authState = getAuthState();

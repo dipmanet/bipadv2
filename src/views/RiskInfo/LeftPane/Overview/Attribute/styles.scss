@@ -1,28 +1,34 @@
 .attribute {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+    background-color: var(--color-foreground-alt);
     cursor: pointer;
-    padding: var(--spacing-medium) 0;
+    padding: var(--spacing-small);
 
-    .icon {
-        width: var(--width-risk-info-attribute-icon);
-        height: var(--height-risk-info-attribute-icon);
+    .left {
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
 
-        path {
-            fill: currentColor;
+        .icon {
+            width: var(--width-risk-info-attribute-icon);
+            height: var(--height-risk-info-attribute-icon);
+
+            path {
+                fill: currentColor;
+            }
         }
     }
 
-    .title {
-        padding: var(--spacing-medium-alt);
-        text-align: center;
-        font-size: var(--font-size-large);
-    }
+    .right {
+        flex-grow: 1;
 
-    .description {
-        padding: var(--spacing-small) var(--spacing-medium-alt);
+        .title {
+            padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+
+        .description {
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
     }
 
     &:hover {

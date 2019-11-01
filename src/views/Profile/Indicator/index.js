@@ -7,6 +7,8 @@ import styles from './styles.scss';
 
 const Indicator = () => (
     <Page
+        leftContent={null}
+        hideMap
         mainContentClassName={styles.main}
         mainContent={(
             <div

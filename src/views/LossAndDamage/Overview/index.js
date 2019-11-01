@@ -1,15 +1,12 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
-import { styleProperties } from '#constants';
-import { currentStyle } from '#rsu/styles';
 
 import Page from '#components/Page';
-import { lossMetrics } from '#utils/domain';
 
 import Map from '../Map';
 import LeftPane from './LeftPane';
-import Filter from '../Filter';
+import Filters from '#components/Filters';
 
 import {
     metricMap,
@@ -42,33 +39,10 @@ export default class Overview extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
-        const { rightPaneExpanded } = this.state;
-
-        this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
     componentWillUnmount() {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
         if (mapControls) {
             mapControls.style.right = this.previousMapContorlStyle;
-        }
-    }
-
-    setPlacementForMapControls = (rightPaneExpanded) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-
-        if (mapControls) {
-            const widthRightPanel = rightPaneExpanded
-                ? convertValueToNumber(styleProperties.widthRightPanel)
-                : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
-            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
-
-            if (!this.previousMapContorlStyle) {
-                this.previousMapContorlStyle = mapControls.style.right;
-            }
-            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
         }
     }
 
@@ -105,7 +79,6 @@ export default class Overview extends React.PureComponent {
 
     handleRightPaneExpandChange = (rightPaneExpanded) => {
         this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
 
         const { onRightPaneExpandChange } = this.props;
         if (onRightPaneExpandChange) {
@@ -125,6 +98,7 @@ export default class Overview extends React.PureComponent {
             regionLevel,
             regions,
             wards,
+            minDate,
         } = this.props;
 
         const {
@@ -150,29 +124,31 @@ export default class Overview extends React.PureComponent {
         return (
             <React.Fragment>
                 <Map
+                    geoareas={geoareas}
                     leftPaneExpanded={leftPaneExpanded}
-                    rightPaneExpanded={rightPaneExpanded}
                     mapping={mapping}
                     maxValue={maxValue}
                     metric={selectedMetric.metricFn}
                     metricName={selectedMetric.label}
-                    geoareas={geoareas}
+                    rightPaneExpanded={rightPaneExpanded}
                 />
                 <Page
                     leftContentClassName={styles.left}
                     leftContent={(
                         <LeftPane
-                            pending={pending}
                             lossAndDamageList={lossAndDamageList}
                             onExpandChange={this.handleLeftPaneExpandChange}
+                            pending={pending}
                             rightPaneExpanded={rightPaneExpanded}
-                            minDate={this.props.minDate}
+                            minDate={minDate}
                         />
                     )}
+                    rightContentClassName={styles.right}
                     rightContent={(
-                        <Filter
-                            onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={lossMetrics}
+                        <Filters
+                            className={styles.filters}
+                            showDateRange
+                            showMetricSelect
                         />
                     )}
                 />

@@ -3,15 +3,9 @@ import memoize from 'memoize-one';
 import { listToMap } from '@togglecorp/fujs';
 
 import { currentStyle } from '#rsu/styles';
-import { lossMetrics } from '#utils/domain';
 
-
-import {
-    iconNames,
-    styleProperties,
-} from '#constants';
+import { styleProperties } from '#constants';
 import Page from '#components/Page';
-// import { getYmd } from '#utils/common';
 
 import Button from '#rsca/Button';
 import FormattedDate from '#rscv/FormattedDate';
@@ -20,7 +14,7 @@ import SelectInput from '#rsci/SelectInput';
 import Map from '../Map';
 import LeftPane from './LeftPane';
 import Seekbar from './Seekbar';
-import Filter from '../Filter';
+import Filters from '#components/Filters';
 
 import {
     getAggregatedStats,
@@ -151,24 +145,19 @@ export default class Timeline extends React.PureComponent {
         }
     }
 
-    setPlacementForMapControls = (rightPaneExpanded) => {
+    setPlacementForMapControls = () => {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {
-            const widthRightPanel = rightPaneExpanded
-                ? convertValueToNumber(styleProperties.widthRightPanel)
-                : 0;
             const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
-            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
             const heightTimeline = convertValueToNumber(styleProperties.heightTimelineMainContent);
+            const spacingPageBottom = convertValueToNumber(styleProperties.spacingPageBottom);
 
             if (!this.previousMapControlRight) {
-                this.previousMapControlRight = mapControls.style.right;
                 this.previousMapControlBottom = mapControls.style.bottom;
             }
 
-            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
-            mapControls.style.bottom = `${heightTimeline + spacingMedium}px`;
+            mapControls.style.bottom = `${heightTimeline + 2 * spacingMedium}px`;
         }
     }
 
@@ -290,20 +279,6 @@ export default class Timeline extends React.PureComponent {
         }
     }
 
-    handleLeftPaneExpandChange = (leftPaneExpanded) => {
-        this.setState({ leftPaneExpanded });
-    }
-
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
-
-        const { onRightPaneExpandChange } = this.props;
-        if (onRightPaneExpandChange) {
-            onRightPaneExpandChange(rightPaneExpanded);
-        }
-    }
-
     handlePlaybackButtonClick = () => {
         const { isPlaying } = this.state;
         this.setState({ isPlaying: !isPlaying });
@@ -333,66 +308,6 @@ export default class Timeline extends React.PureComponent {
         this.playback(lossAndDamageList, regionLevel, currentIndex);
     }
 
-    /*
-    renderEventTimeline = ({
-        start,
-        end,
-        eventList = emptyList,
-    }) => {
-        if (!start || !end || eventList.length === 0) {
-            return null;
-        }
-
-        const {
-            startTimestamp,
-            endTimestamp,
-        } = this.state;
-
-        const DAY = 1000 * 60 * 60 * 24;
-
-        // FIXME: memoize this
-        const sanitizedEventList = eventList
-            .filter(d => d.startedOn)
-            .map((d) => {
-                const startedOn = (new Date(d.startedOn)).getTime();
-                const endedOn = d.endedOn
-                    ? (new Date(d.endedOn)).getTime()
-                    : startedOn + (DAY * 30);
-
-                return {
-                    ...d,
-                    startedOn,
-                    endedOn,
-                };
-            })
-            .filter(d => d.startedOn >= startTimestamp && d.startedOn <= endTimestamp);
-
-        return (
-            <div className={styles.eventList}>
-                { sanitizedEventList.map((e) => {
-                    const timelineBandwidth = endTimestamp - startTimestamp;
-                    const left = 100 * ((e.startedOn - startTimestamp) / timelineBandwidth);
-                    const right = 100 * ((e.endedOn - startTimestamp) / timelineBandwidth);
-
-                    return (
-                        <div
-                            key={e.id}
-                            className={styles.eventTitle}
-                            style={{
-                                left: `${left}%`,
-                                width: `${right - left}%`,
-                            }}
-                            title={`${e.startedOn} ${e.endedOn}`}
-                        >
-                            { e.title }
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    }
-    */
-
     render() {
         const {
             className,
@@ -404,12 +319,9 @@ export default class Timeline extends React.PureComponent {
             provinces,
             regionLevel,
             wards,
-            // eventList,
         } = this.props;
 
         const {
-            // start,
-            // end,
             leftPaneExpanded,
             rightPaneExpanded,
             currentIndex,
@@ -462,6 +374,7 @@ export default class Timeline extends React.PureComponent {
                     leftContentClassName={styles.left}
                     leftContent={(
                         <LeftPane
+                            className={styles.leftPane}
                             pending={pending}
                             lossAndDamageList={bucketedIncidents[currentIndex]}
                             onExpandChange={this.handleLeftPaneExpandChange}
@@ -469,12 +382,9 @@ export default class Timeline extends React.PureComponent {
                             minDate={this.props.minDate}
                         />
                     )}
+                    rightContentClassName={styles.right}
                     rightContent={(
-                        <Filter
-                            onExpandChange={this.handleRightPaneExpandChange}
-                            metricOptions={lossMetrics}
-                            isTimeline
-                        />
+                        <Filters />
                     )}
                     mainContentClassName={styles.main}
                     mainContent={(
@@ -485,6 +395,7 @@ export default class Timeline extends React.PureComponent {
                                         Now showing:
                                     </div>
                                     <FormattedDate
+                                        className={styles.start}
                                         value={currentRange.start}
                                         mode="yyyy-MM-dd"
                                     />
@@ -492,6 +403,7 @@ export default class Timeline extends React.PureComponent {
                                         to
                                     </div>
                                     <FormattedDate
+                                        className={styles.end}
                                         value={currentRange.end}
                                         mode="yyyy-MM-dd"
                                     />
@@ -501,6 +413,7 @@ export default class Timeline extends React.PureComponent {
                                         Time bucket:
                                     </div>
                                     <SelectInput
+                                        className={styles.timeBucketInput}
                                         options={timeBucketOptions}
                                         value={timeBucket}
                                         onChange={this.handleBucketInputChange}
@@ -515,17 +428,10 @@ export default class Timeline extends React.PureComponent {
                                     <Button
                                         onClick={this.handlePlaybackButtonClick}
                                         className={styles.playbackButton}
-                                        iconName={!isPlaying ? iconNames.play : iconNames.pause}
+                                        iconName={!isPlaying ? 'play' : 'pause'}
                                     />
                                 </div>
                                 <div className={styles.right}>
-                                    {/*
-                                    <EventTimeline
-                                        eventList={eventList}
-                                        start={start}
-                                        end={end}
-                                    />
-                                    */}
                                     <Seekbar
                                         className={styles.seekbar}
                                         data={groupedIncidents}

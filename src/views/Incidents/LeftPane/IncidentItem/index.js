@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+    _cs,
+    reverseRoute,
+} from '@togglecorp/fujs';
 import { Link } from '@reach/router';
-import ReactSVG from 'react-svg';
-
-import { _cs, reverseRoute } from '@togglecorp/fujs';
 
 import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
 import { getHazardColor, getHazardIcon } from '#utils/domain';
@@ -70,10 +72,9 @@ export default class IncidentItem extends React.PureComponent {
                 to={reverseRoute(':incidentId/response', { incidentId })}
             >
                 <div className={styles.left}>
-                    <ReactSVG
-                        className={styles.svgContainer}
-                        path={icon}
-                        svgClassName={styles.icon}
+                    <ScalableVectorGraphics
+                        className={styles.icon}
+                        src={icon}
                         style={{
                             color: getHazardColor(hazardTypes, hazard),
                         }}

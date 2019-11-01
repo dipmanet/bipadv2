@@ -10,10 +10,7 @@ import {
 
 import MapDownload from '#rscz/Map/MapDownload';
 
-import {
-    styleProperties,
-} from '#constants';
-
+import { styleProperties } from '#constants';
 import { currentStyle } from '#rsu/styles';
 
 import HazardsLegend from '#components/HazardsLegend';
@@ -21,6 +18,8 @@ import Loading from '#components/Loading';
 
 import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
+
+import Filters from '#components/Filters';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
@@ -50,7 +49,6 @@ import Page from '#components/Page';
 
 import Map from './Map';
 import LeftPane from './LeftPane';
-import RightPane from './RightPane';
 
 import styles from './styles.scss';
 
@@ -411,8 +409,10 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <Loading pending={pending} />
                 <HoverItemDetail />
                 <Page
+                    leftContentClassName={styles.leftContainer}
                     leftContent={(
                         <LeftPane
+                            className={styles.leftPane}
                             alertList={alertList}
                             eventList={eventList}
                             hazardTypes={hazardTypes}
@@ -429,7 +429,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         />
                     )}
                     rightContent={(
-                        <RightPane />
+                        <Filters className={styles.filters} />
                     )}
                 />
             </React.Fragment>

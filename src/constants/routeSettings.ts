@@ -1,5 +1,3 @@
-import iconNames from './iconNames';
-
 export interface Route {
     path: string;
     name: string;
@@ -38,7 +36,7 @@ const routeSettings: SomeRoute[] = [
         path: '/',
         load: () => import('../views/Dashboard'),
         navbar: true,
-        iconName: iconNames.dashboard,
+        iconName: 'dashboard',
     },
     {
         name: 'incident',
@@ -46,7 +44,7 @@ const routeSettings: SomeRoute[] = [
         path: '/incidents/',
         load: () => import('../views/Incidents'),
         navbar: true,
-        iconName: iconNames.incidents,
+        iconName: 'incidents',
     },
     {
         name: 'response',
@@ -61,13 +59,13 @@ const routeSettings: SomeRoute[] = [
         path: '/damage-and-loss/',
         load: () => import('../views/LossAndDamage'),
         navbar: true,
-        iconName: iconNames.lossAndDamange,
+        iconName: 'lossAndDamange',
     },
     {
         name: 'realtime',
         title: 'Realtime',
         path: '/realtime/',
-        iconName: iconNames.realtime,
+        iconName: 'realtime',
         load: () => import('../views/RealTimeMonitoring'),
         navbar: true,
     },
@@ -75,7 +73,7 @@ const routeSettings: SomeRoute[] = [
         name: 'profile',
         title: 'Profile',
         path: '/profile/',
-        iconName: iconNames.profile,
+        iconName: 'profile',
         load: () => import('../views/Profile'),
         navbar: true,
     },
@@ -86,13 +84,13 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/RiskInfo'),
         navbar: true,
         disabled: false,
-        iconName: iconNames.riskMap,
+        iconName: 'riskMap',
     },
     {
         name: 'aboutUs',
         title: 'About Us',
         path: '/about-us/',
-        iconName: iconNames.aboutUs,
+        iconName: 'aboutUs',
         load: () => import('../views/AboutUs'),
         navbar: true,
     },

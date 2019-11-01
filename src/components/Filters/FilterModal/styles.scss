@@ -1,0 +1,11 @@
+.date-range-input {
+    display: flex;
+
+    .start-date-input {
+        flex-basis: 50%;
+    }
+
+    .end-date-input {
+        flex-basis: 50%;
+    }
+}

@@ -105,24 +105,6 @@ class AlertEventMap extends React.PureComponent {
 
     static defaultProps = defaultProps;
 
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        const mapPaddings = getMapPaddings();
-
-        if (leftPaneExpanded && rightPaneExpanded) {
-            return mapPaddings.bothPaneExpanded;
-        }
-
-        if (leftPaneExpanded) {
-            return mapPaddings.leftPaneExpanded;
-        }
-
-        if (rightPaneExpanded) {
-            return mapPaddings.rightPaneExpanded;
-        }
-
-        return mapPaddings.noPaneExpanded;
-    });
-
     getConvexAlertsFeatureCollection = memoize(alertToConvexPolygonGeojson);
 
     getPolygonAlertsFeatureCollection = memoize(alertToPolygonGeojson);
@@ -175,8 +157,6 @@ class AlertEventMap extends React.PureComponent {
             alertList,
             eventList,
             hazards,
-            leftPaneExpanded,
-            rightPaneExpanded,
             recentDay,
         } = this.props;
 
@@ -197,17 +177,12 @@ class AlertEventMap extends React.PureComponent {
             hazards,
         );
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, false);
-
-
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
 
         return (
             <React.Fragment>
-                <CommonMap
-                    boundsPadding={boundsPadding}
-                />
+                <CommonMap />
 
                 <MapSource
                     sourceKey="alerts-convex-polygon"

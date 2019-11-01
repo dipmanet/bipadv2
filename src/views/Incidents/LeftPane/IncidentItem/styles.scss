@@ -1,21 +1,12 @@
-@import '~base-scss/base';
-
 .incident-item {
     display: flex;
-    border-bottom: $width-separator-thin solid $color-separator;
-    padding: $spacing-medium 0;
-    width: 100%;
-    height: 102px;
+    height: 100px;
     overflow: hidden;
     text-decoration: none;
     color: inherit;
 
-    &:first-child {
-        border-top: $width-separator-thin solid $color-separator;
-    }
-
     &:hover {
-        background-color: $color-background-hover;
+        background-color: var(--color-background-hover);
     }
 
     &.new {
@@ -28,55 +19,51 @@
 
     .left {
         flex-shrink: 0;
+        padding: var(--spacing-medium);
 
-        .svg-container {
-            margin: $spacing-small $spacing-medium;
+        .icon {
+            width: 20px;
+            height: 20px;
 
-            .icon {
-                width: 20px;
-                height: auto;
-                height: $font-size-extra-large;
-
-                path {
-                    fill: currentColor;
-                }
+            path {
+                fill: currentColor;
             }
         }
 
         .default-icon {
             flex-shrink: 0;
-            margin: $spacing-small $spacing-medium;
             width: 20px;
             height: 20px;
-            color: $color-danger;
-            font-size: $font-size-extra-large;
+            color: var(--color-danger);
+            font-size: var(--font-size-extra-large);
         }
     }
 
     .right {
         flex-grow: 1;
+        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+        padding: var(--spacing-medium) 0;
         overflow: hidden;
 
         .header {
             display: flex;
             align-items: center;
-            height: 26px;
 
             .heading {
                 flex-grow: 1;
-                padding: 0 $spacing-medium;
+                padding: 0 var(--spacing-medium);
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                font-weight: $font-weight-bold;
+                font-weight: var(--font-weight-bold);
             }
 
             .icon {
                 flex-shrink: 0;
-                padding: 0 $spacing-medium;
+                padding: 0 var(--spacing-medium);
 
                 &.verified {
-                    color: $color-success;
+                    color: var(--color-success);
                 }
             }
         }
@@ -84,10 +71,10 @@
         .content {
             display: flex;
             flex-direction: column;
-            padding: $spacing-extra-small $spacing-medium;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
 
             >* {
-                padding-right: $spacing-medium;
+                padding-right: var(--spacing-medium);
             }
         }
     }

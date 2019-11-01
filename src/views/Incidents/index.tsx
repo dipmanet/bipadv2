@@ -9,17 +9,12 @@ import {
 import memoize from 'memoize-one';
 
 import MapDownload from '#rscz/Map/MapDownload';
-
-import {
-    styleProperties,
-} from '#constants';
-
-import { currentStyle } from '#rsu/styles';
-
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
+
+import Filters from '#components/Filters';
 
 import {
     createConnectedRequestCoordinator,
@@ -49,7 +44,6 @@ import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
 import HazardsLegend from '#components/HazardsLegend';
 
-import IncidentsFilter from './Filter';
 import Map from './Map';
 import LeftPane from './LeftPane';
 
@@ -187,21 +181,6 @@ class Incidents extends React.PureComponent<Props, State> {
         };
     }
 
-    public componentDidMount(): void {
-        const { rightPaneExpanded } = this.state;
-
-        this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
-    public componentWillUnmount(): void {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
-        if (mapControls) {
-            mapControls.style.right = this.previousMapContorlStyle;
-        }
-    }
-
-    private previousMapContorlStyle: string | null = null;
-
     private getSanitizedIncidents = memoize(getSanitizedIncidents)
 
     private getIncidentHazardTypesList = memoize((incidentList) => {
@@ -217,30 +196,12 @@ class Incidents extends React.PureComponent<Props, State> {
         ),
     );
 
-    public setPlacementForMapControls = (rightPaneExpanded?: boolean) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
-
-        if (mapControls) {
-            const widthRightPanel = rightPaneExpanded
-                ? convertValueToNumber(styleProperties.widthRightPanel)
-                : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
-            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
-
-            if (!this.previousMapContorlStyle) {
-                this.previousMapContorlStyle = mapControls.style.right;
-            }
-            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
-        }
-    }
-
     private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
         this.setState({ leftPaneExpanded });
     }
 
     private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
         this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
     }
 
     private handleIncidentHover = (selectedIncidentId: number) => {
@@ -341,38 +302,7 @@ class Incidents extends React.PureComponent<Props, State> {
                 </MapDownload>
                 <HoverItemDetail />
                 <Page
-                    mainContentClassName={_cs(
-                        styles.main,
-                        leftPaneExpanded && styles.leftPaneExpanded,
-                        rightPaneExpanded && styles.rightPaneExpanded,
-                    )}
-                    mainContent={(
-                        <React.Fragment>
-                            <HazardsLegend
-                                filteredHazardTypes={filteredHazardTypes}
-                                className={styles.hazardLegend}
-                                itemClassName={styles.legendItem}
-                            />
-                            <div className={styles.pointSizeLegendContainer}>
-                                <header className={styles.header}>
-                                    <h4 className={styles.heading}>
-                                        Incident circle size (people death count)
-                                    </h4>
-                                </header>
-                                <Legend
-                                    className={styles.pointSizeLegend}
-                                    data={incidentPointSizeData}
-                                    keySelector={keySelector}
-                                    labelSelector={labelSelector}
-                                    colorSelector={colorSelector}
-                                    itemClassName={styles.legendSymbol}
-                                    symbolClassNameSelector={classNameSelector}
-                                    emptyComponent={null}
-                                />
-                            </div>
-                        </React.Fragment>
-                    )}
-                    leftContentClassName={styles.container}
+                    leftContentClassName={styles.leftPaneContainer}
                     leftContent={(
                         <LeftPane
                             className={styles.leftPane}
@@ -381,11 +311,36 @@ class Incidents extends React.PureComponent<Props, State> {
                             recentDay={RECENT_DAY}
                         />
                     )}
+                    mainContentClassName={styles.legendContainer}
+                    mainContent={(
+                        <React.Fragment>
+                            <div className={styles.pointSizeLegendContainer}>
+                                <header className={styles.header}>
+                                    <h4 className={styles.heading}>
+                                        People death count
+                                    </h4>
+                                </header>
+                                <Legend
+                                    className={styles.pointSizeLegend}
+                                    colorSelector={colorSelector}
+                                    data={incidentPointSizeData}
+                                    emptyComponent={null}
+                                    itemClassName={styles.legendItem}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    symbolClassNameSelector={classNameSelector}
+                                />
+                            </div>
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                            />
+                        </React.Fragment>
+                    )}
                     rightContentClassName={styles.right}
                     rightContent={(
-                        <IncidentsFilter
-                            onExpandChange={this.handleRightPaneExpandChange}
-                        />
+                        <Filters showEvent />
                     )}
                 />
             </React.Fragment>

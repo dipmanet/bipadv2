@@ -18,24 +18,6 @@ const colorGrade = [
 ];
 
 export default class ProjectsProfileMap extends React.PureComponent {
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        const mapPaddings = getMapPaddings();
-
-        if (leftPaneExpanded && rightPaneExpanded) {
-            return mapPaddings.bothPaneExpanded;
-        }
-
-        if (leftPaneExpanded) {
-            return mapPaddings.leftPaneExpanded;
-        }
-
-        if (rightPaneExpanded) {
-            return mapPaddings.rightPaneExpanded;
-        }
-
-        return mapPaddings.noPaneExpanded;
-    });
-
     generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -95,8 +77,6 @@ export default class ProjectsProfileMap extends React.PureComponent {
             regionLevel,
         } = this.props;
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
         const mapState = this.generateMapState(projects, regionLevel, regions);
         const maxValue = Math.max(1, ...mapState.map(item => item.value.count));
         const color = this.generateColor(maxValue, 0, colorGrade);
@@ -140,7 +120,6 @@ export default class ProjectsProfileMap extends React.PureComponent {
                     </div>
                 </div>
                 <ChoroplethMap
-                    boundsPadding={boundsPadding}
                     paint={colorPaint}
                     mapState={mapState}
                 />

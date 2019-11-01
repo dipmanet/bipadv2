@@ -20,6 +20,12 @@ const defaultProps = {
 
 const incidentKeySelector = d => d.id;
 
+const EmptyComponent = () => (
+    <div className={styles.incidentEmpty}>
+        There are no incidents at the moment.
+    </div>
+);
+
 export default class IncidentListView extends React.PureComponent {
     static propTypes = propTypes
 
@@ -36,8 +42,6 @@ export default class IncidentListView extends React.PureComponent {
         const {
             className,
             incidentList,
-            hazardTypes,
-            pending,
         } = this.props;
 
         return (
@@ -52,7 +56,8 @@ export default class IncidentListView extends React.PureComponent {
                 renderer={IncidentItem}
                 rendererParams={this.getIncidentRendererParams}
                 keySelector={incidentKeySelector}
-                emptyMessage="There are no incidents at the moment."
+                emptyComponent={EmptyComponent}
+                iteHeight={100}
             />
         );
     }
