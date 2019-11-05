@@ -3,7 +3,10 @@ import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    bound,
+} from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { setStyleProperty } from '#rsu/styles';
@@ -121,7 +124,7 @@ const domain = process.env.REACT_APP_DOMAIN;
 interface State {
     leftPaneContent?: React.ElementType;
     leftPaneClassName?: string;
-    hideMap?: string;
+    hideMap?: boolean;
 }
 
 interface BoundingClientRect {
@@ -261,6 +264,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
+    public componentDidUpdate() {
+        const { boundingClientRect } = this.props;
+
+        this.setLeftPanelWidth(boundingClientRect);
+    }
+
     private setFilterFromUrl = (
         provinces: Province[],
         districts: District[],
@@ -327,7 +336,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private setLeftPanelWidth = memoize((boundingClientRect) => {
         const { width = 0 } = boundingClientRect;
-        setStyleProperty('widthLeftPanel', `${Math.min(320, Math.max(220, 56 + width * 0.2))}px`);
+        setStyleProperty('widthLeftPanel', `${bound(56 + width * 0.2, 200, 340)}px`);
     })
 
     private setLeftPaneComponent = (content: React.ElementType, leftPaneClassName?: string) => {
@@ -346,18 +355,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const {
-            mapStyle,
-            boundingClientRect,
-        } = this.props;
+        const { mapStyle } = this.props;
 
         const {
             leftPaneContent,
             leftPaneClassName,
             hideMap,
         } = this.state;
-
-        this.setLeftPanelWidth(boundingClientRect);
 
         const pageProps = {
             setLeftPaneComponent: this.setLeftPaneComponent,
