@@ -163,7 +163,6 @@ interface Coords {
     };
 }
 
-interface OwnProps {}
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({

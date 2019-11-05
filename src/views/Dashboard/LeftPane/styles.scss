@@ -76,6 +76,12 @@
             .alert-icon {
                 border-radius: 50%;
             }
+
+            .add-alert-button {
+                flex-shrink: 0;
+                margin: 0 var(--spacing-small);
+                padding: var(--spacing-small) var(--var(--spacing-medium) - var(--spacing-small));
+            }
         }
 
         .event-list {
@@ -91,4 +97,10 @@
             font-size: var(--font-size-large);
         }
     }
+}
+
+.add-alert-modal {
+    width: 90vw;
+    height: 80vh;
+    overflow: auto;
 }

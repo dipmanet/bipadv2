@@ -8,6 +8,10 @@ export default {
             'line-color': '#000000',
             'line-width': 1,
         },
+        fill: {
+            'fill-color': '#000000',
+            'fill-opacity': 0.1,
+        },
     },
     district: {
         outline: {
@@ -17,6 +21,10 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 1,
+        },
+        fill: {
+            'fill-color': '#000000',
+            'fill-opacity': 0.1,
         },
     },
     municipality: {
@@ -28,6 +36,10 @@ export default {
             'line-color': '#000000',
             'line-width': 1,
         },
+        fill: {
+            'fill-color': '#000000',
+            'fill-opacity': 0.1,
+        },
     },
     ward: {
         outline: {
@@ -37,6 +49,10 @@ export default {
         choroplethOutline: {
             'line-color': '#000000',
             'line-width': 1,
+        },
+        fill: {
+            'fill-color': '#000000',
+            'fill-opacity': 0.1,
         },
     },
     provinceLabel: {

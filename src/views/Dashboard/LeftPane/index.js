@@ -4,14 +4,19 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import VirtualizedListView from '#rscv/VirtualizedListView';
+import Button from '#rsca/Button';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
 
 import TextOutput from '#components/TextOutput';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
+import Cloak from '#components/Cloak';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
 import Visualizations from './Visualizations';
+import AddAlertForm from './AddAlertForm';
 
 import styles from './styles.scss';
 
@@ -56,6 +61,7 @@ export default class LeftPane extends React.PureComponent {
             showAlerts: true,
             showTabular: false,
             showVisualizations: false,
+            showAddAlertModal: false,
         };
     }
 
@@ -104,22 +110,8 @@ export default class LeftPane extends React.PureComponent {
         this.setState({ showTabular: true });
     }
 
-    handleShowAlertsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showAlerts: true });
-
-        if (onExpandChange) {
-            onExpandChange(true);
-        }
-    }
-
-    handleHideAlertsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showAlerts: false });
-
-        if (onExpandChange) {
-            onExpandChange(false);
-        }
+    handleAddAlertButtonClick = () => {
+        this.setState({ showAddAlertModal: true });
     }
 
     renderAlertsAndEvents = ({
@@ -156,6 +148,7 @@ export default class LeftPane extends React.PureComponent {
         const {
             showAlerts,
             showTabular,
+            showAddAlertModal,
         } = this.state;
 
         return (
@@ -187,6 +180,28 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Alerts
                             </h2>
+                            <Button
+                                transparent
+                                smallVerticalPadding
+                                smallHorizontalPadding
+                                className={styles.addAlertButton}
+                                onClick={this.handleAddAlertButtonClick}
+                            >
+                                Add
+                            </Button>
+                            {/*
+                            <Cloak hiddenIf={p => !p.change_alert}>
+                                <Button
+                                    transparent
+                                    smallVerticalPadding
+                                    smallHorizontalPadding
+                                    className={styles.addAlertButton}
+                                    onChange={this.handleAddAlertButtonClick}
+                                >
+                                    Add
+                                </Button>
+                            </Cloak>
+                            */}
                         </header>
                         <VirtualizedListView
                             className={styles.content}
@@ -216,6 +231,11 @@ export default class LeftPane extends React.PureComponent {
                         />
                     </div>
                 </div>
+                { showAddAlertModal && (
+                    <Modal className={styles.addAlertModal}>
+                        <AddAlertForm />
+                    </Modal>
+                )}
             </div>
         );
     }
