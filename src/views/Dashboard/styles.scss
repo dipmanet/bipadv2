@@ -1,5 +1,14 @@
 @import '~base-scss/base';
 
+.left-container {
+    display: flex;
+    flex-direction: column;
+
+    .left-pane {
+        flex-grow: 1;
+    }
+}
+
 .hazard-legend {
     display: flex;
     align-items: center;

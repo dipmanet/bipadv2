@@ -1,5 +1,14 @@
 @import '~base-scss/base';
 
+.left {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .left-pane {
+        flex-grow: 1;
+    }
+}
 .right {
     top: calc(var(--spacing-medium) * 2 + 34px);
 }

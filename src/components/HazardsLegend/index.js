@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
 
 import Legend from '#rscz/Legend';
 
@@ -32,7 +31,6 @@ class HazardsLegend extends React.PureComponent {
     render() {
         const {
             className,
-            itemClassName,
             hazardTypes,
             filteredHazardTypes,
             ...otherProps
@@ -44,7 +42,6 @@ class HazardsLegend extends React.PureComponent {
             <Legend
                 className={className}
                 data={hazardItems}
-                itemClassName={itemClassName}
                 keySelector={legendKeySelector}
                 labelSelector={legendLabelSelector}
                 colorSelector={legendColorSelector}

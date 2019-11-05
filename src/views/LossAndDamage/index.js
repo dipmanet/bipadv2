@@ -16,7 +16,6 @@ import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
-
 import {
     lossAndDamageListSelector,
     lossAndDamageFilterValuesSelector,
@@ -28,11 +27,7 @@ import {
     regionLevelSelector,
     hazardTypesSelector,
 } from '#selectors';
-
-import {
-    setLossAndDamageListAction,
-} from '#actionCreators';
-
+import { setLossAndDamageListAction } from '#actionCreators';
 import Loading from '#components/Loading';
 
 import {
@@ -43,10 +38,8 @@ import {
 import Overview from './Overview';
 import Timeline from './Timeline';
 import Comparative from './Comparative';
-import styles from './styles.scss';
 
-const emptyObject = {};
-const emptyList = [];
+import styles from './styles.scss';
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -104,7 +97,8 @@ const requests = {
         url: '/incident/',
         query: {
             expand: ['loss.peoples', 'wards'],
-            limit: 9999999999,
+            limit: 1000,
+            // limit: 9999999999,
             ordering: '-incident_on',
             lnd: true,
         },
@@ -136,12 +130,6 @@ class LossAndDamage extends React.PureComponent {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            isOverviewRightPaneExpanded: true,
-            isTimelineRightPaneExpanded: true,
-            isComparativeRightPaneExpanded: true,
-        };
 
         this.tabs = {
             overview: 'Overview',
@@ -313,28 +301,6 @@ class LossAndDamage extends React.PureComponent {
         return sanitizedIncidents;
     }
 
-    handleOverviewRightPaneExpandChange = (isExpanded) => {
-        this.setState({
-            isOverviewRightPaneExpanded: isExpanded,
-        });
-    }
-
-    handleTimelineRightPaneExpandChange = (isExpanded) => {
-        this.setState({ isTimelineRightPaneExpanded: isExpanded });
-    }
-
-    handleComparativeRightPaneExpandChange = (isExpanded) => {
-        this.setState({ isComparativeRightPaneExpanded: isExpanded });
-    }
-
-    handleHashChange = () => {
-        this.setState({
-            isOverviewRightPaneExpanded: true,
-            isTimelineRightPaneExpanded: true,
-            isComparativeRightPaneExpanded: true,
-        });
-    }
-
     render() {
         const {
             requests: {
@@ -344,32 +310,12 @@ class LossAndDamage extends React.PureComponent {
         } = this.props;
 
         const pending = lossAndDamagePending; // eventsPending;
-        const currentPage = window.location.hash.substring(2);
-        let rightPaneExpanded = false;
-
-        const {
-            isOverviewRightPaneExpanded,
-            isTimelineRightPaneExpanded,
-            isComparativeRightPaneExpanded,
-        } = this.state;
-
-        if (currentPage === 'overview') {
-            rightPaneExpanded = isOverviewRightPaneExpanded;
-        } else if (currentPage === 'timeline') {
-            rightPaneExpanded = isTimelineRightPaneExpanded;
-        } else if (currentPage === 'comparative') {
-            rightPaneExpanded = isComparativeRightPaneExpanded;
-        }
 
         return (
             <React.Fragment>
                 <Loading pending={pending} />
                 <FixedTabs
-                    className={_cs(
-                        styles.tabs,
-                        rightPaneExpanded && styles.rightPaneExpanded,
-                        // currentPage === 'comparative' && styles.comparative,
-                    )}
+                    className={styles.tabs}
                     tabs={this.tabs}
                     useHash
                     onHashChange={this.handleHashChange}

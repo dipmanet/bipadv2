@@ -47,7 +47,7 @@ const attributeList: AttributeItem[] = [
         key: 'vulnerability',
         title: 'Vulnerability',
         description: 'The conditions determined by physical, social, economics and environmental factors or processes which increase the susceptibility of an individual, a community, assets or systems to the impacts of hazards',
-        color: '#cddc39',
+        color: '#7c6200',
         icon: vulnerabilityIcon,
     },
     {

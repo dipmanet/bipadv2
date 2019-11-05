@@ -49,18 +49,20 @@ class Attribute extends React.Component<Props, State> {
                     color,
                 }}
             >
-                <ScalableVectorGraphics
-                    className={styles.icon}
-                    src={icon}
-                />
-                <h4 className={styles.title}>
-                    {title}
-                </h4>
-                {/*
+                <div className={styles.left}>
+                    <ScalableVectorGraphics
+                        className={styles.icon}
+                        src={icon}
+                    />
+                </div>
+                <div className={styles.right}>
+                    <h4 className={styles.title}>
+                        {title}
+                    </h4>
                     <div className={styles.description}>
                         {description}
                     </div>
-                */}
+                </div>
             </div>
         );
     }

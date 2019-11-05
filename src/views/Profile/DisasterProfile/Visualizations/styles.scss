@@ -2,11 +2,10 @@
 
 .visualization-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 
     %visualization-container {
-        flex-basis: calc(100% / 2);
-        padding: var(--spacing-large);
+        padding: var(--spacing-medium);
 
         .header {
             .heading {
@@ -38,7 +37,6 @@
     .legend-container {
         display: flex;
         align-items: center;
-        flex-basis: calc(100% / 2);
         justify-content: center;
 
         .legend {
@@ -47,9 +45,9 @@
 
             .legend-item {
                 flex-basis: calc(100% / 3);
-                padding: $spacing-large;
-                color: $color-text-label;
-                font-size: $font-size-large;
+                padding: var(--spacing-small) var(--spacing-medium);
+                color: var(--color-text-label);
+                font-size: var(--font-size-small);
             }
         }
     }

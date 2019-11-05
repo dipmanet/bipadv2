@@ -1,17 +1,11 @@
-@import '~base-scss/base';
-
 .tabs {
     position: absolute;
     top: var(--spacing-medium);
-    right: calc(var(--spacing-medium) * 2 + var(--width-navbar-right) + 28px);
+    right: var(--spacing-medium);
     transition: .2s all ease-in;
     z-index: 1;
-    background-color: $color-foreground;
-    padding: 0 $spacing-small;
-
-    &.right-pane-expanded {
-        right: calc(var(--width-right-panel) + var(--spacing-medium) * 2 + var(--width-navbar-right));
-    }
+    background-color: var(--color-foreground);
+    padding: 0 var(--spacing-small);
 
     a {
         text-decoration: none;

@@ -1,12 +1,10 @@
-@import '~base-scss/base';
-
 .visualizations-container {
     %visualization-container {
-        padding: $spacing-small 0;
+        padding: var(--spacing-small) 0;
 
         .header {
             .heading {
-                padding: $spacing-small $spacing-medium;
+                padding: var(--spacing-small) var(--spacing-medium);
             }
         }
 
@@ -24,10 +22,10 @@
 
             .legend-item {
                 flex-basis: calc(100% / 3);
-                padding: $spacing-small;
-                color: $color-text-label;
-                font-size: $font-size-small;
-                font-weight: $font-weight-bold;
+                padding: var(--spacing-small);
+                color: var(--color-text-label);
+                font-size: var(--font-size-small);
+                font-weight: var(--font-weight-bold);
             }
         }
     }

@@ -413,12 +413,10 @@ class ProjectsProfile extends React.PureComponent {
                     regionLevel={regionLevel}
                 />
                 <Page
-                    mainContent={null}
                     leftContentClassName={styles.left}
                     leftContent={(
                         <LeftPane
-                            leftPaneExpanded={leftPaneExpanded}
-                            onExpandChange={this.handleLeftPaneExpandChange}
+                            className={styles.leftPane}
                             projects={filteredProjects}
                             drrCycleData={drrPieData}
                             categoryData={categoryPieData}

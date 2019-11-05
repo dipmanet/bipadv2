@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
 
+import Icon from '#rscg/Icon';
+
 import styles from './styles.scss';
 
 interface Props {
@@ -37,6 +39,7 @@ export default class MenuItem extends React.PureComponent<Props, State> {
             title,
             link,
             iconName,
+            titleClassName,
         } = this.props;
 
         return (
@@ -44,11 +47,12 @@ export default class MenuItem extends React.PureComponent<Props, State> {
                 to={link}
                 getProps={this.getProps}
             >
-                <div
-                    className={_cs(iconName, styles.icon)}
+                <Icon
+                    className={styles.icon}
+                    name={iconName}
                     title={title}
                 />
-                <div className={styles.title}>
+                <div className={_cs(titleClassName, styles.title)}>
                     {title}
                 </div>
             </Link>

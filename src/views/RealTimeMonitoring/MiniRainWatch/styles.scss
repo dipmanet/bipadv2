@@ -1,12 +1,7 @@
-@import '~base-scss/base';
-
 .rain-watch {
     display: flex;
     flex-direction: column;
-    margin-top: $spacing-medium;
-    border: var(--width-separator-thin) solid var(--color-separator);
-    background-color: $color-foreground;
-    height: 26vh;
+    background-color: var(--color-foreground-alt);
     overflow: auto;
 
     .header {
@@ -18,39 +13,67 @@
         .heading {
             align-self: flex-start;
             flex-grow: 1;
-            padding: $spacing-medium;
-            color: $color-text;
-        }
-
-        .show-details-button {
-            margin-right: $spacing-medium;
-            border: $width-separator-thin solid $color-separator;
-            color: $color-primary;
+            padding: var(--spacing-medium);
+            color: var(--color-primary);
         }
     }
 
-    .input {
-        display: flex;
+    .duration-input {
         flex-shrink: 0;
-        margin: 0 var(--spacing-small);
+        margin: var(--spacing-small) var(--spacing-medium);
+
+        :global {
+            .segment-option {
+                background-color: var(--color-foreground-alt);
+            }
+        }
     }
 
-    .rain-watch-table {
+    .table-container {
         display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
-        .rainfall-value {
-            &.below {
-                color: var(--color-success);
+        .rain-watch-table {
+            display: flex;
+            flex-grow: 1;
+
+            .rainfall-value {
+                font-weight: var(--font-weight-bold);
+
+                &.below {
+                    color: var(--color-success);
+                }
+
+                &.above {
+                    color: var(--color-warning);
+                }
+
+                &.danger {
+                    color: var(--color-danger);
+                }
             }
 
-            &.above {
-                color: var(--color-warning);
-            }
+            :global {
+                .table {
+                    .header {
+                        border: 0;
+                        background-color: var(--color-foreground-alt);
+                    }
 
-            &.danger {
-                color: var(--color-danger);
+                    .body {
+                        .row {
+                            .cell {
+                                border: 0;
+
+                                &.title {
+                                    color: var(--color-text-label);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

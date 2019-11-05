@@ -23,6 +23,7 @@ $font-weight-heading: 600;
     }
 
     ::-webkit-scrollbar-thumb {
+        border-radius: calc(var(--width-scrollbar) / 2);
         background-color: $color-foreground-scrollbar;
     }
 }

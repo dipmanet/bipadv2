@@ -1,46 +1,38 @@
-@import '~base-scss/base';
-
 .alert-item {
     display: flex;
     align-items: center;
-    border-bottom: $width-separator-thin solid $color-separator-light;
-    padding: $spacing-medium 0;
-
 
     &.new {
         background-color: var(--color-background-new-item);
     }
 
-    .svg-container {
+    .icon {
         flex-shrink: 0;
-        margin: $spacing-small $spacing-medium;
+        margin: var(--spacing-small) var(--spacing-medium);
+        width: 20px;
+        height: 20px;
 
-        .icon {
-            width: 20px;
-            height: auto;
-            height: $font-size-extra-large;
-
-            path {
-                fill: currentColor;
-            }
+        path {
+            fill: currentColor;
         }
     }
 
     .default-icon {
         flex-shrink: 0;
-        margin: $spacing-small $spacing-medium;
+        margin: var(--spacing-small) var(--spacing-medium);
         width: 20px;
         height: 20px;
-        color: $color-danger;
-        font-size: $font-size-extra-large;
+        color: var(--color-danger);
+        font-size: var(--font-size-extra-large);
     }
 
     .right {
         flex-grow: 1;
-        padding: 0 $spacing-medium;
+        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+        padding: var(--spacing-medium);
 
         .title {
-            font-weight: $font-weight-bold;
+            font-weight: var(--font-weight-bold);
         }
     }
 }

@@ -9,7 +9,6 @@ import MapSource from '#rscz/Map/MapSource';
 import CommonMap from '#components/CommonMap';
 import {
     hazardTypesSelector,
-    // wardsMapSelector,
     provincesMapSelector,
     districtsMapSelector,
     municipalitiesMapSelector,
@@ -21,7 +20,11 @@ import {
 } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
 
-import { getYesterday, framize } from '#utils/common';
+import {
+    getYesterday,
+    framize,
+} from '#utils/common';
+
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
@@ -30,8 +33,6 @@ import {
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     hazards: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-    leftPaneExpanded: PropTypes.bool.isRequired,
-    rightPaneExpanded: PropTypes.bool.isRequired,
     recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
     onIncidentHover: PropTypes.func.isRequired,
 };
@@ -56,24 +57,6 @@ class IncidentMap extends React.PureComponent {
         super(props);
         this.prevTimestamp = undefined;
     }
-
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        const mapPaddings = getMapPaddings();
-
-        if (leftPaneExpanded && rightPaneExpanded) {
-            return mapPaddings.bothPaneExpanded;
-        }
-
-        if (leftPaneExpanded) {
-            return mapPaddings.leftPaneExpanded;
-        }
-
-        if (rightPaneExpanded) {
-            return mapPaddings.rightPaneExpanded;
-        }
-
-        return mapPaddings.noPaneExpanded;
-    });
 
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
@@ -118,8 +101,6 @@ class IncidentMap extends React.PureComponent {
         const {
             incidentList,
             hazards,
-            leftPaneExpanded,
-            rightPaneExpanded,
             recentDay,
             onIncidentHover,
         } = this.props;
@@ -127,16 +108,12 @@ class IncidentMap extends React.PureComponent {
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
 
         return (
             <React.Fragment>
-                <CommonMap
-                    boundsPadding={boundsPadding}
-                />
+                <CommonMap />
                 <MapSource
                     sourceKey="incident-polygons"
                     geoJson={polygonFeatureCollection}

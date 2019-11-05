@@ -4,7 +4,6 @@ import memoize from 'memoize-one';
 
 import { _cs, isDefined } from '@togglecorp/fujs';
 
-import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
 import { lossMetrics } from '#utils/domain';
@@ -46,34 +45,23 @@ export default class LossDetails extends React.PureComponent {
         const {
             className,
             data = emptyList,
-            minDate,
         } = this.props;
 
         const summaryData = this.calculateSummary(data);
 
         return (
-            <div className={_cs(className, styles.statsContainer)}>
-                { isDefined(minDate) && (
-                    <TextOutput
-                        className={styles.stat}
-                        label="Data available from"
-                        type="block"
-                        value={(
-                            <FormattedDate
-                                value={minDate}
-                                mode="yyyy-MM-dd"
-                            />
-                        )}
-                    />
-                )}
+            <div className={_cs(className, styles.lossDetails)}>
                 { lossMetrics.map(metric => (
                     <TextOutput
                         className={styles.stat}
-                        key={metric.key}
-                        type="block"
-                        label={metric.label}
-                        value={summaryData[metric.key]}
                         isNumericValue
+                        key={metric.key}
+                        label={metric.label}
+                        labelClassName={styles.label}
+                        normal
+                        type="block"
+                        value={summaryData[metric.key]}
+                        valueClassName={styles.value}
                     />
                 ))}
             </div>

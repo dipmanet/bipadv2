@@ -118,6 +118,7 @@ class Visualizations extends React.PureComponent {
                             valueSelector={donutChartValueSelector}
                             labelModifier={deathsLabelModifier}
                             colorSelector={donutChartColorSelector}
+                            hideLabel
                         />
                     </div>
                     <div className={styles.donutContainer}>
@@ -134,6 +135,7 @@ class Visualizations extends React.PureComponent {
                             valueSelector={donutChartValueSelector}
                             labelModifier={estimatedMonetaryLossLabelModifier}
                             colorSelector={donutChartColorSelector}
+                            hideLabel
                         />
                     </div>
                 </div>

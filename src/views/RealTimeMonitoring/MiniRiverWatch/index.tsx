@@ -18,6 +18,7 @@ import RiverWatch from '../RiverWatch';
 import styles from './styles.scss';
 
 interface Props {
+    className?: string;
     realTimeRiver: RealTimeRiver[];
 }
 
@@ -71,14 +72,15 @@ class MiniRiverWatch extends React.PureComponent<Props> {
     public render() {
         const {
             realTimeRiver,
+            className,
         } = this.props;
 
         return (
-            <div className={styles.riverWatch}>
+            <div className={_cs(className, styles.riverWatch)}>
                 <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        River Watch
-                    </h4>
+                    <h2 className={styles.heading}>
+                        River watch
+                    </h2>
                     <ModalButton
                         className={styles.showDetailsButton}
                         transparent
@@ -91,12 +93,14 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         Show all
                     </ModalButton>
                 </header>
-                <Table
-                    className={styles.riverWatchTable}
-                    data={realTimeRiver}
-                    headers={this.riverWatchHeader}
-                    keySelector={riverWatchKeySelector}
-                />
+                <div className={styles.tableContainer}>
+                    <Table
+                        className={styles.riverWatchTable}
+                        data={realTimeRiver}
+                        headers={this.riverWatchHeader}
+                        keySelector={riverWatchKeySelector}
+                    />
+                </div>
             </div>
         );
     }

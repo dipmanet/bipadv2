@@ -1,14 +1,4 @@
 .left {
-    display: flex;
-    flex-direction: column;
-    border: var(--width-separator-thin) solid var(--color-separator);
-    border-radius: 5px;
-    // border-radius: var(--radius-border-large);
-    background-color: var(--color-foreground);
-    width: var(--width-left-panel);
-    height: calc(100vh - calc(var(--height-navbar) + var(--spacing-medium) * 2));
-    overflow: auto;
-
     .header {
         flex-shrink: 0;
 

@@ -3,15 +3,27 @@ import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { Router } from '@reach/router';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    bound,
+} from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
+import { setStyleProperty } from '#rsu/styles';
+import Responsive from '#rscg/Responsive';
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
-import { District, Province, Municipality, Region } from '#store/atom/page/types';
+import {
+    District,
+    Province,
+    Municipality,
+    Region,
+} from '#store/atom/page/types';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
+import PageContext from '#components/PageContext';
 import { routeSettings } from '#constants';
 import { AppState } from '#store/types';
 
@@ -33,29 +45,12 @@ import helmetify from '../helmetify';
 
 import styles from './styles.scss';
 
-const loadingStyle: React.CSSProperties = {
-    zIndex: 1111,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    display: 'flex',
-    padding: 10,
-    textAlign: 'center',
-    alignItems: 'baseline',
-    justifyContent: 'center',
-    fontSize: '18px',
-    backgroundColor: '#ffffff',
-    border: '1px solid rgba(255, 0, 0, 0.2)',
-    borderRadius: '3px',
-};
-
 function reloadPage() {
     window.location.reload(false);
 }
 
 const ErrorInPage = () => (
-    <div style={loadingStyle}>
+    <div className={styles.errorInPage}>
         Some problem occured.
         <DangerButton
             transparent
@@ -67,7 +62,7 @@ const ErrorInPage = () => (
 );
 
 const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
-    <div style={loadingStyle}>
+    <div className={styles.retryableErrorInPage}>
         Some problem occured.
         <DangerButton
             onClick={retry}
@@ -127,11 +122,20 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 const domain = process.env.REACT_APP_DOMAIN;
 
 interface State {
+    leftPaneContent?: React.ElementType;
+    leftPaneClassName?: string;
+    hideMap?: boolean;
 }
+
+interface BoundingClientRect {
+    width: number;
+}
+
 interface OwnProps {
     pending: boolean;
     hasError: boolean;
     mapStyle: string;
+    boundingClientRect?: BoundingClientRect;
 }
 
 interface PropsFromState {
@@ -212,75 +216,16 @@ const getMatchingRegion = (
     return {};
 };
 
-/*
-const getMatchingSubDomain = (
-    region: Region,
-    provinces: Province[],
-    districts: District[],
-    municipalities: Municipality[],
-): string | undefined => {
-    if (!region.adminLevel || !region.geoarea) {
-        return undefined;
-    }
-
-    switch (region.adminLevel) {
-        case 1: {
-            const province = provinces.find(p => p.id === region.geoarea);
-            return province ? province.code : undefined;
-        } case 2: {
-            const district = districts.find(p => p.id === region.geoarea);
-            return district ? district.code : undefined;
-        } case 3: {
-            const municipality = municipalities.find(p => p.id === region.geoarea);
-            return municipality ? municipality.code : undefined;
-        } default:
-            return undefined;
-    }
-};
-*/
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    // private filtersSetFromUrl = false;
+    public constructor(props: Props) {
+        super(props);
 
-    // NOTE: this isn't used currently
-    /*
-    private setUrlFromFilter = memoize((
-        region,
-        provinces,
-        districts,
-        municipalities,
-    ) => {
-        if (!domain) {
-            return;
-        }
-
-        const subdomain = getMatchingSubDomain(
-            region,
-            provinces,
-            districts,
-            municipalities,
-        );
-
-        if (subdomain) {
-            const { href } = window.location;
-            const escapedDomain = domain.replace(/\./g, '\\.');
-
-            const newUrl = href.replace(
-                new RegExp(`(?:\\w+\\.)+${escapedDomain}`), `${subdomain}.${domain}`
-            );
-            if (newUrl !== href) {
-                window.location.href = newUrl;
-            }
-        } else {
-            const { href } = window.location;
-            const escapedDomain = domain.replace(/\./g, '\\.');
-            const newUrl = href.replace(new RegExp(`(?:\\w+\\.)+${escapedDomain}`), domain);
-            if (newUrl !== href) {
-                window.location.href = newUrl;
-            }
-        }
-    })
-    */
+        this.state = {
+            leftPaneContent: undefined,
+            leftPaneClassName: undefined,
+        };
+    }
 
     public componentDidMount() {
         // NOTE: this means everything has loaded before mounting this page,
@@ -303,6 +248,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const {
             pending: oldPending,
         } = this.props;
+
         const {
             pending: newPending,
             provinces,
@@ -316,6 +262,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (oldPending !== newPending && !newPending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
         }
+    }
+
+    public componentDidUpdate() {
+        const { boundingClientRect } = this.props;
+
+        this.setLeftPanelWidth(boundingClientRect);
     }
 
     private setFilterFromUrl = (
@@ -382,32 +334,71 @@ class Multiplexer extends React.PureComponent<Props, State> {
         );
     }
 
+    private setLeftPanelWidth = memoize((boundingClientRect) => {
+        const { width = 0 } = boundingClientRect;
+        setStyleProperty('widthLeftPanel', `${bound(56 + width * 0.2, 200, 340)}px`);
+    })
+
+    private setLeftPaneComponent = (content: React.ElementType, leftPaneClassName?: string) => {
+        this.setState({
+            leftPaneContent: content,
+            leftPaneClassName,
+        });
+    }
+
+    private hideMap = () => {
+        this.setState({ hideMap: true });
+    }
+
+    private showMap = () => {
+        this.setState({ hideMap: false });
+    }
+
     public render() {
         const { mapStyle } = this.props;
 
+        const {
+            leftPaneContent,
+            leftPaneClassName,
+            hideMap,
+        } = this.state;
+
+        const pageProps = {
+            setLeftPaneComponent: this.setLeftPaneComponent,
+            hideMap: this.hideMap,
+            showMap: this.showMap,
+        };
+
         return (
-            <div className={styles.multiplexer}>
-                <Navbar className={styles.navbar} />
-                <div className={_cs(styles.content, 'bipad-main-content')}>
-                    <Map
-                        mapStyle={mapStyle}
-                        fitBoundsDuration={200}
-                        minZoom={5}
-                        logoPosition="bottom-left"
+            <PageContext.Provider value={pageProps}>
+                <div className={styles.multiplexer}>
+                    <div className={_cs(styles.content, 'bipad-main-content')}>
+                        <Map
+                            mapStyle={mapStyle}
+                            fitBoundsDuration={200}
+                            minZoom={5}
+                            logoPosition="top-left"
 
-                        showScaleControl
-                        scaleControlPosition="bottom-right"
+                            showScaleControl
+                            scaleControlPosition="bottom-right"
 
-                        showNavControl
-                        navControlPosition="bottom-right"
-                    >
-                        <MapContainer className={styles.map} />
-                        {this.renderRoutes()}
-                    </Map>
+                            showNavControl
+                            navControlPosition="bottom-right"
+                        >
+                            { leftPaneContent && (
+                                <aside className={_cs(styles.leftPaneContainer, leftPaneClassName)}>
+                                    { leftPaneContent }
+                                </aside>
+                            )}
+                            <MapContainer className={_cs(styles.map, hideMap && styles.hidden)} />
+                            {this.renderRoutes()}
+                        </Map>
+                    </div>
+                    <Navbar className={styles.navbar} />
                 </div>
-            </div>
+            </PageContext.Provider>
         );
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Multiplexer);
+export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));

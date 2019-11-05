@@ -162,95 +162,95 @@ class Visualizations extends React.PureComponent {
         const lossSummary = this.getLossSummary(lossAndDamageList);
 
         return (
-            <React.Fragment>
-                <div className={styles.visualizationContainer}>
-                    <div className={styles.barChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                People death count
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={deathCountLabelSelector}
-                            valueSelector={deathCountValueSelector}
-                            colorScheme={peopleDeathChartColorScheme}
-                            tiltLabels
-                        />
-                    </div>
-                    <div className={styles.barChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={estimatedLossLabelSelector}
-                            valueSelector={estimatedLossValueSelector}
-                            valueLabelFormat={estimatedLossValueLabelSelector}
-                            colorScheme={estimatedLossChartColorScheme}
-                            tiltLabels
-                        />
-                    </div>
-                    <div className={styles.hazardDeathChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Total people death by hazard
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardDeaths}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={deathsLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                        />
-                    </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss by Hazard
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardLossEstimate}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={estimatedMonetaryLossLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                        />
-                    </div>
-                    <div className={styles.hazardsBarContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Top five hazards by occurrence
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={topHazards}
-                            labelSelector={barChartLabelSelector}
-                            valueSelector={barChartValueSelector}
-                            colorSelector={barChartColorSelector}
-                        />
-                    </div>
-                    <div className={styles.legendContainer}>
-                        <HazardsLegend
-                            filteredHazardTypes={filteredHazardTypesList}
-                            className={styles.legend}
-                            itemClassName={styles.legendItem}
-                            colorSelector={barChartColorSelector}
-                        />
-                    </div>
+            <div className={styles.visualizationContainer}>
+                <div className={styles.barChartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            People death count
+                        </h4>
+                    </header>
+                    <HorizontalBar
+                        className={styles.chart}
+                        data={lossSummary}
+                        labelSelector={deathCountLabelSelector}
+                        valueSelector={deathCountValueSelector}
+                        colorScheme={peopleDeathChartColorScheme}
+                        tiltLabels
+                    />
                 </div>
-            </React.Fragment>
+                <div className={styles.barChartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss
+                        </h4>
+                    </header>
+                    <HorizontalBar
+                        className={styles.chart}
+                        data={lossSummary}
+                        labelSelector={estimatedLossLabelSelector}
+                        valueSelector={estimatedLossValueSelector}
+                        valueLabelFormat={estimatedLossValueLabelSelector}
+                        colorScheme={estimatedLossChartColorScheme}
+                        tiltLabels
+                    />
+                </div>
+                <div className={styles.hazardDeathChartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Total people death by hazard
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.4}
+                        className={styles.chart}
+                        data={hazardDeaths}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        labelModifier={deathsLabelModifier}
+                        colorSelector={donutChartColorSelector}
+                        hideLabel
+                    />
+                </div>
+                <div className={styles.donutContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss by Hazard
+                        </h4>
+                    </header>
+                    <DonutChart
+                        sideLengthRatio={0.4}
+                        className={styles.chart}
+                        data={hazardLossEstimate}
+                        labelSelector={donutChartLabelSelector}
+                        valueSelector={donutChartValueSelector}
+                        labelModifier={estimatedMonetaryLossLabelModifier}
+                        colorSelector={donutChartColorSelector}
+                        hideLabel
+                    />
+                </div>
+                <div className={styles.hazardsBarContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Top five hazards by occurrence
+                        </h4>
+                    </header>
+                    <HorizontalBar
+                        className={styles.chart}
+                        data={topHazards}
+                        labelSelector={barChartLabelSelector}
+                        valueSelector={barChartValueSelector}
+                        colorSelector={barChartColorSelector}
+                    />
+                </div>
+                <div className={styles.legendContainer}>
+                    <HazardsLegend
+                        filteredHazardTypes={filteredHazardTypesList}
+                        className={styles.legend}
+                        itemClassName={styles.legendItem}
+                        colorSelector={barChartColorSelector}
+                    />
+                </div>
+            </div>
         );
     }
 }

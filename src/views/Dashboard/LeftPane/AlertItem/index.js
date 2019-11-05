@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactSVG from 'react-svg';
-
 import { _cs } from '@togglecorp/fujs';
+
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+
 import { getYesterday } from '#utils/common';
 import { getHazardColor, getHazardIcon } from '#utils/domain';
 import DateOutput from '#components/DateOutput';
@@ -53,10 +54,9 @@ export default class AlertItem extends React.PureComponent {
                     isNew && styles.new,
                 )}
             >
-                <ReactSVG
-                    className={styles.svgContainer}
-                    path={icon}
-                    svgClassName={styles.icon}
+                <ScalableVectorGraphics
+                    className={styles.icon}
+                    src={icon}
                     style={{
                         color: getHazardColor(hazardTypes, hazard),
                     }}

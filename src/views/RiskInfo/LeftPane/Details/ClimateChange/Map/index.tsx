@@ -36,11 +36,6 @@ const colorGrade = [
 ];
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
-    private getBoundsPadding = memoize(() => {
-        const mapPaddings = getMapPaddings();
-        return mapPaddings.leftPaneExpanded;
-    });
-
     private generateMapState = memoize((geoareas: GeoArea[]) => {
         const value = geoareas.map(geoarea => ({
             id: geoarea.id,
@@ -84,14 +79,11 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
 
         const mapState = this.generateMapState(districts);
 
-        const boundsPadding = this.getBoundsPadding();
-
         const color = this.generateColor(10, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
         return (
             <ChoroplethMap
-                boundsPadding={boundsPadding}
                 paint={colorPaint}
                 mapState={mapState}
             />

@@ -156,25 +156,26 @@ const schemaList: Schema[] = [
             description: 'Incident Object',
         },
         fields: {
-            title: { type: 'string', required: true },
+            approved: { type: 'boolean' },
+            cause: { type: 'string' },
+            createdBy: { type: 'number' },
             description: { type: 'string' },
             detail: { type: 'object' }, // FIXME: what is this
-            cause: { type: 'string' },
-            inducer: { type: 'inducer' },
-            severity: { type: 'string' },
-            verified: { type: 'boolean' },
-            wards: { type: 'array.unknown' }, // FIXME: why is this sent
-            streetAddress: { type: 'string' },
-            source: { type: 'string', required: true },
-            incidentOn: { type: 'string', required: true }, // date
-            reportedOn: { type: 'string' }, // date
             event: { type: 'event' },
             hazard: { type: 'uint', required: true },
+            incidentOn: { type: 'string', required: true }, // date
+            inducer: { type: 'inducer' },
+            loss: { type: 'loss' },
             point: { type: 'unknown' }, // FIXME: geometry object
             polygon: { type: 'unknown' }, // FIXME: geometry object
-            loss: { type: 'loss' },
-            createdBy: { type: 'number' },
+            reportedOn: { type: 'string' }, // date
+            severity: { type: 'string' },
+            source: { type: 'string', required: true },
+            streetAddress: { type: 'string' },
+            title: { type: 'string', required: true },
             updatedBy: { type: 'number' },
+            verified: { type: 'boolean' },
+            wards: { type: 'array.unknown' }, // FIXME: why is this sent
         },
     },
     {

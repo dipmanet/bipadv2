@@ -1,18 +1,19 @@
 .menu-item {
     display: flex;
     align-items: center;
-    border-top: var(--width-separator-thick) solid transparent;
-    border-bottom: var(--width-separator-thick) solid transparent;
-    padding: 0 var(--spacing-medium);
+    flex-direction: column;
+    justify-content: center;
     text-decoration: none;
     color: var(--color-text);
 
     .icon {
-        margin: 0 var(--spacing-extra-small-alt);
+        padding: var(--spacing-medium);
+        font-size: var(--font-size-extra-large);
     }
 
     .title {
-        padding: 0 var(--spacing-extra-small-alt);
+        padding: var(--spacing-extra-small);
+        font-size: var(--font-size-extra-small);
         font-weight: bold;
     }
 
@@ -21,8 +22,8 @@
     }
 
     &.active {
-        border-bottom-color: var(--color-accent);
-        color: var(--color-accent);
+        background-color: var(--color-accent);
+        color: var(--color-text-on-accent);
     }
 
     &.disabled {

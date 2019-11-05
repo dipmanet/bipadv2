@@ -13,6 +13,7 @@ import {
     initializeStyles,
     setStyleProperties,
 } from '#rsu/styles';
+
 import App from './App';
 
 interface State {

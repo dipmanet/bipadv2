@@ -21,6 +21,7 @@ import styles from './styles.scss';
 
 interface Props {
     realTimeRain: RealTimeRain[];
+    className?: string;
 }
 interface State {
     duration: number;
@@ -130,6 +131,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
     public render() {
         const {
+            className,
             realTimeRain,
         } = this.props;
 
@@ -137,11 +139,11 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration);
 
         return (
-            <div className={styles.rainWatch}>
+            <div className={_cs(className, styles.rainWatch)}>
                 <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Rain Watch
-                    </h4>
+                    <h2 className={styles.heading}>
+                        Rain watch
+                    </h2>
                     <ModalButton
                         className={styles.showDetailsButton}
                         transparent
@@ -155,19 +157,23 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                     </ModalButton>
                 </header>
                 <SegmentInput
-                    className={styles.input}
+                    className={styles.durationInput}
                     options={durationOptions}
                     value={duration}
                     onChange={this.handleDurationSelect}
                     keySelector={durationKeySelector}
                     labelSelector={durationLabelSelector}
+                    showLabel={false}
+                    showHintAndError={false}
                 />
-                <Table
-                    className={styles.rainWatchTable}
-                    data={realTimeRain}
-                    headers={rainHeader}
-                    keySelector={rainWatchKeySelector}
-                />
+                <div className={styles.tableContainer}>
+                    <Table
+                        className={styles.rainWatchTable}
+                        data={realTimeRain}
+                        headers={rainHeader}
+                        keySelector={rainWatchKeySelector}
+                    />
+                </div>
             </div>
         );
     }

@@ -1,132 +1,33 @@
-@import '~base-scss/base';
-
-$width-filter-container: var(--width-right-panel);
-$width-vertical-nav: var(--width-navbar-right);
-
-$width-non-tabular-container: var(--width-left-panel);
-$width-tabular-container: calc(100vw - #{$width-filter-container} - #{$width-vertical-nav} - calc(#{$spacing-medium} * 3));
-
 .left-pane {
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
+    width: var(--width-left-panel);
     overflow: auto;
 
-    .show-incident-button-container {
-        transform-origin: 0 0;
-
-        .show-incidents-button {
-            padding: $spacing-extra-small $spacing-small;
-            color: $color-danger;
-            font-size: $font-size-extra-large;
-        }
+    .loss-details {
+        flex-shrink: 0;
+        border: var(--width-separator-thin) solid var(--color-separator-light);
+        padding: var(--spacing-small);
     }
 
-    .incidents-container {
+    .incident-list {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        transform-origin: 0 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
         overflow: auto;
 
-        .non-tabular-container {
-            display: flex;
-            flex-direction: column;
+        .header {
+            .heading {
+                flex-shrink: 0;
+                padding: var(--spacing-medium);
+                color: var(--color-primary);
+            }
+        }
+
+        .content {
             flex-grow: 1;
-            transform-origin: 0 0;
-            background-color: $color-foreground;
-            width: $width-non-tabular-container;
-            overflow-y: auto;
-
-            .header {
-                display: flex;
-                align-items: center;
-                flex-shrink: 0;
-                padding: $spacing-small 0;
-
-                .heading {
-                    flex-grow: 1;
-                    padding: 0 $spacing-medium;
-                    color: $color-primary;
-                }
-
-                .expand-tabular-view-button {
-                    flex-shrink: 0;
-                }
-
-                .hide-incidents-button {
-                    flex-shrink: 0;
-                    margin-right: $spacing-small;
-                }
-            }
-
-            .content {
-                display: flex;
-                flex-direction: column;
-                flex-grow: 1;
-                overflow-y: auto;
-
-                .list-header-container {
-                    display: flex;
-                    align-items: center;
-                    flex-shrink: 0;
-                    justify-content: flex-end;
-                    border-bottom: $width-separator-thin solid $color-separator;
-                    padding: $spacing-extra-small $spacing-small;
-                }
-
-                .incident-list {
-                    flex-grow: 1;
-                    border: 1px solid blue;
-                    overflow-y: auto;
-                }
-            }
-        }
-
-        .tabular-container {
-            display: flex;
-            flex-direction: column;
-            transform-origin: 0 0;
-            background-color: $color-foreground;
-            width: $width-tabular-container;
-            height: calc(100vh - calc(#{$height-navbar} + #{$spacing-medium} * 2));
-
-            .header {
-                display: flex;
-                align-items: center;
-                flex-shrink: 0;
-                justify-content: flex-end;
-
-                .heading {
-                    align-self: flex-start;
-                    flex-grow: 1;
-                    padding: $spacing-medium;
-                    color: $color-primary;
-                }
-
-                .collapse-tabular-view-button {
-                    margin-right: $spacing-small;
-                }
-            }
-
-            .tabular-view {
-                flex-grow: 1;
-                overflow: auto;
-            }
-        }
-    }
-
-    .stats-container {
-        display: flex;
-        flex-shrink: 0;
-        flex-wrap: wrap;
-        padding: $spacing-extra-small $spacing-medium;
-
-        .stat {
-            flex-basis: 50%;
-            padding: $spacing-small 0;
+            overflow: auto;
         }
     }
 }

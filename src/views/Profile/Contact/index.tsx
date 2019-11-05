@@ -445,10 +445,7 @@ class ContactPage extends React.PureComponent<Props> {
         return (
             <React.Fragment>
                 <Loading pending={pending} />
-                <CommonMap
-                    region={region}
-                    boundsPadding={getMapPaddings().leftPaneExpanded}
-                />
+                <CommonMap region={region} />
                 <MapSource
                     sourceKey="profile-contact-points"
                     geoJson={pointsGeoJson}

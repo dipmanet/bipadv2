@@ -4,22 +4,17 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
-import AccentButton from '#rsca/Button/AccentButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
 
 import { iconNames } from '#constants';
-import CollapsibleView from '#components/CollapsibleView';
 
 import {
     hazardTypesSelector,
 } from '#selectors';
 
-import TabularView from './TabularView';
 import IncidentListView from './ListView';
-import Visualizations from './Visualizations';
 
 import styles from './styles.scss';
 
@@ -81,28 +76,6 @@ class LeftPane extends React.PureComponent {
         }
     }
 
-    renderListViewHeader = () => (
-        <header className={styles.header}>
-            <h4 className={styles.heading}>
-                Incidents
-            </h4>
-            <Button
-                className={styles.expandTabularViewButton}
-                onClick={this.handleExpandButtonClick}
-                iconName={iconNames.expand}
-                title="Show detailed view"
-                transparent
-            />
-            <Button
-                className={styles.hideIncidentsButton}
-                onClick={this.handleHideIncidentsButtonClick}
-                iconName={iconNames.chevronUp}
-                title="Hide Incidents"
-                transparent
-            />
-        </header>
-    )
-
     renderTabularViewHeader = () => (
         <header className={styles.header}>
             <h4 className={styles.heading}>
@@ -140,77 +113,26 @@ class LeftPane extends React.PureComponent {
             ),
         }));
 
-        const Header = this.renderListViewHeader;
-
         return (
-            <CollapsibleView
-                className={_cs(className, styles.leftPane)}
-                expanded={showIncidents}
-                collapsedViewContainerClassName={styles.showIncidentsButtonContainer}
-                collapsedView={(
-                    <React.Fragment>
-                        <PrimaryButton
-                            className={styles.showIncidentsButton}
-                            onClick={this.handleShowIncidentsButtonClick}
-                            title="Show incidents"
-                        >
-                            Show Incidents
-                        </PrimaryButton>
-                    </React.Fragment>
-                )}
-                expandedViewContainerClassName={styles.incidentsContainer}
-                expandedView={(
-                    <CollapsibleView
-                        expanded={showTabular}
-                        collapsedViewContainerClassName={styles.nonTabularContainer}
-                        collapsedView={(
-                            <React.Fragment>
-                                <Header />
-                                <div className={styles.content}>
-                                    <LossDetails data={incidentList} />
-                                    <div className={styles.listHeaderContainer}>
-                                        <AccentButton
-                                            transparent
-                                            className={styles.toggleVisualizationButton}
-                                            onClick={this.handleToggleVisualizationButtonClick}
-                                        >
-                                            {
-                                                showVisualizations
-                                                    ? 'Show list'
-                                                    : 'Show charts'
-                                            }
-                                        </AccentButton>
-                                    </div>
-                                    { showVisualizations ? (
-                                        <Visualizations
-                                            hazardTypes={hazardTypes}
-                                            className={styles.incidentVisualizations}
-                                            incidentList={incidentList}
-                                        />
-                                    ) : (
-                                        <IncidentListView
-                                            hazardTypes={hazardTypes}
-                                            className={styles.incidentList}
-                                            incidentList={incidentList}
-                                            recentDay={recentDay}
-                                        />
-                                    )}
-                                </div>
-                            </React.Fragment>
-                        )}
-                        expandedViewContainerClassName={styles.tabularContainer}
-                        expandedView={(
-                            <React.Fragment>
-                                { this.renderTabularViewHeader() }
-                                <TabularView
-                                    incidentList={incidentList}
-                                    className={styles.tabularView}
-                                />
-                            </React.Fragment>
-                        )}
+            <div className={_cs(className, styles.leftPane)}>
+                <LossDetails
+                    className={styles.lossDetails}
+                    data={incidentList}
+                />
+                <div className={styles.incidentList}>
+                    <header className={styles.header}>
+                        <h2 className={styles.heading}>
+                            Incidents
+                        </h2>
+                    </header>
+                    <IncidentListView
+                        hazardTypes={hazardTypes}
+                        className={styles.content}
+                        incidentList={incidentList}
+                        recentDay={recentDay}
                     />
-                )}
-            />
+                </div>
+            </div>
         );
     }
 }
