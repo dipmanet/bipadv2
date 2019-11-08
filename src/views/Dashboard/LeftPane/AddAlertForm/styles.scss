@@ -1,12 +1,3 @@
 .add-alert-form {
-    border: 1px solid red;
-    padding: var(--spacing-medium);
-
-    .started-on-inputs {
-        display: flex;
-    }
-
-    .expires-on-inputs {
-        display: flex;
-    }
+    width: var(--width-modal-medium);
 }

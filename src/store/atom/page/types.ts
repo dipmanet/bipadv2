@@ -1,5 +1,10 @@
 import { Obj } from '@togglecorp/fujs';
 
+export interface Field {
+    id: number;
+    title: string;
+}
+
 export interface Province {
     id: number;
     bbox: number[];
@@ -37,21 +42,16 @@ export interface WithHazard {
     id: number;
     hazard?: number;
 }
-export interface HazardType {
-    id: number;
-    title?: string;
+export interface HazardType extends Field {
     color?: string;
     icon?: string;
     type?: string;
 }
-export interface EventType {
-    id: number;
+export interface EventType extends Field {
 }
 export interface ResourceType {
 }
-export interface Event {
-    id: number;
-    title: string;
+export interface Event extends Field {
     createdOn: string;
     description: string;
     polygon?: unknown;
@@ -59,15 +59,16 @@ export interface Event {
     hazard?: number;
     severity: string;
 }
-export interface Alert {
-    id: number;
-    title: string;
+export interface Alert extends Field {
     description?: string;
     hazard: number;
     polygon?: unknown;
     point?: unknown;
     createdOn: string;
 }
+export interface Source extends Field {
+}
+
 export interface Incident {
     id: number;
     title: string;
@@ -265,6 +266,7 @@ export interface RealTimePollution {
 export interface DashboardPage {
     alertList: Alert[];
     eventList: Event[];
+    sourceList: Source[];
     filters: Filters;
 }
 
@@ -368,7 +370,6 @@ export interface PageState {
 
     resourceTypes: Obj<ResourceType>;
     hazardTypes: Obj<HazardType>;
-    eventTypes: Obj<EventType>;
 
     dashboardPage: DashboardPage;
     incidentPage: IncidentPage;
