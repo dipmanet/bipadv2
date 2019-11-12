@@ -78,6 +78,20 @@ const state: PageState = {
     dashboardPage: {
         eventList: [],
         alertList: [],
+        sourceList: [
+            {
+                id: 1,
+                title: 'dhm',
+            },
+            {
+                id: 2,
+                title: 'nsc',
+            },
+            {
+                id: 3,
+                title: 'other',
+            },
+        ],
         filters: {
             faramValues: {
                 dateRange: 30,

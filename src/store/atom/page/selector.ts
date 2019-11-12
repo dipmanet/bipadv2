@@ -167,6 +167,11 @@ export const eventListSelector = createSelector(
     ({ eventList }) => eventList,
 );
 
+export const sourceListSelector = createSelector(
+    dashboardPageSelector,
+    ({ sourceList }) => sourceList,
+);
+
 // incidentPage
 
 export const filtersSelectorIP = createSelector(

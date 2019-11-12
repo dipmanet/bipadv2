@@ -117,12 +117,15 @@ class CommonMap extends React.PureComponent {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
             sourceKey,
+            showDistrict: showDistrictFromProps,
+            showMunicipality: showMunicipalityFromProps,
+            showWard: showWardFromProps,
         } = this.props;
 
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
-        const showDistrict = [1, 2].includes(regionLevel);
-        const showMunicipality = [2, 3].includes(regionLevel);
-        const showWard = [3, 4].includes(regionLevel);
+        const showDistrict = [1, 2].includes(regionLevel) || showDistrictFromProps;
+        const showMunicipality = [2, 3].includes(regionLevel) || showMunicipalityFromProps;
+        const showWard = [3, 4].includes(regionLevel) || showWardFromProps;
 
         const showProvinceLabel = isNotDefined(regionLevel);
         const showDistrictLabel = regionLevel === 1;

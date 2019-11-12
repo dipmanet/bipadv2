@@ -4,14 +4,20 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import VirtualizedListView from '#rscv/VirtualizedListView';
+import Button from '#rsca/Button';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import modalize from '#rscg/Modalize';
 
 import TextOutput from '#components/TextOutput';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
+import Cloak from '#components/Cloak';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
 import Visualizations from './Visualizations';
+import AddAlertForm from './AddAlertForm';
 
 import styles from './styles.scss';
 
@@ -28,6 +34,8 @@ const defaultProps = {
     hazardTypes: {},
     className: undefined,
 };
+
+const ModalButton = modalize(Button);
 
 const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
@@ -104,24 +112,6 @@ export default class LeftPane extends React.PureComponent {
         this.setState({ showTabular: true });
     }
 
-    handleShowAlertsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showAlerts: true });
-
-        if (onExpandChange) {
-            onExpandChange(true);
-        }
-    }
-
-    handleHideAlertsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showAlerts: false });
-
-        if (onExpandChange) {
-            onExpandChange(false);
-        }
-    }
-
     renderAlertsAndEvents = ({
         events,
         alerts,
@@ -187,6 +177,15 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Alerts
                             </h2>
+                            <ModalButton
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddAlertForm />
+                                )}
+                            >
+                                Add
+                            </ModalButton>
                         </header>
                         <VirtualizedListView
                             className={styles.content}
