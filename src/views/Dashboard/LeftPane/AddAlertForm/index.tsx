@@ -146,6 +146,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             municipality: [],
             wards: [],
             geoJson: [],
+            location: [],
             startedOnDate: [requiredCondition],
             startedOnTime: [requiredCondition],
             expireOnDate: [requiredCondition],
@@ -228,12 +229,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 ),
             },
             location: {
-                component: () => <LocationInput />,
+                component: () => <LocationInput faramElementName="location" />,
             },
         };
 
         this.state = {
-            faramValues: {},
+            faramValues: {
+                wards: [],
+            },
             faramErrors: {},
             pristine: true,
             currentView: 'general',
@@ -265,14 +268,16 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             startedOnTime,
             expireOnDate,
             expireOnTime,
+            location,
             ...others
         } = faramValues;
 
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
+        const point = location.geoJson.features[0].geometry.coordinates;
 
         addAlertPostRequest.do({
-            body: { startedOn, expireOn, ...others },
+            body: { startedOn, expireOn, point, ...others },
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();

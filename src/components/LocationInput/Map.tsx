@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { isNotDefined } from '@togglecorp/fujs';
 
 import MapSource from '#rscz/Map/MapSource';
 import MapLayer from '#rscz/Map/MapLayer';
@@ -9,8 +8,6 @@ import MapLayer from '#rscz/Map/MapLayer';
 import { mapSources, mapStyles } from '#constants';
 
 import {
-    regionLabelToGeojson,
-
     getWardFilter,
     getMunicipalityFilter,
     getDistrictFilter,
@@ -50,23 +47,7 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const visibleLayout = {
-    visibility: 'visible',
-};
-
-const noneLayout = {
-    visibility: 'none',
-};
-
 class LocationInputMap extends React.PureComponent<Props, State> {
-    private getProvincesFeatureCollection = memoize(regionLabelToGeojson);
-
-    private getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
-
-    private getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
-
-    private getWardsFeatureCollection = memoize(regionLabelToGeojson);
-
     private getWardFilter = memoize(getWardFilter);
 
     private getMunicipalityFilter = memoize(getMunicipalityFilter);
@@ -90,21 +71,15 @@ class LocationInputMap extends React.PureComponent<Props, State> {
             sourceKey,
         } = this.props;
 
-        const showProvinceLabel = isNotDefined(regionLevel);
-        const showDistrictLabel = regionLevel === 1;
-        const showMunicipalityLabel = regionLevel === 2;
-        const showWardLabel = regionLevel === 3;
-
         const wardFilter = this.getWardFilter(provinceId, districtId, municipalityId, wards);
         const municipalityFilter = this.getMunicipalityFilter(
-            provinceId, districtId, municipalityId, municipalities);
+            provinceId,
+            districtId,
+            municipalityId,
+            municipalities,
+        );
         const districtFilter = this.getDistrictFilter(provinceId, districtId, districts);
         const provinceFilter = this.getProvinceFilter(provinceId);
-
-        const provinceLabels = this.getProvincesFeatureCollection(provinces);
-        const districtLabels = this.getDistrictsFeatureCollection(districts);
-        const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
-        const wardLabels = this.getWardsFeatureCollection(wards);
 
         return (
             <Fragment>

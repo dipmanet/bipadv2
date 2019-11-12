@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import { FaramInputElement } from '@togglecorp/faram';
 
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
@@ -24,7 +25,7 @@ import {
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 
-import DraggablePoint from './DraggablePoint';
+import Point from './Point';
 import AreaMap from './Map';
 
 import styles from './styles.scss';
@@ -52,60 +53,33 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     mapStyle: mapStyleSelector(state),
 });
 
+const emptyObject = {};
 
 class LocationInput extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            geoJson: {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [84.1240, 28.3949],
-                    },
-                    properties: {
-                        hazardColor: '#f00000',
-                    },
-                }],
-            },
-            region: undefined,
-        };
-    }
-
     private handlePointMove = (geoJson, region) => {
-        this.setState({
-            geoJson,
-            region,
-        });
-    }
+        const { onChange } = this.props;
 
-    private getFormData = (geoJson) => {
-        const feature = geoJson.features[0];
-        const { coordinates } = feature.geometry;
-
-        const lng = coordinates[0];
-        const lat = coordinates[1];
-
-        return {
-            lng,
-            lat,
-        };
+        if (onChange) {
+            onChange({
+                geoJson,
+                region,
+            });
+        }
     }
 
     public render() {
-        const { mapStyle } = this.props;
+        const {
+            mapStyle,
+            districts,
+            municipalities,
+            provinces,
+            value = emptyObject,
+        } = this.props;
+
         const {
             geoJson,
             region,
-        } = this.state;
-
-        const {
-            lng,
-            lat,
-        } = this.getFormData(geoJson);
+        } = value;
 
         return (
             <div className={styles.locationInput}>
@@ -123,25 +97,13 @@ class LocationInput extends React.PureComponent<Props, State> {
                 >
                     <MapContainer className={styles.mapContainer} />
                     <AreaMap />
-                    <DraggablePoint
+                    <Point
                         geoJson={geoJson}
                         onPointMove={this.handlePointMove}
-                    />
-                    <div className={styles.coordinateInput}>
-                        <TextInput
-                            type="number"
-                            label="Longitude"
-                            value={lng}
-                        />
-                        <TextInput
-                            type="number"
-                            label="Latitude"
-                            value={lat}
-                        />
-                    </div>
-                    <RegionSelectInput
-                        label="Region"
-                        value={region}
+                        region={region}
+                        provinces={provinces}
+                        districts={districts}
+                        municipalities={municipalities}
                     />
                 </Map>
             </div>
@@ -149,4 +111,4 @@ class LocationInput extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps)(LocationInput);
+export default connect(mapStateToProps)(FaramInputElement(LocationInput));
