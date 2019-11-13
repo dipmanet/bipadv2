@@ -72,6 +72,7 @@ const state: PageState = {
 
     hazardTypes: {},
     resourceTypes: {},
+    lossList: [],
 
     // Page related
 

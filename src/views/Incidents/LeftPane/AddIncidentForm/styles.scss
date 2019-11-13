@@ -1,0 +1,24 @@
+@import '~base-scss/base';
+
+.add-incident-modal {
+    display: flex;
+    width: 80vw;
+    height: 90vh;
+
+    .date-time-inputs {
+        display: flex;
+        flex-direction: column;
+
+        h3 {
+            text-transform: uppercase;
+            font-size: $font-size-small;
+        }
+
+        .inputs {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
+
+

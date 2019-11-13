@@ -69,6 +69,7 @@ class LocationInput extends React.PureComponent<Props, State> {
 
     public render() {
         const {
+            className,
             mapStyle,
             districts,
             municipalities,

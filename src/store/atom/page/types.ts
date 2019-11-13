@@ -105,6 +105,8 @@ export interface InventoryItem {
 }
 
 export interface Loss {
+    id: number;
+    description?: string;
     estimatedLoss?: number;
     peopleDeathCount?: number;
     livestockDestroyedCount?: number;
@@ -395,6 +397,7 @@ export enum PageType {
     SET_DISTRICTS = 'page/SET_DISTRICTS',
     SET_MUNICIPALITIES = 'page/SET_MUNICIPALITIES',
     SET_WARDS = 'page/SET_WARDS',
+    SET_LOSS_LIST = 'page/SET_LOSS_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -518,6 +521,11 @@ export interface SetIncidentFilters extends FiltersWithRegion {
     type: typeof PageType.IP__SET_FILTERS;
 }
 
+export interface SetLossList {
+    type: typeof PageType.SET_LOSS_LIST;
+    lossList: Loss[];
+}
+
 // response
 
 export interface SetResourceList {
@@ -634,5 +642,5 @@ export type PageActionTypes = (
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
-    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters
+    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList
 );

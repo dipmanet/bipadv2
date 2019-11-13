@@ -5,14 +5,11 @@ import { _cs } from '@togglecorp/fujs';
 
 import VirtualizedListView from '#rscv/VirtualizedListView';
 import Button from '#rsca/Button';
-import Modal from '#rscv/Modal';
-import ModalBody from '#rscv/Modal/Body';
 import modalize from '#rscg/Modalize';
 
 import TextOutput from '#components/TextOutput';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
-import Cloak from '#components/Cloak';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';

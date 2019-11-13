@@ -1,6 +1,8 @@
 import React from 'react';
+import Redux, {
+    compose,
+} from 'redux';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { _cs } from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
@@ -8,25 +10,27 @@ import Faram, {
 
 import FixedTabs from '#rscv/FixedTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
-
 import Modal from '#rscv/Modal';
-import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
+import Checkbox from '#rsci/Checkbox';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import LocationInput from '#components/LocationInput';
 
+import {
+    setLossListAction,
+} from '#actionCreators';
+
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-
-import styles from './styles.scss';
 
 import {
     createRequestClient,
@@ -39,63 +43,61 @@ import {
     eventListSelector,
     sourceListSelector,
     hazardTypeListSelector,
+    lossListSelector,
 } from '#selectors';
 
-interface Params {
-    body: object;
-    onSuccess: () => void;
-    onFailure: (faramErrors: object) => void;
-}
-
-interface OwnProps {
-    closeModal?: () => void;
-    onUpdate?: () => void;
-    className?: string;
-}
-
-interface PropsFromState {
-    eventList: PageType.Event[];
-    sourceList: PageType.Source[];
-    hazardList: PageType.HazardType[];
-}
-
-interface PropsFromDispatch {
-}
+import styles from './styles.scss';
 
 interface Tabs {
     general: string;
     location: string;
 }
-
 interface Views {
     general: {};
     location: {};
 }
-
+interface Params {
+    body: object;
+    onSuccess: () => void;
+    onFailure: (faramErrors: object) => void;
+}
+interface OwnProps {
+    closeModal?: () => void;
+    onUpdate?: () => void;
+    className?: string;
+}
+interface PropsFromState {
+    eventList: PageType.Event[];
+    sourceList: PageType.Source[];
+    hazardList: PageType.HazardType[];
+    lossList: PageType.Loss[];
+}
+interface PropsFromDispatch {
+    setLossList: typeof setLossListAction;
+}
+interface FaramValues {
+    hazard?: number;
+    source?: number;
+    incidentOnDate?: string;
+    incidentOnTime?: string;
+    wards?: [number];
+    point?: [number];
+    polygon?: string;
+    description?: string;
+    cause?: string;
+    verified?: boolean;
+    verificationMessage?: string;
+    approved?: boolean;
+    reportedOnDate?: string;
+    reportedOnTime?: string;
+    streetAddress?: string;
+    detail?: string;
+    needFollowup?: boolean;
+    event?: number;
+    loss?: number;
+}
 interface FaramErrors {
 }
-
-interface FaramValues {
-    title?: string;
-    source?: string;
-    description?: string;
-    hazard?: number;
-    event?: number;
-    point?: string;
-    polygon?: string;
-    district?: string;
-    municipality?: string;
-    wards?: string[];
-    startedOnDate?: string;
-    startedOnTime?: string;
-    expireOnDate?: string;
-    expireOnTime?: string;
-    geoJson?: string;
-    verified?: boolean;
-    public?: boolean;
-
-}
-
 interface State {
     faramValues: FaramValues;
     faramErrors: FaramErrors;
@@ -103,21 +105,38 @@ interface State {
     currentView: keyof Tabs;
 }
 
+type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type Props = NewProps<ReduxProps, Params>;
+
 const mapStateToProps = (state: AppState): PropsFromState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    lossList: lossListSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setLossList: params => dispatch(setLossListAction(params)),
 });
 
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
-
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
-type Props = NewProps<ReduxProps, Params>;
+const lossKeySelector = (d: PageType.Loss) => d.id;
+const lossLabelSelector = (d: PageType.Loss) => d.description;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    addAlertPostRequest: {
-        url: '/alert/',
+    lossGetRequest: {
+        url: '/loss/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setLossList } }) => {
+            interface Response { results: PageType.Loss[] }
+            const { results: lossList = [] } = response as Response;
+            setLossList({ lossList });
+        },
+    },
+    addIncidentPostRequest: {
+        url: '/incident/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
@@ -133,7 +152,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
-class AddAlertForm extends React.PureComponent<Props, State> {
+class AddIncidentForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -146,32 +165,32 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             eventList,
             sourceList,
             hazardList,
+            lossList,
         } = this.props;
 
         this.views = {
             general: {
                 component: () => (
-                    <div className={styles.generalInputs}>
-                        {/*
-                        <TextInput
-                            className={styles.titleInput}
-                            faramElementName="title"
-                            label="Title"
-                        />
-                        */}
+                    <>
                         <TextArea
-                            className={styles.descriptionInput}
                             faramElementName="description"
                             label="Description"
-                            persistantHintAndError={false}
+                        />
+                        <TextArea
+                            faramElementName="detail"
+                            label="Detail1"
+                        />
+                        <TextArea
+                            faramElementName="cause"
+                            label="Cause"
                         />
                         <SelectInput
-                            className={styles.eventInput}
-                            faramElementName="event"
-                            options={eventList}
+                            className={styles.hazardInput}
+                            faramElementName="hazard"
+                            options={hazardList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
-                            label="Event"
+                            label="Hazard"
                         />
                         <SelectInput
                             className={styles.sourceInput}
@@ -182,40 +201,75 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                             label="Source"
                         />
                         <SelectInput
-                            className={styles.hazardInput}
-                            faramElementName="hazard"
-                            options={hazardList}
+                            className={styles.eventInput}
+                            faramElementName="event"
+                            options={eventList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
-                            label="Hazard"
+                            label="Event"
                         />
-                        <div className={styles.startedOnInputs}>
-                            <DateInput
-                                className={styles.startedOnDate}
-                                faramElementName="startedOnDate"
-                                label="Started on"
-                            />
-                            <TimeInput
-                                faramElementName="startedOnTime"
-                            />
+                        <SelectInput
+                            className={styles.lossInput}
+                            faramElementName="loss"
+                            options={lossList}
+                            keySelector={lossKeySelector}
+                            labelSelector={lossLabelSelector}
+                            label="Loss"
+                        />
+                        <TextInput
+                            className={styles.streetAddress}
+                            faramElementName="streetAddress"
+                            label="Street Address"
+                        />
+                        <div className={styles.dateTimeInputs}>
+                            <h3>Incident On</h3>
+                            <div className={styles.inputs}>
+                                <DateInput
+                                    className={styles.incidentOnDate}
+                                    faramElementName="incidentOnDate"
+                                />
+                                <TimeInput
+                                    faramElementName="incidentOnTime"
+                                />
+                            </div>
                         </div>
-                        <div className={styles.expiresOnInputs}>
-                            <DateInput
-                                label="Expires on"
-                                faramElementName="expireOnDate"
-                            />
-                            <TimeInput
-                                faramElementName="expireOnTime"
-                            />
+                        <div className={styles.dateTimeInputs}>
+                            <h3>Reported On</h3>
+                            <div className={styles.inputs}>
+                                <DateInput
+                                    faramElementName="reportedOnDate"
+                                />
+                                <TimeInput
+                                    faramElementName="reportedOnTime"
+                                />
+                            </div>
                         </div>
-
-                    </div>
+                        <Checkbox
+                            className={styles.approved}
+                            label="Approved"
+                            faramElementName="approved"
+                        />
+                        <Checkbox
+                            className={styles.verified}
+                            label="Verified"
+                            faramElementName="verified"
+                        />
+                        <Checkbox
+                            className={styles.needFollowup}
+                            label="Need Followup"
+                            faramElementName="needFollowup"
+                        />
+                        <TextArea
+                            faramElementName="verificationMessage"
+                            label="Verification Message"
+                        />
+                    </>
                 ),
             },
             location: {
                 component: () => (
                     <LocationInput
-                        className={styles.locationInput}
+                        className={styles.location}
                         faramElementName="location"
                     />
                 ),
@@ -223,42 +277,40 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         };
 
         this.state = {
-            faramValues: {
-                wards: [],
-            },
+            faramValues: {},
             faramErrors: {},
             pristine: true,
             currentView: 'general',
         };
     }
 
-    private static schema = {
-        fields: {
-            source: [requiredCondition],
-            description: [requiredCondition],
-            hazard: [requiredCondition],
-            event: [],
-            point: [],
-            polygon: [],
-            district: [],
-            municipality: [],
-            wards: [],
-            geoJson: [],
-            location: [],
-            startedOnDate: [requiredCondition],
-            startedOnTime: [requiredCondition],
-            expireOnDate: [requiredCondition],
-            expireOnTime: [requiredCondition],
-        },
-    };
-
     private tabs: Tabs;
 
     private views: Views;
 
-    private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        console.warn(faramValues.location);
+    private static schema = {
+        fields: {
+            hazard: [requiredCondition],
+            source: [requiredCondition],
+            incidentOn: [requiredCondition],
+            wards: [requiredCondition],
+            point: [requiredCondition],
+            polygon: [],
+            description: [],
+            cause: [],
+            verified: [],
+            verificationMessage: [],
+            approved: [],
+            reportedOn: [],
+            streetAddress: [],
+            detail: [],
+            needFollowup: [],
+            event: [],
+            loss: [],
+        },
+    };
 
+    private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         this.setState({
             faramValues,
             faramErrors,
@@ -273,22 +325,20 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addAlertPostRequest }, onUpdate, closeModal } = this.props;
+        const { requests: { addIncidentPostRequest }, onUpdate, closeModal } = this.props;
         const {
-            startedOnDate,
-            startedOnTime,
-            expireOnDate,
-            expireOnTime,
-            location,
+            incidentOnDate,
+            incidentOnTime,
+            reportedOnDate,
+            reportedOnTime,
             ...others
         } = faramValues;
 
-        const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
-        const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
-        const point = location.geoJson.features[0].geometry;
+        const startedOn = new Date(`${incidentOnDate}T${incidentOnTime}`).toISOString();
+        const reportedOn = new Date(`${reportedOnDate}T${reportedOnTime}`).toISOString();
 
-        addAlertPostRequest.do({
-            body: { startedOn, expireOn, point, ...others },
+        addIncidentPostRequest.do({
+            body: { startedOn, reportedOn, ...others },
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
@@ -314,14 +364,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
         const {
             pristine,
-            currentView,
             faramValues,
             faramErrors,
+            currentView,
         } = this.state;
 
         return (
             <Modal
-                className={_cs(styles.addAlertFormModal, className)}
+                className={_cs(styles.addIncidentModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
@@ -329,12 +379,12 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddAlertForm.schema}
+                    schema={AddIncidentForm.schema}
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader title="Add Alert" />
-                    <ModalBody className={styles.body}>
+                    <ModalHeader title="Add Incident" />
+                    <ModalBody>
                         <FixedTabs
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
@@ -363,6 +413,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 }
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),
-)(AddAlertForm);
+)(AddIncidentForm);

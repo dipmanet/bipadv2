@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import modalize from '#rscg/Modalize';
+
 
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
@@ -15,8 +17,11 @@ import {
 } from '#selectors';
 
 import IncidentListView from './ListView';
+import AddIncidentForm from './AddIncidentForm';
 
 import styles from './styles.scss';
+
+const ModalButton = modalize(Button);
 
 const propTypes = {
     className: PropTypes.string,
@@ -124,6 +129,16 @@ class LeftPane extends React.PureComponent {
                         <h2 className={styles.heading}>
                             Incidents
                         </h2>
+                        <ModalButton
+                            className={styles.addIncidentButton}
+                            title="Add"
+                            transparent
+                            modal={(
+                                <AddIncidentForm />
+                            )}
+                        >
+                            Add
+                        </ModalButton>
                     </header>
                     <IncidentListView
                         hazardTypes={hazardTypes}

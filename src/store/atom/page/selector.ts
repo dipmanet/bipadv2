@@ -129,6 +129,8 @@ export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
 
 export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
 
+export const lossListSelector = ({ page }: AppState) => page.lossList;
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(

@@ -75,6 +75,11 @@ export const setWardsAction = (
     wards,
 });
 
+export const setLossListAction = ({ lossList }: { lossList: Type.Loss[]}) => ({
+    type: Type.PageType.SET_LOSS_LIST,
+    lossList,
+});
+
 // dashboard action creator
 
 export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) => ({
@@ -347,6 +352,15 @@ const setWards = (state: Type.PageState, action: Type.SetWards) => {
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.wards = wards;
+    });
+    return newState;
+};
+
+const setLossList = (state: Type.PageState, action: Type.SetLossList) => {
+    const { lossList } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.lossList = lossList;
     });
     return newState;
 };
@@ -870,6 +884,8 @@ export default function routeReducer(
             return setMunicipalities(state, action);
         case Type.PageType.SET_WARDS:
             return setWards(state, action);
+        case Type.PageType.SET_LOSS_LIST:
+            return setLossList(state, action);
         case Type.PageType.DP__SET_ALERTS:
             return setAlertList(state, action);
         case Type.PageType.DP__SET_FILTERS:
