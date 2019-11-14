@@ -1,9 +1,6 @@
 import React from 'react';
-import Redux, {
-    compose,
-} from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-
 import { _cs } from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
@@ -20,7 +17,6 @@ import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
-import Checkbox from '#rsci/Checkbox';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 

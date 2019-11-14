@@ -11,16 +11,20 @@ const state: PageState = {
 
     adminLevelList: [
         {
+            id: 0,
+            title: 'national',
+        },
+        {
             id: 1,
-            title: 'Province',
+            title: 'province',
         },
         {
             id: 2,
-            title: 'District',
+            title: 'district',
         },
         {
             id: 3,
-            title: 'Municipality',
+            title: 'municipality',
         },
     ],
 
@@ -28,6 +32,8 @@ const state: PageState = {
     districts: [],
     municipalities: [],
     wards: [],
+
+    documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
     mapStyles: [

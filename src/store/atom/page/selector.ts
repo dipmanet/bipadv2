@@ -135,6 +135,8 @@ export const sourceListSelector = ({ page }: AppState) => page.sourceList;
 
 export const severityListSelector = ({ page }: AppState) => page.severityList;
 
+export const documentCategoryListSelector = ({ page }: AppState) => page.documentCategoryList;
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(

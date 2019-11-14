@@ -80,6 +80,12 @@ export const setLossListAction = ({ lossList }: { lossList: Type.Loss[]}) => ({
     lossList,
 });
 
+export const setDocumentCategoryListAction = (
+    { documentCategoryList }: { documentCategoryList: Type.DocumentCategory[]},
+) => ({
+    type: Type.PageType.SET_DOCUMENT_CATEGORY_LIST,
+    documentCategoryList,
+});
 // dashboard action creator
 
 export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) => ({
@@ -361,6 +367,15 @@ const setLossList = (state: Type.PageState, action: Type.SetLossList) => {
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.lossList = lossList;
+    });
+    return newState;
+};
+
+const setDocumentCategoryList = (state: Type.PageState, action: Type.SetDocumentCategoryList) => {
+    const { documentCategoryList } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.documentCategoryList = documentCategoryList;
     });
     return newState;
 };
@@ -930,6 +945,8 @@ export default function routeReducer(
             return setProfileContactList(state, action);
         case Type.PageType.PCP__SET_FILTERS:
             return setProfileContactFilters(state, action);
+        case Type.PageType.SET_DOCUMENT_CATEGORY_LIST:
+            return setDocumentCategoryList(state, action);
         default:
             return state;
     }

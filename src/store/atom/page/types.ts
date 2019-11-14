@@ -53,6 +53,8 @@ export interface SeverityType extends Field {
 }
 export interface ResourceType {
 }
+export interface DocumentCategory extends Field {
+}
 export interface Event extends Field {
     createdOn: string;
     description: string;
@@ -366,6 +368,8 @@ export interface PageState {
 
     adminLevelList: AdminLevel[];
 
+    documentCategoryList: DocumentCategory[];
+
     provinces: Province[];
     districts: District[];
     municipalities: Municipality[];
@@ -402,6 +406,7 @@ export enum PageType {
     SET_MUNICIPALITIES = 'page/SET_MUNICIPALITIES',
     SET_WARDS = 'page/SET_WARDS',
     SET_LOSS_LIST = 'page/SET_LOSS_LIST',
+    SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -491,6 +496,11 @@ export interface SetMunicipalities {
 export interface SetWards {
     type: typeof PageType.SET_WARDS;
     wards: Ward[];
+}
+
+export interface SetDocumentCategoryList {
+    type: typeof PageType.SET_DOCUMENT_CATEGORY_LIST;
+    documentCategoryList: DocumentCategory[];
 }
 
 // dashboard
@@ -646,5 +656,6 @@ export type PageActionTypes = (
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
-    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList
+    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
+    SetDocumentCategoryList
 );
