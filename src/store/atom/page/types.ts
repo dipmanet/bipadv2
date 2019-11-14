@@ -49,6 +49,8 @@ export interface HazardType extends Field {
 }
 export interface EventType extends Field {
 }
+export interface SeverityType extends Field {
+}
 export interface ResourceType {
 }
 export interface Event extends Field {
@@ -268,7 +270,6 @@ export interface RealTimePollution {
 export interface DashboardPage {
     alertList: Alert[];
     eventList: Event[];
-    sourceList: Source[];
     filters: Filters;
 }
 
@@ -369,6 +370,9 @@ export interface PageState {
     districts: District[];
     municipalities: Municipality[];
     wards: Ward[];
+    lossList: Loss[];
+    sourceList: Source[];
+    severityList: SeverityType[];
 
     resourceTypes: Obj<ResourceType>;
     hazardTypes: Obj<HazardType>;

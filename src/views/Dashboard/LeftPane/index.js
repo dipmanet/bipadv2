@@ -15,6 +15,7 @@ import EventItem from './EventItem';
 import AlertItem from './AlertItem';
 import Visualizations from './Visualizations';
 import AddAlertForm from './AddAlertForm';
+import AddEventForm from './AddEventForm';
 
 import styles from './styles.scss';
 
@@ -200,6 +201,15 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Major events
                             </h2>
+                            <ModalButton
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddEventForm />
+                                )}
+                            >
+                                Add
+                            </ModalButton>
                         </header>
                         <VirtualizedListView
                             className={styles.content}

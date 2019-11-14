@@ -292,7 +292,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         fields: {
             hazard: [requiredCondition],
             source: [requiredCondition],
-            incidentOn: [requiredCondition],
+            incidentOnDate: [requiredCondition],
+            incidentOntime: [requiredCondition],
             wards: [requiredCondition],
             point: [requiredCondition],
             polygon: [],
@@ -335,7 +336,10 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         } = faramValues;
 
         const startedOn = new Date(`${incidentOnDate}T${incidentOnTime}`).toISOString();
-        const reportedOn = new Date(`${reportedOnDate}T${reportedOnTime}`).toISOString();
+        let reportedOn;
+        if (reportedOnDate && reportedOnTime) {
+            reportedOn = new Date(`${reportedOnDate}T${reportedOnTime}`).toISOString();
+        }
 
         addIncidentPostRequest.do({
             body: { startedOn, reportedOn, ...others },

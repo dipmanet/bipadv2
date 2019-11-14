@@ -73,26 +73,40 @@ const state: PageState = {
     hazardTypes: {},
     resourceTypes: {},
     lossList: [],
+    severityList: [
+        {
+            id: 1,
+            title: 'minor',
+        },
+        {
+            id: 2,
+            title: 'major',
+        },
+        {
+            id: 3,
+            title: 'catastrophic',
+        },
+    ],
+    sourceList: [
+        {
+            id: 1,
+            title: 'dhm',
+        },
+        {
+            id: 2,
+            title: 'nsc',
+        },
+        {
+            id: 3,
+            title: 'other',
+        },
+    ],
 
     // Page related
 
     dashboardPage: {
         eventList: [],
         alertList: [],
-        sourceList: [
-            {
-                id: 1,
-                title: 'dhm',
-            },
-            {
-                id: 2,
-                title: 'nsc',
-            },
-            {
-                id: 3,
-                title: 'other',
-            },
-        ],
         filters: {
             faramValues: {
                 dateRange: 30,

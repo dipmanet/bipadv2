@@ -131,6 +131,10 @@ export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
 
 export const lossListSelector = ({ page }: AppState) => page.lossList;
 
+export const sourceListSelector = ({ page }: AppState) => page.sourceList;
+
+export const severityListSelector = ({ page }: AppState) => page.severityList;
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(
@@ -167,11 +171,6 @@ export const alertListSelectorDP = createSelector(
 export const eventListSelector = createSelector(
     dashboardPageSelector,
     ({ eventList }) => eventList,
-);
-
-export const sourceListSelector = createSelector(
-    dashboardPageSelector,
-    ({ sourceList }) => sourceList,
 );
 
 // incidentPage
