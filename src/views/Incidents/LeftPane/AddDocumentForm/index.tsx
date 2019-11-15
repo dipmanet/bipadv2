@@ -8,6 +8,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -15,7 +16,8 @@ import ModalFooter from '#rscv/Modal/Footer';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import SelectInput from '#rsci/SelectInput';
-import FileInput from '#rsci/FileInput';
+import RawFileInput from '#rsci/RawFileInput';
+import HiddenInput from '#rsci/HiddenInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -42,6 +44,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { UploadBuilder } from '#rsu/upload';
 
 interface Params {
     body: object;
@@ -73,12 +76,14 @@ interface FaramValues {
     province?: string;
     district?: string;
     municipality?: string;
+    file?: File;
     event?: string;
     publishedDate?: string;
     severity?: string;
 }
 
 interface FaramErrors {
+    file?: string;
 }
 
 interface State {
@@ -101,7 +106,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onMount: true,
     },
     documentCategoriesGetRequest: {
-        url: '/document/category/',
+        url: '/document-category/',
         method: methods.GET,
         onSuccess: ({ response, props: { setDocumentCategoryList } }) => {
             interface Response { results: PageType.DocumentCategory[] }
@@ -113,6 +118,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addDocumentPostRequest: {
         url: '/document/',
         method: methods.POST,
+        body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
             if (onSuccess) {
                 onSuccess();
@@ -122,6 +128,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
             }
+        },
+        extras: {
+            hasFile: true,
         },
     },
 };
@@ -178,20 +187,21 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+    private handleFaramValidationSuccess = (_: unknown, faramValues: FaramValues) => {
         const { requests: { addDocumentPostRequest }, onUpdate, closeModal } = this.props;
         const {
             publishedDate: date,
             ...others
         } = faramValues;
 
-        let publishedDate;
+        let newBody: object = { ...others };
         if (date) {
-            publishedDate = new Date(date).toISOString();
+            const publishedDate = new Date(date).toISOString();
+            newBody = { publishedDate, ...others };
         }
 
         addDocumentPostRequest.do({
-            body: { publishedDate, ...others },
+            body: newBody,
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
@@ -261,12 +271,19 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             labelSelector={labelSelector}
                             label="Event"
                         />
-                        <FileInput
-                            faramElementName="file"
-                        />
-                        <DateInput
-                            faramElementName="publishedDate"
-                        />
+                        <div>
+                            <div>Add Document </div>
+                            <RawFileInput
+                                className={styles.fileInput}
+                                faramElementName="file"
+                                error={faramErrors.file}
+                            >
+                                <span className={styles.load}>
+                                    <Icon name="upload" />
+                                </span>
+                            </RawFileInput>
+                            <HiddenInput faramElementName="file" />
+                        </div>
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>

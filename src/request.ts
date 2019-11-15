@@ -17,6 +17,21 @@ import { getAuthState } from '#utils/session';
 const wsEndpoint = process.env.REACT_APP_API_SERVER_URL;
 const domain = process.env.REACT_APP_DOMAIN;
 
+const getFormData = (jsonData: any) => {
+    const formData = new FormData();
+    Object.keys(jsonData || {}).forEach(
+        (key) => {
+            const value: any = jsonData[key] || {};
+            if (value.prop && value.prop.constructor === Array) {
+                value.map((v: any) => formData.append(key, v));
+            } else {
+                formData.append(key, value);
+            }
+        },
+    );
+    return formData;
+};
+
 // FIXME: don't know why eslint disable is required right now
 // eslint-disable-next-line arrow-parens
 export function createConnectedRequestCoordinator<OwnProps>() {
@@ -27,17 +42,30 @@ export function createConnectedRequestCoordinator<OwnProps>() {
             const {
                 body,
                 method,
+                extras,
             } = data;
+
             const cookies = getAuthState();
 
-            return {
-                method: method || methods.GET,
-                body: JSON.stringify(body),
-                headers: {
+            const myExtras = (extras || {}) as { hasFile?: boolean };
+            const newBody = myExtras.hasFile
+                ? getFormData(body)
+                : JSON.stringify(body);
+
+            const newHeaders = myExtras.hasFile
+                ? {
+                    Accept: 'application/json',
+                    'X-CSRFToken': cookies.csrftoken,
+                }
+                : {
                     Accept: 'application/json',
                     'Content-Type': 'application/json; charset=utf-8',
                     'X-CSRFToken': cookies.csrftoken,
-                },
+                };
+            return {
+                method: method || methods.GET,
+                body: newBody,
+                headers: newHeaders,
             };
         },
         transformProps: (props: Props) => {
