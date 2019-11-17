@@ -25,6 +25,9 @@ const styleProperties = {
     heightRiskInfoAttributeIcon: '24px',
 
     spacingPageBottom: '36px',
+
+    widthManualImagePreview: '72px',
+    heightManualImagePreview: '96px',
 };
 
 export default styleProperties;
