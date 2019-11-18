@@ -8,6 +8,7 @@ import About from './About';
 import PrivacyPolicy from './PrivacyPolicy';
 import Metadata from './Metadata';
 import Disclaimer from './Disclaimer';
+import Manual from './Manual';
 
 import styles from './styles.scss';
 
@@ -20,6 +21,7 @@ export default class AboutUs extends React.PureComponent {
             privacyPolicy: 'Privacy policy',
             metadata: 'Metadata',
             disclaimer: 'Disclaimer',
+            manual: 'Manual',
         };
 
         const rendererParams = () => ({ className: styles.content });
@@ -39,6 +41,10 @@ export default class AboutUs extends React.PureComponent {
             },
             disclaimer: {
                 component: Disclaimer,
+                rendererParams,
+            },
+            manual: {
+                component: Manual,
                 rendererParams,
             },
         };
