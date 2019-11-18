@@ -51,7 +51,7 @@ export interface EventType extends Field {
 }
 export interface SeverityType extends Field {
 }
-export interface ResourceType {
+export interface ResourceType  extends Field {
 }
 export interface DocumentCategory extends Field {
 }
@@ -378,7 +378,7 @@ export interface PageState {
     sourceList: Source[];
     severityList: SeverityType[];
 
-    resourceTypes: Obj<ResourceType>;
+    resourceTypeList: ResourceType[];
     hazardTypes: Obj<HazardType>;
 
     dashboardPage: DashboardPage;

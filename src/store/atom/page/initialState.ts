@@ -77,7 +77,36 @@ const state: PageState = {
     ],
 
     hazardTypes: {},
-    resourceTypes: {},
+    resourceTypeList: [
+        {
+            id: 1,
+            title: 'education',
+        },
+        {
+            id: 2,
+            title: 'health',
+        },
+        {
+            id: 3,
+            title: 'finance',
+        },
+        {
+            id: 4,
+            title: 'governance',
+        },
+        {
+            id: 5,
+            title: 'tourism',
+        },
+        {
+            id: 6,
+            title: 'cultural',
+        },
+        {
+            id: 7,
+            title: 'industry',
+        },
+    ],
     lossList: [],
     severityList: [
         {

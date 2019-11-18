@@ -18,8 +18,8 @@ const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => p
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
 
-const resourceTypesSelector = ({ page }: AppState) => (
-    page.resourceTypes || emptyList
+export const resourceTypeListSelector = ({ page }: AppState) => (
+    page.resourceTypeList || emptyList
 );
 
 // Popup
@@ -116,11 +116,6 @@ export const hazardTypesSelector = ({ page }: AppState) => page.hazardTypes;
 export const hazardTypeListSelector = createSelector(
     hazardTypesSelector,
     hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
-);
-
-export const resourceTypeListSelector = createSelector(
-    resourceTypesSelector,
-    resources => mapToList(resources),
 );
 
 // map styles

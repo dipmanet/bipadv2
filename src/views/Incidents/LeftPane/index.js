@@ -19,6 +19,7 @@ import {
 import IncidentListView from './ListView';
 import AddIncidentForm from './AddIncidentForm';
 import AddDocumentForm from './AddDocumentForm';
+import AddResourceForm from './AddResourceForm';
 
 import styles from './styles.scss';
 
@@ -149,6 +150,16 @@ class LeftPane extends React.PureComponent {
                             )}
                         >
                             Add Document
+                        </ModalButton>
+                        <ModalButton
+                            className={styles.addIncidentButton}
+                            title="Add"
+                            transparent
+                            modal={(
+                                <AddResourceForm />
+                            )}
+                        >
+                            Add Resource
                         </ModalButton>
                     </header>
                     <IncidentListView
