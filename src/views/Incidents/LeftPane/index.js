@@ -20,6 +20,7 @@ import IncidentListView from './ListView';
 import AddIncidentForm from './AddIncidentForm';
 import AddDocumentForm from './AddDocumentForm';
 import AddResourceForm from './AddResourceForm';
+import AddInventoryForm from './AddInventoryForm';
 
 import styles from './styles.scss';
 
@@ -131,36 +132,48 @@ class LeftPane extends React.PureComponent {
                         <h2 className={styles.heading}>
                             Incidents
                         </h2>
-                        <ModalButton
-                            className={styles.addIncidentButton}
-                            title="Add"
-                            transparent
-                            modal={(
-                                <AddIncidentForm />
-                            )}
-                        >
-                            Add
-                        </ModalButton>
-                        <ModalButton
-                            className={styles.addIncidentButton}
-                            title="Add"
-                            transparent
-                            modal={(
-                                <AddDocumentForm />
-                            )}
-                        >
-                            Add Document
-                        </ModalButton>
-                        <ModalButton
-                            className={styles.addIncidentButton}
-                            title="Add"
-                            transparent
-                            modal={(
-                                <AddResourceForm />
-                            )}
-                        >
-                            Add Resource
-                        </ModalButton>
+                        <div className={styles.buttons}>
+                            <ModalButton
+                                className={styles.addIncidentButton}
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddIncidentForm />
+                                )}
+                            >
+                                Add
+                            </ModalButton>
+                            <ModalButton
+                                className={styles.addIncidentButton}
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddDocumentForm />
+                                )}
+                            >
+                                Add Document
+                            </ModalButton>
+                            <ModalButton
+                                className={styles.addIncidentButton}
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddResourceForm />
+                                )}
+                            >
+                                Add Resource
+                            </ModalButton>
+                            <ModalButton
+                                className={styles.addIncidentButton}
+                                title="Add"
+                                transparent
+                                modal={(
+                                    <AddInventoryForm />
+                                )}
+                            >
+                                Add Inventory
+                            </ModalButton>
+                        </div>
                     </header>
                     <IncidentListView
                         hazardTypes={hazardTypes}

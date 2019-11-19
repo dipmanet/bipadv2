@@ -51,8 +51,9 @@ export interface EventType extends Field {
 }
 export interface SeverityType extends Field {
 }
-export interface ResourceType  extends Field {
+export interface ResourceType extends Field {
 }
+
 export interface DocumentCategory extends Field {
 }
 export interface Event extends Field {
@@ -84,9 +85,7 @@ export interface Incident {
     loss: Loss;
     incidentOn: string;
 }
-export interface Resource {
-    id: number;
-    title: string;
+export interface Resource extends Field {
     resourceType: string;
     distance: number;
     point: {
@@ -100,9 +99,7 @@ export interface InventoryCategory {
     description: string;
 }
 
-export interface InventoryItem {
-    id: number;
-    title: string;
+export interface InventoryItem extends Field {
     unit: string;
     category: string;
     description: string;

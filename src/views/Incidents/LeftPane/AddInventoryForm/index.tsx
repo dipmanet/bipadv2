@@ -1,5 +1,7 @@
 import React from 'react';
-import { compose } from 'redux';
+import Redux, {
+    compose,
+} from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import Faram, {
@@ -11,13 +13,19 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import SelectInput from '#rsci/SelectInput';
-import TextInput from '#rsci/TextInput';
 import TextArea from '#rsci/TextArea';
+import NumberInput from '#rsci/NumberInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import {
+    setInventoryItemListActionRP,
+    setResourceListActionRP,
 } from '#actionCreators';
+import {
+    resourceListSelectorRP,
+    inventoryItemListSelectorRP,
+} from '#selectors';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -29,15 +37,6 @@ import {
     methods,
 } from '#request';
 
-import {
-    resourceTypeListSelector,
-} from '#selectors';
-
-import EducationFields from './EducationFields';
-import HealthFields from './HealthFields';
-import FinanceFields from './FinanceFields';
-import GovernanceFields from './GovernanceFields';
-import CulturalFields from './CulturalFields';
 import styles from './styles.scss';
 
 interface Params {
@@ -51,17 +50,19 @@ interface OwnProps {
     className?: string;
 }
 interface PropsFromState {
-    resourceTypeList: PageType.ResourceType[];
+    inventoryItemList: PageType.InventoryItem[];
+    resourceList: PageType.Resource[];
 }
 interface PropsFromDispatch {
+    setInventoryItemList: typeof setInventoryItemListActionRP;
+    setResourceList: typeof setResourceListActionRP;
 }
+
 interface FaramValues {
-    title?: string;
+    itemId?: number;
+    quantity?: number;
+    resource?: number;
     description?: string;
-    point?: string;
-    ward?: number;
-    type?: number;
-    resourceType?: string;
 }
 interface FaramErrors {
 }
@@ -70,19 +71,44 @@ interface State {
     faramErrors: FaramErrors;
     pristine: boolean;
 }
-
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    resourceTypeList: resourceTypeListSelector(state),
+    resourceList: resourceListSelectorRP(state),
+    inventoryItemList: inventoryItemListSelectorRP(state),
+});
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setInventoryItemList: params => dispatch(setInventoryItemListActionRP(params)),
+    setResourceList: params => dispatch(setResourceListActionRP(params)),
 });
 
+const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    addResourcePostRequest: {
+    inventoryItemListGetRequest: {
+        url: '/inventory-item/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setInventoryItemList } }) => {
+            interface Response { results: PageType.InventoryItem[] }
+            const { results: inventoryItemList = [] } = response as Response;
+            setInventoryItemList({ inventoryItemList });
+        },
+    },
+    resourceListGetRequest: {
         url: '/resource/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setResourceList } }) => {
+            interface Response { results: PageType.Resource[] }
+            const { results: resourceList = [] } = response as Response;
+            setResourceList({ resourceList });
+        },
+    },
+    addInventoryPostRequest: {
+        url: '/inventory/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
@@ -98,32 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
-interface ExtraFieldProps {
-    title: string;
-}
-
-const ExtraFields = ({ title }: ExtraFieldProps) => {
-    switch (title) {
-        case 'education':
-            return (<EducationFields />);
-
-        case 'health':
-            return (<HealthFields />);
-
-        case 'finance':
-            return (<FinanceFields />);
-
-        case 'governance':
-            return (<GovernanceFields />);
-
-        case 'cultural':
-            return (<CulturalFields />);
-        default:
-            return null;
-    }
-};
-
-class AddResourceForm extends React.PureComponent<Props, State> {
+class AddInventoryForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -136,12 +137,10 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 
     private static schema = {
         fields: {
-            title: [requiredCondition],
+            itemId: [requiredCondition],
+            quantity: [requiredCondition],
+            resource: [requiredCondition],
             description: [],
-            point: [],
-            ward: [],
-            resourceType: [],
-            type: [requiredCondition],
         },
     };
 
@@ -160,8 +159,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addResourcePostRequest }, onUpdate, closeModal } = this.props;
-        addResourcePostRequest.do({
+        const { requests: { addInventoryPostRequest }, onUpdate, closeModal } = this.props;
+
+        addInventoryPostRequest.do({
             body: faramValues,
             onSuccess: () => {
                 if (onUpdate) {
@@ -180,7 +180,8 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
-            resourceTypeList,
+            inventoryItemList,
+            resourceList,
         } = this.props;
 
         const {
@@ -189,11 +190,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             pristine,
         } = this.state;
 
-        const { resourceType } = faramValues;
-
         return (
             <Modal
-                className={_cs(styles.addResourceModal, className)}
+                className={_cs(styles.addInventoryModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
@@ -201,35 +200,34 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddResourceForm.schema}
+                    schema={AddInventoryForm.schema}
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader title="Add Resource" />
+                    <ModalHeader title="Add Inventory" />
                     <ModalBody>
                         <SelectInput
-                            className={styles.hazardInput}
-                            faramElementName="resourceType"
-                            options={resourceTypeList}
-                            keySelector={labelSelector}
+                            faramElementName="itemId"
+                            options={inventoryItemList}
+                            keySelector={keySelector}
                             labelSelector={labelSelector}
-                            label="Hazard"
+                            label="Item"
                         />
-                        <TextInput
-                            faramElementName="title"
-                            label="Title"
+                        <NumberInput
+                            faramElementName="quantity"
+                            label="Quantity"
                         />
                         <TextArea
                             faramElementName="description"
                             label="Description"
                         />
-                        {
-                            resourceType && (
-                                <ExtraFields
-                                    title={resourceType}
-                                />
-                            )
-                        }
+                        <SelectInput
+                            faramElementName="resource"
+                            options={resourceList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Resource"
+                        />
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>
@@ -249,6 +247,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 }
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),
-)(AddResourceForm);
+)(AddInventoryForm);

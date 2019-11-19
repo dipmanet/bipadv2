@@ -75,7 +75,6 @@ class LocationInput extends React.PureComponent<Props, State> {
             municipalities,
             provinces,
             value = emptyObject,
-            className,
         } = this.props;
 
         const {

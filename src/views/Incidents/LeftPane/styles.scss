@@ -26,6 +26,12 @@
                 flex-shrink: 0;
                 padding: var(--spacing-medium);
                 color: var(--color-primary);
+
+                .buttons {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                }
             }
 
             .add-incident-button {
