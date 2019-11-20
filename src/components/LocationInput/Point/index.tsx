@@ -40,6 +40,7 @@ interface Region {
 }
 
 interface Props {
+    pointColor: string;
     geoJson: GeoJson;
     onPointMove: (geoJson: GeoJson, region: Region) => {};
 }
@@ -49,6 +50,13 @@ interface State {
 
 
 export default class DraggablePoint extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        // TODO find a better way;
+        defaultGeoJson.features[0].properties.hazardColor = props.pointColor;
+    }
+
     private handleMove = (e: {}) => {
         const {
             geoJson,
@@ -70,7 +78,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         this.context.map.getSource('alert-point').setData(newGeoJson);
     }
 
-    private handleEnd = (e) => {
+    private handleEnd = (e: any) => {
         this.context.map.off('mousemove', this.handleMove);
         this.context.map.off('touchmove', this.handleMove);
 
@@ -117,7 +125,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
     }
 
-    private handleMouseClick = (e) => {
+    private handleMouseClick = (e: any) => {
         const {
             geoJson = defaultGeoJson,
             onPointMove,

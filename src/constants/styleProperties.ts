@@ -1,6 +1,8 @@
 // import { currentStyle } from '#rsu/styles';
 
 const styleProperties = {
+    colorBackground: '#f2f2f2',
+
     widthScrollbar: '4px',
 
     widthLeftPanel: '320px',

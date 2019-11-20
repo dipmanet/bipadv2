@@ -73,6 +73,20 @@
                         margin: 0 var(--spacing-large);
                     }
                 }
+
+                .checkboxes {
+                    display: flex;
+
+                    .is-public-selection-checkbox {
+                        @extend %input;
+                        flex-basis: 50%;
+                    }
+
+                    .is-verified-selection-checkbox {
+                        @extend %input;
+                        flex-basis: 50%;
+                    }
+                }
             }
         }
     }

@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    padStart as p,
+} from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -44,7 +47,7 @@ import {
 
 interface Params {
     body: object;
-    onSuccess: () => void;
+    onSuccess: (response: PageType.Alert) => void;
     onFailure: (faramErrors: object) => void;
 }
 
@@ -115,23 +118,50 @@ const labelSelector = (d: PageType.Field) => d.title;
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
+const onSuccess = ({
+    params,
+    response,
+}: {
+    params: Params;
+    response: PageType.Alert;
+}) => {
+    if (params && params.onSuccess) {
+        params.onSuccess(response);
+    }
+};
+
+const onFailure = ({
+    error,
+    params,
+}: {
+    params: Params;
+    error: {
+        faramErrors: {};
+    };
+}) => {
+    if (params.onFailure) {
+        onFailure(error.faramErrors);
+    }
+};
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    addAlertPostRequest: {
+    addAlertRequest: {
         url: '/alert/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
-            }
-        },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
-            }
-        },
+        onSuccess,
+        onFailure,
+    },
+    editAlertRequest: {
+        url: ({ props }) => `/alert/${props.data.id}/`,
+        method: methods.PUT,
+        body: ({ params: { body } }) => body,
+        onSuccess,
+        onFailure,
     },
 };
+
+const defaultHazardColor = '#a0a0a0';
 
 class AddAlertForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -201,30 +231,69 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 faramElementName="expireOnTime"
                             />
                         </div>
-                        <Checkbox
-                            label="public"
-                            faramElementName="public"
-                        />
-                        <Checkbox
-                            label="Verified"
-                            faramElementName="verified"
-                        />
+                        <div className={styles.checkboxes}>
+                            <Checkbox
+                                className={styles.isPublicSelectionCheckbox}
+                                label="Public"
+                                faramElementName="public"
+                            />
+                            <Checkbox
+                                className={styles.isVerifiedSelectionCheckbox}
+                                label="Verified"
+                                faramElementName="verified"
+                            />
+                        </div>
                     </div>
                 ),
             },
             location: {
-                component: () => (
-                    <LocationInput
-                        className={styles.locationInput}
-                        faramElementName="location"
-                    />
-                ),
+                component: () => {
+                    const {
+                        faramValues: {
+                            hazard,
+                        },
+                    } = this.state;
+
+                    return (
+                        <LocationInput
+                            pointColor={this.getActiveHazardColor(hazard, hazardList)}
+                            className={styles.locationInput}
+                            faramElementName="location"
+                        />
+                    );
+                },
             },
         };
+
+        let initialData = {};
+
+        if (props.data) {
+            const startedOn = new Date(props.data.startedOn);
+            const startedOnDate = `${p(startedOn.getFullYear(), 2)}-${p(startedOn.getMonth() + 1, 2)}-${p(startedOn.getDate(), 2)}`;
+            const startedOnTime = `${p(startedOn.getHours(), 2)}:${p(startedOn.getMinutes(), 2)}:${p(startedOn.getSeconds(), 2)}`;
+
+            const expireOn = new Date(props.data.expireOn);
+            const expireOnDate = `${p(expireOn.getFullYear(), 2)}-${p(expireOn.getMonth() + 1, 2)}-${p(expireOn.getDate(), 2)}`;
+            const expireOnTime = `${p(expireOn.getHours(), 2)}:${p(expireOn.getMinutes(), 2)}:${p(expireOn.getSeconds(), 2)}`;
+
+            initialData = {
+                source: props.data.source,
+                description: props.data.description,
+                hazard: props.data.hazard,
+                startedOnDate,
+                startedOnTime,
+                public: props.data.public,
+                verified: props.data.verified,
+                event: (props.data.event || {}).id,
+                expireOnDate,
+                expireOnTime,
+            };
+        }
 
         this.state = {
             faramValues: {
                 wards: [],
+                ...initialData,
             },
             faramErrors: {},
             pristine: true,
@@ -258,8 +327,24 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
     private views: Views;
 
+    private getActiveHazardColor = (
+        activeHazardKey: PageType.HazardType['id'] | undefined,
+        hazardOptions: PageType.HazardType[],
+    ) => {
+        if (!activeHazardKey) {
+            return defaultHazardColor;
+        }
+
+        const activeHazard = hazardOptions.find(d => d.id === activeHazardKey);
+        if (!activeHazard) {
+            return defaultHazardColor;
+        }
+
+        return activeHazard.color;
+    }
+
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        console.warn(faramValues.location);
+        // console.warn(faramValues.location);
 
         this.setState({
             faramValues,
@@ -275,7 +360,16 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addAlertPostRequest }, onUpdate, closeModal } = this.props;
+        const {
+            requests: {
+                addAlertRequest,
+                editAlertRequest,
+            },
+            onUpdate,
+            closeModal,
+            data,
+        } = this.props;
+
         const {
             startedOnDate,
             startedOnTime,
@@ -288,20 +382,40 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
         const point = location.geoJson.features[0].geometry;
+        const wards = location.wards;
+        const body = {
+            ...others,
+            startedOn,
+            expireOn,
+            point,
+            wards,
+        };
 
-        addAlertPostRequest.do({
-            body: { startedOn, expireOn, point, ...others },
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                } else if (closeModal) {
-                    closeModal();
-                }
-            },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
-        });
+        if (data && data.id) {
+            editAlertRequest.do({
+                body,
+                onSuccess: this.handleRequestSuccess,
+                onFailure: this.handleRequestFailure,
+            });
+        } else {
+            addAlertRequest.do({
+                body,
+                onSuccess: this.handleRequestSuccess,
+                onFailure: this.handleRequestFailure,
+            });
+        }
+    }
+
+    private handleRequestSuccess = (response: PageType.Alert) => {
+        const { onRequestSuccess } = this.props;
+
+        if (onRequestSuccess) {
+            onRequestSuccess(response);
+        }
+    }
+
+    private handleRequestFailure = (faramErrors) => {
+        this.setState({ faramErrors });
     }
 
     private handleTabClick = (newTab: keyof Tabs) => {
@@ -312,6 +426,8 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            hazardList,
+            onCloseButtonClick,
         } = this.props;
 
         const {
@@ -321,6 +437,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramErrors,
         } = this.state;
 
+
         return (
             <Modal
                 className={_cs(styles.addAlertFormModal, className)}
@@ -328,6 +445,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 closeOnEscape
             >
                 <Faram
+                    className={styles.addAlertForm}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
@@ -348,7 +466,9 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton onClick={closeModal}>
+                        <DangerButton
+                            onClick={onCloseButtonClick}
+                        >
                             Close
                         </DangerButton>
                         <PrimaryButton

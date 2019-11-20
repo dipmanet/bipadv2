@@ -1,11 +1,15 @@
 @import '~base-scss/base';
 
 .tooltip {
-    background-color: $color-foreground;
-    padding: $spacing-medium;
+    background-color: var(--color-foreground);
+    padding: var(--spacing-small) 0;
 
     .heading {
-        padding-bottom: $spacing-small;
-        font-weight: $font-weight-bold;
+        padding: var(--spacing-small) var(--spacing-large);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .description {
+        padding: var(--spacing-small) var(--spacing-large);
     }
 }

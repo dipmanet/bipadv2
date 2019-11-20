@@ -172,6 +172,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             schemaName: 'eventResponse',
         },
     },
+    deleteAlertRequest: {
+        url: ({ params }) => `/alert/${params.alertId}`,
+        method: methods.DELETE,
+        onSuccess: ({ params }) => {
+            if (params && params.onSuccess) {
+                params.onSuccess();
+            }
+        },
+    },
 };
 
 const RECENT_DAY = 1;
@@ -301,6 +310,31 @@ class Dashboard extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleAlertChange = (/* newAlert */) => {
+        // TODO: update redux instead?
+        const {
+            requests: {
+                alertsRequest,
+            },
+        } = this.props;
+
+        alertsRequest.do();
+    }
+
+    private handleDeleteAlertButtonClick = (alert) => {
+        const {
+            requests: {
+                deleteAlertRequest,
+                alertsRequest,
+            },
+        } = this.props;
+
+        deleteAlertRequest.do({
+            alertId: alert.id,
+            onSuccess: alertsRequest.do,
+        });
+    }
+
     private renderHoverItemDetail = () => {
         const {
             hoverItemId,
@@ -378,7 +412,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             rightPaneExpanded,
         } = this.state;
 
-        const HoverItemDetail = this.renderHoverItemDetail;
+        // const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
@@ -403,8 +437,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                             pending={pending}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
+                            onAlertChange={this.handleAlertChange}
+                            onDeleteAlertButtonClick={this.handleDeleteAlertButtonClick}
                         />
                     )}
+                    mainContentClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
                     mainContent={(
                         <HazardsLegend
                             filteredHazardTypes={filteredHazardTypes}

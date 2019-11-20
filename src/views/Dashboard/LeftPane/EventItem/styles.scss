@@ -1,32 +1,26 @@
-@import '~base-scss/base';
-
 .event-item {
     display: flex;
     align-items: center;
-    border-bottom: $width-separator-thin solid $color-separator-light;
-    padding: $spacing-medium 0;
+    border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+    padding: var(--spacing-medium) 0;
 
-    .svg-container {
+    .icon {
         flex-shrink: 0;
-        margin: $spacing-small $spacing-medium;
+        margin: var(--spacing-small) var(--spacing-medium);
+        width: 20px;
+        height: 20px;
 
-        .icon {
-            width: 20px;
-            height: auto;
-            height: $font-size-extra-large;
-
-            path {
-                fill: currentColor;
-            }
+        path {
+            fill: currentColor;
         }
     }
 
     .right {
         flex-grow: 1;
-        padding: 0 $spacing-medium;
+        padding: 0 var(--spacing-medium);
 
         .title {
-            font-weight: $font-weight-bold;
+            font-weight: var(--font-weight-bold);
         }
     }
 }

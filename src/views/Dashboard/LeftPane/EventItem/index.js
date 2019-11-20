@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactSVG from 'react-svg';
-
 import { _cs } from '@togglecorp/fujs';
+
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import { getHazardColor, getHazardIcon } from '#utils/domain';
 import DateOutput from '#components/DateOutput';
@@ -46,13 +46,10 @@ export default class EventItem extends React.PureComponent {
                     styles.eventItem,
                 )}
             >
-                <ReactSVG
-                    className={styles.svgContainer}
-                    path={icon}
-                    svgClassName={styles.icon}
-                    style={{
-                        color: getHazardColor(hazardTypes, hazard),
-                    }}
+                <ScalableVectorGraphics
+                    className={styles.icon}
+                    src={icon}
+                    style={{ color: getHazardColor(hazardTypes, hazard) }}
                 />
                 <div className={styles.right}>
                     <div className={styles.title}>

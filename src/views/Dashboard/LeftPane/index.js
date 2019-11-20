@@ -62,6 +62,7 @@ export default class LeftPane extends React.PureComponent {
             showAlerts: true,
             showTabular: false,
             showVisualizations: false,
+            showAddAlertModal: false,
         };
     }
 
@@ -69,6 +70,8 @@ export default class LeftPane extends React.PureComponent {
         alert: d,
         hazardTypes: this.props.hazardTypes,
         recentDay: this.props.recentDay,
+        onEditButtonClick: this.handleAlertEditButtonClick,
+        onDeleteButtonClick: this.props.onDeleteAlertButtonClick,
     });
 
     getEventRendererParams = (_, d) => ({
@@ -94,6 +97,37 @@ export default class LeftPane extends React.PureComponent {
             alertColor,
         };
     });
+
+    handleAlertEditButtonClick = (alert) => {
+        this.setState({
+            showAddAlertModal: true,
+            alertToEdit: alert,
+        });
+    }
+
+    handleAddAlertButtonClick = () => {
+        this.setState({
+            showAddAlertModal: true,
+            alertToEdit: undefined,
+        });
+    }
+
+    handleAddAlertModalCloseButtonClick = () => {
+        this.setState({
+            showAddAlertModal: false,
+            alertToEdit: undefined,
+        });
+    }
+
+    handleAlertFormRequestSuccess = (response) => {
+        this.setState({
+            showAddAlertModal: false,
+            alertToEdit: undefined,
+        });
+
+        const { onAlertChange } = this.props;
+        onAlertChange(response);
+    }
 
     handleToggleVisualizationButtonClick = () => {
         const { showVisualizations } = this.state;
@@ -144,6 +178,8 @@ export default class LeftPane extends React.PureComponent {
         const {
             showAlerts,
             showTabular,
+            showAddAlertModal,
+            alertToEdit,
         } = this.state;
 
         return (
@@ -175,15 +211,14 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Alerts
                             </h2>
-                            <ModalButton
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddAlertForm />
-                                )}
-                            >
-                                Add
-                            </ModalButton>
+                            <div className={styles.actions}>
+                                <Button
+                                    transparent
+                                    onClick={this.handleAddAlertButtonClick}
+                                >
+                                    Add
+                                </Button>
+                            </div>
                         </header>
                         <VirtualizedListView
                             className={styles.content}
@@ -191,7 +226,6 @@ export default class LeftPane extends React.PureComponent {
                             renderer={AlertItem}
                             rendererParams={this.getAlertRendererParams}
                             keySelector={alertKeySelector}
-                            itemHeight={57}
                             emptyComponent={AlertEmptyComponent}
                         />
                     </div>
@@ -201,15 +235,17 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Major events
                             </h2>
-                            <ModalButton
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddEventForm />
-                                )}
-                            >
-                                Add
-                            </ModalButton>
+                            <div className={styles.actions}>
+                                <ModalButton
+                                    title="Add"
+                                    transparent
+                                    modal={(
+                                        <AddEventForm />
+                                    )}
+                                >
+                                    Add
+                                </ModalButton>
+                            </div>
                         </header>
                         <VirtualizedListView
                             className={styles.content}
@@ -217,11 +253,17 @@ export default class LeftPane extends React.PureComponent {
                             renderer={EventItem}
                             rendererParams={this.getEventRendererParams}
                             keySelector={eventKeySelector}
-                            itemHeight={60}
                             emptyComponent={EventEmptyComponent}
                         />
                     </div>
                 </div>
+                { showAddAlertModal && (
+                    <AddAlertForm
+                        data={alertToEdit}
+                        onCloseButtonClick={this.handleAddAlertModalCloseButtonClick}
+                        onRequestSuccess={this.handleAlertFormRequestSuccess}
+                    />
+                )}
             </div>
         );
     }

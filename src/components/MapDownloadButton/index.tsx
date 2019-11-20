@@ -1,12 +1,29 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 
 import Button from '#rsca/Button';
 import MapChild from '#rscz/Map/MapChild';
 
+import { AppState } from '#store/types';
+import {
+    Ward,
+    District,
+    Province,
+    Municipality,
+    Region,
+} from '#store/atom/page/types';
+import {
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    wardsSelector,
+    regionSelector,
+} from '#selectors';
+
 import indexMapImage from '#resources/images/index-map.png';
 
-interface Props {
+interface OwnProps {
     map: {};
 }
 
@@ -14,10 +31,28 @@ interface State {
     pending: boolean;
 }
 
+interface PropsFromAppState {
+    region: Region;
+    wards: Ward[];
+    districts: District[];
+    provinces: Province[];
+    municipalities: Municipality[];
+}
+
+type Props = OwnProps & PropsFromAppState;
+
 const indexBounds = {
     sw: { lng: 80.0884245137, lat: 26.3978980576 },
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    region: regionSelector(state),
+    wards: wardsSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
+});
 
 const getIndexMapProportion = (bounds) => {
     const {
@@ -46,11 +81,22 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
     }
 
     private export = () => {
-        const { map } = this.props;
-
+        const {
+            map,
+            region,
+            wards,
+            districts,
+            municipalities,
+            provinces,
+        } = this.props;
 
         if (!map) {
             console.warn('Cannot export as there is no map');
+            return;
+        }
+
+        if (map) {
+            console.warn(region);
             return;
         }
 
@@ -189,4 +235,4 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
     }
 }
 
-export default MapChild(MapDownloadButton);
+export default connect(mapStateToProps)(MapChild(MapDownloadButton));
