@@ -8,7 +8,7 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import { convertJsonToCsv } from '#utils/common';
 
 // FIXME: move this somewhere nice
-export default class DownloadButton extends React.PureComponent {
+export default class MapDownloadButton extends React.PureComponent {
     static propTypes = {
         name: PropTypes.string,
         value: PropTypes.array, // eslint-disable-line react/forbid-prop-types

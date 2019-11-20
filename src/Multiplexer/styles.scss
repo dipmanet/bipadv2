@@ -15,6 +15,20 @@
         flex-grow: 1;
         overflow: auto;
 
+        .map-actions {
+            display: flex;
+            position: absolute;
+            top: var(--spacing-small);
+            left: calc(var(--width-mapbox-control-left-top) + var(--spacing-medium));
+            z-index: 1;
+            border: var(--width-separator-thin) solid var(--color-separator);
+            background-color: var(--color-foreground);
+
+            &.with-left-pane {
+                left: calc(var(--width-left-panel) + var(--width-mapbox-control-left-top) + var(--spacing-medium));
+            }
+        }
+
         .left-pane-container {
             flex-shrink: 0;
             z-index: 1;
@@ -28,7 +42,8 @@
             background-color: transparent;
 
             &.hidden {
-                display: none;
+                visibility: hidden;
+                z-index: -1;
             }
         }
     }

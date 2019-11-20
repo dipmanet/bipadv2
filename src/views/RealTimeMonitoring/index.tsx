@@ -290,7 +290,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         return (
             <>
                 {(showRain || showRiver) && (
-                    <div className={_cs('map-legend-container', styles.legendContainer)}>
+                    <div className={styles.legendContainer}>
                         <h4 className={styles.heading}>
                             Rain & River
                         </h4>
@@ -447,7 +447,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             otherSourceList={otherSourceList}
                         />
                     )}
-                    mainContentClassName={styles.main}
+                    mainContentClassName={_cs(styles.main, 'map-legend-container')}
                     mainContent={(
                         <LegendView />
                     )}

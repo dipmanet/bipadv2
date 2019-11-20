@@ -74,6 +74,7 @@ class LocationInput extends React.PureComponent<Props, State> {
             municipalities,
             provinces,
             value = emptyObject,
+            className,
         } = this.props;
 
         const {
@@ -82,7 +83,7 @@ class LocationInput extends React.PureComponent<Props, State> {
         } = value;
 
         return (
-            <div className={styles.locationInput}>
+            <div className={_cs(className, styles.locationInput)}>
                 <Map
                     mapStyle={mapStyle}
                     fitBoundsDuration={200}
@@ -95,9 +96,8 @@ class LocationInput extends React.PureComponent<Props, State> {
                     showNavControl
                     navControlPosition="bottom-right"
                 >
-                    <MapContainer className={styles.mapContainer} />
-                    <AreaMap />
                     <Point
+                        className={styles.point}
                         geoJson={geoJson}
                         onPointMove={this.handlePointMove}
                         region={region}
@@ -105,6 +105,8 @@ class LocationInput extends React.PureComponent<Props, State> {
                         districts={districts}
                         municipalities={municipalities}
                     />
+                    <MapContainer className={styles.mapContainer} />
+                    <AreaMap />
                 </Map>
             </div>
         );

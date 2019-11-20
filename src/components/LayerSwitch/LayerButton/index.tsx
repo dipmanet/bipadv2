@@ -8,10 +8,23 @@ import styles from './styles.scss';
 interface Props {
     name: string;
     color: string;
+    style: string;
+    onClick?: (style: string) => void;
     className?: string;
 }
 
 export default class LayerButton extends React.PureComponent<Props> {
+    private handleClick = () => {
+        const {
+            onClick,
+            style,
+        } = this.props;
+
+        if (onClick) {
+            onClick(style);
+        }
+    }
+
     public render() {
         const {
             name,
@@ -21,6 +34,7 @@ export default class LayerButton extends React.PureComponent<Props> {
 
         return (
             <Button
+                onClick={this.handleClick}
                 className={_cs(styles.layerButton, className)}
                 transparent
             >

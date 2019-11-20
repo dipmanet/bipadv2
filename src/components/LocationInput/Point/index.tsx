@@ -2,13 +2,14 @@ import React from 'react';
 import memoize from 'memoize-one';
 import produce from 'immer';
 
+import { _cs } from '@togglecorp/fujs';
+
 import MapContext from '#rscz/Map/context';
 import MapSource from '#rscz/Map/MapSource';
 import MapLayer from '#rscz/Map/MapLayer';
 
 import TextInput from '#rsci/TextInput';
 import RegionSelectInput from '#components/RegionSelectInput';
-
 
 import { mapStyles } from '#constants';
 
@@ -312,6 +313,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         const {
             geoJson,
             region,
+            className,
         } = this.props;
 
         const {
@@ -320,7 +322,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         } = this.getFormData(geoJson);
 
         return (
-            <>
+            <div className={_cs(className, styles.point)}>
                 { geoJson && (
                     <MapSource
                         sourceKey="alert-point"
@@ -335,12 +337,14 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                 )}
                 <div className={styles.coordinateInput}>
                     <TextInput
+                        className={styles.lngInput}
                         type="number"
                         label="Longitude"
                         value={lng}
                         onChange={this.handleLngInputChange}
                     />
                     <TextInput
+                        className={styles.latInput}
                         type="number"
                         label="Latitude"
                         value={lat}
@@ -348,11 +352,12 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                     />
                 </div>
                 <RegionSelectInput
+                    className={styles.regionInput}
                     label="Region"
                     value={region}
                     onChange={this.handleRegionSelectInputChange}
                 />
-            </>
+            </div>
         );
     }
 }

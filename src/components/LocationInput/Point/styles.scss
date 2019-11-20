@@ -1,0 +1,21 @@
+.point {
+    display: flex;
+
+    .coordinate-input {
+        display: flex;
+        flex-shrink: 0;
+
+        .lat-input {
+            margin: var(--spacing-medium);
+        }
+
+        .lng-input {
+            margin: var(--spacing-medium);
+        }
+    }
+
+    .region-input {
+        flex-grow: 1;
+        margin: var(--spacing-medium);
+    }
+}

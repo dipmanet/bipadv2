@@ -32,12 +32,10 @@
     }
 }
 
-.hover-detail-box {
+.hover-details {
     display: flex;
     position: absolute;
-    top: $spacing-medium;
-    right: calc(var(--width-navbar-right) + calc(var(--spacing-medium) * 2) +
-    calc(var(--font-size-small) * 10));
+    right: var(--width-filter);
     flex-direction: column;
     z-index: 1;
     border: $width-separator-thin solid $color-separator-light;
@@ -48,11 +46,4 @@
     &.right-pane-expanded {
         right: calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 2));
     }
-}
-
-.map-download-button {
-    position: absolute;
-    top: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
-    z-index: 11;
 }

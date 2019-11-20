@@ -1,9 +1,13 @@
 .location-input {
-    .map-container {
-        height: 500px;
+    display: flex;
+    flex-direction: column;
+
+    .point {
+        flex-shrink: 0;
+        padding-top: var(--spacing-medium);
     }
 
-    .coordinate-input {
-        display: flex;
+    .map-container {
+        flex-grow: 1;
     }
 }

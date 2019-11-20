@@ -1,8 +1,5 @@
-@import '~base-scss/base';
-
 .right {
-    padding: 0;
-    width: 300px;
+    width: var(--width-realtime-filter);
 }
 
 .left {
@@ -38,8 +35,8 @@
             flex-shrink: 0;
             padding: var(--spacing-medium);
             text-transform: uppercase;
-            color: $color-text;
-            font-size: $font-size-small;
+            color: var(--color-text);
+            font-size: var(--font-size-small);
         }
 
         .legend {

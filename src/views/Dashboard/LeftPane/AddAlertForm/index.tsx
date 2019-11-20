@@ -135,7 +135,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 class AddAlertForm extends React.PureComponent<Props, State> {
     private static schema = {
         fields: {
-            title: [requiredCondition],
+            // title: [requiredCondition],
             source: [requiredCondition],
             description: [requiredCondition],
             hazard: [requiredCondition],
@@ -171,15 +171,19 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         this.views = {
             general: {
                 component: () => (
-                    <>
+                    <div className={styles.generalInputs}>
+                        {/*
                         <TextInput
+                            className={styles.titleInput}
                             faramElementName="title"
                             label="Title"
                         />
+                        */}
                         <TextArea
                             className={styles.descriptionInput}
                             faramElementName="description"
                             label="Description"
+                            persistantHintAndError={false}
                         />
                         <SelectInput
                             className={styles.eventInput}
@@ -225,11 +229,16 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                             />
                         </div>
 
-                    </>
+                    </div>
                 ),
             },
             location: {
-                component: () => <LocationInput faramElementName="location" />,
+                component: () => (
+                    <LocationInput
+                        className={styles.locationInput}
+                        faramElementName="location"
+                    />
+                ),
             },
         };
 
@@ -248,6 +257,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     private views: Views;
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        console.warn(faramValues.location);
         this.setState({
             faramValues,
             faramErrors,
@@ -274,7 +284,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
-        const point = location.geoJson.features[0].geometry.coordinates;
+        const point = location.geoJson.features[0].geometry;
 
         addAlertPostRequest.do({
             body: { startedOn, expireOn, point, ...others },
@@ -310,7 +320,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.addAlertForm, className)}
+                className={_cs(styles.addAlertFormModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
@@ -324,7 +334,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                 >
                     <ModalHeader title="Add Alert" />
-                    <ModalBody>
+                    <ModalBody className={styles.body}>
                         <FixedTabs
                             tabs={this.tabs}
                             onClick={this.handleTabClick}

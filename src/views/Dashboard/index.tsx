@@ -8,8 +8,6 @@ import {
     Obj,
 } from '@togglecorp/fujs';
 
-import MapDownload from '#rscz/Map/MapDownload';
-
 import { styleProperties } from '#constants';
 import { currentStyle } from '#rsu/styles';
 
@@ -348,19 +346,11 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className={
-                _cs(
-                    rightPaneExpanded && styles.rightPaneExpanded,
-                    styles.hoverDetailBox,
-                )
-            }
-            >
-                <h3>
+            <div className={styles.hoverDetails}>
+                <h3 className={styles.heading}>
                     {title}
                 </h3>
-                <DateOutput
-                    value={date}
-                />
+                <DateOutput value={date} />
                 <TextOutput
                     label="Source"
                     value={source}
@@ -392,6 +382,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         return (
             <React.Fragment>
+                <Loading pending={pending} />
                 <Map
                     alertList={alertList}
                     eventList={eventList}
@@ -400,14 +391,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onHoverChange={this.handleHoverChange}
                 />
-                <MapDownload
-                    className={styles.mapDownloadButton}
-                    iconName="download"
-                >
-                    Download this map
-                </MapDownload>
-                <Loading pending={pending} />
-                <HoverItemDetail />
+                {/* <HoverItemDetail /> */}
                 <Page
                     leftContentClassName={styles.leftContainer}
                     leftContent={(

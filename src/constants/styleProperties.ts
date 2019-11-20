@@ -28,6 +28,11 @@ const styleProperties = {
 
     widthManualImagePreview: '72px',
     heightManualImagePreview: '96px',
+
+    widthMapboxControlLeftTop: '0',
+    heightMapboxControlLeftTop: '0',
+
+    widthRealtimeFilter: '300px',
 };
 
 export default styleProperties;

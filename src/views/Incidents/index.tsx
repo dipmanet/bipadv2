@@ -8,7 +8,6 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
-import MapDownload from '#rscz/Map/MapDownload';
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -294,12 +293,6 @@ class Incidents extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
                 />
-                <MapDownload
-                    className={styles.mapDownloadButton}
-                    iconName="download"
-                >
-                    Download this map
-                </MapDownload>
                 <HoverItemDetail />
                 <Page
                     leftContentClassName={styles.leftPaneContainer}

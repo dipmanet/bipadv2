@@ -24,6 +24,8 @@ import DangerButton from '#rsca/Button/DangerButton';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
+import LayerSwitch from '#components/LayerSwitch';
+import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import { AppState } from '#store/types';
 
@@ -217,6 +219,8 @@ const getMatchingRegion = (
 
 
 class Multiplexer extends React.PureComponent<Props, State> {
+    private mapboxCtrlSizeSet = false;
+
     public constructor(props: Props) {
         super(props);
 
@@ -267,6 +271,20 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
+
+        if (!this.mapboxCtrlSizeSet) {
+            const mapboxCtrlTopLeft = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
+
+            if (mapboxCtrlTopLeft) {
+                const bcr = mapboxCtrlTopLeft.getBoundingClientRect();
+                if (bcr.width || bcr.height) {
+                    setStyleProperty('widthMapboxControlLeftTop', `${bcr.width}px`);
+                    setStyleProperty('heightMapboxControlLeftTop', `${bcr.height}px`);
+
+                    this.mapboxCtrlSizeSet = true;
+                }
+            }
+        }
     }
 
     private setFilterFromUrl = (
@@ -384,6 +402,21 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             showNavControl
                             navControlPosition="bottom-right"
                         >
+                            { !hideMap && (
+                                <div
+                                    className={_cs(
+                                        styles.mapActions,
+                                        leftPaneContent && styles.withLeftPane,
+                                    )}
+                                >
+                                    <MapDownloadButton
+                                        transparent
+                                        title="Download current map"
+                                        iconName="download"
+                                    />
+                                    <LayerSwitch />
+                                </div>
+                            )}
                             { leftPaneContent && (
                                 <aside className={_cs(styles.leftPaneContainer, leftPaneClassName)}>
                                     { leftPaneContent }
