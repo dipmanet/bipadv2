@@ -406,8 +406,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 addAlertRequest,
                 editAlertRequest,
             },
-            onUpdate,
-            closeModal,
             data,
         } = this.props;
 
@@ -529,6 +527,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     <ModalHeader title="Add / edit alert" />
                     <ModalBody className={styles.body}>
                         <FixedTabs
+                            className={styles.tabs}
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
                             active={currentView}

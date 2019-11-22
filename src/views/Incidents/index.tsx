@@ -304,7 +304,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             recentDay={RECENT_DAY}
                         />
                     )}
-                    mainContentClassName={styles.legendContainer}
+                    mainContentClassName={_cs(styles.legendContainer, 'map-legend-container')}
                     mainContent={(
                         <React.Fragment>
                             <div className={styles.pointSizeLegendContainer}>

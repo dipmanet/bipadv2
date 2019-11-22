@@ -1,22 +1,112 @@
-@import '~base-scss/base';
-
-.add-incident-modal {
+.add-incident-form-modal {
     display: flex;
-    width: 80vw;
-    height: 90vh;
+    flex-direction: column;
+    width: 100%;
+    max-width: 720px;
+    height: 80vh;
 
-    .date-time-inputs {
+    .add-incident-form {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
 
-        h3 {
-            text-transform: uppercase;
-            font-size: $font-size-small;
-        }
-
-        .inputs {
+        .body {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            flex-grow: 1;
+
+            .tabs {
+                flex-shrink: 0;
+            }
+
+            .location-input {
+                flex-grow: 1;
+            }
+
+            .general-inputs {
+                flex-grow: 1;
+                margin: auto;
+                // margin-top: var(--spacing-super-large);
+                background-color: var(--color-foreground-alt);
+                padding: var(--spacing-large);
+                width: 100%;
+                max-width: 640px;
+                overflow: auto;
+
+                %input {
+                    margin: var(--spacing-medium) var(--spacing-large);
+                }
+
+                .description-input {
+                    @extend %input;
+                }
+
+                .detail-input {
+                    @extend %input;
+                }
+
+                .cause-input {
+                    @extend %input;
+                }
+
+                .hazard-input {
+                    @extend %input;
+                }
+
+                .source-input {
+                    @extend %input;
+                }
+
+                .event-input {
+                    @extend %input;
+                }
+
+                .loss-input {
+                    @extend %input;
+                }
+
+                .street-address-input {
+                    @extend %input;
+                }
+
+                .date-inputs {
+                    display: flex;
+
+                    .incident-on-inputs {
+                        display: flex;
+                        padding: var(--spacing-large) 0;
+
+                        >* {
+                            flex-basis: calc(50% - var(--spacing-large));
+                            margin: 0 var(--spacing-large);
+                        }
+                    }
+
+                    .reported-on-inputs {
+                        display: flex;
+                        padding: var(--spacing-large) 0;
+
+                        >* {
+                            flex-basis: calc(50% - var(--spacing-large));
+                            margin: 0 var(--spacing-large);
+                        }
+                    }
+                }
+
+                .checkboxes {
+                    display: flex;
+
+                    >* {
+                        @extend %input;
+                        flex-basis: calc(100% / 3);
+                    }
+                }
+
+                .verification-message-input {
+                    @extend %input;
+                }
+            }
         }
     }
 }

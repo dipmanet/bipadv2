@@ -124,31 +124,53 @@ const labelSelector = (d: PageType.Field) => d.title;
 const lossKeySelector = (d: PageType.Loss) => d.id;
 const lossLabelSelector = (d: PageType.Loss) => d.description;
 
+const onSuccess = ({
+    params,
+    response,
+}: {
+    params: Params;
+    response: PageType.Alert;
+}) => {
+    if (params && params.onSuccess) {
+        params.onSuccess(response);
+    }
+};
+
+const onFailure = ({
+    error,
+    params,
+}: {
+    params: Params;
+    error: {
+        faramErrors: {};
+    };
+}) => {
+    if (params.onFailure) {
+        onFailure(error.faramErrors);
+    }
+};
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     lossGetRequest: {
         url: '/loss/',
         method: methods.GET,
         onMount: true,
+        query: {
+            limit: 50,
+        },
         onSuccess: ({ response, props: { setLossList } }) => {
             interface Response { results: PageType.Loss[] }
             const { results: lossList = [] } = response as Response;
-            setLossList({ lossList });
+            const filteredLossList = lossList.filter(d => d.description);
+            setLossList({ lossList: filteredLossList });
         },
     },
-    addIncidentPostRequest: {
+    addIncidentRequest: {
         url: '/incident/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
-            }
-        },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
-            }
-        },
+        onSuccess,
+        onFailure,
     },
 };
 
@@ -171,23 +193,26 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         this.views = {
             general: {
                 component: () => (
-                    <>
+                    <div className={styles.generalInputs}>
                         <TextArea
+                            className={styles.descriptionInput}
                             faramElementName="description"
                             label="Description"
                         />
                         <TextArea
+                            className={styles.detailInput}
                             faramElementName="detail"
-                            label="Detail1"
+                            label="Detail"
                         />
                         <TextArea
+                            className={styles.causeInput}
                             faramElementName="cause"
                             label="Cause"
                         />
                         <SelectInput
                             className={styles.hazardInput}
                             faramElementName="hazard"
-                            options={hazardList}
+                            options={this.props.hazardList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Hazard"
@@ -195,7 +220,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                         <SelectInput
                             className={styles.sourceInput}
                             faramElementName="source"
-                            options={sourceList}
+                            options={this.props.sourceList}
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
                             label="Source"
@@ -203,7 +228,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                         <SelectInput
                             className={styles.eventInput}
                             faramElementName="event"
-                            options={eventList}
+                            options={this.props.eventList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Event"
@@ -211,20 +236,20 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                         <SelectInput
                             className={styles.lossInput}
                             faramElementName="loss"
-                            options={lossList}
+                            options={this.props.lossList}
                             keySelector={lossKeySelector}
                             labelSelector={lossLabelSelector}
                             label="Loss"
                         />
                         <TextInput
-                            className={styles.streetAddress}
+                            className={styles.streetAddressInput}
                             faramElementName="streetAddress"
                             label="Street Address"
                         />
-                        <div className={styles.dateTimeInputs}>
-                            <h3>Incident On</h3>
-                            <div className={styles.inputs}>
+                        <div className={styles.dateInputs}>
+                            <div className={styles.incidentOnInputs}>
                                 <DateInput
+                                    label="Incident on"
                                     className={styles.incidentOnDate}
                                     faramElementName="incidentOnDate"
                                 />
@@ -232,11 +257,9 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                     faramElementName="incidentOnTime"
                                 />
                             </div>
-                        </div>
-                        <div className={styles.dateTimeInputs}>
-                            <h3>Reported On</h3>
-                            <div className={styles.inputs}>
+                            <div className={styles.reportedOnInputs}>
                                 <DateInput
+                                    label="Reported on"
                                     faramElementName="reportedOnDate"
                                 />
                                 <TimeInput
@@ -244,32 +267,35 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                 />
                             </div>
                         </div>
-                        <Checkbox
-                            className={styles.approved}
-                            label="Approved"
-                            faramElementName="approved"
-                        />
-                        <Checkbox
-                            className={styles.verified}
-                            label="Verified"
-                            faramElementName="verified"
-                        />
-                        <Checkbox
-                            className={styles.needFollowup}
-                            label="Need Followup"
-                            faramElementName="needFollowup"
-                        />
+                        <div className={styles.checkboxes}>
+                            <Checkbox
+                                className={styles.isApprovedSelectionCheckbox}
+                                label="Approved"
+                                faramElementName="approved"
+                            />
+                            <Checkbox
+                                className={styles.isVerifiedSelectionCheckbox}
+                                label="Verified"
+                                faramElementName="verified"
+                            />
+                            <Checkbox
+                                className={styles.needFollowupSelectionCheckbox}
+                                label="Need Followup"
+                                faramElementName="needFollowup"
+                            />
+                        </div>
                         <TextArea
+                            className={styles.verificationMessageInput}
                             faramElementName="verificationMessage"
                             label="Verification Message"
                         />
-                    </>
+                    </div>
                 ),
             },
             location: {
                 component: () => (
                     <LocationInput
-                        className={styles.location}
+                        className={styles.locationInput}
                         faramElementName="location"
                     />
                 ),
@@ -277,7 +303,10 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         };
 
         this.state = {
-            faramValues: {},
+            faramValues: {
+                approved: true,
+                verified: true,
+            },
             faramErrors: {},
             pristine: true,
             currentView: 'general',
@@ -292,10 +321,10 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         fields: {
             hazard: [requiredCondition],
             source: [requiredCondition],
-            incidentOnDate: [requiredCondition],
-            incidentOntime: [requiredCondition],
-            wards: [requiredCondition],
-            point: [requiredCondition],
+            incidentOnDate: [],
+            incidentOntime: [],
+            wards: [],
+            point: [],
             polygon: [],
             description: [],
             cause: [],
@@ -308,10 +337,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             needFollowup: [],
             event: [],
             loss: [],
+            location: [],
         },
     };
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        console.warn(faramValues);
         this.setState({
             faramValues,
             faramErrors,
@@ -326,34 +357,75 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addIncidentPostRequest }, onUpdate, closeModal } = this.props;
+        const {
+            requests: {
+                addIncidentRequest,
+            },
+        } = this.props;
         const {
             incidentOnDate,
             incidentOnTime,
             reportedOnDate,
             reportedOnTime,
+            location,
             ...others
         } = faramValues;
 
-        const startedOn = new Date(`${incidentOnDate}T${incidentOnTime}`).toISOString();
+        const getRegion = (region) => {
+            const regionTypeMap = {
+                1: 'province',
+                2: 'district',
+                3: 'municipality',
+                4: 'ward',
+            };
+
+            return {
+                regionType: regionTypeMap[region.adminLevel],
+                regionId: region.geoarea,
+            };
+        };
+
+        const incidentOn = new Date(`${incidentOnDate}T${incidentOnTime}`).toISOString();
+
         let reportedOn;
         if (reportedOnDate && reportedOnTime) {
             reportedOn = new Date(`${reportedOnDate}T${reportedOnTime}`).toISOString();
         }
+        const point = location.geoJson.features[0].geometry;
+        const wards = location.wards;
 
-        addIncidentPostRequest.do({
-            body: { startedOn, reportedOn, ...others },
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                } else if (closeModal) {
-                    closeModal();
-                }
-            },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+        const {
+            regionType,
+            regionId,
+        } = getRegion(location.region);
+
+        const body = {
+            ...others,
+            incidentOn,
+            reportedOn,
+            point,
+            wards,
+            regionId,
+            region: regionType,
+        };
+
+        addIncidentRequest.do({
+            body,
+            onSuccess: this.handleRequestSuccess,
+            onFailure: this.handleRequestFailure,
         });
+    }
+
+    private handleRequestSuccess = (response) => {
+        const { onRequestSuccess } = this.props;
+
+        if (onRequestSuccess) {
+            onRequestSuccess(response);
+        }
+    }
+
+    private handleRequestFailure = (faramErrors) => {
+        this.setState({ faramErrors });
     }
 
     private handleTabClick = (newTab: keyof Tabs) => {
@@ -375,7 +447,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.addIncidentModal, className)}
+                className={_cs(styles.addIncidentFormModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
@@ -386,10 +458,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     schema={AddIncidentForm.schema}
                     value={faramValues}
                     error={faramErrors}
+                    className={styles.addIncidentForm}
                 >
                     <ModalHeader title="Add Incident" />
-                    <ModalBody>
+                    <ModalBody className={styles.body}>
                         <FixedTabs
+                            className={styles.tabs}
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
                             active={currentView}

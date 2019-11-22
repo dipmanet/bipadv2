@@ -143,6 +143,7 @@ class LeftPane extends React.PureComponent {
                             >
                                 Add
                             </ModalButton>
+                            {/*
                             <ModalButton
                                 className={styles.addIncidentButton}
                                 title="Add"
@@ -173,6 +174,7 @@ class LeftPane extends React.PureComponent {
                             >
                                 Add Inventory
                             </ModalButton>
+                            */}
                         </div>
                     </header>
                     <IncidentListView
