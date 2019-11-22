@@ -12,6 +12,7 @@ import {
     getHazardIcon,
 } from '#utils/domain';
 import DateOutput from '#components/DateOutput';
+import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 
@@ -95,21 +96,23 @@ export default class AlertItem extends React.PureComponent {
                         <div className={styles.title}>
                             {title}
                         </div>
-                        <Button
-                            transparent
-                            className={styles.editButton}
-                            onClick={this.handleEditButtonClick}
-                        >
-                            Edit
-                        </Button>
-                        <DangerConfirmButton
-                            transparent
-                            className={styles.deleteButton}
-                            onClick={this.handleDeleteButtonClick}
-                            confirmationMessage="Are you sure to delete the Alert?"
-                        >
-                            Delete
-                        </DangerConfirmButton>
+                        <Cloak hiddenIf={p => !p.change_alert}>
+                            <Button
+                                transparent
+                                className={styles.editButton}
+                                onClick={this.handleEditButtonClick}
+                            >
+                                Edit
+                            </Button>
+                            <DangerConfirmButton
+                                transparent
+                                className={styles.deleteButton}
+                                onClick={this.handleDeleteButtonClick}
+                                confirmationMessage="Are you sure to delete the Alert?"
+                            >
+                                Delete
+                            </DangerConfirmButton>
+                        </Cloak>
                     </div>
                     <div className={styles.bottom}>
                         <DateOutput

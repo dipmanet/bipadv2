@@ -10,6 +10,7 @@ import modalize from '#rscg/Modalize';
 import TextOutput from '#components/TextOutput';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
+import Cloak from '#components/Cloak';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
@@ -243,14 +244,16 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Alerts
                             </h2>
-                            <div className={styles.actions}>
-                                <Button
-                                    transparent
-                                    onClick={this.handleAddAlertButtonClick}
-                                >
-                                    Add
-                                </Button>
-                            </div>
+                            <Cloak hiddenIf={p => !p.change_alert}>
+                                <div className={styles.actions}>
+                                    <Button
+                                        transparent
+                                        onClick={this.handleAddAlertButtonClick}
+                                    >
+                                        Add
+                                    </Button>
+                                </div>
+                            </Cloak>
                         </header>
                         <VirtualizedListView
                             className={styles.content}
@@ -267,14 +270,16 @@ export default class LeftPane extends React.PureComponent {
                             <h2 className={styles.heading}>
                                 Major events
                             </h2>
-                            <div className={styles.actions}>
-                                <Button
-                                    transparent
-                                    onClick={this.handleAddEventButtonClick}
-                                >
-                                    Add
-                                </Button>
-                            </div>
+                            <Cloak hiddenIf={p => !p.change_event}>
+                                <div className={styles.actions}>
+                                    <Button
+                                        transparent
+                                        onClick={this.handleAddEventButtonClick}
+                                    >
+                                        Add
+                                    </Button>
+                                </div>
+                            </Cloak>
                         </header>
                         <VirtualizedListView
                             className={styles.content}

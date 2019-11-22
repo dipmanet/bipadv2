@@ -99,6 +99,7 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
 
         let regionName = 'Nepal';
         const pageTitle = this.context.activeRouteDetails.title;
+        let source = '';
 
         if (map) {
             if (region.adminLevel === 1) {
@@ -117,6 +118,12 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
                 if (municipality) {
                     regionName = municipality.title;
                 }
+            }
+
+            if (this.context.activeRouteDetails.name === 'realtime') {
+                source = 'Rain / river: DHM, Fire: ICIMOD, Pollution: Ministry of forest of environment, Earthquake: Seismology';
+            } else if (this.context.activeRouteDetails.name === 'incident') {
+                source = 'Nepal police';
             }
         }
 
@@ -180,6 +187,9 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
             context.fillText(title, 12, 24);
             context.font = '14px Source Sans Pro';
             context.fillText(`Exported on: ${today.toLocaleDateString()}`, 12, 48);
+            if (source) {
+                context.fillText(`Source: ${source}`, 12, 68);
+            }
 
             if (scale) {
                 const scaleCanvas = html2canvas(scale);

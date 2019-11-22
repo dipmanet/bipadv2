@@ -491,6 +491,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             closeModal,
             hazardList,
             onCloseButtonClick,
+            requests: {
+                addAlertRequest: {
+                    pending: addAlertRequestPending,
+                },
+                editAlertRequest: {
+                    pending: editAlertRequestPending,
+                },
+            },
         } = this.props;
 
         const {
@@ -500,6 +508,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramErrors,
         } = this.state;
 
+        const pending = addAlertRequestPending || editAlertRequestPending;
 
         return (
             <Modal
@@ -515,6 +524,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     schema={AddAlertForm.schema}
                     value={faramValues}
                     error={faramErrors}
+                    disbled={pending}
                 >
                     <ModalHeader title="Add / edit alert" />
                     <ModalBody className={styles.body}>
@@ -529,12 +539,16 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton onClick={onCloseButtonClick}>
+                        <DangerButton
+                            disabled={pending}
+                            onClick={onCloseButtonClick}
+                        >
                             Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
+                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>

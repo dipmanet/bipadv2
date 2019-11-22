@@ -1,6 +1,7 @@
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 
 import Faram, {
     requiredCondition,
@@ -10,6 +11,7 @@ import Faram, {
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextInput from '#rsci/TextInput';
+import Page from '#components/Page';
 
 import { User } from '#store/atom/auth/types';
 
@@ -148,6 +150,7 @@ class Login extends React.PureComponent<Props, State> {
             faramValues,
         } = this.state;
         const {
+            className,
             requests: {
                 loginRequest: {
                     pending,
@@ -156,40 +159,51 @@ class Login extends React.PureComponent<Props, State> {
         } = this.props;
 
         return (
-            <div className={styles.form}>
-                <h2> Login </h2>
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={Login.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disabled={pending}
-                >
-                    <NonFieldErrors faramElement />
-                    <TextInput
-                        faramElementName="username"
-                        label="Username"
-                        placeholder="shyam"
-                        autoFocus
-                    />
-                    <TextInput
-                        faramElementName="password"
-                        label="Password"
-                        placeholder="********"
-                        type="password"
-                    />
-                    <div>
-                        <PrimaryButton
-                            type="submit"
-                            pending={pending}
-                        >
+            <Page
+                leftContent={null}
+                hideMap
+                mainContentClassName={_cs(className, styles.form)}
+                mainContent={(
+                    <>
+                        <h2 className={styles.heading}>
                             Login
-                        </PrimaryButton>
-                    </div>
-                </Faram>
-            </div>
+                        </h2>
+                        <Faram
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramValidationFailure}
+                            onValidationSuccess={this.handleFaramValidationSuccess}
+                            schema={Login.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                            disabled={pending}
+                        >
+                            <NonFieldErrors faramElement />
+                            <TextInput
+                                className={styles.input}
+                                faramElementName="username"
+                                label="Username"
+                                placeholder="shyam"
+                                autoFocus
+                            />
+                            <TextInput
+                                className={styles.input}
+                                faramElementName="password"
+                                label="Password"
+                                placeholder="********"
+                                type="password"
+                            />
+                            <div>
+                                <PrimaryButton
+                                    type="submit"
+                                    pending={pending}
+                                >
+                                    Login
+                                </PrimaryButton>
+                            </div>
+                        </Faram>
+                    </>
+                )}
+            />
         );
     }
 }

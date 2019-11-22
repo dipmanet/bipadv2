@@ -48,6 +48,7 @@ const iconNames = {
     user: 'ion-android-person',
 
     login: 'ion-log-in',
+    logout: 'ion-log-out',
     back: 'ion-android-arrow-back',
 
     email: 'ion-ios-email',

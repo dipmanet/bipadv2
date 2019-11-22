@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
+import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 
 import { routeSettings } from '#constants';
 import { authStateSelector } from '#selectors';
@@ -104,6 +106,7 @@ class Navbar extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
+        // console.warn('auth state yaaaay', authState);
         const { authenticated, user } = authState;
         // <Logo />
 
@@ -116,37 +119,38 @@ class Navbar extends React.PureComponent<Props, State> {
                     rendererParams={this.menuRendererParams}
                     className={styles.menuItemList}
                 />
-                {/*
-                    <div className={styles.right}>
-                        { !authenticated && (
-                            <MenuItem
-                                title="Login"
-                                link="/login/"
-                                />
-                        )}
-                        { user && (
-                            <div className={styles.username}>
-                                {`Hello ${user.username}`}
-                                </div>
-                        )}
-                        { authenticated && (
-                            <Button
-                                onClick={logoutRequest.do}
-                                pending={logoutRequest.pending}
-                                transparent
-                            >
-                                Logout
-                                </Button>
-                        )}
-                        </div>
-                  */}
+                <div className={styles.bottom}>
+                    { !authenticated && (
+                        <MenuItem
+                            title="Login"
+                            iconName="login"
+                            link="/login/"
+                        />
+                    )}
+                    { user && (
+                        <Icon
+                            className={styles.userIcon}
+                            title={`${user.username}`}
+                            name="user"
+                        />
+                    )}
+                    { authenticated && (
+                        <Button
+                            className={styles.logoutButton}
+                            title="Logout"
+                            onClick={logoutRequest.do}
+                            pending={logoutRequest.pending}
+                            transparent
+                            iconName="logout"
+                        />
+                    )}
+                </div>
             </nav>
         );
     }
 }
 
 // check for map styles
-
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requestOptions)(
