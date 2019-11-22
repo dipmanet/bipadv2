@@ -59,10 +59,9 @@ export default class LeftPane extends React.PureComponent {
         super(props);
 
         this.state = {
-            showAlerts: true,
-            showTabular: false,
             showVisualizations: false,
             showAddAlertModal: false,
+            showAddEventModal: false,
         };
     }
 
@@ -77,6 +76,8 @@ export default class LeftPane extends React.PureComponent {
     getEventRendererParams = (_, d) => ({
         event: d,
         hazardTypes: this.props.hazardTypes,
+        onEditButtonClick: this.handleEventEditButtonClick,
+        onDeleteButtonClick: this.props.onDeleteEventButtonClick,
     });
 
     groupByHazard = memoize((alerts, hazards) => {
@@ -129,6 +130,37 @@ export default class LeftPane extends React.PureComponent {
         onAlertChange(response);
     }
 
+    handleEventEditButtonClick = (event) => {
+        this.setState({
+            showAddEventModal: true,
+            eventToEdit: event,
+        });
+    }
+
+    handleAddEventButtonClick = () => {
+        this.setState({
+            showAddEventModal: true,
+            eventToEdit: undefined,
+        });
+    }
+
+    handleAddEventModalCloseButtonClick = () => {
+        this.setState({
+            showAddEventModal: false,
+            eventToEdit: undefined,
+        });
+    }
+
+    handleEventFormRequestSuccess = (response) => {
+        this.setState({
+            showAddEventModal: false,
+            eventToEdit: undefined,
+        });
+
+        const { onEventChange } = this.props;
+        onEventChange(response);
+    }
+
     handleToggleVisualizationButtonClick = () => {
         const { showVisualizations } = this.state;
         this.setState({
@@ -176,10 +208,10 @@ export default class LeftPane extends React.PureComponent {
         } = this.props;
 
         const {
-            showAlerts,
-            showTabular,
             showAddAlertModal,
+            showAddEventModal,
             alertToEdit,
+            eventToEdit,
         } = this.state;
 
         return (
@@ -236,15 +268,12 @@ export default class LeftPane extends React.PureComponent {
                                 Major events
                             </h2>
                             <div className={styles.actions}>
-                                <ModalButton
-                                    title="Add"
+                                <Button
                                     transparent
-                                    modal={(
-                                        <AddEventForm />
-                                    )}
+                                    onClick={this.handleAddEventButtonClick}
                                 >
                                     Add
-                                </ModalButton>
+                                </Button>
                             </div>
                         </header>
                         <VirtualizedListView
@@ -262,6 +291,13 @@ export default class LeftPane extends React.PureComponent {
                         data={alertToEdit}
                         onCloseButtonClick={this.handleAddAlertModalCloseButtonClick}
                         onRequestSuccess={this.handleAlertFormRequestSuccess}
+                    />
+                )}
+                { showAddEventModal && (
+                    <AddEventForm
+                        data={eventToEdit}
+                        onCloseButtonClick={this.handleAddEventModalCloseButtonClick}
+                        onRequestSuccess={this.handleEventFormRequestSuccess}
                     />
                 )}
             </div>

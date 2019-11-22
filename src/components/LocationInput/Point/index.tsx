@@ -50,12 +50,14 @@ interface State {
 
 
 export default class DraggablePoint extends React.PureComponent<Props, State> {
+    /*
     public constructor(props: Props) {
         super(props);
 
         // TODO find a better way;
-        defaultGeoJson.features[0].properties.hazardColor = props.pointColor;
+        // defaultGeoJson.features[0].geometry = props.point;
     }
+     */
 
     private handleMove = (e: {}) => {
         const {
@@ -71,8 +73,16 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         } = e;
 
         const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            if (deferedState.features[0].geometry) {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry.coordinates = [lng, lat];
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry = {
+                    type: 'Point',
+                    coordinates: [lng, lat],
+                };
+            }
         });
 
         this.context.map.getSource('alert-point').setData(newGeoJson);
@@ -95,8 +105,16 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         } = e;
 
         const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            if (deferedState.features[0].geometry) {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry.coordinates = [lng, lat];
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry = {
+                    type: 'Point',
+                    coordinates: [lng, lat],
+                };
+            }
         });
 
         // this.context.map.getSource('alert-point').setData(newGeoJson);
@@ -346,12 +364,14 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                 <div className={styles.coordinateInput}>
                     <TextInput
                         className={styles.lngInput}
+                        readOnly
                         type="number"
                         label="Longitude"
                         value={lng}
                         onChange={this.handleLngInputChange}
                     />
                     <TextInput
+                        readOnly
                         className={styles.latInput}
                         type="number"
                         label="Latitude"

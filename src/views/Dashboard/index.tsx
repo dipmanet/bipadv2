@@ -181,6 +181,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    deleteEventRequest: {
+        url: ({ params }) => `/event/${params.eventId}`,
+        method: methods.DELETE,
+        onSuccess: ({ params }) => {
+            if (params && params.onSuccess) {
+                params.onSuccess();
+            }
+        },
+    },
 };
 
 const RECENT_DAY = 1;
@@ -321,6 +330,17 @@ class Dashboard extends React.PureComponent<Props, State> {
         alertsRequest.do();
     }
 
+    private handleEventChange = (/* newEvent */) => {
+        // TODO: update redux instead?
+        const {
+            requests: {
+                eventsRequest,
+            },
+        } = this.props;
+
+        eventsRequest.do();
+    }
+
     private handleDeleteAlertButtonClick = (alert) => {
         const {
             requests: {
@@ -332,6 +352,20 @@ class Dashboard extends React.PureComponent<Props, State> {
         deleteAlertRequest.do({
             alertId: alert.id,
             onSuccess: alertsRequest.do,
+        });
+    }
+
+    private handleDeleteEventButtonClick = (event) => {
+        const {
+            requests: {
+                deleteEventRequest,
+                eventsRequest,
+            },
+        } = this.props;
+
+        deleteEventRequest.do({
+            eventId: event.id,
+            onSuccess: eventsRequest.do,
         });
     }
 
@@ -439,6 +473,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                             recentDay={RECENT_DAY}
                             onAlertChange={this.handleAlertChange}
                             onDeleteAlertButtonClick={this.handleDeleteAlertButtonClick}
+                            onEventChange={this.handleEventChange}
+                            onDeleteEventButtonClick={this.handleDeleteEventButtonClick}
                         />
                     )}
                     mainContentClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}

@@ -54,28 +54,6 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 const emptyObject = {};
 
 class LocationInput extends React.PureComponent<Props, State> {
-    private getGeoJson = (geoJsonFromState, pointColor) => {
-        if (geoJsonFromState) {
-            return geoJsonFromState;
-        }
-
-        const geoJson = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [84.1240, 28.3949],
-                },
-                properties: {
-                    hazardColor: pointColor,
-                },
-            }],
-        };
-
-        return geoJson;
-    }
-
     private handlePointMove = (geoJson, region) => {
         const {
             onChange,
@@ -111,6 +89,7 @@ class LocationInput extends React.PureComponent<Props, State> {
             districts,
             municipalities,
             provinces,
+            point,
             pointColor,
             value = emptyObject,
         } = this.props;
@@ -143,7 +122,6 @@ class LocationInput extends React.PureComponent<Props, State> {
                         provinces={provinces}
                         districts={districts}
                         municipalities={municipalities}
-                        pointColor={pointColor}
                     />
                     <MapContainer className={styles.mapContainer} />
                 </Map>

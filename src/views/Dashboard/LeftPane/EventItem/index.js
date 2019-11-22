@@ -3,8 +3,13 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Button from '#rsca/Button';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
-import { getHazardColor, getHazardIcon } from '#utils/domain';
+import {
+    getHazardColor,
+    getHazardIcon,
+} from '#utils/domain';
 import DateOutput from '#components/DateOutput';
 
 import styles from './styles.scss';
@@ -23,6 +28,32 @@ export default class EventItem extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
+
+    handleEditButtonClick = () => {
+        const {
+            onEditButtonClick,
+            event,
+        } = this.props;
+
+        if (!onEditButtonClick) {
+            return;
+        }
+
+        onEditButtonClick(event);
+    }
+
+    handleDeleteButtonClick = () => {
+        const {
+            onDeleteButtonClick,
+            alert,
+        } = this.props;
+
+        if (!onDeleteButtonClick) {
+            return;
+        }
+
+        onDeleteButtonClick(alert);
+    }
 
     render() {
         const {
@@ -52,13 +83,32 @@ export default class EventItem extends React.PureComponent {
                     style={{ color: getHazardColor(hazardTypes, hazard) }}
                 />
                 <div className={styles.right}>
-                    <div className={styles.title}>
-                        {title}
+                    <div className={styles.top}>
+                        <div className={styles.title}>
+                            {title}
+                        </div>
+                        <Button
+                            transparent
+                            className={styles.editButton}
+                            onClick={this.handleEditButtonClick}
+                        >
+                            Edit
+                        </Button>
+                        <DangerConfirmButton
+                            transparent
+                            className={styles.deleteButton}
+                            onClick={this.handleDeleteButtonClick}
+                            confirmationMessage="Are you sure to delete the Alert?"
+                        >
+                            Delete
+                        </DangerConfirmButton>
                     </div>
-                    <DateOutput
-                        className={styles.createdOn}
-                        value={createdOn}
-                    />
+                    <div className={styles.bottom}>
+                        <DateOutput
+                            className={styles.createdOn}
+                            value={createdOn}
+                        />
+                    </div>
                 </div>
             </div>
         );

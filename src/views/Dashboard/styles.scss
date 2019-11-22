@@ -1,5 +1,3 @@
-@import '~base-scss/base';
-
 .left-container {
     display: flex;
     flex-direction: column;
@@ -14,12 +12,12 @@
     transform: none;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
+    width: 300px;
 
     .hazard-legend {
         display: flex;
         flex-wrap: wrap;
         padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-medium));
-        max-width: 300px;
 
         .legend-item {
             flex-basis: 50%;
@@ -44,20 +42,4 @@
 
 .filters {
     border: var(--width-separator-thin) solid var(--color-separator);
-}
-
-.hover-details {
-    display: flex;
-    position: absolute;
-    right: var(--width-filter);
-    flex-direction: column;
-    z-index: 1;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: 3px;
-    background-color: $color-foreground;
-    padding: $spacing-small $spacing-large;
-
-    &.right-pane-expanded {
-        right: calc(var(--width-right-panel) + var(--width-navbar-right) + calc(var(--spacing-medium) * 2));
-    }
 }

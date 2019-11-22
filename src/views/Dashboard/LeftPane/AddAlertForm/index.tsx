@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import produce from 'immer';
 import {
     _cs,
     padStart as p,
@@ -16,7 +17,6 @@ import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalFooter from '#rscv/Modal/Footer';
-import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
@@ -219,6 +219,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 label="Started on"
                             />
                             <TimeInput
+                                className={styles.startedOnTime}
                                 faramElementName="startedOnTime"
                             />
                         </div>
@@ -228,6 +229,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 faramElementName="expireOnDate"
                             />
                             <TimeInput
+                                className={styles.startedOnTime}
                                 faramElementName="expireOnTime"
                             />
                         </div>
@@ -256,7 +258,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
                     return (
                         <LocationInput
-                            pointColor={this.getActiveHazardColor(hazard, hazardList)}
                             className={styles.locationInput}
                             faramElementName="location"
                         />
@@ -276,6 +277,32 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             const expireOnDate = `${p(expireOn.getFullYear(), 2)}-${p(expireOn.getMonth() + 1, 2)}-${p(expireOn.getDate(), 2)}`;
             const expireOnTime = `${p(expireOn.getHours(), 2)}:${p(expireOn.getMinutes(), 2)}:${p(expireOn.getSeconds(), 2)}`;
 
+            const geoJson = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    geometry: props.data.point || {
+                        type: 'Point',
+                        coordinates: [],
+                    },
+                    properties: {
+                        hazardColor: this.getActiveHazardColor(props.data.hazard, props.hazardList),
+                    },
+                }],
+            };
+
+            const adminLevelMap = {
+                province: 1,
+                district: 2,
+                municipality: 3,
+                ward: 4,
+            };
+
+            const region = {
+                adminLevel: adminLevelMap[props.data.region],
+                geoarea: props.data.regionId,
+            };
+
             initialData = {
                 source: props.data.source,
                 description: props.data.description,
@@ -287,11 +314,18 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 event: (props.data.event || {}).id,
                 expireOnDate,
                 expireOnTime,
+                location: {
+                    region,
+                    geoJson,
+                    wards: props.data.wards,
+                },
             };
         }
 
         this.state = {
             faramValues: {
+                public: true,
+                verified: true,
                 wards: [],
                 ...initialData,
             },
@@ -344,10 +378,17 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        // console.warn(faramValues.location);
+        const hazardColor = this.getActiveHazardColor(faramValues.hazard, this.props.hazardList);
+        const location = produce(faramValues.location, (deferedState) => {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.geoJson.features[0].properties.hazardColor = hazardColor;
+        });
 
         this.setState({
-            faramValues,
+            faramValues: {
+                ...faramValues,
+                location,
+            },
             faramErrors,
             pristine: false,
         });
@@ -379,16 +420,38 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             ...others
         } = faramValues;
 
+        const getRegion = (region) => {
+            const regionTypeMap = {
+                1: 'province',
+                2: 'district',
+                3: 'municipality',
+                4: 'ward',
+            };
+
+            return {
+                regionType: regionTypeMap[region.adminLevel],
+                regionId: region.geoarea,
+            };
+        };
+
+
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
         const point = location.geoJson.features[0].geometry;
         const wards = location.wards;
+        const {
+            regionType,
+            regionId,
+        } = getRegion(location.region);
+
         const body = {
             ...others,
             startedOn,
             expireOn,
             point,
             wards,
+            regionId,
+            region: regionType,
         };
 
         if (data && data.id) {
@@ -453,7 +516,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader title="Add Alert" />
+                    <ModalHeader title="Add / edit alert" />
                     <ModalBody className={styles.body}>
                         <FixedTabs
                             tabs={this.tabs}
@@ -466,9 +529,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            onClick={onCloseButtonClick}
-                        >
+                        <DangerButton onClick={onCloseButtonClick}>
                             Close
                         </DangerButton>
                         <PrimaryButton

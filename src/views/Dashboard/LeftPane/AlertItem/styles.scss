@@ -21,15 +21,6 @@
         }
     }
 
-    .default-icon {
-        flex-shrink: 0;
-        margin: var(--spacing-small) var(--spacing-medium);
-        width: 20px;
-        height: 20px;
-        color: var(--color-danger);
-        font-size: var(--font-size-extra-large);
-    }
-
     .right {
         flex-grow: 1;
         padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;

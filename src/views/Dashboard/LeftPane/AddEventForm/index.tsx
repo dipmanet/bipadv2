@@ -1,7 +1,10 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    padStart as p,
+} from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -76,8 +79,8 @@ interface FaramValues {
     polygon?: string;
     startedOnDate?: string;
     startedOnTime?: string;
-    endedOnDate?: string;
-    endedOnTime?: string;
+    expireOnDate?: string;
+    expireOnTime?: string;
     severity?: string;
     hazard?: number;
 }
@@ -94,21 +97,46 @@ interface State {
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
+const onSuccess = ({
+    params,
+    response,
+}: {
+    params: Params;
+    response: PageType.Event;
+}) => {
+    if (params && params.onSuccess) {
+        params.onSuccess(response);
+    }
+};
+
+const onFailure = ({
+    error,
+    params,
+}: {
+    params: Params;
+    error: {
+        faramErrors: {};
+    };
+}) => {
+    if (params.onFailure) {
+        onFailure(error.faramErrors);
+    }
+};
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    addEventPostRequest: {
+    addEventRequest: {
         url: '/event/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
-            }
-        },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object}).faramErrors);
-            }
-        },
+        onSuccess,
+        onFailure,
+    },
+    editEventRequest: {
+        url: ({ props }) => `/event/${props.data.id}/`,
+        method: methods.PUT,
+        body: ({ params: { body } }) => body,
+        onSuccess,
+        onFailure,
     },
 };
 
@@ -119,6 +147,8 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     hazardList: hazardTypeListSelector(state),
     severityList: severityListSelector(state),
 });
+
+const defaultHazardColor = '#a0a0a0';
 
 class AddEventForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -137,38 +167,43 @@ class AddEventForm extends React.PureComponent<Props, State> {
         this.views = {
             general: {
                 component: () => (
-                    <>
+                    <div className={styles.generalInputs}>
                         <TextInput
+                            className={styles.titleInput}
                             faramElementName="title"
                             label="Title"
+                            persistantHintAndError={false}
                         />
                         <TextArea
+                            className={styles.descriptionInput}
                             faramElementName="description"
                             label="Description"
+                            persistantHintAndError={false}
                         />
-                        <div className={styles.dateTimeInputs}>
-                            <h3>Started On</h3>
-                            <div className={styles.inputs}>
-                                <DateInput
-                                    faramElementName="startedOnDate"
-                                />
-                                <TimeInput
-                                    faramElementName="startedOnTime"
-                                />
-                            </div>
+                        <div className={styles.startedOnInputs}>
+                            <DateInput
+                                className={styles.startedOnDate}
+                                faramElementName="startedOnDate"
+                                label="Started on"
+                            />
+                            <TimeInput
+                                faramElementName="startedOnTime"
+                            />
                         </div>
-                        <div className={styles.dateTimeInputs}>
-                            <h3>Ended On</h3>
-                            <div className={styles.inputs}>
-                                <DateInput
-                                    faramElementName="endedOnDate"
-                                />
-                                <TimeInput
-                                    faramElementName="endedOnTime"
-                                />
-                            </div>
+                        {/*
+                        <div className={styles.expiresOnInputs}>
+                            <DateInput
+                                label="Expires on"
+                                faramElementName="expireOnDate"
+                            />
+                            <TimeInput
+                                className={styles.startedOnTime}
+                                faramElementName="expireOnTime"
+                            />
                         </div>
+                        */}
                         <SelectInput
+                            className={styles.severityInput}
                             faramElementName="severity"
                             options={severityList}
                             keySelector={labelSelector}
@@ -183,25 +218,61 @@ class AddEventForm extends React.PureComponent<Props, State> {
                             labelSelector={labelSelector}
                             label="Hazard"
                         />
-                    </>
+                    </div>
                 ),
             },
             location: {
-                component: () => (<div>Location</div>),
+                component: () => {
+                    const {
+                        faramValues: {
+                            hazard,
+                        },
+                    } = this.state;
+
+                    return (
+                        <LocationInput
+                            pointColor={this.getActiveHazardColor(hazard, hazardList)}
+                            className={styles.locationInput}
+                            faramElementName="location"
+                        />
+                    );
+                },
             },
         };
 
+        let initialData = {};
+
+        if (props.data) {
+            const startedOn = new Date(props.data.startedOn);
+            const startedOnDate = `${p(startedOn.getFullYear(), 2)}-${p(startedOn.getMonth() + 1, 2)}-${p(startedOn.getDate(), 2)}`;
+            const startedOnTime = `${p(startedOn.getHours(), 2)}:${p(startedOn.getMinutes(), 2)}:${p(startedOn.getSeconds(), 2)}`;
+
+            const expireOn = new Date(props.data.expireOn);
+            const expireOnDate = `${p(expireOn.getFullYear(), 2)}-${p(expireOn.getMonth() + 1, 2)}-${p(expireOn.getDate(), 2)}`;
+            const expireOnTime = `${p(expireOn.getHours(), 2)}:${p(expireOn.getMinutes(), 2)}:${p(expireOn.getSeconds(), 2)}`;
+
+            initialData = {
+                title: props.data.title,
+                description: props.data.description,
+                hazard: props.data.hazard,
+                severity: props.data.severity,
+                startedOnDate,
+                startedOnTime,
+                // expireOnDate,
+                // expireOnTime,
+            };
+        }
+
         this.state = {
-            faramValues: {},
+            faramValues: {
+                wards: [],
+                ...initialData,
+            },
             faramErrors: {},
             pristine: true,
             currentView: 'general',
         };
     }
-
-    private tabs: Tabs;
-
-    private views: Views;
 
     private static schema = {
         fields: {
@@ -212,11 +283,32 @@ class AddEventForm extends React.PureComponent<Props, State> {
             description: [],
             point: [],
             polygon: [],
-            endedOnDate: [],
-            endedOnTime: [],
+            // expireOnDate: [],
+            // expireOnTime: [],
+            location: [],
             severity: [],
         },
     };
+
+    private tabs: Tabs;
+
+    private views: Views;
+
+    private getActiveHazardColor = (
+        activeHazardKey: PageType.HazardType['id'] | undefined,
+        hazardOptions: PageType.HazardType[],
+    ) => {
+        if (!activeHazardKey) {
+            return defaultHazardColor;
+        }
+
+        const activeHazard = hazardOptions.find(d => d.id === activeHazardKey);
+        if (!activeHazard) {
+            return defaultHazardColor;
+        }
+
+        return activeHazard.color;
+    }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         this.setState({
@@ -233,34 +325,62 @@ class AddEventForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addEventPostRequest }, onUpdate, closeModal } = this.props;
+        const {
+            requests: {
+                addEventRequest,
+                editEventRequest,
+            },
+            onUpdate,
+            closeModal,
+            data,
+        } = this.props;
+
         const {
             startedOnDate,
             startedOnTime,
-            endedOnDate,
-            endedOnTime,
+            expireOnDate,
+            expireOnTime,
+            location,
             ...others
         } = faramValues;
 
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
+        // const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
+        const point = location.geoJson.features[0].geometry;
+        const wards = location.wards;
+        const body = {
+            ...others,
+            startedOn,
+            // expireOn,
+            point,
+            wards,
+        };
 
-        let endedOn;
-        if (endedOnDate && endedOnTime) {
-            endedOn = new Date(`${endedOnDate}T${endedOnTime}`).toISOString();
+        if (data && data.id) {
+            editEventRequest.do({
+                body,
+                onSuccess: this.handleRequestSuccess,
+                onFailure: this.handleRequestFailure,
+            });
+        } else {
+            addEventRequest.do({
+                body,
+                onSuccess: this.handleRequestSuccess,
+                onFailure: this.handleRequestFailure,
+            });
         }
-        addEventPostRequest.do({
-            body: { startedOn, endedOn, ...others },
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                } else if (closeModal) {
-                    closeModal();
-                }
-            },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
-        });
+    }
+
+    private handleRequestSuccess = (response: PageType.Alert) => {
+        const { onRequestSuccess } = this.props;
+
+        if (onRequestSuccess) {
+            onRequestSuccess(response);
+        }
+    }
+
+    private handleRequestFailure = (faramErrors) => {
+        this.setState({ faramErrors });
     }
 
     private handleTabClick = (newTab: keyof Tabs) => {
@@ -271,6 +391,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            onCloseButtonClick,
         } = this.props;
 
         const {
@@ -282,11 +403,12 @@ class AddEventForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.addEventModal, className)}
+                className={_cs(styles.addEventFormModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
                 <Faram
+                    className={styles.addEventForm}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
@@ -294,8 +416,8 @@ class AddEventForm extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader title="Add Event" />
-                    <ModalBody>
+                    <ModalHeader title="Add / edit event" />
+                    <ModalBody className={styles.body}>
                         <FixedTabs
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
@@ -307,7 +429,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton onClick={closeModal}>
+                        <DangerButton onClick={onCloseButtonClick}>
                             Close
                         </DangerButton>
                         <PrimaryButton

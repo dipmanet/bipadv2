@@ -8,6 +8,7 @@
 
     .left {
         flex-shrink: 0;
+        padding: var(--spacing-medium);
 
         .image {
             width: var(--width-manual-image-preview);
