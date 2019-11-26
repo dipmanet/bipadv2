@@ -35,7 +35,8 @@ const state: PageState = {
 
     documentCategoryList: [],
 
-    selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+    // selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+    selectedMapStyle: 'https://api.maptiler.com/tiles/v3/tiles.json?key=i81l5tcmzCHrIgcdQTIr',
     mapStyles: [
         {
             name: 'none',
@@ -56,6 +57,11 @@ const state: PageState = {
             name: 'satellite',
             style: 'mapbox://styles/mapbox/satellite-streets-v11',
             color: '#c89966',
+        },
+        {
+            name: 'osm',
+            color: '#000000',
+            style: 'https://api.maptiler.com/tiles/v3/tiles.json?key=i81l5tcmzCHrIgcdQTIr',
         },
         /*
         {
