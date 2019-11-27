@@ -1,5 +1,7 @@
 import { PageState } from './types';
 
+const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
+
 const state: PageState = {
     eventTypes: {},
 
@@ -61,7 +63,7 @@ const state: PageState = {
         {
             name: 'osm',
             color: '#000000',
-            style: 'https://api.maptiler.com/tiles/v3/tiles.json?key=i81l5tcmzCHrIgcdQTIr',
+            style: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
         },
         /*
         {

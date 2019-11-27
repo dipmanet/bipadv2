@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import produce from 'immer';
 import {
     _cs,
     padStart as p,
@@ -234,6 +235,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                             pointColor={this.getActiveHazardColor(hazard, hazardList)}
                             className={styles.locationInput}
                             faramElementName="location"
+                            pointShape="rect"
                         />
                     );
                 },
@@ -311,8 +313,17 @@ class AddEventForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        const hazardColor = this.getActiveHazardColor(faramValues.hazard, this.props.hazardList);
+        const location = produce(faramValues.location, (deferedState) => {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.geoJson.features[0].properties.hazardColor = hazardColor;
+        });
+
         this.setState({
-            faramValues,
+            faramValues: {
+                ...faramValues,
+                location,
+            },
             faramErrors,
             pristine: false,
         });

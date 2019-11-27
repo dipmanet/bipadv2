@@ -91,6 +91,7 @@ class LocationInput extends React.PureComponent<Props, State> {
             provinces,
             point,
             pointColor,
+            pointShape,
             value = emptyObject,
         } = this.props;
 
@@ -122,6 +123,7 @@ class LocationInput extends React.PureComponent<Props, State> {
                         provinces={provinces}
                         districts={districts}
                         municipalities={municipalities}
+                        pointShape={pointShape}
                     />
                     <MapContainer className={styles.mapContainer} />
                 </Map>

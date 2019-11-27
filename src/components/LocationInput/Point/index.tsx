@@ -43,21 +43,16 @@ interface Props {
     pointColor: string;
     geoJson: GeoJson;
     onPointMove: (geoJson: GeoJson, region: Region) => {};
+    pointShape?: 'rect' | 'circle';
 }
 
 interface State {
 }
 
-
 export default class DraggablePoint extends React.PureComponent<Props, State> {
-    /*
-    public constructor(props: Props) {
-        super(props);
-
-        // TODO find a better way;
-        // defaultGeoJson.features[0].geometry = props.point;
+    public static defaultProps = {
+        pointShape: 'circle',
     }
-     */
 
     private handleMove = (e: {}) => {
         const {
@@ -187,10 +182,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
     }
 
-    private setMapEvents = memoize((map) => {
+    private setMapEvents = memoize((map, pointShape) => {
         if (map) {
             map.on('click', this.handleMouseClick);
-            map.on('mousedown', 'alert-point-fill', (e: {
+            map.on('mousedown', pointShape === 'rect' ? 'rect-symbol' : 'alert-point-fill', (e: {
                 preventDefault: () => void;
             }) => {
                 e.preventDefault();
@@ -207,7 +202,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
     });
 
     public componentDidUpdate() {
-        this.setMapEvents(this.context.map);
+        const {
+            pointShape,
+        } = this.props;
+        this.setMapEvents(this.context.map, pointShape);
     }
 
     private getFormData = (geoJson) => {
@@ -340,6 +338,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             geoJson,
             region,
             className,
+            pointShape,
         } = this.props;
 
         const {
@@ -354,11 +353,20 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         sourceKey="alert-point"
                         geoJson={geoJson}
                     >
-                        <MapLayer
-                            type="circle"
-                            layerKey="alert-point-fill"
-                            paint={mapStyles.alertPoint.circle}
-                        />
+                        { pointShape === 'rect' ? (
+                            <MapLayer
+                                layerKey="rect-symbol"
+                                type="symbol"
+                                layout={mapStyles.eventSymbol.layout}
+                                paint={mapStyles.eventSymbol.paint}
+                            />
+                        ) : (
+                            <MapLayer
+                                type="circle"
+                                layerKey="alert-point-fill"
+                                paint={mapStyles.alertPoint.circle}
+                            />
+                        )}
                     </MapSource>
                 )}
                 <div className={styles.coordinateInput}>
