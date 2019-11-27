@@ -171,15 +171,18 @@ export default {
         },
         paint: {
             'text-color': ['get', 'hazardColor'],
+            'text-halo-color': '#000000',
+            /*
             'text-halo-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
                 'rgba(0, 0, 0, 0)',
             ],
+             */
             'text-halo-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
+                2,
                 1,
-                0,
             ],
         },
     },

@@ -3,10 +3,16 @@ import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Button from '#rsca/Button';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import { getYesterday } from '#utils/common';
-import { getHazardColor, getHazardIcon } from '#utils/domain';
+import {
+    getHazardColor,
+    getHazardIcon,
+} from '#utils/domain';
 import DateOutput from '#components/DateOutput';
+import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 
@@ -28,6 +34,32 @@ export default class AlertItem extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
+
+    handleEditButtonClick = () => {
+        const {
+            onEditButtonClick,
+            alert,
+        } = this.props;
+
+        if (!onEditButtonClick) {
+            return;
+        }
+
+        onEditButtonClick(alert);
+    }
+
+    handleDeleteButtonClick = () => {
+        const {
+            onDeleteButtonClick,
+            alert,
+        } = this.props;
+
+        if (!onDeleteButtonClick) {
+            return;
+        }
+
+        onDeleteButtonClick(alert);
+    }
 
     render() {
         const {
@@ -57,13 +89,30 @@ export default class AlertItem extends React.PureComponent {
                 <ScalableVectorGraphics
                     className={styles.icon}
                     src={icon}
-                    style={{
-                        color: getHazardColor(hazardTypes, hazard),
-                    }}
+                    style={{ color: getHazardColor(hazardTypes, hazard) }}
                 />
                 <div className={styles.right}>
-                    <div className={styles.title}>
-                        {title}
+                    <div className={styles.top}>
+                        <div className={styles.title}>
+                            {title}
+                        </div>
+                        <Cloak hiddenIf={p => !p.change_alert}>
+                            <Button
+                                transparent
+                                className={styles.editButton}
+                                onClick={this.handleEditButtonClick}
+                            >
+                                Edit
+                            </Button>
+                            <DangerConfirmButton
+                                transparent
+                                className={styles.deleteButton}
+                                onClick={this.handleDeleteButtonClick}
+                                confirmationMessage="Are you sure to delete the Alert?"
+                            >
+                                Delete
+                            </DangerConfirmButton>
+                        </Cloak>
                     </div>
                     <div className={styles.bottom}>
                         <DateOutput

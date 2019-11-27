@@ -1,5 +1,7 @@
 import { PageState } from './types';
 
+const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
+
 const state: PageState = {
     eventTypes: {},
 
@@ -11,16 +13,20 @@ const state: PageState = {
 
     adminLevelList: [
         {
+            id: 0,
+            title: 'national',
+        },
+        {
             id: 1,
-            title: 'Province',
+            title: 'province',
         },
         {
             id: 2,
-            title: 'District',
+            title: 'district',
         },
         {
             id: 3,
-            title: 'Municipality',
+            title: 'municipality',
         },
     ],
 
@@ -29,7 +35,10 @@ const state: PageState = {
     municipalities: [],
     wards: [],
 
-    selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+    documentCategoryList: [],
+
+    // selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+    selectedMapStyle: 'https://api.maptiler.com/tiles/v3/tiles.json?key=i81l5tcmzCHrIgcdQTIr',
     mapStyles: [
         {
             name: 'none',
@@ -51,6 +60,11 @@ const state: PageState = {
             style: 'mapbox://styles/mapbox/satellite-streets-v11',
             color: '#c89966',
         },
+        {
+            name: 'osm',
+            color: '#000000',
+            style: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
+        },
         /*
         {
             name: 'light',
@@ -71,27 +85,71 @@ const state: PageState = {
     ],
 
     hazardTypes: {},
-    resourceTypes: {},
+    resourceTypeList: [
+        {
+            id: 1,
+            title: 'education',
+        },
+        {
+            id: 2,
+            title: 'health',
+        },
+        {
+            id: 3,
+            title: 'finance',
+        },
+        {
+            id: 4,
+            title: 'governance',
+        },
+        {
+            id: 5,
+            title: 'tourism',
+        },
+        {
+            id: 6,
+            title: 'cultural',
+        },
+        {
+            id: 7,
+            title: 'industry',
+        },
+    ],
+    lossList: [],
+    severityList: [
+        {
+            id: 1,
+            title: 'minor',
+        },
+        {
+            id: 2,
+            title: 'major',
+        },
+        {
+            id: 3,
+            title: 'catastrophic',
+        },
+    ],
+    sourceList: [
+        {
+            id: 1,
+            title: 'dhm',
+        },
+        {
+            id: 2,
+            title: 'nsc',
+        },
+        {
+            id: 3,
+            title: 'other',
+        },
+    ],
 
     // Page related
 
     dashboardPage: {
         eventList: [],
         alertList: [],
-        sourceList: [
-            {
-                id: 1,
-                title: 'dhm',
-            },
-            {
-                id: 2,
-                title: 'nsc',
-            },
-            {
-                id: 3,
-                title: 'other',
-            },
-        ],
         filters: {
             faramValues: {
                 dateRange: 30,

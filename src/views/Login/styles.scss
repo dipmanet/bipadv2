@@ -9,4 +9,13 @@
 
     // FIXME: this
     min-width: 400px;
+    height: auto;
+
+    .heading {
+        margin-bottom: 32px;
+    }
+
+    .input {
+        margin: var(--spacing-medium) 0;
+    }
 }

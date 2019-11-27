@@ -35,10 +35,9 @@ const AlertTooltip = ({ title, description }) => (
         <h3 className={styles.heading}>
             {title}
         </h3>
-        <TextOutput
-            label="Description"
-            value={description}
-        />
+        <div className={styles.description}>
+            { description }
+        </div>
     </div>
 );
 

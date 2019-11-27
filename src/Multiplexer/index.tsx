@@ -127,6 +127,7 @@ interface State {
     leftPaneContent?: React.ElementType;
     leftPaneClassName?: string;
     hideMap?: boolean;
+    activeRouteDetails: {};
 }
 
 interface BoundingClientRect {
@@ -227,6 +228,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.state = {
             leftPaneContent: undefined,
             leftPaneClassName: undefined,
+            activeRouteDetails: {},
         };
     }
 
@@ -363,6 +365,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private setActiveRouteDetails = (activeRouteDetails) => {
+        this.setState({ activeRouteDetails });
+    }
+
     private hideMap = () => {
         this.setState({ hideMap: true });
     }
@@ -378,10 +384,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
             leftPaneContent,
             leftPaneClassName,
             hideMap,
+            activeRouteDetails,
         } = this.state;
 
         const pageProps = {
             setLeftPaneComponent: this.setLeftPaneComponent,
+            setActiveRouteDetails: this.setActiveRouteDetails,
+            activeRouteDetails,
             hideMap: this.hideMap,
             showMap: this.showMap,
         };

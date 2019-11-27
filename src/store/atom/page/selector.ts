@@ -18,8 +18,8 @@ const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => p
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
 
-const resourceTypesSelector = ({ page }: AppState) => (
-    page.resourceTypes || emptyList
+export const resourceTypeListSelector = ({ page }: AppState) => (
+    page.resourceTypeList || emptyList
 );
 
 // Popup
@@ -118,16 +118,19 @@ export const hazardTypeListSelector = createSelector(
     hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
 );
 
-export const resourceTypeListSelector = createSelector(
-    resourceTypesSelector,
-    resources => mapToList(resources),
-);
-
 // map styles
 
 export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
 
 export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
+
+export const lossListSelector = ({ page }: AppState) => page.lossList;
+
+export const sourceListSelector = ({ page }: AppState) => page.sourceList;
+
+export const severityListSelector = ({ page }: AppState) => page.severityList;
+
+export const documentCategoryListSelector = ({ page }: AppState) => page.documentCategoryList;
 
 // dashboardPage
 
@@ -165,11 +168,6 @@ export const alertListSelectorDP = createSelector(
 export const eventListSelector = createSelector(
     dashboardPageSelector,
     ({ eventList }) => eventList,
-);
-
-export const sourceListSelector = createSelector(
-    dashboardPageSelector,
-    ({ sourceList }) => sourceList,
 );
 
 // incidentPage

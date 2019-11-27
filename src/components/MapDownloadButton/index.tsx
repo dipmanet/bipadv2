@@ -1,12 +1,31 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 
 import Button from '#rsca/Button';
 import MapChild from '#rscz/Map/MapChild';
 
+import PageContext from '#components/PageContext';
+
+import { AppState } from '#store/types';
+import {
+    Ward,
+    District,
+    Province,
+    Municipality,
+    Region,
+} from '#store/atom/page/types';
+import {
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    wardsSelector,
+    regionSelector,
+} from '#selectors';
+
 import indexMapImage from '#resources/images/index-map.png';
 
-interface Props {
+interface OwnProps {
     map: {};
 }
 
@@ -14,10 +33,28 @@ interface State {
     pending: boolean;
 }
 
+interface PropsFromAppState {
+    region: Region;
+    wards: Ward[];
+    districts: District[];
+    provinces: Province[];
+    municipalities: Municipality[];
+}
+
+type Props = OwnProps & PropsFromAppState;
+
 const indexBounds = {
     sw: { lng: 80.0884245137, lat: 26.3978980576 },
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    region: regionSelector(state),
+    wards: wardsSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
+});
 
 const getIndexMapProportion = (bounds) => {
     const {
@@ -46,12 +83,48 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
     }
 
     private export = () => {
-        const { map } = this.props;
-
+        const {
+            map,
+            region,
+            wards,
+            districts,
+            municipalities,
+            provinces,
+        } = this.props;
 
         if (!map) {
             console.warn('Cannot export as there is no map');
             return;
+        }
+
+        let regionName = 'Nepal';
+        const pageTitle = this.context.activeRouteDetails.title;
+        let source = '';
+
+        if (map) {
+            if (region.adminLevel === 1) {
+                const province = provinces.find(d => d.id === region.geoarea);
+                if (province) {
+                    regionName = province.title;
+                }
+            } else if (region.adminLevel === 2) {
+                const district = districts.find(d => d.id === region.geoarea);
+                if (district) {
+                    regionName = district.title;
+                }
+            } else if (region.adminLevel === 3) {
+                const municipality = municipalities.find(d => d.id === region.geoarea);
+
+                if (municipality) {
+                    regionName = municipality.title;
+                }
+            }
+
+            if (this.context.activeRouteDetails.name === 'realtime') {
+                source = 'Rain / river: DHM, Fire: ICIMOD, Pollution: Ministry of forest of environment, Earthquake: Seismology';
+            } else if (this.context.activeRouteDetails.name === 'incident') {
+                source = 'Nepal police';
+            }
         }
 
         const legendContainerClassName = 'map-legend-container';
@@ -109,11 +182,14 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
             const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
 
             const today = new Date();
-            const title = 'Realtime map';
+            const title = `${pageTitle} for ${regionName}`;
             context.font = '24px Source Sans Pro';
             context.fillText(title, 12, 24);
             context.font = '14px Source Sans Pro';
             context.fillText(`Exported on: ${today.toLocaleDateString()}`, 12, 48);
+            if (source) {
+                context.fillText(`Source: ${source}`, 12, 68);
+            }
 
             if (scale) {
                 const scaleCanvas = html2canvas(scale);
@@ -189,4 +265,6 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
     }
 }
 
-export default MapChild(MapDownloadButton);
+MapDownloadButton.contextType = PageContext;
+
+export default connect(mapStateToProps)(MapChild(MapDownloadButton));

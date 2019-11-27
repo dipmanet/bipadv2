@@ -18,10 +18,27 @@
         overflow: auto;
 
         .header {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: space-between;
+
             .heading {
                 flex-shrink: 0;
                 padding: var(--spacing-medium);
                 color: var(--color-primary);
+
+                .buttons {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                }
+            }
+
+            .add-incident-button {
+                flex-shrink: 0;
+                margin: 0 var(--spacing-small);
+                padding: var(--spacing-small) var(--var(--spacing-medium) - var(--spacing-small));
             }
         }
 

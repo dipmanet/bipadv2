@@ -1,5 +1,6 @@
 .navbar {
     display: flex;
+    flex-direction: column;
     background-color: var(--color-foreground);
 
     .menu-item-list {
@@ -8,6 +9,22 @@
 
         .title {
             display: none;
+        }
+    }
+
+    .bottom {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex-shrink: 0;
+        justify-content: center;
+
+        .user-icon {
+            font-size: var(--font-size-large);
+        }
+
+        .logout-button {
+            font-size: var(--font-size-large);
         }
     }
 }

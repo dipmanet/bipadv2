@@ -6,8 +6,6 @@ import { FaramInputElement } from '@togglecorp/faram';
 import Map from '#rscz/Map';
 import MapContainer from '#rscz/Map/MapContainer';
 
-import TextInput from '#rsci/TextInput';
-
 import { AppState } from '#store/types';
 import {
     District,
@@ -20,10 +18,8 @@ import {
     municipalitiesSelector,
     provincesSelector,
     mapStyleSelector,
+    wardsSelector,
 } from '#selectors';
-
-import CommonMap from '#components/CommonMap';
-import RegionSelectInput from '#components/RegionSelectInput';
 
 import Point from './Point';
 import AreaMap from './Map';
@@ -32,6 +28,7 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
+    pointColor: string;
 }
 
 interface PropsFromAppState {
@@ -47,6 +44,7 @@ interface State {
 type Props = OwnProps & PropsFromAppState;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    wards: wardsSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
@@ -57,24 +55,44 @@ const emptyObject = {};
 
 class LocationInput extends React.PureComponent<Props, State> {
     private handlePointMove = (geoJson, region) => {
-        const { onChange } = this.props;
+        const {
+            onChange,
+            wards,
+            districts,
+        } = this.props;
+
+        let wardList;
+
+        if (region.adminLevel === 1) {
+            wardList = wards.filter(d => d.province === region.geoarea);
+        } else if (region.adminLevel === 2) {
+            wardList = wards.filter(d => d.district === region.geoarea);
+        } else if (region.adminLevel === 3) {
+            wardList = wards.filter(d => d.municipality === region.geoarea);
+        } else {
+            wardList = [region.ward];
+        }
 
         if (onChange) {
             onChange({
                 geoJson,
                 region,
+                wards: wardList.map(d => d.id),
             });
         }
     }
 
     public render() {
         const {
+            className,
             mapStyle,
             districts,
             municipalities,
             provinces,
+            point,
+            pointColor,
+            pointShape,
             value = emptyObject,
-            className,
         } = this.props;
 
         const {
@@ -96,6 +114,7 @@ class LocationInput extends React.PureComponent<Props, State> {
                     showNavControl
                     navControlPosition="bottom-right"
                 >
+                    <AreaMap />
                     <Point
                         className={styles.point}
                         geoJson={geoJson}
@@ -104,9 +123,9 @@ class LocationInput extends React.PureComponent<Props, State> {
                         provinces={provinces}
                         districts={districts}
                         municipalities={municipalities}
+                        pointShape={pointShape}
                     />
                     <MapContainer className={styles.mapContainer} />
-                    <AreaMap />
                 </Map>
             </div>
         );

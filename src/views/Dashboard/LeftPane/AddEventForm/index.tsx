@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import produce from 'immer';
 import {
     _cs,
@@ -12,21 +12,21 @@ import Faram, {
 
 import FixedTabs from '#rscv/FixedTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
-
 import Modal from '#rscv/Modal';
-import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
+import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import Checkbox from '#rsci/Checkbox';
 
 import LocationInput from '#components/LocationInput';
 
+import {} from '#actionCreators';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
@@ -40,14 +40,22 @@ import {
 } from '#request';
 
 import {
-    eventListSelector,
-    sourceListSelector,
     hazardTypeListSelector,
+    severityListSelector,
 } from '#selectors';
+
+interface Tabs {
+    general: string;
+    location: string;
+}
+interface Views {
+    general: {};
+    location: {};
+}
 
 interface Params {
     body: object;
-    onSuccess: (response: PageType.Alert) => void;
+    onSuccess: () => void;
     onFailure: (faramErrors: object) => void;
 }
 
@@ -58,45 +66,27 @@ interface OwnProps {
 }
 
 interface PropsFromState {
-    eventList: PageType.Event[];
-    sourceList: PageType.Source[];
     hazardList: PageType.HazardType[];
+    severityList: PageType.SeverityType[];
 }
 
 interface PropsFromDispatch {
 }
 
-interface Tabs {
-    general: string;
-    location: string;
-}
-
-interface Views {
-    general: {};
-    location: {};
-}
-
-interface FaramErrors {
-}
-
 interface FaramValues {
-    source?: string;
+    title?: string;
     description?: string;
-    hazard?: number;
-    event?: number;
     point?: string;
     polygon?: string;
-    district?: string;
-    municipality?: string;
-    wards?: number[];
     startedOnDate?: string;
     startedOnTime?: string;
     expireOnDate?: string;
     expireOnTime?: string;
-    geoJson?: string;
-    verified?: boolean;
-    public?: boolean;
+    severity?: string;
+    hazard?: number;
+}
 
+interface FaramErrors {
 }
 
 interface State {
@@ -105,25 +95,15 @@ interface State {
     pristine: boolean;
     currentView: keyof Tabs;
 }
-
-const mapStateToProps = (state: AppState): PropsFromState => ({
-    eventList: eventListSelector(state),
-    sourceList: sourceListSelector(state),
-    hazardList: hazardTypeListSelector(state),
-});
-
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
-
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
-type Props = NewProps<ReduxProps, Params>;
 
 const onSuccess = ({
     params,
     response,
 }: {
     params: Params;
-    response: PageType.Alert;
+    response: PageType.Event;
 }) => {
     if (params && params.onSuccess) {
         params.onSuccess(response);
@@ -145,15 +125,15 @@ const onFailure = ({
 };
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    addAlertRequest: {
-        url: '/alert/',
+    addEventRequest: {
+        url: '/event/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess,
         onFailure,
     },
-    editAlertRequest: {
-        url: ({ props }) => `/alert/${props.data.id}/`,
+    editEventRequest: {
+        url: ({ props }) => `/event/${props.data.id}/`,
         method: methods.PUT,
         body: ({ params: { body } }) => body,
         onSuccess,
@@ -161,9 +141,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
+type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type Props = NewProps<ReduxProps, Params>;
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    hazardList: hazardTypeListSelector(state),
+    severityList: severityListSelector(state),
+});
+
 const defaultHazardColor = '#a0a0a0';
 
-class AddAlertForm extends React.PureComponent<Props, State> {
+class AddEventForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -173,8 +161,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         };
 
         const {
-            eventList,
-            sourceList,
+            severityList,
             hazardList,
         } = this.props;
 
@@ -182,35 +169,17 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             general: {
                 component: () => (
                     <div className={styles.generalInputs}>
+                        <TextInput
+                            className={styles.titleInput}
+                            faramElementName="title"
+                            label="Title"
+                            persistantHintAndError={false}
+                        />
                         <TextArea
                             className={styles.descriptionInput}
                             faramElementName="description"
                             label="Description"
                             persistantHintAndError={false}
-                        />
-                        <SelectInput
-                            className={styles.eventInput}
-                            faramElementName="event"
-                            options={eventList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Event"
-                        />
-                        <SelectInput
-                            className={styles.sourceInput}
-                            faramElementName="source"
-                            options={sourceList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            label="Source"
-                        />
-                        <SelectInput
-                            className={styles.hazardInput}
-                            faramElementName="hazard"
-                            options={hazardList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Hazard"
                         />
                         <div className={styles.startedOnInputs}>
                             <DateInput
@@ -219,10 +188,10 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 label="Started on"
                             />
                             <TimeInput
-                                className={styles.startedOnTime}
                                 faramElementName="startedOnTime"
                             />
                         </div>
+                        {/*
                         <div className={styles.expiresOnInputs}>
                             <DateInput
                                 label="Expires on"
@@ -233,18 +202,23 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 faramElementName="expireOnTime"
                             />
                         </div>
-                        <div className={styles.checkboxes}>
-                            <Checkbox
-                                className={styles.isPublicSelectionCheckbox}
-                                label="Public"
-                                faramElementName="public"
-                            />
-                            <Checkbox
-                                className={styles.isVerifiedSelectionCheckbox}
-                                label="Verified"
-                                faramElementName="verified"
-                            />
-                        </div>
+                        */}
+                        <SelectInput
+                            className={styles.severityInput}
+                            faramElementName="severity"
+                            options={severityList}
+                            keySelector={labelSelector}
+                            labelSelector={labelSelector}
+                            label="Severity"
+                        />
+                        <SelectInput
+                            className={styles.hazardInput}
+                            faramElementName="hazard"
+                            options={hazardList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Hazard"
+                        />
                     </div>
                 ),
             },
@@ -258,8 +232,10 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
                     return (
                         <LocationInput
+                            pointColor={this.getActiveHazardColor(hazard, hazardList)}
                             className={styles.locationInput}
                             faramElementName="location"
+                            pointShape="rect"
                         />
                     );
                 },
@@ -277,55 +253,20 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             const expireOnDate = `${p(expireOn.getFullYear(), 2)}-${p(expireOn.getMonth() + 1, 2)}-${p(expireOn.getDate(), 2)}`;
             const expireOnTime = `${p(expireOn.getHours(), 2)}:${p(expireOn.getMinutes(), 2)}:${p(expireOn.getSeconds(), 2)}`;
 
-            const geoJson = {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    geometry: props.data.point || {
-                        type: 'Point',
-                        coordinates: [],
-                    },
-                    properties: {
-                        hazardColor: this.getActiveHazardColor(props.data.hazard, props.hazardList),
-                    },
-                }],
-            };
-
-            const adminLevelMap = {
-                province: 1,
-                district: 2,
-                municipality: 3,
-                ward: 4,
-            };
-
-            const region = {
-                adminLevel: adminLevelMap[props.data.region],
-                geoarea: props.data.regionId,
-            };
-
             initialData = {
-                source: props.data.source,
+                title: props.data.title,
                 description: props.data.description,
                 hazard: props.data.hazard,
+                severity: props.data.severity,
                 startedOnDate,
                 startedOnTime,
-                public: props.data.public,
-                verified: props.data.verified,
-                event: (props.data.event || {}).id,
-                expireOnDate,
-                expireOnTime,
-                location: {
-                    region,
-                    geoJson,
-                    wards: props.data.wards,
-                },
+                // expireOnDate,
+                // expireOnTime,
             };
         }
 
         this.state = {
             faramValues: {
-                public: true,
-                verified: true,
                 wards: [],
                 ...initialData,
             },
@@ -337,23 +278,17 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
     private static schema = {
         fields: {
-            source: [requiredCondition],
-            description: [requiredCondition],
-            hazard: [requiredCondition],
+            title: [requiredCondition],
             startedOnDate: [requiredCondition],
             startedOnTime: [requiredCondition],
-            public: [requiredCondition],
-            verified: [],
-            event: [],
+            hazard: [requiredCondition],
+            description: [],
             point: [],
             polygon: [],
-            district: [],
-            municipality: [],
-            wards: [],
-            geoJson: [],
+            // expireOnDate: [],
+            // expireOnTime: [],
             location: [],
-            expireOnDate: [],
-            expireOnTime: [],
+            severity: [],
         },
     };
 
@@ -403,9 +338,11 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
             requests: {
-                addAlertRequest,
-                editAlertRequest,
+                addEventRequest,
+                editEventRequest,
             },
+            onUpdate,
+            closeModal,
             data,
         } = this.props;
 
@@ -418,48 +355,26 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             ...others
         } = faramValues;
 
-        const getRegion = (region) => {
-            const regionTypeMap = {
-                1: 'province',
-                2: 'district',
-                3: 'municipality',
-                4: 'ward',
-            };
-
-            return {
-                regionType: regionTypeMap[region.adminLevel],
-                regionId: region.geoarea,
-            };
-        };
-
-
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
-        const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
+        // const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
         const point = location.geoJson.features[0].geometry;
         const wards = location.wards;
-        const {
-            regionType,
-            regionId,
-        } = getRegion(location.region);
-
         const body = {
             ...others,
             startedOn,
-            expireOn,
+            // expireOn,
             point,
             wards,
-            regionId,
-            region: regionType,
         };
 
         if (data && data.id) {
-            editAlertRequest.do({
+            editEventRequest.do({
                 body,
                 onSuccess: this.handleRequestSuccess,
                 onFailure: this.handleRequestFailure,
             });
         } else {
-            addAlertRequest.do({
+            addEventRequest.do({
                 body,
                 onSuccess: this.handleRequestSuccess,
                 onFailure: this.handleRequestFailure,
@@ -487,47 +402,34 @@ class AddAlertForm extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
-            hazardList,
             onCloseButtonClick,
-            requests: {
-                addAlertRequest: {
-                    pending: addAlertRequestPending,
-                },
-                editAlertRequest: {
-                    pending: editAlertRequestPending,
-                },
-            },
         } = this.props;
 
         const {
-            pristine,
-            currentView,
             faramValues,
             faramErrors,
+            pristine,
+            currentView,
         } = this.state;
-
-        const pending = addAlertRequestPending || editAlertRequestPending;
 
         return (
             <Modal
-                className={_cs(styles.addAlertFormModal, className)}
+                className={_cs(styles.addEventFormModal, className)}
                 onClose={closeModal}
                 closeOnEscape
             >
                 <Faram
-                    className={styles.addAlertForm}
+                    className={styles.addEventForm}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddAlertForm.schema}
+                    schema={AddEventForm.schema}
                     value={faramValues}
                     error={faramErrors}
-                    disbled={pending}
                 >
-                    <ModalHeader title="Add / edit alert" />
+                    <ModalHeader title="Add / edit event" />
                     <ModalBody className={styles.body}>
                         <FixedTabs
-                            className={styles.tabs}
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
                             active={currentView}
@@ -538,16 +440,12 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            disabled={pending}
-                            onClick={onCloseButtonClick}
-                        >
+                        <DangerButton onClick={onCloseButtonClick}>
                             Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
-                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>
@@ -561,4 +459,4 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 export default compose(
     connect(mapStateToProps),
     createRequestClient(requests),
-)(AddAlertForm);
+)(AddEventForm);

@@ -1,0 +1,252 @@
+import React from 'react';
+import Redux, {
+    compose,
+} from 'redux';
+import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
+import Faram, {
+    requiredCondition,
+} from '@togglecorp/faram';
+
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
+import SelectInput from '#rsci/SelectInput';
+import TextArea from '#rsci/TextArea';
+import NumberInput from '#rsci/NumberInput';
+import DangerButton from '#rsca/Button/DangerButton';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+
+import {
+    setInventoryItemListActionRP,
+    setResourceListActionRP,
+} from '#actionCreators';
+import {
+    resourceListSelectorRP,
+    inventoryItemListSelectorRP,
+} from '#selectors';
+
+import { AppState } from '#store/types';
+import * as PageType from '#store/atom/page/types';
+
+import {
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+
+import styles from './styles.scss';
+
+interface Params {
+    body: object;
+    onSuccess: () => void;
+    onFailure: (faramErrors: object) => void;
+}
+interface OwnProps {
+    closeModal?: () => void;
+    onUpdate?: () => void;
+    className?: string;
+}
+interface PropsFromState {
+    inventoryItemList: PageType.InventoryItem[];
+    resourceList: PageType.Resource[];
+}
+interface PropsFromDispatch {
+    setInventoryItemList: typeof setInventoryItemListActionRP;
+    setResourceList: typeof setResourceListActionRP;
+}
+
+interface FaramValues {
+    itemId?: number;
+    quantity?: number;
+    resource?: number;
+    description?: string;
+}
+interface FaramErrors {
+}
+interface State {
+    faramValues: FaramValues;
+    faramErrors: FaramErrors;
+    pristine: boolean;
+}
+type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type Props = NewProps<ReduxProps, Params>;
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    resourceList: resourceListSelectorRP(state),
+    inventoryItemList: inventoryItemListSelectorRP(state),
+});
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setInventoryItemList: params => dispatch(setInventoryItemListActionRP(params)),
+    setResourceList: params => dispatch(setResourceListActionRP(params)),
+});
+
+const keySelector = (d: PageType.Field) => d.id;
+const labelSelector = (d: PageType.Field) => d.title;
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+    inventoryItemListGetRequest: {
+        url: '/inventory-item/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setInventoryItemList } }) => {
+            interface Response { results: PageType.InventoryItem[] }
+            const { results: inventoryItemList = [] } = response as Response;
+            setInventoryItemList({ inventoryItemList });
+        },
+    },
+    resourceListGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setResourceList } }) => {
+            interface Response { results: PageType.Resource[] }
+            const { results: resourceList = [] } = response as Response;
+            setResourceList({ resourceList });
+        },
+    },
+    addInventoryPostRequest: {
+        url: '/inventory/',
+        method: methods.POST,
+        body: ({ params: { body } = { body: {} } }) => body,
+        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
+            if (onSuccess) {
+                onSuccess();
+            }
+        },
+        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
+            if (onFailure) {
+                onFailure((error as { faramErrors: object }).faramErrors);
+            }
+        },
+    },
+};
+
+class AddInventoryForm extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            faramValues: {},
+            faramErrors: {},
+            pristine: true,
+        };
+    }
+
+    private static schema = {
+        fields: {
+            itemId: [requiredCondition],
+            quantity: [requiredCondition],
+            resource: [requiredCondition],
+            description: [],
+        },
+    };
+
+    private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        this.setState({
+            faramValues,
+            faramErrors,
+            pristine: false,
+        });
+    }
+
+    private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
+        this.setState({
+            faramErrors,
+        });
+    }
+
+    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+        const { requests: { addInventoryPostRequest }, onUpdate, closeModal } = this.props;
+
+        addInventoryPostRequest.do({
+            body: faramValues,
+            onSuccess: () => {
+                if (onUpdate) {
+                    onUpdate();
+                } else if (closeModal) {
+                    closeModal();
+                }
+            },
+            onFailure: (faramErrors: object) => {
+                this.setState({ faramErrors });
+            },
+        });
+    }
+
+    public render() {
+        const {
+            className,
+            closeModal,
+            inventoryItemList,
+            resourceList,
+        } = this.props;
+
+        const {
+            faramValues,
+            faramErrors,
+            pristine,
+        } = this.state;
+
+        return (
+            <Modal
+                className={_cs(styles.addInventoryModal, className)}
+                onClose={closeModal}
+                closeOnEscape
+            >
+                <Faram
+                    onChange={this.handleFaramChange}
+                    onValidationFailure={this.handleFaramValidationFailure}
+                    onValidationSuccess={this.handleFaramValidationSuccess}
+                    schema={AddInventoryForm.schema}
+                    value={faramValues}
+                    error={faramErrors}
+                >
+                    <ModalHeader title="Add Inventory" />
+                    <ModalBody>
+                        <SelectInput
+                            faramElementName="itemId"
+                            options={inventoryItemList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Item"
+                        />
+                        <NumberInput
+                            faramElementName="quantity"
+                            label="Quantity"
+                        />
+                        <TextArea
+                            faramElementName="description"
+                            label="Description"
+                        />
+                        <SelectInput
+                            faramElementName="resource"
+                            options={resourceList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            label="Resource"
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <DangerButton onClick={closeModal}>
+                            Close
+                        </DangerButton>
+                        <PrimaryButton
+                            type="submit"
+                            disabled={pristine}
+                        >
+                            Submit
+                        </PrimaryButton>
+                    </ModalFooter>
+                </Faram>
+            </Modal>
+        );
+    }
+}
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createRequestClient(requests),
+)(AddInventoryForm);

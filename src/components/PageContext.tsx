@@ -1,3 +1,6 @@
 import React from 'react';
 
-export default React.createContext();
+interface PageType {
+}
+
+export default React.createContext<PageType>({});

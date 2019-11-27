@@ -49,7 +49,12 @@ export interface HazardType extends Field {
 }
 export interface EventType extends Field {
 }
-export interface ResourceType {
+export interface SeverityType extends Field {
+}
+export interface ResourceType extends Field {
+}
+
+export interface DocumentCategory extends Field {
 }
 export interface Event extends Field {
     createdOn: string;
@@ -80,9 +85,7 @@ export interface Incident {
     loss: Loss;
     incidentOn: string;
 }
-export interface Resource {
-    id: number;
-    title: string;
+export interface Resource extends Field {
     resourceType: string;
     distance: number;
     point: {
@@ -96,15 +99,15 @@ export interface InventoryCategory {
     description: string;
 }
 
-export interface InventoryItem {
-    id: number;
-    title: string;
+export interface InventoryItem extends Field {
     unit: string;
     category: string;
     description: string;
 }
 
 export interface Loss {
+    id: number;
+    description?: string;
     estimatedLoss?: number;
     peopleDeathCount?: number;
     livestockDestroyedCount?: number;
@@ -266,7 +269,6 @@ export interface RealTimePollution {
 export interface DashboardPage {
     alertList: Alert[];
     eventList: Event[];
-    sourceList: Source[];
     filters: Filters;
 }
 
@@ -363,12 +365,17 @@ export interface PageState {
 
     adminLevelList: AdminLevel[];
 
+    documentCategoryList: DocumentCategory[];
+
     provinces: Province[];
     districts: District[];
     municipalities: Municipality[];
     wards: Ward[];
+    lossList: Loss[];
+    sourceList: Source[];
+    severityList: SeverityType[];
 
-    resourceTypes: Obj<ResourceType>;
+    resourceTypeList: ResourceType[];
     hazardTypes: Obj<HazardType>;
 
     dashboardPage: DashboardPage;
@@ -395,6 +402,8 @@ export enum PageType {
     SET_DISTRICTS = 'page/SET_DISTRICTS',
     SET_MUNICIPALITIES = 'page/SET_MUNICIPALITIES',
     SET_WARDS = 'page/SET_WARDS',
+    SET_LOSS_LIST = 'page/SET_LOSS_LIST',
+    SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -486,6 +495,11 @@ export interface SetWards {
     wards: Ward[];
 }
 
+export interface SetDocumentCategoryList {
+    type: typeof PageType.SET_DOCUMENT_CATEGORY_LIST;
+    documentCategoryList: DocumentCategory[];
+}
+
 // dashboard
 
 export interface SetDashboardAlertList {
@@ -516,6 +530,11 @@ export interface SetIncident {
 
 export interface SetIncidentFilters extends FiltersWithRegion {
     type: typeof PageType.IP__SET_FILTERS;
+}
+
+export interface SetLossList {
+    type: typeof PageType.SET_LOSS_LIST;
+    lossList: Loss[];
 }
 
 // response
@@ -634,5 +653,6 @@ export type PageActionTypes = (
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
-    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters
+    SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
+    SetDocumentCategoryList
 );

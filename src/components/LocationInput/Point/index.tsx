@@ -40,15 +40,20 @@ interface Region {
 }
 
 interface Props {
+    pointColor: string;
     geoJson: GeoJson;
     onPointMove: (geoJson: GeoJson, region: Region) => {};
+    pointShape?: 'rect' | 'circle';
 }
 
 interface State {
 }
 
-
 export default class DraggablePoint extends React.PureComponent<Props, State> {
+    public static defaultProps = {
+        pointShape: 'circle',
+    }
+
     private handleMove = (e: {}) => {
         const {
             geoJson,
@@ -63,14 +68,22 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         } = e;
 
         const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            if (deferedState.features[0].geometry) {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry.coordinates = [lng, lat];
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry = {
+                    type: 'Point',
+                    coordinates: [lng, lat],
+                };
+            }
         });
 
         this.context.map.getSource('alert-point').setData(newGeoJson);
     }
 
-    private handleEnd = (e) => {
+    private handleEnd = (e: any) => {
         this.context.map.off('mousemove', this.handleMove);
         this.context.map.off('touchmove', this.handleMove);
 
@@ -87,8 +100,16 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         } = e;
 
         const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            if (deferedState.features[0].geometry) {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry.coordinates = [lng, lat];
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.features[0].geometry = {
+                    type: 'Point',
+                    coordinates: [lng, lat],
+                };
+            }
         });
 
         // this.context.map.getSource('alert-point').setData(newGeoJson);
@@ -117,7 +138,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
     }
 
-    private handleMouseClick = (e) => {
+    private handleMouseClick = (e: any) => {
         const {
             geoJson = defaultGeoJson,
             onPointMove,
@@ -161,10 +182,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
     }
 
-    private setMapEvents = memoize((map) => {
+    private setMapEvents = memoize((map, pointShape) => {
         if (map) {
             map.on('click', this.handleMouseClick);
-            map.on('mousedown', 'alert-point-fill', (e: {
+            map.on('mousedown', pointShape === 'rect' ? 'rect-symbol' : 'alert-point-fill', (e: {
                 preventDefault: () => void;
             }) => {
                 e.preventDefault();
@@ -181,7 +202,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
     });
 
     public componentDidUpdate() {
-        this.setMapEvents(this.context.map);
+        const {
+            pointShape,
+        } = this.props;
+        this.setMapEvents(this.context.map, pointShape);
     }
 
     private getFormData = (geoJson) => {
@@ -314,6 +338,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             geoJson,
             region,
             className,
+            pointShape,
         } = this.props;
 
         const {
@@ -328,22 +353,33 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         sourceKey="alert-point"
                         geoJson={geoJson}
                     >
-                        <MapLayer
-                            type="circle"
-                            layerKey="alert-point-fill"
-                            paint={mapStyles.alertPoint.circle}
-                        />
+                        { pointShape === 'rect' ? (
+                            <MapLayer
+                                layerKey="rect-symbol"
+                                type="symbol"
+                                layout={mapStyles.eventSymbol.layout}
+                                paint={mapStyles.eventSymbol.paint}
+                            />
+                        ) : (
+                            <MapLayer
+                                type="circle"
+                                layerKey="alert-point-fill"
+                                paint={mapStyles.alertPoint.circle}
+                            />
+                        )}
                     </MapSource>
                 )}
                 <div className={styles.coordinateInput}>
                     <TextInput
                         className={styles.lngInput}
+                        readOnly
                         type="number"
                         label="Longitude"
                         value={lng}
                         onChange={this.handleLngInputChange}
                     />
                     <TextInput
+                        readOnly
                         className={styles.latInput}
                         type="number"
                         label="Latitude"

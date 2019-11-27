@@ -74,4 +74,15 @@
             padding: 0!important;
         }
     }
+
+    .mapboxgl-popup {
+        .mapboxgl-popup-content {
+            padding: 0;
+
+            .mapboxgl-popup-close-button {
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+                font-size: var(--font-size-super-large);
+            }
+        }
+    }
 }
