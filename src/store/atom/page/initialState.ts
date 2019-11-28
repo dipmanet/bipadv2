@@ -114,6 +114,39 @@ const state: PageState = {
             title: 'other',
         },
     ],
+    genderList: [
+        {
+            id: 1,
+            title: 'male',
+        },
+        {
+            id: 2,
+            title: 'female',
+        },
+        {
+            id: 3,
+            title: 'others',
+        },
+    ],
+    statusList: [
+        {
+            id: 1,
+            title: 'dead',
+        },
+        {
+            id: 2,
+            title: 'missing',
+        },
+        {
+            id: 3,
+            title: 'injured',
+        },
+        {
+            id: 4,
+            title: 'affected',
+        },
+    ],
+    countryList: [],
 
     // Page related
 

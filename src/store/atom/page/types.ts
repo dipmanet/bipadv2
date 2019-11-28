@@ -73,6 +73,12 @@ export interface Alert extends Field {
 }
 export interface Source extends Field {
 }
+export interface Status extends Field {
+}
+export interface Gender extends Field {
+}
+export interface Country extends Field {
+}
 
 export interface Incident {
     id: number;
@@ -403,6 +409,9 @@ export interface PageState {
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
+    statusList: Status[];
+    countryList: Country[];
+    genderList: Gender[];
 
     resourceTypeList: ResourceType[];
     hazardTypes: Obj<HazardType>;
@@ -433,6 +442,7 @@ export enum PageType {
     SET_WARDS = 'page/SET_WARDS',
     SET_LOSS_LIST = 'page/SET_LOSS_LIST',
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
+    SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -527,6 +537,11 @@ export interface SetWards {
 export interface SetDocumentCategoryList {
     type: typeof PageType.SET_DOCUMENT_CATEGORY_LIST;
     documentCategoryList: DocumentCategory[];
+}
+
+export interface SetCountryList {
+    type: typeof PageType.SET_COUNTRY_LIST;
+    contryList: Country[];
 }
 
 // dashboard

@@ -124,7 +124,7 @@ const labelSelector = (d: PageType.Field) => d.title;
 const lossKeySelector = (d: PageType.Loss) => d.id;
 const lossLabelSelector = (d: PageType.Loss) => d.description;
 
-const onSuccess = ({
+const onS uccess = ({
     params,
     response,
 }: {

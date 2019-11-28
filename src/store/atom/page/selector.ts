@@ -132,6 +132,12 @@ export const severityListSelector = ({ page }: AppState) => page.severityList;
 
 export const documentCategoryListSelector = ({ page }: AppState) => page.documentCategoryList;
 
+export const genderListSelector = ({ page }: AppState) => page.genderList;
+
+export const statusListSelector = ({ page }: AppState) => page.statusList;
+
+export const countryListSelector = ({ page }: AppState) => page.countryList;
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(
