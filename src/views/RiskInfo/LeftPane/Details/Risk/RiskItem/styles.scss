@@ -1,0 +1,47 @@
+.risk-item {
+
+    .top {
+        display: flex;
+        align-items: center;
+
+        .left {
+            flex-shrink: 0;
+        }
+    
+        .right {
+            display: flex;
+            flex-grow: 1;
+
+            .expand-button {
+                display: flex;
+                flex-grow: 1;
+
+                &:focus{
+                    outline: none;
+                }
+
+                .title{
+                    flex-grow: 1;
+                    text-align: left;
+                }
+
+                .icon {
+                    flex-shrink: 0;
+                }
+            }
+        }
+        padding: var(--spacing-small);
+
+        &:hover{
+            background-color: var(--color-background-hover);
+        }
+    }
+    
+    .bottom {
+        padding: var(--spacing-small)
+                var(--spacing-small)
+                var(--spacing-small)
+                var(--spacing-large-alt);
+
+    }
+}

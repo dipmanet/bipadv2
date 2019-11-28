@@ -54,6 +54,9 @@ const iconNames = {
     email: 'ion-ios-email',
     star: 'ion-ios-star',
     upload: 'ion-upload',
+
+    eye: 'ion-eye',
+    eyeOff: 'ion-eye-off',
 };
 
 export default iconNames;

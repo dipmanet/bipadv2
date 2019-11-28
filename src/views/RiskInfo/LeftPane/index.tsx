@@ -5,6 +5,7 @@ import Overview from './Overview';
 import Details from './Details';
 
 import styles from './styles.scss';
+import Risk from './Details/Risk';
 
 interface Props {
     className?: string;
@@ -54,17 +55,23 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
         } = this.state;
 
         return (
-            <div className={_cs(styles.leftPane, className)}>
-                { activeAttribute ? (
+            <div className={
+                _cs(
+                    styles.leftPane,
+                    className,
+                    activeAttribute && styles.hasActiveAttribute,
+                )}
+            >
+                <Overview
+                    titleShown={!activeAttribute}
+                    className={styles.overview}
+                    onAttributeClick={this.handleAttributeClick}
+                />
+                {activeAttribute && (
                     <Details
                         className={styles.content}
                         attribute={activeAttribute}
                         onBackButtonClick={this.handleDetailsBackButtonClick}
-                    />
-                ) : (
-                    <Overview
-                        className={styles.content}
-                        onAttributeClick={this.handleAttributeClick}
                     />
                 )}
             </div>
