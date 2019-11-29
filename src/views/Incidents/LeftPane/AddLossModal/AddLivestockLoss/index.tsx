@@ -12,9 +12,7 @@ import {
     methods,
 } from '#request';
 
-import { MultiResponse } from '#store/atom/response/types';
 import {
-    Resource,
     Status,
     Field,
 } from '#store/atom/page/types';
@@ -47,12 +45,10 @@ interface PropsFromDispatch {
 interface Params {
     body?: object;
     onSuccess?: () => void;
-    setResources?: (resourceList: Resource[]) => void;
     onFailure?: (faramErrors: object) => void;
 }
 
 interface State {
-    resourceList: Resource[];
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
@@ -64,19 +60,8 @@ type Props = NewProps<ReduxProps, Params>;
 const labelSelector = (d: Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    resourceRequest: {
-        url: '/resource/',
-        method: methods.GET,
-        onMount: true,
-        onSuccess: ({ response, params: { setResources } = { setResources: undefined } }) => {
-            const { results } = response as MultiResponse<Resource>;
-            if (setResources) {
-                setResources(results);
-            }
-        },
-    },
-    addInfrastructureLossRequest: {
-        url: '/loss-infrastructure/',
+    addLivestockLossRequest: {
+        url: '/loss-livestock/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ response }) => {
@@ -88,10 +73,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
-
 };
-
-const infrastructureLossStatusList: Status [] = [
+const livestockLossStatus: Status [] = [
     {
         id: 1,
         title: 'destroyed',
@@ -102,35 +85,21 @@ const infrastructureLossStatusList: Status [] = [
     },
 ];
 
-class AddInfrastructureLoss extends React.PureComponent<Props, State> {
+class AddLivestockLoss extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
         this.state = {
-            resourceList: [],
             faramValues: {},
             faramErrors: {},
             pristine: true,
         };
-
-        const {
-            requests: {
-                resourceRequest,
-            },
-        } = this.props;
-
-        resourceRequest.setDefaultParams({
-            setResources: (resourceList: Resource[]) => {
-                this.setState({
-                    resourceList,
-                });
-            },
-        });
     }
 
     private static schema = {
         fields: {
             status: [requiredCondition],
+            count: [requiredCondition],
         },
     }
 
@@ -151,12 +120,12 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
             requests: {
-                addInfrastructureLossRequest,
+                addLivestockLossRequest,
             },
             onUpdate,
         } = this.props;
 
-        addInfrastructureLossRequest.do({
+        addLivestockLossRequest.do({
             body: faramValues,
             onSuccess: () => {
                 if (onUpdate) {
@@ -175,10 +144,9 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
-            resourceList,
-            pristine,
             faramValues,
             faramErrors,
+            pristine,
         } = this.state;
 
         return (
@@ -186,7 +154,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                 onChange={this.handleFaramChange}
                 onValidationFailure={this.handleFaramValidationFailure}
                 onValidationSuccess={this.handleFaramValidationSuccess}
-                schema={AddInfrastructureLoss.schema}
+                schema={AddLivestockLoss.schema}
                 value={faramValues}
                 error={faramErrors}
             >
@@ -197,36 +165,9 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                 <SelectInput
                     faramElementName="status"
                     label="Status"
-                    options={infrastructureLossStatusList}
+                    options={livestockLossStatus}
                     keySelector={labelSelector}
                     labelSelector={labelSelector}
-                />
-                <SelectInput
-                    faramElementName="resource"
-                    label="Resource"
-                    options={resourceList}
-                    keySelector={labelSelector}
-                    labelSelector={labelSelector}
-                />
-                <NumberInput
-                    faramElementName="equipmentValue"
-                    label="Equipment Value"
-                />
-                <NumberInput
-                    faramElementName="infrastructureValue"
-                    label="Infrastructure Value"
-                />
-                <TextInput
-                    faramElementName="beneficiaryOwner"
-                    label="Beneficiary Owner"
-                />
-                <NumberInput
-                    faramElementName="beneficiaryCount"
-                    label="Beneficiary Count"
-                />
-                <Checkbox
-                    faramElementName="serviceDisrupted"
-                    label="Service Disrupted"
                 />
                 <NumberInput
                     faramElementName="count"
@@ -244,10 +185,6 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                     faramElementName="verificationMessage"
                     label="Verification Message"
                 />
-                <SelectInput
-                    faramElementName="unit"
-                    label="Unit"
-                />
                 <div>
                     <PrimaryButton
                         type="submit"
@@ -261,4 +198,4 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requests)(AddInfrastructureLoss);
+export default createRequestClient(requests)(AddLivestockLoss);
