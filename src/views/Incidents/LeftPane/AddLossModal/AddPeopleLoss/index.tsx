@@ -142,7 +142,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleFaramValidationSuccess = (_: unknown, faramValues: FaramValues) => {
+    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const { requests: { addPeopleLossRequest }, onUpdate } = this.props;
 
         addPeopleLossRequest.do({

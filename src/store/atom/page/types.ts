@@ -82,6 +82,9 @@ export interface Country extends Field {
 export interface AgricultureLossType extends Field{
 }
 
+export interface InfrastructureType extends Field {
+}
+
 export interface Incident {
     id: number;
     title: string;
