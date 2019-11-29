@@ -94,6 +94,13 @@ export const setCountryListAction = (
     countryList,
 });
 
+export const setAgricultureLossTypeListAction = (
+    { agricultureLossTypeList }: { agricultureLossTypeList: Type.AgricultureLossType[]},
+) => ({
+    type: Type.PageType.SET_AGRICULTURE_LOSS_TYPE_LIST,
+    agricultureLossTypeList,
+});
+
 
 // dashboard action creator
 
@@ -389,7 +396,9 @@ const setDocumentCategoryList = (state: Type.PageState, action: Type.SetDocument
     return newState;
 };
 
-const setCountryList = (state: Type.PageState, action: Type.SetCountryList) => {
+const setCountryList = (
+    state: Type.PageState, action: Type.SetCountryList,
+) => {
     const { countryList } = action;
 
     const newState = produce(state, (deferedState) => {
@@ -397,6 +406,19 @@ const setCountryList = (state: Type.PageState, action: Type.SetCountryList) => {
     });
 
     return newState;
+};
+
+const setAgricultureLossTypeList = (
+    state: Type.PageState,
+    action: Type.SetAgricultureLossTypeList,
+) => {
+    const { agricultureLossTypeList } = action;
+
+    const newSate = produce(state, (deferedState) => {
+        deferedState.agricultureLossTypeList = agricultureLossTypeList;
+    });
+
+    return newSate;
 };
 
 // dashboard page
@@ -968,6 +990,8 @@ export default function routeReducer(
             return setDocumentCategoryList(state, action);
         case Type.PageType.SET_COUNTRY_LIST:
             return setCountryList(state, action);
+        case Type.PageType.SET_AGRICULTURE_LOSS_TYPE_LIST:
+            return setAgricultureLossTypeList(state, action);
         default:
             return state;
     }

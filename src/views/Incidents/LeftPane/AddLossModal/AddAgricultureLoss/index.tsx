@@ -4,6 +4,7 @@ import Redux, {
 } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -16,13 +17,12 @@ import {
 } from '#request';
 
 import {
-    setCountryListAction,
+    setAgricultureLossTypeListAction,
 } from '#actionCreators';
 
 import {
-    countryListSelector,
-    peopleLossStatusListSelector,
-    genderListSelector,
+    agricultureLossStatusListSelector,
+    agricultureLossTypeListSelector,
 } from '#selectors';
 
 import { AppState } from '#store/types';
@@ -48,13 +48,12 @@ interface OwnProps {
 }
 
 interface PropsFromState {
-    countryList: PageType.Country[];
-    peopleLossStatusList: PageType.Status[];
-    genderList: PageType.Gender[];
+    agricultureLossStatusList: PageType.Status[];
+    agricultureLossTypeList: PageType.AgricultureLossType[];
 }
 
 interface PropsFromDispatch {
-    setCountryList: typeof setCountryListAction;
+    setAgricultureLossTypeList: typeof setAgricultureLossTypeListAction;
 }
 interface Params {
     body: object;
@@ -72,33 +71,33 @@ interface State {
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    countryList: countryListSelector(state),
-    peopleLossStatusList: peopleLossStatusListSelector(state),
-    genderList: genderListSelector(state),
+    agricultureLossStatusList: agricultureLossStatusListSelector(state),
+    agricultureLossTypeList: agricultureLossTypeListSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setCountryList: params => dispatch(setCountryListAction(params)),
+    setAgricultureLossTypeList: params => dispatch(setAgricultureLossTypeListAction(params)),
 });
 
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    countryGetRequest: {
-        url: '/country/',
+    // TODO: change this when actual api is available
+    agricultureLossTypeGet: {
+        url: '/loss-agriculture-type/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response, props: { setCountryList } }) => {
-            interface Response { results: PageType.Country[] }
-            const { results: countryList = [] } = response as Response;
-            setCountryList({ countryList });
+        onSuccess: ({ response, props: { setAgricultureLossTypeList } }) => {
+            interface Response { results: PageType.AgricultureLossType[] }
+            const { results: agricultureLossTypeList = [] } = response as Response;
+            setAgricultureLossTypeList({ agricultureLossTypeList });
         },
     },
-    addPeopleLossRequest: {
-        url: '/loss-people/',
+    addAgricultureLossRequest: {
+        url: '/loss-agriculture/',
         method: methods.POST,
-        body: ({ params: { body } = { body: { } } }) => body,
+        body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ params, response }) => {
             console.warn('response', response);
         },
@@ -110,7 +109,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
-class AddPeopleLoss extends React.PureComponent<Props, State> {
+class AddAgricultureLoss extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -124,7 +123,8 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
     private static schema = {
         fields: {
             status: [requiredCondition],
-            count: [requiredCondition],
+            type: [requiredCondition],
+            quantity: [requiredCondition],
         },
     }
 
@@ -160,10 +160,9 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
 
     public render() {
         const {
-            genderList,
-            countryList,
-            peopleLossStatusList,
             className,
+            agricultureLossStatusList,
+            agricultureLossTypeList,
         } = this.props;
 
         const {
@@ -177,39 +176,32 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                 onChange={this.handleFaramChange}
                 onValidationFailure={this.handleFaramValidationFailure}
                 onValidationSuccess={this.handleFaramValidationSuccess}
-                schema={AddPeopleLoss.schema}
+                schema={AddAgricultureLoss.schema}
                 value={faramValues}
                 error={faramErrors}
             >
                 <SelectInput
                     faramElementName="status"
                     label="Status"
-                    options={peopleLossStatusList}
+                    options={agricultureLossStatusList}
                     keySelector={labelSelector}
                     labelSelector={labelSelector}
                 />
                 <TextInput
-                    faramElementName="name"
-                    label="Name"
+                    faramElementName="beneficiaryOwner"
+                    label="Beneficiary Owner"
                 />
                 <NumberInput
-                    faramElementName="age"
-                    label="Age"
-                />
-                <SelectInput
-                    faramElementName="gender"
-                    label="Gender"
-                    options={genderList}
-                    keySelector={labelSelector}
-                    labelSelector={labelSelector}
-                />
-                <Checkbox
-                    faramElementName="belowPoverty"
-                    label="Below Poverty"
+                    faramElementName="beneficiaryCount"
+                    label="Beneficiary Count"
                 />
                 <NumberInput
-                    faramElementName="count"
-                    label="Count"
+                    faramElementName="quantity"
+                    label="Quantity"
+                />
+                <NumberInput
+                    faramElementName="economicLoss"
+                    label="Economic Loss"
                 />
                 <Checkbox
                     faramElementName="verified"
@@ -220,10 +212,10 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                     label="Verification Message"
                 />
                 <SelectInput
-                    faramElementName="nationality"
-                    label="Nationality"
-                    options={countryList}
-                    keySelector={keySelector}
+                    faramElementName="type"
+                    label="Type"
+                    options={agricultureLossTypeList}
+                    keySelector={labelSelector}
                     labelSelector={labelSelector}
                 />
                 <div>
@@ -242,4 +234,4 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),
-)(AddPeopleLoss);
+)(AddAgricultureLoss);

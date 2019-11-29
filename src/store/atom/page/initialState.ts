@@ -128,7 +128,7 @@ const state: PageState = {
             title: 'others',
         },
     ],
-    statusList: [
+    peopleLossStatusList: [
         {
             id: 1,
             title: 'dead',
@@ -143,6 +143,16 @@ const state: PageState = {
         },
         {
             id: 4,
+            title: 'affected',
+        },
+    ],
+    agricultureLossStatusList: [
+        {
+            id: 1,
+            title: 'destroyed',
+        },
+        {
+            id: 1,
             title: 'affected',
         },
     ],

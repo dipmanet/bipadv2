@@ -134,7 +134,17 @@ export const documentCategoryListSelector = ({ page }: AppState) => page.documen
 
 export const genderListSelector = ({ page }: AppState) => page.genderList;
 
-export const statusListSelector = ({ page }: AppState) => page.statusList;
+export const peopleLossStatusListSelector = (
+    { page }: AppState,
+) => page.peopleLossStatusList;
+
+export const agricultureLossStatusListSelector = (
+    { page }: AppState,
+) => page.agricultureLossStatusList;
+
+export const agricultureLossTypeListSelector = (
+    { page }: AppState,
+) => page.agricultureLossTypeList;
 
 export const countryListSelector = ({ page }: AppState) => page.countryList;
 

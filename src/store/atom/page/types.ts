@@ -79,6 +79,8 @@ export interface Gender extends Field {
 }
 export interface Country extends Field {
 }
+export interface AgricultureLossType extends Field{
+}
 
 export interface Incident {
     id: number;
@@ -409,7 +411,9 @@ export interface PageState {
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
-    statusList: Status[];
+    peopleLossStatusList: Status[];
+    agricultureLossStatusList: Status[];
+    agricultureLossTypeList: AgricultureLossType[];
     countryList: Country[];
     genderList: Gender[];
 
@@ -443,6 +447,7 @@ export enum PageType {
     SET_LOSS_LIST = 'page/SET_LOSS_LIST',
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
+    SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -541,7 +546,12 @@ export interface SetDocumentCategoryList {
 
 export interface SetCountryList {
     type: typeof PageType.SET_COUNTRY_LIST;
-    contryList: Country[];
+    countryList: Country[];
+}
+
+export interface SetAgricultureLossTypeList {
+    type: typeof PageType.SET_AGRICULTURE_LOSS_TYPE_LIST;
+    agricultureLossTypeList: AgricultureLossType[];
 }
 
 // dashboard
@@ -698,5 +708,5 @@ export type PageActionTypes = (
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
-    SetDocumentCategoryList
+    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList
 );
