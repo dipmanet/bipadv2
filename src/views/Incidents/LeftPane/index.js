@@ -21,6 +21,7 @@ import AddIncidentForm from './AddIncidentForm';
 import AddDocumentForm from './AddDocumentForm';
 import AddResourceForm from './AddResourceForm';
 import AddInventoryForm from './AddInventoryForm';
+import AddLossModal from './AddLossModal';
 
 import styles from './styles.scss';
 

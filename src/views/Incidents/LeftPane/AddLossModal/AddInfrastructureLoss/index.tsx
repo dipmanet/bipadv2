@@ -7,8 +7,8 @@ import Faram, {
 
 import {
     createRequestClient,
-    NewProps,
     ClientAttributes,
+    NewProps,
     methods,
 } from '#request';
 
@@ -17,6 +17,7 @@ import {
     Resource,
     Status,
     Field,
+    InfrastructureType,
 } from '#store/atom/page/types';
 
 import TextInput from '#rsci/TextInput';
@@ -28,6 +29,7 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import styles from './styles.scss';
 
 interface FaramValues {
+    serviceDisrupted?: number;
 }
 
 interface FaramErrors {
@@ -44,23 +46,47 @@ interface PropsFromState {
 interface PropsFromDispatch {
 }
 
+interface InfrastructureUnit extends Field {}
+
 interface Params {
     body?: object;
     onSuccess?: () => void;
     setResources?: (resourceList: Resource[]) => void;
+    setInfrastructureUnits?: (infrastructureUnitList: InfrastructureUnit[]) => void;
+    setInfrastructureTypes?: (infrastructureTypeList: InfrastructureType[]) => void;
     onFailure?: (faramErrors: object) => void;
 }
 
 interface State {
+    infrastructureTypeList: InfrastructureType[];
+    infrastructureUnitList: InfrastructureUnit[];
     resourceList: Resource[];
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
 }
 
+interface ServiceDisruptedOption extends Field {
+    value: boolean;
+}
+
+const serviceDisruptedOptions: ServiceDisruptedOption[] = [
+    {
+        id: 1,
+        title: 'Yes',
+        value: true,
+    },
+    {
+        id: 2,
+        title: 'No',
+        value: false,
+    },
+];
+
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
+const keySelector = (d: Field) => d.id;
 const labelSelector = (d: Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -72,6 +98,34 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             const { results } = response as MultiResponse<Resource>;
             if (setResources) {
                 setResources(results);
+            }
+        },
+    },
+    infrastructureTypeGetRequest: {
+        url: '/infrastructure-type/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({
+            response,
+            params: { setInfrastructureTypes } = { setInfrastructureTypes: undefined },
+        }) => {
+            const { results } = response as MultiResponse<InfrastructureType>;
+            if (setInfrastructureTypes) {
+                setInfrastructureTypes(results);
+            }
+        },
+    },
+    infrastructureUnitGetRequest: {
+        url: '/infrastructure-unit/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({
+            response,
+            params: { setInfrastructureUnits } = { setInfrastructureUnits: undefined },
+        }) => {
+            const { results } = response as MultiResponse<InfrastructureUnit>;
+            if (setInfrastructureUnits) {
+                setInfrastructureUnits(results);
             }
         },
     },
@@ -107,6 +161,8 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
+            infrastructureTypeList: [],
+            infrastructureUnitList: [],
             resourceList: [],
             faramValues: {},
             faramErrors: {},
@@ -116,8 +172,26 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
         const {
             requests: {
                 resourceRequest,
+                infrastructureTypeGetRequest,
+                infrastructureUnitGetRequest,
             },
         } = this.props;
+
+        infrastructureTypeGetRequest.setDefaultParams({
+            setInfrastructureTypes: (infrastructureTypeList: InfrastructureType[]) => {
+                this.setState({
+                    infrastructureTypeList,
+                });
+            },
+        });
+
+        infrastructureUnitGetRequest.setDefaultParams({
+            setInfrastructureUnits: (infrastructureUnitList: InfrastructureUnit[]) => {
+                this.setState({
+                    infrastructureUnitList,
+                });
+            },
+        });
 
         resourceRequest.setDefaultParams({
             setResources: (resourceList: Resource[]) => {
@@ -130,7 +204,19 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
 
     private static schema = {
         fields: {
+            title: [],
             status: [requiredCondition],
+            type: [requiredCondition],
+            resource: [],
+            equipmentValue: [],
+            infrastructureValue: [],
+            beneficiaryOwner: [],
+            serviceDisrupted: [],
+            count: [requiredCondition],
+            economicLoss: [],
+            verified: [],
+            verificationMessage: [],
+            unit: [],
         },
     }
 
@@ -149,6 +235,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+        console.warn('handleFaramValidationSuccess', faramValues);
         const {
             requests: {
                 addInfrastructureLossRequest,
@@ -156,8 +243,16 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
             onUpdate,
         } = this.props;
 
+        const {
+            serviceDisrupted: id,
+        } = faramValues;
+
+        const selected = serviceDisruptedOptions.find(v => v.id === id);
+
+        const serviceDisrupted = selected ? selected.value : null;
+
         addInfrastructureLossRequest.do({
-            body: faramValues,
+            body: { ...faramValues, serviceDisrupted },
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
@@ -175,6 +270,8 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
+            infrastructureTypeList,
+            infrastructureUnitList,
             resourceList,
             pristine,
             faramValues,
@@ -208,6 +305,13 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                     keySelector={labelSelector}
                     labelSelector={labelSelector}
                 />
+                <SelectInput
+                    faramElementName="type"
+                    label="Type"
+                    options={infrastructureTypeList}
+                    keySelector={keySelector}
+                    labelSelector={labelSelector}
+                />
                 <NumberInput
                     faramElementName="equipmentValue"
                     label="Equipment Value"
@@ -224,9 +328,12 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                     faramElementName="beneficiaryCount"
                     label="Beneficiary Count"
                 />
-                <Checkbox
+                <SelectInput
                     faramElementName="serviceDisrupted"
                     label="Service Disrupted"
+                    options={serviceDisruptedOptions}
+                    keySelector={labelSelector}
+                    labelSelector={labelSelector}
                 />
                 <NumberInput
                     faramElementName="count"
@@ -247,6 +354,9 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                 <SelectInput
                     faramElementName="unit"
                     label="Unit"
+                    options={infrastructureUnitList}
+                    keySelector={keySelector}
+                    labelSelector={labelSelector}
                 />
                 <div>
                     <PrimaryButton

@@ -24,6 +24,7 @@ import Checkbox from '#rsci/Checkbox';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import styles from './styles.scss';
+import { MultiResponse } from '#store/atom/response/types';
 
 interface FaramValues {
 }
@@ -46,12 +47,17 @@ interface Params {
     body?: object;
     onSuccess?: () => void;
     onFailure?: (faramErrors: object) => void;
+    setLivestockTypes?: (livestockTypes: LivestockType[]) => void;
 }
 
 interface State {
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
+    livestockTypes: LivestockType[];
+}
+
+interface LivestockType extends Field{
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -73,6 +79,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    livestockTypeGetRequest: {
+        url: '/livestock-type/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({
+            response,
+            params: { setLivestockTypes } = { setLivestockType: undefined },
+        }) => {
+            const { results } = response as MultiResponse<LivestockType>;
+            if (setLivestockTypes) {
+                setLivestockTypes(results);
+            }
+        },
+    },
 };
 const livestockLossStatus: Status [] = [
     {
@@ -90,16 +110,36 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
+            livestockTypes: [],
             faramValues: {},
             faramErrors: {},
             pristine: true,
         };
+
+        const {
+            requests: {
+                livestockTypeGetRequest,
+            },
+        } = this.props;
+
+        livestockTypeGetRequest.setDefaultParams({
+            setLivestockTypes: (livestockTypes: LivestockType[]) => {
+                this.setState({
+                    livestockTypes,
+                });
+            },
+        });
     }
 
     private static schema = {
         fields: {
+            title: [],
+            type: [],
             status: [requiredCondition],
             count: [requiredCondition],
+            economicLoss: [],
+            verified: [],
+            verificationMessage: [],
         },
     }
 
@@ -144,6 +184,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
+            livestockTypes,
             faramValues,
             faramErrors,
             pristine,
@@ -161,6 +202,13 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                 <TextInput
                     faramElementName="title"
                     label="Title"
+                />
+                <SelectInput
+                    faramElementName="type"
+                    label="Type"
+                    options={livestockTypes}
+                    keySelector={labelSelector}
+                    labelSelector={labelSelector}
                 />
                 <SelectInput
                     faramElementName="status"

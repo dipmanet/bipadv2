@@ -26,7 +26,11 @@ import {
 } from '#selectors';
 
 import { AppState } from '#store/types';
-import * as PageType from '#store/atom/page/types';
+import {
+    Status,
+    AgricultureLossType,
+    Field,
+} from '#store/atom/page/types';
 
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
@@ -48,8 +52,8 @@ interface OwnProps {
 }
 
 interface PropsFromState {
-    agricultureLossStatusList: PageType.Status[];
-    agricultureLossTypeList: PageType.AgricultureLossType[];
+    agricultureLossStatusList: Status[];
+    agricultureLossTypeList: AgricultureLossType[];
 }
 
 interface PropsFromDispatch {
@@ -79,17 +83,17 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAgricultureLossTypeList: params => dispatch(setAgricultureLossTypeListAction(params)),
 });
 
-const keySelector = (d: PageType.Field) => d.id;
-const labelSelector = (d: PageType.Field) => d.title;
+const keySelector = (d: Field) => d.id;
+const labelSelector = (d: Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     // TODO: change this when actual api is available
     agricultureLossTypeGet: {
-        url: '/loss-agriculture-type/',
+        url: '/agriculture-type/',
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, props: { setAgricultureLossTypeList } }) => {
-            interface Response { results: PageType.AgricultureLossType[] }
+            interface Response { results: AgricultureLossType[] }
             const { results: agricultureLossTypeList = [] } = response as Response;
             setAgricultureLossTypeList({ agricultureLossTypeList });
         },
@@ -123,6 +127,11 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
     private static schema = {
         fields: {
             status: [requiredCondition],
+            beneficiaryOwner: [],
+            beneficiaryCount: [],
+            economicLoss: [],
+            verified: [],
+            verificationMessage: [],
             type: [requiredCondition],
             quantity: [requiredCondition],
         },
@@ -143,9 +152,14 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addPeopleLossRequest }, onUpdate } = this.props;
+        const {
+            requests: {
+                addAgricultureLossRequest,
+            },
+            onUpdate,
+        } = this.props;
 
-        addPeopleLossRequest.do({
+        addAgricultureLossRequest.do({
             body: faramValues,
             onSuccess: () => {
                 if (onUpdate) {
@@ -215,7 +229,7 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
                     faramElementName="type"
                     label="Type"
                     options={agricultureLossTypeList}
-                    keySelector={labelSelector}
+                    keySelector={keySelector}
                     labelSelector={labelSelector}
                 />
                 <div>

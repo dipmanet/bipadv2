@@ -125,6 +125,13 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
         fields: {
             status: [requiredCondition],
             count: [requiredCondition],
+            name: [],
+            age: [],
+            gender: [],
+            belowPoverty: [],
+            verified: [],
+            verificationMessage: [],
+            nationality: [],
         },
     }
 
