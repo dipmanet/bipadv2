@@ -7,7 +7,7 @@
         .left {
             flex-shrink: 0;
         }
-    
+
         .right {
             display: flex;
             flex-grow: 1;
@@ -36,12 +36,29 @@
             background-color: var(--color-background-hover);
         }
     }
-    
-    .bottom {
-        padding: var(--spacing-small)
-                var(--spacing-small)
-                var(--spacing-small)
-                var(--spacing-large-alt);
 
+    .bottom {
+        padding: var(--spacing-small) var(--spacing-small) var(--spacing-small) var(--spacing-extra-large-alt);
+
+        .iconList {
+            display: flex;
+            justify-content: center;
+            border-top: var(--spacing-super-small) solid var(--color-separator);
+            border-bottom: var(--spacing-super-small) solid var(--color-separator);
+            margin-top: var(--spacing-medium);
+            padding: var(--spacing-small-alt) 0;
+            color: var(--color-accent);
+            font-size: var(--font-size-large);
+
+
+            div{
+                cursor: pointer;
+                padding: 0 var(--spacing-small-alt);
+
+                &:hover{
+                    color: var(--color-foreground-scrollbar);
+                }
+            }
+        }
     }
 }

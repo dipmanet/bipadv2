@@ -3,7 +3,6 @@ import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 import ListView from '#rscv/List/ListView';
-import Checkbox from '#rsci/MultiSelectInput/Checkbox';
 
 import { RiskElement } from '#types';
 
@@ -16,12 +15,11 @@ interface Props {
 interface State {
 }
 
-
 const riskList: RiskElement[] = [
     {
         key: 1,
         title: 'Durham Earthquake Risk Data',
-        description: 'durham earthquake risk data desc',
+        description: 'durham earthquake risk data desc durham earthquake risk data desc',
     },
     {
         key: 2,
@@ -37,7 +35,7 @@ export default class Risk extends React.PureComponent<Props, State> {
         title: item.title,
         description: item.description,
         className: styles.item,
-    })
+    });
 
     public render() {
         const {

@@ -57,6 +57,9 @@ const iconNames = {
 
     eye: 'ion-eye',
     eyeOff: 'ion-eye-off',
+
+    table: 'fa fa-table',
+    contrast: 'ion-contrast',
 };
 
 export default iconNames;

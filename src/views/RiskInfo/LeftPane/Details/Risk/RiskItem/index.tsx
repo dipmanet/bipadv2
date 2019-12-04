@@ -3,12 +3,13 @@ import { _cs } from '@togglecorp/fujs';
 
 import Checkbox from '#rsci/Checkbox';
 import Button from '#rsca/Button';
+import ListView from '#rscv/List/ListView';
 
 import { RiskElement } from '#types';
 
+import DropdownMenu from '#rsca/DropdownMenu';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import { number, string } from 'prop-types';
 
 
 interface Props {
@@ -21,14 +22,14 @@ interface State {
     isExpanded: boolean;
 }
 
-interface iconElement {
+interface IconElement {
     key: number;
     name: string;
     description: string;
 }
 
 
-const iconList: iconElement[] = [
+const iconList: IconElement[] = [
     {
         key: 1,
         name: 'eye',
@@ -36,9 +37,40 @@ const iconList: iconElement[] = [
     },
     {
         key: 2,
-        name: ''
-    }
+        name: 'download',
+        description: 'Download the data',
+    },
+    {
+        key: 3,
+        name: 'table',
+        description: 'View in attribute table',
+    },
+    {
+        key: 4,
+        name: 'share',
+        description: 'Share this view',
+    },
+    {
+        key: 5,
+        name: 'contrast',
+        description: 'Transparency/ Opacity',
+    },
 ];
+
+const iconListKeySelector = (d: IconElement) => d.key;
+
+const iconListRenderer = (item: IconElement) => (
+    <div>
+        <Icon name={item.name} />
+    </div>
+);
+
+const iconListRendererParams = (_: number, item: IconElement) => ({
+    key: item.key,
+    name: item.name,
+    description: item.description,
+});
+
 class RiskItem extends React.Component<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -49,9 +81,7 @@ class RiskItem extends React.Component<Props, State> {
     }
 
     private handleExpandButtonClick = () => {
-        const { isExpanded } = this.state;
-
-        this.setState({ isExpanded: !isExpanded });
+        this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
     }
 
     public render() {
@@ -80,7 +110,7 @@ class RiskItem extends React.Component<Props, State> {
                             onClick={this.handleExpandButtonClick}
                         >
                             <div className={styles.title}>
-                                { title }
+                                {title}
                             </div>
                             <Icon
                                 className={styles.icon}
@@ -89,14 +119,18 @@ class RiskItem extends React.Component<Props, State> {
                         </Button>
                     </div>
                 </div>
-                { isExpanded && (
+                {isExpanded && (
                     <div className={styles.bottom}>
                         <div className={styles.description}>
                             {description}
                         </div>
                         <div className={styles.iconMenu}>
-                            <Icon
-                                name={'eye'}
+                            <ListView
+                                data={iconList}
+                                className={styles.iconList}
+                                keySelector={iconListKeySelector}
+                                renderer={iconListRenderer}
+                                rendererParams={iconListRendererParams}
                             />
                         </div>
                     </div>
