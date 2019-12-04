@@ -65,3 +65,10 @@ pages:
     - public
   only:
   - gl-pages
+
+deploy:
+  stage: deploy
+  script:
+    - ./scripts/deploy.sh
+  only:
+    - staging
