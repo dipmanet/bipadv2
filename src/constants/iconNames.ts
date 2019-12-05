@@ -58,6 +58,7 @@ const iconNames = {
     eye: 'ion-eye',
     eyeOff: 'ion-eye-off',
 
+    sliders: 'fa fa-sliders',
     table: 'fa fa-table',
     contrast: 'ion-contrast',
 };
