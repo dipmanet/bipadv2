@@ -1,7 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import ListView from '#rscv/List/ListView';
+import ListView from '#rsu/../v2/View/ListView';
 
 import hazardIcon from '#resources/icons/Destroyed.svg';
 import exposureIcon from '#resources/icons/See.svg';
@@ -18,6 +18,7 @@ type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity
 interface Props {
     className?: string;
     onAttributeClick: (key: AttributeKey) => void;
+    titleShown: boolean;
 }
 
 interface AttributeItem {
@@ -34,42 +35,42 @@ const attributeList: AttributeItem[] = [
         title: 'Hazard',
         description: 'Hazard is a phenomena or event that has the potential to cause damage/disruption to lives and livelihood',
         color: '#e53935',
-        icon: hazardIcon,
+        icon: 'H',
     },
     {
         key: 'exposure',
         title: 'Exposure',
         description: 'The situation of people, infrastructure, housing, production capacities and other tangible human assets located in hazard-prone areas',
         color: '#8e24aa',
-        icon: exposureIcon,
+        icon: 'E',
     },
     {
         key: 'vulnerability',
         title: 'Vulnerability',
         description: 'The conditions determined by physical, social, economics and environmental factors or processes which increase the susceptibility of an individual, a community, assets or systems to the impacts of hazards',
         color: '#7c6200',
-        icon: vulnerabilityIcon,
+        icon: 'V',
     },
     {
         key: 'risk',
         title: 'Risk',
         description: '-',
         color: '#ff8f00',
-        icon: riskIcon,
+        icon: 'R',
     },
     {
         key: 'capacity-and-resources',
         title: 'Capacity & resources',
         description: 'The strengths, attributes and resources available within the administrative area to manage and reduce disaster risks and strengthen resilience',
         color: '#1976d2',
-        icon: capacityAndResourcesIcon,
+        icon: 'CR',
     },
     {
         key: 'climate-change',
         title: 'Climate change',
         description: 'Climate change occurs when changes in Earth\'s climate system result in new weather patterns that last for at least a few decades, and maybe for millions of years.',
         color: '#689f38',
-        icon: climateChangeIcon,
+        icon: 'CC',
     },
 ];
 
@@ -79,23 +80,26 @@ export default class Overview extends React.PureComponent<Props> {
     private getAttributeRendererParams = (_: string, attribute: AttributeItem) => ({
         attributeKey: attribute.key,
         title: attribute.title,
-        color: attribute.color,
         icon: attribute.icon,
         description: attribute.description,
         onClick: this.props.onAttributeClick,
         className: styles.attribute,
+        titleShown: this.props.titleShown,
     })
 
     public render() {
         const {
             className,
+            titleShown,
         } = this.props;
 
         return (
             <div className={_cs(styles.overview, className)}>
-                <header className={styles.header}>
-                    Select an attribute to get started
-                </header>
+                { titleShown && (
+                    <header className={styles.header}>
+                        Select an attribute to get started
+                    </header>
+                )}
                 <ListView
                     className={styles.content}
                     data={attributeList}

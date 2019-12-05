@@ -5,21 +5,24 @@
     padding: var(--spacing-small);
 
     .left {
+        width: var(--width-icon-extra-large-alt);
         flex-shrink: 0;
         padding: var(--spacing-medium);
 
-        .icon {
-            width: var(--width-risk-info-attribute-icon);
-            height: var(--height-risk-info-attribute-icon);
+        h4{
+            font-size: var(--font-size-extra-large-alt);
+            text-align: center;
+        }
 
-            path {
-                fill: currentColor;
-            }
+        path {
+            fill: var(--color-risk-info-icon);
         }
     }
 
     .right {
+        display: flex;
         flex-grow: 1;
+        align-items: center;
 
         .title {
             padding: var(--spacing-small) var(--spacing-medium);

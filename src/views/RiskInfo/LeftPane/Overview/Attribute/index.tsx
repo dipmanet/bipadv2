@@ -1,8 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-
 import styles from './styles.scss';
 
 type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
@@ -11,10 +9,10 @@ interface Props {
     className?: string;
     title: string;
     description?: string;
-    color?: string;
     attributeKey: AttributeKey;
     onClick: (key: AttributeKey) => void;
     icon: string;
+    titleShown: boolean;
 }
 
 interface State {
@@ -35,8 +33,8 @@ class Attribute extends React.Component<Props, State> {
             className,
             title,
             description,
-            color,
             icon,
+            titleShown,
         } = this.props;
 
         return (
@@ -45,24 +43,19 @@ class Attribute extends React.Component<Props, State> {
                 onClick={this.handleClick}
                 role="presentation"
                 title={description}
-                style={{
-                    color,
-                }}
             >
                 <div className={styles.left}>
-                    <ScalableVectorGraphics
-                        className={styles.icon}
-                        src={icon}
-                    />
-                </div>
-                <div className={styles.right}>
-                    <h4 className={styles.title}>
-                        {title}
+                    <h4 className={styles.icon}>
+                        {icon}
                     </h4>
-                    <div className={styles.description}>
-                        {description}
-                    </div>
                 </div>
+                { titleShown && (
+                    <div className={styles.right}>
+                        <h4 className={styles.title}>
+                            {title}
+                        </h4>
+                    </div>
+                )}
             </div>
         );
     }

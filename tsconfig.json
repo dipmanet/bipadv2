@@ -36,7 +36,8 @@
         "#rscz/*": ["./src/vendor/react-store/components/Visualization/*"],
         "#rsk/*": ["./src/vendor/react-store/constants/*"],
         "#rsu/*": ["./src/vendor/react-store/utils/*"],
-        "#views/*": ["./src/views/*"]
+        "#views/*": ["./src/views/*"],
+        "#types": ["./src/types"]
     }
   },
   "include": [

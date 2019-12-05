@@ -35,6 +35,7 @@ const styleProperties = {
     heightMapboxControlLeftTop: '0',
 
     widthRealtimeFilter: '300px',
+    colorRiskInfoIcon: '#777',
 };
 
 export default styleProperties;
