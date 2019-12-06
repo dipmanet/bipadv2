@@ -13,8 +13,6 @@ import ListView from '#rscv/List/ListView';
 
 import { setMapStyleAction } from '#actionCreators';
 
-import { AppState } from '#store/types';
-
 import LayerButton from './LayerButton';
 import styles from './styles.scss';
 
