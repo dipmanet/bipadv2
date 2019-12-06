@@ -8,10 +8,10 @@ else
     git clone git@github.com:toggle-corp/react-store.git src/vendor/react-store
 fi
 
-# Clone react-components if necessary
-if [ -d "src/vendor/react-components" ]; then
-    echo "Skipping react-components (already cloned)"
+# Clone osm-liberty if necessary
+if [ -d "src/vendor/osm-liberty" ]; then
+    echo "Skipping osm-liberty (already cloned)"
 else
-    echo "Cloning react-components to src/vendor/react-components"
-    git clone git@github.com:timilsinabishal/react-components.git src/vendor/react-components
+    echo "Cloning osm-liberty to src/vendor/osm-liberty"
+    git clone git@gitlab.com:bipad/osm-liberty.git src/vendor/osm-liberty
 fi

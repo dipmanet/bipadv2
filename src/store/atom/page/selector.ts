@@ -120,7 +120,7 @@ export const hazardTypeListSelector = createSelector(
 
 // map styles
 
-export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
+// export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
 
 export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
 
