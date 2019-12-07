@@ -14,12 +14,11 @@
     }
 
     &.has-active-attribute {
-        border: 1px solid blue;
         flex-direction: row;
 
         .overview {
-            flex-shrink: 0;
             flex-grow: unset;
+            flex-shrink: 0;
         }
     }
 }

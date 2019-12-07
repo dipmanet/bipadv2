@@ -52,6 +52,11 @@ const iconList: IconElement[] = [
     },
     {
         key: 5,
+        name: 'sliders',
+        description: 'Configure Attributes',
+    },
+    {
+        key: 6,
         name: 'contrast',
         description: 'Transparency/ Opacity',
     },
@@ -61,7 +66,10 @@ const iconListKeySelector = (d: IconElement) => d.key;
 
 const iconListRenderer = (item: IconElement) => (
     <div>
-        <Icon name={item.name} />
+        <Icon
+            name={item.name}
+            title={item.description}
+        />
     </div>
 );
 
