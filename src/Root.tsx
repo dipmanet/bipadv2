@@ -1,8 +1,10 @@
 import React from 'react';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
+import { persistStore, Persistor } from 'redux-persist';
+
 import styleProperties from '#constants/styleProperties';
+import ReduxContext from '#components/ReduxContext';
 
 import { addIcon } from '#rscg/Icon';
 import { iconNames } from '#constants';
@@ -29,8 +31,6 @@ export default class Root extends React.Component<Props, State> {
         super(props);
 
         this.state = { rehydrated: false };
-        // FIXME: later
-        this.store = store as Store<AppState>;
 
         initializeStyles();
         setStyleProperties(styleProperties);
@@ -41,12 +41,14 @@ export default class Root extends React.Component<Props, State> {
         });
 
         console.info('React version:', React.version);
+
+        // FIXME: later
+        this.store = store as Store<AppState>;
+        // NOTE: We can also use PersistGate instead of callback to wait for rehydration
+        this.persistor = persistStore(this.store, undefined, this.setRehydrated);
     }
 
-    public componentDidMount() {
-        // NOTE: We can also use PersistGate instead of callback to wait for rehydration
-        persistStore(this.store, undefined, this.setRehydrated);
-    }
+    private persistor: Persistor;
 
     private setRehydrated = () => {
         this.setState({ rehydrated: true });
@@ -64,7 +66,11 @@ export default class Root extends React.Component<Props, State> {
 
         return (
             <Provider store={this.store}>
-                <App />
+                <ReduxContext.Provider
+                    value={{ persistor: this.persistor }}
+                >
+                    <App />
+                </ReduxContext.Provider>
             </Provider>
         );
     }

@@ -3,16 +3,68 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import ReduxContext from '#components/ReduxContext';
+
+import osmLibertyStyle from '#mapStyles/style';
+import osmStyle from '#mapStyles/rasterStyle';
+
 import DropdownMenu from '#rsca/DropdownMenu';
 import ListView from '#rscv/List/ListView';
 
-import { mapStylesSelector } from '#selectors';
 import { setMapStyleAction } from '#actionCreators';
-
-import { AppState } from '#store/types';
 
 import LayerButton from './LayerButton';
 import styles from './styles.scss';
+
+const mapStyles = [
+    {
+        name: 'none',
+        style: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
+        color: '#dddddd',
+    },
+    {
+        name: 'light',
+        style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
+        color: '#ff8867',
+    },
+    {
+        name: 'roads',
+        style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
+        color: '#671076',
+    },
+    {
+        name: 'satellite',
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        color: '#c89966',
+    },
+    {
+        name: 'osm',
+        color: '#000000',
+        style: osmLibertyStyle,
+    },
+    {
+        name: 'osm-raster',
+        color: '#f0ff0f',
+        style: osmStyle,
+    },
+    /*
+    {
+        name: 'light',
+        style: 'mapbox://styles/mapbox/light-v10',
+        color: '#cdcdcd',
+    },
+    {
+        name: 'outdoor',
+        style: 'mapbox://styles/mapbox/outdoors-v11',
+        color: '#c8dd97',
+    },
+    {
+        name: 'street',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        color: '#ece0ca',
+    },
+    */
+];
 
 interface OwnProps {
     className?: string;
@@ -31,14 +83,10 @@ interface PropsFromAppState {
 }
 
 interface PropsFromDispatch {
-    setMapStyles: typeof setMapStyleAction;
+    setMapStyle: typeof setMapStyleAction;
 }
 
 type Props = OwnProps & PropsFromAppState & PropsFromDispatch;
-
-const mapStateToProps = (state: AppState) => ({
-    mapStyles: mapStylesSelector(state),
-});
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMapStyle: params => dispatch(setMapStyleAction(params)),
@@ -55,13 +103,16 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     private handleLayerButtonClick = (style: string) => {
         const { setMapStyle } = this.props;
         setMapStyle(style);
+        // To reload styling
+        if (this.context.persistor) {
+            this.context.persistor.flush().then(() => {
+                window.location.reload();
+            });
+        }
     }
 
     public render() {
-        const {
-            className,
-            mapStyles,
-        } = this.props;
+        const { className } = this.props;
 
         return (
             <DropdownMenu
@@ -79,5 +130,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         );
     }
 }
+LayerSwitch.contextType = ReduxContext;
 
-export default connect(mapStateToProps, mapDispatchToProps)(LayerSwitch);
+export default connect(undefined, mapDispatchToProps)(LayerSwitch);

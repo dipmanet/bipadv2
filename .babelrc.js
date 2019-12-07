@@ -63,6 +63,7 @@ module.exports = {
                     '#rsu': './src/vendor/react-store/utils',
                     '#views': './src/views',
                     '#types': './src/types',
+                    '#mapStyles': './src/vendor/osm-liberty',
                 },
             },
         ],

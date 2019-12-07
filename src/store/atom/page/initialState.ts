@@ -1,6 +1,21 @@
 import { PageState } from './types';
+import myStyle from '#constants/../vendor/osm-liberty/style';
+import rasterStyle from '#constants/../vendor/osm-liberty/rasterStyle';
 
 const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
+
+const myOtherStyle = {
+    version: 8,
+    sources: {
+    },
+    layers: [{
+        id: 'simple-tiles',
+        type: 'raster',
+        source: 'raster-tiles',
+        minzoom: 0,
+        maxzoom: 22,
+    }],
+};
 
 const state: PageState = {
     eventTypes: {},
@@ -39,51 +54,6 @@ const state: PageState = {
 
     // selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
     selectedMapStyle: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
-    mapStyles: [
-        {
-            name: 'none',
-            style: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
-            color: '#dddddd',
-        },
-        {
-            name: 'light',
-            style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
-            color: '#ff8867',
-        },
-        {
-            name: 'roads',
-            style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
-            color: '#671076',
-        },
-        {
-            name: 'satellite',
-            style: 'mapbox://styles/mapbox/satellite-streets-v11',
-            color: '#c89966',
-        },
-        {
-            name: 'osm',
-            color: '#000000',
-            style: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
-        },
-        /*
-        {
-            name: 'light',
-            style: 'mapbox://styles/mapbox/light-v10',
-            color: '#cdcdcd',
-        },
-        {
-            name: 'outdoor',
-            style: 'mapbox://styles/mapbox/outdoors-v11',
-            color: '#c8dd97',
-        },
-        {
-            name: 'street',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            color: '#ece0ca',
-        },
-        */
-    ],
-
     hazardTypes: {},
     resourceTypeList: [
         {
