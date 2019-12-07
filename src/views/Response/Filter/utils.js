@@ -50,7 +50,7 @@ const getKey = x => x.key;
 const getLabel = x => x.label;
 
 
-export const getFilterInputElement = (filterParam, show) => {
+export const getFilterInputElement = (filterParam, show, elementProps = {}) => {
     const {
         key,
         type: paramType,
@@ -63,6 +63,7 @@ export const getFilterInputElement = (filterParam, show) => {
     if (type === 'string') {
         return (
             <TextInput
+                {...elementProps}
                 key={key}
                 faramElementName={key}
                 label={label}
@@ -74,6 +75,7 @@ export const getFilterInputElement = (filterParam, show) => {
     if (type === 'number') {
         return (
             <NumberInput
+                {...elementProps}
                 key={key}
                 faramElementName={key}
                 label={label}
@@ -87,6 +89,7 @@ export const getFilterInputElement = (filterParam, show) => {
     if (type === 'boolean') {
         return (
             <Checkbox
+                {...elementProps}
                 key={key}
                 faramElementName={key}
                 label={label}
@@ -98,6 +101,7 @@ export const getFilterInputElement = (filterParam, show) => {
     if (type === 'select') {
         return (
             <SelectInput
+                {...elementProps}
                 key={key}
                 label={label}
                 faramElementName={key}
@@ -105,13 +109,13 @@ export const getFilterInputElement = (filterParam, show) => {
                 labelSelector={getLabel}
                 options={filter.options}
                 disabled={!show}
-                // showLabel={false}
             />
         );
     }
 
     return (
         <TextInput
+            {...elementProps}
             key={filterParam.key}
             faramElementName={filterParam.key}
             label={filterParam.label}

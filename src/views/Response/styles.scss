@@ -1,10 +1,10 @@
-@import '~base-scss/base';
-
-.info {
-    border: $width-separator-thin solid $color-separator-light;
-    padding: $spacing-large;
+.left-container {
+    background-color: var(--color-foreground);
 }
 
-.incident-details {
-    border-radius: $radius-border-medium;
+.right-container {
+    .stock-pile-filter {
+        border: var(--width-separator-thin) solid var(--color-separator);
+        background-color: var(--color-foreground);
+    }
 }

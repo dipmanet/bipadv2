@@ -69,7 +69,7 @@ export default class IncidentItem extends React.PureComponent {
                     styles.incidentItem,
                     isNew && styles.new,
                 )}
-                to={reverseRoute(':incidentId/response', { incidentId })}
+                to={reverseRoute('incidents/:incidentId/response', { incidentId })}
             >
                 <div className={styles.left}>
                     <ScalableVectorGraphics

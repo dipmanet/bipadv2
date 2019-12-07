@@ -51,8 +51,9 @@ export default class ResourceItem extends React.PureComponent {
     renderDetails = () => {
         const { resourceType, inventories } = this.props;
         const attrs = resourceAttributes[resourceType] || [];
+
         return (
-            <React.Fragment>
+            <div className={styles.additionalDetails}>
                 <div className={styles.attributes}>
                     {
                         attrs.map(x => (
@@ -75,7 +76,7 @@ export default class ResourceItem extends React.PureComponent {
                         {inventories.map(inventoryToTextOutput)}
                     </React.Fragment>
                 )}
-            </React.Fragment>
+            </div>
         );
     }
 
@@ -84,7 +85,7 @@ export default class ResourceItem extends React.PureComponent {
             className,
             title,
             distance,
-            contactNumber = 'Not Available',
+            contactNumber = 'N/A',
             showDetails,
             // FIXME: point = emptyobject is a hack. point should be present
             // due to mapbox stringifying objects and so on
@@ -96,42 +97,38 @@ export default class ResourceItem extends React.PureComponent {
         const googleLink = coordinates && `https://www.google.com/maps/?q=${coordinates[1]},${coordinates[0]}&ll=${coordinates[1]},${coordinates[0]}&=13z`;
 
         return (
-            <React.Fragment>
-                <div className={_cs(styles.resource, className)}>
-                    <div className={styles.leftContainer}>
-                        <div className={styles.title}>
-                            { title }
-                        </div>
-                        <div className={styles.content}>
-                            <DistanceOutput
-                                value={distance / 1000}
-                            />
-                            <TextOutput
-                                label={iconNames.telephone}
-                                value={contactNumber}
-                                iconLabel
-                            />
-                        </div>
-                    </div>
-                    {
-                        googleLink && (
-                            <div className={styles.rightContainer}>
-                                <a
-                                    className={styles.link}
-                                    href={googleLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Get direction
-                                </a>
-                            </div>
-                        )
-                    }
+            <div className={_cs(styles.resource, className)}>
+                <h4 className={styles.heading}>
+                    { title }
+                </h4>
+                <div className={styles.basicInformation}>
+                    <DistanceOutput
+                        className={styles.distance}
+                        value={distance / 1000}
+                    />
+                    <TextOutput
+                        className={styles.contactNumber}
+                        label={iconNames.telephone}
+                        value={contactNumber}
+                        iconLabel
+                    />
                 </div>
                 {
-                    showDetails && this.renderDetails()
+                    googleLink && (
+                        <div className={styles.googleLinkContainer}>
+                            <a
+                                className={styles.link}
+                                href={googleLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Get direction
+                            </a>
+                        </div>
+                    )
                 }
-            </React.Fragment>
+                { showDetails && this.renderDetails() }
+            </div>
         );
     }
 }

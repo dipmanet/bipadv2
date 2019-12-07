@@ -1,45 +1,36 @@
-@import '~base-scss/base';
-
 .resource {
-    display: flex;
-    align-items: flex-start;
-    padding: $spacing-small;
+    padding: calc(var(--spacing-small) - var(--spacing-extra-small))  0;
 
-    .left-container {
-        flex-grow: 1;
+    .heading {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+    }
 
-        .title {
-            color: $color-accent;
-            font-weight: $font-weight-bold;
+    .basic-information {
+        display: flex;
+
+        .distance {
+            flex-basis: 50%;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
         }
 
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-
-            >* {
-                padding-right: $spacing-medium;
-            }
+        .contact-number {
+            flex-basis: 50%;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
         }
     }
 
-    .hr {
-        margin: $spacing-small 0;
-        border-bottom: $width-separator-thin solid $color-separator-light;
-    }
-
-    .right-container {
-        flex-shrink: 0;
-
+    .google-link-container {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+        
         .link {
-            border-radius: 2px;
-            background-color: $color-primary;
-            padding: $spacing-extra-small $spacing-small;
             text-transform: uppercase;
-            text-decoration: none;
-            color: $color-text-on-primary;
-            font-size: $font-size-small;
-            font-weight: $font-weight-bold;
+            color: var(--color-accent);
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-bold);
         }
+    }
+
+    .additional-details {
+        padding: var(--spacing-small) var(--spacing-medium);
     }
 }

@@ -259,33 +259,41 @@ class ResponseFilter extends React.PureComponent {
         const filterItem = this.filterItems.find(f => f.key === selectedFilter);
 
         return (
-            <div className={styles.filterContainer}>
+            <div className={styles.resourceFilter}>
                 <FaramGroup
                     key={filterItem.key}
                     faramElementName={filterItem.key}
                 >
-                    <div className={styles.filterHeader}>
+                    <header className={styles.header}>
                         <Checkbox
                             className={styles.checkbox}
                             faramElementName="show"
                             label={titles[filterItem.key] || filterItem.key}
                         />
                         <Button
+                            className={styles.closeButton}
                             transparent
-                            iconName={iconNames.close}
+                            iconName="close"
                             onClick={this.handleFilterClose}
                         />
+                    </header>
+                    <div className={styles.content}>
+                        {
+                            filterItem.filterParams.map(
+                                param => (
+                                    <div className={styles.inputContainer}>
+                                        {
+                                            getFilterInputElement(
+                                                param,
+                                                faramValues[filterItem.key].show,
+                                                { showHintAndError: false },
+                                            )
+                                        }
+                                    </div>
+                                ),
+                            )
+                        }
                     </div>
-                    {
-                        filterItem.filterParams.map(
-                            param => (
-                                getFilterInputElement(
-                                    param,
-                                    faramValues[filterItem.key].show,
-                                )
-                            ),
-                        )
-                    }
                 </FaramGroup>
             </div>
         );
@@ -315,57 +323,29 @@ class ResponseFilter extends React.PureComponent {
         const Filter = this.renderFilter;
 
         return (
-            <CollapsibleView
-                className={_cs(styles.filter, className)}
-                expanded={showFilters}
-                collapsedViewContainerClassName={styles.showFilterButtonContainer}
-                collapsedView={(
-                    <PrimaryButton
-                        onClick={this.handleShowFiltersButtonClick}
-                    >
-                        Show Resources
-                    </PrimaryButton>
-                )}
-                expandedViewContainerClassName={styles.filtersContainer}
-                expandedView={(
-                    <React.Fragment>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Resources
-                            </h4>
-                            <Button
-                                onClick={this.handleHideFiltersButtonClick}
-                                iconName={iconNames.chevronUp}
-                                title="Hide resources"
-                                transparent
-                            />
-                        </header>
-                        <Faram
-                            className={styles.filterForm}
-                            onChange={this.handleFaramChange}
-                            schema={this.schema}
-                            value={faramValues}
-                            error={faramErrors}
-                        >
-                            <div className={styles.resourceListContainer}>
-                                <ListView
-                                    data={resourceKeys}
-                                    renderer={Resource}
-                                    rendererParams={this.getResourceRendererParams}
-                                />
-                            </div>
-                            { selectedFilter && (
-                                <FloatingContainer
-                                    className={styles.floatingContainer}
-                                    onInvalidate={this.handleInvalidate}
-                                >
-                                    <Filter />
-                                </FloatingContainer>
-                            )}
-                        </Faram>
-                    </React.Fragment>
-                )}
-            />
+            <div className={_cs(className, styles.filter)}>
+                <header className={styles.header}>
+                    <h3 className={styles.heading}>
+                        Resources
+                    </h3>
+                </header>
+                { selectedFilter && <Filter /> }
+                <Faram
+                    className={styles.filterForm}
+                    onChange={this.handleFaramChange}
+                    schema={this.schema}
+                    value={faramValues}
+                    error={faramErrors}
+                >
+                    <div className={styles.resourceListContainer}>
+                        <ListView
+                            data={resourceKeys}
+                            renderer={Resource}
+                            rendererParams={this.getResourceRendererParams}
+                        />
+                    </div>
+                </Faram>
+            </div>
         );
     }
 }

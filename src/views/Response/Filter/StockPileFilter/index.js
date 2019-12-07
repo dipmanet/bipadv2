@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
 import {
+    _cs,
     listToMap,
 } from '@togglecorp/fujs';
 
@@ -121,6 +122,7 @@ class StockPileFilter extends React.PureComponent {
         const {
             filteredList,
             inventoryItemList,
+            className,
         } = this.props;
 
         const itemUnits = this.getItemsUnits(inventoryItemList);
@@ -132,16 +134,16 @@ class StockPileFilter extends React.PureComponent {
 
         return (
             <Faram
-                className={styles.filterForm}
+                className={_cs(className, styles.filterForm)}
                 onChange={this.handleFaramChange}
                 onValidationSuccess={this.handleFaramValidationSuccess}
                 schema={this.schema}
                 value={faramValues}
                 error={faramErrors}
             >
-                <h2 className={styles.heading}>
+                <h3 className={styles.heading}>
                     Stockpile Items
-                </h2>
+                </h3>
                 <SelectInput
                     key="item"
                     label="Item"
@@ -149,6 +151,8 @@ class StockPileFilter extends React.PureComponent {
                     keySelector={idSelector}
                     labelSelector={titleSelector}
                     options={inventoryItemList}
+                    showHintAndError={false}
+                    className={styles.input}
                 />
                 <NumberInput
                     key="quantity"
@@ -157,6 +161,8 @@ class StockPileFilter extends React.PureComponent {
                     title="Quantity"
                     disabled={quantityDisabled}
                     separator=" "
+                    showHintAndError={false}
+                    className={styles.input}
                 />
                 <SelectInput
                     key="operatorType"
@@ -165,8 +171,10 @@ class StockPileFilter extends React.PureComponent {
                     keySelector={keySelector}
                     labelSelector={labelSelector}
                     options={operatorOptions}
+                    showHintAndError={false}
+                    className={styles.input}
                 />
-                <div className={styles.bottomContainer}>
+                <div className={styles.actions}>
                     <PrimaryButton
                         type="submit"
                     >

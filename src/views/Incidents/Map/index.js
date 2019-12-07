@@ -14,10 +14,7 @@ import {
     municipalitiesMapSelector,
     wardsMapSelector,
 } from '#selectors';
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
+import { mapStyles } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
 
 import {
@@ -29,6 +26,8 @@ import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
+
+import styles from './styles.scss';
 
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -83,6 +82,10 @@ class IncidentMap extends React.PureComponent {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            maxWidth: '320px',
+            closeButton: false,
+            closeOnClick: true,
+            className: styles.incidentInfo,
         };
     }
 

@@ -8,13 +8,23 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    titleClassName: PropTypes.string,
+    contentClassName: PropTypes.string,
+    rowClassName: PropTypes.string,
+    labelClassName: PropTypes.string,
+    valueClassName: PropTypes.string,
     // eslint-disable-next-line react/forbid-prop-types
     loss: PropTypes.object.isRequired,
-    label: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
-    className: '',
+    className: undefined,
+    titleClassName: undefined,
+    contentClassName: undefined,
+    rowClassName: undefined,
+    labelClassName: undefined,
+    valueClassName: undefined,
 };
 
 const emptyObject = {};
@@ -27,7 +37,12 @@ export default class Loss extends React.PureComponent {
     render() {
         const {
             className,
-            label,
+            title,
+            titleClassName,
+            labelClassName,
+            valueClassName,
+            contentClassName,
+            rowClassName,
             loss = emptyObject,
         } = this.props;
 
@@ -41,33 +56,46 @@ export default class Loss extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.loss)}>
-                <div className={styles.label}>
-                    <b>
-                        { label }
-                    </b>
-                </div>
-                <div>
+                <h3 className={_cs(titleClassName, styles.title)}>
+                    { title }
+                </h3>
+                <div className={contentClassName}>
                     <TextOutput
+                        className={rowClassName}
+                        labelClassName={labelClassName}
+                        valueClassName={valueClassName}
                         label="People Dead"
                         value={peopleDeathCount}
                         isNumericValue
                     />
                     <TextOutput
+                        className={rowClassName}
+                        labelClassName={labelClassName}
+                        valueClassName={valueClassName}
                         label="Livestock Destroyed"
                         value={livestockDestroyedCount}
                         isNumericValue
                     />
                     <TextOutput
+                        className={rowClassName}
+                        labelClassName={labelClassName}
+                        valueClassName={valueClassName}
                         label="Infrastructures Destroyed"
                         value={infrastructureDestroyedCount}
                         isNumericValue
                     />
                     <TextOutput
+                        className={rowClassName}
+                        labelClassName={labelClassName}
+                        valueClassName={valueClassName}
                         label="Estimated Loss (NRs.)"
                         value={estimatedLoss}
                         isNumericValue
                     />
                     <TextOutput
+                        className={rowClassName}
+                        labelClassName={labelClassName}
+                        valueClassName={valueClassName}
                         label="Description"
                         value={description}
                     />

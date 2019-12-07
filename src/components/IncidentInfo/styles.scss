@@ -1,46 +1,134 @@
-@import '~base-scss/base';
+.incident-info {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-medium-alt) - var(--spacing-medium));
 
-.tooltip {
-    background-color: $color-foreground;
-    padding: var(--spacing-small);
-    max-width: var(--width-left-sidebar);
+    >.header {
+        flex-shrink: 0;
+        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
 
-    .heading {
-        font-weight: $font-weight-bold;
+        .heading {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            font-size: var(--font-size-large);
+        }
+
+        .incident-date {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
     }
 
-    .goto-response-link {
-        display: inline-block;
-        margin: var(--spacing-small) 0;
-        border-radius: 3px;
-        background-color: $color-primary;
-        padding: $spacing-small;
-        width: auto;
-        text-transform: uppercase;
-        text-decoration: none;
-        color: $color-text-on-primary;
-        font-size: $font-size-small;
-        font-weight: $font-weight-bold;
+    .actions {
+        flex-shrink: 0;
+
+        .goto-response-link {
+            display: block;
+            padding: var(--spacing-small) var(--spacing-medium);
+            text-transform: uppercase;
+            color: var(--color-primary);
+            font-weight: var(--font-weight-bold);
+        }
     }
 
-    .geoarea-name,
-    .incident-date {
-        padding: $spacing-extra-small 0;
-    }
-
-    .hr {
-        margin: $spacing-small 0;
-        border-bottom: $width-separator-thin solid $color-separator-light;
-    }
-
-    .ward-list {
-        max-height: 74px;
+    >.content {
+        flex-grow: 1;
         overflow: auto;
-    }
 
-    .loss {
-        margin-top: $spacing-small;
-        border-top: $width-separator-thin solid $color-separator-light;
-        padding-top: $spacing-small;
+        .general {
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+            %text-output {
+                display: table-row;
+
+                .label {
+                    display: table-cell;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                }
+                
+                .value {
+                    display: table-cell;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                }
+            }
+
+            .verified {
+                @extend %text-output;
+            }
+
+            .source {
+                @extend %text-output;
+            }
+
+            .inducer {
+                @extend %text-output;
+            }
+
+            .cause {
+                @extend %text-output;
+            }
+
+            .hazard-type {
+                @extend %text-output;
+            }
+
+            .event {
+                @extend %text-output;
+            }
+
+            .reported-on {
+                @extend %text-output;
+            }
+        }
+
+        .wards {
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
+
+            .heading {
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+            }
+
+            .ward-list {
+                .ward {
+                    display: flex;
+                    padding: var(--spacing-extra-small) calc(var(--spacing-medium) - var(--spacing-small));
+
+                    .icon {
+                        flex-shrink: 0;
+                        margin: 0 var(--spacing-small);
+                    }
+
+                    .name {
+                        flex-grow: 1;
+                        padding: 0 var(--spacing-small);
+                    }
+                }
+            }
+        }
+
+        .loss {
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
+
+            .title {
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+            }
+
+            .content {
+                padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
+
+                .row {
+                    display: table-row;
+
+                    .label {
+                        display: table-cell;
+                        padding: var(--spacing-extra-small) var(--spacing-small);
+                    }
+
+                    .value {
+                        display: table-cell;
+                        padding: var(--spacing-extra-small) var(--spacing-small);
+                    }
+                }
+            }
+
+        }
     }
 }

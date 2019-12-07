@@ -1,18 +1,15 @@
-@import '~base-scss/base';
-
 .filter-form {
-    margin-top: $spacing-small-alt;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: $radius-border-medium;
-    background-color: rgba(255, 255, 255, .9);
-    padding: $spacing-small $spacing-medium;
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
     .heading {
-        padding-bottom: $spacing-medium;
+        padding: var(--spacing-small) var(--spacing-medium);
     }
 
-    .bottom-container {
-        display: flex;
-        justify-content: flex-end;
+    .input {
+        margin: var(--spacing-medium);
+    }
+
+    .actions {
+        padding: var(--spacing-small) var(--spacing-medium);
     }
 }

@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { _cs, reverseRoute, mapToList } from '@togglecorp/fujs';
+import {
+    _cs,
+    reverseRoute,
+} from '@togglecorp/fujs';
 import { Link } from '@reach/router';
 
 import FormattedDate from '#rscv/FormattedDate';
+import Icon from '#rscg/Icon';
 
 import TextOutput from '#components/TextOutput';
-import GeoOutput from '#components/GeoOutput';
 import DateOutput from '#components/DateOutput';
 import Loss from '#components/Loss';
-
-import { toTitleCase } from '#utils/common';
-
 
 import styles from './styles.scss';
 
@@ -62,26 +62,15 @@ export default class IncidentInfo extends React.PureComponent {
             hazard: { title: hazardType } = emptyObject,
             incidentOn,
             wards = emptyList,
-            streetAddress: geoareaName,
             event: {
                 title: eventTitle,
             } = {},
 
             loss = emptyObject,
-
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-            id, point, createdOn, polygon, hazardInfo,
-
-            ...misc
+            id,
         } = incident;
 
         const verifiedText = verified ? 'Yes' : 'No';
-
-        // FIXME: memoize later
-        const miscInfo = mapToList(
-            misc,
-            (value, key) => ({ key: toTitleCase(key), value: value.toString() }),
-        );
 
         // FIXME: memoize later
         const wardNames = wards.map((ward) => {
@@ -92,101 +81,117 @@ export default class IncidentInfo extends React.PureComponent {
         });
 
         return (
-            <div className={_cs(styles.tooltip, className)}>
-                <h2 className={styles.heading}>
-                    {title}
-                </h2>
-                <GeoOutput
-                    geoareaName={geoareaName}
-                    className={styles.geoareaName}
-                />
+            <div className={_cs(styles.incidentInfo, className)}>
+                <header className={styles.header}>
+                    <h3 className={styles.heading}>
+                        {title}
+                    </h3>
+                    <DateOutput
+                        className={styles.incidentDate}
+                        value={incidentOn}
+                    />
+                </header>
                 { !hideLink && (
-                    <Link
-                        className={styles.gotoResponseLink}
-                        to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
-                    >
-                        Go to response
-                    </Link>
+                    <div className={styles.actions}>
+                        <Link
+                            className={styles.gotoResponseLink}
+                            to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
+                        >
+                            Goto response
+                        </Link>
+                    </div>
                 )}
-                <DateOutput
-                    className={styles.incidentDate}
-                    date={incidentOn}
-                />
-                <div className={styles.hr} />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Verified"
-                    value={verifiedText}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Source"
-                    value={source}
-                />
-                <TextOutput
-                    className={styles.inducer}
-                    label="Inducer"
-                    value={inducerText[inducer]}
-                />
-                <TextOutput
-                    className={styles.cause}
-                    label="Cause"
-                    value={cause}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Hazard"
-                    value={hazardType}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Event"
-                    value={eventTitle}
-                />
-                <TextOutput
-                    className={styles.commonInfo}
-                    label="Reported On"
-                    value={(
-                        <FormattedDate
-                            mode="yyyy-MM-dd hh:mm"
-                            value={reportedOn}
+                <div className={styles.content}>
+                    <div className={styles.general}>
+                        <TextOutput
+                            className={styles.verified}
+                            label="Verified"
+                            value={verifiedText}
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
                         />
-                    )}
-                />
-                { wardNames.length > 0 && (
-                    <React.Fragment>
-                        <div className={styles.hr} />
-                        <b> Wards </b>
-                        <div className={styles.wardList}>
-                            { wardNames.map(wardName => (
-                                <div key={wardName}>{wardName}</div>
-                            ))}
-                        </div>
-                    </React.Fragment>
-                )}
-                <Loss
-                    className={styles.loss}
-                    label="Loss"
-                    loss={loss}
-                />
-                {/* miscInfo.length !== 0 && (
-                    <React.Fragment>
-                        <div className={styles.hr} />
-                        <b> Misc </b>
-                        {
-                            // FIXME: use List
-                            // FIXME: may need to differentiate number and string
-                            miscInfo.map(x => (
-                                <TextOutput
-                                    className={styles.commonInfo}
-                                    key={x.key}
-                                    label={x.key}
-                                    value={x.value}
+                        <TextOutput
+                            className={styles.source}
+                            label="Source"
+                            value={source}
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                        />
+                        <TextOutput
+                            className={styles.inducer}
+                            label="Inducer"
+                            value={inducerText[inducer]}
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                        />
+                        <TextOutput
+                            className={styles.cause}
+                            label="Cause"
+                            value={cause}
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                        />
+                        <TextOutput
+                            className={styles.hazardType}
+                            label="Hazard"
+                            value={hazardType}
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                        />
+                        <TextOutput
+                            className={styles.event}
+                            label="Event"
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                            value={eventTitle}
+                        />
+                        <TextOutput
+                            className={styles.reportedOn}
+                            label="Reported On"
+                            labelClassName={styles.label}
+                            valueClassName={styles.value}
+                            value={(
+                                <FormattedDate
+                                    mode="yyyy-MM-dd hh:mm"
+                                    value={reportedOn}
                                 />
-                            ))
-                        }
-                    </React.Fragment>
-                ) */}
+                            )}
+                        />
+                    </div>
+                    { wardNames.length > 0 && (
+                        <div className={styles.wards}>
+                            <h4 className={styles.heading}>
+                                Wards
+                            </h4>
+                            <div className={styles.wardList}>
+                                { wardNames.map(wardName => (
+                                    <div
+                                        className={styles.ward}
+                                        key={wardName}
+                                    >
+                                        <Icon
+                                            name="checkmarkCircle"
+                                            className={styles.icon}
+                                        />
+                                        <div className={styles.name}>
+                                            {wardName}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    <Loss
+                        className={styles.loss}
+                        title="Loss"
+                        titleClassName={styles.title}
+                        contentClassName={styles.content}
+                        rowClassName={styles.row}
+                        labelClassName={styles.label}
+                        valueClassName={styles.value}
+                        loss={loss}
+                    />
+                </div>
             </div>
         );
     }

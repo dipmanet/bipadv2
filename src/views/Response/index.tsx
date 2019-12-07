@@ -27,12 +27,11 @@ import {
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
-
-import ResourceList from './ResourceList';
-import StockPileFilter from './Filter/StockPileFilter';
-
 import Map from './Map';
+
+import LeftPane from './LeftPane';
 import ResponseFilter from './Filter';
+import StockPileFilter from './Filter/StockPileFilter';
 
 import styles from './styles.scss';
 
@@ -230,37 +229,28 @@ class Response extends React.PureComponent<Props, State> {
                             rightPaneExpanded={rightPaneExpanded}
                         />
                         <Page
-                            leftContentClassName={styles.incidentDetails}
+                            leftContentClassName={styles.leftContainer}
                             leftContent={(
-                                <React.Fragment>
-                                    <ResourceList
-                                        className={styles.resourceList}
-                                        resourceList={resourceList}
-                                        pending={pending}
-                                        incident={incident}
-                                        wardsMap={wardsMap}
-                                        provincesMap={provincesMap}
-                                        districtsMap={districtsMap}
-                                        municipalitiesMap={municipalitiesMap}
-                                        onExpandChange={this.handleLeftPaneExpandChange}
-                                    />
-                                    { authenticated && (
-                                        <StockPileFilter
-                                            setStockPileFilter={this.setStockPileFilter}
-                                        />
-                                    ) }
-                                </React.Fragment>
-                            )}
-                            rightContentClassName={styles.resourceListContainer}
-                            rightContent={(
-                                <ResponseFilter
+                                <LeftPane
+                                    incident={incident}
+                                    wardsMap={wardsMap}
+                                    provincesMap={provincesMap}
+                                    districtsMap={districtsMap}
+                                    municipalitiesMap={municipalitiesMap}
+
                                     resourceList={resourceList}
-                                    filteredList={filteredResourceList}
+                                    filteredResourceList={filteredResourceList}
                                     setFilter={this.setFilter}
                                     setStockPileFilter={this.setStockPileFilter}
-                                    onExpandChange={this.handleRightPaneExpandChange}
                                 />
                             )}
+                            rightContentClassName={styles.rightContainer}
+                            rightContent={authenticated ? (
+                                <StockPileFilter
+                                    className={styles.stockPileFilter}
+                                    setStockPileFilter={this.setStockPileFilter}
+                                />
+                            ) : null}
                         />
                     </React.Fragment>
                 )}

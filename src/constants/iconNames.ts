@@ -61,6 +61,8 @@ const iconNames = {
     sliders: 'fa fa-sliders',
     table: 'fa fa-table',
     contrast: 'ion-contrast',
+
+    checkmarkCircle: 'ion-checkmark-circled',
 };
 
 export default iconNames;

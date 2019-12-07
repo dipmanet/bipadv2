@@ -1,97 +1,39 @@
-@import '~base-scss/base';
-
 .filter {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - var(--spacing-medium) * 2);
-    overflow: auto;
-
-    .header {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-
+    >.header {
         .heading {
-            flex-grow: 1;
-            padding: $spacing-medium $spacing-small;
-            color: $color-primary;
-        }
-
-        button {
-            flex-shrink: 0;
+            padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
         }
     }
 
-    .show-filter-button-container {
-        top: 0;
-        right: 0;
-        transform-origin: 100% 0;
-    }
-
-    .filters-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        transform-origin: 100% 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
-        background-color: rgba(255, 255, 255, .9);
-        padding-bottom: $spacing-small;
-        width: var(--width-right-panel-large);
-        overflow: auto;
-    }
-
-    :global {
-        .expanded-container-ghost,
-        .collapsed-container-ghost {
-            top: 0;
-            right: 0;
-        }
-
-        .expanded-container-expanding {
-            top: 0;
-            right: 0;
-        }
-    }
-
-    .filter-form {
-        flex-grow: 1;
-        padding: 0 $spacing-medium;
-        overflow: auto;
-
-        .heading {
-            padding-bottom: $spacing-small;
-        }
-
-        .resource-list-container {
-            padding-bottom: $spacing-medium;
-        }
-    }
-}
-
-.floating-container {
-    box-shadow: none;
-
-    .filter-container {
-        background-color: $color-foreground;
-        padding: $spacing-medium;
-        width: var(--width-response-filters);
-
-        .filter-header {
+    .resource-filter {
+        .header {
             display: flex;
-            justify-content: space-between;
+            padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-small));
+            font-size: var(--font-size-large);
 
-            >.checkbox {
-                display: flex;
-                align-items: center;
-                margin-bottom: $spacing-small;
+            .checkbox {
+                flex-grow: 1;
+                padding: 0 var(--spacing-small);
 
                 :global {
-                    .label {
-                        font-size: $font-size-large;
-                        font-weight: $font-weight-bold;
+                    .checkmark {
+                        margin-right: var(--spacing-medium);
                     }
                 }
+            }
+
+            .close-button {
+                flex-shrink: 0;
+                padding: 0 var(--spacing-small);
+            }
+        }
+
+        .content {
+            padding: 0 var(--spacing-medium);
+
+            .input-container {
+                padding: var(--spacing-small) 0;
             }
         }
     }

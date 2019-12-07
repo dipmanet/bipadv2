@@ -1,37 +1,60 @@
-@import '~base-scss/base';
+.resource-group {
+    padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
 
-.resources {
-    &:not(:first-child) {
-        margin-top: $spacing-large;
-    }
-
-    .header {
+    > .header {
         display: flex;
         align-items: center;
+        padding: var(--spacing-extra-small) 0;
 
         .icon {
-            padding-right: $spacing-medium;
-            height: $font-size-large;
+            margin: 0 var(--spacing-medium);
+            width: 24px;
+            height: 24px;
         }
 
         .heading {
+            display: flex;
             flex-grow: 1;
+
+            .resorce-name {
+                flex-grow: 1;
+                padding: 0 var(--spacing-small);
+            }
+
+            .count-details {
+                display: flex;
+                flex-shrink: 0;
+                padding: 0 calc(var(--spacing-small) - var(--spacing-extra-small));
+
+                .num-items {
+                    padding: 0 var(--spacing-extra-small);
+                }
+
+                .separator {
+                    padding: 0 var(--spacing-extra-small);
+                }
+
+                .total {
+                    padding: 0 var(--spacing-extra-small);
+                }
+            }
         }
 
-        .button {
+        .actions {
             flex-shrink: 0;
-            font-size: $font-size-small;
-        }
+            padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
 
-        .filter-button {
-            margin-right: $spacing-small;
+            .filter-button {
+                margin: 0 var(--spacing-extra-small);
+            }
+
+            .expand-button {
+                margin: 0 var(--spacing-extra-small);
+            }
         }
     }
 
-    .content {
-        // border-top: $width-separator-thin solid $color-separator;
-        // border-bottom: $width-separator-thin solid $color-separator;
-        height: 200px;
-        overflow-y: auto;
+    .summary {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
     }
 }

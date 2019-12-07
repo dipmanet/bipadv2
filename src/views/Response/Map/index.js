@@ -34,7 +34,7 @@ import mapIcon from '#resources/icons/Map.svg';
 
 import ResourceItem from '../resources/ResourceItem';
 
-// import styles from './styles.scss';
+import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
@@ -127,8 +127,17 @@ class ResponseMap extends React.PureComponent {
 
     tooltipRenderer = params => <ResourceItem {...params} showDetails />
 
-    tooltipRendererParams = id => this
-        .props.resourceList.find(x => x.id === id) || emptyObject
+    tooltipRendererParams = (id) => {
+        const resourceList = this.props.resourceList.find(x => x.id === id) || emptyObject;
+
+        return {
+            ...resourceList,
+            closeOnClick: true,
+            closeButton: false,
+            maxWidth: '300px',
+            className: styles.resourceDetail,
+        };
+    }
 
     render() {
         const {

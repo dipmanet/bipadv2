@@ -107,7 +107,7 @@ export default class ResourceGroup extends React.PureComponent {
 
         const itemsSorted = Object.keys(inventoriesSummary).sort();
         return (
-            <div>
+            <div className={styles.summary}>
                 {
                     // Aggregation of types
                     groupedTypes.map(group => (group.key && (
@@ -164,13 +164,13 @@ export default class ResourceGroup extends React.PureComponent {
         }
 
         const itemsCount = data.length;
-        const buttonIcon = showResources ? iconNames.chevronUp : iconNames.chevronDown;
+        const buttonIcon = showResources ? 'chevronUp' : 'chevronDown';
         const filterButtonText = isFilterShown ? 'Hide Filters' : 'Show Filters';
 
         const Summary = this.renderSummary;
 
         return (
-            <div className={_cs(className, styles.resources)}>
+            <div className={_cs(className, styles.resourceGroup)}>
                 <div className={styles.header}>
                     <img
                         className={styles.icon}
@@ -178,26 +178,35 @@ export default class ResourceGroup extends React.PureComponent {
                         alt={heading}
                     />
                     <h3 className={styles.heading}>
-                        { heading }
-                        &npsp;(
-                        { itemsCount }
-                        &nbsp;/&nbsp;
-                        { totalSize }
-                        )
+                        <div className={styles.resourceName}>
+                            { heading }
+                        </div>
+                        <div className={styles.countDetails}>
+                            <div className={styles.numItems}>
+                                { itemsCount }
+                            </div>
+                            <div className={styles.separator}>
+                                /
+                            </div>
+                            <div className={styles.total}>
+                                { totalSize }
+                            </div>
+                        </div>
                     </h3>
-                    <Button
-                        className={_cs(styles.filterButton, styles.button)}
-                        onClick={this.handleFilterButtonClick}
-                        type="button"
-                    >
-                        { filterButtonText }
-                    </Button>
-                    <Button
-                        className={styles.button}
-                        onClick={this.handleExpandToggleClick}
-                        iconName={buttonIcon}
-                        type="button"
-                    />
+                    <div className={styles.actions}>
+                        <Button
+                            className={styles.filterButton}
+                            onClick={this.handleFilterButtonClick}
+                            iconName="filter"
+                            type="button"
+                        />
+                        <Button
+                            className={styles.expandButton}
+                            onClick={this.handleExpandToggleClick}
+                            iconName={buttonIcon}
+                            type="button"
+                        />
+                    </div>
                 </div>
                 <Summary />
                 { showResources && (

@@ -281,7 +281,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
 
         const pending = pendingEvents || pendingIncidents;
-        const HoverItemDetail = this.renderHoverItemDetail;
+        // const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
@@ -293,7 +293,6 @@ class Incidents extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
                 />
-                <HoverItemDetail />
                 <Page
                     leftContentClassName={styles.leftPaneContainer}
                     leftContent={(
