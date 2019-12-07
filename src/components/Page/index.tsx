@@ -11,9 +11,9 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
 
-    leftContent?: React.ReactElement;
-    rightContent?: React.ReactElement;
-    mainContent?: React.ReactElement;
+    leftContent?: React.ReactNode;
+    rightContent?: React.ReactNode;
+    mainContent?: React.ReactNode;
 
     leftContentClassName?: string;
     rightContentClassName?: string;

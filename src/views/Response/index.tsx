@@ -1,12 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import {
-    styleProperties,
-} from '#constants';
-
+import { styleProperties } from '#constants';
 import { currentStyle } from '#rsu/styles';
 
 import {
@@ -18,8 +14,8 @@ import {
     setIncidentActionIP,
     setResourceListActionRP,
 } from '#actionCreators';
+
 import {
-    // incidentIdFromRouteSelector,
     incidentSelector,
     resourceListSelectorRP,
     provincesMapSelector,
@@ -35,8 +31,8 @@ import Loading from '#components/Loading';
 import ResourceList from './ResourceList';
 import StockPileFilter from './Filter/StockPileFilter';
 
-import ResponseFilter from './Filter';
 import Map from './Map';
+import ResponseFilter from './Filter';
 
 import styles from './styles.scss';
 
@@ -46,21 +42,11 @@ const emptyObject = {};
 
 const DEFAULT_RESOURCES_DISTANCE = 12 * 1000; // distance in meter
 
-const propTypes = {
-    // eslint-disable-next-line react/forbid-prop-types
-    wardsMap: PropTypes.object,
-    // eslint-disable-next-line react/forbid-prop-types
-    provincesMap: PropTypes.object,
-    // eslint-disable-next-line react/forbid-prop-types
-    districtsMap: PropTypes.object,
-    // eslint-disable-next-line react/forbid-prop-types
-    municipalitiesMap: PropTypes.object,
-    // eslint-disable-next-line react/forbid-prop-types
-    incident: PropTypes.object,
-    resourceList: PropTypes.arrayOf(PropTypes.object),
-    // eslint-disable-next-line react/forbid-prop-types
-    requests: PropTypes.object,
-};
+interface Props {
+}
+
+interface State {
+}
 
 const defaultProps = {
     wardsMap: {},
@@ -143,12 +129,10 @@ const requests = {
     },
 };
 
-class Response extends React.PureComponent {
-    static propTypes = propTypes
+class Response extends React.PureComponent<Props, State> {
+    public static defaultProps = defaultProps
 
-    static defaultProps = defaultProps
-
-    constructor(props) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -159,36 +143,28 @@ class Response extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const { rightPaneExpanded } = this.state;
 
         this.setPlacementForMapControls(rightPaneExpanded);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
         if (mapControls) {
             mapControls.style.right = this.previousMapContorlStyle;
         }
     }
 
-    getFilteredList = memoize((list, filterFunction) => (
+    private getFilteredList = memoize((list, filterFunction) => (
         list.filter(filterFunction)
     ))
 
-    setFilter = (filterFunction) => {
+    private setFilter = (filterFunction) => {
         this.setState({ filterFunction });
     }
 
-    /*
-    setDistanceFilter = ({ min, max }) => {
-        this.setState({
-            distance: max,
-        }, () => this.props.requests.filteredResponseRequest.do({ min, max }));
-    }
-    */
-
-    setStockPileFilter = ({ item, quantity, operatorType }) => {
+    private setStockPileFilter = ({ item, quantity, operatorType }) => {
         this.props.requests.filteredResponseRequest.do({
             quantity,
             operatorType,
@@ -196,7 +172,7 @@ class Response extends React.PureComponent {
         });
     }
 
-    setPlacementForMapControls = (rightPaneExpanded) => {
+    private setPlacementForMapControls = (rightPaneExpanded) => {
         const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
 
         if (mapControls) {
@@ -213,16 +189,7 @@ class Response extends React.PureComponent {
         }
     }
 
-    handleLeftPaneExpandChange = (leftPaneExpanded) => {
-        this.setState({ leftPaneExpanded });
-    }
-
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-        this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
-    render() {
+    public render() {
         const {
             incident = emptyObject,
             resourceList,

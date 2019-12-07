@@ -1,42 +1,20 @@
-@import '~base-scss/base';
-
-$color-text-on-primary: get-text-color($color-primary);
-$width-message-max: 540px;
-
 .four-hundred-three {
-    @extend %main-content;
-    @include background-color($color-foreground-alt);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    line-height: 2;
-
-    .bipad-logo {
-        margin-bottom: $spacing-large;
-        width: 256px;
-        height: 256px;
-
-        path {
-            fill: $color-text-disabled;
-        }
-    }
+    top: 50%;
+    bottom: unset;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: var(--width-separator-thin) solid var(--color-separator);
+    background-color: var(--color-foreground);
+    padding: calc(var(--spacing-large) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-medium));
 
     .heading {
-        color: $color-danger;
-        font-size: $font-size-super-large-alt;
-        font-weight: $font-weight-bold;
+        padding: var(--spacing-small) var(--spacing-medium);
+        text-align: center;
+        color: var(--color-danger);
     }
 
     .message {
-        margin: $spacing-large 0;
-        max-width: $width-message-max;
+        padding: var(--spacing-small) var(--spacing-medium);
         text-align: center;
-        font-size: $font-size-large-alt;
-    }
-
-    .home-screen-link {
-        color: $color-accent;
-        font-size: $font-size-large;
     }
 }
