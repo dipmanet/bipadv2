@@ -14,6 +14,7 @@ import DateInput from '#rsci/DateInput';
 
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import styles from './styles.scss';
 
@@ -58,6 +59,9 @@ const FilterModal = ({
                 schema={filterSchema}
                 value={faramValues}
             >
+                <StepwiseRegionSelectInput
+                    faramElementName="region"
+                />
                 { showMetricSelect && (
                     <SelectInput
                         label="Metric"

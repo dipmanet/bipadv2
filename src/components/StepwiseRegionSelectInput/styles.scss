@@ -1,0 +1,19 @@
+.stepwise-region-select-input {
+    display: flex;
+
+    .province-input {
+        margin: var(--spacing-small);
+    }
+
+    .district-input {
+        margin: var(--spacing-small);
+    }
+
+    .municipality-input {
+        margin: var(--spacing-small);
+    }
+
+    .ward-input {
+        margin: var(--spacing-small);
+    }
+}
