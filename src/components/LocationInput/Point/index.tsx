@@ -392,6 +392,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                     label="Region"
                     value={region}
                     onChange={this.handleRegionSelectInputChange}
+                    maxOptions={50}
                 />
             </div>
         );
