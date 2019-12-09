@@ -13,19 +13,16 @@ import DangerButton from '#rsca/Button/DangerButton';
 import AddAgricultureLoss from './AddAgricultureLoss';
 import AddLivestockLoss from './AddLivestockLoss';
 import AddInfrastructureLoss from './AddInfrastructureLoss';
-import AddFamilyLoss from './AddFamilyLossModal';
 
 import styles from './styles.scss';
 
 interface Tabs {
-    family: string;
     livestock: string;
     infrastructure: string;
     agriculture: string;
 }
 
 interface Views {
-    family: {};
     livestock: {};
     infrastructure: {};
     agriculture: {};
@@ -54,16 +51,12 @@ class AddLossModal extends React.PureComponent<Props, State> {
         super(props);
 
         this.tabs = {
-            family: 'Family',
             livestock: 'Livestock',
             infrastructure: 'Infrastructure',
             agriculture: 'Agriculture',
         };
 
         this.views = {
-            family: {
-                component: () => <AddFamilyLoss />,
-            },
             livestock: {
                 component: () => <AddLivestockLoss />,
             },

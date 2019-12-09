@@ -4,6 +4,7 @@
     width: 100%;
     max-width: 720px;
     height: 80vh;
+    overflow-y: auto;
 
     .header {
         border-bottom: none;
@@ -35,6 +36,12 @@
                 flex-grow: 1;
                 width: 100%;
                 overflow: auto;
+            }
+
+            .footer {
+                display: flex;
+                justify-content: flex-end;
+                padding: var(--spacing-medium);
             }
         }
     }

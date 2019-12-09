@@ -26,15 +26,18 @@ import {
 
 import GeneralDetails from './General';
 import PeopleLossList from './PeopleLossList';
+import FamiliesLossList from './FamiliesLossList';
 import styles from './styles.scss';
 
 interface Tabs {
     general: string;
     peopleLoss: string;
+    familiesLoss: string;
 }
 interface Views {
     general: {};
     peopleLoss: {};
+    familiesLoss: {};
 }
 interface Params {
     body?: object;
@@ -133,15 +136,40 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         this.tabs = {
             general: 'General',
             peopleLoss: 'People Loss',
+            familiesLoss: 'Families Loss',
         };
 
         this.views = {
             general: {
-                component: () => (
-                    <GeneralDetails
-                        className={styles.generalInputs}
-                    />
-                ),
+                component: () => {
+                    const {
+                        pristine,
+                        faramValues,
+                        faramErrors,
+                    } = this.state;
+
+                    return (
+                        <Faram
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramValidationFailure}
+                            onValidationSuccess={this.handleFaramValidationSuccess}
+                            schema={AddIncidentForm.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                            className={styles.generalInputs}
+                        >
+                            <GeneralDetails />
+                            <div className={styles.footer}>
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={pristine}
+                                >
+                                    Submit
+                                </PrimaryButton>
+                            </div>
+                        </Faram>
+                    );
+                },
             },
             peopleLoss: {
                 component: () => {
@@ -153,6 +181,22 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
                     return (
                         <PeopleLossList
+                            className={styles.peopleLossList}
+                            lossServerId={lossServerId}
+                        />
+                    );
+                },
+            },
+            familiesLoss: {
+                component: () => {
+                    const { lossServerId } = this.props;
+
+                    if (!lossServerId) {
+                        return null;
+                    }
+
+                    return (
+                        <FamiliesLossList
                             className={styles.peopleLossList}
                             lossServerId={lossServerId}
                         />
@@ -303,12 +347,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             lossServerId,
         } = this.props;
 
-        const {
-            pristine,
-            faramValues,
-            faramErrors,
-            currentView,
-        } = this.state;
+        const { currentView } = this.state;
 
         const disabledTabs = isFalsy(lossServerId)
             ? ['peopleLoss']
@@ -319,27 +358,19 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                 className={_cs(styles.addIncidentFormModal, className)}
                 onClose={closeModal}
             >
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddIncidentForm.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    className={styles.addIncidentForm}
-                >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Add Incident"
-                        rightComponent={(
-                            <ConfirmButton
-                                onClick={closeModal}
-                                transparent
-                                iconName="close"
-                                confirmationMessage="Are you sure you want to close?"
-                            />
-                        )}
-                    />
+                <ModalHeader
+                    className={styles.header}
+                    title="Add Incident"
+                    rightComponent={(
+                        <ConfirmButton
+                            onClick={closeModal}
+                            transparent
+                            iconName="close"
+                            confirmationMessage="Are you sure you want to close?"
+                        />
+                    )}
+                />
+                <div className={styles.addIncidentForm}>
                     <ModalBody className={styles.body}>
                         <ScrollTabs
                             className={styles.tabs}
@@ -353,15 +384,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                             active={currentView}
                         />
                     </ModalBody>
-                    <ModalFooter>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                        >
-                            Submit
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                </div>
             </Modal>
         );
     }
