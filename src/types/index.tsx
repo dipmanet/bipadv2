@@ -4,6 +4,38 @@ export interface RiskElement {
     description?: string;
 }
 
-
 export interface Attribute {
+}
+
+export interface RegionElement {
+    id: number;
+    centroid: number[];
+    title: string;
+    code?: string;
+}
+
+export interface ProvinceElement extends RegionElement {
+    bbox: number[];
+}
+
+export interface DistrictElement extends RegionElement {
+    province: number;
+    bbox: number[];
+}
+
+export interface MunicipalityElement extends RegionElement {
+    province?: number;
+    district: number;
+    bbox: number[];
+}
+
+export interface WardElement extends RegionElement {
+    province?: number;
+    district?: number;
+    municipality: number;
+}
+
+export interface Region {
+    adminLevel: number;
+    geoarea: number;
 }

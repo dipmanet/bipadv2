@@ -31,7 +31,7 @@ import { hazardTypesSelector } from '#selectors';
 import styles from './styles.scss';
 
 const AlertTooltip = ({ title, description }) => (
-    <div className={styles.tooltip}>
+    <div className={styles.alertTooltip}>
         <h3 className={styles.heading}>
             {title}
         </h3>
@@ -47,27 +47,38 @@ AlertTooltip.propTypes = {
 };
 
 const EventTooltip = ({ title, description, severity, createdOn }) => (
-    <div className={styles.tooltip}>
+    <div className={styles.eventTooltip}>
         <h3 className={styles.heading}>
             {title}
         </h3>
-        <TextOutput
-            label="Description"
-            value={description}
-        />
-        <TextOutput
-            label="Severity"
-            value={severity}
-        />
-        <TextOutput
-            label="Created On"
-            value={(
-                <FormattedDate
-                    value={createdOn}
-                    mode="yyyy-MM-dd hh:mm"
-                />
-            )}
-        />
+        <div className={styles.content}>
+            <TextOutput
+                className={styles.createdOn}
+                labelClassName={styles.label}
+                valueClassName={styles.value}
+                label="Created On"
+                value={(
+                    <FormattedDate
+                        value={createdOn}
+                        mode="yyyy-MM-dd hh:mm"
+                    />
+                )}
+            />
+            <TextOutput
+                className={styles.severity}
+                labelClassName={styles.label}
+                valueClassName={styles.value}
+                label="Severity"
+                value={severity}
+            />
+            <TextOutput
+                className={styles.description}
+                labelClassName={styles.label}
+                valueClassName={styles.value}
+                label="Description"
+                value={description}
+            />
+        </div>
     </div>
 );
 
@@ -123,6 +134,7 @@ class AlertEventMap extends React.PureComponent {
     alertTooltipRendererParams = (id, { title, description }) => ({
         title,
         description,
+        closeOnClick: true,
     })
 
     eventTooltipRendererParams = (id, { title, description, severity, createdOn }) => ({
@@ -130,6 +142,7 @@ class AlertEventMap extends React.PureComponent {
         description,
         severity,
         createdOn,
+        closeOnClick: true,
     })
 
     handleAnimationKeyframe = framize((percent) => {
