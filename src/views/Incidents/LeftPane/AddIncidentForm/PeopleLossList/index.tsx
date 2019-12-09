@@ -124,7 +124,7 @@ class PeopleLossList extends React.PureComponent<Props, State> {
                 key: 'disability',
                 label: 'Disability',
                 order: 4,
-                modifier: row => (isTruthy(row.disability) ? row.disability : 'N/A'),
+                modifier: row => (isTruthy(row.disability) ? String(row.disability) : 'N/A'),
             },
             {
                 key: 'belowPoverty',

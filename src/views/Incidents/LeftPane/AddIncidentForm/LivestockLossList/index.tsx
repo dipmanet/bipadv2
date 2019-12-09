@@ -21,21 +21,20 @@ import modalize from '#rscg/Modalize';
 import * as PageType from '#store/atom/page/types';
 import { Header } from '#store/atom/table/types';
 
-import AddFamilyLossModal from './AddFamilyLossModal';
+import AddLivestockLoss from './AddLivestockLoss';
 import styles from './styles.scss';
 
 const ModalButton = modalize(Button);
 
-interface FamilyLoss {
+interface LivestockLoss {
     id: number;
     loss: number;
-    name: string;
+    title: string;
+    type: number;
     createdOn: string;
     modifiedOn: string;
-    belowPoverty?: boolean;
-    phoneNumber?: number;
+    economicLoss?: number;
     verified?: number;
-    count?: number;
     status?: 'missing' | 'dead' | 'injured' | 'affected';
 }
 
@@ -45,7 +44,7 @@ interface ExtraHeader {
 }
 
 interface State {
-    list: FamilyLoss[];
+    list: LivestockLoss[];
 }
 
 interface OwnProps {
@@ -55,7 +54,7 @@ interface OwnProps {
 
 interface Params {
     onAddFailure?: (faramErrors: object) => void;
-    onListGet?: (list: [FamilyLoss]) => void;
+    onListGet?: (list: [LivestockLoss]) => void;
     onListItemRemove?: (listItem: number) => void;
     itemId?: number;
 }
@@ -66,7 +65,7 @@ type Props = NewProps<OwnProps, Params>;
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     listRequest: {
-        url: '/loss-family/',
+        url: '/loss-livestock/',
         query: ({ props: { lossServerId } }) => ({
             loss: lossServerId,
         }),
@@ -79,7 +78,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
         },
     },
     listItemRemoveRequest: {
-        url: ({ params: { itemId } }) => `/loss-family/${itemId}/`,
+        url: ({ params: { itemId } }) => `/loss-livestock/${itemId}/`,
         method: methods.DELETE,
         onSuccess: ({ params: { onListItemRemove, itemId } }) => {
             if (onListItemRemove) {
@@ -89,7 +88,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     },
 };
 
-class FamilyLossList extends React.PureComponent<Props, State> {
+class LivestockLossList extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -105,31 +104,37 @@ class FamilyLossList extends React.PureComponent<Props, State> {
 
         this.headers = [
             {
-                key: 'name',
-                label: 'Name',
+                key: 'title',
+                label: 'Title',
                 order: 1,
             },
             {
-                key: 'phoneNumber',
-                label: 'Phone Number',
-                order: 3,
+                key: 'economicLoss',
+                label: 'Economic Loss',
+                order: 2,
             },
+            /*
             {
-                key: 'belowPoverty',
-                label: 'Below Poverty',
-                order: 5,
-                modifier: row => (row.belowPoverty ? 'Yes' : 'No'),
+                key: 'type',
+                label: 'Type',
+                order: 2,
+                modifier: (row) => {
+                    const { livestockTypes } = this.state;
+                    const livestock = livestockTypes.find(l => l.id === row.type);
+                    return livestock.title;
+                }
             },
-            {
-                key: 'status',
-                label: 'Status',
-                order: 6,
-            },
+             */
             {
                 key: 'verified',
                 label: 'Verified',
                 order: 5,
                 modifier: row => (isTruthy(row.verified) ? String(row.verified) : 'N/A'),
+            },
+            {
+                key: 'status',
+                label: 'Status',
+                order: 6,
             },
             {
                 key: 'actions',
@@ -158,13 +163,13 @@ class FamilyLossList extends React.PureComponent<Props, State> {
         };
     }
 
-    private headers: Header<FamilyLoss & ExtraHeader>[];
+    private headers: Header<LivestockLoss & ExtraHeader>[];
 
-    private handleListGet = (list: FamilyLoss[]) => {
+    private handleListGet = (list: LivestockLoss[]) => {
         this.setState({ list });
     }
 
-    private handleListItemAdd = (listItem: FamilyLoss) => {
+    private handleListItemAdd = (listItem: LivestockLoss) => {
         const { list } = this.state;
         const newList = [
             ...list,
@@ -175,7 +180,7 @@ class FamilyLossList extends React.PureComponent<Props, State> {
 
     private handleListItemRemoveSuccess = (itemId: number) => {
         const { list } = this.state;
-        const itemIndex = list.findIndex((l: FamilyLoss) => l.id === itemId);
+        const itemIndex = list.findIndex((l: LivestockLoss) => l.id === itemId);
 
         if (itemIndex === -1) {
             return;
@@ -218,19 +223,19 @@ class FamilyLossList extends React.PureComponent<Props, State> {
                 {pending && <LoadingAnimation />}
                 <header className={styles.header}>
                     <h2 className={styles.heading}>
-                        Family Loss
+                        Livestock Loss
                     </h2>
                     <ModalButton
                         className={styles.button}
                         iconName="add"
                         modal={(
-                            <AddFamilyLossModal
+                            <AddLivestockLoss
                                 lossServerId={lossServerId}
                                 onAddSuccess={this.handleListItemAdd}
                             />
                         )}
                     >
-                        Add Family Loss
+                        Add Livestock Loss
                     </ModalButton>
                 </header>
                 <Table
@@ -244,4 +249,4 @@ class FamilyLossList extends React.PureComponent<Props, State> {
     }
 }
 
-export default compose(createRequestClient(requests))(FamilyLossList);
+export default compose(createRequestClient(requests))(LivestockLossList);

@@ -275,6 +275,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
+                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>

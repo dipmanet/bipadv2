@@ -11,19 +11,16 @@ import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import AddAgricultureLoss from './AddAgricultureLoss';
-import AddLivestockLoss from './AddLivestockLoss';
 import AddInfrastructureLoss from './AddInfrastructureLoss';
 
 import styles from './styles.scss';
 
 interface Tabs {
-    livestock: string;
     infrastructure: string;
     agriculture: string;
 }
 
 interface Views {
-    livestock: {};
     infrastructure: {};
     agriculture: {};
 }
@@ -51,15 +48,11 @@ class AddLossModal extends React.PureComponent<Props, State> {
         super(props);
 
         this.tabs = {
-            livestock: 'Livestock',
             infrastructure: 'Infrastructure',
             agriculture: 'Agriculture',
         };
 
         this.views = {
-            livestock: {
-                component: () => <AddLivestockLoss />,
-            },
             infrastructure: {
                 component: () => <AddInfrastructureLoss />,
             },

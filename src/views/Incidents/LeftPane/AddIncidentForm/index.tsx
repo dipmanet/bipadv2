@@ -27,17 +27,20 @@ import {
 import GeneralDetails from './General';
 import PeopleLossList from './PeopleLossList';
 import FamiliesLossList from './FamiliesLossList';
+import LivestockLossList from './LivestockLossList';
 import styles from './styles.scss';
 
 interface Tabs {
     general: string;
     peopleLoss: string;
-    familiesLoss: string;
+    familyLoss: string;
+    livestockLoss: string;
 }
 interface Views {
     general: {};
     peopleLoss: {};
-    familiesLoss: {};
+    familyLoss: {};
+    livestockLoss: {};
 }
 interface Params {
     body?: object;
@@ -136,7 +139,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         this.tabs = {
             general: 'General',
             peopleLoss: 'People Loss',
-            familiesLoss: 'Families Loss',
+            familyLoss: 'Family Loss',
+            livestockLoss: 'Livestock Loss',
         };
 
         this.views = {
@@ -187,7 +191,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     );
                 },
             },
-            familiesLoss: {
+            familyLoss: {
                 component: () => {
                     const { lossServerId } = this.props;
 
@@ -197,6 +201,22 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
                     return (
                         <FamiliesLossList
+                            className={styles.peopleLossList}
+                            lossServerId={lossServerId}
+                        />
+                    );
+                },
+            },
+            livestockLoss: {
+                component: () => {
+                    const { lossServerId } = this.props;
+
+                    if (!lossServerId) {
+                        return null;
+                    }
+
+                    return (
+                        <LivestockLossList
                             className={styles.peopleLossList}
                             lossServerId={lossServerId}
                         />
