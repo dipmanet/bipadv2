@@ -19,9 +19,9 @@ import Table from '#rscv/Table';
 import modalize from '#rscg/Modalize';
 
 import * as PageType from '#store/atom/page/types';
-import AddPeopleLoss from '#views/Incidents/LeftPane/AddLossModal/AddPeopleLoss';
 import { Header } from '#store/atom/table/types';
 
+import AddPeopleLoss from './AddPeopleLoss';
 import styles from './styles.scss';
 
 const ModalButton = modalize(Button);

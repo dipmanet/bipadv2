@@ -11,7 +11,6 @@ import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import AddAgricultureLoss from './AddAgricultureLoss';
-import AddPeopleLoss from './AddPeopleLoss';
 import AddLivestockLoss from './AddLivestockLoss';
 import AddInfrastructureLoss from './AddInfrastructureLoss';
 import AddFamilyLoss from './AddFamilyLossModal';
@@ -19,7 +18,6 @@ import AddFamilyLoss from './AddFamilyLossModal';
 import styles from './styles.scss';
 
 interface Tabs {
-    people: string;
     family: string;
     livestock: string;
     infrastructure: string;
@@ -27,7 +25,6 @@ interface Tabs {
 }
 
 interface Views {
-    people: {};
     family: {};
     livestock: {};
     infrastructure: {};
@@ -57,7 +54,6 @@ class AddLossModal extends React.PureComponent<Props, State> {
         super(props);
 
         this.tabs = {
-            people: 'People',
             family: 'Family',
             livestock: 'Livestock',
             infrastructure: 'Infrastructure',
@@ -65,9 +61,6 @@ class AddLossModal extends React.PureComponent<Props, State> {
         };
 
         this.views = {
-            people: {
-                component: () => <AddPeopleLoss />,
-            },
             family: {
                 component: () => <AddFamilyLoss />,
             },
