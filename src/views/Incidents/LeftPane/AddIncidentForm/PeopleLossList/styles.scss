@@ -1,0 +1,25 @@
+.list-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+
+    .header {
+        display: flex;
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
+
+        .heading {
+            flex-grow: 1;
+        }
+
+        .button {
+            flex-shrink: 0;
+        }
+    }
+
+    .table {
+        flex-grow: 1;
+        border-top: var(--width-separator-thin) solid var(--color-separator);
+    }
+}

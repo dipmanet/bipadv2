@@ -57,13 +57,13 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             <div className={_cs(styles.general, className)}>
                 <TextArea
                     className={styles.input}
-                    faramElementName="description"
-                    label="Description"
+                    faramElementName="title"
+                    label="Title"
                 />
                 <TextArea
                     className={styles.input}
-                    faramElementName="detail"
-                    label="Detail"
+                    faramElementName="description"
+                    label="Description"
                 />
                 <TextArea
                     className={styles.input}
@@ -83,7 +83,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                         className={styles.input}
                         faramElementName="source"
                         options={sourceList}
-                        keySelector={labelSelector}
+                        keySelector={keySelector}
                         labelSelector={labelSelector}
                         label="Source"
                     />

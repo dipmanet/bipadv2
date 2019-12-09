@@ -3,7 +3,6 @@ import Redux, {
     compose,
 } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -28,11 +27,18 @@ import {
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
+import LoadingAnimation from '#rscv/LoadingAnimation';
+import Modal from '#rscv/Modal';
+import ModalBody from '#rscv/Modal/Body';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalFooter from '#rscv/Modal/Footer';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 
 import styles from './styles.scss';
 
@@ -42,9 +48,25 @@ interface FaramValues {
 interface FaramErrors {
 }
 
+interface PeopleLoss {
+    id: number;
+    loss: number;
+    name: string;
+    createdOn: string;
+    modifiedOn: string;
+    belowPoverty?: boolean;
+    disability?: boolean;
+    gender: 'male' | 'female' | 'other';
+    count?: number;
+    status?: 'missing' | 'dead' | 'injured' | 'affected';
+    age?: number;
+}
+
 interface OwnProps {
     className?: string;
-    onUpdate?: () => void;
+    lossServerId: number;
+    onAddSuccess: (peopleLoss: PeopleLoss) => void;
+    closeModal: () => void;
 }
 
 interface PropsFromState {
@@ -58,7 +80,6 @@ interface PropsFromDispatch {
 }
 interface Params {
     body: object;
-    onSuccess: () => void;
     onFailure: (faramErrors: object) => void;
 }
 
@@ -99,8 +120,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/loss-people/',
         method: methods.POST,
         body: ({ params: { body } = { body: { } } }) => body,
-        onSuccess: ({ params, response }) => {
-            console.warn('response', response);
+        onSuccess: ({ props, response }) => {
+            const {
+                onAddSuccess,
+                closeModal,
+            } = props;
+
+            if (onAddSuccess) {
+                onAddSuccess(response);
+            }
+            closeModal();
         },
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
@@ -115,7 +144,9 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            faramValues: {},
+            faramValues: {
+                verified: false,
+            },
             faramErrors: {},
             pristine: true,
         };
@@ -129,7 +160,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
             age: [],
             gender: [],
             belowPoverty: [],
-            verified: [],
+            verified: [requiredCondition],
             verificationMessage: [],
             nationality: [],
         },
@@ -150,14 +181,15 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addPeopleLossRequest }, onUpdate } = this.props;
+        const {
+            requests: { addPeopleLossRequest },
+            lossServerId,
+        } = this.props;
 
         addPeopleLossRequest.do({
-            body: faramValues,
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                }
+            body: {
+                ...faramValues,
+                loss: lossServerId,
             },
             onFailure: (faramErrors: object) => {
                 this.setState({ faramErrors });
@@ -171,6 +203,12 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
             countryList,
             peopleLossStatusList,
             className,
+            closeModal,
+            requests: {
+                addPeopleLossRequest: {
+                    pending,
+                },
+            },
         } = this.props;
 
         const {
@@ -180,68 +218,89 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Faram
-                onChange={this.handleFaramChange}
-                onValidationFailure={this.handleFaramValidationFailure}
-                onValidationSuccess={this.handleFaramValidationSuccess}
-                schema={AddPeopleLoss.schema}
-                value={faramValues}
-                error={faramErrors}
-            >
-                <SelectInput
-                    faramElementName="status"
-                    label="Status"
-                    options={peopleLossStatusList}
-                    keySelector={labelSelector}
-                    labelSelector={labelSelector}
+            <Modal className={className}>
+                <ModalHeader
+                    title="Add People Loss"
+                    rightComponent={(
+                        <Button
+                            iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
+                        />
+                    )}
                 />
-                <TextInput
-                    faramElementName="name"
-                    label="Name"
-                />
-                <NumberInput
-                    faramElementName="age"
-                    label="Age"
-                />
-                <SelectInput
-                    faramElementName="gender"
-                    label="Gender"
-                    options={genderList}
-                    keySelector={labelSelector}
-                    labelSelector={labelSelector}
-                />
-                <Checkbox
-                    faramElementName="belowPoverty"
-                    label="Below Poverty"
-                />
-                <NumberInput
-                    faramElementName="count"
-                    label="Count"
-                />
-                <Checkbox
-                    faramElementName="verified"
-                    label="Verified"
-                />
-                <TextInput
-                    faramElementName="verificationMessage"
-                    label="Verification Message"
-                />
-                <SelectInput
-                    faramElementName="nationality"
-                    label="Nationality"
-                    options={countryList}
-                    keySelector={keySelector}
-                    labelSelector={labelSelector}
-                />
-                <div>
-                    <PrimaryButton
-                        type="submit"
-                        disabled={pristine}
-                    >
-                        Submit
-                    </PrimaryButton>
-                </div>
-            </Faram>
+                <Faram
+                    onChange={this.handleFaramChange}
+                    onValidationFailure={this.handleFaramValidationFailure}
+                    onValidationSuccess={this.handleFaramValidationSuccess}
+                    schema={AddPeopleLoss.schema}
+                    value={faramValues}
+                    error={faramErrors}
+                >
+                    <ModalBody className={styles.modalBody}>
+                        {pending && <LoadingAnimation />}
+                        <SelectInput
+                            faramElementName="status"
+                            label="Status"
+                            options={peopleLossStatusList}
+                            keySelector={labelSelector}
+                            labelSelector={labelSelector}
+                        />
+                        <TextInput
+                            faramElementName="name"
+                            label="Name"
+                        />
+                        <NumberInput
+                            faramElementName="age"
+                            label="Age"
+                        />
+                        <SelectInput
+                            faramElementName="gender"
+                            label="Gender"
+                            options={genderList}
+                            keySelector={labelSelector}
+                            labelSelector={labelSelector}
+                        />
+                        <Checkbox
+                            faramElementName="belowPoverty"
+                            label="Below Poverty"
+                        />
+                        <NumberInput
+                            faramElementName="count"
+                            label="Count"
+                        />
+                        <Checkbox
+                            faramElementName="verified"
+                            label="Verified"
+                        />
+                        <TextInput
+                            faramElementName="verificationMessage"
+                            label="Verification Message"
+                        />
+                        <SelectInput
+                            faramElementName="nationality"
+                            label="Nationality"
+                            options={countryList}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <DangerButton
+                            onClick={closeModal}
+                        >
+                            Cancel
+                        </DangerButton>
+                        <PrimaryButton
+                            type="submit"
+                            disabled={pristine}
+                            pending={pending}
+                        >
+                            Submit
+                        </PrimaryButton>
+                    </ModalFooter>
+                </Faram>
+            </Modal>
         );
     }
 }

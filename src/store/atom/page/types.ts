@@ -71,7 +71,9 @@ export interface Alert extends Field {
     point?: unknown;
     createdOn: string;
 }
-export interface Source extends Field {
+export interface Source {
+    id: string;
+    title: string;
 }
 export interface Status extends Field {
 }

@@ -6,7 +6,6 @@ import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 
-
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
 
@@ -49,6 +48,8 @@ class LeftPane extends React.PureComponent {
             showIncidents: true,
             showTabular: false,
             showVisualizations: false,
+            lossServerId: 17678,
+            incidentServerId: 42018,
         };
     }
 
@@ -85,6 +86,18 @@ class LeftPane extends React.PureComponent {
         }
     }
 
+    handleIncidentEdit = (incident) => {
+        this.setState({
+            incidentServerId: incident.id,
+        });
+    }
+
+    handleLossEdit = (loss) => {
+        this.setState({
+            lossServerId: loss.id,
+        });
+    }
+
     renderTabularViewHeader = () => (
         <header className={styles.header}>
             <h4 className={styles.heading}>
@@ -112,6 +125,8 @@ class LeftPane extends React.PureComponent {
             showIncidents,
             showTabular,
             showVisualizations,
+            lossServerId,
+            incidentServerId,
         } = this.state;
 
         // FIXME: fix this
@@ -139,7 +154,12 @@ class LeftPane extends React.PureComponent {
                                 title="Add"
                                 transparent
                                 modal={(
-                                    <AddIncidentForm />
+                                    <AddIncidentForm
+                                        lossServerId={lossServerId}
+                                        incidentServerId={incidentServerId}
+                                        onIncidentChange={this.handleIncidentEdit}
+                                        onLossChange={this.handleLossEdit}
+                                    />
                                 )}
                             >
                                 Add

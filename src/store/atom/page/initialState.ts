@@ -1,21 +1,6 @@
 import { PageState } from './types';
-import myStyle from '#constants/../vendor/osm-liberty/style';
-import rasterStyle from '#constants/../vendor/osm-liberty/rasterStyle';
 
 const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
-
-const myOtherStyle = {
-    version: 8,
-    sources: {
-    },
-    layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-    }],
-};
 
 const state: PageState = {
     eventTypes: {},
@@ -102,16 +87,16 @@ const state: PageState = {
     ],
     sourceList: [
         {
-            id: 1,
-            title: 'dhm',
+            id: 'initial_rapid_assesment',
+            title: 'Initial Rapid Assesment',
         },
         {
-            id: 2,
-            title: 'nsc',
+            id: 'nepal_police',
+            title: 'Nepal Police',
         },
         {
-            id: 3,
-            title: 'other',
+            id: 'other',
+            title: 'Other',
         },
     ],
     genderList: [
