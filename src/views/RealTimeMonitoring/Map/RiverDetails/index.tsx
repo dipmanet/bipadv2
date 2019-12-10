@@ -17,6 +17,8 @@ import Image from '#rscv/Image';
 import FormattedDate from '#rscv/FormattedDate';
 import TextOutput from '#components/TextOutput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import Legend from '#rscz/Legend';
+import MultiLineChart from '#rscz/MultiLineChart';
 
 import { RealTimeRiverDetails } from '#store/atom/page/types';
 import { MultiResponse } from '#store/atom/response/types';
@@ -29,8 +31,6 @@ import {
     methods,
 } from '#request';
 
-import waterLevelChartImage from '#resources/images/river-water-level-chart.png';
-
 import styles from './styles.scss';
 
 interface Params {}
@@ -40,6 +40,21 @@ interface OwnProps {
 }
 interface State {
 }
+interface LegendItem {
+    key: string;
+    label: string;
+    color: string;
+}
+
+const riverLegendData: LegendItem[] = [
+    { key: 'waterLevel', label: 'Water Level', color: '#4daf4a' },
+    { key: 'warningLevel', label: 'Warning Level', color: '#377eb8' },
+    { key: 'dangerLevel', label: 'Danger Level', color: '#e41a1c' },
+];
+
+const labelSelector = (d: LegendItem) => d.label;
+const keySelector = (d: LegendItem) => d.label;
+const colorSelector = (d: LegendItem) => d.color;
 
 type Props = NewProps<OwnProps, Params>;
 
@@ -132,6 +147,58 @@ class RiverDetails extends React.PureComponent<Props> {
         return riverHours;
     })
 
+    private getHourlyChartData = memoize((riverDetails: RealTimeRiverDetails[]) => {
+        interface ChartData {
+            waterLevelOn: number[];
+            waterLevel: number[];
+            warningLevel: number[];
+            dangerLevel: number[];
+        }
+        const initialChartData: ChartData = {
+            waterLevelOn: [],
+            waterLevel: [],
+            warningLevel: [],
+            dangerLevel: [],
+        };
+        const data = riverDetails.reduce((acc, river) => {
+            const {
+                waterLevelOn: wo,
+                waterLevel: wl = 0,
+                warningLevel: warl = 0,
+                dangerLevel: dl = 0,
+            } = river;
+
+            const {
+                waterLevelOn,
+                waterLevel,
+                warningLevel,
+                dangerLevel,
+            } = acc;
+
+            if (waterLevelOn) {
+                waterLevelOn.push(wo);
+                waterLevel.push(wl);
+                warningLevel.push(warl);
+                dangerLevel.push(dl);
+            }
+            return acc;
+        }, initialChartData);
+        const { waterLevelOn, ...others } = data;
+        const series = Object.entries(others).map(([key, value]) => {
+            const legendItem = riverLegendData.find(rl => rl.key === key);
+            const color = legendItem ? legendItem.color : '#4daf4a';
+
+            return ({
+                name: key,
+                values: value,
+                color,
+            });
+        });
+        const dates = waterLevelOn;
+
+        return ({ series, dates });
+    })
+
     public render() {
         const {
             requests: {
@@ -156,6 +223,7 @@ class RiverDetails extends React.PureComponent<Props> {
         const latestRiverDetail = sortedRiverDetails[0];
         const todaysRiverDetail = this.getTodaysRiverDetail(sortedRiverDetails);
         const hourlyRiverDetails = this.getHourlyRiverData(todaysRiverDetail);
+        const hourlyRiverChartData = this.getHourlyChartData(hourlyRiverDetails);
 
         return (
             <Modal
@@ -290,10 +358,17 @@ class RiverDetails extends React.PureComponent<Props> {
                                     />
                                 </div>
                                 <div className={styles.waterLevelChartContainer}>
-                                    <img
-                                        className={styles.waterLevelChart}
-                                        src={waterLevelChartImage}
-                                        alt="chart"
+                                    <MultiLineChart
+                                        className={styles.riverChart}
+                                        data={hourlyRiverChartData}
+                                    />
+                                    <Legend
+                                        className={styles.riverChartLegend}
+                                        colorSelector={colorSelector}
+                                        data={riverLegendData}
+                                        keySelector={keySelector}
+                                        labelSelector={labelSelector}
+                                        itemClassName={styles.legendItem}
                                     />
                                 </div>
                             </div>

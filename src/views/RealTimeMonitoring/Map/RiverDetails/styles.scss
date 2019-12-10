@@ -86,14 +86,25 @@
 
                 .water-level-chart-container {
                     display: flex;
-                    align-items: center;
                     flex-basis: 50%;
-                    flex-grow: 0;
-                    justify-content: center;
+                    flex-direction: column;
+                    flex-shrink: 0;
 
-                    .water-level-chart-container {
-                        object-fit: contain;
-                        object-position: center center;
+                    .river-chart {
+                        display: flex;
+                        flex-grow: 1;
+                    }
+
+                    .river-chart-legend {
+                        display: flex;
+                        justify-content: center;
+                        border-left: var(--width-separator-thin) solid var(--color-separator);
+                        background-color: var(--color-foreground);
+                        padding: var(--spacing-medium);
+
+                        .legend-item {
+                            padding: var(--spacing-extra-small) 0;
+                        }
                     }
                 }
             }
