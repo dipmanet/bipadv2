@@ -10,53 +10,70 @@ import Vulnerability from './Vulnerability';
 import Risk from './Risk';
 import CapacityAndResources from './CapacityAndResources';
 import ClimateChange from './ClimateChange';
+import { LayerMap } from '#store/atom/page/types';
+import { AttributeKey } from '#types';
 
 import styles from './styles.scss';
 
 interface Props {
     className?: string;
-    attribute: 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
+    layerMap: LayerMap;
+    attribute: AttributeKey;
     onBackButtonClick: () => void;
 }
 
 interface State {
 }
 
-const rendererParams = () => ({
-    className: styles.content,
-});
-
 export default class Details extends React.PureComponent<Props, State> {
     private views = {
         hazard: {
             title: 'Hazard',
             component: Hazard,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.hazard || [],
+            }),
         },
         exposure: {
             title: 'Exposure',
             component: Exposure,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.exposure || [],
+            }),
         },
         vulnerability: {
             title: 'Vulnerability',
             component: Vulnerability,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.vulnerability || [],
+            }),
         },
         risk: {
             title: 'Risk',
             component: Risk,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.risk || [],
+            }),
         },
         'capacity-and-resources': {
             title: 'Capacity & resources',
             component: CapacityAndResources,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.capacity || [],
+            }),
         },
         'climate-change': {
             title: 'Climate change',
             component: ClimateChange,
-            rendererParams,
+            rendererParams: () => ({
+                className: styles.content,
+                layerList: this.props.layerMap.climate || [],
+            }),
         },
     }
 

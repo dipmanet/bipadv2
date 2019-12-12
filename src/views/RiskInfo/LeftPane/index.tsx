@@ -1,30 +1,77 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    listToGroupList,
+} from '@togglecorp/fujs';
 
+import {
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+    createConnectedRequestCoordinator,
+} from '#request';
+
+import { MultiResponse } from '#store/atom/response/types';
+import { AttributeKey } from '#types';
+import { Layer, LayerMap } from '#store/atom/page/types';
 import Overview from './Overview';
 import Details from './Details';
 
 import styles from './styles.scss';
-import Risk from './Details/Risk';
 
-interface Props {
+interface OwnProps {
     className?: string;
     onViewChange: (key: AttributeKey | undefined) => void;
 }
 
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
+interface Params {
+    setLayerMap: (layerMap: LayerMap) => void;
+}
 
 interface State {
+    layerMap: LayerMap | {};
     activeAttribute: AttributeKey | undefined;
 }
 
-export default class RiskInfoLeftPane extends React.PureComponent<Props, State> {
+type Props = NewProps<OwnProps, Params>;
+
+const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+    layersGetRequest: {
+        url: '/layer/?expand=group',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params: { setLayerMap } = { setLayerList: undefined } }) => {
+            const { results } = response as MultiResponse<Layer>;
+            if (setLayerMap) {
+                setLayerMap(listToGroupList(results, d => d.category));
+            }
+        },
+    },
+};
+
+class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
         this.state = {
+            layerMap: {},
             activeAttribute: undefined,
         };
+
+        const {
+            requests: {
+                layersGetRequest,
+            },
+        } = this.props;
+
+        layersGetRequest.setDefaultParams({
+            setLayerMap: (layerMap: LayerMap) => {
+                this.setState({
+                    layerMap,
+                });
+            },
+        });
     }
 
     private handleAttributeClick = (key: AttributeKey) => {
@@ -51,6 +98,7 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
         } = this.props;
 
         const {
+            layerMap,
             activeAttribute,
         } = this.state;
 
@@ -71,6 +119,7 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
                     <Details
                         className={styles.content}
                         attribute={activeAttribute}
+                        layerMap={layerMap}
                         onBackButtonClick={this.handleDetailsBackButtonClick}
                     />
                 )}
@@ -78,3 +127,7 @@ export default class RiskInfoLeftPane extends React.PureComponent<Props, State> 
         );
     }
 }
+
+export default createConnectedRequestCoordinator<OwnProps>()(
+    createRequestClient(requests)(RiskInfoLeftPane),
+);

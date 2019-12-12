@@ -1,9 +1,9 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import styles from './styles.scss';
+import { AttributeKey } from '#types';
 
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

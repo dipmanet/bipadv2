@@ -10,10 +10,9 @@ import riskIcon from '#resources/icons/Help.svg';
 import capacityAndResourcesIcon from '#resources/icons/Livelihood.svg';
 import climateChangeIcon from '#resources/icons/Drought.svg';
 
+import { AttributeKey } from '#types';
 import Attribute from './Attribute';
 import styles from './styles.scss';
-
-type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 interface Props {
     className?: string;
