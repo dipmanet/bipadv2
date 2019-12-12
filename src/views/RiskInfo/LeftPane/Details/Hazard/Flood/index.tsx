@@ -4,6 +4,7 @@ import ListView from '#rscv/List/ListView';
 import { LayerWithGroup } from '#store/atom/page/types';
 
 import FloodGroup from './FloodGroup';
+import styles from './styles.scss';
 
 interface FloodGroupElement {
     id: number;
@@ -32,6 +33,7 @@ export default class Flood extends React.PureComponent<Props, State> {
         } = this.props;
         return (
             <ListView
+                className={styles.floodGroupList}
                 data={floodGroups}
                 keySelector={floodGroupKeySelector}
                 renderer={FloodGroup}

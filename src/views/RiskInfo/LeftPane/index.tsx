@@ -56,7 +56,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 
         this.state = {
             layerMap: {},
-            activeAttribute: undefined,
+            activeAttribute: 'hazard',
         };
 
         const {
