@@ -4,8 +4,7 @@ export interface RiskElement {
     description?: string;
 }
 
-export interface Attribute {
-}
+export type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 export interface RegionElement {
     id: number;

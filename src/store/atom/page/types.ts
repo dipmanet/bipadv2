@@ -92,6 +92,35 @@ export interface Resource extends Field {
         coordinates: unknown;
     };
 }
+export interface Layer extends Field {
+    category: string;
+    'type': string;
+    description: string;
+    workspace: string;
+    layername: string;
+    'public': boolean;
+    group: number;
+    hazard: number;
+}
+
+export interface LayerGroup extends Field {
+    description: string;
+}
+
+export interface LayerMap {
+    [category: string]: Layer;
+}
+
+export interface LayerWithGroup extends Field {
+    category: string;
+    'type': string;
+    description: string;
+    workspace: string;
+    layername: string;
+    'public': boolean;
+    group: LayerGroup;
+    hazard: number;
+}
 
 export interface InventoryCategory {
     id: number;
