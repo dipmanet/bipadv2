@@ -1,36 +1,22 @@
 import React from 'react';
-
 import Button from '#rsca/Button';
+import RadioInput from '#rsci/RadioInput';
 import Icon from '#rscg/Icon';
-import ListView from '#rscv/List/ListView';
 
 import { LayerWithGroup } from '#store/atom/page/types';
 
-import FloodGroup from './FloodGroup';
-import styles from './styles.scss';
-
-interface FloodGroupElement {
+interface Props {
     id: number;
     title: string;
     description: string;
     layers: LayerWithGroup[];
-}
-interface Props {
-    floodGroups: FloodGroupElement[];
 }
 
 interface State {
     isExpanded: boolean;
 }
 
-const floodRendererParams = (_: number, floodGroup: FloodGroupElement) => {
-    const { id, title, description, layers } = floodGroup;
-    return ({ id, title, description, layers });
-};
-
-const floodGroupKeySelector = (floodGroup: FloodGroupElement) => floodGroup.id;
-
-export default class Flood extends React.PureComponent<Props, State> {
+export default class Group extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -45,31 +31,34 @@ export default class Flood extends React.PureComponent<Props, State> {
 
     public render() {
         const {
-            floodGroups,
+            title,
+            description,
+            layers,
         } = this.props;
-
         const {
             isExpanded,
         } = this.state;
+
         return (
             <div>
+                <div>{title}</div>
                 <Button
                     transparent
                     onClick={this.handleExpandButtonClick}
                 >
-                    Flood
                     <Icon
                         name={isExpanded ? 'chevronUp' : 'chevronDown'}
                     />
                 </Button>
                 { isExpanded && (
-                    <ListView
-                        className={styles.floodGroupList}
-                        data={floodGroups}
-                        keySelector={floodGroupKeySelector}
-                        renderer={FloodGroup}
-                        rendererParams={floodRendererParams}
-                    />
+                    <div>
+                        <div>{description}</div>
+                        <RadioInput
+                            options={layers}
+                            labelSelector={(d: LayerWithGroup) => d.title}
+                            keySelector={(d: LayerWithGroup) => d.id}
+                        />
+                    </div>
                 )}
             </div>
         );

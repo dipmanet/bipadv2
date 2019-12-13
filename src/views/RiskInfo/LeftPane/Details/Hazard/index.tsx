@@ -1,4 +1,5 @@
 import React from 'react';
+import memoize from 'memoize-one';
 import {
     Obj,
     _cs,
@@ -8,6 +9,8 @@ import {
 import { LayerWithGroup, HazardType } from '#store/atom/page/types';
 
 import Flood from './Flood';
+import Earthquake from './Earthquake';
+import Landslide from './Landslide';
 
 import styles from './styles.scss';
 
@@ -20,33 +23,45 @@ interface Props {
 interface State {
 }
 
-
 class Hazard extends React.PureComponent<Props, State> {
-    private getFloodGroups = (layerList: LayerWithGroup[]) => {
-        const floodList = layerList.filter(layer => layer.hazard === 11);
-        const groups = unique(floodList.map(flood => flood.group), group => group.id) || [];
-        const floodGroups = groups.map((group) => {
-            const { id } = group;
-            const layers = floodList.filter(flood => flood.group.id === id);
-            return ({ ...group, layers });
-        });
+    private getGroup = (layerList: LayerWithGroup[], hazard: number) => {
+        const layers = layerList.filter(layer => layer.hazard === hazard);
+        const groups = unique(layers.map(layer => layer.group), group => group.id) || [];
 
-        return floodGroups;
+        const groupWithLayers = groups.map((group) => {
+            const { id } = group;
+            const groupLayers = layers.filter(layer => layer.group.id === id);
+            return ({ ...group, layers: groupLayers });
+        });
+        return groupWithLayers;
     }
+
+    private getFloodGroups = memoize(this.getGroup);
+
+    private getEarthquakeGroups = memoize(this.getGroup);
+
+    private getLandslideGroups = memoize(this.getGroup);
 
     public render() {
         const {
             className,
-            hazards,
             layerList,
         } = this.props;
 
-        const floodGroups = this.getFloodGroups(layerList);
+        const floodGroups = this.getFloodGroups(layerList, 11);
+        const earthquakeGroups = this.getEarthquakeGroups(layerList, 8);
+        const landslideGroups = this.getLandslideGroups(layerList, 17);
 
         return (
             <div className={_cs(styles.hazard, className)}>
                 <Flood
                     floodGroups={floodGroups}
+                />
+                <Earthquake
+                    earthquakeGroups={earthquakeGroups}
+                />
+                <Landslide
+                    landslideGroups={landslideGroups}
                 />
             </div>
         );
