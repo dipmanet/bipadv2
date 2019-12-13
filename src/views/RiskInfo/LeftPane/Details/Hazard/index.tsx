@@ -55,12 +55,15 @@ class Hazard extends React.PureComponent<Props, State> {
         return (
             <div className={_cs(styles.hazard, className)}>
                 <Flood
+                    className={styles.subCategory}
                     floodGroups={floodGroups}
                 />
                 <Earthquake
+                    className={styles.subCategory}
                     earthquakeGroups={earthquakeGroups}
                 />
                 <Landslide
+                    className={styles.subCategory}
                     landslideGroups={landslideGroups}
                 />
             </div>

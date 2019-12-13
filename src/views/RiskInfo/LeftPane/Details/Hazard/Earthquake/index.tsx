@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
@@ -8,6 +9,7 @@ import Icon from '#rscg/Icon';
 import { LayerWithGroup } from '#store/atom/page/types';
 
 import Group from '../Group';
+import styles from './styles.scss';
 
 interface GroupElement {
     id: number;
@@ -17,6 +19,7 @@ interface GroupElement {
 }
 interface Props {
     earthquakeGroups: GroupElement[];
+    className: string;
 }
 
 interface State {
@@ -25,7 +28,7 @@ interface State {
 
 const rendererParams = (_: number, group: GroupElement) => {
     const { id, title, description, layers } = group;
-    return ({ id, title, description, layers });
+    return ({ id, title, description, layers, className: styles.group });
 };
 
 const groupKeySelector = (group: GroupElement) => group.id;
@@ -46,6 +49,7 @@ export default class extends React.PureComponent<Props, State> {
     public render() {
         const {
             earthquakeGroups,
+            className,
         } = this.props;
 
         const {
@@ -53,13 +57,17 @@ export default class extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div>
+            <div
+                className={_cs(className, styles.earthquake)}
+            >
                 <Button
+                    className={styles.button}
                     transparent
                     onClick={this.handleExpandButtonClick}
                 >
-                    Earthquake
+                    <div className={styles.title}>Earthquake</div>
                     <Icon
+                        className={styles.icon}
                         name={isExpanded ? 'chevronUp' : 'chevronDown'}
                     />
                 </Button>
