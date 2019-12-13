@@ -41,21 +41,23 @@ export default class FloodGroup extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div className={styles.top}>
-                <Button
-                    className={styles.left}
-                    transparent
-                    onClick={this.handleExpandButtonClick}
-                >
-                    <div className={styles.title}>
-                        {title}
-                    </div>
+            <div className={styles.floodList}>
+                <div className={styles.top}>
+                    <Button
+                        className={styles.left}
+                        transparent
+                        onClick={this.handleExpandButtonClick}
+                    >
+                        <div className={styles.title}>
+                            {title}
+                        </div>
 
-                    <Icon
-                        className={styles.right}
-                        name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                    />
-                </Button>
+                        <Icon
+                            className={styles.right}
+                            name={isExpanded ? 'chevronUp' : 'chevronDown'}
+                        />
+                    </Button>
+                </div>
 
                 { isExpanded && (
                     <div className={styles.bottom}>
