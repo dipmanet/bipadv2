@@ -1,36 +1,36 @@
 import React from 'react';
 
+import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
-import ListView from '#rscv/List/ListView';
+
 
 import { LayerWithGroup } from '#store/atom/page/types';
 
-import FloodGroup from './FloodGroup';
-import styles from './styles.scss';
+import Group from '../Group';
 
-interface FloodGroupElement {
+interface GroupElement {
     id: number;
     title: string;
     description: string;
     layers: LayerWithGroup[];
 }
 interface Props {
-    floodGroups: FloodGroupElement[];
+    earthquakeGroups: GroupElement[];
 }
 
 interface State {
     isExpanded: boolean;
 }
 
-const floodRendererParams = (_: number, floodGroup: FloodGroupElement) => {
-    const { id, title, description, layers } = floodGroup;
+const rendererParams = (_: number, group: GroupElement) => {
+    const { id, title, description, layers } = group;
     return ({ id, title, description, layers });
 };
 
-const floodGroupKeySelector = (floodGroup: FloodGroupElement) => floodGroup.id;
+const groupKeySelector = (group: GroupElement) => group.id;
 
-export default class Flood extends React.PureComponent<Props, State> {
+export default class extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -45,30 +45,30 @@ export default class Flood extends React.PureComponent<Props, State> {
 
     public render() {
         const {
-            floodGroups,
+            earthquakeGroups,
         } = this.props;
 
         const {
             isExpanded,
         } = this.state;
+
         return (
             <div>
                 <Button
                     transparent
                     onClick={this.handleExpandButtonClick}
                 >
-                    Flood
+                    Earthquake
                     <Icon
                         name={isExpanded ? 'chevronUp' : 'chevronDown'}
                     />
                 </Button>
                 { isExpanded && (
                     <ListView
-                        className={styles.floodGroupList}
-                        data={floodGroups}
-                        keySelector={floodGroupKeySelector}
-                        renderer={FloodGroup}
-                        rendererParams={floodRendererParams}
+                        data={earthquakeGroups}
+                        keySelector={groupKeySelector}
+                        renderer={Group}
+                        rendererParams={rendererParams}
                     />
                 )}
             </div>
