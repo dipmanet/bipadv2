@@ -4,6 +4,7 @@ import RadioInput from '#rsci/RadioInput';
 import Icon from '#rscg/Icon';
 
 import { LayerWithGroup } from '#store/atom/page/types';
+import styles from './styles.scss';
 
 interface Props {
     id: number;
@@ -40,20 +41,29 @@ export default class FloodGroup extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div>
-                <div>{title}</div>
+            <div className={styles.top}>
                 <Button
+                    className={styles.left}
                     transparent
                     onClick={this.handleExpandButtonClick}
                 >
+                    <div className={styles.title}>
+                        {title}
+                    </div>
+
                     <Icon
+                        className={styles.right}
                         name={isExpanded ? 'chevronUp' : 'chevronDown'}
                     />
                 </Button>
+
                 { isExpanded && (
-                    <div>
-                        <div>{description}</div>
+                    <div className={styles.bottom}>
+                        <div className={styles.desc}>
+                            {description}
+                        </div>
                         <RadioInput
+                            className={styles.layers}
                             options={layers}
                             labelSelector={(d: LayerWithGroup) => d.title}
                             keySelector={(d: LayerWithGroup) => d.id}
