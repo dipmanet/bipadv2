@@ -3,11 +3,14 @@ import memoize from 'memoize-one';
 import {
     _cs,
     compareDate,
+    compareNumber,
+    getDifferenceInDays,
     getDate,
     listToGroupList,
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
+import { timeFormat } from 'd3-time-format';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
@@ -18,6 +21,8 @@ import Image from '#rsu/../v2/View/Image';
 import FormattedDate from '#rscv/FormattedDate';
 import TextOutput from '#components/TextOutput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import MultiLineChart from '#rscz/MultiLineChart';
+import Legend from '#rscz/Legend';
 
 import {
     RealTimeRainDetails,
@@ -33,9 +38,6 @@ import {
     methods,
 } from '#request';
 
-import waterLevelChartImage from '#resources/images/river-water-level-chart.png';
-import accumulatedRainfallChartImage from '#resources/images/accumulated-rainfall-chart.png';
-
 import styles from './styles.scss';
 
 interface Params {}
@@ -45,6 +47,20 @@ interface OwnProps {
     className?: string;
 }
 interface State {}
+
+interface LegendItem {
+    key: string;
+    label: string;
+    color: string;
+}
+
+const rainLegendData: LegendItem[] = [
+    { key: 'averages', label: 'Average Rainfall (mm)', color: '#7fc97f' },
+];
+
+const labelSelector = (d: LegendItem) => d.label;
+const keySelector = (d: LegendItem) => d.label;
+const colorSelector = (d: LegendItem) => d.color;
 
 type Props = NewProps<OwnProps, Params>;
 
@@ -151,6 +167,42 @@ class RainDetails extends React.PureComponent<Props> {
         return todaysData;
     })
 
+    private getWeeklyRainDetails = memoize((rainDetails: RealTimeRainDetails[]) => {
+        const today = new Date().getTime();
+        const filtered = rainDetails.filter(
+            rainDetail => (getDifferenceInDays(rainDetail.createdOn, today) < 8),
+        );
+
+        const groupedRain = listToGroupList(
+            filtered,
+            rain => new Date(rain.createdOn).setHours(0, 0, 0, 0),
+        );
+
+        interface Series {
+            name: string;
+            color: string;
+            values: number[];
+        }
+
+        const data: Series = { name: 'Average Rainfall (mm)', color: '#7fc97f', values: [] };
+        const dates: number[] = [];
+
+        Object.entries(groupedRain).forEach(([key, values]) => {
+            const value = values.reduce(
+                (prev, curr) => (prev.createdOn > curr.createdOn ? prev : curr),
+            );
+            const latestAverageValue = value.averages.reduce(
+                (prev, curr) => (prev.interval > curr.interval ? prev : curr),
+            );
+            data.values.push(latestAverageValue.value || 0);
+            dates.push(+key);
+        });
+        const series = [
+            data,
+        ];
+        return ({ series, dates });
+    });
+
     private getHourlyRainData = memoize((rainDetails: RealTimeRainDetails[]) => {
         const rainWithoutMinutes = rainDetails.map((rain) => {
             const {
@@ -174,6 +226,50 @@ class RainDetails extends React.PureComponent<Props> {
 
         return rainHours;
     })
+
+    private getHourlyChartData = memoize((rainDetails: RealTimeRainDetails[]) => {
+        interface ChartData {
+            createdOn: number[];
+            averageRainfall: number[];
+        }
+
+        const initialChartData: ChartData = {
+            averageRainfall: [],
+            createdOn: [],
+        };
+
+        const data = rainDetails.reduce((acc, rain) => {
+            const {
+                averages,
+                createdOn: co,
+            } = rain;
+
+            const hourlyAverage = averages.find(av => av.interval === 1);
+            const rainfall = hourlyAverage && hourlyAverage.value ? hourlyAverage.value : 0;
+            if (co) {
+                const {
+                    averageRainfall,
+                    createdOn,
+                } = acc;
+
+                averageRainfall.push(rainfall);
+                createdOn.push(co);
+            }
+
+            return acc;
+        }, initialChartData);
+
+        const { averageRainfall, createdOn } = data;
+        const series = [
+            {
+                name: 'Average Rainfall (mm)',
+                color: '#7fc97f',
+                values: averageRainfall,
+            },
+        ];
+
+        return ({ series, dates: createdOn });
+    });
 
     public render() {
         const {
@@ -200,6 +296,8 @@ class RainDetails extends React.PureComponent<Props> {
         const todaysRainDetails = this.getTodaysRainDetails(sortedRainDetails);
         const latestRainDetail = sortedRainDetails[0];
         const hourlyRainDetails = this.getHourlyRainData(todaysRainDetails);
+        const hourlyRainChartData = this.getHourlyChartData(hourlyRainDetails);
+        const weeklyRainChartData = this.getWeeklyRainDetails(rainDetails);
 
         return (
             <Modal
@@ -299,9 +397,22 @@ class RainDetails extends React.PureComponent<Props> {
                                             keySelector={waterLevelKeySelector}
                                         />
                                         <div className={styles.chartContainer}>
-                                            <img
-                                                src={waterLevelChartImage}
-                                                alt="chart"
+                                            <header className={styles.header}>
+                                                <h4 className={styles.heading}>
+                                                    Average Weekly Rainfall
+                                                </h4>
+                                            </header>
+                                            <MultiLineChart
+                                                className={styles.rainChart}
+                                                data={weeklyRainChartData}
+                                            />
+                                            <Legend
+                                                className={styles.rainChartLegend}
+                                                colorSelector={colorSelector}
+                                                data={rainLegendData}
+                                                keySelector={keySelector}
+                                                labelSelector={labelSelector}
+                                                itemClassName={styles.legendItem}
                                             />
                                         </div>
                                     </div>
@@ -320,9 +431,23 @@ class RainDetails extends React.PureComponent<Props> {
                                             keySelector={rainKeySelector}
                                         />
                                         <div className={styles.chartContainer}>
-                                            <img
-                                                src={accumulatedRainfallChartImage}
-                                                alt="chart"
+                                            <header className={styles.header}>
+                                                <h4 className={styles.heading}>
+                                                    Average Daily Rainfall
+                                                </h4>
+                                            </header>
+                                            <MultiLineChart
+                                                className={styles.rainChart}
+                                                data={hourlyRainChartData}
+                                                tickArguments={[8, timeFormat('%I %p')]}
+                                            />
+                                            <Legend
+                                                className={styles.rainChartLegend}
+                                                colorSelector={colorSelector}
+                                                data={rainLegendData}
+                                                keySelector={keySelector}
+                                                labelSelector={labelSelector}
+                                                itemClassName={styles.legendItem}
                                             />
                                         </div>
                                     </div>
