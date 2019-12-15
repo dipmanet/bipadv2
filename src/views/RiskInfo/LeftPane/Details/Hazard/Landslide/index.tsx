@@ -7,7 +7,7 @@ import Icon from '#rscg/Icon';
 
 import { LayerWithGroup } from '#store/atom/page/types';
 
-import Group from '../Group';
+import LandslideGroup from './LandslideGroup';
 import styles from './styles.scss';
 
 interface GroupElement {
@@ -77,7 +77,7 @@ export default class Landslide extends React.PureComponent<Props, State> {
                     <ListView
                         data={landslideGroups}
                         keySelector={groupKeySelector}
-                        renderer={Group}
+                        renderer={LandslideGroup}
                         rendererParams={rendererParams}
                     />
                 )}
