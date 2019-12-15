@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
@@ -7,6 +8,7 @@ import Icon from '#rscg/Icon';
 import { LayerWithGroup } from '#store/atom/page/types';
 
 import Group from '../Group';
+import styles from './styles.scss';
 
 interface GroupElement {
     id: number;
@@ -17,6 +19,7 @@ interface GroupElement {
 
 interface Props {
     landslideGroups: GroupElement[];
+    className: string;
 }
 
 interface State {
@@ -46,6 +49,7 @@ export default class Landslide extends React.PureComponent<Props, State> {
     public render() {
         const {
             landslideGroups,
+            className,
         } = this.props;
 
         const {
@@ -53,13 +57,19 @@ export default class Landslide extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div>
+            <div
+                className={_cs(className, styles.landslide)}
+            >
                 <Button
                     transparent
                     onClick={this.handleExpandButtonClick}
+                    className={styles.button}
                 >
-                    Landslide
+                    <div className={styles.title}>
+                        Landslide
+                    </div>
                     <Icon
+                        className={styles.icon}
                         name={isExpanded ? 'chevronUp' : 'chevronDown'}
                     />
                 </Button>

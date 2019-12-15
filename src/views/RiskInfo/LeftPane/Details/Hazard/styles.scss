@@ -2,48 +2,4 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-
-    .tabs {
-        flex-shrink: 0;
-    }
-
-    .flood-map-radio-input {
-        flex-grow: 1;
-        background-color: var(--color-foreground-alt);
-        padding: var(--spacing-small) 0;
-        overflow: auto;
-    }
-
-    .bottom {
-        flex-shrink: 0;
-        padding: var(--spacing-small) 0;
-
-        .return-period-input {
-            margin: var(--spacing-small) var(--spacing-medium);
-
-            :global {
-                .input-label {
-                    margin-bottom: var(--spacing-small);
-                    text-transform: none;
-                    font-size: var(--font-size-medium);
-                }
-            }
-        }
-
-        .info {
-            display: flex;
-            align-items: flex-start;
-
-            .icon {
-                margin: var(--spacing-small) var(--spacing-medium);
-                font-size: var(--font-size-extra-large);
-            }
-
-            .text {
-                padding: var(--spacing-small) var(--spacing-medium);
-                text-align: justify;
-                color: var(--color-text-label);
-            }
-        }
-    }
 }
