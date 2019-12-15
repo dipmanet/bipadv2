@@ -71,7 +71,20 @@ export interface Alert extends Field {
     point?: unknown;
     createdOn: string;
 }
-export interface Source extends Field {
+export interface Source {
+    id: string;
+    title: string;
+}
+export interface Status extends Field {
+}
+export interface Gender extends Field {
+}
+export interface Country extends Field {
+}
+export interface AgricultureLossType extends Field{
+}
+
+export interface InfrastructureType extends Field {
 }
 
 export interface Incident {
@@ -403,6 +416,11 @@ export interface PageState {
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
+    peopleLossStatusList: Status[];
+    agricultureLossStatusList: Status[];
+    agricultureLossTypeList: AgricultureLossType[];
+    countryList: Country[];
+    genderList: Gender[];
 
     resourceTypeList: ResourceType[];
     hazardTypes: Obj<HazardType>;
@@ -433,6 +451,8 @@ export enum PageType {
     SET_WARDS = 'page/SET_WARDS',
     SET_LOSS_LIST = 'page/SET_LOSS_LIST',
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
+    SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
+    SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -527,6 +547,16 @@ export interface SetWards {
 export interface SetDocumentCategoryList {
     type: typeof PageType.SET_DOCUMENT_CATEGORY_LIST;
     documentCategoryList: DocumentCategory[];
+}
+
+export interface SetCountryList {
+    type: typeof PageType.SET_COUNTRY_LIST;
+    countryList: Country[];
+}
+
+export interface SetAgricultureLossTypeList {
+    type: typeof PageType.SET_AGRICULTURE_LOSS_TYPE_LIST;
+    agricultureLossTypeList: AgricultureLossType[];
 }
 
 // dashboard
@@ -683,5 +713,5 @@ export type PageActionTypes = (
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
-    SetDocumentCategoryList
+    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList
 );

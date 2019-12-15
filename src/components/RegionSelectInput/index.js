@@ -6,6 +6,7 @@ import { FaramInputElement } from '@togglecorp/faram';
 import memoize from 'memoize-one';
 
 import SelectInput from '#rsci/SelectInput';
+import SearchSelectInput from '#rsci/SearchSelectInput';
 // import SegmentInput from '#rsci/SegmentInput';
 
 import {
@@ -28,6 +29,7 @@ const emptyObject = {};
 
 const propTypes = {
     className: PropTypes.string,
+    maxOptions: PropTypes.number,
     value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func.isRequired,
     districts: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -40,6 +42,7 @@ const defaultProps = {
     className: '',
     value: {},
     showHintAndError: false,
+    maxOptions: 0,
 };
 
 const mapStateToProps = state => ({
@@ -130,6 +133,7 @@ export default class RegionSelectInput extends React.PureComponent {
             provinces,
             districts,
             municipalities,
+            maxOptions,
             ...otherProps
         } = this.props;
 
@@ -144,6 +148,7 @@ export default class RegionSelectInput extends React.PureComponent {
         }
 
         const options = this.createSingleList(provinces, districts, municipalities);
+        const Input = maxOptions > 0 ? SearchSelectInput : SelectInput;
 
         return (
             <div className={_cs(className, styles.regionSelectInput)}>
@@ -159,10 +164,11 @@ export default class RegionSelectInput extends React.PureComponent {
                     showHintAndError={showHintAndError}
                 />
                 */}
-                <SelectInput
+                <Input
                     label="Location"
                     key={adminLevel}
                     {...otherProps}
+                    maxDisplayOptions={maxOptions}
                     className={styles.geoareaSelectInput}
                     options={options}
                     value={value}

@@ -9,7 +9,6 @@ const schemaList: Schema[] = [
         },
         fields: {
             description: { type: 'string' },
-
             estimatedLoss: { type: 'uint' },
             agricultureEconomicLoss: { type: 'uint' },
             infrastructureEconomicLoss: { type: 'uint' },
@@ -160,7 +159,7 @@ const schemaList: Schema[] = [
             cause: { type: 'string' },
             createdBy: { type: 'number' },
             description: { type: 'string' },
-            detail: { type: 'object' }, // FIXME: what is this
+            detail: { type: 'string' }, // FIXME: what is this
             event: { type: 'event' },
             hazard: { type: 'uint', required: true },
             incidentOn: { type: 'string', required: true }, // date

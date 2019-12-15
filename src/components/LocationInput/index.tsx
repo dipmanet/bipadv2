@@ -11,6 +11,7 @@ import {
     District,
     Province,
     Municipality,
+    Ward,
 } from '#store/atom/page/types';
 
 import {
@@ -28,17 +29,26 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
-    pointColor: string;
+    pointColor?: string;
+    faramElementName?: string;
+    onChange: (response: object) => void;
 }
 
 interface PropsFromAppState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
+    wards: Ward[];
     mapStyle: string;
 }
 
 interface State {
+}
+
+interface Region {
+    geoarea: number;
+    adminLevel: number;
+    ward: number;
 }
 
 type Props = OwnProps & PropsFromAppState;
@@ -54,15 +64,13 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 const emptyObject = {};
 
 class LocationInput extends React.PureComponent<Props, State> {
-    private handlePointMove = (geoJson, region) => {
+    private handlePointMove = (geoJson: object, region: Region) => {
         const {
             onChange,
             wards,
-            districts,
         } = this.props;
 
-        let wardList;
-
+        let wardList: { id: number }[] = [];
         if (region.adminLevel === 1) {
             wardList = wards.filter(d => d.province === region.geoarea);
         } else if (region.adminLevel === 2) {
@@ -70,7 +78,7 @@ class LocationInput extends React.PureComponent<Props, State> {
         } else if (region.adminLevel === 3) {
             wardList = wards.filter(d => d.municipality === region.geoarea);
         } else {
-            wardList = [region.ward];
+            wardList = [{ id: region.ward }];
         }
 
         if (onChange) {

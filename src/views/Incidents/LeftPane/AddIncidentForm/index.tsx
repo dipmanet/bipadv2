@@ -1,36 +1,21 @@
 import React from 'react';
-import Redux, {
-    compose,
-} from 'redux';
-import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { compose } from 'redux';
+import {
+    _cs,
+    isFalsy,
+} from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
-import FixedTabs from '#rscv/FixedTabs';
+import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
-import TextInput from '#rsci/TextInput';
-import DateInput from '#rsci/DateInput';
-import TimeInput from '#rsci/TimeInput';
-import SelectInput from '#rsci/SelectInput';
-import TextArea from '#rsci/TextArea';
-import Checkbox from '#rsci/Checkbox';
-import DangerButton from '#rsca/Button/DangerButton';
+import ConfirmButton from '#rsca/ConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-
-import LocationInput from '#components/LocationInput';
-
-import {
-    setLossListAction,
-} from '#actionCreators';
-
-import { AppState } from '#store/types';
-import * as PageType from '#store/atom/page/types';
 
 import {
     createRequestClient,
@@ -39,43 +24,45 @@ import {
     methods,
 } from '#request';
 
-import {
-    eventListSelector,
-    sourceListSelector,
-    hazardTypeListSelector,
-    lossListSelector,
-} from '#selectors';
-
+import GeneralDetails from './General';
+import PeopleLossList from './PeopleLossList';
+import FamiliesLossList from './FamiliesLossList';
+import LivestockLossList from './LivestockLossList';
 import styles from './styles.scss';
 
 interface Tabs {
     general: string;
-    location: string;
+    peopleLoss: string;
+    familyLoss: string;
+    livestockLoss: string;
 }
 interface Views {
     general: {};
-    location: {};
+    peopleLoss: {};
+    familyLoss: {};
+    livestockLoss: {};
 }
 interface Params {
-    body: object;
-    onSuccess: () => void;
-    onFailure: (faramErrors: object) => void;
+    body?: object;
+    onAddFailure?: (faramErrors: object) => void;
 }
+
 interface OwnProps {
     closeModal?: () => void;
     onUpdate?: () => void;
     className?: string;
+    lossServerId?: number;
+    incidentServerId?: number;
+    onLossChange?: (loss: object) => void;
+    onIncidentChange?: (incident: object) => void;
 }
-interface PropsFromState {
-    eventList: PageType.Event[];
-    sourceList: PageType.Source[];
-    hazardList: PageType.HazardType[];
-    lossList: PageType.Loss[];
-}
-interface PropsFromDispatch {
-    setLossList: typeof setLossListAction;
-}
+
 interface FaramValues {
+    location?: {
+        geoJson: object;
+        region: object;
+        wards: number[];
+    };
     hazard?: number;
     source?: number;
     incidentOnDate?: string;
@@ -91,86 +78,57 @@ interface FaramValues {
     reportedOnDate?: string;
     reportedOnTime?: string;
     streetAddress?: string;
-    detail?: string;
+    title?: string;
     needFollowup?: boolean;
     event?: number;
-    loss?: number;
+    lossDescription?: string;
+    estimatedLoss?: number;
 }
+
 interface FaramErrors {
 }
+
 interface State {
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
     currentView: keyof Tabs;
+    incidentServerId?: number;
 }
 
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type ReduxProps = OwnProps;
 type Props = NewProps<ReduxProps, Params>;
 
-const mapStateToProps = (state: AppState): PropsFromState => ({
-    eventList: eventListSelector(state),
-    sourceList: sourceListSelector(state),
-    hazardList: hazardTypeListSelector(state),
-    lossList: lossListSelector(state),
-});
-
-const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setLossList: params => dispatch(setLossListAction(params)),
-});
-
-const keySelector = (d: PageType.Field) => d.id;
-const labelSelector = (d: PageType.Field) => d.title;
-const lossKeySelector = (d: PageType.Loss) => d.id;
-const lossLabelSelector = (d: PageType.Loss) => d.description;
-
-const onSuccess = ({
-    params,
-    response,
-}: {
-    params: Params;
-    response: PageType.Alert;
-}) => {
-    if (params && params.onSuccess) {
-        params.onSuccess(response);
-    }
-};
-
-const onFailure = ({
-    error,
-    params,
-}: {
-    params: Params;
-    error: {
-        faramErrors: {};
-    };
-}) => {
-    if (params.onFailure) {
-        onFailure(error.faramErrors);
-    }
-};
-
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    lossGetRequest: {
-        url: '/loss/',
-        method: methods.GET,
-        onMount: true,
-        query: {
-            limit: 50,
-        },
-        onSuccess: ({ response, props: { setLossList } }) => {
-            interface Response { results: PageType.Loss[] }
-            const { results: lossList = [] } = response as Response;
-            const filteredLossList = lossList.filter(d => d.description);
-            setLossList({ lossList: filteredLossList });
-        },
-    },
-    addIncidentRequest: {
+    incidentRequest: {
         url: '/incident/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess,
-        onFailure,
+        onSuccess: ({ props, response }) => {
+            console.warn('incident creation', response);
+            const { onIncidentChange } = props;
+            if (onIncidentChange) {
+                onIncidentChange(response);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.onAddFailure) {
+                const { faramErrors } = error as { faramErrors: object };
+                params.onAddFailure(faramErrors);
+            }
+        },
+    },
+    lossRequest: {
+        url: '/loss/',
+        method: methods.POST,
+        body: ({ params: { body } = { body: {} } }) => body,
+        onSuccess: ({ props, response }) => {
+            console.warn('loss creation', response);
+            const { onLossChange } = props;
+            if (onLossChange) {
+                onLossChange(response);
+            }
+        },
     },
 };
 
@@ -180,125 +138,90 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
         this.tabs = {
             general: 'General',
-            location: 'Location',
+            peopleLoss: 'People Loss',
+            familyLoss: 'Family Loss',
+            livestockLoss: 'Livestock Loss',
         };
-
-        const {
-            eventList,
-            sourceList,
-            hazardList,
-            lossList,
-        } = this.props;
 
         this.views = {
             general: {
-                component: () => (
-                    <div className={styles.generalInputs}>
-                        <TextArea
-                            className={styles.descriptionInput}
-                            faramElementName="description"
-                            label="Description"
-                        />
-                        <TextArea
-                            className={styles.detailInput}
-                            faramElementName="detail"
-                            label="Detail"
-                        />
-                        <TextArea
-                            className={styles.causeInput}
-                            faramElementName="cause"
-                            label="Cause"
-                        />
-                        <SelectInput
-                            className={styles.hazardInput}
-                            faramElementName="hazard"
-                            options={this.props.hazardList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Hazard"
-                        />
-                        <SelectInput
-                            className={styles.sourceInput}
-                            faramElementName="source"
-                            options={this.props.sourceList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            label="Source"
-                        />
-                        <SelectInput
-                            className={styles.eventInput}
-                            faramElementName="event"
-                            options={this.props.eventList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Event"
-                        />
-                        <SelectInput
-                            className={styles.lossInput}
-                            faramElementName="loss"
-                            options={this.props.lossList}
-                            keySelector={lossKeySelector}
-                            labelSelector={lossLabelSelector}
-                            label="Loss"
-                        />
-                        <TextInput
-                            className={styles.streetAddressInput}
-                            faramElementName="streetAddress"
-                            label="Street Address"
-                        />
-                        <div className={styles.dateInputs}>
-                            <div className={styles.incidentOnInputs}>
-                                <DateInput
-                                    label="Incident on"
-                                    className={styles.incidentOnDate}
-                                    faramElementName="incidentOnDate"
-                                />
-                                <TimeInput
-                                    faramElementName="incidentOnTime"
-                                />
+                component: () => {
+                    const {
+                        pristine,
+                        faramValues,
+                        faramErrors,
+                    } = this.state;
+
+                    return (
+                        <Faram
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramValidationFailure}
+                            onValidationSuccess={this.handleFaramValidationSuccess}
+                            schema={AddIncidentForm.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                            className={styles.generalInputs}
+                        >
+                            <GeneralDetails />
+                            <div className={styles.footer}>
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={pristine}
+                                >
+                                    Submit
+                                </PrimaryButton>
                             </div>
-                            <div className={styles.reportedOnInputs}>
-                                <DateInput
-                                    label="Reported on"
-                                    faramElementName="reportedOnDate"
-                                />
-                                <TimeInput
-                                    faramElementName="reportedOnTime"
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.checkboxes}>
-                            <Checkbox
-                                className={styles.isApprovedSelectionCheckbox}
-                                label="Approved"
-                                faramElementName="approved"
-                            />
-                            <Checkbox
-                                className={styles.isVerifiedSelectionCheckbox}
-                                label="Verified"
-                                faramElementName="verified"
-                            />
-                            <Checkbox
-                                className={styles.needFollowupSelectionCheckbox}
-                                label="Need Followup"
-                                faramElementName="needFollowup"
-                            />
-                        </div>
-                        <TextArea
-                            className={styles.verificationMessageInput}
-                            faramElementName="verificationMessage"
-                            label="Verification Message"
-                        />
-                    </div>
-                ),
+                        </Faram>
+                    );
+                },
             },
-            location: {
-                component: () => (
-                    <LocationInput
-                        className={styles.locationInput}
-                        faramElementName="location"
-                    />
-                ),
+            peopleLoss: {
+                component: () => {
+                    const { lossServerId } = this.props;
+
+                    if (!lossServerId) {
+                        return null;
+                    }
+
+                    return (
+                        <PeopleLossList
+                            className={styles.peopleLossList}
+                            lossServerId={lossServerId}
+                        />
+                    );
+                },
+            },
+            familyLoss: {
+                component: () => {
+                    const { lossServerId } = this.props;
+
+                    if (!lossServerId) {
+                        return null;
+                    }
+
+                    return (
+                        <FamiliesLossList
+                            className={styles.peopleLossList}
+                            lossServerId={lossServerId}
+                        />
+                    );
+                },
+            },
+            livestockLoss: {
+                component: () => {
+                    const { lossServerId } = this.props;
+
+                    if (!lossServerId) {
+                        return null;
+                    }
+
+                    return (
+                        <LivestockLossList
+                            className={styles.peopleLossList}
+                            lossServerId={lossServerId}
+                        />
+                    );
+                },
             },
         };
 
@@ -321,8 +244,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         fields: {
             hazard: [requiredCondition],
             source: [requiredCondition],
-            incidentOnDate: [],
-            incidentOntime: [],
+            incidentOnDate: [requiredCondition],
+            incidentOnTime: [requiredCondition],
             wards: [],
             point: [],
             polygon: [],
@@ -331,13 +254,15 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             verified: [],
             verificationMessage: [],
             approved: [],
-            reportedOn: [],
+            reportedOnDate: [requiredCondition],
+            reportedOnTime: [requiredCondition],
             streetAddress: [],
-            detail: [],
+            title: [requiredCondition],
             needFollowup: [],
             event: [],
-            loss: [],
-            location: [],
+            lossDescription: [requiredCondition],
+            estimatedLoss: [],
+            location: [requiredCondition],
         },
     };
 
@@ -351,23 +276,25 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
-        this.setState({
-            faramErrors,
-        });
+        this.setState({ faramErrors });
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
             requests: {
-                addIncidentRequest,
+                incidentRequest,
+                lossRequest,
             },
         } = this.props;
+
         const {
             incidentOnDate,
             incidentOnTime,
             reportedOnDate,
             reportedOnTime,
             location,
+            estimatedLoss,
+            lossDescription,
             ...others
         } = faramValues;
 
@@ -409,22 +336,23 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             region: regionType,
         };
 
-        addIncidentRequest.do({
+        const bodyForLoss = {
+            description: lossDescription,
+            estimatedLoss,
+        };
+
+        incidentRequest.do({
             body,
-            onSuccess: this.handleRequestSuccess,
-            onFailure: this.handleRequestFailure,
+            onAddFailure: this.handleRequestFailure,
+        });
+
+        lossRequest.do({
+            body: bodyForLoss,
+            onAddFailure: this.handleRequestFailure,
         });
     }
 
-    private handleRequestSuccess = (response) => {
-        const { onRequestSuccess } = this.props;
-
-        if (onRequestSuccess) {
-            onRequestSuccess(response);
-        }
-    }
-
-    private handleRequestFailure = (faramErrors) => {
+    private handleRequestFailure = (faramErrors: object) => {
         this.setState({ faramErrors });
     }
 
@@ -436,61 +364,50 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         const {
             className,
             closeModal,
+            lossServerId,
         } = this.props;
 
-        const {
-            pristine,
-            faramValues,
-            faramErrors,
-            currentView,
-        } = this.state;
+        const { currentView } = this.state;
+
+        const disabledTabs = isFalsy(lossServerId)
+            ? ['peopleLoss']
+            : undefined;
 
         return (
             <Modal
                 className={_cs(styles.addIncidentFormModal, className)}
                 onClose={closeModal}
-                closeOnEscape
             >
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddIncidentForm.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    className={styles.addIncidentForm}
-                >
-                    <ModalHeader title="Add Incident" />
+                <ModalHeader
+                    className={styles.header}
+                    title="Add Incident"
+                    rightComponent={(
+                        <ConfirmButton
+                            onClick={closeModal}
+                            transparent
+                            iconName="close"
+                            confirmationMessage="Are you sure you want to close?"
+                        />
+                    )}
+                />
+                <div className={styles.addIncidentForm}>
                     <ModalBody className={styles.body}>
-                        <FixedTabs
+                        <ScrollTabs
                             className={styles.tabs}
                             tabs={this.tabs}
                             onClick={this.handleTabClick}
                             active={currentView}
+                            disabledTabs={disabledTabs}
                         />
                         <MultiViewContainer
                             views={this.views}
                             active={currentView}
                         />
                     </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                        >
-                            Submit
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                </div>
             </Modal>
         );
     }
 }
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    createRequestClient(requests),
-)(AddIncidentForm);
+export default compose(createRequestClient(requests))(AddIncidentForm);

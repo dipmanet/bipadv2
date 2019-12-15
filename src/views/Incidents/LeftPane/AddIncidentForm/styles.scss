@@ -4,6 +4,11 @@
     width: 100%;
     max-width: 720px;
     height: 80vh;
+    overflow-y: auto;
+
+    .header {
+        border-bottom: none;
+    }
 
     .add-incident-form {
         display: flex;
@@ -15,97 +20,28 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            padding: 0;
 
             .tabs {
                 flex-shrink: 0;
             }
 
-            .location-input {
-                flex-grow: 1;
-            }
-
             .general-inputs {
                 flex-grow: 1;
-                margin: auto;
-                // margin-top: var(--spacing-super-large);
-                background-color: var(--color-foreground-alt);
-                padding: var(--spacing-large);
                 width: 100%;
-                max-width: 640px;
                 overflow: auto;
+            }
 
-                %input {
-                    margin: var(--spacing-medium) var(--spacing-large);
-                }
+            .people-loss-list {
+                flex-grow: 1;
+                width: 100%;
+                overflow: auto;
+            }
 
-                .description-input {
-                    @extend %input;
-                }
-
-                .detail-input {
-                    @extend %input;
-                }
-
-                .cause-input {
-                    @extend %input;
-                }
-
-                .hazard-input {
-                    @extend %input;
-                }
-
-                .source-input {
-                    @extend %input;
-                }
-
-                .event-input {
-                    @extend %input;
-                }
-
-                .loss-input {
-                    @extend %input;
-                }
-
-                .street-address-input {
-                    @extend %input;
-                }
-
-                .date-inputs {
-                    display: flex;
-
-                    .incident-on-inputs {
-                        display: flex;
-                        padding: var(--spacing-large) 0;
-
-                        >* {
-                            flex-basis: calc(50% - var(--spacing-large));
-                            margin: 0 var(--spacing-large);
-                        }
-                    }
-
-                    .reported-on-inputs {
-                        display: flex;
-                        padding: var(--spacing-large) 0;
-
-                        >* {
-                            flex-basis: calc(50% - var(--spacing-large));
-                            margin: 0 var(--spacing-large);
-                        }
-                    }
-                }
-
-                .checkboxes {
-                    display: flex;
-
-                    >* {
-                        @extend %input;
-                        flex-basis: calc(100% / 3);
-                    }
-                }
-
-                .verification-message-input {
-                    @extend %input;
-                }
+            .footer {
+                display: flex;
+                justify-content: flex-end;
+                padding: var(--spacing-medium);
             }
         }
     }

@@ -132,6 +132,22 @@ export const severityListSelector = ({ page }: AppState) => page.severityList;
 
 export const documentCategoryListSelector = ({ page }: AppState) => page.documentCategoryList;
 
+export const genderListSelector = ({ page }: AppState) => page.genderList;
+
+export const peopleLossStatusListSelector = (
+    { page }: AppState,
+) => page.peopleLossStatusList;
+
+export const agricultureLossStatusListSelector = (
+    { page }: AppState,
+) => page.agricultureLossStatusList;
+
+export const agricultureLossTypeListSelector = (
+    { page }: AppState,
+) => page.agricultureLossTypeList;
+
+export const countryListSelector = ({ page }: AppState) => page.countryList;
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(

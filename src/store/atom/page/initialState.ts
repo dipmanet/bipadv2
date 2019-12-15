@@ -1,21 +1,6 @@
 import { PageState } from './types';
-import myStyle from '#constants/../vendor/osm-liberty/style';
-import rasterStyle from '#constants/../vendor/osm-liberty/rasterStyle';
 
 const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
-
-const myOtherStyle = {
-    version: 8,
-    sources: {
-    },
-    layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-    }],
-};
 
 const state: PageState = {
     eventTypes: {},
@@ -102,18 +87,61 @@ const state: PageState = {
     ],
     sourceList: [
         {
+            id: 'initial_rapid_assesment',
+            title: 'Initial Rapid Assesment',
+        },
+        {
+            id: 'nepal_police',
+            title: 'Nepal Police',
+        },
+        {
+            id: 'other',
+            title: 'Other',
+        },
+    ],
+    genderList: [
+        {
             id: 1,
-            title: 'dhm',
+            title: 'male',
         },
         {
             id: 2,
-            title: 'nsc',
+            title: 'female',
         },
         {
             id: 3,
-            title: 'other',
+            title: 'others',
         },
     ],
+    peopleLossStatusList: [
+        {
+            id: 1,
+            title: 'dead',
+        },
+        {
+            id: 2,
+            title: 'missing',
+        },
+        {
+            id: 3,
+            title: 'injured',
+        },
+        {
+            id: 4,
+            title: 'affected',
+        },
+    ],
+    agricultureLossStatusList: [
+        {
+            id: 1,
+            title: 'destroyed',
+        },
+        {
+            id: 1,
+            title: 'affected',
+        },
+    ],
+    countryList: [],
 
     // Page related
 
