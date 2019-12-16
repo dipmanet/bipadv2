@@ -16,7 +16,11 @@ interface Props {
 
 interface State {
     isExpanded: boolean;
+    selectedLayer: number | undefined;
 }
+
+const labelSelector = (d: LayerWithGroup) => d.title;
+const keySelector = (d: LayerWithGroup) => d.id;
 
 export default class Group extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -24,11 +28,16 @@ export default class Group extends React.PureComponent<Props, State> {
 
         this.state = {
             isExpanded: false,
+            selectedLayer: undefined,
         };
     }
 
     private handleExpandButtonClick = () => {
         this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
+    }
+
+    private onChange = (layerId: number) => {
+        this.setState({ selectedLayer: layerId });
     }
 
     public render() {
@@ -40,6 +49,7 @@ export default class Group extends React.PureComponent<Props, State> {
         } = this.props;
         const {
             isExpanded,
+            selectedLayer,
         } = this.state;
 
         return (
@@ -71,8 +81,10 @@ export default class Group extends React.PureComponent<Props, State> {
                         <RadioInput
                             className={styles.layers}
                             options={layers}
-                            labelSelector={(d: LayerWithGroup) => d.title}
-                            keySelector={(d: LayerWithGroup) => d.id}
+                            labelSelector={labelSelector}
+                            keySelector={keySelector}
+                            onChange={this.onChange}
+                            value={selectedLayer}
                         />
                     </div>
                 )}

@@ -7,7 +7,7 @@ import ListView from '#rscv/List/ListView';
 
 import { LayerWithGroup } from '#store/atom/page/types';
 
-import FloodGroup from './FloodGroup';
+import Group from '../Group';
 import styles from './styles.scss';
 
 interface FloodGroupElement {
@@ -77,7 +77,7 @@ export default class Flood extends React.PureComponent<Props, State> {
                         className={styles.floodGroupList}
                         data={floodGroups}
                         keySelector={floodGroupKeySelector}
-                        renderer={FloodGroup}
+                        renderer={Group}
                         rendererParams={floodRendererParams}
                     />
                 )}
