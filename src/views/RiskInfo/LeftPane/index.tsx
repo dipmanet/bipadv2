@@ -12,6 +12,8 @@ import {
     createConnectedRequestCoordinator,
 } from '#request';
 
+import Loading from '#components/Loading';
+
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap } from '#store/atom/page/types';
@@ -95,6 +97,11 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
+            requests: {
+                layersGetRequest: {
+                    pending,
+                },
+            },
         } = this.props;
 
         const {
@@ -110,6 +117,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                     activeAttribute && styles.hasActiveAttribute,
                 )}
             >
+                <Loading pending={pending} />
                 <Overview
                     titleShown={!activeAttribute}
                     className={styles.overview}

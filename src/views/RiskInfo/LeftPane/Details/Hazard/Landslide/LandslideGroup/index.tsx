@@ -4,8 +4,12 @@ import Button from '#rsca/Button';
 import ListSelection from '#rsci/ListSelection';
 import Icon from '#rscg/Icon';
 import Checkbox from '#rsci/Checkbox';
+import MapLayer from '#rscz/Map/MapLayer';
+import MapSource from '#rscz/Map/MapSource';
 
 import { LayerWithGroup } from '#store/atom/page/types';
+
+import { getRasterTile } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -17,10 +21,16 @@ interface Props {
     className: string;
 }
 
+interface Tile {
+    id: number;
+    tile: string[];
+}
+
 interface State {
     isExpanded: boolean;
     isLayerVisible: boolean;
     selectedLayers: number[];
+    rasterTileList: Tile[];
 }
 
 const labelSelector = (d: LayerWithGroup) => d.title;
@@ -33,6 +43,7 @@ export default class Group extends React.PureComponent<Props, State> {
         this.state = {
             isExpanded: false,
             selectedLayers: [],
+            rasterTileList: [],
             isLayerVisible: true,
         };
     }
@@ -41,8 +52,21 @@ export default class Group extends React.PureComponent<Props, State> {
         this.setState({ isLayerVisible });
     }
 
-    private handleLayerSelection = (layers: number[]) => {
-        this.setState({ selectedLayers: layers });
+    private handleLayerSelection = (layerIdList: number[]) => {
+        const { layers } = this.props;
+        const selectedLayers = layers.filter(l => layerIdList.includes(l.id));
+        const rasterTileList = selectedLayers.map((layer) => {
+            const tile = getRasterTile(layer);
+            return ({
+                id: layer.id,
+                tile: [tile],
+            });
+        });
+
+        this.setState({
+            selectedLayers: layerIdList,
+            rasterTileList,
+        });
     }
 
     private handleExpandButtonClick = () => {
@@ -60,6 +84,7 @@ export default class Group extends React.PureComponent<Props, State> {
         const {
             selectedLayers,
             isLayerVisible,
+            rasterTileList,
             isExpanded,
         } = this.state;
 
@@ -103,6 +128,21 @@ export default class Group extends React.PureComponent<Props, State> {
                         />
                     </div>
                 )}
+                { rasterTileList.map(({ id, tile }) => (
+                    <MapSource
+                        key={`landslide-${id}`}
+                        sourceKey={`landslide-${id}`}
+                        rasterTiles={tile}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            type="raster"
+                            paint={{
+                                'raster-opacity': 0.5,
+                            }}
+                        />
+                    </MapSource>
+                ))}
             </div>
         );
     }
