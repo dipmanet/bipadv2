@@ -2,7 +2,8 @@
     display: flex;
     position: absolute;
     top: 0;
-    left: 0; 
+    left: 0;
+    transform: none; 
     z-index: 1;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
@@ -31,6 +32,7 @@
         }
 
         .content {
+            position: relative;
             flex-grow: 1;
             overflow: auto;
         }

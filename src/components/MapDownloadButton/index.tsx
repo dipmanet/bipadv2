@@ -56,7 +56,15 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     provinces: provincesSelector(state),
 });
 
-const getIndexMapProportion = (bounds) => {
+interface GeoPoint {
+    lat: number;
+    lng: number;
+}
+
+const getIndexMapProportion = (bounds: {
+    _sw: GeoPoint;
+    _ne: GeoPoint;
+}) => {
     const {
         _sw,
         _ne,
@@ -73,6 +81,38 @@ const getIndexMapProportion = (bounds) => {
     };
 };
 
+const drawText = (
+    context: CanvasRenderingContext2D,
+    font: string,
+    text: string,
+    x: number,
+    y: number,
+    textColor: string,
+    backgroundColor: string,
+) => {
+    context.save();
+
+    // eslint-disable-next-line no-param-reassign
+    context.font = font;
+    const { width } = context.measureText(text);
+
+    // eslint-disable-next-line no-param-reassign
+    context.fillStyle = backgroundColor;
+
+    // eslint-disable-next-line no-param-reassign
+    context.textBaseline = 'top';
+    context.fillRect(x, y, width, parseInt(font, 10));
+
+    // eslint-disable-next-line no-param-reassign
+    context.fillStyle = textColor;
+    context.fillText(text, x, y);
+
+    context.restore();
+};
+
+const largeFont = '24px Source Sans Pro';
+const smallFont = '14px Source Sans Pro';
+
 class MapDownloadButton extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -86,7 +126,6 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
         const {
             map,
             region,
-            wards,
             districts,
             municipalities,
             provinces,
@@ -96,6 +135,7 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
             console.warn('Cannot export as there is no map');
             return;
         }
+
 
         let regionName = 'Nepal';
         const pageTitle = this.context.activeRouteDetails.title;
@@ -121,7 +161,7 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
             }
 
             if (this.context.activeRouteDetails.name === 'realtime') {
-                source = 'Rain / river: DHM, Fire: ICIMOD, Pollution: Ministry of forest of environment, Earthquake: Seismology';
+                source = 'Rain / river: DHM';
             } else if (this.context.activeRouteDetails.name === 'incident') {
                 source = 'Nepal police';
             }
@@ -141,12 +181,14 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
         if (!context) {
             return;
         }
-        context.drawImage(mapCanvas, 0, 0);
 
+        context.drawImage(mapCanvas, 0, 0);
         const mapBounds = map.getBounds();
+
         const mp = getIndexMapProportion(mapBounds);
         const indexMap = new Image();
         indexMap.src = indexMapImage;
+
         indexMap.onload = () => {
             const rightMargin = 24;
             const topMargin = 24;
@@ -176,6 +218,7 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
                 indexMapWidth * mp.width,
                 indexMapHeight * mp.height,
             );
+
             context.stroke();
 
             const legend = document.getElementsByClassName(legendContainerClassName);
@@ -183,53 +226,58 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
 
             const today = new Date();
             const title = `${pageTitle} for ${regionName}`;
-            context.font = '24px Source Sans Pro';
-            context.fillText(title, 12, 24);
-            context.font = '14px Source Sans Pro';
-            context.fillText(`Exported on: ${today.toLocaleDateString()}`, 12, 48);
+            const exportText = `Exported on: ${today.toLocaleDateString()}`;
+
+            drawText(context, largeFont, title, 12, 24, '#000', '#fff');
+            drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
+
             if (source) {
-                context.fillText(`Source: ${source}`, 12, 68);
+                drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
             }
 
-            if (scale) {
-                const scaleCanvas = html2canvas(scale);
+            const allPromises = [];
 
-                scaleCanvas.then((c) => {
-                    context.drawImage(
-                        c,
-                        mapCanvas.width - c.width - 6,
-                        mapCanvas.height - c.height - 6,
-                    );
+            if (scale) {
+                const scaleCanvas = html2canvas(scale as HTMLElement);
+
+                const scalePromise = new Promise((resolve) => {
+                    scaleCanvas.then((c) => {
+                        context.drawImage(
+                            c,
+                            mapCanvas.width - c.width - 6,
+                            mapCanvas.height - c.height - 6,
+                        );
+                        resolve();
+                    });
                 });
+
+                allPromises.push(scalePromise);
             }
 
             if (legend) {
-                const promises = Array.from(legend).map((l) => {
-                    const el = l;
-                    const elCanvas = html2canvas(l);
+                const legendPromise = new Promise((resolve) => {
+                    const promises = Array.from(legend).map((legendElement) => {
+                        const elCanvas = html2canvas(legendElement as HTMLElement);
 
-                    return elCanvas;
-                });
-
-                Promise.all(promises).then((canvases) => {
-                    const x = 6;
-
-                    canvases.forEach((c) => {
-                        const y = mapCanvas.height - c.height - 6;
-                        // context.shadowBlur = 1;
-                        // context.shadowColor = 'rgba(0, 0, 0, 0.1)';
-                        context.drawImage(c, x, y);
+                        return elCanvas;
                     });
 
-                    canvas.toBlob((blob) => {
-                        const link = document.createElement('a');
-                        link.download = 'map-export.png';
-                        link.href = URL.createObjectURL(blob);
-                        link.click();
-                        this.setState({ pending: false });
-                    }, 'image/png');
+                    Promise.all(promises).then((canvases) => {
+                        const x = 6;
+
+                        canvases.forEach((c) => {
+                            const y = mapCanvas.height - c.height - 6;
+                            context.drawImage(c, x, y);
+                        });
+
+                        resolve();
+                    });
                 });
-            } else {
+
+                allPromises.push(legendPromise);
+            }
+
+            Promise.all(allPromises).then(() => {
                 canvas.toBlob((blob) => {
                     const link = document.createElement('a');
                     link.download = 'map-export.png';
@@ -237,7 +285,7 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
                     link.click();
                     this.setState({ pending: false });
                 }, 'image/png');
-            }
+            });
         };
     }
 
@@ -247,7 +295,8 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
             setDestroyer,
             zoomLevel,
             mapContainerRef,
-            mapStyle, // capturing the prop
+            mapStyle,
+            dispatch,
             ...otherProps
         } = this.props;
 

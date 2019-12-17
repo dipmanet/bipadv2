@@ -119,6 +119,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                     showHintAndError={false}
                 />
                 <ListSelection
+                    disabled
                     label="Other layers"
                     className={styles.otherSourcesInput}
                     faramElementName="otherSources"

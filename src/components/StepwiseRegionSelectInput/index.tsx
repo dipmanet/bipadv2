@@ -86,7 +86,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             props.value,
             props.districtList,
             props.municipalityList,
-            props.wardList,
+            // props.wardList,
         );
 
         // TODO: componentWillReceiveProps
@@ -102,7 +102,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         value: Region | undefined,
         districtList: DistrictElement[],
         municipalityList: MunicipalityElement[],
-        wardList: WardElement[],
+        // wardList: WardElement[],
     ) => {
         let provinceId;
         let districtId;
@@ -132,6 +132,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     const district = districtList.find(d => d.id === geoarea);
                     if (district) {
                         provinceId = district.province;
+                        districtId = district.id;
                     }
                 }
                 break;
@@ -141,6 +142,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     if (municipality) {
                         provinceId = municipality.province;
                         districtId = municipality.district;
+                        municipalityId = municipality.id;
                     }
                 }
                 break;

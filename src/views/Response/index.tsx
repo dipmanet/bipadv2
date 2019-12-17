@@ -142,19 +142,6 @@ class Response extends React.PureComponent<Props, State> {
         };
     }
 
-    public componentDidMount() {
-        const { rightPaneExpanded } = this.state;
-
-        this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
-    public componentWillUnmount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-        if (mapControls) {
-            mapControls.style.right = this.previousMapContorlStyle;
-        }
-    }
-
     private getFilteredList = memoize((list, filterFunction) => (
         list.filter(filterFunction)
     ))
@@ -169,23 +156,6 @@ class Response extends React.PureComponent<Props, State> {
             operatorType,
             inventoryItem: item,
         });
-    }
-
-    private setPlacementForMapControls = (rightPaneExpanded) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-
-        if (mapControls) {
-            const widthRightPanel = rightPaneExpanded
-                ? convertValueToNumber(styleProperties.widthRightPanelLarge)
-                : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
-            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
-
-            if (!this.previousMapContorlStyle) {
-                this.previousMapContorlStyle = mapControls.style.right;
-            }
-            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
-        }
     }
 
     public render() {
