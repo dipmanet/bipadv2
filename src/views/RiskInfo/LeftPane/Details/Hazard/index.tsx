@@ -4,6 +4,7 @@ import {
     Obj,
     _cs,
     unique,
+    compareNumber,
 } from '@togglecorp/fujs';
 
 import { LayerWithGroup, HazardType } from '#store/atom/page/types';
@@ -31,6 +32,7 @@ class Hazard extends React.PureComponent<Props, State> {
         const groupWithLayers = groups.map((group) => {
             const { id } = group;
             const groupLayers = layers.filter(layer => layer.group.id === id);
+
             return ({ ...group, layers: groupLayers });
         });
         return groupWithLayers;

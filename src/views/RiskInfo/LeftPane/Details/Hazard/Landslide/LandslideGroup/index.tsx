@@ -1,15 +1,18 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
-import ListSelection from '#rsci/ListSelection';
+
 import Icon from '#rscg/Icon';
 import Checkbox from '#rsci/Checkbox';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+import { OpacityElement } from '#types';
 import { LayerWithGroup } from '#store/atom/page/types';
 
 import { getRasterTile } from '#utils/domain';
+
+import LandslideSelection from './LandslideSelection';
 
 import styles from './styles.scss';
 
@@ -24,6 +27,7 @@ interface Props {
 interface Tile {
     id: number;
     tile: string[];
+    opacity: number;
 }
 
 interface State {
@@ -60,6 +64,7 @@ export default class Group extends React.PureComponent<Props, State> {
             return ({
                 id: layer.id,
                 tile: [tile],
+                opacity: 0.5,
             });
         });
 
@@ -71,6 +76,18 @@ export default class Group extends React.PureComponent<Props, State> {
 
     private handleExpandButtonClick = () => {
         this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
+    }
+
+    private handleOpacityChange = ({ key, value }: OpacityElement) => {
+        this.setState(({ rasterTileList }) => {
+            const newTileList = rasterTileList.map(
+                tile => (tile.id === key ? { ...tile, opacity: value } : tile),
+            );
+
+            return ({
+                rasterTileList: newTileList,
+            });
+        });
     }
 
     public render() {
@@ -118,17 +135,19 @@ export default class Group extends React.PureComponent<Props, State> {
                         <div className={styles.description}>
                             {description}
                         </div>
-                        <ListSelection
+                        <LandslideSelection
                             className={styles.layers}
                             options={layers}
                             labelSelector={labelSelector}
+                            tooltipSelector={labelSelector}
                             keySelector={keySelector}
                             onChange={this.handleLayerSelection}
+                            handleOpacityChange={this.handleOpacityChange}
                             value={selectedLayers}
                         />
                     </div>
                 )}
-                { rasterTileList.map(({ id, tile }) => (
+                { rasterTileList.map(({ id, tile, opacity }) => (
                     <MapSource
                         key={`landslide-${id}`}
                         sourceKey={`landslide-${id}`}
@@ -138,7 +157,7 @@ export default class Group extends React.PureComponent<Props, State> {
                             layerKey="raster-layer"
                             type="raster"
                             paint={{
-                                'raster-opacity': 0.5,
+                                'raster-opacity': opacity,
                             }}
                         />
                     </MapSource>

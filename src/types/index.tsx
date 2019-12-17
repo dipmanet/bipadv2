@@ -4,6 +4,10 @@ export interface RiskElement {
     description?: string;
 }
 
+export interface OpacityElement {
+    key: number;
+    value: number;
+}
 export type AttributeKey = 'hazard' | 'exposure' | 'vulnerability' | 'risk' | 'capacity-and-resources' | 'climate-change';
 
 export interface RegionElement {
