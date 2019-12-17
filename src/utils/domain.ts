@@ -18,6 +18,8 @@ import {
     Municipality,
     District,
     Resource,
+    Layer,
+    LayerGroup,
 } from '#store/atom/page/types';
 import { groupList } from '#utils/common';
 
@@ -679,4 +681,23 @@ export function getProvinceFilter(selectedProvinceId: number | undefined) {
         return ['==', ['id'], selectedProvinceId];
     }
     return undefined;
+}
+
+export function getRasterTile(layer: Layer | LayerGroup) {
+    const tile = [
+        'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        `&layers=Bipad:${layer.layername}`,
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
+
+    return tile;
 }
