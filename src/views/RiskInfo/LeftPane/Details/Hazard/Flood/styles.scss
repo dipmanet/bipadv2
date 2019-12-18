@@ -2,32 +2,27 @@
     display: flex;
     align-items: stretch;
     flex-direction: column;
-    border-bottom: var(--width-separator-thin)
-        solid
-        var(--color-separator-alt);
+    border-bottom: var(--width-separator-thin) solid var(--color-separator-alt);
 
     .button {
         display: flex;
         align-items: center;
         flex-grow: 1;
-        background-color: var(--color-accent);
         padding: var(--spacing-medium-alt);
 
         &:focus {
             outline: none;
         }
 
-        .title{
+        .title {
             display: flex;
             flex-grow: 1;
-            color: var(--color-foreground);
             font-size: var(--font-size-medium);
         }
 
         .icon {
-            display:flex;
+            display: flex;
             flex-shrink: 0;
-            color: var(--color-foreground);
         }
     }
 }

@@ -13,6 +13,7 @@ interface Props {
     onClick: (key: AttributeKey) => void;
     icon: string;
     titleShown: boolean;
+    isActive: boolean;
 }
 
 interface State {
@@ -35,11 +36,17 @@ class Attribute extends React.Component<Props, State> {
             description,
             icon,
             titleShown,
+            isActive,
         } = this.props;
 
         return (
             <div
-                className={_cs(className, styles.attribute)}
+                className={_cs(
+                    className,
+                    styles.attribute,
+                    isActive && styles.active,
+                    !titleShown && styles.iconOnly,
+                )}
                 onClick={this.handleClick}
                 role="presentation"
                 title={description}
