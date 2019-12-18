@@ -12,6 +12,8 @@ import {
     createConnectedRequestCoordinator,
 } from '#request';
 
+import Button from '#rsca/Button';
+
 import Loading from '#components/Loading';
 
 import { MultiResponse } from '#store/atom/response/types';
@@ -118,19 +120,40 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                 )}
             >
                 <Loading pending={pending} />
-                <Overview
-                    titleShown={!activeAttribute}
-                    className={styles.overview}
-                    onAttributeClick={this.handleAttributeClick}
-                />
-                {activeAttribute && (
-                    <Details
-                        className={styles.content}
-                        attribute={activeAttribute}
-                        layerMap={layerMap}
-                        onBackButtonClick={this.handleDetailsBackButtonClick}
+                <header className={styles.header}>
+                    {activeAttribute ? (
+                        <>
+                            <Button
+                                className={styles.backButton}
+                                onClick={this.handleDetailsBackButtonClick}
+                                iconName="back"
+                                transparent
+                            />
+                            <h2 className={styles.heading}>
+                                { activeAttribute }
+                            </h2>
+                        </>
+                    ) : (
+                        <h2 className={styles.heading}>
+                            Select an attribute to get started
+                        </h2>
+                    )}
+                </header>
+                <div className={styles.content}>
+                    <Overview
+                        titleShown={!activeAttribute}
+                        className={styles.overview}
+                        onAttributeClick={this.handleAttributeClick}
+                        activeAttribute={activeAttribute}
                     />
-                )}
+                    {activeAttribute && (
+                        <Details
+                            className={styles.detail}
+                            attribute={activeAttribute}
+                            layerMap={layerMap}
+                        />
+                    )}
+                </div>
             </div>
         );
     }

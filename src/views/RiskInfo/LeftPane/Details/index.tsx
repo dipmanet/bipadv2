@@ -19,7 +19,6 @@ interface Props {
     className?: string;
     layerMap: LayerMap;
     attribute: AttributeKey;
-    onBackButtonClick: () => void;
 }
 
 interface State {
@@ -81,24 +80,12 @@ export default class Details extends React.PureComponent<Props, State> {
         const {
             className,
             attribute,
-            onBackButtonClick,
         } = this.props;
 
-        const headingText = this.views[attribute].title;
+        // const headingText = this.views[attribute].title;
 
         return (
             <div className={_cs(styles.details, className)}>
-                <header className={styles.header}>
-                    <Button
-                        className={styles.backButton}
-                        onClick={onBackButtonClick}
-                        iconName="back"
-                        transparent
-                    />
-                    <h3 className={styles.heading}>
-                        { headingText }
-                    </h3>
-                </header>
                 <MultiViewContainer
                     views={this.views}
                     active={attribute}

@@ -16,6 +16,7 @@ interface FloodGroupElement {
     description: string;
     layers: LayerWithGroup[];
 }
+
 interface Props {
     floodGroups: FloodGroupElement[];
     className: string;
@@ -25,7 +26,7 @@ interface State {
     isExpanded: boolean;
 }
 
-const floodRendererParams = (_: number, floodGroup: FloodGroupElement) => {
+const getFloodGroupRendererParams = (_: number, floodGroup: FloodGroupElement) => {
     const { id, title, description, layers } = floodGroup;
     return ({ id, title, description, layers });
 };
@@ -51,9 +52,7 @@ export default class Flood extends React.PureComponent<Props, State> {
             className,
         } = this.props;
 
-        const {
-            isExpanded,
-        } = this.state;
+        const { isExpanded } = this.state;
         return (
             <div
                 className={_cs(className, styles.flood)}
@@ -78,7 +77,7 @@ export default class Flood extends React.PureComponent<Props, State> {
                         data={floodGroups}
                         keySelector={floodGroupKeySelector}
                         renderer={Group}
-                        rendererParams={floodRendererParams}
+                        rendererParams={getFloodGroupRendererParams}
                     />
                 )}
             </div>

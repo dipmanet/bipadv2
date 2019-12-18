@@ -37,4 +37,13 @@
     &:hover {
         background-color: var(--color-background-hover);
     }
+
+    &.icon-only {
+        border-right: var(--width-separator-thin) solid var(--color-separator);
+    }
+
+    &.active {
+        border-right-color: transparent;
+        background-color: var(--color-foreground);
+    }
 }

@@ -3,13 +3,6 @@ import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rsu/../v2/View/ListView';
 
-import hazardIcon from '#resources/icons/Destroyed.svg';
-import exposureIcon from '#resources/icons/See.svg';
-import vulnerabilityIcon from '#resources/icons/Damaged-Affected.svg';
-import riskIcon from '#resources/icons/Help.svg';
-import capacityAndResourcesIcon from '#resources/icons/Livelihood.svg';
-import climateChangeIcon from '#resources/icons/Drought.svg';
-
 import { AttributeKey } from '#types';
 import Attribute from './Attribute';
 import styles from './styles.scss';
@@ -18,6 +11,7 @@ interface Props {
     className?: string;
     onAttributeClick: (key: AttributeKey) => void;
     titleShown: boolean;
+    activeAttribute: AttributeKey;
 }
 
 interface AttributeItem {
@@ -84,29 +78,22 @@ export default class Overview extends React.PureComponent<Props> {
         onClick: this.props.onAttributeClick,
         className: styles.attribute,
         titleShown: this.props.titleShown,
+        isActive: this.props.activeAttribute === attribute.key,
     })
 
     public render() {
         const {
             className,
-            titleShown,
         } = this.props;
 
         return (
-            <div className={_cs(styles.overview, className)}>
-                { titleShown && (
-                    <header className={styles.header}>
-                        Select an attribute to get started
-                    </header>
-                )}
-                <ListView
-                    className={styles.content}
-                    data={attributeList}
-                    renderer={Attribute}
-                    rendererParams={this.getAttributeRendererParams}
-                    keySelector={attributeListKeySelector}
-                />
-            </div>
+            <ListView
+                className={_cs(styles.overview, className)}
+                data={attributeList}
+                renderer={Attribute}
+                rendererParams={this.getAttributeRendererParams}
+                keySelector={attributeListKeySelector}
+            />
         );
     }
 }
