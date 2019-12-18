@@ -57,7 +57,7 @@ export default class IncidentListView extends React.PureComponent {
                 rendererParams={this.getIncidentRendererParams}
                 keySelector={incidentKeySelector}
                 emptyComponent={EmptyComponent}
-                iteHeight={100}
+                itemHeight={100}
             />
         );
     }
