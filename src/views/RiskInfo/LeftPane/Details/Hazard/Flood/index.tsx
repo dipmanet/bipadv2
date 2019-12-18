@@ -1,11 +1,10 @@
 import React from 'react';
 
 import { _cs } from '@togglecorp/fujs';
-import Button from '#rsca/Button';
-import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
 
 import { LayerWithGroup } from '#store/atom/page/types';
+import ExpandableView from '#components/ExpandableView';
 
 import Group from '../Group';
 import styles from './styles.scss';
@@ -52,26 +51,12 @@ export default class Flood extends React.PureComponent<Props, State> {
             className,
         } = this.props;
 
-        const { isExpanded } = this.state;
         return (
-            <div
+            <ExpandableView
                 className={_cs(className, styles.flood)}
-            >
-                <Button
-                    className={styles.button}
-                    transparent
-                    onClick={this.handleExpandButtonClick}
-                >
-                    <div className={styles.title}>
-                        Flood
-                    </div>
-
-                    <Icon
-                        className={styles.icon}
-                        name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                    />
-                </Button>
-                { isExpanded && (
+                headerContentClassName={styles.title}
+                headerContent="Flood"
+                expandableContent={(
                     <ListView
                         className={styles.floodGroupList}
                         data={floodGroups}
@@ -80,7 +65,7 @@ export default class Flood extends React.PureComponent<Props, State> {
                         rendererParams={getFloodGroupRendererParams}
                     />
                 )}
-            </div>
+            />
         );
     }
 }

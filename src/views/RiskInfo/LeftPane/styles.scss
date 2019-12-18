@@ -8,8 +8,8 @@
     .header {
         display: flex;
         flex-shrink: 0;
-        padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
         border-bottom: var(--width-separator-thin) solid var(--color-separator);
+        padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
 
         .back-button {
             flex-shrink: 0;

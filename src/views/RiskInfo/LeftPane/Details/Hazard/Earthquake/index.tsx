@@ -7,6 +7,7 @@ import Icon from '#rscg/Icon';
 
 
 import { LayerWithGroup } from '#store/atom/page/types';
+import ExpandableView from '#components/ExpandableView';
 
 import Group from '../Group';
 import styles from './styles.scss';
@@ -34,52 +35,26 @@ const rendererParams = (_: number, group: GroupElement) => {
 const groupKeySelector = (group: GroupElement) => group.id;
 
 export default class extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            isExpanded: false,
-        };
-    }
-
-    private handleExpandButtonClick = () => {
-        this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
-    }
-
     public render() {
         const {
             earthquakeGroups,
             className,
         } = this.props;
 
-        const {
-            isExpanded,
-        } = this.state;
-
         return (
-            <div
+            <ExpandableView
                 className={_cs(className, styles.earthquake)}
-            >
-                <Button
-                    className={styles.button}
-                    transparent
-                    onClick={this.handleExpandButtonClick}
-                >
-                    <div className={styles.title}>Earthquake</div>
-                    <Icon
-                        className={styles.icon}
-                        name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                    />
-                </Button>
-                { isExpanded && (
+                headerContent="Earthquake"
+                expandableContent={(
                     <ListView
+                        className={styles.earthquakeGroup}
                         data={earthquakeGroups}
                         keySelector={groupKeySelector}
                         renderer={Group}
                         rendererParams={rendererParams}
                     />
                 )}
-            </div>
+            />
         );
     }
 }

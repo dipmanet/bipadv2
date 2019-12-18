@@ -1,14 +1,17 @@
 import React from 'react';
-import Button from '#rsca/Button';
+import { _cs } from '@togglecorp/fujs';
+
 import DangerButton from '#rsca/Button/DangerButton';
-import RadioInput from '#rsci/RadioInput';
-import Icon from '#rscg/Icon';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import { LayerWithGroup } from '#store/atom/page/types';
-
 import { getRasterTile } from '#utils/domain';
+import { OpacityElement } from '#types';
+import ExpandableView from '#components/ExpandableView';
+import RadioInput from '#components/RadioInput';
+import RiskDescription from '#components/RiskDescription';
+import OpacityInput from '#components/OpacityInput';
 
 import styles from './styles.scss';
 
@@ -21,9 +24,9 @@ interface Props {
 }
 
 interface State {
-    isExpanded: boolean;
     selectedLayer: LayerWithGroup | undefined;
     rasterTile: string[];
+    layerOpacity: number;
 }
 
 const labelSelector = (d: LayerWithGroup) => d.title;
@@ -34,9 +37,9 @@ export default class Group extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            isExpanded: false,
             rasterTile: [],
             selectedLayer: undefined,
+            layerOpacity: 1,
         };
     }
 
@@ -44,12 +47,6 @@ export default class Group extends React.PureComponent<Props, State> {
         this.setState({
             selectedLayer: undefined,
         });
-    }
-
-    private handleExpandButtonClick = () => {
-        this.setState(prevState => ({
-            isExpanded: !prevState.isExpanded,
-        }));
     }
 
     private onChange = (layerId: number) => {
@@ -64,6 +61,10 @@ export default class Group extends React.PureComponent<Props, State> {
         }
     }
 
+    private handleOpacityInputChange = (key: OpacityElement['key'], value: OpacityElement['value']) => {
+        this.setState({ layerOpacity: value });
+    }
+
     public render() {
         const {
             title,
@@ -71,53 +72,61 @@ export default class Group extends React.PureComponent<Props, State> {
             layers,
             className,
         } = this.props;
+
         const {
-            isExpanded,
             selectedLayer,
             rasterTile,
+            layerOpacity,
         } = this.state;
 
         return (
-            <div className={styles.group}>
-                <Button
-                    className={styles.button}
-                    transparent
-                    onClick={this.handleExpandButtonClick}
-                >
-                    <div
-                        className={styles.title}
-                    >
-                        {title}
-                    </div>
-
-                    <Icon
-                        className={styles.icon}
-                        name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                    />
-                </Button>
-                { isExpanded && (
-                    <div
-                        className={styles.bottom}
-                    >
-                        <div className={styles.description}>
-                            {description}
-                        </div>
-                        <DangerButton
-                            disabled={!selectedLayer}
-                            onClick={this.handleLayerUnselect}
-                        >
-                            Unselect
-                        </DangerButton>
-                        <RadioInput
-                            className={styles.layers}
-                            options={layers}
-                            labelSelector={labelSelector}
-                            keySelector={keySelector}
-                            onChange={this.onChange}
-                            value={selectedLayer && selectedLayer.id}
-                        />
-                    </div>
-                )}
+            <>
+                <ExpandableView
+                    className={_cs(className, styles.group)}
+                    headerClassName={styles.header}
+                    headerContentClassName={styles.headerContent}
+                    expandIconClassName={styles.expandIcon}
+                    headerContent={title}
+                    expandButtonClassName={styles.expandButton}
+                    expandableContent={(
+                        <>
+                            <RiskDescription
+                                className={styles.description}
+                                text={description}
+                            />
+                            { selectedLayer && (
+                                <OpacityInput
+                                    inputKey={selectedLayer.id}
+                                    onChange={this.handleOpacityInputChange}
+                                />
+                            )}
+                            <RadioInput
+                                title={(
+                                    <header className={styles.header}>
+                                        <h4 className={styles.heading}>
+                                            Layers
+                                        </h4>
+                                        <DangerButton
+                                            disabled={!selectedLayer}
+                                            onClick={this.handleLayerUnselect}
+                                            className={styles.clearButton}
+                                            transparent
+                                        >
+                                            Clear
+                                        </DangerButton>
+                                    </header>
+                                )}
+                                className={styles.layerList}
+                                contentClassName={styles.content}
+                                options={layers}
+                                labelSelector={labelSelector}
+                                keySelector={keySelector}
+                                onChange={this.onChange}
+                                value={selectedLayer && selectedLayer.id}
+                            />
+                        </>
+                    )}
+                />
                 {selectedLayer && (
                     <MapSource
                         key={selectedLayer.id}
@@ -128,12 +137,12 @@ export default class Group extends React.PureComponent<Props, State> {
                             layerKey={`layer-${selectedLayer && selectedLayer.id}`}
                             type="raster"
                             paint={{
-                                'raster-opacity': 0.5,
+                                'raster-opacity': layerOpacity,
                             }}
                         />
                     </MapSource>
                 )}
-            </div>
+            </>
         );
     }
 }

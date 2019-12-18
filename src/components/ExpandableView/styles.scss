@@ -1,0 +1,36 @@
+.expandable-view {
+    >.header {
+        display: flex;
+
+        .expand-button {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            outline: none;
+            padding: 0;
+            text-align: left;
+            text-transform: none;
+            color: var(--color-text);
+            font-size: var(--font-size-medium);
+            font-weight: var(--font-weight-medium);
+
+            .header-content {
+                flex-grow: 1;
+                padding: var(--spacing-medium);
+            }
+
+            .icon {
+                flex-shrink: 0;
+                margin: var(--spacing-small) var(--spacing-medium);
+            }
+        }
+    }
+
+    &.expanded {
+        >.header {
+            .expand-button {
+                font-weight: var(--font-weight-bold);
+            }
+        }
+    }
+}

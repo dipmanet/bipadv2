@@ -9,6 +9,12 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     headerContent: React.ReactNode;
+    expandableContent: React.ReactNode;
+    headerContentClassName?: string;
+    headerClassName?: string;
+    expandedClassName?: string;
+    expandButtonClassName?: string;
+    expandIconClassName?: string;
 }
 
 interface State {
@@ -33,26 +39,45 @@ class ExpandableView extends React.PureComponent<Props, State> {
         const {
             className,
             headerContent,
+            expandableContent,
+            headerContentClassName,
+            headerClassName,
+            expandedClassName,
+            expandButtonClassName,
+            expandIconClassName,
         } = this.props;
 
         const { isExpanded } = this.state;
 
         return (
-            <div className={_cs(styles.expandableView, className)}>
-                <header className={styles.header}>
+            <div
+                className={_cs(
+                    styles.expandableView,
+                    className,
+                    isExpanded && styles.expanded,
+                    isExpanded && expandedClassName,
+                )}
+            >
+                <header className={_cs(styles.header, headerClassName)}>
                     <Button
                         transparent
                         onClick={this.handleButtonClick}
+                        className={_cs(styles.expandButton, expandButtonClassName)}
                     >
-                        <div className={styles.headerContent}>
+                        <div className={_cs(styles.headerContent, headerContentClassName)}>
                             {headerContent}
                         </div>
                         <Icon
-                            className={styles.icon}
+                            className={_cs(styles.icon, expandIconClassName)}
                             name={isExpanded ? 'chevronUp' : 'chevronDown'}
                         />
                     </Button>
                 </header>
+                {isExpanded && (
+                    <div className={styles.expandableContent}>
+                        { expandableContent }
+                    </div>
+                )}
             </div>
         );
     }

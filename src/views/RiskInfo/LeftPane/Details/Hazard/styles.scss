@@ -1,5 +1,9 @@
 .hazard {
-    display: flex;
-    flex-direction: column;
     overflow: auto;
+
+    .sub-category {
+        &:not(:last-child) {
+            border-bottom: var(--width-separator-thin) solid var(--color-separator);
+        }
+    }
 }

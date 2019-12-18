@@ -1,0 +1,19 @@
+.option {
+    display: flex;
+    cursor: pointer;
+    padding: var(--spacing-extra-small-alt) calc(var(--spacing-medium) - var(--spacing-small));
+
+    .icon {
+        flex-shrink: 0;
+        margin: 0 var(--spacing-small);
+    }
+
+    .label {
+        flex-grow: 1;
+        padding: 0 var(--spacing-small);
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
+}
