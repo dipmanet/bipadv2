@@ -18,7 +18,7 @@ interface Props {
     options: LayerWithGroup[];
     value: number[];
     onChange: (layers: number[]) => void;
-    handleOpacityChange: (opacity: OpacityElement) => void;
+    onOpacityChange: (opacity: OpacityElement) => void;
 }
 
 interface State {}
@@ -26,7 +26,9 @@ interface State {}
 export default class LandslideSelection extends React.PureComponent<Props, State> {
     private handleItemChange = (key: number, isSelected: boolean) => {
         const { value, onChange } = this.props;
+
         const newValue = [...value];
+
         if (!isSelected) {
             const index = newValue.indexOf(key);
             newValue.splice(index, 1);
@@ -46,22 +48,22 @@ export default class LandslideSelection extends React.PureComponent<Props, State
             disabled,
             readOnly,
             options,
-            handleOpacityChange,
+            onOpacityChange,
         } = this.props;
 
         const selected = value.indexOf(key) >= 0;
         const layer = options.find(l => keySelector(l) === key);
 
         return {
-            id: keySelector(itemData),
+            layerKey: keySelector(itemData),
             label: labelSelector(itemData),
             tooltip: tooltipSelector(itemData),
             value: selected,
-            onChange: (val: boolean) => this.handleItemChange(key, val),
+            onChange: this.handleItemChange,
             checkboxType: 'check',
             disabled,
             readOnly,
-            handleOpacityChange,
+            onOpacityChange,
             layer,
         };
     }
@@ -70,17 +72,17 @@ export default class LandslideSelection extends React.PureComponent<Props, State
         const {
             options,
             keySelector,
+            className,
         } = this.props;
 
         return (
-            <div className={styles.item}>
-                <ListView
-                    data={options}
-                    renderer={LandslideItem}
-                    keySelector={keySelector}
-                    rendererParams={this.rendererParams}
-                />
-            </div>
+            <ListView
+                className={_cs(className, styles.landslideSelection)}
+                data={options}
+                renderer={LandslideItem}
+                keySelector={keySelector}
+                rendererParams={this.rendererParams}
+            />
         );
     }
 }

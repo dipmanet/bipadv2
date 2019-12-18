@@ -54,6 +54,15 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     },
 };
 
+const attributeNames = {
+    hazard: 'Hazard',
+    exposure: 'Exposure',
+    vulnerability: 'Vulnerability',
+    risk: 'Risk',
+    'capacity-and-resources': 'Capacity & resources',
+    'climate-change': 'Climate change',
+};
+
 class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -130,7 +139,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                                 transparent
                             />
                             <h2 className={styles.heading}>
-                                { activeAttribute }
+                                { attributeNames[activeAttribute] }
                             </h2>
                         </>
                     ) : (

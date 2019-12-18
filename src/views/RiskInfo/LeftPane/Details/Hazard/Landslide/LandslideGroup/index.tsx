@@ -1,11 +1,11 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import Button from '#rsca/Button';
 
-import Icon from '#rscg/Icon';
-import Checkbox from '#rsci/Checkbox';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+
+import ExpandableView from '#components/ExpandableView';
+import RiskDescription from '#components/RiskDescription';
 
 import { OpacityElement } from '#types';
 import { LayerWithGroup } from '#store/atom/page/types';
@@ -61,10 +61,11 @@ export default class Group extends React.PureComponent<Props, State> {
         const selectedLayers = layers.filter(l => layerIdList.includes(l.id));
         const rasterTileList = selectedLayers.map((layer) => {
             const tile = getRasterTile(layer);
+
             return ({
                 id: layer.id,
                 tile: [tile],
-                opacity: 0.5,
+                opacity: 1,
             });
         });
 
@@ -78,7 +79,10 @@ export default class Group extends React.PureComponent<Props, State> {
         this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
     }
 
-    private handleOpacityChange = ({ key, value }: OpacityElement) => {
+    private handleOpacityChange = (
+        key: OpacityElement['key'],
+        value: OpacityElement['value'],
+    ) => {
         this.setState(({ rasterTileList }) => {
             const newTileList = rasterTileList.map(
                 tile => (tile.id === key ? { ...tile, opacity: value } : tile),
@@ -106,55 +110,36 @@ export default class Group extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div className={_cs(className, styles.group)}>
-                <div className={styles.heading}>
-                    <Checkbox
-                        value={isLayerVisible}
-                        onChange={this.handleLayerVisibility}
-                    />
-                    <Button
-                        className={styles.button}
-                        transparent
-                        onClick={this.handleExpandButtonClick}
-                    >
-                        <div
-                            className={styles.title}
-                        >
-                            {title}
-                        </div>
-                        <Icon
-                            className={styles.icon}
-                            name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                        />
-                    </Button>
-                </div>
-                { isExpanded && (
-                    <div
-                        className={styles.bottom}
-                    >
-                        <div className={styles.description}>
-                            {description}
-                        </div>
-                        <LandslideSelection
-                            className={styles.layers}
-                            options={layers}
-                            labelSelector={labelSelector}
-                            tooltipSelector={labelSelector}
-                            keySelector={keySelector}
-                            onChange={this.handleLayerSelection}
-                            handleOpacityChange={this.handleOpacityChange}
-                            value={selectedLayers}
-                        />
-                    </div>
-                )}
-                { rasterTileList.map(({ id, tile, opacity }) => (
+            <>
+                <ExpandableView
+                    className={_cs(className, styles.group)}
+                    headerContent={title}
+                    expandableContent={(
+                        <>
+                            <RiskDescription
+                                text={description}
+                            />
+                            <LandslideSelection
+                                className={styles.layers}
+                                options={layers}
+                                labelSelector={labelSelector}
+                                tooltipSelector={labelSelector}
+                                keySelector={keySelector}
+                                onChange={this.handleLayerSelection}
+                                onOpacityChange={this.handleOpacityChange}
+                                value={selectedLayers}
+                            />
+                        </>
+                    )}
+                />
+                {rasterTileList.map(({ id, tile, opacity }) => (
                     <MapSource
                         key={`landslide-${id}`}
                         sourceKey={`landslide-${id}`}
                         rasterTiles={tile}
                     >
                         <MapLayer
-                            layerKey="raster-layer"
+                            layerKey={`landslide-${id}-layer`}
                             type="raster"
                             paint={{
                                 'raster-opacity': opacity,
@@ -162,7 +147,7 @@ export default class Group extends React.PureComponent<Props, State> {
                         />
                     </MapSource>
                 ))}
-            </div>
+            </>
         );
     }
 }

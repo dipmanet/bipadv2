@@ -1,0 +1,9 @@
+.opacity-input {
+    padding: var(--spacing-small) var(--spacing-medium);
+
+    .label {
+        text-transform: uppercase;
+        color: var(--color-text-label);
+        font-size: var(--font-size-small);
+    }
+}

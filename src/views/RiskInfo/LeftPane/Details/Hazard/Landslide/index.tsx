@@ -2,10 +2,9 @@ import React from 'react';
 
 import { _cs } from '@togglecorp/fujs';
 import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
-import Icon from '#rscg/Icon';
 
 import { LayerWithGroup } from '#store/atom/page/types';
+import ExpandableView from '#components/ExpandableView';
 
 import LandslideGroup from './LandslideGroup';
 import styles from './styles.scss';
@@ -57,31 +56,19 @@ export default class Landslide extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div
+            <ExpandableView
                 className={_cs(className, styles.landslide)}
-            >
-                <Button
-                    transparent
-                    onClick={this.handleExpandButtonClick}
-                    className={styles.button}
-                >
-                    <div className={styles.title}>
-                        Landslide
-                    </div>
-                    <Icon
-                        className={styles.icon}
-                        name={isExpanded ? 'chevronUp' : 'chevronDown'}
-                    />
-                </Button>
-                { isExpanded && (
+                headerContent="Landslide"
+                expandableContent={(
                     <ListView
+                        className={styles.landslideGroupList}
                         data={landslideGroups}
                         keySelector={groupKeySelector}
                         renderer={LandslideGroup}
                         rendererParams={rendererParams}
                     />
                 )}
-            </div>
+            />
         );
     }
 }

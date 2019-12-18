@@ -1,33 +1,5 @@
 .earthquake {
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
-    border-bottom: var(--width-separator-thin)
-                    solid
-                    var(--color-separator-alt);
-
-    .button {
-        display: flex;
-        align-items: center;
-        flex-grow: 1;
-        padding: var(--spacing-medium-alt);
-        background-color: var(--color-accent);
-
-        &:focus {
-            outline: none;
-        }
-
-        .title {
-            display: flex;
-            flex-grow: 1;
-            font-size: var(--font-size-medium);
-            color: var(--color-foreground);
-        }
-
-        .icon {
-            display:flex;
-            flex-shrink: 0;
-            color: var(--color-foreground);
-        }
+    .earthquake-group {
+        padding: 0 var(--spacing-medium);
     }
 }

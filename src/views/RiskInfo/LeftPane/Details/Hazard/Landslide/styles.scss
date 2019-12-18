@@ -1,30 +1,5 @@
 .landslide {
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
-
-    .button {
-        display: flex;
-        align-items: center;
-        flex-grow: 1;
-        background-color: var(--color-accent);
-        padding: var(--spacing-medium-alt);
-
-        &:focus {
-            outline: none;
-        }
-
-        .title{
-            display: flex;
-            flex-grow: 1;
-            color: var(--color-foreground);
-            font-size: var(--font-size-medium);
-        }
-
-        .icon {
-            display:flex;
-            flex-shrink: 0;
-            color: var(--color-foreground);
-        }
+    .landslide-group-list {
+        padding: 0 var(--spacing-medium);
     }
 }
