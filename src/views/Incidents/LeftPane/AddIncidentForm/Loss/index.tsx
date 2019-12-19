@@ -44,7 +44,7 @@ interface OwnProps {
     className?: string;
     lossServerId?: number;
     incidentServerId?: number;
-    onLossChange?: (loss: object) => void;
+    onLossChange?: (loss: object, incident?: object) => void;
     onIncidentChange?: (incident: object) => void;
 }
 
@@ -84,24 +84,36 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 requests: {
                     incidentPatchRequest,
                 },
+                lossServerId,
             } = props;
 
-            if (onLossChange) {
+            if (!lossServerId) {
+                incidentPatchRequest.do({
+                    body: {
+                        loss: response.id,
+                    },
+                });
+            } else {
                 onLossChange(response);
             }
-            incidentPatchRequest.do({
-                body: {
-                    loss: response.id,
-                },
-            });
         },
     },
     incidentPatchRequest: {
         url: ({ props: { incidentServerId } }) => `/incident/${incidentServerId}/`,
         method: methods.PATCH,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: () => {
-            // TODO: patch incident to incident list
+        onSuccess: ({ props, response: incidentResponse }) => {
+            const {
+                onLossChange,
+                requests: {
+                    lossEditRequest: {
+                        response: lossResponse,
+                    },
+                },
+                lossServerId,
+            } = props;
+
+            onLossChange(lossResponse, incidentResponse);
         },
     },
 };
@@ -175,6 +187,9 @@ class AddLoss extends React.PureComponent<Props, State> {
                 lossGetRequest: {
                     pending: lossGetPending,
                 },
+                incidentPatchRequest: {
+                    pending: incidentPending,
+                },
             },
         } = this.props;
 
@@ -208,6 +223,7 @@ class AddLoss extends React.PureComponent<Props, State> {
                 <div className={styles.footer}>
                     <PrimaryButton
                         type="submit"
+                        pending={lossEditPending || incidentPending}
                         disabled={pristine}
                     >
                         Submit

@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isDefined,
+} from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
@@ -14,6 +17,10 @@ import { iconNames } from '#constants';
 import {
     hazardTypesSelector,
 } from '#selectors';
+import {
+    setIncidentActionIP,
+} from '#actionCreators';
+import Cloak from '#components/Cloak';
 
 import IncidentListView from './ListView';
 import AddIncidentForm from './AddIncidentForm';
@@ -30,11 +37,17 @@ const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    // eslint-disable-next-line react/no-unused-prop-types
+    setIncident: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
     className: undefined,
 };
+
+const mapDispatchToProps = dispatch => ({
+    setIncident: params => dispatch(setIncidentActionIP(params)),
+});
 
 class LeftPane extends React.PureComponent {
     static propTypes = propTypes
@@ -87,12 +100,20 @@ class LeftPane extends React.PureComponent {
     }
 
     handleIncidentEdit = (incident) => {
+        const { setIncident } = this.props;
+
+        setIncident(incident);
         this.setState({
             incidentServerId: incident.id,
         });
     }
 
-    handleLossEdit = (loss) => {
+    handleLossEdit = (loss, incident) => {
+        const { setIncident } = this.props;
+
+        if (isDefined(incident)) {
+            setIncident(incident);
+        }
         this.setState({
             lossServerId: loss.id,
         });
@@ -149,21 +170,23 @@ class LeftPane extends React.PureComponent {
                             Incidents
                         </h2>
                         <div className={styles.buttons}>
-                            <ModalButton
-                                className={styles.addIncidentButton}
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddIncidentForm
-                                        lossServerId={lossServerId}
-                                        incidentServerId={incidentServerId}
-                                        onIncidentChange={this.handleIncidentEdit}
-                                        onLossChange={this.handleLossEdit}
-                                    />
-                                )}
-                            >
-                                Add
-                            </ModalButton>
+                            <Cloak hiddenIf={p => !p.change_incident}>
+                                <ModalButton
+                                    className={styles.addIncidentButton}
+                                    title="Add"
+                                    transparent
+                                    modal={(
+                                        <AddIncidentForm
+                                            lossServerId={lossServerId}
+                                            incidentServerId={incidentServerId}
+                                            onIncidentChange={this.handleIncidentEdit}
+                                            onLossChange={this.handleLossEdit}
+                                        />
+                                    )}
+                                >
+                                    Add
+                                </ModalButton>
+                            </Cloak>
                         </div>
                     </header>
                     <IncidentListView
@@ -182,4 +205,4 @@ const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-export default connect(mapStateToProps)(LeftPane);
+export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);

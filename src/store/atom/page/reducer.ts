@@ -130,7 +130,7 @@ export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.I
     incidentList,
 });
 
-export const setIncidentActionIP = ({ incident }: { incident: Type.Incident}) => ({
+export const setIncidentActionIP = ({ incident }: { incident: Type.Incident }) => ({
     type: Type.PageType.IP__SET_INCIDENT,
     incident,
 });

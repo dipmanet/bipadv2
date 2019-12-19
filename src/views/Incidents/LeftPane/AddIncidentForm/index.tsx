@@ -1,11 +1,17 @@
 import React from 'react';
 import { compose } from 'redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    populateFormat,
+    breakFormat,
+    encodeDate,
+    _cs,
+} from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
 import ScrollTabs from '#rscv/ScrollTabs';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -156,6 +162,30 @@ const getLocationDetails = (incidentDetails) => {
     });
 };
 
+const getIncidentDateTime = (incidentOn) => {
+    if (!incidentOn) {
+        return {};
+    }
+
+    const date = new Date(incidentOn);
+    return {
+        incidentOnDate: encodeDate(date),
+        incidentOnTime: populateFormat(breakFormat('hh:mm'), date)[0].value,
+    };
+};
+
+const getReportedDateTime = (reportedOn) => {
+    if (!reportedOn) {
+        return {};
+    }
+
+    const date = new Date(reportedOn);
+    return {
+        reportedOnDate: encodeDate(date),
+        reportedOnTime: populateFormat(breakFormat('hh:mm'), date)[0].value,
+    };
+};
+
 class AddIncidentForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -178,6 +208,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             ...incidentDetails,
             location: getLocationDetails(incidentDetails),
             event: incidentDetails.event && incidentDetails.event.id,
+            ...getIncidentDateTime(incidentDetails.incidentOn),
+            ...getReportedDateTime(incidentDetails.reportedOn),
         };
 
         this.views = {
@@ -188,6 +220,14 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                         faramValues,
                         faramErrors,
                     } = this.state;
+
+                    const {
+                        requests: {
+                            incidentRequest: {
+                                pending: incidentPending,
+                            },
+                        },
+                    } = this.props;
 
                     return (
                         <Faram
@@ -203,6 +243,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                             <div className={styles.footer}>
                                 <PrimaryButton
                                     type="submit"
+                                    pending={incidentPending}
                                     disabled={pristine}
                                 >
                                     Submit
@@ -398,6 +439,11 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             closeModal,
             lossServerId,
             incidentServerId,
+            requests: {
+                incidentRequest: {
+                    pending: incidentPending,
+                },
+            },
         } = this.props;
 
         const { currentView } = this.state;
@@ -428,6 +474,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                 />
                 <div className={styles.addIncidentForm}>
                     <ModalBody className={styles.body}>
+                        {incidentPending && <LoadingAnimation />}
                         <ScrollTabs
                             className={styles.tabs}
                             tabs={this.tabs}

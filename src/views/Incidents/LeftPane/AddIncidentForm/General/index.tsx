@@ -9,6 +9,7 @@ import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import Checkbox from '#rsci/Checkbox';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import LocationInput from '#components/LocationInput';
 
@@ -24,6 +25,7 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
+    pending?: boolean;
 }
 
 interface PropsFromState {
@@ -50,10 +52,12 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             hazardList,
             sourceList,
             className,
+            pending,
         } = this.props;
 
         return (
             <div className={_cs(styles.general, className)}>
+                {pending && <LoadingAnimation />}
                 <TextArea
                     className={styles.input}
                     faramElementName="description"
