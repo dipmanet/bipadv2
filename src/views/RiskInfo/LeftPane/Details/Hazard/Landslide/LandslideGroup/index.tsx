@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 import ExpandableView from '#components/ExpandableView';
 import RiskDescription from '#components/RiskDescription';
@@ -40,7 +41,7 @@ interface State {
 const labelSelector = (d: LayerWithGroup) => d.title;
 const keySelector = (d: LayerWithGroup) => d.id;
 
-export default class Group extends React.PureComponent<Props, State> {
+export default class LandslideGroup extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -68,6 +69,15 @@ export default class Group extends React.PureComponent<Props, State> {
                 opacity: 1,
             });
         });
+
+        const layersToRemove = layers.map(d => `landslide-${d.id}`);
+        this.context.removeLayers(layersToRemove);
+
+        const activeLayerList = selectedLayers.map(d => ({
+            id: `landslide-${d.id}`,
+            title: `${d.group.title} / ${d.title}`,
+        }));
+        this.context.addLayers(activeLayerList);
 
         this.setState({
             selectedLayers: layerIdList,
@@ -139,7 +149,7 @@ export default class Group extends React.PureComponent<Props, State> {
                         rasterTiles={tile}
                     >
                         <MapLayer
-                            layerKey={`landslide-${id}-layer`}
+                            layerKey={`landslide-${id}`}
                             type="raster"
                             paint={{
                                 'raster-opacity': opacity,
@@ -151,3 +161,5 @@ export default class Group extends React.PureComponent<Props, State> {
         );
     }
 }
+
+LandslideGroup.contextType = RiskInfoLayerContext;

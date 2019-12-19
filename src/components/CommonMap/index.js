@@ -156,7 +156,6 @@ class CommonMap extends React.PureComponent {
                     sourceKey={`${sourceKey}-country-outline`}
                     url={mapSources.nepal.url}
                     bounds={bounds}
-                    boundsPadding={boundsPadding}
                 >
                     <MapLayer
                         layerKey="ward-outline"
