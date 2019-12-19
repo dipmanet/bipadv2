@@ -1,9 +1,6 @@
 import React from 'react';
 import { compose } from 'redux';
-import {
-    _cs,
-    isFalsy,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -13,7 +10,6 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import ModalFooter from '#rscv/Modal/Footer';
 import ConfirmButton from '#rsca/ConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -25,6 +21,7 @@ import {
 } from '#request';
 
 import GeneralDetails from './General';
+import Loss from './Loss';
 import PeopleLossList from './PeopleLossList';
 import FamiliesLossList from './FamiliesLossList';
 import LivestockLossList from './LivestockLossList';
@@ -32,12 +29,14 @@ import styles from './styles.scss';
 
 interface Tabs {
     general: string;
+    loss: string;
     peopleLoss: string;
     familyLoss: string;
     livestockLoss: string;
 }
 interface Views {
     general: {};
+    loss: {};
     peopleLoss: {};
     familyLoss: {};
     livestockLoss: {};
@@ -81,8 +80,6 @@ interface FaramValues {
     title?: string;
     needFollowup?: boolean;
     event?: number;
-    lossDescription?: string;
-    estimatedLoss?: number;
 }
 
 interface FaramErrors {
@@ -101,15 +98,18 @@ type Props = NewProps<ReduxProps, Params>;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     incidentRequest: {
-        url: '/incident/',
-        method: methods.POST,
+        url: ({ props: { incidentServerId } }) => (incidentServerId
+            ? `/incident/${incidentServerId}/` : '/incident/'),
+        method: ({ props: { incidentServerId } }) => (
+            incidentServerId ? methods.PATCH : methods.POST
+        ),
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ props, response }) => {
-            console.warn('incident creation', response);
             const { onIncidentChange } = props;
             if (onIncidentChange) {
                 onIncidentChange(response);
             }
+            // TODO: patch or add incident to incident list
         },
         onFailure: ({ error, params }) => {
             if (params && params.onAddFailure) {
@@ -118,18 +118,42 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
-    lossRequest: {
-        url: '/loss/',
-        method: methods.POST,
-        body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ props, response }) => {
-            console.warn('loss creation', response);
-            const { onLossChange } = props;
-            if (onLossChange) {
-                onLossChange(response);
-            }
+};
+
+const getLocationDetails = (incidentDetails) => {
+    const {
+        wards = [],
+        point,
+        ward,
+        municipality,
+    } = incidentDetails || {};
+
+    if (!point) {
+        return undefined;
+    }
+
+    const geoJson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: point,
+                properties: {
+                    hazardColor: '#f00000',
+                },
+            },
+        ],
+    };
+
+    return ({
+        geoJson,
+        region: {
+            geoarea: municipality,
+            adminLevel: 3,
+            ward,
         },
-    },
+        wards: wards.map(w => w.id),
+    });
 };
 
 class AddIncidentForm extends React.PureComponent<Props, State> {
@@ -138,9 +162,22 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
         this.tabs = {
             general: 'General',
+            loss: 'Loss',
             peopleLoss: 'People Loss',
             familyLoss: 'Family Loss',
             livestockLoss: 'Livestock Loss',
+        };
+
+        const {
+            incidentDetails = {},
+        } = this.props;
+
+        const faramValuesForState = {
+            approved: true,
+            verified: true,
+            ...incidentDetails,
+            location: getLocationDetails(incidentDetails),
+            event: incidentDetails.event && incidentDetails.event.id,
         };
 
         this.views = {
@@ -172,6 +209,21 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                 </PrimaryButton>
                             </div>
                         </Faram>
+                    );
+                },
+            },
+            loss: {
+                component: () => {
+                    const {
+                        onLossChange,
+                        lossServerId,
+                    } = this.props;
+
+                    return (
+                        <Loss
+                            lossServerId={lossServerId}
+                            onLossChange={onLossChange}
+                        />
                     );
                 },
             },
@@ -226,10 +278,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         };
 
         this.state = {
-            faramValues: {
-                approved: true,
-                verified: true,
-            },
+            faramValues: faramValuesForState,
             faramErrors: {},
             pristine: true,
             currentView: 'general',
@@ -257,17 +306,13 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             reportedOnDate: [requiredCondition],
             reportedOnTime: [requiredCondition],
             streetAddress: [],
-            title: [requiredCondition],
             needFollowup: [],
             event: [],
-            lossDescription: [requiredCondition],
-            estimatedLoss: [],
             location: [requiredCondition],
         },
     };
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        console.warn(faramValues);
         this.setState({
             faramValues,
             faramErrors,
@@ -283,7 +328,6 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         const {
             requests: {
                 incidentRequest,
-                lossRequest,
             },
         } = this.props;
 
@@ -293,8 +337,6 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             reportedOnDate,
             reportedOnTime,
             location,
-            estimatedLoss,
-            lossDescription,
             ...others
         } = faramValues;
 
@@ -336,18 +378,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             region: regionType,
         };
 
-        const bodyForLoss = {
-            description: lossDescription,
-            estimatedLoss,
-        };
-
         incidentRequest.do({
             body,
-            onAddFailure: this.handleRequestFailure,
-        });
-
-        lossRequest.do({
-            body: bodyForLoss,
             onAddFailure: this.handleRequestFailure,
         });
     }
@@ -365,13 +397,17 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             className,
             closeModal,
             lossServerId,
+            incidentServerId,
         } = this.props;
 
         const { currentView } = this.state;
 
-        const disabledTabs = isFalsy(lossServerId)
-            ? ['peopleLoss']
-            : undefined;
+        const disabledTabs = [
+            !lossServerId && !incidentServerId && 'loss',
+            !lossServerId && 'peopleLoss',
+            !lossServerId && 'familyLoss',
+            !lossServerId && 'livestockLoss',
+        ];
 
         return (
             <Modal

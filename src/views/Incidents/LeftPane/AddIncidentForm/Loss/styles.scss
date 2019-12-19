@@ -1,0 +1,9 @@
+.loss-form {
+    position: relative;
+    padding: var(--spacing-large);
+
+    .footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

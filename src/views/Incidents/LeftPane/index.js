@@ -48,8 +48,8 @@ class LeftPane extends React.PureComponent {
             showIncidents: true,
             showTabular: false,
             showVisualizations: false,
-            lossServerId: 17678,
-            incidentServerId: 42018,
+            lossServerId: undefined,
+            incidentServerId: undefined,
         };
     }
 
@@ -164,38 +164,6 @@ class LeftPane extends React.PureComponent {
                             >
                                 Add
                             </ModalButton>
-                            {/*
-                            <ModalButton
-                                className={styles.addIncidentButton}
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddDocumentForm />
-                                )}
-                            >
-                                Add Document
-                            </ModalButton>
-                            <ModalButton
-                                className={styles.addIncidentButton}
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddResourceForm />
-                                )}
-                            >
-                                Add Resource
-                            </ModalButton>
-                            <ModalButton
-                                className={styles.addIncidentButton}
-                                title="Add"
-                                transparent
-                                modal={(
-                                    <AddInventoryForm />
-                                )}
-                            >
-                                Add Inventory
-                            </ModalButton>
-                            */}
                         </div>
                     </header>
                     <IncidentListView

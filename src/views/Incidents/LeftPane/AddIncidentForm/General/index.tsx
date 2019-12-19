@@ -7,7 +7,6 @@ import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
-import NumberInput from '#rsci/NumberInput';
 import TextArea from '#rsci/TextArea';
 import Checkbox from '#rsci/Checkbox';
 
@@ -55,11 +54,6 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
 
         return (
             <div className={_cs(styles.general, className)}>
-                <TextArea
-                    className={styles.input}
-                    faramElementName="title"
-                    label="Title"
-                />
                 <TextArea
                     className={styles.input}
                     faramElementName="description"
@@ -133,16 +127,6 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                         faramElementName="needFollowup"
                     />
                 </div>
-                <TextArea
-                    className={styles.input}
-                    faramElementName="lossDescription"
-                    label="Loss Description"
-                />
-                <NumberInput
-                    className={styles.input}
-                    faramElementName="estimatedLoss"
-                    label="Estimated loss"
-                />
                 <TextInput
                     className={styles.input}
                     faramElementName="streetAddress"

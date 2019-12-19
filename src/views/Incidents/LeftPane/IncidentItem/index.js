@@ -9,12 +9,17 @@ import { Link } from '@reach/router';
 import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import AccentButton from '#rsca/Button/AccentButton';
+import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
 import GeoOutput from '#components/GeoOutput';
 import { getHazardColor, getHazardIcon } from '#utils/domain';
 import { getYesterday } from '#utils/common';
 
+import AddIncidentForm from '../AddIncidentForm';
 import styles from './styles.scss';
+
+const ModalAccentButton = modalize(AccentButton);
 
 const propTypes = {
     className: PropTypes.string,
@@ -46,6 +51,7 @@ export default class IncidentItem extends React.PureComponent {
         } = this.props;
 
         const {
+            id: incidentServerId,
             title,
             incidentOn,
             streetAddress,
@@ -53,6 +59,9 @@ export default class IncidentItem extends React.PureComponent {
             verified,
             hazard,
             id: incidentId,
+            loss: {
+                id: lossServerId,
+            } = {},
         } = data;
 
         const verifiedIconClass = verified
@@ -63,21 +72,18 @@ export default class IncidentItem extends React.PureComponent {
         const isNew = isRecent(incidentOn, recentDay);
 
         return (
-            <Link
+            <div
                 className={_cs(
                     className,
                     styles.incidentItem,
                     isNew && styles.new,
                 )}
-                to={reverseRoute('incidents/:incidentId/response', { incidentId })}
             >
                 <div className={styles.left}>
                     <ScalableVectorGraphics
                         className={styles.icon}
                         src={icon}
-                        style={{
-                            color: getHazardColor(hazardTypes, hazard),
-                        }}
+                        style={{ color: getHazardColor(hazardTypes, hazard) }}
                     />
                 </div>
                 <div className={styles.right}>
@@ -106,8 +112,31 @@ export default class IncidentItem extends React.PureComponent {
                             alwaysVisible
                         />
                     </div>
+                    <div className={styles.footer}>
+                        <ModalAccentButton
+                            className={styles.button}
+                            transparent
+                            modal={(
+                                <AddIncidentForm
+                                    lossServerId={lossServerId}
+                                    incidentServerId={incidentServerId}
+                                    incidentDetails={data}
+                                    onIncidentChange={this.handleIncidentEdit}
+                                    onLossChange={this.handleLossEdit}
+                                />
+                            )}
+                        >
+                            Edit
+                        </ModalAccentButton>
+                        <Link
+                            className={styles.link}
+                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
+                        >
+                            Go to response
+                        </Link>
+                    </div>
                 </div>
-            </Link>
+            </div>
         );
     }
 }

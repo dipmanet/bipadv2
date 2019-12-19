@@ -1,0 +1,221 @@
+import React from 'react';
+import { compose } from 'redux';
+import { _cs } from '@togglecorp/fujs';
+import Faram, {
+    requiredCondition,
+} from '@togglecorp/faram';
+
+import LoadingAnimation from '#rscv/LoadingAnimation';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+import NumberInput from '#rsci/NumberInput';
+import TextArea from '#rsci/TextArea';
+
+import {
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+
+import styles from './styles.scss';
+
+interface Tabs {
+    general: string;
+    loss: string;
+    peopleLoss: string;
+    familyLoss: string;
+    livestockLoss: string;
+}
+interface Views {
+    general: {};
+    loss: {};
+    peopleLoss: {};
+    familyLoss: {};
+    livestockLoss: {};
+}
+interface Params {
+    body?: object;
+    onLossGet?: (loss: object) => void;
+}
+
+interface OwnProps {
+    closeModal?: () => void;
+    onUpdate?: () => void;
+    className?: string;
+    lossServerId?: number;
+    incidentServerId?: number;
+    onLossChange?: (loss: object) => void;
+    onIncidentChange?: (incident: object) => void;
+}
+
+interface FaramValues {
+    description?: string;
+    estimatedLoss?: number;
+}
+
+interface FaramErrors {
+}
+
+interface State {
+    faramValues: FaramValues;
+    faramErrors: FaramErrors;
+    pristine: boolean;
+}
+
+type ReduxProps = OwnProps;
+type Props = NewProps<ReduxProps, Params>;
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    lossGetRequest: {
+        url: ({ props: { lossServerId } }) => `/loss/${lossServerId}/`,
+        method: methods.GET,
+        onMount: ({ props: { lossServerId } }) => !!lossServerId,
+        onSuccess: ({ response, params: { onLossGet } }) => {
+            onLossGet(response);
+        },
+    },
+    lossEditRequest: {
+        url: ({ props: { lossServerId } }) => (lossServerId ? `/loss/${lossServerId}/` : '/loss/'),
+        method: ({ props: { lossServerId } }) => (lossServerId ? methods.PATCH : methods.POST),
+        body: ({ params: { body } = { body: {} } }) => body,
+        onSuccess: ({ props, response }) => {
+            const {
+                onLossChange,
+                requests: {
+                    incidentPatchRequest,
+                },
+            } = props;
+
+            if (onLossChange) {
+                onLossChange(response);
+            }
+            incidentPatchRequest.do({
+                body: {
+                    loss: response.id,
+                },
+            });
+        },
+    },
+    incidentPatchRequest: {
+        url: ({ props: { incidentServerId } }) => `/incident/${incidentServerId}/`,
+        method: methods.PATCH,
+        body: ({ params: { body } = { body: {} } }) => body,
+        onSuccess: () => {
+            // TODO: patch incident to incident list
+        },
+    },
+};
+
+class AddLoss extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        const {
+            requests: {
+                lossGetRequest,
+            },
+        } = this.props;
+
+        lossGetRequest.setDefaultParams({
+            onLossGet: this.handleLossGet,
+        });
+
+        this.state = {
+            faramValues: {},
+            faramErrors: {},
+            pristine: true,
+        };
+    }
+
+    private static schema = {
+        fields: {
+            description: [requiredCondition],
+            estimatedLoss: [],
+        },
+    };
+
+    private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
+        this.setState({
+            faramValues,
+            faramErrors,
+            pristine: false,
+        });
+    }
+
+    private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
+        this.setState({ faramErrors });
+    }
+
+    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+        const {
+            requests: {
+                lossEditRequest,
+            },
+        } = this.props;
+
+        lossEditRequest.do({ body: faramValues });
+    }
+
+    private handleLossGet = (loss: FaramValues) => {
+        this.setState({
+            faramValues: {
+                estimatedLoss: loss.estimatedLoss,
+                description: loss.description,
+            },
+        });
+    }
+
+    public render() {
+        const {
+            className,
+            requests: {
+                lossEditRequest: {
+                    pending: lossEditPending,
+                },
+                lossGetRequest: {
+                    pending: lossGetPending,
+                },
+            },
+        } = this.props;
+
+        const {
+            faramValues,
+            faramErrors,
+            pristine,
+        } = this.state;
+
+        const pending = lossEditPending || lossGetPending;
+
+        return (
+            <Faram
+                className={_cs(className, styles.lossForm)}
+                onChange={this.handleFaramChange}
+                onValidationFailure={this.handleFaramValidationFailure}
+                onValidationSuccess={this.handleFaramValidationSuccess}
+                schema={AddLoss.schema}
+                value={faramValues}
+                error={faramErrors}
+            >
+                {pending && <LoadingAnimation />}
+                <TextArea
+                    faramElementName="description"
+                    label="Description"
+                />
+                <NumberInput
+                    faramElementName="estimatedLoss"
+                    label="Estimated loss"
+                />
+                <div className={styles.footer}>
+                    <PrimaryButton
+                        type="submit"
+                        disabled={pristine}
+                    >
+                        Submit
+                    </PrimaryButton>
+                </div>
+            </Faram>
+        );
+    }
+}
+
+export default compose(createRequestClient(requests))(AddLoss);
