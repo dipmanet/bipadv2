@@ -8,6 +8,7 @@ import { LayerWithGroup } from '#store/atom/page/types';
 import { OpacityElement } from '#types';
 import RiskDescription from '#components/RiskDescription';
 import OpacityInput from '#components/OpacityInput';
+import { getRasterLegendURL } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -69,6 +70,7 @@ export default class LandslideItem extends React.PureComponent<Props> {
                             onChange={onOpacityChange}
                             inputKey={layerKey}
                         />
+                        <img src={getRasterLegendURL(layer)} alt={`legend-for-${layer.title}`} />
                     </div>
                 )}
             </div>
