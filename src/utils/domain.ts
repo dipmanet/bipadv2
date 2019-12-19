@@ -19,7 +19,7 @@ import {
     District,
     Resource,
     Layer,
-    LayerGroup,
+    LayerWithGroup,
 } from '#store/atom/page/types';
 import { groupList } from '#utils/common';
 
@@ -683,7 +683,7 @@ export function getProvinceFilter(selectedProvinceId: number | undefined) {
     return undefined;
 }
 
-export function getRasterTile(layer: Layer | LayerGroup) {
+export function getRasterTile(layer: Layer | LayerWithGroup) {
     const tile = [
         'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
         '&version=1.1.1',
@@ -700,4 +700,10 @@ export function getRasterTile(layer: Layer | LayerGroup) {
     ].join('');
 
     return tile;
+}
+export function getRasterLegendURL(layer: Layer | LayerWithGroup) {
+    const { layername } = layer;
+    const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
+
+    return url;
 }

@@ -6,12 +6,15 @@ import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
 import { LayerWithGroup } from '#store/atom/page/types';
-import { getRasterTile } from '#utils/domain';
 import { OpacityElement } from '#types';
 import ExpandableView from '#components/ExpandableView';
 import RadioInput from '#components/RadioInput';
 import RiskDescription from '#components/RiskDescription';
 import OpacityInput from '#components/OpacityInput';
+import {
+    getRasterTile,
+    getRasterLegendURL,
+} from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -98,6 +101,12 @@ export default class Group extends React.PureComponent<Props, State> {
                                 <OpacityInput
                                     inputKey={selectedLayer.id}
                                     onChange={this.handleOpacityInputChange}
+                                />
+                            )}
+                            {selectedLayer && (
+                                <img
+                                    src={getRasterLegendURL(selectedLayer)}
+                                    alt={`legend-for-${selectedLayer.title}`}
                                 />
                             )}
                             <RadioInput
