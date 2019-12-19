@@ -171,7 +171,8 @@ const schemaList: Schema[] = [
             severity: { type: 'string' },
             source: { type: 'string', required: true },
             streetAddress: { type: 'string' },
-            title: { type: 'string', required: true },
+            // FIXME: Title is required
+            title: { type: 'string', required: false },
             updatedBy: { type: 'number' },
             verified: { type: 'boolean' },
             wards: { type: 'array.unknown' }, // FIXME: why is this sent

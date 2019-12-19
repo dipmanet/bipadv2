@@ -1,9 +1,9 @@
+@import '~base-scss/utils';
+
 .incident-item {
     display: flex;
-    height: 100px;
+    height: 120px;
     overflow: hidden;
-    text-decoration: none;
-    color: inherit;
 
     &:hover {
         background-color: var(--color-background-hover);
@@ -75,6 +75,19 @@
 
             >* {
                 padding-right: var(--spacing-medium);
+            }
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+
+            .button {
+                margin-right: var(--spacing-small);
+            }
+
+            .link {
+                @extend %transparent-button-like-link;
             }
         }
     }

@@ -7,9 +7,9 @@ import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
-import NumberInput from '#rsci/NumberInput';
 import TextArea from '#rsci/TextArea';
 import Checkbox from '#rsci/Checkbox';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import LocationInput from '#components/LocationInput';
 
@@ -25,6 +25,7 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
+    pending?: boolean;
 }
 
 interface PropsFromState {
@@ -51,15 +52,12 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             hazardList,
             sourceList,
             className,
+            pending,
         } = this.props;
 
         return (
             <div className={_cs(styles.general, className)}>
-                <TextArea
-                    className={styles.input}
-                    faramElementName="title"
-                    label="Title"
-                />
+                {pending && <LoadingAnimation />}
                 <TextArea
                     className={styles.input}
                     faramElementName="description"
@@ -133,16 +131,6 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                         faramElementName="needFollowup"
                     />
                 </div>
-                <TextArea
-                    className={styles.input}
-                    faramElementName="lossDescription"
-                    label="Loss Description"
-                />
-                <NumberInput
-                    className={styles.input}
-                    faramElementName="estimatedLoss"
-                    label="Estimated loss"
-                />
                 <TextInput
                     className={styles.input}
                     faramElementName="streetAddress"
