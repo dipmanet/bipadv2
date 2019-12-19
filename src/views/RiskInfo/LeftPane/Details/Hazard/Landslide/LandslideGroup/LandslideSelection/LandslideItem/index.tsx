@@ -6,6 +6,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import { LayerWithGroup } from '#store/atom/page/types';
 import { OpacityElement } from '#types';
+import MapLayerLegend from '#components/MapLayerLegend';
 import RiskDescription from '#components/RiskDescription';
 import OpacityInput from '#components/OpacityInput';
 import { getRasterLegendURL } from '#utils/domain';
@@ -70,7 +71,10 @@ export default class LandslideItem extends React.PureComponent<Props> {
                             onChange={onOpacityChange}
                             inputKey={layerKey}
                         />
-                        <img src={getRasterLegendURL(layer)} alt={`legend-for-${layer.title}`} />
+                        <MapLayerLegend
+                            legendSrc={getRasterLegendURL(layer)}
+                            layerTitle={layer.title}
+                        />
                     </div>
                 )}
             </div>

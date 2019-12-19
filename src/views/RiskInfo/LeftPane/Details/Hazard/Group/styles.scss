@@ -2,6 +2,11 @@
     background-color: var(--color-foreground-alt);
     padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
+    .legend-container {
+        padding: var(--spacing-medium);
+        border: 1px solid red;
+    }
+
     >.header {
         padding: var(--spacing-small) 0;
 

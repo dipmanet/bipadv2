@@ -27,6 +27,7 @@ import PageContext from '#components/PageContext';
 import LayerSwitch from '#components/LayerSwitch';
 import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AppState } from '#store/types';
 
 import {
@@ -123,11 +124,17 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 const domain = process.env.REACT_APP_DOMAIN;
 
+interface LayerDetail {
+    id: string;
+    title: string;
+}
+
 interface State {
     leftPaneContent?: React.ElementType;
     leftPaneClassName?: string;
     hideMap?: boolean;
     activeRouteDetails: {};
+    activeLayers: LayerDetail[];
 }
 
 interface BoundingClientRect {
@@ -229,6 +236,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             leftPaneContent: undefined,
             leftPaneClassName: undefined,
             activeRouteDetails: {},
+            activeLayers: [],
         };
     }
 
@@ -377,6 +385,75 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ hideMap: false });
     }
 
+    private addLayer = (layer) => {
+        this.setState(({ activeLayers }) => {
+            if (activeLayers.findIndex(d => d.id === layer.id) === -1) {
+                return ({
+                    activeLayers: [
+                        ...activeLayers,
+                        layer,
+                    ],
+                });
+            }
+
+            return { activeLayers };
+        });
+    }
+
+    private removeLayer = (layerId) => {
+        this.setState(({ activeLayers }) => {
+            const layerIndex = activeLayers.findIndex(d => d.id === layerId);
+
+            if (layerIndex !== -1) {
+                const newActiveLayers = [...activeLayers];
+                newActiveLayers.splice(layerIndex, 1);
+
+                return { activeLayers: newActiveLayers };
+            }
+
+            return { activeLayers };
+        });
+    }
+
+    private setLayers = (activeLayers) => {
+        this.setState({ activeLayers });
+    }
+
+    private addLayers = (layerList) => {
+        this.setState(({ activeLayers }) => {
+            const newActiveLayerList = [...activeLayers];
+
+            layerList.forEach((layer) => {
+                if (newActiveLayerList.findIndex(d => d.id === layer.id) === -1) {
+                    newActiveLayerList.push(layer);
+                }
+            });
+
+            return { activeLayers: newActiveLayerList };
+        });
+    }
+
+    private removeLayers = (layerIdList) => {
+        this.setState(({ activeLayers }) => {
+            const newActiveLayerList = [...activeLayers];
+
+            layerIdList.forEach((layerId) => {
+                const layerIndex = newActiveLayerList.findIndex(d => d.id === layerId);
+
+                if (layerIndex !== -1) {
+                    newActiveLayerList.splice(layerIndex, 1);
+                }
+            });
+
+            return ({ activeLayers: newActiveLayerList });
+        });
+    }
+
+    private getLayerOrder = memoize(activeLayers => (
+        activeLayers.map(d => d.id)
+    ))
+
+
     public render() {
         const { mapStyle } = this.props;
 
@@ -385,6 +462,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             leftPaneClassName,
             hideMap,
             activeRouteDetails,
+            activeLayers,
         } = this.state;
 
         const pageProps = {
@@ -395,45 +473,68 @@ class Multiplexer extends React.PureComponent<Props, State> {
             showMap: this.showMap,
         };
 
+        const riskInfoLayerProps = {
+            addLayer: this.addLayer,
+            removeLayer: this.removeLayer,
+            addLayers: this.addLayers,
+            removeLayers: this.removeLayers,
+            setLayers: this.setLayers,
+            activeLayers,
+        };
+
+
         return (
             <PageContext.Provider value={pageProps}>
                 <div className={styles.multiplexer}>
                     <div className={_cs(styles.content, 'bipad-main-content')}>
-                        <Map
-                            mapStyle={mapStyle}
-                            fitBoundsDuration={200}
-                            minZoom={5}
-                            logoPosition="top-left"
+                        <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
+                            <Map
+                                mapStyle={mapStyle}
+                                fitBoundsDuration={200}
+                                minZoom={5}
+                                logoPosition="top-left"
 
-                            showScaleControl
-                            scaleControlPosition="bottom-right"
+                                showScaleControl
+                                scaleControlPosition="bottom-right"
 
-                            showNavControl
-                            navControlPosition="bottom-right"
-                        >
-                            { !hideMap && (
-                                <div
+                                showNavControl
+                                navControlPosition="bottom-right"
+                                layerOrder={this.getLayerOrder(activeLayers)}
+                            >
+                                { !hideMap && (
+                                    <div
+                                        className={_cs(
+                                            styles.mapActions,
+                                            leftPaneContent && styles.withLeftPane,
+                                        )}
+                                    >
+                                        <MapDownloadButton
+                                            transparent
+                                            title="Download current map"
+                                            iconName="download"
+                                        />
+                                        <LayerSwitch />
+                                    </div>
+                                )}
+                                { leftPaneContent && (
+                                    <aside
+                                        className={_cs(
+                                            styles.leftPaneContainer,
+                                            leftPaneClassName,
+                                        )}
+                                    >
+                                        { leftPaneContent }
+                                    </aside>
+                                )}
+                                <MapContainer
                                     className={_cs(
-                                        styles.mapActions,
-                                        leftPaneContent && styles.withLeftPane,
+                                        styles.map,
+                                        hideMap && styles.hidden,
                                     )}
-                                >
-                                    <MapDownloadButton
-                                        transparent
-                                        title="Download current map"
-                                        iconName="download"
-                                    />
-                                    <LayerSwitch />
-                                </div>
-                            )}
-                            { leftPaneContent && (
-                                <aside className={_cs(styles.leftPaneContainer, leftPaneClassName)}>
-                                    { leftPaneContent }
-                                </aside>
-                            )}
-                            <MapContainer className={_cs(styles.map, hideMap && styles.hidden)} />
-                            {this.renderRoutes()}
-                        </Map>
+                                />
+                                {this.renderRoutes()}
+                            </Map>
+                        </RiskInfoLayerContext.Provider>
                     </div>
                     <Navbar className={styles.navbar} />
                 </div>

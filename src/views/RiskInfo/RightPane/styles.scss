@@ -1,4 +1,12 @@
 .right-pane {
     background-color: var(--color-foreground);
     padding: var(--spacing-medium);
+
+    .region-select-input {
+        margin-bottom: var(--spacing-medium);
+    }
+
+    .stepwise-region-select-input {
+        flex-direction: column;
+    }
 }

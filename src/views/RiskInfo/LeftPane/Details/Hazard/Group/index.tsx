@@ -5,10 +5,12 @@ import DangerButton from '#rsca/Button/DangerButton';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { LayerWithGroup } from '#store/atom/page/types';
 import { OpacityElement } from '#types';
 import ExpandableView from '#components/ExpandableView';
 import RadioInput from '#components/RadioInput';
+import MapLayerLegend from '#components/MapLayerLegend';
 import RiskDescription from '#components/RiskDescription';
 import OpacityInput from '#components/OpacityInput';
 import {
@@ -35,7 +37,7 @@ interface State {
 const labelSelector = (d: LayerWithGroup) => d.title;
 const keySelector = (d: LayerWithGroup) => d.id;
 
-export default class Group extends React.PureComponent<Props, State> {
+class Group extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -46,7 +48,21 @@ export default class Group extends React.PureComponent<Props, State> {
         };
     }
 
+    public componentWillUnmount() {
+        const { selectedLayer } = this.state;
+
+        if (selectedLayer) {
+            this.context.removeLayer(`layer-${selectedLayer.id}`);
+        }
+    }
+
     private handleLayerUnselect = () => {
+        const { selectedLayer } = this.state;
+
+        if (selectedLayer) {
+            this.context.removeLayer(`layer-${selectedLayer.id}`);
+        }
+
         this.setState({
             selectedLayer: undefined,
         });
@@ -54,12 +70,23 @@ export default class Group extends React.PureComponent<Props, State> {
 
     private onChange = (layerId: number) => {
         const { layers } = this.props;
+
         const layer = layers.find(l => l.id === layerId);
         if (layer) {
+            const { selectedLayer } = this.state;
+            if (selectedLayer) {
+                this.context.removeLayer(`layer-${selectedLayer.id}`);
+            }
+
             const rasterTile = getRasterTile(layer);
             this.setState({
                 selectedLayer: layer,
                 rasterTile: [rasterTile],
+            });
+
+            this.context.addLayer({
+                title: `${layer.group.title} /  ${layer.title}`,
+                id: `layer-${layer.id}`,
             });
         }
     }
@@ -97,18 +124,6 @@ export default class Group extends React.PureComponent<Props, State> {
                                 className={styles.description}
                                 text={description}
                             />
-                            { selectedLayer && (
-                                <OpacityInput
-                                    inputKey={selectedLayer.id}
-                                    onChange={this.handleOpacityInputChange}
-                                />
-                            )}
-                            {selectedLayer && (
-                                <img
-                                    src={getRasterLegendURL(selectedLayer)}
-                                    alt={`legend-for-${selectedLayer.title}`}
-                                />
-                            )}
                             <RadioInput
                                 title={(
                                     <header className={styles.header}>
@@ -133,17 +148,29 @@ export default class Group extends React.PureComponent<Props, State> {
                                 onChange={this.onChange}
                                 value={selectedLayer && selectedLayer.id}
                             />
+                            { selectedLayer && (
+                                <OpacityInput
+                                    inputKey={selectedLayer.id}
+                                    onChange={this.handleOpacityInputChange}
+                                />
+                            )}
+                            {selectedLayer && (
+                                <MapLayerLegend
+                                    legendSrc={getRasterLegendURL(selectedLayer)}
+                                    layerTitle={selectedLayer.title}
+                                />
+                            )}
                         </>
                     )}
                 />
                 {selectedLayer && (
                     <MapSource
                         key={selectedLayer.id}
-                        sourceKey={`flood-source-${selectedLayer && selectedLayer.id}`}
+                        sourceKey={`flood-source-${selectedLayer.id}`}
                         rasterTiles={rasterTile}
                     >
                         <MapLayer
-                            layerKey={`layer-${selectedLayer && selectedLayer.id}`}
+                            layerKey={`layer-${selectedLayer.id}`}
                             type="raster"
                             paint={{
                                 'raster-opacity': layerOpacity,
@@ -155,3 +182,7 @@ export default class Group extends React.PureComponent<Props, State> {
         );
     }
 }
+
+Group.contextType = RiskInfoLayerContext;
+
+export default Group;

@@ -20,7 +20,10 @@ class RiskDescription extends React.PureComponent<Props> {
         }
 
         return (
-            <div className={_cs(className, styles.riskDescription)}>
+            <div
+                title={text}
+                className={_cs(className, styles.riskDescription)}
+            >
                 { text }
             </div>
         );

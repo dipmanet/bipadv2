@@ -27,7 +27,7 @@ interface State {
 class Hazard extends React.PureComponent<Props, State> {
     private getGroup = (layerList: LayerWithGroup[], hazard: number) => {
         const layers = layerList.filter(layer => layer.hazard === hazard);
-        const groups = unique(layers.map(layer => layer.group), group => group.id) || [];
+        const groups = unique(layers.map(layer => layer.group || {}), group => group.id) || [];
 
         const groupWithLayers = groups.map((group) => {
             const { id } = group;

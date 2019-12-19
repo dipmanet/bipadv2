@@ -199,7 +199,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
         const { onChange } = this.props;
         onChange({
-            adminLevel: 1,
+            adminLevel: selectedProvinceId ? 1 : undefined,
             geoarea: selectedProvinceId,
         });
     }
@@ -211,10 +211,11 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedWardId: undefined,
         });
 
+        const { selectedProvinceId } = this.state;
         const { onChange } = this.props;
         onChange({
-            adminLevel: 2,
-            geoarea: selectedDistrictId,
+            adminLevel: selectedDistrictId ? 2 : 1,
+            geoarea: selectedDistrictId || selectedProvinceId,
         });
     }
 
@@ -224,10 +225,11 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedWardId: undefined,
         });
 
+        const { selectedDistrictId } = this.state;
         const { onChange } = this.props;
         onChange({
-            adminLevel: 3,
-            geoarea: selectedMunicipalityId,
+            adminLevel: selectedMunicipalityId ? 3 : 2,
+            geoarea: selectedMunicipalityId || selectedDistrictId,
         });
     }
 

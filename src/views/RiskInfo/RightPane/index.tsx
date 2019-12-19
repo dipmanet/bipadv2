@@ -9,6 +9,7 @@ import { Region } from '#store/atom/page/types';
 import { filtersSelectorDP } from '#selectors';
 
 import RegionSelectInput from '#components/RegionSelectInput';
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import styles from './styles.scss';
 
@@ -79,11 +80,10 @@ class RiskInfoRightPane extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.rightPane, className)}>
-                <RegionSelectInput
-                    className={styles.regionSelectInput}
+                <StepwiseRegionSelectInput
+                    className={styles.stepwiseRegionSelectInput}
                     value={faramValues.region}
                     onChange={this.handleRegionChange}
-                    showHintAndError={false}
                 />
             </div>
         );
