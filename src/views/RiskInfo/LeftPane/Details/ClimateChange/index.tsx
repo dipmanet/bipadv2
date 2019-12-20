@@ -369,7 +369,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
     private generatePaint = memoize((color: (string|number)[]) => {
         if (color.length <= 0) {
             return {
-                'fill-color': 'red',
+                'fill-color': '#ccebc5',
             };
         }
         return {
