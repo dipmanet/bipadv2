@@ -42,3 +42,22 @@ export interface Region {
     adminLevel: number;
     geoarea: number;
 }
+
+export interface VulnerabilityItem {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    data: VulnerabilityIndicator;
+    municipality: number;
+}
+
+export interface VulnerabilityIndicator {
+    [key: string]: number;
+}
+
+export interface MapState {
+    id: number;
+    value: {
+        value: number;
+    };
+}

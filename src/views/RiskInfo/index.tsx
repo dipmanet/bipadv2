@@ -65,7 +65,10 @@ class RiskInfo extends React.PureComponent<Props, State> {
 
         return (
             <>
-                { activeView !== 'climate-change' && <Map /> }
+                {(
+                    activeView !== 'climate-change'
+                    && activeView !== 'vulnerability'
+                ) && <Map /> }
                 <Page
                     leftContentClassName={styles.leftContainer}
                     leftContent={(
