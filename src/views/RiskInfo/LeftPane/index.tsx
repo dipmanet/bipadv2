@@ -18,7 +18,7 @@ import Loading from '#components/Loading';
 
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
-import { Layer, LayerMap } from '#store/atom/page/types';
+import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
 import Overview from './Overview';
 import Details from './Details';
 
@@ -30,11 +30,13 @@ interface OwnProps {
 }
 
 interface Params {
-    setLayerMap: (layerMap: LayerMap) => void;
+    setLayerMap?: (layerMap: LayerMap) => void;
+    setLayerGroup?: (layerGroupList: LayerGroup[]) => void;
 }
 
 interface State {
     layerMap: LayerMap | {};
+    layerGroupList: LayerGroup[];
     activeAttribute: AttributeKey | undefined;
 }
 
@@ -45,10 +47,21 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
         url: '/layer/?expand=group',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response, params: { setLayerMap } = { setLayerList: undefined } }) => {
+        onSuccess: ({ response, params: { setLayerMap } = { setLayerMap: undefined } }) => {
             const { results } = response as MultiResponse<Layer>;
             if (setLayerMap) {
                 setLayerMap(listToGroupList(results, d => d.category));
+            }
+        },
+    },
+    layerGroupGetRequest: {
+        url: '/layer-group/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params: { setLayerGroup } = { setLayerGroup: undefined } }) => {
+            const { results } = response as MultiResponse<LayerGroup>;
+            if (setLayerGroup) {
+                setLayerGroup(results);
             }
         },
     },
@@ -69,12 +82,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 
         this.state = {
             layerMap: {},
+            layerGroupList: [],
             activeAttribute: 'hazard',
         };
 
         const {
             requests: {
                 layersGetRequest,
+                layerGroupGetRequest,
             },
         } = this.props;
 
@@ -82,6 +97,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
             setLayerMap: (layerMap: LayerMap) => {
                 this.setState({
                     layerMap,
+                });
+            },
+        });
+
+        layerGroupGetRequest.setDefaultParams({
+            setLayerGroup: (layerGroupList: LayerGroup[]) => {
+                this.setState({
+                    layerGroupList,
                 });
             },
         });
@@ -117,6 +140,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 
         const {
             layerMap,
+            layerGroupList,
             activeAttribute,
         } = this.state;
 
@@ -160,6 +184,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             className={styles.detail}
                             attribute={activeAttribute}
                             layerMap={layerMap}
+                            layerGroupList={layerGroupList}
                         />
                     )}
                 </div>

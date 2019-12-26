@@ -8,11 +8,15 @@ import {
 
 import ListView from '#rscv/List/ListView';
 
-import { LayerWithGroup } from '#store/atom/page/types';
+import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
 
 import Group from '../Hazard/Group';
 
 import styles from './styles.scss';
+
+interface LayerGroupTreeElement {
+    [key: string]: string | LayerGroup[];
+}
 
 interface CapacityAndResourceGroup {
     id: number;
@@ -24,6 +28,7 @@ interface CapacityAndResourceGroup {
 interface Props {
     className?: string;
     layerList: LayerWithGroup[];
+    layerGroupList: LayerGroup[];
 }
 
 interface State {
@@ -47,13 +52,38 @@ export default class CapacityAndResources extends React.PureComponent<Props, Sta
 
     private getRendererParams = (_: number, group: CapacityAndResourceGroup) => group;
 
+    private getTreeLayout = (layerList: LayerWithGroup[], layerGroupList: LayerGroup[]) => {
+        const tree = [];
+        const lookup = {};
+
+        const l = layerList.map(layer => ({ ...layer, parent: layer.group.id }));
+        const allLayers = [...l, ...layerGroupList];
+
+        allLayers.forEach((group) => {
+            lookup[group.id] = group;
+            lookup[group.id].children = [];
+        });
+
+        allLayers.forEach((group) => {
+            if (group.parent) {
+                lookup[group.parent].children.push(group);
+            } else {
+                tree.push(group);
+            }
+        });
+
+        return tree;
+    }
+
     public render() {
         const {
+            layerGroupList,
             layerList,
             className,
         } = this.props;
 
         const groups = this.getGroupedLayers(layerList);
+        const groupsWithParent = this.getTreeLayout(layerList, layerGroupList);
 
         return (
             <div className={_cs(styles.capacityAndResources, className)}>

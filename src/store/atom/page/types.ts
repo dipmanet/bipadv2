@@ -118,6 +118,7 @@ export interface Layer extends Field {
 
 export interface LayerGroup extends Field {
     description: string;
+    parent: number | null;
 }
 
 export interface LayerMap {

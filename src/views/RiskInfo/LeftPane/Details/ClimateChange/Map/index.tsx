@@ -1,57 +1,67 @@
 import React from 'react';
 import memoize from 'memoize-one';
+import { extent } from 'd3-array';
+import { mean, isNotDefined, isDefined } from '@togglecorp/fujs';
 
-import {
-    District,
-} from '#store/atom/page/types';
-
+import { NapValue, MapState } from '#types';
 import ChoroplethMap from '#components/ChoroplethMap';
-
-import {
-    getMapPaddings,
-} from '#constants';
 
 import styles from './styles.scss';
 
+interface NapData {
+    district: number;
+    value: NapValue[];
+}
 interface Props {
-    districts: District[];
+    data: NapData[];
+    measurementType: string;
 }
 
 interface State {
 }
 
-interface GeoArea {
-    id: number;
-}
+const tempColors: string[] = [
+    '#fef0d9',
+    '#fdd49e',
+    '#fdbb84',
+    '#fc8d59',
+    '#ef6548',
+    '#d7301f',
+    '#990000',
+];
 
-const colorGrade = [
-    '#31a354',
-    '#93ce82',
-    '#ddf1b3',
-    '#fef6cb',
-    '#f2b294',
-    '#d7595d',
-    '#e31a1c',
-    '#bd0026',
+const rainColors: string[] = [
+    '#f0f9e8',
+    '#ccebc5',
+    '#a8ddb5',
+    '#7bccc4',
+    '#4eb3d3',
+    '#2b8cbe',
+    '#08589e',
 ];
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
-    private generateMapState = memoize((geoareas: GeoArea[]) => {
-        const value = geoareas.map(geoarea => ({
-            id: geoarea.id,
+    private generateMapState = memoize((data: NapData[]) => {
+        const mapState = data.map(item => ({
+            id: item.district,
             value: {
-                count: Math.round(Math.random() * 10),
+                value: mean(item.value.map(v => v.value).filter(isDefined)),
             },
         }));
 
-        return value;
+        return mapState;
     });
 
     private generateColor = memoize(
-        (maxValue: number, minValue: number, colorMapping: string[]) => {
+        (maxValue: number, minValue: number, measurementType: string) => {
             const newColor: (string | number)[] = [];
+            const colorMapping = measurementType === 'temperature' ? tempColors : rainColors;
             const { length } = colorMapping;
             const range = maxValue - minValue;
+            if (isNotDefined(maxValue) || isNotDefined(minValue) || maxValue === minValue) {
+                return [];
+            }
+
             colorMapping.forEach((color, i) => {
                 const val = minValue + ((i * range) / (length - 1));
                 newColor.push(val);
@@ -60,28 +70,36 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
 
             return newColor;
         },
-    );
+    )
 
-    private generatePaint = memoize(color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'count'],
-            ...color,
-        ],
-    }))
+    private generatePaint = memoize((color: (string | number)[]) => {
+        if (color.length <= 0) {
+            return {
+                'fill-color': '#ccebc5',
+            };
+        }
 
+        return ({
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['feature-state', 'value'],
+                ...color,
+            ],
+        });
+    })
 
     public render() {
         const {
-            districts,
+            data,
+            measurementType,
         } = this.props;
 
-        const mapState = this.generateMapState(districts);
+        const mapState = this.generateMapState(data);
+        const [min, max] = extent(mapState, (d: MapState) => d.value.value);
 
-        const color = this.generateColor(10, 0, colorGrade);
+        const color = this.generateColor(max, min, measurementType);
         const colorPaint = this.generatePaint(color);
-
         return (
             <ChoroplethMap
                 paint={colorPaint}

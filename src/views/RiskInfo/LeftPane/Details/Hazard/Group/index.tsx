@@ -5,8 +5,10 @@ import DangerButton from '#rsca/Button/DangerButton';
 import MapLayer from '#rscz/Map/MapLayer';
 import MapSource from '#rscz/Map/MapSource';
 
+
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import { LayerWithGroup } from '#store/atom/page/types';
+import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
+
 import { OpacityElement } from '#types';
 import ExpandableView from '#components/ExpandableView';
 import RadioInput from '#components/RadioInput';
@@ -26,6 +28,7 @@ interface Props {
     description: string;
     layers: LayerWithGroup[];
     className: string;
+    layerGroupList: LayerGroup[];
 }
 
 interface State {
@@ -101,6 +104,7 @@ class Group extends React.PureComponent<Props, State> {
             description,
             layers,
             className,
+            layerGroupList,
         } = this.props;
 
         const {

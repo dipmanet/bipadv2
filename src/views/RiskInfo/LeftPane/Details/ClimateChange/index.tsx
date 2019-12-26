@@ -1,14 +1,11 @@
 import React from 'react';
-import memoize from 'memoize-one';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs, mean, isDefined, isNotDefined } from '@togglecorp/fujs';
-
-import { extent } from 'd3-array';
+import { _cs } from '@togglecorp/fujs';
 import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
-import ChoroplethMap from '#components/ChoroplethMap';
+import Map from './Map';
 
 import {
     Province,
@@ -17,6 +14,7 @@ import {
     Ward,
 } from '#store/atom/page/types';
 import { MultiResponse } from '#store/atom/response/types';
+import { NapData, NapValue } from '#types';
 
 import {
     createRequestClient,
@@ -55,8 +53,8 @@ interface PropsFromDispatch {
 }
 
 interface Params {
-    setNapTemperature?: (data: NapTemperatureData[]) => void;
-    setNapPrecipitation?: (data: NapPrecipitationData[]) => void;
+    setNapTemperature?: (data: NapData[]) => void;
+    setNapPrecipitation?: (data: NapData[]) => void;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -64,14 +62,10 @@ type Props = NewProps<ReduxProps, Params>;
 
 interface State {
     scenario: string;
-    temperature: NapTemperatureData[];
-    precipitation: NapPrecipitationData[];
+    temperature: NapData[];
+    precipitation: NapData[];
     timePeriodKey: string;
     measurementType: string;
-}
-
-interface Values {
-    [key: string]: number | undefined | null;
 }
 
 interface MapState {
@@ -79,28 +73,6 @@ interface MapState {
     value: {
         value: number;
     };
-}
-
-interface NapTemperatureData {
-    id: number;
-    createdOn: string;
-    modifiedOn: string;
-    district: number;
-    temperatureRcp45: Values;
-    sdRcp45: Values;
-    temperatureRcp85: Values;
-    sdRcp85: Values;
-}
-
-interface NapPrecipitationData {
-    id: number;
-    createdOn: string;
-    modifiedOn: string;
-    district: number;
-    precipitationRcp45: Values;
-    sdRcp45: Values;
-    precipitationRcp85: Values;
-    sdRcp85: Values;
 }
 
 interface TimePeriod {
@@ -129,28 +101,8 @@ const timePeriodOptions: TimePeriod[] = [
 ];
 
 const scenarioOptions = [
-    { key: 'rcp-45', label: 'RCP 4.5' },
-    { key: 'rcp-85', label: 'RCP 8.5' },
-];
-
-const tempColors: string[] = [
-    '#fef0d9',
-    '#fdd49e',
-    '#fdbb84',
-    '#fc8d59',
-    '#ef6548',
-    '#d7301f',
-    '#990000',
-];
-
-const rainColors: string[] = [
-    '#f0f9e8',
-    '#ccebc5',
-    '#a8ddb5',
-    '#7bccc4',
-    '#4eb3d3',
-    '#2b8cbe',
-    '#08589e',
+    { key: 'rcp45', label: 'RCP 4.5' },
+    { key: 'rcp85', label: 'RCP 8.5' },
 ];
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -162,7 +114,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             response,
             params: { setNapTemperature } = { setNapTemperature: undefined },
         }) => {
-            const { results } = response as MultiResponse<NapTemperatureData>;
+            const { results } = response as MultiResponse<NapData>;
             if (setNapTemperature) {
                 setNapTemperature(results);
             }
@@ -176,7 +128,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             response,
             params: { setNapPrecipitation } = { setNapPrecipitation: undefined },
         }) => {
-            const { results } = response as MultiResponse<NapPrecipitationData>;
+            const { results } = response as MultiResponse<NapData>;
             if (setNapPrecipitation) {
                 setNapPrecipitation(results);
             }
@@ -191,7 +143,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         this.state = {
             temperature: [],
             precipitation: [],
-            scenario: 'rcp-45',
+            scenario: 'rcp45',
             timePeriodKey: 'reference-period',
             measurementType: 'temperature',
         };
@@ -204,7 +156,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         } = this.props;
 
         napTemperatureGetRequest.setDefaultParams({
-            setNapTemperature: (data: NapTemperatureData[]) => {
+            setNapTemperature: (data: NapData[]) => {
                 this.setState({
                     temperature: data,
                 });
@@ -212,7 +164,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         });
 
         napPrecipitationGetRequest.setDefaultParams({
-            setNapPrecipitation: (data: NapPrecipitationData[]) => {
+            setNapPrecipitation: (data: NapData[]) => {
                 this.setState({
                     precipitation: data,
                 });
@@ -238,153 +190,40 @@ class ClimateChange extends React.PureComponent<Props, State> {
         });
     }
 
-    private getFilteredTemperature = (temperature: NapTemperatureData[], timePeriodKey: string) => {
-        const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
-                        || timePeriodOptions[0];
-        const { startYear, endYear } = timePeriod;
-
-        const data = temperature.map((temp) => {
-            const { district, temperatureRcp45, sdRcp45, temperatureRcp85, sdRcp85 } = temp;
-            const filter = (key: string) => (+key >= startYear && +key <= endYear);
-            const filteredTemperatureRcp45 = Object.keys(temperatureRcp45)
-                .filter(filter)
-                .map(value => temperatureRcp45[value]);
-            const filteredsdRcp45 = Object.keys(sdRcp45)
-                .filter(filter)
-                .map(value => sdRcp45[value]);
-            const filteredTempereatureRcp85 = Object.keys(temperatureRcp85)
-                .filter(filter)
-                .map(value => temperatureRcp85[value]);
-            const filteredsdRcp85 = Object.keys(sdRcp85)
-                .filter(filter)
-                .map(value => sdRcp85[value]);
-            return ({
-                district,
-                temperatureRcp45: filteredTemperatureRcp45,
-                sdRcp45: filteredsdRcp45,
-                temperatureRcp85: filteredTempereatureRcp85,
-                sdRcp85: filteredsdRcp85,
-            });
-        });
-
-        return data;
-    }
-
-    private getFilteredPrecipitation = (
-        precipitation: NapPrecipitationData[],
+    private getFilteredData = (
+        scenario: string,
+        measurementType: string,
         timePeriodKey: string,
     ) => {
+        const {
+            temperature,
+            precipitation,
+        } = this.state;
+
+        const napData = measurementType === 'tempereature' ? temperature : precipitation;
+
         const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
-                        || timePeriodOptions[0];
+                            || timePeriodOptions[0];
         const { startYear, endYear } = timePeriod;
 
-        const data = precipitation.map((rain) => {
-            const { district, precipitationRcp45, sdRcp45, precipitationRcp85, sdRcp85 } = rain;
-            const filter = (key: string) => (+key >= startYear && +key <= endYear);
-            const filteredPrecipitationeRcp45 = Object.keys(precipitationRcp45)
-                .filter(filter)
-                .map(value => precipitationRcp45[value]);
-            const filteredsdRcp45 = Object.keys(sdRcp45)
-                .filter(filter)
-                .map(value => sdRcp45[value]);
-            const filteredPrecipitationRcp85 = Object.keys(precipitationRcp85)
-                .filter(filter)
-                .map(value => precipitationRcp85[value]);
-            const filteredsdRcp85 = Object.keys(sdRcp85)
-                .filter(filter)
-                .map(value => sdRcp85[value]);
+        const filter = ({ year }: NapValue) => (year >= startYear && year <= endYear);
+
+        const filteredData = napData.map((data) => {
+            const { district, rcp45, rcp85 } = data;
+            const item = scenario === 'rcp45' ? rcp45 : rcp85;
+            const filteredItem = item.filter(filter);
 
             return ({
                 district,
-                precipitationRcp45: filteredPrecipitationeRcp45,
-                sdRcp45: filteredsdRcp45,
-                precipitationRcp85: filteredPrecipitationRcp85,
-                sdRcp85: filteredsdRcp85,
+                value: filteredItem,
             });
         });
-        return data;
-    };
 
-    private getTemperatureMapState = (
-        temperature: NapTemperatureData[],
-        scenario: string,
-        timePeriodKey: string,
-    ) => {
-        const filteredTemeperature = this.getFilteredTemperature(temperature, timePeriodKey);
-        const values = filteredTemeperature.map((temp) => {
-            const { district, temperatureRcp45, temperatureRcp85 } = temp;
-            const value = scenario === 'rcp-45' ? temperatureRcp45 : temperatureRcp85;
-            const avgValue = mean(value.filter(isDefined));
-
-            return {
-                id: district,
-                value: {
-                    value: avgValue,
-                },
-            };
-        });
-
-        return values;
+        return filteredData;
     }
-
-    private getPrecipitationMapState = (
-        precipitation: NapPrecipitationData[],
-        scenario: string,
-        timePeriodKey: string,
-    ) => {
-        const filteredPrecipitation = this.getFilteredPrecipitation(precipitation, timePeriodKey);
-        const values = filteredPrecipitation.map((rain) => {
-            const { district, precipitationRcp45, precipitationRcp85 } = rain;
-            const value = scenario === 'rcp-45' ? precipitationRcp45 : precipitationRcp85;
-            const avgValue = mean(value.filter(isDefined));
-
-            return {
-                id: district,
-                value: {
-                    value: avgValue,
-                },
-            };
-        });
-
-        return values;
-    }
-
-    private generateColor = (maxValue: number, minValue: number, colorMapping: string[]) => {
-        const newColor: (string | number)[] = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-
-        if (isNotDefined(maxValue) || isNotDefined(minValue) || maxValue === minValue) {
-            return [];
-        }
-
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    };
-
-    private generatePaint = memoize((color: (string|number)[]) => {
-        if (color.length <= 0) {
-            return {
-                'fill-color': '#ccebc5',
-            };
-        }
-        return {
-            'fill-color': [
-                'interpolate',
-                ['linear'],
-                ['feature-state', 'value'],
-                ...color,
-            ],
-        };
-    })
 
     public render() {
         const {
-            districts,
             className,
             requests: {
                 napPrecipitationGetRequest: {
@@ -397,8 +236,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
-            temperature,
-            precipitation,
             timePeriodKey,
             measurementType,
             scenario,
@@ -406,17 +243,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
         const pending = precipitationPending || temperaturePending;
 
-        const mapState: MapState[] = measurementType === 'temperature'
-            ? this.getTemperatureMapState(temperature, scenario, timePeriodKey)
-            : this.getPrecipitationMapState(precipitation, scenario, timePeriodKey);
-
-        const [min, max] = extent(mapState, (d: MapState) => d.value.value);
-
-        const colorGrade = measurementType === 'temperature'
-            ? tempColors : rainColors;
-
-        const color = this.generateColor(max, min, colorGrade);
-        const colorPaint = this.generatePaint(color);
+        const data = this.getFilteredData(scenario, measurementType, timePeriodKey);
 
         return (
             <>
@@ -445,9 +272,9 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             onChange={this.handleSetScenario}
                         />
                     </div>
-                    <ChoroplethMap
-                        paint={colorPaint}
-                        mapState={mapState}
+                    <Map
+                        data={data}
+                        measurementType={measurementType}
                     />
                     <div className={styles.bottom}>
                         <img

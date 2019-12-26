@@ -1,7 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import Button from '#rsca/Button';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 
 import Hazard from './Hazard';
@@ -10,7 +9,7 @@ import Vulnerability from './Vulnerability';
 import Risk from './Risk';
 import CapacityAndResources from './CapacityAndResources';
 import ClimateChange from './ClimateChange';
-import { LayerMap } from '#store/atom/page/types';
+import { LayerMap, LayerGroup } from '#store/atom/page/types';
 import { AttributeKey } from '#types';
 
 import styles from './styles.scss';
@@ -18,7 +17,8 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     layerMap: LayerMap;
-    attribute: AttributeKey;
+    layerGroupList: LayerGroup[];
+    attribute?: AttributeKey;
 }
 
 interface State {
@@ -32,6 +32,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.hazard || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
         exposure: {
@@ -40,6 +41,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.exposure || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
         vulnerability: {
@@ -48,6 +50,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.vulnerability || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
         risk: {
@@ -56,6 +59,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.risk || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
         'capacity-and-resources': {
@@ -64,6 +68,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.capacity_resource || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
         'climate-change': {
@@ -72,6 +77,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.climate || [],
+                layerGroupList: this.props.layerGroupList,
             }),
         },
     }

@@ -61,3 +61,19 @@ export interface MapState {
         value: number;
     };
 }
+
+export interface NapValue {
+    year: number;
+    value: number;
+}
+
+export interface NapData {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    district: number;
+    rcp45: NapValue[];
+    sdRcp45: NapValue[];
+    rcp85: NapValue[];
+    sdRcp85: NapValue[];
+}
