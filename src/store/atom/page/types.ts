@@ -105,6 +105,7 @@ export interface Resource extends Field {
         coordinates: unknown;
     };
 }
+
 export interface Layer extends Field {
     category: string;
     'type': string;
@@ -117,6 +118,7 @@ export interface Layer extends Field {
 }
 
 export interface LayerGroup extends Field {
+    category: string;
     description: string;
     parent: number | null;
 }
