@@ -49,8 +49,6 @@ export default class Details extends React.PureComponent<Props, State> {
             component: Vulnerability,
             rendererParams: () => ({
                 className: styles.content,
-                layerList: this.props.layerMap.vulnerability || [],
-                layerGroupList: this.props.layerGroupList,
             }),
         },
         risk: {

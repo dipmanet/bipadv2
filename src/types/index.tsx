@@ -86,6 +86,12 @@ export interface VulnerabilityOption {
     selected: boolean;
 }
 
+export interface VulnerabilityType {
+    key: string;
+    label: string;
+    children: VulnerabilityType[];
+    isParent?: boolean;
+}
 
 export interface LayerHierarchy extends LayerGroup {
     parent: number | null;
