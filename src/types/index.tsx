@@ -1,3 +1,5 @@
+import { Layer, LayerGroup, LayerWithGroup } from "#store/atom/page/types";
+
 export interface RiskElement {
     key: number;
     title: string;
@@ -76,4 +78,20 @@ export interface NapData {
     sdRcp45: NapValue[];
     rcp85: NapValue[];
     sdRcp85: NapValue[];
+}
+export interface VulnerabilityOption {
+    key: string;
+    title: string;
+    nodes?: VulnerabilityOption[];
+    selected: boolean;
+}
+
+
+export interface LayerHierarchy extends LayerGroup {
+    parent: number | null;
+    children: LayerHierarchy[];
+}
+
+export interface LayerMap {
+    [key: number]: LayerHierarchy;
 }

@@ -68,7 +68,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.capacity_resource || [],
-                layerGroupList: this.props.layerGroupList,
+                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'capacity_resource'),
             }),
         },
         'climate-change': {
