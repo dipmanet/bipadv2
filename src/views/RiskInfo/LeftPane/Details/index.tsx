@@ -32,7 +32,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.hazard || [],
-                layerGroupList: this.props.layerGroupList,
+                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'hazard'),
             }),
         },
         exposure: {

@@ -9,5 +9,9 @@
 
     .expandable-layer-child {
         padding: 0 var(--spacing-small);
+
+        .description {
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
     }
 }

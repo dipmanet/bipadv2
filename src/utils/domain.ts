@@ -20,7 +20,13 @@ import {
     Resource,
     Layer,
     LayerWithGroup,
+    LayerGroup,
 } from '#store/atom/page/types';
+import {
+    LayerHierarchy,
+    LayerMap,
+} from '#types';
+
 import { groupList } from '#utils/common';
 
 // NOTE: interface for Ward, Municipality, ...
@@ -706,4 +712,39 @@ export function getRasterLegendURL(layer: Layer | LayerWithGroup) {
     const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
 
     return url;
+}
+
+export function getLayerHierarchy(
+    layerList: LayerWithGroup[],
+    layerGroupList: LayerGroup[],
+) {
+    const tree: LayerHierarchy[] = [];
+    const lookup: LayerMap = {};
+
+    const newLayers = layerList.map(layer => ({
+        ...layer,
+        parent: layer.group.id,
+        children: [],
+    }));
+
+    const newGroups = layerGroupList.map(group => ({
+        ...group,
+        children: [],
+    }));
+
+    const layersAndGroups = [...newGroups, ...newLayers];
+
+    newGroups.forEach((element) => {
+        lookup[element.id] = element;
+    });
+
+    layersAndGroups.forEach((element) => {
+        if (element.parent) {
+            lookup[element.parent].children.push(element);
+        } else {
+            tree.push(element);
+        }
+    });
+
+    return tree;
 }

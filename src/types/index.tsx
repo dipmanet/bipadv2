@@ -95,7 +95,7 @@ export interface VulnerabilityType {
 
 export interface LayerHierarchy extends LayerGroup {
     parent: number | null;
-    children: LayerHierarchy[];
+    children: LayerHierarchy[] | LayerWithGroup[];
 }
 
 export interface LayerMap {

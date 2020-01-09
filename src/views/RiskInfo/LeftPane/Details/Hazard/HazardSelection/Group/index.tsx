@@ -28,7 +28,6 @@ interface Props {
     description: string;
     layers: LayerWithGroup[];
     className: string;
-    layerGroupList: LayerGroup[];
 }
 
 interface State {
@@ -104,7 +103,6 @@ class Group extends React.PureComponent<Props, State> {
             description,
             layers,
             className,
-            layerGroupList,
         } = this.props;
 
         const {

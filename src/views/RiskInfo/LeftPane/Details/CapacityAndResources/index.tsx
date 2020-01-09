@@ -17,11 +17,11 @@ import OpacityInput from '#components/OpacityInput';
 import {
     getRasterTile,
     getRasterLegendURL,
+    getLayerHierarchy,
 } from '#utils/domain';
 import {
     OpacityElement,
     LayerHierarchy,
-    LayerMap,
 } from '#types';
 import { LayerWithGroup, LayerGroup, Layer } from '#store/atom/page/types';
 
@@ -59,41 +59,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     }
 
-    private getLayerHierarchy = memoize((
-        layerList: LayerWithGroup[],
-        layerGroupList: LayerGroup[],
-    ) => {
-        const tree: LayerHierarchy[] = [];
-        const lookup: LayerMap = {};
-
-        const newLayers = layerList.map(layer => ({
-            ...layer,
-            parent: layer.group.id,
-            children: [],
-        }));
-
-        const newGroups = layerGroupList.map(group => ({
-            ...group,
-            children: [],
-        }));
-
-
-        const layersAndGroups = [...newGroups, ...newLayers];
-
-        newGroups.forEach((element) => {
-            lookup[element.id] = element;
-        });
-
-        layersAndGroups.forEach((element) => {
-            if (element.parent) {
-                lookup[element.parent].children.push(element);
-            } else {
-                tree.push(element);
-            }
-        });
-
-        return tree;
-    });
+    private getHierarchy = memoize(getLayerHierarchy);
 
     private handleLayerUnselect = () => {
         const { selectedLayerId } = this.state;
@@ -159,7 +125,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             selectedLayerId,
         } = this.state;
 
-        const layers = this.getLayerHierarchy(layerList, layerGroupList);
+        const layers = this.getHierarchy(layerList, layerGroupList);
         const selectedLayer = this.getLayer(selectedLayerId);
         const rasterTiles = this.getRasterTiles(selectedLayer);
 
