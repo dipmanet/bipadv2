@@ -3,17 +3,14 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 import FormattedDate from '#rscv/FormattedDate';
 
 import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 
-import {
-    mapStyles,
-    getMapPaddings,
-} from '#constants';
+import { mapStyles } from '#constants';
 
 import {
     alertToConvexPolygonGeojson,
@@ -195,100 +192,122 @@ class AlertEventMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap />
-
                 <MapSource
                     sourceKey="alerts-convex-polygon"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={featureConvexCollection}
                 >
                     <MapLayer
                         layerKey="alerts-convex-outline"
-                        type="line"
-                        enableHover
-                        paint={mapStyles.alertConvex.outline}
-                        onHoverChange={this.handleAlertHover}
+                        layerOptions={{
+                            type: 'line',
+                            enableHover: true,
+                            paint: mapStyles.alertConvex.outline,
+                            onHoverChange: this.handleAlertHover,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="alerts-polygon"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={featurePolygonCollection}
                 >
                     <MapLayer
                         layerKey="alerts-polygon-fill"
-                        type="fill"
-                        enableHover
-                        paint={mapStyles.alertPolygon.fill}
-                        onHoverChange={this.handleAlertHover}
+                        layerOptions={{
+                            type: 'fill',
+                            enableHover: true,
+                            paint: mapStyles.alertPolygon.fill,
+                            onHoverChange: this.handleAlertHover,
+                        }}
                     />
                     <MapLayer
                         layerKey="alerts-polygon-outline"
-                        type="line"
-                        paint={mapStyles.alertPolygon.outline}
+                        layerOptions={{
+                            type: 'line',
+                            paint: mapStyles.alertPolygon.outline,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="alerts-point"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={featurePointCollection}
                 >
                     <MapLayer
                         layerKey="alerts-point-animated"
-                        type="circle"
-                        filter={filter}
-                        paint={mapStyles.alertPoint.animatedCircle}
-                        onAnimationKeyframe={this.handleAnimationKeyframe}
+                        layerOptions={{
+                            type: 'circle',
+                            filter,
+                            paint: mapStyles.alertPoint.animatedCircle,
+                            onAnimationKeyframe: this.handleAnimationKeyframe,
+                        }}
                     />
                     <MapLayer
                         layerKey="alerts-point"
-                        type="circle"
-                        paint={mapStyles.alertPoint.circle}
-                        enableHover
-                        tooltipRenderer={AlertTooltip}
-                        tooltipRendererParams={this.alertTooltipRendererParams}
-                        onHoverChange={this.handleAlertHover}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.alertPoint.circle,
+                            enableHover: true,
+                            tooltipRenderer: AlertTooltip,
+                            tooltipRendererParams: this.alertTooltipRendererParams,
+                            onHoverChange: this.handleAlertHover,
+                        }}
                     />
                 </MapSource>
-
                 <MapSource
                     sourceKey="events-convex-polygon"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={eventsConvexFeatureCollection}
                 >
                     <MapLayer
                         layerKey="events-convex-outline"
-                        type="line"
-                        enableHover
-                        paint={mapStyles.eventConvex.outline}
-                        onHoverChange={this.handleEventHover}
+                        layerOptions={{
+                            type: 'line',
+                            enableHover: true,
+                            paint: mapStyles.eventConvex.outline,
+                            onHoverChange: this.handleEventHover,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="events-polygon"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={eventsPolygonFeatureCollection}
                 >
                     <MapLayer
                         layerKey="events-polygon-fill"
-                        type="fill"
-                        enableHover
-                        paint={mapStyles.eventPolygon.fill}
-                        onHoverChange={this.handleEventHover}
+                        layerOptions={{
+                            type: 'fill',
+                            enableHover: true,
+                            paint: mapStyles.eventPolygon.fill,
+                            onHoverChange: this.handleEventHover,
+                        }}
                     />
                     <MapLayer
                         layerKey="events-polygon-outline"
-                        type="line"
-                        paint={mapStyles.eventPolygon.outline}
+                        layerOptions={{
+                            type: 'line',
+                            paint: mapStyles.eventPolygon.outline,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="events-symbol"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={eventsPointFeatureCollection}
                 >
                     <MapLayer
                         layerKey="events-symbol"
-                        type="symbol"
-                        enableHover
-                        layout={mapStyles.eventSymbol.layout}
-                        paint={mapStyles.eventSymbol.paint}
-                        tooltipRenderer={EventTooltip}
-                        tooltipRendererParams={this.eventTooltipRendererParams}
-                        onHoverChange={this.handleEventHover}
+                        layerOptions={{
+                            type: 'symbol',
+                            enableHover: true,
+                            layout: mapStyles.eventSymbol.layout,
+                            paint: mapStyles.eventSymbol.paint,
+                            tooltipRenderer: EventTooltip,
+                            tooltipRendererParams: this.eventTooltipRendererParams,
+                            onHoverChange: this.handleEventHover,
+                        }}
                     />
                 </MapSource>
             </React.Fragment>

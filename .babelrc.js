@@ -64,6 +64,7 @@ module.exports = {
                     '#views': './src/views',
                     '#types': './src/types',
                     '#mapStyles': './src/vendor/osm-liberty',
+                    '#re-map': './src/vendor/re-map',
                 },
             },
         ],

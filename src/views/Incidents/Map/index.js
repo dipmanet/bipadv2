@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -119,36 +119,44 @@ class IncidentMap extends React.PureComponent {
                 <CommonMap />
                 <MapSource
                     sourceKey="incident-polygons"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={polygonFeatureCollection}
                 >
                     <MapLayer
                         layerKey="incident-polygon-fill"
-                        type="fill"
-                        paint={mapStyles.incidentPolygon.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
+                        layerOptions={{
+                            type: 'fill',
+                            paint: mapStyles.incidentPolygon.fill,
+                            enableHover: true,
+                            tooltipRenderer: IncidentInfo,
+                            tooltipRendererParams: this.tooltipRendererParams,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="incident-points"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={pointFeatureCollection}
                 >
                     <MapLayer
                         layerKey="incident-points-animate"
-                        type="circle"
-                        filter={filter}
-                        paint={mapStyles.incidentPoint.animatedFill}
-                        onAnimationKeyframe={this.handleAnimationKeyframe}
+                        layerOptions={{
+                            type: 'circle',
+                            filter,
+                            paint: mapStyles.incidentPoint.animatedFill,
+                            onAnimationKeyframe: this.handleAnimationKeyframe,
+                        }}
                     />
                     <MapLayer
                         layerKey="incident-points-fill"
-                        type="circle"
-                        paint={mapStyles.incidentPoint.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                        onHoverChange={onIncidentHover}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.incidentPoint.fill,
+                            enableHover: true,
+                            tooltipRenderer: IncidentInfo,
+                            tooltipRendererParams: this.tooltipRendererParams,
+                            onHoverChange: onIncidentHover,
+                        }}
                     />
                 </MapSource>
             </React.Fragment>

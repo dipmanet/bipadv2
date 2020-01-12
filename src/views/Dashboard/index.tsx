@@ -46,6 +46,7 @@ import {
 import Page from '#components/Page';
 
 import Map from './Map';
+// import CommonMap from '#components/CommonMap';
 import LeftPane from './LeftPane';
 
 import styles from './styles.scss';
