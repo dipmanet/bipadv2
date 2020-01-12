@@ -1,9 +1,17 @@
 .hazard {
     overflow: auto;
 
-    .sub-category {
-        &:not(:last-child) {
-            border-bottom: var(--width-separator-thin) solid var(--color-separator);
+    .hazard-selection {
+        padding: 0;
+
+        .layer {
+            margin: var(--spacing-small);
+            border: var(--width-separator-thin) solid var(--color-separator-light);
+            padding: var(--spacing-small);
+        }
+
+        .group {
+            border: var(--width-separator-thin) solid var(--color-separator-light);
         }
     }
 }

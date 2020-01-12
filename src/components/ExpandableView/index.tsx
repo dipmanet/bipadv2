@@ -15,6 +15,7 @@ interface Props {
     expandedClassName?: string;
     expandButtonClassName?: string;
     expandIconClassName?: string;
+    expandableContentClassName?: string;
 }
 
 interface State {
@@ -45,6 +46,7 @@ class ExpandableView extends React.PureComponent<Props, State> {
             expandedClassName,
             expandButtonClassName,
             expandIconClassName,
+            expandableContentClassName,
         } = this.props;
 
         const { isExpanded } = this.state;
@@ -74,7 +76,7 @@ class ExpandableView extends React.PureComponent<Props, State> {
                     </Button>
                 </header>
                 {isExpanded && (
-                    <div className={styles.expandableContent}>
+                    <div className={_cs(expandableContentClassName, styles.expandableContent)}>
                         { expandableContent }
                     </div>
                 )}

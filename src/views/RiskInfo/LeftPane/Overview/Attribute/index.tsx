@@ -14,6 +14,7 @@ interface Props {
     icon: string;
     titleShown: boolean;
     isActive: boolean;
+    color?: string;
 }
 
 interface State {
@@ -37,6 +38,7 @@ class Attribute extends React.Component<Props, State> {
             icon,
             titleShown,
             isActive,
+            color,
         } = this.props;
 
         return (
@@ -52,13 +54,19 @@ class Attribute extends React.Component<Props, State> {
                 title={description}
             >
                 <div className={styles.left}>
-                    <h4 className={styles.icon}>
+                    <h4
+                        className={styles.icon}
+                        style={{ color }}
+                    >
                         {icon}
                     </h4>
                 </div>
                 { titleShown && (
                     <div className={styles.right}>
-                        <h4 className={styles.title}>
+                        <h4
+                            className={styles.title}
+                            style={{ color }}
+                        >
                             {title}
                         </h4>
                     </div>

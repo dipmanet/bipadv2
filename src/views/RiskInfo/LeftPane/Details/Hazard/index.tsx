@@ -40,6 +40,9 @@ class Hazard extends React.PureComponent<Props, State> {
         return (
             <div className={_cs(styles.hazard, className)}>
                 <HazardSelection
+                    groupClassName={styles.group}
+                    layerClassName={styles.layer}
+                    className={styles.hazardSelection}
                     layers={layers}
                 />
             </div>

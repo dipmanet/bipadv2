@@ -1,9 +1,6 @@
 .risk-description {
-    display: -webkit-box;
     padding: var(--spacing-small) var(--spacing-medium);
-    max-height: 94px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
+    text-align: justify;
+    color: var(--color-text-light);
+    font-size: var(--font-size-small);
 }

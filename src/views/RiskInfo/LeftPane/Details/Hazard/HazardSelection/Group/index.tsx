@@ -27,7 +27,7 @@ interface Props {
     title: string;
     description: string;
     layers: LayerWithGroup[];
-    className: string;
+    className?: string;
 }
 
 interface State {

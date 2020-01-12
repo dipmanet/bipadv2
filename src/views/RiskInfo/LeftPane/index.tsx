@@ -15,6 +15,7 @@ import {
 import Button from '#rsca/Button';
 
 import Loading from '#components/Loading';
+import { getHashFromBrowser } from '#rscg/HashManager';
 
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
@@ -83,7 +84,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         this.state = {
             layerMap: {},
             layerGroupList: [],
-            activeAttribute: 'hazard',
+            activeAttribute: getHashFromBrowser(),
         };
 
         const {

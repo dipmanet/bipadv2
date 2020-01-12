@@ -2,10 +2,15 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rsu/../v2/View/ListView';
+import { getHashFromBrowser } from '#rscg/HashManager';
 
 import { AttributeKey } from '#types';
 import Attribute from './Attribute';
 import styles from './styles.scss';
+
+interface State {
+    hash: string | undefined;
+}
 
 interface Props {
     className?: string;
@@ -69,7 +74,28 @@ const attributeList: AttributeItem[] = [
 
 const attributeListKeySelector = (d: AttributeItem) => d.key;
 
-export default class Overview extends React.PureComponent<Props> {
+export default class Overview extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            hash: getHashFromBrowser(),
+        };
+    }
+
+    public componentDidMount() {
+        window.addEventListener('hashchange', this.handleHashChange);
+    }
+
+    public componentWillUnmount() {
+        window.removeEventListener('hashchange', this.handleHashChange);
+    }
+
+    private handleHashChange = () => {
+        const hash = getHashFromBrowser();
+        this.setState({ hash });
+    }
+
     private getAttributeRendererParams = (_: string, attribute: AttributeItem) => ({
         attributeKey: attribute.key,
         title: attribute.title,
@@ -78,16 +104,17 @@ export default class Overview extends React.PureComponent<Props> {
         onClick: this.props.onAttributeClick,
         className: styles.attribute,
         titleShown: this.props.titleShown,
-        isActive: this.props.activeAttribute === attribute.key,
+        isActive: this.state.hash === attribute.key,
+        color: attribute.color,
     })
 
     public render() {
-        const {
-            className,
-        } = this.props;
+        const { className } = this.props;
+        const { hash } = this.state;
 
         return (
             <ListView
+                key={hash}
                 className={_cs(styles.overview, className)}
                 data={attributeList}
                 renderer={Attribute}

@@ -2,8 +2,11 @@ import React from 'react';
 
 import Page from '#components/Page';
 
-import mapLegendImage from '#resources/images/temperature-change-legend.png';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+import {
+    setHashToBrowser,
+    getHashFromBrowser,
+} from '#rscg/HashManager';
 
 import SortableListView from '#rscv/SortableListView';
 
@@ -52,12 +55,13 @@ class RiskInfo extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            activeView: undefined,
+            activeView: getHashFromBrowser(),
         };
     }
 
     private handleViewChange = (activeView: string | undefined) => {
         this.setState({ activeView });
+        setHashToBrowser(activeView);
     }
 
     public render() {

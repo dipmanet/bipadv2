@@ -1,4 +1,6 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
+
 import ExpandableView from '#components/ExpandableView';
 import RiskDescription from '#components/RiskDescription';
 import { LayerHierarchy } from '#types';
@@ -10,6 +12,8 @@ import styles from './styles.scss';
 
 interface Props {
     layers: LayerHierarchy[];
+    className?: string;
+    layerClassName?: string;
 }
 
 interface State {
@@ -24,7 +28,15 @@ function isGroup(children: LayerHierarchy[] | LayerWithGroup[]): children is Lay
 }
 
 
-const LayerRenderer = (layer: LayerHierarchy) => {
+const LayerRenderer = ({
+    layer,
+    layerClassName,
+    groupClassName,
+}: {
+    layerClassName?: string;
+    groupClassName?: string;
+    layer: LayerHierarchy;
+}) => {
     if (isGroup(layer.children)) {
         return (
             <Group
@@ -32,17 +44,17 @@ const LayerRenderer = (layer: LayerHierarchy) => {
                 title={layer.title}
                 description={layer.shortDescription}
                 layers={layer.children}
-                className=""
+                className={groupClassName}
             />
         );
     }
     return (
         <ExpandableView
+            className={layerClassName}
             headerContent={layer.title}
             expandableContent={(
                 <>
                     <RiskDescription
-                        className={styles.description}
                         text={layer.shortDescription}
                     />
                     <HazardSelection
@@ -57,20 +69,32 @@ const LayerRenderer = (layer: LayerHierarchy) => {
 const layerKeySelector = (d: LayerHierarchy) => d.id;
 
 class HazardSelection extends React.PureComponent<Props, State> {
-    private getLayerRendererParams = (_: number, layer: LayerHierarchy) => layer;
+    private getLayerRendererParams = (_: number, layer: LayerHierarchy) => {
+        const {
+            layerClassName,
+            groupClassName,
+        } = this.props;
+
+        return {
+            groupClassName,
+            layerClassName,
+            layer,
+        };
+    }
 
     public render() {
         const {
             layers,
+            className,
         } = this.props;
 
         return (
             <ListView
+                className={_cs(className, styles.layerSelection)}
                 data={layers}
                 keySelector={layerKeySelector}
                 renderer={LayerRenderer}
                 rendererParams={this.getLayerRendererParams}
-                className={styles.layerSelection}
             />
         );
     }
