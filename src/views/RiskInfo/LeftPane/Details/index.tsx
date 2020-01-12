@@ -83,17 +83,16 @@ export default class Details extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
-            attribute,
+            activeView,
         } = this.props;
 
-        // const headingText = this.views[attribute].title;
+        // const headingText = this.views[activeView].title;
 
         return (
             <div className={_cs(styles.details, className)}>
                 <MultiViewContainer
                     views={this.views}
-                    // active={attribute}
-                    useHash
+                    active={activeView}
                 />
             </div>
         );

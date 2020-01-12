@@ -233,6 +233,7 @@ class DisasterProfile extends React.PureComponent {
                     region={region}
                 />
                 <Page
+                    hideMap
                     leftContentClassName={styles.leftContainer}
                     leftContent={(
                         <>

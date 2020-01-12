@@ -1,7 +1,7 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import { extent } from 'd3-array';
-import { mean, isNotDefined, isDefined } from '@togglecorp/fujs';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import { NapValue, MapState } from '#types';
 import ChoroplethMap from '#components/ChoroplethMap';
@@ -15,37 +15,55 @@ interface NapData {
 interface Props {
     data: NapData[];
     measurementType: string;
+    scenario: string;
 }
 
 interface State {
 }
 
 const tempColors: string[] = [
-    '#fef0d9',
-    '#fdd49e',
-    '#fdbb84',
-    '#fc8d59',
-    '#ef6548',
-    '#d7301f',
-    '#990000',
+    '#31a354',
+    '#93ce82',
+    '#ddf1b3',
+    '#fef6cb',
+    '#f2b294',
+    '#d7595d',
+    '#bd0026',
 ];
 
 const rainColors: string[] = [
-    '#f0f9e8',
-    '#ccebc5',
-    '#a8ddb5',
-    '#7bccc4',
-    '#4eb3d3',
-    '#2b8cbe',
-    '#08589e',
+    '#ffffcc',
+    '#c7e4b9',
+    '#7fcdbb',
+    '#41b6c4',
+    '#1d91c0',
+    '#225ea8',
+    '#0c2c84',
 ];
+
+const getItemValueDifference = (item) => {
+    const {
+        district,
+        value,
+    } = item;
+
+    const filteredList = value.filter(d => d && d.value);
+    const diff = Math.abs(filteredList[0].value - filteredList[filteredList.length - 1].value);
+
+    return diff;
+};
+
+const generateMapLegend = (colorPaint) => {
+    console.warn(colorPaint);
+};
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
     private generateMapState = memoize((data: NapData[]) => {
         const mapState = data.map(item => ({
             id: item.district,
             value: {
-                value: mean(item.value.map(v => v.value).filter(isDefined)),
+                value: getItemValueDifference(item),
+                // value: mean(item.value.map(v => v.value).filter(isDefined)),
             },
         }));
 
@@ -53,7 +71,7 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
     });
 
     private generateColor = memoize(
-        (maxValue: number, minValue: number, measurementType: string) => {
+        (maxValue: number, minValue: number, measurementType: string, scenario: string) => {
             const newColor: (string | number)[] = [];
             const colorMapping = measurementType === 'temperature' ? tempColors : rainColors;
             const { length } = colorMapping;
@@ -75,17 +93,33 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
     private generatePaint = memoize((color: (string | number)[]) => {
         if (color.length <= 0) {
             return {
-                'fill-color': '#ccebc5',
+                'fill-color': 'white',
+                'fill-opacity': 0.1,
             };
         }
 
-        return ({
-            'fill-color': [
+        const fillColor = [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            'white',
+            [
                 'interpolate',
                 ['linear'],
                 ['feature-state', 'value'],
                 ...color,
             ],
+        ];
+
+        const fillOpacity = [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            0.1,
+            1,
+        ];
+
+        return ({
+            'fill-color': fillColor,
+            'fill-opacity': fillOpacity,
         });
     })
 
@@ -93,13 +127,17 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         const {
             data,
             measurementType,
+            scenario,
         } = this.props;
 
         const mapState = this.generateMapState(data);
         const [min, max] = extent(mapState, (d: MapState) => d.value.value);
 
-        const color = this.generateColor(max, min, measurementType);
+        const color = this.generateColor(max, min, measurementType, scenario);
         const colorPaint = this.generatePaint(color);
+
+        generateMapLegend(color);
+
         return (
             <ChoroplethMap
                 paint={colorPaint}

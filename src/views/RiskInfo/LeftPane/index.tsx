@@ -186,6 +186,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             attribute={activeAttribute}
                             layerMap={layerMap}
                             layerGroupList={layerGroupList}
+                            activeView={activeAttribute}
                         />
                     )}
                 </div>

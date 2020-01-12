@@ -38,7 +38,8 @@ const state: PageState = {
     documentCategoryList: [],
 
     // selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
-    selectedMapStyle: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
+    // selectedMapStyle: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
+    selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
     hazardTypes: {},
     resourceTypeList: [
         {

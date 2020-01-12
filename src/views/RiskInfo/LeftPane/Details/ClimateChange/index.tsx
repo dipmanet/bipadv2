@@ -2,9 +2,16 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+
+import {
+    getResults,
+    isAnyRequestPending,
+} from '#utils/request';
+
 import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
+
 import Map from './Map';
 
 import {
@@ -13,8 +20,10 @@ import {
     Municipality,
     Ward,
 } from '#store/atom/page/types';
-import { MultiResponse } from '#store/atom/response/types';
-import { NapData, NapValue } from '#types';
+import {
+    NapData,
+    NapValue,
+} from '#types';
 
 import {
     createRequestClient,
@@ -53,19 +62,17 @@ interface PropsFromDispatch {
 }
 
 interface Params {
-    setNapTemperature?: (data: NapData[]) => void;
-    setNapPrecipitation?: (data: NapData[]) => void;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
+type MeasurementType = 'temperature' | 'precipitation';
+
 interface State {
     scenario: string;
-    temperature: NapData[];
-    precipitation: NapData[];
     timePeriodKey: string;
-    measurementType: string;
+    measurementType: MeasurementType;
 }
 
 interface MapState {
@@ -89,14 +96,17 @@ const mapStateToProps = (state: AppState) => ({
     wards: wardsSelector(state),
 });
 
-const measurementOptions = [
+const measurementOptions: {
+    key: MeasurementType;
+    label: 'Temperature' | 'Precipitation';
+}[] = [
     { key: 'temperature', label: 'Temperature' },
     { key: 'precipitation', label: 'Precipitation' },
 ];
 
 const timePeriodOptions: TimePeriod[] = [
     { key: 'reference-period', label: 'Reference period (1981-2010)', startYear: 1981, endYear: 2010 },
-    { key: 'medium-term', label: 'Medium term (2016-2065)', startYear: 2016, endYear: 2065 },
+    { key: 'medium-term', label: 'Medium term (2016-2045)', startYear: 2016, endYear: 2045 },
     { key: 'long-term', label: 'Long Term (2036-2065)', startYear: 2036, endYear: 2065 },
 ];
 
@@ -105,34 +115,16 @@ const scenarioOptions = [
     { key: 'rcp85', label: 'RCP 8.5' },
 ];
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     napTemperatureGetRequest: {
         url: '/nap-temperature/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({
-            response,
-            params: { setNapTemperature } = { setNapTemperature: undefined },
-        }) => {
-            const { results } = response as MultiResponse<NapData>;
-            if (setNapTemperature) {
-                setNapTemperature(results);
-            }
-        },
     },
     napPrecipitationGetRequest: {
         url: '/nap-precipitation/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({
-            response,
-            params: { setNapPrecipitation } = { setNapPrecipitation: undefined },
-        }) => {
-            const { results } = response as MultiResponse<NapData>;
-            if (setNapPrecipitation) {
-                setNapPrecipitation(results);
-            }
-        },
     },
 };
 
@@ -141,38 +133,13 @@ class ClimateChange extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            temperature: [],
-            precipitation: [],
             scenario: 'rcp45',
             timePeriodKey: 'reference-period',
             measurementType: 'temperature',
         };
-
-        const {
-            requests: {
-                napTemperatureGetRequest,
-                napPrecipitationGetRequest,
-            },
-        } = this.props;
-
-        napTemperatureGetRequest.setDefaultParams({
-            setNapTemperature: (data: NapData[]) => {
-                this.setState({
-                    temperature: data,
-                });
-            },
-        });
-
-        napPrecipitationGetRequest.setDefaultParams({
-            setNapPrecipitation: (data: NapData[]) => {
-                this.setState({
-                    precipitation: data,
-                });
-            },
-        });
     }
 
-    private handleSetMeasurementType = (measurementType: string) => {
+    private handleSetMeasurementType = (measurementType: MeasurementType) => {
         this.setState({
             measurementType,
         });
@@ -191,16 +158,13 @@ class ClimateChange extends React.PureComponent<Props, State> {
     }
 
     private getFilteredData = (
+        temperature: NapData[],
+        precipitation: NapData[],
         scenario: string,
         measurementType: string,
         timePeriodKey: string,
     ) => {
-        const {
-            temperature,
-            precipitation,
-        } = this.state;
-
-        const napData = measurementType === 'tempereature' ? temperature : precipitation;
+        const napData = (measurementType === 'temperature') ? temperature : precipitation;
 
         const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
                             || timePeriodOptions[0];
@@ -209,13 +173,18 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const filter = ({ year }: NapValue) => (year >= startYear && year <= endYear);
 
         const filteredData = napData.map((data) => {
-            const { district, rcp45, rcp85 } = data;
-            const item = scenario === 'rcp45' ? rcp45 : rcp85;
-            const filteredItem = item.filter(filter);
+            const {
+                district,
+                rcp45,
+                rcp85,
+            } = data;
+
+            const itemList = (scenario === 'rcp45') ? rcp45 : rcp85;
+            const filteredItemList = itemList.filter(filter);
 
             return ({
                 district,
-                value: filteredItem,
+                value: filteredItemList,
             });
         });
 
@@ -225,14 +194,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
-            requests: {
-                napPrecipitationGetRequest: {
-                    pending: precipitationPending,
-                },
-                napTemperatureGetRequest: {
-                    pending: temperaturePending,
-                },
-            },
+            requests,
         } = this.props;
 
         const {
@@ -241,9 +203,16 @@ class ClimateChange extends React.PureComponent<Props, State> {
             scenario,
         } = this.state;
 
-        const pending = precipitationPending || temperaturePending;
-
-        const data = this.getFilteredData(scenario, measurementType, timePeriodKey);
+        const pending = isAnyRequestPending(requests);
+        const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
+        const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
+        const data = this.getFilteredData(
+            temperature,
+            precipitation,
+            scenario,
+            measurementType,
+            timePeriodKey,
+        );
 
         return (
             <>
@@ -263,6 +232,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             options={timePeriodOptions}
                             value={timePeriodKey}
                             onChange={this.handleSetTimePeriod}
+                            hideClearButton
                         />
                         <SegmentInput
                             className={styles.scenarioInput}
@@ -275,19 +245,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
                     <Map
                         data={data}
                         measurementType={measurementType}
+                        scenario={scenario}
                     />
-                    <div className={styles.bottom}>
-                        <img
-                            className={styles.chart}
-                            src={chartImage}
-                            alt="chart"
-                        />
-                        <img
-                            className={styles.legend}
-                            src={legendImage}
-                            alt="legend"
-                        />
-                    </div>
                 </div>
             </>
         );
@@ -296,5 +255,5 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
 export default compose(
     connect(mapStateToProps),
-    createRequestClient(requests),
+    createRequestClient(requestOptions),
 )(ClimateChange);
