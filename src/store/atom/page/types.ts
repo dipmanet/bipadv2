@@ -119,7 +119,8 @@ export interface Layer extends Field {
 
 export interface LayerGroup extends Field {
     category: string;
-    description: string;
+    shortDescription: string;
+    longDescription: string;
     parent: number | null;
 }
 
@@ -130,7 +131,6 @@ export interface LayerMap {
 export interface LayerWithGroup extends Field {
     category: string;
     'type': string;
-    description: string;
     workspace: string;
     layername: string;
     'public': boolean;

@@ -36,6 +36,8 @@ const styleProperties = {
 
     widthRealtimeFilter: '300px',
     colorRiskInfoIcon: '#777',
+
+    colorTextLight: 'rgba(0, 0, 0, 0.5)',
 };
 
 export default styleProperties;

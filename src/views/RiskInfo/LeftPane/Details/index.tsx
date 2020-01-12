@@ -32,7 +32,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.hazard || [],
-                layerGroupList: this.props.layerGroupList,
+                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'hazard'),
             }),
         },
         exposure: {
@@ -92,7 +92,8 @@ export default class Details extends React.PureComponent<Props, State> {
             <div className={_cs(styles.details, className)}>
                 <MultiViewContainer
                     views={this.views}
-                    active={attribute}
+                    // active={attribute}
+                    useHash
                 />
             </div>
         );

@@ -4,6 +4,7 @@ import {
     isDefined,
 } from '@togglecorp/fujs';
 import ExpandableView from '#components/ExpandableView';
+import RiskDescription from '#components/RiskDescription';
 import { LayerHierarchy } from '#types';
 import Option from '#rsci/RadioInput/Option';
 import ListView from '#rscv/List/ListView';
@@ -66,10 +67,16 @@ const LayerRenderer = (option: LayerOption) => {
                     <ExpandableView
                         headerContent={layerLabelSelector(layer)}
                         expandableContent={(
-                            <LayerSelection
-                                {...option}
-                                layers={layer.children}
-                            />
+                            <>
+                                <RiskDescription
+                                    className={styles.description}
+                                    text={layer.description}
+                                />
+                                <LayerSelection
+                                    {...option}
+                                    layers={layer.children}
+                                />
+                            </>
                         )}
                     />
                 </div>

@@ -12,7 +12,6 @@
             text-transform: none;
             color: var(--color-text);
             font-size: var(--font-size-medium);
-            font-weight: var(--font-weight-medium);
 
             .header-content {
                 flex-grow: 1;
@@ -29,7 +28,7 @@
     &.expanded {
         >.header {
             .expand-button {
-                font-weight: var(--font-weight-bold);
+                color: var(--color-primary);
             }
         }
     }
