@@ -9,7 +9,7 @@ interface Props {
     className?: string;
     onClick: (key: string | number) => void;
     optionKey: string | number;
-    label?: React.ReactNode;
+    label?: React.ReactNode | string;
     isActive: boolean;
 }
 
