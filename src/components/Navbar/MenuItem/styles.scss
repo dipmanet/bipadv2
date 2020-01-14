@@ -7,12 +7,12 @@
     color: var(--color-text);
 
     .icon {
-        padding: var(--spacing-medium);
-        font-size: var(--font-size-extra-large);
+        // font-size: var(--font-size-extra-large);
     }
 
     .title {
         padding: var(--spacing-extra-small);
+        text-align: center;
         font-size: var(--font-size-extra-small);
         font-weight: bold;
     }

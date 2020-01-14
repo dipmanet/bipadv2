@@ -11,6 +11,7 @@ interface Props {
     style: string;
     onClick?: (style: string) => void;
     className?: string;
+    isActive: boolean;
 }
 
 export default class LayerButton extends React.PureComponent<Props> {
@@ -30,12 +31,17 @@ export default class LayerButton extends React.PureComponent<Props> {
             name,
             color,
             className,
+            isActive,
         } = this.props;
 
         return (
             <Button
                 onClick={this.handleClick}
-                className={_cs(styles.layerButton, className)}
+                className={_cs(
+                    styles.layerButton,
+                    className,
+                    isActive && styles.active,
+                )}
                 transparent
             >
                 <div

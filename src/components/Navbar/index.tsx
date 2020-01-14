@@ -92,9 +92,7 @@ class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
         title: data.title,
         link: data.path,
-        iconName: data.iconName,
         disabled: data.disabled,
-        titleClassName: styles.title,
     });
 
     public render() {
@@ -106,7 +104,6 @@ class Navbar extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        // console.warn('auth state yaaaay', authState);
         const { authenticated, user } = authState;
         // <Logo />
 

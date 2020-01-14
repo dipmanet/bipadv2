@@ -12,6 +12,7 @@ import DropdownMenu from '#rsca/DropdownMenu';
 import ListView from '#rscv/List/ListView';
 
 import { setMapStyleAction } from '#actionCreators';
+import { mapStyleSelector } from '#selectors';
 
 import LayerButton from './LayerButton';
 import styles from './styles.scss';
@@ -88,6 +89,10 @@ interface PropsFromDispatch {
 
 type Props = OwnProps & PropsFromAppState & PropsFromDispatch;
 
+const mapAppStateToComponentProps = state => ({
+    currentMapStyle: mapStyleSelector(state),
+});
+
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMapStyle: params => dispatch(setMapStyleAction(params)),
 });
@@ -95,8 +100,19 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 const layerKeySelector = (d: MapStyle) => d.name;
 
 class LayerSwitch extends React.PureComponent<Props, State> {
-    private getLayerButtonRendererParams = (_: string, layer: MapStyle) => ({
+    private isActiveMapStyle = (styleFromLayer) => {
+        const { currentMapStyle } = this.props;
+
+        if (typeof styleFromLayer === 'string') {
+            return currentMapStyle === styleFromLayer;
+        }
+
+        return styleFromLayer.id === currentMapStyle.id;
+    }
+
+    private getLayerButtonRendererParams = (key: string, layer: MapStyle) => ({
         onClick: this.handleLayerButtonClick,
+        isActive: this.isActiveMapStyle(layer.style),
         ...layer,
     })
 
@@ -132,4 +148,4 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 }
 LayerSwitch.contextType = ReduxContext;
 
-export default connect(undefined, mapDispatchToProps)(LayerSwitch);
+export default connect(mapAppStateToComponentProps, mapDispatchToProps)(LayerSwitch);

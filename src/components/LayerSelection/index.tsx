@@ -6,7 +6,7 @@ import {
 import ExpandableView from '#components/ExpandableView';
 import RiskDescription from '#components/RiskDescription';
 import { LayerHierarchy } from '#types';
-import Option from '#rsci/RadioInput/Option';
+import Option from '#components/RadioInput/Option';
 import ListView from '#rscv/List/ListView';
 
 import styles from './styles.scss';

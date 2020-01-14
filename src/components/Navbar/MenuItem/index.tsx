@@ -12,6 +12,7 @@ interface Props {
     link: string;
     iconName?: string;
     disabled?: boolean;
+    titleClassName?: string;
 }
 
 interface State {
@@ -52,11 +53,9 @@ export default class MenuItem extends React.PureComponent<Props, State> {
                     name={iconName}
                     title={title}
                 />
-                {/*
                 <div className={_cs(titleClassName, styles.title)}>
                     {title}
                 </div>
-                  */}
             </Link>
         );
     }
