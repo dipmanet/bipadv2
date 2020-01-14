@@ -57,7 +57,7 @@ export default class Details extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.risk || [],
-                layerGroupList: this.props.layerGroupList,
+                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'risk'),
             }),
         },
         'capacity-and-resources': {
