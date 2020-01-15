@@ -41,6 +41,19 @@ class Attribute extends React.Component<Props, State> {
             color,
         } = this.props;
 
+        let style;
+
+        if (isActive) {
+            style = {
+                backgroundColor: color,
+                color: '#fff',
+            };
+        } else if (titleShown) {
+            style = {
+                color,
+            };
+        }
+
         return (
             <div
                 className={_cs(
@@ -52,21 +65,16 @@ class Attribute extends React.Component<Props, State> {
                 onClick={this.handleClick}
                 role="presentation"
                 title={description}
+                style={style}
             >
                 <div className={styles.left}>
-                    <h4
-                        className={styles.icon}
-                        style={{ color }}
-                    >
+                    <h4 className={styles.icon}>
                         {icon}
                     </h4>
                 </div>
                 { titleShown && (
                     <div className={styles.right}>
-                        <h4
-                            className={styles.title}
-                            style={{ color }}
-                        >
+                        <h4 className={styles.title}>
                             {title}
                         </h4>
                     </div>

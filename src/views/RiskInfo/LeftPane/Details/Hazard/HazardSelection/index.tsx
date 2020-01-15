@@ -6,7 +6,6 @@ import RiskDescription from '#components/RiskDescription';
 import { LayerHierarchy } from '#types';
 import { LayerWithGroup } from '#store/atom/page/types';
 import ListView from '#rscv/List/ListView';
-
 import Group from './Group';
 import styles from './styles.scss';
 

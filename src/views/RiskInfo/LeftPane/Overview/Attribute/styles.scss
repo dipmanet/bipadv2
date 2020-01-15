@@ -3,7 +3,6 @@
     background-color: var(--color-foreground);
     cursor: pointer;
     padding: var(--spacing-medium) var(--spacing-small);
-    filter: grayscale(0.8);
 
     .left {
         display: flex;
@@ -36,18 +35,12 @@
         }
     }
 
+    &:not(.icon-only) {
+        filter: grayscale(0.8);
+    }
+
     &:hover {
         background-color: var(--color-background-hover);
-    }
-
-    &.icon-only {
-        border-right: var(--width-separator-medium) solid transparent;
-    }
-
-    &.active {
-        border-right-color: var(--color-accent);
-        background-color: var(--color-foreground);
-        // color: var(--color-accent);
         filter: grayscale(0);
     }
 }

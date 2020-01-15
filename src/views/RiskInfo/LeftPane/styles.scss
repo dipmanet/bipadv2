@@ -9,19 +9,20 @@
         display: flex;
         flex-shrink: 0;
         border-bottom: var(--width-separator-thin) solid var(--color-separator);
-        padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
+        padding: calc(var(--spacing-large) - var(--spacing-medium));
 
         .back-button {
             flex-shrink: 0;
             padding: var(--spacing-small) var(--spacing-medium);
+            color: inherit;
             font-size: var(--font-size-large);
         }
 
         .heading {
             flex-grow: 1;
             padding: var(--spacing-medium);
-            color: var(--color-primary);
-            font-size: var(--font-size-large);
+            color: inherit;
+            font-size: var(--font-size-extra-large);
         }
     }
 
