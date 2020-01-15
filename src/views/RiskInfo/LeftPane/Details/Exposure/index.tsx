@@ -73,9 +73,15 @@ class Exposure extends React.PureComponent<Props, State> {
 
     public componentWillUnmount() {
         const { setMapStyle } = this.props;
-        const { previousMapStyle } = this.state;
+        const {
+            previousMapStyle,
+            selectedId,
+        } = this.state;
 
         setMapStyle(previousMapStyle);
+        if (selectedId) {
+            this.context.removeLayer(`exposure-${selectedId}`);
+        }
     }
 
     private handleClick = (key: number | string) => {
@@ -119,6 +125,7 @@ class Exposure extends React.PureComponent<Props, State> {
         const { selectedId } = this.state;
 
         return ({
+            className: styles.option,
             label: labelSelector(layer),
             optionKey: keySelector(layer),
             onClick: this.handleClick,
@@ -135,7 +142,6 @@ class Exposure extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.exposure, className)}>
-                Exposure
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
                         Layers
@@ -150,6 +156,7 @@ class Exposure extends React.PureComponent<Props, State> {
                     </DangerButton>
                 </header>
                 <ListView
+                    className={styles.content}
                     data={layerOptions}
                     keySelector={keySelector}
                     renderer={Option}

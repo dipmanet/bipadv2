@@ -142,6 +142,7 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
             <ChoroplethMap
                 paint={colorPaint}
                 mapState={mapState}
+                regionLevel={1}
             />
         );
     }
