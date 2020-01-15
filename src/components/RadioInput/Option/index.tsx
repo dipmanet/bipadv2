@@ -7,8 +7,8 @@ import styles from './styles.scss';
 
 interface Props {
     className?: string;
-    onClick: (key: string) => void;
-    optionKey: string;
+    onClick: (key: string | number) => void;
+    optionKey: string | number;
     label?: React.ReactNode;
     isActive: boolean;
 }

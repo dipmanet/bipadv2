@@ -2,10 +2,16 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
+    max-width: 50px;
 
     .menu-item-list {
         flex-grow: 1;
         overflow: auto;
+
+        .menu-item {
+            border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+            padding: var(--spacing-medium) 0;
+        }
     }
 
     .bottom {

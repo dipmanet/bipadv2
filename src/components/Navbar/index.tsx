@@ -93,6 +93,8 @@ class Navbar extends React.PureComponent<Props, State> {
         title: data.title,
         link: data.path,
         disabled: data.disabled,
+        iconName: data.iconName,
+        className: styles.menuItem,
     });
 
     public render() {
