@@ -20,6 +20,8 @@ import { getHashFromBrowser } from '#rscg/HashManager';
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
+
+import { attributeColorMap } from './attributes';
 import Overview from './Overview';
 import Details from './Details';
 
@@ -50,6 +52,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
         onMount: true,
         onSuccess: ({ response, params: { setLayerMap } = { setLayerMap: undefined } }) => {
             const { results } = response as MultiResponse<Layer>;
+
             if (setLayerMap) {
                 setLayerMap(listToGroupList(results, d => d.category));
             }
@@ -145,6 +148,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
             activeAttribute,
         } = this.state;
 
+        const headerStyle = activeAttribute ? ({
+            borderTop: `3px solid ${attributeColorMap[activeAttribute]}`,
+            // backgroundColor: attributeColorMap[activeAttribute],
+            // color: '#fff',
+        }) : ({
+            borderTop: '3px solid transparent',
+        });
+
         return (
             <div className={
                 _cs(
@@ -154,7 +165,10 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                 )}
             >
                 <Loading pending={pending} />
-                <header className={styles.header}>
+                <header
+                    className={styles.header}
+                    style={headerStyle}
+                >
                     {activeAttribute ? (
                         <>
                             <Button
@@ -169,7 +183,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                         </>
                     ) : (
                         <h2 className={styles.heading}>
-                            Select an attribute to get started
+                            Risk info
                         </h2>
                     )}
                 </header>
