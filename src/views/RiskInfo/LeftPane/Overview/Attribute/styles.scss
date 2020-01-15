@@ -1,11 +1,15 @@
 .attribute {
     display: flex;
-    background-color: var(--color-foreground-alt);
+    background-color: var(--color-foreground);
     cursor: pointer;
-    padding: var(--spacing-small);
+    padding: var(--spacing-medium) var(--spacing-small);
+    filter: grayscale(0.8);
 
     .left {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
+        justify-content: center;
         padding: var(--spacing-medium) 0;
         width: var(--width-icon-extra-large);
         font-weight: var(--font-weight-bold);
@@ -13,6 +17,7 @@
         h4 {
             text-align: center;
             font-size: var(--font-size-extra-large);
+            font-weight: var(--font-weight-bold);
         }
     }
 
@@ -42,6 +47,7 @@
     &.active {
         border-right-color: var(--color-accent);
         background-color: var(--color-foreground);
-        color: var(--color-accent);
+        // color: var(--color-accent);
+        filter: grayscale(0);
     }
 }

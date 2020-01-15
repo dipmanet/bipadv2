@@ -54,7 +54,7 @@ const getItemValueDifference = (item) => {
 };
 
 const generateMapLegend = (colorPaint) => {
-    console.warn(colorPaint);
+    // console.warn(colorPaint);
 };
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
