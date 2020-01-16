@@ -57,11 +57,9 @@ export default class LossAndDamageMap extends React.PureComponent {
     generateMapState = memoize((geoareas, groupedIncidentMapping, metricFn) => {
         const value = geoareas.map(geoarea => ({
             id: geoarea.id,
-            value: {
-                count: groupedIncidentMapping
-                    ? metricFn(groupedIncidentMapping[geoarea.id])
-                    : 0,
-            },
+            value: groupedIncidentMapping
+                ? metricFn(groupedIncidentMapping[geoarea.id])
+                : 0,
         }));
         return value;
     });

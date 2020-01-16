@@ -67,12 +67,34 @@ class IncidentItem extends React.PureComponent {
         }
     }
 
+    handleMouseEnter = () => {
+        const {
+            onHover,
+            data,
+        } = this.props;
+
+        if (onHover) {
+            onHover(data.id);
+        }
+    }
+
+    handleMouseLeave = () => {
+        const {
+            onHover,
+        } = this.props;
+
+        if (onHover) {
+            onHover();
+        }
+    }
+
     render() {
         const {
             className,
             data,
             hazardTypes,
             recentDay,
+            isHovered,
         } = this.props;
 
         const {
@@ -97,12 +119,16 @@ class IncidentItem extends React.PureComponent {
         const isNew = isRecent(incidentOn, recentDay);
 
         return (
+            // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
             <div
                 className={_cs(
                     className,
                     styles.incidentItem,
                     isNew && styles.new,
+                    isHovered && styles.hovered,
                 )}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
             >
                 <div className={styles.left}>
                     <ScalableVectorGraphics

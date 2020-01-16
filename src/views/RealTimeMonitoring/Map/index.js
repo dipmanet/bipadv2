@@ -1,8 +1,8 @@
 import React from 'react';
 import memoize from 'memoize-one';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
@@ -256,38 +256,45 @@ export default class RealTimeMap extends React.PureComponent {
                 />
                 <MapSource
                     sourceKey="real-time-rain-points"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={rainFeatureCollection}
                     supportHover
                 >
                     { showRain && (
                         <MapLayer
                             layerKey="real-time-rain-symbol"
-                            type="symbol"
-                            layout={mapStyles.rainPoint.layout}
-                            paint={mapStyles.rainPoint.paint}
-                            enableHover
-                            onClick={this.handleRainClick}
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: mapStyles.rainPoint.layout,
+                                paint: mapStyles.rainPoint.paint,
+                                onClick: this.handleRainClick,
+                                enableHover: true,
+                            }}
                         />
                     )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-river-points"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={riverFeatureCollection}
                     supportHover
                 >
                     { showRiver && (
                         <MapLayer
                             layerKey="real-time-river-symbol"
-                            type="symbol"
-                            layout={mapStyles.riverPoint.layout}
-                            paint={mapStyles.riverPoint.paint}
-                            enableHover
-                            onClick={this.handleRiverClick}
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: mapStyles.riverPoint.layout,
+                                paint: mapStyles.riverPoint.paint,
+                                enableHover: true,
+                                onClick: this.handleRiverClick,
+                            }}
                         />
                     )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-eartquake-points"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={earthquakeFeatureCollection}
                     supportHover
                 >
@@ -295,19 +302,23 @@ export default class RealTimeMap extends React.PureComponent {
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
-                                type="circle"
-                                property="earthquakeId"
-                                paint={mapStyles.earthquakePoint.fill}
-                                enableHover
-                                tooltipRenderer={this.earthquakeTooltipRenderer}
-                                tooltipRendererParams={this.earthquakeTooltipRendererParams}
+                                layerOptions={{
+                                    type: 'circle',
+                                    property: 'earthquakeId',
+                                    paint: mapStyles.earthquakePoint.fill,
+                                    enableHover: true,
+                                    tooltipRenderer: this.earthquakeTooltipRenderer,
+                                    tooltipRendererParams: this.earthquakeTooltipRendererParams,
+                                }}
                             />
                             <MapLayer
                                 layerKey="real-time-earthquake-text"
-                                type="symbol"
-                                property="earthquakeId"
-                                layout={mapStyles.earthquakeText.layout}
-                                paint={mapStyles.earthquakeText.paint}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    property: 'earthquakeId',
+                                    layout: mapStyles.earthquakeText.layout,
+                                    paint: mapStyles.earthquakeText.paint,
+                                }}
                             />
                         </React.Fragment>
                     )}
@@ -315,43 +326,51 @@ export default class RealTimeMap extends React.PureComponent {
                 <MapSource
                     sourceKey="real-time-fire-points"
                     geoJson={fireFeatureCollection}
+                    sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
                     { showFire && (
                         <MapLayer
                             layerKey="real-time-fire-points-fill"
-                            type="symbol"
-                            property="fireId"
-                            layout={mapStyles.firePoint.layout}
-                            paint={mapStyles.firePoint.paint}
-                            enableHover
-                            tooltipRenderer={this.fireTooltipRenderer}
-                            tooltipRendererParams={this.fireTooltipRendererParams}
+                            layerOptions={{
+                                type: 'symbol',
+                                property: 'fireId',
+                                layout: mapStyles.firePoint.layout,
+                                paint: mapStyles.firePoint.paint,
+                                enableHover: true,
+                                tooltipRenderer: this.fireTooltipRenderer,
+                                tooltipRendererParams: this.fireTooltipRendererParams,
+                            }}
                         />
                     )}
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-pollution-points"
                     geoJson={pollutionFeatureCollection}
+                    sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
                     { showPollution && (
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
-                                type="circle"
-                                property="pollutionId"
-                                paint={mapStyles.pollutionPoint.fill}
-                                enableHover
-                                tooltipRenderer={this.pollutionTooltipRenderer}
-                                tooltipRendererParams={this.pollutionTooltipRendererParams}
+                                layerOptions={{
+                                    type: 'circle',
+                                    property: 'pollutionId',
+                                    paint: mapStyles.pollutionPoint.fill,
+                                    enableHover: true,
+                                    tooltipRenderer: this.pollutionTooltipRenderer,
+                                    tooltipRendererParams: this.pollutionTooltipRendererParams,
+                                }}
                             />
                             <MapLayer
                                 layerKey="real-time-pollution-text"
-                                type="symbol"
-                                property="pollutionId"
-                                layout={mapStyles.pollutionText.layout}
-                                paint={mapStyles.pollutionText.paint}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    property: 'pollutionId',
+                                    layout: mapStyles.pollutionText.layout,
+                                    paint: mapStyles.pollutionText.paint,
+                                }}
                             />
                         </React.Fragment>
                     )}

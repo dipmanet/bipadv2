@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import MapBounds from '#re-map/MapBounds';
+import MapState from '#re-map/MapSource/MapState';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 
@@ -155,13 +156,20 @@ class ChoroplethMap extends React.PureComponent {
 
         const provinceMapState = showProvinceFill ? mapState : undefined;
         const districtMapState = showDistrictFill ? mapState : undefined;
-        const municipalityWardState = showMunicipalityFill ? mapState : undefined;
+        const municipalityMapState = showMunicipalityFill ? mapState : undefined;
         const wardMapState = showWardFill ? mapState : undefined;
 
         const provinceLabels = this.getProvincesFeatureCollection(provinces);
         const districtLabels = this.getDistrictsFeatureCollection(districts);
         const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
         const wardLabels = this.getWardsFeatureCollection(wards);
+
+        const {
+            ward,
+            municipality,
+            district,
+            province,
+        } = mapSources.nepal.layers;
 
         return (
             <Fragment>
@@ -170,7 +178,7 @@ class ChoroplethMap extends React.PureComponent {
                     padding={20}
                 />
                 <MapSource
-                    sourceKey={`${sourceKey}-outlines`}
+                    sourceKey={`${sourceKey}-fills`}
                     sourceOptions={{
                         type: 'vector',
                         url: mapSources.nepal.url,
@@ -180,9 +188,8 @@ class ChoroplethMap extends React.PureComponent {
                         layerKey="ward-fill"
                         layerOptions={{
                             type: 'fill',
-                            sourceLayer: mapSources.nepal.layers.ward,
+                            'source-layer': mapSources.nepal.layers.ward,
                             paint,
-                            mapState: wardMapState,
                             layout: showWardFill ? visibleLayout : noneLayout,
                             filter: wardFilter,
                         }}
@@ -191,9 +198,8 @@ class ChoroplethMap extends React.PureComponent {
                         layerKey="municipality-fill"
                         layerOptions={{
                             type: 'fill',
-                            sourceLayer: mapSources.nepal.layers.municipality,
+                            'source-layer': mapSources.nepal.layers.municipality,
                             paint,
-                            mapState: municipalityWardState,
                             layout: showMunicipalityFill ? visibleLayout : noneLayout,
                             filter: municipalityFilter,
                         }}
@@ -202,9 +208,8 @@ class ChoroplethMap extends React.PureComponent {
                         layerKey="district-fill"
                         layerOptions={{
                             type: 'fill',
-                            sourceLayer: mapSources.nepal.layers.district,
+                            'source-layer': mapSources.nepal.layers.district,
                             paint,
-                            mapState: districtMapState,
                             layout: showDistrictFill ? visibleLayout : noneLayout,
                             filter: districtFilter,
                         }}
@@ -213,13 +218,40 @@ class ChoroplethMap extends React.PureComponent {
                         layerKey="province-fill"
                         layerOptions={{
                             type: 'fill',
-                            sourceLayer: mapSources.nepal.layers.province,
+                            'source-layer': mapSources.nepal.layers.province,
                             paint,
-                            mapState: provinceMapState,
                             layout: showProvinceFill ? visibleLayout : noneLayout,
                             filter: provinceFilter,
                         }}
                     />
+                    <MapState
+                        attributes={wardMapState}
+                        attributeKey="count"
+                        sourceLayer={ward}
+                    />
+                    <MapState
+                        attributes={districtMapState}
+                        attributeKey="count"
+                        sourceLayer={district}
+                    />
+                    <MapState
+                        attributes={municipalityMapState}
+                        attributeKey="count"
+                        sourceLayer={municipality}
+                    />
+                    <MapState
+                        attributes={provinceMapState}
+                        attributeKey="count"
+                        sourceLayer={province}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-outlines`}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepal.url,
+                    }}
+                >
                     <MapLayer
                         layerKey="ward-outline"
                         layerOptions={{

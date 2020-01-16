@@ -140,6 +140,8 @@ class LeftPane extends React.PureComponent {
             incidentList: incidentListNoSeverity,
             hazardTypes,
             recentDay,
+            onIncidentHover,
+            hoveredIncidentId,
         } = this.props;
 
         const {
@@ -190,6 +192,8 @@ class LeftPane extends React.PureComponent {
                         </div>
                     </header>
                     <IncidentListView
+                        onIncidentHover={onIncidentHover}
+                        hoveredIncidentId={hoveredIncidentId}
                         hazardTypes={hazardTypes}
                         className={styles.content}
                         incidentList={incidentList}

@@ -56,6 +56,10 @@ interface State {
     leftPaneExpanded?: boolean;
     rightPaneExpanded?: boolean;
     selectedIncidentId?: number;
+    mapHoverAttributes: {
+        id: number;
+        value: boolean;
+    }[];
 }
 
 interface Params {
@@ -177,6 +181,7 @@ class Incidents extends React.PureComponent<Props, State> {
             leftPaneExpanded: true,
             rightPaneExpanded: true,
             selectedIncidentId: undefined,
+            mapHoverAttributes: [],
         };
     }
 
@@ -204,7 +209,16 @@ class Incidents extends React.PureComponent<Props, State> {
     }
 
     private handleIncidentHover = (selectedIncidentId: number) => {
-        this.setState({ selectedIncidentId });
+        if (selectedIncidentId) {
+            this.setState({
+                mapHoverAttributes: [{
+                    id: selectedIncidentId,
+                    value: true,
+                }],
+            });
+        } else {
+            this.setState({ mapHoverAttributes: [] });
+        }
     }
 
     private renderHoverItemDetail = () => {
@@ -270,6 +284,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             leftPaneExpanded,
             rightPaneExpanded,
+            mapHoverAttributes,
         } = this.state;
 
         const sanitizedIncidentList = this.getSanitizedIncidents(
@@ -292,6 +307,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     incidentList={sanitizedIncidentList}
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
+                    mapHoverAttributes={mapHoverAttributes}
                 />
                 <Page
                     leftContentClassName={styles.leftPaneContainer}
@@ -301,6 +317,8 @@ class Incidents extends React.PureComponent<Props, State> {
                             incidentList={sanitizedIncidentList}
                             onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
+                            onIncidentHover={this.handleIncidentHover}
+                            hoveredIncidentId={(mapHoverAttributes[0] || {}).id}
                         />
                     )}
                     mainContentClassName={_cs(styles.legendContainer, 'map-legend-container')}

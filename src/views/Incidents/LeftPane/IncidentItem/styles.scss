@@ -5,6 +5,7 @@
     height: 120px;
     overflow: hidden;
 
+    &.hovered,
     &:hover {
         background-color: var(--color-background-hover);
     }
@@ -12,6 +13,7 @@
     &.new {
         background-color: var(--color-background-new-item);
 
+        &.hovered,
         &:hover {
             background-color: var(--color-background-new-item-hover);
         }

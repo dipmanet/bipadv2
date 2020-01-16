@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -100,12 +101,21 @@ class IncidentMap extends React.PureComponent {
         };
     })
 
+    handleIncidentMouseEnter = (feature) => {
+        this.props.onIncidentHover(feature.id);
+    }
+
+    handleIncidentMouseLeave = () => {
+        this.props.onIncidentHover(undefined);
+    }
+
     render() {
         const {
             incidentList,
             hazards,
             recentDay,
             onIncidentHover,
+            mapHoverAttributes,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -152,11 +162,17 @@ class IncidentMap extends React.PureComponent {
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.incidentPoint.fill,
-                            enableHover: true,
-                            tooltipRenderer: IncidentInfo,
-                            tooltipRendererParams: this.tooltipRendererParams,
-                            onHoverChange: onIncidentHover,
+                            // enableHover: true,
+                            // tooltipRenderer: IncidentInfo,
+                            // tooltipRendererParams: this.tooltipRendererParams,
+                            // onHoverChange: onIncidentHover,
                         }}
+                        onMouseEnter={this.handleIncidentMouseEnter}
+                        onMouseLeave={this.handleIncidentMouseLeave}
+                    />
+                    <MapState
+                        attributes={mapHoverAttributes}
+                        attributeKey="hover"
                     />
                 </MapSource>
             </React.Fragment>
