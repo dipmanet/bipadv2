@@ -101,3 +101,8 @@ export interface LayerHierarchy extends LayerGroup {
 export interface LayerMap {
     [key: number]: LayerHierarchy;
 }
+
+export interface LegendItem {
+    color: string;
+    label: string;
+}

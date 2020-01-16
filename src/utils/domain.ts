@@ -23,6 +23,7 @@ import {
     LayerGroup,
 } from '#store/atom/page/types';
 import {
+    LegendItem,
     LayerHierarchy,
     LayerMap,
 } from '#types';
@@ -747,4 +748,25 @@ export function getLayerHierarchy(
     });
 
     return tree;
+}
+
+function formatNumber(num: number) {
+    return num.toFixed(2).replace(/\.00$/, '');
+}
+
+export function generateLegendData(colorPaint: (string | number)[]) {
+    let initialValue = 0;
+    const legendData = colorPaint.reduce((acc: LegendItem[], _, index, array) => {
+        if (index % 2 === 0) {
+            const [value, colorValue] = array.slice(index, index + 2);
+            const label = `${formatNumber(initialValue)} - ${formatNumber(Number(value))}`;
+            const color = `${colorValue}`;
+            initialValue = Number(value);
+
+            acc.push({ label, color });
+        }
+        return acc;
+    }, []);
+
+    return legendData;
 }

@@ -3,8 +3,14 @@ import memoize from 'memoize-one';
 import { extent } from 'd3-array';
 import { isNotDefined } from '@togglecorp/fujs';
 
-import { NapValue, MapState } from '#types';
+import {
+    NapValue,
+    MapState,
+    LegendItem,
+} from '#types';
+import Legend from '#rscz/Legend';
 import ChoroplethMap from '#components/ChoroplethMap';
+import { generateLegendData } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -41,6 +47,10 @@ const rainColors: string[] = [
     '#0c2c84',
 ];
 
+const keySelector = (d: LegendItem) => d.label;
+const labelSelector = (d: LegendItem) => d.label;
+const colorSelector = (d: LegendItem) => d.color;
+
 const getItemValueDifference = (item) => {
     const {
         district,
@@ -51,10 +61,6 @@ const getItemValueDifference = (item) => {
     const diff = Math.abs(filteredList[0].value - filteredList[filteredList.length - 1].value);
 
     return diff;
-};
-
-const generateMapLegend = (colorPaint) => {
-    // console.warn(colorPaint);
 };
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
@@ -123,6 +129,8 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         });
     })
 
+    private getLegendData = memoize(generateLegendData);
+
     public render() {
         const {
             data,
@@ -136,14 +144,30 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         const color = this.generateColor(max, min, measurementType, scenario);
         const colorPaint = this.generatePaint(color);
 
-        generateMapLegend(color);
+        const legendData = this.getLegendData(color);
 
         return (
-            <ChoroplethMap
-                paint={colorPaint}
-                mapState={mapState}
-                regionLevel={1}
-            />
+            <div className={styles.map}>
+                <ChoroplethMap
+                    paint={colorPaint}
+                    mapState={mapState}
+                    regionLevel={1}
+                />
+                <div className={styles.legendContainer}>
+                    <h4 className={styles.heading}>
+                        Legend
+                    </h4>
+                    <Legend
+                        className={styles.legend}
+                        data={legendData}
+                        itemClassName={styles.legendItem}
+                        keySelector={keySelector}
+                        labelSelector={labelSelector}
+                        colorSelector={colorSelector}
+                        emptyComponent={null}
+                    />
+                </div>
+            </div>
         );
     }
 }
