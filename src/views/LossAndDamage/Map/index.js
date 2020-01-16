@@ -49,7 +49,7 @@ export default class LossAndDamageMap extends React.PureComponent {
         'fill-color': [
             'interpolate',
             ['linear'],
-            ['feature-state', 'count'],
+            ['feature-state', 'value'],
             ...color,
         ],
     }))
@@ -72,6 +72,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             maxValue,
             metricName,
             isTimeline,
+            sourceKey,
         } = this.props;
 
         const color = this.generateColor(maxValue, 0, colorGrade);
@@ -118,6 +119,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                     </div>
                 </div>
                 <ChoroplethMap
+                    sourceKey={sourceKey}
                     paint={colorPaint}
                     mapState={mapState}
                 />

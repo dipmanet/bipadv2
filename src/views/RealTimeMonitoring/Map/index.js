@@ -252,6 +252,7 @@ export default class RealTimeMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap
+                    sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
                 <MapSource

@@ -155,7 +155,7 @@ class CommonMap extends React.PureComponent {
             <Fragment>
                 <MapBounds
                     bounds={bounds}
-                    padding={20}
+                    padding={boundsPadding}
                 />
                 <MapSource
                     sourceKey={`${sourceKey}-outlines`}

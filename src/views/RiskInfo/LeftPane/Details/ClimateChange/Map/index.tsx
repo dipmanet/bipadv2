@@ -67,10 +67,7 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
     private generateMapState = memoize((data: NapData[]) => {
         const mapState = data.map(item => ({
             id: item.district,
-            value: {
-                value: getItemValueDifference(item),
-                // value: mean(item.value.map(v => v.value).filter(isDefined)),
-            },
+            value: getItemValueDifference(item),
         }));
 
         return mapState;
@@ -139,7 +136,7 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         } = this.props;
 
         const mapState = this.generateMapState(data);
-        const [min, max] = extent(mapState, (d: MapState) => d.value.value);
+        const [min, max] = extent(mapState, (d: MapState) => d.value);
 
         const color = this.generateColor(max, min, measurementType, scenario);
         const colorPaint = this.generatePaint(color);

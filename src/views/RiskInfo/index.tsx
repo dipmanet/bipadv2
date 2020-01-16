@@ -10,7 +10,6 @@ import {
 
 import SortableListView from '#rscv/SortableListView';
 
-import Map from './Map';
 import LeftPane from './LeftPane';
 import RightPane from './RightPane';
 
@@ -68,30 +67,24 @@ class RiskInfo extends React.PureComponent<Props, State> {
         const { activeView } = this.state;
 
         return (
-            <>
-                {(
-                    activeView !== 'climate-change'
-                    && activeView !== 'vulnerability'
-                ) && <Map /> }
-                <Page
-                    leftContentClassName={styles.leftContainer}
-                    leftContent={(
-                        <LeftPane
-                            onViewChange={this.handleViewChange}
-                            className={styles.leftPane}
-                        />
-                    )}
-                    rightContent={(
-                        <RightPane />
-                    )}
-                    mainContentClassName={styles.mainContent}
-                    mainContent={(
-                        <RiskInfoLayerContext.Consumer>
-                            { LayerList }
-                        </RiskInfoLayerContext.Consumer>
-                    )}
-                />
-            </>
+            <Page
+                leftContentClassName={styles.leftContainer}
+                leftContent={(
+                    <LeftPane
+                        onViewChange={this.handleViewChange}
+                        className={styles.leftPane}
+                    />
+                )}
+                rightContent={(
+                    <RightPane />
+                )}
+                mainContentClassName={styles.mainContent}
+                mainContent={(
+                    <RiskInfoLayerContext.Consumer>
+                        { LayerList }
+                    </RiskInfoLayerContext.Consumer>
+                )}
+            />
         );
     }
 }

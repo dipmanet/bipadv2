@@ -131,6 +131,7 @@ export default class Overview extends React.PureComponent {
                     metric={selectedMetric.metricFn}
                     metricName={selectedMetric.label}
                     rightPaneExpanded={rightPaneExpanded}
+                    sourceKey="loss-and-damage-overview"
                 />
                 <Page
                     leftContentClassName={styles.left}

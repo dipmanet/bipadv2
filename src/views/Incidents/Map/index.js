@@ -126,7 +126,7 @@ class IncidentMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <CommonMap />
+                <CommonMap sourceKey="incidents" />
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}

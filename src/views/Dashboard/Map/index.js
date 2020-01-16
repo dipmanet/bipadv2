@@ -191,7 +191,7 @@ class AlertEventMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <CommonMap />
+                <CommonMap sourceKey="dashboard" />
                 <MapSource
                     sourceKey="alerts-convex-polygon"
                     sourceOptions={{ type: 'geojson' }}

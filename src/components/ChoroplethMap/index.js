@@ -226,22 +226,22 @@ class ChoroplethMap extends React.PureComponent {
                     />
                     <MapState
                         attributes={wardMapState}
-                        attributeKey="count"
+                        attributeKey="value"
                         sourceLayer={ward}
                     />
                     <MapState
                         attributes={districtMapState}
-                        attributeKey="count"
+                        attributeKey="value"
                         sourceLayer={district}
                     />
                     <MapState
                         attributes={municipalityMapState}
-                        attributeKey="count"
+                        attributeKey="value"
                         sourceLayer={municipality}
                     />
                     <MapState
                         attributes={provinceMapState}
-                        attributeKey="count"
+                        attributeKey="value"
                         sourceLayer={province}
                     />
                 </MapSource>

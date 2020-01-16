@@ -5,8 +5,10 @@ import {
 } from '@togglecorp/fujs';
 
 import DangerButton from '#rsca/Button/DangerButton';
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+
+import CommonMap from '#components/CommonMap';
 
 import LayerSelection from '#components/LayerSelection';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
@@ -131,6 +133,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.capacityAndResources, className)}>
+                <CommonMap sourceKey="capacity-and-resources" />
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
                         Layers
@@ -165,15 +168,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 )}
                 { selectedLayer && (
                     <MapSource
-                        key={selectedLayer.id}
-                        sourceKey={`layer-${selectedLayer.id}`}
-                        rasterTiles={rasterTiles}
+                        sourceKey={`capacity-source-${selectedLayer.id}`}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: rasterTiles,
+                            tileSize: 256,
+                        }}
                     >
                         <MapLayer
                             layerKey={`layer-${selectedLayer.id}`}
-                            type="raster"
-                            paint={{
-                                'raster-opacity': layerOpacity,
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': layerOpacity,
+                                },
                             }}
                         />
                     </MapSource>

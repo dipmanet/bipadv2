@@ -369,6 +369,7 @@ export default class Timeline extends React.PureComponent {
                     metricName={selectedMetric.label}
                     geoareas={geoareas}
                     isTimeline
+                    sourceKey="loss-and-damage-timeline"
                 />
                 <Page
                     leftContentClassName={styles.left}
