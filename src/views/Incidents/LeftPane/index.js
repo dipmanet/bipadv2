@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 import {
     _cs,
-    isDefined,
+    compareDate,
 } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
@@ -12,22 +13,17 @@ import modalize from '#rscg/Modalize';
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
 
-import { iconNames } from '#constants';
-
 import {
     hazardTypesSelector,
 } from '#selectors';
 import {
     setIncidentActionIP,
+    patchIncidentActionIP,
 } from '#actionCreators';
 import Cloak from '#components/Cloak';
 
 import IncidentListView from './ListView';
 import AddIncidentForm from './AddIncidentForm';
-import AddDocumentForm from './AddDocumentForm';
-import AddResourceForm from './AddResourceForm';
-import AddInventoryForm from './AddInventoryForm';
-import AddLossModal from './AddLossModal';
 
 import styles from './styles.scss';
 
@@ -37,8 +33,11 @@ const propTypes = {
     className: PropTypes.string,
     hazardTypes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-    // eslint-disable-next-line react/no-unused-prop-types
     setIncident: PropTypes.func.isRequired,
+    patchIncident: PropTypes.func.isRequired,
+    onIncidentHover: PropTypes.func.isRequired,
+    recentDay: PropTypes.number.isRequired,
+    hoveredIncidentId: PropTypes.number.isRequired,
 };
 
 const defaultProps = {
@@ -46,6 +45,7 @@ const defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
+    patchIncident: params => dispatch(patchIncidentActionIP(params)),
     setIncident: params => dispatch(setIncidentActionIP(params)),
 });
 
@@ -58,21 +58,31 @@ class LeftPane extends React.PureComponent {
         super(props);
 
         this.state = {
-            showIncidents: true,
-            showTabular: false,
             showVisualizations: false,
             lossServerId: undefined,
             incidentServerId: undefined,
         };
     }
 
+    getMappedIncidentList = memoize((incidentList) => {
+        const newIncidentList = incidentList.map(incident => ({
+            ...incident,
+            severity: calculateCategorizedSeverity(
+                calculateSeverity(incident.loss, severityScaleFactor),
+            ),
+        })).sort((a, b) => compareDate(b.incidentOn, a.incidentOn));
+        return newIncidentList;
+    });
+
     handleToggleVisualizationButtonClick = () => {
         const { showVisualizations } = this.state;
+
         this.setState({
             showVisualizations: !showVisualizations,
         });
     }
 
+    /*
     handleCollapseTabularViewButtonClick = () => {
         this.setState({ showTabular: false });
     }
@@ -98,27 +108,33 @@ class LeftPane extends React.PureComponent {
             onExpandChange(false);
         }
     }
+    */
 
     handleIncidentEdit = (incident) => {
         const { setIncident } = this.props;
 
-        setIncident(incident);
+        setIncident({ incident });
         this.setState({
             incidentServerId: incident.id,
         });
     }
 
     handleLossEdit = (loss, incident) => {
-        const { setIncident } = this.props;
+        const { patchIncident } = this.props;
 
-        if (isDefined(incident)) {
-            setIncident(incident);
-        }
+        patchIncident({
+            incident: {
+                loss,
+            },
+            incidentId: incident.id,
+        });
+
         this.setState({
             lossServerId: loss.id,
         });
     }
 
+    /*
     renderTabularViewHeader = () => (
         <header className={styles.header}>
             <h4 className={styles.heading}>
@@ -133,11 +149,12 @@ class LeftPane extends React.PureComponent {
             />
         </header>
     )
+    */
 
     render() {
         const {
             className,
-            incidentList: incidentListNoSeverity,
+            incidentList: incidentListFromProps,
             hazardTypes,
             recentDay,
             onIncidentHover,
@@ -145,20 +162,11 @@ class LeftPane extends React.PureComponent {
         } = this.props;
 
         const {
-            showIncidents,
-            showTabular,
-            showVisualizations,
             lossServerId,
             incidentServerId,
         } = this.state;
 
-        // FIXME: fix this
-        const incidentList = incidentListNoSeverity.map(incident => ({
-            ...incident,
-            severity: calculateCategorizedSeverity(
-                calculateSeverity(incident.loss, severityScaleFactor),
-            ),
-        }));
+        const incidentList = this.getMappedIncidentList(incidentListFromProps);
 
         return (
             <div className={_cs(className, styles.leftPane)}>

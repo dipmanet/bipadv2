@@ -11,6 +11,9 @@ import styles from './styles.scss';
 const propTypes = {
     className: PropTypes.string,
     incidentList: PropTypes.arrayOf(PropTypes.object),
+    recentDay: PropTypes.number.isRequired,
+    hoveredIncidentId: PropTypes.number.isRequired,
+    onIncidentHover: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -31,14 +34,23 @@ export default class IncidentListView extends React.PureComponent {
 
     static defaultProps = defaultProps
 
-    getIncidentRendererParams = (_, d) => ({
-        data: d,
-        className: styles.incident,
-        hazardTypes: this.props.hazardTypes,
-        recentDay: this.props.recentDay,
-        onHover: this.props.onIncidentHover,
-        isHovered: d.id === this.props.hoveredIncidentId,
-    });
+    getIncidentRendererParams = (_, d) => {
+        const {
+            hazardTypes,
+            recentTypes,
+            recentDay,
+            onIncidentHover,
+            hoveredIncidentId,
+        } = this.props;
+
+        return ({
+            data: d,
+            hazardTypes,
+            recentDay,
+            onHover: onIncidentHover,
+            isHovered: d.id === hoveredIncidentId,
+        });
+    }
 
     render() {
         const {

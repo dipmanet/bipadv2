@@ -50,6 +50,7 @@ interface Views {
 interface Params {
     body?: object;
     onAddFailure?: (faramErrors: object) => void;
+    incidentServerId?: number;
 }
 
 interface OwnProps {
@@ -111,9 +112,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         ),
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ props, response }) => {
-            const { onIncidentChange } = props;
-            if (onIncidentChange) {
-                onIncidentChange(response);
+            const {
+                requests: { incidentGetRequest },
+            } = props;
+            if (incidentGetRequest) {
+                incidentGetRequest.do({ incidentServerId: response.id });
             }
             // TODO: patch or add incident to incident list
         },
@@ -122,6 +125,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 const { faramErrors } = error as { faramErrors: object };
                 params.onAddFailure(faramErrors);
             }
+        },
+    },
+    incidentGetRequest: {
+        url: ({ params: { incidentServerId } }) => `/incident/${incidentServerId}/`,
+        query: ({
+            expand: ['loss', 'event', 'wards'],
+        }),
+        method: methods.GET,
+        onSuccess: ({ props, response }) => {
+            const { onIncidentChange } = props;
+            if (onIncidentChange) {
+                onIncidentChange(response);
+            }
+            // TODO: patch or add incident to incident list
         },
     },
 };
@@ -258,11 +275,13 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     const {
                         onLossChange,
                         lossServerId,
+                        incidentServerId,
                     } = this.props;
 
                     return (
                         <Loss
                             lossServerId={lossServerId}
+                            incidentServerId={incidentServerId}
                             onLossChange={onLossChange}
                         />
                     );
