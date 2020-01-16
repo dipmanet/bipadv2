@@ -153,20 +153,22 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
                     mapState={mapState}
                     regionLevel={1}
                 />
-                <div className={styles.legendContainer}>
-                    <h4 className={styles.heading}>
-                        Legend
-                    </h4>
-                    <Legend
-                        className={styles.legend}
-                        data={legendData}
-                        itemClassName={styles.legendItem}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        colorSelector={colorSelector}
-                        emptyComponent={null}
-                    />
-                </div>
+                { legendData.length > 0 && (
+                    <div className={styles.legendContainer}>
+                        <h4 className={styles.heading}>
+                            Legend
+                        </h4>
+                        <Legend
+                            className={styles.legend}
+                            data={legendData}
+                            itemClassName={styles.legendItem}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            colorSelector={colorSelector}
+                            emptyComponent={null}
+                        />
+                    </div>
+                )}
             </div>
         );
     }

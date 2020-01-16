@@ -7,12 +7,12 @@
         flex-direction: column;
         border: var(--width-separator-thin) solid var(--color-separator);
         background-color: var(--color-foreground);
-        padding: var(--spacing-small);
+        padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
         overflow: auto;
 
         .heading {
             flex-shrink: 0;
-            padding: var(--spacing-medium);
+            padding: var(--spacing-small) var(--spacing-medium);
             text-transform: uppercase;
             color: var(--color-text);
             font-size: var(--font-size-small);
@@ -20,6 +20,7 @@
 
         .legend {
             flex-grow: 1;
+            padding: var(--spacing-small) var(--spacing-medium);
 
             .legend-item {
                 display: flex;
@@ -28,7 +29,7 @@
                 font-weight: var(--font-weight-bold);
 
                 >div:first-child {
-                    width: 24px;
+                    width: 20px;
                     text-align: center;
                 }
 
