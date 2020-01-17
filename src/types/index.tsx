@@ -106,3 +106,8 @@ export interface LegendItem {
     color: string;
     label: string;
 }
+
+export interface Scenario {
+    key: string;
+    label: string;
+}

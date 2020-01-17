@@ -8,6 +8,7 @@ import MapBounds from '#re-map/MapBounds';
 import MapState from '#re-map/MapSource/MapState';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapTooltip from '#re-map/MapTooltip';
 
 import { mapSources, mapStyles } from '#constants';
 
@@ -53,6 +54,8 @@ const propTypes = {
     selectedDistrictId: PropTypes.number,
     selectedMunicipalityId: PropTypes.number,
     sourceKey: PropTypes.string,
+    tooltipRenderer: PropTypes.func,
+    tooltipParams: PropTypes.func,
 };
 
 const defaultProps = {
@@ -62,6 +65,8 @@ const defaultProps = {
     selectedProvinceId: undefined,
     selectedDistrictId: undefined,
     selectedMunicipalityId: undefined,
+    tooltipRenderer: undefined,
+    tooltipParams: undefined,
     sourceKey: 'country',
 };
 
@@ -86,6 +91,15 @@ const noneLayout = {
 };
 
 class ChoroplethMap extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            feature: undefined,
+            hoverLngLat: undefined,
+        };
+    }
+
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -106,6 +120,20 @@ class ChoroplethMap extends React.PureComponent {
 
     getProvinceFilter = memoize(getProvinceFilter);
 
+    handleMouseEnter = (feature, lngLat) => {
+        this.setState({
+            feature,
+            hoverLngLat: lngLat,
+        });
+    }
+
+    handleMouseLeave = () => {
+        this.setState({
+            feature: undefined,
+            hoverLngLat: undefined,
+        });
+    }
+
     render() {
         const {
             boundsPadding,
@@ -124,6 +152,8 @@ class ChoroplethMap extends React.PureComponent {
             mapState,
             regionLevelFromAppState,
             regionLevel = regionLevelFromAppState,
+            tooltipRenderer: TooltipRenderer,
+            tooltipParams,
         } = this.props;
 
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
@@ -171,6 +201,22 @@ class ChoroplethMap extends React.PureComponent {
             province,
         } = mapSources.nepal.layers;
 
+        const {
+            hoverLngLat,
+            feature,
+        } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: false,
+            closeButton: false,
+            offset: 8,
+        };
+
+        let extraParams = {};
+        if (tooltipParams) {
+            extraParams = tooltipParams();
+        }
+
         return (
             <Fragment>
                 <MapBounds
@@ -186,6 +232,7 @@ class ChoroplethMap extends React.PureComponent {
                 >
                     <MapLayer
                         layerKey="ward-fill"
+
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.ward,
@@ -196,6 +243,8 @@ class ChoroplethMap extends React.PureComponent {
                     />
                     <MapLayer
                         layerKey="municipality-fill"
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.municipality,
@@ -206,6 +255,8 @@ class ChoroplethMap extends React.PureComponent {
                     />
                     <MapLayer
                         layerKey="district-fill"
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.district,
@@ -224,6 +275,18 @@ class ChoroplethMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
+                    {TooltipRenderer && hoverLngLat && (
+                        <MapTooltip
+                            coordinates={hoverLngLat}
+                            tooltipOptions={tooltipOptions}
+                            trackPointer
+                        >
+                            <TooltipRenderer
+                                feature={feature}
+                                {...extraParams}
+                            />
+                        </MapTooltip>
+                    )}
                     <MapState
                         attributes={wardMapState}
                         attributeKey="value"
