@@ -146,6 +146,7 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         return (
             <div className={styles.map}>
                 <ChoroplethMap
+                    sourceKey="risk-info-climate-change"
                     paint={colorPaint}
                     mapState={mapState}
                     regionLevel={1}
