@@ -50,16 +50,14 @@ import { getSanitizedIncidents } from '../LossAndDamage/common';
 
 import styles from './styles.scss';
 
-const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
+const emptyHoverAttributeList: {
+    id: number;
+    value: boolean;
+}[] = [];
 
 interface State {
-    leftPaneExpanded?: boolean;
-    rightPaneExpanded?: boolean;
     selectedIncidentId?: number;
-    mapHoverAttributes: {
-        id: number;
-        value: boolean;
-    }[];
+    hoveredIncidentId: number | undefined;
 }
 
 interface Params {
@@ -178,10 +176,8 @@ class Incidents extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            leftPaneExpanded: true,
-            rightPaneExpanded: true,
             selectedIncidentId: undefined,
-            mapHoverAttributes: [],
+            hoveredIncidentId: undefined,
         };
     }
 
@@ -200,74 +196,19 @@ class Incidents extends React.PureComponent<Props, State> {
         ),
     );
 
-    private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
-        this.setState({ leftPaneExpanded });
+    private handleIncidentHover = (hoveredIncidentId: number) => {
+        this.setState({ hoveredIncidentId });
     }
 
-    private handleRightPaneExpandChange = (rightPaneExpanded: boolean) => {
-        this.setState({ rightPaneExpanded });
-    }
-
-    private handleIncidentHover = (selectedIncidentId: number) => {
-        if (selectedIncidentId) {
-            this.setState({
-                mapHoverAttributes: [{
-                    id: selectedIncidentId,
-                    value: true,
-                }],
-            });
-        } else {
-            this.setState({ mapHoverAttributes: [] });
-        }
-    }
-
-    private renderHoverItemDetail = () => {
-        const {
-            selectedIncidentId,
-            rightPaneExpanded,
-        } = this.state;
-
-        const { incidentList, regions, hazardTypes } = this.props;
-        const sanitizedIncidentList = this.getSanitizedIncidents(
-            incidentList,
-            regions,
-            hazardTypes,
-        );
-        const incidentMap = this.getIncidentMap(sanitizedIncidentList);
-
-        if (!selectedIncidentId || !incidentMap[selectedIncidentId]) {
-            return null;
+    private getMapHoverAttributes = (hoveredIncidentId: number | undefined) => {
+        if (!hoveredIncidentId) {
+            return emptyHoverAttributeList;
         }
 
-        const selectedIncident = incidentMap[selectedIncidentId];
-
-        return (
-            <div className={
-                _cs(
-                    rightPaneExpanded && styles.rightPaneExpanded,
-                    styles.hoverDetailBox,
-                )
-            }
-            >
-                <h3 title={selectedIncident.title}>
-                    {selectedIncident.title}
-                </h3>
-                <DateOutput
-                    value={selectedIncident.incidentOn}
-                    alwaysVisible
-                />
-                <GeoOutput
-                    className={styles.geoOutput}
-                    geoareaName={selectedIncident.streetAddress}
-                    alwaysVisible
-                />
-                <TextOutput
-                    label="Source"
-                    value={selectedIncident.source}
-                    alwaysVisible
-                />
-            </div>
-        );
+        return [{
+            id: hoveredIncidentId,
+            value: true,
+        }];
     }
 
     public render() {
@@ -281,11 +222,7 @@ class Incidents extends React.PureComponent<Props, State> {
             hazardTypes,
         } = this.props;
 
-        const {
-            leftPaneExpanded,
-            rightPaneExpanded,
-            mapHoverAttributes,
-        } = this.state;
+        const { hoveredIncidentId } = this.state;
 
         const sanitizedIncidentList = this.getSanitizedIncidents(
             incidentList,
@@ -293,17 +230,16 @@ class Incidents extends React.PureComponent<Props, State> {
             hazardTypes,
         );
 
+        const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
+
         const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
 
         const pending = pendingEvents || pendingIncidents;
-        // const HoverItemDetail = this.renderHoverItemDetail;
 
         return (
             <React.Fragment>
                 <Loading pending={pending} />
                 <Map
-                    leftPaneExpanded={leftPaneExpanded}
-                    rightPaneExpanded={rightPaneExpanded}
                     incidentList={sanitizedIncidentList}
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
@@ -315,10 +251,9 @@ class Incidents extends React.PureComponent<Props, State> {
                         <LeftPane
                             className={styles.leftPane}
                             incidentList={sanitizedIncidentList}
-                            onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                             onIncidentHover={this.handleIncidentHover}
-                            hoveredIncidentId={(mapHoverAttributes[0] || {}).id}
+                            hoveredIncidentId={hoveredIncidentId}
                         />
                     )}
                     mainContentClassName={_cs(styles.legendContainer, 'map-legend-container')}

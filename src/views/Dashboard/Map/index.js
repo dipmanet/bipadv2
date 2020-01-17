@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
+
 import FormattedDate from '#rscv/FormattedDate';
 
 import CommonMap from '#components/CommonMap';
@@ -161,12 +163,30 @@ class AlertEventMap extends React.PureComponent {
         this.props.onHoverChange('event', eventId);
     }
 
+    handleAlertMouseEnter = (feature) => {
+        this.props.onAlertHover(feature.id);
+    }
+
+    handleAlertMouseLeave = () => {
+        this.props.onAlertHover(undefined);
+    }
+
+    handleEventMouseEnter = (feature) => {
+        this.props.onEventHover(feature.id);
+    }
+
+    handleEventMouseLeave = () => {
+        this.props.onEventHover(undefined);
+    }
+
     render() {
         const {
             alertList,
             eventList,
             hazards,
             recentDay,
+            alertHoverAttributes,
+            eventHoverAttributes,
         } = this.props;
 
         const featureConvexCollection = this.getConvexAlertsFeatureCollection(alertList, hazards);
@@ -201,9 +221,8 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="alerts-convex-outline"
                         layerOptions={{
                             type: 'line',
-                            enableHover: true,
                             paint: mapStyles.alertConvex.outline,
-                            onHoverChange: this.handleAlertHover,
+                            // onHoverChange: this.handleAlertHover,
                         }}
                     />
                 </MapSource>
@@ -216,7 +235,6 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="alerts-polygon-fill"
                         layerOptions={{
                             type: 'fill',
-                            enableHover: true,
                             paint: mapStyles.alertPolygon.fill,
                             onHoverChange: this.handleAlertHover,
                         }}
@@ -248,11 +266,15 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.alertPoint.circle,
-                            enableHover: true,
-                            tooltipRenderer: AlertTooltip,
-                            tooltipRendererParams: this.alertTooltipRendererParams,
-                            onHoverChange: this.handleAlertHover,
+                            // tooltipRenderer: AlertTooltip,
+                            // tooltipRendererParams: this.alertTooltipRendererParams,
                         }}
+                        onMouseEnter={this.handleAlertMouseEnter}
+                        onMouseLeave={this.handleAlertMouseLeave}
+                    />
+                    <MapState
+                        attributes={alertHoverAttributes}
+                        attributeKey="hover"
                     />
                 </MapSource>
                 <MapSource
@@ -264,9 +286,8 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="events-convex-outline"
                         layerOptions={{
                             type: 'line',
-                            enableHover: true,
                             paint: mapStyles.eventConvex.outline,
-                            onHoverChange: this.handleEventHover,
+                            // onHoverChange: this.handleEventHover,
                         }}
                     />
                 </MapSource>
@@ -279,9 +300,8 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="events-polygon-fill"
                         layerOptions={{
                             type: 'fill',
-                            enableHover: true,
                             paint: mapStyles.eventPolygon.fill,
-                            onHoverChange: this.handleEventHover,
+                            // onHoverChange: this.handleEventHover,
                         }}
                     />
                     <MapLayer
@@ -301,13 +321,18 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="events-symbol"
                         layerOptions={{
                             type: 'symbol',
-                            enableHover: true,
                             layout: mapStyles.eventSymbol.layout,
                             paint: mapStyles.eventSymbol.paint,
-                            tooltipRenderer: EventTooltip,
-                            tooltipRendererParams: this.eventTooltipRendererParams,
+                            // tooltipRenderer: EventTooltip,
+                            // tooltipRendererParams: this.eventTooltipRendererParams,
                             onHoverChange: this.handleEventHover,
                         }}
+                        onMouseEnter={this.handleEventMouseEnter}
+                        onMouseLeave={this.handleEventMouseLeave}
+                    />
+                    <MapState
+                        attributes={eventHoverAttributes}
+                        attributeKey="hover"
                     />
                 </MapSource>
             </React.Fragment>

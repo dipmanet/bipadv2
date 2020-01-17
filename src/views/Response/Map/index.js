@@ -5,8 +5,8 @@ import memoize from 'memoize-one';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 
 import ZoomMap from '#components/ZoomMap';
 import {
@@ -144,8 +144,6 @@ class ResponseMap extends React.PureComponent {
             incident,
             resourceList,
             hazards,
-            leftPaneExpanded,
-            rightPaneExpanded,
         } = this.props;
 
         const {
@@ -156,8 +154,6 @@ class ResponseMap extends React.PureComponent {
 
         const incidentList = this.getIncidentList(incident);
 
-        const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
         const resourceGeoJson = this.getResourceFeatureCollection(resourceList);
 
         const mybox = this.getConvex(point || polygon, resourceGeoJson);
@@ -165,27 +161,34 @@ class ResponseMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <ZoomMap
-                    boundsPadding={boundsPadding}
                     bounds={mybox}
+                    // boundsPadding={boundsPadding}
                 />
                 <MapSource
                     sourceKey="resource"
-                    geoJson={resourceGeoJson}
+                    sourceOptions={{
+                        type: 'geojson',
+                    }}
                     images={resourceImages}
+                    geoJson={resourceGeoJson}
                 >
                     <MapLayer
                         layerKey="resource-point"
-                        type="circle"
-                        paint={mapStyles.resourcePoint.circle}
-                        enableHover
-                        tooltipRenderer={this.tooltipRenderer}
-                        tooltipRendererParams={this.tooltipRendererParams}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.resourcePoint.circle,
+                            enableHover: true,
+                            tooltipRenderer: this.tooltipRenderer,
+                            tooltipRendererParams: this.tooltipRendererParams,
+                        }}
                     />
                     <MapLayer
                         layerKey="resource-symbol"
-                        type="symbol"
-                        layout={mapStyles.resourceSymbol.layout}
-                        paint={mapStyles.resourceSymbol.symbol}
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: mapStyles.resourceSymbol.layout,
+                            paint: mapStyles.resourceSymbol.symbol,
+                        }}
                     />
                 </MapSource>
 
@@ -193,25 +196,31 @@ class ResponseMap extends React.PureComponent {
                     <MapSource
                         sourceKey="points"
                         geoJson={this.getPointFeatureCollection(incidentList, hazards)}
+                        sourceOptions={{ type: 'geojson' }}
                     >
                         <MapLayer
                             layerKey="points"
-                            type="circle"
-                            property="incident"
-                            paint={mapStyles.incidentPoint.fill}
+                            layerOptions={{
+                                type: 'circle',
+                                property: 'incident',
+                                paint: mapStyles.incidentPoint.fill,
+                            }}
                         />
                     </MapSource>
                 )}
                 { polygon && (
                     <MapSource
                         sourceKey="polygon"
+                        sourceOptions={{ type: 'geojson' }}
                         geoJson={this.getPolygonFeatureCollection(incidentList, hazards)}
                     >
                         <MapLayer
                             layerKey="polygon"
-                            type="fill"
-                            property="incident"
-                            paint={mapStyles.incidentPolygon.fill}
+                            layerOptions={{
+                                type: 'fill',
+                                property: 'incident',
+                                paint: mapStyles.incidentPolygon.fill,
+                            }}
                         />
                     </MapSource>
                 )}

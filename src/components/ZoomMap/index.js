@@ -3,8 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import MapSource from '#rscz/Map/MapSource';
-import MapLayer from '#rscz/Map/MapLayer';
+import MapBounds from '#re-map/MapBounds';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 
 import { mapSources, mapStyles } from '#constants';
 import { regionLabelToGeojson } from '#utils/domain';
@@ -66,90 +67,111 @@ class ZoomMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <MapSource
-                    sourceKey={sourceKey}
-                    url={mapSources.nepal.url}
+                <MapBounds
                     bounds={bounds}
-                    boundsPadding={boundsPadding}
+                    padding={boundsPadding}
+                />
+                <MapSource
+                    sourceKey={`${sourceKey}-outlines`}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepal.url,
+                    }}
                 >
                     <MapLayer
                         layerKey="ward-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.ward}
-                        paint={mapStyles.ward.outline}
-                        minzoom={9}
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.ward,
+                            type: 'line',
+                            paint: mapStyles.ward.outline,
+                            minzoom: 9,
+                        }}
                     />
                     <MapLayer
                         layerKey="municipality-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.municipality}
-                        paint={mapStyles.municipality.outline}
-                        minzoom={8}
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.municipality,
+                            type: 'line',
+                            paint: mapStyles.municipality.outline,
+                            minzoom: 8,
+                        }}
                     />
                     <MapLayer
                         layerKey="district-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.outline}
-                        minzoom={6}
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.district,
+                            type: 'line',
+                            paint: mapStyles.district.outline,
+                            minzoom: 6,
+                        }}
                     />
                     <MapLayer
                         layerKey="province-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.outline}
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.province,
+                            type: 'line',
+                            paint: mapStyles.province.outline,
+                        }}
                     />
                 </MapSource>
 
                 <MapSource
-                    sourceKey={`${sourceKey}-ward-label`}
-                    geoJson={wardLabels}
-                >
-                    <MapLayer
-                        layerKey="ward-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.wardLabel.paint}
-                        layout={mapStyles.wardLabel.layout}
-                        minzoom={9}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-municipality-label`}
-                    geoJson={municipalityLabels}
-                >
-                    <MapLayer
-                        layerKey="municipality-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.municipalityLabel.paint}
-                        layout={mapStyles.municipalityLabel.layout}
-                        minzoom={8}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-district-label`}
-                    geoJson={districtLabels}
-                >
-                    <MapLayer
-                        layerKey="district-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.districtLabel.paint}
-                        layout={mapStyles.districtLabel.layout}
-                        minzoom={6}
-                    />
-                </MapSource>
-                <MapSource
                     sourceKey={`${sourceKey}-province-label`}
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={provinceLabels}
                 >
                     <MapLayer
                         layerKey="province-label"
-                        type="symbol"
-                        property="adminLevelId"
-                        paint={mapStyles.provinceLabel.paint}
-                        layout={mapStyles.provinceLabel.layout}
+                        layerOptions={{
+                            type: 'symbol',
+                            property: 'adminLevelId',
+                            paint: mapStyles.provinceLabel.paint,
+                        }}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-municipality-label`}
+                    sourceOptions={{ type: 'geojson' }}
+                    geoJson={municipalityLabels}
+                >
+                    <MapLayer
+                        layerKey="municipality-label"
+                        layerOptions={{
+                            type: 'symbol',
+                            property: 'adminLevelId',
+                            paint: mapStyles.municipalityLabel.paint,
+                            minzoom: 6,
+                        }}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-district-label`}
+                    sourceOptions={{ type: 'geojson' }}
+                    geoJson={districtLabels}
+                >
+                    <MapLayer
+                        layerKey="district-label"
+                        layerOptions={{
+                            type: 'symbol',
+                            property: 'adminLevelId',
+                            paint: mapStyles.districtLabel.paint,
+                            minzoom: 8,
+                        }}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-ward-label`}
+                    sourceOptions={{ type: 'geojson' }}
+                    geoJson={wardLabels}
+                >
+                    <MapLayer
+                        layerKey="ward-label"
+                        layerOptions={{
+                            type: 'symbol',
+                            property: 'adminLevelId',
+                            paint: mapStyles.wardLabel.paint,
+                            minzoom: 9,
+                        }}
                     />
                 </MapSource>
             </React.Fragment>

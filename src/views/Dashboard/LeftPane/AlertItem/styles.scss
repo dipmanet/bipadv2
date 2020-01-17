@@ -54,4 +54,9 @@
             padding: var(--spacing-extra-small) var(--spacing-medium);
         }
     }
+
+    &.hovered,
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
 }

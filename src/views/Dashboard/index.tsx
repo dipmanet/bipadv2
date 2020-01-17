@@ -46,19 +46,23 @@ import {
 import Page from '#components/Page';
 
 import Map from './Map';
-// import CommonMap from '#components/CommonMap';
 import LeftPane from './LeftPane';
 
 import styles from './styles.scss';
 
-const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
+interface MapHoverAttributes {
+    id: number;
+    value: boolean;
+}
+
+const emptyAlertHoverAttributeList: MapHoverAttributes[] = [];
+const emptyEventHoverAttributeList: MapHoverAttributes[] = [];
 
 interface State {
-    leftPaneExpanded?: boolean;
-    rightPaneExpanded?: boolean;
-    hoverItemId?: number;
-    hoverType?: string;
+    hoveredAlertId: number | undefined;
+    hoveredEventId: number | undefined;
 }
+
 interface Params {
     triggerAlertRequest: (timeout: number) => void;
     triggerEventRequest: (timeout: number) => void;
@@ -200,10 +204,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            leftPaneExpanded: true,
-            rightPaneExpanded: true,
-            hoverItemId: undefined,
-            hoverType: undefined,
+            hoveredAlertId: undefined,
+            hoveredEventId: undefined,
         };
 
         const {
@@ -218,20 +220,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         });
     }
 
-    public componentDidMount(): void {
-        const { rightPaneExpanded } = this.state;
-
-        // this.setPlacementForMapControls(rightPaneExpanded);
-    }
-
     public componentWillUnmount(): void {
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
-
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
-        if (mapControls) {
-            mapControls.style.right = this.previousMapContorlStyle;
-        }
     }
 
     private previousMapContorlStyle: string | null = null;
@@ -274,23 +265,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         ),
     );
 
-    public setPlacementForMapControls = (rightPaneExpanded: boolean | undefined) => {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0] as HTMLElement | undefined;
-
-        if (mapControls) {
-            const widthRightPanel = rightPaneExpanded
-                ? convertValueToNumber(styleProperties.widthRightPanel)
-                : 0;
-            const spacingMedium = convertValueToNumber(currentStyle.spacingMedium);
-            const widthNavbar = convertValueToNumber(styleProperties.widthNavbarRight);
-
-            if (!this.previousMapContorlStyle) {
-                this.previousMapContorlStyle = mapControls.style.right;
-            }
-            mapControls.style.right = `${widthNavbar + widthRightPanel + spacingMedium}px`;
-        }
-    }
-
     private alertTimeout?: number
 
     private eventTimeout?: number
@@ -309,15 +283,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
-    private handleLeftPaneExpandChange = (leftPaneExpanded: boolean) => {
-        this.setState({ leftPaneExpanded });
+
+    private handleAlertHover = (hoveredAlertId: number | undefined) => {
+        this.setState({ hoveredAlertId });
     }
 
-    private handleHoverChange = (hoverType: string, hoverItemId: number) => {
-        this.setState({
-            hoverItemId,
-            hoverType,
-        });
+    private handleEventHover = (hoveredEventId: number | undefined) => {
+        this.setState({ hoveredEventId });
     }
 
     private handleAlertChange = (/* newAlert */) => {
@@ -428,6 +400,28 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
+    private getAlertMapHoverAttributes = (hoveredAlertId: number | undefined) => {
+        if (!hoveredAlertId) {
+            return emptyAlertHoverAttributeList;
+        }
+
+        return [{
+            id: hoveredAlertId,
+            value: true,
+        }];
+    }
+
+    private getEventMapHoverAttributes = (hoveredEventId: number | undefined) => {
+        if (!hoveredEventId) {
+            return emptyEventHoverAttributeList;
+        }
+
+        return [{
+            id: hoveredEventId,
+            value: true,
+        }];
+    }
+
     public render() {
         const {
             alertList,
@@ -443,11 +437,12 @@ class Dashboard extends React.PureComponent<Props, State> {
         const pending = alertsPending || eventsPending;
 
         const {
-            leftPaneExpanded,
-            rightPaneExpanded,
+            hoveredAlertId,
+            hoveredEventId,
         } = this.state;
 
-        // const HoverItemDetail = this.renderHoverItemDetail;
+        const alertMapHoverAttributes = this.getAlertMapHoverAttributes(hoveredAlertId);
+        const eventMapHoverAttributes = this.getEventMapHoverAttributes(hoveredEventId);
 
         return (
             <React.Fragment>
@@ -455,12 +450,12 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <Map
                     alertList={alertList}
                     eventList={eventList}
-                    leftPaneExpanded={leftPaneExpanded}
-                    rightPaneExpanded={rightPaneExpanded}
                     recentDay={RECENT_DAY}
-                    onHoverChange={this.handleHoverChange}
+                    onAlertHover={this.handleAlertHover}
+                    onEventHover={this.handleEventHover}
+                    alertHoverAttributes={alertMapHoverAttributes}
+                    eventHoverAttributes={eventMapHoverAttributes}
                 />
-                {/* <HoverItemDetail /> */}
                 <Page
                     leftContentClassName={styles.leftContainer}
                     leftContent={(
@@ -470,12 +465,15 @@ class Dashboard extends React.PureComponent<Props, State> {
                             eventList={eventList}
                             hazardTypes={hazardTypes}
                             pending={pending}
-                            onExpandChange={this.handleLeftPaneExpandChange}
                             recentDay={RECENT_DAY}
                             onAlertChange={this.handleAlertChange}
                             onDeleteAlertButtonClick={this.handleDeleteAlertButtonClick}
                             onEventChange={this.handleEventChange}
                             onDeleteEventButtonClick={this.handleDeleteEventButtonClick}
+                            hoveredAlertId={hoveredAlertId}
+                            hoveredEventId={hoveredEventId}
+                            onEventHover={this.handleEventHover}
+                            onAlertHover={this.handleAlertHover}
                         />
                     )}
                     mainContentClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
