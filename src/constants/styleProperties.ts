@@ -44,6 +44,9 @@ const styleProperties = {
     colorLogoBlue: '#003893',
     colorTextOnLogoBlue: '#fff',
     colorTextOnLogoRed: '#fff',
+
+    colorBoxShadow: 'rgba(189,187,189,0.59)',
+    colorPrimaryBlue: '#029aef',
 };
 
 export default styleProperties;

@@ -54,6 +54,7 @@ const iconNames = {
     email: 'ion-ios-email',
     star: 'ion-ios-star',
     upload: 'ion-upload',
+    cloudDownload: 'ion-android-download',
 
     eye: 'ion-eye',
     eyeOff: 'ion-eye-off',
