@@ -9,16 +9,17 @@ import ChoroplethMap from '#components/ChoroplethMap';
 
 import styles from './styles.scss';
 
+
 const colorGrade = [
-    '#ffffcc',
-    '#ffeda0',
-    '#fed976',
-    '#feb24c',
-    '#fd8d3c',
-    '#fc4e2a',
-    '#e31a1c',
-    '#bd0026',
-    '#800026',
+    '#ffe5d4',
+    '#f9d0b8',
+    '#f2bb9e',
+    '#eca685',
+    '#e4906e',
+    '#dd7a59',
+    '#d46246',
+    '#cb4836',
+    '#c22727',
 ];
 
 const propTypes = {

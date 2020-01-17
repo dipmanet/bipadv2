@@ -37,7 +37,7 @@ const propTypes = {
     patchIncident: PropTypes.func.isRequired,
     onHover: PropTypes.func,
     recentDay: PropTypes.number.isRequired,
-    isHovered: PropTypes.boolean.isRequired,
+    isHovered: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({

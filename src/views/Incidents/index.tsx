@@ -38,9 +38,6 @@ import { transformDateRangeFilterParam } from '#utils/transformations';
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
-import TextOutput from '#components/TextOutput';
-import DateOutput from '#components/DateOutput';
-import GeoOutput from '#components/GeoOutput';
 import HazardsLegend from '#components/HazardsLegend';
 
 import Map from './Map';

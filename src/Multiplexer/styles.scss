@@ -29,12 +29,24 @@
             }
         }
 
-        .left-pane-container {
+        .left {
+            display: flex;
+            flex-direction: column;
             flex-shrink: 0;
             z-index: 1;
             box-shadow: 3px 0 5px -3px rgba(0, 0, 0, 0.3);
             width: var(--width-left-panel);
             overflow: auto;
+
+            .brand {
+                flex-shrink: 0;
+                border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+            }
+
+            .left-pane-container {
+                flex-grow: 1;
+                overflow: auto;
+            }
         }
 
         .map {

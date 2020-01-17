@@ -97,7 +97,7 @@ const requests = {
         url: '/incident/',
         query: {
             expand: ['loss.peoples', 'wards'],
-            limit: 1000,
+            limit: 10000,
             // limit: 9999999999,
             ordering: '-incident_on',
             lnd: true,

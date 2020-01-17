@@ -34,24 +34,28 @@ const defaultProps = {
 const emptyList = [];
 
 const peopleDeathChartColorScheme = [
-    '#e53935',
+    '#f95d6a',
 ];
 
 const estimatedLossChartColorScheme = [
-    '#ffefc3',
+    '#ffa600',
 ];
 
 const estimatedLossValueSelector = d => d.estimatedLoss;
-const estimatedLossValueLabelSelector = (d) => {
-    const { number, normalizeSuffix } = Numeral.getNormalizedNumber({
+const estimatedLossValueFormatter = (d) => {
+    const numeral = Numeral.getNormalizedNumber({
         value: d,
         normal: true,
         precision: 0,
+        lang: 'ne',
     });
+
+    const { number, normalizeSuffix } = numeral;
 
     if (normalizeSuffix) {
         return `${number}${normalizeSuffix}`;
     }
+
     return number;
 };
 const estimatedLossLabelSelector = d => d.label;
@@ -78,10 +82,10 @@ const mapStateToProps = state => ({
 });
 
 const barChartMargins = {
-    left: 48,
-    top: 10,
-    right: 10,
-    bottom: 48,
+    left: 32,
+    top: 12,
+    right: 12,
+    bottom: 32,
 };
 
 
@@ -169,6 +173,7 @@ class Visualizations extends React.PureComponent {
                         colorScheme={peopleDeathChartColorScheme}
                         tiltLabels
                         margins={barChartMargins}
+                        bandPadding={0.1}
                     />
                 </div>
                 <div className={styles.barChartContainer}>
@@ -182,10 +187,11 @@ class Visualizations extends React.PureComponent {
                         data={lossSummary}
                         labelSelector={estimatedLossLabelSelector}
                         valueSelector={estimatedLossValueSelector}
-                        valueLabelFormat={estimatedLossValueLabelSelector}
+                        valueLabelFormat={estimatedLossValueFormatter}
                         colorScheme={estimatedLossChartColorScheme}
                         tiltLabels
                         margins={barChartMargins}
+                        bandPadding={0.1}
                     />
                 </div>
                 <div className={styles.donutContainer}>
@@ -221,6 +227,8 @@ class Visualizations extends React.PureComponent {
                         colorSelector={donutChartColorSelector}
                         hideLabel
                     />
+                </div>
+                <div className={styles.legendContainer}>
                     <HazardsLegend
                         filteredHazardTypes={filteredHazardTypesList}
                         className={styles.legend}

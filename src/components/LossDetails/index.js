@@ -62,6 +62,7 @@ export default class LossDetails extends React.PureComponent {
                         type="block"
                         value={summaryData[metric.key]}
                         valueClassName={styles.value}
+                        lang="ne"
                     />
                 ))}
             </div>

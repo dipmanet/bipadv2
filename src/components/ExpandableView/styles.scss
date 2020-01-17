@@ -18,9 +18,23 @@
                 padding: var(--spacing-medium);
             }
 
-            .icon {
+            .info-icon {
+                flex-shrink: 0;
+                opacity: 0;
+                margin: var(--spacing-small) var(--spacing-medium);
+                color: var(--color-accent);
+                font-size: var(--font-size-extra-large);
+            }
+
+            .expand-icon {
                 flex-shrink: 0;
                 margin: var(--spacing-small) var(--spacing-medium);
+            }
+
+            &:hover {
+                .info-icon {
+                    opacity: 1;
+                }
             }
         }
     }
