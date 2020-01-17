@@ -14,6 +14,7 @@ import {
 
 import Button from '#rsca/Button';
 
+import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import { getHashFromBrowser } from '#rscg/HashManager';
 
@@ -182,9 +183,12 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             </h2>
                         </>
                     ) : (
-                        <h2 className={styles.heading}>
-                            Risk info
-                        </h2>
+                        <>
+                            <h2 className={styles.heading}>
+                                Risk info
+                            </h2>
+                            <CommonMap sourceKey="risk-info" />
+                        </>
                     )}
                 </header>
                 <div className={styles.content}>

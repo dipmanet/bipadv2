@@ -2,8 +2,8 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import DangerButton from '#rsca/Button/DangerButton';
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
@@ -167,15 +167,20 @@ class Group extends React.PureComponent<Props, State> {
                 />
                 {selectedLayer && (
                     <MapSource
-                        key={selectedLayer.id}
                         sourceKey={`flood-source-${selectedLayer.id}`}
-                        rasterTiles={rasterTile}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: rasterTile,
+                            tileSize: 256,
+                        }}
                     >
                         <MapLayer
                             layerKey={`layer-${selectedLayer.id}`}
-                            type="raster"
-                            paint={{
-                                'raster-opacity': layerOpacity,
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': layerOpacity,
+                                },
                             }}
                         />
                     </MapSource>

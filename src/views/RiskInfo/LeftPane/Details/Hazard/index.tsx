@@ -5,6 +5,7 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import CommonMap from '#components/CommonMap';
 import { LayerWithGroup, LayerGroup, HazardType } from '#store/atom/page/types';
 
 import { getLayerHierarchy } from '#utils/domain';
@@ -39,6 +40,7 @@ class Hazard extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.hazard, className)}>
+                <CommonMap sourceKey="hazard" />
                 <HazardSelection
                     groupClassName={styles.group}
                     layerClassName={styles.layer}

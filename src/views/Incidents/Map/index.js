@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -100,12 +101,21 @@ class IncidentMap extends React.PureComponent {
         };
     })
 
+    handleIncidentMouseEnter = (feature) => {
+        this.props.onIncidentHover(feature.id);
+    }
+
+    handleIncidentMouseLeave = () => {
+        this.props.onIncidentHover(undefined);
+    }
+
     render() {
         const {
             incidentList,
             hazards,
             recentDay,
             onIncidentHover,
+            mapHoverAttributes,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -116,39 +126,53 @@ class IncidentMap extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <CommonMap />
+                <CommonMap sourceKey="incidents" />
                 <MapSource
                     sourceKey="incident-polygons"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={polygonFeatureCollection}
                 >
                     <MapLayer
                         layerKey="incident-polygon-fill"
-                        type="fill"
-                        paint={mapStyles.incidentPolygon.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
+                        layerOptions={{
+                            type: 'fill',
+                            paint: mapStyles.incidentPolygon.fill,
+                            enableHover: true,
+                            tooltipRenderer: IncidentInfo,
+                            tooltipRendererParams: this.tooltipRendererParams,
+                        }}
                     />
                 </MapSource>
                 <MapSource
                     sourceKey="incident-points"
+                    sourceOptions={{ type: 'geojson' }}
                     geoJson={pointFeatureCollection}
                 >
                     <MapLayer
                         layerKey="incident-points-animate"
-                        type="circle"
-                        filter={filter}
-                        paint={mapStyles.incidentPoint.animatedFill}
-                        onAnimationKeyframe={this.handleAnimationKeyframe}
+                        layerOptions={{
+                            type: 'circle',
+                            filter,
+                            paint: mapStyles.incidentPoint.animatedFill,
+                            onAnimationKeyframe: this.handleAnimationKeyframe,
+                        }}
                     />
                     <MapLayer
                         layerKey="incident-points-fill"
-                        type="circle"
-                        paint={mapStyles.incidentPoint.fill}
-                        enableHover
-                        tooltipRenderer={IncidentInfo}
-                        tooltipRendererParams={this.tooltipRendererParams}
-                        onHoverChange={onIncidentHover}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.incidentPoint.fill,
+                            // enableHover: true,
+                            // tooltipRenderer: IncidentInfo,
+                            // tooltipRendererParams: this.tooltipRendererParams,
+                            // onHoverChange: onIncidentHover,
+                        }}
+                        onMouseEnter={this.handleIncidentMouseEnter}
+                        onMouseLeave={this.handleIncidentMouseLeave}
+                    />
+                    <MapState
+                        attributes={mapHoverAttributes}
+                        attributeKey="hover"
                     />
                 </MapSource>
             </React.Fragment>

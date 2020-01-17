@@ -36,6 +36,8 @@ export default class IncidentListView extends React.PureComponent {
         className: styles.incident,
         hazardTypes: this.props.hazardTypes,
         recentDay: this.props.recentDay,
+        onHover: this.props.onIncidentHover,
+        isHovered: d.id === this.props.hoveredIncidentId,
     });
 
     render() {

@@ -72,6 +72,8 @@ export default class LeftPane extends React.PureComponent {
         recentDay: this.props.recentDay,
         onEditButtonClick: this.handleAlertEditButtonClick,
         onDeleteButtonClick: this.props.onDeleteAlertButtonClick,
+        onHover: this.props.onAlertHover,
+        isHovered: this.props.hoveredAlertId === d.id,
     });
 
     getEventRendererParams = (_, d) => ({
@@ -79,6 +81,8 @@ export default class LeftPane extends React.PureComponent {
         hazardTypes: this.props.hazardTypes,
         onEditButtonClick: this.handleEventEditButtonClick,
         onDeleteButtonClick: this.props.onDeleteEventButtonClick,
+        onHover: this.props.onEventHover,
+        isHovered: this.props.hoveredEventId === d.id,
     });
 
     groupByHazard = memoize((alerts, hazards) => {

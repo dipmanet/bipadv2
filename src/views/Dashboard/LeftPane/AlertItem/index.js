@@ -61,12 +61,34 @@ export default class AlertItem extends React.PureComponent {
         onDeleteButtonClick(alert);
     }
 
+    handleMouseEnter = () => {
+        const {
+            onHover,
+            alert,
+        } = this.props;
+
+        if (onHover) {
+            onHover(alert.id);
+        }
+    }
+
+    handleMouseLeave = () => {
+        const {
+            onHover,
+        } = this.props;
+
+        if (onHover) {
+            onHover();
+        }
+    }
+
     render() {
         const {
             alert,
             className,
             hazardTypes,
             recentDay,
+            isHovered,
         } = this.props;
 
         const {
@@ -84,7 +106,10 @@ export default class AlertItem extends React.PureComponent {
                     className,
                     styles.alertItem,
                     isNew && styles.new,
+                    isHovered && styles.hovered,
                 )}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
             >
                 <ScalableVectorGraphics
                     className={styles.icon}

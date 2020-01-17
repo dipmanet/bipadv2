@@ -46,14 +46,35 @@ export default class EventItem extends React.PureComponent {
     handleDeleteButtonClick = () => {
         const {
             onDeleteButtonClick,
-            alert,
+            event,
         } = this.props;
 
         if (!onDeleteButtonClick) {
             return;
         }
 
-        onDeleteButtonClick(alert);
+        onDeleteButtonClick(event);
+    }
+
+    handleMouseEnter = () => {
+        const {
+            onHover,
+            event,
+        } = this.props;
+
+        if (onHover) {
+            onHover(event.id);
+        }
+    }
+
+    handleMouseLeave = () => {
+        const {
+            onHover,
+        } = this.props;
+
+        if (onHover) {
+            onHover();
+        }
     }
 
     render() {
@@ -61,6 +82,7 @@ export default class EventItem extends React.PureComponent {
             event = emptyObject,
             className,
             hazardTypes,
+            isHovered,
         } = this.props;
 
         const {
@@ -76,7 +98,10 @@ export default class EventItem extends React.PureComponent {
                 className={_cs(
                     className,
                     styles.eventItem,
+                    isHovered && styles.hovered,
                 )}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
             >
                 <ScalableVectorGraphics
                     className={styles.icon}

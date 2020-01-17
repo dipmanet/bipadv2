@@ -25,9 +25,9 @@ import styles from './styles.scss';
 interface OwnProps {
     className?: string;
     showEvent?: boolean;
-    eventList: Event[];
-    showMetricSelect: boolean;
-    showDateRange: boolean;
+    eventList?: Event[];
+    showMetricSelect?: boolean;
+    showDateRange?: boolean;
 }
 
 interface PropsFromAppState {

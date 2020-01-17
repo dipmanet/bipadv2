@@ -9,10 +9,11 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
+
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
-import Map from '#rscz/Map';
-import MapContainer from '#rscz/Map/MapContainer';
 import {
     District,
     Province,
@@ -29,6 +30,7 @@ import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AppState } from '#store/types';
+
 
 import {
     districtsSelector,
@@ -490,18 +492,22 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
                                 mapStyle={mapStyle}
-                                fitBoundsDuration={200}
-                                minZoom={5}
-                                logoPosition="top-left"
+                                mapOptions={{
+                                    logoPosition: 'top-left',
+                                    minZoom: 5,
+                                }}
+                                // fitBoundsDuration={200}
+                                // minZoom={5}
+                                // logoPosition="top-left"
 
-                                showScaleControl
+                                scaleControlShown
                                 scaleControlPosition="bottom-right"
 
-                                showNavControl
+                                navControlShown
                                 navControlPosition="bottom-right"
-                                layerOrder={this.getLayerOrder(activeLayers)}
+                                // layerOrder={this.getLayerOrder(activeLayers)}
                             >
-                                { !hideMap && (
+                                { !hideMap && false && (
                                     <div
                                         className={_cs(
                                             styles.mapActions,
