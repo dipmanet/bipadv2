@@ -1,0 +1,40 @@
+.app-brand {
+    display: flex;
+    overflow: auto;
+
+    .logo {
+        display: flex;
+        flex-shrink: 0;
+
+        >.left {
+            background-color: var(--color-logo-red);
+            width: var(--spacing-medium-alt);
+        }
+
+        >.right {
+            background-color: var(--color-logo-blue);
+            color: var(--color-text-on-logo-blue);
+
+            .title {
+                padding: var(--spacing-medium);
+            }
+        }
+    }
+
+    .region-name-container {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        justify-content: center;
+        background-color: var(--color-logo-red);
+        overflow: auto;
+        color: var(--color-text-on-logo-red);
+
+        .region-name {
+            padding: 0 var(--spacing-medium);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}

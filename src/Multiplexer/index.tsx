@@ -31,7 +31,7 @@ import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AppState } from '#store/types';
 
-
+import AppBrand from '#components/AppBrand';
 import {
     districtsSelector,
     municipalitiesSelector,
@@ -77,6 +77,7 @@ const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
         </DangerButton>
     </div>
 );
+
 
 interface LoadOptions {
     error: string;
@@ -455,9 +456,35 @@ class Multiplexer extends React.PureComponent<Props, State> {
         activeLayers.map(d => d.id)
     ))
 
+    private getRegionName = (selectedRegion, provinces, districts, municipalities) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
+            return 'National';
+        }
+
+        const adminLevels = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+
+        if (currentRegion) {
+            return currentRegion.title;
+        }
+
+        return 'Unknown';
+    }
 
     public render() {
-        const { mapStyle } = this.props;
+        const {
+            mapStyle,
+            filters,
+            provinces,
+            districts,
+            municipalities,
+        } = this.props;
 
         const {
             leftPaneContent,
@@ -484,6 +511,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeLayers,
         };
 
+        const regionName = this.getRegionName(
+            filters.faramValues.region,
+            provinces,
+            districts,
+            municipalities,
+        );
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -524,12 +557,20 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 )}
                                 { leftPaneContent && (
                                     <aside
-                                        className={_cs(
-                                            styles.leftPaneContainer,
-                                            leftPaneClassName,
-                                        )}
+                                        className={styles.left}
                                     >
-                                        { leftPaneContent }
+                                        <AppBrand
+                                            className={styles.brand}
+                                            regionName={regionName}
+                                        />
+                                        <div
+                                            className={_cs(
+                                                styles.leftPaneContainer,
+                                                leftPaneClassName,
+                                            )}
+                                        >
+                                            { leftPaneContent }
+                                        </div>
                                     </aside>
                                 )}
                                 <MapContainer

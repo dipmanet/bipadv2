@@ -2,6 +2,7 @@
 
 const styleProperties = {
     colorBackground: '#f2f2f2',
+    colorPrimary: '#003893',
 
     widthScrollbar: '4px',
 
@@ -38,6 +39,11 @@ const styleProperties = {
     colorRiskInfoIcon: '#777',
 
     colorTextLight: 'rgba(0, 0, 0, 0.5)',
+
+    colorLogoRed: '#dc143c',
+    colorLogoBlue: '#003893',
+    colorTextOnLogoBlue: '#fff',
+    colorTextOnLogoRed: '#fff',
 };
 
 export default styleProperties;

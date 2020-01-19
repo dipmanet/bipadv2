@@ -1,12 +1,15 @@
 .loss-details {
     display: flex;
-    flex-shrink: 0;
     flex-wrap: wrap;
+    padding: calc(var(--spacing-medium) - var(--spacing-extra-small));
 
     .stat {
         display: flex;
-        flex-basis: 50%;
+        flex-basis: calc(50% - 2 * var(--spacing-extra-small));
         flex-direction: column;
+        margin: var(--spacing-extra-small);
+        border: var(--width-separator-thin) solid var(--color-separator);
+        border-radius: 3px;
         padding: var(--spacing-medium);
 
         .label {

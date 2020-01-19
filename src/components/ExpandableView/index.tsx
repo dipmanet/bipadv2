@@ -47,6 +47,8 @@ class ExpandableView extends React.PureComponent<Props, State> {
             expandButtonClassName,
             expandIconClassName,
             expandableContentClassName,
+            infoIconClassName,
+            infoTooltip,
         } = this.props;
 
         const { isExpanded } = this.state;
@@ -70,7 +72,12 @@ class ExpandableView extends React.PureComponent<Props, State> {
                             {headerContent}
                         </div>
                         <Icon
-                            className={_cs(styles.icon, expandIconClassName)}
+                            title={infoTooltip}
+                            className={_cs(styles.infoIcon, infoIconClassName)}
+                            name="infoOutline"
+                        />
+                        <Icon
+                            className={_cs(styles.expandIcon, expandIconClassName)}
                             name={isExpanded ? 'chevronUp' : 'chevronDown'}
                         />
                     </Button>

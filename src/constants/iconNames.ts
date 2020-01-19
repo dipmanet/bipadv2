@@ -63,6 +63,7 @@ const iconNames = {
     contrast: 'ion-contrast',
 
     checkmarkCircle: 'ion-checkmark-circled',
+    infoOutline: 'ion-ios-information-outline',
 };
 
 export default iconNames;
