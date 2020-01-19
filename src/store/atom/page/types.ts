@@ -465,6 +465,7 @@ export enum PageType {
     // incident
     IP__SET_INCIDENT_LIST = 'page/INCIDENT_PAGE/SET_INCIDENT_LIST',
     IP__SET_INCIDENT = 'page/INCIDENT_PAGE/SET_INCIDENT',
+    IP__PATCH_INCIDENT = 'page/INCIDENT_PAGE/PATCH_INCIDENT',
     IP__SET_FILTERS = 'page/INCIDENT_PAGE/SET_FILTERS',
 
     // response
@@ -590,6 +591,12 @@ export interface SetIncident {
     incident: Incident;
 }
 
+export interface PatchIncident {
+    type: typeof PageType.IP__PATCH_INCIDENT;
+    incident: Incident;
+    incidentId: number;
+}
+
 export interface SetIncidentFilters extends FiltersWithRegion {
     type: typeof PageType.IP__SET_FILTERS;
 }
@@ -710,7 +717,7 @@ export type PageActionTypes = (
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
-    SetIncident | SetIncidentFilters | SetResourceList | SetEventType |
+    SetIncident | PatchIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |

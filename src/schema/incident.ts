@@ -170,6 +170,9 @@ const schemaList: Schema[] = [
             reportedOn: { type: 'string' }, // date
             severity: { type: 'string' },
             source: { type: 'string', required: true },
+            verificationMessage: { type: 'string' },
+            region: { type: 'string' },
+            regionId: { type: 'number' },
             streetAddress: { type: 'string' },
             // FIXME: Title is required
             title: { type: 'string', required: false },

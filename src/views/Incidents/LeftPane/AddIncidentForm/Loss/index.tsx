@@ -89,12 +89,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
             if (!lossServerId) {
                 incidentPatchRequest.do({
+                    loss: response,
                     body: {
                         loss: response.id,
                     },
                 });
-            } else {
-                onLossChange(response);
             }
         },
     },
@@ -102,18 +101,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ props: { incidentServerId } }) => `/incident/${incidentServerId}/`,
         method: methods.PATCH,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ props, response: incidentResponse }) => {
+        onSuccess: ({
+            props,
+            params: { loss },
+            response: incidentResponse,
+        }) => {
             const {
                 onLossChange,
-                requests: {
-                    lossEditRequest: {
-                        response: lossResponse,
-                    },
-                },
-                lossServerId,
             } = props;
 
-            onLossChange(lossResponse, incidentResponse);
+            onLossChange(loss, incidentResponse);
         },
     },
 };
@@ -163,9 +160,15 @@ class AddLoss extends React.PureComponent<Props, State> {
             requests: {
                 lossEditRequest,
             },
+            incidentServerId,
         } = this.props;
 
-        lossEditRequest.do({ body: faramValues });
+        lossEditRequest.do({
+            body: {
+                incident: incidentServerId,
+                ...faramValues,
+            },
+        });
     }
 
     private handleLossGet = (loss: FaramValues) => {

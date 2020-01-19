@@ -20,6 +20,7 @@ import { getYesterday } from '#utils/common';
 import Cloak from '#components/Cloak';
 
 import {
+    patchIncidentActionIP,
     setIncidentActionIP,
 } from '#actionCreators';
 
@@ -33,14 +34,20 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     setIncident: PropTypes.func.isRequired,
+    patchIncident: PropTypes.func.isRequired,
+    onHover: PropTypes.func,
+    recentDay: PropTypes.number.isRequired,
+    isHovered: PropTypes.boolean.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
+    patchIncident: params => dispatch(patchIncidentActionIP(params)),
     setIncident: params => dispatch(setIncidentActionIP(params)),
 });
 
 const defaultProps = {
     className: undefined,
+    onHover: undefined,
 };
 
 const isRecent = (date, recentDay) => {
@@ -56,15 +63,21 @@ class IncidentItem extends React.PureComponent {
 
     handleIncidentEdit = (incident) => {
         const { setIncident } = this.props;
-        setIncident(incident);
+
+        if (isDefined(incident)) {
+            setIncident({ incident });
+        }
     }
 
     handleLossEdit = (loss, incident) => {
-        const { setIncident } = this.props;
+        const { patchIncident } = this.props;
 
-        if (isDefined(incident)) {
-            setIncident(incident);
-        }
+        patchIncident({
+            incident: {
+                loss,
+            },
+            incidentId: incident.id,
+        });
     }
 
     handleMouseEnter = () => {
@@ -113,7 +126,7 @@ class IncidentItem extends React.PureComponent {
 
         const verifiedIconClass = verified
             ? _cs(styles.icon, iconNames.check, styles.verified)
-            : _cs(styles.icon, iconNames.close, styles.notVerified);
+            : _cs(styles.icon, iconNames.close);
 
         const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(incidentOn, recentDay);
@@ -153,7 +166,6 @@ class IncidentItem extends React.PureComponent {
                             alwaysVisible
                         />
                         <GeoOutput
-                            className={styles.geoOutput}
                             geoareaName={streetAddress}
                             alwaysVisible
                         />

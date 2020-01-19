@@ -135,6 +135,15 @@ export const setIncidentActionIP = ({ incident }: { incident: Type.Incident }) =
     incident,
 });
 
+export const patchIncidentActionIP = ({ incident, incidentId }: {
+    incident: Type.Incident;
+    incidentId: number;
+}) => ({
+    type: Type.PageType.IP__PATCH_INCIDENT,
+    incident,
+    incidentId,
+});
+
 export const setFiltersActionIP = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
@@ -529,6 +538,36 @@ const setIncident = (state: Type.PageState, action: Type.SetIncident) => {
             incidentList.splice(incidentIndex, 1, incident);
         } else {
             incidentList.push(incident);
+        }
+        /* eslint-enable no-param-reassign */
+    });
+    return newState;
+};
+
+const patchIncident = (state: Type.PageState, action: Type.PatchIncident) => {
+    const {
+        incident,
+        incidentId,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (!deferedState.incidentPage) {
+            deferedState.incidentPage = initialState.incidentPage;
+        }
+
+        const {
+            incidentPage: {
+                incidentList,
+            },
+        } = deferedState;
+
+        const incidentIndex = incidentList.findIndex(d => d.id === incidentId);
+        if (incidentIndex !== -1) {
+            incidentList[incidentIndex] = {
+                ...incidentList[incidentIndex],
+                ...incident,
+            };
         }
         /* eslint-enable no-param-reassign */
     });
@@ -950,6 +989,8 @@ export default function routeReducer(
             return setIncidentList(state, action);
         case Type.PageType.IP__SET_INCIDENT:
             return setIncident(state, action);
+        case Type.PageType.IP__PATCH_INCIDENT:
+            return patchIncident(state, action);
         case Type.PageType.IP__SET_FILTERS:
             return setIncidentFilters(state, action);
         case Type.PageType.RP__SET_RESOURCE_LIST:
