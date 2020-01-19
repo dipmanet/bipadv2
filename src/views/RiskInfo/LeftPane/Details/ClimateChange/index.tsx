@@ -23,6 +23,7 @@ import {
 import {
     NapData,
     NapValue,
+    Scenario,
 } from '#types';
 
 import {
@@ -33,9 +34,6 @@ import {
 } from '#request';
 
 import Loading from '#components/Loading';
-
-import chartImage from '#resources/images/mean-anual-precipitation-chart.png';
-import legendImage from '#resources/images/mean-anual-precipitation-legend.png';
 
 import {
     provincesSelector,
@@ -110,7 +108,7 @@ const timePeriodOptions: TimePeriod[] = [
     { key: 'long-term', label: 'Long Term (2036-2065)', startYear: 2036, endYear: 2065 },
 ];
 
-const scenarioOptions = [
+const scenarioOptions: Scenario[] = [
     { key: 'rcp45', label: 'RCP 4.5' },
     { key: 'rcp85', label: 'RCP 8.5' },
 ];
@@ -245,6 +243,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                     <Map
                         data={data}
                         measurementType={measurementType}
+                        scenarioOptions={scenarioOptions}
                         scenario={scenario}
                     />
                 </div>

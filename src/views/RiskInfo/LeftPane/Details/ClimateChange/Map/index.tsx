@@ -7,6 +7,7 @@ import {
     NapValue,
     MapState,
     LegendItem,
+    Scenario,
 } from '#types';
 import Legend from '#rscz/Legend';
 import ChoroplethMap from '#components/ChoroplethMap';
@@ -22,6 +23,7 @@ interface Props {
     data: NapData[];
     measurementType: string;
     scenario: string;
+    scenarioOptions: Scenario[];
 }
 
 interface State {
@@ -61,6 +63,27 @@ const getItemValueDifference = (item) => {
     const diff = Math.abs(filteredList[0].value - filteredList[filteredList.length - 1].value);
 
     return diff;
+};
+
+const Tooltip = ({ feature, scenario }: { feature: unknown; scenario: string }) => {
+    const { properties: { title }, state: { value } } = feature;
+
+    if (value) {
+        const valueText = `${scenario}: ${Number(value).toFixed(2)}`;
+
+        return (
+            <div className={styles.tooltip}>
+                <div className={styles.title}>{title}</div>
+                <div className={styles.value}>{valueText}</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.tooltip}>
+            <div className={styles.title}>{title}</div>
+        </div>
+    );
 };
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
@@ -126,6 +149,15 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         });
     })
 
+    private tooltipParams = () => {
+        const { scenario: key, scenarioOptions } = this.props;
+        const scenario = scenarioOptions.find(sc => sc.key === key);
+
+        return ({
+            scenario: scenario ? scenario.label : '',
+        });
+    }
+
     private getLegendData = memoize(generateLegendData);
 
     public render() {
@@ -150,6 +182,8 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
                     paint={colorPaint}
                     mapState={mapState}
                     regionLevel={1}
+                    tooltipParams={this.tooltipParams}
+                    tooltipRenderer={Tooltip}
                 />
                 { legendData.length > 0 && (
                     <div className={styles.legendContainer}>

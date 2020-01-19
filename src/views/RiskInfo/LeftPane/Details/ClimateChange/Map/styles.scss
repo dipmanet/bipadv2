@@ -44,3 +44,21 @@
         }
     }
 }
+
+.tooltip {
+    display: flex;
+    // align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-extra-small-alt);
+
+    .title {
+        text-transform: capitalize;
+        font-size: var(--font-size-large);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .value {
+        font-size: var(--font-size-small);
+    }
+}
