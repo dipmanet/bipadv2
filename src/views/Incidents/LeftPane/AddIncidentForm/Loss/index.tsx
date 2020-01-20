@@ -152,7 +152,10 @@ class AddLoss extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
-        this.setState({ faramErrors });
+        this.setState({
+            faramErrors,
+            pristine: true,
+        });
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
@@ -169,6 +172,8 @@ class AddLoss extends React.PureComponent<Props, State> {
                 ...faramValues,
             },
         });
+
+        this.setState({ pristine: true });
     }
 
     private handleLossGet = (loss: FaramValues) => {
@@ -215,22 +220,24 @@ class AddLoss extends React.PureComponent<Props, State> {
                 error={faramErrors}
             >
                 {pending && <LoadingAnimation />}
-                <TextArea
-                    faramElementName="description"
-                    label="Description"
-                />
-                <NumberInput
-                    faramElementName="estimatedLoss"
-                    label="Estimated loss"
-                />
-                <div className={styles.footer}>
-                    <PrimaryButton
-                        type="submit"
-                        pending={lossEditPending || incidentPending}
-                        disabled={pristine}
-                    >
-                        Submit
-                    </PrimaryButton>
+                <div className={styles.container}>
+                    <TextArea
+                        faramElementName="description"
+                        label="Description"
+                    />
+                    <NumberInput
+                        faramElementName="estimatedLoss"
+                        label="Estimated loss"
+                    />
+                    <div className={styles.footer}>
+                        <PrimaryButton
+                            type="submit"
+                            pending={lossEditPending || incidentPending}
+                            disabled={pristine}
+                        >
+                            Submit
+                        </PrimaryButton>
+                    </div>
                 </div>
             </Faram>
         );

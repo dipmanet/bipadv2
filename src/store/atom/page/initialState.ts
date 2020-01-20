@@ -88,8 +88,8 @@ const state: PageState = {
     ],
     sourceList: [
         {
-            id: 'initial_rapid_assesment',
-            title: 'Initial Rapid Assesment',
+            id: 'ira',
+            title: 'Initial Rapid Assessment',
         },
         {
             id: 'nepal_police',

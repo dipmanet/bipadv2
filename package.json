@@ -139,7 +139,7 @@
         "@togglecorp/faram": "^1.2.1",
         "@togglecorp/fujs": "^1.8.0",
         "@togglecorp/ravl": "^1.2.3",
-        "@togglecorp/react-rest-request": "^2.4.5",
+        "@togglecorp/react-rest-request": "^2.5.0-beta.2",
         "@turf/bbox": "^6.0.1",
         "@turf/buffer": "^5.1.5",
         "@turf/turf": "^5.1.6",
