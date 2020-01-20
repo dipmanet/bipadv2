@@ -411,10 +411,10 @@ export default {
         fill: {
             'circle-radius': [
                 'case',
-                ['>=', ['get', 'magnitude'], 8], 12,
-                ['>=', ['get', 'magnitude'], 7], 11,
-                ['>=', ['get', 'magnitude'], 6], 10,
-                ['>=', ['get', 'magnitude'], 5], 9,
+                ['>=', ['get', 'magnitude'], 8], 21,
+                ['>=', ['get', 'magnitude'], 7], 18,
+                ['>=', ['get', 'magnitude'], 6], 15,
+                ['>=', ['get', 'magnitude'], 5], 11,
                 ['>=', ['get', 'magnitude'], 4], 8,
                 7,
             ],

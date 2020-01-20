@@ -192,6 +192,7 @@ export interface FiltersWithRegion {
         dateRange?: number;
         region: Region;
         realtimeSources?: number[];
+        otherSources?: number[];
         event?: number;
     };
     faramErrors: object;
@@ -373,6 +374,11 @@ export interface RealTimeSource {
     title: string;
 }
 
+export interface OtherSource {
+    id: number;
+    title: string;
+}
+
 export interface RealTimeMonitoringPage {
     realTimeRainList: RealTimeRain[];
     realTimeRiverList: RealTimeRiver[];
@@ -380,6 +386,7 @@ export interface RealTimeMonitoringPage {
     realTimeFireList: RealTimeFire[];
     realTimePollutionList: RealTimePollution[];
     realTimeSourceList: RealTimeSource[];
+    otherSourceList: OtherSource[];
     filters: Filters;
 }
 

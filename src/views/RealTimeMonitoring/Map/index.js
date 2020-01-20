@@ -264,11 +264,11 @@ export default class RealTimeMap extends React.PureComponent {
                     { showRain && (
                         <MapLayer
                             layerKey="real-time-rain-symbol"
+                            onClick={this.handleRainClick}
                             layerOptions={{
                                 type: 'symbol',
                                 layout: mapStyles.rainPoint.layout,
                                 paint: mapStyles.rainPoint.paint,
-                                onClick: this.handleRainClick,
                                 enableHover: true,
                             }}
                         />
@@ -283,12 +283,12 @@ export default class RealTimeMap extends React.PureComponent {
                     { showRiver && (
                         <MapLayer
                             layerKey="real-time-river-symbol"
+                            onClick={this.handleRiverClick}
                             layerOptions={{
                                 type: 'symbol',
                                 layout: mapStyles.riverPoint.layout,
                                 paint: mapStyles.riverPoint.paint,
                                 enableHover: true,
-                                onClick: this.handleRiverClick,
                             }}
                         />
                     )}

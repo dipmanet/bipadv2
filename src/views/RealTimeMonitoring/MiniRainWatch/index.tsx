@@ -142,7 +142,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             <div className={_cs(className, styles.rainWatch)}>
                 <header className={styles.header}>
                     <h2 className={styles.heading}>
-                        Rain watch
+                        Rainfall watch
                     </h2>
                     <ModalButton
                         className={styles.showDetailsButton}
