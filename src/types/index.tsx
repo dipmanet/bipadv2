@@ -119,3 +119,5 @@ export interface RiskData {
         riskScore: number;
     };
 }
+
+export type ResourceType = 'education' | 'health' | 'tourism' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy';
