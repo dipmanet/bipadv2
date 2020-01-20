@@ -1,0 +1,3 @@
+{
+"description": "The map represents the spatial distribution of total relative seismic risk for Nepal. The data is calculated as a normalized sum of six different risk metrics: a) percentage of scenarios with at least one fatality b) median fatalities for all scenarios that cause fatalities c) maximum fatalities d) specificity of fatalities for all scenarios that cause fatalities e) remoteness score and f) HDI. \r\n\r\nAll data are the property of Durham University."
+}

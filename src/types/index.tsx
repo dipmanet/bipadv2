@@ -111,3 +111,11 @@ export interface Scenario {
     key: string;
     label: string;
 }
+
+export interface RiskData {
+    id: number;
+    district: number;
+    data: {
+        riskScore: number;
+    };
+}
