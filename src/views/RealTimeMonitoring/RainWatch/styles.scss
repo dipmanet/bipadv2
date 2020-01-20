@@ -3,6 +3,12 @@
     height: 90vh;
     overflow: auto;
 
+    .warning {
+        background-color: var(--color-danger);
+        padding: var(--spacing-small);
+        color: var(--color-text-on-danger);
+    }
+
     .body {
         display: flex;
         flex-direction: column;

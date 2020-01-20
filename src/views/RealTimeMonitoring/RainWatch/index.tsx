@@ -181,6 +181,12 @@ class RainWatch extends React.PureComponent<Props> {
                         />
                     )}
                 />
+                <div className={styles.warning}>
+                    Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr,
+                    100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates
+                    potential threat for landslides in steep slope and high flow in local areas.
+                </div>
+                <hr />
                 <ModalBody className={styles.body}>
                     <Table
                         rowClassNameSelector={this.getClassName}
