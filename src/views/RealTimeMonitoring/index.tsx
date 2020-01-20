@@ -68,6 +68,7 @@ interface PropsFromState {
     realTimeFireList: PageType.RealTimeFire[];
     realTimePollutionList: PageType.RealTimePollution[];
     realTimeSourceList: PageType.RealTimeSource[];
+    otherSouceList: PageType.OtherSource[];
     filters: PageType.FiltersWithRegion['faramValues'];
 }
 
@@ -176,6 +177,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props: { setRealTimeFireList } }) => {
             interface Response { results: PageType.RealTimeFire[] }
             const { results: realTimeFireList = [] } = response as Response;
+
             setRealTimeFireList({ realTimeFireList });
         },
         onPropsChanged: {
@@ -395,16 +397,17 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             },
             filters: {
                 realtimeSources,
+                otherSources,
             },
             realTimeSourceList,
             otherSourceList,
         } = this.props;
 
-        const showEarthquake = realtimeSources && realtimeSources.findIndex(v => v === 1) !== -1;
+        const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
-        const showFire = realtimeSources && realtimeSources.findIndex(v => v === 4) !== -1;
-        const showPollution = realtimeSources && realtimeSources.findIndex(v => v === 5) !== -1;
+        const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
+        const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const LegendView = this.renderLegend;
 
         const pending = (

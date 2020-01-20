@@ -112,7 +112,7 @@ const schemaList: Schema[] = [
         fields: {
             createdOn: { type: 'string', required: true }, // date
             modifiedOn: { type: 'string' }, // date
-            scan: { type: 'object' },
+            scan: { type: 'number' },
             eventOn: { type: 'string' }, // date
             basin: { type: 'string' },
             landCover: { type: 'string' },
