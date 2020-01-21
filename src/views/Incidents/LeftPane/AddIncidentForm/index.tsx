@@ -110,35 +110,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: ({ props: { incidentServerId } }) => (
             incidentServerId ? methods.PATCH : methods.POST
         ),
+        query: ({
+            expand: ['loss', 'event', 'wards'],
+        }),
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ props, response }) => {
-            const {
-                requests: { incidentGetRequest },
-            } = props;
-            if (incidentGetRequest) {
-                incidentGetRequest.do({ incidentServerId: response.id });
+            const { onIncidentChange } = props;
+            if (onIncidentChange) {
+                onIncidentChange(response);
             }
-            // TODO: patch or add incident to incident list
         },
         onFailure: ({ error, params }) => {
             if (params && params.onAddFailure) {
                 const { faramErrors } = error as { faramErrors: object };
                 params.onAddFailure(faramErrors);
             }
-        },
-    },
-    incidentGetRequest: {
-        url: ({ params: { incidentServerId } }) => `/incident/${incidentServerId}/`,
-        query: ({
-            expand: ['loss', 'event', 'wards'],
-        }),
-        method: methods.GET,
-        onSuccess: ({ props, response }) => {
-            const { onIncidentChange } = props;
-            if (onIncidentChange) {
-                onIncidentChange(response);
-            }
-            // TODO: patch or add incident to incident list
         },
     },
 };
@@ -381,7 +367,10 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
-        this.setState({ faramErrors });
+        this.setState({
+            faramErrors,
+            pristine: true,
+        });
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
@@ -442,6 +431,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             body,
             onAddFailure: this.handleRequestFailure,
         });
+
+        this.setState({ pristine: true });
     }
 
     private handleRequestFailure = (faramErrors: object) => {

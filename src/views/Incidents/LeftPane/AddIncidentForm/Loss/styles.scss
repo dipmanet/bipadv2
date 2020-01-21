@@ -1,9 +1,13 @@
 .loss-form {
     position: relative;
-    padding: var(--spacing-large);
+    flex-grow: 1;
 
-    .footer {
-        display: flex;
-        justify-content: flex-end;
+    .container {
+        padding: var(--spacing-large);
+
+        .footer {
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 }
