@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
+import MapTooltip from '#re-map/MapTooltip';
 
 import FormattedDate from '#rscv/FormattedDate';
 
@@ -83,11 +84,14 @@ const EventTooltip = ({ title, description, severity, createdOn }) => (
 
 EventTooltip.propTypes = {
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     severity: PropTypes.string.isRequired,
     createdOn: PropTypes.string.isRequired,
 };
 
+EventTooltip.defaultProps = {
+    description: undefined,
+};
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -96,7 +100,8 @@ const propTypes = {
     eventList: PropTypes.array,
     // eslint-disable-next-line react/forbid-prop-types
     hazards: PropTypes.object,
-    onHoverChange: PropTypes.func.isRequired,
+    onAlertHover: PropTypes.func.isRequired,
+    onEventHover: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -110,6 +115,12 @@ const mapStateToProps = state => ({
 });
 
 class AlertEventMap extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+    }
+
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -141,7 +152,6 @@ class AlertEventMap extends React.PureComponent {
         description,
         severity,
         createdOn,
-        closeOnClick: true,
     })
 
     handleAnimationKeyframe = framize((percent) => {
@@ -155,28 +165,59 @@ class AlertEventMap extends React.PureComponent {
         };
     })
 
-    handleAlertHover = (alertId) => {
-        this.props.onHoverChange('alert', alertId);
+    handleAlertClick = (feature, lngLat) => {
+        const { properties: { title, description } } = feature;
+
+        this.setState({
+            alertTitle: title,
+            alertDescription: description,
+            alertClickLngLat: lngLat,
+        });
     }
 
-    handleEventHover = (eventId) => {
-        this.props.onHoverChange('event', eventId);
+    handleEventClick = (feature, lngLat) => {
+        const { properties: { title, severity, createdOn, description } } = feature;
+        this.setState({
+            eventTitle: title,
+            eventSeverity: severity,
+            eventCreatedOn: createdOn,
+            eventDescription: description,
+            eventClickLngLat: lngLat,
+        });
     }
 
-    handleAlertMouseEnter = (feature) => {
-        this.props.onAlertHover(feature.id);
+    handleEventClose = () => {
+        this.setState({
+            eventClickLngLat: undefined,
+        });
     }
 
-    handleAlertMouseLeave = () => {
-        this.props.onAlertHover(undefined);
+    handleAlertClose = () => {
+        this.setState({
+            alertClickLngLat: undefined,
+        });
     }
 
-    handleEventMouseEnter = (feature) => {
-        this.props.onEventHover(feature.id);
+    handleAlertEnter = (feature) => {
+        const { id } = feature;
+        const { onAlertHover } = this.props;
+        onAlertHover(id);
     }
 
-    handleEventMouseLeave = () => {
-        this.props.onEventHover(undefined);
+    handleAlertLeave = () => {
+        const { onAlertHover } = this.props;
+        onAlertHover();
+    }
+
+    handleEventEnter = (feature) => {
+        const { id } = feature;
+        const { onEventHover } = this.props;
+        onEventHover(id);
+    }
+
+    handleEventLeave = () => {
+        const { onEventHover } = this.props;
+        onEventHover();
     }
 
     render() {
@@ -209,6 +250,23 @@ class AlertEventMap extends React.PureComponent {
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
 
+        const {
+            eventTitle,
+            eventSeverity,
+            eventCreatedOn,
+            eventDescription,
+            eventClickLngLat,
+            alertTitle,
+            alertDescription,
+            alertClickLngLat,
+        } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: true,
+            closeButton: false,
+            offset: 8,
+        };
+
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
@@ -222,7 +280,6 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'line',
                             paint: mapStyles.alertConvex.outline,
-                            // onHoverChange: this.handleAlertHover,
                         }}
                     />
                 </MapSource>
@@ -236,7 +293,6 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'fill',
                             paint: mapStyles.alertPolygon.fill,
-                            onHoverChange: this.handleAlertHover,
                         }}
                     />
                     <MapLayer
@@ -266,16 +322,23 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.alertPoint.circle,
-                            // tooltipRenderer: AlertTooltip,
-                            // tooltipRendererParams: this.alertTooltipRendererParams,
                         }}
-                        onMouseEnter={this.handleAlertMouseEnter}
-                        onMouseLeave={this.handleAlertMouseLeave}
+                        onMouseEnter={this.handleAlertEnter}
+                        onMouseLeave={this.hanleAlertLeave}
+                        onClick={this.handleAlertClick}
                     />
-                    <MapState
-                        attributes={alertHoverAttributes}
-                        attributeKey="hover"
-                    />
+                    {alertClickLngLat && (
+                        <MapTooltip
+                            coordinates={alertClickLngLat}
+                            tooltipOptions={tooltipOptions}
+                            onHide={this.handleAlertClose}
+                        >
+                            <AlertTooltip
+                                title={alertTitle}
+                                description={alertDescription}
+                            />
+                        </MapTooltip>
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey="events-convex-polygon"
@@ -287,7 +350,6 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'line',
                             paint: mapStyles.eventConvex.outline,
-                            // onHoverChange: this.handleEventHover,
                         }}
                     />
                 </MapSource>
@@ -301,7 +363,6 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'fill',
                             paint: mapStyles.eventPolygon.fill,
-                            // onHoverChange: this.handleEventHover,
                         }}
                     />
                     <MapLayer
@@ -323,12 +384,28 @@ class AlertEventMap extends React.PureComponent {
                             type: 'symbol',
                             layout: mapStyles.eventSymbol.layout,
                             paint: mapStyles.eventSymbol.paint,
-                            // tooltipRenderer: EventTooltip,
-                            // tooltipRendererParams: this.eventTooltipRendererParams,
-                            onHoverChange: this.handleEventHover,
                         }}
-                        onMouseEnter={this.handleEventMouseEnter}
-                        onMouseLeave={this.handleEventMouseLeave}
+                        onClick={this.handleEventClick}
+                        onMouseEnter={this.handleEventEnter}
+                        onMouseLeave={this.handleEventLeave}
+                    />
+                    {eventClickLngLat && (
+                        <MapTooltip
+                            coordinates={eventClickLngLat}
+                            tooltipOptions={tooltipOptions}
+                            onHide={this.handleEventClose}
+                        >
+                            <EventTooltip
+                                title={eventTitle}
+                                severity={eventSeverity}
+                                createdOn={eventCreatedOn}
+                                description={eventDescription}
+                            />
+                        </MapTooltip>
+                    )}
+                    <MapState
+                        attributes={alertHoverAttributes}
+                        attributeKey="hover"
                     />
                     <MapState
                         attributes={eventHoverAttributes}
