@@ -6,6 +6,7 @@ import memoize from 'memoize-one';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
+import MapTooltip from '#re-map/MapTooltip';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -35,6 +36,11 @@ const propTypes = {
     hazards: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
     onIncidentHover: PropTypes.func.isRequired,
+    mapHoverAttributes: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    wardsMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    provincesMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    districtsMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    municipalitiesMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
@@ -56,6 +62,8 @@ class IncidentMap extends React.PureComponent {
     constructor(props) {
         super(props);
         this.prevTimestamp = undefined;
+
+        this.state = {};
     }
 
     getPointFeatureCollection = memoize(incidentPointToGeojson)
@@ -65,30 +73,6 @@ class IncidentMap extends React.PureComponent {
     getFilter = memoize(timestamp => (
         ['>', ['get', 'incidentOn'], timestamp]
     ))
-
-    tooltipRendererParams = (id) => {
-        const {
-            incidentList,
-            wardsMap,
-            provincesMap,
-            districtsMap,
-            municipalitiesMap,
-        } = this.props;
-
-        const incident = incidentList.find(i => i.id === id);
-
-        return {
-            incident,
-            wardsMap,
-            provincesMap,
-            districtsMap,
-            municipalitiesMap,
-            maxWidth: '320px',
-            closeButton: false,
-            closeOnClick: true,
-            className: styles.incidentInfo,
-        };
-    }
 
     handleAnimationKeyframe = framize((percent) => {
         const p = percent;
@@ -109,13 +93,33 @@ class IncidentMap extends React.PureComponent {
         this.props.onIncidentHover(undefined);
     }
 
+    handleIncidentClick = (feature, lngLat) => {
+        const { id } = feature;
+        const { incidentList } = this.props;
+        const incident = incidentList.find(item => item.id === id);
+        this.setState({
+            incident,
+            incidentLngLat: lngLat,
+        });
+    }
+
+    handleIncidentClose = () => {
+        this.setState({
+            incident: undefined,
+            incidentLngLat: undefined,
+        });
+    }
+
     render() {
         const {
             incidentList,
             hazards,
             recentDay,
-            onIncidentHover,
             mapHoverAttributes,
+            wardsMap,
+            provincesMap,
+            districtsMap,
+            municipalitiesMap,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -123,6 +127,16 @@ class IncidentMap extends React.PureComponent {
 
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
+        const {
+            incident,
+            incidentLngLat,
+        } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: true,
+            closeButton: true,
+            offset: 8,
+        };
 
         return (
             <React.Fragment>
@@ -137,9 +151,6 @@ class IncidentMap extends React.PureComponent {
                         layerOptions={{
                             type: 'fill',
                             paint: mapStyles.incidentPolygon.fill,
-                            enableHover: true,
-                            tooltipRenderer: IncidentInfo,
-                            tooltipRendererParams: this.tooltipRendererParams,
                         }}
                     />
                 </MapSource>
@@ -162,14 +173,28 @@ class IncidentMap extends React.PureComponent {
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.incidentPoint.fill,
-                            // enableHover: true,
-                            // tooltipRenderer: IncidentInfo,
-                            // tooltipRendererParams: this.tooltipRendererParams,
-                            // onHoverChange: onIncidentHover,
+                            enableHover: true,
                         }}
+                        onClick={this.handleIncidentClick}
                         onMouseEnter={this.handleIncidentMouseEnter}
                         onMouseLeave={this.handleIncidentMouseLeave}
                     />
+                    { incidentLngLat && (
+                        <MapTooltip
+                            coordinates={incidentLngLat}
+                            tooltipOptions={tooltipOptions}
+                            onHide={this.handleIncidentClose}
+                        >
+                            <IncidentInfo
+                                incident={incident}
+                                wardsMap={wardsMap}
+                                provincesMap={provincesMap}
+                                districtsMap={districtsMap}
+                                municipalitiesMap={municipalitiesMap}
+                                className={styles.incidentInfo}
+                            />
+                        </MapTooltip>
+                    )}
                     <MapState
                         attributes={mapHoverAttributes}
                         attributeKey="hover"

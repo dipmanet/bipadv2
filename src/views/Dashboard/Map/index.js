@@ -339,6 +339,10 @@ class AlertEventMap extends React.PureComponent {
                             />
                         </MapTooltip>
                     )}
+                    <MapState
+                        attributes={alertHoverAttributes}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="events-convex-polygon"
@@ -403,10 +407,6 @@ class AlertEventMap extends React.PureComponent {
                             />
                         </MapTooltip>
                     )}
-                    <MapState
-                        attributes={alertHoverAttributes}
-                        attributeKey="hover"
-                    />
                     <MapState
                         attributes={eventHoverAttributes}
                         attributeKey="hover"
