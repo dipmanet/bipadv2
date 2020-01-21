@@ -4,192 +4,211 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import {
+    methods,
+    NewProps,
+    ClientAttributes,
+    createRequestClient,
+} from '@togglecorp/react-rest-request';
+
 import DangerButton from '#rsca/Button/DangerButton';
+import ListView from '#rscv/List/ListView';
+
 import MapSource from '#re-map/MapSource';
+import MapIcon from '#re-map/MapIcon';
 import MapLayer from '#re-map/MapSource/MapLayer';
 
 import CommonMap from '#components/CommonMap';
-
-import LayerSelection from '#components/LayerSelection';
-import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import MapLayerLegend from '#components/MapLayerLegend';
-import OpacityInput from '#components/OpacityInput';
-
+import Option from '#components/RadioInput/Option';
+import Loading from '#components/Loading';
 
 import {
-    getRasterTile,
-    getRasterLegendURL,
-    getLayerHierarchy,
-} from '#utils/domain';
+    getResults,
+    isAnyRequestPending,
+} from '#utils/request';
+import { mapStyles } from '#constants';
+
+import HealthIcon from '#resources/icons/Health-facility.png';
+import FinanceIcon from '#resources/icons/Financing.png';
+// import EducationIcon from '#resources/icons/Education.png';
+
 import {
-    OpacityElement,
-    LayerHierarchy,
+    ResourceType,
 } from '#types';
-import { LayerWithGroup, LayerGroup, Layer } from '#store/atom/page/types';
 
 import styles from './styles.scss';
 
-interface Props {
+interface ComponentProps {
     className?: string;
-    layerList: LayerWithGroup[];
-    layerGroupList: LayerGroup[];
 }
 
 interface State {
-    layerOpacity: number;
-    selectedLayerId: number | undefined;
+    activeLayerKey: ResourceType | undefined;
 }
 
-const layerKeySelector = (d: LayerHierarchy) => d.id;
-const layerLabelSelector = (d: LayerHierarchy) => d.title;
+interface ResourceElement {
+    key: ResourceType;
+    title: string;
+}
+
+interface Params {
+}
+
+type Props = NewProps<ComponentProps, Params>
+
+const resourceLayerList: ResourceElement[] = [
+    // { key: 'education', title: 'Education' },
+    { key: 'finance', title: 'Finance' },
+    { key: 'health', title: 'Health' },
+];
+
+const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
+    resourceGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => {
+            if (!params || !params.resourceType) {
+                return undefined;
+            }
+
+            return {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                resource_type: params.resourceType,
+                limit: 99999,
+            };
+        },
+    },
+};
+
+interface ResourceResponseElement {
+    id: number;
+    resourceType: ResourceType;
+    title: string;
+    description?: string;
+    point: {
+        type: 'string';
+        coordinates: [number, number];
+        ward: number;
+    };
+}
+
+const emptyResourceList: ResourceResponseElement[] = [];
 
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
         this.state = {
-            layerOpacity: 1,
-            selectedLayerId: undefined,
+            activeLayerKey: undefined,
         };
     }
 
-    public componentWillUnmount() {
-        const { selectedLayerId } = this.state;
+    private getGeojson = memoize((resourceList: ResourceResponseElement[]) => {
+        const geojson = {
+            type: 'FeatureCollection',
+            features: resourceList.map(r => ({
+                type: 'Feature',
+                geometry: r.point,
+                properties: r,
+            })),
+        };
 
-        if (selectedLayerId) {
-            this.context.removeLayer(`layer-${selectedLayerId}`);
-        }
+        return geojson;
+    })
+
+    private getLayerRendererParams = (key, layer) => ({
+        optionKey: key,
+        label: layer.title,
+        onClick: this.handleLayerClick,
+        isActive: this.state.activeLayerKey === key,
+    })
+
+    private handleLayerClick = (layerKey) => {
+        this.setState({ activeLayerKey: layerKey });
+
+        this.props.requests.resourceGetRequest.do({
+            resourceType: layerKey,
+        });
     }
-
-    private getHierarchy = memoize(getLayerHierarchy);
 
     private handleLayerUnselect = () => {
-        const { selectedLayerId } = this.state;
-
-        if (selectedLayerId) {
-            this.context.removeLayer(`layer-${selectedLayerId}`);
-        }
-
-        this.setState({
-            selectedLayerId: undefined,
-        });
+        this.setState({ activeLayerKey: undefined });
     }
-
-    private handleClick = (layerId: number | undefined) => {
-        const { selectedLayerId } = this.state;
-        if (selectedLayerId) {
-            this.context.removeLayer(`layer-${selectedLayerId}`);
-        }
-
-        this.setState({
-            selectedLayerId: layerId,
-        });
-
-        if (layerId) {
-            const layer = this.getLayer(layerId);
-
-            if (layer) {
-                this.context.addLayer({
-                    title: `${layer.group.title} / ${layer.title}`,
-                    id: `layer-${layer.id}`,
-                });
-            }
-        }
-    }
-
-    private handleOpacityInputChange = (_: OpacityElement['key'], value: OpacityElement['value']) => {
-        this.setState({ layerOpacity: value });
-    }
-
-    private getLayer = (layerId: number| undefined) => {
-        const { layerList } = this.props;
-        const layer = layerList.find(l => l.id === layerId);
-        return layer;
-    };
-
-    private getRasterTiles = (layer: Layer| LayerWithGroup | undefined) => {
-        if (layer) {
-            const rasterTile = getRasterTile(layer);
-            return [rasterTile];
-        }
-        return [];
-    };
 
     public render() {
         const {
-            layerGroupList,
-            layerList,
             className,
+            requests,
         } = this.props;
 
-        const {
-            layerOpacity,
-            selectedLayerId,
-        } = this.state;
+        const { activeLayerKey } = this.state;
+        const sourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+        const geojson = this.getGeojson(sourceList);
 
-        const layers = this.getHierarchy(layerList, layerGroupList);
-        const selectedLayer = this.getLayer(selectedLayerId);
-        const rasterTiles = this.getRasterTiles(selectedLayer);
+        const pending = isAnyRequestPending(requests);
 
         return (
-            <div className={_cs(styles.capacityAndResources, className)}>
-                <CommonMap sourceKey="capacity-and-resources" />
-                <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        Layers
-                    </h4>
-                    <DangerButton
-                        disabled={!selectedLayerId}
-                        onClick={this.handleLayerUnselect}
-                        className={styles.clearButton}
-                        transparent
-                    >
-                        Clear
-                    </DangerButton>
-                </header>
-                <LayerSelection
-                    layers={layers}
-                    onClick={this.handleClick}
-                    layerKeySelector={layerKeySelector}
-                    layerLabelSelector={layerLabelSelector}
-                    selectedLayerId={selectedLayerId}
-                />
-                { selectedLayerId && (
-                    <OpacityInput
-                        inputKey={selectedLayerId}
-                        onChange={this.handleOpacityInputChange}
-                    />
-                )}
-                { selectedLayer && (
-                    <MapLayerLegend
-                        legendSrc={getRasterLegendURL(selectedLayer)}
-                        layerTitle={selectedLayer.title}
-                    />
-                )}
-                { selectedLayer && (
-                    <MapSource
-                        sourceKey={`capacity-source-${selectedLayer.id}`}
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: rasterTiles,
-                            tileSize: 256,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey={`layer-${selectedLayer.id}`}
-                            layerOptions={{
-                                type: 'raster',
-                                paint: {
-                                    'raster-opacity': layerOpacity,
-                                },
-                            }}
+            <>
+                <Loading pending={pending} />
+                <div className={_cs(styles.capacityAndResources, className)}>
+                    <CommonMap sourceKey="capacity-and-resources" />
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Layers
+                        </h4>
+                        <DangerButton
+                            disabled={!activeLayerKey}
+                            onClick={this.handleLayerUnselect}
+                            className={styles.clearButton}
+                            transparent
+                        >
+                            Clear
+                        </DangerButton>
+                    </header>
+                    <div className={styles.content}>
+                        <ListView
+                            data={resourceLayerList}
+                            keySelector={d => d.key}
+                            renderer={Option}
+                            rendererParams={this.getLayerRendererParams}
                         />
-                    </MapSource>
-                )}
-            </div>
+                    </div>
+                    <MapIcon
+                        src={HealthIcon}
+                        iconKey="health"
+                    />
+                    <MapIcon
+                        src={FinanceIcon}
+                        iconKey="finance"
+                    />
+                    { activeLayerKey && (
+                        <MapSource
+                            sourceKey="resource-symbol"
+                            sourceOptions={{ type: 'geojson' }}
+                            geoJson={geojson}
+                        >
+                            <MapLayer
+                                layerKey="resource-symbol-background"
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: mapStyles.resourcePoint.circle,
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="resource-symbol-icon"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': activeLayerKey,
+                                        'icon-size': 0.02,
+                                    },
+                                }}
+                            />
+                        </MapSource>
+                    )}
+                </div>
+            </>
         );
     }
-}
-
-CapacityAndResources.contextType = RiskInfoLayerContext;
-export default CapacityAndResources;
+} export default createRequestClient(requestOptions)(CapacityAndResources);
