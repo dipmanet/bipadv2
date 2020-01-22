@@ -4,6 +4,7 @@ import { extent } from 'd3-array';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import ChoroplethMap from '#components/ChoroplethMap';
+import ListView from '#rscv/List/ListView';
 
 import {
     LegendItem,
@@ -52,6 +53,23 @@ const Tooltip = ({ feature }: { feature: unknown }) => {
     );
 };
 
+const LegendItemRenderer = (item: LegendItem) => {
+    const style = {
+        backgroundColor: item.color,
+    };
+    return (
+        <div className={styles.legendItem}>
+            <div className={styles.valueTop}>{item.label}</div>
+            <div
+                className={styles.block}
+                style={style}
+            />
+            <div className={styles.valueBottom}>{item.label}</div>
+        </div>
+    );
+};
+
+const legendKeySelector = (legend: LegendItem) => legend.label;
 
 export default class RiskMap extends React.PureComponent<Props, State> {
     private generateMapState = memoize((data: RiskData[]) => {
@@ -72,10 +90,11 @@ export default class RiskMap extends React.PureComponent<Props, State> {
         }
 
         const { length } = colors;
+        const add = range / (length);
         colors.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
+            const val = minValue + (i + 1) * add;
             newColor.push(color);
+            newColor.push(val);
         });
 
         return newColor;
@@ -90,15 +109,9 @@ export default class RiskMap extends React.PureComponent<Props, State> {
         }
 
         const fillColor = [
-            'case',
-            ['==', ['feature-state', 'value'], null],
-            'white',
-            [
-                'interpolate',
-                ['linear'],
-                ['feature-state', 'value'],
-                ...color,
-            ],
+            'step',
+            ['feature-state', 'value'],
+            ...color.slice(0, -1),
         ];
 
         const fillOpacity = [
@@ -117,8 +130,8 @@ export default class RiskMap extends React.PureComponent<Props, State> {
     private getLegendData = memoize((colorPaint: (string | number)[]) => {
         const legendData = colorPaint.reduce((acc: LegendItem[], _, index, array) => {
             if (index % 2 === 0) {
-                const [value, colorValue] = array.slice(index, index + 2);
-                const label = Number(value).toFixed(1).replace(/\.00$/, '');
+                const [colorValue, value] = array.slice(index, index + 2);
+                const label = Number(value).toFixed(2);
                 const color = `${colorValue}`;
 
                 acc.push({ label, color });
@@ -128,6 +141,8 @@ export default class RiskMap extends React.PureComponent<Props, State> {
 
         return legendData;
     });
+
+    private rendererParams = (_: string, item: LegendItem) => item;
 
     public render() {
         const { data } = this.props;
@@ -154,24 +169,13 @@ export default class RiskMap extends React.PureComponent<Props, State> {
                         <h4 className={styles.heading}>
                             Legend
                         </h4>
-                        <div className={styles.legend}>
-                            {legendData.map((item) => {
-                                const style = {
-                                    backgroundColor: item.color,
-                                };
-
-                                return (
-                                    <div className={styles.legendItem}>
-                                        <div className={styles.valueTop}>{item.label}</div>
-                                        <div
-                                            className={styles.block}
-                                            style={style}
-                                        />
-                                        <div className={styles.valueBottom}>{item.label}</div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <ListView
+                            className={styles.legend}
+                            data={legendData}
+                            keySelector={legendKeySelector}
+                            renderer={LegendItemRenderer}
+                            rendererParams={this.rendererParams}
+                        />
                     </div>
                 )}
             </div>

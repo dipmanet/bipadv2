@@ -106,11 +106,13 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
                 return [];
             }
 
+            const gap = range / (length);
             colorMapping.forEach((color, i) => {
-                const val = minValue + ((i * range) / (length - 1));
-                newColor.push(val);
+                const val = minValue + (i + 1) * gap;
                 newColor.push(color);
+                newColor.push(val);
             });
+
 
             return newColor;
         },
@@ -125,15 +127,9 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
         }
 
         const fillColor = [
-            'case',
-            ['==', ['feature-state', 'value'], null],
-            'white',
-            [
-                'interpolate',
-                ['linear'],
-                ['feature-state', 'value'],
-                ...color,
-            ],
+            'step',
+            ['feature-state', 'value'],
+            ...color.slice(0, -1),
         ];
 
         const fillOpacity = [
