@@ -3,9 +3,6 @@ import memoize from 'memoize-one';
 import { extent } from 'd3-array';
 import { isNotDefined } from '@togglecorp/fujs';
 
-import { generateLegendData } from '#utils/domain';
-
-import Legend from '#rscz/Legend';
 import ChoroplethMap from '#components/ChoroplethMap';
 
 import {
@@ -33,10 +30,6 @@ const YlOrRd = [
     '#f6b633',
     '#e93f34',
 ];
-
-const keySelector = (d: LegendItem) => d.label;
-const labelSelector = (d: LegendItem) => d.label;
-const colorSelector = (d: LegendItem) => d.color;
 
 const Tooltip = ({ feature }: { feature: unknown }) => {
     const { properties: { title }, state: { value } } = feature;
@@ -121,7 +114,20 @@ export default class RiskMap extends React.PureComponent<Props, State> {
         });
     })
 
-    private getLegendData = memoize(generateLegendData);
+    private getLegendData = memoize((colorPaint: (string | number)[]) => {
+        const legendData = colorPaint.reduce((acc: LegendItem[], _, index, array) => {
+            if (index % 2 === 0) {
+                const [value, colorValue] = array.slice(index, index + 2);
+                const label = Number(value).toFixed(1).replace(/\.00$/, '');
+                const color = `${colorValue}`;
+
+                acc.push({ label, color });
+            }
+            return acc;
+        }, []);
+
+        return legendData;
+    });
 
     public render() {
         const { data } = this.props;
@@ -129,6 +135,7 @@ export default class RiskMap extends React.PureComponent<Props, State> {
 
         const [min, max] = extent(mapState, (d: MapState) => d.value);
         const color = this.generateColor(max, min, YlOrRd);
+
         const colorPaint = this.generatePaint(color);
 
         const legendData = this.getLegendData(color);
@@ -147,15 +154,24 @@ export default class RiskMap extends React.PureComponent<Props, State> {
                         <h4 className={styles.heading}>
                             Legend
                         </h4>
-                        <Legend
-                            className={styles.legend}
-                            data={legendData}
-                            itemClassName={styles.legendItem}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            colorSelector={colorSelector}
-                            emptyComponent={null}
-                        />
+                        <div className={styles.legend}>
+                            {legendData.map((item) => {
+                                const style = {
+                                    backgroundColor: item.color,
+                                };
+
+                                return (
+                                    <div className={styles.legendItem}>
+                                        <div className={styles.valueTop}>{item.label}</div>
+                                        <div
+                                            className={styles.block}
+                                            style={style}
+                                        />
+                                        <div className={styles.valueBottom}>{item.label}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
             </div>
