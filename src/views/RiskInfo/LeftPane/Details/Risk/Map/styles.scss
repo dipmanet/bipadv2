@@ -19,26 +19,35 @@
         }
 
         .legend {
+            display: flex;
             flex-grow: 1;
-            padding: var(--spacing-small) var(--spacing-medium);
+            padding: var(--spacing-medium);
 
             .legend-item {
-                display: flex;
-                align-items: center;
-                font-size: var(--font-size-small);
-                font-weight: var(--font-weight-bold);
+                flex-grow: 1;
 
-                >div:first-child {
-                    width: 20px;
+                .value-top,
+                .value-bottom {
                     text-align: center;
                 }
 
-                >div:last-child {
-                    padding: var(--spacing-extra-small-alt) var(--spacing-small);
+
+                .block {
+                    height: var(--font-size-medium);
+                }
+            }
+
+            .legend-item {
+                &:nth-child(even) {
+                    .value-top {
+                        visibility: hidden;
+                    }
                 }
 
-                &:hover {
-                    background-color: var(--color-background-hover);
+                &:nth-child(odd) {
+                    .value-bottom {
+                        visibility: hidden;
+                    }
                 }
             }
         }
