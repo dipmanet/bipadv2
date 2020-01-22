@@ -10,8 +10,18 @@
             padding: 0 var(--spacing-medium);
             color: var(--color-accent);
         }
+    }
 
-        .description {
+    .description {
+        padding: var(--spacing-small) var(--spacing-medium);
+
+        .metric {
+            padding: var(--spacing-small);
+        }
+    }
+
+    .options {
+        .metric-input {
             padding: var(--spacing-small) var(--spacing-medium);
         }
     }

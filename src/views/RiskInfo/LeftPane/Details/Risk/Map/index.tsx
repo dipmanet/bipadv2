@@ -24,13 +24,14 @@ interface State {
 }
 
 const YlOrRd = [
-    '#ffffb2',
-    '#fed976',
-    '#feb24c',
+    '#e1e1e1',
+    '#47a3bc',
+    '#53ab82',
     '#fd8d3c',
-    '#fc4e2a',
-    '#e31a1c',
-    '#b10026',
+    '#7ff200',
+    '#fbf731',
+    '#f6b633',
+    '#e93f34',
 ];
 
 const keySelector = (d: LegendItem) => d.label;
@@ -64,6 +65,7 @@ export default class RiskMap extends React.PureComponent<Props, State> {
         const mapState = data.map(item => ({
             id: item.district,
             value: item.data.riskScore,
+            rank: item.rank,
         }));
 
         return mapState;
@@ -122,10 +124,7 @@ export default class RiskMap extends React.PureComponent<Props, State> {
     private getLegendData = memoize(generateLegendData);
 
     public render() {
-        const {
-            data,
-        } = this.props;
-
+        const { data } = this.props;
         const mapState = this.generateMapState(data);
 
         const [min, max] = extent(mapState, (d: MapState) => d.value);

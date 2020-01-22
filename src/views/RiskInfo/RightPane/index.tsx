@@ -3,6 +3,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+
 import { setFiltersActionDP } from '#actionCreators';
 import { AppState } from '#store/types';
 import { Region } from '#store/atom/page/types';
