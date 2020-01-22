@@ -1,13 +1,21 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isNotDefined,
+    _cs,
+    listToMap,
+} from '@togglecorp/fujs';
+import VerticalTabs from '#rscv/VerticalTabs';
+import MultiViewContainer from '#rscv/MultiViewContainer';
+
 
 import { lossMetrics } from '#utils/domain';
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
 import TextOutput from '#components/TextOutput';
 import Page from '#components/Page';
+import Icon from '#rscg/Icon';
 
 import {
     createConnectedRequestCoordinator,
@@ -42,6 +50,9 @@ import {
 
 
 import Visualizations from './Visualizations';
+import Disasters from './Disasters';
+import Demographics from './Demographics';
+import CapacitiesAndResources from './CapacitiesAndResources';
 
 import styles from './styles.scss';
 
@@ -122,7 +133,62 @@ const isValidIncident = (
     }
 };
 
+const leftMenu = [
+    {
+        key: 'demographics',
+        name: 'Demographics',
+    },
+    {
+        key: 'disasters',
+        name: 'Disasters',
+    },
+    {
+        key: 'capacitiesAndResources',
+        name: 'Capacitites and Resources',
+    },
+];
+
+const leftMenuMap = listToMap(leftMenu, d => d.key, d => d.name);
+const tabModifier = (key, name) => (
+    <div className={styles.menuRender}>
+        <Icon
+            className={styles.firstIcon}
+            name="chevronRight"
+        />
+        <span className={styles.content}>
+            { name }
+        </span>
+        <Icon
+            className={styles.secondIcon}
+            name="cloudDownload"
+        />
+    </div>
+);
+
+const menuViews = {
+    demographics: {
+        component: Demographics,
+    },
+    disasters: {
+        component: Disasters,
+    },
+    capacitiesAndResources: {
+        component: CapacitiesAndResources,
+    },
+};
 class DisasterProfile extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeTab: 'demographics',
+        };
+    }
+
+    handleTabClick = (activeTab) => {
+        this.setState({ activeTab });
+    };
+
     filterIncidents = (incidents = emptyList, regions, region) => {
         if (!region) {
             return incidents;
@@ -146,24 +212,12 @@ class DisasterProfile extends React.PureComponent {
                 aggregatedStat: {},
             };
         }
-
         const groupFn = getGroupMethod(region.adminLevel);
         const regionGroupedIncidents = getGroupedIncidents(
             incidents,
             groupFn,
         );
 
-        // console.warn(regionGroupedIncidents);
-
-        // const listToMapGroupedItem = groupedIncidents => (
-        //     listToMap(
-        //         groupedIncidents,
-        //         incident => incident.key,
-        //         incident => incident,
-        //     )
-        // );
-
-        // const mapping = listToMapGroupedItem(regionGroupedIncidents);
 
         return {
             // mapping,
@@ -214,6 +268,8 @@ class DisasterProfile extends React.PureComponent {
             region,
         } = this.props;
 
+        const { activeTab } = this.state;
+
         const pending = lossAndDamageRequestPending !== undefined
             ? lossAndDamageRequestPending : true;
 
@@ -233,17 +289,41 @@ class DisasterProfile extends React.PureComponent {
                     region={region}
                 />
                 <Page
-                    hideMap
-                    leftContentClassName={styles.leftContainer}
-                    leftContent={(
+                    leftContent={null}
+                    mainContentClassName={styles.mainContainer}
+                    mainContent={(
                         <>
-                            <AggregatedStat
-                                className={styles.aggregatedStat}
-                                data={dataset.aggregatedStat}
-                            />
-                            <Visualizations
-                                lossAndDamageList={filteredIncidents}
-                            />
+                            <div className={styles.mainContainerContent}>
+                                <div className={styles.leftSide}>
+                                    <div className={
+                                        _cs(styles.customContainer,
+                                            styles.leftCustomContainer)
+                                    }
+                                    >
+                                        <div className={styles.leftHeader}>
+                                            header
+                                        </div>
+                                        <VerticalTabs
+                                            tabs={leftMenuMap}
+                                            active={activeTab}
+                                            className={styles.leftContent}
+                                            modifier={tabModifier}
+                                            onClick={this.handleTabClick}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.rightSide}>
+                                    <div className={_cs(styles.customContainer,
+                                        styles.rightCustomContainer)}
+                                    >
+                                        <MultiViewContainer
+                                            className={styles.menuItemContainer}
+                                            views={menuViews}
+                                            active={activeTab}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </>
                     )}
                     rightContentClassName={styles.rightContainer}
