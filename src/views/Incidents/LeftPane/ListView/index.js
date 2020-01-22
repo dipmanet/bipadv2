@@ -12,12 +12,13 @@ const propTypes = {
     className: PropTypes.string,
     incidentList: PropTypes.arrayOf(PropTypes.object),
     recentDay: PropTypes.number.isRequired,
-    hoveredIncidentId: PropTypes.number.isRequired,
+    hoveredIncidentId: PropTypes.number,
     onIncidentHover: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
     className: undefined,
+    hoveredIncidentId: undefined,
     incidentList: [],
 };
 

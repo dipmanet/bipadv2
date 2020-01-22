@@ -37,11 +37,12 @@ const propTypes = {
     patchIncident: PropTypes.func.isRequired,
     onIncidentHover: PropTypes.func.isRequired,
     recentDay: PropTypes.number.isRequired,
-    hoveredIncidentId: PropTypes.number.isRequired,
+    hoveredIncidentId: PropTypes.number,
 };
 
 const defaultProps = {
     className: undefined,
+    hoveredIncidentId: undefined,
 };
 
 const mapDispatchToProps = dispatch => ({
