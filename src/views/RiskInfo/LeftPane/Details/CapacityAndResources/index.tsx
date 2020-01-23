@@ -2,6 +2,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 import {
     _cs,
+    mapToList,
 } from '@togglecorp/fujs';
 
 import {
@@ -15,10 +16,13 @@ import DangerButton from '#rsca/Button/DangerButton';
 import ListView from '#rscv/List/ListView';
 
 import MapSource from '#re-map/MapSource';
-import MapIcon from '#re-map/MapIcon';
+// import MapIcon from '#re-map/MapIcon';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapTooltip from '#re-map/MapTooltip';
+import { MapChildContext } from '#re-map/context';
 
 import CommonMap from '#components/CommonMap';
+import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
 
@@ -42,8 +46,16 @@ interface ComponentProps {
     className?: string;
 }
 
+interface ResourceDetails {
+    id: number;
+    title: string;
+    ['string']: string | object | number;
+}
+
 interface State {
+    resourceLngLat: [number, number] | undefined;
     activeLayerKey: ResourceType | undefined;
+    resourceInfo: ResourceDetails | undefined;
 }
 
 interface ResourceElement {
@@ -79,6 +91,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
             };
         },
     },
+    resourceDetailGetRequest: {
+        url: ({ params: { resourceId } }) => `/resource/${resourceId}/`,
+        method: methods.GET,
+        onMount: false,
+    },
 };
 
 interface ResourceResponseElement {
@@ -92,8 +109,43 @@ interface ResourceResponseElement {
         ward: number;
     };
 }
+interface Resource {
+    label: string;
+    value: number | string | object;
+}
 
 const emptyResourceList: ResourceResponseElement[] = [];
+const resourceKeySelector = (d: Resource) => d.label;
+
+const ResourceTooltip = (resourceDetails: ResourceDetails) => {
+    const { id, point, title, ...resource } = resourceDetails;
+    const data = mapToList(resource, (value, key) => ({ label: key, value }));
+
+    const rendererParams = (_: string, item: Resource) => {
+        console.warn('item', item);
+
+        return ({
+            className: styles.item,
+            labelClassName: styles.label,
+            valueClassName: styles.value,
+            ...item,
+        });
+    };
+
+    return (
+        <div className={styles.resourceTooltip}>
+            <h3 className={styles.heading}>
+                {title}
+            </h3>
+            <ListView
+                data={data}
+                keySelector={resourceKeySelector}
+                renderer={TextOutput}
+                rendererParams={rendererParams}
+            />
+        </div>
+    );
+};
 
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -101,6 +153,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         this.state = {
             activeLayerKey: undefined,
+            resourceLngLat: undefined,
+            resourceInfo: undefined,
         };
     }
 
@@ -124,6 +178,50 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         isActive: this.state.activeLayerKey === key,
     })
 
+    private handleClusterClick = (feature: unknown, lngLat: [number, number]) => {
+        const { properties: { cluster_id: clusterId }, source } = feature;
+        const { map } = this.context;
+
+        if (source) {
+            map
+                .getSource(source)
+                .getClusterExpansionZoom(clusterId, (error: string, zoom: number) => {
+                    if (!error) {
+                        map.flyTo({ center: lngLat, zoom });
+                    }
+                });
+        }
+    }
+
+    private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
+        const { properties: { id, title, description, ward } } = feature;
+
+        const {
+            requests: {
+                resourceDetailGetRequest,
+            },
+        } = this.props;
+
+        resourceDetailGetRequest.do({
+            resourceId: id,
+        });
+
+        this.setState({
+            resourceLngLat: lngLat,
+            resourceInfo: {
+                title,
+                description,
+                ward,
+            },
+        });
+    }
+
+    private handleTooltipClose = () => {
+        this.setState({
+            resourceLngLat: undefined,
+        });
+    }
+
     private handleLayerClick = (layerKey) => {
         this.setState({ activeLayerKey: layerKey });
 
@@ -144,9 +242,24 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         const { activeLayerKey } = this.state;
         const sourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+        const {
+            resourceDetailGetRequest: {
+                response: resourceDetails,
+            },
+        } = requests;
         const geojson = this.getGeojson(sourceList);
 
         const pending = isAnyRequestPending(requests);
+        const {
+            resourceLngLat,
+            resourceInfo,
+        } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: true,
+            closeButton: false,
+            offset: 20,
+        };
 
         return (
             <>
@@ -174,6 +287,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             rendererParams={this.getLayerRendererParams}
                         />
                     </div>
+                    {/*
                     <MapIcon
                         src={HealthIcon}
                         iconKey="health"
@@ -182,33 +296,75 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         src={FinanceIcon}
                         iconKey="finance"
                     />
+                    */}
                     { activeLayerKey && (
                         <MapSource
                             sourceKey="resource-symbol"
-                            sourceOptions={{ type: 'geojson' }}
+                            sourceOptions={{
+                                type: 'geojson',
+                                cluster: true,
+                                clusterMaxZoom: 10,
+                            }}
                             geoJson={geojson}
                         >
                             <MapLayer
-                                layerKey="resource-symbol-background"
+                                layerKey="cluster"
+                                onClick={this.handleClusterClick}
                                 layerOptions={{
                                     type: 'circle',
+                                    paint: mapStyles.resourceCluster.circle,
+                                    filter: ['has', 'point_count'],
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="cluster-count"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    filter: ['has', 'point_count'],
+                                    layout: {
+                                        'text-field': '{point_count_abbreviated}',
+                                        'text-size': 12,
+                                    },
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="resource-symbol-background"
+                                onClick={this.handleResourceClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    filter: ['!', ['has', 'point_count']],
                                     paint: mapStyles.resourcePoint.circle,
                                 }}
                             />
                             <MapLayer
-                                layerKey="resource-symbol-icon"
+                                layerKey="-resourece-symbol-icon"
                                 layerOptions={{
                                     type: 'symbol',
+                                    filter: ['!', ['has', 'point_count']],
                                     layout: {
                                         'icon-image': activeLayerKey,
                                         'icon-size': 0.02,
                                     },
                                 }}
                             />
+                            { resourceLngLat && (
+                                <MapTooltip
+                                    coordinates={resourceLngLat}
+                                    tooltipOptions={tooltipOptions}
+                                    onHide={this.handleTooltipClose}
+                                >
+                                    <ResourceTooltip
+                                        {...resourceInfo}
+                                        {...resourceDetails}
+                                    />
+                                </MapTooltip>
+                            )}
                         </MapSource>
                     )}
                 </div>
             </>
         );
     }
-} export default createRequestClient(requestOptions)(CapacityAndResources);
+}
+CapacityAndResources.contextType = MapChildContext;
+export default createRequestClient(requestOptions)(CapacityAndResources);
