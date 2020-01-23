@@ -65,6 +65,7 @@ const iconNames = {
 
     checkmarkCircle: 'ion-checkmark-circled',
     infoOutline: 'ion-ios-information-outline',
+    settings: 'ion-ios-settings-strong',
 };
 
 export default iconNames;

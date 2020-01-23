@@ -8,18 +8,17 @@ import {
     createRequestClient,
 } from '@togglecorp/react-rest-request';
 
-import RiskDescription from '#components/RiskDescription';
-import Loading from '#components/Loading';
-import LayerSelectionItem from '#components/LayerSelectionItem';
+import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
+import FloatingContainer from '#rscv/FloatingContainer';
 
-import { description } from './description.json';
+import Loading from '#components/Loading';
+
+import DataTableModal from './DataTableModal';
 import Map from './Map';
-import RiskItem from './RiskItem';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
-import {
-    RiskData,
-} from '#types';
+import { RiskData } from '#types';
 
 import {
     getResults,
@@ -27,6 +26,8 @@ import {
 } from '#utils/request';
 
 import styles from './styles.scss';
+
+const DataTableModalButton = modalize(Button);
 
 
 interface OwnProps {
@@ -38,7 +39,6 @@ interface Params {
 }
 
 interface State {
-    // selectedLayerId: number | undefined;
     metricValues: {};
 }
 
@@ -58,7 +58,7 @@ const metrices = {
     medScore: 'Median fatalities',
     remoteScore: 'Remoteness',
     specificityScore: 'Specificity',
-    pctScore: 'Freq',
+    pctScore: 'Frequency',
 };
 
 const metricKeys = Object.keys(metrices);
@@ -77,6 +77,9 @@ class Risk extends React.PureComponent<Props, State> {
                 specificityScore: 1,
                 pctScore: 1,
             },
+            showOpacitySettings: false,
+            showMetricSettings: false,
+            opacityValue: 1,
         };
     }
 
@@ -91,13 +94,19 @@ class Risk extends React.PureComponent<Props, State> {
     private getRiskData = (riskDataRaw, metricScores) => {
         const riskScoreData = riskDataRaw.map((rd) => {
             let riskScore = 0;
+            let totalWeight = 0;
 
             metricKeys.forEach((m) => {
                 riskScore += (rd.data[m] || 0) * metricScores[m];
+                totalWeight += metricScores[m];
             });
 
+            if (totalWeight === 0) {
+                totalWeight = 1;
+            }
+
             return {
-                data: { riskScore },
+                data: { riskScore: metricKeys.length * riskScore / totalWeight },
                 district: rd.district,
                 rank: rd.data.rank,
             };
@@ -106,11 +115,31 @@ class Risk extends React.PureComponent<Props, State> {
         return riskScoreData;
     }
 
+    private handleShowOpacityButtonClick = () => {
+        this.setState(({ showOpacity: prevValue }) => ({
+            showOpacitySettings: !prevValue,
+            showMetricSettings: false,
+        }));
+    }
+
+    private handleShowMetricsButtonClick = () => {
+        this.setState(({ showMetricSettings: prevValue }) => ({
+            showOpacitySettings: false,
+            showMetricSettings: !prevValue,
+        }));
+    }
+
     public render() {
         const {
             className,
             requests,
         } = this.props;
+
+        const {
+            showMetricSettings,
+            showOpacitySettings,
+            opacityValue,
+        } = this.state;
 
         const pending = isAnyRequestPending(requests);
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
@@ -151,21 +180,78 @@ class Risk extends React.PureComponent<Props, State> {
                         All data are the property of Durham University.
                     </div>
                     <div className={styles.options}>
-                        { metricKeys.map(m => (
-                            <div
-                                key={m}
-                                className={styles.metricInput}
-                            >
-                                <div className={styles.label}>
-                                    { metrices[m] }
-                                </div>
+                        <div className={styles.actions}>
+                            <Button
+                                iconName="info"
+                                transparent
+                                className={styles.optionButton}
+                            />
+                            <DataTableModalButton
+                                modal={<DataTableModal data={riskDataRaw} />}
+                                initialShowModal={false}
+                                iconName="table"
+                                transparent
+                                className={styles.optionButton}
+                            />
+                            <Button
+                                iconName="contrast"
+                                onClick={this.handleShowOpacityButtonClick}
+                                transparent
+                                className={_cs(
+                                    showOpacitySettings && styles.active,
+                                    styles.optionButton,
+                                )}
+                            />
+                            <Button
+                                iconName="settings"
+                                onClick={this.handleShowMetricsButtonClick}
+                                transparent
+                                className={_cs(
+                                    showMetricSettings && styles.active,
+                                    styles.optionButton,
+                                )}
+                            />
+                        </div>
+                        { showMetricSettings && (
+                            <div className={styles.metricSettings}>
+                                {metricKeys.map(m => (
+                                    <div
+                                        key={m}
+                                        className={styles.metricInput}
+                                    >
+                                        <div className={styles.label}>
+                                            { metrices[m] }
+                                        </div>
+                                        <Slider
+                                            axis="x"
+                                            xmin={0}
+                                            xmax={2}
+                                            xstep={1}
+                                            x={this.state.metricValues[m]}
+                                            onChange={({ x }) => {
+                                                this.handleMetricSliderChange(m, x);
+                                            }}
+                                            styles={{
+                                                track: {
+                                                    height: 5,
+                                                    width: '90%',
+                                                },
+                                                thumb: { cursor: 'pointer' },
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        { showOpacitySettings && (
+                            <div className={styles.opacitySettings}>
                                 <Slider
                                     axis="x"
                                     xmin={0}
-                                    xmax={2}
-                                    xstep={1}
-                                    x={this.state.metricValues[m]}
-                                    onChange={({ x }) => this.handleMetricSliderChange(m, x)}
+                                    xmax={1}
+                                    xstep={0.01}
+                                    x={opacityValue}
+                                    onChange={this.handleOpacityInputChange}
                                     styles={{
                                         track: {
                                             height: 5,
@@ -175,7 +261,7 @@ class Risk extends React.PureComponent<Props, State> {
                                     }}
                                 />
                             </div>
-                        ))}
+                        )}
                     </div>
                     <Map
                         data={riskData}

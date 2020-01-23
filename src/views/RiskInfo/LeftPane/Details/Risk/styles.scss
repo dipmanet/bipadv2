@@ -21,8 +21,45 @@
     }
 
     .options {
-        .metric-input {
+        padding: var(--spacing-medium);
+
+        .actions {
+            display: flex;
+
+            .mid {
+                flex-grow: 1;
+            }
+        }
+
+        .option-button {
+            flex-shrink: 0;
+            outline: none;
             padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+
+            &:hover {
+                background-color: var(--color-background-hover);
+                color: var(--color-accent);
+            }
+
+            &.active {
+                background-color: var(--color-background);
+            }
+        }
+
+        .metric-settings {
+            background-color: var(--color-background);
+
+            .metric-input {
+                padding: var(--spacing-small) var(--spacing-medium);
+            }
+        }
+
+        .opacity-settings {
+            display: flex;
+            justify-content: center;
+            background-color: var(--color-background);
+            padding: var(--spacing-large) var(--spacing-small);
         }
     }
 }
