@@ -16,7 +16,7 @@ import DangerButton from '#rsca/Button/DangerButton';
 import ListView from '#rscv/List/ListView';
 
 import MapSource from '#re-map/MapSource';
-// import MapIcon from '#re-map/MapIcon';
+import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import { MapChildContext } from '#re-map/context';
@@ -283,16 +283,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             rendererParams={this.getLayerRendererParams}
                         />
                     </div>
-                    {/*
-                    <MapIcon
-                        src={HealthIcon}
-                        iconKey="health"
+                    <MapImage
+                        url={HealthIcon}
+                        name="health"
                     />
-                    <MapIcon
-                        src={FinanceIcon}
-                        iconKey="finance"
+                    <MapImage
+                        url={FinanceIcon}
+                        name="finance"
                     />
-                    */}
                     { activeLayerKey && (
                         <MapSource
                             sourceKey="resource-symbol"
