@@ -116,7 +116,7 @@ class Risk extends React.PureComponent<Props, State> {
     }
 
     private handleShowOpacityButtonClick = () => {
-        this.setState(({ showOpacity: prevValue }) => ({
+        this.setState(({ showOpacitySettings: prevValue }) => ({
             showOpacitySettings: !prevValue,
             showMetricSettings: false,
         }));

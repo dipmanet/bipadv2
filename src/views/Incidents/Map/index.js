@@ -165,8 +165,8 @@ class IncidentMap extends React.PureComponent {
                             type: 'circle',
                             filter,
                             paint: mapStyles.incidentPoint.animatedFill,
-                            onAnimationKeyframe: this.handleAnimationKeyframe,
                         }}
+                        onAnimationFrame={this.handleAnimationKeyframe}
                     />
                     <MapLayer
                         layerKey="incident-points-fill"

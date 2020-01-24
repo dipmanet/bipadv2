@@ -22,14 +22,15 @@ interface State {
 }
 
 const YlOrRd = [
-    '#e1e1e1',
-    '#47a3bc',
-    '#53ab82',
-    '#fd8d3c',
-    '#7ff200',
-    '#fbf731',
-    '#f6b633',
-    '#e93f34',
+    '#ffe1ca',
+    '#f7cbac',
+    '#eeb590',
+    '#e69e76',
+    '#dc875e',
+    '#d37047',
+    '#c95733',
+    '#be3b20',
+    '#b31010',
 ];
 
 const Tooltip = ({ feature }: { feature: unknown }) => {

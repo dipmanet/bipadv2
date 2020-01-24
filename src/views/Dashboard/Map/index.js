@@ -314,8 +314,8 @@ class AlertEventMap extends React.PureComponent {
                             type: 'circle',
                             filter,
                             paint: mapStyles.alertPoint.animatedCircle,
-                            onAnimationKeyframe: this.handleAnimationKeyframe,
                         }}
+                        onAnimationFrame={this.handleAnimationKeyframe}
                     />
                     <MapLayer
                         layerKey="alerts-point"
