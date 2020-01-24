@@ -47,6 +47,10 @@ const styleProperties = {
 
     colorBoxShadow: 'rgba(189,187,189,0.59)',
     colorPrimaryBlue: '#029aef',
+
+    fontSizeJumbo: '32px',
+    fontSizeJumboAlt: '36px',
+    fontSizeExtraJumbo: '45px',
 };
 
 export default styleProperties;

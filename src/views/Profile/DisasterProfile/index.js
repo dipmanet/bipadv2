@@ -49,7 +49,6 @@ import {
 } from '../../LossAndDamage/common';
 
 
-import Visualizations from './Visualizations';
 import Disasters from './Disasters';
 import Demographics from './Demographics';
 import CapacitiesAndResources from './CapacitiesAndResources';
@@ -181,7 +180,7 @@ class DisasterProfile extends React.PureComponent {
         super(props);
 
         this.state = {
-            activeTab: 'demographics',
+            activeTab: 'capacitiesAndResources',
         };
     }
 
