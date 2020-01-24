@@ -91,6 +91,7 @@ class Group extends React.PureComponent<Props, State> {
             this.context.addLayer({
                 title: `${layer.group.title} /  ${layer.title}`,
                 id: `layer-${layer.id}`,
+                source: `flood-source-${layer.id}`,
             });
         }
     }

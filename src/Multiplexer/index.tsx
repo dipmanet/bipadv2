@@ -11,6 +11,8 @@ import memoize from 'memoize-one';
 
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
+import MapOrder from '#re-map/MapOrder';
+import { getLayerName } from '#re-map/utils';
 
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
@@ -453,7 +455,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private getLayerOrder = memoize(activeLayers => (
-        activeLayers.map(d => d.id)
+        activeLayers.map(d => getLayerName(d.source, d.id))
     ))
 
     private getRegionName = (selectedRegion, provinces, districts, municipalities) => {
@@ -518,6 +520,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
         );
 
+        const orderedLayers = this.getLayerOrder(activeLayers);
+
         return (
             <PageContext.Provider value={pageProps}>
                 <div className={styles.multiplexer}>
@@ -538,7 +542,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
                                 navControlShown
                                 navControlPosition="bottom-right"
-                                // layerOrder={this.getLayerOrder(activeLayers)}
                             >
                                 { !hideMap && false && (
                                     <div
@@ -580,6 +583,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     )}
                                 />
                                 {this.renderRoutes()}
+                                <MapOrder
+                                    ordering={orderedLayers}
+                                />
                             </Map>
                         </RiskInfoLayerContext.Provider>
                     </div>
