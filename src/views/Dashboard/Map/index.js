@@ -324,7 +324,7 @@ class AlertEventMap extends React.PureComponent {
                             paint: mapStyles.alertPoint.circle,
                         }}
                         onMouseEnter={this.handleAlertEnter}
-                        onMouseLeave={this.hanleAlertLeave}
+                        onMouseLeave={this.handleAlertLeave}
                         onClick={this.handleAlertClick}
                     />
                     {alertClickLngLat && (

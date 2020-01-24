@@ -250,6 +250,21 @@ export default {
         },
     },
 
+    resourceCluster: {
+        circle: {
+            'circle-color': '#ffeb3b',
+            'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                10,
+                100,
+                20,
+                750,
+                30,
+            ],
+        },
+    },
+
     resourcePoint: {
         circle: {
             'circle-color': '#ffffff',
