@@ -1,0 +1,14 @@
+.data-table-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}

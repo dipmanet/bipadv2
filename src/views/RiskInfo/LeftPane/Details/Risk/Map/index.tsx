@@ -76,7 +76,6 @@ export default class RiskMap extends React.PureComponent<Props, State> {
         const mapState = data.map(item => ({
             id: item.district,
             value: item.data.riskScore,
-            rank: item.rank,
         }));
 
         return mapState;
