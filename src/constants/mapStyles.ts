@@ -387,33 +387,16 @@ export default {
     pollutionPoint: {
         fill: {
             'circle-radius': 10,
-            'circle-color': [
-                'case',
-                ['<=', ['get', 'pm25'], 12], '#009966',
-                ['<=', ['get', 'pm25'], 35.4], '#ffde33',
-                ['<=', ['get', 'pm25'], 55.4], '#ff9933',
-                ['<=', ['get', 'pm25'], 150.4], '#cc0033',
-                ['<=', ['get', 'pm25'], 250.4], '#660099',
-                // ['<=', ['get', 'pm25'], 350.4], '#7e0023',
-                ['<=', ['get', 'pm25'], 500.4], '#7e0023',
-                '#7e0023',
-            ],
-            'circle-stroke-color': '#000000',
-            'circle-stroke-width': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                2,
-                0,
-            ],
+            'circle-color': ['get', 'aqiColor'],
         },
     },
     pollutionText: {
         layout: {
             'text-font': ['League Mono Regular'],
-            'text-field': ['get', 'pm25'],
+            'text-field': ['get', 'aqi'],
             'text-allow-overlap': false,
             'text-size': 10,
-            // NOTE: should negate idk why
-            'symbol-sort-key': ['-', ['get', 'pm25']],
+            'symbol-sort-key': ['-', ['get', 'aqi']],
         },
         paint: {
             'text-color': '#000000',

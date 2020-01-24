@@ -1,25 +1,6 @@
 @import '~base-scss/base';
 
-.tooltip {
-    border: $width-separator-thin solid $color-separator-light;
-    background-color: $color-foreground;
-    padding: $spacing-large;
-
-    .heading {
-        padding-bottom: $spacing-small;
-        font-weight: $font-weight-bold;
-    }
-
-    .hr {
-        margin: $spacing-small 0;
-        border-bottom: $width-separator-thin solid $color-separator-light;
-    }
-
-    .basin,
-    .description,
-    status,
-    title,
-    .elevation {
-        line-height: 1.8;
-    }
+.aqi {
+    display: flex;
+    align-items: center;
 }

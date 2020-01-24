@@ -306,6 +306,7 @@ export interface Measurement {
 export interface RealTimePollution {
     id: number;
     point: unknown;
+    aqi: number;
     location?: string;
     measuredOn?: string;
     measurements?: Measurement[];

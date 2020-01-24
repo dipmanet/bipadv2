@@ -3,6 +3,7 @@ import memoize from 'memoize-one';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
@@ -24,6 +25,9 @@ import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import styles from './styles.scss';
 
+const RealTimeTooltip = ({ renderer: Renderer, params }) => (
+    <Renderer {...params} />
+);
 
 export default class RealTimeMap extends React.PureComponent {
     constructor(props) {
@@ -65,7 +69,8 @@ export default class RealTimeMap extends React.PureComponent {
         return mapPaddings.noPaneExpanded;
     });
 
-    handleRainClick = (id, { title }) => {
+    handleRainClick = (feature) => {
+        const { properties: { title } } = feature;
         this.setState({
             riverTitle: undefined,
             showRiverModal: false,
@@ -73,15 +78,105 @@ export default class RealTimeMap extends React.PureComponent {
             rainTitle: title,
             showRainModal: true,
         });
+        return true;
     }
 
-    handleRiverClick = (id, { title }) => {
+    handleRiverClick = (feature) => {
+        const { properties: { title } } = feature;
+
         this.setState({
             riverTitle: title,
             showRiverModal: true,
 
             rainTitle: undefined,
             showRainModal: false,
+        });
+        return true;
+    }
+
+    handleEarthquakeClick = (feature, lngLat) => {
+        const {
+            properties: {
+                address,
+                description,
+                eventOn,
+                magnitude,
+            },
+        } = feature;
+
+        this.setState({
+            tooltipRenderer: this.earthquakeTooltipRenderer,
+            tooltipParams: {
+                address,
+                description,
+                eventOn,
+                magnitude,
+            },
+            coordinates: lngLat,
+        });
+
+        return true;
+    }
+
+    handleFireClick = (feature, lngLat) => {
+        const {
+            properties: {
+                brightness,
+                confidence,
+                eventOn,
+                landCover,
+            },
+        } = feature;
+
+        this.setState({
+            tooltipRenderer: this.fireTooltipRenderer,
+            tooltipParams: {
+                brightness,
+                confidence,
+                eventOn,
+                landCover,
+            },
+            coordinates: lngLat,
+        });
+
+        return true;
+    }
+
+    handlePollutionClick = (feature, lngLat) => {
+        const {
+            properties: {
+                modifiedOn,
+                title,
+                aqi,
+                aqiColor,
+                observation,
+                tags,
+                description,
+            },
+        } = feature;
+
+        this.setState({
+            tooltipRenderer: this.pollutionTooltipRenderer,
+            tooltipParams: {
+                modifiedOn,
+                title,
+                aqi,
+                aqiColor,
+                observation: JSON.parse(observation),
+                tags: JSON.parse(tags),
+                description,
+            },
+            coordinates: lngLat,
+        });
+
+        return true;
+    }
+
+    handleTooltipClose = () => {
+        this.setState({
+            tooltipRenderer: null,
+            coordinates: undefined,
+            tooltipParams: null,
         });
     }
 
@@ -94,14 +189,6 @@ export default class RealTimeMap extends React.PureComponent {
             showRainModal: false,
         });
     }
-
-    earthquakeTooltipRendererParams = (id, { address, description, eventOn, magnitude }) => ({
-        address,
-        description,
-        eventOn,
-        magnitude,
-    })
-
 
     earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
         <div>
@@ -129,13 +216,6 @@ export default class RealTimeMap extends React.PureComponent {
             />
         </div>
     )
-
-    fireTooltipRendererParams = (id, { brightness, confidence, eventOn, landCover }) => ({
-        brightness,
-        confidence,
-        eventOn,
-        landCover,
-    })
 
     fireTooltipRenderer = ({ brightness, confidence, eventOn, landCover }) => (
         <div>
@@ -167,46 +247,39 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
-    pollutionTooltipRendererParams = (id, { location, measuredOn, measurements, city }) => ({
-        id,
-        location,
-        measuredOn,
-        city,
-    })
-
-    pollutionTooltipRenderer = ({ id, location, measuredOn, city }) => {
-        const { realTimePollutionList } = this.props;
-        const { measurements } = realTimePollutionList.find(m => m.id === id);
-
-        const measurement = measurements.flat().map(m => (
-            <TextOutput
-                label={`${m.parameter} measurement (${m.unit})`}
-                value={m.value}
-                precision={3}
-                isNumericValue
-            />
-        ));
+    pollutionTooltipRenderer = (props) => {
+        const {
+            modifiedOn,
+            title,
+            aqi,
+            aqiColor,
+            observation,
+            tags,
+            description,
+        } = props;
 
         return (
             <div>
+                <h3>
+                    {title}
+                </h3>
+                <div className={styles.aqi}>
+                    <div>Air Quality Index </div>
+                    <div style={{ backgroundColor: `${aqiColor}` }}>{aqi}</div>
+                </div>
                 <TextOutput
-                    label="city"
-                    value={city}
-                />
-                <TextOutput
-                    label="location"
-                    value={location}
+                    label="Description"
+                    value={description}
                 />
                 <TextOutput
                     label="Measured On"
                     value={(
                         <FormattedDate
-                            value={measuredOn}
+                            value={modifiedOn}
                             mode="yyyy-MM-dd hh:mm"
                         />
                     )}
                 />
-                { measurement }
             </div>
         );
     }
@@ -243,11 +316,20 @@ export default class RealTimeMap extends React.PureComponent {
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         const {
+            tooltipRenderer,
+            tooltipParams,
+            coordinates,
             showRiverModal,
             showRainModal,
             riverTitle,
             rainTitle,
         } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: true,
+            closeButton: false,
+            offset: 8,
+        };
 
         return (
             <React.Fragment>
@@ -255,6 +337,18 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
+                { coordinates && (
+                    <MapTooltip
+                        coordinates={coordinates}
+                        tooltipOptions={tooltipOptions}
+                        onHide={this.handleTooltipClose}
+                    >
+                        <RealTimeTooltip
+                            renderer={tooltipRenderer}
+                            params={tooltipParams}
+                        />
+                    </MapTooltip>
+                )}
                 <MapSource
                     sourceKey="real-time-rain-points"
                     sourceOptions={{ type: 'geojson' }}
@@ -303,13 +397,12 @@ export default class RealTimeMap extends React.PureComponent {
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-earthquake-points-fill"
+                                onClick={this.handleEarthquakeClick}
                                 layerOptions={{
                                     type: 'circle',
                                     property: 'earthquakeId',
                                     paint: mapStyles.earthquakePoint.fill,
                                     enableHover: true,
-                                    tooltipRenderer: this.earthquakeTooltipRenderer,
-                                    tooltipRendererParams: this.earthquakeTooltipRendererParams,
                                 }}
                             />
                             <MapLayer
@@ -333,14 +426,13 @@ export default class RealTimeMap extends React.PureComponent {
                     { showFire && (
                         <MapLayer
                             layerKey="real-time-fire-points-fill"
+                            onClick={this.handleFireClick}
                             layerOptions={{
                                 type: 'symbol',
                                 property: 'fireId',
                                 layout: mapStyles.firePoint.layout,
                                 paint: mapStyles.firePoint.paint,
                                 enableHover: true,
-                                tooltipRenderer: this.fireTooltipRenderer,
-                                tooltipRendererParams: this.fireTooltipRendererParams,
                             }}
                         />
                     )}
@@ -355,13 +447,12 @@ export default class RealTimeMap extends React.PureComponent {
                         <React.Fragment>
                             <MapLayer
                                 layerKey="real-time-pollution-points-fill"
+                                onClick={this.handlePollutionClick}
                                 layerOptions={{
                                     type: 'circle',
                                     property: 'pollutionId',
                                     paint: mapStyles.pollutionPoint.fill,
                                     enableHover: true,
-                                    tooltipRenderer: this.pollutionTooltipRenderer,
-                                    tooltipRendererParams: this.pollutionTooltipRendererParams,
                                 }}
                             />
                             <MapLayer
