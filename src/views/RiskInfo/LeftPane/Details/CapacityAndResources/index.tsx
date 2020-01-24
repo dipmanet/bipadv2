@@ -121,16 +121,12 @@ const ResourceTooltip = (resourceDetails: ResourceDetails) => {
     const { id, point, title, ...resource } = resourceDetails;
     const data = mapToList(resource, (value, key) => ({ label: key, value }));
 
-    const rendererParams = (_: string, item: Resource) => {
-        console.warn('item', item);
-
-        return ({
-            className: styles.item,
-            labelClassName: styles.label,
-            valueClassName: styles.value,
-            ...item,
-        });
-    };
+    const rendererParams = (_: string, item: Resource) => ({
+        className: styles.item,
+        labelClassName: styles.label,
+        valueClassName: styles.value,
+        ...item,
+    });
 
     return (
         <div className={styles.resourceTooltip}>

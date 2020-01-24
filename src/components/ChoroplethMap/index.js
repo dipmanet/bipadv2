@@ -59,7 +59,7 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     paint: PropTypes.object.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
-    mapState: PropTypes.object.isRequired,
+    mapState: PropTypes.array.isRequired,
 };
 
 const defaultProps = {
