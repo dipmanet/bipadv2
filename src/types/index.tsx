@@ -89,6 +89,7 @@ export interface VulnerabilityOption {
 export interface VulnerabilityType {
     key: string;
     label: string;
+    indicatorType: string;
     children: VulnerabilityType[];
     isParent?: boolean;
 }
