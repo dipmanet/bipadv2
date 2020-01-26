@@ -1,0 +1,33 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-large);
+
+    .content {
+        display: flex;
+
+        .title {
+            color: var(--color-text-label);
+            font-size: var(--font-size-medium);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--spacing-medium);
+
+            .count {
+                color: var(--color-primary-blue);
+                font-size: var(--font-size-super-large-alt);
+                font-weight: var(--font-weight-bold);
+            }
+
+            .name {
+                color: var(--color-text-label);
+                font-size: var(--font-size-medium);
+            }
+        }
+    }
+}

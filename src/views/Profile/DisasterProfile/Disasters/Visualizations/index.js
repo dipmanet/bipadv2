@@ -21,10 +21,12 @@ import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    lossAndDamageList: PropTypes.object,
 };
 
 const defaultProps = {
     className: undefined,
+    lossAndDamageList: {},
 };
 
 const peopleDeathChartColorScheme = [
@@ -160,6 +162,7 @@ class Visualizations extends React.PureComponent {
         const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
         const topHazards = this.getHazardOccurrence(lossAndDamageList);
         const lossSummary = this.getLossSummary(lossAndDamageList);
+        console.warn(lossSummary);
 
         return (
             <div className={styles.visualizationContainer}>

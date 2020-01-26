@@ -23,6 +23,7 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            overflow: auto;
         }
 
         .custom-container {
@@ -91,7 +92,7 @@
             }
 
             .menu-item-container {
-                margin: var(--spacing-medium-alt);
+                padding: var(--spacing-medium-alt);
             }
         }
     }
