@@ -75,9 +75,6 @@ class RiskInfo extends React.PureComponent<Props, State> {
                         className={styles.leftPane}
                     />
                 )}
-                rightContent={(
-                    <RightPane />
-                )}
                 mainContentClassName={styles.mainContent}
                 mainContent={(
                     <RiskInfoLayerContext.Consumer>

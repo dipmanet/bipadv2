@@ -10,7 +10,6 @@ import {
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-import FloatingContainer from '#rscv/FloatingContainer';
 
 import Loading from '#components/Loading';
 

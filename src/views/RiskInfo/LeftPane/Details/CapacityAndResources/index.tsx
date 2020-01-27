@@ -19,6 +19,7 @@ import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
+import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
 import CommonMap from '#components/CommonMap';
@@ -34,6 +35,7 @@ import { mapStyles } from '#constants';
 
 import HealthIcon from '#resources/icons/Health-facility.png';
 import FinanceIcon from '#resources/icons/Financing.png';
+import FoodWarehouseIcon from '#resources/icons/Food-warehouse.png';
 // import EducationIcon from '#resources/icons/Education.png';
 
 import {
@@ -72,6 +74,7 @@ const resourceLayerList: ResourceElement[] = [
     // { key: 'education', title: 'Education' },
     { key: 'finance', title: 'Finance' },
     { key: 'health', title: 'Health' },
+    { key: 'governance', title: 'Governance' },
 ];
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
@@ -198,6 +201,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
+        if (!id) {
+            return;
+        }
+
         resourceDetailGetRequest.do({
             resourceId: id,
         });
@@ -291,6 +298,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         url={FinanceIcon}
                         name="finance"
                     />
+                    <MapImage
+                        url={FoodWarehouseIcon}
+                        name="governance"
+                    />
+                    <MapShapeEditor />
                     { activeLayerKey && (
                         <MapSource
                             sourceKey="resource-symbol"
@@ -337,7 +349,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     filter: ['!', ['has', 'point_count']],
                                     layout: {
                                         'icon-image': activeLayerKey,
-                                        'icon-size': 0.02,
+                                        'icon-size': 0.03,
                                     },
                                 }}
                             />

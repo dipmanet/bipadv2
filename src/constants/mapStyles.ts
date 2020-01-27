@@ -262,21 +262,27 @@ export default {
                 750,
                 30,
             ],
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-opacity': 0.3,
         },
     },
 
     resourcePoint: {
         circle: {
             'circle-color': '#ffffff',
-            'circle-radius': 10,
+            'circle-radius': 13,
             'circle-opacity': 0.9,
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 2,
-                0,
+                1,
             ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-opacity': 0.3,
         },
     },
+
     resourceSymbol: {
         layout: {
             'icon-image': ['get', 'iconName'],
