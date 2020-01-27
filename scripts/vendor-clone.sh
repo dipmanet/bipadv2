@@ -14,7 +14,7 @@ if [ -d "src/vendor/re-map" ]; then
     echo "Skipping re-map (already cloned)"
 else
     echo "Cloning re-map to src/vendor/re-map"
-    git clone git@github.com:toggle-corp/react-store.git src/vendor/re-map
+    git clone git@github.com:toggle-corp/re-map.git src/vendor/re-map
     git checkout feature/use-dimension
 fi
 
