@@ -57,13 +57,6 @@ export interface VulnerabilityIndicator {
     [key: string]: number;
 }
 
-export interface MapState {
-    id: number;
-    value: {
-        value: number;
-    };
-}
-
 export interface NapValue {
     year: number;
     value: number;
@@ -79,6 +72,12 @@ export interface NapData {
     rcp85: NapValue[];
     sdRcp85: NapValue[];
 }
+
+export interface NapAverage {
+    id: number;
+    value: number;
+}
+
 export interface VulnerabilityOption {
     key: string;
     title: string;

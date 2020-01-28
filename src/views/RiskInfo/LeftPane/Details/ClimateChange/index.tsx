@@ -1,7 +1,8 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, mean } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import {
     getResults,
@@ -155,7 +156,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         });
     }
 
-    private getFilteredData = (
+    private getMapState = (
         temperature: NapData[],
         precipitation: NapData[],
         scenario: string,
@@ -167,8 +168,16 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
                             || timePeriodOptions[0];
         const { startYear, endYear } = timePeriod;
+        const {
+            startYear: referenceStart,
+            endYear: referenceEnd,
+        } = timePeriodOptions.find(option => option.key === 'reference-period')
+        || timePeriodOptions[0];
 
         const filter = ({ year }: NapValue) => (year >= startYear && year <= endYear);
+        const referenceFilter = ({ year }: NapValue) => (
+            year >= referenceStart && year <= referenceEnd
+        );
 
         const filteredData = napData.map((data) => {
             const {
@@ -179,10 +188,21 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
             const itemList = (scenario === 'rcp45') ? rcp45 : rcp85;
             const filteredItemList = itemList.filter(filter);
+            const referenceItemList = itemList.filter(referenceFilter);
+
+            if (timePeriodKey === 'reference-period') {
+                return ({
+                    id: district,
+                    value: mean(filteredItemList.map(v => v.value)),
+                });
+            }
+
+            const referenceAverage = mean(referenceItemList.map(v => v.value));
+            const filteredAverage = mean(filteredItemList.map(v => v.value));
 
             return ({
-                district,
-                value: filteredItemList,
+                id: district,
+                value: filteredAverage - referenceAverage,
             });
         });
 
@@ -204,7 +224,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const pending = isAnyRequestPending(requests);
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
-        const data = this.getFilteredData(
+        const mapState = this.getMapState(
             temperature,
             precipitation,
             scenario,
@@ -241,7 +261,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         />
                     </div>
                     <Map
-                        data={data}
+                        mapState={mapState}
                         measurementType={measurementType}
                         scenarioOptions={scenarioOptions}
                         scenario={scenario}

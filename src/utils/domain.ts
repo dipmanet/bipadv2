@@ -738,8 +738,8 @@ function formatNumber(num: number) {
     return num.toFixed(2).replace(/\.00$/, '');
 }
 
-export function generateLegendData(colorPaint: (string | number)[]) {
-    let initialValue = 0;
+export function generateLegendData(colorPaint: (string | number)[], minValue: number = 0) {
+    let initialValue = minValue;
     const legendData = colorPaint.reduce((acc: LegendItem[], _, index, array) => {
         if (index % 2 === 0) {
             const [colorValue, value] = array.slice(index, index + 2);

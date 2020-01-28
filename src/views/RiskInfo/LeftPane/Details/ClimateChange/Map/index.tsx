@@ -4,8 +4,6 @@ import { extent } from 'd3-array';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import {
-    NapValue,
-    MapState,
     LegendItem,
     Scenario,
 } from '#types';
@@ -15,12 +13,12 @@ import { generateLegendData } from '#utils/domain';
 
 import styles from './styles.scss';
 
-interface NapData {
-    district: number;
-    value: NapValue[];
+interface MapState {
+    id: number;
+    value: number;
 }
 interface Props {
-    data: NapData[];
+    mapState: MapState[];
     measurementType: string;
     scenario: string;
     scenarioOptions: Scenario[];
@@ -53,18 +51,6 @@ const keySelector = (d: LegendItem) => d.label;
 const labelSelector = (d: LegendItem) => d.label;
 const colorSelector = (d: LegendItem) => d.color;
 
-const getItemValueDifference = (item) => {
-    const {
-        district,
-        value,
-    } = item;
-
-    const filteredList = value.filter(d => d && d.value);
-    const diff = Math.abs(filteredList[0].value - filteredList[filteredList.length - 1].value);
-
-    return diff;
-};
-
 const Tooltip = ({ feature, scenario }: { feature: unknown; scenario: string }) => {
     const { properties: { title }, state: { value } } = feature;
 
@@ -87,15 +73,6 @@ const Tooltip = ({ feature, scenario }: { feature: unknown; scenario: string }) 
 };
 
 export default class ClimateChangeMap extends React.PureComponent<Props, State> {
-    private generateMapState = memoize((data: NapData[]) => {
-        const mapState = data.map(item => ({
-            id: item.district,
-            value: getItemValueDifference(item),
-        }));
-
-        return mapState;
-    });
-
     private generateColor = memoize(
         (maxValue: number, minValue: number, measurementType: string, scenario: string) => {
             const newColor: (string | number)[] = [];
@@ -158,18 +135,15 @@ export default class ClimateChangeMap extends React.PureComponent<Props, State> 
 
     public render() {
         const {
-            data,
+            mapState,
             measurementType,
             scenario,
         } = this.props;
-
-        const mapState = this.generateMapState(data);
         const [min, max] = extent(mapState, (d: MapState) => d.value);
 
         const color = this.generateColor(max, min, measurementType, scenario);
         const colorPaint = this.generatePaint(color);
-
-        const legendData = this.getLegendData(color);
+        const legendData = this.getLegendData(color, min);
 
         return (
             <div className={styles.map}>
