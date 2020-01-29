@@ -1,11 +1,16 @@
 export default {
     nepal: {
-        url: 'mapbox://adityakhatri.colcm1cq',
+        url: 'mapbox://adityakhatri.9xb2vnfb',
         layers: {
             province: 'provincegeo',
             district: 'districtgeo',
-            municipality: 'municipalitygeo',
+            municipality: 'palikageo',
             ward: 'wardgeo',
+
+            provinceLabel: 'provincecentroidgeo',
+            districtLabel: 'districtcentroidgeo',
+            municipalityLabel: 'palikacentroidgeo',
+            wardLabel: 'wardcentroidgeo',
         },
     },
 };
