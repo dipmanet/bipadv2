@@ -230,6 +230,11 @@ const getMatchingRegion = (
     return {};
 };
 
+const layerNameMap = {
+    raster: 'raster-layer',
+    choropleth: 'choropleth-layer',
+};
+
 
 class Multiplexer extends React.PureComponent<Props, State> {
     private mapboxCtrlSizeSet = false;
@@ -392,7 +397,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private addLayer = (layer) => {
         this.setState(({ activeLayers }) => {
-            if (activeLayers.findIndex(d => d.id === layer.id) === -1) {
+            const layerIndex = activeLayers.findIndex(d => d.id === layer.id);
+
+            if (layerIndex === -1) {
                 return ({
                     activeLayers: [
                         ...activeLayers,
@@ -401,7 +408,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 });
             }
 
-            return { activeLayers };
+            // update layer
+            const newActiveLayers = [...activeLayers];
+            newActiveLayers.splice(layerIndex, 1, layer);
+
+            return { activeLayers: newActiveLayers };
         });
     }
 
@@ -455,7 +466,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private getLayerOrder = memoize(activeLayers => (
-        activeLayers.map(d => getLayerName(d.source, d.id))
+        activeLayers.map(d => getLayerName(d.layername, layerNameMap[d.type]))
     ))
 
     private getRegionName = (selectedRegion, provinces, districts, municipalities) => {
@@ -533,9 +544,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     logoPosition: 'top-left',
                                     minZoom: 5,
                                 }}
-                                // fitBoundsDuration={200}
-                                // minZoom={5}
-                                // logoPosition="top-left"
+                                // debug
 
                                 scaleControlShown
                                 scaleControlPosition="bottom-right"
@@ -559,9 +568,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     </div>
                                 )}
                                 { leftPaneContent && (
-                                    <aside
-                                        className={styles.left}
-                                    >
+                                    <aside className={styles.left}>
                                         <AppBrand
                                             className={styles.brand}
                                             regionName={regionName}

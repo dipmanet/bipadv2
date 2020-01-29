@@ -5,6 +5,7 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import LayerSelection from '#components/LayerSelection';
 import CommonMap from '#components/CommonMap';
 import { LayerWithGroup, LayerGroup, HazardType } from '#store/atom/page/types';
 
@@ -38,14 +39,16 @@ class Hazard extends React.PureComponent<Props, State> {
             layerGroupList,
         );
 
+        // console.warn(layers);
+
         return (
             <div className={_cs(styles.hazard, className)}>
                 <CommonMap sourceKey="hazard" />
-                <HazardSelection
-                    groupClassName={styles.group}
-                    layerClassName={styles.layer}
-                    className={styles.hazardSelection}
-                    layers={layers}
+                <LayerSelection
+                    // groupClassName={styles.group}
+                    // layerClassName={styles.layer}
+                    // className={styles.hazardSelection}
+                    layerList={layers}
                 />
             </div>
         );

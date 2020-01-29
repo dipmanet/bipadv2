@@ -5,6 +5,8 @@ import {
     mapToList,
 } from '@togglecorp/fujs';
 
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+
 import {
     methods,
     NewProps,
@@ -154,6 +156,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
+            resourceListInsidePolygon: [],
         };
     }
 
@@ -237,6 +240,29 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ activeLayerKey: undefined });
     }
 
+    private handlePolygonCreate = (features) => {
+        const { requests } = this.props;
+        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+
+        const resourceListInsidePolygon = resourceList.filter(
+            (d => booleanPointInPolygon(d.point, features[0].geometry)),
+        );
+
+        this.setState({ resourceListInsidePolygon });
+    }
+
+    private handlePolygonUpdate = (features) => {
+        const { requests } = this.props;
+        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+        // console.warn('Create', features, resourceList);
+
+        const resourceListInsidePolygon = resourceList.filter(
+            (d => booleanPointInPolygon(d.point, features[0].geometry)),
+        );
+
+        this.setState({ resourceListInsidePolygon });
+    }
+
     public render() {
         const {
             className,
@@ -244,18 +270,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { activeLayerKey } = this.state;
-        const sourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
         const {
             resourceDetailGetRequest: {
                 response: resourceDetails,
             },
         } = requests;
-        const geojson = this.getGeojson(sourceList);
+        const geojson = this.getGeojson(resourceList);
 
         const pending = isAnyRequestPending(requests);
         const {
             resourceLngLat,
             resourceInfo,
+            resourceListInsidePolygon,
         } = this.state;
 
         const tooltipOptions = {
@@ -289,6 +316,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             renderer={Option}
                             rendererParams={this.getLayerRendererParams}
                         />
+                        { resourceListInsidePolygon.length !== 0 && (
+                            <div className={styles.polygonSelectedLayerInfo}>
+                                { resourceListInsidePolygon.length }
+                            </div>
+                        )}
                     </div>
                     <MapImage
                         url={HealthIcon}
@@ -302,75 +334,88 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         url={FoodWarehouseIcon}
                         name="governance"
                     />
-                    <MapShapeEditor />
                     { activeLayerKey && (
-                        <MapSource
-                            sourceKey="resource-symbol"
-                            sourceOptions={{
-                                type: 'geojson',
-                                cluster: true,
-                                clusterMaxZoom: 10,
-                            }}
-                            geoJson={geojson}
-                        >
-                            <MapLayer
-                                layerKey="cluster"
-                                onClick={this.handleClusterClick}
-                                layerOptions={{
-                                    type: 'circle',
-                                    paint: mapStyles.resourceCluster.circle,
-                                    filter: ['has', 'point_count'],
-                                }}
-                            />
-                            <MapLayer
-                                layerKey="cluster-count"
-                                layerOptions={{
-                                    type: 'symbol',
-                                    filter: ['has', 'point_count'],
-                                    layout: {
-                                        'text-field': '{point_count_abbreviated}',
-                                        'text-size': 12,
+                        <>
+                            <MapShapeEditor
+                                onCreate={this.handlePolygonCreate}
+                                onUpdate={this.handlePolygonUpdate}
+                                drawOptions={{
+                                    displayControlsDefault: false,
+                                    controls: {
+                                        polygon: true,
+                                        trash: true,
                                     },
                                 }}
                             />
-                            <MapLayer
-                                layerKey="resource-symbol-background"
-                                onClick={this.handleResourceClick}
-                                layerOptions={{
-                                    type: 'circle',
-                                    filter: ['!', ['has', 'point_count']],
-                                    paint: mapStyles.resourcePoint.circle,
+                            <MapSource
+                                sourceKey="resource-symbol"
+                                sourceOptions={{
+                                    type: 'geojson',
+                                    cluster: true,
+                                    clusterMaxZoom: 10,
                                 }}
-                            />
-                            <MapLayer
-                                layerKey="-resourece-symbol-icon"
-                                layerOptions={{
-                                    type: 'symbol',
-                                    filter: ['!', ['has', 'point_count']],
-                                    layout: {
-                                        'icon-image': activeLayerKey,
-                                        'icon-size': 0.03,
-                                    },
-                                }}
-                            />
-                            { resourceLngLat && (
-                                <MapTooltip
-                                    coordinates={resourceLngLat}
-                                    tooltipOptions={tooltipOptions}
-                                    onHide={this.handleTooltipClose}
-                                >
-                                    <ResourceTooltip
-                                        {...resourceInfo}
-                                        {...resourceDetails}
-                                    />
-                                </MapTooltip>
-                            )}
-                        </MapSource>
+                                geoJson={geojson}
+                            >
+                                <MapLayer
+                                    layerKey="cluster"
+                                    onClick={this.handleClusterClick}
+                                    layerOptions={{
+                                        type: 'circle',
+                                        paint: mapStyles.resourceCluster.circle,
+                                        filter: ['has', 'point_count'],
+                                    }}
+                                />
+                                <MapLayer
+                                    layerKey="cluster-count"
+                                    layerOptions={{
+                                        type: 'symbol',
+                                        filter: ['has', 'point_count'],
+                                        layout: {
+                                            'text-field': '{point_count_abbreviated}',
+                                            'text-size': 12,
+                                        },
+                                    }}
+                                />
+                                <MapLayer
+                                    layerKey="resource-symbol-background"
+                                    onClick={this.handleResourceClick}
+                                    layerOptions={{
+                                        type: 'circle',
+                                        filter: ['!', ['has', 'point_count']],
+                                        paint: mapStyles.resourcePoint.circle,
+                                    }}
+                                />
+                                <MapLayer
+                                    layerKey="-resourece-symbol-icon"
+                                    layerOptions={{
+                                        type: 'symbol',
+                                        filter: ['!', ['has', 'point_count']],
+                                        layout: {
+                                            'icon-image': activeLayerKey,
+                                            'icon-size': 0.03,
+                                        },
+                                    }}
+                                />
+                                { resourceLngLat && (
+                                    <MapTooltip
+                                        coordinates={resourceLngLat}
+                                        tooltipOptions={tooltipOptions}
+                                        onHide={this.handleTooltipClose}
+                                    >
+                                        <ResourceTooltip
+                                            {...resourceInfo}
+                                            {...resourceDetails}
+                                        />
+                                    </MapTooltip>
+                                )}
+                            </MapSource>
+                        </>
                     )}
                 </div>
             </>
         );
     }
 }
+
 CapacityAndResources.contextType = MapChildContext;
 export default createRequestClient(requestOptions)(CapacityAndResources);

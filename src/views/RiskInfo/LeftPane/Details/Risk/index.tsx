@@ -1,5 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { extent } from 'd3-array';
 import Slider from 'react-input-slider';
 import {
     methods,
@@ -11,10 +12,12 @@ import {
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 
+import LayerSelectionItem from '#components/LayerSelectionItem';
 import Loading from '#components/Loading';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 import DataTableModal from './DataTableModal';
-import Map from './Map';
+// import Map from './Map';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
 import { RiskData } from '#types';
@@ -23,6 +26,8 @@ import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
+
+import { generatePaint } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -39,6 +44,9 @@ interface Params {
 
 interface State {
     metricValues: {};
+    showOpacitySettings: boolean;
+    showMetricSettings: boolean;
+    opacityValue: number;
 }
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
@@ -46,6 +54,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         url: '/earthquake-riskscore/',
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ params, response }) => {
+            if (params.onSuccess) {
+                params.onSuccess(response);
+            }
+        },
     },
 };
 
@@ -62,6 +75,38 @@ const metrices = {
 
 const metricKeys = Object.keys(metrices);
 
+const colorGrade = [
+    '#ffe1ca',
+    '#f7cbac',
+    '#eeb590',
+    '#e69e76',
+    '#dc875e',
+    '#d37047',
+    '#c95733',
+    '#be3b20',
+    '#b31010',
+];
+
+const transformRiskDataToLayer = (data: RiskData[]) => {
+    const mapState = data.map(d => ({
+        id: d.district,
+        value: d.data.riskScore,
+    }));
+
+    const [min, max] = extent(mapState, d => d.value);
+    const paint = generatePaint(colorGrade, min || 0, max || 0);
+
+    return {
+        id: 'durham-earthquake-risk',
+        title: 'Durham earthquake risk',
+        type: 'choropleth',
+        adminLevel: 'district',
+        layername: 'Durham earthquake risk',
+        opacity: 1,
+        mapState,
+        paint,
+    };
+};
 
 class Risk extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -80,14 +125,39 @@ class Risk extends React.PureComponent<Props, State> {
             showMetricSettings: false,
             opacityValue: 1,
         };
+
+        props.requests.riskGetRequest.setDefaultParams({
+            onSuccess: this.handleRiskGetRequestSuccess,
+        });
+    }
+
+    private handleRiskGetRequestSuccess = (response) => {
+        const { addLayer } = this.context;
+        const { metricValues } = this.state;
+        const riskData = this.getRiskData(response.results, metricValues);
+        const riskLayer = transformRiskDataToLayer(riskData);
+
+        if (addLayer) {
+            addLayer(riskLayer);
+        }
     }
 
     private handleMetricSliderChange = (key, value) => {
+        const { addLayer } = this.context;
+        const { requests } = this.props;
         const { metricValues } = this.state;
 
         const newMetricValues = { ...metricValues };
         newMetricValues[key] = value;
         this.setState({ metricValues: newMetricValues });
+
+        const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
+        const riskData = this.getRiskData(riskDataRaw, newMetricValues);
+        const riskLayer = transformRiskDataToLayer(riskData);
+
+        if (addLayer) {
+            addLayer(riskLayer);
+        }
     }
 
     private getRiskData = (riskDataRaw, metricScores) => {
@@ -143,16 +213,13 @@ class Risk extends React.PureComponent<Props, State> {
         const pending = isAnyRequestPending(requests);
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
         const riskData = this.getRiskData(riskDataRaw, this.state.metricValues);
+        const riskLayer = transformRiskDataToLayer(riskData);
 
         return (
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.risk, className)}>
-                    <header className={styles.header}>
-                        <h4 className={styles.heading}>
-                            Durham Earthquake
-                        </h4>
-                    </header>
+                    <LayerSelectionItem data={riskLayer} />
                     <div className={styles.description}>
                         The map represents the spatial distribution of total
                         relative seismic risk for Nepal. The data is calculated
@@ -262,13 +329,11 @@ class Risk extends React.PureComponent<Props, State> {
                             </div>
                         )}
                     </div>
-                    <Map
-                        data={riskData}
-                    />
                 </div>
             </>
         );
     }
 }
 
+Risk.contextType = RiskInfoLayerContext;
 export default createRequestClient(requestOptions)(Risk);

@@ -5,15 +5,17 @@ import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
 
-interface Props {
+interface Props<T> {
     className?: string;
-    onClick: (key: string | number) => void;
-    optionKey: string | number;
+    onClick: (key: T) => void;
+    optionKey: T;
     label?: React.ReactNode | string;
     isActive: boolean;
+    iconClassName?: string;
+    labelContainerClassName?: string;
 }
 
-class Option extends React.PureComponent<Props> {
+class Option<T = string | number> extends React.PureComponent<Props<T>> {
     private handleClick = () => {
         const {
             onClick,
