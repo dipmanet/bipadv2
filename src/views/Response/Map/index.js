@@ -7,6 +7,7 @@ import buffer from '@turf/buffer';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
+import MapTooltip from '#re-map/MapTooltip';
 
 import ZoomMap from '#components/ZoomMap';
 import {
@@ -69,6 +70,14 @@ const mapStateToProps = state => ({
 });
 
 class ResponseMap extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            resourceLngLat: undefined,
+        };
+    }
+
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -125,18 +134,19 @@ class ResponseMap extends React.PureComponent {
         return bbox(bufferedV);
     })
 
-    tooltipRenderer = params => <ResourceItem {...params} showDetails />
+    handleResourceClick = (feature, lngLat) => {
+        const { id } = feature;
+        const resource = this.props.resourceList.find(x => x.id === id) || emptyObject;
+        this.setState({
+            resourceLngLat: lngLat,
+            resource,
+        });
+    }
 
-    tooltipRendererParams = (id) => {
-        const resourceList = this.props.resourceList.find(x => x.id === id) || emptyObject;
-
-        return {
-            ...resourceList,
-            closeOnClick: true,
-            closeButton: false,
-            maxWidth: '300px',
-            className: styles.resourceDetail,
-        };
+    handleTooltipClose = () => {
+        this.setState({
+            resourceLngLat: undefined,
+        });
     }
 
     render() {
@@ -158,6 +168,19 @@ class ResponseMap extends React.PureComponent {
 
         const mybox = this.getConvex(point || polygon, resourceGeoJson);
 
+        const {
+            resourceLngLat,
+            resource,
+        } = this.state;
+
+        const tooltipOptions = {
+            closeOnClick: true,
+            closeButton: true,
+            offset: 8,
+            maxWidth: '300px',
+            className: styles.resourceDetail,
+        };
+
         return (
             <React.Fragment>
                 <ZoomMap
@@ -174,12 +197,11 @@ class ResponseMap extends React.PureComponent {
                 >
                     <MapLayer
                         layerKey="resource-point"
+                        onClick={this.handleResourceClick}
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.resourcePoint.circle,
                             enableHover: true,
-                            tooltipRenderer: this.tooltipRenderer,
-                            tooltipRendererParams: this.tooltipRendererParams,
                         }}
                     />
                     <MapLayer
@@ -190,6 +212,18 @@ class ResponseMap extends React.PureComponent {
                             paint: mapStyles.resourceSymbol.symbol,
                         }}
                     />
+                    { resourceLngLat && (
+                        <MapTooltip
+                            coordinates={resourceLngLat}
+                            tooltipOptions={tooltipOptions}
+                            onHide={this.handleTooltipClose}
+                        >
+                            <ResourceItem
+                                {...resource}
+                                showDetails
+                            />
+                        </MapTooltip>
+                    )}
                 </MapSource>
 
                 { point && (
