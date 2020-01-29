@@ -11,8 +11,6 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import { mapSources, mapStyles } from '#constants';
 
 import {
-    regionLabelToGeojson,
-
     getWardFilter,
     getMunicipalityFilter,
     getDistrictFilter,
@@ -88,14 +86,6 @@ class CommonMap extends React.PureComponent {
 
     static defaultProps = defaultProps;
 
-    getProvincesFeatureCollection = memoize(regionLabelToGeojson);
-
-    getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
-
-    getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
-
-    getWardsFeatureCollection = memoize(regionLabelToGeojson);
-
     getWardFilter = memoize(getWardFilter);
 
     getMunicipalityFilter = memoize(getMunicipalityFilter);
@@ -145,11 +135,6 @@ class CommonMap extends React.PureComponent {
         const provinceFilter = showProvince
             ? this.getProvinceFilter(provinceId)
             : undefined;
-
-        const provinceLabels = this.getProvincesFeatureCollection(provinces);
-        const districtLabels = this.getDistrictsFeatureCollection(districts);
-        const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
-        const wardLabels = this.getWardsFeatureCollection(wards);
 
         return (
             <Fragment>
@@ -204,66 +189,43 @@ class CommonMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-province-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={provinceLabels}
-                >
                     <MapLayer
                         layerKey="province-label"
                         layerOptions={{
+                            'source-layer': mapSources.nepal.layers.provinceLabel,
                             type: 'symbol',
-                            property: 'adminLevelId',
                             paint: mapStyles.provinceLabel.paint,
                             layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
                             filter: provinceFilter,
                         }}
                     />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-municipality-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={municipalityLabels}
-                >
-                    <MapLayer
-                        layerKey="municipality-label"
-                        layerOptions={{
-                            type: 'symbol',
-                            property: 'adminLevelId',
-                            paint: mapStyles.municipalityLabel.paint,
-                            layout: showMunicipalityLabel
-                                ? mapStyles.municipalityLabel.layout : noneLayout,
-                            filter: municipalityFilter,
-                        }}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-district-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={districtLabels}
-                >
                     <MapLayer
                         layerKey="district-label"
                         layerOptions={{
+                            'source-layer': mapSources.nepal.layers.districtLabel,
                             type: 'symbol',
-                            property: 'adminLevelId',
                             paint: mapStyles.districtLabel.paint,
                             layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
                             filter: districtFilter,
                         }}
                     />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-ward-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={wardLabels}
-                >
+                    <MapLayer
+                        layerKey="municipality-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.municipalityLabel,
+                            type: 'symbol',
+                            paint: mapStyles.municipalityLabel.paint,
+                            layout: showMunicipalityLabel
+                                ? mapStyles.municipalityLabel.layout
+                                : noneLayout,
+                            filter: municipalityFilter,
+                        }}
+                    />
                     <MapLayer
                         layerKey="ward-label"
                         layerOptions={{
+                            'source-layer': mapSources.nepal.layers.wardLabel,
                             type: 'symbol',
-                            property: 'adminLevelId',
                             paint: mapStyles.wardLabel.paint,
                             layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
                             filter: wardFilter,
