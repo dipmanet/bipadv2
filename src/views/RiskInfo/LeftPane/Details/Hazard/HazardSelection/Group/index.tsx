@@ -6,10 +6,7 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import {
-    LayerWithGroup,
-    LayerGroup,
-} from '#store/atom/page/types';
+import { LayerWithGroup } from '#store/atom/page/types';
 
 import { OpacityElement } from '#types';
 import ExpandableView from '#components/ExpandableView';

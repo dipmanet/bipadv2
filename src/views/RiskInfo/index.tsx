@@ -8,10 +8,14 @@ import {
     getHashFromBrowser,
 } from '#rscg/HashManager';
 
-import SortableListView from '#rscv/SortableListView';
+import MapSource from '#re-map/MapSource';
+
+import { getRasterTile } from '#utils/domain';
 
 import LeftPane from './LeftPane';
+import RiskInfoMap from './Map';
 import RightPane from './RightPane';
+import ActiveLayers from './ActiveLayers';
 
 import styles from './styles.scss';
 
@@ -21,33 +25,6 @@ interface Props {
 interface State {
     activeView: string | undefined;
 }
-
-
-const LayerList = (p) => {
-    const {
-        activeLayers,
-        setLayers,
-    } = p;
-
-    return (
-        <div className={styles.layerList}>
-            <h4 className={styles.heading}>
-                Active layers
-            </h4>
-            <SortableListView
-                className={styles.content}
-                itemClassName={styles.activeLayerContainer}
-                data={activeLayers}
-                renderer={({ title }) => <div className={styles.activeLayer}>{title}</div>}
-                rendererParams={(_, d) => ({
-                    title: d.title,
-                })}
-                keySelector={d => d.id}
-                onChange={setLayers}
-            />
-        </div>
-    );
-};
 
 class RiskInfo extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -66,22 +43,28 @@ class RiskInfo extends React.PureComponent<Props, State> {
     public render() {
         const { activeView } = this.state;
 
+        const layer = {
+            id: 32,
+            layername: 'Pre-Monsoon 2014 Landslide',
+        };
+
         return (
-            <Page
-                leftContentClassName={styles.leftContainer}
-                leftContent={(
-                    <LeftPane
-                        onViewChange={this.handleViewChange}
-                        className={styles.leftPane}
-                    />
-                )}
-                mainContentClassName={styles.mainContent}
-                mainContent={(
-                    <RiskInfoLayerContext.Consumer>
-                        { LayerList }
-                    </RiskInfoLayerContext.Consumer>
-                )}
-            />
+            <>
+                <RiskInfoMap />
+                <Page
+                    leftContentClassName={styles.leftContainer}
+                    leftContent={(
+                        <LeftPane
+                            onViewChange={this.handleViewChange}
+                            className={styles.leftPane}
+                        />
+                    )}
+                    mainContentClassName={styles.mainContent}
+                    mainContent={(
+                        <ActiveLayers className={styles.activeLayerList} />
+                    )}
+                />
+            </>
         );
     }
 }

@@ -51,6 +51,8 @@ const styleProperties = {
     fontSizeJumbo: '32px',
     fontSizeJumboAlt: '36px',
     fontSizeExtraJumbo: '45px',
+
+    colorBackgroundHover: 'rgba(0, 100, 100, 0.06)',
 };
 
 export default styleProperties;

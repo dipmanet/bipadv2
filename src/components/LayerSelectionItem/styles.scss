@@ -1,0 +1,16 @@
+.layer-selection-item {
+    .switch-input {
+        display: flex;
+        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+        .switch {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-small)
+        }
+
+        .label {
+            flex-grow: 1;
+            padding: var(--spacing-extra-small) var(--spacing-small)
+        }
+    }
+}

@@ -692,6 +692,7 @@ export function getRasterTile(layer: Layer | LayerWithGroup) {
 
     return tile;
 }
+
 export function getRasterLegendURL(layer: Layer | LayerWithGroup) {
     const { layername } = layer;
     const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
@@ -710,6 +711,8 @@ export function getLayerHierarchy(
         ...layer,
         parent: layer.group.id,
         children: [],
+        opacity: 0.5,
+        type: 'raster',
     }));
 
     const newGroups = layerGroupList.map(group => ({
@@ -754,3 +757,56 @@ export function generateLegendData(colorPaint: (string | number)[], minValue: nu
 
     return legendData;
 }
+
+export const generatePaint = (colorDomain: string[], minValue: number, maxValue: number) => {
+    const range = maxValue - minValue;
+    const gap = range / colorDomain.length;
+
+    const colors: (string | number)[] = [];
+
+    if (maxValue <= 1 || gap < 1) {
+        colorDomain.forEach((color, i) => {
+            const val = minValue + (i + 1) * gap;
+            colors.push(color);
+            colors.push(val);
+        });
+    } else {
+        colorDomain.forEach((color, i) => {
+            const val = Math.floor(minValue + (i + 1) * gap);
+            colors.push(color);
+            colors.push(val);
+        });
+    }
+
+    let paint: {
+        'fill-color': string | any[];
+        'fill-opacity': number | any[];
+    } = {
+        'fill-color': 'white',
+        'fill-opacity': 0.1,
+    };
+
+    if (colors.length !== 0) {
+        const fillColor = [
+            'step',
+            ['feature-state', 'value'],
+            ...colors.slice(0, -1),
+        ];
+
+        const fillOpacity = [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            0,
+            ['==', ['feature-state', 'hovered'], true],
+            0.5,
+            1,
+        ];
+
+        paint = {
+            'fill-color': fillColor,
+            'fill-opacity': fillOpacity,
+        };
+    }
+
+    return paint;
+};

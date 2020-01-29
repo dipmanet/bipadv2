@@ -1,4 +1,4 @@
-import { Layer, LayerGroup, LayerWithGroup } from "#store/atom/page/types";
+import { LayerGroup, LayerWithGroup } from '#store/atom/page/types';
 
 export interface RiskElement {
     key: number;
@@ -86,7 +86,7 @@ export interface VulnerabilityOption {
 }
 
 export interface VulnerabilityType {
-    key: string;
+    id: string;
     label: string;
     indicatorType: string;
     children: VulnerabilityType[];

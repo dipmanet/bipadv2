@@ -45,6 +45,7 @@ class OpacityInput extends React.PureComponent<Props, State> {
                     Opacity:
                 </div>
                 <Slider
+                    className={styles.slider}
                     axis="x"
                     xmin={0}
                     xmax={1}
@@ -52,7 +53,12 @@ class OpacityInput extends React.PureComponent<Props, State> {
                     x={value}
                     onChange={this.handleSliderChange}
                     styles={{
-                        track: { height: 5 },
+                        track: {
+                            width: '100%',
+                        },
+                        thumb: {
+                            border: '1px solid rgba(0, 0, 0, 0.3)',
+                        },
                     }}
                 />
             </div>

@@ -1,17 +1,2 @@
 .layer-selection {
-    .has-parent {
-        background-color: var(--color-foreground-alt);
-    }
-
-    .layer-child {
-        padding: var(--spacing-small);
-    }
-
-    .expandable-layer-child {
-        padding: 0 var(--spacing-small);
-
-        .description {
-            padding: var(--spacing-small) var(--spacing-medium);
-        }
-    }
 }
