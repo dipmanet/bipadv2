@@ -1,16 +1,32 @@
 .layer-selection-item {
+    padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium-alt) - var(--spacing-medium));
+
     .switch-input {
         display: flex;
-        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+        align-items: center;
+        padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
 
         .switch {
             flex-shrink: 0;
-            margin: var(--spacing-extra-small) var(--spacing-small)
+            margin: var(--spacing-extra-small) var(--spacing-small);
         }
 
-        .label {
+        .title {
             flex-grow: 1;
-            padding: var(--spacing-extra-small) var(--spacing-small)
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            font-weight: var(--font-weight-bold);
         }
+
+        .info-icon {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-small);
+            color: var(--color-primary);
+        }
+    }
+
+    .short-description {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+        color: var(--color-text-light);
+        font-size: var(--font-size-small-alt);
     }
 }

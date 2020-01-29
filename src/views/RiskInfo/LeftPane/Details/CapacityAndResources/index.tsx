@@ -295,11 +295,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.capacityAndResources, className)}>
-                    <CommonMap sourceKey="capacity-and-resources" />
                     <header className={styles.header}>
-                        <h4 className={styles.heading}>
+                        <h2 className={styles.heading}>
                             Layers
-                        </h4>
+                        </h2>
                         <DangerButton
                             disabled={!activeLayerKey}
                             onClick={this.handleLayerUnselect}

@@ -2,6 +2,7 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import LayerSelection from '#components/LayerSelection';
 import { LayerHierarchy } from '#types';
@@ -57,11 +58,42 @@ class LayerGroup extends React.PureComponent<Props, State> {
                         onClick={this.handleShowContentButtonClick}
                     />
                 </header>
+                { data.shortDescription && (
+                    <div className={styles.shortDescription}>
+                        { data.shortDescription }
+                    </div>
+                )}
                 { isContentShown && (
                     <div className={styles.content}>
-                        { data.shortDescription && (
-                            <div className={styles.shortDescription}>
-                                { data.shortDescription }
+                        { data.longDescription && (
+                            <div className={styles.actions}>
+                                <PrimaryButton
+                                    iconName="info"
+                                    disabled={!data.longDescription}
+                                    transparent
+                                    title={data.longDescription}
+                                    className={styles.infoButton}
+                                />
+                                <Button
+                                    transparent
+                                    iconName="table"
+                                    disabled
+                                />
+                                <Button
+                                    iconName="contrast"
+                                    transparent
+                                    disabled
+                                />
+                                <Button
+                                    iconName="download"
+                                    transparent
+                                    disabled
+                                />
+                                <Button
+                                    iconName="share"
+                                    transparent
+                                    disabled
+                                />
                             </div>
                         )}
                         {data.children.length !== 0 && (

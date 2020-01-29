@@ -2,7 +2,8 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 
-import Option from '#components/RadioInput/Option';
+import Icon from '#rscg/Icon';
+
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { LayerHierarchy } from '#types';
 
@@ -53,10 +54,22 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                         value={isActive}
                         onChange={this.handleChange}
                     />
-                    <div className={styles.label}>
+                    <div className={styles.title}>
                         { data.title }
                     </div>
+                    { data.longDescription && (
+                        <Icon
+                            name="info"
+                            className={styles.infoIcon}
+                            title={data.longDescription}
+                        />
+                    )}
                 </div>
+                { data.shortDescription && (
+                    <div className={styles.shortDescription}>
+                        { data.shortDescription || 'Woo hooo, finally a description of layer' }
+                    </div>
+                )}
             </div>
         );
     }

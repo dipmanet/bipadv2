@@ -1,5 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import Button from '#rsca/Button';
 import SortableListView from '#rscv/SortableListView';
@@ -60,11 +61,19 @@ class ActiveLayers extends React.PureComponent<Props> {
         onOpacityChange: this.handleOpacityChange,
     })
 
+    private getData = memoize(data => (
+        [...data].reverse()
+    ))
+
+    private handleChange = (data) => {
+        const { setLayers } = this.context;
+        setLayers([...data].reverse());
+    }
+
     public render() {
         const { className } = this.props;
         const {
             activeLayers,
-            setLayers,
         } = this.context;
 
         return (
@@ -75,11 +84,11 @@ class ActiveLayers extends React.PureComponent<Props> {
                 <SortableListView
                     className={styles.content}
                     itemClassName={styles.activeLayerContainer}
-                    data={activeLayers}
+                    data={this.getData(activeLayers)}
                     renderer={ActiveLayer}
                     rendererParams={this.getRendererParams}
                     keySelector={d => String(d.id)}
-                    onChange={setLayers}
+                    onChange={this.handleChange}
                 />
             </div>
         );

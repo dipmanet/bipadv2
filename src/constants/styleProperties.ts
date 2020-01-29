@@ -6,7 +6,7 @@ const styleProperties = {
 
     widthScrollbar: '4px',
 
-    widthLeftPanel: '320px',
+    widthLeftPanel: '480px',
     widthRightPanel: '256px',
     widthRightPanelLarge: '360px',
     widthNavbarRight: '50px',

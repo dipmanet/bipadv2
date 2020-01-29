@@ -7,6 +7,7 @@
 
     .header {
         display: flex;
+        align-items: center;
         flex-shrink: 0;
         border-bottom: var(--width-separator-thin) solid var(--color-separator);
         padding: calc(var(--spacing-large) - var(--spacing-medium));
@@ -15,7 +16,7 @@
             flex-shrink: 0;
             padding: var(--spacing-small) var(--spacing-medium);
             color: inherit;
-            font-size: var(--font-size-large);
+            font-size: var(--font-size-extra-large);
         }
 
         .heading {
@@ -40,7 +41,7 @@
 
     &.has-active-attribute {
         .content {
-            flex-direction: row;
+            // flex-direction: row;
 
             .overview {
                 flex-grow: unset;

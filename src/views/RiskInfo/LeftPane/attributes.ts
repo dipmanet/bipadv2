@@ -36,7 +36,7 @@ export const attributeList: AttributeItem[] = [
     {
         key: 'risk',
         title: 'Risk',
-        description: '-',
+        description: 'The likelihood or probability of a given hazard of a given level causing a particular level of loss of damage',
         color: '#ff8f00',
         icon: 'R',
     },

@@ -41,18 +41,9 @@ class Attribute extends React.Component<Props, State> {
             color,
         } = this.props;
 
-        let style;
-
-        if (isActive) {
-            style = {
-                backgroundColor: color,
-                color: '#fff',
-            };
-        } else if (titleShown) {
-            style = {
-                color,
-            };
-        }
+        const style = {
+            color,
+        };
 
         return (
             <div
@@ -77,6 +68,9 @@ class Attribute extends React.Component<Props, State> {
                         <h4 className={styles.title}>
                             {title}
                         </h4>
+                        <div className={styles.description}>
+                            { description }
+                        </div>
                     </div>
                 )}
             </div>

@@ -1,14 +1,26 @@
 .opacity-input {
-    padding: var(--spacing-small) var(--spacing-medium);
+    display: flex;
+    padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-small));
     overflow: hidden;
 
     .label {
+        padding: 0 var(--spacing-small);
         text-transform: uppercase;
         color: var(--color-text-label);
         font-size: var(--font-size-small);
     }
 
-    .slider {
-        overflow: shown;
+    .range-input {
+        flex-grow: 1;
+        margin: 0 var(--spacing-small);
+    }
+
+    .value-label {
+        position: absolute;
+        bottom: -3px;
+        z-index: 1;
+        color: #fff;
+        font-size: 9px;
+        pointer-events: none;
     }
 }

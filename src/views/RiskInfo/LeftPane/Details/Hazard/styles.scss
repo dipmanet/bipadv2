@@ -1,17 +1,3 @@
 .hazard {
     overflow: auto;
-
-    .hazard-selection {
-        padding: 0;
-
-        .layer {
-            margin: var(--spacing-small);
-            border: var(--width-separator-thin) solid var(--color-separator-light);
-            padding: var(--spacing-small);
-        }
-
-        .group {
-            border: var(--width-separator-thin) solid var(--color-separator-light);
-        }
-    }
 }

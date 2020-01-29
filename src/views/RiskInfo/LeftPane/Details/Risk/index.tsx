@@ -1,7 +1,9 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { extent } from 'd3-array';
-import Slider from 'react-input-slider';
+import RangeInput from 'react-input-range';
+import rangeInputDefaultClassNames from 'react-input-range/src/js/input-range/default-class-names';
+
 import {
     methods,
     NewProps,
@@ -219,115 +221,118 @@ class Risk extends React.PureComponent<Props, State> {
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.risk, className)}>
-                    <LayerSelectionItem data={riskLayer} />
-                    <div className={styles.description}>
-                        The map represents the spatial distribution of total
-                        relative seismic risk for Nepal. The data is calculated
-                        as a normalized sum of six different risk metrics:
+                    <header className={styles.header}>
+                        <h2 className={styles.heading}>
+                            Layers
+                        </h2>
+                    </header>
+                    <div className={styles.content}>
+                        <LayerSelectionItem data={riskLayer} />
+                        <div className={styles.description}>
+                            The map represents the spatial distribution of total
+                            relative seismic risk for Nepal. The data is calculated
+                            as a normalized sum of six different risk metrics:
 
-                        <div className={styles.metric}>
-                            a) percentage of scenarios with at least one fatality
-                        </div>
-                        <div className={styles.metric}>
-                            b) median fatalities for all scenarios that cause fatalities
-                        </div>
-                        <div className={styles.metric}>
-                            c) maximum fatalities
-                        </div>
-                        <div className={styles.metric}>
-                            d) specificity of fatalities for all scenarios that cause fatalities
-                        </div>
-                        <div className={styles.metric}>
-                            e) remoteness score and
-                        </div>
-                        <div className={styles.metric}>
-                            f) HDI.
-                        </div>
-                        All data are the property of Durham University.
-                    </div>
-                    <div className={styles.options}>
-                        <div className={styles.actions}>
-                            <Button
-                                iconName="info"
-                                transparent
-                                className={styles.optionButton}
-                            />
-                            <DataTableModalButton
-                                modal={<DataTableModal data={riskDataRaw} />}
-                                initialShowModal={false}
-                                iconName="table"
-                                transparent
-                                className={styles.optionButton}
-                            />
-                            <Button
-                                iconName="contrast"
-                                onClick={this.handleShowOpacityButtonClick}
-                                transparent
-                                className={_cs(
-                                    showOpacitySettings && styles.active,
-                                    styles.optionButton,
-                                )}
-                            />
-                            <Button
-                                iconName="settings"
-                                onClick={this.handleShowMetricsButtonClick}
-                                transparent
-                                className={_cs(
-                                    showMetricSettings && styles.active,
-                                    styles.optionButton,
-                                )}
-                            />
-                        </div>
-                        { showMetricSettings && (
-                            <div className={styles.metricSettings}>
-                                {metricKeys.map(m => (
-                                    <div
-                                        key={m}
-                                        className={styles.metricInput}
-                                    >
-                                        <div className={styles.label}>
-                                            { metrices[m] }
-                                        </div>
-                                        <Slider
-                                            axis="x"
-                                            xmin={0}
-                                            xmax={2}
-                                            xstep={1}
-                                            x={this.state.metricValues[m]}
-                                            onChange={({ x }) => {
-                                                this.handleMetricSliderChange(m, x);
-                                            }}
-                                            styles={{
-                                                track: {
-                                                    height: 5,
-                                                    width: '90%',
-                                                },
-                                                thumb: { cursor: 'pointer' },
-                                            }}
-                                        />
-                                    </div>
-                                ))}
+                            <div className={styles.metric}>
+                                a) Percentage of scenarios with at least one fatality
                             </div>
-                        )}
-                        { showOpacitySettings && (
-                            <div className={styles.opacitySettings}>
-                                <Slider
-                                    axis="x"
-                                    xmin={0}
-                                    xmax={1}
-                                    xstep={0.01}
-                                    x={opacityValue}
-                                    onChange={this.handleOpacityInputChange}
-                                    styles={{
-                                        track: {
-                                            height: 5,
-                                            width: '90%',
-                                        },
-                                        thumb: { cursor: 'pointer' },
-                                    }}
+                            <div className={styles.metric}>
+                                b) Median fatalities for all scenarios that cause fatalities
+                            </div>
+                            <div className={styles.metric}>
+                                c) Maximum fatalities
+                            </div>
+                            <div className={styles.metric}>
+                                d) Specificity of fatalities for all scenarios that cause fatalities
+                            </div>
+                            <div className={styles.metric}>
+                                e) Remoteness score
+                            </div>
+                            <div className={styles.metric}>
+                                f) HDI
+                            </div>
+                            All data are the property of Durham University.
+                        </div>
+                        <div className={styles.options}>
+                            <div className={styles.actions}>
+                                <Button
+                                    iconName="info"
+                                    transparent
+                                    className={styles.optionButton}
+                                    disabled
+                                />
+                                <DataTableModalButton
+                                    modal={<DataTableModal data={riskDataRaw} />}
+                                    initialShowModal={false}
+                                    iconName="table"
+                                    transparent
+                                    className={styles.optionButton}
+                                />
+                                <Button
+                                    iconName="contrast"
+                                    disabled
+                                    onClick={this.handleShowOpacityButtonClick}
+                                    transparent
+                                    className={_cs(
+                                        showOpacitySettings && styles.active,
+                                        styles.optionButton,
+                                    )}
+                                />
+                                <Button
+                                    iconName="settings"
+                                    onClick={this.handleShowMetricsButtonClick}
+                                    transparent
+                                    className={_cs(
+                                        showMetricSettings && styles.active,
+                                        styles.optionButton,
+                                    )}
                                 />
                             </div>
-                        )}
+                            { showMetricSettings && (
+                                <div className={styles.metricSettings}>
+                                    {metricKeys.map(m => (
+                                        <div
+                                            key={m}
+                                            className={styles.metricInput}
+                                        >
+                                            <div className={styles.label}>
+                                                { metrices[m] }
+                                            </div>
+                                            <RangeInput
+                                                classNames={{
+                                                    ...rangeInputDefaultClassNames,
+                                                    minLabel: styles.minLabel,
+                                                    maxLabel: styles.maxLabel,
+                                                    valueLabel: styles.valueLabel,
+                                                    inputRange: _cs(
+                                                        rangeInputDefaultClassNames.inputRange,
+                                                        styles.rangeInput,
+                                                    ),
+                                                }}
+                                                minValue={0}
+                                                maxValue={2}
+                                                step={1}
+                                                value={this.state.metricValues[m]}
+                                                onChange={(value) => {
+                                                    this.handleMetricSliderChange(m, value);
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            { showOpacitySettings && (
+                                <div className={styles.opacitySettings}>
+                                    <RangeInput
+                                        minValue={0}
+                                        maxValue={1}
+                                        step={0.01}
+                                        value={opacityValue}
+                                        onChange={this.handleOpacityInputChange}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </>

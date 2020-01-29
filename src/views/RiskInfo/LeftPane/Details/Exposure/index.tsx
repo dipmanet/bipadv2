@@ -3,8 +3,6 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
-import CommonMap from '#components/CommonMap';
-
 import { mapStyleSelector } from '#selectors';
 import { setMapStyleAction } from '#actionCreators';
 
@@ -144,11 +142,10 @@ class Exposure extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.exposure, className)}>
-                <CommonMap sourceKey="exposure" />
                 <header className={styles.header}>
-                    <h4 className={styles.heading}>
+                    <h2 className={styles.heading}>
                         Layers
-                    </h4>
+                    </h2>
                     <DangerButton
                         disabled={!selectedId}
                         onClick={this.handleLayerUnselect}

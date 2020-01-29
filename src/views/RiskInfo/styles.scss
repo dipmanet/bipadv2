@@ -17,7 +17,8 @@
     background-color: var(--color-foreground);
 
     .active-layer-list {
-        width: 240px;
+        width: 320px;
+        min-height: 96px;
         max-height: 240px;
     }
 }

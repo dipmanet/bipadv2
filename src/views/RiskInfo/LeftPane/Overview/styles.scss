@@ -2,9 +2,21 @@
     display: flex;
     flex-direction: column;
     border-right: var(--width-separator-thin) solid var(--color-separator);
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
     overflow: auto;
 
     .attribute {
-        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+        padding: var(--spacing-small) var(--spacing-medium);
+        // border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+    }
+
+    &.icon-only {
+        flex-direction: row;
+        padding: 0;
+
+        .attribute {
+            flex-grow: 1;
+            padding: 0;
+        }
     }
 }
