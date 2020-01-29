@@ -8,8 +8,8 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
-import MapLayer from '#rscz/Map/MapLayer';
-import MapSource from '#rscz/Map/MapSource';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
 
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
@@ -46,16 +46,11 @@ import {
 
 import {
     iconNames,
-    getMapPaddings,
     mapStyles,
 } from '#constants';
 
 import Filter from './Filter';
 import styles from './styles.scss';
-
-interface Response {
-    results: Contact[];
-}
 
 interface OwnProps {
     className?: string;
@@ -445,30 +440,40 @@ class ContactPage extends React.PureComponent<Props> {
         return (
             <React.Fragment>
                 <Loading pending={pending} />
-                <CommonMap region={region} />
+                <CommonMap sourceKey="profile-contact" />
                 <MapSource
                     sourceKey="profile-contact-points"
                     geoJson={pointsGeoJson}
-                    cluster
+                    sourceOptions={{
+                        type: 'geojson',
+                        cluster: true,
+                        clusterMaxZoom: 10,
+                    }}
                 >
                     <MapLayer
                         layerKey="contact-point-clusters"
-                        type="circle"
-                        paint={mapStyles.contactPoint.clusteredCircle}
-                        filter={clusteredPointFilter}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.contactPoint.clusteredCircle,
+                            filter: clusteredPointFilter,
+                        }}
                     />
                     <MapLayer
                         layerKey="contact-point-cluster-count"
-                        type="symbol"
-                        paint={mapStyles.contactPoint.clusterLabelPaint}
-                        layout={mapStyles.contactPoint.clusterLabelLayout}
-                        filter={clusteredPointFilter}
+                        layerOptions={{
+                            type: 'symbol',
+                            paint: mapStyles.contactPoint.clusterLabelPaint,
+                            layout: mapStyles.contactPoint.clusterLabelLayout,
+                            filter: clusteredPointFilter,
+                        }}
                     />
                     <MapLayer
                         layerKey="contact-points"
-                        type="circle"
-                        paint={mapStyles.contactPoint.circle}
-                        filter={nonClusteredPointFilter}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: mapStyles.contactPoint.circle,
+                            filter: nonClusteredPointFilter,
+                        }}
                     />
                 </MapSource>
                 <Page
