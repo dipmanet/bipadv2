@@ -9,6 +9,7 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     layerList: LayerHierarchy[];
+    pending?: boolean;
 }
 
 class LayerSelection extends React.PureComponent<Props> {
@@ -20,6 +21,7 @@ class LayerSelection extends React.PureComponent<Props> {
         const {
             className,
             layerList,
+            pending,
         } = this.props;
 
         return (
@@ -29,6 +31,7 @@ class LayerSelection extends React.PureComponent<Props> {
                 keySelector={d => d.id}
                 renderer={LayerItem}
                 rendererParams={this.getLayerRendererParams}
+                pending={pending}
             />
         );
     }

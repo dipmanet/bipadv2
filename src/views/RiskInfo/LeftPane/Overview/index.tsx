@@ -59,13 +59,17 @@ export default class Overview extends React.PureComponent<Props, State> {
     })
 
     public render() {
-        const { className } = this.props;
+        const {
+            className,
+            titleShown,
+        } = this.props;
+
         const { hash } = this.state;
 
         return (
             <ListView
                 key={hash}
-                className={_cs(styles.overview, className)}
+                className={_cs(styles.overview, className, !titleShown && styles.iconOnly)}
                 data={attributeList}
                 renderer={Attribute}
                 rendererParams={this.getAttributeRendererParams}

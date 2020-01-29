@@ -1,12 +1,16 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import Slider from 'react-input-slider';
+import RangeInput from 'react-input-range';
+import rangeInputDefaultClassNames from 'react-input-range/src/js/input-range/default-class-names';
+
+import 'react-input-range/lib/css/index.css';
 
 import styles from './styles.scss';
 
 interface Props {
     className?: string;
     inputKey: number;
+    value: number;
     onChange: (key: number, value: number) => void;
 }
 
@@ -15,51 +19,38 @@ interface State {
 }
 
 class OpacityInput extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            value: 1,
-        };
-    }
-
-    private handleSliderChange = ({ x: value }: { x: number }) => {
+    private handleRangeInputChange = (value: number) => {
         const {
             inputKey,
             onChange,
         } = this.props;
 
-        this.setState({ value });
-
-        onChange(inputKey, value);
+        onChange(inputKey, parseFloat(value.toFixed(1)));
     }
 
 
     public render() {
-        const { className } = this.props;
-        const { value } = this.state;
+        const {
+            className,
+            value,
+        } = this.props;
 
         return (
             <div className={_cs(styles.opacityInput, className)}>
                 <div className={styles.label}>
                     Opacity:
                 </div>
-                <Slider
-                    className={styles.slider}
-                    axis="x"
-                    xmin={0}
-                    xmax={1}
-                    xstep={0.1}
-                    x={value}
-                    onChange={this.handleSliderChange}
-                    styles={{
-                        track: {
-                            width: '100%',
-                        },
-                        thumb: {
-                            border: '1px solid rgba(0, 0, 0, 0.3)',
-                        },
+                <RangeInput
+                    classNames={{
+                        ...rangeInputDefaultClassNames,
+                        inputRange: _cs(rangeInputDefaultClassNames.inputRange, styles.rangeInput),
+                        valueLabel: styles.valueLabel,
                     }}
+                    minValue={0}
+                    maxValue={1}
+                    step={0.1}
+                    value={value}
+                    onChange={this.handleRangeInputChange}
                 />
             </div>
         );

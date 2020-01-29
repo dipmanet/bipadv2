@@ -1,28 +1,33 @@
 .risk {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-large) - var(--spacing-medium-alt));
+
     .header {
         display: flex;
-        flex-direction: column;
-        padding: var(--spacing-medium) 0;
+        align-items: center;
+        flex-shrink: 0;
+        padding: calc(var(--spacing-medium-alt) - var(--spacing-extra-small)) calc(var(--spacing-medium-alt) - var(--spacing-medium));
 
         .heading {
             flex-grow: 1;
-
-            padding: 0 var(--spacing-medium);
-            color: var(--color-accent);
+            padding: var(--spacing-extra-small) var(--spacing-medium);
         }
     }
 
     .description {
-        padding: var(--spacing-small) var(--spacing-medium);
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+        color: var(--color-text-light);
+        font-size: var(--font-size-small-alt);
 
         .metric {
-            padding: var(--spacing-small);
+            padding: var(--spacing-extra-small-alt) var(--spacing-small);
         }
     }
 
     .options {
         position: relative;
-        padding: var(--spacing-medium);
+        padding: var(--spacing-medium) 0;
 
         .actions {
             display: flex;
@@ -33,11 +38,6 @@
             outline: none;
             padding: var(--spacing-small) var(--spacing-medium);
             font-size: var(--font-size-large);
-
-            &:hover {
-                background-color: var(--color-background-hover);
-                color: var(--color-accent);
-            }
 
             &.active {
                 background-color: var(--color-background);
@@ -50,10 +50,37 @@
             border: var(--width-separator-thin) solid var(--color-separator-light);
             box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.3);
             background-color: var(--color-background);
-            width: 200px;
+            width: 300px;
 
             .metric-input {
-                padding: var(--spacing-small) var(--spacing-medium);
+                display: flex;
+                padding: var(--spacing-large);
+
+                .label {
+                    flex-shrink: 0;
+                    width: 120px;
+                }
+
+                .range-input {
+                    flex-grow: 1;
+                }
+
+                .min-label {
+                    position: absolute;
+                    left: 4px;
+                    bottom: -3px;
+                    bottom: -12px;
+                }
+
+                .max-label {
+                    position: absolute;
+                    right: 0;
+                    bottom: -12px;
+                }
+
+                .value-label {
+                    display: none;
+                }
             }
         }
 

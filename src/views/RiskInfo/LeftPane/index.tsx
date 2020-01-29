@@ -16,7 +16,10 @@ import Button from '#rsca/Button';
 
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
-import { getHashFromBrowser } from '#rscg/HashManager';
+import {
+    setHashToBrowser,
+    getHashFromBrowser,
+} from '#rscg/HashManager';
 
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
@@ -30,7 +33,6 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
-    onViewChange: (key: AttributeKey | undefined) => void;
 }
 
 interface Params {
@@ -116,21 +118,13 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     }
 
     private handleAttributeClick = (key: AttributeKey) => {
-        const {
-            onViewChange,
-        } = this.props;
-
         this.setState({ activeAttribute: key });
-        onViewChange(key);
+        setHashToBrowser(key);
     }
 
     private handleDetailsBackButtonClick = () => {
-        const {
-            onViewChange,
-        } = this.props;
-
         this.setState({ activeAttribute: undefined });
-        onViewChange(undefined);
+        setHashToBrowser(undefined);
     }
 
     public render() {
@@ -151,8 +145,6 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 
         const headerStyle = activeAttribute ? ({
             borderTop: `3px solid ${attributeColorMap[activeAttribute]}`,
-            // backgroundColor: attributeColorMap[activeAttribute],
-            // color: '#fff',
         }) : ({
             borderTop: '3px solid transparent',
         });
@@ -179,6 +171,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                                 transparent
                             />
                             <h2 className={styles.heading}>
+                                Risk info / &nbsp;
                                 { attributeNames[activeAttribute] }
                             </h2>
                         </>
@@ -192,12 +185,6 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                     )}
                 </header>
                 <div className={styles.content}>
-                    <Overview
-                        titleShown={!activeAttribute}
-                        className={styles.overview}
-                        onAttributeClick={this.handleAttributeClick}
-                        activeAttribute={activeAttribute}
-                    />
                     {activeAttribute && (
                         <Details
                             className={styles.detail}
@@ -207,6 +194,12 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             activeView={activeAttribute}
                         />
                     )}
+                    <Overview
+                        titleShown={!activeAttribute}
+                        className={styles.overview}
+                        onAttributeClick={this.handleAttributeClick}
+                        activeAttribute={activeAttribute}
+                    />
                 </div>
             </div>
         );

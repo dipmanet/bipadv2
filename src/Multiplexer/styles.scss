@@ -4,6 +4,10 @@
     height: 100vh;
     overflow: auto;
 
+    button {
+        outline: none;
+    }
+
     .navbar {
         flex-shrink: 0;
         z-index: 1;

@@ -1,5 +1,5 @@
 .layer-group {
-    padding: calc(var(--spacing-medium-alt) - var(--spacing-small));
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small-alt)) calc(var(--spacing-large) - var(--spacing-medium));
 
     .header {
         display: flex;
@@ -9,35 +9,59 @@
         .title {
             flex-grow: 1;
             padding: 0 var(--spacing-medium);
+            font-size: var(--font-size-large);
         }
 
         .show-content-button {
             flex-shrink: 0;
             margin: 0 calc(var(--spacing-medium) - var(--spacing-small));
             padding: var(--spacing-extra-small-alt) var(--spacing-small);
+            color: var(--color-text-disabled);
+            font-size: var(--font-size-large);
+
+            &:hover {
+                color: var(--color-text);
+            }
         }
     }
 
-    .content {
-        padding: var(--spacing-extra-small) 0;
+    .short-description {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+        color: var(--color-text-light);
+        font-size: var(--font-size-small-alt);
+    }
 
-        .short-description {
-            padding: var(--spacing-extra-small) var(--spacing-medium);
-            font-size: var(--font-size-small);
+    .content {
+        .actions {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-extra-small);
+
+            .info-button {
+                // font-size: var(--font-size-large);
+            }
+
+            button {
+                margin: var(--spacing-extra-small-alt) calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
+                padding: 0;
+                padding: var(--spacing-extra-small-alt);
+            }
         }
 
-        h3 {
-            color: var(--color-text-label);
+
+        .title {
             font-size: var(--font-size-medium);
         }
     }
 
-    .layer-group {
-        background-color: rgba(0, 0, 0, .03);
-        padding: calc(var(--spacing-medium) - var(--spacing-small));
+    &:not(:last-child) {
+        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+    }
 
-        &:not(:last-child) {
-            border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
-        }
+
+    .layer-group {
+        margin: var(--spacing-medium-alt);
+        // background-color: rgba(0, 0, 0, .03);
+        padding: calc(var(--spacing-medium) - var(--spacing-small));
     }
 }
