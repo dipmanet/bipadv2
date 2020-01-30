@@ -1,4 +1,5 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 
 import Faram from '@togglecorp/faram';
 
@@ -16,14 +17,9 @@ import {
     Resource,
 } from '#store/atom/page/types';
 
-import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
-import Modal from '#rscv/Modal';
-import ModalBody from '#rscv/Modal/Body';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalFooter from '#rscv/Modal/Footer';
 
 import FinanceForm, { financeSchema } from './FinanceForm';
 import HealthForm, { healthSchema } from './HealthForm';
@@ -34,7 +30,7 @@ import styles from './styles.scss';
 interface OwnProps {
     resourceDetails: Resource;
     className?: string;
-    closeModal?: () => void;
+    onCloseButtonClick?: () => void;
     resourceId: number | undefined;
     resourceType: ResourceType | undefined;
 }
@@ -137,7 +133,7 @@ class EditResourceModal extends React.PureComponent<Props, State> {
             requests: {
                 editResourcePutRequest,
             },
-            closeModal,
+            onCloseButtonClick,
         } = this.props;
 
         editResourcePutRequest.do({
@@ -145,8 +141,8 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                 ...faramValues,
             },
             onSuccess: () => {
-                if (closeModal) {
-                    closeModal();
+                if (onCloseButtonClick) {
+                    onCloseButtonClick();
                 }
             },
             onFailure: (faramErrors: object) => {
@@ -160,7 +156,7 @@ class EditResourceModal extends React.PureComponent<Props, State> {
             resourceId,
             resourceType,
             className,
-            closeModal,
+            onCloseButtonClick,
             requests: {
                 editResourcePutRequest: {
                     pending,
@@ -178,18 +174,14 @@ class EditResourceModal extends React.PureComponent<Props, State> {
         const schema = this.getSchema(resourceType);
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Edit Resource"
-                    rightComponent={(
-                        <Button
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
+            <div className={_cs(className, styles.editResourceForm)}>
+                <header className={styles.header}>
+                    <h2 className={styles.heading}>
+                        Edit Resource
+                    </h2>
+                </header>
                 <Faram
+                    className={styles.content}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
@@ -197,13 +189,13 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalBody className={styles.modalBody}>
-                        {pending && <LoadingAnimation />}
-                    </ModalBody>
-                    { form }
-                    <ModalFooter>
+                    {pending && <LoadingAnimation />}
+                    <div className={styles.formInputElements}>
+                        { form }
+                    </div>
+                    <div className={styles.actions}>
                         <DangerButton
-                            onClick={closeModal}
+                            onClick={onCloseButtonClick}
                         >
                             Cancel
                         </DangerButton>
@@ -214,9 +206,9 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                         >
                             Submit
                         </PrimaryButton>
-                    </ModalFooter>
+                    </div>
                 </Faram>
-            </Modal>
+            </div>
         );
     }
 }

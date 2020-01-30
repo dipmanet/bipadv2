@@ -15,17 +15,16 @@ import {
 } from '@togglecorp/react-rest-request';
 
 import DangerButton from '#rsca/Button/DangerButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
+import AccentButton from '#rsca/Button/AccentButton';
 import ListView from '#rscv/List/ListView';
 
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import MapShapeEditor from '#re-map/MapShapeEditor';
+// import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
-import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
@@ -49,7 +48,7 @@ import {
     Resource,
 } from '#store/atom/page/types';
 
-import EditResourceModal from './EditResourceModal';
+import EditResourceForm from './EditResourceForm';
 
 import styles from './styles.scss';
 
@@ -61,7 +60,7 @@ interface State {
     resourceLngLat: [number, number] | undefined;
     activeLayerKey: ResourceType | undefined;
     resourceInfo: Resource | undefined;
-    openEditModal: boolean;
+    showResourceForm: boolean;
 }
 
 interface ResourceElement {
@@ -124,6 +123,13 @@ interface ResourceTooltipParams extends Resource {
     onEditClick: () => void;
 }
 
+const camelCaseToSentence = (text: string) => {
+    const result = text.replace(/([A-Z])/g, ' $1');
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+
+    return finalResult;
+};
+
 const ResourceTooltip = (params: ResourceTooltipParams) => {
     const { onEditClick, ...resourceDetails } = params;
 
@@ -137,6 +143,7 @@ const ResourceTooltip = (params: ResourceTooltipParams) => {
         labelClassName: styles.label,
         valueClassName: styles.value,
         ...item,
+        label: camelCaseToSentence(item.label),
     });
 
     return (
@@ -145,17 +152,22 @@ const ResourceTooltip = (params: ResourceTooltipParams) => {
                 {title}
             </h3>
             <ListView
+                className={styles.content}
                 data={data}
                 keySelector={resourceKeySelector}
                 renderer={TextOutput}
                 rendererParams={rendererParams}
             />
-            <PrimaryButton
-                title="Edit"
-                onClick={onEditClick}
-            >
-                Edit
-            </PrimaryButton>
+            <div className={styles.actions}>
+                <AccentButton
+                    title="Edit"
+                    onClick={onEditClick}
+                    transparent
+                    className={styles.editButton}
+                >
+                    Edit data
+                </AccentButton>
+            </div>
         </div>
     );
 };
@@ -168,7 +180,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
-            openEditModal: false,
+            showResourceForm: false,
             resourceListInsidePolygon: [],
         };
     }
@@ -284,14 +296,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private handleEditClick = () => {
         this.setState({
-            openEditModal: true,
+            showResourceForm: true,
             resourceLngLat: undefined,
         });
     }
 
-    private handleCloseModal = () => {
+    private handleEditResourceFormCloseButtonClick = () => {
         this.setState({
-            openEditModal: false,
+            showResourceForm: false,
         });
     }
 
@@ -312,7 +324,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         const pending = isAnyRequestPending(requests);
         const {
-            openEditModal,
+            showResourceForm,
             resourceLngLat,
             resourceInfo,
             resourceListInsidePolygon,
@@ -346,25 +358,25 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Clear
                         </DangerButton>
                     </header>
-                    <div className={styles.content}>
-                        <ListView
-                            data={resourceLayerList}
-                            keySelector={d => d.key}
-                            renderer={Option}
-                            rendererParams={this.getLayerRendererParams}
-                        />
-                        { resourceListInsidePolygon.length !== 0 && (
-                            <div className={styles.polygonSelectedLayerInfo}>
-                                { resourceListInsidePolygon.length }
-                            </div>
-                        )}
-                    </div>
-                    { openEditModal && resourceDetails && (
-                        <EditResourceModal
+                    <ListView
+                        className={styles.content}
+                        data={resourceLayerList}
+                        keySelector={d => d.key}
+                        renderer={Option}
+                        rendererParams={this.getLayerRendererParams}
+                    />
+                    {/* resourceListInsidePolygon.length !== 0 && (
+                        <div className={styles.polygonSelectedLayerInfo}>
+                            { resourceListInsidePolygon.length }
+                        </div>
+                    ) */}
+                    { showResourceForm && resourceDetails && (
+                        <EditResourceForm
+                            className={styles.editResourceForm}
                             resourceId={resourceDetails.id}
                             resourceType={activeLayerKey}
                             resourceDetails={resourceDetails}
-                            closeModal={this.handleCloseModal}
+                            onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
                         />
                     )}
                     <MapImage
@@ -381,6 +393,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     { activeLayerKey && (
                         <>
+                            {/*
                             <MapShapeEditor
                                 onCreate={this.handlePolygonCreate}
                                 onUpdate={this.handlePolygonUpdate}
@@ -392,6 +405,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     },
                                 }}
                             />
+                            */}
                             <MapSource
                                 sourceKey="resource-symbol"
                                 sourceOptions={{
