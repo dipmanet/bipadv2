@@ -22,44 +22,59 @@
     }
 
     .content {
+        flex-shrink: 0;
+        overflow: auto;
+    }
+
+    .edit-resource-form {
         flex-grow: 1;
         overflow: auto;
     }
 }
 
-%row {
-    display: table-row;
-
-    .label {
-        display: table-cell;
-        padding: var(--spacing-extra-small) var(--spacing-small);
-    }
-
-    .value {
-        display: table-cell;
-        padding: var(--spacing-extra-small) var(--spacing-small);
-    }
-}
-
 .resource-tooltip {
-    box-shadow: 0 -2px 4px -3px #000;
-    max-width: 240px;
+    display: flex;
+    flex-direction: column;
+    border-top: var(--width-separator-medium) solid var(--color-accent);
+    padding: calc(var(--spacing-large) - var(--spacing-medium));
+    width: 240px;
     max-height: 240px;
     overflow: auto;
 
     .heading {
-        padding: var(--spacing-medium) var(--spacing-medium);
+        flex-shrink: 0;
+        padding: var(--spacing-medium);
+        color: var(--color-primary);
     }
 
     .content {
-        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+        flex-grow: 1;
+        padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+        overflow: auto;
 
-        .description {
-            @extend %row;
+        .item {
+            display: table-row;
+
+            .value {
+                display: table-cell;
+                padding: var(--spacing-extra-small) var(--spacing-small);
+                font-weight: var(--font-weight-bold);
+            }
+
+            .label {
+                display: table-cell;
+                padding: var(--spacing-extra-small) var(--spacing-small);
+                text-transform: capitalize;
+            }
         }
+    }
 
-        .location {
-            @extend %row;
+    .actions {
+        flex-shrink: 0;
+        padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
+
+        .edit-button {
+            padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
         }
     }
 }

@@ -99,8 +99,11 @@ export interface Incident {
     incidentOn: string;
 }
 export interface Resource extends Field {
+    id: number;
+    title: string;
+    description: string;
     resourceType: string;
-    distance: number;
+    ward: number;
     point: {
         coordinates: unknown;
     };

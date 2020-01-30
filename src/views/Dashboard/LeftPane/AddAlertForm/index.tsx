@@ -140,7 +140,7 @@ const onFailure = ({
     };
 }) => {
     if (params.onFailure) {
-        onFailure(error.faramErrors);
+        params.onFailure(error.faramErrors);
     }
 };
 

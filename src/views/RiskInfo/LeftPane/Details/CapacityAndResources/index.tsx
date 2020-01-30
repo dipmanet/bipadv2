@@ -15,16 +15,16 @@ import {
 } from '@togglecorp/react-rest-request';
 
 import DangerButton from '#rsca/Button/DangerButton';
+import AccentButton from '#rsca/Button/AccentButton';
 import ListView from '#rscv/List/ListView';
 
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import MapShapeEditor from '#re-map/MapShapeEditor';
+// import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
-import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
@@ -44,22 +44,23 @@ import {
     ResourceType,
 } from '#types';
 
+import {
+    Resource,
+} from '#store/atom/page/types';
+
+import EditResourceForm from './EditResourceForm';
+
 import styles from './styles.scss';
 
 interface ComponentProps {
     className?: string;
 }
 
-interface ResourceDetails {
-    id: number;
-    title: string;
-    ['string']: string | object | number;
-}
-
 interface State {
     resourceLngLat: [number, number] | undefined;
     activeLayerKey: ResourceType | undefined;
-    resourceInfo: ResourceDetails | undefined;
+    resourceInfo: Resource | undefined;
+    showResourceForm: boolean;
 }
 
 interface ResourceElement {
@@ -68,6 +69,7 @@ interface ResourceElement {
 }
 
 interface Params {
+    resourceId: number;
 }
 
 type Props = NewProps<ComponentProps, Params>
@@ -114,23 +116,34 @@ interface ResourceResponseElement {
         ward: number;
     };
 }
-interface Resource {
-    label: string;
-    value: number | string | object;
-}
 
 const emptyResourceList: ResourceResponseElement[] = [];
-const resourceKeySelector = (d: Resource) => d.label;
 
-const ResourceTooltip = (resourceDetails: ResourceDetails) => {
+interface ResourceTooltipParams extends Resource {
+    onEditClick: () => void;
+}
+
+const camelCaseToSentence = (text: string) => {
+    const result = text.replace(/([A-Z])/g, ' $1');
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+
+    return finalResult;
+};
+
+const ResourceTooltip = (params: ResourceTooltipParams) => {
+    const { onEditClick, ...resourceDetails } = params;
+
     const { id, point, title, ...resource } = resourceDetails;
+
     const data = mapToList(resource, (value, key) => ({ label: key, value }));
+    const resourceKeySelector = (d: typeof data) => d.label;
 
     const rendererParams = (_: string, item: Resource) => ({
         className: styles.item,
         labelClassName: styles.label,
         valueClassName: styles.value,
         ...item,
+        label: camelCaseToSentence(item.label),
     });
 
     return (
@@ -139,11 +152,22 @@ const ResourceTooltip = (resourceDetails: ResourceDetails) => {
                 {title}
             </h3>
             <ListView
+                className={styles.content}
                 data={data}
                 keySelector={resourceKeySelector}
                 renderer={TextOutput}
                 rendererParams={rendererParams}
             />
+            <div className={styles.actions}>
+                <AccentButton
+                    title="Edit"
+                    onClick={onEditClick}
+                    transparent
+                    className={styles.editButton}
+                >
+                    Edit data
+                </AccentButton>
+            </div>
         </div>
     );
 };
@@ -156,6 +180,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
+            showResourceForm: false,
             resourceListInsidePolygon: [],
         };
     }
@@ -198,7 +223,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleResourceMouseEnter = () => {}
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
-        const { properties: { id, title, description, ward } } = feature;
+        const { properties: { id, title, description, ward, resourceType, point } } = feature;
 
         const {
             requests: {
@@ -217,9 +242,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({
             resourceLngLat: lngLat,
             resourceInfo: {
+                id,
                 title,
                 description,
                 ward,
+                resourceType,
+                point,
             },
         });
     }
@@ -227,6 +255,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleTooltipClose = () => {
         this.setState({
             resourceLngLat: undefined,
+            resourceInfo: undefined,
         });
     }
 
@@ -265,6 +294,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ resourceListInsidePolygon });
     }
 
+    private handleEditClick = () => {
+        this.setState({
+            showResourceForm: true,
+            resourceLngLat: undefined,
+        });
+    }
+
+    private handleEditResourceFormCloseButtonClick = () => {
+        this.setState({
+            showResourceForm: false,
+        });
+    }
+
     public render() {
         const {
             className,
@@ -275,13 +317,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
         const {
             resourceDetailGetRequest: {
-                response: resourceDetails,
+                response,
             },
         } = requests;
         const geojson = this.getGeojson(resourceList);
 
         const pending = isAnyRequestPending(requests);
         const {
+            showResourceForm,
             resourceLngLat,
             resourceInfo,
             resourceListInsidePolygon,
@@ -292,6 +335,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             closeButton: false,
             offset: 20,
         };
+
+        let resourceDetails: Resource | undefined;
+        if (response) {
+            resourceDetails = response as Resource;
+        }
 
         return (
             <>
@@ -310,19 +358,27 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Clear
                         </DangerButton>
                     </header>
-                    <div className={styles.content}>
-                        <ListView
-                            data={resourceLayerList}
-                            keySelector={d => d.key}
-                            renderer={Option}
-                            rendererParams={this.getLayerRendererParams}
+                    <ListView
+                        className={styles.content}
+                        data={resourceLayerList}
+                        keySelector={d => d.key}
+                        renderer={Option}
+                        rendererParams={this.getLayerRendererParams}
+                    />
+                    {/* resourceListInsidePolygon.length !== 0 && (
+                        <div className={styles.polygonSelectedLayerInfo}>
+                            { resourceListInsidePolygon.length }
+                        </div>
+                    ) */}
+                    { showResourceForm && resourceDetails && (
+                        <EditResourceForm
+                            className={styles.editResourceForm}
+                            resourceId={resourceDetails.id}
+                            resourceType={activeLayerKey}
+                            resourceDetails={resourceDetails}
+                            onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
                         />
-                        { resourceListInsidePolygon.length !== 0 && (
-                            <div className={styles.polygonSelectedLayerInfo}>
-                                { resourceListInsidePolygon.length }
-                            </div>
-                        )}
-                    </div>
+                    )}
                     <MapImage
                         url={HealthIcon}
                         name="health"
@@ -337,6 +393,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     { activeLayerKey && (
                         <>
+                            {/*
                             <MapShapeEditor
                                 onCreate={this.handlePolygonCreate}
                                 onUpdate={this.handlePolygonUpdate}
@@ -348,6 +405,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     },
                                 }}
                             />
+                            */}
                             <MapSource
                                 sourceKey="resource-symbol"
                                 sourceOptions={{
@@ -398,7 +456,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         },
                                     }}
                                 />
-                                { resourceLngLat && (
+                                { resourceLngLat && resourceInfo && (
                                     <MapTooltip
                                         coordinates={resourceLngLat}
                                         tooltipOptions={tooltipOptions}
@@ -407,6 +465,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         <ResourceTooltip
                                             {...resourceInfo}
                                             {...resourceDetails}
+                                            onEditClick={this.handleEditClick}
                                         />
                                     </MapTooltip>
                                 )}

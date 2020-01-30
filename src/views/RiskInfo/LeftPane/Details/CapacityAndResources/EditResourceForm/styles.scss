@@ -1,0 +1,55 @@
+.edit-resource-form {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
+
+    >.header {
+        display: flex;
+        flex-shrink: 0;
+        padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
+
+        .heading {
+            flex-grow: 1;
+            padding: var(--spacing-small);
+        }
+
+        .actions {
+            flex-shrink: 0;
+            padding: var(--spacing-small);
+        }
+    }
+
+    >.content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .form-input-elements {
+            flex-grow: 1;
+            padding: var(--spacing-medium);
+            overflow: auto;
+
+            :global {
+                .text-input,
+                .text-area,
+                .checkbox,
+                .number-input {
+                    margin: var(--spacing-medium) 0;
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            flex-shrink: 0;
+            justify-content: flex-end;
+            padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
+
+            button {
+                margin: 0 var(--spacing-extra-small-alt);
+            }
+        }
+    }
+}
