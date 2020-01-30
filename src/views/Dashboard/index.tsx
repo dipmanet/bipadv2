@@ -8,9 +8,6 @@ import {
     Obj,
 } from '@togglecorp/fujs';
 
-import { styleProperties } from '#constants';
-import { currentStyle } from '#rsu/styles';
-
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
 

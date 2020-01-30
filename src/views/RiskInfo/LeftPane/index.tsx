@@ -143,12 +143,6 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
             activeAttribute,
         } = this.state;
 
-        const headerStyle = activeAttribute ? ({
-            borderTop: `3px solid ${attributeColorMap[activeAttribute]}`,
-        }) : ({
-            borderTop: '3px solid transparent',
-        });
-
         return (
             <div className={
                 _cs(
@@ -158,10 +152,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                 )}
             >
                 <Loading pending={pending} />
-                <header
-                    className={styles.header}
-                    style={headerStyle}
-                >
+                <header className={styles.header}>
                     {activeAttribute ? (
                         <>
                             <Button

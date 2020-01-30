@@ -1,10 +1,7 @@
 .alert-item {
     display: flex;
     align-items: center;
-
-    &:not(:first-child) {
-        border-top: var(--width-separator-thin) solid var(--color-separator-light);
-    }
+    padding: calc(var(--spacing-medium-alt) - var(--spacing-medium)) 0;
 
     &.new {
         background-color: var(--color-background-new-item);
@@ -13,8 +10,8 @@
     .icon {
         flex-shrink: 0;
         margin: var(--spacing-small) var(--spacing-medium);
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
 
         path {
             fill: currentColor;

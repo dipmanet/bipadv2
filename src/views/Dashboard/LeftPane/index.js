@@ -74,6 +74,7 @@ export default class LeftPane extends React.PureComponent {
         onDeleteButtonClick: this.props.onDeleteAlertButtonClick,
         onHover: this.props.onAlertHover,
         isHovered: this.props.hoveredAlertId === d.id,
+        className: styles.alertItem,
     });
 
     getEventRendererParams = (_, d) => ({
@@ -83,6 +84,7 @@ export default class LeftPane extends React.PureComponent {
         onDeleteButtonClick: this.props.onDeleteEventButtonClick,
         onHover: this.props.onEventHover,
         isHovered: this.props.hoveredEventId === d.id,
+        className: styles.eventItem,
     });
 
     groupByHazard = memoize((alerts, hazards) => {
@@ -221,25 +223,36 @@ export default class LeftPane extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.leftPane)}>
-                <div className={styles.stats}>
-                    <TextOutput
-                        className={styles.stat}
-                        isNumericValue
-                        label="Alerts"
-                        labelClassName={styles.label}
-                        type="block"
-                        value={alertList.length}
-                        valueClassName={styles.value}
-                    />
-                    <TextOutput
-                        className={styles.stat}
-                        isNumericValue
-                        label="Events"
-                        labelClassName={styles.label}
-                        type="block"
-                        value={eventList.length}
-                        valueClassName={styles.value}
-                    />
+                <div className={styles.topContainer}>
+                    <div className={styles.stats}>
+                        <TextOutput
+                            className={styles.stat}
+                            isNumericValue
+                            label="Alerts"
+                            labelClassName={styles.label}
+                            type="block"
+                            value={alertList.length}
+                            valueClassName={styles.value}
+                        />
+                        <TextOutput
+                            className={styles.stat}
+                            isNumericValue
+                            label="Events"
+                            labelClassName={styles.label}
+                            type="block"
+                            value={eventList.length}
+                            valueClassName={styles.value}
+                        />
+                    </div>
+                    <div className={styles.actions}>
+                        <Button
+                            className={styles.visualizationsButton}
+                            transparent
+                            disabled
+                            iconName="bars"
+                            title="Show visualizations"
+                        />
+                    </div>
                 </div>
                 <div className={styles.bottomContainer}>
                     <div className={styles.alertList}>

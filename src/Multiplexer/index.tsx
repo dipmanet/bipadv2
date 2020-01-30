@@ -12,6 +12,7 @@ import memoize from 'memoize-one';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
+import MapBounds from '#re-map/MapBounds';
 import { getLayerName } from '#re-map/utils';
 
 import { setStyleProperty } from '#rsu/styles';
@@ -465,9 +466,23 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private getLayerOrder = memoize(activeLayers => (
-        activeLayers.map(d => getLayerName(d.layername, layerNameMap[d.type]))
-    ))
+    private getLayerOrder = memoize((activeLayers) => {
+        const otherLayers = [
+            getLayerName('risk-infoz-outlines', 'ward-outline'),
+            getLayerName('risk-infoz-outlines', 'municipality-outline'),
+            getLayerName('risk-infoz-outlines', 'district-outline'),
+            getLayerName('risk-infoz-outlines', 'province-outline'),
+            getLayerName('risk-infoz-outlines', 'ward-label'),
+            getLayerName('risk-infoz-outlines', 'municipality-label'),
+            getLayerName('risk-infoz-outlines', 'district-label'),
+            getLayerName('risk-infoz-outlines', 'province-label'),
+        ];
+        const layers = activeLayers.map(d => getLayerName(d.layername, layerNameMap[d.type]));
+        return [
+            ...layers,
+            ...otherLayers,
+        ];
+    })
 
     private getRegionName = (selectedRegion, provinces, districts, municipalities) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
@@ -590,9 +605,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     )}
                                 />
                                 {this.renderRoutes()}
-                                <MapOrder
-                                    ordering={orderedLayers}
-                                />
+                                <MapOrder ordering={orderedLayers} />
                             </Map>
                         </RiskInfoLayerContext.Provider>
                     </div>

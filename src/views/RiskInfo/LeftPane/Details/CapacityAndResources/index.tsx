@@ -195,6 +195,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     }
 
+    private handleResourceMouseEnter = () => {}
+
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
         const { properties: { id, title, description, ward } } = feature;
 
@@ -378,6 +380,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 <MapLayer
                                     layerKey="resource-symbol-background"
                                     onClick={this.handleResourceClick}
+                                    onMouserEnter={this.handleResourceMouseEnter}
                                     layerOptions={{
                                         type: 'circle',
                                         filter: ['!', ['has', 'point_count']],

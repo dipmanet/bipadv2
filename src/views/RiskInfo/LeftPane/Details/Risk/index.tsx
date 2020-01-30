@@ -1,8 +1,12 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    listToMap,
+} from '@togglecorp/fujs';
 import { extent } from 'd3-array';
 import RangeInput from 'react-input-range';
 import rangeInputDefaultClassNames from 'react-input-range/src/js/input-range/default-class-names';
+import memoize from 'memoize-one';
 
 import {
     methods,
@@ -89,6 +93,39 @@ const colorGrade = [
     '#b31010',
 ];
 
+const RiskTooltipOutput = ({ label, value }) => (
+    <div className={styles.riskTooltipOutput}>
+        <div className={styles.label}>
+            { label }
+        </div>
+        <div className={styles.value}>
+            { value }
+        </div>
+    </div>
+);
+
+const RiskTooltip = ({ layer, feature }) => (
+    <div className={styles.riskTooltip}>
+        <h3 className={styles.heading}>
+            { feature.properties.title }
+        </h3>
+        <div className={styles.content}>
+            <RiskTooltipOutput
+                label="Risk score:"
+                value={feature.state.value}
+            />
+            <RiskTooltipOutput
+                label="Rank:"
+                value={layer.rankMap[feature.id]}
+            />
+        </div>
+    </div>
+);
+
+const getRankMap = memoize(data => (
+    listToMap(data, d => d.district, d => d.rank)
+));
+
 const transformRiskDataToLayer = (data: RiskData[]) => {
     const mapState = data.map(d => ({
         id: d.district,
@@ -107,6 +144,8 @@ const transformRiskDataToLayer = (data: RiskData[]) => {
         opacity: 1,
         mapState,
         paint,
+        tooltipRenderer: RiskTooltip,
+        rankMap: getRankMap(data),
     };
 };
 
@@ -310,7 +349,7 @@ class Risk extends React.PureComponent<Props, State> {
                                                     ),
                                                 }}
                                                 minValue={0}
-                                                maxValue={2}
+                                                maxValue={5}
                                                 step={1}
                                                 value={this.state.metricValues[m]}
                                                 onChange={(value) => {
