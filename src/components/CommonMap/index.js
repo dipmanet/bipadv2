@@ -52,7 +52,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    boundsPadding: undefined,
+    boundsPadding: 24,
     regionLevel: undefined,
     selectedProvinceId: undefined,
     selectedDistrictId: undefined,

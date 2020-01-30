@@ -1,7 +1,7 @@
 .event-item {
     display: flex;
     align-items: center;
-    border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+    padding: calc(var(--spacing-medium-alt) - var(--spacing-medium)) 0;
 
     .icon {
         flex-shrink: 0;
