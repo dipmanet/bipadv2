@@ -52,6 +52,9 @@ class OpacityInput extends React.PureComponent<Props, State> {
                     value={value}
                     onChange={this.handleRangeInputChange}
                 />
+                <div className={styles.value}>
+                    { value }
+                </div>
             </div>
         );
     }

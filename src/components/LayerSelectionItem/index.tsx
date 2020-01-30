@@ -12,6 +12,7 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     data: LayerHierarchy;
+    disabled?: boolean;
 }
 
 class LayerSelectionItem extends React.PureComponent<Props> {
@@ -39,6 +40,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
         const {
             className,
             data,
+            disabled,
         } = this.props;
 
         const { activeLayers } = this.context;
@@ -48,6 +50,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             <div className={_cs(className, styles.layerSelectionItem)}>
                 <div className={styles.switchInput}>
                     <Switch
+                        disabled={disabled}
                         className={styles.switch}
                         on
                         off={false}

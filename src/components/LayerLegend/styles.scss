@@ -1,0 +1,22 @@
+.legend {
+    padding: var(--spacing-small) var(--spacing-medium);
+
+    .choropleth-legend {
+        display: flex;
+
+        .legend-element {
+            flex-grow: 1;
+
+            .color {
+                height: var(--font-size-small);
+            }
+
+            .value {
+                text-align: center;
+                color: var(--color-text-label);
+                font-size: var(--font-size-small);
+                font-weight: var(--font-weight-bold);
+            }
+        }
+    }
+}

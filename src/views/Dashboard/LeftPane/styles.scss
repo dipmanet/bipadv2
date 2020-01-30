@@ -8,12 +8,10 @@
     .top-container {
         display: flex;
         flex-shrink: 0;
-        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
 
         .stats {
             display: flex;
             flex-grow: 1;
-            background-color: var(--color-foreground-alt);
 
             .stat {
                 display: flex;
@@ -24,8 +22,9 @@
                     order: 1;
                     padding: 0 var(--spacing-extra-small);
                     text-align: center;
-                    font-size: var(--font-size-ultra-large-alt);
-                    font-weight: var(--font-weight-normal);
+                    color: var(--color-danger);
+                    font-size: var(--font-size-ultra-large);
+                    font-weight: var(--font-weight-light);
                 }
 
                 .label {
@@ -34,7 +33,7 @@
                     text-align: center;
                     text-transform: uppercase;
                     font-size: var(--font-size-small);
-                    font-weight: var(--font-weight-thin);
+                    font-weight: var(--font-weight-medium);
                 }
             }
         }
@@ -71,9 +70,9 @@
                 .icon {
                     flex-shrink: 0;
                     margin: 0 var(--spacing-medium);
-                    background-color: var(--color-text);
-                    width: var(--font-size-medium);
-                    height: var(--font-size-medium);
+                    background-color: var(--color-text-light);
+                    width: var(--font-size-small);
+                    height: var(--font-size-small);
                 }
 
                 .heading {
@@ -81,6 +80,7 @@
                     padding: var(--spacing-medium);
                     color: var(--color-primary);
                     font-size: var(--font-size-extra-large);
+                    font-weight: var(--font-weight-light);
                 }
 
                 .actions {

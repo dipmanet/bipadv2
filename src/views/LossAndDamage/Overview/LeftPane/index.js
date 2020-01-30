@@ -94,6 +94,10 @@ export default class LeftPane extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.leftPane)}>
+                <LossDetails
+                    className={styles.lossDetails}
+                    data={lossAndDamageList}
+                />
                 <div className={styles.info}>
                     <Icon
                         className={styles.icon}
@@ -107,10 +111,6 @@ export default class LeftPane extends React.PureComponent {
                         />
                     </div>
                 </div>
-                <LossDetails
-                    className={styles.lossDetails}
-                    data={lossAndDamageList}
-                />
                 <Visualizations
                     className={styles.visualizations}
                     lossAndDamageList={lossAndDamageList}

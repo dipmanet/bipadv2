@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 import Button from '#rsca/Button';
 import SortableListView from '#rscv/SortableListView';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+import LayerLegend from '#components/LayerLegend';
 
 import OpacityInput from '#components/OpacityInput';
 
@@ -14,11 +15,18 @@ interface Props {
     className?: string;
 }
 
+interface State {
+    showOpacityInput: boolean;
+    showLegend: boolean;
+}
+
 const ActiveLayer = ({
     className,
     layer,
     onRemoveButtonClick,
     onOpacityChange,
+    showLegend,
+    showOpacityInput,
 }) => (
     <div className={styles.activeLayer}>
         <header className={styles.header}>
@@ -33,15 +41,28 @@ const ActiveLayer = ({
             />
         </header>
         <div className={styles.content}>
-            <OpacityInput
-                value={layer.opacity}
-                onChange={(key, value) => onOpacityChange(layer, value)}
-            />
+            { showOpacityInput && (
+                <OpacityInput
+                    className={styles.opacityInput}
+                    value={layer.opacity}
+                    onChange={(key, value) => onOpacityChange(layer, value)}
+                />
+            )}
+            { showLegend && (
+                <LayerLegend
+                    layer={layer}
+                />
+            )}
         </div>
     </div>
 );
 
-class ActiveLayers extends React.PureComponent<Props> {
+class ActiveLayers extends React.PureComponent<Props, State> {
+    public state = {
+        showLegend: true,
+        showOpacityInput: true,
+    }
+
     private handleRemoveButtonClick = (layer) => {
         const { removeLayer } = this.context;
         removeLayer(layer.id);
@@ -55,10 +76,24 @@ class ActiveLayers extends React.PureComponent<Props> {
         });
     }
 
+    private handleToggleLegendVisibilityButtonClick = () => {
+        this.setState(
+            ({ showLegend }) => ({ showLegend: !showLegend }),
+        );
+    }
+
+    private handleToggleOpacityInputVisibilityButtonClick = () => {
+        this.setState(
+            ({ showOpacityInput }) => ({ showOpacityInput: !showOpacityInput }),
+        );
+    }
+
     private getRendererParams = (key, layer) => ({
         layer,
         onRemoveButtonClick: this.handleRemoveButtonClick,
         onOpacityChange: this.handleOpacityChange,
+        showOpacityInput: this.state.showOpacityInput,
+        showLegend: this.state.showLegend,
     })
 
     private getData = memoize(data => (
@@ -76,12 +111,42 @@ class ActiveLayers extends React.PureComponent<Props> {
             activeLayers,
         } = this.context;
 
+        const {
+            showLegend,
+            showOpacityInput,
+        } = this.state;
+
         return (
             <div className={_cs(styles.activeLayers, className)}>
-                <h4 className={styles.heading}>
-                    Active layers
-                </h4>
+                <header className={styles.header}>
+                    <h3 className={styles.heading}>
+                        Active layers
+                    </h3>
+                    <div className={styles.actions}>
+                        <Button
+                            title="Toggle opacity input visibility"
+                            transparent
+                            onClick={this.handleToggleOpacityInputVisibilityButtonClick}
+                            className={_cs(
+                                styles.toggleOpacityInputVisibilityButton,
+                                showOpacityInput && styles.active,
+                            )}
+                            iconName="contrast"
+                        />
+                        <Button
+                            title="Toggle legend visiblity"
+                            transparent
+                            onClick={this.handleToggleLegendVisibilityButtonClick}
+                            className={_cs(
+                                styles.toggleLegendVisibilityButton,
+                                showLegend && styles.active,
+                            )}
+                            iconName="list"
+                        />
+                    </div>
+                </header>
                 <SortableListView
+                    dragHandleClassName={styles.dragHandle}
                     className={styles.content}
                     itemClassName={styles.activeLayerContainer}
                     data={this.getData(activeLayers)}

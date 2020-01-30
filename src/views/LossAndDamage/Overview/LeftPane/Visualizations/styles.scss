@@ -1,8 +1,7 @@
 .visualizations-container {
     %visualization-container {
         margin: var(--spacing-medium);
-        // border-top: var(--width-separator-thin) solid var(--color-separator);
-        background-color: var(--color-background);
+        // background-color: var(--color-background);
         padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
         .header {

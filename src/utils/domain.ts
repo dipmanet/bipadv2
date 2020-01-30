@@ -675,7 +675,7 @@ export function getProvinceFilter(selectedProvinceId: number | undefined) {
 }
 
 export function getRasterTile(layer: Layer | LayerWithGroup) {
-    const tile = [
+    const tileUrl = [
         'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
         '&version=1.1.1',
         '&service=WMS',
@@ -690,14 +690,24 @@ export function getRasterTile(layer: Layer | LayerWithGroup) {
         '&format=image/png',
     ].join('');
 
-    return tile;
+    return tileUrl;
 }
 
-export function getRasterLegendURL(layer: Layer | LayerWithGroup) {
-    const { layername } = layer;
-    const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
+export function getRasterLegendUrl(layer: Layer | LayerWithGroup) {
+    // const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
+    const legendUrl = [
+        'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetLegendGraphic',
+        `&layer=Bipad:${layer.layername}`,
+        '&format=image/png',
+        '&legend_options=fontAntiAliasing:true;layout:vertical;columnheight:100;dpi:96;labelMargin:2;fontSize:9;',
+        '&width=12',
+        '&height=12',
+    ].join('');
 
-    return url;
+    return legendUrl;
 }
 
 export function getLayerHierarchy(
@@ -763,18 +773,23 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
     const gap = range / colorDomain.length;
 
     const colors: (string | number)[] = [];
+    const legend: {
+        [key: string]: number;
+    } = {};
 
     if (maxValue <= 1 || gap < 1) {
         colorDomain.forEach((color, i) => {
             const val = minValue + (i + 1) * gap;
             colors.push(color);
             colors.push(val);
+            legend[color] = val;
         });
     } else {
         colorDomain.forEach((color, i) => {
             const val = Math.floor(minValue + (i + 1) * gap);
             colors.push(color);
             colors.push(val);
+            legend[color] = val;
         });
     }
 
@@ -808,5 +823,5 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
         };
     }
 
-    return paint;
+    return { paint, legend };
 };

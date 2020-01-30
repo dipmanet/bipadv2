@@ -10,7 +10,7 @@
 .main-content {
     position: absolute;
     bottom: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
+    left: calc(var(--width-left-panel) + var(--spacing-medium));
     transform: none;
     z-index: 11;
     border: var(--width-separator-thin) solid var(--color-separator);
@@ -19,7 +19,7 @@
     .active-layer-list {
         width: 320px;
         min-height: 96px;
-        max-height: 240px;
+        max-height: 320px;
     }
 }
 

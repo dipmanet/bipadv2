@@ -23,7 +23,6 @@ import Loading from '#components/Loading';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 import DataTableModal from './DataTableModal';
-// import Map from './Map';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
 import { RiskData } from '#types';
@@ -60,11 +59,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         url: '/earthquake-riskscore/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ params, response }) => {
-            if (params.onSuccess) {
-                params.onSuccess(response);
-            }
-        },
     },
 };
 
@@ -133,7 +127,7 @@ const transformRiskDataToLayer = (data: RiskData[]) => {
     }));
 
     const [min, max] = extent(mapState, d => d.value);
-    const paint = generatePaint(colorGrade, min || 0, max || 0);
+    const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
 
     return {
         id: 'durham-earthquake-risk',
@@ -144,6 +138,7 @@ const transformRiskDataToLayer = (data: RiskData[]) => {
         opacity: 1,
         mapState,
         paint,
+        legend,
         tooltipRenderer: RiskTooltip,
         rankMap: getRankMap(data),
     };
@@ -166,10 +161,6 @@ class Risk extends React.PureComponent<Props, State> {
             showMetricSettings: false,
             opacityValue: 1,
         };
-
-        props.requests.riskGetRequest.setDefaultParams({
-            onSuccess: this.handleRiskGetRequestSuccess,
-        });
     }
 
     private handleRiskGetRequestSuccess = (response) => {
@@ -266,7 +257,10 @@ class Risk extends React.PureComponent<Props, State> {
                         </h2>
                     </header>
                     <div className={styles.content}>
-                        <LayerSelectionItem data={riskLayer} />
+                        <LayerSelectionItem
+                            data={riskLayer}
+                            disabled={pending}
+                        />
                         <div className={styles.description}>
                             The map represents the spatial distribution of total
                             relative seismic risk for Nepal. The data is calculated
@@ -305,6 +299,7 @@ class Risk extends React.PureComponent<Props, State> {
                                     initialShowModal={false}
                                     iconName="table"
                                     transparent
+                                    disabled={pending}
                                     className={styles.optionButton}
                                 />
                                 <Button
@@ -319,6 +314,7 @@ class Risk extends React.PureComponent<Props, State> {
                                 />
                                 <Button
                                     iconName="settings"
+                                    disabled={pending}
                                     onClick={this.handleShowMetricsButtonClick}
                                     transparent
                                     className={_cs(

@@ -21,7 +21,9 @@ const userDefinedSchemas: Schema[] = [
     },
 ];
 
-const warning = !isProduction;
+// const warning = !isProduction;
+const warning = false;
+
 const dict = new Dict({ warning });
 
 [

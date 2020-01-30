@@ -12,15 +12,16 @@
 
     .range-input {
         flex-grow: 1;
-        margin: 0 var(--spacing-small);
+        margin: 0 var(--spacing-medium);
     }
 
     .value-label {
-        position: absolute;
-        bottom: -3px;
-        z-index: 1;
-        color: #fff;
-        font-size: 9px;
-        pointer-events: none;
+        display: none;
+    }
+
+    .value {
+        flex-shrink: 0;
+        padding: 0 var(--spacing-small);
+        font-weight: var(--font-weight-bold);
     }
 }
