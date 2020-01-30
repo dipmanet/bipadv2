@@ -15,6 +15,7 @@ import {
 } from '@togglecorp/react-rest-request';
 
 import DangerButton from '#rsca/Button/DangerButton';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ListView from '#rscv/List/ListView';
 
 import MapSource from '#re-map/MapSource';
@@ -44,22 +45,23 @@ import {
     ResourceType,
 } from '#types';
 
+import {
+    Resource,
+} from '#store/atom/page/types';
+
+import EditResourceModal from './EditResourceModal';
+
 import styles from './styles.scss';
 
 interface ComponentProps {
     className?: string;
 }
 
-interface ResourceDetails {
-    id: number;
-    title: string;
-    ['string']: string | object | number;
-}
-
 interface State {
     resourceLngLat: [number, number] | undefined;
     activeLayerKey: ResourceType | undefined;
-    resourceInfo: ResourceDetails | undefined;
+    resourceInfo: Resource | undefined;
+    openEditModal: boolean;
 }
 
 interface ResourceElement {
@@ -68,6 +70,7 @@ interface ResourceElement {
 }
 
 interface Params {
+    resourceId: number;
 }
 
 type Props = NewProps<ComponentProps, Params>
@@ -114,17 +117,20 @@ interface ResourceResponseElement {
         ward: number;
     };
 }
-interface Resource {
-    label: string;
-    value: number | string | object;
-}
 
 const emptyResourceList: ResourceResponseElement[] = [];
-const resourceKeySelector = (d: Resource) => d.label;
 
-const ResourceTooltip = (resourceDetails: ResourceDetails) => {
+interface ResourceTooltipParams extends Resource {
+    onEditClick: () => void;
+}
+
+const ResourceTooltip = (params: ResourceTooltipParams) => {
+    const { onEditClick, ...resourceDetails } = params;
+
     const { id, point, title, ...resource } = resourceDetails;
+
     const data = mapToList(resource, (value, key) => ({ label: key, value }));
+    const resourceKeySelector = (d: typeof data) => d.label;
 
     const rendererParams = (_: string, item: Resource) => ({
         className: styles.item,
@@ -144,6 +150,12 @@ const ResourceTooltip = (resourceDetails: ResourceDetails) => {
                 renderer={TextOutput}
                 rendererParams={rendererParams}
             />
+            <PrimaryButton
+                title="Edit"
+                onClick={onEditClick}
+            >
+                Edit
+            </PrimaryButton>
         </div>
     );
 };
@@ -156,6 +168,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
+            openEditModal: false,
             resourceListInsidePolygon: [],
         };
     }
@@ -198,7 +211,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleResourceMouseEnter = () => {}
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
-        const { properties: { id, title, description, ward } } = feature;
+        const { properties: { id, title, description, ward, resourceType, point } } = feature;
 
         const {
             requests: {
@@ -217,9 +230,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({
             resourceLngLat: lngLat,
             resourceInfo: {
+                id,
                 title,
                 description,
                 ward,
+                resourceType,
+                point,
             },
         });
     }
@@ -227,6 +243,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleTooltipClose = () => {
         this.setState({
             resourceLngLat: undefined,
+            resourceInfo: undefined,
         });
     }
 
@@ -265,6 +282,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ resourceListInsidePolygon });
     }
 
+    private handleEditClick = () => {
+        this.setState({
+            openEditModal: true,
+            resourceLngLat: undefined,
+        });
+    }
+
+    private handleCloseModal = () => {
+        this.setState({
+            openEditModal: false,
+        });
+    }
+
     public render() {
         const {
             className,
@@ -275,13 +305,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
         const {
             resourceDetailGetRequest: {
-                response: resourceDetails,
+                response,
             },
         } = requests;
         const geojson = this.getGeojson(resourceList);
 
         const pending = isAnyRequestPending(requests);
         const {
+            openEditModal,
             resourceLngLat,
             resourceInfo,
             resourceListInsidePolygon,
@@ -292,6 +323,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             closeButton: false,
             offset: 20,
         };
+
+        let resourceDetails: Resource | undefined;
+        if (response) {
+            resourceDetails = response as Resource;
+        }
 
         return (
             <>
@@ -323,6 +359,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             </div>
                         )}
                     </div>
+                    { openEditModal && resourceDetails && (
+                        <EditResourceModal
+                            resourceId={resourceDetails.id}
+                            resourceType={activeLayerKey}
+                            resourceDetails={resourceDetails}
+                            closeModal={this.handleCloseModal}
+                        />
+                    )}
                     <MapImage
                         url={HealthIcon}
                         name="health"
@@ -398,7 +442,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         },
                                     }}
                                 />
-                                { resourceLngLat && (
+                                { resourceLngLat && resourceInfo && (
                                     <MapTooltip
                                         coordinates={resourceLngLat}
                                         tooltipOptions={tooltipOptions}
@@ -407,6 +451,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         <ResourceTooltip
                                             {...resourceInfo}
                                             {...resourceDetails}
+                                            onEditClick={this.handleEditClick}
                                         />
                                     </MapTooltip>
                                 )}
