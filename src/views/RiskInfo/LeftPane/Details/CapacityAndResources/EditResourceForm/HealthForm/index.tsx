@@ -81,22 +81,24 @@ function HealthForm() {
 }
 
 export const healthSchema = {
-    title: [requiredCondition],
-    description: [],
-    bedCount: [],
-    type: [],
-    cbsCode: [],
-    phoneNumber: [],
-    emailAddress: [],
-    emergencyService: [],
-    icu: [],
-    nicu: [],
-    operatingTheater: [],
-    xRay: [],
-    ambulanceService: [],
-    openingHours: [],
-    noOfBeds: [],
-    specialization: [],
+    fields: {
+        title: [requiredCondition],
+        description: [],
+        bedCount: [],
+        type: [],
+        cbsCode: [],
+        phoneNumber: [],
+        emailAddress: [],
+        emergencyService: [],
+        icu: [],
+        nicu: [],
+        operatingTheater: [],
+        xRay: [],
+        ambulanceService: [],
+        openingHours: [],
+        noOfBeds: [],
+        specialization: [],
+    },
 };
 
 export default HealthForm;
