@@ -37,14 +37,15 @@
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            z-index: 1;
-            box-shadow: 3px 0 5px -3px rgba(0, 0, 0, 0.3);
+            z-index: 11;
+            box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.3);
             width: var(--width-left-panel);
             overflow: auto;
 
             .brand {
                 flex-shrink: 0;
-                border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+                z-index: 1;
+                box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.5);
             }
 
             .left-pane-container {
@@ -104,5 +105,18 @@
 
     .mapboxgl-ctrl-logo {
         display: none!important;
+    }
+
+    .modal {
+        border-radius: 5px;
+        padding: var(--spacing-small);
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
     }
 }

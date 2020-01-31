@@ -5,13 +5,12 @@
     .info {
         display: flex;
         align-items: center;
-        background-color: var(--color-info);
         padding: var(--spacing-medium) calc(var(--spacing-medium) - var(--spacing-small));
-        color: var(--color-text-on-info);
 
         .icon {
             flex-shrink: 0;
             margin: 0 var(--spacing-small);
+            color: var(--color-info);
             font-size: var(--font-size-large);
         }
 
@@ -19,6 +18,8 @@
             display: flex;
             flex-grow: 1;
             padding: 0 var(--spacing-small);
+            color: var(--color-text-light);
+            font-weight: var(--font-weight-bold);
         }
     }
 }

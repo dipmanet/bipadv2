@@ -7,8 +7,6 @@
 
     .loss-details {
         flex-shrink: 0;
-        border: var(--width-separator-thin) solid var(--color-separator-light);
-        padding: var(--spacing-small);
     }
 
     .incident-list {
@@ -25,8 +23,9 @@
 
             .heading {
                 flex-shrink: 0;
-                padding: var(--spacing-medium);
+                padding: var(--spacing-large);
                 color: var(--color-primary);
+                font-weight: var(--font-weight-light);
 
                 .buttons {
                     display: flex;
