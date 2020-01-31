@@ -1,20 +1,33 @@
 @import '~base-scss/base';
 
 .filter {
+    display: flex;
+    flex-direction: column;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
     padding: 0 var(--spacing-extra-small-alt);
 
     .region-select-input {
+        display: flex;
+        flex-direction: column;
         margin: calc(var(--spacing-medium) + var(--spacing-extra-small-alt)) var(--spacing-medium);
     }
 
     .real-time-sources-input {
+        display: flex;
+        flex-direction: column;
         margin: var(--spacing-medium);
     }
 
     .other-sources-input {
+        display: flex;
+        flex-direction: column;
         margin: var(--spacing-medium);
+
+        .list {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 
     :global {

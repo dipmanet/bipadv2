@@ -121,6 +121,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                 <ListSelection
                     label="Other layers"
                     className={styles.otherSourcesInput}
+                    listClassName={styles.list}
                     faramElementName="otherSources"
                     options={otherSourceList}
                     keySelector={sourceKeySelector}

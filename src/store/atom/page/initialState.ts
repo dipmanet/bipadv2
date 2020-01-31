@@ -189,6 +189,7 @@ const state: PageState = {
             { id: 1, title: 'Earthquake' },
             { id: 5, title: 'Pollution' },
             { id: 4, title: 'Forest Fire' },
+            { id: 6, title: 'Streamflow' },
         ],
         filters: {
             faramValues: {
