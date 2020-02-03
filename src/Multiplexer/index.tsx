@@ -12,7 +12,6 @@ import memoize from 'memoize-one';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
-import MapBounds from '#re-map/MapBounds';
 import { getLayerName } from '#re-map/utils';
 
 import { setStyleProperty } from '#rsu/styles';
@@ -374,7 +373,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private setLeftPanelWidth = memoize((boundingClientRect) => {
         const { width = 0 } = boundingClientRect;
-        setStyleProperty('widthLeftPanel', `${bound(56 + width * 0.24, 240, 480)}px`);
+        setStyleProperty('widthLeftPanel', `${bound(32 + width * 0.28, 240, 520)}px`);
     })
 
     private setLeftPaneComponent = (content: React.ElementType, leftPaneClassName?: string) => {

@@ -1,3 +1,12 @@
+const incidentCircleRadii = [
+    'case',
+    ['==', ['get', 'severity'], 'Minor'], 8,
+    ['==', ['get', 'severity'], 'Major'], 11,
+    ['==', ['get', 'severity'], 'Severe'], 15,
+    ['==', ['get', 'severity'], 'Catastrophic'], 20,
+    7,
+];
+
 export default {
     province: {
         outline: {
@@ -130,6 +139,21 @@ export default {
             ],
             'circle-opacity': 0.9,
         },
+        circleDim: {
+            'circle-color': ['get', 'hazardColor'],
+            'circle-radius': 8,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                0,
+            ],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
+        },
         animatedCircle: {
             'circle-color': ['get', 'hazardColor'],
 
@@ -172,20 +196,28 @@ export default {
         paint: {
             'text-color': ['get', 'hazardColor'],
             'text-halo-color': '#000000',
-            /*
-            'text-halo-color': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                '#000000',
-                'rgba(0, 0, 0, 0)',
-            ],
-             */
             'text-halo-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 2,
                 1,
             ],
         },
+        dimPaint: {
+            'text-color': ['get', 'hazardColor'],
+            'text-halo-color': '#000000',
+            'text-halo-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                1,
+            ],
+            opacity: ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                0.1,
+                1,
+            ],
+        },
     },
+
     eventConvex: {
         outline: {
             'line-color': ['get', 'hazardColor'],
@@ -209,19 +241,28 @@ export default {
     incidentPoint: {
         fill: {
             'circle-color': ['get', 'hazardColor'],
-            'circle-radius': [
-                'case',
-                ['==', ['get', 'severity'], 'Minor'], 5,
-                ['==', ['get', 'severity'], 'Major'], 7,
-                ['==', ['get', 'severity'], 'Severe'], 9,
-                ['==', ['get', 'severity'], 'Catastrophic'], 11,
-                5,
-            ],
-            'circle-opacity': 0.95,
+            'circle-radius': [...incidentCircleRadii],
+            'circle-opacity': 0.8,
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 3,
                 1,
+            ],
+            'circle-stroke-color': '#414141',
+        },
+        dimFill: {
+            'circle-color': ['get', 'hazardColor'],
+            'circle-radius': [...incidentCircleRadii],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                0,
             ],
         },
         animatedFill: {

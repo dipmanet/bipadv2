@@ -1,0 +1,9 @@
+.disasters {
+    padding: calc(var(--spacing-large) - var(--spacing-medium));
+
+    .header {
+        .heading {
+            padding: var(--spacing-medium);
+        }
+    }
+}

@@ -120,6 +120,7 @@ class IncidentMap extends React.PureComponent {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            isHovered,
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -172,7 +173,9 @@ class IncidentMap extends React.PureComponent {
                         layerKey="incident-points-fill"
                         layerOptions={{
                             type: 'circle',
-                            paint: mapStyles.incidentPoint.fill,
+                            paint: isHovered
+                                ? mapStyles.incidentPoint.dimFill
+                                : mapStyles.incidentPoint.fill,
                             enableHover: true,
                         }}
                         onClick={this.handleIncidentClick}

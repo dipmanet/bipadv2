@@ -228,6 +228,8 @@ class AlertEventMap extends React.PureComponent {
             recentDay,
             alertHoverAttributes,
             eventHoverAttributes,
+            isEventHovered,
+            isAlertHovered,
         } = this.props;
 
         const featureConvexCollection = this.getConvexAlertsFeatureCollection(alertList, hazards);
@@ -321,7 +323,9 @@ class AlertEventMap extends React.PureComponent {
                         layerKey="alerts-point"
                         layerOptions={{
                             type: 'circle',
-                            paint: mapStyles.alertPoint.circle,
+                            paint: isAlertHovered
+                                ? mapStyles.alertPoint.circleDim
+                                : mapStyles.alertPoint.circle,
                         }}
                         onMouseEnter={this.handleAlertEnter}
                         onMouseLeave={this.handleAlertLeave}
@@ -387,7 +391,9 @@ class AlertEventMap extends React.PureComponent {
                         layerOptions={{
                             type: 'symbol',
                             layout: mapStyles.eventSymbol.layout,
-                            paint: mapStyles.eventSymbol.paint,
+                            paint: isEventHovered
+                                ? mapStyles.eventSymbol.paintDim
+                                : mapStyles.eventSymbol.paint,
                         }}
                         onClick={this.handleEventClick}
                         onMouseEnter={this.handleEventEnter}
