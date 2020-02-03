@@ -347,6 +347,26 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
+                { showStreamFlow && (
+                    <MapSource
+                        sourceKey="real-time-streamflow"
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [getRasterTile(streamFlowLayer)],
+                            tileSize: 256,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 0.5,
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )}
                 { coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
@@ -477,26 +497,6 @@ export default class RealTimeMap extends React.PureComponent {
                         </React.Fragment>
                     )}
                 </MapSource>
-                { showStreamFlow && (
-                    <MapSource
-                        sourceKey="real-time-streamflow"
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: [getRasterTile(streamFlowLayer)],
-                            tileSize: 256,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey="raster-layer"
-                            layerOptions={{
-                                type: 'raster',
-                                paint: {
-                                    'raster-opacity': 1,
-                                },
-                            }}
-                        />
-                    </MapSource>
-                )}
                 {showRiverModal && (
                     <RiverDetails
                         title={riverTitle}
