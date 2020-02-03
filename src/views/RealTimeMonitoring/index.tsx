@@ -68,7 +68,7 @@ interface PropsFromState {
     realTimeFireList: PageType.RealTimeFire[];
     realTimePollutionList: PageType.RealTimePollution[];
     realTimeSourceList: PageType.RealTimeSource[];
-    otherSouceList: PageType.OtherSource[];
+    otherSourceList: PageType.OtherSource[];
     filters: PageType.FiltersWithRegion['faramValues'];
 }
 
@@ -288,6 +288,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
         const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
+        const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
 
         return (
             <>
@@ -408,6 +409,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;
         const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
+        const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
+
         const LegendView = this.renderLegend;
 
         const pending = (
@@ -428,6 +431,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showEarthquake={showEarthquake}
                     showFire={showFire}
                     showPollution={showPollution}
+                    showStreamFlow={showStreamflow}
                 />
                 <Page
                     leftContentClassName={styles.left}

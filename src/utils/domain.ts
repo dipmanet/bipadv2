@@ -693,7 +693,7 @@ export function getRasterTile(layer: Layer | LayerWithGroup) {
     return tileUrl;
 }
 
-export function getRasterLegendUrl(layer: Layer | LayerWithGroup) {
+export function getRasterLegendUrl(layer: Layer | LayerWithGroup | { layername: string }) {
     // const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
     const legendUrl = [
         'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',

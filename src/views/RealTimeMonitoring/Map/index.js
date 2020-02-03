@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
 import MapSource from '#re-map/MapSource';
@@ -19,6 +20,7 @@ import {
     rainToGeojson,
     fireToGeojson,
     pollutionToGeojson,
+    getRasterTile,
 } from '#utils/domain';
 
 import RiverDetails from './RiverDetails';
@@ -28,6 +30,11 @@ import styles from './styles.scss';
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
 );
+
+RealTimeTooltip.propTypes = {
+    renderer: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
 
 export default class RealTimeMap extends React.PureComponent {
     constructor(props) {
@@ -297,6 +304,7 @@ export default class RealTimeMap extends React.PureComponent {
             showEarthquake,
             showFire,
             showPollution,
+            showStreamFlow,
             rightPaneExpanded,
             leftPaneExpanded,
         } = this.props;
@@ -313,6 +321,8 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
+        // TODO this is hard coded for now.get stream flow layer from api later
+        const streamFlowLayer = { layername: 'Streamflow' };
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         const {
@@ -337,6 +347,26 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
+                { showStreamFlow && (
+                    <MapSource
+                        sourceKey="real-time-streamflow"
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [getRasterTile(streamFlowLayer)],
+                            tileSize: 256,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 0.5,
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )}
                 { coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
