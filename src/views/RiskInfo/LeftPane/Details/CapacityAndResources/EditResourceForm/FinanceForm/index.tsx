@@ -78,22 +78,24 @@ function FinanceForm() {
 }
 
 export const financeSchema = {
-    title: [requiredCondition],
-    description: [],
-    cbsCode: [],
-    population: [],
-    channel: [],
-    accessPointCount: [],
-    type: [],
-    phoneNumber: [],
-    emailAddress: [],
-    website: [],
-    openingHours: [],
-    operatorType: [],
-    bankType: [],
-    atmAvailable: [],
-    placeAddress: [],
-    network: [],
+    fields: {
+        title: [requiredCondition],
+        description: [],
+        cbsCode: [],
+        population: [],
+        channel: [],
+        accessPointCount: [],
+        type: [],
+        phoneNumber: [],
+        emailAddress: [],
+        website: [],
+        openingHours: [],
+        operatorType: [],
+        bankType: [],
+        atmAvailable: [],
+        placeAddress: [],
+        network: [],
+    },
 };
 
 export default FinanceForm;

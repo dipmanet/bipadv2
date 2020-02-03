@@ -209,7 +209,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { properties: { cluster_id: clusterId }, source } = feature;
         const { map } = this.context;
 
-        if (source) {
+        if (source && map && clusterId) {
             map
                 .getSource(source)
                 .getClusterExpansionZoom(clusterId, (error: string, zoom: number) => {
@@ -224,6 +224,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
         const { properties: { id, title, description, ward, resourceType, point } } = feature;
+        const { coordinates } = JSON.parse(point);
+        const { map } = this.context;
+
+        if (coordinates && map) {
+            map.flyTo({
+                center: coordinates,
+                zoom: 10,
+            });
+        }
 
         const {
             requests: {
@@ -240,7 +249,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
 
         this.setState({
-            resourceLngLat: lngLat,
+            resourceLngLat: coordinates,
             resourceInfo: {
                 id,
                 title,
@@ -260,7 +269,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleLayerClick = (layerKey) => {
-        this.setState({ activeLayerKey: layerKey });
+        this.setState({
+            activeLayerKey: layerKey,
+            showResourceForm: false,
+        });
 
         this.props.requests.resourceGetRequest.do({
             resourceType: layerKey,
@@ -268,6 +280,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleLayerUnselect = () => {
+        const { map } = this.context;
+        const nepalBounds = [
+            80.05858661752784, 26.347836996368667,
+            88.20166918432409, 30.44702867091792,
+        ];
+        map.fitBounds(nepalBounds);
         this.setState({ activeLayerKey: undefined });
     }
 
@@ -333,7 +351,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
-            offset: 20,
+            offset: 10,
         };
 
         let resourceDetails: Resource | undefined;
