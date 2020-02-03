@@ -1,9 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import {
-    getRasterTile,
-    // getRasterLegendURL,
-} from '#utils/domain';
+import { getRasterTile } from '#utils/domain';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';

@@ -26,14 +26,14 @@ export default class Profile extends React.PureComponent {
         super(props);
 
         this.tabs = {
+            summary: 'Summary',
             projectsProfile: 'Projects',
-            disasterProfile: 'Disaster',
             contact: 'Contact',
             indicator: 'Indicator',
         };
 
         this.views = {
-            disasterProfile: {
+            summary: {
                 component: DisasterProfile,
             },
             projectsProfile: {
@@ -46,31 +46,6 @@ export default class Profile extends React.PureComponent {
                 component: Indicator,
             },
         };
-
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-
-        if (mapControls) {
-            this.mapControls = mapControls;
-            this.previousMapControlDisplay = mapControls.style.display;
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.mapControls) {
-            this.mapControls.style.display = this.previousMapControlDisplay;
-        }
-    }
-
-    setMapControlDisplay = (currentPage) => {
-        if (window.location.hash.substring(2) === 'projectsProfile') {
-            this.mapControls.style.display = 'block';
-        } else {
-            this.mapControls.style.display = 'none';
-        }
-    }
-
-    handleHashChange = (hash) => {
-        this.setMapControlDisplay(hash);
     }
 
     render() {

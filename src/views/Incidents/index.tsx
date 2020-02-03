@@ -241,6 +241,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     recentDay={RECENT_DAY}
                     onIncidentHover={this.handleIncidentHover}
                     mapHoverAttributes={mapHoverAttributes}
+                    isHovered={!!hoveredIncidentId}
                 />
                 <Page
                     leftContentClassName={styles.leftPaneContainer}

@@ -1,0 +1,113 @@
+import React from 'react';
+import { _cs } from '@togglecorp/fujs';
+
+import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
+
+import EducationIcon from '#resources/icons/Education.svg';
+import HealthIcon from '#resources/icons/Health-facility.svg';
+import FinanceIcon from '#resources/icons/Financing.svg';
+import CommunicationIcon from '#resources/icons/Cell-tower.svg';
+import GovernanceIcon from '#resources/icons/Food-Security.svg';
+import TourismIcon from '#resources/icons/Tourist.svg';
+import IndustryIcon from '#resources/icons/Factory.svg';
+import CulturalIcon from '#resources/icons/Dreamcatcher.svg';
+import EnergyIcon from '#resources/icons/Energy.svg';
+
+import styles from './styles.scss';
+
+interface Props {
+    className?: string;
+}
+
+interface Params {}
+
+const attributes = {
+    education: {
+        dataKey: 'educationCount',
+        title: 'Educational instutions',
+        icon: EducationIcon,
+    },
+    health: {
+        dataKey: 'healthCount',
+        title: 'Health facilities',
+        icon: HealthIcon,
+    },
+    finance: {
+        dataKey: 'financeCount',
+        title: 'Finance count',
+        icon: FinanceIcon,
+    },
+    communication: {
+        dataKey: 'communicationCount',
+        title: 'Communication source',
+        icon: CommunicationIcon,
+    },
+    governance: {
+        dataKey: 'governanceCount',
+        title: 'Governance',
+        icon: GovernanceIcon,
+    },
+    tourism: {
+        dataKey: 'tourismCount',
+        title: 'Tourism places',
+        icon: TourismIcon,
+    },
+    industry: {
+        dataKey: 'industryCount',
+        title: 'Industries',
+        icon: IndustryIcon,
+    },
+    cultural: {
+        dataKey: 'culturalCount',
+        title: 'Cultural places',
+        icon: CulturalIcon,
+    },
+    energy: {
+        dataKey: 'energyCount',
+        title: 'Energy station',
+        icon: EnergyIcon,
+    },
+};
+
+class ResourceProfile extends React.PureComponent<Props> {
+    public render() {
+        const {
+            className,
+            data = {},
+        } = this.props;
+
+
+        return (
+            <div className={_cs(styles.resourceProfile, className)}>
+                <header className={styles.header}>
+                    <h2 className={styles.heading}>
+                        Available resources
+                    </h2>
+                </header>
+                <div className={styles.content}>
+                    { Object.keys(attributes).map(key => (
+                        <div
+                            key={key}
+                            className={styles.attribute}
+                        >
+                            <ScalableVectorGraphcis
+                                className={styles.icon}
+                                src={attributes[key].icon}
+                            />
+                            <div className={styles.details}>
+                                <div className={styles.value}>
+                                    { data[attributes[key].dataKey] || '-' }
+                                </div>
+                                <div className={styles.label}>
+                                    { attributes[key].title }
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+}
+
+export default ResourceProfile;

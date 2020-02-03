@@ -452,6 +452,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                     onEventHover={this.handleEventHover}
                     alertHoverAttributes={alertMapHoverAttributes}
                     eventHoverAttributes={eventMapHoverAttributes}
+                    isEventHovered={!!hoveredEventId}
+                    isAlertHovered={!!hoveredAlertId}
                 />
                 <Page
                     leftContentClassName={styles.leftContainer}
