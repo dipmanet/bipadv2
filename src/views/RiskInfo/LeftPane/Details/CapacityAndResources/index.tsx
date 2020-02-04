@@ -1,28 +1,28 @@
 import React from 'react';
 import memoize from 'memoize-one';
+import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
     _cs,
     mapToList,
 } from '@togglecorp/fujs';
 
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
-
 import {
-    methods,
+    createRequestClient,
     NewProps,
     ClientAttributes,
-    createRequestClient,
-} from '@togglecorp/react-rest-request';
+    methods,
+} from '#request';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import AccentButton from '#rsca/Button/AccentButton';
 import ListView from '#rscv/List/ListView';
 
+import { Draw } from '#re-map/type';
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-// import MapShapeEditor from '#re-map/MapShapeEditor';
+import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
 import TextOutput from '#components/TextOutput';
@@ -61,6 +61,7 @@ interface State {
     activeLayerKey: ResourceType | undefined;
     resourceInfo: Resource | undefined;
     showResourceForm: boolean;
+    selectedFeatures: MapboxGeoJSONFeature[] | undefined;
 }
 
 interface ResourceElement {
@@ -69,7 +70,9 @@ interface ResourceElement {
 }
 
 interface Params {
-    resourceId: number;
+    resourceType?: string;
+    resourceId?: number;
+    coordinates?: [number, number][];
 }
 
 type Props = NewProps<ComponentProps, Params>
@@ -99,9 +102,34 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         },
     },
     resourceDetailGetRequest: {
-        url: ({ params: { resourceId } }) => `/resource/${resourceId}/`,
+        url: ({ params }) => {
+            if (!params || !params.resourceId) {
+                return '';
+            }
+            return `/resource/${params.resourceId}/`;
+        },
         method: methods.GET,
         onMount: false,
+    },
+    polygonResourceDetailGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => {
+            if (!params || !params.coordinates || !params.resourceType) {
+                return undefined;
+            }
+
+            return {
+                format: 'json',
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                resource_type: params.resourceType,
+                boundary: JSON.stringify({
+                    type: 'Polygon',
+                    coordinates: params.coordinates,
+                }),
+            };
+        },
     },
 };
 
@@ -181,7 +209,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceLngLat: undefined,
             resourceInfo: undefined,
             showResourceForm: false,
-            resourceListInsidePolygon: [],
+            selectedFeatures: undefined,
         };
     }
 
@@ -198,7 +226,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         return geojson;
     })
 
-    private getLayerRendererParams = (key, layer) => ({
+    private getLayerRendererParams = (key: string, layer: ResourceElement) => ({
         optionKey: key,
         label: layer.title,
         onClick: this.handleLayerClick,
@@ -268,7 +296,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleLayerClick = (layerKey) => {
+    private handleLayerClick = (layerKey: ResourceType) => {
         this.setState({
             activeLayerKey: layerKey,
             showResourceForm: false,
@@ -289,27 +317,56 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ activeLayerKey: undefined });
     }
 
-    private handlePolygonCreate = (features) => {
-        const { requests } = this.props;
-        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+    private handlePolygonCreate = (features: MapboxGeoJSONFeature[], draw: Draw) => {
+        const {
+            requests: {
+                polygonResourceDetailGetRequest,
+            },
+        } = this.props;
 
-        const resourceListInsidePolygon = resourceList.filter(
-            (d => booleanPointInPolygon(d.point, features[0].geometry)),
-        );
+        const { activeLayerKey, selectedFeatures } = this.state;
 
-        this.setState({ resourceListInsidePolygon });
+        if (selectedFeatures && selectedFeatures[0].id) {
+            draw.delete(selectedFeatures[0].id);
+        }
+
+        polygonResourceDetailGetRequest.do({
+            coordinates: features[0].geometry.coordinates,
+            resourceType: activeLayerKey,
+        });
+
+        this.setState({
+            selectedFeatures: features,
+        });
     }
 
-    private handlePolygonUpdate = (features) => {
-        const { requests } = this.props;
-        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
-        // console.warn('Create', features, resourceList);
+    private handlePolygonUpdate = (features: MapboxGeoJSONFeature[], draw: Draw) => {
+        const {
+            requests: {
+                polygonResourceDetailGetRequest,
+            },
+        } = this.props;
 
-        const resourceListInsidePolygon = resourceList.filter(
-            (d => booleanPointInPolygon(d.point, features[0].geometry)),
-        );
+        const { activeLayerKey, selectedFeatures } = this.state;
 
-        this.setState({ resourceListInsidePolygon });
+        if (selectedFeatures && selectedFeatures[0].id) {
+            draw.delete(selectedFeatures[0].id);
+        }
+
+        polygonResourceDetailGetRequest.do({
+            coordinates: features[0].geometry.coordinates,
+            resourceType: activeLayerKey,
+        });
+
+        this.setState({
+            selectedFeatures: features,
+        });
+    }
+
+    private handlePolygonDelete = (_: MapboxGeoJSONFeature[]) => {
+        this.setState({
+            selectedFeatures: undefined,
+        });
     }
 
     private handleEditClick = () => {
@@ -332,12 +389,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { activeLayerKey } = this.state;
-        const resourceList = getResults(requests, 'resourceGetRequest', emptyResourceList) as ResourceResponseElement[];
+        const resourceList = getResults(
+            requests,
+            'resourceGetRequest',
+            emptyResourceList,
+        ) as ResourceResponseElement[];
         const {
             resourceDetailGetRequest: {
                 response,
             },
         } = requests;
+        const polygonResources = getResults(
+            requests,
+            'polygonResourceDetailGetRequest',
+            emptyResourceList,
+        ) as ResourceResponseElement[];
+
         const geojson = this.getGeojson(resourceList);
 
         const pending = isAnyRequestPending(requests);
@@ -345,7 +412,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             showResourceForm,
             resourceLngLat,
             resourceInfo,
-            resourceListInsidePolygon,
+            selectedFeatures,
         } = this.state;
 
         const tooltipOptions = {
@@ -411,10 +478,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     { activeLayerKey && (
                         <>
-                            {/*
                             <MapShapeEditor
+                                geoJsons={selectedFeatures}
                                 onCreate={this.handlePolygonCreate}
                                 onUpdate={this.handlePolygonUpdate}
+                                onDelete={this.handlePolygonDelete}
                                 drawOptions={{
                                     displayControlsDefault: false,
                                     controls: {
@@ -423,7 +491,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     },
                                 }}
                             />
-                            */}
                             <MapSource
                                 sourceKey="resource-symbol"
                                 sourceOptions={{
