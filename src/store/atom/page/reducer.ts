@@ -114,6 +114,13 @@ export const setEventListAction = ({ eventList }: { eventList: Type.Event[]}) =>
     eventList,
 });
 
+export const setFiltersAction = (
+    { filters }: Type.SetFilters,
+) => ({
+    type: Type.PageType.SET_FILTERS,
+    filters,
+});
+
 export const setFiltersActionDP = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
 ) => ({
@@ -278,6 +285,19 @@ export const setProfileContactFiltersAction = (
 });
 
 //  REDUCERS
+
+const setFilters = (state: Type.PageState, action: Type.SetFilters) => {
+    const { filters } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.filters = filters;
+
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 const setRegion = (state: Type.PageState, action: Type.SetRegion) => {
     const { region } = action;
@@ -981,6 +1001,8 @@ export default function routeReducer(
             return setWards(state, action);
         case Type.PageType.SET_LOSS_LIST:
             return setLossList(state, action);
+        case Type.PageType.SET_FILTERS:
+            return setFilters(state, action);
         case Type.PageType.DP__SET_ALERTS:
             return setAlertList(state, action);
         case Type.PageType.DP__SET_FILTERS:

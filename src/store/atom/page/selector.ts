@@ -148,6 +148,48 @@ export const agricultureLossTypeListSelector = (
 
 export const countryListSelector = ({ page }: AppState) => page.countryList;
 
+const regionLevelToNameMap = {
+    1: 'province',
+    2: 'district',
+    3: 'municipality',
+};
+
+const transformRegionToFilter = (region) => {
+    if (!region || !region.adminLevel || !region.geoarea) {
+        return {};
+    }
+
+    const label = regionLevelToNameMap[region.adminLevel];
+    if (label) {
+        return {
+            [label]: region.geoarea,
+        };
+    }
+
+    return {};
+};
+
+const transformDataRangeToFilter = (dataRange) => {
+    const {
+        startDate,
+        endDate,
+    } = dataRange;
+
+    return {
+        startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
+        endDate: endDate ? (new Date(endDate)).toISOString() : undefined,
+    };
+};
+
+export const filtersSelector = ({ page }: AppState) => page.filters;
+export const dashboardFiltersSelector = createSelector(
+    filtersSelector,
+    filters => ({
+        ...transformRegionToFilter(filters.region),
+        ...transformDataRangeToFilter(filters.dataDateRange),
+    }),
+);
+
 // dashboardPage
 
 export const filtersSelectorDP = createSelector(

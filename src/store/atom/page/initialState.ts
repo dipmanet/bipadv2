@@ -1,6 +1,6 @@
 import { PageState } from './types';
 
-const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
+// const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
 
 const state: PageState = {
     eventTypes: {},
@@ -9,6 +9,12 @@ const state: PageState = {
 
     region: {
         adminLevel: undefined,
+    },
+
+    filters: {
+        region: {},
+        hazard: {},
+        dataDateRange: {},
     },
 
     adminLevelList: [
@@ -37,8 +43,6 @@ const state: PageState = {
 
     documentCategoryList: [],
 
-    // selectedMapStyle: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
-    // selectedMapStyle: `https://api.maptiler.com/tiles/v3/tiles.json?key=${maptilerAccessToken}`,
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
     hazardTypes: {},
     resourceTypeList: [

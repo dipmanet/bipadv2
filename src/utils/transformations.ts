@@ -8,7 +8,7 @@ const addDaysToDate = (date: Date, days: number) => {
     return newDate;
 };
 
-const pastDaysToDateRange = (pastDays: number) => {
+export const pastDaysToDateRange = (pastDays: number) => {
     const today = new Date();
     const lastDate = addDaysToDate(today, -pastDays);
     return {

@@ -16,6 +16,7 @@
 
     .content {
         display: flex;
+        position: relative;
         flex-grow: 1;
         overflow: auto;
 
@@ -62,6 +63,14 @@
                 visibility: hidden;
                 z-index: -1;
             }
+        }
+
+        .filters {
+            position: absolute;
+            top: var(--spacing-medium);
+            right: var(--spacing-medium);
+            z-index: 11;
+            width: 240px;
         }
     }
 }

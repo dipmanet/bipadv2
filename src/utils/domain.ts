@@ -137,11 +137,11 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
 };
 
 export const lossMetrics = [
-    { key: 'count', label: 'incidents' },
-    { key: 'estimatedLoss', label: 'estimated loss (NPR)' },
-    { key: 'infrastructureDestroyedCount', label: 'infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'livestock destroyed' },
-    { key: 'peopleDeathCount', label: 'people death' },
+    { key: 'count', label: 'Incidents' },
+    { key: 'peopleDeathCount', label: 'People death' },
+    { key: 'estimatedLoss', label: 'Estimated loss (NPR)' },
+    { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed' },
+    { key: 'livestockDestroyedCount', label: 'Livestock destroyed' },
 ];
 
 // CONVERSION TO GEOJSON

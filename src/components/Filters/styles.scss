@@ -1,12 +1,72 @@
 .filters {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .3);
     background-color: var(--color-foreground);
-    padding: var(--spacing-medium);
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-medium));
 
-    .region-select-input {
-        margin-bottom: var(--spacing-medium);
+    >.header {
+        .heading {
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
     }
 
-    .event-select-input {
-        margin-bottom: var(--spacing-medium);
+    >.content {
+        .tabs {
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
+
+        .filter-view-container {
+            display: flex;
+            flex-direction: column;
+            max-height: 40vh;
+            overflow: auto;
+
+            > .header {
+                display: flex;
+                flex-grow: 1;
+
+                .heading {
+                    flex-grow: 1;
+                    padding: var(--spacing-small) var(--spacing-medium);
+                }
+
+                .close-button {
+                    flex-shrink: 0;
+                    margin: 0 calc(var(--spacing-medium) - var(--spacing-small));
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                }
+            }
+
+            .active-view {
+                flex-grow: 1;
+                padding: var(--spacing-small);
+                overflow: auto;
+            }
+
+            .stepwise-region-select-input {
+                display: flex;
+                flex-direction: column;
+                padding: calc(var(--spacing-medium) - var(--spacing-small)) var(--spacing-small);
+            }
+
+            .date-range-input {
+                padding: var(--spacing-medium) 0;
+            }
+        }
+    }
+}
+
+.filter-icon {
+    border-bottom: var(--width-separator-medium) solid var(--color-separator);
+    cursor: pointer;
+    padding: var(--spacing-small) var(--spacing-large);
+    font-size: var(--font-size-large);
+
+    &.active {
+        border-bottom-color: var(--color-accent);
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
     }
 }

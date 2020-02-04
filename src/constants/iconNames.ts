@@ -67,6 +67,10 @@ const iconNames = {
     infoOutline: 'ion-ios-information-outline',
     settings: 'ion-ios-settings-strong',
     bars: 'ion-stats-bars',
+
+    map: 'ion-map',
+    warning: 'ion-android-warning',
+    dataRange: 'ion-android-time',
 };
 
 export default iconNames;

@@ -37,7 +37,7 @@ import {
     alertListSelectorDP,
     eventListSelector,
     hazardTypesSelector,
-    filtersValuesSelectorDP,
+    dashboardFiltersSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -69,7 +69,8 @@ interface PropsFromState {
     alertList: PageTypes.Alert[];
     eventList: PageTypes.Event[];
     hazardTypes: Obj<PageTypes.HazardType>;
-    filters: PageTypes.FiltersWithRegion['faramValues'];
+    filters: {};
+    // filters: PageTypes.FiltersWithRegion['faramValues'];
 }
 interface PropsFromDispatch {
     setEventList: typeof setEventListAction;
@@ -82,12 +83,22 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     alertList: alertListSelectorDP(state),
     eventList: eventListSelector(state),
     hazardTypes: hazardTypesSelector(state),
-    filters: filtersValuesSelectorDP(state),
+    filters: dashboardFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAlertList: params => dispatch(setAlertListActionDP(params)),
     setEventList: params => dispatch(setEventListAction(params)),
+});
+
+const transformFilters = ({
+    startDate,
+    endDate,
+    ...otherFilters
+}) => ({
+    ...otherFilters,
+    created_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
+    created_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -96,7 +107,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         // We have to transform dateRange to created_on__lt and created_on__gt
         query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'created_on'),
+            ...transformFilters(filters),
             expand: ['event'],
             ordering: '-created_on',
         }),
@@ -121,15 +132,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazard, dateRange, region } },
-                prevProps: { filters: {
-                    hazard: prevHazard,
-                    dateRange: prevDateRange,
-                    region: prevRegion,
-                } },
-            }) => (
-                hazard !== prevHazard || dateRange !== prevDateRange || region !== prevRegion
-            ),
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
+
+                return shouldRequest;
+            },
         },
         extras: {
             schemaName: 'alertResponse',
@@ -428,6 +437,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 alertsRequest: { pending: alertsPending },
                 eventsRequest: { pending: eventsPending },
             },
+            filters,
         } = this.props;
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);

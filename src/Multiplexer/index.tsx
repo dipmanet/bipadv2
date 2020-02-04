@@ -16,6 +16,10 @@ import { getLayerName } from '#re-map/utils';
 
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
+import DangerButton from '#rsca/Button/DangerButton';
+
+import { AppState } from '#store/types';
+
 import {
     District,
     Province,
@@ -23,7 +27,6 @@ import {
     Region,
 } from '#store/atom/page/types';
 
-import DangerButton from '#rsca/Button/DangerButton';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
@@ -31,9 +34,9 @@ import LayerSwitch from '#components/LayerSwitch';
 import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import { AppState } from '#store/types';
-
 import AppBrand from '#components/AppBrand';
+import Filters from '#components/Filters';
+
 import {
     districtsSelector,
     municipalitiesSelector,
@@ -551,6 +554,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             <PageContext.Provider value={pageProps}>
                 <div className={styles.multiplexer}>
                     <div className={_cs(styles.content, 'bipad-main-content')}>
+                        <Filters
+                            className={styles.filters}
+                        />
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
                                 mapStyle={mapStyle}

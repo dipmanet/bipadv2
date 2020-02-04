@@ -419,6 +419,11 @@ export interface PageState {
     mapStyles: MapStyle[];
 
     region: Region;
+    filters: {
+        region: {};
+        hazard: {};
+        dataDateRange: {};
+    };
 
     adminLevelList: AdminLevel[];
 
@@ -469,6 +474,8 @@ export enum PageType {
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
     SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
 
+    SET_FILTERS = 'page/SET_FILTERS',
+
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
     DP__SET_EVENTS = 'page/DASHBOARD/SET_EVENTS',
@@ -510,6 +517,11 @@ export enum PageType {
 }
 
 // ACTION CREATOR INTERFACE
+
+export interface SetFilters {
+    type: typeof PageType.SET_FILTERS;
+    filters: {};
+}
 
 export interface SetRegion {
     type: typeof PageType.SET_REGION;
