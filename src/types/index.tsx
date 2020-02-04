@@ -87,10 +87,13 @@ export interface VulnerabilityOption {
 
 export interface VulnerabilityType {
     id: string;
-    label: string;
-    indicatorType: string;
+    indicatorType: 'positive' | 'negative';
     children: VulnerabilityType[];
     isParent?: boolean;
+    valueType: 'index' | 'count';
+    title: string;
+    suffix?: string;
+    iconName?: string;
 }
 
 export interface LayerHierarchy extends LayerGroup {
