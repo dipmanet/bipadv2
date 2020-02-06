@@ -14,7 +14,6 @@ import SelectInput from '#rsci/SelectInput';
 import Map from '../Map';
 import LeftPane from './LeftPane';
 import Seekbar from './Seekbar';
-import Filters from '#components/Filters';
 
 import {
     getAggregatedStats,
@@ -382,10 +381,6 @@ export default class Timeline extends React.PureComponent {
                             rightPaneExpanded={rightPaneExpanded}
                             minDate={this.props.minDate}
                         />
-                    )}
-                    rightContentClassName={styles.right}
-                    rightContent={(
-                        <Filters />
                     )}
                     mainContentClassName={styles.main}
                     mainContent={(

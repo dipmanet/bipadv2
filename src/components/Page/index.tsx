@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-    _cs,
-    isDefined,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
-import PageContext from '#components/PageContext';
+import PageContext, { PageContextProps } from '#components/PageContext';
 
 import styles from './styles.scss';
 
@@ -14,10 +11,12 @@ interface Props {
     leftContent?: React.ReactNode;
     rightContent?: React.ReactNode;
     mainContent?: React.ReactNode;
+    extraFilterContent?: React.ReactNode;
 
-    leftContentClassName?: string;
-    rightContentClassName?: string;
-    mainContentClassName?: string;
+    leftContentContainerClassName?: string;
+    rightContentContainerClassName?: string;
+    mainContentContainerClassName?: string;
+    extraFilterContentContainerClassName?: string;
 
     hideMap?: boolean;
 }
@@ -27,77 +26,99 @@ interface State {
 
 export default class Page extends React.PureComponent<Props, State> {
     public componentDidMount() {
-        const { setLeftPaneComponent } = this.context;
+        const { hideMap: shouldHideMap } = this.props;
         const {
-            leftContent,
-            leftContentClassName,
+            showMap,
             hideMap,
-        } = this.props;
+        } = this.context;
 
-        if (setLeftPaneComponent && (leftContent || leftContent === null)) {
-            setLeftPaneComponent(leftContent, leftContentClassName);
-        }
 
-        if (hideMap && this.context.hideMap) {
-            this.context.hideMap();
-        } else if (this.context.showMap) {
-            this.context.showMap();
-        }
+        this.transferContents(this.props, this.context);
+        this.syncMapVisibility(shouldHideMap, hideMap, showMap);
     }
 
     public componentWillReceiveProps(nextProps: Props) {
-        const { setLeftPaneComponent } = this.context;
+        const { hideMap: shouldHideMap } = nextProps;
+        const { hideMap: prevShouldHideMap } = this.props;
+
         const {
-            leftContent,
-            leftContentClassName,
+            showMap,
             hideMap,
-        } = nextProps;
+        } = this.context;
 
-        const { hideMap: oldHideMap } = this.props;
-
-        if (setLeftPaneComponent && (leftContent || leftContent === null)) {
-            setLeftPaneComponent(leftContent, leftContentClassName);
-        }
-
-        if (hideMap !== oldHideMap) {
-            if (hideMap && this.context.hideMap) {
-                this.context.hideMap();
-            } else if (this.context.showMap) {
-                this.context.showMap();
-            }
+        this.transferContents(this.props, this.context);
+        if (shouldHideMap !== prevShouldHideMap) {
+            this.syncMapVisibility(shouldHideMap, hideMap, showMap);
         }
     }
 
     public componentWillUnmount() {
-        const { hideMap } = this.props;
+        const { hideMap: shouldHideMap } = this.props;
+        const { showMap } = this.context;
 
-        if (hideMap && this.context.showMap) {
-            this.context.showMap();
+        if (shouldHideMap && showMap) {
+            showMap();
         }
     }
 
+    private syncMapVisibility = (
+        shouldHideMap: boolean | undefined,
+        hideMap?: PageContextProps['hideMap'],
+        showMap?: PageContextProps['showMap'],
+    ) => {
+        if (shouldHideMap && hideMap) {
+            hideMap();
+        } else if (showMap) {
+            showMap();
+        }
+    }
+
+
+    private transferContents = (props: Props, context: PageContextProps) => {
+        const {
+            setLeftContent,
+            setRightContent,
+            setFilterContent,
+        } = context;
+
+        const {
+            leftContent,
+            leftContentContainerClassName,
+            rightContent,
+            rightContentContainerClassName,
+            extraFilterContent,
+            extraFilterContentContainerClassName,
+        } = props;
+
+        if (setLeftContent && (leftContent || leftContent === null)) {
+            setLeftContent(leftContent, leftContentContainerClassName);
+        }
+
+        if (setRightContent && (rightContent || rightContent === null)) {
+            setRightContent(rightContent, rightContentContainerClassName);
+        }
+
+        if (setFilterContent && (extraFilterContent || extraFilterContent === null)) {
+            setFilterContent(extraFilterContent, extraFilterContentContainerClassName);
+        }
+    }
+
+
     public render() {
         const {
-            rightContent,
-            rightContentClassName,
             mainContent,
-            mainContentClassName,
+            mainContentContainerClassName,
         } = this.props;
 
-        return (
-            <React.Fragment>
-                { mainContent && (
-                    <div className={_cs(styles.mainContent, mainContentClassName)}>
-                        { mainContent }
-                    </div>
-                ) }
-                { rightContent && (
-                    <aside className={_cs(styles.rightContent, rightContentClassName)}>
-                        { rightContent }
-                    </aside>
-                ) }
-            </React.Fragment>
-        );
+        if (mainContent) {
+            return (
+                <div className={_cs(styles.mainContent, mainContentContainerClassName)}>
+                    { mainContent }
+                </div>
+            );
+        }
+
+        return null;
     }
 }
 

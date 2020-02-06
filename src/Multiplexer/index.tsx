@@ -19,19 +19,25 @@ import Responsive from '#rscg/Responsive';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { AppState } from '#store/types';
+import {
+    RouteDetailElement,
+    RegionAdminLevel,
+    RegionValueElement,
+    Layer,
+    FiltersElement,
+} from '#types';
 
 import {
     District,
     Province,
     Municipality,
-    Region,
 } from '#store/atom/page/types';
 
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
-import LayerSwitch from '#components/LayerSwitch';
-import MapDownloadButton from '#components/MapDownloadButton';
+// import LayerSwitch from '#components/LayerSwitch';
+// import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import AppBrand from '#components/AppBrand';
@@ -41,12 +47,12 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-    filtersSelectorDP,
+    filtersSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
-    setFiltersActionDP,
+    setFiltersAction,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
@@ -132,17 +138,16 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 const domain = process.env.REACT_APP_DOMAIN;
 
-interface LayerDetail {
-    id: string;
-    title: string;
-}
-
 interface State {
-    leftPaneContent?: React.ElementType;
-    leftPaneClassName?: string;
+    leftContent?: React.ReactNode;
+    rightContent?: React.ReactNode;
+    filterContent?: React.ReactNode;
+    leftContentContainerClassName?: string;
+    rightContentContainerClassName?: string;
+    filterContentContainerClassName?: string;
     hideMap?: boolean;
-    activeRouteDetails: {};
-    activeLayers: LayerDetail[];
+    activeRouteDetails: RouteDetailElement | undefined;
+    activeLayers: Layer[];
 }
 
 interface BoundingClientRect {
@@ -160,18 +165,13 @@ interface PropsFromState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
-    filters: {
-        faramValues: {
-            region: Region;
-        };
-        faramErrors: {};
-    };
+    filters: FiltersElement;
 }
 
 interface PropsFromDispatch {
     setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
-    setFilters: typeof setFiltersActionDP;
+    setFilters: typeof setFiltersAction;
 }
 
 interface Coords {
@@ -184,7 +184,7 @@ interface Coords {
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    filters: filtersSelectorDP(state),
+    filters: filtersSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
@@ -193,7 +193,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
-    setFilters: params => dispatch(setFiltersActionDP(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
 });
 
 const getMatchingRegion = (
@@ -201,7 +201,7 @@ const getMatchingRegion = (
     provinces: Province[],
     districts: District[],
     municipalities: Municipality[],
-): Region => {
+): RegionValueElement => {
     if (!subdomain) {
         return {};
     }
@@ -240,15 +240,15 @@ const layerNameMap = {
 
 
 class Multiplexer extends React.PureComponent<Props, State> {
-    private mapboxCtrlSizeSet = false;
-
     public constructor(props: Props) {
         super(props);
 
         this.state = {
-            leftPaneContent: undefined,
-            leftPaneClassName: undefined,
-            activeRouteDetails: {},
+            leftContent: undefined,
+            rightContent: undefined,
+            leftContentContainerClassName: undefined,
+            rightContentContainerClassName: undefined,
+            activeRouteDetails: undefined,
             activeLayers: [],
         };
     }
@@ -294,20 +294,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
-
-        if (!this.mapboxCtrlSizeSet) {
-            const mapboxCtrlTopLeft = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
-
-            if (mapboxCtrlTopLeft) {
-                const bcr = mapboxCtrlTopLeft.getBoundingClientRect();
-                if (bcr.width || bcr.height) {
-                    setStyleProperty('widthMapboxControlLeftTop', `${bcr.width}px`);
-                    setStyleProperty('heightMapboxControlLeftTop', `${bcr.height}px`);
-
-                    this.mapboxCtrlSizeSet = true;
-                }
-            }
-        }
     }
 
     private setFilterFromUrl = (
@@ -317,7 +303,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         filters: PropsFromState['filters'],
         setFilters: PropsFromDispatch['setFilters'],
     ) => {
-        const { faramValues } = filters;
         const { hostname } = window.location;
 
         const index = hostname.search(`.${domain}`);
@@ -335,18 +320,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const {
             geoarea: oldGeoarea,
             adminLevel: oldAdminLevel,
-        } = faramValues.region || {};
+        } = filters.region || {};
 
         if (currentGeoarea && currentAdminLevel && (
             currentGeoarea !== oldGeoarea || oldAdminLevel !== currentAdminLevel
         )) {
             setFilters({
-                faramValues: {
-                    ...faramValues,
+                filters: {
+                    ...filters,
                     region,
                 },
-                faramErrors: {},
-                pristine: true,
             });
         }
     }
@@ -379,14 +362,37 @@ class Multiplexer extends React.PureComponent<Props, State> {
         setStyleProperty('widthLeftPanel', `${bound(32 + width * 0.28, 240, 520)}px`);
     })
 
-    private setLeftPaneComponent = (content: React.ElementType, leftPaneClassName?: string) => {
+    private setLeftContent = (
+        content: React.ReactNode,
+        leftContentContainerClassName?: string,
+    ) => {
         this.setState({
-            leftPaneContent: content,
-            leftPaneClassName,
+            leftContent: content,
+            leftContentContainerClassName,
         });
     }
 
-    private setActiveRouteDetails = (activeRouteDetails) => {
+    private setRightContent = (
+        content: React.ReactNode,
+        rightContentContainerClassName?: string,
+    ) => {
+        this.setState({
+            rightContent: content,
+            rightContentContainerClassName,
+        });
+    }
+
+    private setFilterContent = (
+        content: React.ReactNode,
+        filterContentContainerClassName?: string,
+    ) => {
+        this.setState({
+            filterContent: content,
+            filterContentContainerClassName,
+        });
+    }
+
+    private setActiveRouteDetails = (activeRouteDetails: RouteDetailElement) => {
         this.setState({ activeRouteDetails });
     }
 
@@ -398,7 +404,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ hideMap: false });
     }
 
-    private addLayer = (layer) => {
+    private addLayer = (layer: Layer) => {
         this.setState(({ activeLayers }) => {
             const layerIndex = activeLayers.findIndex(d => d.id === layer.id);
 
@@ -419,7 +425,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private removeLayer = (layerId) => {
+    private removeLayer = (layerId: Layer['id']) => {
         this.setState(({ activeLayers }) => {
             const layerIndex = activeLayers.findIndex(d => d.id === layerId);
 
@@ -434,11 +440,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private setLayers = (activeLayers) => {
+    private setLayers = (activeLayers: Layer[]) => {
         this.setState({ activeLayers });
     }
 
-    private addLayers = (layerList) => {
+    private addLayers = (layerList: Layer[]) => {
         this.setState(({ activeLayers }) => {
             const newActiveLayerList = [...activeLayers];
 
@@ -452,7 +458,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private removeLayers = (layerIdList) => {
+    private removeLayers = (layerIdList: Layer['id'][]) => {
         this.setState(({ activeLayers }) => {
             const newActiveLayerList = [...activeLayers];
 
@@ -468,7 +474,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
-    private getLayerOrder = memoize((activeLayers) => {
+    private getLayerOrder = memoize((activeLayers: Layer[]) => {
         const otherLayers = [
             getLayerName('risk-infoz-outlines', 'ward-outline'),
             getLayerName('risk-infoz-outlines', 'municipality-outline'),
@@ -479,19 +485,29 @@ class Multiplexer extends React.PureComponent<Props, State> {
             getLayerName('risk-infoz-outlines', 'district-label'),
             getLayerName('risk-infoz-outlines', 'province-label'),
         ];
-        const layers = activeLayers.map(d => getLayerName(d.layername, layerNameMap[d.type]));
+
+        const layers = activeLayers.map(
+            d => getLayerName(d.layername, layerNameMap[d.type]),
+        );
         return [
             ...layers,
             ...otherLayers,
         ];
     })
 
-    private getRegionName = (selectedRegion, provinces, districts, municipalities) => {
+    private getRegionName = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
             return 'National';
         }
 
-        const adminLevels = {
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
             1: provinces,
             2: districts,
             3: municipalities,
@@ -517,15 +533,21 @@ class Multiplexer extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
-            leftPaneContent,
-            leftPaneClassName,
+            leftContent,
+            leftContentContainerClassName,
+            rightContent,
+            rightContentContainerClassName,
+            filterContent,
+            filterContentContainerClassName,
             hideMap,
             activeRouteDetails,
             activeLayers,
         } = this.state;
 
         const pageProps = {
-            setLeftPaneComponent: this.setLeftPaneComponent,
+            setLeftContent: this.setLeftContent,
+            setRightContent: this.setRightContent,
+            setFilterContent: this.setFilterContent,
             setActiveRouteDetails: this.setActiveRouteDetails,
             activeRouteDetails,
             hideMap: this.hideMap,
@@ -542,7 +564,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
 
         const regionName = this.getRegionName(
-            filters.faramValues.region,
+            filters.region,
             provinces,
             districts,
             municipalities,
@@ -556,6 +578,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     <div className={_cs(styles.content, 'bipad-main-content')}>
                         <Filters
                             className={styles.filters}
+                            extraContent={filterContent}
+                            extraContentContainerClassName={filterContentContainerClassName}
                         />
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
@@ -572,22 +596,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 navControlShown
                                 navControlPosition="bottom-right"
                             >
-                                { !hideMap && false && (
-                                    <div
-                                        className={_cs(
-                                            styles.mapActions,
-                                            leftPaneContent && styles.withLeftPane,
-                                        )}
-                                    >
-                                        <MapDownloadButton
-                                            transparent
-                                            title="Download current map"
-                                            iconName="download"
-                                        />
-                                        <LayerSwitch />
-                                    </div>
-                                )}
-                                { leftPaneContent && (
+                                { leftContent && (
                                     <aside className={styles.left}>
                                         <AppBrand
                                             className={styles.brand}
@@ -595,20 +604,44 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         />
                                         <div
                                             className={_cs(
-                                                styles.leftPaneContainer,
-                                                leftPaneClassName,
+                                                styles.leftContentContainer,
+                                                leftContentContainerClassName,
                                             )}
                                         >
-                                            { leftPaneContent }
+                                            { leftContent }
                                         </div>
                                     </aside>
                                 )}
-                                <MapContainer
-                                    className={_cs(
-                                        styles.map,
-                                        hideMap && styles.hidden,
-                                    )}
-                                />
+                                <main className={styles.main}>
+                                    {/* !hideMap && false && (
+                                        <div className={styles.mapActions}>
+                                            <MapDownloadButton
+                                                transparent
+                                                title="Download current map"
+                                                iconName="download"
+                                            />
+                                            <LayerSwitch />
+                                        </div>
+                                    ) */}
+                                    <MapContainer
+                                        className={_cs(
+                                            styles.map,
+                                            hideMap && styles.hidden,
+                                        )}
+                                    />
+                                </main>
+                                { rightContent && (
+                                    <aside className={styles.right}>
+                                        <div
+                                            className={_cs(
+                                                styles.rightContentContainer,
+                                                rightContentContainerClassName,
+                                            )}
+                                        >
+                                            { rightContent }
+                                        </div>
+                                    </aside>
+                                )}
                                 {this.renderRoutes()}
                                 <MapOrder ordering={orderedLayers} />
                             </Map>

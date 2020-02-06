@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { mapToList, listToMap } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 
 import { AppState } from '../../types';
 import { Region } from './types';
@@ -148,45 +149,31 @@ export const agricultureLossTypeListSelector = (
 
 export const countryListSelector = ({ page }: AppState) => page.countryList;
 
-const regionLevelToNameMap = {
-    1: 'province',
-    2: 'district',
-    3: 'municipality',
-};
-
-const transformRegionToFilter = (region) => {
-    if (!region || !region.adminLevel || !region.geoarea) {
-        return {};
-    }
-
-    const label = regionLevelToNameMap[region.adminLevel];
-    if (label) {
-        return {
-            [label]: region.geoarea,
-        };
-    }
-
-    return {};
-};
-
-const transformDataRangeToFilter = (dataRange) => {
-    const {
-        startDate,
-        endDate,
-    } = dataRange;
-
-    return {
-        startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
-        endDate: endDate ? (new Date(endDate)).toISOString() : undefined,
-    };
-};
-
 export const filtersSelector = ({ page }: AppState) => page.filters;
-export const dashboardFiltersSelector = createSelector(
+
+export const hazardFilterSelector = createSelector(
     filtersSelector,
-    filters => ({
-        ...transformRegionToFilter(filters.region),
-        ...transformDataRangeToFilter(filters.dataDateRange),
+    filters => filters.hazard,
+);
+
+export const regionFilterSelector = createSelector(
+    filtersSelector,
+    filters => filters.region,
+);
+
+export const dataDateRangeFilterSelector = createSelector(
+    filtersSelector,
+    filters => filters.dataDateRange,
+);
+
+export const dashboardFiltersSelector = createSelector(
+    hazardFilterSelector,
+    regionFilterSelector,
+    dataDateRangeFilterSelector,
+    (hazard, region, dataDateRange) => ({
+        hazard,
+        region,
+        dataDateRange,
     }),
 );
 

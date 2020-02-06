@@ -1,4 +1,76 @@
-import { LayerGroup, LayerWithGroup } from '#store/atom/page/types';
+import {
+    LayerGroup,
+    LayerWithGroup,
+    Alert,
+    Event,
+} from '#store/atom/page/types';
+
+export interface RouteDetailElement {
+    name: string;
+    title: string;
+    path: string;
+    iconName?: string;
+}
+
+export interface BasicElement {
+    id: number;
+    title: string;
+}
+
+export interface MapStateElement {
+    id: number;
+    value: boolean;
+}
+
+export type RegionAdminLevelType = 'province' | 'district' | 'municipality';
+export type RegionAdminLevel = 1 | 2 | 3;
+export type GeoareaId = number;
+
+export type HazardType = 'natural' | 'non natural';
+export interface HazardElement extends BasicElement {
+    color: string | null;
+    description: string;
+    icon: string | null;
+    type: HazardType;
+}
+
+export interface RegionValueElement {
+    adminLevel?: RegionAdminLevel;
+    geoarea?: GeoareaId;
+}
+export interface DataDateRangeValueElement {
+    dataRange: string;
+    startDate: string;
+    endDate: string;
+}
+
+export interface FiltersElement {
+    hazard: HazardElement[];
+    region: RegionValueElement;
+    dataDateRange: DataDateRangeValueElement;
+}
+
+export interface AlertElement extends Alert {}
+export interface EventElement extends Event {}
+
+export type LayerType = 'raster' | 'choropleth';
+export interface Layer {
+    id: number;
+    title: string;
+    type: LayerType;
+    layername: string;
+    adminLevel: RegionAdminLevelType;
+    opacity: number;
+    mapState: MapStateElement[];
+    paint: {
+        'fill-color': [];
+        'fill-opacity': [];
+    };
+    legend: {
+        [key: string]: number;
+    };
+    tooltipRenderer: React.ReactNode;
+}
 
 export interface RiskElement {
     key: number;

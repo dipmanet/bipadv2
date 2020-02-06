@@ -49,20 +49,30 @@
                 box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.5);
             }
 
-            .left-pane-container {
+            .left-content-container {
                 flex-grow: 1;
                 overflow: auto;
             }
         }
 
-        .map {
+        .main {
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
-            background-color: transparent;
 
-            &.hidden {
-                visibility: hidden;
-                z-index: -1;
+            .map {
+                flex-grow: 1;
+                background-color: transparent;
+
+                &.hidden {
+                    visibility: hidden;
+                    z-index: -1;
+                }
             }
+        }
+
+        .right {
+            z-index: 11;
         }
 
         .filters {

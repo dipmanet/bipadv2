@@ -3,17 +3,17 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
+import memoize from 'memoize-one';
 
 import Button from '#rsca/Button';
 import ScrollTabs from '#rscv/ScrollTabs';
-import SelectInput from '#rsci/SelectInput';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
 
 import { setFiltersAction } from '#actionCreators';
 import { filtersSelector } from '#selectors';
 import { AppState } from '#store/types';
-import { lossMetrics } from '#utils/domain';
+import { FiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
@@ -22,10 +22,12 @@ import styles from './styles.scss';
 
 interface ComponentProps {
     className?: string;
+    extraContent?: React.ReactNode;
+    extraContentContainerClassName?: string;
 }
 
 interface PropsFromAppState {
-    filters: {};
+    filters: FiltersElement;
 }
 
 interface PropsFromDispatch {
@@ -33,7 +35,7 @@ interface PropsFromDispatch {
 }
 
 interface State {
-    activeView: string | undefined;
+    activeView?: string | undefined;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -46,7 +48,11 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
 });
 
-const iconNames = {
+type TabKey = 'location' | 'hazard' | 'dataRange' | 'others';
+
+const iconNames: {
+    [key in TabKey]: string;
+} = {
     location: 'map',
     hazard: 'warning',
     dataRange: 'calendar',
@@ -57,6 +63,9 @@ const FilterIcon = ({
     isActive,
     className,
     ...otherProps
+}: {
+    isActive?: boolean;
+    className?: string;
 }) => (
     <Icon
         className={_cs(className, isActive && styles.active, styles.filterIcon)}
@@ -77,12 +86,6 @@ class Filters extends React.PureComponent<Props> {
         activeView: undefined,
     }
 
-    private tabs = {
-        location: 'Location',
-        hazard: 'Hazard',
-        dataRange: 'Data range',
-        others: 'Others',
-    }
 
     private views = {
         location: {
@@ -112,15 +115,15 @@ class Filters extends React.PureComponent<Props> {
         },
         others: {
             component: () => (
-                <div className={styles.activeView}>
-                    <SelectInput
-                        label="Metric"
-                        faramElementName="metric"
-                        options={lossMetrics}
-                        hideClearButton
-                        // disabled={disabledMetricSelect}
-                    />
-                </div>
+                this.props.extraContent ? (
+                    <div className={_cs(
+                        styles.activeView,
+                        this.props.extraContentContainerClassName,
+                    )}
+                    >
+                        { this.props.extraContent }
+                    </div>
+                ) : null
             ),
         },
     }
@@ -129,7 +132,7 @@ class Filters extends React.PureComponent<Props> {
         this.setState({ activeView });
     }
 
-    private getFilterTabRendererParams = (key: string, title: string) => ({
+    private getFilterTabRendererParams = (key: TabKey, title: string) => ({
         name: iconNames[key],
         title,
         className: styles.icon,
@@ -139,18 +142,37 @@ class Filters extends React.PureComponent<Props> {
         this.setState({ activeView: undefined });
     }
 
-    private handleFaramChange = (faramValues) => {
+    private handleFaramChange = (faramValues: FiltersElement) => {
         const { setFilters } = this.props;
         setFilters({ filters: faramValues });
     }
+
+    private getTabs = memoize(
+        (extraContent: React.ReactNode): {
+            [key in TabKey]?: string;
+        } => (
+            extraContent ? ({
+                location: 'Location',
+                hazard: 'Hazard',
+                dataRange: 'Data range',
+                others: 'Others',
+            }) : ({
+                location: 'Location',
+                hazard: 'Hazard',
+                dataRange: 'Data range',
+            })
+        ),
+    )
 
     public render() {
         const {
             className,
             filters: faramValues,
+            extraContent,
         } = this.props;
 
         const { activeView } = this.state;
+        const tabs = this.getTabs(extraContent);
 
         return (
             <div className={_cs(styles.filters, className)}>
@@ -161,7 +183,7 @@ class Filters extends React.PureComponent<Props> {
                 </header>
                 <div className={styles.content}>
                     <ScrollTabs
-                        tabs={this.tabs}
+                        tabs={tabs}
                         active={activeView}
                         onClick={this.handleTabClick}
                         renderer={FilterIcon}
@@ -177,7 +199,7 @@ class Filters extends React.PureComponent<Props> {
                         { activeView && (
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
-                                    { this.tabs[activeView] }
+                                    { tabs[activeView] }
                                 </h3>
                                 <Button
                                     className={styles.closeButton}

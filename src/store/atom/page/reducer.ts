@@ -115,7 +115,7 @@ export const setEventListAction = ({ eventList }: { eventList: Type.Event[]}) =>
 });
 
 export const setFiltersAction = (
-    { filters }: Type.SetFilters,
+    { filters }: { filters: Type.SetFilters['filters'] },
 ) => ({
     type: Type.PageType.SET_FILTERS,
     filters,

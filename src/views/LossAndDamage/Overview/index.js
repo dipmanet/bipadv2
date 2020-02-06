@@ -6,7 +6,6 @@ import Page from '#components/Page';
 
 import Map from '../Map';
 import LeftPane from './LeftPane';
-import Filters from '#components/Filters';
 
 import {
     metricMap,
@@ -142,14 +141,6 @@ export default class Overview extends React.PureComponent {
                             pending={pending}
                             rightPaneExpanded={rightPaneExpanded}
                             minDate={minDate}
-                        />
-                    )}
-                    rightContentClassName={styles.right}
-                    rightContent={(
-                        <Filters
-                            className={styles.filters}
-                            showDateRange
-                            showMetricSelect
                         />
                     )}
                 />

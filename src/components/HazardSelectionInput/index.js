@@ -64,6 +64,7 @@ class HazardSelectionInput extends React.PureComponent {
             }
         });
 
+
         return groupedHazardTypes;
     }
 
@@ -75,7 +76,7 @@ class HazardSelectionInput extends React.PureComponent {
 
         // NOTE: sort hazards
         const sortedHazardList = [...hazardList].sort(compareHazard);
-        sortedHazardList.forEach((hazard, i) => {
+        sortedHazardList.forEach((hazard) => {
             if (!groupedHazardTypes[hazard.type]) {
                 console.warn('Unknown hazard type', hazard.type);
             } else {

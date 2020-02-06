@@ -1,21 +1,7 @@
-.left-content {
-    position: absolute;
-    top: var(--spacing-medium);
-    left: var(--spacing-medium);
-    z-index: 1;
-}
-
 .main-content {
     position: absolute;
     bottom: var(--spacing-medium);
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
-}
-
-.right-content {
-    position: absolute;
-    top: var(--spacing-medium);
-    right: var(--spacing-medium);
     z-index: 1;
 }

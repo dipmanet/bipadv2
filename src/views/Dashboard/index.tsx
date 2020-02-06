@@ -3,18 +3,12 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
-    listToMap,
     _cs,
     Obj,
 } from '@togglecorp/fujs';
 
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
-
-import TextOutput from '#components/TextOutput';
-import DateOutput from '#components/DateOutput';
-
-import Filters from '#components/Filters';
 
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
@@ -26,13 +20,18 @@ import {
     methods,
 } from '#request';
 
-import { transformDateRangeFilterParam } from '#utils/transformations';
+import {
+    transformDataRangeToFilter,
+    transformRegionToFilter,
+} from '#utils/transformations';
+
 import { hazardTypesList } from '#utils/domain';
 
 import {
     setAlertListActionDP,
     setEventListAction,
 } from '#actionCreators';
+
 import {
     alertListSelectorDP,
     eventListSelector,
@@ -45,41 +44,43 @@ import Page from '#components/Page';
 import Map from './Map';
 import LeftPane from './LeftPane';
 
+import {
+    MapStateElement,
+    AlertElement,
+    EventElement,
+    FiltersElement,
+} from '#types';
+
 import styles from './styles.scss';
 
-interface MapHoverAttributes {
-    id: number;
-    value: boolean;
-}
-
-const emptyAlertHoverAttributeList: MapHoverAttributes[] = [];
-const emptyEventHoverAttributeList: MapHoverAttributes[] = [];
+const emptyAlertHoverAttributeList: MapStateElement[] = [];
+const emptyEventHoverAttributeList: MapStateElement[] = [];
 
 interface State {
-    hoveredAlertId: number | undefined;
-    hoveredEventId: number | undefined;
+    hoveredAlertId: AlertElement['id'] | undefined;
+    hoveredEventId: EventElement['id'] | undefined;
 }
 
 interface Params {
     triggerAlertRequest: (timeout: number) => void;
     triggerEventRequest: (timeout: number) => void;
 }
-interface OwnProps {}
-interface PropsFromState {
+interface ComponentProps {}
+interface PropsFromAppState {
     alertList: PageTypes.Alert[];
     eventList: PageTypes.Event[];
     hazardTypes: Obj<PageTypes.HazardType>;
-    filters: {};
-    // filters: PageTypes.FiltersWithRegion['faramValues'];
+    filters: FiltersElement;
 }
 interface PropsFromDispatch {
     setEventList: typeof setEventListAction;
     setAlertList: typeof setAlertListActionDP;
 }
-type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
+
+type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
-const mapStateToProps = (state: AppState): PropsFromState => ({
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
     alertList: alertListSelectorDP(state),
     eventList: eventListSelector(state),
     hazardTypes: hazardTypesSelector(state),
@@ -92,20 +93,19 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const transformFilters = ({
-    startDate,
-    endDate,
+    dataDateRange,
+    region,
     ...otherFilters
-}) => ({
+}: FiltersElement) => ({
     ...otherFilters,
-    created_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-    created_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
+    ...transformDataRangeToFilter(dataDateRange, 'created_on'),
+    ...transformRegionToFilter(region),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     alertsRequest: {
         url: '/alert/',
         method: methods.GET,
-        // We have to transform dateRange to created_on__lt and created_on__gt
         query: ({ props: { filters } }) => ({
             ...transformFilters(filters),
             expand: ['event'],
@@ -147,9 +147,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     eventsRequest: {
         url: '/event/',
         method: methods.GET,
-        // We have to transform dateRange to created_on__lt and created_on__gt
         query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'created_on'),
+            ...transformFilters(filters),
             ordering: '-created_on',
         }),
         onSuccess: ({ response, props: { setEventList }, params }) => {
@@ -173,15 +172,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { dateRange } },
-                prevProps: { filters: {
-                    dateRange: prevDateRange,
-                } },
-            }) => dateRange !== prevDateRange,
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => filters !== prevFilters,
         },
-        extras: {
-            schemaName: 'eventResponse',
-        },
+        extras: { schemaName: 'eventResponse' },
     },
     deleteAlertRequest: {
         url: ({ params }) => `/alert/${params.alertId}`,
@@ -231,8 +226,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         window.clearTimeout(this.eventTimeout);
     }
 
-    private previousMapContorlStyle: string | null = null;
-
     private getAlertHazardTypesList = memoize((
         alertList: PageTypes.Alert[],
         eventList: PageTypes.Event[],
@@ -244,32 +237,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         ];
         return hazardTypesList(items, hazardTypes);
     });
-
-    private getAlertMap = memoize(
-        alertList => listToMap(
-            alertList,
-            (d: {
-                id: number;
-                title: string;
-                startedOn: string;
-                source: string;
-            }) => d.id,
-            d => d,
-        ),
-    );
-
-    private getEventMap = memoize(
-        eventList => listToMap(
-            eventList,
-            (d: {
-                id: number;
-                title: string;
-                startedOn: string;
-                source: string;
-            }) => d.id,
-            d => d,
-        ),
-    );
 
     private alertTimeout?: number
 
@@ -300,22 +267,14 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     private handleAlertChange = (/* newAlert */) => {
         // TODO: update redux instead?
-        const {
-            requests: {
-                alertsRequest,
-            },
-        } = this.props;
+        const { requests: { alertsRequest } } = this.props;
 
         alertsRequest.do();
     }
 
     private handleEventChange = (/* newEvent */) => {
         // TODO: update redux instead?
-        const {
-            requests: {
-                eventsRequest,
-            },
-        } = this.props;
+        const { requests: { eventsRequest } } = this.props;
 
         eventsRequest.do();
     }
@@ -346,64 +305,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             eventId: event.id,
             onSuccess: eventsRequest.do,
         });
-    }
-
-    private renderHoverItemDetail = () => {
-        const {
-            hoverItemId,
-            hoverType,
-            rightPaneExpanded,
-        } = this.state;
-
-        const {
-            alertList,
-            eventList,
-        } = this.props;
-
-        let title = '';
-        let date = '';
-        let source = '';
-
-        if (!hoverItemId || !hoverType) {
-            return null;
-        }
-
-        if (hoverType === 'alert') {
-            const alertMap = this.getAlertMap(alertList);
-            const hoverDetail = alertMap[hoverItemId];
-
-            if (!hoverDetail) {
-                return null;
-            }
-
-            ({ title, source } = hoverDetail);
-            date = hoverDetail.startedOn;
-        }
-
-        if (hoverType === 'event') {
-            const eventMap = this.getEventMap(eventList);
-            const hoverDetail = eventMap[hoverItemId];
-
-            if (!hoverDetail) {
-                return null;
-            }
-
-            ({ title, source } = hoverDetail);
-            date = hoverDetail.startedOn;
-        }
-
-        return (
-            <div className={styles.hoverDetails}>
-                <h3 className={styles.heading}>
-                    {title}
-                </h3>
-                <DateOutput value={date} />
-                <TextOutput
-                    label="Source"
-                    value={source}
-                />
-            </div>
-        );
     }
 
     private getAlertMapHoverAttributes = (hoveredAlertId: number | undefined) => {
@@ -437,7 +338,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                 alertsRequest: { pending: alertsPending },
                 eventsRequest: { pending: eventsPending },
             },
-            filters,
         } = this.props;
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);
@@ -466,7 +366,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     isAlertHovered={!!hoveredAlertId}
                 />
                 <Page
-                    leftContentClassName={styles.leftContainer}
+                    leftContentContainerClassName={styles.leftContainer}
                     leftContent={(
                         <LeftPane
                             className={styles.leftPane}
@@ -485,16 +385,13 @@ class Dashboard extends React.PureComponent<Props, State> {
                             onAlertHover={this.handleAlertHover}
                         />
                     )}
-                    mainContentClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
+                    mainContentContainerClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
                     mainContent={(
                         <HazardsLegend
                             filteredHazardTypes={filteredHazardTypes}
                             className={styles.hazardLegend}
                             itemClassName={styles.legendItem}
                         />
-                    )}
-                    rightContent={(
-                        <Filters className={styles.filters} />
                     )}
                 />
             </React.Fragment>

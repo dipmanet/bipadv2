@@ -13,8 +13,6 @@ import Legend from '#rscz/Legend';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
-import Filters from '#components/Filters';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -244,7 +242,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     isHovered={!!hoveredIncidentId}
                 />
                 <Page
-                    leftContentClassName={styles.leftPaneContainer}
+                    leftContentContainerClassName={styles.leftPaneContainer}
                     leftContent={(
                         <LeftPane
                             className={styles.leftPane}
@@ -254,7 +252,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             hoveredIncidentId={hoveredIncidentId}
                         />
                     )}
-                    mainContentClassName={_cs(styles.legendContainer, 'map-legend-container')}
+                    mainContentContainerClassName={_cs(styles.legendContainer, 'map-legend-container')}
                     mainContent={(
                         <React.Fragment>
                             <div className={styles.pointSizeLegendContainer}>
@@ -280,10 +278,6 @@ class Incidents extends React.PureComponent<Props, State> {
                                 itemClassName={styles.legendItem}
                             />
                         </React.Fragment>
-                    )}
-                    rightContentClassName={styles.right}
-                    rightContent={(
-                        <Filters showEvent />
                     )}
                 />
             </React.Fragment>

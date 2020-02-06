@@ -1,6 +1,19 @@
 import React from 'react';
+import { RouteDetailElement } from '#types';
 
-interface PageType {
+type SetContentFunction = (
+    content: React.ReactNode | null,
+    contentClassName?: string
+) => void;
+
+export interface PageContextProps {
+    setLeftContent?: SetContentFunction;
+    setRightContent?: SetContentFunction;
+    setFilterContent?: SetContentFunction;
+    setActiveRouteDetails?: (activeRouteDetail: RouteDetailElement) => void;
+    activeRouteDetails?: RouteDetailElement;
+    hideMap?: () => void;
+    showMap?: () => void;
 }
 
-export default React.createContext<PageType>({});
+export default React.createContext<PageContextProps>({});

@@ -13,7 +13,7 @@ const state: PageState = {
 
     filters: {
         region: {},
-        hazard: {},
+        hazard: [],
         dataDateRange: {},
     },
 

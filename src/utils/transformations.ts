@@ -1,5 +1,12 @@
 import { Obj } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 import { FiltersWithRegion } from '#store/atom/page/types';
+import {
+    RegionAdminLevel,
+    RegionAdminLevelType,
+    RegionValueElement,
+    DataDateRangeValueElement,
+} from '#types';
 
 
 const addDaysToDate = (date: Date, days: number) => {
@@ -56,5 +63,47 @@ export const transformDateRangeFilterParam = (
             [`${destParamName}__gt`]: startDate.toISOString(),
         };
     }
+
     return outputFilters;
+};
+
+const regionLevelToNameMap: {
+    [key in RegionAdminLevel]: RegionAdminLevelType;
+} = {
+    1: 'province',
+    2: 'district',
+    3: 'municipality',
+};
+
+export const transformRegionToFilter = (region: RegionValueElement) => {
+    if (!region || !region.adminLevel || !region.geoarea) {
+        return {};
+    }
+
+    const label = regionLevelToNameMap[region.adminLevel];
+    if (label) {
+        return {
+            [label]: region.geoarea,
+        };
+    }
+
+    return {};
+};
+
+export const transformDataRangeToFilter = (
+    dataRange: DataDateRangeValueElement,
+    dateParamName: string,
+) => {
+    const {
+        startDate,
+        endDate,
+    } = dataRange;
+
+    return {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__gt`]: startDate ? (new Date(startDate)).toISOString() : undefined,
+
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__lt`]: endDate ? (new Date(endDate)).toISOString() : undefined,
+    };
 };

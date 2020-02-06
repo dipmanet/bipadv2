@@ -1,4 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
+import { FiltersElement } from '#types';
 
 export interface Field {
     id: number;
@@ -98,6 +99,7 @@ export interface Incident {
     loss: Loss;
     incidentOn: string;
 }
+
 export interface Resource extends Field {
     id: number;
     title: string;
@@ -419,11 +421,7 @@ export interface PageState {
     mapStyles: MapStyle[];
 
     region: Region;
-    filters: {
-        region: {};
-        hazard: {};
-        dataDateRange: {};
-    };
+    filters: FiltersElement;
 
     adminLevelList: AdminLevel[];
 
@@ -520,7 +518,7 @@ export enum PageType {
 
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
-    filters: {};
+    filters: FiltersElement;
 }
 
 export interface SetRegion {

@@ -72,6 +72,7 @@ class LeftPane extends React.PureComponent {
                 calculateSeverity(incident.loss, severityScaleFactor),
             ),
         })).sort((a, b) => compareDate(b.incidentOn, a.incidentOn));
+
         return newIncidentList;
     });
 
@@ -82,34 +83,6 @@ class LeftPane extends React.PureComponent {
             showVisualizations: !showVisualizations,
         });
     }
-
-    /*
-    handleCollapseTabularViewButtonClick = () => {
-        this.setState({ showTabular: false });
-    }
-
-    handleExpandButtonClick = () => {
-        this.setState({ showTabular: true });
-    }
-
-    handleShowIncidentsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showIncidents: true });
-
-        if (onExpandChange) {
-            onExpandChange(true);
-        }
-    }
-
-    handleHideIncidentsButtonClick = () => {
-        const { onExpandChange } = this.props;
-        this.setState({ showIncidents: false });
-
-        if (onExpandChange) {
-            onExpandChange(false);
-        }
-    }
-    */
 
     handleIncidentEdit = (incident) => {
         const { setIncident } = this.props;
@@ -134,23 +107,6 @@ class LeftPane extends React.PureComponent {
             lossServerId: loss.id,
         });
     }
-
-    /*
-    renderTabularViewHeader = () => (
-        <header className={styles.header}>
-            <h4 className={styles.heading}>
-                Incidents
-            </h4>
-            <Button
-                className={styles.collapseTabularViewButton}
-                onClick={this.handleCollapseTabularViewButtonClick}
-                iconName={iconNames.chevronUp}
-                title="Hide detailed view"
-                transparent
-            />
-        </header>
-    )
-    */
 
     render() {
         const {
