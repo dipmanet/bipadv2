@@ -105,7 +105,8 @@ export interface Resource extends Field {
     resourceType: string;
     ward: number;
     point: {
-        coordinates: unknown;
+        type: string;
+        coordinates: [number, number];
     };
 }
 
