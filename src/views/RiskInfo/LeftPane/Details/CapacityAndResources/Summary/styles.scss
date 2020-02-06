@@ -1,0 +1,19 @@
+.item {
+    display: flex;
+    align-items: baseline;
+    padding: var(--spacing-large) var(--spacing-large);
+
+    .value {
+        flex-basis: 10%;
+        font-size: var(--font-size-extra-jumbo);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .title {
+        flex-grow: 1;
+        padding-left: var(--spacing-large);
+        text-transform: capitalize;
+        font-size: var(--font-size-large-alt);
+        font-weight: var(--font-weight-bold);
+    }
+}

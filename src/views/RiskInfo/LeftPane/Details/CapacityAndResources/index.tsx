@@ -4,6 +4,8 @@ import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
     _cs,
     mapToList,
+    isFalsy,
+    isTruthy,
 } from '@togglecorp/fujs';
 
 import {
@@ -13,6 +15,7 @@ import {
     methods,
 } from '#request';
 
+import modalize from '#rscg/Modalize';
 import DangerButton from '#rsca/Button/DangerButton';
 import AccentButton from '#rsca/Button/AccentButton';
 import ListView from '#rscv/List/ListView';
@@ -50,6 +53,7 @@ import {
 
 import EditResourceForm from './EditResourceForm';
 
+import Summary from './Summary';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -76,6 +80,8 @@ interface Params {
 }
 
 type Props = NewProps<ComponentProps, Params>
+
+const SummaryButton = modalize(AccentButton);
 
 const resourceLayerList: ResourceElement[] = [
     // { key: 'education', title: 'Education' },
@@ -124,6 +130,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
                 format: 'json',
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
+                meta: true,
                 boundary: JSON.stringify({
                     type: 'Polygon',
                     coordinates: params.coordinates,
@@ -133,19 +140,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
     },
 };
 
-interface ResourceResponseElement {
-    id: number;
-    resourceType: ResourceType;
-    title: string;
-    description?: string;
-    point: {
-        type: 'string';
-        coordinates: [number, number];
-        ward: number;
-    };
-}
-
-const emptyResourceList: ResourceResponseElement[] = [];
+const emptyResourceList: Resource[] = [];
 
 interface ResourceTooltipParams extends Resource {
     onEditClick: () => void;
@@ -213,7 +208,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         };
     }
 
-    private getGeojson = memoize((resourceList: ResourceResponseElement[]) => {
+    private getGeojson = memoize((resourceList: Resource[]) => {
         const geojson = {
             type: 'FeatureCollection',
             features: resourceList.map(r => ({
@@ -393,17 +388,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             requests,
             'resourceGetRequest',
             emptyResourceList,
-        ) as ResourceResponseElement[];
+        ) as Resource[];
         const {
             resourceDetailGetRequest: {
                 response,
+            },
+            polygonResourceDetailGetRequest: {
+                pending: polygonSelectPending,
             },
         } = requests;
         const polygonResources = getResults(
             requests,
             'polygonResourceDetailGetRequest',
             emptyResourceList,
-        ) as ResourceResponseElement[];
+        ) as Resource[];
 
         const geojson = this.getGeojson(resourceList);
 
@@ -442,6 +440,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         >
                             Clear
                         </DangerButton>
+                        <SummaryButton
+                            transparent
+                            className={styles.summaryButton}
+                            disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                            modal={(
+                                <Summary
+                                    data={polygonResources}
+                                    resourceType={activeLayerKey}
+                                />
+                            )}
+                        >
+                            Show summary
+                        </SummaryButton>
                     </header>
                     <ListView
                         className={styles.content}
