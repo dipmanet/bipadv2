@@ -26,9 +26,11 @@
 
     .legend-container {
         display: flex;
+        align-self: flex-start;
         flex-direction: column;
         border: var(--width-separator-thin) solid var(--color-separator);
         background-color: var(--color-foreground);
+        padding: var(--spacing-medium);
         overflow: auto;
 
         .heading {
@@ -39,17 +41,20 @@
             font-size: var(--font-size-small);
         }
 
+        .legend-icon { margin: 0 var(--spacing-medium) }
+
         .legend {
             flex-grow: 1;
 
             .legend-item {
                 display: flex;
                 align-items: center;
+                padding-left: var(--spacing-medium);
                 font-size: var(--font-size-small);
                 font-weight: var(--font-weight-bold);
 
                 >div:first-child {
-                    width: 24px;
+                    width: 16px;
                     text-align: center;
                 }
 
@@ -67,6 +72,12 @@
             display: flex;
             flex-grow: 1;
             padding: var(--spacing-small);
+
+            .legend {
+                display: flex;
+                flex-direction: column;
+                padding: var(--spacing-small);
+            }
         }
 
         .color-legend {
