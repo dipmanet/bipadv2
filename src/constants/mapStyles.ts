@@ -335,32 +335,28 @@ export default {
     },
 
     rainPoint: {
-        layout: {
-            'text-field': '■',
-            'text-allow-overlap': true,
-            'text-size': 24,
-        },
         paint: {
-            'text-color': [
+            'circle-radius': 10,
+            'circle-color': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'text-opacity': [
+            'circle-opacity': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
                 0.2,
             ],
-            'text-halo-color': ['case',
+            'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
                 'rgba(0, 0, 0, 0)',
             ],
-            'text-halo-width': ['case',
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 1,
                 0,
@@ -381,14 +377,15 @@ export default {
             'text-size': 24,
         },
         paint: {
-            'text-color': [
+            'circle-radius': 10,
+            'circle-color': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'text-opacity': [
+            'circle-opacity': [
                 'case',
                 ['==', ['get', 'steady'], 'STEADY'], 0.3,
                 ['==', ['get', 'steady'], 'RISING'], 1,
@@ -396,12 +393,12 @@ export default {
                 0.3,
             ],
 
-            'text-halo-color': ['case',
+            'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
                 'rgba(0, 0, 0, 0)',
             ],
-            'text-halo-width': ['case',
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 1,
                 0,
@@ -416,14 +413,15 @@ export default {
             'text-size': 24,
         },
         paint: {
-            'text-color': '#e64a19',
-            'text-opacity': ['get', 'opacity'],
-            'text-halo-color': ['case',
+            'circle-radius': 10,
+            'circle-color': '#ffffff',
+            'circle-opacity': ['get', 'opacity'],
+            'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
                 'rgba(0, 0, 0, 0)',
             ],
-            'text-halo-width': ['case',
+            'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 1,
                 0,

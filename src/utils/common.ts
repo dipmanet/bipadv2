@@ -165,3 +165,9 @@ export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
         return fn(percent, timestamp);
     };
 }
+
+export function getImage(src: string, width = 56, height = 56) {
+    const image = new Image(width, height);
+    image.src = src;
+    return image;
+}

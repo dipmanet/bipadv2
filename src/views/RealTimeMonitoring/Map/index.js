@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
+import MapImage from '#re-map/MapImage';
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
@@ -22,6 +23,13 @@ import {
     pollutionToGeojson,
     getRasterTile,
 } from '#utils/domain';
+import { getImage } from '#utils/common';
+
+import RainIcon from '#resources/icons/Rain.svg';
+import RiverIcon from '#resources/icons/Wave.svg';
+import EarthquakeIcon from '#resources/icons/Earthquake.svg';
+import PollutionIcon from '#resources/icons/AirQuality.svg';
+import FireIcon from '#resources/icons/Forest-fire.svg';
 
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
@@ -90,7 +98,6 @@ export default class RealTimeMap extends React.PureComponent {
 
     handleRiverClick = (feature) => {
         const { properties: { title } } = feature;
-
         this.setState({
             riverTitle: title,
             showRiverModal: true,
@@ -341,11 +348,37 @@ export default class RealTimeMap extends React.PureComponent {
             offset: 8,
         };
 
+        const RainImage = getImage(RainIcon);
+        const RiverImage = getImage(RiverIcon);
+        const EarthquakeImage = getImage(EarthquakeIcon);
+        const PollutionImage = getImage(PollutionIcon);
+        const FireImage = getImage(FireIcon);
+
         return (
             <React.Fragment>
                 <CommonMap
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
+                />
+                <MapImage
+                    image={RainImage}
+                    name="rain"
+                />
+                <MapImage
+                    image={RiverImage}
+                    name="river"
+                />
+                <MapImage
+                    image={EarthquakeImage}
+                    name="earthquake"
+                />
+                <MapImage
+                    image={PollutionImage}
+                    name="pollution"
+                />
+                <MapImage
+                    image={FireImage}
+                    name="forest-fire"
                 />
                 { showStreamFlow && (
                     <MapSource
@@ -386,16 +419,28 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     { showRain && (
-                        <MapLayer
-                            layerKey="real-time-rain-symbol"
-                            onClick={this.handleRainClick}
-                            layerOptions={{
-                                type: 'symbol',
-                                layout: mapStyles.rainPoint.layout,
-                                paint: mapStyles.rainPoint.paint,
-                                enableHover: true,
-                            }}
-                        />
+                        <>
+                            <MapLayer
+                                layerKey="real-time-rain-circle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: mapStyles.rainPoint.paint,
+                                    enableHover: true,
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="real-time-rain-symbol"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': 'rain',
+                                        'icon-size': 0.2,
+                                    },
+                                    enableHover: true,
+                                }}
+                            />
+                        </>
                     )}
                 </MapSource>
                 <MapSource
@@ -405,20 +450,32 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     { showRiver && (
-                        <MapLayer
-                            layerKey="real-time-river-symbol"
-                            onClick={this.handleRiverClick}
-                            layerOptions={{
-                                type: 'symbol',
-                                layout: mapStyles.riverPoint.layout,
-                                paint: mapStyles.riverPoint.paint,
-                                enableHover: true,
-                            }}
-                        />
+                        <>
+                            <MapLayer
+                                layerKey="real-time-river-circle"
+                                onClick={this.handleRiverClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: mapStyles.riverPoint.paint,
+                                    enableHover: true,
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="real-time-river-symbol"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': 'river',
+                                        'icon-size': 0.2,
+                                    },
+                                    enableHover: true,
+                                }}
+                            />
+                        </>
                     )}
                 </MapSource>
                 <MapSource
-                    sourceKey="real-time-eartquake-points"
+                    sourceKey="real-time-earthquake-points"
                     sourceOptions={{ type: 'geojson' }}
                     geoJson={earthquakeFeatureCollection}
                     supportHover
@@ -444,6 +501,17 @@ export default class RealTimeMap extends React.PureComponent {
                                     paint: mapStyles.earthquakeText.paint,
                                 }}
                             />
+                            <MapLayer
+                                layerKey="real-time-earthquake-symbol"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': 'earthquake',
+                                        'icon-size': 0.2,
+                                    },
+                                    enableHover: true,
+                                }}
+                            />
                         </React.Fragment>
                     )}
                 </MapSource>
@@ -454,17 +522,28 @@ export default class RealTimeMap extends React.PureComponent {
                     supportHover
                 >
                     { showFire && (
-                        <MapLayer
-                            layerKey="real-time-fire-points-fill"
-                            onClick={this.handleFireClick}
-                            layerOptions={{
-                                type: 'symbol',
-                                property: 'fireId',
-                                layout: mapStyles.firePoint.layout,
-                                paint: mapStyles.firePoint.paint,
-                                enableHover: true,
-                            }}
-                        />
+                        <>
+                            <MapLayer
+                                layerKey="real-time-fire-points-cirle"
+                                onClick={this.handleFireClick}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: mapStyles.firePoint.paint,
+                                    enableHover: true,
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="real-time-fire-points-symbol"
+                                onClick={this.handleFireClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': 'forest-fire',
+                                        'icon-size': 0.2,
+                                    },
+                                }}
+                            />
+                        </>
                     )}
                 </MapSource>
                 <MapSource
@@ -492,6 +571,16 @@ export default class RealTimeMap extends React.PureComponent {
                                     property: 'pollutionId',
                                     layout: mapStyles.pollutionText.layout,
                                     paint: mapStyles.pollutionText.paint,
+                                }}
+                            />
+                            <MapLayer
+                                layerKey="real-time-pollution-symbol"
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: {
+                                        'icon-image': 'pollution',
+                                        'icon-size': 0.2,
+                                    },
                                 }}
                             />
                         </React.Fragment>

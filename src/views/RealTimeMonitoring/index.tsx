@@ -40,6 +40,12 @@ import {
 import Page from '#components/Page';
 import Loading from '#components/Loading';
 
+import RainIcon from '#resources/icons/Rain.svg';
+import RiverIcon from '#resources/icons/Wave.svg';
+import EarthquakeIcon from '#resources/icons/Earthquake.svg';
+import PollutionIcon from '#resources/icons/AirQuality.svg';
+import FireIcon from '#resources/icons/Forest-fire.svg';
+
 import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
 import MiniRiverWatch from './MiniRiverWatch';
@@ -298,16 +304,28 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             Rain & River
                         </h4>
                         <div className={styles.content}>
-                            <Legend
-                                className={styles.legend}
-                                data={rainAndRiverSymbolItems}
-                                itemClassName={styles.legendItem}
-                                keySelector={itemSelector}
-                                iconSelector={iconSelector}
-                                labelSelector={legendLabelSelector}
-                                colorSelector={legendColorSelector}
-                                emptyComponent={null}
-                            />
+                            <div className={styles.legend}>
+                                <div>
+                                    <img
+                                        className={styles.legendIcon}
+                                        src={RainIcon}
+                                        height={16}
+                                        width={16}
+                                        alt="Rain"
+                                    />
+                                    Rain
+                                </div>
+                                <div>
+                                    <img
+                                        className={styles.legendIcon}
+                                        src={RiverIcon}
+                                        height={16}
+                                        width={16}
+                                        alt="River"
+                                    />
+                                    River
+                                </div>
+                            </div>
                             <div className={styles.colorLegend}>
                                 <div className={_cs(styles.item, styles.belowWarning)}>
                                     Below warning
@@ -328,6 +346,16 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         <h5 className={styles.heading}>
                             Earthquake (Richter Scale)
                         </h5>
+                        <div className={styles.legend}>
+                            <img
+                                className={styles.legendIcon}
+                                src={EarthquakeIcon}
+                                height={16}
+                                width={16}
+                                alt="Earthquake"
+                            />
+                            Earthquake
+                        </div>
                         <Legend
                             className={styles.legend}
                             data={earthquakeLegendItems}
@@ -349,6 +377,16 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             </sub>
                             )
                         </h5>
+                        <div className={styles.legend}>
+                            <img
+                                className={styles.legendIcon}
+                                src={PollutionIcon}
+                                height={16}
+                                width={16}
+                                alt="Pollution"
+                            />
+                            Pollution
+                        </div>
                         <Legend
                             className={styles.legend}
                             data={pollutionLegendItems}
@@ -366,16 +404,16 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         <h5 className={styles.heading}>
                             Forest Fire
                         </h5>
-                        <Legend
-                            className={styles.legend}
-                            data={fireLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        <div>
+                            <img
+                                className={styles.legendIcon}
+                                src={FireIcon}
+                                height={16}
+                                width={16}
+                                alt="Forest Fire"
+                            />
+                            Forest Fire
+                        </div>
                     </div>
                 )}
             </>
