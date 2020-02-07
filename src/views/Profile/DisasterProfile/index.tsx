@@ -109,24 +109,18 @@ class DisasterProfile extends React.PureComponent<Props> {
         return (
             <>
                 <Loading pending={pending} />
-                <Page
-                    className={_cs(styles.disasterProfile, className)}
-                    leftContentClassName={styles.leftContainer}
-                    leftContent={(
-                        <>
-                            <FixedTabs
-                                className={styles.tabs}
-                                tabs={this.tabs}
-                                active={activeView}
-                                onClick={this.handleTabClick}
-                            />
-                            <MultiViewContainer
-                                views={this.views}
-                                active={activeView}
-                            />
-                        </>
-                    )}
-                />
+                <div className={_cs(styles.profileSummary, className)}>
+                    <FixedTabs
+                        className={styles.tabs}
+                        tabs={this.tabs}
+                        active={activeView}
+                        onClick={this.handleTabClick}
+                    />
+                    <MultiViewContainer
+                        views={this.views}
+                        active={activeView}
+                    />
+                </div>
             </>
         );
     }

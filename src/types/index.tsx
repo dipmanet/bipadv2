@@ -39,13 +39,13 @@ export interface RegionValueElement {
     geoarea?: GeoareaId;
 }
 export interface DataDateRangeValueElement {
-    dataRange: string;
+    rangeInDays: number;
     startDate: string;
     endDate: string;
 }
 
 export interface FiltersElement {
-    hazard: HazardElement[];
+    hazard: HazardElement['id'][];
     region: RegionValueElement;
     dataDateRange: DataDateRangeValueElement;
 }

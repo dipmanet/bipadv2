@@ -291,6 +291,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleProvinceChange}
                     disabled={shouldDisableProvinceInput}
                     showHintAndError={false}
+                    placeholder="All provinces"
                 />
                 <SelectInput
                     className={_cs(districtInputClassName, styles.districtInput)}
@@ -302,6 +303,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleDistrictChange}
                     disabled={shouldDisableDistrictInput}
                     showHintAndError={false}
+                    placeholder="All districts"
                 />
                 <SelectInput
                     className={_cs(municipalityInputClassName, styles.municipalityInput)}
@@ -313,6 +315,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleMunicipalityChange}
                     disabled={shouldDisableMunicipalityInput}
                     showHintAndError={false}
+                    placeholder="All municipalities"
                 />
                 <SelectInput
                     className={_cs(wardInputClassName, styles.wardInput)}
@@ -324,6 +327,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleWardChange}
                     disabled={shouldDisableWardInput}
                     showHintAndError={false}
+                    placeholder="All wards"
                 />
             </div>
         );

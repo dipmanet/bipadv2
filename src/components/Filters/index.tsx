@@ -13,7 +13,11 @@ import Icon from '#rscg/Icon';
 import { setFiltersAction } from '#actionCreators';
 import { filtersSelector } from '#selectors';
 import { AppState } from '#store/types';
-import { FiltersElement } from '#types';
+import {
+    FiltersElement,
+    RegionValueElement,
+    DataDateRangeValueElement,
+} from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
@@ -35,7 +39,7 @@ interface PropsFromDispatch {
 }
 
 interface State {
-    activeView?: string | undefined;
+    activeView?: TabKey;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -53,22 +57,29 @@ type TabKey = 'location' | 'hazard' | 'dataRange' | 'others';
 const iconNames: {
     [key in TabKey]: string;
 } = {
-    location: 'map',
+    location: 'distance',
     hazard: 'warning',
-    dataRange: 'calendar',
+    dataRange: 'dataRange',
     others: 'filter',
 };
 
 const FilterIcon = ({
     isActive,
     className,
+    isFiltered,
     ...otherProps
 }: {
+    isFiltered: boolean;
     isActive?: boolean;
     className?: string;
 }) => (
     <Icon
-        className={_cs(className, isActive && styles.active, styles.filterIcon)}
+        className={_cs(
+            className,
+            isActive && styles.active,
+            isFiltered && styles.filtered,
+            styles.filterIcon,
+        )}
         {...otherProps}
     />
 );
@@ -81,11 +92,31 @@ const filterSchema = {
     },
 };
 
-class Filters extends React.PureComponent<Props> {
-    public state = {
-        activeView: undefined,
+const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
+    if (!key || key === 'others') {
+        return false;
     }
 
+    const tabKeyToFilterMap: {
+        [key in Exclude<TabKey, 'others'>]: keyof FiltersElement;
+    } = {
+        hazard: 'hazard',
+        location: 'region',
+        dataRange: 'dataDateRange',
+    };
+
+    const filter = filters[tabKeyToFilterMap[key]];
+
+    if (Array.isArray(filter)) {
+        return filter.length !== 0;
+    }
+
+    const filterKeys = Object.keys(filter);
+    return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+};
+
+class Filters extends React.PureComponent<Props, State> {
+    public state = {};
 
     private views = {
         location: {
@@ -128,7 +159,7 @@ class Filters extends React.PureComponent<Props> {
         },
     }
 
-    private handleTabClick = (activeView: string) => {
+    private handleTabClick = (activeView: TabKey) => {
         this.setState({ activeView });
     }
 
@@ -136,7 +167,11 @@ class Filters extends React.PureComponent<Props> {
         name: iconNames[key],
         title,
         className: styles.icon,
+        isFiltered: getIsFiltered(key, this.props.filters),
     })
+
+    private handleResetFiltersButtonClick = () => {
+    }
 
     private handleCloseCurrentFilterButtonClick = () => {
         this.setState({ activeView: undefined });
@@ -180,6 +215,14 @@ class Filters extends React.PureComponent<Props> {
                     <h3 className={styles.heading}>
                         Filters
                     </h3>
+                    <Button
+                        className={styles.resetFiltersButton}
+                        title="Reset filters"
+                        onClick={this.handleResetFiltersButtonClick}
+                        iconName="refresh"
+                        transparent
+                        disabled
+                    />
                 </header>
                 <div className={styles.content}>
                     <ScrollTabs
@@ -204,7 +247,7 @@ class Filters extends React.PureComponent<Props> {
                                 <Button
                                     className={styles.closeButton}
                                     transparent
-                                    iconName="close"
+                                    iconName="chevronUp"
                                     onClick={this.handleCloseCurrentFilterButtonClick}
                                 />
                             </header>

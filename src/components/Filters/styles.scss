@@ -1,18 +1,25 @@
 .filters {
-    border-radius: 5px;
-    box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .3);
-    background-color: var(--color-foreground);
     padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-medium));
 
     >.header {
+        display: flex;
+
         .heading {
+            flex-grow: 1;
             padding: var(--spacing-small) var(--spacing-medium);
+            color: var(--color-primary);
+        }
+
+        .reset-filters-button {
+            flex-shrink: 0;
+            margin: 0 calc(var(--spacing-medium) - var(--spacing-small));
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            font-size: var(--font-size-large);
         }
     }
 
     >.content {
-        .tabs {
-            padding: var(--spacing-small) var(--spacing-medium);
+        .tabs { padding: var(--spacing-small) var(--spacing-medium);
         }
 
         .filter-view-container {
@@ -55,11 +62,27 @@
 .filter-icon {
     border-bottom: var(--width-separator-medium) solid var(--color-separator);
     cursor: pointer;
-    padding: var(--spacing-small) var(--spacing-large);
-    font-size: var(--font-size-large);
+    padding: var(--spacing-small) var(--spacing-medium-alt);
+    font-size: var(--font-size-extra-large);
 
     &.active {
         border-bottom-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    &.filtered {
+        position: relative;
+
+        &:after {
+            position: absolute;
+            top: var(--spacing-small);
+            right: var(--spacing-small);
+            border-radius: 50%;
+            background-color: var(--color-accent);
+            width: 6px;
+            height: 6px;
+            content: '';
+        }
     }
 
     &:hover {

@@ -1,21 +1,23 @@
-@import '~base-scss/base';
-
 .loading {
     display: flex;
     position: absolute;
-    top: $spacing-medium;
+    top: var(--spacing-medium);
     left: 50%;
     align-items: center;
     transform: translateX(-50%);
-    z-index: 1;
-    border: $width-separator-thin solid $color-separator-light;
-    border-radius: 5px;
-    background-color: $color-foreground;
-    padding: $spacing-medium;
+    z-index: 111;
+    border-radius: 3px;
+    box-shadow: 0 3px 5px -2px rgba(0, 0, 0, .3);
+    background-color: var(--color-foreground);
+    padding: calc(var(--spacing-large) - var(--spacing-medium));
     text-align: center;
-    font-size: $font-size-large;
+    font-size: var(--font-size-large);
 
     .spinner {
-        margin-right: 6px;
+        margin: var(--spacing-medium)
+    }
+
+    .text {
+        padding: var(--spacing-medium);
     }
 }

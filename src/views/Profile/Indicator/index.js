@@ -6,16 +6,9 @@ import template from './source.html';
 import styles from './styles.scss';
 
 const Indicator = () => (
-    <Page
-        leftContent={null}
-        hideMap
-        mainContentClassName={styles.main}
-        mainContent={(
-            <div
-                className={styles.tableContainer}
-                dangerouslySetInnerHTML={{ __html: template }}
-            />
-        )}
+    <div
+        className={styles.tableContainer}
+        dangerouslySetInnerHTML={{ __html: template }}
     />
 );
 

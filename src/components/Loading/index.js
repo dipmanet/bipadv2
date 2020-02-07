@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Spinner from '#rscv/Spinner';
+import Spinner from '#rsu/../v2/View/Spinner';
 
 import styles from './styles.scss';
 
@@ -13,7 +13,9 @@ const Loading = ({ pending, text }) => {
     return (
         <div className={styles.loading}>
             <Spinner className={styles.spinner} />
-            {text}
+            <div className={styles.text}>
+                {text}
+            </div>
         </div>
     );
 };

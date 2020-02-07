@@ -10,6 +10,7 @@ import memoize from 'memoize-one';
 
 import Legend from '#rscz/Legend';
 
+import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
@@ -27,12 +28,15 @@ import {
 } from '#actionCreators';
 import {
     incidentListSelectorIP,
-    filtersValuesSelectorIP,
+    filtersSelector,
     hazardTypesSelector,
     regionsSelector,
 } from '#selectors';
 import { hazardTypesList } from '#utils/domain';
-import { transformDateRangeFilterParam } from '#utils/transformations';
+import {
+    transformDataRangeToFilter,
+    transformRegionToFilter,
+} from '#utils/transformations';
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
@@ -51,23 +55,22 @@ const emptyHoverAttributeList: {
 }[] = [];
 
 interface State {
-    selectedIncidentId?: number;
     hoveredIncidentId: number | undefined;
 }
 
 interface Params {
 }
 
-interface OwnProps {
+interface ComponentProps {
 }
 
 interface PropsFromDispatch {
     setIncidentList: typeof setIncidentListActionIP;
     setEventList: typeof setEventListAction;
 }
-interface PropsFromState {
+interface PropsFromAppState {
     incidentList: PageType.Incident[];
-    filters: PageType.FiltersWithRegion['faramValues'];
+    filters: FiltersElement;
     hazardTypes: Obj<PageType.HazardType>;
     regions: {
         provinces: object;
@@ -77,15 +80,15 @@ interface PropsFromState {
     };
 }
 
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type ReduxProps = ComponentProps & PropsFromDispatch & PropsFromAppState;
 
 type Props = NewProps<ReduxProps, Params>;
 
-const mapStateToProps = (state: AppState): PropsFromState => ({
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
-    filters: filtersValuesSelectorIP(state),
     regions: regionsSelector(state),
+    filters: filtersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -93,15 +96,26 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setEventList: params => dispatch(setEventListAction(params)),
 });
 
+const transformFilters = ({
+    dataDateRange,
+    region,
+    ...otherFilters
+}: FiltersElement) => ({
+    ...otherFilters,
+    ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformRegionToFilter(region),
+});
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    incidentsRequest: {
+    incidentsGetRequest: {
         url: '/incident/',
         method: methods.GET,
         // We have to transform dateRange to incident_on__lt and incident_on__gt
         query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformFilters(filters),
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
+            limit: 99999,
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
@@ -111,28 +125,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         onPropsChanged: {
             filters: ({
-                props: { filters: { hazard, dateRange, region, event } },
-                prevProps: { filters: {
-                    hazard: prevHazard,
-                    dateRange: prevDateRange,
-                    region: prevRegion,
-                    event: prevEvent,
-                } },
-            }) => (
-                hazard !== prevHazard || dateRange !== prevDateRange
-                    || region !== prevRegion || event !== prevEvent
-            ),
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
+
+                return shouldRequest;
+            },
         },
-        extras: {
-            schemaName: 'incidentResponse',
-        },
+        // extras: { schemaName: 'incidentResponse' },
     },
     eventsRequest: {
         url: '/event/',
         method: methods.GET,
-        // We have to transform dateRange to created_on__lt and created_on__gt
         query: ({ props: { filters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'created_on'),
+            ...transformFilters(filters),
         }),
         onSuccess: ({ response, props: { setEventList } }) => {
             interface Response { results: PageType.Event[] }
@@ -140,9 +147,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             setEventList({ eventList });
         },
         onMount: true,
-        extras: {
-            schemaName: 'eventResponse',
-        },
+        extras: { schemaName: 'eventResponse' },
     },
 };
 
@@ -171,7 +176,6 @@ class Incidents extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            selectedIncidentId: undefined,
             hoveredIncidentId: undefined,
         };
     }
@@ -210,7 +214,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const {
             incidentList,
             requests: {
-                incidentsRequest: { pending: pendingIncidents },
+                incidentsGetRequest: { pending: pendingIncidents },
                 eventsRequest: { pending: pendingEvents },
             },
             regions,

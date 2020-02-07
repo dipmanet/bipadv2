@@ -105,10 +105,6 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                 error={faramErrors}
                 disabled={false}
             >
-                <RegionSelectInput
-                    className={styles.regionSelectInput}
-                    faramElementName="region"
-                />
                 <ListSelection
                     label="Realtime layers"
                     className={styles.realTimeSourcesInput}

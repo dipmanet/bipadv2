@@ -571,16 +571,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         );
 
         const orderedLayers = this.getLayerOrder(activeLayers);
+        const hideFilters = false;
 
         return (
             <PageContext.Provider value={pageProps}>
                 <div className={styles.multiplexer}>
                     <div className={_cs(styles.content, 'bipad-main-content')}>
-                        <Filters
-                            className={styles.filters}
-                            extraContent={filterContent}
-                            extraContentContainerClassName={filterContentContainerClassName}
-                        />
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
                                 mapStyle={mapStyle}
@@ -630,16 +626,25 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         )}
                                     />
                                 </main>
-                                { rightContent && (
+                                { (rightContent || !hideFilters) && (
                                     <aside className={styles.right}>
-                                        <div
-                                            className={_cs(
-                                                styles.rightContentContainer,
-                                                rightContentContainerClassName,
-                                            )}
-                                        >
-                                            { rightContent }
-                                        </div>
+                                        { rightContent && (
+                                            <div
+                                                className={_cs(
+                                                    styles.rightContentContainer,
+                                                    rightContentContainerClassName,
+                                                )}
+                                            >
+                                                { rightContent }
+                                            </div>
+                                        )}
+                                        <Filters
+                                            className={styles.filters}
+                                            extraContent={filterContent}
+                                            extraContentContainerClassName={
+                                                filterContentContainerClassName
+                                            }
+                                        />
                                     </aside>
                                 )}
                                 {this.renderRoutes()}

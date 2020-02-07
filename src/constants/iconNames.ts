@@ -13,8 +13,9 @@ const iconNames = {
 
     dashboard: 'ion-android-home',
     riskMap: 'ion-android-map',
-    incidents: 'ion-alert-circled', // TODO remove this
-    incident: 'ion-alert-circled',
+    riskInfo: 'ion-android-alert',
+    incidents: 'ion-help-circled', // TODO remove this
+    incident: 'ion-help-circled',
     lossAndDamange: 'ion-ios-clock',
     drrProjectsProfile: 'ion-filing',
     disasterProfile: 'ion-podium',
@@ -71,6 +72,8 @@ const iconNames = {
     map: 'ion-map',
     warning: 'ion-android-warning',
     dataRange: 'ion-android-time',
+
+    refresh: 'ion-android-refresh',
 };
 
 export default iconNames;

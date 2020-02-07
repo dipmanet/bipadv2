@@ -1,11 +1,13 @@
 .option {
     display: flex;
+    align-items: center;
     cursor: pointer;
     padding: var(--spacing-extra-small-alt) calc(var(--spacing-medium) - var(--spacing-small));
 
     .icon {
         flex-shrink: 0;
         margin: 0 var(--spacing-small);
+        font-size: var(--font-size-large);
     }
 
     .label {

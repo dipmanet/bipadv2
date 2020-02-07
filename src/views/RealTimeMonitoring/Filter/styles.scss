@@ -1,10 +1,6 @@
-@import '~base-scss/base';
-
 .filter {
     display: flex;
     flex-direction: column;
-    border: var(--width-separator-thin) solid var(--color-separator);
-    background-color: var(--color-foreground);
     padding: 0 var(--spacing-extra-small-alt);
 
     .region-select-input {

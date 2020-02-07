@@ -166,16 +166,10 @@ export const dataDateRangeFilterSelector = createSelector(
     filters => filters.dataDateRange,
 );
 
-export const dashboardFiltersSelector = createSelector(
-    hazardFilterSelector,
-    regionFilterSelector,
-    dataDateRangeFilterSelector,
-    (hazard, region, dataDateRange) => ({
-        hazard,
-        region,
-        dataDateRange,
-    }),
-);
+export const dashboardFiltersSelector = filtersSelector;
+export const incidentFiltersSelector = filtersSelector;
+export const lossAndDamageFiltersSelector = filtersSelector;
+
 
 // dashboardPage
 
@@ -338,7 +332,7 @@ export const realTimeFiltersValuesSelector = createSelector(
 // loss and damage page
 export const lossAndDamagePageSelector = ({ page }: AppState) => page.lossAndDamagePage;
 
-export const lossAndDamageFiltersSelector = createSelector(
+export const lossAndDamageFiltersSelectorOld = createSelector(
     lossAndDamagePageSelector,
     regionSelector,
     (lossAndDamagePage, region) => {

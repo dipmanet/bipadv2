@@ -2,6 +2,14 @@ import { PageState } from './types';
 
 // const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
 
+const getInitialStartDate = (rangeInDays: number) => {
+    const today = new Date();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(today.getDate() - rangeInDays);
+
+    return threeDaysAgo.toISOString();
+};
+
 const state: PageState = {
     eventTypes: {},
 
@@ -14,7 +22,11 @@ const state: PageState = {
     filters: {
         region: {},
         hazard: [],
-        dataDateRange: {},
+        dataDateRange: {
+            rangeInDays: 3,
+            startDate: getInitialStartDate(3),
+            endDate: (new Date()).toISOString(),
+        },
     },
 
     adminLevelList: [

@@ -1,20 +1,12 @@
-.disaster-profile {
-}
-
-.left-container {
+.profile-summary {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-foreground);
 
     .tabs {
-        display: flex;
         flex-shrink: 0;
-        // justify-content: center;
-        padding: var(--spacing-medium) var(--spacing-large);
     }
 
     .view {
-        position: relative;
         flex-grow: 1;
         overflow: auto;
     }
