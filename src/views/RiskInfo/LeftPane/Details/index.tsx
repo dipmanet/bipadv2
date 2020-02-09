@@ -19,6 +19,7 @@ interface Props {
     layerMap: LayerMap;
     layerGroupList: LayerGroup[];
     attribute?: AttributeKey;
+    activeView: string;
 }
 
 interface State {

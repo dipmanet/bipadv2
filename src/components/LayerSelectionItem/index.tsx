@@ -70,7 +70,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                 </div>
                 { data.shortDescription && (
                     <div className={styles.shortDescription}>
-                        { data.shortDescription || 'Woo hooo, finally a description of layer' }
+                        { data.shortDescription }
                     </div>
                 )}
             </div>

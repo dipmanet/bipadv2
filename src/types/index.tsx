@@ -69,6 +69,7 @@ export interface Layer {
     legend: {
         [key: string]: number;
     };
+    legendTitle?: string;
     tooltipRenderer: React.ReactNode;
 }
 

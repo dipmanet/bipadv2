@@ -1,0 +1,77 @@
+.layer-detail-modal {
+    width: 80vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .details {
+            flex-grow: 1;
+            overflow: auto;
+
+            .description {
+                padding: var(--spacing-medium) 0;
+                white-space: pre-wrap;
+            }
+
+            .disclaimer {
+                padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+
+                .heading {
+                    padding: var(--spacing-small) 0;
+                }
+
+                .content {
+                    padding: var(--spacing-small) 0;
+                }
+            }
+        }
+
+        .metadata {
+            flex-grow: 1;
+            overflow: auto;
+
+            .group {
+                padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
+
+                .group-title {
+                    padding: var(--spacing-medium);
+                    font-weight: var(--font-weight-bold);
+                }
+
+                .rows {
+                    .metadata-item {
+                        display: flex;
+
+                        .label {
+                            flex-shrink: 0;
+                            padding: var(--spacing-small) var(--spacing-medium);
+                            width: 200px;
+                            color: var(--color-text-light);
+                            font-size: var(--font-size-small);
+                            font-weight: var(--font-weight-bold);
+                        }
+
+                        .value {
+                            flex-grow: 1;
+                            padding: var(--spacing-small) var(--spacing-medium);
+                        }
+
+                        &:nth-child(odd) {
+                            background-color: var(--color-foreground-alt);
+                        }
+
+                        &:hover {
+                            background-color: var(--color-background-hover);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.layer-detail-modal-button {
+    font-size: var(--font-size-large);
+}
