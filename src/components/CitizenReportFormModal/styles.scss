@@ -1,0 +1,18 @@
+.add-citizen-report-form-modal {
+    .location-input {
+        height: 200px;
+    }
+
+    .input-group {
+        display: flex;
+
+        .input {
+            flex-grow: 1;
+        }
+    }
+
+    .input {
+        margin: var(--spacing-medium);
+    }
+}
+

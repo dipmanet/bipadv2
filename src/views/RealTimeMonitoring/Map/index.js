@@ -23,7 +23,7 @@ import {
     pollutionToGeojson,
     getRasterTile,
 } from '#utils/domain';
-import { getImage } from '#utils/common';
+import { getImageAsync } from '#utils/common';
 
 import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
@@ -54,6 +54,8 @@ export default class RealTimeMap extends React.PureComponent {
             showRiverModal: false,
             showRainModal: false,
         };
+
+        this.loadImages();
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -298,6 +300,14 @@ export default class RealTimeMap extends React.PureComponent {
         );
     }
 
+    loadImages = () => {
+        getImageAsync(RainIcon).then((image) => { this.rainIcon = image; });
+        getImageAsync(RiverIcon).then((image) => { this.riverIcon = image; });
+        getImageAsync(EarthquakeIcon).then((image) => { this.earthquakeIcon = image; });
+        getImageAsync(PollutionIcon).then((image) => { this.pollutionIcon = image; });
+        getImageAsync(FireIcon).then((image) => { this.fireIcon = image; });
+    }
+
     render() {
         const {
             realTimeRainList,
@@ -348,12 +358,6 @@ export default class RealTimeMap extends React.PureComponent {
             offset: 8,
         };
 
-        const RainImage = getImage(RainIcon);
-        const RiverImage = getImage(RiverIcon);
-        const EarthquakeImage = getImage(EarthquakeIcon);
-        const PollutionImage = getImage(PollutionIcon);
-        const FireImage = getImage(FireIcon);
-
         return (
             <React.Fragment>
                 <CommonMap
@@ -361,23 +365,23 @@ export default class RealTimeMap extends React.PureComponent {
                     boundsPadding={boundsPadding}
                 />
                 <MapImage
-                    image={RainImage}
+                    image={this.rainIcon}
                     name="rain"
                 />
                 <MapImage
-                    image={RiverImage}
+                    image={this.riverIcon}
                     name="river"
                 />
                 <MapImage
-                    image={EarthquakeImage}
+                    image={this.earthquakeIcon}
                     name="earthquake"
                 />
                 <MapImage
-                    image={PollutionImage}
+                    image={this.pollutionIcon}
                     name="pollution"
                 />
                 <MapImage
-                    image={FireImage}
+                    image={this.fireIcon}
                     name="forest-fire"
                 />
                 { showStreamFlow && (

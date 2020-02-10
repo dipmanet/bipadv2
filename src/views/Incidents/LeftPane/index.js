@@ -7,7 +7,7 @@ import {
     compareDate,
 } from '@togglecorp/fujs';
 
-import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
@@ -27,7 +27,7 @@ import AddIncidentForm from './AddIncidentForm';
 
 import styles from './styles.scss';
 
-const ModalButton = modalize(Button);
+const ModalButton = modalize(AccentButton);
 
 const propTypes = {
     className: PropTypes.string,

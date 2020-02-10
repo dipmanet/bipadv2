@@ -3,7 +3,12 @@ import {
     LayerWithGroup,
     Alert,
     Event,
+    Source,
 } from '#store/atom/page/types';
+
+import { AppState as AppStateOld } from '#store/types';
+
+export AppState extends AppStateOld {}
 
 export interface RouteDetailElement {
     name: string;
@@ -52,6 +57,8 @@ export interface FiltersElement {
 
 export interface AlertElement extends Alert {}
 export interface EventElement extends Event {}
+
+export interface SourceElement extends Source {}
 
 export type LayerType = 'raster' | 'choropleth';
 export interface Layer {

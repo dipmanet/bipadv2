@@ -118,6 +118,7 @@ const drawText = (
 const MapDownloadButton = (props: Props) => {
     const {
         disabled,
+        dispatch,
         pending: pendingFromProps,
 
         region,

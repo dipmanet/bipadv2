@@ -1,9 +1,19 @@
 .disasters {
-    padding: calc(var(--spacing-large) - var(--spacing-medium));
+    display: flex;
+    flex-direction: column;
+    padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
 
     .header {
+        flex-shrink: 0;
+
         .heading {
             padding: var(--spacing-medium);
+            color: var(--color-primary);
         }
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: auto;
     }
 }

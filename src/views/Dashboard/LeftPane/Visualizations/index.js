@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
+import {
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
+    BarChart,
+    Bar,
+    LabelList,
+} from 'recharts';
+
 import { groupList } from '#utils/common';
-import HorizontalBar from '#rscz/HorizontalBar';
 
 import styles from './styles.scss';
 
@@ -68,7 +76,7 @@ export default class Visualization extends React.PureComponent {
                 label: event.key,
                 value: event.value.length,
             }
-        )).sort((a, b) => (a.value - b.value));
+        )).sort((a, b) => (b.value - a.value));
     });
 
     render() {
@@ -81,37 +89,44 @@ export default class Visualization extends React.PureComponent {
         const hazardSummary = this.getHazardSummary(alertList);
         const eventSummary = this.getEventSummary(alertList);
 
+        console.warn(alertList, hazardSummary, eventSummary);
+
         return (
             <div className={styles.visualizations}>
-                <div className={styles.hazardStatisticsChart}>
-                    <header className={styles.header}>
-                        <h4 className={styles.heading}>
-                            Hazard Statistics
-                        </h4>
-                    </header>
-                    <HorizontalBar
-                        className={styles.chart}
-                        data={hazardSummary}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
-                        colorScheme={chartColorScheme}
-                    />
+                <div
+                    style={{
+                        height: hazardSummary.length * 32,
+                    }}
+                    className={styles.container}
+                >
+                    <ResponsiveContainer className={styles.visualizationContainer}>
+                        <BarChart
+                            data={hazardSummary}
+                            layout="vertical"
+                        >
+                            <XAxis
+                                dataKey="value"
+                                type="number"
+                                hide
+                            />
+                            <Bar
+                                fill="#e04656"
+                                dataKey="value"
+                                layout="vertical"
+                            >
+                                <LabelList
+                                    dataKey="label"
+                                    position="insideLeft"
+                                />
+                            </Bar>
+                            <YAxis
+                                dataKey="label"
+                                type="category"
+                                hide
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
-                {eventSummary.length > 0 && (
-                    <div className={styles.eventStatisticsChart}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Major Event Statistics
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            className={styles.chart}
-                            data={eventSummary}
-                            labelSelector={barChartLabelSelector}
-                            valueSelector={barChartValueSelector}
-                        />
-                    </div>
-                )}
             </div>
         );
     }

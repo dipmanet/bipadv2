@@ -3,15 +3,17 @@
 .date-output {
     display: flex;
     align-items: center;
+    padding: var(--spacing-extra-small) calc(var(--spacing-medium) - var(--spacing-small));
 
     .icon {
         flex-shrink: 0;
-        padding-right: $spacing-small;
+        padding: 0 var(--spacing-small);
     }
 
     .formatted-date {
         flex-grow: 1;
-        color: $color-text;
-        font-size: $font-size-small;
+        padding: 0 var(--spacing-small);
+        color: var(--color-text-light);
+        font-weight: var(--font-weight-bold);
     }
 }

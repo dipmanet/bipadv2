@@ -1,0 +1,13 @@
+.left-content-container {
+    display: flex;
+    flex-direction: column;
+
+    .tabs {
+        flex-shrink: 0;
+    }
+
+    .view {
+        flex-grow: 1;
+        overflow: auto;
+    }
+}

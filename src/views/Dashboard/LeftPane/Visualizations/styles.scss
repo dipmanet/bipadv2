@@ -1,23 +1,5 @@
-@import '~base-scss/base';
-
 .visualizations {
-    padding-top: $spacing-small;
-
-    %chart-container {
-        .header {
-            .heading {
-                padding: 0 $spacing-medium;
-                color: $color-accent;
-            }
-        }
-
-        .chart {
-            height: 320px;
-        }
-    }
-
-    .hazard-statistics-chart,
-    .event-statistics-chart {
-        @extend %chart-container;
+    .container {
+        // min-height: 100px;
     }
 }
