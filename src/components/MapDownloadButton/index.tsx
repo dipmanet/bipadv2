@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 
 import Button from '#rsca/Button';
-import MapChild from '#rscz/Map/MapChild';
+import { MapChildContext } from '#re-map/context';
 
 import PageContext from '#components/PageContext';
 
@@ -26,7 +26,9 @@ import {
 import indexMapImage from '#resources/images/index-map.png';
 
 interface OwnProps {
-    map: {};
+    className?: string;
+    disabled?: boolean;
+    pending?: boolean;
 }
 
 interface State {
@@ -47,6 +49,9 @@ const indexBounds = {
     sw: { lng: 80.0884245137, lat: 26.3978980576 },
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
+
+const largeFont = '24px Source Sans Pro';
+const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     region: regionSelector(state),
@@ -110,38 +115,39 @@ const drawText = (
     context.restore();
 };
 
-const largeFont = '24px Source Sans Pro';
-const smallFont = '14px Source Sans Pro';
+const MapDownloadButton = (props: Props) => {
+    const {
+        disabled,
+        pending: pendingFromProps,
 
-class MapDownloadButton extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
+        region,
+        districts,
+        municipalities,
+        provinces,
 
-        this.state = {
-            pending: false,
-        };
-    }
+        ...otherProps
+    } = props;
 
-    private export = () => {
-        const {
-            map,
-            region,
-            districts,
-            municipalities,
-            provinces,
-        } = this.props;
+    const mapContext = useContext(MapChildContext);
+    const pageContext = useContext(PageContext);
 
-        if (!map) {
-            console.warn('Cannot export as there is no map');
-            return;
-        }
+    const [pending, setPending] = useState(false);
 
+    const handleExport = useCallback(
+        () => {
+            if (!mapContext || !mapContext.map) {
+                console.warn('Map context not found');
+                return;
+            }
 
-        let regionName = 'Nepal';
-        const pageTitle = this.context.activeRouteDetails.title;
-        let source = '';
+            if (!pageContext || !pageContext.activeRouteDetails) {
+                console.warn('Page context not found');
+                return;
+            }
 
-        if (map) {
+            const pageTitle = pageContext.activeRouteDetails.title;
+
+            let regionName = 'Nepal';
             if (region.adminLevel === 1) {
                 const province = provinces.find(d => d.id === region.geoarea);
                 if (province) {
@@ -154,166 +160,152 @@ class MapDownloadButton extends React.PureComponent<Props, State> {
                 }
             } else if (region.adminLevel === 3) {
                 const municipality = municipalities.find(d => d.id === region.geoarea);
-
                 if (municipality) {
                     regionName = municipality.title;
                 }
             }
 
-            if (this.context.activeRouteDetails.name === 'realtime') {
+            let source = '';
+            if (pageContext.activeRouteDetails.name === 'realtime') {
                 source = 'Rain / river: DHM';
-            } else if (this.context.activeRouteDetails.name === 'incident') {
+            } else if (pageContext.activeRouteDetails.name === 'incident') {
                 source = 'Nepal police';
             }
-        }
 
-        const legendContainerClassName = 'map-legend-container';
+            setPending(true);
 
-        this.setState({ pending: true });
-        const mapCanvas = map.getCanvas();
+            const { map } = mapContext;
 
-        const canvas = document.createElement('canvas');
-        canvas.width = mapCanvas.width;
-        canvas.height = mapCanvas.height;
+            const mapCanvas = map.getCanvas();
 
-        const context = canvas.getContext('2d');
+            const canvas = document.createElement('canvas');
+            canvas.width = mapCanvas.width;
+            canvas.height = mapCanvas.height;
 
-        if (!context) {
-            return;
-        }
-
-        context.drawImage(mapCanvas, 0, 0);
-        const mapBounds = map.getBounds();
-
-        const mp = getIndexMapProportion(mapBounds);
-        const indexMap = new Image();
-        indexMap.src = indexMapImage;
-
-        indexMap.onload = () => {
-            const rightMargin = 24;
-            const topMargin = 24;
-
-            const indexMapWidth = 200;
-            const indexMapHeight = 200 * indexMap.height / indexMap.width;
-
-            const left = canvas.width - indexMapWidth - rightMargin;
-            const top = topMargin;
-
-            const dx = mp.left * indexMapWidth;
-            const dy = mp.top * indexMapHeight;
-
-            context.drawImage(
-                indexMap,
-                canvas.width - indexMapWidth - rightMargin,
-                topMargin,
-                indexMapWidth,
-                indexMapHeight,
-            );
-
-            context.beginPath();
-            context.strokeStyle = '#ff0000';
-            context.rect(
-                left + dx,
-                top + dy,
-                indexMapWidth * mp.width,
-                indexMapHeight * mp.height,
-            );
-
-            context.stroke();
-
-            const legend = document.getElementsByClassName(legendContainerClassName);
-            const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
-
-            const today = new Date();
-            const title = `${pageTitle} for ${regionName}`;
-            const exportText = `Exported on: ${today.toLocaleDateString()}`;
-
-            drawText(context, largeFont, title, 12, 24, '#000', '#fff');
-            drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
-
-            if (source) {
-                drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
+            const context = canvas.getContext('2d');
+            if (!context) {
+                setPending(false);
+                return;
             }
 
-            const allPromises = [];
+            context.drawImage(mapCanvas, 0, 0);
+            const mapBounds = map.getBounds();
 
-            if (scale) {
-                const scaleCanvas = html2canvas(scale as HTMLElement);
+            const mp = getIndexMapProportion(mapBounds);
+            const indexMap = new Image();
+            indexMap.src = indexMapImage;
 
-                const scalePromise = new Promise((resolve) => {
-                    scaleCanvas.then((c) => {
-                        context.drawImage(
-                            c,
-                            mapCanvas.width - c.width - 6,
-                            mapCanvas.height - c.height - 6,
-                        );
-                        resolve();
+            indexMap.onload = () => {
+                const rightMargin = 24;
+                const topMargin = 24;
+
+                const indexMapWidth = 200;
+                const indexMapHeight = 200 * indexMap.height / indexMap.width;
+
+                const left = canvas.width - indexMapWidth - rightMargin;
+                const top = topMargin;
+
+                const dx = mp.left * indexMapWidth;
+                const dy = mp.top * indexMapHeight;
+
+                context.drawImage(
+                    indexMap,
+                    canvas.width - indexMapWidth - rightMargin,
+                    topMargin,
+                    indexMapWidth,
+                    indexMapHeight,
+                );
+
+                context.beginPath();
+                context.strokeStyle = '#ff0000';
+                context.rect(
+                    left + dx,
+                    top + dy,
+                    indexMapWidth * mp.width,
+                    indexMapHeight * mp.height,
+                );
+
+                context.stroke();
+
+                const legendContainerClassName = 'map-legend-container';
+                const legend = document.getElementsByClassName(legendContainerClassName);
+                const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
+
+                const today = new Date();
+                const title = `${pageTitle} for ${regionName}`;
+                const exportText = `Exported on: ${today.toLocaleDateString()}`;
+
+                drawText(context, largeFont, title, 12, 24, '#000', '#fff');
+                drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
+
+                if (source) {
+                    drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
+                }
+
+                const allPromises = [];
+
+                if (scale) {
+                    const scaleCanvas = html2canvas(scale as HTMLElement);
+
+                    const scalePromise = new Promise((resolve) => {
+                        scaleCanvas.then((c) => {
+                            context.drawImage(
+                                c,
+                                mapCanvas.width - c.width - 6,
+                                mapCanvas.height - c.height - 6,
+                            );
+                            resolve();
+                        });
                     });
-                });
 
-                allPromises.push(scalePromise);
-            }
+                    allPromises.push(scalePromise);
+                }
 
-            if (legend) {
-                const legendPromise = new Promise((resolve) => {
-                    const promises = Array.from(legend).map((legendElement) => {
-                        const elCanvas = html2canvas(legendElement as HTMLElement);
+                if (legend) {
+                    const legendPromise = new Promise((resolve) => {
+                        const promises = Array.from(legend).map((legendElement) => {
+                            const elCanvas = html2canvas(legendElement as HTMLElement);
 
-                        return elCanvas;
-                    });
-
-                    Promise.all(promises).then((canvases) => {
-                        const x = 6;
-
-                        canvases.forEach((c) => {
-                            const y = mapCanvas.height - c.height - 6;
-                            context.drawImage(c, x, y);
+                            return elCanvas;
                         });
 
-                        resolve();
+                        Promise.all(promises).then((canvases) => {
+                            const x = 6;
+
+                            canvases.forEach((c) => {
+                                const y = mapCanvas.height - c.height - 6;
+                                context.drawImage(c, x, y);
+                            });
+
+                            resolve();
+                        });
                     });
+
+                    allPromises.push(legendPromise);
+                }
+
+                Promise.all(allPromises).then(() => {
+                    canvas.toBlob((blob) => {
+                        const link = document.createElement('a');
+                        link.download = 'map-export.png';
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                        setPending(false);
+                    }, 'image/png');
                 });
+            };
+        },
+        [region, districts, provinces, municipalities, mapContext, pageContext],
+    );
 
-                allPromises.push(legendPromise);
-            }
+    return (
+        <Button
+            disabled={disabled || !mapContext || !mapContext.map}
+            pending={pending || pendingFromProps}
+            onClick={handleExport}
+            {...otherProps}
+        />
+    );
+};
 
-            Promise.all(allPromises).then(() => {
-                canvas.toBlob((blob) => {
-                    const link = document.createElement('a');
-                    link.download = 'map-export.png';
-                    link.href = URL.createObjectURL(blob);
-                    link.click();
-                    this.setState({ pending: false });
-                }, 'image/png');
-            });
-        };
-    }
-
-    public render() {
-        const {
-            legendContainerClassName, // capturing the prop
-            setDestroyer,
-            zoomLevel,
-            mapContainerRef,
-            mapStyle,
-            dispatch,
-            ...otherProps
-        } = this.props;
-
-        const {
-            pending,
-        } = this.state;
-
-        return (
-            <Button
-                pending={pending}
-                onClick={this.export}
-                {...otherProps}
-            />
-        );
-    }
-}
-
-MapDownloadButton.contextType = PageContext;
-
-export default connect(mapStateToProps)(MapChild(MapDownloadButton));
+export default connect(mapStateToProps)(MapDownloadButton);

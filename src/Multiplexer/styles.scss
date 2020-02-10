@@ -20,20 +20,6 @@
         flex-grow: 1;
         overflow: auto;
 
-        .map-actions {
-            display: flex;
-            position: absolute;
-            top: var(--spacing-small);
-            left: var(--spacing-medium);
-            z-index: 11;
-            border: var(--width-separator-thin) solid var(--color-separator);
-            background-color: var(--color-foreground);
-
-            &.with-left-pane {
-                left: calc(var(--width-left-panel) + var(--spacing-medium));
-            }
-        }
-
         .left {
             display: flex;
             flex-direction: column;
@@ -57,8 +43,24 @@
 
         .main {
             display: flex;
+            position: relative;
             flex-direction: column;
             flex-grow: 1;
+
+            .map-actions {
+                display: flex;
+                position: absolute;
+                top: var(--spacing-medium);
+                left: var(--spacing-medium);
+                z-index: 11;
+                border: var(--width-separator-thin) solid var(--color-separator);
+                background-color: var(--color-foreground);
+
+                &.with-left-pane {
+                    left: calc(var(--width-left-panel) + var(--spacing-medium));
+                }
+            }
+
 
             .map {
                 flex-grow: 1;

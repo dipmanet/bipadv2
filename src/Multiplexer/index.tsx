@@ -36,8 +36,8 @@ import {
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
-// import LayerSwitch from '#components/LayerSwitch';
-// import MapDownloadButton from '#components/MapDownloadButton';
+import LayerSwitch from '#components/LayerSwitch';
+import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import AppBrand from '#components/AppBrand';
@@ -609,7 +609,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     </aside>
                                 )}
                                 <main className={styles.main}>
-                                    {/* !hideMap && false && (
+                                    { !hideMap && (
                                         <div className={styles.mapActions}>
                                             <MapDownloadButton
                                                 transparent
@@ -618,7 +618,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                             <LayerSwitch />
                                         </div>
-                                    ) */}
+                                    )}
                                     <MapContainer
                                         className={_cs(
                                             styles.map,

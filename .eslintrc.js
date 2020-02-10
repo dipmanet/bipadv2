@@ -13,6 +13,7 @@ module.exports = {
         'import',
         'css-modules',
         '@typescript-eslint',
+        'react-hooks',
     ],
     'settings': {
         'import/resolver': {
@@ -114,5 +115,9 @@ module.exports = {
 
         // NOTE: disabling this rignt now because of bug in eslint-plugin-react
         'react/jsx-curly-brace-presence': 0,
+
+        // Hooks
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
     },
 };

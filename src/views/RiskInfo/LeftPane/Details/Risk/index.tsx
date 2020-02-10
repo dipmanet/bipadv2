@@ -313,7 +313,6 @@ class Risk extends React.PureComponent<Props, State> {
                             <div className={styles.metric}>
                                 f) HDI
                             </div>
-                            All data are the property of Durham University.
                         </div>
                         <div className={styles.options}>
                             <div className={styles.actions}>
