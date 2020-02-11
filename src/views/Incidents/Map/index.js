@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import ListView from '#rscv/List/ListView';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
@@ -20,11 +19,11 @@ import {
 } from '#selectors';
 import { mapStyles } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
-import FireIcon from '#resources/icons/Forest-fire.svg';
 import {
     getYesterday,
     framize,
     getImage,
+    getImageAsync,
 } from '#utils/common';
 
 import {
@@ -33,6 +32,43 @@ import {
 } from '#utils/domain';
 
 import styles from './styles.scss';
+
+const SvgMapImage = (props) => {
+    const {
+        image,
+        name,
+    } = props;
+
+    const [realImage, setRealImage] = useState(undefined);
+
+    const [initialImage] = useState(image);
+
+    useEffect(
+        () => {
+            getImageAsync(initialImage)
+                .then((loadedImage) => {
+                    setRealImage(loadedImage);
+                });
+        },
+        [initialImage],
+    );
+
+    if (!realImage) {
+        return null;
+    }
+
+    return (
+        <MapImage
+            image={realImage}
+            name={name}
+        />
+    );
+};
+
+SvgMapImage.propTypes = {
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+};
 
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -57,8 +93,6 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
-const hazardKeySelector = hazard => hazard.id;
-
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -67,7 +101,6 @@ class IncidentMap extends React.PureComponent {
     constructor(props) {
         super(props);
         this.prevTimestamp = undefined;
-
         this.state = {};
     }
 
@@ -121,7 +154,7 @@ class IncidentMap extends React.PureComponent {
             .filter(v => v);
         const uniqueIds = [...new Set(hazardIdList)];
 
-        return uniqueIds.map(id => hazards[id]);
+        return uniqueIds.map(id => hazards[id]).reverse();
     }
 
     mapImageRendererParams = (_, hazard) => {
@@ -165,17 +198,13 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="incidents" />
-                { hazardList.map((hazard) => {
-                    const image = getImage(hazard.icon)
-                        .setAttribute('crossOrigin', '');
-
-                    return (
-                        <MapImage
-                            image={image}
-                            name={hazard.title}
-                        />
-                    );
-                })}
+                {hazardList.map(hazard => (
+                    <SvgMapImage
+                        key={hazard.icon}
+                        image={hazard.icon}
+                        name={hazard.icon}
+                    />
+                ))}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}
@@ -221,7 +250,7 @@ class IncidentMap extends React.PureComponent {
                         layerOptions={{
                             type: 'symbol',
                             layout: {
-                                'icon-image': ['get', 'hazardTitle'],
+                                'icon-image': ['get', 'hazardIcon'],
                                 'icon-size': 0.2,
                             },
                         }}

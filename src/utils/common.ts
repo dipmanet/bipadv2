@@ -168,9 +168,7 @@ export function framize<T>(fn: FrameFunction<T>, duration = 2000) {
 
 export const getImageAsync = (src: string, width = 56, height = 56) => {
     const image = new Image(width, height);
-
-    // doesn't work :(
-    // image.style.filter = 'brightness(0) invert(1)';
+    image.setAttribute('crossOrigin', '');
 
     image.src = src;
 
