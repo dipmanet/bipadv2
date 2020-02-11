@@ -1,9 +1,7 @@
-@import '~base-scss/utils';
-
 .incident-item {
     display: flex;
-    height: 120px;
-    overflow: hidden;
+    padding: calc(var(--spacing-large) - var(--spacing-medium));
+    overflow: auto;
 
     &.hovered,
     &:hover {
@@ -24,8 +22,8 @@
         padding: var(--spacing-medium);
 
         .icon {
-            width: 20px;
-            height: 20px;
+            width: 32px;
+            height: 32px;
 
             path {
                 fill: currentColor;
@@ -35,7 +33,7 @@
 
     .right {
         flex-grow: 1;
-        border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
+        // border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
         padding: var(--spacing-medium) 0;
         overflow: hidden;
 
@@ -45,7 +43,7 @@
 
             .heading {
                 flex-grow: 1;
-                padding: 0 var(--spacing-medium);
+                padding: var(--spacing-extra-small) var(--spacing-medium);
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -65,23 +63,50 @@
         .content {
             display: flex;
             flex-direction: column;
-            padding: var(--spacing-extra-small) var(--spacing-medium);
 
-            >* {
-                padding-right: var(--spacing-medium);
+            .location-output {
+                display: flex;
+                padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
+
+                .province-name,
+                .district-name,
+                .municipality-name {
+                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+
+                    &:after {
+                        content: ',';
+                    }
+                }
+
+                .street-address {
+                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                }
+            }
+
+            .source,
+            .status {
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+            }
+
+            .output-group {
+                display: flex;
             }
         }
 
-        .footer {
+        .actions {
             display: flex;
             align-items: center;
 
             .button {
-                margin-right: var(--spacing-small);
+                padding: var(--spacing-medium);
+                font-size: var(--font-size-medium);
             }
 
             .link {
-                @extend %transparent-button-like-link;
+                padding: var(--spacing-medium);
+                text-transform: uppercase;
+                color: var(--color-accent);
+                font-weight: var(--font-weight-bold);
             }
         }
     }

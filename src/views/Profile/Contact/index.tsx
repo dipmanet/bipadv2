@@ -13,7 +13,6 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
-import Page from '#components/Page';
 import ListView from '#rscv/List/ListView';
 
 import {
@@ -476,33 +475,20 @@ class ContactPage extends React.PureComponent<Props> {
                         }}
                     />
                 </MapSource>
-                <Page
-                    leftContentClassName={styles.left}
-                    leftContent={(
-                        <React.Fragment>
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Contact personnels
-                                </h3>
-                            </header>
-                            <ListView
-                                className={styles.contactDetailsList}
-                                data={filteredContactList}
-                                renderer={this.renderContactDetails}
-                                rendererParams={this.contactRendererParams}
-                                keySelector={contactKeySelector}
-                            />
-                        </React.Fragment>
-                    )}
-                    rightContentClassName={styles.right}
-                    rightContent={(
-                        <Filter
-                            committeeValueList={committeeValueList}
-                            trainingValueList={trainingValueList}
-                            positionValueList={positionOptions}
-                        />
-                    )}
-                />
+                <div className={styles.left}>
+                    <header className={styles.header}>
+                        <h3 className={styles.heading}>
+                            Contact personnels
+                        </h3>
+                    </header>
+                    <ListView
+                        className={styles.contactDetailsList}
+                        data={filteredContactList}
+                        renderer={this.renderContactDetails}
+                        rendererParams={this.contactRendererParams}
+                        keySelector={contactKeySelector}
+                    />
+                </div>
             </React.Fragment>
         );
     }

@@ -10,8 +10,8 @@
     .icon {
         flex-shrink: 0;
         margin: var(--spacing-small) var(--spacing-medium);
-        width: 24px;
-        height: 24px;
+        width: 32px;
+        height: 32px;
 
         path {
             fill: currentColor;
@@ -48,7 +48,7 @@
         }
 
         .bottom {
-            padding: var(--spacing-extra-small) var(--spacing-medium);
+            // padding: var(--spacing-extra-small) var(--spacing-medium);
         }
     }
 

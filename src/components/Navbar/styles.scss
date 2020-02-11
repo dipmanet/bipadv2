@@ -16,17 +16,59 @@
 
     .bottom {
         display: flex;
-        align-items: center;
         flex-direction: column;
         flex-shrink: 0;
-        justify-content: center;
+
+        .menu-item {
+            padding: var(--spacing-medium) 0;
+        }
 
         .user-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-medium);
             font-size: var(--font-size-large);
         }
 
+        .report-incident-button,
         .logout-button {
-            font-size: var(--font-size-large);
+            padding: var(--spacing-medium) 0;
         }
+    }
+}
+
+.menu-item-like-button {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--color-text);
+
+    .icon {
+        font-size: var(--font-size-extra-large);
+    }
+
+    .title {
+        padding: var(--spacing-extra-small);
+        text-align: center;
+        font-size: var(--font-size-extra-small);
+        font-weight: bold;
+    }
+
+    &:hover {
+        color: var(--color-accent);
+    }
+
+    &.active {
+        background-color: var(--color-accent);
+        color: var(--color-text-on-accent);
+    }
+
+    &.disabled {
+        color: var(--color-text-disabled);
+        pointer-events: none;
     }
 }

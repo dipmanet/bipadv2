@@ -4,7 +4,6 @@ import Page from '#components/Page';
 
 import LeftPane from './LeftPane';
 import RiskInfoMap from './Map';
-import RightPane from './RightPane';
 import ActiveLayers from './ActiveLayers';
 
 import styles from './styles.scss';
@@ -18,11 +17,11 @@ class RiskInfo extends React.PureComponent<Props> {
             <>
                 <RiskInfoMap />
                 <Page
-                    leftContentClassName={styles.leftContainer}
+                    leftContentContainerClassName={styles.leftContainer}
                     leftContent={(
                         <LeftPane className={styles.leftPane} />
                     )}
-                    mainContentClassName={styles.mainContent}
+                    mainContentContainerClassName={styles.mainContent}
                     mainContent={(
                         <ActiveLayers className={styles.activeLayerList} />
                     )}

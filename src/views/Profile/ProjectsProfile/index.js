@@ -412,33 +412,27 @@ class ProjectsProfile extends React.PureComponent {
                     regions={regions}
                     regionLevel={regionLevel}
                 />
-                <Page
-                    leftContentClassName={styles.left}
-                    leftContent={(
-                        <LeftPane
-                            className={styles.leftPane}
-                            projects={filteredProjects}
-                            drrCycleData={drrPieData}
-                            categoryData={categoryPieData}
-                            drrCycleMap={drrCycleMap}
-                            categoryMap={categoryMap}
-                            organizationMap={organizationMap}
-                            projectMap={projectMap}
-                        />
-                    )}
-                    rightContentClassName={styles.right}
-                    rightContent={(
-                        <ProjectsProfileFilter
-                            onExpandChange={this.handleRightPaneExpandChange}
-                            drrCycleOptions={drrcycle}
-                            elementsOptions={category}
-                            organizationOptions={organization}
-                            priorityOptions={priorityOptions}
-                            subPriorityOptions={subPriorityOptions}
-                            activityOptions={activityOptions}
-                        />
-                    )}
+                <LeftPane
+                    className={styles.leftPane}
+                    projects={filteredProjects}
+                    drrCycleData={drrPieData}
+                    categoryData={categoryPieData}
+                    drrCycleMap={drrCycleMap}
+                    categoryMap={categoryMap}
+                    organizationMap={organizationMap}
+                    projectMap={projectMap}
                 />
+                {/*
+                    <ProjectsProfileFilter
+                        onExpandChange={this.handleRightPaneExpandChange}
+                        drrCycleOptions={drrcycle}
+                        elementsOptions={category}
+                        organizationOptions={organization}
+                        priorityOptions={priorityOptions}
+                        subPriorityOptions={subPriorityOptions}
+                        activityOptions={activityOptions}
+                    />
+                */}
             </React.Fragment>
         );
     }

@@ -1,9 +1,10 @@
 .resource-profile {
-    padding: calc(var(--spacing-large) - var(--spacing-medium));
+    padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
 
     .header {
         .heading {
             padding: var(--spacing-medium);
+            color: var(--color-primary);
         }
     }
 
@@ -17,15 +18,16 @@
             align-items: center;
             flex-basis: 50%;
             padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+            filter: brightness(160%) saturate(70%);
 
             .icon {
                 margin: var(--spacing-small) var(--spacing-medium);
-                width: 54px;
-                height: 54px;
-                fill: var(--color-primary);
+                width: 36px;
+                height: 36px;
+                fill: var(--color-accent);
 
                 path {
-                    fill: var(--color-primary);
+                    fill: var(--color-accent);
                 }
             }
 
@@ -34,9 +36,9 @@
 
                 .value {
                     padding: var(--spacing-extra-small) var(--spacing-medium);
-                    color: var(--color-primary);
+                    color: var(--color-accent);
                     font-size: var(--font-size-super-large);
-                    font-weight: var(--font-weight-medium)
+                    font-weight: var(--font-weight-medium);
                 }
 
                 .label {
@@ -45,6 +47,11 @@
                     color: var(--color-text-light);
                     font-size: var(--font-size-small);
                 }
+            }
+
+            &:hover {
+                filter: brightness(100%) saturate(100%);
+                background-color: var(--color-accent-light);
             }
         }
     }

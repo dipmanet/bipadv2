@@ -23,13 +23,18 @@ export const resourceTypeListSelector = ({ page }: AppState) => (
     page.resourceTypeList || emptyList
 );
 
+export const filtersSelector = ({ page }: AppState) => page.filters;
+
 // Popup
 
 export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
 
 // geo
 
-export const regionSelector = ({ page }: AppState) => page.region;
+export const regionSelector = createSelector(
+    filtersSelector,
+    filters => filters.region,
+);
 
 export const regionLevelSelector = createSelector(
     regionByPropSelector,
@@ -128,6 +133,9 @@ export const mapStyleSelector = ({ page }: AppState) => page.selectedMapStyle;
 export const lossListSelector = ({ page }: AppState) => page.lossList;
 
 export const sourceListSelector = ({ page }: AppState) => page.sourceList;
+export const sourcesSelector = ({ page }: AppState) => (
+    listToMap(page.sourceList, d => d.id, d => d.title)
+);
 
 export const severityListSelector = ({ page }: AppState) => page.severityList;
 
@@ -148,8 +156,6 @@ export const agricultureLossTypeListSelector = (
 ) => page.agricultureLossTypeList;
 
 export const countryListSelector = ({ page }: AppState) => page.countryList;
-
-export const filtersSelector = ({ page }: AppState) => page.filters;
 
 export const hazardFilterSelector = createSelector(
     filtersSelector,
@@ -465,6 +471,7 @@ export const boundsSelector = createSelector(
     districtsSelector,
     municipalitiesSelector,
     (regionFromProps, region, provinces, districts, municipalities) => {
+        console.warn('bounds changed');
         const { adminLevel, geoarea } = regionFromProps || region;
         const geoAreas = (
             (adminLevel === 1 && provinces)

@@ -12,7 +12,9 @@ const styleProperties = {
     widthNavbarRight: '50px',
     widthResponseFilters: '240px',
     heightNavbar: '56px',
-    colorAccentLight: '#e9f3f0',
+    colorAccent: '#e04556',
+    colorAccentLight: '#ffd9e3',
+    colorTextAccentHint: '#e04556',
     radiusPanelBorder: '5px',
     heightTimelineMainContent: '112px',
     panelBorderRadius: '5px',
@@ -52,7 +54,8 @@ const styleProperties = {
     fontSizeJumboAlt: '36px',
     fontSizeExtraJumbo: '45px',
 
-    colorBackgroundHover: 'rgba(0, 100, 100, 0.06)',
+    colorBackgroundHover: 'rgba(200, 100, 100, 0.06)',
+    colorBackgroundAccentHint: 'rgba(200, 100, 100, 0.06)',
 };
 
 export default styleProperties;

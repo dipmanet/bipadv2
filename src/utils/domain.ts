@@ -719,7 +719,7 @@ export function getLayerHierarchy(
 
     const newLayers = layerList.map(layer => ({
         ...layer,
-        parent: layer.group.id,
+        parent: layer.group ? layer.group.id : undefined,
         children: [],
         opacity: 0.5,
         type: 'raster',

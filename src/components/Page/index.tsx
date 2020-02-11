@@ -82,23 +82,23 @@ export default class Page extends React.PureComponent<Props, State> {
         } = context;
 
         const {
-            leftContent,
+            leftContent = null,
             leftContentContainerClassName,
-            rightContent,
+            rightContent = null,
             rightContentContainerClassName,
-            extraFilterContent,
+            extraFilterContent = null,
             extraFilterContentContainerClassName,
         } = props;
 
-        if (setLeftContent && (leftContent || leftContent === null)) {
+        if (setLeftContent) {
             setLeftContent(leftContent, leftContentContainerClassName);
         }
 
-        if (setRightContent && (rightContent || rightContent === null)) {
+        if (setRightContent) {
             setRightContent(rightContent, rightContentContainerClassName);
         }
 
-        if (setFilterContent && (extraFilterContent || extraFilterContent === null)) {
+        if (setFilterContent) {
             setFilterContent(extraFilterContent, extraFilterContentContainerClassName);
         }
     }

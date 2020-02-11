@@ -1,7 +1,7 @@
 .left-pane {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-foreground);
+    background-color: var(--color-foreground-alt);
     width: var(--width-left-panel);
     overflow: auto;
 
@@ -24,28 +24,41 @@
                     text-align: center;
                     color: var(--color-danger);
                     font-size: var(--font-size-ultra-large);
-                    font-weight: var(--font-weight-light);
+                    font-weight: var(--font-weight-bold);
                 }
 
                 .label {
                     order: 2;
                     padding: 0 var(--spacing-extra-small);
                     text-align: center;
-                    text-transform: uppercase;
-                    font-size: var(--font-size-small);
-                    font-weight: var(--font-weight-medium);
+                    font-size: var(--font-size-medium);
+                    font-weight: var(--font-weight-bold);
                 }
             }
         }
 
         .actions {
             display: flex;
-            align-items: center;
             flex-shrink: 0;
-            padding: var(--spacing-medium);
 
-            .visualizations-button {
+            .show-list-button {
+                padding: var(--spacing-medium) var(--spacing-large);
                 font-size: var(--font-size-ultra-large);
+
+                &.active {
+                    background-color: var(--color-foreground);
+                    color: var(--color-accent);
+                }
+            }
+
+            .show-visualizations-button {
+                padding: var(--spacing-medium) var(--spacing-large);
+                font-size: var(--font-size-ultra-large);
+
+                &.active {
+                    background-color: var(--color-foreground);
+                    color: var(--color-accent);
+                }
             }
         }
     }
@@ -54,6 +67,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        background-color: var(--color-foreground);
         overflow: auto;
 
         %container {
@@ -80,14 +94,13 @@
                     padding: var(--spacing-medium);
                     color: var(--color-primary);
                     font-size: var(--font-size-extra-large);
-                    font-weight: var(--font-weight-light);
                 }
 
                 .actions {
                     flex-shrink: 0;
 
                     button {
-                        color: inherit;
+                        font-size: var(--font-size-medium);
                     }
                 }
             }

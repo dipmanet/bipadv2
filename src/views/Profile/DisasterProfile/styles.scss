@@ -1,9 +1,12 @@
 .profile-summary {
     display: flex;
     flex-direction: column;
+    background-color: var(--color-foreground);
+    padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
 
-    .tabs {
+    .summary-selection {
         flex-shrink: 0;
+        padding: var(--spacing-medium) var(--spacing-large);
     }
 
     .view {

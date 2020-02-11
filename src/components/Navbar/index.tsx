@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
+import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
 import { authStateSelector } from '#selectors';
@@ -21,12 +21,10 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import CitizenReportFormModal from '#components/CitizenReportFormModal';
 
 import MenuItem from './MenuItem';
-
 import styles from './styles.scss';
-
-const adminEndpoint = process.env.REACT_APP_ADMIN_LOGIN_URL;
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
@@ -88,6 +86,30 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const menuKeySelector = (d: {name: string}) => d.name;
 
+const MenuItemLikeButton = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+}) => (
+    <div
+        role="presentation"
+        className={_cs(styles.menuItemLikeButton, className)}
+        onClick={!disabled ? onClick : undefined}
+    >
+        <Icon
+            className={styles.icon}
+            name={iconName}
+        />
+        <div className={styles.title}>
+            { title }
+        </div>
+    </div>
+);
+
+const CitizenReportingButton = modalize(MenuItemLikeButton);
+
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
         title: data.title,
@@ -119,8 +141,15 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
+                    <CitizenReportingButton
+                        className={styles.reportIncidentButton}
+                        title="Report an incident"
+                        iconName="telephone"
+                        modal={<CitizenReportFormModal />}
+                    />
                     { !authenticated && (
                         <MenuItem
+                            className={styles.menuItem}
                             title="Login"
                             iconName="login"
                             link="/login/"
@@ -134,13 +163,12 @@ class Navbar extends React.PureComponent<Props, State> {
                         />
                     )}
                     { authenticated && (
-                        <Button
+                        <MenuItemLikeButton
                             className={styles.logoutButton}
                             title="Logout"
-                            onClick={logoutRequest.do}
-                            pending={logoutRequest.pending}
-                            transparent
                             iconName="logout"
+                            onClick={logoutRequest.do}
+                            disabled={logoutRequest.pending}
                         />
                     )}
                 </div>

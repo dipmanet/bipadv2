@@ -14,10 +14,10 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
-import GeoOutput from '#components/GeoOutput';
 import { getHazardColor, getHazardIcon } from '#utils/domain';
 import { getYesterday } from '#utils/common';
 import Cloak from '#components/Cloak';
+import { sourcesSelector } from '#selectors';
 
 import {
     patchIncidentActionIP,
@@ -40,6 +40,10 @@ const propTypes = {
     isHovered: PropTypes.bool.isRequired,
 };
 
+const mapStateToProps = state => ({
+    sources: sourcesSelector(state),
+});
+
 const mapDispatchToProps = dispatch => ({
     patchIncident: params => dispatch(patchIncidentActionIP(params)),
     setIncident: params => dispatch(setIncidentActionIP(params)),
@@ -55,6 +59,36 @@ const isRecent = (date, recentDay) => {
     const timestamp = new Date(date).getTime();
     return timestamp > yesterday;
 };
+
+const LocationOutput = ({
+    provinceTitle,
+    districtTitle,
+    municipalityTitle,
+    streetAddress,
+}) => (
+    <div className={styles.locationOutput}>
+        { provinceTitle && (
+            <div className={styles.provinceName}>
+                { provinceTitle }
+            </div>
+        )}
+        { districtTitle && (
+            <div className={styles.districtName}>
+                { districtTitle }
+            </div>
+        )}
+        { municipalityTitle && (
+            <div className={styles.municipalityName}>
+                { municipalityTitle }
+            </div>
+        )}
+        { streetAddress && (
+            <div className={styles.streetAddress}>
+                { streetAddress }
+            </div>
+        )}
+    </div>
+);
 
 class IncidentItem extends React.PureComponent {
     static propTypes = propTypes
@@ -108,6 +142,7 @@ class IncidentItem extends React.PureComponent {
             hazardTypes,
             recentDay,
             isHovered,
+            sources,
         } = this.props;
 
         const {
@@ -122,11 +157,10 @@ class IncidentItem extends React.PureComponent {
             loss: {
                 id: lossServerId,
             } = {},
+            provinceTitle,
+            districtTitle,
+            municipalityTitle,
         } = data;
-
-        const verifiedIconClass = verified
-            ? _cs(styles.icon, iconNames.check, styles.verified)
-            : _cs(styles.icon, iconNames.close);
 
         const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(incidentOn, recentDay);
@@ -158,24 +192,36 @@ class IncidentItem extends React.PureComponent {
                         >
                             { title }
                         </h3>
-                        <span className={verifiedIconClass} />
+                        <DateOutput
+                            hideIcon
+                            className={styles.date}
+                            value={incidentOn}
+                        />
                     </header>
                     <div className={styles.content}>
-                        <DateOutput
-                            value={incidentOn}
+                        <LocationOutput
+                            provinceTitle={provinceTitle}
+                            municipalityTitle={municipalityTitle}
+                            districtTitle={districtTitle}
+                            streetAddress={streetAddress}
                             alwaysVisible
                         />
-                        <GeoOutput
-                            geoareaName={streetAddress}
-                            alwaysVisible
-                        />
-                        <TextOutput
-                            label="Source"
-                            value={source}
-                            alwaysVisible
-                        />
+                        <div className={styles.outputGroup}>
+                            <TextOutput
+                                label="Source"
+                                value={sources[source]}
+                                alwaysVisible
+                                className={styles.source}
+                            />
+                            <TextOutput
+                                value={verified ? 'Verified' : 'Not verified'}
+                                label="Status"
+                                alwaysVisible
+                                className={styles.status}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.footer}>
+                    <div className={styles.actions}>
                         <Cloak hiddenIf={p => !p.change_incident}>
                             <ModalAccentButton
                                 className={styles.button}
@@ -192,13 +238,13 @@ class IncidentItem extends React.PureComponent {
                             >
                                 Edit
                             </ModalAccentButton>
-                            <Link
-                                className={styles.link}
-                                to={reverseRoute('incidents/:incidentId/response', { incidentId })}
-                            >
-                                Go to response
-                            </Link>
                         </Cloak>
+                        <Link
+                            className={styles.link}
+                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
+                        >
+                            Go to response
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -206,4 +252,4 @@ class IncidentItem extends React.PureComponent {
     }
 }
 
-export default connect(null, mapDispatchToProps)(IncidentItem);
+export default connect(mapStateToProps, mapDispatchToProps)(IncidentItem);

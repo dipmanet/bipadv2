@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import { iconNames } from '#constants';
+import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 import styles from './styles.scss';
 
@@ -13,7 +13,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    className: '',
+    className: undefined,
     alwaysVisible: false,
 };
 
@@ -25,8 +25,11 @@ export default class DateOutput extends React.PureComponent {
     render() {
         const {
             className: classNameFromProps,
+            iconClassName,
+            valueClassName,
             value,
             alwaysVisible,
+            hideIcon,
             ...otherProps
         } = this.props;
 
@@ -36,15 +39,20 @@ export default class DateOutput extends React.PureComponent {
 
         return (
             <div className={_cs(classNameFromProps, styles.dateOutput)}>
-                <div
-                    className={_cs(
-                        styles.icon,
-                        iconNames.calendar,
-                        'date-output-icon',
-                    )}
-                />
+                {!hideIcon && (
+                    <Icon
+                        className={_cs(
+                            styles.icon,
+                            iconClassName,
+                        )}
+                        name="calendar"
+                    />
+                )}
                 <FormattedDate
-                    className={styles.formattedDate}
+                    className={_cs(
+                        styles.formattedDate,
+                        valueClassName,
+                    )}
                     value={value}
                     mode="yyyy-MM-dd"
                     {...otherProps}

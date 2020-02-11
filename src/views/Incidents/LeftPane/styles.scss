@@ -7,6 +7,7 @@
 
     .loss-details {
         flex-shrink: 0;
+        background-color: var(--color-foreground-alt);
     }
 
     .incident-list {
@@ -20,12 +21,12 @@
             align-items: center;
             flex-shrink: 0;
             justify-content: space-between;
+            border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
 
             .heading {
                 flex-shrink: 0;
                 padding: var(--spacing-large);
                 color: var(--color-primary);
-                font-weight: var(--font-weight-light);
 
                 .buttons {
                     display: flex;
@@ -38,6 +39,7 @@
                 flex-shrink: 0;
                 margin: 0 var(--spacing-small);
                 padding: var(--spacing-small) var(--var(--spacing-medium) - var(--spacing-small));
+                font-size: var(--font-size-medium);
             }
         }
 

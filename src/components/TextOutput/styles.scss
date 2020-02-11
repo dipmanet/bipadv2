@@ -6,8 +6,10 @@
 
     .label {
         flex-shrink: 0;
-        color: $color-text-label;
+        text-transform: uppercase;
+        color: var(--color-text-light);
         font-size: $font-size-small;
+        font-weight: var(--font-weight-bold);
 
         &:after {
             margin-right: $spacing-small;

@@ -4,8 +4,8 @@ import { _cs } from '@togglecorp/fujs';
 import FixedTabs from '#rscv/FixedTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Message from '#rscv/Message';
+import SegmentInput from '#rsci/SegmentInput';
 
-import Page from '#components/Page';
 import Loading from '#components/Loading';
 import {
     createConnectedRequestCoordinator,
@@ -45,6 +45,12 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
     },
 };
 
+
+const tabList = [
+    { key: 'resources', label: 'Resources' },
+    { key: 'disasters', label: 'Disasters' },
+    { key: 'demographics', label: 'Demographics' },
+];
 
 class DisasterProfile extends React.PureComponent<Props> {
     public state = {
@@ -110,11 +116,15 @@ class DisasterProfile extends React.PureComponent<Props> {
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.profileSummary, className)}>
-                    <FixedTabs
-                        className={styles.tabs}
-                        tabs={this.tabs}
-                        active={activeView}
-                        onClick={this.handleTabClick}
+                    <SegmentInput
+                        className={styles.summarySelection}
+                        options={tabList}
+                        value={activeView}
+                        onChange={this.handleTabClick}
+                        keySelector={d => d.key}
+                        labelSelector={d => d.label}
+                        showLabel={false}
+                        showHintAndError={false}
                     />
                     <MultiViewContainer
                         views={this.views}

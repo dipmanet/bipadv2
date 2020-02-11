@@ -74,6 +74,7 @@ const iconNames = {
     dataRange: 'ion-android-time',
 
     refresh: 'ion-android-refresh',
+    send: 'ion-android-send',
 };
 
 export default iconNames;

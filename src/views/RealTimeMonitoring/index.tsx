@@ -472,7 +472,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showStreamFlow={showStreamflow}
                 />
                 <Page
-                    leftContentClassName={styles.left}
+                    leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
                             <MiniRiverWatch
@@ -485,14 +485,14 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             />
                         </>
                     )}
-                    rightContentClassName={styles.right}
+                    rightContentContainerClassName={styles.right}
                     rightContent={(
                         <RealTimeMonitoringFilter
                             realTimeSourceList={realTimeSourceList}
                             otherSourceList={otherSourceList}
                         />
                     )}
-                    mainContentClassName={_cs(styles.main, 'map-legend-container')}
+                    mainContentContainerClassName={_cs(styles.main, 'map-legend-container')}
                     mainContent={(
                         <LegendView />
                     )}

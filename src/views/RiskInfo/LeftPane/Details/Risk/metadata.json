@@ -1,0 +1,196 @@
+[
+    {
+        "groupTitle": "General",
+        "rows": [
+            {
+                "label": "Dataset title",
+                "value": "Earthquake Ensemble Summary Statistics"
+            },
+            {
+                "label": "Dataset Creation Date",
+                "value": "8/20/2018"
+            },
+            {
+                "label": "Abstract",
+                "value": "High death tolls from recent earthquakes have highlighted the need to better identify ways to effectively reduce seismic risk. We address this need by developing a new earthquake scenario ensemble approach. We model impacts from multiple different earthquake scenarios, identifying impacts that are common to multiple scenarios. This method allows us to estimate whether particular impacts are specific to certain earthquakes or occur irrespective of the location or magnitude of the next earthquake. Our method provides contingency planners with critical information on the likelihood, and probable scale, of impacts in future earthquakes, especially in situations where robust information on the likelihood of future earthquakes is incomplete, allowing disaster risk-reduction efforts to focus on minimizing such effects and reducing seismic risk."
+            },
+            {
+                "label": "Purpose",
+                "value": "This data is intended to provide contingency planners with an overview of the earthquake risk facing individual districts of Nepal. The total risk score is intended to highlight the districts where earthquake risk reduction activities are most urgently needed, based on the potential impacts of future earthquakes, the level of development, and the access constraints for the region. The data is intended to help users target the attributes that contribute to a specific locations earthquake risk in order to understand which mitigation activities may best reduce earthquake risk in that district."
+            },
+            {
+                "label": "Descriptive keyword",
+                "value": "earthquake risk"
+            }
+        ]
+    },
+    {
+        "groupTitle": "Identification Info",
+        "rows": [
+            {
+                "label": "Data type",
+                "value": "Shapefile Feature Class"
+            },
+            {
+                "label": "Data source",
+                "value": "https://doi.org/10.1073/pnas.1807433115"
+            },
+            {
+                "label": "Dataset character set",
+                "value": ""
+            },
+            {
+                "label": "Dataset topic category",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "groupTitle": "Metadata Record Info",
+        "rows": [
+            {
+                "label": "Metadata language",
+                "value": ""
+            },
+            {
+                "label": "Metadat charset",
+                "value": ""
+            },
+            {
+                "label": "Metadata standard name",
+                "value": ""
+            },
+            {
+                "label": "Metadata standard version",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "groupTitle": "Reference System",
+        "rows": [
+            {
+                "label": "Reference System",
+                "value": "WGS 1984"
+            }
+        ]
+    },
+    {
+        "groupTitle": "Geographic Extent  of the dataset",
+        "rows": [
+            {
+                "label": "Geographic Extent East",
+                "value": "88.201668"
+            },
+            {
+                "label": "Geographic Extent West",
+                "value": "80.058585"
+            },
+            {
+                "label": "Geographic Extent North",
+                "value": "30.447277"
+            },
+            {
+                "label": "Geographic Extent South",
+                "value": "26.347837"
+            }
+        ]
+    },
+    {
+        "groupTitle": "Point of Contact",
+        "rows": [
+            {
+                "label": "Name",
+                "value": "Dr Tom Robinson"
+            },
+            {
+                "label": "Organization Name",
+                "value": "Newcastle University"
+            },
+            {
+                "label": "Position name",
+                "value": ""
+            },
+            {
+                "label": "Role",
+                "value": "Lecturer in Physical Geography"
+            },
+            {
+                "label": "Email",
+                "value": "tom.robinson1@newcastle.ac.uk"
+            }
+        ]
+    },
+    {
+        "groupTitle": "Resource Maintenance Information",
+        "rows": [
+            {
+                "label": "Maintenance and update frequency",
+                "value": "N/A"
+            },
+            {
+                "label": "User Defined Maintenance Frequency",
+                "value": "N/A"
+            },
+            {
+                "label": "Date of Next Update",
+                "value": "N/A"
+            }
+        ]
+    },
+    {
+        "groupTitle": "Disclaimer",
+        "rows": [
+            {
+                "label": "Use Constraints",
+                "value": ""
+            },
+            {
+                "label": "Legal Usage",
+                "value": ""
+            },
+            {
+                "label": "Disclaimer",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "groupTitle": "Data Quality Info",
+        "rows": [
+            {
+                "label": "Hierarchy level",
+                "value": ""
+            },
+            {
+                "label": "Statement",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "groupTitle": "Distributor Info",
+        "rows": [
+            {
+                "label": "Individual Name",
+                "value": ""
+            },
+            {
+                "label": "Organization Name",
+                "value": ""
+            },
+            {
+                "label": "Position name",
+                "value": ""
+            },
+            {
+                "label": "Email",
+                "value": ""
+            },
+            {
+                "label": "Role",
+                "value": ""
+            }
+        ]
+    }
+] 
