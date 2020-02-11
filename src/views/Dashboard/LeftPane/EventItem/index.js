@@ -5,11 +5,8 @@ import { _cs } from '@togglecorp/fujs';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import alertIcon from '#resources/icons/Alert.svg';
 
-import {
-    getHazardColor,
-    getHazardIcon,
-} from '#utils/domain';
 import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
 
@@ -91,8 +88,6 @@ export default class EventItem extends React.PureComponent {
             hazard,
         } = event;
 
-        const icon = getHazardIcon(hazardTypes, hazard);
-
         return (
             <div
                 className={_cs(
@@ -105,8 +100,8 @@ export default class EventItem extends React.PureComponent {
             >
                 <ScalableVectorGraphics
                     className={styles.icon}
-                    src={icon}
-                    style={{ color: getHazardColor(hazardTypes, hazard) }}
+                    src={hazard.icon ? hazard.icon : alertIcon}
+                    style={{ color: hazard.color ? hazard.color : '#4666b0' }}
                 />
                 <div className={styles.right}>
                     <div className={styles.top}>

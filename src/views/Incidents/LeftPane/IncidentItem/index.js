@@ -14,7 +14,10 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
+
 import { getHazardColor, getHazardIcon } from '#utils/domain';
+import GeoOutput from '#components/GeoOutput';
+
 import { getYesterday } from '#utils/common';
 import Cloak from '#components/Cloak';
 import { sourcesSelector } from '#selectors';
@@ -23,6 +26,8 @@ import {
     patchIncidentActionIP,
     setIncidentActionIP,
 } from '#actionCreators';
+
+import alertIcon from '#resources/icons/Alert.svg';
 
 import AddIncidentForm from '../AddIncidentForm';
 import styles from './styles.scss';
@@ -152,7 +157,7 @@ class IncidentItem extends React.PureComponent {
             streetAddress,
             source,
             verified,
-            hazard,
+            hazard: hazardId,
             id: incidentId,
             loss: {
                 id: lossServerId,
@@ -162,8 +167,13 @@ class IncidentItem extends React.PureComponent {
             municipalityTitle,
         } = data;
 
-        const icon = getHazardIcon(hazardTypes, hazard);
+
+        const verifiedIconClass = verified
+            ? _cs(styles.icon, iconNames.check, styles.verified)
+            : _cs(styles.icon, iconNames.close);
+
         const isNew = isRecent(incidentOn, recentDay);
+        const hazard = hazardTypes[hazardId];
 
         return (
             // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
@@ -180,8 +190,8 @@ class IncidentItem extends React.PureComponent {
                 <div className={styles.left}>
                     <ScalableVectorGraphics
                         className={styles.icon}
-                        src={icon}
-                        style={{ color: getHazardColor(hazardTypes, hazard) }}
+                        src={hazard.icon || alertIcon}
+                        style={{ color: hazard.color || '#4666b0' }}
                     />
                 </div>
                 <div className={styles.right}>

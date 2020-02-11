@@ -62,7 +62,7 @@ export interface Event extends Field {
     description: string;
     polygon?: unknown;
     point?: unknown;
-    hazard?: number;
+    hazard: number;
     severity: string;
 }
 export interface Alert extends Field {

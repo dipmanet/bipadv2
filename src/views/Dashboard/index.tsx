@@ -150,6 +150,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ props: { filters } }) => ({
             ...transformFilters(filters),
             ordering: '-created_on',
+            expand: 'hazard',
         }),
         onSuccess: ({ response, props: { setEventList }, params }) => {
             interface Response { results: PageTypes.Event[] }

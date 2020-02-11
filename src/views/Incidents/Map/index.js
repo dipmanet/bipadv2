@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
+import ListView from '#rscv/List/ListView';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
+import MapImage from '#re-map/MapImage';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -18,10 +20,11 @@ import {
 } from '#selectors';
 import { mapStyles } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
-
+import FireIcon from '#resources/icons/Forest-fire.svg';
 import {
     getYesterday,
     framize,
+    getImage,
 } from '#utils/common';
 
 import {
@@ -53,6 +56,8 @@ const mapStateToProps = state => ({
     municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
 });
+
+const hazardKeySelector = hazard => hazard.id;
 
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
@@ -110,6 +115,22 @@ class IncidentMap extends React.PureComponent {
         });
     }
 
+    getIncidentsHazardList = (incidentList = []) => {
+        const { hazards } = this.props;
+        const hazardIdList = incidentList.map(v => v.hazard)
+            .filter(v => v);
+        const uniqueIds = [...new Set(hazardIdList)];
+
+        return uniqueIds.map(id => hazards[id]);
+    }
+
+    mapImageRendererParams = (_, hazard) => {
+        const image = getImage(hazard.icon)
+            .setAttribute('crossOrigin', '');
+
+        return ({ name: hazard.title, image });
+    }
+
     render() {
         const {
             incidentList,
@@ -133,6 +154,8 @@ class IncidentMap extends React.PureComponent {
             incidentLngLat,
         } = this.state;
 
+        const hazardList = this.getIncidentsHazardList(incidentList);
+
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: true,
@@ -142,6 +165,17 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="incidents" />
+                { hazardList.map((hazard) => {
+                    const image = getImage(hazard.icon)
+                        .setAttribute('crossOrigin', '');
+
+                    return (
+                        <MapImage
+                            image={image}
+                            name={hazard.title}
+                        />
+                    );
+                })}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}
@@ -181,6 +215,16 @@ class IncidentMap extends React.PureComponent {
                         onClick={this.handleIncidentClick}
                         onMouseEnter={this.handleIncidentMouseEnter}
                         onMouseLeave={this.handleIncidentMouseLeave}
+                    />
+                    <MapLayer
+                        layerKey="incident-point-icon"
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: {
+                                'icon-image': ['get', 'hazardTitle'],
+                                'icon-size': 0.2,
+                            },
+                        }}
                     />
                     { incidentLngLat && (
                         <MapTooltip
