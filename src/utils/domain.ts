@@ -30,6 +30,8 @@ import {
 
 import { groupList } from '#utils/common';
 
+import alertIcon from '#resources/icons/Alert.svg';
+
 // NOTE: interface for Ward, Municipality, ...
 interface Geo {
     id: number;
@@ -220,12 +222,15 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
                     polygon,
                     point,
                     description,
+                    hazard: hazardId,
                     createdOn,
                 } = alert;
 
                 const geometry = polygon
                     ? centroid(polygon as AllGeoJSON).geometry
                     : point;
+
+                const hazard = hazards[hazardId];
 
                 return {
                     id,
@@ -234,7 +239,9 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
                     properties: {
                         title,
                         description,
-                        hazardColor: getHazardColor(hazards, alert.hazard),
+                        hazardTitle: hazard.title,
+                        hazardIcon: hazard.icon,
+                        hazardColor: hazard.color || '#4666b0',
                         createdOn: new Date(createdOn).getTime(),
                     },
                 };
@@ -322,12 +329,14 @@ export const eventToPointGeojson = (eventList: Event[], hazards: Obj<HazardType>
                     description,
                     severity,
                     createdOn,
-                    hazard,
+                    hazard: hazardId,
                 } = event;
 
                 const geometry = polygon
                     ? centroid(polygon as AllGeoJSON).geometry
                     : point;
+
+                const hazard = hazards[hazardId];
 
                 return {
                     id,
@@ -338,7 +347,9 @@ export const eventToPointGeojson = (eventList: Event[], hazards: Obj<HazardType>
                         description,
                         severity,
                         createdOn,
-                        hazardColor: getHazardColor(hazards, hazard),
+                        hazardTitle: hazard.title,
+                        hazardIcon: hazard.icon,
+                        hazardColor: hazard.color || '#4666b0',
                     },
                 };
             }),
@@ -359,10 +370,13 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
             const {
                 id,
                 point,
-                hazard,
+                hazard: hazardId,
                 incidentOn,
                 severityValue,
             } = incident;
+
+            const hazard = hazards[hazardId];
+
             return {
                 id,
                 type: 'Feature',
@@ -370,7 +384,9 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
                 properties: {
                     incidentId: id,
                     severity: calculateCategorizedSeverity(severityValue),
-                    hazardColor: getHazardColor(hazards, hazard),
+                    hazardTitle: hazard.title,
+                    hazardIcon: hazard.icon,
+                    hazardColor: hazard.color || '#4666b0',
                     incidentOn: new Date(incidentOn).getTime(),
                 },
             };

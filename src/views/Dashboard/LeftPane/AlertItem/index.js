@@ -5,12 +5,9 @@ import { _cs } from '@togglecorp/fujs';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import alertIcon from '#resources/icons/Alert.svg';
 
 import { getYesterday } from '#utils/common';
-import {
-    getHazardColor,
-    getHazardIcon,
-} from '#utils/domain';
 import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
 
@@ -97,7 +94,6 @@ export default class AlertItem extends React.PureComponent {
             startedOn,
         } = alert;
 
-        const icon = getHazardIcon(hazardTypes, hazard);
         const isNew = isRecent(startedOn, recentDay);
 
         return (
@@ -113,8 +109,8 @@ export default class AlertItem extends React.PureComponent {
             >
                 <ScalableVectorGraphics
                     className={styles.icon}
-                    src={icon}
-                    style={{ color: getHazardColor(hazardTypes, hazard) }}
+                    src={hazard.icon || alertIcon}
+                    style={{ color: hazard.color || '#4666b0' }}
                 />
                 <div className={styles.right}>
                     <div className={styles.top}>

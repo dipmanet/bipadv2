@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
+import { unique } from '@togglecorp/fujs';
 
+import ListView from '#rscv/List/ListView';
 import MapSource from '#re-map/MapSource';
+import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
@@ -24,7 +27,7 @@ import {
     eventToPolygonGeojson,
     eventToPointGeojson,
 } from '#utils/domain';
-import { getYesterday, framize } from '#utils/common';
+import { getYesterday, framize, getImage } from '#utils/common';
 
 import { hazardTypesSelector } from '#selectors';
 
@@ -113,6 +116,8 @@ const defaultProps = {
 const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
 });
+
+const hazardKeySelector = hazard => hazard.id;
 
 class AlertEventMap extends React.PureComponent {
     constructor(props) {
@@ -220,6 +225,25 @@ class AlertEventMap extends React.PureComponent {
         onEventHover();
     }
 
+    getHazardList = (alertList = [], eventList = []) => {
+        const { hazards } = this.props;
+        const alertHazardIdList = alertList.map(v => v.hazard)
+            .filter(v => v);
+        const eventHazardIdList = eventList.map(v => v.hazard)
+            .filter(v => v);
+
+        const uniqueIds = [...new Set([...alertHazardIdList, ...eventHazardIdList])];
+
+        return uniqueIds.map(id => hazards[id]);
+    }
+
+    mapImageRendererParams = (_, hazard) => {
+        const image = getImage(hazard.icon)
+            .setAttribute('crossOrigin', '');
+
+        return ({ name: hazard.title, image });
+    }
+
     render() {
         const {
             alertList,
@@ -235,6 +259,8 @@ class AlertEventMap extends React.PureComponent {
         const featureConvexCollection = this.getConvexAlertsFeatureCollection(alertList, hazards);
         const featurePolygonCollection = this.getPolygonAlertsFeatureCollection(alertList, hazards);
         const featurePointCollection = this.getPointAlertsFeatureCollection(alertList, hazards);
+
+        const hazardList = this.getHazardList(alertList);
 
         const eventsConvexFeatureCollection = this.getConvexEventsFeatureCollection(
             eventList,
@@ -272,6 +298,12 @@ class AlertEventMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
+                <ListView
+                    keySelector={hazardKeySelector}
+                    data={hazardList}
+                    renderer={MapImage}
+                    rendererParams={this.mapImageRendererParams}
+                />
                 <MapSource
                     sourceKey="alerts-convex-polygon"
                     sourceOptions={{ type: 'geojson' }}
@@ -318,6 +350,16 @@ class AlertEventMap extends React.PureComponent {
                             paint: mapStyles.alertPoint.animatedCircle,
                         }}
                         onAnimationFrame={this.handleAnimationKeyframe}
+                    />
+                    <MapLayer
+                        layerKey="alerts-point-icon"
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: {
+                                'icon-image': ['get', 'hazardTitle'],
+                                'icon-size': 0.2,
+                            },
+                        }}
                     />
                     <MapLayer
                         layerKey="alerts-point"
@@ -387,7 +429,17 @@ class AlertEventMap extends React.PureComponent {
                     geoJson={eventsPointFeatureCollection}
                 >
                     <MapLayer
-                        layerKey="events-symbol"
+                        layerKey="events-point-icon"
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: {
+                                'icon-image': ['get', 'hazardTitle'],
+                                'icon-size': 0.2,
+                            },
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="events-point"
                         layerOptions={{
                             type: 'symbol',
                             layout: mapStyles.eventSymbol.layout,
