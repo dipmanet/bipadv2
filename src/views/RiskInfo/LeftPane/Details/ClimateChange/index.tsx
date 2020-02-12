@@ -1,8 +1,11 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { extent } from 'd3-array';
 import { _cs, mean } from '@togglecorp/fujs';
-import memoize from 'memoize-one';
+import Switch from 'react-input-switch';
+
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 import {
     getResults,
@@ -13,7 +16,7 @@ import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
 
-import Map from './Map';
+import { generatePaint } from '#utils/domain';
 
 import {
     Province,
@@ -45,6 +48,46 @@ import {
 
 import styles from './styles.scss';
 
+const tempColors: string[] = [
+    '#31a354',
+    '#93ce82',
+    '#ddf1b3',
+    '#fef6cb',
+    '#f2b294',
+    '#d7595d',
+    '#bd0026',
+];
+
+const rainColors: string[] = [
+    '#ffffcc',
+    '#c7e4b9',
+    '#7fcdbb',
+    '#41b6c4',
+    '#1d91c0',
+    '#225ea8',
+    '#0c2c84',
+];
+
+const Tooltip = ({ feature, layer }: { feature: unknown; layer: unknown }) => {
+    const { properties: { title }, state: { value } } = feature;
+
+    if (value) {
+        const valueText = `${layer.scenarioName}: ${Number(value).toFixed(2)}`;
+
+        return (
+            <div className={styles.tooltip}>
+                <div className={styles.label}>{title}</div>
+                <div className={styles.value}>{valueText}</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.tooltip}>
+            <div className={styles.title}>{title}</div>
+        </div>
+    );
+};
 
 interface OwnProps {
     className?: string;
@@ -69,16 +112,10 @@ type Props = NewProps<ReduxProps, Params>;
 type MeasurementType = 'temperature' | 'precipitation';
 
 interface State {
+    isActive: boolean;
     scenario: string;
     timePeriodKey: string;
     measurementType: MeasurementType;
-}
-
-interface MapState {
-    id: number;
-    value: {
-        value: number;
-    };
 }
 
 interface TimePeriod {
@@ -86,6 +123,11 @@ interface TimePeriod {
     label: string;
     startYear: number;
     endYear: number;
+}
+
+interface MapState {
+    id: number;
+    value: number;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -132,6 +174,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
+            isActive: false,
             scenario: 'rcp45',
             timePeriodKey: 'reference-period',
             measurementType: 'temperature',
@@ -142,18 +185,48 @@ class ClimateChange extends React.PureComponent<Props, State> {
         this.setState({
             measurementType,
         });
+        const { addLayer } = this.context;
+        const { timePeriodKey, scenario } = this.state;
+        if (addLayer) {
+            const layer = this.transformClimateChangeToLayer({
+                timePeriodKey,
+                scenario,
+                measurementType,
+            });
+            addLayer(layer);
+        }
     }
 
     private handleSetScenario =(scenario: string) => {
         this.setState({
             scenario,
         });
+        const { timePeriodKey, measurementType } = this.state;
+        const { addLayer } = this.context;
+        if (addLayer) {
+            const layer = this.transformClimateChangeToLayer({
+                timePeriodKey,
+                measurementType,
+                scenario,
+            });
+            addLayer(layer);
+        }
     }
 
     private handleSetTimePeriod = (timePeriodKey: string) => {
         this.setState({
             timePeriodKey,
         });
+        const { addLayer } = this.context;
+        const { scenario, measurementType } = this.state;
+        if (addLayer) {
+            const layer = this.transformClimateChangeToLayer({
+                scenario,
+                measurementType,
+                timePeriodKey,
+            });
+            addLayer(layer);
+        }
     }
 
     private getMapState = (
@@ -166,13 +239,13 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const napData = (measurementType === 'temperature') ? temperature : precipitation;
 
         const timePeriod = timePeriodOptions.find(option => option.key === timePeriodKey)
-                            || timePeriodOptions[0];
+                        || timePeriodOptions[0];
         const { startYear, endYear } = timePeriod;
         const {
             startYear: referenceStart,
             endYear: referenceEnd,
         } = timePeriodOptions.find(option => option.key === 'reference-period')
-        || timePeriodOptions[0];
+         || timePeriodOptions[0];
 
         const filter = ({ year }: NapValue) => (year >= startYear && year <= endYear);
         const referenceFilter = ({ year }: NapValue) => (
@@ -209,19 +282,15 @@ class ClimateChange extends React.PureComponent<Props, State> {
         return filteredData;
     }
 
-    public render() {
+    private transformClimateChangeToLayer = ({
+        timePeriodKey,
+        measurementType,
+        scenario,
+    }: Omit<State, 'isActive'>) => {
         const {
-            className,
             requests,
         } = this.props;
 
-        const {
-            timePeriodKey,
-            measurementType,
-            scenario,
-        } = this.state;
-
-        const pending = isAnyRequestPending(requests);
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
         const mapState = this.getMapState(
@@ -232,21 +301,99 @@ class ClimateChange extends React.PureComponent<Props, State> {
             timePeriodKey,
         );
 
+        const [min, max] = extent(mapState, (d: MapState) => d.value);
+        const colors = measurementType === 'temperature' ? tempColors : rainColors;
+        const { paint, legend } = generatePaint(colors, min || 0, max || 0);
+        const { label: scenarioName } = scenarioOptions.find(v => v.key === scenario) || {};
+        return {
+            id: 'climate-change-risk-info',
+            title: `Climate change / ${measurementType}`,
+            type: 'choropleth',
+            adminLevel: 'district',
+            layername: 'Climate change risk',
+            opacity: 1,
+            mapState,
+            paint,
+            legend,
+            scenarioName,
+            tooltipRenderer: Tooltip,
+        };
+    };
+
+    private handleChange = (value: boolean) => {
+        const {
+            addLayer,
+            removeLayer,
+        } = this.context;
+
+        console.warn('value', value);
+        this.setState({
+            isActive: value,
+        });
+
+        const {
+            timePeriodKey,
+            measurementType,
+            scenario,
+        } = this.state;
+
+        const layer = this.transformClimateChangeToLayer({
+            timePeriodKey,
+            measurementType,
+            scenario,
+        });
+        if (value) {
+            addLayer(layer);
+        } else {
+            removeLayer(layer.id);
+        }
+    }
+
+    public render() {
+        const {
+            className,
+            requests,
+        } = this.props;
+
+        const {
+            timePeriodKey,
+            measurementType,
+            scenario,
+            isActive,
+        } = this.state;
+
+        const pending = isAnyRequestPending(requests);
+
         return (
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.climateChange, className)}>
+                    <div className={styles.header}>
+                        <Switch
+                            disabled={pending}
+                            className={styles.switch}
+                            on
+                            off={false}
+                            value={isActive}
+                            onChange={this.handleChange}
+                        />
+                        <div className={styles.title}>
+                            Climate change
+                        </div>
+                    </div>
                     <div className={styles.top}>
                         <SegmentInput
                             className={styles.measurementTypeInput}
                             label="Measurement"
+                            disabled={pending || !isActive}
                             options={measurementOptions}
                             value={measurementType}
                             onChange={this.handleSetMeasurementType}
                         />
                         <SelectInput
-                            label="Time period"
                             className={styles.timePeriodInput}
+                            label="Time period"
+                            disabled={pending || !isActive}
                             options={timePeriodOptions}
                             value={timePeriodKey}
                             onChange={this.handleSetTimePeriod}
@@ -255,23 +402,19 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         <SegmentInput
                             className={styles.scenarioInput}
                             label="Scenario"
+                            disabled={pending || !isActive}
                             options={scenarioOptions}
                             value={scenario}
                             onChange={this.handleSetScenario}
                         />
                     </div>
-                    <Map
-                        mapState={mapState}
-                        measurementType={measurementType}
-                        scenarioOptions={scenarioOptions}
-                        scenario={scenario}
-                    />
                 </div>
             </>
         );
     }
 }
 
+ClimateChange.contextType = RiskInfoLayerContext;
 export default compose(
     connect(mapStateToProps),
     createRequestClient(requestOptions),
