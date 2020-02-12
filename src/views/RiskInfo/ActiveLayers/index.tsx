@@ -31,7 +31,7 @@ const ActiveLayer = ({
     <div className={styles.activeLayer}>
         <header className={styles.header}>
             <h4 className={styles.heading}>
-                { layer.title }
+                { layer.fullName || layer.title }
             </h4>
             <Button
                 transparent

@@ -1,6 +1,12 @@
 .legend {
     padding: var(--spacing-small) var(--spacing-medium);
 
+    .header {
+        .heading {
+            padding: var(--spacing-extra-small) 0;
+        }
+    }
+
     .choropleth-legend {
         display: flex;
 

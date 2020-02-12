@@ -92,10 +92,16 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         }
 
         const layerGroupMap = listToMap(layerGroupList, d => d.id, d => d);
-        const groupExpandedLayerList = layerList.map(d => ({
-            ...d,
-            group: d.group ? layerGroupMap[d.group] : undefined,
-        }));
+        const groupExpandedLayerList = layerList.map((d) => {
+            const group = d.group ? layerGroupMap[d.group] : undefined;
+            const fullName = (group && group.title) ? `${group.title} / ${d.title}` : undefined;
+
+            return {
+                ...d,
+                group,
+                fullName,
+            };
+        });
 
         const groupedLayerList = listToGroupList(
             groupExpandedLayerList,
