@@ -14,6 +14,7 @@ import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
+import ReCaptcha from '#rsci/ReCaptcha';
 
 import {
     BasicElement,
@@ -81,6 +82,7 @@ const schema = {
         reportedOnTime: [],
         streetAddress: [],
         location: [],
+        recaptacha: [],
     },
 };
 
@@ -113,9 +115,21 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
                 citizenReportPostRequest,
             },
         } = this.props;
-        citizenReportPostRequest.do({
-            body: faramValues,
-        });
+
+        const { location } = faramValues;
+
+        const point = location.geoJson.features[0].geometry;
+        const wards = location.wards;
+
+        const body = {
+            hazard: faramValues.hazard,
+            point,
+            ward: wards[0],
+            description: faramValues.description,
+            recaptcha: faramValues.recaptacha,
+        };
+
+        citizenReportPostRequest.do({ body });
     }
 
     public render() {
@@ -127,9 +141,7 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
             eventList,
         } = this.props;
 
-        const {
-            faramValues,
-        } = this.state;
+        const { faramValues } = this.state;
 
         return (
             <Modal
@@ -189,6 +201,10 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
                         <LocationInput
                             className={_cs(styles.locationInput, styles.input)}
                             faramElementName="location"
+                        />
+                        <ReCaptcha
+                            faramElementName="recaptacha"
+                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                         />
                     </ModalBody>
                     <ModalFooter>

@@ -432,7 +432,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             };
         };
 
-
         const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
         const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
         const point = location.geoJson.features[0].geometry;
