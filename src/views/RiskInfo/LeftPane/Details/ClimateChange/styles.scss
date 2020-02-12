@@ -1,9 +1,28 @@
 .climate-change {
     display: flex;
     flex-direction: column;
+    padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+    .header {
+        display: flex;
+        align-items: center;
+        padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+        .switch {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-small);
+        }
+
+        .title {
+            flex-grow: 1;
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            font-weight: var(--font-weight-bold);
+        }
+    }
 
     .top {
         flex-grow: 1;
+        padding: calc(var(--spacing-medium) - var(--spacing-small));
 
         .measurement-type-input {
             margin: var(--spacing-medium);
@@ -17,12 +36,19 @@
             margin: var(--spacing-medium);
         }
     }
+}
 
-    .bottom {
-        flex-shrink: 0;
+.tooltip {
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+    border-top: var(--width-separator-medium) solid var(--color-accent);
 
-        .chart {
-            width: 100%;
-        }
+    .label {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+        color: var(--color-text-label);
+    }
+
+    .value {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+        font-weight: var(--font-weight-bold);
     }
 }
