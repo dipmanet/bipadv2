@@ -10,21 +10,8 @@
             flex-grow: 1;
             overflow: auto;
 
-            .description {
+            .content {
                 padding: var(--spacing-medium) 0;
-                white-space: pre-wrap;
-            }
-
-            .disclaimer {
-                padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
-
-                .heading {
-                    padding: var(--spacing-small) 0;
-                }
-
-                .content {
-                    padding: var(--spacing-small) 0;
-                }
             }
         }
 
@@ -38,6 +25,10 @@
                 .group-title {
                     padding: var(--spacing-medium);
                     font-weight: var(--font-weight-bold);
+
+                    &:first-letter {
+                        text-transform: uppercase;
+                    }
                 }
 
                 .rows {
@@ -51,6 +42,10 @@
                             color: var(--color-text-light);
                             font-size: var(--font-size-small);
                             font-weight: var(--font-weight-bold);
+
+                            &:first-letter {
+                                text-transform: uppercase;
+                            }
                         }
 
                         .value {

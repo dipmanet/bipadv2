@@ -2,9 +2,9 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 
-import Icon from '#rscg/Icon';
-
+import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+
 import { LayerHierarchy } from '#types';
 
 import styles from './styles.scss';
@@ -60,11 +60,10 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                     <div className={styles.title}>
                         { data.title }
                     </div>
-                    { data.longDescription && (
-                        <Icon
-                            name="info"
-                            className={styles.infoIcon}
-                            title={data.longDescription}
+                    { (data.longDescription || data.metadata) && (
+                        <LayerDetailModalButton
+                            layer={data}
+                            className={styles.infoButton}
                         />
                     )}
                 </div>

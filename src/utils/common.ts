@@ -185,3 +185,9 @@ export function getImage(src: string, width = 56, height = 56) {
 
     return image;
 }
+
+export const encodeTime = (date: Date) => (
+    `${date.getHours()}:${date.getMinutes()}:00`
+);
+
+export { encodeDate } from '@togglecorp/fujs';

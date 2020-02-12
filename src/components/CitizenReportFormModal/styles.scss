@@ -1,6 +1,6 @@
 .add-citizen-report-form-modal {
     .location-input {
-        height: 200px;
+        height: 400px;
     }
 
     .input-group {
@@ -8,6 +8,10 @@
 
         .input {
             flex-grow: 1;
+        }
+
+        .date-time-input {
+            display: flex;
         }
     }
 

@@ -6,9 +6,7 @@ import {
     Source,
 } from '#store/atom/page/types';
 
-import { AppState as AppStateOld } from '#store/types';
-
-export AppState extends AppStateOld {}
+export { AppState } from '#store/types';
 
 export interface RouteDetailElement {
     name: string;

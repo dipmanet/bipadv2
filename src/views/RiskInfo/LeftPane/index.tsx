@@ -2,6 +2,7 @@ import React from 'react';
 import {
     _cs,
     listToGroupList,
+    listToMap,
 } from '@togglecorp/fujs';
 
 import {
@@ -24,8 +25,11 @@ import {
 import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
+import {
+    getResults,
+    isAnyRequestPending,
+} from '#utils/request';
 
-import { attributeColorMap } from './attributes';
 import Overview from './Overview';
 import Details from './Details';
 
@@ -41,35 +45,25 @@ interface Params {
 }
 
 interface State {
-    layerMap: LayerMap | {};
-    layerGroupList: LayerGroup[];
     activeAttribute: AttributeKey | undefined;
 }
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
-    layersGetRequest: {
-        url: '/layer/?expand=group',
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+    layerGetRequest: {
+        url: '/layer/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response, params: { setLayerMap } = { setLayerMap: undefined } }) => {
-            const { results } = response as MultiResponse<Layer>;
-
-            if (setLayerMap) {
-                setLayerMap(listToGroupList(results, d => d.category));
-            }
-        },
     },
     layerGroupGetRequest: {
         url: '/layer-group/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response, params: { setLayerGroup } = { setLayerGroup: undefined } }) => {
-            const { results } = response as MultiResponse<LayerGroup>;
-            if (setLayerGroup) {
-                setLayerGroup(results);
-            }
+        query: {
+            expand: [
+                'metadata',
+            ],
         },
     },
 };
@@ -88,33 +82,27 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            layerMap: {},
-            layerGroupList: [],
-            activeAttribute: getHashFromBrowser(),
+            activeAttribute: getHashFromBrowser() as AttributeKey,
         };
+    }
 
-        const {
-            requests: {
-                layersGetRequest,
-                layerGroupGetRequest,
-            },
-        } = this.props;
+    private getGroupedLayers = (layerList: Layer[], layerGroupList: LayerGroup[]) => {
+        if (layerList.length === 0 || layerGroupList.length === 0) {
+            return {};
+        }
 
-        layersGetRequest.setDefaultParams({
-            setLayerMap: (layerMap: LayerMap) => {
-                this.setState({
-                    layerMap,
-                });
-            },
-        });
+        const layerGroupMap = listToMap(layerGroupList, d => d.id, d => d);
+        const groupExpandedLayerList = layerList.map(d => ({
+            ...d,
+            group: d.group ? layerGroupMap[d.group] : undefined,
+        }));
 
-        layerGroupGetRequest.setDefaultParams({
-            setLayerGroup: (layerGroupList: LayerGroup[]) => {
-                this.setState({
-                    layerGroupList,
-                });
-            },
-        });
+        const groupedLayerList = listToGroupList(
+            groupExpandedLayerList,
+            d => d.category,
+        );
+
+        return groupedLayerList;
     }
 
     private handleAttributeClick = (key: AttributeKey) => {
@@ -130,18 +118,16 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     public render() {
         const {
             className,
-            requests: {
-                layersGetRequest: {
-                    pending,
-                },
-            },
+            requests,
         } = this.props;
 
-        const {
-            layerMap,
-            layerGroupList,
-            activeAttribute,
-        } = this.state;
+        const { activeAttribute } = this.state;
+
+        const layerList = getResults(requests, 'layerGetRequest');
+        const layerGroupList = getResults(requests, 'layerGroupGetRequest');
+        const pending = isAnyRequestPending(requests);
+
+        const groupedLayers = this.getGroupedLayers(layerList, layerGroupList);
 
         return (
             <div className={
@@ -180,7 +166,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                         <Details
                             className={styles.detail}
                             attribute={activeAttribute}
-                            layerMap={layerMap}
+                            layerMap={groupedLayers}
                             layerGroupList={layerGroupList}
                             activeView={activeAttribute}
                         />
@@ -198,5 +184,5 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 }
 
 export default createConnectedRequestCoordinator<OwnProps>()(
-    createRequestClient(requests)(RiskInfoLeftPane),
+    createRequestClient(requestOptions)(RiskInfoLeftPane),
 );

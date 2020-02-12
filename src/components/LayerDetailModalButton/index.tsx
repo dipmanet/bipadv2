@@ -1,5 +1,8 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    camelToNormal,
+} from '@togglecorp/fujs';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -8,6 +11,7 @@ import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
+import Message from '#rscv/Message';
 
 import { Layer } from '#types';
 
@@ -37,52 +41,80 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
 
     private views = {
         details: {
-            component: () => (
-                <div className={styles.details}>
-                    <div className={styles.description}>
-                        { this.props.layer.description }
-                    </div>
-                    <div className={styles.disclaimer}>
-                        <h3 className={styles.heading}>
-                            Disclaimer
-                        </h3>
-                        <div className={styles.content}>
-                            { this.props.layer.disclaimer }
+            component: () => {
+                const { layer } = this.props;
+
+                if (!layer.longDescription) {
+                    return (
+                        <div className={styles.details}>
+                            <Message>
+                                Not available
+                            </Message>
                         </div>
+                    );
+                }
+
+                return (
+                    <div className={styles.details}>
+                        <div
+                            className={styles.content}
+                            dangerouslySetInnerHTML={{
+                                __html: layer.longDescription,
+                            }}
+                        />
                     </div>
-                </div>
-            ),
+                );
+            },
         },
         metadata: {
-            component: () => (
-                <div className={styles.metadata}>
-                    { this.props.layer.metadata.map(g => (
-                        <div
-                            key={g.groupTitle}
-                            className={styles.group}
-                        >
-                            <div className={styles.groupTitle}>
-                                { g.groupTitle }
-                            </div>
-                            <div className={styles.rows}>
-                                { g.rows.map(m => (
-                                    <div
-                                        className={styles.metadataItem}
-                                        key={m.label}
-                                    >
-                                        <div className={styles.label}>
-                                            { m.label }
-                                        </div>
-                                        <div className={styles.value}>
-                                            { m.value || '-' }
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+            component: () => {
+                const {
+                    layer,
+                } = this.props;
+
+                if (!layer.metadata) {
+                    return (
+                        <div className={styles.metadata}>
+                            <Message>
+                                Not available
+                            </Message>
                         </div>
-                    ))}
-                </div>
-            ),
+                    );
+                }
+
+                const groups = layer.metadata.value;
+                const groupKeys = Object.keys(groups);
+
+                return (
+                    <div className={styles.metadata}>
+                        { groupKeys.map(groupKey => (
+                            <div
+                                key={groupKey}
+                                className={styles.group}
+                            >
+                                <div className={styles.groupTitle}>
+                                    { camelToNormal(groupKey) }
+                                </div>
+                                <div className={styles.rows}>
+                                    { Object.keys(groups[groupKey]).map(m => (
+                                        <div
+                                            className={styles.metadataItem}
+                                            key={m}
+                                        >
+                                            <div className={styles.label}>
+                                                {camelToNormal(m)}
+                                            </div>
+                                            <div className={styles.value}>
+                                                {groups[groupKey][m] || '-'}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            },
         },
     }
 

@@ -2,9 +2,9 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import LayerSelection from '#components/LayerSelection';
+import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import { LayerHierarchy } from '#types';
 
 import styles from './styles.scss';
@@ -33,9 +33,7 @@ class LayerGroup extends React.PureComponent<Props, State> {
             className,
         } = this.props;
 
-        const {
-            isContentShown,
-        } = this.state;
+        const { isContentShown } = this.state;
 
         if (!data.children) {
             return null;
@@ -51,6 +49,21 @@ class LayerGroup extends React.PureComponent<Props, State> {
                     <h3 className={styles.title}>
                         { data.title }
                     </h3>
+                    { (data.longDescription || data.metadata) && (
+                        <div className={styles.hiddenActions}>
+                            <LayerDetailModalButton
+                                layer={data}
+                                className={styles.infoButton}
+                            />
+                            <Button
+                                title="Show data (currently not available)"
+                                className={styles.showDataButton}
+                                transparent
+                                iconName="table"
+                                disabled
+                            />
+                        </div>
+                    )}
                     <Button
                         transparent
                         className={styles.showContentButton}
@@ -65,37 +78,6 @@ class LayerGroup extends React.PureComponent<Props, State> {
                 )}
                 { isContentShown && (
                     <div className={styles.content}>
-                        { data.longDescription && (
-                            <div className={styles.actions}>
-                                <PrimaryButton
-                                    iconName="info"
-                                    disabled={!data.longDescription}
-                                    transparent
-                                    title={data.longDescription}
-                                    className={styles.infoButton}
-                                />
-                                <Button
-                                    transparent
-                                    iconName="table"
-                                    disabled
-                                />
-                                <Button
-                                    iconName="contrast"
-                                    transparent
-                                    disabled
-                                />
-                                <Button
-                                    iconName="download"
-                                    transparent
-                                    disabled
-                                />
-                                <Button
-                                    iconName="share"
-                                    transparent
-                                    disabled
-                                />
-                            </div>
-                        )}
                         {data.children.length !== 0 && (
                             <LayerSelection layerList={data.children as LayerHierarchy[]} />
                         )}

@@ -12,6 +12,29 @@
             font-size: var(--font-size-large);
         }
 
+        .hidden-actions {
+            display: flex;
+            align-items: center;
+            transition: .2s opacity ease-in-out;
+            opacity: 0;
+            padding: var(--spacing-extra-small);
+
+            .info-button {
+                color: var(--color-primary);
+                font-size: var(--font-size-large);
+            }
+
+            .show-data-button {
+                font-size: var(--font-size-large);
+            }
+
+            button {
+                margin: var(--spacing-extra-small-alt) calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
+                padding: 0;
+                padding: var(--spacing-extra-small-alt);
+            }
+        }
+
         .show-content-button {
             flex-shrink: 0;
             margin: 0 calc(var(--spacing-medium) - var(--spacing-small));
@@ -21,6 +44,12 @@
 
             &:hover {
                 color: var(--color-text);
+            }
+        }
+
+        &:hover {
+            .hidden-actions {
+                opacity: 1;
             }
         }
     }
@@ -35,10 +64,15 @@
         .actions {
             display: flex;
             align-items: center;
+            justify-content: center;
             padding: var(--spacing-extra-small);
 
             .info-button {
-                // font-size: var(--font-size-large);
+                font-size: var(--font-size-large);
+            }
+
+            .show-data-button {
+                font-size: var(--font-size-large);
             }
 
             button {
@@ -47,7 +81,6 @@
                 padding: var(--spacing-extra-small-alt);
             }
         }
-
 
         .title {
             font-size: var(--font-size-medium);
