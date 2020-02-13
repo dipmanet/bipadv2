@@ -22,7 +22,6 @@ import {
     getHashFromBrowser,
 } from '#rscg/HashManager';
 
-import { MultiResponse } from '#store/atom/response/types';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
 import {

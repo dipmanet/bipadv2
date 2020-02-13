@@ -90,10 +90,12 @@ class ResourceProfile extends React.PureComponent<Props> {
                             key={key}
                             className={styles.attribute}
                         >
-                            <ScalableVectorGraphcis
-                                className={styles.icon}
-                                src={attributes[key].icon}
-                            />
+                            <div className={styles.iconContainer}>
+                                <ScalableVectorGraphcis
+                                    className={styles.icon}
+                                    src={attributes[key].icon}
+                                />
+                            </div>
                             <div className={styles.details}>
                                 <div className={styles.value}>
                                     { data[attributes[key].dataKey] || '-' }

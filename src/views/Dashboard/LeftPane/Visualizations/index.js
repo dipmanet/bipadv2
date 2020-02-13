@@ -93,6 +93,25 @@ export default class Visualization extends React.PureComponent {
 
         return (
             <div className={styles.visualizations}>
+                <div className={styles.alertSummary}>
+                    <header className={styles.header}>
+                        <h2 className={styles.heading}>
+                            Alerts summary
+                        </h2>
+                    </header>
+                    <div className={styles.content}>
+                        { hazardSummary.map(s => (
+                            <div>
+                                <div>
+                                    { s.label }
+                                </div>
+                                <div>
+                                    { s.value }
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
                 <div
                     style={{
                         height: hazardSummary.length * 32,

@@ -5,11 +5,11 @@ import memoize from 'memoize-one';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import MapImage from '#re-map/MapImage';
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
 import CommonMap from '#components/CommonMap';
+import SVGMapIcon from '#components/SVGMapIcon';
 
 import {
     mapStyles,
@@ -23,7 +23,6 @@ import {
     pollutionToGeojson,
     getRasterTile,
 } from '#utils/domain';
-import { getImageAsync } from '#utils/common';
 
 import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
@@ -54,8 +53,6 @@ export default class RealTimeMap extends React.PureComponent {
             showRiverModal: false,
             showRainModal: false,
         };
-
-        this.loadImages();
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -300,14 +297,6 @@ export default class RealTimeMap extends React.PureComponent {
         );
     }
 
-    loadImages = () => {
-        getImageAsync(RainIcon).then((image) => { this.rainIcon = image; });
-        getImageAsync(RiverIcon).then((image) => { this.riverIcon = image; });
-        getImageAsync(EarthquakeIcon).then((image) => { this.earthquakeIcon = image; });
-        getImageAsync(PollutionIcon).then((image) => { this.pollutionIcon = image; });
-        getImageAsync(FireIcon).then((image) => { this.fireIcon = image; });
-    }
-
     render() {
         const {
             realTimeRainList,
@@ -364,24 +353,24 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
-                <MapImage
-                    image={this.rainIcon}
+                <SVGMapIcon
+                    src={RainIcon}
                     name="rain"
                 />
-                <MapImage
-                    image={this.riverIcon}
+                <SVGMapIcon
+                    src={RiverIcon}
                     name="river"
                 />
-                <MapImage
-                    image={this.earthquakeIcon}
+                <SVGMapIcon
+                    src={EarthquakeIcon}
                     name="earthquake"
                 />
-                <MapImage
-                    image={this.pollutionIcon}
+                <SVGMapIcon
+                    src={PollutionIcon}
                     name="pollution"
                 />
-                <MapImage
-                    image={this.fireIcon}
+                <SVGMapIcon
+                    src={FireIcon}
                     name="forest-fire"
                 />
                 { showStreamFlow && (

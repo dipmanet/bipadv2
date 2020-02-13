@@ -7,6 +7,11 @@
         }
     }
 
+    .loading-message {
+        padding: var(--spacing-small);
+        color: var(--color-text-light);
+    }
+
     .choropleth-legend {
         display: flex;
 

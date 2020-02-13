@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import { unique } from '@togglecorp/fujs';
 
 import ListView from '#rscv/List/ListView';
 import MapSource from '#re-map/MapSource';

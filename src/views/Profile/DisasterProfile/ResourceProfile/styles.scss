@@ -18,25 +18,35 @@
             align-items: center;
             flex-basis: 50%;
             padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
-            filter: brightness(160%) saturate(70%);
 
-            .icon {
+            .icon-container {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                justify-content: center;
                 margin: var(--spacing-small) var(--spacing-medium);
-                width: 36px;
-                height: 36px;
-                fill: var(--color-accent);
+                border: var(--width-separator-medium) solid var(--color-accent-light);
+                border-radius: 50%;
+                padding: var(--spacing-medium-alt);
 
-                path {
-                    fill: var(--color-accent);
+                .icon {
+                    width: 32px;
+                    height: 32px;
+                    fill: var(--color-text-light);
+
+                    path {
+                        fill: var(--color-text-light);
+                    }
                 }
             }
 
             .details {
+                flex-grow: 1;
                 padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
 
                 .value {
                     padding: var(--spacing-extra-small) var(--spacing-medium);
-                    color: var(--color-accent);
+                    color: var(--color-text);
                     font-size: var(--font-size-super-large);
                     font-weight: var(--font-weight-medium);
                 }
@@ -50,8 +60,7 @@
             }
 
             &:hover {
-                filter: brightness(100%) saturate(100%);
-                background-color: var(--color-accent-light);
+                background-color: var(--color-background-hover);
             }
         }
     }

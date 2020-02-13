@@ -1,9 +1,12 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
+
 import Numeral from '#rscv/Numeral';
 
 import { Layer } from '#types';
 import { getRasterLegendUrl } from '#utils/domain';
+import { imageUrlToDataUrl } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -13,6 +16,25 @@ interface Props {
 }
 
 class LayerLegend extends React.PureComponent<Props> {
+    public state = {
+        loadingLegend: false,
+        rasterLegendDataUrl: undefined,
+    }
+
+    private loadLegendImage = memoize((layer) => {
+        if (layer.type !== 'raster') {
+            return;
+        }
+
+        this.setState({ loadingLegend: true });
+        imageUrlToDataUrl(getRasterLegendUrl(layer), (dataUrl) => {
+            this.setState({
+                loadingLegend: false,
+                rasterLegendDataUrl: dataUrl,
+            });
+        });
+    })
+
     public render() {
         const {
             className,
@@ -23,18 +45,25 @@ class LayerLegend extends React.PureComponent<Props> {
             return null;
         }
 
+        this.loadLegendImage(layer);
+
         return (
-            <div className={_cs(className, styles.legend)}>
+            <div className={_cs(className, styles.legend, 'map-legend-container')}>
                 <header className={styles.header}>
                     <h5 className={styles.heading}>
                         { layer.legendTitle || 'Legend' }
                     </h5>
                 </header>
-                { layer.type === 'raster' && (
+                { layer.type === 'raster' && this.state.loadingLegend && (
+                    <div className={styles.loadingMessage}>
+                        loading legend...
+                    </div>
+                )}
+                { layer.type === 'raster' && this.state.rasterLegendDataUrl && (
                     <div className={styles.rasterLegend}>
                         <img
                             className={styles.rasterLegendImage}
-                            src={getRasterLegendUrl(layer)}
+                            src={this.state.rasterLegendDataUrl}
                             alt={layer.layername}
                         />
                     </div>
