@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
-import ListView from '#rscv/List/ListView';
+import List from '#rscv/List';
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
@@ -297,11 +297,12 @@ class AlertEventMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
-                <ListView
+                <List
                     keySelector={hazardKeySelector}
                     data={hazardList}
                     renderer={MapImage}
                     rendererParams={this.mapImageRendererParams}
+                    emptyComponent={null}
                 />
                 <MapSource
                     sourceKey="alerts-convex-polygon"
