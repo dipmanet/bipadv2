@@ -534,6 +534,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         type="number"
                                         scale="time"
                                         domain={['dataMin', 'dataMax']}
+                                        angle={-30}
                                     >
                                         <Label
                                             value="year"
