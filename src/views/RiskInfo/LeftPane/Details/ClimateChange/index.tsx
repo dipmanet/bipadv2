@@ -2,8 +2,19 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { extent } from 'd3-array';
-import { _cs, mean } from '@togglecorp/fujs';
+import { _cs, mean, listToMap } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
+import {
+    ResponsiveContainer,
+    ComposedChart,
+    Line,
+    Area,
+    XAxis,
+    YAxis,
+    Label,
+    Tooltip,
+    Legend,
+} from 'recharts';
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
@@ -68,7 +79,7 @@ const rainColors: string[] = [
     '#0c2c84',
 ];
 
-const Tooltip = ({ feature, layer }: { feature: unknown; layer: unknown }) => {
+const ClimateChangeTooltip = ({ feature, layer }: { feature: unknown; layer: unknown }) => {
     const { properties: { title }, state: { value } } = feature;
 
     if (value) {
@@ -140,9 +151,21 @@ const mapStateToProps = (state: AppState) => ({
 const measurementOptions: {
     key: MeasurementType;
     label: 'Temperature' | 'Precipitation';
+    axisLabel: string;
+    chartTitle: string;
 }[] = [
-    { key: 'temperature', label: 'Temperature' },
-    { key: 'precipitation', label: 'Precipitation' },
+    {
+        key: 'temperature',
+        label: 'Temperature',
+        axisLabel: 'Temperature (°C)',
+        chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
+    },
+    {
+        key: 'precipitation',
+        label: 'Precipitation',
+        axisLabel: 'Precipitation (mm/year)',
+        chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
+    },
 ];
 
 const timePeriodOptions: TimePeriod[] = [
@@ -227,6 +250,73 @@ class ClimateChange extends React.PureComponent<Props, State> {
             });
             addLayer(layer);
         }
+    }
+
+    private getChartData = (measurementType: string) => {
+        const {
+            requests,
+        } = this.props;
+
+        const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
+        const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
+
+        const data = measurementType === 'temperature' ? temperature : precipitation;
+        const yearlyAverageData = data.map(({ rcp45, sdRcp45, rcp85, sdRcp85 }) => {
+            const mapSdRcp45 = listToMap(sdRcp45, d => d.year, d => d.value);
+            const mapRcp85 = listToMap(rcp85, d => d.year, d => d.value);
+            const mapSdRcp85 = listToMap(sdRcp85, d => d.year, d => d.value);
+            const yearWiseData = rcp45.map(({ year, value }) => ({
+                year,
+                rcp45: [value || 0],
+                sdRcp45: [mapSdRcp45[year] || 0],
+                rcp85: [mapRcp85[year] || 0],
+                sdRcp85: [mapSdRcp85[year] || 0],
+            }));
+            return yearWiseData;
+        }).reduce((acc, value) => {
+            if (acc.length === 0) {
+                acc.push(...value);
+            } else {
+                value.forEach((v) => {
+                    const { year, rcp45, sdRcp45, rcp85, sdRcp85 } = v;
+                    const yearlyValue = acc.find(y => y.year === year);
+                    if (yearlyValue) {
+                        yearlyValue.rcp45.push(...rcp45);
+                        yearlyValue.sdRcp45.push(...sdRcp45);
+                        yearlyValue.rcp85.push(...rcp85);
+                        yearlyValue.sdRcp85.push(...sdRcp85);
+                    } else {
+                        acc.push(v);
+                    }
+                });
+            }
+            return acc;
+        }, []).map(({ year, rcp45, sdRcp45, rcp85, sdRcp85 }) => {
+            const rcp45Value = mean(rcp45);
+            const rcp85Value = mean(rcp85);
+            const sdRcp45Value = mean(sdRcp45);
+            const sdRcp85Value = mean(sdRcp85);
+            if (year < 2010) {
+                return {
+                    year,
+                    'Reference Period': rcp45Value.toFixed(2),
+                };
+            }
+            return {
+                year,
+                'RCP 4.5': rcp45Value.toFixed(2),
+                'SD RCP 4.5': [
+                    (rcp45Value - sdRcp45Value).toFixed(2),
+                    (rcp45Value + sdRcp45Value).toFixed(2),
+                ],
+                'RCP 8.5': rcp85Value.toFixed(2),
+                'SD RCP 8.5': [
+                    (rcp85Value - sdRcp85Value).toFixed(2),
+                    (rcp85Value + sdRcp85Value).toFixed(2),
+                ],
+            };
+        });
+        return yearlyAverageData;
     }
 
     private getMapState = (
@@ -316,7 +406,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             paint,
             legend,
             scenarioName,
-            tooltipRenderer: Tooltip,
+            tooltipRenderer: ClimateChangeTooltip,
         };
     };
 
@@ -326,7 +416,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
             removeLayer,
         } = this.context;
 
-        console.warn('value', value);
         this.setState({
             isActive: value,
         });
@@ -363,6 +452,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
         } = this.state;
 
         const pending = isAnyRequestPending(requests);
+        const data = this.getChartData(measurementType);
+        const selectedOption = measurementOptions.find(m => m.key === measurementType);
+        const yAxisLabel = selectedOption && selectedOption.axisLabel;
+        const chartTitle = selectedOption && selectedOption.chartTitle;
 
         return (
             <>
@@ -408,6 +501,90 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             onChange={this.handleSetScenario}
                         />
                     </div>
+                    { !pending && (
+                        <div className={styles.bottom}>
+                            <div className={styles.header}>
+                                {chartTitle}
+                            </div>
+                            <ResponsiveContainer className={styles.chart}>
+                                <ComposedChart
+                                    data={data}
+                                    margin={{
+                                        top: 15,
+                                        right: 5,
+                                        left: 5,
+                                        bottom: 15,
+                                    }}
+                                >
+                                    <XAxis
+                                        dataKey="year"
+                                        type="number"
+                                        scale="time"
+                                        domain={['dataMin', 'dataMax']}
+                                    >
+                                        <Label
+                                            value="year"
+                                            offset={-5}
+                                            position="insideBottom"
+                                        />
+                                    </XAxis>
+                                    <YAxis
+                                        type="number"
+                                        domain={['auto', 'auto']}
+                                        allowDecimals={false}
+                                        padding={{ top: 5, bottom: 0 }}
+                                    >
+                                        <Label
+                                            value={yAxisLabel}
+                                            angle={270}
+                                            offset={-10}
+                                            position="left"
+                                            style={{ textAnchor: 'middle' }}
+                                        />
+                                    </YAxis>
+                                    <Tooltip
+                                        labelFormatter={value => `year: ${value}`}
+                                    />
+                                    <Legend verticalAlign="top" />
+                                    <Area
+                                        dataKey="SD RCP 8.5"
+                                        fill="#f45b5b"
+                                        fillOpacity={0.3}
+                                        stroke="none"
+                                        legendType="square"
+                                    />
+                                    <Area
+                                        dataKey="SD RCP 4.5"
+                                        fill="#7cb5ec"
+                                        fillOpacity={0.3}
+                                        stroke="none"
+                                        legendType="square"
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="Reference Period"
+                                        stroke="#434348"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="RCP 8.5"
+                                        stroke="#e41a1c"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="RCP 4.5"
+                                        stroke="#1f78b4"
+                                        dot={false}
+                                    />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </div>
+                    )}
                 </div>
             </>
         );
