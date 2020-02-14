@@ -151,6 +151,7 @@ const mapStateToProps = (state: AppState) => ({
 const measurementOptions: {
     key: MeasurementType;
     label: 'Temperature' | 'Precipitation';
+    legendTitle: string;
     axisLabel: string;
     chartTitle: string;
 }[] = [
@@ -158,12 +159,14 @@ const measurementOptions: {
         key: 'temperature',
         label: 'Temperature',
         axisLabel: 'Temperature (°C)',
+        legendTitle: 'Temperature Change (°C)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
     {
         key: 'precipitation',
         label: 'Precipitation',
         axisLabel: 'Precipitation (mm/year)',
+        legendTitle: 'Precipitation Change (°C)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
 ];
@@ -391,6 +394,15 @@ class ClimateChange extends React.PureComponent<Props, State> {
             timePeriodKey,
         );
 
+        const selectedMeasurement = measurementOptions.find(m => m.key === measurementType);
+        const selectedScenario = scenarioOptions.find(s => s.key === scenario);
+        const selectedTimePeriod = timePeriodOptions.find(t => t.key === timePeriodKey);
+
+        const legendTitle = `
+            ${selectedMeasurement && selectedMeasurement.legendTitle}
+            ${selectedTimePeriod && selectedTimePeriod.label}\n
+            [${selectedScenario && selectedScenario.label}]
+        `;
         const [min, max] = extent(mapState, (d: MapState) => d.value);
         const colors = measurementType === 'temperature' ? tempColors : rainColors;
         const { paint, legend } = generatePaint(colors, min || 0, max || 0);
@@ -405,6 +417,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             mapState,
             paint,
             legend,
+            legendTitle,
             scenarioName,
             tooltipRenderer: ClimateChangeTooltip,
         };
