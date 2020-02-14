@@ -4,10 +4,10 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import VirtualizedListView from '#rscv/VirtualizedListView';
-import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
+import Button from '#rsca/Button';
 
-import TextOutput from '#components/TextOutput';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
 import Cloak from '#components/Cloak';
@@ -62,6 +62,7 @@ export default class LeftPane extends React.PureComponent {
             showAddAlertModal: false,
             showAddEventModal: false,
             showList: true,
+            activeView: 'alerts',
         };
     }
 
@@ -167,19 +168,16 @@ export default class LeftPane extends React.PureComponent {
         onEventChange(response);
     }
 
-    handleToggleVisualizationButtonClick = () => {
-        const { showVisualizations } = this.state;
-        this.setState({
-            showVisualizations: !showVisualizations,
-        });
+    handleAlertsButtonClick = () => {
+        this.setState({ activeView: 'alerts' });
     }
 
-    handleCollapseTabularViewButtonClick = () => {
-        this.setState({ showTabular: false });
+    handleEventsButtonClick = () => {
+        this.setState({ activeView: 'events' });
     }
 
-    handleExpandButtonClick = () => {
-        this.setState({ showTabular: true });
+    handleVisualizationsButtonClick = () => {
+        this.setState({ activeView: 'visualizations' });
     }
 
     render() {
@@ -196,122 +194,117 @@ export default class LeftPane extends React.PureComponent {
             showAddEventModal,
             alertToEdit,
             eventToEdit,
-            showVisualizations,
-            showList,
+            activeView,
         } = this.state;
 
         return (
             <div className={_cs(className, styles.leftPane)}>
-                <div className={styles.topContainer}>
-                    <div className={styles.stats}>
-                        <TextOutput
-                            className={styles.stat}
-                            isNumericValue
-                            label="Alerts"
-                            labelClassName={styles.label}
-                            type="block"
-                            value={alertList.length}
-                            valueClassName={styles.value}
-                        />
-                        <TextOutput
-                            className={styles.stat}
-                            isNumericValue
-                            label="Events"
-                            labelClassName={styles.label}
-                            type="block"
-                            value={eventList.length}
-                            valueClassName={styles.value}
-                        />
+                <header className={styles.header}>
+                    <div className={styles.tabs}>
+                        <div
+                            className={_cs(styles.tab, activeView === 'alerts' && styles.active)}
+                            onClick={this.handleAlertsButtonClick}
+                            role="presentation"
+                        >
+                            <div className={styles.value}>
+                                { alertList.length }
+                            </div>
+                            <div className={styles.title}>
+                                <div className={_cs(styles.icon, styles.alertIcon)} />
+                                <div className={styles.text}>
+                                    Alerts
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            className={_cs(styles.tab, activeView === 'events' && styles.active)}
+                            onClick={this.handleEventsButtonClick}
+                            role="presentation"
+                        >
+                            <div className={styles.value}>
+                                { eventList.length }
+                            </div>
+                            <div className={styles.title}>
+                                <div className={_cs(styles.icon, styles.eventIcon)} />
+                                <div className={styles.text}>
+                                    Events
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            className={_cs(styles.tab, activeView === 'visualizations' && styles.active)}
+                            role="presentation"
+                            onClick={this.handleVisualizationsButtonClick}
+                            iconName="bars"
+                        >
+                            <Icon
+                                className={styles.visualizationIcon}
+                                name="bars"
+                            />
+                            <div className={styles.text}>
+                                Visualizations
+                            </div>
+                        </div>
                     </div>
                     <div className={styles.actions}>
                         <Button
-                            className={_cs(styles.showListButton, showList && styles.active)}
-                            iconName="list"
-                            transparent
-                            title="Show list"
-                            onClick={() => this.setState({
-                                showList: true,
-                                showVisualizations: false,
-                            })}
-                        />
-                        <Button
-                            className={_cs(
-                                styles.showVisualizationsButton,
-                                showVisualizations && styles.active,
-                            )}
-                            onClick={() => this.setState({
-                                showVisualizations: true,
-                                showList: false,
-                            })}
-                            transparent
-                            iconName="bars"
-                            title="Show visualizations"
+                            iconName="table"
                         />
                     </div>
-                </div>
-                <div className={styles.bottomContainer}>
-                    { showVisualizations && (
+                </header>
+                <div className={styles.content}>
+                    { activeView === 'visualizations' && (
                         <Visualizations
                             hazardTypes={hazardTypes}
                             className={styles.alertVisualizations}
                             alertList={alertList}
                         />
                     )}
-                    { showList && (
-                        <>
-                            <div className={styles.alertList}>
-                                <header className={styles.header}>
-                                    <div className={_cs(styles.icon, styles.alertIcon)} />
-                                    <h2 className={styles.heading}>
-                                        Alerts
-                                    </h2>
-                                    <Cloak hiddenIf={p => !p.change_alert}>
-                                        <div className={styles.actions}>
-                                            <AccentButton
-                                                transparent
-                                                onClick={this.handleAddAlertButtonClick}
-                                            >
-                                                Add
-                                            </AccentButton>
-                                        </div>
-                                    </Cloak>
-                                </header>
-                                <VirtualizedListView
-                                    className={styles.content}
-                                    data={alertList}
-                                    renderer={AlertItem}
-                                    rendererParams={this.getAlertRendererParams}
-                                    keySelector={alertKeySelector}
-                                    emptyComponent={AlertEmptyComponent}
-                                />
-                            </div>
-                            <div className={styles.eventList}>
-                                <header className={styles.header}>
-                                    <div className={_cs(styles.icon, styles.eventIcon)} />
-                                    <h2 className={styles.heading}>
-                                        Major events
-                                    </h2>
-                                    <Cloak hiddenIf={p => !p.change_event}>
-                                        <div className={styles.actions}>
-                                            <AccentButton
-                                                transparent
-                                                onClick={this.handleAddEventButtonClick}
-                                            >
-                                                Add
-                                            </AccentButton>
-                                        </div>
-                                    </Cloak>
-                                </header>
-                                <VirtualizedListView
-                                    className={styles.content}
-                                    data={eventList}
-                                    renderer={EventItem}
-                                    rendererParams={this.getEventRendererParams}
-                                    keySelector={eventKeySelector}
-                                    emptyComponent={EventEmptyComponent}
-                                />
-                            </div>
-                        </>
+                    { activeView === 'alerts' && (
+                        <div className={styles.alertList}>
+                            <header className={styles.header}>
+                                <Cloak hiddenIf={p => !p.change_alert}>
+                                    <AccentButton onClick={this.handleAddAlertButtonClick}>
+                                        Add new alert
+                                    </AccentButton>
+                                </Cloak>
+                            </header>
+                            <VirtualizedListView
+                                className={styles.content}
+                                data={alertList}
+                                renderer={AlertItem}
+                                rendererParams={this.getAlertRendererParams}
+                                keySelector={alertKeySelector}
+                                emptyComponent={AlertEmptyComponent}
+                            />
+                        </div>
+                    )}
+                    { activeView === 'events' && (
+                        <div className={styles.eventList}>
+                            <header className={styles.header}>
+                                <h2 className={styles.heading}>
+                                    Major events
+                                </h2>
+                                <Cloak hiddenIf={p => !p.change_event}>
+                                    <div className={styles.actions}>
+                                        <AccentButton
+                                            transparent
+                                            onClick={this.handleAddEventButtonClick}
+                                        >
+                                            Add
+                                        </AccentButton>
+                                    </div>
+                                </Cloak>
+                            </header>
+                            <VirtualizedListView
+                                className={styles.content}
+                                data={eventList}
+                                renderer={EventItem}
+                                rendererParams={this.getEventRendererParams}
+                                keySelector={eventKeySelector}
+                                emptyComponent={EventEmptyComponent}
+                            />
+                        </div>
                     )}
                 </div>
                 { showAddAlertModal && (

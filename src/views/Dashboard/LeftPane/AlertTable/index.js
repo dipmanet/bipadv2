@@ -9,7 +9,6 @@ import {
     compareBoolean,
 } from '@togglecorp/fujs';
 
-
 import NormalTaebul from '#rscv/Taebul';
 import Sortable from '#rscv/Taebul/Sortable';
 import ColumnWidth from '#rscv/Taebul/ColumnWidth';
@@ -38,11 +37,12 @@ const defaultProps = {
 
 // eslint-disable-next-line react/no-multi-comp
 export default class AlertTable extends React.PureComponent {
+    static tableKeySelector = data => data.id;
+
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
 
-    static tableKeySelector = data => data.id;
 
     constructor(props) {
         super(props);

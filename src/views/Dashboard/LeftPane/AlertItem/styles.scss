@@ -1,7 +1,7 @@
 .alert-item {
     display: flex;
     align-items: center;
-    padding: calc(var(--spacing-medium-alt) - var(--spacing-medium)) 0;
+    padding: calc(var(--spacing-medium-alt) - var(--spacing-medium)) calc(var(--spacing-large) - var(--spacing-medium));
 
     &.new {
         background-color: var(--color-background-new-item);

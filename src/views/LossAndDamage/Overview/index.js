@@ -124,12 +124,10 @@ export default class Overview extends React.PureComponent {
             <React.Fragment>
                 <Map
                     geoareas={geoareas}
-                    leftPaneExpanded={leftPaneExpanded}
                     mapping={mapping}
                     maxValue={maxValue}
                     metric={selectedMetric.metricFn}
                     metricName={selectedMetric.label}
-                    rightPaneExpanded={rightPaneExpanded}
                     sourceKey="loss-and-damage-overview"
                 />
                 <Page
