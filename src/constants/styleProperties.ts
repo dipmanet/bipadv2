@@ -2,7 +2,7 @@
 
 const styleProperties = {
     colorBackground: '#f2f2f2',
-    colorPrimary: '#003893',
+    colorPrimary: '#216cd7',
 
     widthScrollbar: '4px',
 
@@ -12,8 +12,8 @@ const styleProperties = {
     widthNavbarRight: '50px',
     widthResponseFilters: '240px',
     heightNavbar: '56px',
-    colorAccent: '#e04556',
-    colorAccentLight: '#ffd9e3',
+    colorAccent: '#e35163',
+    colorAccentLight: '#ffb3c1',
     colorTextAccentHint: '#e04556',
     radiusPanelBorder: '5px',
     heightTimelineMainContent: '112px',
@@ -42,8 +42,8 @@ const styleProperties = {
 
     colorTextLight: 'rgba(0, 0, 0, 0.5)',
 
-    colorLogoRed: '#dc143c',
-    colorLogoBlue: '#003893',
+    colorLogoRed: '#e35163',
+    colorLogoBlue: '#216cd7',
     colorTextOnLogoBlue: '#fff',
     colorTextOnLogoRed: '#fff',
 

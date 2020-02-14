@@ -612,11 +612,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     { !hideMap && (
                                         <div className={styles.mapActions}>
                                             <MapDownloadButton
+                                                className={styles.mapDownloadButton}
                                                 transparent
                                                 title="Download current map"
                                                 iconName="download"
                                             />
-                                            <LayerSwitch />
+                                            <LayerSwitch
+                                                className={styles.layerSwitch}
+                                            />
                                         </div>
                                     )}
                                     <MapContainer
