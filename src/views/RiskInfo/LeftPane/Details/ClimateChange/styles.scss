@@ -3,7 +3,7 @@
     flex-direction: column;
     padding: calc(var(--spacing-medium) - var(--spacing-small));
 
-    .header {
+    >.header {
         display: flex;
         align-items: center;
         padding: calc(var(--spacing-medium) - var(--spacing-small));
@@ -23,6 +23,7 @@
     .top {
         flex-grow: 1;
         padding: calc(var(--spacing-medium) - var(--spacing-small));
+        overflow: auto;
 
         .measurement-type-input {
             margin: var(--spacing-medium);
@@ -36,11 +37,26 @@
             margin: var(--spacing-medium);
         }
     }
+
+    .bottom {
+        flex-shrink: 0;
+
+        .header {
+            flex-shrink: 0;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .chart {
+            height: 300px!important;
+            overflow: hidden;
+        }
+    }
 }
 
 .tooltip {
-    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
     border-top: var(--width-separator-medium) solid var(--color-accent);
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
     .label {
         padding: var(--spacing-extra-small) var(--spacing-small);
