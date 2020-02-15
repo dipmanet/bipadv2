@@ -250,6 +250,7 @@ class Comparative extends React.PureComponent {
                                 >
                                     <MapContainer className={styles.map2} />
                                     <CommonMap
+                                        // NOTE: what does this do?
                                         region={faramValues.region2}
                                     />
                                 </Map>

@@ -75,6 +75,35 @@ export const setWardsAction = (
     wards,
 });
 
+
+export const setShowProvinceAction = (
+    { value }: {value: boolean },
+) => ({
+    type: Type.PageType.SET_SHOW_PROVINCE,
+    value,
+});
+
+export const setShowDistrictAction = (
+    { value }: {value: boolean },
+) => ({
+    type: Type.PageType.SET_SHOW_DISTRICT,
+    value,
+});
+
+export const setShowMunicipalityAction = (
+    { value }: {value: boolean },
+) => ({
+    type: Type.PageType.SET_SHOW_MUNICIPALITY,
+    value,
+});
+
+export const setShowWardAction = (
+    { value }: {value: boolean },
+) => ({
+    type: Type.PageType.SET_SHOW_WARD,
+    value,
+});
+
 export const setLossListAction = ({ lossList }: { lossList: Type.Loss[]}) => ({
     type: Type.PageType.SET_LOSS_LIST,
     lossList,
@@ -403,6 +432,42 @@ const setWards = (state: Type.PageState, action: Type.SetWards) => {
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.wards = wards;
+    });
+    return newState;
+};
+
+const setShowProvince = (state: Type.PageState, action: Type.SetShowProvince) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.showProvince = value;
+    });
+    return newState;
+};
+
+const setShowDistrict = (state: Type.PageState, action: Type.SetShowDistrict) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.showDistrict = value;
+    });
+    return newState;
+};
+
+const setShowMunicipality = (state: Type.PageState, action: Type.SetShowMunicipality) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.showMunicipality = value;
+    });
+    return newState;
+};
+
+const setShowWard = (state: Type.PageState, action: Type.SetShowWard) => {
+    const { value } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.showWard = value;
     });
     return newState;
 };
@@ -999,6 +1064,14 @@ export default function routeReducer(
             return setMunicipalities(state, action);
         case Type.PageType.SET_WARDS:
             return setWards(state, action);
+        case Type.PageType.SET_SHOW_PROVINCE:
+            return setShowProvince(state, action);
+        case Type.PageType.SET_SHOW_DISTRICT:
+            return setShowDistrict(state, action);
+        case Type.PageType.SET_SHOW_MUNICIPALITY:
+            return setShowMunicipality(state, action);
+        case Type.PageType.SET_SHOW_WARD:
+            return setShowWard(state, action);
         case Type.PageType.SET_LOSS_LIST:
             return setLossList(state, action);
         case Type.PageType.SET_FILTERS:

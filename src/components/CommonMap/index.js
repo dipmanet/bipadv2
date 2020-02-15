@@ -18,7 +18,7 @@ import {
 } from '#utils/domain';
 
 import {
-    provincesSelector,
+    // provincesSelector,
     municipalitiesSelector,
     districtsSelector,
     wardsSelector,
@@ -28,6 +28,11 @@ import {
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
+
+    showProvinceSelector,
+    showDistrictSelector,
+    showMunicipalitySelector,
+    showWardSelector,
 } from '#selectors';
 
 const propTypes = {
@@ -35,7 +40,7 @@ const propTypes = {
     regionLevel: PropTypes.number,
 
     // eslint-disable-next-line react/forbid-prop-types
-    provinces: PropTypes.array.isRequired,
+    // provinces: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     districts: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
@@ -49,6 +54,12 @@ const propTypes = {
     selectedDistrictId: PropTypes.number,
     selectedMunicipalityId: PropTypes.number,
     sourceKey: PropTypes.string,
+
+    // NOTE: get this from redux
+    showProvince: PropTypes.bool,
+    showDistrict: PropTypes.bool,
+    showMunicipality: PropTypes.bool,
+    showWard: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -58,10 +69,15 @@ const defaultProps = {
     selectedDistrictId: undefined,
     selectedMunicipalityId: undefined,
     sourceKey: 'country',
+
+    showProvince: undefined,
+    showDistrict: undefined,
+    showMunicipality: undefined,
+    showWard: undefined,
 };
 
 const mapStateToProps = (state, props) => ({
-    provinces: provincesSelector(state),
+    // provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
@@ -72,6 +88,11 @@ const mapStateToProps = (state, props) => ({
     selectedProvinceId: selectedProvinceIdSelector(state, props),
     selectedDistrictId: selectedDistrictIdSelector(state, props),
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
+
+    showProvince: showProvinceSelector(state),
+    showDistrict: showDistrictSelector(state),
+    showMunicipality: showMunicipalitySelector(state),
+    showWard: showWardSelector(state),
 });
 
 const visibleLayout = {
@@ -99,7 +120,7 @@ class CommonMap extends React.PureComponent {
             boundsPadding,
             regionLevel,
             bounds,
-            provinces,
+            // provinces,
             districts,
             municipalities,
             wards,
@@ -108,20 +129,47 @@ class CommonMap extends React.PureComponent {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
             sourceKey,
+
+            showProvince: showProvinceFromProps,
             showDistrict: showDistrictFromProps,
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
         } = this.props;
 
-        const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
-        const showDistrict = [1, 2].includes(regionLevel) || showDistrictFromProps;
-        const showMunicipality = [2, 3].includes(regionLevel) || showMunicipalityFromProps;
-        const showWard = [3, 4].includes(regionLevel) || showWardFromProps;
+        const isForced = showProvinceFromProps
+            || showDistrictFromProps
+            || showMunicipalityFromProps
+            || showWardFromProps;
 
-        const showProvinceLabel = isNotDefined(regionLevel);
-        const showDistrictLabel = regionLevel === 1;
-        const showMunicipalityLabel = regionLevel === 2;
-        const showWardLabel = regionLevel === 3;
+        let showProvince;
+        let showDistrict;
+        let showMunicipality;
+        let showWard;
+        let showProvinceLabel;
+        let showDistrictLabel;
+        let showMunicipalityLabel;
+        let showWardLabel;
+        if (isForced) {
+            showProvince = showProvinceFromProps;
+            showDistrict = showDistrictFromProps;
+            showMunicipality = showMunicipalityFromProps;
+            showWard = showWardFromProps;
+
+            showProvinceLabel = showProvinceFromProps;
+            showDistrictLabel = showDistrictFromProps;
+            showMunicipalityLabel = showMunicipalityFromProps;
+            showWardLabel = showWardFromProps;
+        } else {
+            showProvince = isNotDefined(regionLevel) || regionLevel === 1;
+            showDistrict = [1, 2].includes(regionLevel);
+            showMunicipality = [2, 3].includes(regionLevel);
+            showWard = [3, 4].includes(regionLevel);
+
+            showProvinceLabel = isNotDefined(regionLevel);
+            showDistrictLabel = regionLevel === 1;
+            showMunicipalityLabel = regionLevel === 2;
+            showWardLabel = regionLevel === 3;
+        }
 
         const wardFilter = showWard
             ? this.getWardFilter(provinceId, districtId, municipalityId, wards)
