@@ -7,7 +7,7 @@
     >.header {
         display: flex;
         flex-shrink: 0;
-        background-color: var(--color-foreground-alt);
+        background-color: var(--color-background);
 
         .tabs {
             display: flex;
@@ -70,6 +70,10 @@
             align-self: center;
             flex-shrink: 0;
             padding: var(--spacing-medium) var(--spacing-large);
+
+            .show-table-button {
+                font-size: var(--font-size-large);
+            }
         }
     }
 
@@ -80,7 +84,8 @@
         background-color: var(--color-foreground);
         overflow: auto;
 
-        .alert-list {
+        .alert-list,
+        .event-list {
             flex-grow: 1;
 
             .header {
@@ -92,6 +97,26 @@
                 flex-grow: 1;
                 overflow: auto;
             }
+        }
+    }
+}
+
+.alert-empty,
+.event-empty {
+    padding: var(--spacing-large);
+    color: var(--color-text-light);
+}
+
+.alert-table-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex-grow: 1;
         }
     }
 }

@@ -1,22 +1,26 @@
 .loss-details {
     display: flex;
     flex-wrap: wrap;
-    padding: calc(var(--spacing-large) - var(--spacing-medium));
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-medium));
 
     .stat {
         display: flex;
         flex-basis: calc(100% / 3);
-        padding: var(--spacing-medium);
+        flex-grow: 1;
+        padding: var(--spacing-small) var(--spacing-medium);
 
         .label {
             order: 2;
+            text-align: center;
             color: var(--color-text-label);
+            font-size: var(--font-size-small);
         }
 
         .value {
             order: 1;
+            text-align: center;
             color: var(--color-danger);
-            font-size: var(--font-size-ultra-large);
+            font-size: var(--font-size-super-large);
             font-weight: var(--font-weight-medium);
         }
     }
