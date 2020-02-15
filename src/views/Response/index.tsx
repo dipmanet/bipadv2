@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import { styleProperties } from '#constants';
-import { currentStyle } from '#rsu/styles';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -27,15 +24,15 @@ import {
 
 import Page from '#components/Page';
 import Loading from '#components/Loading';
-import Map from './Map';
 
+import Map from './Map';
 import LeftPane from './LeftPane';
-import ResponseFilter from './Filter';
-import StockPileFilter from './Filter/StockPileFilter';
+import StockPileFilter from './StockPileFilter';
+
+import { createResourceFilter } from './LeftPane/utils';
+import resourceAttributes from './resourceAttributes';
 
 import styles from './styles.scss';
-
-const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
 
 const emptyObject = {};
 
@@ -45,6 +42,10 @@ interface Props {
 }
 
 interface State {
+    stockPileFilter?: object;
+    filter?: object;
+    rightPaneExpanded?: boolean;
+    leftPaneExpanded?: boolean;
 }
 
 const defaultProps = {
@@ -57,12 +58,12 @@ const defaultProps = {
     requests: emptyObject,
 };
 
-const trueFilter = () => true;
+// const trueFilter = () => true;
 
 const mapStateToProps = (state, props) => ({
-    // incidentId: incidentIdFromRouteSelector(state),
     incident: incidentSelector(state, props),
     resourceList: resourceListSelectorRP(state),
+    // incidentId: incidentIdFromRouteSelector(state),
     // incidentList: incidentListSelectorIP(state),
     provincesMap: provincesMapSelector(state),
     districtsMap: districtsMapSelector(state),
@@ -91,6 +92,7 @@ const requests = {
             schemaName: 'responseResponse',
         },
     },
+    // FIXME: should use the same request as responseRequest
     filteredResponseRequest: {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/response/`
@@ -111,6 +113,7 @@ const requests = {
             schemaName: 'responseResponse',
         },
     },
+
     incidentRequest: {
         url: ({ props: { incidentId } }) => (
             `/incident/${incidentId}/`
@@ -135,22 +138,31 @@ class Response extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            filterFunction: trueFilter,
+            // filterFunction: trueFilter,
+
+            stockPileFilter: {},
+
+            filter: {
+                health: { show: true },
+                finance: { show: true },
+                volunteer: { show: true },
+                education: { show: true },
+                openSpace: { show: true },
+                hotel: { show: true },
+                governance: { show: true },
+            },
 
             leftPaneExpanded: true,
             rightPaneExpanded: true,
         };
     }
 
-    private getFilteredList = memoize((list, filterFunction) => (
-        list.filter(filterFunction)
-    ))
+    private setStockPileFilter = (stockPileFilter) => {
+        this.setState({
+            stockPileFilter,
+        });
 
-    private setFilter = (filterFunction) => {
-        this.setState({ filterFunction });
-    }
-
-    private setStockPileFilter = ({ item, quantity, operatorType }) => {
+        const { item, quantity, operatorType } = stockPileFilter;
         this.props.requests.filteredResponseRequest.do({
             quantity,
             operatorType,
@@ -158,15 +170,15 @@ class Response extends React.PureComponent<Props, State> {
         });
     }
 
+
+    private handleFilterChange = (filter) => {
+        this.setState({ filter });
+    }
+
     public render() {
         const {
             incident = emptyObject,
-            resourceList,
-            requests: {
-                responseRequest: { pending: pendingResponse },
-                filteredResponseRequest: { pending: pendingFilteredResponse },
-                incidentRequest: { pending: pendingIncident },
-            },
+            resourceList: unfilteredResourceList,
             wardsMap,
             provincesMap,
             districtsMap,
@@ -174,18 +186,25 @@ class Response extends React.PureComponent<Props, State> {
             authState: {
                 authenticated,
             },
+            requests: {
+                responseRequest: { pending: pendingResponse },
+                filteredResponseRequest: { pending: pendingFilteredResponse },
+                incidentRequest: { pending: pendingIncident },
+            },
         } = this.props;
 
         const {
             leftPaneExpanded,
             rightPaneExpanded,
-            filterFunction,
+            stockPileFilter,
+            filter,
         } = this.state;
 
-        // TODO: memoize this
-        const filteredResourceList = this.getFilteredList(resourceList, filterFunction);
-
         const pending = pendingResponse || pendingFilteredResponse || pendingIncident;
+
+        // TODO: memoize this
+        const filterFunction = createResourceFilter(filter, resourceAttributes);
+        const resourceList = unfilteredResourceList.filter(filterFunction);
 
         return (
             <React.Fragment>
@@ -194,31 +213,35 @@ class Response extends React.PureComponent<Props, State> {
                     <React.Fragment>
                         <Map
                             incident={incident}
-                            resourceList={filteredResourceList}
+                            resourceList={resourceList}
+                            // resourceList={filteredResourceList}
                             leftPaneExpanded={leftPaneExpanded}
                             rightPaneExpanded={rightPaneExpanded}
                         />
                         <Page
-                            leftContentClassName={styles.leftContainer}
+                            leftContentContainerClassName={styles.leftContainer}
                             leftContent={(
                                 <LeftPane
+                                    className={styles.left}
                                     incident={incident}
                                     wardsMap={wardsMap}
                                     provincesMap={provincesMap}
                                     districtsMap={districtsMap}
                                     municipalitiesMap={municipalitiesMap}
 
-                                    resourceList={resourceList}
-                                    filteredResourceList={filteredResourceList}
-                                    setFilter={this.setFilter}
-                                    setStockPileFilter={this.setStockPileFilter}
+                                    resourceList={unfilteredResourceList}
+                                    filteredResourceList={resourceList}
+                                    setFilter={this.handleFilterChange}
+                                    filter={filter}
                                 />
                             )}
-                            rightContentClassName={styles.rightContainer}
+                            rightContentContainerClassName={styles.rightContainer}
                             rightContent={authenticated ? (
                                 <StockPileFilter
                                     className={styles.stockPileFilter}
                                     setStockPileFilter={this.setStockPileFilter}
+                                    stockPileFilter={stockPileFilter}
+                                    // TODO: inject stockPileFilter
                                 />
                             ) : null}
                         />

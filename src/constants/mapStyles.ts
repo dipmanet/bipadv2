@@ -327,7 +327,7 @@ export default {
     resourceSymbol: {
         layout: {
             'icon-image': ['get', 'iconName'],
-            'icon-size': 1,
+            'icon-size': 0.2,
         },
         symbol: {
             // 'icon-color': 'red',

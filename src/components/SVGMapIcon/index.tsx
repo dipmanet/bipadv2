@@ -7,6 +7,7 @@ import MapImage from '#re-map/MapImage';
 
 interface Props {
     src: string;
+    name: string;
     fillColor?: string;
     width?: number;
     height?: number;
@@ -67,11 +68,13 @@ class SVGMapIcon extends React.PureComponent<Props, State> {
             fillColor = undefined,
             width = 56,
             height = 56,
+            name,
             ...otherProps
         } = this.props;
-        const { image } = this.state;
+
         this.generateImage(src, width, height, fillColor);
 
+        const { image } = this.state;
         if (!image) {
             return null;
         }
@@ -79,6 +82,7 @@ class SVGMapIcon extends React.PureComponent<Props, State> {
         return (
             <MapImage
                 image={image}
+                name={name}
                 {...otherProps}
             />
         );

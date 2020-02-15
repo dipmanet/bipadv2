@@ -119,7 +119,6 @@ class Login extends React.PureComponent<Props, State> {
     };
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        console.warn(faramValues);
         const {
             requests: {
                 loginRequest,
