@@ -22,6 +22,7 @@ import {
     methods,
 } from '#request';
 import CitizenReportFormModal from '#components/CitizenReportFormModal';
+import LoginModal from './LoginModal';
 
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
@@ -35,6 +36,37 @@ interface Menu {
     iconName: string;
     disabled: boolean;
 }
+
+const MenuItemLikeButton = ({
+    title,
+    className,
+    onClick,
+    iconName,
+    disabled,
+}: {
+    title: string;
+    className?: string;
+    onClick: () => void;
+    iconName?: string;
+    disabled?: boolean;
+}) => (
+    <div
+        role="presentation"
+        className={_cs(styles.menuItemLikeButton, className)}
+        onClick={!disabled ? onClick : undefined}
+    >
+        <Icon
+            className={styles.icon}
+            name={iconName}
+        />
+        <div className={styles.title}>
+            { title }
+        </div>
+    </div>
+);
+
+const CitizenReportingButton = modalize(MenuItemLikeButton);
+const LoginButton = modalize(MenuItemLikeButton);
 
 interface State {
 }
@@ -73,6 +105,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const authState = getAuthState();
             const { setAuth } = props;
             setAuth(authState);
+
+            window.location.reload();
         },
         onFailure: ({ error }) => {
             // TODO: handle error
@@ -85,30 +119,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 };
 
 const menuKeySelector = (d: {name: string}) => d.name;
-
-const MenuItemLikeButton = ({
-    title,
-    className,
-    onClick,
-    iconName,
-    disabled,
-}) => (
-    <div
-        role="presentation"
-        className={_cs(styles.menuItemLikeButton, className)}
-        onClick={!disabled ? onClick : undefined}
-    >
-        <Icon
-            className={styles.icon}
-            name={iconName}
-        />
-        <div className={styles.title}>
-            { title }
-        </div>
-    </div>
-);
-
-const CitizenReportingButton = modalize(MenuItemLikeButton);
 
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
@@ -148,11 +158,11 @@ class Navbar extends React.PureComponent<Props, State> {
                         modal={<CitizenReportFormModal />}
                     />
                     { !authenticated && (
-                        <MenuItem
+                        <LoginButton
                             className={styles.menuItem}
                             title="Login"
                             iconName="login"
-                            link="/login/"
+                            modal={<LoginModal />}
                         />
                     )}
                     { user && (

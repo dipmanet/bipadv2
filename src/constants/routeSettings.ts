@@ -101,14 +101,6 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/FourHundredThree'),
         navbar: false,
     },
-    {
-        name: 'login',
-        title: 'Login',
-        path: '/login/',
-        load: () => import('../views/Login'),
-        navbar: false,
-        disableIfAuth: true,
-    },
 
     {
         name: 'fourHundredFour',
