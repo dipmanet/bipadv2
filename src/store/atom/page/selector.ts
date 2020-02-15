@@ -44,6 +44,11 @@ export const regionLevelSelector = createSelector(
 
 const getId = (val: { id: number }) => val.id;
 
+export const showProvinceSelector = ({ page }: AppState) => page.showProvince;
+export const showDistrictSelector = ({ page }: AppState) => page.showDistrict;
+export const showMunicipalitySelector = ({ page }: AppState) => page.showMunicipality;
+export const showWardSelector = ({ page }: AppState) => page.showWard;
+
 export const provincesSelector = ({ page }: AppState) => page.provinces || emptyList;
 
 export const provincesMapSelector = createSelector(

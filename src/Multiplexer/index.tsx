@@ -37,6 +37,7 @@ import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
 import LayerSwitch from '#components/LayerSwitch';
+import LayerToggle from '#components/LayerToggle';
 import MapDownloadButton from '#components/MapDownloadButton';
 import { routeSettings } from '#constants';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
@@ -620,6 +621,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             <LayerSwitch
                                                 className={styles.layerSwitch}
                                             />
+                                            <LayerToggle />
                                         </div>
                                     )}
                                     <MapContainer

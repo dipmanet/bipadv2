@@ -427,6 +427,11 @@ export interface PageState {
 
     documentCategoryList: DocumentCategory[];
 
+    showProvince: boolean;
+    showDistrict: boolean;
+    showMunicipality: boolean;
+    showWard: boolean;
+
     provinces: Province[];
     districts: District[];
     municipalities: Municipality[];
@@ -471,6 +476,11 @@ export enum PageType {
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
     SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
+
+    SET_SHOW_PROVINCE = 'page/SET_SHOW_PROVINCE',
+    SET_SHOW_DISTRICT = 'page/SET_SHOW_DISTRICT',
+    SET_SHOW_MUNICIPALITY = 'page/SET_SHOW_MUNICIPALITY',
+    SET_SHOW_WARD = 'page/SET_SHOW_WARD',
 
     SET_FILTERS = 'page/SET_FILTERS',
 
@@ -568,6 +578,23 @@ export interface SetMunicipalities {
 export interface SetWards {
     type: typeof PageType.SET_WARDS;
     wards: Ward[];
+}
+
+export interface SetShowProvince {
+    type: typeof PageType.SET_SHOW_PROVINCE;
+    value: boolean;
+}
+export interface SetShowDistrict {
+    type: typeof PageType.SET_SHOW_DISTRICT;
+    value: boolean;
+}
+export interface SetShowMunicipality {
+    type: typeof PageType.SET_SHOW_MUNICIPALITY;
+    value: boolean;
+}
+export interface SetShowWard {
+    type: typeof PageType.SET_SHOW_WARD;
+    value: boolean;
 }
 
 export interface SetDocumentCategoryList {
@@ -738,6 +765,7 @@ export type PageActionTypes = (
     SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
+    SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | PatchIncident | SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
