@@ -8,6 +8,11 @@ import Faram, {
     lengthGreaterThanCondition,
 } from '@togglecorp/faram';
 
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
+import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextInput from '#rsci/TextInput';
@@ -44,9 +49,12 @@ interface State {
 interface Params {
     username?: string;
     password?: string;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface OwnProps {
+    className?: string;
+    closeModal?: () => void;
 }
 
 interface PropsFromDispatch {
@@ -84,15 +92,29 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
             const authState = getAuthState();
             setAuth(authState);
-
             setUserDetail(response as User);
+
+            if (props.closeModal) {
+                props.closeModal();
+            }
+
+            window.location.reload();
         },
-        onFailure: ({ error }) => {
-            // TODO: handle error
-            console.warn('failure', error);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
         },
-        onFatal: () => {
-            console.warn('fatal');
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
         },
     },
 };
@@ -128,6 +150,7 @@ class Login extends React.PureComponent<Props, State> {
         loginRequest.do({
             username: faramValues.username,
             password: faramValues.password,
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     };
 
@@ -150,6 +173,7 @@ class Login extends React.PureComponent<Props, State> {
         } = this.state;
         const {
             className,
+            closeModal,
             requests: {
                 loginRequest: {
                     pending,
@@ -158,51 +182,57 @@ class Login extends React.PureComponent<Props, State> {
         } = this.props;
 
         return (
-            <Page
-                leftContent={null}
-                hideMap
-                mainContentClassName={_cs(className, styles.form)}
-                mainContent={(
-                    <>
-                        <h2 className={styles.heading}>
-                            Login
-                        </h2>
-                        <Faram
-                            onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramValidationFailure}
-                            onValidationSuccess={this.handleFaramValidationSuccess}
-                            schema={Login.schema}
-                            value={faramValues}
-                            error={faramErrors}
-                            disabled={pending}
+            <Modal
+                className={_cs(styles.loginModal, className)}
+                onClose={closeModal}
+            >
+                <Faram
+                    onChange={this.handleFaramChange}
+                    onValidationFailure={this.handleFaramValidationFailure}
+                    onValidationSuccess={this.handleFaramValidationSuccess}
+                    schema={Login.schema}
+                    value={faramValues}
+                    error={faramErrors}
+                    disabled={pending}
+                >
+                    <ModalHeader
+                        className={styles.header}
+                        title="Login"
+                        rightComponent={(
+                            <Button
+                                onClick={closeModal}
+                                transparent
+                                iconName="close"
+                            />
+                        )}
+                    />
+                    <ModalBody className={styles.body}>
+                        <NonFieldErrors faramElement />
+                        <TextInput
+                            className={styles.input}
+                            faramElementName="username"
+                            label="Username"
+                            placeholder="shyam"
+                            autoFocus
+                        />
+                        <TextInput
+                            className={styles.input}
+                            faramElementName="password"
+                            label="Password"
+                            placeholder="********"
+                            type="password"
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <PrimaryButton
+                            type="submit"
+                            pending={pending}
                         >
-                            <NonFieldErrors faramElement />
-                            <TextInput
-                                className={styles.input}
-                                faramElementName="username"
-                                label="Username"
-                                placeholder="shyam"
-                                autoFocus
-                            />
-                            <TextInput
-                                className={styles.input}
-                                faramElementName="password"
-                                label="Password"
-                                placeholder="********"
-                                type="password"
-                            />
-                            <div>
-                                <PrimaryButton
-                                    type="submit"
-                                    pending={pending}
-                                >
-                                    Login
-                                </PrimaryButton>
-                            </div>
-                        </Faram>
-                    </>
-                )}
-            />
+                            Login
+                        </PrimaryButton>
+                    </ModalFooter>
+                </Faram>
+            </Modal>
         );
     }
 }

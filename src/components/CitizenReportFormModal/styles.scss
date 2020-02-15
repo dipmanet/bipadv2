@@ -3,6 +3,10 @@
         height: 400px;
     }
 
+    .input {
+        margin: var(--spacing-medium);
+    }
+
     .input-group {
         display: flex;
 
@@ -13,10 +17,6 @@
         .date-time-input {
             display: flex;
         }
-    }
-
-    .input {
-        margin: var(--spacing-medium);
     }
 }
 
