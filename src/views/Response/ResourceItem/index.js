@@ -7,7 +7,7 @@ import DistanceOutput from '#components/DistanceOutput';
 import { iconNames } from '#constants';
 import TextOutput from '#components/TextOutput';
 
-import resourceAttributes from '../../resourceAttributes';
+import resourceAttributes from '../resourceAttributes';
 
 import styles from './styles.scss';
 
@@ -33,15 +33,6 @@ const defaultProps = {
 
 const emptyObject = {};
 
-const inventoryToTextOutput = inventory => (
-    <TextOutput
-        key={inventory.id}
-        label={inventory.item.title}
-        value={inventory.quantity}
-        isNumericValue
-        suffix={` ${inventory.item.unit}`}
-    />
-);
 
 export default class ResourceItem extends React.PureComponent {
     static propTypes = propTypes;
@@ -49,22 +40,24 @@ export default class ResourceItem extends React.PureComponent {
     static defaultProps = defaultProps;
 
     renderDetails = () => {
-        const { resourceType, inventories } = this.props;
-        const attrs = resourceAttributes[resourceType] || [];
+        const {
+            resourceType,
+            inventories,
+        } = this.props;
+
+        const attributes = resourceAttributes[resourceType] || [];
 
         return (
             <div className={styles.additionalDetails}>
                 <div className={styles.attributes}>
-                    {
-                        attrs.map(x => (
-                            <TextOutput
-                                key={x.key}
-                                className={styles.info}
-                                label={x.label}
-                                value={this.props[x.key]}
-                            />
-                        ))
-                    }
+                    {attributes.map(x => (
+                        <TextOutput
+                            key={x.key}
+                            className={styles.info}
+                            label={x.label}
+                            value={this.props[x.key]}
+                        />
+                    ))}
                 </div>
                 { inventories.length > 0 && (
                     <React.Fragment>
@@ -73,7 +66,15 @@ export default class ResourceItem extends React.PureComponent {
                         <div>
                             <b> Inventories </b>
                         </div>
-                        {inventories.map(inventoryToTextOutput)}
+                        {inventories.map(inventory => (
+                            <TextOutput
+                                key={inventory.id}
+                                label={inventory.item.title}
+                                value={inventory.quantity}
+                                isNumericValue
+                                suffix={` ${inventory.item.unit}`}
+                            />
+                        ))}
                     </React.Fragment>
                 )}
             </div>

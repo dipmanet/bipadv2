@@ -24,11 +24,11 @@ import {
 } from '#actionCreators';
 
 import {
-    inventoryCategoryListSelectorRP,
+    // inventoryCategoryListSelectorRP,
     inventoryItemListSelectorRP,
 } from '#selectors';
 
-import { operatorOptions } from '../../resourceAttributes';
+import { operatorOptions } from '../resourceAttributes';
 import styles from './styles.scss';
 
 const requests = {
@@ -51,16 +51,13 @@ const requests = {
     },
 };
 
-const propTypes = {};
-const defaultProps = {};
-
 const labelSelector = x => x.label;
 const titleSelector = x => x.title;
 const keySelector = x => x.key;
 const idSelector = x => x.id;
 
 const mapStateToProps = state => ({
-    inventoryCategoryList: inventoryCategoryListSelectorRP(state),
+    // inventoryCategoryList: inventoryCategoryListSelectorRP(state),
     inventoryItemList: inventoryItemListSelectorRP(state),
 });
 
@@ -68,6 +65,11 @@ const mapDispatchToProps = dispatch => ({
     setInventoryCategories: params => dispatch(setInventoryCategoryListActionRP(params)),
     setInventoryItems: params => dispatch(setInventoryItemListActionRP(params)),
 });
+
+const propTypes = {
+};
+const defaultProps = {
+};
 
 class StockPileFilter extends React.PureComponent {
     static propTypes = propTypes;
@@ -77,8 +79,11 @@ class StockPileFilter extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        const { stockPileFilter } = this.props;
+
         this.state = {
-            faramValues: {},
+            faramValues: stockPileFilter,
+            faramErrors: {},
         };
 
         this.schema = {
@@ -96,6 +101,10 @@ class StockPileFilter extends React.PureComponent {
         item => item.unit,
     ))
 
+    handleFaramValidationFailure = (faramErrors) => {
+        this.setState({ faramErrors });
+    }
+
     handleFaramChange = (faramValues) => {
         if (!faramValues.item) {
             this.setState({
@@ -110,7 +119,8 @@ class StockPileFilter extends React.PureComponent {
     }
 
     handleFaramValidationSuccess = (_, faramValues) => {
-        this.props.setStockPileFilter(faramValues);
+        const { setStockPileFilter } = this.props;
+        setStockPileFilter(faramValues);
     }
 
     render() {
@@ -120,22 +130,22 @@ class StockPileFilter extends React.PureComponent {
         } = this.state;
 
         const {
-            filteredList,
             inventoryItemList,
             className,
         } = this.props;
 
         const itemUnits = this.getItemsUnits(inventoryItemList);
-
         const { inventory: { item } = {} } = faramValues;
         const unit = itemUnits[item];
         const unitText = unit ? `(${unit})` : '';
+
         const quantityDisabled = !faramValues.item;
 
         return (
             <Faram
                 className={_cs(className, styles.filterForm)}
                 onChange={this.handleFaramChange}
+                onValidationFailure={this.hanndleValidationFailure}
                 onValidationSuccess={this.handleFaramValidationSuccess}
                 schema={this.schema}
                 value={faramValues}

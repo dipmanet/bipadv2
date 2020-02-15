@@ -46,7 +46,7 @@ export default class Page extends React.PureComponent<Props, State> {
             hideMap,
         } = this.context;
 
-        this.transferContents(this.props, this.context);
+        this.transferContents(nextProps, this.context);
         if (shouldHideMap !== prevShouldHideMap) {
             this.syncMapVisibility(shouldHideMap, hideMap, showMap);
         }

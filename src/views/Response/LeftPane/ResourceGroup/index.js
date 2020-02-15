@@ -6,10 +6,9 @@ import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import TextOutput from '#components/TextOutput';
 import { groupList } from '#utils/common';
-import { iconNames } from '#constants';
 
-import ResourceItem from '../resources/ResourceItem';
-import resourceAttributes from '../resourceAttributes';
+import ResourceItem from '../../ResourceItem';
+import resourceAttributes from '../../resourceAttributes';
 
 import styles from './styles.scss';
 
@@ -34,12 +33,13 @@ const defaultProps = {
     showSummary: true,
 };
 
+
+const keySelector = (d, id) => `${d.title}-${id}`;
+
 export default class ResourceGroup extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
-
-    static keySelector = (d, id) => `${d.title}-${id}`;
 
     constructor(props) {
         super(props);
@@ -84,11 +84,8 @@ export default class ResourceGroup extends React.PureComponent {
             .filter(x => x.aggregate)
             .map(({ key, label }) => ({ key, label }));
 
-
         const aggregatedAttributes = {};
-
         const inventories = [];
-
         data.forEach((resource) => {
             inventories.push(...(resource.inventories || []));
             aggregatableAttributes.forEach(({ key, label }) => {
@@ -98,14 +95,12 @@ export default class ResourceGroup extends React.PureComponent {
 
         const inventoryUnits = {};
         const inventoriesSummary = {};
-
         inventories.forEach((inventory) => {
             const key = inventory.item.title;
             inventoryUnits[key] = inventory.item.unit;
             inventoriesSummary[key] = (inventoriesSummary[key] || 0) + inventory.quantity;
         });
 
-        const itemsSorted = Object.keys(inventoriesSummary).sort();
         return (
             <div className={styles.summary}>
                 {
@@ -132,7 +127,7 @@ export default class ResourceGroup extends React.PureComponent {
                 }
                 {
                     // Aggregation of inventories
-                    itemsSorted.map(itemName => (
+                    Object.keys(inventoriesSummary).sort().map(itemName => (
                         <TextOutput
                             key={itemName}
                             label={itemName}
@@ -153,7 +148,6 @@ export default class ResourceGroup extends React.PureComponent {
             className,
             icon,
             totalSize,
-            isFilterShown,
             // itemRenderer,
         } = this.props;
 
@@ -165,7 +159,6 @@ export default class ResourceGroup extends React.PureComponent {
 
         const itemsCount = data.length;
         const buttonIcon = showResources ? 'chevronUp' : 'chevronDown';
-        const filterButtonText = isFilterShown ? 'Hide Filters' : 'Show Filters';
 
         const Summary = this.renderSummary;
 
@@ -209,16 +202,15 @@ export default class ResourceGroup extends React.PureComponent {
                     </div>
                 </div>
                 <Summary />
-                { showResources && (
+                {showResources && (
                     <ListView
                         className={styles.content}
                         data={data}
                         renderer={ResourceItem}
                         rendererParams={this.getResourceElementRendererParams}
-                        keySelector={ResourceGroup.keySelector}
+                        keySelector={keySelector}
                     />
-                )
-                }
+                )}
             </div>
         );
     }

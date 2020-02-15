@@ -9,6 +9,7 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 
+import SVGMapIcon from '#components/SVGMapIcon';
 import ZoomMap from '#components/ZoomMap';
 import {
     mapStyles,
@@ -33,24 +34,9 @@ import satelliteIcon from '#resources/icons/Satellite-dish.svg';
 import buildingIcon from '#resources/icons/Building.svg';
 import mapIcon from '#resources/icons/Map.svg';
 
-import ResourceItem from '../resources/ResourceItem';
+import ResourceItem from '../ResourceItem';
 
 import styles from './styles.scss';
-
-const propTypes = {
-    className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    incident: PropTypes.object,
-    resourceList: PropTypes.arrayOf(PropTypes.object),
-};
-
-const defaultProps = {
-    className: '',
-    incident: {},
-    resourceList: [],
-};
-
-const emptyObject = {};
 
 const resourceImages = [
     { name: 'Communication', icon: satelliteIcon },
@@ -69,6 +55,19 @@ const mapStateToProps = state => ({
     hazards: hazardTypesSelector(state),
 });
 
+const propTypes = {
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    incident: PropTypes.object,
+    resourceList: PropTypes.arrayOf(PropTypes.object),
+};
+
+const defaultProps = {
+    className: '',
+    incident: {},
+    resourceList: [],
+};
+
 class ResponseMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -81,32 +80,6 @@ class ResponseMap extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
-
-    getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
-        const mapPaddings = getMapPaddings();
-
-        if (leftPaneExpanded && rightPaneExpanded) {
-            mapPaddings.bothPaneExpanded.right += (360 - 256);
-            return mapPaddings.bothPaneExpanded;
-        }
-
-        if (leftPaneExpanded) {
-            return mapPaddings.leftPaneExpanded;
-        }
-
-        if (rightPaneExpanded) {
-            mapPaddings.rightPaneExpanded.right += (360 - 256);
-            return mapPaddings.rightPaneExpanded;
-        }
-
-        return mapPaddings.noPaneExpanded;
-    });
-
-    getBuffer = memoize((shape) => {
-        const buffered = buffer(shape, 32, { units: 'kilometers' });
-        const box = bbox(buffered);
-        return box;
-    });
 
     getIncidentList = memoize(incident => [incident]);
 
@@ -136,7 +109,11 @@ class ResponseMap extends React.PureComponent {
 
     handleResourceClick = (feature, lngLat) => {
         const { id } = feature;
-        const resource = this.props.resourceList.find(x => x.id === id) || emptyObject;
+        const resource = this.props.resourceList.find(x => x.id === id);
+        if (!resource) {
+            return;
+        }
+
         this.setState({
             resourceLngLat: lngLat,
             resource,
@@ -146,6 +123,7 @@ class ResponseMap extends React.PureComponent {
     handleTooltipClose = () => {
         this.setState({
             resourceLngLat: undefined,
+            resource: undefined,
         });
     }
 
@@ -160,7 +138,6 @@ class ResponseMap extends React.PureComponent {
             point,
             polygon,
         } = incident;
-        // const box = this.getBuffer(point || polygon);
 
         const incidentList = this.getIncidentList(incident);
 
@@ -187,12 +164,18 @@ class ResponseMap extends React.PureComponent {
                     bounds={mybox}
                     // boundsPadding={boundsPadding}
                 />
+                {resourceImages.map(image => (
+                    <SVGMapIcon
+                        src={image.icon}
+                        name={image.name}
+                    />
+                ))}
                 <MapSource
                     sourceKey="resource"
                     sourceOptions={{
                         type: 'geojson',
                     }}
-                    images={resourceImages}
+                    // images={resourceImages}
                     geoJson={resourceGeoJson}
                 >
                     <MapLayer
@@ -212,7 +195,7 @@ class ResponseMap extends React.PureComponent {
                             paint: mapStyles.resourceSymbol.symbol,
                         }}
                     />
-                    { resourceLngLat && (
+                    { resourceLngLat && resource && (
                         <MapTooltip
                             coordinates={resourceLngLat}
                             tooltipOptions={tooltipOptions}

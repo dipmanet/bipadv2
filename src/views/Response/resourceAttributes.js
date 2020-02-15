@@ -49,15 +49,23 @@ const healthAttributes = [
             operation: filterOperations.GTE,
         },
     },
-    { key: 'icu', label: 'ICU', type: 'boolean', filter: {} },
-    { key: 'nicu', label: 'NICU', type: 'boolean', filter: {} },
+    {
+        key: 'icu',
+        label: 'ICU',
+        type: 'boolean',
+        filter: { },
+    },
+    {
+        key: 'nicu',
+        label: 'NICU',
+        type: 'boolean',
+        filter: { },
+    },
     {
         key: 'emergencyService',
         label: 'Emergency Service',
         type: 'boolean',
-        filter: {
-            operation: filterOperations.EQ,
-        },
+        filter: { },
     },
     { key: 'operatingTheatre', label: 'Operating Theatre', type: 'boolean' },
     { key: 'ambulanceService', label: 'Ambulance Service', type: 'boolean' },
@@ -162,6 +170,5 @@ const resourceAttributes = {
     hotel: hotelAttributes,
     governance: governanceAttributes,
 };
-
 
 export default resourceAttributes;

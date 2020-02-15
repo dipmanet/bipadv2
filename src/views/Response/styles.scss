@@ -1,5 +1,11 @@
 .left-container {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-foreground);
+
+    .left {
+        flex-grow: 1;
+    }
 }
 
 .right-container {
