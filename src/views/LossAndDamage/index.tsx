@@ -51,7 +51,6 @@ interface Params {
 
 type Props = NewProps<ComponentProps, Params>;
 
-const emptyList = [];
 const chartMargin = {
     top: 0,
     right: 0,
@@ -149,7 +148,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { selectedMetric } = this.state;
-        console.warn(selectedMetric);
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');

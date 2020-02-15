@@ -75,6 +75,8 @@ const iconNames = {
 
     refresh: 'ion-android-refresh',
     send: 'ion-android-send',
+
+    gridView: 'ion-ios-grid-view-outline',
 };
 
 export default iconNames;

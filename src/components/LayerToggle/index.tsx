@@ -79,7 +79,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
-                iconName="layers"
+                iconName="gridView"
                 hideDropdownIcon
                 dropdownClassName={styles.container}
             >
