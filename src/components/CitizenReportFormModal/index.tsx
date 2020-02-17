@@ -1,6 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import Faram from '@togglecorp/faram';
+import Faram, { requiredCondition } from '@togglecorp/faram';
 import { connect } from 'react-redux';
 
 import Modal from '#rscv/Modal';
@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
@@ -57,6 +58,11 @@ interface PropsFromAppState {
     hazardList: HazardElement[];
 }
 
+interface State {
+    faramValues: object;
+    faramErrors: object;
+}
+
 interface Params {
 }
 
@@ -71,18 +77,21 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 
 const schema = {
     fields: {
-        hazard: [],
+        description: [],
+        hazard: [requiredCondition],
+        incidentOnDate: [],
+        incidentOnTime: [],
+        streetAddress: [],
+        location: [requiredCondition],
+        recaptcha: [],
+
+        /*
         source: [],
         wards: [],
         point: [],
         polygon: [],
-        description: [],
         approved: [],
-        reportedOnDate: [],
-        reportedOnTime: [],
-        streetAddress: [],
-        location: [],
-        recaptacha: [],
+        */
     },
 };
 
@@ -93,40 +102,55 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     citizenReportPostRequest: {
         url: '/citizen-report/',
         method: methods.POST,
-        body: ({ params: { body } = { body: {} } }) => body,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            if (props.closeModal) {
+                props.closeModal();
+            }
+        },
     },
 };
 
-class CitizenReportFormModal extends React.PureComponent<Props> {
+class CitizenReportFormModal extends React.PureComponent<Props, State> {
     public state = {
         faramValues: {
             incidentOnDate: encodeDate(new Date()),
             incidentOnTime: encodeTime(new Date()),
         },
+        faramErrors: {},
     };
 
-    private handleFaramChange = (faramValues) => {
-        this.setState({ faramValues });
+    private handleFaramValidationFailure = (faramErrors: object) => {
+        this.setState({ faramErrors });
     }
 
-    private handleFaramValidationSuccess = (faramValues) => {
+    private handleFaramChange = (faramValues: object, faramErrors: object) => {
+        this.setState({ faramValues, faramErrors });
+    }
+
+    private handleFaramValidationSuccess = (faramValues: object) => {
         const {
             requests: {
                 citizenReportPostRequest,
             },
         } = this.props;
 
-        const { location } = faramValues;
+        const {
+            location,
+            hazard,
+            description,
+            recaptcha,
+        } = faramValues;
 
-        const point = location.geoJson.features[0].geometry;
-        const wards = location.wards;
+        const { wards, geoJson } = location;
+        const point = geoJson.features[0].geometry;
 
         const body = {
-            hazard: faramValues.hazard,
+            hazard,
             point,
             ward: wards[0],
-            description: faramValues.description,
-            recaptcha: faramValues.recaptacha,
+            description,
+            recaptcha,
         };
 
         citizenReportPostRequest.do({ body });
@@ -139,9 +163,17 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
             hazardList,
             sourceList,
             eventList,
+            requests: {
+                citizenReportPostRequest: {
+                    pending,
+                },
+            },
         } = this.props;
 
-        const { faramValues } = this.state;
+        const {
+            faramValues,
+            faramErrors,
+        } = this.state;
 
         return (
             <Modal
@@ -153,7 +185,10 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
                     schema={schema}
                     onChange={this.handleFaramChange}
                     value={faramValues}
+                    error={faramErrors}
                     onValidationSuccess={this.handleFaramValidationSuccess}
+                    onValidationFailure={this.handleFaramValidationFailure}
+                    disabled={pending}
                 >
                     <ModalHeader
                         className={styles.header}
@@ -167,6 +202,7 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
                         )}
                     />
                     <ModalBody className={styles.body}>
+                        <NonFieldErrors faramElement />
                         <TextArea
                             className={styles.input}
                             faramElementName="description"
@@ -203,13 +239,14 @@ class CitizenReportFormModal extends React.PureComponent<Props> {
                             faramElementName="location"
                         />
                         <ReCaptcha
-                            faramElementName="recaptacha"
+                            faramElementName="recaptcha"
                             siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                         />
                     </ModalBody>
                     <ModalFooter>
                         <PrimaryButton
                             type="submit"
+                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>

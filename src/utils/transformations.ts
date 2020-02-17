@@ -24,6 +24,7 @@ export const pastDaysToDateRange = (pastDays: number) => {
     };
 };
 
+// FIXME: obsolete
 // eslint-disable-next-line import/prefer-default-export, arrow-parens
 export const transformDateRangeFilterParam = (
     filters: FiltersWithRegion['faramValues'],
@@ -94,16 +95,23 @@ export const transformDataRangeToFilter = (
     dataRange: DataDateRangeValueElement,
     dateParamName: string,
 ) => {
-    const {
-        startDate,
-        endDate,
-    } = dataRange;
+    const { rangeInDays } = dataRange;
 
-    return {
+    const getFilter = (startDate?: Date, endDate?: Date) => ({
         // eslint-disable-next-line @typescript-eslint/camelcase
-        [`${dateParamName}__gt`]: startDate ? (new Date(startDate)).toISOString() : undefined,
+        [`${dateParamName}__gt`]: startDate ? startDate.toISOString() : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__lt`]: endDate ? endDate.toISOString() : undefined,
+    });
 
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        [`${dateParamName}__lt`]: endDate ? (new Date(endDate)).toISOString() : undefined,
-    };
+    if (rangeInDays !== 'custom') {
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        return getFilter(startDate, endDate);
+    }
+
+    const { startDate, endDate } = dataRange;
+    return getFilter(
+        startDate ? new Date(startDate) : undefined,
+        endDate ? new Date(endDate) : undefined,
+    );
 };

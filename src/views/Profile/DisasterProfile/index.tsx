@@ -1,11 +1,11 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import FixedTabs from '#rscv/FixedTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Message from '#rscv/Message';
 import SegmentInput from '#rsci/SegmentInput';
 
+import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import {
     createConnectedRequestCoordinator,
@@ -129,6 +129,9 @@ class DisasterProfile extends React.PureComponent<Props> {
                     <MultiViewContainer
                         views={this.views}
                         active={activeView}
+                    />
+                    <CommonMap
+                        sourceKey="profile-disaster"
                     />
                 </div>
             </>

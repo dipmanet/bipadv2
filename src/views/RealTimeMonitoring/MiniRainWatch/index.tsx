@@ -54,6 +54,11 @@ const durationOptions: KeyValue[] = [
     },
 ];
 
+const defaultSort = {
+    key: 'lastHour',
+    order: 'asc',
+};
+
 const durationLabelSelector = (d: KeyValue) => d.label;
 const durationKeySelector = (d: KeyValue) => d.key;
 
@@ -79,7 +84,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            duration: 1,
+            duration: 24,
         };
     }
 
@@ -140,23 +145,19 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(className, styles.rainWatch)}>
-                <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Rainfall watch
-                    </h2>
-                    <ModalButton
-                        className={styles.showDetailsButton}
-                        transparent
-                        modal={(
-                            <RainWatch
-                                realTimeRain={realTimeRain}
-                            />
-                        )}
-                    >
-                        Show all
-                    </ModalButton>
-                </header>
+                <ModalButton
+                    className={styles.showDetailsButton}
+                    transparent
+                    iconName="table"
+                    title="Show all data"
+                    modal={(
+                        <RainWatch
+                            realTimeRain={realTimeRain}
+                        />
+                    )}
+                />
                 <SegmentInput
+                    label="Time range"
                     className={styles.durationInput}
                     options={durationOptions}
                     value={duration}
@@ -172,6 +173,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                         data={realTimeRain}
                         headers={rainHeader}
                         keySelector={rainWatchKeySelector}
+                        defaultSort={defaultSort}
                     />
                 </div>
             </div>

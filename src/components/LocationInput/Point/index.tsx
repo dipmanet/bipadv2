@@ -339,6 +339,8 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             region,
             className,
             pointShape,
+            hint,
+            error,
         } = this.props;
 
         const {
@@ -369,15 +371,18 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         )}
                     </MapSource>
                 )}
+                <RegionSelectInput
+                    className={styles.regionInput}
+                    label="Region"
+                    value={region}
+                    onChange={this.handleRegionSelectInputChange}
+                    maxOptions={50}
+                    hideClearButton
+                    error={error}
+                    hint={hint}
+                    showHintAndError
+                />
                 <div className={styles.coordinateInput}>
-                    <TextInput
-                        className={styles.lngInput}
-                        readOnly
-                        type="number"
-                        label="Longitude"
-                        value={lng}
-                        onChange={this.handleLngInputChange}
-                    />
                     <TextInput
                         readOnly
                         className={styles.latInput}
@@ -386,14 +391,15 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         value={lat}
                         onChange={this.handleLatInputChange}
                     />
+                    <TextInput
+                        className={styles.lngInput}
+                        readOnly
+                        type="number"
+                        label="Longitude"
+                        value={lng}
+                        onChange={this.handleLngInputChange}
+                    />
                 </div>
-                <RegionSelectInput
-                    className={styles.regionInput}
-                    label="Region"
-                    value={region}
-                    onChange={this.handleRegionSelectInputChange}
-                    maxOptions={50}
-                />
             </div>
         );
     }

@@ -22,7 +22,8 @@ import {
     methods,
 } from '#request';
 import CitizenReportFormModal from '#components/CitizenReportFormModal';
-import LoginModal from './LoginModal';
+import LoginModal from '#components/LoginModal';
+import AboutModal from '#components/AboutModal';
 
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
@@ -65,8 +66,7 @@ const MenuItemLikeButton = ({
     </div>
 );
 
-const CitizenReportingButton = modalize(MenuItemLikeButton);
-const LoginButton = modalize(MenuItemLikeButton);
+const ModalButton = modalize(MenuItemLikeButton);
 
 interface State {
 }
@@ -151,14 +151,20 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <CitizenReportingButton
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="About Us"
+                        iconName="aboutUs"
+                        modal={<AboutModal />}
+                    />
+                    <ModalButton
                         className={styles.reportIncidentButton}
                         title="Report an incident"
                         iconName="telephone"
                         modal={<CitizenReportFormModal />}
                     />
                     { !authenticated && (
-                        <LoginButton
+                        <ModalButton
                             className={styles.menuItem}
                             title="Login"
                             iconName="login"

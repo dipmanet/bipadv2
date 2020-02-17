@@ -118,6 +118,13 @@ const mapStateToProps = state => ({
 
 const hazardKeySelector = hazard => hazard.id;
 
+const visibleLayout = {
+    visibility: 'visible',
+};
+const noneLayout = {
+    visibility: 'none',
+};
+
 class AlertEventMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -348,30 +355,36 @@ class AlertEventMap extends React.PureComponent {
                             type: 'circle',
                             filter,
                             paint: mapStyles.alertPoint.animatedCircle,
+                            layout: isAlertHovered || isEventHovered
+                                ? noneLayout
+                                : visibleLayout,
                         }}
                         onAnimationFrame={this.handleAnimationKeyframe}
-                    />
-                    <MapLayer
-                        layerKey="alerts-point-icon"
-                        layerOptions={{
-                            type: 'symbol',
-                            layout: {
-                                'icon-image': ['get', 'hazardTitle'],
-                                'icon-size': 0.2,
-                            },
-                        }}
                     />
                     <MapLayer
                         layerKey="alerts-point"
                         layerOptions={{
                             type: 'circle',
-                            paint: isAlertHovered
+                            paint: isAlertHovered || isEventHovered
                                 ? mapStyles.alertPoint.circleDim
                                 : mapStyles.alertPoint.circle,
                         }}
                         onMouseEnter={this.handleAlertEnter}
                         onMouseLeave={this.handleAlertLeave}
                         onClick={this.handleAlertClick}
+                    />
+                    <MapLayer
+                        layerKey="alerts-point-icon"
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: {
+                                'icon-image': ['get', 'hazardIcon'],
+                                'icon-size': 0.2,
+                            },
+                            paint: isAlertHovered || isEventHovered
+                                ? { 'icon-opacity': 0.1 }
+                                : { 'icon-opacity': 0.9 },
+                        }}
                     />
                     {alertClickLngLat && (
                         <MapTooltip
@@ -429,27 +442,30 @@ class AlertEventMap extends React.PureComponent {
                     geoJson={eventsPointFeatureCollection}
                 >
                     <MapLayer
-                        layerKey="events-point-icon"
-                        layerOptions={{
-                            type: 'symbol',
-                            layout: {
-                                'icon-image': ['get', 'hazardTitle'],
-                                'icon-size': 0.2,
-                            },
-                        }}
-                    />
-                    <MapLayer
                         layerKey="events-point"
                         layerOptions={{
                             type: 'symbol',
                             layout: mapStyles.eventSymbol.layout,
-                            paint: isEventHovered
+                            paint: isEventHovered || isAlertHovered
                                 ? mapStyles.eventSymbol.paintDim
                                 : mapStyles.eventSymbol.paint,
                         }}
                         onClick={this.handleEventClick}
                         onMouseEnter={this.handleEventEnter}
                         onMouseLeave={this.handleEventLeave}
+                    />
+                    <MapLayer
+                        layerKey="events-point-icon"
+                        layerOptions={{
+                            type: 'symbol',
+                            layout: {
+                                'icon-image': ['get', 'hazardIcon'],
+                                'icon-size': 0.2,
+                            },
+                            paint: isAlertHovered || isEventHovered
+                                ? { 'icon-opacity': 0.1 }
+                                : { 'icon-opacity': 0.9 },
+                        }}
                     />
                     {eventClickLngLat && (
                         <MapTooltip

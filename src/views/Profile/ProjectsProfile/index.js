@@ -21,7 +21,7 @@ import {
     createRequestClient,
 } from '#request';
 
-import ProjectsProfileFilter from './Filter';
+// import ProjectsProfileFilter from './Filter';
 import LeftPane from './LeftPane';
 import Map from './Map';
 

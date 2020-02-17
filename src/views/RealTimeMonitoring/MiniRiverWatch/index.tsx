@@ -25,6 +25,11 @@ interface Props {
 const ModalButton = modalize(Button);
 const riverWatchKeySelector = (station: RealTimeRiver) => station.id;
 
+const defaultSort = {
+    key: 'waterLevel',
+    order: 'asc',
+};
+
 class MiniRiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
@@ -77,28 +82,24 @@ class MiniRiverWatch extends React.PureComponent<Props> {
 
         return (
             <div className={_cs(className, styles.riverWatch)}>
-                <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        River watch
-                    </h2>
-                    <ModalButton
-                        className={styles.showDetailsButton}
-                        transparent
-                        modal={(
-                            <RiverWatch
-                                realTimeRiver={realTimeRiver}
-                            />
-                        )}
-                    >
-                        Show all
-                    </ModalButton>
-                </header>
+                <ModalButton
+                    className={styles.showDetailsButton}
+                    transparent
+                    iconName="table"
+                    title="Show all data"
+                    modal={(
+                        <RiverWatch
+                            realTimeRiver={realTimeRiver}
+                        />
+                    )}
+                />
                 <div className={styles.tableContainer}>
                     <Table
                         className={styles.riverWatchTable}
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}
                         keySelector={riverWatchKeySelector}
+                        defaultSort={defaultSort}
                     />
                 </div>
             </div>
