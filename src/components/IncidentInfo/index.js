@@ -97,7 +97,7 @@ export default class IncidentInfo extends React.PureComponent {
                             className={styles.gotoResponseLink}
                             to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
                         >
-                            Goto response
+                            Go to response
                         </Link>
                     </div>
                 )}

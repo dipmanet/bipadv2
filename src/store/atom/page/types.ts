@@ -492,6 +492,7 @@ export enum PageType {
     // incident
     IP__SET_INCIDENT_LIST = 'page/INCIDENT_PAGE/SET_INCIDENT_LIST',
     IP__SET_INCIDENT = 'page/INCIDENT_PAGE/SET_INCIDENT',
+    IP__REMOVE_INCIDENT = 'page/INCIDENT_PAGE/REMOVE_INCIDENT',
     IP__PATCH_INCIDENT = 'page/INCIDENT_PAGE/PATCH_INCIDENT',
     IP__SET_FILTERS = 'page/INCIDENT_PAGE/SET_FILTERS',
 
@@ -640,6 +641,11 @@ export interface SetIncident {
     incident: Incident;
 }
 
+export interface RemoveIncident {
+    type: typeof PageType.IP__REMOVE_INCIDENT;
+    incidentId: Incident['id'];
+}
+
 export interface PatchIncident {
     type: typeof PageType.IP__PATCH_INCIDENT;
     incident: Incident;
@@ -767,7 +773,8 @@ export type PageActionTypes = (
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
-    SetIncident | PatchIncident | SetIncidentFilters | SetResourceList | SetEventType |
+    SetIncident | RemoveIncident | PatchIncident |
+    SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 import {
     _cs,
     isDefined,
@@ -8,23 +9,25 @@ import {
 } from '@togglecorp/fujs';
 import { Link } from '@reach/router';
 
-import { iconNames } from '#constants';
+import {
+    createRequestClient,
+    methods,
+} from '#request';
 import TextOutput from '#components/TextOutput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
 
-import { getHazardColor, getHazardIcon } from '#utils/domain';
-import GeoOutput from '#components/GeoOutput';
-
 import { getYesterday } from '#utils/common';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
 import { sourcesSelector } from '#selectors';
 
 import {
     patchIncidentActionIP,
     setIncidentActionIP,
+    removeIncidentActionIP,
 } from '#actionCreators';
 
 import alertIcon from '#resources/icons/Alert.svg';
@@ -39,10 +42,18 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     setIncident: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    removeIncident: PropTypes.func.isRequired,
     patchIncident: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    hazardTypes: PropTypes.object.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    sources: PropTypes.object.isRequired,
     onHover: PropTypes.func,
     recentDay: PropTypes.number.isRequired,
     isHovered: PropTypes.bool.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types, react/no-unused-prop-types
+    requests: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -52,17 +63,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     patchIncident: params => dispatch(patchIncidentActionIP(params)),
     setIncident: params => dispatch(setIncidentActionIP(params)),
+    removeIncident: params => dispatch(removeIncidentActionIP(params)),
 });
 
 const defaultProps = {
     className: undefined,
     onHover: undefined,
-};
-
-const isRecent = (date, recentDay) => {
-    const yesterday = getYesterday(recentDay);
-    const timestamp = new Date(date).getTime();
-    return timestamp > yesterday;
 };
 
 const LocationOutput = ({
@@ -94,6 +100,33 @@ const LocationOutput = ({
         )}
     </div>
 );
+
+LocationOutput.propTypes = {
+    provinceTitle: PropTypes.string,
+    districtTitle: PropTypes.string,
+    municipalityTitle: PropTypes.string,
+    streetAddress: PropTypes.string,
+};
+
+LocationOutput.defaultProps = {
+    provinceTitle: '',
+    districtTitle: '',
+    municipalityTitle: '',
+    streetAddress: '',
+};
+
+const requestOptions = {
+    incidentDeleteRequest: {
+        url: ({ props: { data: { id: incidentId } } }) => `/incident/${incidentId}/`,
+        method: methods.DELETE,
+        onSuccess: ({ props: {
+            data: { id: incidentId },
+            removeIncident,
+        } }) => {
+            removeIncident({ incidentId });
+        },
+    },
+};
 
 class IncidentItem extends React.PureComponent {
     static propTypes = propTypes
@@ -140,6 +173,17 @@ class IncidentItem extends React.PureComponent {
         }
     }
 
+    handleIncidentDelete = () => {
+        const { requests: { incidentDeleteRequest } } = this.props;
+        incidentDeleteRequest.do();
+    }
+
+    isRecent = memoize((date, recentDay) => {
+        const yesterday = getYesterday(recentDay);
+        const timestamp = new Date(date).getTime();
+        return timestamp > yesterday;
+    })
+
     render() {
         const {
             className,
@@ -148,6 +192,11 @@ class IncidentItem extends React.PureComponent {
             recentDay,
             isHovered,
             sources,
+            requests: {
+                incidentDeleteRequest: {
+                    pending: incidentDeletePending,
+                },
+            },
         } = this.props;
 
         const {
@@ -167,12 +216,7 @@ class IncidentItem extends React.PureComponent {
             municipalityTitle,
         } = data;
 
-
-        const verifiedIconClass = verified
-            ? _cs(styles.icon, iconNames.check, styles.verified)
-            : _cs(styles.icon, iconNames.close);
-
-        const isNew = isRecent(incidentOn, recentDay);
+        const isNew = this.isRecent(incidentOn, recentDay);
         const hazard = hazardTypes[hazardId];
 
         return (
@@ -232,29 +276,42 @@ class IncidentItem extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        <Cloak hiddenIf={p => !p.change_incident}>
-                            <ModalAccentButton
-                                className={styles.button}
-                                transparent
-                                modal={(
-                                    <AddIncidentForm
-                                        lossServerId={lossServerId}
-                                        incidentServerId={incidentServerId}
-                                        incidentDetails={data}
-                                        onIncidentChange={this.handleIncidentEdit}
-                                        onLossChange={this.handleLossEdit}
-                                    />
-                                )}
+                        <div className={styles.leftActions}>
+                            <Link
+                                className={styles.link}
+                                to={reverseRoute('incidents/:incidentId/response', { incidentId })}
                             >
-                                Edit
-                            </ModalAccentButton>
+                                Go to response
+                            </Link>
+                        </div>
+                        <Cloak hiddenIf={p => !p.change_incident}>
+                            <div className={styles.rightActions}>
+                                <ModalAccentButton
+                                    className={styles.button}
+                                    transparent
+                                    modal={(
+                                        <AddIncidentForm
+                                            lossServerId={lossServerId}
+                                            incidentServerId={incidentServerId}
+                                            incidentDetails={data}
+                                            onIncidentChange={this.handleIncidentEdit}
+                                            onLossChange={this.handleLossEdit}
+                                        />
+                                    )}
+                                >
+                                    Edit
+                                </ModalAccentButton>
+                                <DangerConfirmButton
+                                    className={styles.button}
+                                    confirmationMessage="Are you sure you want to delete this incident?"
+                                    onClick={this.handleIncidentDelete}
+                                    pending={incidentDeletePending}
+                                    transparent
+                                >
+                                    Delete
+                                </DangerConfirmButton>
+                            </div>
                         </Cloak>
-                        <Link
-                            className={styles.link}
-                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
-                        >
-                            Go to response
-                        </Link>
                     </div>
                 </div>
             </div>
@@ -262,4 +319,6 @@ class IncidentItem extends React.PureComponent {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IncidentItem);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createRequestClient(requestOptions)(IncidentItem),
+);
