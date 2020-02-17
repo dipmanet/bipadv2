@@ -33,43 +33,6 @@ import {
 
 import styles from './styles.scss';
 
-const SvgMapImage = (props) => {
-    const {
-        image,
-        name,
-    } = props;
-
-    const [realImage, setRealImage] = useState(undefined);
-
-    const [initialImage] = useState(image);
-
-    useEffect(
-        () => {
-            getImageAsync(initialImage)
-                .then((loadedImage) => {
-                    setRealImage(loadedImage);
-                });
-        },
-        [initialImage],
-    );
-
-    if (!realImage) {
-        return null;
-    }
-
-    return (
-        <MapImage
-            image={realImage}
-            name={name}
-        />
-    );
-};
-
-SvgMapImage.propTypes = {
-    image: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-};
-
 const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     hazards: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -148,17 +111,6 @@ class IncidentMap extends React.PureComponent {
         });
     }
 
-    /*
-    getIncidentsHazardList = (incidentList = []) => {
-        const { hazards } = this.props;
-        const hazardIdList = incidentList.map(v => v.hazard)
-            .filter(v => v);
-        const uniqueIds = [...new Set(hazardIdList)];
-
-        return uniqueIds.map(id => hazards[id]).reverse();
-    }
-    */
-
     mapImageRendererParams = (_, hazard) => {
         const image = getImage(hazard.icon)
             .setAttribute('crossOrigin', '');
@@ -189,8 +141,6 @@ class IncidentMap extends React.PureComponent {
             incidentLngLat,
         } = this.state;
 
-        // const hazardList = this.getIncidentsHazardList(incidentList);
-
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: true,
@@ -200,13 +150,6 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="incidents" />
-                {/* hazardList.map(hazard => (
-                    <SvgMapImage
-                        key={hazard.icon}
-                        image={hazard.icon}
-                        name={hazard.icon}
-                    />
-                )) */}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}
@@ -255,6 +198,9 @@ class IncidentMap extends React.PureComponent {
                                 'icon-image': ['get', 'hazardIcon'],
                                 'icon-size': 0.2,
                             },
+                            paint: isHovered
+                                ? { 'icon-opacity': 0.1 }
+                                : { 'icon-opacity': 0.9 },
                         }}
                     />
                     { incidentLngLat && (
