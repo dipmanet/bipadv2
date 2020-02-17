@@ -115,7 +115,6 @@ export default class AlertTable extends React.PureComponent {
         } = this.props;
 
         const alertListForExport = this.convertValues(alertList, this.columns);
-        console.warn(alertList, this.columns);
 
         return (
             <div className={_cs(className, styles.tabularView)}>
