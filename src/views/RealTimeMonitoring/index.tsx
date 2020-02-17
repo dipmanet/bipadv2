@@ -106,6 +106,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/rain/',
         method: methods.GET,
         query: ({ props: { filters } }) => ({
+            // FIXME: obsolete
             ...transformDateRangeFilterParam(filters, 'incident_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {

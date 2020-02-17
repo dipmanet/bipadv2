@@ -5,11 +5,10 @@ import { _cs } from '@togglecorp/fujs';
 import DateInput from '#rsci/DateInput';
 import RadioInput from '#components/RadioInput';
 
-import { pastDaysToDateRange } from '#utils/transformations';
-
 import styles from './styles.scss';
 
 const pastDataKeySelector = d => d.key;
+
 const pastDataLabelSelector = d => d.label;
 
 const pastDateRangeOptions = [
@@ -43,62 +42,63 @@ const pastDateRangeOptions = [
     },
 ];
 
+interface InputValue {
+    rangeInDays: number | 'custom';
+    startDate: string | undefined;
+    endDate: string | undefined;
+}
+
 interface Props {
     className?: string;
+    onChange: (value: InputValue) => void;
+    value: InputValue;
 }
 
 class PastDateRangeInput extends React.PureComponent<Props> {
-    private handleRadioInputChange = (rangeInDays: number) => {
+    public static defaultProps = {
+        value: undefined,
+    };
+
+    private handleRadioInputChange = (rangeInDays: number | 'custom') => {
         const { onChange } = this.props;
 
-        if (rangeInDays === 'others') {
+        if (rangeInDays === 'custom') {
+            onChange({
+                rangeInDays,
+                startDate: undefined,
+                endDate: undefined,
+            });
+        } else {
             onChange({
                 rangeInDays,
                 startDate: undefined,
                 endDate: undefined,
             });
         }
-
-        const {
-            startDate,
-            endDate,
-        } = pastDaysToDateRange(rangeInDays);
-
-        onChange({
-            rangeInDays,
-            startDate,
-            endDate,
-        });
     }
 
     private handleStartDateInputChange = (newStartDate: string) => {
         const {
-            value: {
-                rangeInDays,
-                endDate,
-            } = {},
+            value,
             onChange,
         } = this.props;
 
         onChange({
-            rangeInDays,
+            rangeInDays: 'custom',
             startDate: newStartDate,
-            endDate,
+            endDate: value ? value.endDate : undefined,
         });
     }
 
     private handleEndDateInputChange = (newEndDate: string) => {
         const {
-            value: {
-                rangeInDays,
-                startDate,
-            } = {},
+            value,
             onChange,
         } = this.props;
 
         onChange({
-            rangeInDays,
-            startDate,
+            rangeInDays: 'custom',
+            startDate: value ? value.startDate : undefined,
             endDate: newEndDate,
         });
     }
@@ -106,7 +106,7 @@ class PastDateRangeInput extends React.PureComponent<Props> {
     public render() {
         const {
             className,
-            value = {},
+            value,
         } = this.props;
 
         return (

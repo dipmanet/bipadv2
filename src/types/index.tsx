@@ -42,9 +42,9 @@ export interface RegionValueElement {
     geoarea?: GeoareaId;
 }
 export interface DataDateRangeValueElement {
-    rangeInDays: number;
-    startDate: string;
-    endDate: string;
+    rangeInDays: number | 'custom';
+    startDate?: string;
+    endDate?: string;
 }
 
 export interface FiltersElement {
