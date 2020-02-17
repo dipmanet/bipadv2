@@ -3,6 +3,7 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -56,6 +57,7 @@ import styles from './styles.scss';
 interface State {
     showRainWatch: boolean;
     showRiverWatch: boolean;
+    activeView?: ActiveView;
 }
 interface Params {}
 interface OwnProps {}
@@ -281,7 +283,19 @@ const iconSelector = (d: { icon: string }) => d.icon;
 const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 
+type ActiveView = 'rainwatch' | 'riverwatch';
+
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            activeView: 'rainwatch',
+            showRainWatch: true,
+            showRiverWatch: true,
+        };
+    }
+
     private renderLegend = () => {
         const {
             filters: {
@@ -421,6 +435,15 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         );
     }
 
+
+    private handleRiverWatchButtonClick = () => {
+        this.setState({ activeView: 'riverwatch' });
+    }
+
+    private handleRainWatchButtonClick = () => {
+        this.setState({ activeView: 'rainwatch' });
+    }
+
     public render() {
         const {
             realTimeRainList,
@@ -442,6 +465,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             realTimeSourceList,
             otherSourceList,
         } = this.props;
+        const {
+            activeView,
+        } = this.state;
 
         const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -455,6 +481,15 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const pending = (
             rainPending || riverPending || earthquakePending || firePending || pollutionPending
         );
+
+        let validActiveView = activeView;
+        if (!showRain && !showRiver) {
+            validActiveView = undefined;
+        } else if (!showRain) {
+            validActiveView = 'riverwatch';
+        } else if (!showRiver) {
+            validActiveView = 'rainwatch';
+        }
 
         return (
             <>
@@ -476,14 +511,80 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
-                            <MiniRiverWatch
-                                className={styles.miniRiverWatch}
-                                realTimeRiver={realTimeRiverList}
-                            />
-                            <MiniRainWatch
-                                className={styles.miniRainWatch}
-                                realTimeRain={realTimeRainList}
-                            />
+                            <header className={styles.header}>
+                                <div className={styles.tabs}>
+                                    {showRain && (
+                                        <div
+                                            className={_cs(styles.tab, validActiveView === 'rainwatch' && styles.active)}
+                                            onClick={this.handleRainWatchButtonClick}
+                                            role="presentation"
+                                        >
+                                            <div className={styles.value}>
+                                                {realTimeRainList.length}
+                                            </div>
+                                            <div className={styles.title}>
+                                                <div
+                                                    className={_cs(styles.icon, styles.alertIcon)}
+                                                />
+                                                <div className={styles.text}>
+                                                    Rain watch
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {showRiver && (
+                                        <div
+                                            className={_cs(styles.tab, validActiveView === 'riverwatch' && styles.active)}
+                                            onClick={this.handleRiverWatchButtonClick}
+                                            role="presentation"
+                                        >
+                                            <div className={styles.value}>
+                                                {realTimeRiverList.length}
+                                            </div>
+                                            <div className={styles.title}>
+                                                <div
+                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                                />
+                                                <div className={styles.text}>
+                                                    River watch
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={styles.actions}>
+                                    {/*
+                                    <ModalButton
+                                        title="Show data in tabular format"
+                                        className={styles.showTableButton}
+                                        iconName="table"
+                                        transparent
+                                        modal={<AlertTableModal alertList={alertList} />}
+                                    />
+                                  */}
+                                </div>
+                            </header>
+                            <div className={styles.content}>
+                                {validActiveView === 'riverwatch' && (
+                                    <MiniRiverWatch
+                                        className={styles.riverwatchList}
+                                        realTimeRiver={realTimeRiverList}
+                                    />
+                                )}
+                                {validActiveView === 'rainwatch' && (
+                                    <MiniRainWatch
+                                        className={styles.rainwatchList}
+                                        realTimeRain={realTimeRainList}
+                                    />
+                                )}
+                                {!validActiveView && (
+                                    <div
+                                        className={styles.message}
+                                    >
+                                        Select rain or river to see details
+                                    </div>
+                                )}
+                            </div>
                         </>
                     )}
                     rightContentContainerClassName={styles.right}

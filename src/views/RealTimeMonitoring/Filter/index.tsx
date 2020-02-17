@@ -10,8 +10,6 @@ import ListSelection from '#rsci/ListSelection';
 import { setRealTimeFiltersAction } from '#actionCreators';
 import { realTimeFiltersSelector } from '#selectors';
 
-import RegionSelectInput from '#components/RegionSelectInput';
-
 import styles from './styles.scss';
 
 const sourceKeySelector = (d: Source) => d.id;
@@ -30,8 +28,8 @@ interface OwnProps {
 
 interface PropsFromAppState {
     filters: {
-        faramValues: {};
-        faramErrors: {};
+        faramValues: object;
+        faramErrors: object;
     };
 }
 
@@ -41,8 +39,8 @@ interface PropsFromDispatch {
         faramErrors,
         pristine,
     }: {
-        faramValues: {};
-        faramErrors: {};
+        faramValues: object;
+        faramErrors: object;
         pristine: boolean;
     }) => void;
 }
@@ -70,7 +68,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
         },
     }
 
-    private handleFaramChange = (faramValues, faramErrors) => {
+    private handleFaramChange = (faramValues: object, faramErrors: object) => {
         this.props.setFilters({
             faramValues,
             faramErrors,
@@ -78,7 +76,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleFaramFailure = (faramErrors) => {
+    private handleFaramFailure = (faramErrors: object) => {
         this.props.setFilters({
             faramErrors,
             pristine: true,
