@@ -50,13 +50,8 @@
                 font-weight: var(--font-weight-bold);
             }
 
-            .icon {
+            .date {
                 flex-shrink: 0;
-                padding: 0 var(--spacing-medium);
-
-                &.verified {
-                    color: var(--color-success);
-                }
             }
         }
 

@@ -360,7 +360,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private setLeftPanelWidth = memoize((boundingClientRect) => {
         const { width = 0 } = boundingClientRect;
-        setStyleProperty('widthLeftPanel', `${bound(32 + width * 0.28, 240, 520)}px`);
+        setStyleProperty('widthLeftPanel', `${bound(32 + width * 0.3, 300, 600)}px`);
     })
 
     private setLeftContent = (

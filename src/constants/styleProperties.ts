@@ -20,6 +20,13 @@ const styleProperties = {
     panelBorderRadius: '5px',
     colorBackgroundNewItem: 'rgba(79, 195, 247, .09)',
     colorBackgroundNewItemHover: 'rgba(79, 195, 247, .2)',
+
+    fontWeightLight: '300',
+    fontWeightMedium: '400',
+    fontWeightBold: '700',
+
+    fontSizeMedium: '12px',
+    fontSizeSmall: '10px',
     fontSizeUltraLarge: '32px',
     fontSizeUltraLargeAlt: '48px',
 

@@ -1,13 +1,33 @@
-.tabs {
-    position: absolute;
-    top: var(--spacing-medium);
-    right: var(--spacing-medium);
-    transition: .2s all ease-in;
-    z-index: 1;
+.left {
+    overflow-y: scroll;
     background-color: var(--color-foreground);
-    padding: 0 var(--spacing-small);
 
-    a {
-        text-decoration: none;
+    .chart-list {
+        padding: var(--spacing-medium) 0;
+
+        .chart-container {
+            .heading {
+                display: none;
+            }
+
+            .content {
+                margin: 0 var(--spacing-large);
+                height: 48px;
+            }
+        }
+
+        .axis {
+            margin: 0 var(--spacing-large);
+            height: 36px;
+        }
+    }
+
+    .hazard-summary {
+        height: 600px;
+        margin: 0 var(--spacing-large);
+    }
+
+    .configuration-options {
+        padding: 0 var(--spacing-large);
     }
 }

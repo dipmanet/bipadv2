@@ -4,6 +4,11 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
 import VirtualizedListView from '#rscv/VirtualizedListView';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import modalize from '#rscg/Modalize';
+
 import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
 import Button from '#rsca/Button';
@@ -17,6 +22,7 @@ import AlertItem from './AlertItem';
 import Visualizations from './Visualizations';
 import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
+import AlertTable from './AlertTable';
 
 import styles from './styles.scss';
 
@@ -34,6 +40,8 @@ const defaultProps = {
     className: undefined,
 };
 
+const AlertTableModalButton = modalize(Button);
+
 const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
 
@@ -44,9 +52,32 @@ const AlertEmptyComponent = () => (
 );
 
 const EventEmptyComponent = () => (
-    <div className={styles.alertEmpty}>
+    <div className={styles.eventEmpty}>
         There are no major events at the moment.
     </div>
+);
+
+const AlertTableModal = ({
+    closeModal,
+    alertList,
+}) => (
+    <Modal className={styles.alertTableModal}>
+        <ModalHeader
+            title="Alerts"
+            rightComponent={(
+                <Button
+                    iconName="close"
+                    onClick={closeModal}
+                />
+            )}
+        />
+        <ModalBody className={styles.body}>
+            <AlertTable
+                className={styles.table}
+                alertList={alertList}
+            />
+        </ModalBody>
+    </Modal>
 );
 
 export default class LeftPane extends React.PureComponent {
@@ -235,7 +266,6 @@ export default class LeftPane extends React.PureComponent {
                             className={_cs(styles.tab, activeView === 'visualizations' && styles.active)}
                             role="presentation"
                             onClick={this.handleVisualizationsButtonClick}
-                            iconName="bars"
                         >
                             <Icon
                                 className={styles.visualizationIcon}
@@ -247,8 +277,12 @@ export default class LeftPane extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        <Button
+                        <AlertTableModalButton
+                            title="Show data in tabular format"
+                            className={styles.showTableButton}
                             iconName="table"
+                            transparent
+                            modal={<AlertTableModal alertList={alertList} />}
                         />
                     </div>
                 </header>
@@ -262,13 +296,13 @@ export default class LeftPane extends React.PureComponent {
                     )}
                     { activeView === 'alerts' && (
                         <div className={styles.alertList}>
-                            <header className={styles.header}>
-                                <Cloak hiddenIf={p => !p.change_alert}>
+                            <Cloak hiddenIf={p => !p.change_alert}>
+                                <header className={styles.header}>
                                     <AccentButton onClick={this.handleAddAlertButtonClick}>
                                         Add new alert
                                     </AccentButton>
-                                </Cloak>
-                            </header>
+                                </header>
+                            </Cloak>
                             <VirtualizedListView
                                 className={styles.content}
                                 data={alertList}
@@ -281,21 +315,16 @@ export default class LeftPane extends React.PureComponent {
                     )}
                     { activeView === 'events' && (
                         <div className={styles.eventList}>
-                            <header className={styles.header}>
-                                <h2 className={styles.heading}>
-                                    Major events
-                                </h2>
-                                <Cloak hiddenIf={p => !p.change_event}>
-                                    <div className={styles.actions}>
-                                        <AccentButton
-                                            transparent
-                                            onClick={this.handleAddEventButtonClick}
-                                        >
-                                            Add
-                                        </AccentButton>
-                                    </div>
-                                </Cloak>
-                            </header>
+                            <Cloak hiddenIf={p => !p.change_event}>
+                                <header className={styles.header}>
+                                    <AccentButton
+                                        transparent
+                                        onClick={this.handleAddEventButtonClick}
+                                    >
+                                        Add new event
+                                    </AccentButton>
+                                </header>
+                            </Cloak>
                             <VirtualizedListView
                                 className={styles.content}
                                 data={eventList}
