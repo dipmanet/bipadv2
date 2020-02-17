@@ -301,8 +301,6 @@ class AlertEventMap extends React.PureComponent {
             offset: 8,
         };
 
-        console.warn(eventsPointFeatureCollection, featurePointCollection);
-
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />

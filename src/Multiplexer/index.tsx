@@ -616,20 +616,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     </aside>
                                 )}
                                 <main className={styles.main}>
-                                    { !hideMap && (
-                                        <div className={styles.mapActions}>
-                                            <MapDownloadButton
-                                                className={styles.mapDownloadButton}
-                                                transparent
-                                                title="Download current map"
-                                                iconName="download"
-                                            />
-                                            <LayerSwitch
-                                                className={styles.layerSwitch}
-                                            />
-                                            <LayerToggle />
-                                        </div>
-                                    )}
                                     <MapContainer
                                         className={_cs(
                                             styles.map,
@@ -649,8 +635,22 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                         );
                                     })}
+                                    { !hideMap && (
+                                        <div className={styles.mapActions}>
+                                            <MapDownloadButton
+                                                className={styles.mapDownloadButton}
+                                                transparent
+                                                title="Download current map"
+                                                iconName="download"
+                                            />
+                                            <LayerSwitch
+                                                className={styles.layerSwitch}
+                                            />
+                                            <LayerToggle />
+                                        </div>
+                                    )}
                                 </main>
-                                { (rightContent || !hideFilters) && (
+                                {(rightContent || !hideFilters) && (
                                     <aside className={styles.right}>
                                         { rightContent && (
                                             <div

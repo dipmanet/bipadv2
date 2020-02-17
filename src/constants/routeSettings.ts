@@ -87,14 +87,6 @@ const routeSettings: SomeRoute[] = [
         iconName: 'riskInfo',
     },
     {
-        name: 'aboutUs',
-        title: 'About Us',
-        path: '/about-us/',
-        iconName: 'aboutUs',
-        load: () => import('../views/AboutUs'),
-        navbar: true,
-    },
-    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',
