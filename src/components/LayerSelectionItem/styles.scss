@@ -17,10 +17,23 @@
             font-weight: var(--font-weight-bold);
         }
 
-        .info-icon {
+        .actions {
+            display: flex;
             flex-shrink: 0;
-            margin: var(--spacing-extra-small) var(--spacing-small);
-            color: var(--color-primary);
+            transition: .2s opacity ease-in-out;
+            opacity: 0;
+
+            .info-button {
+                flex-shrink: 0;
+                margin: var(--spacing-extra-small) var(--spacing-small);
+                color: var(--color-primary);
+            }
+        }
+
+        &:hover {
+            .actions {
+                opacity: 1;
+            }
         }
     }
 

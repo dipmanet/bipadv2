@@ -77,6 +77,8 @@ const iconNames = {
     send: 'ion-android-send',
 
     gridView: 'ion-ios-grid-view-outline',
+
+    externalLink: 'ion-android-exit',
 };
 
 export default iconNames;

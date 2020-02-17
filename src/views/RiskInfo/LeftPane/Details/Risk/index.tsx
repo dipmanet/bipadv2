@@ -144,16 +144,20 @@ const getRankMap = memoize(data => (
     listToMap(data, d => d.district, d => d.rank)
 ));
 
-const transformRiskDataToLayer = (data: RiskData[]) => {
+const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
     const mapState = data.map(d => ({
         id: d.district,
         value: d.data.riskScore,
     }));
 
+    const layerGroup = layer.group || {};
+
     const [min, max] = extent(mapState, d => d.value);
     const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
 
     return {
+        longDescription: layerGroup.longDescription,
+        metadata: layerGroup.metadata,
         id: 'durham-earthquake-risk',
         title: 'Durham earthquake risk',
         type: 'choropleth',
@@ -166,9 +170,10 @@ const transformRiskDataToLayer = (data: RiskData[]) => {
         legend,
         tooltipRenderer: RiskTooltip,
         rankMap: getRankMap(data),
-        metadata,
-        description,
+        // metadata,
+        // description,
         disclaimer,
+        actions,
     };
 };
 
@@ -262,6 +267,7 @@ class Risk extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            layerList,
         } = this.props;
 
         const {
@@ -274,7 +280,27 @@ class Risk extends React.PureComponent<Props, State> {
         const pending = isAnyRequestPending(requests);
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
         const riskData = this.getRiskData(riskDataRaw, metricValues);
-        const riskLayer = transformRiskDataToLayer(riskData);
+        const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
+            <>
+                <DataTableModalButton
+                    modal={<DataTableModal data={riskDataRaw} />}
+                    initialShowModal={false}
+                    iconName="table"
+                    transparent
+                    disabled={pending}
+                    className={styles.showDataTableButton}
+                />
+                <Button
+                    title="Show / hide risk configurations parameter settings"
+                    iconName="settings"
+                    disabled={pending}
+                    onClick={this.handleShowMetricsButtonClick}
+                    transparent
+                    className={styles.showMetricsButton}
+                />
+            </>
+        ));
+        const layer = layerList[0];
 
         return (
             <>
@@ -291,85 +317,55 @@ class Risk extends React.PureComponent<Props, State> {
                             disabled={pending}
                         />
                         <div className={styles.description}>
-                            The map represents the spatial distribution of total
-                            relative seismic risk for Nepal. The data is calculated
-                            as a normalized sum of six different risk metrics:
-
-                            <div className={styles.metric}>
-                                a) Percentage of scenarios with at least one fatality
-                            </div>
-                            <div className={styles.metric}>
-                                b) Median fatalities for all scenarios that cause fatalities
-                            </div>
-                            <div className={styles.metric}>
-                                c) Maximum fatalities
-                            </div>
-                            <div className={styles.metric}>
-                                d) Specificity of fatalities for all scenarios that cause fatalities
-                            </div>
-                            <div className={styles.metric}>
-                                e) Remoteness score
-                            </div>
-                            <div className={styles.metric}>
-                                f) HDI
-                            </div>
+                            { layer && layer.group && layer.group.shortDescription }
                         </div>
                         <div className={styles.options}>
-                            <div className={styles.actions}>
-                                <LayerDetailModalButton
-                                    disabled={pending}
-                                    layer={riskLayer}
-                                />
-                                <DataTableModalButton
-                                    modal={<DataTableModal data={riskDataRaw} />}
-                                    initialShowModal={false}
-                                    iconName="table"
-                                    transparent
-                                    disabled={pending}
-                                    className={styles.optionButton}
-                                />
-                                <Button
-                                    iconName="settings"
-                                    disabled={pending}
-                                    onClick={this.handleShowMetricsButtonClick}
-                                    transparent
-                                    className={_cs(
-                                        showMetricSettings && styles.active,
-                                        styles.optionButton,
-                                    )}
-                                />
-                            </div>
                             { showMetricSettings && (
                                 <div className={styles.metricSettings}>
-                                    {metricKeys.map(m => (
-                                        <div
-                                            key={m}
-                                            className={styles.metricInput}
-                                        >
-                                            <div className={styles.label}>
-                                                { metrices[m] }
+                                    <header className={styles.header}>
+                                        <h4 className={styles.heading}>
+                                            Configure risk parameters
+                                        </h4>
+                                        <Button
+                                            title="Hide risk parameter configuration settings"
+                                            transparent
+                                            iconName="chevronUp"
+                                            onClick={() => (
+                                                this.setState({ showMetricSettings: false })
+                                            )}
+                                        />
+                                    </header>
+                                    <div className={styles.content}>
+                                        {metricKeys.map(m => (
+                                            <div
+                                                key={m}
+                                                className={styles.metricInput}
+                                            >
+                                                <div className={styles.label}>
+                                                    { metrices[m] }
+                                                </div>
+                                                <RangeInput
+                                                    classNames={{
+                                                        ...rangeInputDefaultClassNames,
+                                                        minLabel: styles.minLabel,
+                                                        maxLabel: styles.maxLabel,
+                                                        valueLabel: styles.valueLabel,
+                                                        inputRange: _cs(
+                                                            rangeInputDefaultClassNames.inputRange,
+                                                            styles.rangeInput,
+                                                        ),
+                                                    }}
+                                                    minValue={0}
+                                                    maxValue={5}
+                                                    step={1}
+                                                    value={this.state.metricValues[m]}
+                                                    onChange={(value) => {
+                                                        this.handleMetricSliderChange(m, value);
+                                                    }}
+                                                />
                                             </div>
-                                            <RangeInput
-                                                classNames={{
-                                                    ...rangeInputDefaultClassNames,
-                                                    minLabel: styles.minLabel,
-                                                    maxLabel: styles.maxLabel,
-                                                    valueLabel: styles.valueLabel,
-                                                    inputRange: _cs(
-                                                        rangeInputDefaultClassNames.inputRange,
-                                                        styles.rangeInput,
-                                                    ),
-                                                }}
-                                                minValue={0}
-                                                maxValue={5}
-                                                step={1}
-                                                value={this.state.metricValues[m]}
-                                                onChange={(value) => {
-                                                    this.handleMetricSliderChange(m, value);
-                                                }}
-                                            />
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>

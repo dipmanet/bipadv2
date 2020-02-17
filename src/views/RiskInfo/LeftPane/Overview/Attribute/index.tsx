@@ -55,7 +55,7 @@ class Attribute extends React.Component<Props, State> {
                 )}
                 onClick={this.handleClick}
                 role="presentation"
-                title={description}
+                title={`${title} definition (as per UNDRR, updated 2009 UNISDR terminology)`}
                 style={style}
             >
                 <div className={styles.left}>

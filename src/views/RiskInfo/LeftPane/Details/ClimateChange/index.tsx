@@ -17,8 +17,10 @@ import {
 } from 'recharts';
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
 import {
+    getResponse,
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
@@ -26,6 +28,7 @@ import {
 import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
+import Icon from '#rscg/Icon';
 
 import { generatePaint } from '#utils/domain';
 
@@ -193,6 +196,16 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: methods.GET,
         onMount: true,
     },
+    napTemperatureMetadataGetRequest: {
+        url: '/metadata/5/',
+        method: methods.GET,
+        onMount: true,
+    },
+    napPrecipitationMetadataGetRequest: {
+        url: '/metadata/4/',
+        method: methods.GET,
+        onMount: true,
+    },
 };
 
 class ClimateChange extends React.PureComponent<Props, State> {
@@ -238,6 +251,11 @@ class ClimateChange extends React.PureComponent<Props, State> {
             addLayer(layer);
         }
     }
+
+    private getLayer = metadata => ({
+        longDescription: undefined,
+        metadata,
+    })
 
     private handleSetTimePeriod = (timePeriodKey: string) => {
         this.setState({
@@ -463,6 +481,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            layerList,
         } = this.props;
 
         const {
@@ -472,8 +491,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
             isActive,
         } = this.state;
 
+        console.warn(layerList);
+
         const pending = isAnyRequestPending(requests);
         const data = this.getChartData(measurementType);
+        const temperatureMetadata = getResponse(requests, 'napTemperatureMetadataGetRequest');
+        const precipitationMetadata = getResponse(requests, 'napPrecipitationMetadataGetRequest');
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
         const chartTitle = selectedOption && selectedOption.chartTitle;
@@ -494,6 +517,11 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         <div className={styles.title}>
                             Climate change
                         </div>
+                        <LayerDetailModalButton
+                            layer={this.getLayer(
+                                measurementType === 'temperature' ? temperatureMetadata : precipitationMetadata,
+                            )}
+                        />
                     </div>
                     <div className={styles.top}>
                         <SegmentInput
@@ -521,6 +549,43 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             value={scenario}
                             onChange={this.handleSetScenario}
                         />
+                    </div>
+                    <div className={styles.externalLinks}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Links from Climate Scenarios from Nepal (NAP)
+                            </h4>
+                        </header>
+                        <div className={styles.content}>
+                            <a
+                                className={styles.externalLink}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36003"
+                            >
+                                <Icon
+                                    className={styles.icon}
+                                    name="externalLink"
+                                />
+                                <div className={styles.text}>
+                                    Temperature data
+                                </div>
+                            </a>
+                            <a
+                                className={styles.externalLink}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36002"
+                            >
+                                <Icon
+                                    className={styles.icon}
+                                    name="externalLink"
+                                />
+                                <div className={styles.text}>
+                                    Precipitation data
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     { !pending && isActive && (
                         <div className={styles.bottom}>
