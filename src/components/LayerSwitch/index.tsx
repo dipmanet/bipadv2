@@ -135,6 +135,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 className={_cs(styles.layerSwitch, className)}
                 iconName="layers"
                 hideDropdownIcon
+                tooltip="Select layer"
             >
                 <ListView
                     data={mapStyles}

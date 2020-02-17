@@ -82,6 +82,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 iconName="gridView"
                 hideDropdownIcon
                 dropdownClassName={styles.container}
+                tooltip="Select administrative boundary"
             >
                 <Checkbox
                     label="Show Province"

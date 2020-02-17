@@ -166,7 +166,7 @@ const measurementOptions: {
         key: 'precipitation',
         label: 'Precipitation',
         axisLabel: 'Precipitation (mm/year)',
-        legendTitle: 'Precipitation Change (°C)',
+        legendTitle: 'Precipitation Change (mm/year)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
 ];
@@ -368,7 +368,9 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
             return ({
                 id: district,
-                value: filteredAverage - referenceAverage,
+                value: measurementType === 'temperature' && timePeriodKey !== 'reference-period'
+                    ? (filteredAverage - referenceAverage)
+                    : (100 * (filteredAverage - referenceAverage) / referenceAverage),
             });
         });
 
@@ -398,10 +400,16 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const selectedScenario = scenarioOptions.find(s => s.key === scenario);
         const selectedTimePeriod = timePeriodOptions.find(t => t.key === timePeriodKey);
 
+        let unitInPercent = false;
+        if (selectedMeasurement && selectedTimePeriod) {
+            unitInPercent = selectedMeasurement.key === 'precipitation' && selectedTimePeriod.key !== 'reference-period';
+        }
+
         const legendTitle = `
-            ${selectedMeasurement && selectedMeasurement.legendTitle}
-            ${selectedTimePeriod && selectedTimePeriod.label}\n
-            [${selectedScenario && selectedScenario.label}]
+            ${unitInPercent ? 'Precipitation change(%) / ' : ''}
+            ${(!unitInPercent && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
+             ${selectedTimePeriod ? selectedTimePeriod.label : ''}  
+            [${selectedScenario ? selectedScenario.label : ''}]
         `;
         const [min, max] = extent(mapState, (d: MapState) => d.value);
         const colors = measurementType === 'temperature' ? tempColors : rainColors;
@@ -514,7 +522,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             onChange={this.handleSetScenario}
                         />
                     </div>
-                    { !pending && (
+                    { !pending && isActive && (
                         <div className={styles.bottom}>
                             <div className={styles.header}>
                                 {chartTitle}
@@ -537,7 +545,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         angle={-30}
                                     >
                                         <Label
-                                            value="year"
+                                            value="Year"
                                             offset={-5}
                                             position="insideBottom"
                                         />
