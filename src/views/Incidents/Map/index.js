@@ -148,6 +148,7 @@ class IncidentMap extends React.PureComponent {
         });
     }
 
+    /*
     getIncidentsHazardList = (incidentList = []) => {
         const { hazards } = this.props;
         const hazardIdList = incidentList.map(v => v.hazard)
@@ -156,6 +157,7 @@ class IncidentMap extends React.PureComponent {
 
         return uniqueIds.map(id => hazards[id]).reverse();
     }
+    */
 
     mapImageRendererParams = (_, hazard) => {
         const image = getImage(hazard.icon)
@@ -187,7 +189,7 @@ class IncidentMap extends React.PureComponent {
             incidentLngLat,
         } = this.state;
 
-        const hazardList = this.getIncidentsHazardList(incidentList);
+        // const hazardList = this.getIncidentsHazardList(incidentList);
 
         const tooltipOptions = {
             closeOnClick: true,
@@ -198,13 +200,13 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="incidents" />
-                {hazardList.map(hazard => (
+                {/* hazardList.map(hazard => (
                     <SvgMapImage
                         key={hazard.icon}
                         image={hazard.icon}
                         name={hazard.icon}
                     />
-                ))}
+                )) */}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}

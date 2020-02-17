@@ -201,8 +201,9 @@ export default {
                 2,
                 1,
             ],
+            'text-opacity': 0.9,
         },
-        dimPaint: {
+        paintDim: {
             'text-color': ['get', 'hazardColor'],
             'text-halo-color': '#000000',
             'text-halo-width': ['case',
@@ -210,10 +211,10 @@ export default {
                 2,
                 1,
             ],
-            opacity: ['case',
+            'text-opacity': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
-                0.1,
                 1,
+                0.1,
             ],
         },
     },

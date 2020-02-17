@@ -30,8 +30,6 @@ import {
 
 import { groupList } from '#utils/common';
 
-import alertIcon from '#resources/icons/Alert.svg';
-
 // NOTE: interface for Ward, Municipality, ...
 interface Geo {
     id: number;

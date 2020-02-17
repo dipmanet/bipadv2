@@ -100,8 +100,8 @@ export default class EventItem extends React.PureComponent {
             >
                 <ScalableVectorGraphics
                     className={styles.icon}
-                    src={hazard.icon ? hazard.icon : alertIcon}
-                    style={{ color: hazard.color ? hazard.color : '#4666b0' }}
+                    src={(hazardTypes[hazard] ? hazardTypes[hazard].icon : undefined) || alertIcon}
+                    style={{ color: (hazardTypes[hazard] ? hazardTypes[hazard].color : undefined) || '#4666b0' }}
                 />
                 <div className={styles.right}>
                     <div className={styles.top}>
