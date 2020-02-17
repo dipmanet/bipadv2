@@ -3,7 +3,7 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
-import Message from '#rscv/Message';
+import Icon from '#rscg/Icon';
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -315,12 +315,14 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             <>
                 {(showRain || showRiver) && (
                     <div className={styles.legendContainer}>
-                        <h4 className={styles.heading}>
-                            Rain & River
-                        </h4>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Rain & River
+                            </h4>
+                        </header>
                         <div className={styles.content}>
                             <div className={styles.legend}>
-                                <div>
+                                <div className={styles.legendItem}>
                                     <img
                                         className={styles.legendIcon}
                                         src={RainIcon}
@@ -328,9 +330,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                         width={16}
                                         alt="Rain"
                                     />
-                                    Rain
+                                    <div className={styles.label}>
+                                        Rain
+                                    </div>
                                 </div>
-                                <div>
+                                <div className={styles.legendItem}>
                                     <img
                                         className={styles.legendIcon}
                                         src={RiverIcon}
@@ -338,7 +342,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                         width={16}
                                         alt="River"
                                     />
-                                    River
+                                    <div className={styles.label}>
+                                        River
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.colorLegend}>
@@ -353,15 +359,28 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </div>
                             </div>
                         </div>
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="http://hydrology.gov.np"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Department of Hydrology and Meteorology
+                            </a>
+                        </div>
                     </div>
 
                 )}
                 { showEarthquake && (
                     <div className={styles.legendContainer}>
-                        <h5 className={styles.heading}>
-                            Earthquake (Richter Scale)
-                        </h5>
-                        <div className={styles.legend}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Earthquake (Richter Scale)
+                            </h4>
                             <img
                                 className={styles.legendIcon}
                                 src={EarthquakeIcon}
@@ -369,8 +388,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 width={16}
                                 alt="Earthquake"
                             />
-                            Earthquake
-                        </div>
+                        </header>
                         <Legend
                             className={styles.legend}
                             data={earthquakeLegendItems}
@@ -381,18 +399,31 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="https://www.seismonepal.gov.np"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Department of Mines and Geology
+                            </a>
+                        </div>
                     </div>
                 )}
                 { showPollution && (
                     <div className={styles.legendContainer}>
-                        <h5 className={styles.heading}>
-                            Pollution (PM&nbsp;
-                            <sub>
-                                2.5
-                            </sub>
-                            )
-                        </h5>
-                        <div className={styles.legend}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Pollution (PM&nbsp;
+                                <sub>
+                                    2.5
+                                </sub>
+                                )
+                            </h4>
                             <img
                                 className={styles.legendIcon}
                                 src={PollutionIcon}
@@ -400,8 +431,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 width={16}
                                 alt="Pollution"
                             />
-                            Pollution
-                        </div>
+                        </header>
                         <Legend
                             className={styles.legend}
                             data={pollutionLegendItems}
@@ -412,14 +442,27 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="http://mofe.gov.np"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Ministry of Forests and Environment
+                            </a>
+                        </div>
                     </div>
                 )}
                 { showFire && (
                     <div className={styles.legendContainer}>
-                        <h5 className={styles.heading}>
-                            Forest Fire
-                        </h5>
-                        <div>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Forest Fire
+                            </h4>
                             <img
                                 className={styles.legendIcon}
                                 src={FireIcon}
@@ -427,7 +470,19 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 width={16}
                                 alt="Forest Fire"
                             />
-                            Forest Fire
+                        </header>
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="https://www.icimod.org"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                International Centre for Integrated Mountain Development
+                            </a>
                         </div>
                     </div>
                 )}
@@ -475,8 +530,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
-
-        const LegendView = this.renderLegend;
 
         const pending = (
             rainPending || riverPending || earthquakePending || firePending || pollutionPending
@@ -595,9 +648,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         />
                     )}
                     mainContentContainerClassName={_cs(styles.main, 'map-legend-container')}
-                    mainContent={(
-                        <LegendView />
-                    )}
+                    mainContent={this.renderLegend()}
                 />
             </>
         );

@@ -145,28 +145,30 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(className, styles.rainWatch)}>
-                <ModalButton
-                    className={styles.showDetailsButton}
-                    transparent
-                    iconName="table"
-                    title="Show all data"
-                    modal={(
-                        <RainWatch
-                            realTimeRain={realTimeRain}
-                        />
-                    )}
-                />
-                <SegmentInput
-                    label="Time range"
-                    className={styles.durationInput}
-                    options={durationOptions}
-                    value={duration}
-                    onChange={this.handleDurationSelect}
-                    keySelector={durationKeySelector}
-                    labelSelector={durationLabelSelector}
-                    showLabel={false}
-                    showHintAndError={false}
-                />
+                <header className={styles.header}>
+                    <SegmentInput
+                        label="Time range"
+                        className={styles.durationInput}
+                        options={durationOptions}
+                        value={duration}
+                        onChange={this.handleDurationSelect}
+                        keySelector={durationKeySelector}
+                        labelSelector={durationLabelSelector}
+                        showLabel={false}
+                        showHintAndError={false}
+                    />
+                    <ModalButton
+                        className={styles.showDetailsButton}
+                        transparent
+                        iconName="table"
+                        title="Show all data"
+                        modal={(
+                            <RainWatch
+                                realTimeRain={realTimeRain}
+                            />
+                        )}
+                    />
+                </header>
                 <div className={styles.tableContainer}>
                     <Table
                         className={styles.rainWatchTable}

@@ -19,6 +19,17 @@
             padding: var(--spacing-extra-small) var(--spacing-small);
             font-weight: var(--font-weight-bold);
         }
+
+        .show-layer-details-button {
+            transition: .2s opacity ease-in-out;
+            opacity: 0;
+        }
+
+        &:hover {
+            .show-layer-details-button {
+                opacity: 1;
+            }
+        }
     }
 
     .top {

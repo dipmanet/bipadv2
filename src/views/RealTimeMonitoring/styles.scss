@@ -106,25 +106,36 @@
     transform: none;
 
     .legend-container {
-        display: flex;
-        align-self: flex-start;
-        flex-direction: column;
         border: var(--width-separator-thin) solid var(--color-separator);
         background-color: var(--color-foreground);
-        padding: var(--spacing-medium);
+        max-width: 170px;
+        // padding: calc(var(--spacing-medium) - var(--spacing-small));
         overflow: auto;
 
-        .heading {
-            flex-shrink: 0;
-            padding: var(--spacing-medium);
-            text-transform: uppercase;
-            color: var(--color-text);
-            font-size: var(--font-size-small);
+        .header {
+            display: flex;
+            align-items: center;
+
+            .heading {
+                flex-grow: 1;
+                padding: var(--spacing-small) var(--spacing-medium);
+                text-transform: uppercase;
+            }
+
+            .link {
+                display: flex;
+                flex-shrink: 0;
+                margin: var(--spacing-small) var(--spacing-medium);
+                color: var(--color-accent);
+                font-size: var(--font-size-large);
+            }
+
+            .legend-icon {
+                margin: 0 var(--spacing-medium);
+            }
         }
 
-        .legend-icon { margin: 0 var(--spacing-medium) }
-
-        .legend {
+        >.legend {
             flex-grow: 1;
 
             .legend-item {
@@ -158,32 +169,59 @@
                 display: flex;
                 flex-direction: column;
                 padding: var(--spacing-small);
+
+                .legend-item {
+                    display: flex;
+
+                    .legend-icon {
+                        margin: 0 var(--spacing-extra-small);
+                    }
+
+                    .label {
+                        padding: 0 var(--spacing-small);
+                    }
+                }
+            }
+
+            .color-legend {
+                .item {
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-size: var(--font-size-small);
+                    font-weight: var(--font-weight-bold);
+
+                    &.below-warning {
+                        background-color: var(--color-success);
+                        color: var(--color-text-on-success);
+                    }
+
+                    &.above-warning {
+                        background-color: var(--color-warning);
+                        color: var(--color-text-on-warning);
+                    }
+
+                    &.above-danger {
+                        background-color: var(--color-danger);
+                        color: var(--color-text-on-danger);
+                    }
+                }
+
             }
         }
 
-        .color-legend {
-            .item {
+        .source-details {
+            border-top: var(--width-separator-thin) solid var(--color-separator);
+            padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+            font-size: var(--font-size-extra-small);
+
+            .label {
                 padding: var(--spacing-extra-small) var(--spacing-small);
-                text-transform: uppercase;
-                font-size: var(--font-size-small);
-                font-weight: var(--font-weight-bold);
-
-                &.below-warning {
-                    background-color: var(--color-success);
-                    color: var(--color-text-on-success);
-                }
-
-                &.above-warning {
-                    background-color: var(--color-warning);
-                    color: var(--color-text-on-warning);
-                }
-
-                &.above-danger {
-                    background-color: var(--color-danger);
-                    color: var(--color-text-on-danger);
-                }
             }
 
+            .link {
+                display: block;
+                padding: var(--spacing-extra-small) var(--spacing-small);
+                color: var(--color-accent);
+            }
         }
     }
 }

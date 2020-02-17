@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 import {
     listToGroupList,
     isDefined,
@@ -16,6 +17,8 @@ import {
 } from 'recharts';
 
 import SegmentInput from '#rsci/SegmentInput';
+import FormattedDate from '#rscv/FormattedDate';
+import Icon from '#rscg/Icon';
 
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
@@ -31,6 +34,8 @@ import {
 import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
+
+import { getMinDate } from './common';
 
 import {
     getResults,
@@ -141,6 +146,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         return aggregatedData;
     }
 
+    private getMinDate = memoize(getMinDate);
+
     public render() {
         const {
             requests,
@@ -153,6 +160,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const pending = getPending(requests, 'incidentsGetRequest');
 
         const chartData = this.getDataAggregatedByYear(incidentList, hazardTypes);
+        const minDate = this.getMinDate(incidentList);
 
         return (
             <>
@@ -161,6 +169,49 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
+                            <div className={styles.dataDetails}>
+                                <div className={styles.dateDetails}>
+                                    <div className={styles.label}>
+                                        Data available from
+                                    </div>
+                                    <FormattedDate
+                                        className={styles.dateFrom}
+                                        value={minDate}
+                                    />
+                                    <div className={styles.label}>
+                                        to
+                                    </div>
+                                    <FormattedDate
+                                        className={styles.dateTo}
+                                        value={new Date()}
+                                    />
+                                </div>
+                                <div className={styles.sourceDetails}>
+                                    <div className={styles.label}>
+                                        Data sources:
+                                    </div>
+                                    <div className={styles.value}>
+                                        <div className={styles.source}>
+                                            Nepal Police
+                                        </div>
+                                        <div className={styles.source}>
+                                            <div className={styles.text}>
+                                                Nepal Disaster Risk Reduction Portal
+                                            </div>
+                                            <a
+                                                className={styles.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href="http://drrportal.gov.np"
+                                            >
+                                                <Icon
+                                                    name="externalLink"
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <LossDetails
                                 className={styles.lossDetails}
                                 data={incidentList}

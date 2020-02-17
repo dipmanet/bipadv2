@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { extent } from 'd3-array';
+import memoize from 'memoize-one';
 import { _cs, mean, listToMap } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 import {
@@ -252,9 +253,21 @@ class ClimateChange extends React.PureComponent<Props, State> {
         }
     }
 
-    private getLayer = metadata => ({
-        longDescription: undefined,
-        metadata,
+    private getLayer = memoize((layerGroupList, measurementType) => {
+        const climateChange = layerGroupList[0];
+        const temperature = layerGroupList[1];
+        const precipitation = layerGroupList[2];
+
+        if (!climateChange || !temperature || !precipitation) {
+            return {};
+        }
+
+        const metadata = measurementType === 'temperature' ? temperature.metadata : precipitation.metadata;
+
+        return {
+            longDescription: climateChange.longDescription,
+            metadata,
+        };
     })
 
     private handleSetTimePeriod = (timePeriodKey: string) => {
@@ -481,7 +494,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
-            layerList,
+            layerGroupList,
         } = this.props;
 
         const {
@@ -491,12 +504,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
             isActive,
         } = this.state;
 
-        console.warn(layerList);
-
         const pending = isAnyRequestPending(requests);
         const data = this.getChartData(measurementType);
-        const temperatureMetadata = getResponse(requests, 'napTemperatureMetadataGetRequest');
-        const precipitationMetadata = getResponse(requests, 'napPrecipitationMetadataGetRequest');
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
         const chartTitle = selectedOption && selectedOption.chartTitle;
@@ -517,11 +526,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         <div className={styles.title}>
                             Climate change
                         </div>
-                        <LayerDetailModalButton
-                            layer={this.getLayer(
-                                measurementType === 'temperature' ? temperatureMetadata : precipitationMetadata,
-                            )}
-                        />
+                        {!pending && isActive && (
+                            <LayerDetailModalButton
+                                className={styles.showLayerDetailsButton}
+                                layer={this.getLayer(layerGroupList, measurementType)}
+                            />
+                        )}
                     </div>
                     <div className={styles.top}>
                         <SegmentInput
