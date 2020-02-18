@@ -75,8 +75,9 @@ export default class Details extends React.PureComponent<Props, State> {
             component: ClimateChange,
             rendererParams: () => ({
                 className: styles.content,
-                layerList: this.props.layerMap.climate || [],
-                layerGroupList: this.props.layerGroupList,
+                layerList: this.props.layerMap.climate_change || [],
+                // layerGroupList: this.props.layerGroupList,
+                layerGroupList: this.props.layerGroupList.filter(group => group.category === 'climate_change'),
             }),
         },
     }

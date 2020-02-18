@@ -203,7 +203,7 @@ const state: PageState = {
         ],
         otherSourceList: [
             { id: 1, title: 'Earthquake' },
-            { id: 5, title: 'Pollution' },
+            { id: 5, title: 'Air pollution' },
             { id: 4, title: 'Forest Fire' },
             { id: 6, title: 'Streamflow' },
         ],

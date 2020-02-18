@@ -1,6 +1,63 @@
 .left {
-    overflow-y: scroll;
     background-color: var(--color-foreground);
+    overflow-y: scroll;
+
+    .data-details {
+        background-color: var(--color-foreground-alt);
+        padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
+
+        .date-details {
+            display: flex;
+            align-items: center;
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+            .label {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+
+            .date-from {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+
+            .date-to {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+        }
+
+        .source-details {
+            display: flex;
+            align-items: center;
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+            .label {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+                color: var(--color-text-label);
+            }
+
+            .value {
+                display: flex;
+                padding: 0 calc(var(--spacing-small) - var(--spacing-extra-small-alt));
+
+                .source {
+                    display: flex;
+                    align-items: center;
+                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+
+                    &:not(:last-child) {
+                        &:after {
+                            content: ',';
+                        }
+                    }
+
+                    .link {
+                        margin: 0 var(--spacing-small);
+                        color: var(--color-accent);
+                        font-size: var(--font-size-large);
+                    }
+                }
+            }
+        }
+    }
 
     .chart-list {
         padding: var(--spacing-medium) 0;
@@ -23,8 +80,8 @@
     }
 
     .hazard-summary {
-        height: 600px;
         margin: 0 var(--spacing-large);
+        height: 600px;
     }
 
     .configuration-options {

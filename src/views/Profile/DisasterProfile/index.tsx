@@ -48,7 +48,7 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
 
 const tabList = [
     { key: 'resources', label: 'Resources' },
-    { key: 'disasters', label: 'Disasters' },
+    { key: 'disasters', label: 'Losses' },
     { key: 'demographics', label: 'Demographics' },
 ];
 

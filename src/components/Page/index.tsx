@@ -37,7 +37,7 @@ export default class Page extends React.PureComponent<Props, State> {
         this.syncMapVisibility(shouldHideMap, hideMap, showMap);
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    public UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { hideMap: shouldHideMap } = nextProps;
         const { hideMap: prevShouldHideMap } = this.props;
 

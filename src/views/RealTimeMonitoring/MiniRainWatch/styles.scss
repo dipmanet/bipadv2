@@ -10,22 +10,21 @@
         flex-shrink: 0;
         justify-content: space-between;
 
-        .heading {
-            align-self: flex-start;
-            flex-grow: 1;
-            padding: var(--spacing-medium);
-            color: var(--color-primary);
-        }
-    }
+        .duration-input {
+            flex-shrink: 0;
+            margin: var(--spacing-small) var(--spacing-medium);
 
-    .duration-input {
-        flex-shrink: 0;
-        margin: var(--spacing-small) var(--spacing-medium);
-
-        :global {
-            .segment-option {
-                background-color: var(--color-foreground-alt);
+            :global {
+                .segment-option {
+                    background-color: var(--color-foreground-alt);
+                }
             }
+        }
+
+        .show-details-button {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
         }
     }
 

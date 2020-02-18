@@ -415,8 +415,9 @@ export default {
         },
         paint: {
             'circle-radius': 10,
-            'circle-color': '#ffffff',
-            'circle-opacity': ['get', 'opacity'],
+            'circle-color': '#e05648',
+            'circle-opacity': 0.8,
+            // 'circle-opacity': ['get', 'opacity'],
             'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',

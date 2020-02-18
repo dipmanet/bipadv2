@@ -60,12 +60,15 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                     <div className={styles.title}>
                         { data.title }
                     </div>
-                    { (data.longDescription || data.metadata) && (
-                        <LayerDetailModalButton
-                            layer={data}
-                            className={styles.infoButton}
-                        />
-                    )}
+                    <div className={styles.actions}>
+                        { data.actions }
+                        { (data.longDescription || data.metadata) && (
+                            <LayerDetailModalButton
+                                layer={data}
+                                className={styles.infoButton}
+                            />
+                        )}
+                    </div>
                 </div>
                 { data.shortDescription && (
                     <div className={styles.shortDescription}>

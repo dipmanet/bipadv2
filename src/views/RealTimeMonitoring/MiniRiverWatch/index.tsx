@@ -82,17 +82,20 @@ class MiniRiverWatch extends React.PureComponent<Props> {
 
         return (
             <div className={_cs(className, styles.riverWatch)}>
-                <ModalButton
-                    className={styles.showDetailsButton}
-                    transparent
-                    iconName="table"
-                    title="Show all data"
-                    modal={(
-                        <RiverWatch
-                            realTimeRiver={realTimeRiver}
-                        />
-                    )}
-                />
+                <header className={styles.header}>
+                    <div />
+                    <ModalButton
+                        className={styles.showDetailsButton}
+                        transparent
+                        iconName="table"
+                        title="Show all data"
+                        modal={(
+                            <RiverWatch
+                                realTimeRiver={realTimeRiver}
+                            />
+                        )}
+                    />
+                </header>
                 <div className={styles.tableContainer}>
                     <Table
                         className={styles.riverWatchTable}

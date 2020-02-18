@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { extent } from 'd3-array';
+import memoize from 'memoize-one';
 import { _cs, mean, listToMap } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 import {
@@ -17,8 +18,10 @@ import {
 } from 'recharts';
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
 import {
+    getResponse,
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
@@ -26,6 +29,7 @@ import {
 import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
+import Icon from '#rscg/Icon';
 
 import { generatePaint } from '#utils/domain';
 
@@ -166,7 +170,7 @@ const measurementOptions: {
         key: 'precipitation',
         label: 'Precipitation',
         axisLabel: 'Precipitation (mm/year)',
-        legendTitle: 'Precipitation Change (°C)',
+        legendTitle: 'Precipitation Change (mm/year)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
 ];
@@ -190,6 +194,16 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
     napPrecipitationGetRequest: {
         url: '/nap-precipitation/',
+        method: methods.GET,
+        onMount: true,
+    },
+    napTemperatureMetadataGetRequest: {
+        url: '/metadata/5/',
+        method: methods.GET,
+        onMount: true,
+    },
+    napPrecipitationMetadataGetRequest: {
+        url: '/metadata/4/',
         method: methods.GET,
         onMount: true,
     },
@@ -238,6 +252,23 @@ class ClimateChange extends React.PureComponent<Props, State> {
             addLayer(layer);
         }
     }
+
+    private getLayer = memoize((layerGroupList, measurementType) => {
+        const climateChange = layerGroupList[0];
+        const temperature = layerGroupList[1];
+        const precipitation = layerGroupList[2];
+
+        if (!climateChange || !temperature || !precipitation) {
+            return {};
+        }
+
+        const metadata = measurementType === 'temperature' ? temperature.metadata : precipitation.metadata;
+
+        return {
+            longDescription: climateChange.longDescription,
+            metadata,
+        };
+    })
 
     private handleSetTimePeriod = (timePeriodKey: string) => {
         this.setState({
@@ -368,7 +399,9 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
             return ({
                 id: district,
-                value: filteredAverage - referenceAverage,
+                value: measurementType === 'temperature' && timePeriodKey !== 'reference-period'
+                    ? (filteredAverage - referenceAverage)
+                    : (100 * (filteredAverage - referenceAverage) / referenceAverage),
             });
         });
 
@@ -398,10 +431,16 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const selectedScenario = scenarioOptions.find(s => s.key === scenario);
         const selectedTimePeriod = timePeriodOptions.find(t => t.key === timePeriodKey);
 
+        let unitInPercent = false;
+        if (selectedMeasurement && selectedTimePeriod) {
+            unitInPercent = selectedMeasurement.key === 'precipitation' && selectedTimePeriod.key !== 'reference-period';
+        }
+
         const legendTitle = `
-            ${selectedMeasurement && selectedMeasurement.legendTitle}
-            ${selectedTimePeriod && selectedTimePeriod.label}\n
-            [${selectedScenario && selectedScenario.label}]
+            ${unitInPercent ? 'Precipitation change(%) / ' : ''}
+            ${(!unitInPercent && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
+             ${selectedTimePeriod ? selectedTimePeriod.label : ''}  
+            [${selectedScenario ? selectedScenario.label : ''}]
         `;
         const [min, max] = extent(mapState, (d: MapState) => d.value);
         const colors = measurementType === 'temperature' ? tempColors : rainColors;
@@ -455,6 +494,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            layerGroupList,
         } = this.props;
 
         const {
@@ -486,6 +526,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         <div className={styles.title}>
                             Climate change
                         </div>
+                        {!pending && isActive && (
+                            <LayerDetailModalButton
+                                className={styles.showLayerDetailsButton}
+                                layer={this.getLayer(layerGroupList, measurementType)}
+                            />
+                        )}
                     </div>
                     <div className={styles.top}>
                         <SegmentInput
@@ -514,7 +560,44 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             onChange={this.handleSetScenario}
                         />
                     </div>
-                    { !pending && (
+                    <div className={styles.externalLinks}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Links from Climate Scenarios from Nepal (NAP)
+                            </h4>
+                        </header>
+                        <div className={styles.content}>
+                            <a
+                                className={styles.externalLink}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36003"
+                            >
+                                <Icon
+                                    className={styles.icon}
+                                    name="externalLink"
+                                />
+                                <div className={styles.text}>
+                                    Temperature data
+                                </div>
+                            </a>
+                            <a
+                                className={styles.externalLink}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                href="http://rds.icimod.org/Home/DataDetail?metadataId=36002"
+                            >
+                                <Icon
+                                    className={styles.icon}
+                                    name="externalLink"
+                                />
+                                <div className={styles.text}>
+                                    Precipitation data
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    { !pending && isActive && (
                         <div className={styles.bottom}>
                             <div className={styles.header}>
                                 {chartTitle}
@@ -537,7 +620,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         angle={-30}
                                     >
                                         <Label
-                                            value="year"
+                                            value="Year"
                                             offset={-5}
                                             position="insideBottom"
                                         />

@@ -276,7 +276,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    public UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const {
             pending: oldPending,
         } = this.props;
@@ -622,7 +622,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             hideMap && styles.hidden,
                                         )}
                                     />
-                                    {hazardList.map((item) => {
+                                    { hazardList.map((item) => {
                                         if (!item.icon) {
                                             return null;
                                         }
@@ -634,7 +634,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 fillColor="#222222"
                                             />
                                         );
-                                    })}
+                                    }) }
                                     { !hideMap && (
                                         <div className={styles.mapActions}>
                                             <MapDownloadButton

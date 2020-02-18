@@ -370,6 +370,7 @@ export default class RealTimeMap extends React.PureComponent {
                     name="pollution"
                 />
                 <SVGMapIcon
+                    fillColor="#ffffff"
                     src={FireIcon}
                     name="forest-fire"
                 />

@@ -29,7 +29,7 @@ export default class CollapsibleView extends React.PureComponent {
         this.collapsedContainerRef = React.createRef();
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { expanded: isExpanded } = this.props;
         const { expanded: willExpand } = nextProps;
 

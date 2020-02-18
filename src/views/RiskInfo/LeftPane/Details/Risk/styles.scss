@@ -3,7 +3,7 @@
     flex-direction: column;
     padding: calc(var(--spacing-large) - var(--spacing-medium-alt));
 
-    .header {
+    >.header {
         display: flex;
         align-items: center;
         flex-shrink: 0;
@@ -45,83 +45,76 @@
         }
 
         .metric-settings {
-            position: absolute;
-            left: var(--spacing-medium);
-            z-index: 1;
-            border: var(--width-separator-thin) solid var(--color-separator-light);
-            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.3);
-            background-color: var(--color-foreground-alt);
-            width: calc(var(--width-left-panel) - 3 * var(--spacing-medium));
-
-            .metric-input {
+            .header {
                 display: flex;
-                padding: var(--spacing-extra-small-alt);
+                align-items: center;
 
-                &:nth-child(odd) {
-                    background-color: var(--color-background);
-                }
-
-                .label {
-                    flex-shrink: 0;
-                    padding: var(--spacing-medium);
-                    width: 30%;
-                    max-width: 120px;
-                    text-align: right;
-                    font-weight: var(--font-weight-bold);
-                }
-
-                .range-input {
+                .heading {
                     flex-grow: 1;
-                    margin: var(--spacing-medium);
+                    padding: var(--spacing-small) var(--spacing-medium);
                 }
+            }
 
-                .min-label {
-                    position: absolute;
-                    bottom: -10px;
-                    left: -1px;
-                    color: var(--color-text-light);
-                    font-size: var(--font-size-small);
-                    font-weight: var(--font-weight-bold);
-                }
+            .content {
+                .metric-input {
+                    display: flex;
+                    padding: var(--spacing-extra-small-alt);
 
-                .max-label {
-                    position: absolute;
-                    right: -5px;
-                    bottom: -10px;
-                    color: var(--color-text-light);
-                    font-size: var(--font-size-small);
-                    font-weight: var(--font-weight-bold);
-                }
+                    .label {
+                        flex-shrink: 0;
+                        padding: var(--spacing-medium);
+                        width: 30%;
+                        max-width: 130px;
+                        color: var(--color-text-label);
+                        font-weight: var(--font-weight-bold);
+                    }
 
-                .value-label {
-                    position: absolute;
-                    bottom: -3px;
-                    z-index: 1;
-                    color: #fff;
-                    font-size: 9px;
-                    font-weight: var(--font-weight-bold);
-                    pointer-events: none;
+                    .range-input {
+                        flex-grow: 1;
+                        margin: var(--spacing-medium);
+                    }
+
+                    .min-label {
+                        position: absolute;
+                        bottom: -10px;
+                        left: -1px;
+                        color: var(--color-text-light);
+                        font-size: var(--font-size-small);
+                        font-weight: var(--font-weight-bold);
+                    }
+
+                    .max-label {
+                        position: absolute;
+                        right: -5px;
+                        bottom: -10px;
+                        color: var(--color-text-light);
+                        font-size: var(--font-size-small);
+                        font-weight: var(--font-weight-bold);
+                    }
+
+                    .value-label {
+                        position: absolute;
+                        bottom: -3px;
+                        z-index: 1;
+                        color: #fff;
+                        font-size: 9px;
+                        font-weight: var(--font-weight-bold);
+                        pointer-events: none;
+                    }
                 }
             }
         }
+    }
 
-        .opacity-settings {
-            display: flex;
-            position: absolute;
-            justify-content: center;
-            z-index: 1;
-            border: var(--width-separator-thin) solid var(--color-separator-light);
-            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.3);
-            background-color: var(--color-background);
-            padding: var(--spacing-large) var(--spacing-small);
-            width: 200px;
-        }
+    .show-data-table-button,
+    .show-metrics-button {
+        font-size: var(--font-size-large);
     }
 }
 
 .risk-tooltip {
-    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
     border-top: var(--width-separator-medium) solid var(--color-accent);
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
 
     .heading {
         padding: var(--spacing-small) var(--spacing-medium);

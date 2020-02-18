@@ -23,43 +23,48 @@ class SVGMapIcon extends React.PureComponent<Props, State> {
     }
 
     private generateImage = memoize((src: string, width, height, fillColor) => {
-        const dummySvg = document.createElement('svg');
-        const container = document.createElement('div');
-        dummySvg.setAttribute('data-src', src);
-        container.appendChild(dummySvg);
+        setTimeout(() => {
+            const dummySvg = document.createElement('svg');
+            const container = document.createElement('div');
+            dummySvg.setAttribute('data-src', src);
+            container.appendChild(dummySvg);
 
-        const options = {};
+            const options = {};
 
-        SVGInjector(dummySvg, options, () => {
-            const svg = container.children[0] as HTMLElement;
-            svg.style.width = `${width}px`;
-            svg.style.height = `${height}px`;
+            SVGInjector(dummySvg, options, () => {
+                const svg = container.children[0] as HTMLElement;
+                svg.style.width = `${width}px`;
+                svg.style.height = `${height}px`;
 
-            if (fillColor) {
-                svg.style.fill = fillColor;
+                if (fillColor) {
+                    svg.style.fill = fillColor;
 
-                const paths = svg.getElementsByTagName('path');
-                for (let i = 0; i < paths.length; i += 1) {
-                    paths[i].style.fill = fillColor;
+                    const paths = svg.getElementsByTagName('path');
+                    for (let i = 0; i < paths.length; i += 1) {
+                        paths[i].style.fill = fillColor;
+                    }
                 }
-            }
 
-            document.body.appendChild(container);
-            const svgCanvas = html2canvas(container, {
-                allowTaint: true,
-                width,
-                height,
-                backgroundColor: null, // transparent
+                setTimeout(() => {
+                    document.body.appendChild(container);
+                    const svgCanvas = html2canvas(container, {
+                        allowTaint: true,
+                        width,
+                        height,
+                        backgroundColor: null, // transparent
+                    });
+
+                    svgCanvas.then((c) => {
+                        document.body.removeChild(container);
+                        const image = new Image();
+                        image.onload = () => {
+                            this.setState({ image });
+                        };
+                        image.src = c.toDataURL();
+                    });
+                }, Math.floor(100 + Math.random() * 6000));
             });
-            svgCanvas.then((c) => {
-                document.body.removeChild(container);
-                const image = new Image();
-                image.onload = () => {
-                    this.setState({ image });
-                };
-                image.src = c.toDataURL();
-            });
-        });
+        }, Math.floor(100 + Math.random() * 8000));
     })
 
     public render() {

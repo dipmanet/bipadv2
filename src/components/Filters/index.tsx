@@ -13,11 +13,7 @@ import Icon from '#rscg/Icon';
 import { setFiltersAction } from '#actionCreators';
 import { filtersSelector } from '#selectors';
 import { AppState } from '#store/types';
-import {
-    FiltersElement,
-    RegionValueElement,
-    DataDateRangeValueElement,
-} from '#types';
+import { FiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
