@@ -2,7 +2,6 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
-import Message from '#rscv/Message';
 import SegmentInput from '#rsci/SegmentInput';
 
 import CommonMap from '#components/CommonMap';
@@ -17,10 +16,12 @@ import {
 import {
     getResponse,
     isAnyRequestPending,
+    getPending,
 } from '#utils/request';
 
 import ResourceProfile from './ResourceProfile';
 import Disasters from './Disasters';
+import Demographics from './Demographics';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -43,24 +44,30 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
         method: methods.GET,
         onMount: true,
     },
+    demographicsGetRequest: {
+        url: '/demographic/',
+        method: methods.GET,
+        onMount: true,
+    },
 };
 
-
-const tabList = [
+interface Tab {
+    key: string;
+    label: string;
+}
+const tabList: Tab[] = [
     { key: 'resources', label: 'Resources' },
     { key: 'disasters', label: 'Losses' },
     { key: 'demographics', label: 'Demographics' },
 ];
 
+const keySelector = (d: Tab) => d.key;
+const labelSelector = (d: Tab) => d.label;
+
 class DisasterProfile extends React.PureComponent<Props> {
     public state = {
-        activeView: 'resources',
-    }
-
-    private tabs = {
-        resources: 'Resources',
-        disasters: 'Disasters',
-        demographics: 'Demographics',
+        // activeView: 'resources',
+        activeView: 'demographics',
     }
 
     private views = {
@@ -89,17 +96,22 @@ class DisasterProfile extends React.PureComponent<Props> {
             },
         },
         demographics: {
-            component: () => (
-                <div className={styles.view}>
-                    <Message>
-                        Data not available
-                    </Message>
-                </div>
-            ),
+            component: Demographics,
+            rendererParams: () => {
+                const { requests } = this.props;
+                const pending = getPending(requests, 'demographicsGetRequest');
+                const demographics = getResponse(requests, 'demographicsGetRequest');
+
+                return {
+                    pending,
+                    data: demographics.results,
+                    className: styles.view,
+                };
+            },
         },
     }
 
-    private handleTabClick = (activeView) => {
+    private handleTabClick = (activeView: string) => {
         this.setState({ activeView });
     }
 
@@ -121,8 +133,8 @@ class DisasterProfile extends React.PureComponent<Props> {
                         options={tabList}
                         value={activeView}
                         onChange={this.handleTabClick}
-                        keySelector={d => d.key}
-                        labelSelector={d => d.label}
+                        keySelector={keySelector}
+                        labelSelector={labelSelector}
                         showLabel={false}
                         showHintAndError={false}
                     />

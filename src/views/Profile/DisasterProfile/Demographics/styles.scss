@@ -1,40 +1,63 @@
-.main-container {
+.demographics {
     display: flex;
     flex-direction: column;
-    margin-left: var(--spacing-extra-large);
-    padding-top: var(--spacing-extra-large-alt);
-    padding-right: var(--spacing-large);
-    padding-left: var(--spacing-extra-large);
+    flex-grow: 1;
+    overflow: auto;
 
-    .data-block {
-        display:flex;
-        margin: var(--spacing-large) 0;
+    >.header {
+        flex-shrink: 0;
 
-        .left {
-            display: flex;
-            flex-basis: 25%;
-            flex-direction: column;
-            flex-shrink: 0;
-
-            .value {
-                color: var(--color-danger);
-                font-size: var(--font-size-jumbo-alt);
-                font-weight: var(--font-weight-bold);
-            }
-        }
-
-        .title {
-            font-size: var(--font-size-extra-large-alt);
-            font-weight: var(--font-weight-bold);
-        }
-
-        .right {
-            display:flex;
-            flex-direction: column;
-            flex-grow:1;
-
+        .heading {
+            padding: var(--spacing-small) var(--spacing-large);
         }
     }
 
+    .content {
+        flex-grow: 1;
+        overflow: auto;
+
+        .demography-container {
+            padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
+
+            >.header {
+                .heading {
+                    padding: var(--spacing-small) var(--spacing-large);
+                }
+            }
+
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+            }
+
+            .chart-container {
+                padding: 0 var(--spacing-medium);
+                height: 100px;
+
+                text {
+                    color: var(--color-text-light);
+                    font-size: var(--font-size-small);
+                }
+            }
+
+            &.age-group {
+                .chart-container {
+                    height: 400px;
+                }
+            }
+        }
+    }
 }
 
+.summary {
+    padding: var(--spacing-small) var(--spacing-large);
+
+    .value {
+        font-size: var(--font-size-large);
+    }
+
+    .label {
+        font-size: var(--font-size-small);
+    }
+}

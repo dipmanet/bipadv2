@@ -116,6 +116,12 @@ class ActiveLayers extends React.PureComponent<Props, State> {
             showOpacityInput,
         } = this.state;
 
+        const data = this.getData(activeLayers);
+
+        if (!data || data.length === 0) {
+            return null;
+        }
+
         return (
             <div className={_cs(styles.activeLayers, className)}>
                 <header className={styles.header}>
@@ -149,7 +155,7 @@ class ActiveLayers extends React.PureComponent<Props, State> {
                     dragHandleClassName={styles.dragHandle}
                     className={styles.content}
                     itemClassName={styles.activeLayerContainer}
-                    data={this.getData(activeLayers)}
+                    data={data}
                     renderer={ActiveLayer}
                     rendererParams={this.getRendererParams}
                     keySelector={d => String(d.id)}
