@@ -391,12 +391,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
             if (timePeriodKey === 'reference-period') {
                 return ({
                     id: district,
-                    value: mean(filteredItemList.map(v => v.value)),
+                    value: mean(filteredItemList.map(v => +v.value || 0)),
                 });
             }
 
-            const referenceAverage = mean(referenceItemList.map(v => v.value));
-            const filteredAverage = mean(filteredItemList.map(v => v.value));
+            const referenceAverage = mean(referenceItemList.map(v => +v.value || 0));
+            const filteredAverage = mean(filteredItemList.map(v => +v.value || 0));
 
             return ({
                 id: district,
