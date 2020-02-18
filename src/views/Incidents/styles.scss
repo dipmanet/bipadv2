@@ -58,7 +58,7 @@
         .point-size-legend {
             .legend-item {
                 margin: var(--spacing-small) 0;
-                height: var(--font-size-small);
+                height: var(--font-size-medium);
                 overflow: hidden;
 
                 >:nth-child(2) {
@@ -67,37 +67,8 @@
                 }
             }
 
-            %symbol {
+            .symbol {
                 border-radius: 50%;
-                background-color: var(--color-text-label);
-            }
-
-            .minor {
-                @extend %symbol;
-                margin: 0 6px;
-                width: 10px;
-                height: 10px;
-            }
-
-            .major {
-                @extend %symbol;
-                margin: 0 4px;
-                width: 14px;
-                height: 14px;
-            }
-
-            .severe {
-                @extend %symbol;
-                margin: 0 2px;
-                width: 18px;
-                height: 18px;
-            }
-
-            .catastrophic {
-                @extend %symbol;
-                margin: 0;
-                width: 22px;
-                height: 22px;
             }
         }
     }

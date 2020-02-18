@@ -56,6 +56,13 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
 });
 
+const visibleLayout = {
+    visibility: 'visible',
+};
+const noneLayout = {
+    visibility: 'none',
+};
+
 class IncidentMap extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -174,6 +181,9 @@ class IncidentMap extends React.PureComponent {
                             type: 'circle',
                             filter,
                             paint: mapStyles.incidentPoint.animatedFill,
+                            layout: isHovered
+                                ? noneLayout
+                                : visibleLayout,
                         }}
                         onAnimationFrame={this.handleAnimationKeyframe}
                     />
