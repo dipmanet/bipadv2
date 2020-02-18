@@ -68,6 +68,7 @@ const AlertTableModal = ({
                 <Button
                     iconName="close"
                     onClick={closeModal}
+                    transparent
                 />
             )}
         />

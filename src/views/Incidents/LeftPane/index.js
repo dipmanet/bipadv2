@@ -7,8 +7,12 @@ import {
     compareDate,
 } from '@togglecorp/fujs';
 
+import Button from '#rsca/Button';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
@@ -23,11 +27,37 @@ import {
 import Cloak from '#components/Cloak';
 
 import IncidentListView from './ListView';
+import IncidentTable from './TabularView';
 import AddIncidentForm from './AddIncidentForm';
 
 import styles from './styles.scss';
 
-const ModalButton = modalize(AccentButton);
+const AccentModalButton = modalize(AccentButton);
+const ModalButton = modalize(Button);
+
+const IncidentTableModal = ({
+    closeModal,
+    incidentList,
+}) => (
+    <Modal className={styles.incidentTableModal}>
+        <ModalHeader
+            title="Incidents"
+            rightComponent={(
+                <Button
+                    iconName="close"
+                    onClick={closeModal}
+                    transparent
+                />
+            )}
+        />
+        <ModalBody className={styles.body}>
+            <IncidentTable
+                className={styles.table}
+                incidentList={incidentList}
+            />
+        </ModalBody>
+    </Modal>
+);
 
 const propTypes = {
     className: PropTypes.string,
@@ -137,8 +167,19 @@ class LeftPane extends React.PureComponent {
                             Incidents
                         </h2>
                         <div className={styles.buttons}>
+                            <ModalButton
+                                title="Show data in tabular format"
+                                className={styles.showTableButton}
+                                iconName="table"
+                                transparent
+                                modal={(
+                                    <IncidentTableModal
+                                        incidentList={incidentList}
+                                    />
+                                )}
+                            />
                             <Cloak hiddenIf={p => !p.change_incident}>
-                                <ModalButton
+                                <AccentModalButton
                                     className={styles.addIncidentButton}
                                     title="Add"
                                     transparent
@@ -152,7 +193,7 @@ class LeftPane extends React.PureComponent {
                                     )}
                                 >
                                     Add
-                                </ModalButton>
+                                </AccentModalButton>
                             </Cloak>
                         </div>
                     </header>

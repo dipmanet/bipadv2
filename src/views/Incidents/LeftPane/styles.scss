@@ -35,6 +35,10 @@
                 }
             }
 
+            .show-table-button {
+                font-size: var(--font-size-large);
+            }
+
             .add-incident-button {
                 flex-shrink: 0;
                 margin: 0 var(--spacing-small);
@@ -46,6 +50,20 @@
         .content {
             flex-grow: 1;
             overflow: auto;
+        }
+    }
+}
+
+.incident-table-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex-grow: 1;
         }
     }
 }
