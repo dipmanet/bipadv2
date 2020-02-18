@@ -25,14 +25,6 @@ const sourceLayerByAdminLevel = {
     district: mapSources.nepal.layers.district,
 };
 
-const regionLevelMap = {
-    country: 0,
-    province: 1,
-    district: 2,
-    municipality: 3,
-    ward: 4,
-};
-
 const tooltipOptions = {
     closeOnClick: false,
     closeButton: false,
