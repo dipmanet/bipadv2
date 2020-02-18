@@ -157,19 +157,21 @@ interface LegendItem {
     label: string;
     style: string;
     color: string;
+    radius?: number;
 }
 
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', style: styles.minor, color: '#a3a3a3' },
-    { label: 'Major (<10)', style: styles.major, color: '#a3a3a3' },
-    { label: 'Severe (<100)', style: styles.severe, color: '#a3a3a3' },
-    { label: 'Catastrophic (>100)', style: styles.catastrophic, color: '#a3a3a3' },
+    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
 ];
 
 const labelSelector = (d: LegendItem) => d.label;
 const keySelector = (d: LegendItem) => d.label;
 const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
+const radiusSelector = (d: LegendItem) => d.radius;
 
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -268,6 +270,7 @@ class Incidents extends React.PureComponent<Props, State> {
                                 <Legend
                                     className={styles.pointSizeLegend}
                                     colorSelector={colorSelector}
+                                    radiusSelector={radiusSelector}
                                     data={incidentPointSizeData}
                                     emptyComponent={null}
                                     itemClassName={styles.legendItem}
@@ -276,11 +279,13 @@ class Incidents extends React.PureComponent<Props, State> {
                                     symbolClassNameSelector={classNameSelector}
                                 />
                             </div>
-                            <HazardsLegend
-                                filteredHazardTypes={filteredHazardTypes}
-                                className={styles.hazardLegend}
-                                itemClassName={styles.legendItem}
-                            />
+                            {filteredHazardTypes.length > 0 && (
+                                <HazardsLegend
+                                    filteredHazardTypes={filteredHazardTypes}
+                                    className={styles.hazardLegend}
+                                    itemClassName={styles.legendItem}
+                                />
+                            )}
                         </React.Fragment>
                     )}
                 />

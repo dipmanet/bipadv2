@@ -4,7 +4,7 @@ const incidentCircleRadii = [
     ['==', ['get', 'severity'], 'Major'], 11,
     ['==', ['get', 'severity'], 'Severe'], 15,
     ['==', ['get', 'severity'], 'Catastrophic'], 20,
-    7,
+    8,
 ];
 
 export default {
@@ -461,7 +461,8 @@ export default {
                 ['>=', ['get', 'magnitude'], 6], 15,
                 ['>=', ['get', 'magnitude'], 5], 11,
                 ['>=', ['get', 'magnitude'], 4], 8,
-                7,
+                ['>=', ['get', 'magnitude'], 3], 6,
+                6,
             ],
             'circle-color': [
                 'case',

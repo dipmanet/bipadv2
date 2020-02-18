@@ -374,15 +374,15 @@ export default class RealTimeMap extends React.PureComponent {
                     src={FireIcon}
                     name="forest-fire"
                 />
-                { showStreamFlow && (
-                    <MapSource
-                        sourceKey="real-time-streamflow"
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: [getRasterTile(streamFlowLayer)],
-                            tileSize: 256,
-                        }}
-                    >
+                <MapSource
+                    sourceKey="real-time-streamflow"
+                    sourceOptions={{
+                        type: 'raster',
+                        tiles: [getRasterTile(streamFlowLayer)],
+                        tileSize: 256,
+                    }}
+                >
+                    { showStreamFlow && (
                         <MapLayer
                             layerKey="raster-layer"
                             layerOptions={{
@@ -392,8 +392,8 @@ export default class RealTimeMap extends React.PureComponent {
                                 },
                             }}
                         />
-                    </MapSource>
-                )}
+                    )}
+                </MapSource>
                 { coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
