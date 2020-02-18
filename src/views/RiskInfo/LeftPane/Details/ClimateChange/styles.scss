@@ -32,6 +32,14 @@
         }
     }
 
+    .short-description {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+        text-align: justify;
+        white-space: pre-wrap;
+        color: var(--color-text-light);
+        font-size: var(--font-size-small-alt);
+    }
+
     .top {
         flex-shrink: 0;
         padding: calc(var(--spacing-medium) - var(--spacing-small));
@@ -84,6 +92,7 @@
 
     .bottom {
         flex-shrink: 0;
+        padding: var(--spacing-large) calc(var(--spacing-large) - var(--spacing-medium));
 
         .header {
             flex-shrink: 0;

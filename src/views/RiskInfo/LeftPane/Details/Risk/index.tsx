@@ -89,28 +89,6 @@ const colorGrade = [
     '#b31010',
 ];
 
-const description = `The data represents summary statistics for each district of fatalities modelled for 30 different possible earthquake scenarios occurring at three different times of day. The data provides the number of scenarios that result in one or more modelled fatalities, the average modelled fatalities, maximum modelled fatalities, variation in modelled fatalities, the human development index of the district, and the remoteness of the district.  Data was collected from the secondary sources taken from the 2011 National Census of Nepal. No primary data are used in this study. The results displayed on BIPAD are derived by applying the appropriate statistics to the entire earthquake ensemble. Fatalities for individual scenarios are calculated by:
-
-1. Ground shaking was modelled based on Ground Motion Prediction Equations taken from Abrahamson & Silva (2008) EQ Spectra.
-2. Building collapse was estimated based on Nepal’s national census data from 2011 and the response of each building to shaking. For Brick, stone and adobe buildings, Nepali-specific fragility curves from Guragain (2012) are applied; for concrete and wooden buildings global curves from Kircher et al (2010) Nat Haz Rev are used.
-3. Fatalities for each building type are calculated from the census data and globally published fatality rates from So (2016).
-
-The detailed methodology can be found in Robinson et al. (2018). Use of scenario ensembles for deriving seismic risk, Proceedings of the National Academy of Science,
-DOI: https://doi.org/10.1073/pnas.1807433115.`;
-
-const disclaimer = `The results are based on highly simplified earthquake fatality modelling only – they do
-not constitute a prediction or assessment of a real earthquake. Assumptions have been
-made with regards to the building occupancy at different times of day assuming broad
-differences between urban and rural locations that may not reflect the true situation.
-Ground shaking has been modelled over a large area with simplified ground conditions
-and the precise local conditions may increase or decrease the modelled shaking for a
-particular event. The scenarios are chosen from an ensemble of plausible future
-earthquakes based on past events and understanding of faults in the Himalaya. There may
-be other scenarios that have not been considered. No attempt to account for the
-probability of an individual scenario has been made – each of the 90 scenarios are
-considered equally probable. Buildings of the same type are assumed to sustain the same
-level of performance during shaking.`;
-
 const RiskTooltipOutput = ({ label, value }) => (
     <div className={styles.riskTooltipOutput}>
         <div className={styles.label}>
@@ -170,9 +148,6 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         legend,
         tooltipRenderer: RiskTooltip,
         rankMap: getRankMap(data),
-        // metadata,
-        // description,
-        disclaimer,
         actions,
     };
 };
