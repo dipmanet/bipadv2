@@ -149,6 +149,7 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         tooltipRenderer: RiskTooltip,
         rankMap: getRankMap(data),
         actions,
+        minValue: min,
     };
 };
 

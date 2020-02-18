@@ -70,6 +70,9 @@ class LayerLegend extends React.PureComponent<Props> {
                 )}
                 { layer.type === 'choropleth' && (
                     <div className={styles.choroplethLegend}>
+                        { layer.minValue && (
+                            <div className={styles.min}>{ layer.minValue }</div>
+                        )}
                         { Object.keys(layer.legend).map((color) => {
                             const value = layer.legend[color];
 

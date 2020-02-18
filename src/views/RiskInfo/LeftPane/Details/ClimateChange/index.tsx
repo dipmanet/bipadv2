@@ -466,6 +466,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             legendTitle,
             scenarioName,
             tooltipRenderer: ClimateChangeTooltip,
+            minValue: min,
         };
     };
 
