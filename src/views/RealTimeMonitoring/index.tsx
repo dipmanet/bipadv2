@@ -3,7 +3,8 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
-import Icon from '#rscg/Icon';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
@@ -55,8 +56,6 @@ import MiniRainWatch from './MiniRainWatch';
 import styles from './styles.scss';
 
 interface State {
-    showRainWatch: boolean;
-    showRiverWatch: boolean;
     activeView?: ActiveView;
 }
 interface Params {}
@@ -229,24 +228,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const rainLegendItems = [
-    { icon: '■', color: '#7CB342', label: 'Below Warning Level' },
-    { icon: '■', color: '#FDD835', label: 'Above Warning Level' },
-    { icon: '■', color: '#e53935', label: 'Above Danger Level' },
-];
-
-const riverLegendItems = [
-    { icon: '●', color: '#7CB342', label: 'Steady & Below Warning Level' },
-    { icon: '●', color: '#FDD835', label: 'Steady & Above Warning Level' },
-    { icon: '●', color: '#e53935', label: 'Steady & Above Danger Level' },
-
-    { icon: '▲', color: '#7CB342', label: 'Rising & Below Warning Level' },
-    { icon: '▲', color: '#FDD835', label: 'Rising & Above Warning Level' },
-    { icon: '▲', color: '#e53935', label: 'Rising & Above Danger Level' },
-
-    { icon: '▼', color: '#7CB342', label: 'Falling & Below Warning Level' },
-    { icon: '▼', color: '#FDD835', label: 'Falling & Above Warning Level' },
-    { icon: '▼', color: '#e53935', label: 'Falling & Below Danger Level' },
-
+    { icon: '●', color: '#7CB342', label: 'Below Warning Level' },
+    { icon: '●', color: '#FDD835', label: 'Above Warning Level' },
+    { icon: '●', color: '#e53935', label: 'Above Danger Level' },
 ];
 
 const earthquakeLegendItems = [
@@ -267,17 +251,6 @@ const pollutionLegendItems = [
     { icon: '●', color: '#7e0023', label: 'Hazardous (<= 500.4)' },
 ];
 
-const fireLegendItems = [
-    { icon: '◆', color: '#e64a19', label: 'Forest Fire' },
-];
-
-const rainAndRiverSymbolItems = [
-    { icon: '■ ', color: '#414141', label: 'Rain' },
-    { icon: '●', color: '#414141', label: 'River steady' },
-    { icon: '▲', color: '#414141', label: 'River rising' },
-    { icon: '▼', color: '#414141', label: 'River falling' },
-];
-
 const itemSelector = (d: { label: string }) => d.label;
 const iconSelector = (d: { icon: string }) => d.icon;
 const legendColorSelector = (d: { color: string }) => d.color;
@@ -291,8 +264,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         this.state = {
             activeView: 'rainwatch',
-            showRainWatch: true,
-            showRiverWatch: true,
         };
     }
 
@@ -313,52 +284,28 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         return (
             <>
-                {(showRain || showRiver) && (
+                {showRain && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
+                            <ScalableVectorGraphics
+                                className={styles.legendIcon}
+                                src={RainIcon}
+                                alt="Rain"
+                            />
                             <h4 className={styles.heading}>
-                                Rain & River
+                                Rain
                             </h4>
                         </header>
-                        <div className={styles.content}>
-                            <div className={styles.legend}>
-                                <div className={styles.legendItem}>
-                                    <img
-                                        className={styles.legendIcon}
-                                        src={RainIcon}
-                                        height={16}
-                                        width={16}
-                                        alt="Rain"
-                                    />
-                                    <div className={styles.label}>
-                                        Rain
-                                    </div>
-                                </div>
-                                <div className={styles.legendItem}>
-                                    <img
-                                        className={styles.legendIcon}
-                                        src={RiverIcon}
-                                        height={16}
-                                        width={16}
-                                        alt="River"
-                                    />
-                                    <div className={styles.label}>
-                                        River
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.colorLegend}>
-                                <div className={_cs(styles.item, styles.belowWarning)}>
-                                    Below warning
-                                </div>
-                                <div className={_cs(styles.item, styles.aboveWarning)}>
-                                    Above warning
-                                </div>
-                                <div className={_cs(styles.item, styles.aboveDanger)}>
-                                    Above danger
-                                </div>
-                            </div>
-                        </div>
+                        <Legend
+                            className={styles.legend}
+                            data={rainLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 Source:
@@ -373,21 +320,55 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             </a>
                         </div>
                     </div>
-
+                )}
+                {showRiver && (
+                    <div className={styles.legendContainer}>
+                        <header className={styles.header}>
+                            <ScalableVectorGraphics
+                                className={styles.legendIcon}
+                                src={RiverIcon}
+                                alt="River"
+                            />
+                            <h4 className={styles.heading}>
+                                River
+                            </h4>
+                        </header>
+                        <Legend
+                            className={styles.legend}
+                            data={rainLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            iconSelector={iconSelector}
+                            labelSelector={legendLabelSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="http://hydrology.gov.np"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Department of Hydrology and Meteorology
+                            </a>
+                        </div>
+                    </div>
                 )}
                 { showEarthquake && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
+                            <ScalableVectorGraphics
+                                className={styles.legendIcon}
+                                src={EarthquakeIcon}
+                                alt="Earthquake"
+                            />
                             <h4 className={styles.heading}>
                                 Earthquake (Richter Scale)
                             </h4>
-                            <img
-                                className={styles.legendIcon}
-                                src={EarthquakeIcon}
-                                height={16}
-                                width={16}
-                                alt="Earthquake"
-                            />
                         </header>
                         <Legend
                             className={styles.legend}
@@ -417,6 +398,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 { showPollution && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
+                            <ScalableVectorGraphics
+                                className={styles.legendIcon}
+                                src={PollutionIcon}
+                                alt="Pollution"
+                            />
                             <h4 className={styles.heading}>
                                 Pollution (PM&nbsp;
                                 <sub>
@@ -424,13 +410,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </sub>
                                 )
                             </h4>
-                            <img
-                                className={styles.legendIcon}
-                                src={PollutionIcon}
-                                height={16}
-                                width={16}
-                                alt="Pollution"
-                            />
                         </header>
                         <Legend
                             className={styles.legend}
@@ -460,16 +439,13 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 { showFire && (
                     <div className={styles.legendContainer}>
                         <header className={styles.header}>
+                            <ScalableVectorGraphics
+                                className={styles.legendIcon}
+                                src={FireIcon}
+                            />
                             <h4 className={styles.heading}>
                                 Forest Fire
                             </h4>
-                            <img
-                                className={styles.legendIcon}
-                                src={FireIcon}
-                                height={16}
-                                width={16}
-                                alt="Forest Fire"
-                            />
                         </header>
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
@@ -605,17 +581,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                         </div>
                                     )}
                                 </div>
-                                <div className={styles.actions}>
-                                    {/*
-                                    <ModalButton
-                                        title="Show data in tabular format"
-                                        className={styles.showTableButton}
-                                        iconName="table"
-                                        transparent
-                                        modal={<AlertTableModal alertList={alertList} />}
-                                    />
-                                  */}
-                                </div>
                             </header>
                             <div className={styles.content}>
                                 {validActiveView === 'riverwatch' && (
@@ -634,7 +599,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                     <div
                                         className={styles.message}
                                     >
-                                        Select rain or river to see details
+                                        <Message>
+                                            Select rain or river to see details
+                                        </Message>
                                     </div>
                                 )}
                             </div>
