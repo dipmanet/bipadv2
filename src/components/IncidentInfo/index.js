@@ -10,8 +10,10 @@ import { Link } from '@reach/router';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
+import AccentButton from '#rsca/Button/AccentButton';
 import TextOutput from '#components/TextOutput';
 import DateOutput from '#components/DateOutput';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Loss from '#components/Loss';
 
 import styles from './styles.scss';
@@ -27,10 +29,17 @@ const inducerText = {
 };
 
 const propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
     incident: PropTypes.object.isRequired,
+    onEditIncident: PropTypes.func,
+    onDeleteIncident: PropTypes.func,
+    incidentDeletePending: PropTypes.bool,
 };
 
 const defaultProps = {
+    onEditIncident: undefined,
+    onDeleteIncident: undefined,
+    incidentDeletePending: false,
 };
 
 export default class IncidentInfo extends React.PureComponent {
@@ -49,6 +58,11 @@ export default class IncidentInfo extends React.PureComponent {
 
             className,
             hideLink,
+
+            onEditIncident,
+            onDeleteIncident,
+
+            incidentDeletePending,
         } = this.props;
 
         const {
@@ -91,16 +105,40 @@ export default class IncidentInfo extends React.PureComponent {
                         value={incidentOn}
                     />
                 </header>
-                { !hideLink && (
-                    <div className={styles.actions}>
-                        <Link
-                            className={styles.gotoResponseLink}
-                            to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
-                        >
-                            Go to response
-                        </Link>
+                <div className={styles.actions}>
+                    <div className={styles.left}>
+                        { !hideLink && (
+                            <Link
+                                className={styles.gotoResponseLink}
+                                to={reverseRoute('/incidents/:incidentId/response', { incidentId: id })}
+                            >
+                                Go to response
+                            </Link>
+                        )}
                     </div>
-                )}
+                    <div className={styles.right}>
+                        { onEditIncident && (
+                            <AccentButton
+                                className={styles.button}
+                                transparent
+                                onClick={onEditIncident}
+                            >
+                                Edit
+                            </AccentButton>
+                        )}
+                        { onDeleteIncident && (
+                            <DangerConfirmButton
+                                className={styles.button}
+                                confirmationMessage="Are you sure you want to delete this incident?"
+                                onClick={onDeleteIncident}
+                                pending={incidentDeletePending}
+                                transparent
+                            >
+                                Delete
+                            </DangerConfirmButton>
+                        )}
+                    </div>
+                </div>
                 <div className={styles.content}>
                     <div className={styles.general}>
                         <TextOutput
