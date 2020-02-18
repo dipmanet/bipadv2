@@ -15,18 +15,15 @@
 
         .attribute {
             display: flex;
-            align-items: center;
             flex-basis: 50%;
-            padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+            padding: calc(var(--spacing-medium) - var(--spacing-small)) var(--spacing-small);
 
             .icon-container {
                 display: flex;
                 align-items: center;
                 flex-shrink: 0;
                 justify-content: center;
-                margin: var(--spacing-small) var(--spacing-medium);
-                border: var(--width-separator-medium) solid var(--color-accent-light);
-                border-radius: 50%;
+                background-color: var(--color-background);
                 padding: var(--spacing-medium-alt);
 
                 .icon {
@@ -42,6 +39,7 @@
 
             .details {
                 flex-grow: 1;
+                background-color: var(--color-foreground-alt);
                 padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
 
                 .value {
@@ -57,10 +55,6 @@
                     color: var(--color-text-light);
                     font-size: var(--font-size-small);
                 }
-            }
-
-            &:hover {
-                background-color: var(--color-background-hover);
             }
         }
     }

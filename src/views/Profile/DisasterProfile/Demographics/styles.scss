@@ -4,40 +4,60 @@
     flex-grow: 1;
     overflow: auto;
 
-    .item {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
+    >.header {
+        flex-shrink: 0;
 
-        .info {
-            display: flex;
-            flex-shrink: 0;
-        }
-
-        .chart {
-            display: flex;
-            flex-grow: 1;
-            min-height: 20vh;
-
-            .label {
-                fill: var(--color-text);
-                font-size: var(--font-size-large);
-            }
+        .heading {
+            padding: var(--spacing-small) var(--spacing-large);
         }
     }
 
-    .age-group {
-        display: flex;
-        flex-direction: column;
+    .content {
         flex-grow: 1;
+        overflow: auto;
 
-        .chart {
-            display: flex;
-            min-height: 50vh;
+        .demography-container {
+            padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
 
-            .label {
-                font-size: var(--font-size-large);
+            >.header {
+                .heading {
+                    padding: var(--spacing-small) var(--spacing-large);
+                }
+            }
+
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+            }
+
+            .chart-container {
+                padding: 0 var(--spacing-medium);
+                height: 100px;
+
+                text {
+                    color: var(--color-text-light);
+                    font-size: var(--font-size-small);
+                }
+            }
+
+            &.age-group {
+                .chart-container {
+                    height: 400px;
+                }
             }
         }
+    }
+}
+
+.summary {
+    padding: var(--spacing-small) var(--spacing-large);
+
+    .value {
+        font-size: var(--font-size-large);
+    }
+
+    .label {
+        font-size: var(--font-size-small);
     }
 }

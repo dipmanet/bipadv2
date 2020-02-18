@@ -82,6 +82,15 @@ interface Attribute {
     value: number;
 }
 
+const chartMargin = {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+};
+
+const yAxisWidth = 64;
+
 const SummaryValue = (props: { data: Attribute }) => {
     const {
         data: {
@@ -219,14 +228,14 @@ class Demographics extends React.PureComponent<Props> {
             { key: 'totalPopulation', label: 'Total Population', value: totalPopulation },
             {
                 key: 'malePopulation',
-                label: 'Male Population',
+                label: 'Male',
                 value: malePopulation,
                 color: '#64b5f6',
                 percent: ((malePopulation / totalPopulation) * 100).toFixed(2),
             },
             {
                 key: 'femalePopulation',
-                label: 'Female Population',
+                label: 'Female',
                 value: femalePopulation,
                 color: '#f06292',
                 percent: ((femalePopulation / totalPopulation) * 100).toFixed(2),
@@ -244,13 +253,13 @@ class Demographics extends React.PureComponent<Props> {
             },
             {
                 key: 'maleLiteracyRate',
-                label: 'Male Literacy Rate',
+                label: 'Male',
                 color: '#64b5f6',
                 value: maleLiteracyRate.toFixed(2),
             },
             {
                 key: 'femaleLiteracyRate',
-                label: 'Female Literacy Rate',
+                label: 'Female',
                 color: '#f06292',
                 value: femaleLiteracyRate.toFixed(2),
             },
@@ -310,12 +319,12 @@ class Demographics extends React.PureComponent<Props> {
                     </h2>
                 </header>
                 { !pending && (
-                    <div>
-                        <div className={styles.item}>
+                    <div className={styles.content}>
+                        <div className={styles.demographyContainer}>
                             <header className={styles.header}>
-                                <h2 className={styles.heading}>
+                                <h3 className={styles.heading}>
                                     Population
-                                </h2>
+                                </h3>
                             </header>
                             <ListView
                                 className={styles.info}
@@ -324,43 +333,45 @@ class Demographics extends React.PureComponent<Props> {
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />
-                            <ResponsiveContainer
-                                className={styles.chart}
-                            >
-                                <BarChart
-                                    data={sexRatio}
-                                    layout="vertical"
-                                >
-                                    <XAxis type="number" />
-                                    <YAxis
-                                        dataKey="label"
-                                        type="category"
-                                    />
-                                    <Bar
-                                        dataKey="value"
-                                        fill="#dcdcde"
+                            <div className={styles.chartContainer}>
+                                <ResponsiveContainer>
+                                    <BarChart
+                                        data={sexRatio}
+                                        layout="vertical"
+                                        margin={chartMargin}
                                     >
-                                        { sexRatio.map(v => (
-                                            <Cell
-                                                key={v.key}
-                                                fill={v.color}
-                                            />
-                                        ))}
-                                        <LabelList
-                                            className={styles.label}
-                                            dataKey="percent"
-                                            position="insideRight"
-                                            formatter={value => `${value} %`}
+                                        <XAxis type="number" />
+                                        <YAxis
+                                            width={yAxisWidth}
+                                            dataKey="label"
+                                            type="category"
                                         />
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
+                                        <Bar
+                                            dataKey="value"
+                                            fill="#dcdcde"
+                                        >
+                                            { sexRatio.map(v => (
+                                                <Cell
+                                                    key={v.key}
+                                                    fill={v.color}
+                                                />
+                                            ))}
+                                            <LabelList
+                                                className={styles.label}
+                                                dataKey="percent"
+                                                position="insideRight"
+                                                formatter={value => `${value} %`}
+                                            />
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className={styles.item}>
+                        <div className={styles.demographyContainer}>
                             <header className={styles.header}>
-                                <h2 className={styles.heading}>
+                                <h3 className={styles.heading}>
                                     Literacy
-                                </h2>
+                                </h3>
                             </header>
                             <ListView
                                 className={styles.info}
@@ -369,42 +380,44 @@ class Demographics extends React.PureComponent<Props> {
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />
-                            <ResponsiveContainer
-                                className={styles.chart}
-                            >
-                                <BarChart
-                                    data={literacyRatio}
-                                    layout="vertical"
-                                >
-                                    <XAxis type="number" />
-                                    <YAxis
-                                        dataKey="label"
-                                        type="category"
-                                    />
-                                    <Bar
-                                        dataKey="value"
+                            <div className={styles.chartContainer}>
+                                <ResponsiveContainer>
+                                    <BarChart
+                                        data={literacyRatio}
+                                        layout="vertical"
+                                        margin={chartMargin}
                                     >
-                                        { literacyRatio.map(v => (
-                                            <Cell
-                                                key={v.key}
-                                                fill={v.color}
-                                            />
-                                        ))}
-                                        <LabelList
-                                            className={styles.label}
-                                            dataKey="value"
-                                            position="insideRight"
-                                            formatter={value => `${Number(value).toFixed(2)} %`}
+                                        <XAxis type="number" />
+                                        <YAxis
+                                            width={yAxisWidth}
+                                            dataKey="label"
+                                            type="category"
                                         />
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
+                                        <Bar
+                                            dataKey="value"
+                                        >
+                                            { literacyRatio.map(v => (
+                                                <Cell
+                                                    key={v.key}
+                                                    fill={v.color}
+                                                />
+                                            ))}
+                                            <LabelList
+                                                className={styles.label}
+                                                dataKey="value"
+                                                position="insideRight"
+                                                formatter={value => `${Number(value).toFixed(2)} %`}
+                                            />
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className={styles.item}>
+                        <div className={styles.demographyContainer}>
                             <header className={styles.header}>
-                                <h2 className={styles.heading}>
+                                <h3 className={styles.heading}>
                                     Household
-                                </h2>
+                                </h3>
                             </header>
                             <ListView
                                 className={styles.info}
@@ -413,62 +426,66 @@ class Demographics extends React.PureComponent<Props> {
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />
-                            <ResponsiveContainer
-                                className={styles.chart}
-                            >
-                                <BarChart
-                                    data={householdSummary}
-                                    layout="vertical"
-                                >
-                                    <XAxis type="number" />
-                                    <YAxis
-                                        dataKey="label"
-                                        type="category"
-                                    />
-                                    <Bar
-                                        dataKey="value"
-                                        fill="#e35163"
+                            <div className={styles.chartContainer}>
+                                <ResponsiveContainer>
+                                    <BarChart
+                                        margin={chartMargin}
+                                        data={householdSummary}
+                                        layout="vertical"
                                     >
-                                        <LabelList
-                                            className={styles.label}
-                                            dataKey="value"
-                                            position="insideRight"
-                                            formatter={value => format('.2s')(value)}
+                                        <XAxis type="number" />
+                                        <YAxis
+                                            width={yAxisWidth}
+                                            dataKey="label"
+                                            type="category"
                                         />
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
+                                        <Bar
+                                            dataKey="value"
+                                            fill="#e35163"
+                                        >
+                                            <LabelList
+                                                className={styles.label}
+                                                dataKey="value"
+                                                position="insideRight"
+                                                formatter={value => format('.2s')(value)}
+                                            />
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className={styles.ageGroup}>
+                        <div className={_cs(styles.demographyContainer, styles.ageGroup)}>
                             <header className={styles.header}>
-                                <h2 className={styles.heading}>
+                                <h3 className={styles.heading}>
                                     Age Group
-                                </h2>
+                                </h3>
                             </header>
-                            <ResponsiveContainer
-                                className={styles.chart}
-                            >
-                                <BarChart
-                                    data={ageGroupSummary}
-                                    layout="vertical"
-                                >
-                                    <XAxis type="number" />
-                                    <YAxis
-                                        dataKey="label"
-                                        type="category"
-                                    />
-                                    <Bar
-                                        dataKey="male"
-                                        fill="#64b5f6"
-                                        stackId="a"
-                                    />
-                                    <Bar
-                                        dataKey="female"
-                                        fill="#f06292"
-                                        stackId="a"
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            <div className={styles.chartContainer}>
+                                <ResponsiveContainer>
+                                    <BarChart
+                                        margin={chartMargin}
+                                        data={ageGroupSummary}
+                                        layout="vertical"
+                                    >
+                                        <XAxis type="number" />
+                                        <YAxis
+                                            width={yAxisWidth}
+                                            dataKey="label"
+                                            type="category"
+                                        />
+                                        <Bar
+                                            dataKey="male"
+                                            fill="#64b5f6"
+                                            stackId="a"
+                                        />
+                                        <Bar
+                                            dataKey="female"
+                                            fill="#f06292"
+                                            stackId="a"
+                                        />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
                 )}
