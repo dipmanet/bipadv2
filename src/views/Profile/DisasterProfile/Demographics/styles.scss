@@ -1,40 +1,43 @@
-.main-container {
+.demographics {
     display: flex;
     flex-direction: column;
-    margin-left: var(--spacing-extra-large);
-    padding-top: var(--spacing-extra-large-alt);
-    padding-right: var(--spacing-large);
-    padding-left: var(--spacing-extra-large);
+    flex-grow: 1;
+    overflow: auto;
 
-    .data-block {
-        display:flex;
-        margin: var(--spacing-large) 0;
+    .item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
 
-        .left {
+        .info {
             display: flex;
-            flex-basis: 25%;
-            flex-direction: column;
             flex-shrink: 0;
+        }
 
-            .value {
-                color: var(--color-danger);
-                font-size: var(--font-size-jumbo-alt);
-                font-weight: var(--font-weight-bold);
+        .chart {
+            display: flex;
+            flex-grow: 1;
+            min-height: 20vh;
+
+            .label {
+                fill: var(--color-text);
+                font-size: var(--font-size-large);
             }
-        }
-
-        .title {
-            font-size: var(--font-size-extra-large-alt);
-            font-weight: var(--font-weight-bold);
-        }
-
-        .right {
-            display:flex;
-            flex-direction: column;
-            flex-grow:1;
-
         }
     }
 
-}
+    .age-group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
 
+        .chart {
+            display: flex;
+            min-height: 50vh;
+
+            .label {
+                font-size: var(--font-size-large);
+            }
+        }
+    }
+}
