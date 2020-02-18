@@ -1,5 +1,5 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, isDefined } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import Numeral from '#rscv/Numeral';
@@ -70,12 +70,16 @@ class LayerLegend extends React.PureComponent<Props> {
                 )}
                 { layer.type === 'choropleth' && (
                     <div className={styles.choroplethLegend}>
-                        { layer.minValue && (
-                            <div className={styles.min}>{ layer.minValue }</div>
+                        { isDefined(layer.minValue) && (
+                            <Numeral
+                                className={styles.min}
+                                normal
+                                value={layer.minValue}
+                                precision={1}
+                            />
                         )}
                         { Object.keys(layer.legend).map((color) => {
                             const value = layer.legend[color];
-
                             return (
                                 <div
                                     className={styles.legendElement}
