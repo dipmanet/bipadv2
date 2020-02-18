@@ -204,7 +204,7 @@ export default class RealTimeMap extends React.PureComponent {
     }
 
     earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
-        <div>
+        <div className={styles.tooltip}>
             <h3>
                 {address}
             </h3>
@@ -231,7 +231,7 @@ export default class RealTimeMap extends React.PureComponent {
     )
 
     fireTooltipRenderer = ({ brightness, confidence, eventOn, landCover }) => (
-        <div>
+        <div className={styles.tooltip}>
             <TextOutput
                 label="Brightness"
                 value={brightness}
@@ -260,42 +260,34 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
-    pollutionTooltipRenderer = (props) => {
-        const {
-            modifiedOn,
-            title,
-            aqi,
-            aqiColor,
-            observation,
-            tags,
-            description,
-        } = props;
-
-        return (
-            <div>
-                <h3>
-                    {title}
-                </h3>
-                <div className={styles.aqi}>
-                    <div>Air Quality Index </div>
-                    <div style={{ backgroundColor: `${aqiColor}` }}>{aqi}</div>
+    pollutionTooltipRenderer = ({ modifiedOn, title, aqi, aqiColor, description }) => (
+        <div className={styles.tooltip}>
+            <h3>
+                {title}
+            </h3>
+            <div className={styles.aqi}>
+                <div>
+                    Air Quality Index
                 </div>
-                <TextOutput
-                    label="Description"
-                    value={description}
-                />
-                <TextOutput
-                    label="Measured On"
-                    value={(
-                        <FormattedDate
-                            value={modifiedOn}
-                            mode="yyyy-MM-dd hh:mm"
-                        />
-                    )}
-                />
+                <div style={{ backgroundColor: `${aqiColor}` }}>
+                    {aqi}
+                </div>
             </div>
-        );
-    }
+            <TextOutput
+                label="Description"
+                value={description}
+            />
+            <TextOutput
+                label="Measured On"
+                value={(
+                    <FormattedDate
+                        value={modifiedOn}
+                        mode="yyyy-MM-dd hh:mm"
+                    />
+                )}
+            />
+        </div>
+    )
 
     render() {
         const {
