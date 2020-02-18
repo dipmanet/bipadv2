@@ -10,12 +10,12 @@
         display: flex;
         align-items: center;
         flex-shrink: 0;
+        justify-content: space-between;
 
-        .heading {
-            align-self: flex-start;
-            flex-grow: 1;
-            padding: var(--spacing-medium);
-            color: var(--color-primary);
+        .show-details-button {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
         }
     }
 
