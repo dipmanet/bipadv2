@@ -1,5 +1,9 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+import {
+    _cs,
+    doesObjectHaveNoData,
+} from '@togglecorp/fujs';
 import {
     ResponsiveContainer,
     BarChart,
@@ -10,9 +14,27 @@ import {
     Cell,
 } from 'recharts';
 import { format } from 'd3-format';
+import {
+    regionSelector,
+    regionNameSelector,
+    municipalitiesSelector,
+} from '#selectors';
+import {
+    AppState,
+} from '#store/types';
+import {
+    Region,
+    Municipality,
+} from '#store/atom/page/types';
 import ListView from '#rscv/List/ListView';
+
 import styles from './styles.scss';
 
+interface PropsFromState {
+    municipalities: Municipality[];
+    regionName: string;
+    region: Region;
+}
 interface AgeGroup {
     '75+': number;
     '00-04': number;
@@ -47,11 +69,12 @@ interface DemographicsData {
     };
 }
 
-interface Props {
+interface OwnProps {
     pending: boolean;
     className?: string;
     data?: DemographicsData[];
 }
+type Props = OwnProps & PropsFromState;
 type SummaryData = Omit<DemographicsData, 'id' | 'municipality'>;
 interface Attribute {
     key: string;
@@ -80,9 +103,35 @@ const SummaryValue = (props: { data: Attribute }) => {
 };
 
 const keySelector = (d: Attribute) => d.key;
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    municipalities: municipalitiesSelector(state),
+    region: regionSelector(state),
+    regionName: regionNameSelector(state),
+});
 class Demographics extends React.PureComponent<Props> {
-    private getPopulationData = (data: DemographicsData[]) => {
-        const demographics = data.reduce((acc, value, i) => {
+    private getPopulationData = (data: DemographicsData[], region: Region) => {
+        let filteredData = data;
+        if (!doesObjectHaveNoData(region)) {
+            const { adminLevel, geoarea } = region;
+            const { municipalities } = this.props;
+            let selectedMunicipalities: number[] = [];
+            if (adminLevel === 1) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.province === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 2) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.district === geoarea)
+                    .map(v => v.id);
+            } else if (adminLevel === 3) {
+                selectedMunicipalities = municipalities
+                    .filter(v => v.id === geoarea)
+                    .map(v => v.id);
+            }
+            filteredData = data.filter(d => selectedMunicipalities.includes(d.municipality));
+        }
+
+        const demographics = filteredData.reduce((acc, value, i) => {
             const {
                 totalPopulation = 0,
                 malePopulation = 0,
@@ -238,9 +287,11 @@ class Demographics extends React.PureComponent<Props> {
             pending,
             className,
             data = [],
+            regionName,
+            region,
         } = this.props;
 
-        const demographics = this.getPopulationData(data);
+        const demographics = this.getPopulationData(data, region);
         const populationSummary = this.getPopulationSummary(demographics);
         const sexRatio = populationSummary
             .filter(v => ['malePopulation', 'femalePopulation'].includes(v.key));
@@ -249,12 +300,13 @@ class Demographics extends React.PureComponent<Props> {
             .filter(v => ['maleLiteracyRate', 'femaleLiteracyRate'].includes(v.key));
         const householdSummary = this.getHouseholdSummary(demographics);
         const ageGroupSummary = this.getAgeGroupSummary(demographics);
+        const title = `Demographics of ${regionName}`;
 
         return (
             <div className={_cs(styles.demographics, className)}>
                 <header className={styles.header}>
                     <h2 className={styles.heading}>
-                        Demographics
+                        {title}
                     </h2>
                 </header>
                 { !pending && (
@@ -425,4 +477,4 @@ class Demographics extends React.PureComponent<Props> {
     }
 }
 
-export default Demographics;
+export default connect(mapStateToProps)(Demographics);

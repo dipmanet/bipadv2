@@ -1,5 +1,9 @@
 import { createSelector } from 'reselect';
-import { mapToList, listToMap } from '@togglecorp/fujs';
+import {
+    mapToList,
+    listToMap,
+    doesObjectHaveNoData,
+} from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
 import { AppState } from '../../types';
@@ -116,6 +120,35 @@ export const regionsSelector = createSelector(
         municipalities,
         wards,
     }),
+);
+
+export const regionNameSelector = createSelector(
+    regionSelector,
+    provincesMapSelector,
+    districtsMapSelector,
+    municipalitiesMapSelector,
+    (region, provinces, districts, municipalities) => {
+        if (doesObjectHaveNoData(region)) {
+            return 'Nepal';
+        }
+        const { adminLevel, geoarea } = region;
+        if (adminLevel === 1 && geoarea) {
+            return provinces[geoarea].title;
+        }
+        if (adminLevel === 2 && geoarea) {
+            const district = districts[geoarea];
+            const province = provinces[district.province];
+            return `${district.title}, ${province.title}`;
+        }
+        if (adminLevel === 3 && geoarea) {
+            const municipality = municipalities[geoarea];
+            const district = districts[municipality.district];
+            const province = provinces[district.province];
+            return `${municipality.title}, ${district.title}, ${province.title}`;
+        }
+
+        return '';
+    },
 );
 
 export const adminLevelListSelector = ({ page }: AppState) => page.adminLevelList;
