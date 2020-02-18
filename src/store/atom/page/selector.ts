@@ -476,7 +476,6 @@ export const boundsSelector = createSelector(
     districtsSelector,
     municipalitiesSelector,
     (regionFromProps, region, provinces, districts, municipalities) => {
-        console.warn('bounds changed');
         const { adminLevel, geoarea } = regionFromProps || region;
         const geoAreas = (
             (adminLevel === 1 && provinces)

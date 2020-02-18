@@ -92,7 +92,7 @@ export default class Timeline extends React.PureComponent {
         this.setPlacementForMapControls(rightPaneExpanded);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const {
             lossAndDamageList: oldLossAndDamageList,
             regionLevel: oldRegionLevel,

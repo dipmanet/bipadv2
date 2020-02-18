@@ -276,7 +276,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    public UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const {
             pending: oldPending,
         } = this.props;
