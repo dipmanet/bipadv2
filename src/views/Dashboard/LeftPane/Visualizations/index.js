@@ -25,24 +25,6 @@ const defaultProps = {
     alertList: [],
 };
 
-const barChartValueSelector = d => d.value;
-const barChartLabelSelector = d => d.label;
-
-const chartColorScheme = [
-    '#a6cee3',
-    '#1f78b4',
-    '#b2df8a',
-    '#33a02c',
-    '#fb9a99',
-    '#e31a1c',
-    '#fdbf6f',
-    '#ff7f00',
-    '#cab2d6',
-    '#6a3d9a',
-    '#ffff99',
-    '#b15928',
-];
-
 export default class Visualization extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -89,29 +71,28 @@ export default class Visualization extends React.PureComponent {
         const hazardSummary = this.getHazardSummary(alertList);
         const eventSummary = this.getEventSummary(alertList);
 
-        console.warn(alertList, hazardSummary, eventSummary);
-
         return (
             <div className={styles.visualizations}>
                 <div className={styles.alertSummary}>
                     <header className={styles.header}>
-                        <h2 className={styles.heading}>
+                        <h3 className={styles.heading}>
                             Alerts summary
-                        </h2>
+                        </h3>
                     </header>
                     <div className={styles.content}>
                         { hazardSummary.map(s => (
-                            <div>
-                                <div>
+                            <div className={styles.summaryItem}>
+                                <div className={styles.label}>
                                     { s.label }
                                 </div>
-                                <div>
+                                <div className={styles.value}>
                                     { s.value }
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+                {/*
                 <div
                     style={{
                         height: hazardSummary.length * 32,
@@ -146,6 +127,7 @@ export default class Visualization extends React.PureComponent {
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+                */}
             </div>
         );
     }

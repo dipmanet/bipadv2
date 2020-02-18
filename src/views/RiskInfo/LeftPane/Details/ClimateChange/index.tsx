@@ -163,14 +163,14 @@ const measurementOptions: {
         key: 'temperature',
         label: 'Temperature',
         axisLabel: 'Temperature (°C)',
-        legendTitle: 'Temperature Change (°C)',
+        legendTitle: 'Temperature (°C)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
     {
         key: 'precipitation',
         label: 'Precipitation',
         axisLabel: 'Precipitation (mm/year)',
-        legendTitle: 'Precipitation Change (mm/year)',
+        legendTitle: 'Precipitation (mm/year)',
         chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
     },
 ];
@@ -265,6 +265,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const metadata = measurementType === 'temperature' ? temperature.metadata : precipitation.metadata;
 
         return {
+            shortDescription: climateChange.shortDescription,
             longDescription: climateChange.longDescription,
             metadata,
         };
@@ -390,12 +391,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
             if (timePeriodKey === 'reference-period') {
                 return ({
                     id: district,
-                    value: mean(filteredItemList.map(v => v.value)),
+                    value: mean(filteredItemList.map(v => +v.value || 0)),
                 });
             }
 
-            const referenceAverage = mean(referenceItemList.map(v => v.value));
-            const filteredAverage = mean(filteredItemList.map(v => v.value));
+            const referenceAverage = mean(referenceItemList.map(v => +v.value || 0));
+            const filteredAverage = mean(filteredItemList.map(v => +v.value || 0));
 
             return ({
                 id: district,
@@ -436,9 +437,15 @@ class ClimateChange extends React.PureComponent<Props, State> {
             unitInPercent = selectedMeasurement.key === 'precipitation' && selectedTimePeriod.key !== 'reference-period';
         }
 
+        let isTemperatureChange = false;
+        if (selectedMeasurement && selectedTimePeriod) {
+            isTemperatureChange = selectedTimePeriod.key !== 'reference-period';
+        }
+
         const legendTitle = `
-            ${unitInPercent ? 'Precipitation change(%) / ' : ''}
-            ${(!unitInPercent && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
+            ${unitInPercent ? 'Precipitation change (%) / ' : ''}
+            ${isTemperatureChange ? 'Temperature change (°C) / ' : ''}
+            ${(!unitInPercent && !isTemperatureChange && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
              ${selectedTimePeriod ? selectedTimePeriod.label : ''}  
             [${selectedScenario ? selectedScenario.label : ''}]
         `;
@@ -459,6 +466,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             legendTitle,
             scenarioName,
             tooltipRenderer: ClimateChangeTooltip,
+            minValue: min,
         };
     };
 
@@ -510,6 +518,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
         const chartTitle = selectedOption && selectedOption.chartTitle;
 
+        const layer = this.getLayer(layerGroupList, measurementType);
+
         return (
             <>
                 <Loading pending={pending} />
@@ -529,9 +539,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         {!pending && isActive && (
                             <LayerDetailModalButton
                                 className={styles.showLayerDetailsButton}
-                                layer={this.getLayer(layerGroupList, measurementType)}
+                                layer={layer}
                             />
                         )}
+                    </div>
+                    <div className={styles.shortDescription}>
+                        { layer.shortDescription }
                     </div>
                     <div className={styles.top}>
                         <SegmentInput

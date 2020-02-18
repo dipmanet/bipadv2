@@ -793,7 +793,11 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
 
     if (maxValue <= 1 || gap < 1) {
         colorDomain.forEach((color, i) => {
-            const val = minValue + (i + 1) * gap;
+            const val = +(minValue + (i + 1) * gap).toFixed(1);
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === val) {
+                return;
+            }
             colors.push(color);
             colors.push(val);
             legend[color] = val;
@@ -801,6 +805,10 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
     } else {
         colorDomain.forEach((color, i) => {
             const val = Math.floor(minValue + (i + 1) * gap);
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === val) {
+                return;
+            }
             colors.push(color);
             colors.push(val);
             legend[color] = val;

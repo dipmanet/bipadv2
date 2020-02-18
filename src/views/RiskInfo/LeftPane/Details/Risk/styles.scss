@@ -17,12 +17,10 @@
 
     .description {
         padding: var(--spacing-extra-small) var(--spacing-medium);
+        text-align: justify;
+        white-space: pre-wrap;
         color: var(--color-text-light);
         font-size: var(--font-size-small-alt);
-
-        .metric {
-            padding: var(--spacing-extra-small-alt) var(--spacing-small);
-        }
     }
 
     .options {
