@@ -171,6 +171,11 @@ export const setIncidentActionIP = ({ incident }: { incident: Type.Incident }) =
     incident,
 });
 
+export const removeIncidentActionIP = ({ incidentId }: { incidentId: Type.Incident['id'] }) => ({
+    type: Type.PageType.IP__REMOVE_INCIDENT,
+    incidentId,
+});
+
 export const patchIncidentActionIP = ({ incident, incidentId }: {
     incident: Type.Incident;
     incidentId: number;
@@ -625,6 +630,31 @@ const setIncident = (state: Type.PageState, action: Type.SetIncident) => {
             incidentList.push(incident);
         }
         /* eslint-enable no-param-reassign */
+    });
+    return newState;
+};
+
+const removeIncident = (state: Type.PageState, action: Type.PatchIncident) => {
+    const {
+        incidentId,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        if (!deferedState.incidentPage) {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.incidentPage = initialState.incidentPage;
+        }
+
+        const {
+            incidentPage: {
+                incidentList,
+            },
+        } = deferedState;
+
+        const incidentIndex = incidentList.findIndex(d => d.id === incidentId);
+        if (incidentIndex !== -1) {
+            incidentList.splice(incidentIndex, 1);
+        }
     });
     return newState;
 };
@@ -1084,6 +1114,8 @@ export default function routeReducer(
             return setIncidentList(state, action);
         case Type.PageType.IP__SET_INCIDENT:
             return setIncident(state, action);
+        case Type.PageType.IP__REMOVE_INCIDENT:
+            return removeIncident(state, action);
         case Type.PageType.IP__PATCH_INCIDENT:
             return patchIncident(state, action);
         case Type.PageType.IP__SET_FILTERS:
