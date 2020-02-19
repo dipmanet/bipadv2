@@ -1,36 +1,24 @@
 import React from 'react';
-import { _cs, Obj } from '@togglecorp/fujs';
-import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 
+import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
-import DangerButton from '#rsca/Button/DangerButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-import LoadingAnimation from '#rscv/LoadingAnimation';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
-import ModalFooter from '#rscv/Modal/Footer';
 import ModalHeader from '#rscv/Modal/Header';
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
 
 import IncidentFeedbackAckFormModal from '#components/IncidentFeedbackAckFormModal';
 
-import * as PageType from '#store/atom/page/types';
-import { AppState } from '#store/types';
 import {
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-import {
-    hazardTypesSelector,
-} from '#selectors';
-
-import alertIcon from '#resources/icons/Alert.svg';
 
 import { MultiResponse } from '#store/atom/response/types';
 
@@ -56,6 +44,22 @@ interface IncidentFeedbackItemProps {
     data: IncidentFeedback;
 }
 
+const DetailItem = ({
+    className,
+    iconName,
+    value,
+}) => (
+    <div className={_cs(className, styles.detailItem)}>
+        <Icon
+            className={styles.icon}
+            name={iconName}
+        />
+        <div className={styles.value}>
+            { value }
+        </div>
+    </div>
+);
+
 const IncidentFeedbackItem = (props: IncidentFeedbackItemProps) => {
     const {
         className,
@@ -74,42 +78,61 @@ const IncidentFeedbackItem = (props: IncidentFeedbackItemProps) => {
 
     return (
         <div className={_cs(className, styles.incidentFeedback)}>
-            <div className={styles.name}>
-                {name}
+            <div className={styles.iconContainer}>
+                <Icon
+                    className={styles.icon}
+                    name="chatBox"
+                />
             </div>
-            <div className={styles.email}>
-                {email}
-            </div>
-            <div className={styles.mobileNumber}>
-                {mobileNumber}
-            </div>
-            <div className={styles.comment}>
-                {comment}
-            </div>
-            <FormattedDate
-                className={styles.createdOn}
-                value={createdOn}
-                mode="yyyy-MM-dd"
-            />
-            {acknowledged && (
-                <div className={styles.acknowledged}>
-                    Acknowledged
+            <div className={styles.detailContainer}>
+                <div className={styles.comment}>
+                    {comment}
                 </div>
-            )}
-            {!acknowledged && (
-                <ModalAccentButton
-                    className={styles.button}
-                    transparent
-                    modal={(
-                        <IncidentFeedbackAckFormModal
-                            // incidentId={incidentId}
-                            feedbackId={id}
-                        />
-                    )}
-                >
-                    Acknowledge
-                </ModalAccentButton>
-            )}
+                <div className={styles.details}>
+                    <DetailItem
+                        iconName="calendar"
+                        value={(
+                            <FormattedDate
+                                className={styles.createdOn}
+                                value={createdOn}
+                                mode="yyyy-MM-dd"
+                            />
+                        )}
+                    />
+                    <DetailItem
+                        iconName="user"
+                        value={name}
+                    />
+                    <DetailItem
+                        iconName="email"
+                        value={email}
+                    />
+                    <DetailItem
+                        iconName="telephone"
+                        value={mobileNumber}
+                    />
+                </div>
+                {acknowledged && (
+                    <div className={styles.acknowledgementStatus}>
+                        Acknowledged
+                    </div>
+                )}
+                {!acknowledged && (
+                    <ModalAccentButton
+                        className={styles.acknowledgeButton}
+                        transparent
+                        iconName="check"
+                        modal={(
+                            <IncidentFeedbackAckFormModal
+                                // incidentId={incidentId}
+                                feedbackId={id}
+                            />
+                        )}
+                    >
+                        Acknowledge
+                    </ModalAccentButton>
+                )}
+            </div>
         </div>
     );
 };
@@ -148,6 +171,7 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
     }
 
     private rendererParams = (key: number, data: IncidentFeedback) => ({
+        className: styles.incidentFeedbackItem,
         data,
     })
 
