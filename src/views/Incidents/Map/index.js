@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
+import { isDefined } from '@togglecorp/fujs';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
-import MapImage from '#re-map/MapImage';
 
 import CommonMap from '#components/CommonMap';
 import {
@@ -17,19 +17,31 @@ import {
     municipalitiesMapSelector,
     wardsMapSelector,
 } from '#selectors';
+
+import {
+    setIncidentActionIP,
+    patchIncidentActionIP,
+    removeIncidentActionIP,
+} from '#actionCreators';
+
 import { mapStyles } from '#constants';
 import IncidentInfo from '#components/IncidentInfo';
+import {
+    createRequestClient,
+    methods,
+} from '#request';
 import {
     getYesterday,
     framize,
     getImage,
-    getImageAsync,
 } from '#utils/common';
 
 import {
     incidentPointToGeojson,
     incidentPolygonToGeojson,
 } from '#utils/domain';
+
+import AddIncidentForm from '../LeftPane/AddIncidentForm';
 
 import styles from './styles.scss';
 
@@ -43,6 +55,12 @@ const propTypes = {
     provincesMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     districtsMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     municipalitiesMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    setIncident: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    removeIncident: PropTypes.func.isRequired,
+    patchIncident: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types, react/no-unused-prop-types
+    requests: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
@@ -61,6 +79,29 @@ const visibleLayout = {
 };
 const noneLayout = {
     visibility: 'none',
+};
+
+const mapDispatchToProps = dispatch => ({
+    patchIncident: params => dispatch(patchIncidentActionIP(params)),
+    setIncident: params => dispatch(setIncidentActionIP(params)),
+    removeIncident: params => dispatch(removeIncidentActionIP(params)),
+});
+
+const requestOptions = {
+    incidentDeleteRequest: {
+        url: ({ params: { incidentId } }) => `/incident/${incidentId}/`,
+        method: methods.DELETE,
+        onSuccess: ({
+            props: { removeIncident },
+            params: {
+                incidentId,
+                onIncidentRemove,
+            },
+        }) => {
+            removeIncident({ incidentId });
+            onIncidentRemove();
+        },
+    },
 };
 
 class IncidentMap extends React.PureComponent {
@@ -118,6 +159,43 @@ class IncidentMap extends React.PureComponent {
         });
     }
 
+    handleEditIncidentClick = () => {
+        this.setState({ showEditIncidentModal: true });
+    }
+
+    handleCloseEditModal = () => {
+        this.setState({ showEditIncidentModal: false });
+    }
+
+    handleIncidentEdit = (incident) => {
+        const { setIncident } = this.props;
+
+        if (isDefined(incident)) {
+            setIncident({ incident });
+        }
+    }
+
+    handleLossEdit = (loss, incident) => {
+        const { patchIncident } = this.props;
+
+        patchIncident({
+            incident: {
+                loss,
+            },
+            incidentId: incident.id,
+        });
+    }
+
+    handleIncidentDelete = () => {
+        const { incident: { id: incidentId } } = this.state;
+        const { requests: { incidentDeleteRequest } } = this.props;
+
+        incidentDeleteRequest.do({
+            incidentId,
+            onIncidentRemove: this.handleIncidentClose,
+        });
+    }
+
     mapImageRendererParams = (_, hazard) => {
         const image = getImage(hazard.icon)
             .setAttribute('crossOrigin', '');
@@ -136,6 +214,11 @@ class IncidentMap extends React.PureComponent {
             districtsMap,
             municipalitiesMap,
             isHovered,
+            requests: {
+                incidentDeleteRequest: {
+                    pending: incidentDeletePending,
+                },
+            },
         } = this.props;
 
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
@@ -143,16 +226,21 @@ class IncidentMap extends React.PureComponent {
 
         const recentTimestamp = getYesterday(recentDay);
         const filter = this.getFilter(recentTimestamp);
+
         const {
             incident,
             incidentLngLat,
+            showEditIncidentModal,
         } = this.state;
 
         const tooltipOptions = {
             closeOnClick: true,
-            closeButton: true,
+            closeButton: false,
             offset: 8,
         };
+
+        const lossServerId = incident && incident.loss && incident.loss.id;
+        const incidentServerId = incident && incident.id;
 
         return (
             <React.Fragment>
@@ -226,6 +314,9 @@ class IncidentMap extends React.PureComponent {
                                 districtsMap={districtsMap}
                                 municipalitiesMap={municipalitiesMap}
                                 className={styles.incidentInfo}
+                                onEditIncident={this.handleEditIncidentClick}
+                                onDeleteIncident={this.handleIncidentDelete}
+                                incidentDeletePending={incidentDeletePending}
                             />
                         </MapTooltip>
                     )}
@@ -234,9 +325,21 @@ class IncidentMap extends React.PureComponent {
                         attributeKey="hover"
                     />
                 </MapSource>
+                {showEditIncidentModal && (
+                    <AddIncidentForm
+                        lossServerId={lossServerId}
+                        incidentServerId={incidentServerId}
+                        incidentDetails={incident}
+                        onIncidentChange={this.handleIncidentEdit}
+                        onLossChange={this.handleLossEdit}
+                        closeModal={this.handleCloseEditModal}
+                    />
+                )}
             </React.Fragment>
         );
     }
 }
 
-export default connect(mapStateToProps)(IncidentMap);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createRequestClient(requestOptions)(IncidentMap),
+);

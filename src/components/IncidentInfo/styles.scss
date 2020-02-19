@@ -18,14 +18,29 @@
     }
 
     .actions {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
 
-        .goto-response-link {
-            display: block;
-            padding: var(--spacing-small) var(--spacing-medium);
-            text-transform: uppercase;
-            color: var(--color-primary);
-            font-weight: var(--font-weight-bold);
+        .left {
+            flex-grow: 1;
+
+            .goto-response-link {
+                display: block;
+                padding: var(--spacing-small) var(--spacing-medium);
+                text-transform: uppercase;
+                color: var(--color-accent);
+                font-weight: var(--font-weight-bold);
+            }
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+
+            .button {
+                flex-shrink: 0;
+            }
         }
     }
 
