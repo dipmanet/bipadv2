@@ -1,6 +1,4 @@
 import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { extent } from 'd3-array';
 import memoize from 'memoize-one';
 import { _cs, mean, listToMap } from '@togglecorp/fujs';
@@ -21,24 +19,16 @@ import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
 import {
-    getResponse,
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
 
-import { AppState } from '#store/types';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
 import Icon from '#rscg/Icon';
 
 import { generatePaint } from '#utils/domain';
 
-import {
-    Province,
-    District,
-    Municipality,
-    Ward,
-} from '#store/atom/page/types';
 import {
     NapData,
     NapValue,
@@ -53,13 +43,6 @@ import {
 } from '#request';
 
 import Loading from '#components/Loading';
-
-import {
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    wardsSelector,
-} from '#selectors';
 
 import styles from './styles.scss';
 
@@ -84,7 +67,10 @@ const rainColors: string[] = [
 ];
 
 const ClimateChangeTooltip = ({ feature, layer }: { feature: unknown; layer: unknown }) => {
-    const { properties: { title }, state: { value } } = feature;
+    const {
+        properties: { title },
+        state: { value },
+    } = feature;
 
     if (value) {
         const valueText = `${layer.scenarioName}: ${Number(value).toFixed(2)}`;
@@ -108,21 +94,10 @@ interface OwnProps {
     className?: string;
 }
 
-interface PropsFromState {
-    provinces: Province[];
-    districts: District[];
-    municipalities: Municipality[];
-    ward: Ward[];
-}
-
-interface PropsFromDispatch {
-}
-
 interface Params {
 }
 
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
-type Props = NewProps<ReduxProps, Params>;
+type Props = NewProps<OwnProps, Params>;
 
 type MeasurementType = 'temperature' | 'precipitation';
 
@@ -144,13 +119,6 @@ interface MapState {
     id: number;
     value: number;
 }
-
-const mapStateToProps = (state: AppState) => ({
-    provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
-    wards: wardsSelector(state),
-});
 
 const measurementOptions: {
     key: MeasurementType;
@@ -186,7 +154,7 @@ const scenarioOptions: Scenario[] = [
     { key: 'rcp85', label: 'RCP 8.5' },
 ];
 
-const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     napTemperatureGetRequest: {
         url: '/nap-temperature/',
         method: methods.GET,
@@ -702,7 +670,4 @@ class ClimateChange extends React.PureComponent<Props, State> {
 }
 
 ClimateChange.contextType = RiskInfoLayerContext;
-export default compose(
-    connect(mapStateToProps),
-    createRequestClient(requestOptions),
-)(ClimateChange);
+export default createRequestClient(requestOptions)(ClimateChange);

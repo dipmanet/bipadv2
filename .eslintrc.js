@@ -9,10 +9,10 @@ module.exports = {
         'jest': true,
     },
     'plugins': [
-        'react',
         'import',
         'css-modules',
         '@typescript-eslint',
+        'react',
         'react-hooks',
     ],
     'settings': {

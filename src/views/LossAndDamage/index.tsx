@@ -177,6 +177,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <FormattedDate
                                         className={styles.dateFrom}
                                         value={minDate}
+                                        mode="yyyy-MM-dd"
                                     />
                                     <div className={styles.label}>
                                         to
@@ -184,6 +185,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     <FormattedDate
                                         className={styles.dateTo}
                                         value={new Date()}
+                                        mode="yyyy-MM-dd"
                                     />
                                 </div>
                                 <div className={styles.sourceDetails}>

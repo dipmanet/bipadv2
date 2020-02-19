@@ -38,7 +38,6 @@ export default class IncidentListView extends React.PureComponent {
     getIncidentRendererParams = (_, d) => {
         const {
             hazardTypes,
-            recentTypes,
             recentDay,
             onIncidentHover,
             hoveredIncidentId,

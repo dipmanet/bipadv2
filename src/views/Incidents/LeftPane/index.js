@@ -181,7 +181,8 @@ class LeftPane extends React.PureComponent {
                             <Cloak hiddenIf={p => !p.change_incident}>
                                 <AccentModalButton
                                     className={styles.addIncidentButton}
-                                    title="Add"
+                                    iconName="add"
+                                    title="Add new incident"
                                     transparent
                                     modal={(
                                         <AddIncidentForm

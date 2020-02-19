@@ -26,13 +26,13 @@ export const metricMap = listToMap(
     }),
 );
 
-export const getProvince = val => val.province;
-export const getDistrict = val => val.district;
-export const getMunicipality = val => val.municipality;
-export const getWard = val => val.ward;
+const getProvince = val => val.province;
+const getDistrict = val => val.district;
+const getMunicipality = val => val.municipality;
+const getWard = val => val.ward;
 
 // Get all information using ward
-export const getRegionInfoFromWard = (wardId, regions) => {
+const getRegionInfoFromWard = (wardId, regions) => {
     const {
         wards: wardMap,
         municipalities: municipalityMap,
@@ -42,14 +42,48 @@ export const getRegionInfoFromWard = (wardId, regions) => {
 
     const ward = wardMap[wardId];
 
+    if (!ward) {
+        return {};
+    }
+
     const municipalityId = ward.municipality;
     const municipality = municipalityMap[municipalityId];
+
+    if (!municipality) {
+        return {
+            ward: wardId,
+
+            wardTitle: ward.title,
+        };
+    }
 
     const districtId = municipality.district;
     const district = districtMap[districtId];
 
+    if (!district) {
+        return {
+            ward: wardId,
+            municipality: municipalityId,
+
+            wardTitle: ward.title,
+            municipalityTitle: municipality.title,
+        };
+    }
+
     const provinceId = district.province;
     const province = provinceMap[provinceId];
+
+    if (!province) {
+        return {
+            ward: wardId,
+            municipality: municipalityId,
+            district: districtId,
+
+            wardTitle: ward.title,
+            municipalityTitle: municipality.title,
+            districtTitle: district.title,
+        };
+    }
 
     return {
         ward: wardId,
@@ -143,7 +177,7 @@ export const getGroupMethod = (regionLevel) => {
     return getProvince;
 };
 
-export const getStat = ({ key, value }) => ({
+const getStat = ({ key, value }) => ({
     key,
     count: value.length,
     estimatedLoss: sum(

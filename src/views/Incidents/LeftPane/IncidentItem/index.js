@@ -18,6 +18,8 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
+import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
+import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
 
 import { getYesterday } from '#utils/common';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
@@ -214,6 +216,7 @@ class IncidentItem extends React.PureComponent {
             provinceTitle,
             districtTitle,
             municipalityTitle,
+            unacknowledgedFeedbackCount,
         } = data;
 
         const isNew = this.isRecent(incidentOn, recentDay);
@@ -247,11 +250,56 @@ class IncidentItem extends React.PureComponent {
                             { title }
                         </h3>
                         <DateOutput
-                            hideIcon
                             className={styles.date}
                             value={incidentOn}
                         />
                     </header>
+                    <div className={styles.adminActions}>
+                        <Cloak hiddenIf={p => !p.can_edit_incident_feedback}>
+                            <ModalAccentButton
+                                className={styles.button}
+                                transparent
+                                iconName="chatBoxes"
+                                modal={(
+                                    <IncidentFeedbacksModal
+                                        incidentId={incidentId}
+                                    />
+                                )}
+                            >
+                                {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
+                            </ModalAccentButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.change_incident}>
+                            <ModalAccentButton
+                                className={styles.button}
+                                transparent
+                                iconName="edit"
+                                modal={(
+                                    <AddIncidentForm
+                                        lossServerId={lossServerId}
+                                        incidentServerId={incidentServerId}
+                                        incidentDetails={data}
+                                        onIncidentChange={this.handleIncidentEdit}
+                                        onLossChange={this.handleLossEdit}
+                                    />
+                                )}
+                            >
+                                Edit
+                            </ModalAccentButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.change_incident}>
+                            <DangerConfirmButton
+                                iconName="delete"
+                                className={styles.button}
+                                confirmationMessage="Are you sure you want to delete this incident?"
+                                onClick={this.handleIncidentDelete}
+                                pending={incidentDeletePending}
+                                transparent
+                            >
+                                Delete
+                            </DangerConfirmButton>
+                        </Cloak>
+                    </div>
                     <div className={styles.content}>
                         <LocationOutput
                             provinceTitle={provinceTitle}
@@ -275,43 +323,25 @@ class IncidentItem extends React.PureComponent {
                             />
                         </div>
                     </div>
-                    <div className={styles.actions}>
-                        <div className={styles.leftActions}>
-                            <Link
-                                className={styles.link}
-                                to={reverseRoute('incidents/:incidentId/response', { incidentId })}
-                            >
-                                Go to response
-                            </Link>
-                        </div>
-                        <Cloak hiddenIf={p => !p.change_incident}>
-                            <div className={styles.rightActions}>
-                                <ModalAccentButton
-                                    className={styles.button}
-                                    transparent
-                                    modal={(
-                                        <AddIncidentForm
-                                            lossServerId={lossServerId}
-                                            incidentServerId={incidentServerId}
-                                            incidentDetails={data}
-                                            onIncidentChange={this.handleIncidentEdit}
-                                            onLossChange={this.handleLossEdit}
-                                        />
-                                    )}
-                                >
-                                    Edit
-                                </ModalAccentButton>
-                                <DangerConfirmButton
-                                    className={styles.button}
-                                    confirmationMessage="Are you sure you want to delete this incident?"
-                                    onClick={this.handleIncidentDelete}
-                                    pending={incidentDeletePending}
-                                    transparent
-                                >
-                                    Delete
-                                </DangerConfirmButton>
-                            </div>
-                        </Cloak>
+                    <div className={styles.publicActions}>
+                        <Link
+                            className={styles.link}
+                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
+                        >
+                            Go to response
+                        </Link>
+                        <ModalAccentButton
+                            className={styles.button}
+                            transparent
+                            iconName="chatBox"
+                            modal={(
+                                <IncidentFeedbackFormModal
+                                    incidentId={incidentId}
+                                />
+                            )}
+                        >
+                            Leave Feedback
+                        </ModalAccentButton>
                     </div>
                 </div>
             </div>

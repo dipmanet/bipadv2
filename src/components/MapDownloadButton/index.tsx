@@ -19,7 +19,6 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
-    wardsSelector,
     regionSelector,
 } from '#selectors';
 
@@ -37,7 +36,6 @@ interface State {
 
 interface PropsFromAppState {
     region: Region;
-    wards: Ward[];
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
@@ -55,7 +53,6 @@ const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     region: regionSelector(state),
-    wards: wardsSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),

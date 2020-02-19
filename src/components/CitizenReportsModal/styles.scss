@@ -1,0 +1,47 @@
+.citizen-reports-modal {
+    width: 80vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .citizen-report-list {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
+
+.citizen-report {
+    display: flex;
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
+
+    .icon-container {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+
+        .hazard-icon {
+            width: 32px;
+            height: 32px;
+
+            path {
+                fill: currentColor;
+            }
+        }
+    }
+
+    .details {
+        .created-on {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
+
+        .description {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background);
+    }
+}

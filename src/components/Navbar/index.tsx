@@ -22,6 +22,7 @@ import {
     methods,
 } from '#request';
 import CitizenReportFormModal from '#components/CitizenReportFormModal';
+import CitizenReportsModal from '#components/CitizenReportsModal';
 import LoginModal from '#components/LoginModal';
 import AboutModal from '#components/AboutModal';
 
@@ -151,19 +152,21 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="About Us"
-                        iconName="aboutUs"
-                        modal={<AboutModal />}
-                    />
+                    {authenticated && (
+                        <ModalButton
+                            className={styles.reportIncidentButton}
+                            title="Reported incidents"
+                            iconName="list"
+                            modal={<CitizenReportsModal />}
+                        />
+                    )}
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="Report an incident"
                         iconName="telephone"
                         modal={<CitizenReportFormModal />}
                     />
-                    { !authenticated && (
+                    {!authenticated && (
                         <ModalButton
                             className={styles.menuItem}
                             title="Login"
@@ -171,14 +174,20 @@ class Navbar extends React.PureComponent<Props, State> {
                             modal={<LoginModal />}
                         />
                     )}
-                    { user && (
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="About Us"
+                        iconName="aboutUs"
+                        modal={<AboutModal />}
+                    />
+                    {user && (
                         <Icon
                             className={styles.userIcon}
                             title={`${user.username}`}
                             name="user"
                         />
                     )}
-                    { authenticated && (
+                    {authenticated && (
                         <MenuItemLikeButton
                             className={styles.logoutButton}
                             title="Logout"

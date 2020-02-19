@@ -98,6 +98,9 @@ export interface Incident {
     polygon?: unknown;
     loss: Loss;
     incidentOn: string;
+
+    unacknowledgedFeedbackCount?: number;
+    totalFeedbackCount?: number;
 }
 
 export interface Resource extends Field {

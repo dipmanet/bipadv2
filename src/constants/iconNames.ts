@@ -80,6 +80,9 @@ const iconNames = {
 
     externalLink: 'ion-android-exit',
     link: 'ion-link',
+    chatBoxes: 'ion-chatboxes',
+    chatBox: 'ion-chatbox',
+    edit: 'ion-compose',
 };
 
 export default iconNames;

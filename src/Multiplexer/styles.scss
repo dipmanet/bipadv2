@@ -6,6 +6,11 @@
 
     button {
         outline: none;
+        filter: saturate(10%);
+
+        &:hover {
+            filter: saturate(100%);
+        }
     }
 
     .navbar {
@@ -171,6 +176,10 @@
         .modal-footer {
             border-top: none;
         }
+    }
+
+    .input-label {
+        font-size: var(--font-size-extra-small-alt);
     }
 }
 

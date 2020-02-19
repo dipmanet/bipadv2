@@ -78,39 +78,35 @@
                 }
             }
 
-            .source,
-            .status {
-                padding: var(--spacing-extra-small) var(--spacing-medium);
-            }
-
             .output-group {
                 display: flex;
+                flex-wrap: wrap;
+
+                .source,
+                .status,
+                {
+                    padding: var(--spacing-extra-small) var(--spacing-medium);
+                }
             }
         }
 
-        .actions {
-            display: flex;
-            align-items: center;
-
-            .left-actions {
-                flex-grow: 1;
-            }
-
-            .right-actions {
-                flex-shrink: 0;
-            }
-
+        .admin-actions,
+        .public-actions {
             .button {
-                padding: var(--spacing-medium);
+                padding: var(--spacing-small) var(--spacing-medium);
                 font-size: var(--font-size-medium);
             }
 
             .link {
-                padding: var(--spacing-medium);
+                padding: var(--spacing-small) var(--spacing-medium);
                 text-transform: uppercase;
                 color: var(--color-accent);
                 font-weight: var(--font-weight-bold);
             }
+        }
+
+        .public-actions {
+            padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
         }
     }
 }
