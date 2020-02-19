@@ -18,6 +18,8 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import DateOutput from '#components/DateOutput';
+import IncidentFeedbacksModal from '#components/IncidentFeedbacksModal';
+import IncidentFeedbackFormModal from '#components/IncidentFeedbackFormModal';
 
 import { getYesterday } from '#utils/common';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
@@ -214,6 +216,7 @@ class IncidentItem extends React.PureComponent {
             provinceTitle,
             districtTitle,
             municipalityTitle,
+            unacknowledgedFeedbackCount,
         } = data;
 
         const isNew = this.isRecent(incidentOn, recentDay);
@@ -247,7 +250,6 @@ class IncidentItem extends React.PureComponent {
                             { title }
                         </h3>
                         <DateOutput
-                            hideIcon
                             className={styles.date}
                             value={incidentOn}
                         />
@@ -283,9 +285,33 @@ class IncidentItem extends React.PureComponent {
                             >
                                 Go to response
                             </Link>
+                            <ModalAccentButton
+                                className={styles.button}
+                                transparent
+                                modal={(
+                                    <IncidentFeedbackFormModal
+                                        incidentId={incidentId}
+                                    />
+                                )}
+                            >
+                                Leave Feedback
+                            </ModalAccentButton>
                         </div>
-                        <Cloak hiddenIf={p => !p.change_incident}>
-                            <div className={styles.rightActions}>
+                        <div className={styles.rightActions}>
+                            <Cloak hiddenIf={p => !p.can_edit_incident_feedback}>
+                                <ModalAccentButton
+                                    className={styles.button}
+                                    transparent
+                                    modal={(
+                                        <IncidentFeedbacksModal
+                                            incidentId={incidentId}
+                                        />
+                                    )}
+                                >
+                                    {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
+                                </ModalAccentButton>
+                            </Cloak>
+                            <Cloak hiddenIf={p => !p.change_incident}>
                                 <ModalAccentButton
                                     className={styles.button}
                                     transparent
@@ -301,6 +327,8 @@ class IncidentItem extends React.PureComponent {
                                 >
                                     Edit
                                 </ModalAccentButton>
+                            </Cloak>
+                            <Cloak hiddenIf={p => !p.change_incident}>
                                 <DangerConfirmButton
                                     className={styles.button}
                                     confirmationMessage="Are you sure you want to delete this incident?"
@@ -310,8 +338,8 @@ class IncidentItem extends React.PureComponent {
                                 >
                                     Delete
                                 </DangerConfirmButton>
-                            </div>
-                        </Cloak>
+                            </Cloak>
+                        </div>
                     </div>
                 </div>
             </div>

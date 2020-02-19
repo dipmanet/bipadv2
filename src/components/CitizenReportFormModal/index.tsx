@@ -17,11 +17,15 @@ import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import ReCaptcha from '#rsci/ReCaptcha';
 
+
+import {
+    HazardType,
+} from '#store/atom/page/types';
+
 import {
     BasicElement,
     EventElement,
     SourceElement,
-    HazardElement,
     AppState,
 } from '#types';
 
@@ -55,15 +59,29 @@ interface ComponentProps {
 interface PropsFromAppState {
     eventList: EventElement[];
     sourceList: SourceElement[];
-    hazardList: HazardElement[];
+    hazardList: HazardType[];
+}
+
+interface FaramValues {
+    description?: string;
+    hazard?: number;
+    incidentOnDate?: string;
+    incidentOnTime?: string;
+    streetAddress?: string;
+    location?: {
+        wards: number[];
+        geoJson: object;
+    };
+    recaptcha?: number;
 }
 
 interface State {
-    faramValues: object;
+    faramValues: FaramValues;
     faramErrors: object;
 }
 
 interface Params {
+    body?: object;
 }
 
 type PropsWithRedux = ComponentProps & PropsFromAppState;
@@ -98,7 +116,7 @@ const schema = {
 const keySelector = (d: BasicElement) => d.id;
 const labelSelector = (d: BasicElement) => d.title;
 
-const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> } = {
     citizenReportPostRequest: {
         url: '/citizen-report/',
         method: methods.POST,
@@ -124,11 +142,11 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
         this.setState({ faramErrors });
     }
 
-    private handleFaramChange = (faramValues: object, faramErrors: object) => {
+    private handleFaramChange = (faramValues: FaramValues, faramErrors: object) => {
         this.setState({ faramValues, faramErrors });
     }
 
-    private handleFaramValidationSuccess = (faramValues: object) => {
+    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
             requests: {
                 citizenReportPostRequest,
@@ -147,10 +165,11 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
 
         const body = {
             hazard,
-            point,
-            ward: wards[0],
             description,
             recaptcha,
+
+            point,
+            ward: wards[0],
         };
 
         citizenReportPostRequest.do({ body });

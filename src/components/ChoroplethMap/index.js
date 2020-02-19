@@ -13,8 +13,6 @@ import MapTooltip from '#re-map/MapTooltip';
 import { mapSources, mapStyles } from '#constants';
 
 import {
-    regionLabelToGeojson,
-
     getWardFilter,
     getMunicipalityFilter,
     getDistrictFilter,
@@ -22,7 +20,7 @@ import {
 } from '#utils/domain';
 
 import {
-    provincesSelector,
+    // provincesSelector,
     municipalitiesSelector,
     districtsSelector,
     wardsSelector,
@@ -35,12 +33,11 @@ import {
 } from '#selectors';
 
 const propTypes = {
-    boundsPadding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     regionLevelFromAppState: PropTypes.number,
     regionLevel: PropTypes.number,
 
     // eslint-disable-next-line react/forbid-prop-types
-    provinces: PropTypes.array.isRequired,
+    // provinces: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     districts: PropTypes.array.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
@@ -63,7 +60,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-    boundsPadding: undefined,
     regionLevelFromAppState: undefined,
     regionLevel: undefined,
     selectedProvinceId: undefined,
@@ -75,7 +71,7 @@ const defaultProps = {
 };
 
 const mapStateToProps = (state, props) => ({
-    provinces: provincesSelector(state),
+    // provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
@@ -108,14 +104,6 @@ class ChoroplethMap extends React.PureComponent {
 
     static defaultProps = defaultProps;
 
-    getProvincesFeatureCollection = memoize(regionLabelToGeojson);
-
-    getDistrictsFeatureCollection = memoize(regionLabelToGeojson);
-
-    getMunicipalitiesFeatureCollection = memoize(regionLabelToGeojson);
-
-    getWardsFeatureCollection = memoize(regionLabelToGeojson);
-
     getWardFilter = memoize(getWardFilter);
 
     getMunicipalityFilter = memoize(getMunicipalityFilter);
@@ -140,9 +128,8 @@ class ChoroplethMap extends React.PureComponent {
 
     render() {
         const {
-            boundsPadding,
             bounds,
-            provinces,
+            // provinces,
             districts,
             municipalities,
             wards,
@@ -192,11 +179,6 @@ class ChoroplethMap extends React.PureComponent {
         const districtMapState = showDistrictFill ? mapState : undefined;
         const municipalityMapState = showMunicipalityFill ? mapState : undefined;
         const wardMapState = showWardFill ? mapState : undefined;
-
-        const provinceLabels = this.getProvincesFeatureCollection(provinces);
-        const districtLabels = this.getDistrictsFeatureCollection(districts);
-        const municipalityLabels = this.getMunicipalitiesFeatureCollection(municipalities);
-        const wardLabels = this.getWardsFeatureCollection(wards);
 
         const {
             ward,
@@ -279,6 +261,49 @@ class ChoroplethMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
+
+                    <MapLayer
+                        layerKey="province-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.provinceLabel,
+                            type: 'symbol',
+                            paint: mapStyles.provinceLabel.paint,
+                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
+                            filter: provinceFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="district-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.districtLabel,
+                            type: 'symbol',
+                            paint: mapStyles.districtLabel.paint,
+                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
+                            filter: districtFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="municipality-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.municipalityLabel,
+                            type: 'symbol',
+                            paint: mapStyles.municipalityLabel.paint,
+                            layout: showMunicipalityLabel
+                                ? mapStyles.municipalityLabel.layout : noneLayout,
+                            filter: municipalityFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="ward-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.wardLabel,
+                            type: 'symbol',
+                            paint: mapStyles.wardLabel.paint,
+                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
+                            filter: wardFilter,
+                        }}
+                    />
+
                     {TooltipRenderer && hoverLngLat && (
                         <MapTooltip
                             coordinates={hoverLngLat}
@@ -310,119 +335,6 @@ class ChoroplethMap extends React.PureComponent {
                         attributes={provinceMapState}
                         attributeKey="value"
                         sourceLayer={province}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-outlines`}
-                    sourceOptions={{
-                        type: 'vector',
-                        url: mapSources.nepal.url,
-                    }}
-                >
-                    <MapLayer
-                        layerKey="ward-outline"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.ward,
-                            type: 'line',
-                            paint: mapStyles.ward.outline,
-                            layout: showWard ? visibleLayout : noneLayout,
-                            filter: wardFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="municipality-outline"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.municipality,
-                            type: 'line',
-                            paint: mapStyles.municipality.outline,
-                            layout: showMunicipality ? visibleLayout : noneLayout,
-                            filter: municipalityFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="district-outline"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.district,
-                            type: 'line',
-                            paint: mapStyles.district.outline,
-                            layout: showDistrict ? visibleLayout : noneLayout,
-                            filter: districtFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="province-outline"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.province,
-                            type: 'line',
-                            paint: mapStyles.province.outline,
-                            layout: showProvince ? visibleLayout : noneLayout,
-                            filter: provinceFilter,
-                        }}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-province-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={provinceLabels}
-                >
-                    <MapLayer
-                        layerKey="province-label"
-                        layerOptions={{
-                            type: 'symbol',
-                            property: 'adminLevelId',
-                            paint: mapStyles.provinceLabel.paint,
-                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
-                            filter: provinceFilter,
-                        }}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-municipality-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={municipalityLabels}
-                >
-                    <MapLayer
-                        layerKey="municipality-label"
-                        layerOptions={{
-                            type: 'symbol',
-                            property: 'adminLevelId',
-                            paint: mapStyles.municipalityLabel.paint,
-                            layout: showMunicipalityLabel
-                                ? mapStyles.municipalityLabel.layout : noneLayout,
-                            filter: municipalityFilter,
-                        }}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-district-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={districtLabels}
-                >
-                    <MapLayer
-                        layerKey="district-label"
-                        layerOptions={{
-                            type: 'symbol',
-                            property: 'adminLevelId',
-                            paint: mapStyles.districtLabel.paint,
-                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
-                            filter: districtFilter,
-                        }}
-                    />
-                </MapSource>
-                <MapSource
-                    sourceKey={`${sourceKey}-ward-label`}
-                    sourceOptions={{ type: 'geojson' }}
-                    geoJson={wardLabels}
-                >
-                    <MapLayer
-                        layerKey="ward-label"
-                        layerOptions={{
-                            type: 'symbol',
-                            property: 'adminLevelId',
-                            paint: mapStyles.wardLabel.paint,
-                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
-                            filter: wardFilter,
-                        }}
                     />
                 </MapSource>
             </Fragment>

@@ -1,0 +1,41 @@
+.incident-feebacks-modal {
+    width: 80vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .incident-feedback-list {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
+
+.incident-feedback {
+    display: flex;
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
+    flex-direction: column;
+
+    .name {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+    .email {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+    .mobile-number {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+    .comment {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+    .created-on {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+
+    &:hover {
+        background-color: var(--color-background);
+    }
+}

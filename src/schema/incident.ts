@@ -179,6 +179,8 @@ const schemaList: Schema[] = [
             updatedBy: { type: 'number' },
             verified: { type: 'boolean' },
             wards: { type: 'array.unknown' }, // FIXME: why is this sent
+            unacknowledgedFeedbackCount: { type: 'uint' },
+            totalFeedbackCount: { type: 'uint' },
         },
     },
     {
