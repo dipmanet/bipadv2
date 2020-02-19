@@ -54,12 +54,17 @@
         .toggle-left-container-visibility-button {
             position: fixed;
             top: 50%;
-            right: 0;
+            left: var(--width-left-panel);
+            transform: translateY(-100%);
+            transition: .3s left ease-in-out;
             z-index: 1111;
-            border: 1px solid red;
+            border: var(--width-separator-thin) solid var(--color-separator);
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
             background-color: var(--color-foreground);
             cursor: pointer;
-            padding: var(--spacing-medium);
+            padding: var(--spacing-medium) var(--spacing-small);
+            font-size: var(--font-size-large);
         }
 
         .main {
@@ -67,6 +72,13 @@
             position: relative;
             flex-direction: column;
             flex-grow: 1;
+
+            .main-content-container {
+                position: absolute;
+                bottom: var(--spacing-medium);
+                left: var(--spacing-medium);
+                z-index: 11;
+            }
 
             .map-actions {
                 display: flex;
@@ -133,6 +145,14 @@
             }
         }
 
+    }
+
+    &.left-container-hidden {
+        .content {
+            .toggle-left-container-visibility-button {
+                left: 0;
+            }
+        }
     }
 }
 

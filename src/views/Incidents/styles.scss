@@ -10,9 +10,6 @@
 
 .legend-container {
     display: flex;
-    bottom: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium));
-    transform: none;
     border: var(--width-separator-thin) solid var(--color-separator);
     height: 117px;
 
@@ -72,11 +69,4 @@
             }
         }
     }
-}
-
-.map-download-button {
-    position: absolute;
-    top: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
-    z-index: 11;
 }

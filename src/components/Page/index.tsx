@@ -79,6 +79,7 @@ export default class Page extends React.PureComponent<Props, State> {
             setLeftContent,
             setRightContent,
             setFilterContent,
+            setMainContent,
         } = context;
 
         const {
@@ -86,6 +87,8 @@ export default class Page extends React.PureComponent<Props, State> {
             leftContentContainerClassName,
             rightContent = null,
             rightContentContainerClassName,
+            mainContent = null,
+            mainContentContainerClassName,
             extraFilterContent = null,
             extraFilterContentContainerClassName,
         } = props;
@@ -98,6 +101,10 @@ export default class Page extends React.PureComponent<Props, State> {
             setRightContent(rightContent, rightContentContainerClassName);
         }
 
+        if (setMainContent) {
+            setMainContent(mainContent, mainContentContainerClassName);
+        }
+
         if (setFilterContent) {
             setFilterContent(extraFilterContent, extraFilterContentContainerClassName);
         }
@@ -105,19 +112,6 @@ export default class Page extends React.PureComponent<Props, State> {
 
 
     public render() {
-        const {
-            mainContent,
-            mainContentContainerClassName,
-        } = this.props;
-
-        if (mainContent) {
-            return (
-                <div className={_cs(styles.mainContent, mainContentContainerClassName)}>
-                    { mainContent }
-                </div>
-            );
-        }
-
         return null;
     }
 }

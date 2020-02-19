@@ -8,8 +8,6 @@
 }
 
 .hazard-legend-container {
-    left: calc(var(--width-left-panel) + var(--spacing-medium));
-    transform: none;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
     width: 300px;

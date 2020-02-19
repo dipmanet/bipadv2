@@ -146,9 +146,11 @@ const domain = process.env.REACT_APP_DOMAIN;
 interface State {
     leftContent?: React.ReactNode;
     rightContent?: React.ReactNode;
+    mainContent?: React.ReactNode;
     filterContent?: React.ReactNode;
     leftContentContainerClassName?: string;
     rightContentContainerClassName?: string;
+    mainContentContainerClassName?: string;
     filterContentContainerClassName?: string;
     leftContainerHidden?: boolean;
     hideMap?: boolean;
@@ -391,6 +393,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private setMainContent = (
+        content: React.ReactNode,
+        mainContentContainerClassName?: string,
+    ) => {
+        this.setState({
+            mainContent: content,
+            mainContentContainerClassName,
+        });
+    }
+
     private setFilterContent = (
         content: React.ReactNode,
         filterContentContainerClassName?: string,
@@ -555,6 +567,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             leftContentContainerClassName,
             rightContent,
             rightContentContainerClassName,
+            mainContent,
+            mainContentContainerClassName,
             filterContent,
             filterContentContainerClassName,
             hideMap,
@@ -568,6 +582,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             setRightContent: this.setRightContent,
             setFilterContent: this.setFilterContent,
             setActiveRouteDetails: this.setActiveRouteDetails,
+            setMainContent: this.setMainContent,
             activeRouteDetails,
             hideMap: this.hideMap,
             showMap: this.showMap,
@@ -594,7 +609,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         return (
             <PageContext.Provider value={pageProps}>
-                <div className={styles.multiplexer}>
+                <div className={_cs(
+                    styles.multiplexer,
+                    leftContainerHidden && styles.leftContainerHidden,
+                )}
+                >
                     <div className={_cs(styles.content, 'bipad-main-content')}>
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
@@ -643,6 +662,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                                 <main className={styles.main}>
+                                    { mainContent && (
+                                        <div className={_cs(
+                                            styles.mainContentContainer,
+                                            mainContentContainerClassName,
+                                        )}
+                                        >
+                                            { mainContent }
+                                        </div>
+                                    )}
                                     <MapContainer
                                         className={_cs(
                                             styles.map,
