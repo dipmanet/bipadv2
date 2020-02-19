@@ -14,6 +14,7 @@ import {
     YAxis,
     Tooltip,
     CartesianGrid,
+    Brush,
 } from 'recharts';
 
 import modalize from '#rscg/Modalize';
@@ -163,7 +164,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         return counts;
     }
 
-    private getDataAggregatedByYear = (data, hazardTypes) => {
+    private getDataAggregatedByYear = memoize((data, hazardTypes) => {
         const dataWithYear = data.map((d) => {
             const incidentDate = new Date(d.incidentOn);
             incidentDate.setDate(1);
@@ -196,8 +197,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             };
         });
 
-        return aggregatedData;
-    }
+        return aggregatedData.sort(
+            (a, b) => (a.incidentMonthTimestamp - b.incidentMonthTimestamp),
+        );
+    })
 
     private getMinDate = memoize(getMinDate);
 
@@ -339,6 +342,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             <AreaChart
                                                 data={chartData}
                                                 margin={chartMargin}
+                                                syncId="lndChart"
                                             >
                                                 <XAxis
                                                     tickFormatter={timeTickFormatter}
@@ -348,6 +352,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                                     allowDecimals={false}
                                                     interval="preserveStartEnd"
                                                     angle={-30}
+                                                />
+                                                <Brush
+                                                    dataKey="incidentMonthTimestamp"
+                                                    tickFormatter={timeTickFormatter}
                                                 />
                                             </AreaChart>
                                         </ResponsiveContainer>
