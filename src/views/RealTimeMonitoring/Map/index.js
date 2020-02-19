@@ -21,7 +21,6 @@ import {
     rainToGeojson,
     fireToGeojson,
     pollutionToGeojson,
-    getRasterTile,
 } from '#utils/domain';
 
 import RainIcon from '#resources/icons/Rain.svg';
@@ -32,7 +31,10 @@ import FireIcon from '#resources/icons/Forest-fire.svg';
 
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
+import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
+
+const noop = () => {};
 
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -50,8 +52,7 @@ export default class RealTimeMap extends React.PureComponent {
         this.state = {
             rainTitle: undefined,
             riverTitle: undefined,
-            showRiverModal: false,
-            showRainModal: false,
+            streamflowId: undefined,
         };
     }
 
@@ -86,11 +87,9 @@ export default class RealTimeMap extends React.PureComponent {
     handleRainClick = (feature) => {
         const { properties: { title } } = feature;
         this.setState({
-            riverTitle: undefined,
-            showRiverModal: false,
-
             rainTitle: title,
-            showRainModal: true,
+            riverTitle: undefined,
+            streamflowId: undefined,
         });
         return true;
     }
@@ -99,10 +98,8 @@ export default class RealTimeMap extends React.PureComponent {
         const { properties: { title } } = feature;
         this.setState({
             riverTitle: title,
-            showRiverModal: true,
-
+            streamflowId: undefined,
             rainTitle: undefined,
-            showRainModal: false,
         });
         return true;
     }
@@ -195,11 +192,9 @@ export default class RealTimeMap extends React.PureComponent {
 
     handleModalClose = () => {
         this.setState({
-            riverTitle: undefined,
-            showRiverModal: false,
-
             rainTitle: undefined,
-            showRainModal: false,
+            riverTitle: undefined,
+            streamflowId: undefined,
         });
     }
 
@@ -289,6 +284,14 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
+    handleStreamflowClick = (feature) => {
+        const { properties: { comid } } = feature;
+        console.warn('feature', feature);
+        this.setState({
+            streamflowId: comid,
+        });
+    }
+
     render() {
         const {
             realTimeRainList,
@@ -302,7 +305,7 @@ export default class RealTimeMap extends React.PureComponent {
             showEarthquake,
             showFire,
             showPollution,
-            showStreamFlow,
+            showStreamflow,
             rightPaneExpanded,
             leftPaneExpanded,
         } = this.props;
@@ -320,17 +323,20 @@ export default class RealTimeMap extends React.PureComponent {
         );
 
         // TODO this is hard coded for now.get stream flow layer from api later
-        const streamFlowLayer = { layername: 'Streamflow' };
+        const streamflowUrl = 'https://geoserver.naxa.com.np/geoserver/Bipad/wms?'
+            + 'service=WMS&version=1.1.0&request=GetMap&layers=Bipad:Streamflow&'
+            + 'bbox=80.05708333368067,25.566250000386177,88.19124999979978,30.357083333706303'
+            + '&width=768&height=452&srs=EPSG:4326&format=application/json;type=geojson';
+
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         const {
             tooltipRenderer,
             tooltipParams,
             coordinates,
-            showRiverModal,
-            showRainModal,
             riverTitle,
             rainTitle,
+            streamflowId,
         } = this.state;
 
         const tooltipOptions = {
@@ -366,26 +372,35 @@ export default class RealTimeMap extends React.PureComponent {
                     src={FireIcon}
                     name="forest-fire"
                 />
-                <MapSource
-                    sourceKey="real-time-streamflow"
-                    sourceOptions={{
-                        type: 'raster',
-                        tiles: [getRasterTile(streamFlowLayer)],
-                        tileSize: 256,
-                    }}
-                >
-                    { showStreamFlow && (
+                { showStreamflow && (
+                    <MapSource
+                        sourceKey="streamflow-source"
+                        sourceOptions={{
+                            type: 'geojson',
+                        }}
+                        geoJson={streamflowUrl}
+                    >
                         <MapLayer
-                            layerKey="raster-layer"
+                            layerKey="streamflow-layer"
+                            onClick={this.handleStreamflowClick}
+                            // NOTE: to set this layer as hoverable
+                            onMouseEnter={noop}
                             layerOptions={{
-                                type: 'raster',
+                                type: 'line',
                                 paint: {
-                                    'raster-opacity': 0.5,
+                                    'line-color': '#7cb5ec',
+                                    'line-width': 5,
+                                    'line-opacity': [
+                                        'case',
+                                        ['==', ['feature-state', 'hovered'], true],
+                                        1,
+                                        0.5,
+                                    ],
                                 },
                             }}
                         />
-                    )}
-                </MapSource>
+                    </MapSource>
+                )}
                 { coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
@@ -572,15 +587,21 @@ export default class RealTimeMap extends React.PureComponent {
                         </React.Fragment>
                     )}
                 </MapSource>
-                {showRiverModal && (
+                {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
-                {showRainModal && (
+                {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        handleModalClose={this.handleModalClose}
+                    />
+                )}
+                { streamflowId && (
+                    <StreamflowDetails
+                        id={streamflowId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}

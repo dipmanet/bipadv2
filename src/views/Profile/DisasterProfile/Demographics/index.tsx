@@ -26,6 +26,8 @@ import {
     Region,
     Municipality,
 } from '#store/atom/page/types';
+import { KeyValue } from '#types';
+import SummaryItem from '#components/SummaryItem';
 import ListView from '#rscv/List/ListView';
 
 import styles from './styles.scss';
@@ -76,11 +78,6 @@ interface OwnProps {
 }
 type Props = OwnProps & PropsFromState;
 type SummaryData = Omit<DemographicsData, 'id' | 'municipality'>;
-interface Attribute {
-    key: string;
-    label: string;
-    value: number;
-}
 
 const chartMargin = {
     top: 0,
@@ -91,27 +88,7 @@ const chartMargin = {
 
 const yAxisWidth = 64;
 
-const SummaryValue = (props: { data: Attribute }) => {
-    const {
-        data: {
-            label,
-            value,
-        },
-    } = props;
-
-    return (
-        <div className={styles.summary}>
-            <div className={styles.value}>
-                {value}
-            </div>
-            <div className={styles.label}>
-                {label}
-            </div>
-        </div>
-    );
-};
-
-const keySelector = (d: Attribute) => d.key;
+const keySelector = (d: KeyValue) => d.key;
 const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalities: municipalitiesSelector(state),
     region: regionSelector(state),
@@ -249,19 +226,19 @@ class Demographics extends React.PureComponent<Props> {
             {
                 key: 'literacyRate',
                 label: 'Literacy Rate',
-                value: literacyRate.toFixed(2),
+                value: literacyRate,
             },
             {
                 key: 'maleLiteracyRate',
                 label: 'Male',
                 color: '#64b5f6',
-                value: maleLiteracyRate.toFixed(2),
+                value: maleLiteracyRate,
             },
             {
                 key: 'femaleLiteracyRate',
                 label: 'Female',
                 color: '#f06292',
-                value: femaleLiteracyRate.toFixed(2),
+                value: femaleLiteracyRate,
             },
         ]);
     }
@@ -289,7 +266,7 @@ class Demographics extends React.PureComponent<Props> {
         ));
     }
 
-    private rendererParams = (_: string, data: Attribute) => ({ data });
+    private rendererParams = (_: string, data: KeyValue) => ({ data });
 
     public render() {
         const {
@@ -329,7 +306,7 @@ class Demographics extends React.PureComponent<Props> {
                             <ListView
                                 className={styles.info}
                                 data={populationSummary}
-                                renderer={SummaryValue}
+                                renderer={SummaryItem}
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />
@@ -376,7 +353,7 @@ class Demographics extends React.PureComponent<Props> {
                             <ListView
                                 className={styles.info}
                                 data={literacySummary}
-                                renderer={SummaryValue}
+                                renderer={SummaryItem}
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />
@@ -422,7 +399,7 @@ class Demographics extends React.PureComponent<Props> {
                             <ListView
                                 className={styles.info}
                                 data={householdSummary}
-                                renderer={SummaryValue}
+                                renderer={SummaryItem}
                                 keySelector={keySelector}
                                 rendererParams={this.rendererParams}
                             />

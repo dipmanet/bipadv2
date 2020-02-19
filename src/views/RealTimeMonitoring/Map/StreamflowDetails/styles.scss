@@ -1,0 +1,38 @@
+.streamflow-modal {
+    display: flex;
+    width: 90vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .streamflow {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+
+            .header {
+                flex-shrink: 0;
+                .heading {
+                    padding: var(--spacing-small) var(--spacing-large);
+                }
+            }
+
+            .return-period {
+                display: flex;
+                flex-shrink: 0;
+                padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+            }
+
+            .chart {
+                display: flex;
+                flex-grow: 1;
+                overflow: hidden;
+            }
+
+        }
+    }
+
+}

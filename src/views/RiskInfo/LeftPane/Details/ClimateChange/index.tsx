@@ -625,6 +625,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                     />
                                     <Legend verticalAlign="top" />
                                     <Area
+                                        type="monotone"
                                         dataKey="SD RCP 8.5"
                                         fill="#f45b5b"
                                         fillOpacity={0.3}
@@ -632,6 +633,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         legendType="square"
                                     />
                                     <Area
+                                        type="monotone"
                                         dataKey="SD RCP 4.5"
                                         fill="#7cb5ec"
                                         fillOpacity={0.3}

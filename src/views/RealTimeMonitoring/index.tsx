@@ -54,6 +54,9 @@ import MiniRiverWatch from './MiniRiverWatch';
 import MiniRainWatch from './MiniRainWatch';
 
 import styles from './styles.scss';
+import {
+    isAnyRequestPending,
+} from '#utils/request';
 
 interface State {
     activeView?: ActiveView;
@@ -102,7 +105,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setRealTimePollutionList: params => dispatch(setRealTimePollutionListAction(params)),
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimeRainRequest: {
         url: '/rain/',
         method: methods.GET,
@@ -489,13 +492,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             realTimeEarthquakeList,
             realTimeFireList,
             realTimePollutionList,
-            requests: {
-                realTimeRainRequest: { pending: rainPending },
-                realTimeRiverRequest: { pending: riverPending },
-                realTimeEarthquakeRequest: { pending: earthquakePending },
-                realTimeFireRequest: { pending: firePending },
-                realTimePollutionRequest: { pending: pollutionPending },
-            },
+            requests,
             filters: {
                 realtimeSources,
                 otherSources,
@@ -514,17 +511,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
 
-        const pending = (
-            rainPending || riverPending || earthquakePending || firePending || pollutionPending
-        );
+        const pending = isAnyRequestPending(requests);
 
         let validActiveView = activeView;
         if (!showRain && !showRiver) {
             validActiveView = undefined;
-        } else if (!showRain) {
-            validActiveView = 'riverwatch';
-        } else if (!showRiver) {
-            validActiveView = 'rainwatch';
         }
 
         return (
@@ -541,7 +532,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showEarthquake={showEarthquake}
                     showFire={showFire}
                     showPollution={showPollution}
-                    showStreamFlow={showStreamflow}
+                    showStreamflow={showStreamflow}
                 />
                 <Page
                     leftContentContainerClassName={styles.left}
@@ -632,5 +623,5 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),
-    createRequestClient(requests),
+    createRequestClient(requestOptions),
 )(RealTimeMonitoring);
