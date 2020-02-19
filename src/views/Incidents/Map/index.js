@@ -235,7 +235,7 @@ class IncidentMap extends React.PureComponent {
 
         const tooltipOptions = {
             closeOnClick: true,
-            closeButton: true,
+            closeButton: false,
             offset: 8,
         };
 
