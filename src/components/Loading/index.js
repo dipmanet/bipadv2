@@ -12,7 +12,10 @@ const Loading = ({ pending, text }) => {
 
     return (
         <div className={styles.loading}>
-            <Spinner className={styles.spinner} />
+            <Spinner
+                size="large"
+                className={styles.spinner}
+            />
             <div className={styles.text}>
                 {text}
             </div>

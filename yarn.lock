@@ -1260,10 +1260,10 @@
   dependencies:
     "@togglecorp/fujs" "^1.8.0"
 
-"@togglecorp/react-rest-request@^2.5.0-beta.4":
-  version "2.5.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-2.5.0-beta.4.tgz#12e00c81123d822a232da7297d1711ca039d0b3e"
-  integrity sha512-7pfSpWvi5P7zJjvK7Lrq7h/bJa2lYnR6LGtS3qkS+y8D6Qu9H4DCfHrCl2kNCUdQIFK5FHrB8BWqxUZ003zuHw==
+"@togglecorp/react-rest-request@^2.5.0-beta.5":
+  version "2.5.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@togglecorp/react-rest-request/-/react-rest-request-2.5.0-beta.5.tgz#57b48ce6009993b06b8f699166ac3454d0d5968f"
+  integrity sha512-7EGILfS4GL0OKtLd+CByrv4ovwZL7uCjPO1gyttcM7zkGfr5S9Mi5jRy8VmoZALe4hxO0B+Ilq3ydIlFGS+/lg==
   dependencies:
     "@togglecorp/fujs" "^1.8.0"
     abort-controller "^3.0.0"

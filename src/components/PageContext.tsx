@@ -10,6 +10,7 @@ export interface PageContextProps {
     setLeftContent?: SetContentFunction;
     setRightContent?: SetContentFunction;
     setFilterContent?: SetContentFunction;
+    setMainContent?: SetContentFunction;
     setActiveRouteDetails?: (activeRouteDetail: RouteDetailElement) => void;
     activeRouteDetails?: RouteDetailElement;
     hideMap?: () => void;

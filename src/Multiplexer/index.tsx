@@ -13,6 +13,7 @@ import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
 import { getLayerName } from '#re-map/utils';
+import Icon from '#rscg/Icon';
 
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
@@ -145,10 +146,13 @@ const domain = process.env.REACT_APP_DOMAIN;
 interface State {
     leftContent?: React.ReactNode;
     rightContent?: React.ReactNode;
+    mainContent?: React.ReactNode;
     filterContent?: React.ReactNode;
     leftContentContainerClassName?: string;
     rightContentContainerClassName?: string;
+    mainContentContainerClassName?: string;
     filterContentContainerClassName?: string;
+    leftContainerHidden?: boolean;
     hideMap?: boolean;
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
@@ -256,6 +260,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             rightContentContainerClassName: undefined,
             activeRouteDetails: undefined,
             activeLayers: [],
+            leftContainerHidden: false,
         };
     }
 
@@ -385,6 +390,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({
             rightContent: content,
             rightContentContainerClassName,
+        });
+    }
+
+    private setMainContent = (
+        content: React.ReactNode,
+        mainContentContainerClassName?: string,
+    ) => {
+        this.setState({
+            mainContent: content,
+            mainContentContainerClassName,
         });
     }
 
@@ -529,6 +544,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         return 'Unknown';
     }
 
+    private handleToggleLeftContainerVisibilityButtonClick = () => {
+        this.setState(
+            ({ leftContainerHidden: prevLeftContainerHidden }) => ({
+                leftContainerHidden: !prevLeftContainerHidden,
+            }),
+        );
+    }
+
     public render() {
         const {
             mapStyle,
@@ -544,11 +567,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
             leftContentContainerClassName,
             rightContent,
             rightContentContainerClassName,
+            mainContent,
+            mainContentContainerClassName,
             filterContent,
             filterContentContainerClassName,
             hideMap,
             activeRouteDetails,
             activeLayers,
+            leftContainerHidden,
         } = this.state;
 
         const pageProps = {
@@ -556,6 +582,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             setRightContent: this.setRightContent,
             setFilterContent: this.setFilterContent,
             setActiveRouteDetails: this.setActiveRouteDetails,
+            setMainContent: this.setMainContent,
             activeRouteDetails,
             hideMap: this.hideMap,
             showMap: this.showMap,
@@ -582,7 +609,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         return (
             <PageContext.Provider value={pageProps}>
-                <div className={styles.multiplexer}>
+                <div className={_cs(
+                    styles.multiplexer,
+                    leftContainerHidden && styles.leftContainerHidden,
+                )}
+                >
                     <div className={_cs(styles.content, 'bipad-main-content')}>
                         <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                             <Map
@@ -600,7 +631,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 navControlPosition="bottom-right"
                             >
                                 { leftContent && (
-                                    <aside className={styles.left}>
+                                    <aside className={_cs(
+                                        styles.left,
+                                        leftContainerHidden && styles.hidden,
+                                    )}
+                                    >
                                         <AppBrand
                                             className={styles.brand}
                                             regionName={regionName}
@@ -615,7 +650,27 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         </div>
                                     </aside>
                                 )}
+                                <div
+                                    role="presentation"
+                                    className={styles.toggleLeftContainerVisibilityButton}
+                                    onClick={
+                                        this.handleToggleLeftContainerVisibilityButtonClick
+                                    }
+                                >
+                                    <Icon
+                                        name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
+                                    />
+                                </div>
                                 <main className={styles.main}>
+                                    { mainContent && (
+                                        <div className={_cs(
+                                            styles.mainContentContainer,
+                                            mainContentContainerClassName,
+                                        )}
+                                        >
+                                            { mainContent }
+                                        </div>
+                                    )}
                                     <MapContainer
                                         className={_cs(
                                             styles.map,

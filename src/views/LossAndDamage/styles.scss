@@ -1,15 +1,27 @@
 .left {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-foreground);
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .data-details {
+        flex-shrink: 0;
         background-color: var(--color-foreground-alt);
-        padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
+        padding: calc(var(--spacing-large) - var(--spacing-extra-small-alt)) calc(var(--spacing-large) - var(--spacing-small));
 
         .date-details {
             display: flex;
             align-items: center;
-            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+            padding: calc(var(--spacing-small) var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+            .info-icon-container {
+                flex-shrink: 0;
+                padding: 0 var(--spacing-small);
+
+                .info-icon {
+                    font-size: var(--font-size-medium);
+                }
+            }
 
             .label {
                 padding: var(--spacing-extra-small) var(--spacing-small);
@@ -26,22 +38,33 @@
 
         .source-details {
             display: flex;
-            align-items: center;
-            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+            align-items: baseline;
+            padding: calc(var(--spacing-small) var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+            .info-icon-container {
+                flex-shrink: 0;
+                padding: 0 var(--spacing-small);
+
+                .info-icon {
+                    font-size: var(--font-size-medium);
+                }
+            }
 
             .label {
+                flex-shrink: 0;
                 padding: var(--spacing-extra-small) var(--spacing-small);
                 color: var(--color-text-label);
             }
 
             .value {
                 display: flex;
+                flex-wrap: wrap;
                 padding: 0 calc(var(--spacing-small) - var(--spacing-extra-small-alt));
 
                 .source {
                     display: flex;
                     align-items: center;
-                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                    padding: 0 var(--spacing-extra-small-alt);
 
                     &:not(:last-child) {
                         &:after {
@@ -59,32 +82,46 @@
         }
     }
 
-    .chart-list {
-        padding: var(--spacing-medium) 0;
+    .main-content {
+        flex-grow: 1;
+        overflow-x: hidden;
+        overflow-y: scroll;
 
-        .chart-container {
-            .heading {
-                display: none;
+        .chart-list {
+            padding: var(--spacing-medium) 0;
+
+            .chart-container {
+                .heading {
+                    display: none;
+                }
+
+                .content {
+                    margin: 0 var(--spacing-large);
+                    height: 48px;
+                }
             }
 
-            .content {
+            .axis {
                 margin: 0 var(--spacing-large);
-                height: 48px;
+                height: 86px;
             }
         }
 
-        .axis {
+        .hazard-summary {
             margin: 0 var(--spacing-large);
-            height: 36px;
+            height: 300px;
         }
     }
 
-    .hazard-summary {
-        margin: 0 var(--spacing-large);
-        height: 600px;
-    }
+    .footer {
+        flex-shrink: 0;
 
-    .configuration-options {
-        padding: 0 var(--spacing-large);
+        .compare-button {
+            margin: var(--spacing-medium) var(--spacing-large);
+        }
+
+        .configuration-options {
+            padding: 0 var(--spacing-large);
+        }
     }
 }
