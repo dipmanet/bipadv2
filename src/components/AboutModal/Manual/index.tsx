@@ -4,6 +4,8 @@ import { _cs } from '@togglecorp/fujs';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import List from '#rscv/List';
 
+import Icon from '#rscg/Icon';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -46,6 +48,7 @@ const ManualItem = ({ data, className }: {
         download
         target="_blank"
         rel="noopener noreferrer"
+        title="Click to download"
     >
         <div className={styles.left}>
             <img

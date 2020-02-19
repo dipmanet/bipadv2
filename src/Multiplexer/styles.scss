@@ -29,10 +29,15 @@
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
+            transition: .3s margin-left ease-in-out;
             z-index: 11;
             box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.3);
             width: var(--width-left-panel);
             overflow: auto;
+
+            &.hidden {
+                margin-left: calc(-1 * var(--width-left-panel));
+            }
 
             .brand {
                 flex-shrink: 0;
@@ -44,6 +49,17 @@
                 flex-grow: 1;
                 overflow: auto;
             }
+        }
+
+        .toggle-left-container-visibility-button {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            z-index: 1111;
+            border: 1px solid red;
+            background-color: var(--color-foreground);
+            cursor: pointer;
+            padding: var(--spacing-medium);
         }
 
         .main {

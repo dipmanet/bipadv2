@@ -1,7 +1,9 @@
 .login-modal {
     display: flex;
     background-color: var(--color-foreground);
-    height: 80vh;
+    width: 100%;
+    max-width: 900px;
+    height: 90vh;
 
     .header {
     }

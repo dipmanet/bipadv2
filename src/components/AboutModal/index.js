@@ -28,8 +28,8 @@ export default class AboutUs extends React.PureComponent {
             about: 'About',
             privacyPolicy: 'Privacy policy',
             metadata: 'Metadata',
-            disclaimer: 'Disclaimer',
-            manual: 'Manual',
+            // disclaimer: 'Disclaimer',
+            manual: 'Publications',
         };
 
         const rendererParams = () => ({ className: styles.view });
