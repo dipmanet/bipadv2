@@ -48,10 +48,39 @@ export const regionLevelSelector = createSelector(
 
 const getId = (val: { id: number }) => val.id;
 
-export const showProvinceSelector = ({ page }: AppState) => page.showProvince;
-export const showDistrictSelector = ({ page }: AppState) => page.showDistrict;
-export const showMunicipalitySelector = ({ page }: AppState) => page.showMunicipality;
-export const showWardSelector = ({ page }: AppState) => page.showWard;
+
+export const showProvinceSelector = (state: AppState, props: { region?: Region }) => {
+    const { page } = state;
+    const region = regionByPropSelector(state, props);
+    if (region) {
+        return undefined;
+    }
+    return page.showProvince;
+};
+export const showDistrictSelector = (state: AppState, props: { region?: Region }) => {
+    const { page } = state;
+    const region = regionByPropSelector(state, props);
+    if (region) {
+        return undefined;
+    }
+    return page.showDistrict;
+};
+export const showMunicipalitySelector = (state: AppState, props: { region?: Region }) => {
+    const { page } = state;
+    const region = regionByPropSelector(state, props);
+    if (region) {
+        return undefined;
+    }
+    return page.showMunicipality;
+};
+export const showWardSelector = (state: AppState, props: { region?: Region }) => {
+    const { page } = state;
+    const region = regionByPropSelector(state, props);
+    if (region) {
+        return undefined;
+    }
+    return page.showWard;
+};
 
 export const provincesSelector = ({ page }: AppState) => page.provinces || emptyList;
 

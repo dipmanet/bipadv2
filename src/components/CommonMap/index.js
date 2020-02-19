@@ -89,10 +89,10 @@ const mapStateToProps = (state, props) => ({
     selectedDistrictId: selectedDistrictIdSelector(state, props),
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 
-    showProvince: showProvinceSelector(state),
-    showDistrict: showDistrictSelector(state),
-    showMunicipality: showMunicipalitySelector(state),
-    showWard: showWardSelector(state),
+    showProvince: showProvinceSelector(state, props),
+    showDistrict: showDistrictSelector(state, props),
+    showMunicipality: showMunicipalitySelector(state, props),
+    showWard: showWardSelector(state, props),
 });
 
 const visibleLayout = {

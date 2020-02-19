@@ -47,11 +47,11 @@ interface PropsFromDispatch {
 
 type Props = OwnProps & PropsFromAppState & PropsFromDispatch;
 
-const mapAppStateToComponentProps = state => ({
-    showProvince: showProvinceSelector(state),
-    showDistrict: showDistrictSelector(state),
-    showMunicipality: showMunicipalitySelector(state),
-    showWard: showWardSelector(state),
+const mapAppStateToComponentProps = (state, props) => ({
+    showProvince: showProvinceSelector(state, props),
+    showDistrict: showDistrictSelector(state, props),
+    showMunicipality: showMunicipalitySelector(state, props),
+    showWard: showWardSelector(state, props),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({

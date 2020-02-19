@@ -11,14 +11,12 @@ import Faram, {
 
 import Button from '#rsca/Button';
 import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
 
 import LossDetails from '#components/LossDetails';
 import GeoResolve from '#components/GeoResolve';
 
-import MapContainer from '#rscz/Map/MapContainer';
-import Map from '#rscz/Map';
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
 
 import {
     mapStyleSelector,
@@ -27,7 +25,6 @@ import {
     districtsSelector,
     municipalitiesSelector,
     wardsSelector,
-    regionLevelSelector,
     hazardTypesSelector,
 } from '#selectors';
 
@@ -244,39 +241,46 @@ class Comparative extends React.PureComponent {
                                 { isRegionValid(faramValues.region1) && (
                                     <Map
                                         mapStyle={mapStyle}
-                                        fitBoundsDuration={200}
-                                        minZoom={5}
-                                        logoPosition="bottom-left"
+                                        mapOptions={{
+                                            logoPosition: 'top-left',
+                                            minZoom: 5,
+                                        }}
+                                        // debug
 
-                                        showScaleControl
+                                        scaleControlShown
                                         scaleControlPosition="bottom-right"
 
-                                        showNavControl
+                                        navControlShown
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map1} />
                                         <CommonMap
+                                            sourceKey="comparative-first"
                                             region={faramValues.region1}
+                                            debug
                                         />
                                     </Map>
                                 )}
                                 { isRegionValid(faramValues.region2) && (
                                     <Map
                                         mapStyle={mapStyle}
-                                        fitBoundsDuration={200}
-                                        minZoom={5}
-                                        logoPosition="bottom-left"
+                                        mapOptions={{
+                                            logoPosition: 'top-left',
+                                            minZoom: 5,
+                                        }}
+                                        // debug
 
-                                        showScaleControl
+                                        scaleControlShown
                                         scaleControlPosition="bottom-right"
 
-                                        showNavControl
+                                        navControlShown
                                         navControlPosition="bottom-right"
                                     >
                                         <MapContainer className={styles.map2} />
                                         <CommonMap
-                                            // NOTE: what does this do?
+                                            sourceKey="comparative-second"
                                             region={faramValues.region2}
+                                            debug
                                         />
                                     </Map>
                                 )}
