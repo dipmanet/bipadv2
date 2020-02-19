@@ -103,7 +103,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                 'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
                                 paint: {
                                     ...layer.paint,
-                                    'fill-opacity': layer.opacity,
+                                    'fill-opacity': layer.paint['fill-opacity'].map(
+                                        val => (typeof val === 'number' ? val * layer.opacity : val),
+                                    ),
                                 },
                             }}
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}

@@ -34,6 +34,8 @@ import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
 import styles from './styles.scss';
 
+const noop = () => {};
+
 const RealTimeTooltip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
 );
@@ -381,11 +383,19 @@ export default class RealTimeMap extends React.PureComponent {
                         <MapLayer
                             layerKey="streamflow-layer"
                             onClick={this.handleStreamflowClick}
+                            // NOTE: to set this layer as hoverable
+                            onMouseEnter={noop}
                             layerOptions={{
                                 type: 'line',
                                 paint: {
                                     'line-color': '#7cb5ec',
-                                    'line-width': 2,
+                                    'line-width': 5,
+                                    'line-opacity': [
+                                        'case',
+                                        ['==', ['feature-state', 'hovered'], true],
+                                        1,
+                                        0.5,
+                                    ],
                                 },
                             }}
                         />
