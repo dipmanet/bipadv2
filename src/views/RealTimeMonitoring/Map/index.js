@@ -384,9 +384,8 @@ export default class RealTimeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'line',
                                 paint: {
-                                    'line-opacity': 0.5,
-                                    'line-color': '#ff0000',
-                                    'line-width': 3,
+                                    'line-color': '#7cb5ec',
+                                    'line-width': 2,
                                 },
                             }}
                         />

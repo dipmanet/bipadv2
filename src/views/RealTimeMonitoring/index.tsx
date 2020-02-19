@@ -512,7 +512,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
 
         const pending = isAnyRequestPending(requests);
-        console.warn('pending', pending);
 
         let validActiveView = activeView;
         if (!showRain && !showRiver) {

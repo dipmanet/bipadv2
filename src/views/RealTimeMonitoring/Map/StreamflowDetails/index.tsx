@@ -23,12 +23,13 @@ import {
 } from '#utils/request';
 
 import ListView from '#rscv/List/ListView';
-import TextOutput from '#components/TextOutput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
+import { KeyValue } from '#types';
+import SummaryItem from '#components/SummaryItem';
 
 import styles from './styles.scss';
 
@@ -65,12 +66,6 @@ interface StreamflowData {
     comid: number;
     data: FlowData[];
     returnPeriod: ReturnPeriod;
-}
-
-interface KeyValue {
-    key: string;
-    label: string;
-    value: number;
 }
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -119,11 +114,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
         }));
     }
 
-    private rendererParams = (_: string, data: KeyValue) => ({
-        label: data.label,
-        value: data.value,
-        isNumericaValue: true,
-    });
+    private rendererParams = (_: string, data: KeyValue) => ({ data });
 
     public render() {
         const {
@@ -133,12 +124,10 @@ class StreamflowDetails extends React.PureComponent<Props> {
         } = this.props;
 
         const streamflowData: StreamflowData[] = getResults(requests, 'streamflowGetRequest');
-        console.warn('streamflowData', streamflowData);
         const chartData = this.getChartData((streamflowData[0] || {}).data);
         const returnPeriod: KeyValue[] = this.getReturnPeriod(
             (streamflowData[0] || {}).returnPeriod,
         );
-        console.warn('return', returnPeriod);
         const pending = isAnyRequestPending(requests);
         return (
             <Modal
@@ -147,7 +136,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                 className={styles.streamflowModal}
             >
                 <ModalHeader
-                    title={`River Id: ${id}`}
+                    title={`Streamflow Details for River ${id}`}
                     rightComponent={(
                         <DangerButton
                             transparent
@@ -158,91 +147,103 @@ class StreamflowDetails extends React.PureComponent<Props> {
                 />
                 <ModalBody className={styles.body}>
                     { pending && <LoadingAnimation /> }
-                    <div className={styles.content}>
-                        <ListView
-                            className={styles.returnPeriod}
-                            keySelector={keySelector}
-                            data={returnPeriod}
-                            renderer={TextOutput}
-                            rendererParams={this.rendererParams}
-                        />
-                        <ResponsiveContainer className={styles.chart}>
-                            <ComposedChart
-                                data={chartData}
-                            >
-                                <XAxis
-                                    dataKey="date"
-                                    type="number"
-                                    scale="time"
-                                    domain={['dataMin', 'dataMax']}
-                                    tickFormatter={value => new Date(value).toDateString()}
-                                />
-                                <YAxis
-                                    type="number"
-                                />
-                                <Tooltip
-                                    labelFormatter={value => `Date: ${new Date(value)}`}
-                                />
-                                <Legend verticalAlign="top" />
-                                <Area
-                                    type="monotone"
-                                    dataKey="flow"
-                                    stroke="none"
-                                    fill="#90ed7d"
-                                    legendType="square"
-                                />
-                                <Area
-                                    type="monotone"
-                                    dataKey="std"
-                                    stroke="none"
-                                    fill="#33a02c"
-                                    legendType="square"
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="STD Upper Value"
-                                    stroke="#33a02c"
-                                    dot={false}
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="STD Lower Value"
-                                    stroke="#33a02c"
-                                    dot={false}
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="min"
-                                    stroke="#90ed7d"
-                                    dot={false}
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="max"
-                                    stroke="#90ed7d"
-                                    dot={false}
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="HRES"
-                                    stroke="#434348"
-                                    dot={false}
-                                />
-                                <Line
-                                    strokeWidth={2}
-                                    type="monotone"
-                                    dataKey="mean"
-                                    stroke="#1f78b4"
-                                    dot={false}
-                                />
-                            </ComposedChart>
-                        </ResponsiveContainer>
-                    </div>
+                    { !pending && (
+                        <div className={styles.streamflow}>
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    Return Period
+                                </h3>
+                            </header>
+                            <ListView
+                                className={styles.returnPeriod}
+                                keySelector={keySelector}
+                                data={returnPeriod}
+                                renderer={SummaryItem}
+                                rendererParams={this.rendererParams}
+                            />
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    Streamflow
+                                </h3>
+                            </header>
+                            <ResponsiveContainer className={styles.chart}>
+                                <ComposedChart
+                                    data={chartData}
+                                >
+                                    <XAxis
+                                        dataKey="date"
+                                        type="number"
+                                        scale="time"
+                                        domain={['dataMin', 'dataMax']}
+                                        tickFormatter={value => new Date(value).toDateString()}
+                                    />
+                                    <YAxis
+                                        type="number"
+                                    />
+                                    <Tooltip
+                                        labelFormatter={value => `Date: ${new Date(value)}`}
+                                    />
+                                    <Legend verticalAlign="top" />
+                                    <Area
+                                        type="monotone"
+                                        dataKey="flow"
+                                        stroke="none"
+                                        fill="#90ed7d"
+                                        legendType="square"
+                                    />
+                                    <Area
+                                        type="monotone"
+                                        dataKey="std"
+                                        stroke="none"
+                                        fill="#33a02c"
+                                        legendType="square"
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="STD Upper Value"
+                                        stroke="#33a02c"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="STD Lower Value"
+                                        stroke="#33a02c"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="min"
+                                        stroke="#90ed7d"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="max"
+                                        stroke="#90ed7d"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="HRES"
+                                        stroke="#434348"
+                                        dot={false}
+                                    />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="mean"
+                                        stroke="#1f78b4"
+                                        dot={false}
+                                    />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </div>
+                    )}
                 </ModalBody>
             </Modal>
         );
