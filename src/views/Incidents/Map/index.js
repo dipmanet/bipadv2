@@ -11,6 +11,7 @@ import MapTooltip from '#re-map/MapTooltip';
 
 import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
+import ProvinceMap from '#components/ProvinceMap';
 import {
     hazardTypesSelector,
     provincesMapSelector,
@@ -62,9 +63,13 @@ const propTypes = {
     patchIncident: PropTypes.func.isRequired,
     // eslint-disable-next-line react/forbid-prop-types, react/no-unused-prop-types
     requests: PropTypes.object.isRequired,
+    sourceKey: PropTypes.string,
+    isProviceOnlyMap: PropTypes.bool,
 };
 
 const defaultProps = {
+    sourceKey: 'incidents',
+    isProviceOnlyMap: false,
 };
 
 const mapStateToProps = state => ({
@@ -220,6 +225,8 @@ class IncidentMap extends React.PureComponent {
                     pending: incidentDeletePending,
                 },
             },
+            sourceKey,
+            isProviceOnlyMap,
         } = this.props;
 
 
@@ -250,10 +257,11 @@ class IncidentMap extends React.PureComponent {
 
         const lossServerId = incident && incident.loss && incident.loss.id;
         const incidentServerId = incident && incident.id;
+        const Map = isProviceOnlyMap ? ProvinceMap : CommonMap;
 
         return (
             <React.Fragment>
-                <CommonMap sourceKey="incidents" />
+                <Map sourceKey={sourceKey} />
                 {icons.map(icon => (
                     <SVGMapIcon
                         key={icon}

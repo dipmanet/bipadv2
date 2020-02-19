@@ -1,0 +1,22 @@
+.situation-report {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .maps {
+        flex-shrink: 0;
+
+        .map-container {
+            margin: auto;
+            width: 80%;
+            height: 50vh;
+        }
+    }
+
+    .charts {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+}
