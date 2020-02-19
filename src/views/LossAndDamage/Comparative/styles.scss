@@ -2,90 +2,105 @@
 
 .comparative {
     display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
     flex-direction: column;
     background-color: var(--color-foreground);
-    width: 100%;
-    height: 100%;
+    width: 90vw;
+    height: 90vh;
     overflow: auto;
 
-    .region-selection-form {
+    .header {
         display: flex;
         align-items: center;
         flex-shrink: 0;
 
-        .region-input {
-            margin: $spacing-medium;
+        .region-selection-form {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            flex-shrink: 0;
+
+            .region-input {
+                margin: $spacing-medium;
+            }
+        }
+
+        .close-button {
+            flex-shrink: 0;
         }
     }
 
-    .pre-comparision-message {
+    .content {
         display: flex;
-        align-items: center;
-        flex-grow: 1;
-        justify-content: center;
-        opacity: .3;
-        font-size: $font-size-super-large;
-    }
-
-    .comparision-container {
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
-        .title-container {
+        .pre-comparision-message {
             display: flex;
-
-            >h2 {
-                flex-basis: 50%;
-                padding: 0 $spacing-medium;
-            }
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+            opacity: .3;
+            font-size: $font-size-super-large;
         }
 
-        .map-container {
-            display: flex;
-            flex-shrink: 0;
-            height: 360px;
+        .comparision-container {
+            flex-grow: 1;
+            overflow: auto;
 
-            .map-1 {
-                flex-basis: 50%;
-                margin: $spacing-medium;
-                height: 100%;
-            }
-
-            .map-2 {
-                flex-basis: 50%;
-                margin: $spacing-medium;
-                height: 100%;
-            }
-        }
-
-        .visualizations {
-            .aggregated-stats {
+            .title-container {
                 display: flex;
 
-                .aggregated-stat {
-                    display: flex;
+                >h2 {
                     flex-basis: 50%;
-                    flex-wrap: wrap;
-                    padding: var(--spacing-large);
-
-                    .stat-metric {
-                        padding: $spacing-large;
-                    }
-                } 
+                    padding: 0 $spacing-medium;
+                }
             }
 
-            .other-visualizations {
+            .map-container {
                 display: flex;
+                flex-shrink: 0;
+                height: 360px;
 
-                .region1-container {
+                .map-1 {
                     flex-basis: 50%;
+                    margin: $spacing-medium;
+                    height: 100%;
                 }
 
-                .region2-container {
+                .map-2 {
                     flex-basis: 50%;
+                    margin: $spacing-medium;
+                    height: 100%;
+                }
+            }
+
+            .visualizations {
+                .aggregated-stats {
+                    display: flex;
+
+                    .aggregated-stat {
+                        display: flex;
+                        flex-basis: 50%;
+                        flex-wrap: wrap;
+                        padding: var(--spacing-large);
+
+                        .stat-metric {
+                            padding: $spacing-large;
+                        }
+                    } 
+                }
+
+                .other-visualizations {
+                    display: flex;
+
+                    .region1-container {
+                        flex-basis: 50%;
+                    }
+
+                    .region2-container {
+                        flex-basis: 50%;
+                    }
                 }
             }
         }
