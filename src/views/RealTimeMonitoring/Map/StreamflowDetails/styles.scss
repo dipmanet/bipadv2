@@ -1,0 +1,32 @@
+.streamflow-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .streamflow {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+
+            .content {
+                display: flex;
+                flex-direction: column;
+
+                .return-period {
+                    display: flex;
+                    flex-shrink: 0;
+                }
+
+                .chart {
+                    flex-grow: 1;
+                    border: 1px solid pink;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+}
