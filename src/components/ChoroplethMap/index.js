@@ -316,26 +316,34 @@ class ChoroplethMap extends React.PureComponent {
                             />
                         </MapTooltip>
                     )}
-                    <MapState
-                        attributes={wardMapState}
-                        attributeKey="value"
-                        sourceLayer={ward}
-                    />
-                    <MapState
-                        attributes={districtMapState}
-                        attributeKey="value"
-                        sourceLayer={district}
-                    />
-                    <MapState
-                        attributes={municipalityMapState}
-                        attributeKey="value"
-                        sourceLayer={municipality}
-                    />
-                    <MapState
-                        attributes={provinceMapState}
-                        attributeKey="value"
-                        sourceLayer={province}
-                    />
+                    {wardMapState && (
+                        <MapState
+                            attributes={wardMapState}
+                            attributeKey="value"
+                            sourceLayer={ward}
+                        />
+                    )}
+                    {districtMapState && (
+                        <MapState
+                            attributes={districtMapState}
+                            attributeKey="value"
+                            sourceLayer={district}
+                        />
+                    )}
+                    {municipalityMapState && (
+                        <MapState
+                            attributes={municipalityMapState}
+                            attributeKey="value"
+                            sourceLayer={municipality}
+                        />
+                    )}
+                    {provinceMapState && (
+                        <MapState
+                            attributes={provinceMapState}
+                            attributeKey="value"
+                            sourceLayer={province}
+                        />
+                    )}
                 </MapSource>
             </Fragment>
         );

@@ -183,15 +183,96 @@ const getStat = ({ key, value }) => ({
     estimatedLoss: sum(
         value.map(item => (item.loss || {}).estimatedLoss),
     ),
-    infrastructureDestroyedCount: sum(value.map(
-        item => (item.loss || {}).infrastructureDestroyedCount,
-    )),
     livestockDestroyedCount: sum(
         value.map(item => (item.loss || {}).livestockDestroyedCount),
+    ),
+    livestockAffectedCount: sum(
+        value.map(item => (item.loss || {}).livestockAffectedCount),
     ),
     peopleDeathCount: sum(
         value.map(item => (item.loss || {}).peopleDeathCount),
     ),
+    peopleInjuredCount: sum(
+        value.map(item => (item.loss || {}).peopleInjuredCount),
+    ),
+    peopleMissingCount: sum(
+        value.map(item => (item.loss || {}).peopleMissingCount),
+    ),
+    peopleAffectedCount: sum(
+        value.map(item => (item.loss || {}).peopleAffectedCount),
+    ),
+    familyAffectedCount: sum(
+        value.map(item => (item.loss || {}).familyAffectedCount),
+    ),
+    familyRelocatedCount: sum(
+        value.map(item => (item.loss || {}).familyRelocatedCount),
+    ),
+    familyEvacuatedCount: sum(
+        value.map(item => (item.loss || {}).familyEvacuatedCount),
+    ),
+    infrastructureDestroyedCount: sum(value.map(
+        item => (item.loss || {}).infrastructureDestroyedCount,
+    )),
+    infrastructureAffectedHouseCount: sum(value.map(
+        item => (item.loss || {}).infrastructureAffectedHouseCount,
+    )),
+    infrastructureDestroyedHouseCount: sum(value.map(
+        item => (item.loss || {}).infrastructureDestroyedHouseCount,
+    )),
+    infrastructureAffectedBridgeCount: sum(value.map(
+        item => (item.loss || {}).infrastructureAffectedBridgeCount,
+    )),
+    infrastructureDestroyedBridgeCount: sum(value.map(
+        item => (item.loss || {}).infrastructureDestroyedBridgeCount,
+    )),
+    infrastructureAffectedRoadCount: sum(value.map(
+        item => (item.loss || {}).infrastructureAffectedRoadCount,
+    )),
+    infrastructureDestroyedRoadCount: sum(value.map(
+        item => (item.loss || {}).infrastructureDestroyedRoadCount,
+    )),
+    infrastructureAffectedElectricityCount: sum(value.map(
+        item => (item.loss || {}).infrastructureAffectedElectricityCount,
+    )),
+    infrastructureDestroyedElectricityCount: sum(value.map(
+        item => (item.loss || {}).infrastructureDestroyedElectricityCount,
+    )),
+});
+
+export const getSumStats = value => ({
+    estimatedLoss: sum(value.map(item => item.estimatedLoss)),
+    livestockDestroyedCount: sum(value.map(item => item.livestockDestroyedCount)),
+    livestockAffectedCount: sum(value.map(item => item.livestockAffectedCount)),
+    peopleDeathCount: sum(value.map(item => item.peopleDeathCount)),
+    peopleInjuredCount: sum(value.map(item => item.peopleInjuredCount)),
+    peopleMissingCount: sum(value.map(item => item.peopleMissingCount)),
+    peopleAffectedCount: sum(value.map(item => item.peopleAffectedCount)),
+    familyAffectedCount: sum(value.map(item => item.familyAffectedCount)),
+    familyRelocatedCount: sum(value.map(item => item.familyRelocatedCount)),
+    familyEvacuatedCount: sum(value.map(item => item.familyEvacuatedCount)),
+    infrastructureDestroyedCount: sum(value.map(item => item.infrastructureDestroyedCount)),
+    infrastructureAffectedHouseCount: sum(value.map(item => item.infrastructureAffectedHouseCount)),
+    infrastructureDestroyedHouseCount: sum(value.map(
+        item => item.infrastructureDestroyedHouseCount,
+    )),
+    infrastructureAffectedBridgeCount: sum(value.map(
+        item => item.infrastructureAffectedBridgeCount,
+    )),
+    infrastructureDestroyedBridgeCount: sum(value.map(
+        item => item.infrastructureDestroyedBridgeCount,
+    )),
+    infrastructureAffectedRoadCount: sum(value.map(
+        item => item.infrastructureAffectedRoadCount,
+    )),
+    infrastructureDestroyedRoadCount: sum(value.map(
+        item => item.infrastructureDestroyedRoadCount,
+    )),
+    infrastructureAffectedElectricityCount: sum(value.map(
+        item => item.infrastructureAffectedElectricityCount,
+    )),
+    infrastructureDestroyedElectricityCount: sum(value.map(
+        item => item.infrastructureDestroyedElectricityCount,
+    )),
 });
 
 export const getGroupedIncidents = (incidents, groupingFn) => (

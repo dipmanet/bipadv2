@@ -6,39 +6,39 @@
             padding: var(--spacing-extra-small) 0;
         }
     }
+}
 
-    .loading-message {
-        padding: var(--spacing-small);
-        color: var(--color-text-light);
+.loading-message {
+    padding: var(--spacing-small);
+    color: var(--color-text-light);
+}
+
+.choropleth-legend {
+    display: flex;
+    position: relative;
+
+    .min {
+        position: absolute;
+        top: var(--font-size-small);
+        left: calc(-1 * var(--spacing-small));
+        color: var(--color-text-label);
+        font-size: var(--font-size-small);
+        font-weight: var(--font-weight-bold);
     }
 
-    .choropleth-legend {
-        display: flex;
-        position: relative;
+    .legend-element {
+        flex-grow: 1;
 
-        .min {
-            position: absolute;
-            top: var(--font-size-small);
-            left: calc(-1 * var(--spacing-small));
+        .color {
+            height: var(--font-size-small);
+        }
+
+        .value {
+            margin-right: calc(-1 * var(--spacing-small));
+            text-align: right;
             color: var(--color-text-label);
             font-size: var(--font-size-small);
             font-weight: var(--font-weight-bold);
-        }
-
-        .legend-element {
-            flex-grow: 1;
-
-            .color {
-                height: var(--font-size-small);
-            }
-
-            .value {
-                margin-right: calc(-1 * var(--spacing-small));
-                text-align: right;
-                color: var(--color-text-label);
-                font-size: var(--font-size-small);
-                font-weight: var(--font-weight-bold);
-            }
         }
     }
 }
