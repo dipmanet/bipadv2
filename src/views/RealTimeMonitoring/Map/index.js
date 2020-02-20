@@ -345,6 +345,7 @@ export default class RealTimeMap extends React.PureComponent {
                     sourceKey="realtime"
                     boundsPadding={boundsPadding}
                 />
+                {/*
                 <SVGMapIcon
                     src={RainIcon}
                     name="rain"
@@ -370,6 +371,7 @@ export default class RealTimeMap extends React.PureComponent {
                     src={FireIcon}
                     name="forest-fire"
                 />
+                */}
                 { showStreamflow && (
                     <MapSource
                         sourceKey="streamflow-source"

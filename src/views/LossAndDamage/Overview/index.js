@@ -1,17 +1,27 @@
 import React from 'react';
 import memoize from 'memoize-one';
+import { connect } from 'react-redux';
 import { listToMap } from '@togglecorp/fujs';
 
-import Page from '#components/Page';
+import {
+    provincesSelector,
+    municipalitiesSelector,
+    districtsSelector,
+    wardsSelector,
+    regionLevelSelector,
+    hazardTypesSelector,
+    regionsSelector,
+} from '#selectors';
 
 import Map from '../Map';
-import LeftPane from './LeftPane';
+// import LeftPane from './LeftPane';
 
 import {
     metricMap,
     getGroupMethod,
     getGroupedIncidents,
     getAggregatedStats,
+    getSanitizedIncidents,
 } from '../common';
 
 import styles from './styles.scss';
@@ -22,30 +32,28 @@ const propTypes = {
 const defaultProps = {
 };
 
-const convertValueToNumber = (value = '') => +(value.substring(0, value.length - 2));
+const mapStateToProps = (state, props) => ({
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    regionLevel: regionLevelSelector(state, props),
 
-export default class Overview extends React.PureComponent {
+    hazardTypes: hazardTypesSelector(state),
+    regions: regionsSelector(state),
+});
+
+class Overview extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            leftPaneExpanded: true,
-            rightPaneExpanded: true,
-        };
+        this.state = {};
     }
 
-    componentWillUnmount() {
-        const mapControls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
-        if (mapControls) {
-            mapControls.style.right = this.previousMapContorlStyle;
-        }
-    }
-
-    generateOverallDataset = memoize((incidents, regions, regionLevel) => {
+    generateOverallDataset = memoize((incidents, regionLevel) => {
         if (!incidents || incidents.length <= 0) {
             return {
                 mapping: [],
@@ -72,45 +80,34 @@ export default class Overview extends React.PureComponent {
         };
     })
 
-    handleLeftPaneExpandChange = (leftPaneExpanded) => {
-        this.setState({ leftPaneExpanded });
-    }
-
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-
-        const { onRightPaneExpandChange } = this.props;
-        if (onRightPaneExpandChange) {
-            onRightPaneExpandChange(rightPaneExpanded);
-        }
-    }
-
     render() {
         const {
-            className,
-            districts,
             lossAndDamageList,
-            metric,
-            municipalities,
-            pending,
-            provinces,
             regionLevel,
-            regions,
+            provinces,
+            districts,
+            municipalities,
             wards,
-            minDate,
-        } = this.props;
 
+            regions,
+            hazardTypes,
+        } = this.props;
         const {
-            leftPaneExpanded,
-            rightPaneExpanded,
+            selectedMetricKey = 'count',
         } = this.state;
+
+        const sanitizedList = getSanitizedIncidents(
+            lossAndDamageList,
+            regions,
+            hazardTypes,
+        );
 
         const {
             mapping,
             aggregatedStat,
-        } = this.generateOverallDataset(lossAndDamageList, regions, regionLevel);
+        } = this.generateOverallDataset(sanitizedList, regionLevel);
 
-        const selectedMetric = metricMap[metric];
+        const selectedMetric = metricMap[selectedMetricKey];
         const maxValue = Math.max(selectedMetric.metricFn(aggregatedStat), 1);
 
         const geoareas = (
@@ -121,28 +118,21 @@ export default class Overview extends React.PureComponent {
         );
 
         return (
-            <React.Fragment>
-                <Map
-                    geoareas={geoareas}
-                    mapping={mapping}
-                    maxValue={maxValue}
-                    metric={selectedMetric.metricFn}
-                    metricName={selectedMetric.label}
-                    sourceKey="loss-and-damage-overview"
-                />
-                <Page
-                    leftContentClassName={styles.left}
-                    leftContent={(
-                        <LeftPane
-                            lossAndDamageList={lossAndDamageList}
-                            onExpandChange={this.handleLeftPaneExpandChange}
-                            pending={pending}
-                            rightPaneExpanded={rightPaneExpanded}
-                            minDate={minDate}
-                        />
-                    )}
-                />
-            </React.Fragment>
+            <Map
+                geoareas={geoareas}
+                mapping={mapping}
+                maxValue={maxValue}
+                sourceKey="loss-and-damage-overview"
+
+                metric={selectedMetric.metricFn}
+                metricName={selectedMetric.label}
+                metricKey={selectedMetric.key}
+                onMetricChange={(m) => {
+                    this.setState({ selectedMetricKey: m });
+                }}
+            />
         );
     }
 }
+
+export default connect(mapStateToProps)(Overview);
