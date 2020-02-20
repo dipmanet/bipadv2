@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 import { connect } from 'react-redux';
 
+import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -10,6 +11,7 @@ import ModalFooter from '#rscv/Modal/Footer';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
+import RawFileInput from '#rsci/RawFileInput';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
@@ -73,6 +75,8 @@ interface FaramValues {
         geoJson: object;
     };
     recaptcha?: number;
+
+    image?: File;
 }
 
 interface State {
@@ -103,6 +107,7 @@ const schema = {
         location: [requiredCondition],
         recaptcha: [],
 
+        image: [],
         /*
         source: [],
         wards: [],
@@ -126,6 +131,7 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
                 props.closeModal();
             }
         },
+        extras: { hasFile: true },
     },
 };
 
@@ -158,6 +164,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
             hazard,
             description,
             recaptcha,
+            image,
         } = faramValues;
 
         const { wards, geoJson } = location;
@@ -168,8 +175,9 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
             description,
             recaptcha,
 
-            point,
+            point: JSON.stringify(point),
             ward: wards[0],
+            image,
         };
 
         citizenReportPostRequest.do({ body });
@@ -253,6 +261,14 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                             faramElementName="streetAddress"
                             label="Street Address"
                         />
+                        <RawFileInput
+                            className={styles.fileInput}
+                            faramElementName="image"
+                            showStatus
+                            accept="image/*"
+                        >
+                            Upload Image
+                        </RawFileInput>
                         <LocationInput
                             className={_cs(styles.locationInput, styles.input)}
                             faramElementName="location"
