@@ -126,6 +126,7 @@ class Summary extends React.PureComponent<Props, State> {
                     title="Capacity & Resources Summary"
                     rightComponent={(
                         <Button
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                         />

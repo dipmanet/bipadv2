@@ -226,6 +226,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
+                            transparent
                         />
                     )}
                 />

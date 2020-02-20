@@ -78,6 +78,7 @@ class DataTableModal extends React.PureComponent<Props> {
                     title="Durham earthquake risk data"
                     rightComponent={(
                         <Button
+                            transparent
                             onClick={closeModal}
                             iconName="close"
                         />
