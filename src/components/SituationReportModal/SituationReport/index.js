@@ -55,7 +55,7 @@ import {
 import Table from './Table';
 import styles from './styles.scss';
 
-const REQUEST_LIMIT = 100;
+const REQUEST_LIMIT = -1;
 
 const colorGrade = [
     '#ffe5d4',

@@ -153,6 +153,12 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Situation Report"
+                        iconName="aboutUs"
+                        modal={<SituationReport />}
+                    />
                     {authenticated && (
                         <ModalButton
                             className={styles.reportIncidentButton}
@@ -161,12 +167,6 @@ class Navbar extends React.PureComponent<Props, State> {
                             modal={<CitizenReportsModal />}
                         />
                     )}
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Situation Report"
-                        iconName="aboutUs"
-                        modal={<SituationReport />}
-                    />
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="Report an incident"
