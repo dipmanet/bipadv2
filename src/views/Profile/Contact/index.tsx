@@ -494,8 +494,10 @@ class ContactPage extends React.PureComponent<Props> {
     }
 }
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    createConnectedRequestCoordinator<ReduxProps>(),
-    createRequestClient(requests),
-)(ContactPage);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            ContactPage,
+        ),
+    ),
+);

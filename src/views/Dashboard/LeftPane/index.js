@@ -28,14 +28,14 @@ import styles from './styles.scss';
 
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    eventList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    pending: PropTypes.bool,
     className: PropTypes.string,
 };
 
 const defaultProps = {
-    pending: false,
     alertList: [],
+    eventList: [],
     hazardTypes: {},
     className: undefined,
 };
@@ -90,10 +90,8 @@ export default class LeftPane extends React.PureComponent {
         super(props);
 
         this.state = {
-            showVisualizations: false,
             showAddAlertModal: false,
             showAddEventModal: false,
-            showList: true,
             activeView: 'alerts',
         };
     }
@@ -217,7 +215,6 @@ export default class LeftPane extends React.PureComponent {
             className,
             alertList,
             eventList,
-            pending,
             hazardTypes,
         } = this.props;
 

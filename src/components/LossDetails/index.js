@@ -5,7 +5,7 @@ import memoize from 'memoize-one';
 import { _cs, isDefined } from '@togglecorp/fujs';
 
 
-import TextOutput from '#components/TextOutput';
+import StatOutput from '#components/StatOutput';
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
 
@@ -15,10 +15,12 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.array.isRequired,
     className: PropTypes.string,
+    hideIncidentCount: PropTypes.bool,
 };
 
 const defaultProps = {
     className: undefined,
+    hideIncidentCount: false,
 };
 const emptyList = [];
 
@@ -45,26 +47,25 @@ export default class LossDetails extends React.PureComponent {
         const {
             className,
             data = emptyList,
+            hideIncidentCount,
         } = this.props;
 
         const summaryData = this.calculateSummary(data);
 
         return (
             <div className={_cs(className, styles.lossDetails)}>
-                { lossMetrics.map(metric => (
-                    <TextOutput
-                        className={styles.stat}
-                        isNumericValue
-                        key={metric.key}
-                        label={metric.label}
-                        labelClassName={styles.label}
-                        normal
-                        type="block"
-                        value={summaryData[metric.key]}
-                        valueClassName={styles.value}
-                        lang="ne"
-                    />
-                ))}
+                {lossMetrics.map((metric) => {
+                    if (metric.key === 'count' && hideIncidentCount) {
+                        return null;
+                    }
+                    return (
+                        <StatOutput
+                            key={metric.key}
+                            label={metric.label}
+                            value={summaryData[metric.key]}
+                        />
+                    );
+                })}
             </div>
         );
     }
