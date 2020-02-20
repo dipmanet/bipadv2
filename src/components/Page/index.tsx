@@ -19,6 +19,10 @@ interface Props {
     extraFilterContentContainerClassName?: string;
 
     hideMap?: boolean;
+    hideFilter?: boolean;
+    hideLocationFilter?: boolean;
+    hideHazardFilter?: boolean;
+    hideDataRangeFilter?: boolean;
 }
 
 interface State {
@@ -26,29 +30,99 @@ interface State {
 
 export default class Page extends React.PureComponent<Props, State> {
     public componentDidMount() {
-        const { hideMap: shouldHideMap } = this.props;
+        const {
+            hideMap: shouldHideMap,
+            hideFilter: shouldHideFilter,
+            hideLocationFilter: shouldHideLocationFilter,
+            hideHazardFilter: shouldHideHazardFilter,
+            hideDataRangeFilter: shouldHideDataRangeFilter,
+        } = this.props;
         const {
             showMap,
             hideMap,
+            showFilter,
+            hideFilter,
+            showLocationFilter,
+            hideLocationFilter,
+            showHazardFilter,
+            hideHazardFilter,
+            showDataRangeFilter,
+            hideDataRangeFilter,
         } = this.context;
 
 
         this.transferContents(this.props, this.context);
         this.syncMapVisibility(shouldHideMap, hideMap, showMap);
+        this.syncFilterVisibility(
+            shouldHideFilter,
+            hideFilter,
+            showFilter,
+            shouldHideLocationFilter,
+            hideLocationFilter,
+            showLocationFilter,
+            shouldHideHazardFilter,
+            hideHazardFilter,
+            showHazardFilter,
+            shouldHideDataRangeFilter,
+            hideDataRangeFilter,
+            showDataRangeFilter,
+        );
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        const { hideMap: shouldHideMap } = nextProps;
-        const { hideMap: prevShouldHideMap } = this.props;
+        const {
+            hideMap: shouldHideMap,
+            hideFilter: shouldHideFilter,
+            hideLocationFilter: shouldHideLocationFilter,
+            hideHazardFilter: shouldHideHazardFilter,
+            hideDataRangeFilter: shouldHideDataRangeFilter,
+        } = nextProps;
+
+        const {
+            hideMap: prevShouldHideMap,
+            hideFilter: prevShouldHideFilter,
+            hideLocationFilter: prevShouldHideLocationFilter,
+            hideHazardFilter: prevShouldHideHazardFilter,
+            hideDataRangeFilter: prevShouldHideDataRangeFilter,
+        } = this.props;
 
         const {
             showMap,
             hideMap,
+            showFilter,
+            hideFilter,
+            showLocationFilter,
+            hideLocationFilter,
+            showHazardFilter,
+            hideHazardFilter,
+            showDataRangeFilter,
+            hideDataRangeFilter,
         } = this.context;
 
         this.transferContents(nextProps, this.context);
         if (shouldHideMap !== prevShouldHideMap) {
             this.syncMapVisibility(shouldHideMap, hideMap, showMap);
+        }
+
+        if (shouldHideFilter !== prevShouldHideFilter
+            || shouldHideLocationFilter !== prevShouldHideLocationFilter
+            || shouldHideHazardFilter !== prevShouldHideHazardFilter
+            || shouldHideDataRangeFilter !== prevShouldHideDataRangeFilter
+        ) {
+            this.syncFilterVisibility(
+                shouldHideFilter,
+                hideFilter,
+                showFilter,
+                shouldHideLocationFilter,
+                hideLocationFilter,
+                showLocationFilter,
+                shouldHideHazardFilter,
+                hideHazardFilter,
+                showHazardFilter,
+                shouldHideDataRangeFilter,
+                hideDataRangeFilter,
+                showDataRangeFilter,
+            );
         }
     }
 
@@ -70,6 +144,45 @@ export default class Page extends React.PureComponent<Props, State> {
             hideMap();
         } else if (showMap) {
             showMap();
+        }
+    }
+
+    private syncFilterVisibility = (
+        shouldHideFilter: boolean | undefined,
+        hideFilter: PageContextProps['hideFilter'],
+        showFilter: PageContextProps['showFilter'],
+        shouldHideHazardFilter: boolean | undefined,
+        hideHazardFilter: PageContextProps['hideHazardFilter'],
+        showHazardFilter: PageContextProps['showHazardFilter'],
+        shouldHideLocationFilter: boolean | undefined,
+        hideLocationFilter: PageContextProps['hideLocationFilter'],
+        showLocationFilter: PageContextProps['showLocationFilter'],
+        shouldHideDataRangeFilter: boolean | undefined,
+        hideDataRangeFilter: PageContextProps['hideDataRangeFilter'],
+        showDataRangeFilter: PageContextProps['showDataRangeFilter'],
+    ) => {
+        if (shouldHideFilter && hideFilter) {
+            hideFilter();
+        } else if (showFilter) {
+            showFilter();
+        }
+
+        if (shouldHideLocationFilter && hideLocationFilter) {
+            hideLocationFilter();
+        } else if (showLocationFilter) {
+            showLocationFilter();
+        }
+
+        if (shouldHideHazardFilter && hideHazardFilter) {
+            hideHazardFilter();
+        } else if (showHazardFilter) {
+            showHazardFilter();
+        }
+
+        if (shouldHideDataRangeFilter && hideDataRangeFilter) {
+            hideDataRangeFilter();
+        } else if (showDataRangeFilter) {
+            showDataRangeFilter();
         }
     }
 

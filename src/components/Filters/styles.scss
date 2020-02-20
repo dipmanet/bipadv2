@@ -19,7 +19,8 @@
     }
 
     >.content {
-        .tabs { padding: var(--spacing-small) var(--spacing-medium);
+        .tabs {
+            padding: var(--spacing-small) var(--spacing-medium);
         }
 
         .filter-view-container {
@@ -46,7 +47,7 @@
 
             .active-view {
                 flex-grow: 1;
-                padding: var(--spacing-small);
+                // padding: var(--spacing-small);
                 overflow: auto;
             }
 

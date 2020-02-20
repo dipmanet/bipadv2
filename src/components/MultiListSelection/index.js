@@ -66,7 +66,7 @@ export default class MultiListSelection extends React.PureComponent {
         };
     }
 
-    handleOptionClick = ({ params: { optionKey } }) => {
+    handleOptionClick = (optionKey) => {
         const {
             value,
             onChange,
@@ -98,11 +98,11 @@ export default class MultiListSelection extends React.PureComponent {
         isActive,
         title,
     }) => (
-        <Button
+        <div
+            role="presentation"
             className={_cs(className, isActive && styles.active)}
             transparent
-            onClickParams={{ optionKey }}
-            onClick={this.handleOptionClick}
+            onClick={() => this.handleOptionClick(optionKey)}
             title={title}
         >
             { icon && (
@@ -114,7 +114,7 @@ export default class MultiListSelection extends React.PureComponent {
             <div className={styles.title}>
                 { label }
             </div>
-        </Button>
+        </div>
     )
 
     render() {

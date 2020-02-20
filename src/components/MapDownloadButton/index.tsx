@@ -268,10 +268,9 @@ const MapDownloadButton = (props: Props) => {
                         });
 
                         Promise.all(promises).then((canvases) => {
-                            const x = 6;
-
-                            canvases.forEach((c) => {
+                            canvases.forEach((c, i) => {
                                 const y = mapCanvas.height - c.height - 6;
+                                const x = 6 + c.width * i;
                                 context.drawImage(c, x, y);
                             });
 

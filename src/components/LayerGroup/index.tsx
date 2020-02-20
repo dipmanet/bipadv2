@@ -55,6 +55,7 @@ class LayerGroup extends React.PureComponent<Props, State> {
                                 layer={data}
                                 className={styles.infoButton}
                             />
+                            {/*
                             <Button
                                 title="Show data (currently not available)"
                                 className={styles.showDataButton}
@@ -62,6 +63,7 @@ class LayerGroup extends React.PureComponent<Props, State> {
                                 iconName="table"
                                 disabled
                             />
+                            */}
                         </div>
                     )}
                     <Button

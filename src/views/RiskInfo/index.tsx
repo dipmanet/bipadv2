@@ -17,6 +17,8 @@ class RiskInfo extends React.PureComponent<Props> {
             <>
                 <RiskInfoMap />
                 <Page
+                    hideHazardFilter
+                    hideDataRangeFilter
                     leftContentContainerClassName={styles.leftContainer}
                     leftContent={(
                         <LeftPane className={styles.leftPane} />

@@ -4,7 +4,6 @@ import {
     listToMap,
     doesObjectHaveNoData,
 } from '@togglecorp/fujs';
-import memoize from 'memoize-one';
 
 import { AppState } from '../../types';
 import { Region } from './types';

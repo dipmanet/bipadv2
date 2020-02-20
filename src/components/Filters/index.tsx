@@ -1,7 +1,7 @@
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, isDefined } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
 import memoize from 'memoize-one';
 
@@ -24,6 +24,9 @@ interface ComponentProps {
     className?: string;
     extraContent?: React.ReactNode;
     extraContentContainerClassName?: string;
+    hideLocationFilter?: boolean;
+    hideDataRangeFilter?: boolean;
+    hideHazardFilter?: boolean;
 }
 
 interface PropsFromAppState {
@@ -35,7 +38,7 @@ interface PropsFromDispatch {
 }
 
 interface State {
-    activeView?: TabKey;
+    activeView: TabKey | undefined;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -112,7 +115,9 @@ const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
 };
 
 class Filters extends React.PureComponent<Props, State> {
-    public state = {};
+    public state = {
+        activeView: undefined,
+    };
 
     private views = {
         location: {
@@ -179,20 +184,39 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private getTabs = memoize(
-        (extraContent: React.ReactNode): {
+        (
+            extraContent: React.ReactNode,
+            hideLocationFilter,
+            hideHazardFilter,
+            hideDataRangeFilter,
+        ): {
             [key in TabKey]?: string;
-        } => (
-            extraContent ? ({
+        } => {
+            const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
                 dataRange: 'Data range',
                 others: 'Others',
-            }) : ({
-                location: 'Location',
-                hazard: 'Hazard',
-                dataRange: 'Data range',
-            })
-        ),
+            };
+
+            if (!extraContent) {
+                delete tabs.others;
+            }
+
+            if (hideLocationFilter) {
+                delete tabs.location;
+            }
+
+            if (hideHazardFilter) {
+                delete tabs.hazard;
+            }
+
+            if (hideDataRangeFilter) {
+                delete tabs.dataRange;
+            }
+
+            return tabs;
+        },
     )
 
     public render() {
@@ -200,10 +224,23 @@ class Filters extends React.PureComponent<Props, State> {
             className,
             filters: faramValues,
             extraContent,
+            hideDataRangeFilter,
+            hideHazardFilter,
+            hideLocationFilter,
         } = this.props;
 
+        const tabs = this.getTabs(
+            extraContent,
+            hideLocationFilter,
+            hideHazardFilter,
+            hideDataRangeFilter,
+        );
+
         const { activeView } = this.state;
-        const tabs = this.getTabs(extraContent);
+
+        const validActiveView = isDefined(activeView) && tabs[activeView]
+            ? activeView
+            : undefined;
 
         return (
             <div className={_cs(styles.filters, className)}>
@@ -223,7 +260,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <div className={styles.content}>
                     <ScrollTabs
                         tabs={tabs}
-                        active={activeView}
+                        active={validActiveView}
                         onClick={this.handleTabClick}
                         renderer={FilterIcon}
                         rendererParams={this.getFilterTabRendererParams}
@@ -235,10 +272,10 @@ class Filters extends React.PureComponent<Props, State> {
                         value={faramValues}
                         className={styles.filterViewContainer}
                     >
-                        { activeView && (
+                        {validActiveView && (
                             <header className={styles.header}>
                                 <h3 className={styles.heading}>
-                                    { tabs[activeView] }
+                                    { tabs[validActiveView] }
                                 </h3>
                                 <Button
                                     className={styles.closeButton}
@@ -250,7 +287,7 @@ class Filters extends React.PureComponent<Props, State> {
                         )}
                         <MultiViewContainer
                             views={this.views}
-                            active={activeView}
+                            active={validActiveView}
                         />
                     </Faram>
                 </div>
