@@ -322,12 +322,6 @@ export default class RealTimeMap extends React.PureComponent {
             realTimePollutionList,
         );
 
-        // TODO this is hard coded for now.get stream flow layer from api later
-        const streamflowUrl = 'https://geoserver.naxa.com.np/geoserver/Bipad/wms?'
-            + 'service=WMS&version=1.1.0&request=GetMap&layers=Bipad:Streamflow&'
-            + 'bbox=80.05708333368067,25.566250000386177,88.19124999979978,30.357083333706303'
-            + '&width=768&height=452&srs=EPSG:4326&format=application/json;type=geojson';
-
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         const {
@@ -378,7 +372,7 @@ export default class RealTimeMap extends React.PureComponent {
                         sourceOptions={{
                             type: 'geojson',
                         }}
-                        geoJson={streamflowUrl}
+                        geoJson="https://bipad.staging.nepware.com/media/streamflow.json"
                     >
                         <MapLayer
                             layerKey="streamflow-layer"
@@ -389,7 +383,12 @@ export default class RealTimeMap extends React.PureComponent {
                                 type: 'line',
                                 paint: {
                                     'line-color': '#7cb5ec',
-                                    'line-width': 5,
+                                    'line-width': [
+                                        'case',
+                                        ['==', ['feature-state', 'hovered'], true],
+                                        7,
+                                        5,
+                                    ],
                                     'line-opacity': [
                                         'case',
                                         ['==', ['feature-state', 'hovered'], true],
