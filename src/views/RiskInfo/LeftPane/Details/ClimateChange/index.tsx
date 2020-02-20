@@ -23,6 +23,8 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
+import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
 import SegmentInput from '#rsci/SegmentInput';
 import SelectInput from '#rsci/SelectInput';
 import Icon from '#rscg/Icon';
@@ -44,7 +46,11 @@ import {
 
 import Loading from '#components/Loading';
 
+import ClimateChangeTable from './ClimateChangeTable';
+
 import styles from './styles.scss';
+
+const DataTableModalButton = modalize(Button);
 
 const tempColors: string[] = [
     '#31a354',
@@ -386,6 +392,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             requests,
         } = this.props;
 
+        const pending = isAnyRequestPending(requests);
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
         const mapState = this.getMapState(
@@ -414,7 +421,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
             ${unitInPercent ? 'Precipitation change (%) / ' : ''}
             ${isTemperatureChange ? 'Temperature change (°C) / ' : ''}
             ${(!unitInPercent && !isTemperatureChange && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
-             ${selectedTimePeriod ? selectedTimePeriod.label : ''}  
+             ${selectedTimePeriod ? selectedTimePeriod.label : ''}
             [${selectedScenario ? selectedScenario.label : ''}]
         `;
         const [min, max] = extent(mapState, (d: MapState) => d.value);
@@ -466,6 +473,29 @@ class ClimateChange extends React.PureComponent<Props, State> {
         }
     }
 
+    private getFlatData = (data: NapData[]) => {
+        const flatData = data.map((item) => {
+            const { district, rcp45, sdRcp45, rcp85, sdRcp85 } = item;
+
+            const rcp45Map = listToMap(rcp45, d => d.year);
+            const sdRcp45Map = listToMap(sdRcp45, d => d.year);
+            const rcp85Map = listToMap(rcp85, d => d.year);
+            const sdRcp85Map = listToMap(sdRcp85, d => d.year);
+
+            const years = Object.keys(rcp45Map);
+            return years.map(year => ({
+                year,
+                district,
+                rcp45: rcp45Map[year].value,
+                sdRcp45: sdRcp45Map[year].value,
+                rcp85: rcp85Map[year].value,
+                sdRcp85: sdRcp85Map[year].value,
+            }));
+        });
+
+        return flatData.flat();
+    }
+
     public render() {
         const {
             className,
@@ -480,12 +510,15 @@ class ClimateChange extends React.PureComponent<Props, State> {
             isActive,
         } = this.state;
 
+        const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
+        const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
         const pending = isAnyRequestPending(requests);
-        const data = this.getChartData(measurementType);
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
         const chartTitle = selectedOption && selectedOption.chartTitle;
-
+        const data = this.getChartData(measurementType);
+        const rawData = measurementType === 'temperature' ? temperature : precipitation;
+        const flatData = this.getFlatData(rawData);
         const layer = this.getLayer(layerGroupList, measurementType);
 
         return (
@@ -505,10 +538,24 @@ class ClimateChange extends React.PureComponent<Props, State> {
                             Climate change
                         </div>
                         {!pending && isActive && (
-                            <LayerDetailModalButton
-                                className={styles.showLayerDetailsButton}
-                                layer={layer}
-                            />
+                            <>
+                                <DataTableModalButton
+                                    modal={(
+                                        <ClimateChangeTable
+                                            data={flatData}
+                                            title={measurementType}
+                                        />
+                                    )}
+                                    initialShowModal={false}
+                                    iconName="table"
+                                    transparent
+                                    disabled={pending}
+                                />
+                                <LayerDetailModalButton
+                                    className={styles.showLayerDetailsButton}
+                                    layer={layer}
+                                />
+                            </>
                         )}
                     </div>
                     <div className={styles.shortDescription}>

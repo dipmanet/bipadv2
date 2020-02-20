@@ -1,18 +1,13 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
-import Button from '#rsca/Button';
-import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
-import Table from '#rscv/Table';
-
 import { districtsMapSelector } from '#selectors';
-
-import styles from './styles.scss';
+import DataTableModal from '#components/DataTableModal';
 
 interface Props {
+    title: string;
+    className?: string;
+    closeModal?: boolean;
 }
 
 const headers = [
@@ -54,7 +49,9 @@ const mapStateToProps = state => ({
     districts: districtsMapSelector(state),
 });
 
-class DataTableModal extends React.PureComponent<Props> {
+const keySelector = d => d.id;
+
+class RiskTable extends React.PureComponent<Props> {
     private getRenderData = data => (
         data.map(d => ({
             id: d.id,
@@ -67,34 +64,23 @@ class DataTableModal extends React.PureComponent<Props> {
         const {
             className,
             data,
+            title,
             closeModal,
         } = this.props;
 
         const renderData = this.getRenderData(data);
 
         return (
-            <Modal className={_cs(className, styles.dataTableModal)}>
-                <ModalHeader
-                    title="Durham earthquake risk data"
-                    rightComponent={(
-                        <Button
-                            transparent
-                            onClick={closeModal}
-                            iconName="close"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody}>
-                    <Table
-                        className={styles.table}
-                        headers={headers}
-                        data={renderData}
-                        keySelector={d => d.id}
-                    />
-                </ModalBody>
-            </Modal>
+            <DataTableModal
+                className={className}
+                closeModal={closeModal}
+                headers={headers}
+                data={renderData}
+                title={title}
+                keySelector={keySelector}
+            />
         );
     }
 }
 
-export default connect(mapStateToProps)(DataTableModal);
+export default connect(mapStateToProps)(RiskTable);

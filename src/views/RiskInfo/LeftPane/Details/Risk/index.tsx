@@ -23,7 +23,7 @@ import Loading from '#components/Loading';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
-import DataTableModal from './DataTableModal';
+import RiskTable from './RiskTable';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
 import { RiskData } from '#types';
@@ -259,7 +259,12 @@ class Risk extends React.PureComponent<Props, State> {
         const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
             <>
                 <DataTableModalButton
-                    modal={<DataTableModal data={riskDataRaw} />}
+                    modal={(
+                        <RiskTable
+                            title="Durham earthquake risk data"
+                            data={riskDataRaw}
+                        />
+                    )}
                     initialShowModal={false}
                     iconName="table"
                     transparent
