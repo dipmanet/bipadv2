@@ -1,0 +1,31 @@
+.data-table-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    :global {
+        .row {
+            &:nth-child(even) {
+                background-color: var(--color-background);
+            }
+
+            .cell {
+                padding: var(--spacing-medium-alt);
+            }
+        }
+    }
+}

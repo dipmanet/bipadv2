@@ -16,6 +16,7 @@ import {
 } from '#request';
 
 import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
 import DangerButton from '#rsca/Button/DangerButton';
 import AccentButton from '#rsca/Button/AccentButton';
 import ListView from '#rscv/List/ListView';
@@ -54,6 +55,7 @@ import {
 import EditResourceForm from './EditResourceForm';
 
 import Summary from './Summary';
+import CapacityResourceTable from './CapacityResourceTable';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -82,6 +84,7 @@ interface Params {
 type Props = NewProps<ComponentProps, Params>
 
 const SummaryButton = modalize(AccentButton);
+const TableModalButton = modalize(Button);
 
 const resourceLayerList: ResourceElement[] = [
     // { key: 'education', title: 'Education' },
@@ -453,6 +456,18 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         >
                             Show summary
                         </SummaryButton>
+                        <TableModalButton
+                            modal={(
+                                <CapacityResourceTable
+                                    data={resourceList}
+                                    name={activeLayerKey}
+                                />
+                            )}
+                            initialShowModal={false}
+                            iconName="table"
+                            transparent
+                            disabled={pending || !activeLayerKey}
+                        />
                     </header>
                     <ListView
                         className={styles.content}

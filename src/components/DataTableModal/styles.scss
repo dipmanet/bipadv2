@@ -12,6 +12,11 @@
         }
     }
 
+    .modal-footer {
+        display: flex;
+        justify-content: flex-start;
+    }
+
     :global {
         .row {
             &:nth-child(even) {

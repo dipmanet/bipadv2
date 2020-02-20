@@ -133,7 +133,6 @@ export default class AlertTable extends React.PureComponent {
                 </div>
                 <div className={styles.downloadLinkContainer}>
                     <DownloadButton
-                        onClick={this.handleClick}
                         value={alertListForExport}
                     >
                         Download csv
