@@ -22,9 +22,6 @@ const requestOptions = {
         url: '/situation-report/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response }) => {
-            console.warn('here', response);
-        },
         onFailure: ({ error }) => {
             // TODO: handle error
             console.warn('failure', error);

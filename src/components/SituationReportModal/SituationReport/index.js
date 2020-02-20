@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
+import html2canvas from 'html2canvas';
 import {
     _cs,
     listToMap,
@@ -13,19 +14,26 @@ import {
     XAxis,
     YAxis,
     BarChart,
+    Pie,
     Bar,
+    Cell,
+    PieChart,
     LabelList,
 } from 'recharts';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import LegendItem from '#rscz/Legend/LegendItem';
 import {
     hazardTypesList,
     generatePaint,
 } from '#utils/domain';
 import IncidentMap from '#views/Incidents/Map';
+import Button from '#rsca/Button';
+import LayerLegend from '#components/LayerLegend';
 import HazardsLegend from '#components/HazardsLegend';
 import ProvinceChoroplethMap from '#components/ProvinceChroplethMap';
+import Message from '#rscv/Message';
 import {
     getGroupMethod,
     getGroupedIncidents,
@@ -59,6 +67,13 @@ const colorGrade = [
     '#d46246',
     '#cb4836',
     '#c22727',
+];
+
+const pieColors = [
+    '#003f5c',
+    '#7a5195',
+    '#ef5675',
+    '#ffa600',
 ];
 
 const requestOptions = {
@@ -103,6 +118,7 @@ const requestOptions = {
 
 const propTypes = {
     className: PropTypes.string,
+    // eslint-disable-next-line react/no-unused-prop-types
     selectedReport: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     selectedReportDetails: PropTypes.object,
@@ -138,6 +154,7 @@ class SituationReport extends React.PureComponent {
                 mapping: [],
                 aggregatedStat: {},
                 mapState: [],
+                minCasuality: 0,
                 maxCasuality: 1,
             };
         }
@@ -146,7 +163,6 @@ class SituationReport extends React.PureComponent {
         const hazardGroupFn = d => d.hazard;
         const regionGroupedIncidents = getGroupedIncidents(incidents, groupFn);
         const hazardGroupedIncidents = getGroupedIncidents(incidents, hazardGroupFn);
-        console.warn('here', hazardGroupedIncidents);
         const aggregatedStat = getSumStats(hazardGroupedIncidents);
 
         const listToMapGroupedItem = groupedIncidents => (
@@ -157,9 +173,8 @@ class SituationReport extends React.PureComponent {
             )
         );
         const mapping = listToMapGroupedItem(regionGroupedIncidents);
-        const maxCasuality = regionGroupedIncidents.reduce((acc, incident) => (
-            acc > incident.peopleDeathCount ? acc : incident.peopleDeathCount
-        ), 0);
+        const maxCasuality = Math.max(...regionGroupedIncidents.map(item => item.peopleDeathCount));
+        const minCasuality = Math.min(...regionGroupedIncidents.map(item => item.peopleDeathCount));
 
         const mapState = regionGroupedIncidents.map(r => ({
             id: r.key,
@@ -173,6 +188,7 @@ class SituationReport extends React.PureComponent {
             mapping,
             aggregatedStat,
             maxCasuality,
+            minCasuality,
         };
     })
 
@@ -197,10 +213,63 @@ class SituationReport extends React.PureComponent {
         )).sort((a, b) => (a.value - b.value));
     })
 
+    getDataForPieCharts = memoize((aggregatedStat) => {
+        const peopleLossPieData = [
+            {
+                name: 'Death',
+                value: aggregatedStat.peopleDeathCount,
+            },
+            {
+                name: 'Injured',
+                value: aggregatedStat.peopleInjuredCount,
+            },
+            {
+                name: 'Missing',
+                value: aggregatedStat.peopleMissingCount,
+            },
+            {
+                name: 'Affected',
+                value: aggregatedStat.peopleAffectedCount,
+            },
+        ];
+
+        const familyLossPieData = [
+            {
+                name: 'Relocated',
+                value: aggregatedStat.familyRelocatedCount,
+            },
+            {
+                name: 'Affected',
+                value: aggregatedStat.familyAffectedCount,
+            },
+            {
+                name: 'Evacuated',
+                value: aggregatedStat.familyEvacuatedCount,
+            },
+        ];
+
+        return {
+            peopleLossPieData,
+            familyLossPieData,
+        };
+    });
+
+    handleDownloadClick = () => {
+        const element = document.getElementsByClassName(styles.situationReport)[0];
+
+        html2canvas(element).then((canvas) => {
+            canvas.toBlob((blob) => {
+                const link = document.createElement('a');
+                link.download = 'situation-report.png';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            }, 'image/png');
+        });
+    }
+
     render() {
         const {
             className,
-            selectedReport,
             selectedReportDetails,
             requests,
             mapStyle,
@@ -218,7 +287,9 @@ class SituationReport extends React.PureComponent {
         if (!selectedReportDetails) {
             return (
                 <div className={_cs(className, styles.situationReport)}>
-                    Please selected a situation report
+                    <Message>
+                        Please selected a situation report
+                    </Message>
                 </div>
             );
         }
@@ -232,25 +303,52 @@ class SituationReport extends React.PureComponent {
         }
 
         const incidents = response ? response.results : [];
+
+        if (incidents.length < 1) {
+            return (
+                <div className={_cs(className, styles.situationReport)}>
+                    <Message>
+                        There are no incidents in this situation report
+                    </Message>
+                </div>
+            );
+        }
+
         const filteredHazardTypes = this.getIncidentHazardTypesList(incidents);
 
         const sanitizedIncidents = this.getSanitizedIncidents(incidents, regions, hazardTypes);
 
         const {
-            mapping,
-            regionGroupedIncidents,
             hazardGroupedIncidents,
             mapState,
             aggregatedStat,
+            minCasuality,
             maxCasuality,
         } = this.generateOverallDataset(sanitizedIncidents);
 
-        const colorPaint = this.generatePaint(colorGrade, 0, maxCasuality);
+        const colorPaint = this.generatePaint(colorGrade, minCasuality, maxCasuality);
         const hazardSummary = this.getHazardSummary(sanitizedIncidents);
+        const {
+            peopleLossPieData,
+            familyLossPieData,
+        } = this.getDataForPieCharts(aggregatedStat);
 
         return (
             <div className={_cs(styles.situationReport, className)}>
-                <div className={styles.maps}>
+                <Button
+                    className={styles.downloadButton}
+                    onClick={this.handleDownloadClick}
+                    iconName="download"
+                >
+                    Download
+                </Button>
+                <header className={styles.header}>
+                    <h2>Incident Situation Report</h2>
+                </header>
+                <div className={styles.map}>
+                    <h3 className={styles.mapHeading}>
+                        Incident Statistics
+                    </h3>
                     <Map
                         mapStyle={mapStyle}
                         mapOptions={{
@@ -274,33 +372,11 @@ class SituationReport extends React.PureComponent {
                             itemClassName={styles.legendItem}
                         />
                     </Map>
-                    <Map
-                        mapStyle={mapStyle}
-                        mapOptions={{
-                            logoPosition: 'top-left',
-                            minZoom: 5,
-                        }}
-                        scaleControlShown
-                        scaleControlPosition="bottom-right"
-                        navControlShown
-                        navControlPosition="bottom-right"
-                    >
-                        <MapContainer className={styles.mapContainer} />
-                        <ProvinceChoroplethMap
-                            sourceKey="inci-choro"
-                            paint={colorPaint.paint}
-                            mapState={mapState}
-                        />
-                    </Map>
                 </div>
-                <div className={styles.charts}>
-                    <div
-                        style={{
-                            height: hazardSummary.length * 32,
-                        }}
-                        className={styles.container}
-                    >
-                        <ResponsiveContainer className={styles.visualizationContainer}>
+                <div className={styles.vizContainer}>
+                    <h3 className={styles.heading}>Disaster Summary</h3>
+                    <div style={{ height: hazardSummary.length * 32 }}>
+                        <ResponsiveContainer>
                             <BarChart
                                 data={hazardSummary}
                                 layout="vertical"
@@ -327,6 +403,99 @@ class SituationReport extends React.PureComponent {
                                 />
                             </BarChart>
                         </ResponsiveContainer>
+                    </div>
+                </div>
+                <div className={styles.map}>
+                    <h3 className={styles.mapHeading}>
+                        Casuality Statistics
+                    </h3>
+                    <Map
+                        mapStyle={mapStyle}
+                        mapOptions={{
+                            logoPosition: 'top-left',
+                            minZoom: 5,
+                        }}
+                        scaleControlShown
+                        scaleControlPosition="bottom-right"
+                        navControlShown
+                        navControlPosition="bottom-right"
+                    >
+                        <MapContainer className={styles.mapContainer} />
+                        <ProvinceChoroplethMap
+                            sourceKey="inci-choro"
+                            paint={colorPaint.paint}
+                            mapState={mapState}
+                        />
+                        <LayerLegend
+                            layer={{
+                                type: 'choropleth',
+                                minValue: minCasuality,
+                                legendTitle: 'Casualty Statistics',
+                                legend: colorPaint.legend,
+                            }}
+                        />
+                    </Map>
+                </div>
+                <div className={styles.charts}>
+                    <div className={styles.pieCharts}>
+                        <div className={styles.pieChart}>
+                            <h4>People Loss</h4>
+                            <PieChart width={240} height={240}>
+                                <Pie
+                                    data={peopleLossPieData}
+                                    dataKey="value"
+                                    cx={120}
+                                    cy={120}
+                                    outerRadius={60}
+                                >
+                                    {peopleLossPieData.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${entry.name}`}
+                                            fill={pieColors[index % pieColors.length]}
+                                        />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                            <div className={styles.legendContainer}>
+                                {peopleLossPieData.map((entry, index) => (
+                                    <LegendItem
+                                        className={styles.legend}
+                                        key={`cell-${entry.name}`}
+                                        color={pieColors[index % pieColors.length]}
+                                        label={`${entry.name} (${entry.value})`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                        <div className={styles.pieChart}>
+                            <h4>Family Loss</h4>
+                            <PieChart width={240} height={240}>
+                                <Pie
+                                    data={familyLossPieData}
+                                    dataKey="value"
+                                    cx={120}
+                                    cy={120}
+                                    outerRadius={60}
+                                >
+                                    {familyLossPieData.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${entry.name}`}
+                                            fill={pieColors[index % pieColors.length]}
+                                        />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                            <div className={styles.legendContainer}>
+                                {familyLossPieData.map((entry, index) => (
+                                    <LegendItem
+                                        className={styles.legend}
+                                        key={`cell-${entry.name}`}
+                                        color={pieColors[index % pieColors.length]}
+                                        label={`${entry.name} (${entry.value})`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <Table

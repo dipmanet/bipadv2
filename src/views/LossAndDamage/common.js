@@ -204,8 +204,8 @@ const getStat = ({ key, value }) => ({
     familyAffectedCount: sum(
         value.map(item => (item.loss || {}).familyAffectedCount),
     ),
-    familyDisplacedCount: sum(
-        value.map(item => (item.loss || {}).familyDisplacedCount),
+    familyRelocatedCount: sum(
+        value.map(item => (item.loss || {}).familyRelocatedCount),
     ),
     familyEvacuatedCount: sum(
         value.map(item => (item.loss || {}).familyEvacuatedCount),
@@ -248,7 +248,7 @@ export const getSumStats = value => ({
     peopleMissingCount: sum(value.map(item => item.peopleMissingCount)),
     peopleAffectedCount: sum(value.map(item => item.peopleAffectedCount)),
     familyAffectedCount: sum(value.map(item => item.familyAffectedCount)),
-    familyDisplacedCount: sum(value.map(item => item.familyDisplacedCount)),
+    familyRelocatedCount: sum(value.map(item => item.familyRelocatedCount)),
     familyEvacuatedCount: sum(value.map(item => item.familyEvacuatedCount)),
     infrastructureDestroyedCount: sum(value.map(item => item.infrastructureDestroyedCount)),
     infrastructureAffectedHouseCount: sum(value.map(item => item.infrastructureAffectedHouseCount)),

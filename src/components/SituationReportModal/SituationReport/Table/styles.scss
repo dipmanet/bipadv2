@@ -1,5 +1,11 @@
 .situation-report-table {
     .table {
         width: 100%;
+        border-collapse: collapse;
+
+        th, td {
+            padding: var(--spacing-extra-small);
+            text-align: center;
+        }
     }
 }

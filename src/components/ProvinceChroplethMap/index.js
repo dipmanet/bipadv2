@@ -112,11 +112,13 @@ class ChoroplethMap extends React.PureComponent {
                             layout: showProvinceFill ? visibleLayout : noneLayout,
                         }}
                     />
-                    <MapState
-                        attributes={provinceMapState}
-                        attributeKey="value"
-                        sourceLayer={province}
-                    />
+                    {provinceMapState && (
+                        <MapState
+                            attributes={provinceMapState}
+                            attributeKey="value"
+                            sourceLayer={province}
+                        />
+                    )}
                 </MapSource>
                 <MapSource
                     sourceKey={`${sourceKey}-outlines`}

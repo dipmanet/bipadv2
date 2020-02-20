@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 
-import {
-    _cs,
-    listToMap,
-    isDefined,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.scss';
 
@@ -37,8 +31,6 @@ export default class SituationReportTable extends React.PureComponent {
             hazardTypes,
             aggregatedStat,
         } = this.props;
-
-        console.warn('table data', data, hazardTypes);
 
         return (
             <div className={_cs(className, styles.situationReportTable)}>
@@ -106,13 +98,13 @@ export default class SituationReportTable extends React.PureComponent {
                             <td>{aggregatedStat.familyAffectedCount}</td>
                         </tr>
                         <tr>
-                            <td colSpan="2">Displaced</td>
+                            <td colSpan="2">Relocated</td>
                             {data.map(hazardGroup => (
                                 <td>
-                                    {hazardGroup.familyDisplacedCount || 0}
+                                    {hazardGroup.familyRelocatedCount || 0}
                                 </td>
                             ))}
-                            <td>{aggregatedStat.familyDisplacedCount}</td>
+                            <td>{aggregatedStat.familyRelocatedCount}</td>
                         </tr>
                         <tr>
                             <td colSpan="2">Evacuated</td>
