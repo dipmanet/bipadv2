@@ -62,9 +62,9 @@ class SVGMapIcon extends React.PureComponent<Props, State> {
                         };
                         image.src = c.toDataURL();
                     });
-                }, Math.floor(33 + Math.random() * 12000));
+                }, Math.floor(100 + Math.random() * 16000));
             });
-        }, 0);
+        }, 100);
     })
 
     public render() {
