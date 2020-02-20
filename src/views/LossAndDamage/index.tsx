@@ -20,7 +20,6 @@ import {
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-// import SegmentInput from '#rsci/SegmentInput';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
@@ -52,11 +51,11 @@ import {
 } from '#utils/request';
 
 import styles from './styles.scss';
+import Overview from './Overview';
 
 const CompareButton = modalize(Button);
 
 interface State {
-    selectedMetric: string;
 }
 
 interface ComponentProps {
@@ -80,7 +79,7 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
         method: methods.GET,
         query: {
             expand: ['loss.peoples', 'wards'],
-            // limit: 9000,
+            // limit: 100,
             limit: -1,
             ordering: '-incident_on',
             lnd: true,
@@ -129,7 +128,6 @@ type TabKey = 'overview' | 'timeline' | 'comparative';
 
 class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
-        selectedMetric: 'count',
     }
 
     private calculateSummary = (data) => {
@@ -221,8 +219,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardFilter,
             regionFilter,
         } = this.props;
-
-        const { selectedMetric } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
@@ -381,19 +377,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 </div>
                             </div>
                             <footer className={styles.footer}>
-                                {/*
-                                <div className={styles.configurationOptions}>
-                                    <SegmentInput
-                                        options={lossMetrics}
-                                        keySelector={d => d.key}
-                                        labelSelector={d => d.label}
-                                        value={selectedMetric}
-                                        onChange={(metric: string) => {
-                                            this.setState({ selectedMetric: metric });
-                                        }}
-                                    />
-                                </div>
-                                */}
                                 <CompareButton
                                     disabled={pending}
                                     className={styles.compareButton}
@@ -403,6 +386,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 </CompareButton>
                             </footer>
                         </>
+                    )}
+                    mainContent={(
+                        <Overview
+                            lossAndDamageList={incidentList}
+                        />
                     )}
                 />
             </>

@@ -5,7 +5,9 @@ import { _cs } from '@togglecorp/fujs';
 
 import Numeral from '#rscv/Numeral';
 
+import SegmentInput from '#rsci/SegmentInput';
 import ChoroplethMap from '#components/ChoroplethMap';
+import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
 
@@ -70,10 +72,13 @@ export default class LossAndDamageMap extends React.PureComponent {
             geoareas,
             mapping,
             metric,
-            maxValue,
-            metricName,
             isTimeline,
             sourceKey,
+
+            maxValue,
+            metricName,
+            metricKey,
+            onMetricChange,
         } = this.props;
 
         const color = this.generateColor(maxValue, 0, colorGrade);
@@ -91,6 +96,13 @@ export default class LossAndDamageMap extends React.PureComponent {
                         isTimeline && styles.timeline,
                     )}
                 >
+                    <SegmentInput
+                        options={lossMetrics}
+                        keySelector={d => d.key}
+                        labelSelector={d => d.label}
+                        value={metricKey}
+                        onChange={onMetricChange}
+                    />
                     <h5 className={styles.heading}>
                         {metricName}
                     </h5>

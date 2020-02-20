@@ -85,8 +85,8 @@ type ReduxProps = ComponentProps & PropsFromDispatch & PropsFromAppState;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-    hazardTypes: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
+    hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
 });
