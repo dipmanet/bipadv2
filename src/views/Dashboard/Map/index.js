@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
+import { unique } from '@togglecorp/fujs';
 
 import List from '#rscv/List';
 import MapSource from '#re-map/MapSource';
@@ -12,6 +13,7 @@ import MapTooltip from '#re-map/MapTooltip';
 
 import FormattedDate from '#rscv/FormattedDate';
 
+import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 
@@ -301,9 +303,29 @@ class AlertEventMap extends React.PureComponent {
             offset: 8,
         };
 
+        const icons = unique(
+            [
+                ...alertList
+                    .filter(alert => alert.hazardInfo && alert.hazardInfo.icon)
+                    .map(alert => alert.hazardInfo.icon),
+                ...eventList
+                    .filter(event => event.hazardInfo && event.hazardInfo.icon)
+                    .map(event => event.hazardInfo.icon),
+            ],
+            icon => icon,
+        );
+
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
+                {icons.map(icon => (
+                    <SVGMapIcon
+                        key={icon}
+                        src={icon}
+                        name={icon}
+                        fillColor="#222222"
+                    />
+                ))}
                 <List
                     keySelector={hazardKeySelector}
                     data={hazardList}

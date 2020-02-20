@@ -6,7 +6,7 @@ import ListView from '#rscv/List/ListView';
 import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
 
-import TextOutput from '#components/TextOutput';
+import StatOutput from '#components/StatOutput';
 import { iconNames } from '#constants';
 
 import Project from './ProjectItem';
@@ -75,11 +75,9 @@ class ProjectsProfileLeftPane extends React.PureComponent {
         return (
             <div className={_cs(className, styles.leftPane)}>
                 <div className={styles.statsContainer}>
-                    <TextOutput
-                        type="block"
+                    <StatOutput
                         label="No. of Projects"
                         value={projects.length}
-                        isNumericValue
                     />
                     <DonutChart
                         sideLengthRatio={0.5}

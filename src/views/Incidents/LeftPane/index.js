@@ -8,6 +8,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import Modal from '#rscv/Modal';
@@ -26,6 +27,7 @@ import {
 } from '#actionCreators';
 import Cloak from '#components/Cloak';
 
+import Visualizations from './Visualizations';
 import IncidentListView from './ListView';
 import IncidentTable from './TabularView';
 import AddIncidentForm from './AddIncidentForm';
@@ -92,6 +94,7 @@ class LeftPane extends React.PureComponent {
             showVisualizations: false,
             lossServerId: undefined,
             incidentServerId: undefined,
+            activeView: 'incidents',
         };
     }
 
@@ -138,6 +141,14 @@ class LeftPane extends React.PureComponent {
         });
     }
 
+    handleIncidentsButtonClick = () => {
+        this.setState({ activeView: 'incidents' });
+    }
+
+    handleVisualizationsButtonClick = () => {
+        this.setState({ activeView: 'visualizations' });
+    }
+
     render() {
         const {
             className,
@@ -151,6 +162,7 @@ class LeftPane extends React.PureComponent {
         const {
             lossServerId,
             incidentServerId,
+            activeView,
         } = this.state;
 
         const incidentList = this.getMappedIncidentList(incidentListFromProps);
@@ -160,44 +172,72 @@ class LeftPane extends React.PureComponent {
                 <LossDetails
                     className={styles.lossDetails}
                     data={incidentList}
+                    hideIncidentCount
                 />
-                <div className={styles.incidentList}>
-                    <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            Incidents
-                        </h2>
-                        <div className={styles.buttons}>
-                            <ModalButton
-                                title="Show data in tabular format"
-                                className={styles.showTableButton}
-                                iconName="table"
+                <header className={styles.header}>
+                    <div className={styles.tabs}>
+                        <div
+                            className={_cs(styles.tab, activeView === 'incidents' && styles.active)}
+                            onClick={this.handleIncidentsButtonClick}
+                            role="presentation"
+                        >
+                            <div className={styles.value}>
+                                { incidentList.length }
+                            </div>
+                            <div className={styles.title}>
+                                <div className={_cs(styles.icon, styles.incidentIcon)} />
+                                <div className={styles.text}>
+                                    Incidents
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            className={_cs(styles.tab, activeView === 'visualizations' && styles.active)}
+                            role="presentation"
+                            onClick={this.handleVisualizationsButtonClick}
+                        >
+                            <Icon
+                                className={styles.visualizationIcon}
+                                name="bars"
+                            />
+                            <div className={styles.text}>
+                                Visualizations
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.actions}>
+                        <Cloak hiddenIf={p => !p.change_incident}>
+                            <AccentModalButton
+                                className={styles.addIncidentButton}
+                                iconName="add"
+                                title="Add new incident"
                                 transparent
                                 modal={(
-                                    <IncidentTableModal
-                                        incidentList={incidentList}
+                                    <AddIncidentForm
+                                        lossServerId={lossServerId}
+                                        incidentServerId={incidentServerId}
+                                        onIncidentChange={this.handleIncidentEdit}
+                                        onLossChange={this.handleLossEdit}
                                     />
                                 )}
-                            />
-                            <Cloak hiddenIf={p => !p.change_incident}>
-                                <AccentModalButton
-                                    className={styles.addIncidentButton}
-                                    iconName="add"
-                                    title="Add new incident"
-                                    transparent
-                                    modal={(
-                                        <AddIncidentForm
-                                            lossServerId={lossServerId}
-                                            incidentServerId={incidentServerId}
-                                            onIncidentChange={this.handleIncidentEdit}
-                                            onLossChange={this.handleLossEdit}
-                                        />
-                                    )}
-                                >
-                                    Add
-                                </AccentModalButton>
-                            </Cloak>
-                        </div>
-                    </header>
+                            >
+                                New incident
+                            </AccentModalButton>
+                        </Cloak>
+                        <ModalButton
+                            title="Show data in tabular format"
+                            className={styles.showTableButton}
+                            iconName="table"
+                            transparent
+                            modal={(
+                                <IncidentTableModal
+                                    incidentList={incidentList}
+                                />
+                            )}
+                        />
+                    </div>
+                </header>
+                {activeView === 'incidents' && (
                     <IncidentListView
                         onIncidentHover={onIncidentHover}
                         hoveredIncidentId={hoveredIncidentId}
@@ -206,7 +246,14 @@ class LeftPane extends React.PureComponent {
                         incidentList={incidentList}
                         recentDay={recentDay}
                     />
-                </div>
+                )}
+                {activeView === 'visualizations' && (
+                    <Visualizations
+                        className={styles.content}
+                        incidentList={incidentList}
+                        hazardTypes={hazardTypes}
+                    />
+                )}
             </div>
         );
     }

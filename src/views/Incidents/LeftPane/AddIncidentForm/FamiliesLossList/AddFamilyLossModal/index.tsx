@@ -217,6 +217,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                         <Button
                             iconName="close"
                             onClick={closeModal}
+                            transparent
                             title="Close Modal"
                         />
                     )}

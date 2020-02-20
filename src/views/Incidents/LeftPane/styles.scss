@@ -10,6 +10,83 @@
         background-color: var(--color-background);
     }
 
+    >.header {
+        display: flex;
+        flex-shrink: 0;
+        background-color: var(--color-background);
+
+        .tabs {
+            display: flex;
+            flex-grow: 1;
+
+            .tab {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                cursor: pointer;
+                padding: var(--spacing-medium);
+
+                .value {
+                    color: var(--color-accent);
+                    font-size: var(--font-size-ultra-large);
+                }
+
+                .visualization-icon {
+                    color: var(--color-accent);
+                    font-size: var(--font-size-ultra-large);
+                }
+
+                .title {
+                    display: flex;
+                    align-items: center;
+
+                    .alert-icon {
+                        margin: var(--spacing-extra-small) var(--spacing-small);
+                        border-radius: 50%;
+                        background-color: var(--color-text-light);
+                        width: var(--font-size-small);
+                        height: var(--font-size-small);
+                    }
+
+                    .event-icon {
+                        margin: var(--spacing-extra-small) var(--spacing-small);
+                        background-color: var(--color-text-light);
+                        width: var(--font-size-small);
+                        height: var(--font-size-small);
+                    }
+                }
+
+                .text {
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-weight: var(--font-weight-bold);
+                }
+
+                &:hover {
+                    background-color: var(--color-background-hover);
+                }
+
+                &.active {
+                    background-color: var(--color-foreground);
+                }
+            }
+        }
+
+        .actions {
+            align-self: center;
+            flex-shrink: 0;
+            padding: var(--spacing-medium) var(--spacing-large);
+
+            .show-table-button {
+                font-size: var(--font-size-large);
+            }
+
+            .add-incident-button {
+                font-size: var(--font-size-medium);
+            }
+        }
+    }
+
     .incident-list {
         display: flex;
         flex-direction: column;

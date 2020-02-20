@@ -1,9 +1,8 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import MultiViewContainer from '#rscv/MultiViewContainer';
-import ScrollTabs from '#rscv/ScrollTabs';
 import AccentButton from '#rsca/Button/AccentButton';
+import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import Page from '#components/Page';
@@ -19,59 +18,134 @@ type TabKeys = 'summary' | 'projectsProfile' | 'contact';
 interface Props {
 }
 
+interface State {
+    activeView: TabKeys;
+}
+
 const IndicatorButton = modalize(AccentButton);
 
-const tabs: {
-    [key in TabKeys]: string;
-} = {
-    summary: 'Summary',
-    projectsProfile: 'Projects',
-    contact: 'Contact',
-};
+export default class Profile extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
 
-const rendererParams = () => ({ className: styles.view });
+        this.state = {
+            activeView: 'summary',
+        };
+    }
 
-export default class Profile extends React.PureComponent<Props> {
-    private views = {
-        summary: {
-            component: DisasterProfile,
-            rendererParams,
-        },
-        projectsProfile: {
-            component: ProjectsProfile,
-            rendererParams,
-        },
-        contact: {
-            component: Contact,
-            rendererParams,
-        },
-    };
+    private handleSummaryButtonClick = () => {
+        this.setState({ activeView: 'summary' });
+    }
+
+    private handleProjectButtonClick = () => {
+        this.setState({ activeView: 'projectsProfile' });
+    }
+
+    private handleContactButtonClick = () => {
+        this.setState({ activeView: 'contact' });
+    }
 
     public render() {
+        const { activeView } = this.state;
+
         return (
             <Page
                 leftContentContainerClassName={styles.leftContentContainer}
                 leftContent={(
+                    <div>
+                        <header className={styles.header}>
+                            <div className={styles.tabs}>
+                                <div
+                                    className={_cs(styles.tab, activeView === 'summary' && styles.active)}
+                                    onClick={this.handleSummaryButtonClick}
+                                    role="presentation"
+                                >
+                                    <Icon
+                                        className={styles.visualizationIcon}
+                                        name="bars"
+                                    />
+                                    <div className={styles.title}>
+                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
+                                        <div className={styles.text}>
+                                            Summary
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    className={_cs(styles.tab, activeView === 'projectsProfile' && styles.active)}
+                                    role="presentation"
+                                    onClick={this.handleProjectButtonClick}
+                                >
+                                    <Icon
+                                        className={styles.visualizationIcon}
+                                        name="briefcase"
+                                    />
+                                    <div className={styles.text}>
+                                        Projects
+                                    </div>
+                                </div>
+                                <div
+                                    className={_cs(styles.tab, activeView === 'contact' && styles.active)}
+                                    onClick={this.handleContactButtonClick}
+                                    role="presentation"
+                                >
+                                    <Icon
+                                        className={styles.visualizationIcon}
+                                        name="contacts"
+                                    />
+                                    <div className={styles.title}>
+                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
+                                        <div className={styles.text}>
+                                            Contacts
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.actions}>
+                                <IndicatorButton
+                                    transparent
+                                    modal={(
+                                        <Indicator />
+                                    )}
+                                >
+                                    Indicators
+                                </IndicatorButton>
+                            </div>
+                        </header>
+                        {activeView === 'summary' && (
+                            <DisasterProfile
+                                className={styles.profile}
+                            />
+                        )}
+                        {activeView === 'projectsProfile' && (
+                            <ProjectsProfile
+                                className={styles.profile}
+                            />
+                        )}
+                        {activeView === 'contact' && (
+                            <Contact
+                                className={styles.profile}
+                            />
+                        )}
+                    </div>
+                )}
+            />
+        );
+    }
+}
+
+/*
+
                     <>
                         <ScrollTabs
                             className={_cs(styles.tabs)}
                             tabs={tabs}
                             useHash
                         >
-                            <IndicatorButton
-                                transparent
-                                modal={<Indicator />}
-                            >
-                                Indicators
-                            </IndicatorButton>
                         </ScrollTabs>
                         <MultiViewContainer
                             views={this.views}
                             useHash
                         />
                     </>
-                )}
-            />
-        );
-    }
-}
+*/

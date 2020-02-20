@@ -255,20 +255,6 @@ class IncidentItem extends React.PureComponent {
                         />
                     </header>
                     <div className={styles.adminActions}>
-                        <Cloak hiddenIf={p => !p.change_feedback}>
-                            <ModalAccentButton
-                                className={styles.button}
-                                transparent
-                                iconName="chatBoxes"
-                                modal={(
-                                    <IncidentFeedbacksModal
-                                        incidentId={incidentId}
-                                    />
-                                )}
-                            >
-                                {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
-                            </ModalAccentButton>
-                        </Cloak>
                         <Cloak hiddenIf={p => !p.change_incident}>
                             <ModalAccentButton
                                 className={styles.button}
@@ -298,6 +284,20 @@ class IncidentItem extends React.PureComponent {
                             >
                                 Delete
                             </DangerConfirmButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.change_feedback}>
+                            <ModalAccentButton
+                                className={styles.button}
+                                transparent
+                                iconName="chatBoxes"
+                                modal={(
+                                    <IncidentFeedbacksModal
+                                        incidentId={incidentId}
+                                    />
+                                )}
+                            >
+                                {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
+                            </ModalAccentButton>
                         </Cloak>
                     </div>
                     <div className={styles.content}>

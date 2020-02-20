@@ -32,10 +32,10 @@ import {
     District,
     Province,
     Municipality,
-    HazardType,
+    // HazardType,
 } from '#store/atom/page/types';
 
-import SVGMapIcon from '#components/SVGMapIcon';
+// import SVGMapIcon from '#components/SVGMapIcon';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
@@ -52,7 +52,7 @@ import {
     municipalitiesSelector,
     provincesSelector,
     filtersSelector,
-    hazardTypeListSelector,
+    // hazardTypeListSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
@@ -178,7 +178,7 @@ interface PropsFromState {
     provinces: Province[];
     municipalities: Municipality[];
     filters: FiltersElement;
-    hazardList: HazardType[];
+    // hazardList: HazardType[];
 }
 
 interface PropsFromDispatch {
@@ -201,7 +201,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
-    hazardList: hazardTypeListSelector(state),
+    // hazardList: hazardTypeListSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -595,7 +595,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-            hazardList,
+            // hazardList,
         } = this.props;
 
         const {
@@ -727,7 +727,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             hideMap && styles.hidden,
                                         )}
                                     />
-                                    {hazardList.map((item) => {
+                                    {/* hazardList.map((item) => {
                                         if (!item.icon) {
                                             return null;
                                         }
@@ -739,7 +739,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 fillColor="#222222"
                                             />
                                         );
-                                    })}
+                                    }) */}
                                     { !hideMap && (
                                         <div className={styles.mapActions}>
                                             <MapDownloadButton
