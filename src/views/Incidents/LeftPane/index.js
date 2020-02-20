@@ -206,17 +206,6 @@ class LeftPane extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        <ModalButton
-                            title="Show data in tabular format"
-                            className={styles.showTableButton}
-                            iconName="table"
-                            transparent
-                            modal={(
-                                <IncidentTableModal
-                                    incidentList={incidentList}
-                                />
-                            )}
-                        />
                         <Cloak hiddenIf={p => !p.change_incident}>
                             <AccentModalButton
                                 className={styles.addIncidentButton}
@@ -232,9 +221,20 @@ class LeftPane extends React.PureComponent {
                                     />
                                 )}
                             >
-                                Add
+                                New incident
                             </AccentModalButton>
                         </Cloak>
+                        <ModalButton
+                            title="Show data in tabular format"
+                            className={styles.showTableButton}
+                            iconName="table"
+                            transparent
+                            modal={(
+                                <IncidentTableModal
+                                    incidentList={incidentList}
+                                />
+                            )}
+                        />
                     </div>
                 </header>
                 {activeView === 'incidents' && (

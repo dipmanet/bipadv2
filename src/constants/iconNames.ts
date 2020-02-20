@@ -83,6 +83,9 @@ const iconNames = {
     chatBoxes: 'ion-chatboxes',
     chatBox: 'ion-chatbox',
     edit: 'ion-compose',
+
+    contacts: 'ion-ios-contact-outline',
+    briefcase: 'ion-briefcase',
 };
 
 export default iconNames;

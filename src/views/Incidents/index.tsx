@@ -115,7 +115,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ...transformFilters(filters),
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
-            limit: 99999,
+            limit: -1,
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }

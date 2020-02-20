@@ -6,16 +6,15 @@
 
     .label {
         order: 2;
-        // text-align: center;
-        color: var(--color-text-label);
+        color: var(--color-text);
         font-size: var(--font-size-small);
+        font-weight: var(--font-weight-light);
     }
 
     .value {
         order: 1;
-        // text-align: center;
         color: var(--color-danger);
-        font-size: var(--font-size-large);
-        font-weight: var(--font-weight-medium);
+        font-size: var(--font-size-super-large);
+        font-weight: var(--font-weight-light);
     }
 }

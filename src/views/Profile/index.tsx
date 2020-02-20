@@ -78,7 +78,7 @@ export default class Profile extends React.PureComponent<Props, State> {
                                 >
                                     <Icon
                                         className={styles.visualizationIcon}
-                                        name="bars"
+                                        name="briefcase"
                                     />
                                     <div className={styles.text}>
                                         Projects
@@ -91,7 +91,7 @@ export default class Profile extends React.PureComponent<Props, State> {
                                 >
                                     <Icon
                                         className={styles.visualizationIcon}
-                                        name="bars"
+                                        name="contacts"
                                     />
                                     <div className={styles.title}>
                                         <div className={_cs(styles.icon, styles.incidentIcon)} />
