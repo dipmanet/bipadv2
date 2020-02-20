@@ -39,15 +39,14 @@ interface IncidentFeedback {
     createdOn: string;
 }
 
-interface IncidentFeedbackItemProps {
-    className?: string;
-    data: IncidentFeedback;
-}
-
 const DetailItem = ({
     className,
     iconName,
     value,
+}: {
+    className?: string;
+    iconName: string;
+    value: React.ReactNode;
 }) => (
     <div className={_cs(className, styles.detailItem)}>
         <Icon
@@ -59,6 +58,12 @@ const DetailItem = ({
         </div>
     </div>
 );
+
+interface IncidentFeedbackItemProps {
+    className?: string;
+    data: IncidentFeedback;
+    onSuccess: (data: IncidentFeedback) => void;
+}
 
 const IncidentFeedbackItem = (props: IncidentFeedbackItemProps) => {
     const {
@@ -74,6 +79,7 @@ const IncidentFeedbackItem = (props: IncidentFeedbackItemProps) => {
             acknowledged,
             // ward,
         },
+        onSuccess,
     } = props;
 
     return (
@@ -124,6 +130,7 @@ const IncidentFeedbackItem = (props: IncidentFeedbackItemProps) => {
                         iconName="check"
                         modal={(
                             <IncidentFeedbackAckFormModal
+                                onSuccess={onSuccess}
                                 // incidentId={incidentId}
                                 feedbackId={id}
                             />
@@ -146,14 +153,16 @@ interface OwnProps {
 }
 
 interface State {
+    incidentFeedbacks: IncidentFeedback[];
 }
 
 interface Params {
+    setIncidentFeedbacks: (incidentFeedback: IncidentFeedback[]) => void;
 }
 
 type Props = NewProps<OwnProps, Params>;
 
-const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     incidentFeedbacksGet: {
         url: '/incident-feedback/',
         query: ({ props }) => ({
@@ -161,19 +170,50 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
         }),
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ response, params }) => {
+            const feedbackResponse = response as MultiResponse<IncidentFeedback>;
+            if (params && params.setIncidentFeedbacks) {
+                params.setIncidentFeedbacks(feedbackResponse.results);
+            }
+        },
     },
 };
 
 class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            incidentFeedbacks: [],
+        };
+
+        const { requests } = this.props;
+        requests.incidentFeedbacksGet.setDefaultParams({
+            setIncidentFeedbacks: (incidentFeedbacks: IncidentFeedback[]) => {
+                this.setState({ incidentFeedbacks });
+            },
+        });
     }
 
     private rendererParams = (key: number, data: IncidentFeedback) => ({
         className: styles.incidentFeedbackItem,
         data,
+        onSuccess: this.handleSuccess,
     })
+
+    private handleSuccess = (data: IncidentFeedback) => {
+        const { incidentFeedbacks } = this.state;
+        const newFeedbacks = [...incidentFeedbacks];
+        const index = incidentFeedbacks.findIndex(i => i.id === data.id);
+        if (index === -1) {
+            console.error('Cannot replace item which is not in the list');
+            return;
+        }
+
+        newFeedbacks.splice(index, 1, data);
+        this.setState({
+            incidentFeedbacks: newFeedbacks,
+        });
+    }
 
     public render() {
         const {
@@ -186,12 +226,9 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
                 },
             },
         } = this.props;
-
-        let incidentFeedbackList: IncidentFeedback[] = [];
-        if (!pending && response) {
-            const incidentFeedbackResponse = response as MultiResponse<IncidentFeedback>;
-            incidentFeedbackList = incidentFeedbackResponse.results;
-        }
+        const {
+            incidentFeedbacks,
+        } = this.state;
 
         return (
             <Modal className={_cs(styles.incidentFeebacksModal, className)}>
@@ -209,7 +246,7 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
                 <ModalBody className={styles.modalBody}>
                     <ListView
                         className={styles.incidentFeedbackList}
-                        data={incidentFeedbackList}
+                        data={incidentFeedbacks}
                         keySelector={keySelector}
                         renderer={IncidentFeedbackItem}
                         rendererParams={this.rendererParams}
@@ -221,6 +258,6 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requests)(
+export default createRequestClient(requestOptions)(
     IncidentFeedbacksModal,
 );

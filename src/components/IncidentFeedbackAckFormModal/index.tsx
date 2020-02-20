@@ -1,6 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import Faram, { emailCondition, requiredCondition } from '@togglecorp/faram';
+import Faram, { requiredCondition } from '@togglecorp/faram';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -9,13 +9,8 @@ import ModalFooter from '#rscv/Modal/Footer';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
-import TextInput from '#rsci/TextInput';
 import TextArea from '#rsci/TextArea';
 import ReCaptcha from '#rsci/ReCaptcha';
-
-import {
-    BasicElement,
-} from '#types';
 
 import {
     createConnectedRequestCoordinator,
@@ -27,10 +22,25 @@ import {
 
 import styles from './styles.scss';
 
+// FIXME: get from common typings
+interface IncidentFeedback {
+    name: string;
+    email: string;
+    mobileNumber?: string | number;
+    comment: string;
+    acknowledged: boolean;
+    acknowledgedMessage?: string;
+    incident: number;
+
+    id: number;
+    createdOn: string;
+}
+
 interface ComponentProps {
     className?: string;
     closeModal?: () => void;
     feedbackId: number;
+    onSuccess: (data: IncidentFeedback) => void;
 }
 
 interface FaramValues {
@@ -56,10 +66,12 @@ const schema = {
 
 const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     incidentFeedbackPostRequest: {
-        url: '/incident-feedback/',
+        url: ({ props: { feedbackId } }) => `/incident-feedback/${feedbackId}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
+            const feedback = response as IncidentFeedback;
+            props.onSuccess(feedback);
             if (props.closeModal) {
                 props.closeModal();
             }
