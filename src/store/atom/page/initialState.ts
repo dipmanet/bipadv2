@@ -23,7 +23,7 @@ const state: PageState = {
         region: {},
         hazard: [],
         dataDateRange: {
-            rangeInDays: 3,
+            rangeInDays: 30,
             startDate: getInitialStartDate(3),
             endDate: (new Date()).toISOString(),
         },
