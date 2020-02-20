@@ -255,7 +255,7 @@ class IncidentItem extends React.PureComponent {
                         />
                     </header>
                     <div className={styles.adminActions}>
-                        <Cloak hiddenIf={p => !p.can_edit_incident_feedback}>
+                        <Cloak hiddenIf={p => !p.change_feedback}>
                             <ModalAccentButton
                                 className={styles.button}
                                 transparent

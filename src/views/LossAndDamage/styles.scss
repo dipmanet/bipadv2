@@ -12,7 +12,7 @@
         .date-details {
             display: flex;
             align-items: center;
-            padding: calc(var(--spacing-small) var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
 
             .info-icon-container {
                 flex-shrink: 0;
@@ -39,7 +39,7 @@
         .source-details {
             display: flex;
             align-items: baseline;
-            padding: calc(var(--spacing-small) var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+            padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
 
             .info-icon-container {
                 flex-shrink: 0;
