@@ -1,36 +1,41 @@
 @import '~base-scss/base';
 
 .multi-list-selection {
+    padding: calc(var(--spacing-medium) - var(--spacing-small)) 0;
+
     .header-container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) 0;
 
         .label {
-            margin-bottom: $spacing-extra-small;
-            padding: $spacing-extra-small;
+            flex-grow: 1;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
         }
 
         .clear-button {
             padding: 0;
-            color: $color-danger;
-            font-size: $font-size-extra-small;
+            padding: var(--spacing-extra-small) var(--spacing-medium);
+            color: var(--color-danger);
+            font-size: var(--font-size-small);
         }
     }
 
     .options {
-        display: flex;
-        flex-wrap: wrap;
+        padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
 
         .option {
-            flex-basis: calc(100% / 10);
+            display: flex;
+            align-items: center;
             flex-grow: 0;
-            margin: $spacing-small;
-            padding: $spacing-small;
+            cursor: pointer;
+            padding: calc(var(--spacing-extra-small-alt) - var(--spacing-extra-small)) 0;
 
             .icon {
+                display: block;
                 transition: $duration-transition-medium all ease-in-out;
                 opacity: .5;
+                margin: var(--spacing-extra-small) var(--spacing-small);
                 width: 16px;
                 height: 16px;
                 filter: grayscale(77%);
@@ -43,8 +48,9 @@
             .title {
                 transition: $duration-transition-medium all ease-in-out;
                 text-transform: none;
-                color: $color-text-disabled;
-                font-size: $font-size-extra-small;
+                color: var(--color-text-light);
+                font-size: var(--font-size-small);
+                padding: var(--spacing-extra-small) var(--spacing-small);
             }
 
             &:hover {
@@ -58,9 +64,7 @@
             }
 
             &.active {
-                // background-color: var(--color-accent-light);
-                background-color: var(--color-accent);
-                color: var(--color-text-on-accent);
+                color: var(--color-accent);
 
                 .icon {
                     opacity: 1;

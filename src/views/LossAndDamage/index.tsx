@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 import {
     listToGroupList,
     isDefined,
+    listToMap,
 } from '@togglecorp/fujs';
 import {
     ResponsiveContainer,
@@ -19,13 +20,17 @@ import {
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-import SegmentInput from '#rsci/SegmentInput';
+// import SegmentInput from '#rsci/SegmentInput';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
-import { hazardTypesSelector } from '#selectors';
+import {
+    hazardTypesSelector,
+    hazardFilterSelector,
+    regionFilterSelector,
+} from '#selectors';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -75,8 +80,8 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
         method: methods.GET,
         query: {
             expand: ['loss.peoples', 'wards'],
-            limit: 1000,
-            // limit: -1,
+            // limit: 9000,
+            limit: -1,
             ordering: '-incident_on',
             lnd: true,
         },
@@ -164,8 +169,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         return counts;
     }
 
-    private getDataAggregatedByYear = memoize((data, hazardTypes) => {
-        const dataWithYear = data.map((d) => {
+    private getDataAggregatedByYear = memoize((data, hazardTypes, hazardFilter, regionFilter) => {
+        const hazardFilterMap = listToMap(hazardFilter, d => d, () => true);
+        const filteredData = hazardFilter.length > 0
+            ? data.filter(d => hazardFilterMap[d.hazard])
+            : data;
+
+        const dataWithYear = filteredData.map((d) => {
             const incidentDate = new Date(d.incidentOn);
             incidentDate.setDate(1);
             incidentDate.setHours(0);
@@ -188,12 +198,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const aggregatedData = dateList.map((date) => {
             const dataListForCurrentYear = dateGroupedData[date].filter(d => !!d.loss);
             const summaryForCurrentYear = this.calculateSummary(dataListForCurrentYear);
-            const hazardSummary = this.getHazardsCount(dataListForCurrentYear, hazardTypes);
+            // const hazardSummary = this.getHazardsCount(dataListForCurrentYear, hazardTypes);
 
             return {
                 incidentMonthTimestamp: date,
                 summary: summaryForCurrentYear,
-                hazardSummary,
+                // hazardSummary,
             };
         });
 
@@ -208,6 +218,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const {
             requests,
             hazardTypes,
+            hazardFilter,
+            regionFilter,
         } = this.props;
 
         const { selectedMetric } = this.state;
@@ -215,13 +227,19 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
 
-        const chartData = this.getDataAggregatedByYear(incidentList, hazardTypes);
+        const chartData = this.getDataAggregatedByYear(
+            incidentList,
+            hazardTypes,
+            hazardFilter,
+            regionFilter,
+        );
         const minDate = this.getMinDate(incidentList);
 
         return (
             <>
                 <Loading pending={pending} />
                 <Page
+                    hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
@@ -361,49 +379,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
-                                <div className={styles.hazardSummary}>
-                                    <ResponsiveContainer>
-                                        <AreaChart
-                                            data={chartData}
-                                            stackOffset="expand"
-                                            margin={chartMargin}
-                                        >
-                                            <XAxis
-                                                hide
-                                                type="number"
-                                                dataKey="incidentMonthTimestamp"
-                                                domain={['dataMin', 'dataMax']}
-                                                allowDecimals={false}
-                                            />
-                                            <YAxis
-                                                hide
-                                                type="number"
-                                                domain={['dataMin', 'dataMax']}
-                                            />
-                                            <defs>
-                                                { Object.values(hazardTypes).map(h => (
-                                                    <linearGradient key={h.id} id={`hazardColor-${h.id}`} x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor={h.color} stopOpacity={0.9} />
-                                                        <stop offset="95%" stopColor={h.color} stopOpacity={0.1} />
-                                                    </linearGradient>
-                                                ))}
-                                            </defs>
-                                            { Object.values(hazardTypes).map(h => (
-                                                <Area
-                                                    stackId="hazardSummary"
-                                                    key={h.id}
-                                                    type="monotone"
-                                                    dataKey={`hazardSummary.${h.id}.summary.${selectedMetric}`}
-                                                    stroke={h.color}
-                                                    fill={`url(#hazardColor-${h.id})`}
-                                                />
-                                            ))}
-                                            <Tooltip formatter={(value, name) => [value, hazardTypes[name.split('.')[1]].title]} />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                                </div>
                             </div>
                             <footer className={styles.footer}>
+                                {/*
                                 <div className={styles.configurationOptions}>
                                     <SegmentInput
                                         options={lossMetrics}
@@ -415,7 +393,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         }}
                                     />
                                 </div>
+                                */}
                                 <CompareButton
+                                    disabled={pending}
                                     className={styles.compareButton}
                                     modal={<Comparative lossAndDamageList={incidentList} />}
                                 >
@@ -432,6 +412,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
+    hazardFilter: hazardFilterSelector(state),
+    regionSelector: regionFilterSelector(state),
 });
 
 export default compose(

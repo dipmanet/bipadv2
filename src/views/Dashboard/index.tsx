@@ -98,7 +98,7 @@ const transformFilters = ({
     ...otherFilters
 }: FiltersElement) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, 'created_on'),
+    ...transformDataRangeToFilter(dataDateRange, 'expire_on'),
     ...transformRegionToFilter(region),
 });
 

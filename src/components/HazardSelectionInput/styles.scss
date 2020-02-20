@@ -1,11 +1,9 @@
-@import '~base-scss/base';
-
 .hazard-selection-input {
     .artificial-hazard-selection-input {
-        padding: $spacing-small 0;
+        padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-small));
     }
 
     .natural-hazard-selection-input {
-        padding: $spacing-small 0;
+        padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-small));
     }
 }

@@ -6,6 +6,8 @@ type SetContentFunction = (
     contentClassName?: string
 ) => void;
 
+type SetVisibilityFunction = () => void;
+
 export interface PageContextProps {
     setLeftContent?: SetContentFunction;
     setRightContent?: SetContentFunction;
@@ -13,8 +15,16 @@ export interface PageContextProps {
     setMainContent?: SetContentFunction;
     setActiveRouteDetails?: (activeRouteDetail: RouteDetailElement) => void;
     activeRouteDetails?: RouteDetailElement;
-    hideMap?: () => void;
-    showMap?: () => void;
+    hideMap?: SetVisibilityFunction;
+    showMap?: SetVisibilityFunction;
+    hideFilter?: SetVisibilityFunction;
+    showFilter?: SetVisibilityFunction;
+    showLocationFilter?: SetVisibilityFunction;
+    hideLocationFilter?: SetVisibilityFunction;
+    showHazardFilter?: SetVisibilityFunction;
+    hideHazardFilter?: SetVisibilityFunction;
+    showDataRangeFilter?: SetVisibilityFunction;
+    hideDataRangeFilter?: SetVisibilityFunction;
 }
 
 export default React.createContext<PageContextProps>({});

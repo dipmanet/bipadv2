@@ -535,6 +535,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showStreamflow={showStreamflow}
                 />
                 <Page
+                    hideHazardFilter
+                    hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>

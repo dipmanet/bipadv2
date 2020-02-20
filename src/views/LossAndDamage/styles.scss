@@ -92,12 +92,13 @@
 
             .chart-container {
                 .heading {
-                    display: none;
+                    // display: none;
+                    padding: 0 var(--spacing-large);
                 }
 
                 .content {
                     margin: 0 var(--spacing-large);
-                    height: 48px;
+                    height: 84px;
                 }
             }
 

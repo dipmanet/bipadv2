@@ -154,6 +154,10 @@ interface State {
     filterContentContainerClassName?: string;
     leftContainerHidden?: boolean;
     hideMap?: boolean;
+    hideFilter?: boolean;
+    hideLocationFilter?: boolean;
+    hideHazardFilter?: boolean;
+    hideDataRangeFilter?: boolean;
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
 }
@@ -425,6 +429,38 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ hideMap: false });
     }
 
+    private hideFilter = () => {
+        this.setState({ hideFilter: true });
+    }
+
+    private showFilter = () => {
+        this.setState({ hideFilter: false });
+    }
+
+    private hideLocationFilter = () => {
+        this.setState({ hideLocationFilter: true });
+    }
+
+    private showLocationFilter = () => {
+        this.setState({ hideLocationFilter: false });
+    }
+
+    private hideHazardFilter = () => {
+        this.setState({ hideHazardFilter: true });
+    }
+
+    private showHazardFilter = () => {
+        this.setState({ hideHazardFilter: false });
+    }
+
+    private hideDataRangeFilter = () => {
+        this.setState({ hideDataRangeFilter: true });
+    }
+
+    private showDataRangeFilter = () => {
+        this.setState({ hideDataRangeFilter: false });
+    }
+
     private addLayer = (layer: Layer) => {
         this.setState(({ activeLayers }) => {
             const layerIndex = activeLayers.findIndex(d => d.id === layer.id);
@@ -572,6 +608,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
             filterContent,
             filterContentContainerClassName,
             hideMap,
+            hideFilter,
+            hideLocationFilter,
+            hideDataRangeFilter,
+            hideHazardFilter,
             activeRouteDetails,
             activeLayers,
             leftContainerHidden,
@@ -586,6 +626,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeRouteDetails,
             hideMap: this.hideMap,
             showMap: this.showMap,
+            showFilter: this.showFilter,
+            hideFilter: this.hideFilter,
+            showLocationFilter: this.showLocationFilter,
+            hideLocationFilter: this.hideLocationFilter,
+            showHazardFilter: this.showHazardFilter,
+            hideHazardFilter: this.hideHazardFilter,
+            showDataRangeFilter: this.showDataRangeFilter,
+            hideDataRangeFilter: this.hideDataRangeFilter,
         };
 
         const riskInfoLayerProps = {
@@ -650,17 +698,19 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         </div>
                                     </aside>
                                 )}
-                                <div
-                                    role="presentation"
-                                    className={styles.toggleLeftContainerVisibilityButton}
-                                    onClick={
-                                        this.handleToggleLeftContainerVisibilityButtonClick
-                                    }
-                                >
-                                    <Icon
-                                        name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
-                                    />
-                                </div>
+                                { leftContent && (
+                                    <div
+                                        role="presentation"
+                                        className={styles.toggleLeftContainerVisibilityButton}
+                                        onClick={
+                                            this.handleToggleLeftContainerVisibilityButtonClick
+                                        }
+                                    >
+                                        <Icon
+                                            name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
+                                        />
+                                    </div>
+                                )}
                                 <main className={styles.main}>
                                     { mainContent && (
                                         <div className={_cs(
@@ -717,13 +767,18 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 { rightContent }
                                             </div>
                                         )}
-                                        <Filters
-                                            className={styles.filters}
-                                            extraContent={filterContent}
-                                            extraContentContainerClassName={
-                                                filterContentContainerClassName
-                                            }
-                                        />
+                                        { !hideFilter && (
+                                            <Filters
+                                                className={styles.filters}
+                                                hideLocationFilter={hideLocationFilter}
+                                                hideHazardFilter={hideHazardFilter}
+                                                hideDataRangeFilter={hideDataRangeFilter}
+                                                extraContent={filterContent}
+                                                extraContentContainerClassName={
+                                                    filterContentContainerClassName
+                                                }
+                                            />
+                                        )}
                                     </aside>
                                 )}
                                 {this.renderRoutes()}

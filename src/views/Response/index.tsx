@@ -219,6 +219,7 @@ class Response extends React.PureComponent<Props, State> {
                             rightPaneExpanded={rightPaneExpanded}
                         />
                         <Page
+                            hideFilter
                             leftContentContainerClassName={styles.leftContainer}
                             leftContent={(
                                 <LeftPane

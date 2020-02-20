@@ -24,6 +24,9 @@ interface ComponentProps {
     className?: string;
     extraContent?: React.ReactNode;
     extraContentContainerClassName?: string;
+    hideLocationFilter?: boolean;
+    hideDataRangeFilter?: boolean;
+    hideHazardFilter?: boolean;
 }
 
 interface PropsFromAppState {
@@ -179,20 +182,39 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private getTabs = memoize(
-        (extraContent: React.ReactNode): {
+        (
+            extraContent: React.ReactNode,
+            hideLocationFilter,
+            hideHazardFilter,
+            hideDataRangeFilter,
+        ): {
             [key in TabKey]?: string;
-        } => (
-            extraContent ? ({
+        } => {
+            const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
                 dataRange: 'Data range',
                 others: 'Others',
-            }) : ({
-                location: 'Location',
-                hazard: 'Hazard',
-                dataRange: 'Data range',
-            })
-        ),
+            };
+
+            if (!extraContent) {
+                delete tabs.others;
+            }
+
+            if (hideLocationFilter) {
+                delete tabs.location;
+            }
+
+            if (hideHazardFilter) {
+                delete tabs.hazard;
+            }
+
+            if (hideDataRangeFilter) {
+                delete tabs.dataRange;
+            }
+
+            return tabs;
+        },
     )
 
     public render() {
@@ -200,10 +222,18 @@ class Filters extends React.PureComponent<Props, State> {
             className,
             filters: faramValues,
             extraContent,
+            hideDataRangeFilter,
+            hideHazardFilter,
+            hideLocationFilter,
         } = this.props;
 
         const { activeView } = this.state;
-        const tabs = this.getTabs(extraContent);
+        const tabs = this.getTabs(
+            extraContent,
+            hideLocationFilter,
+            hideHazardFilter,
+            hideDataRangeFilter,
+        );
 
         return (
             <div className={_cs(styles.filters, className)}>
