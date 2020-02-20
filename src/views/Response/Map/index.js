@@ -168,6 +168,7 @@ class ResponseMap extends React.PureComponent {
                     <SVGMapIcon
                         src={image.icon}
                         name={image.name}
+                        fillColor="#222222"
                     />
                 ))}
                 <MapSource
@@ -184,7 +185,6 @@ class ResponseMap extends React.PureComponent {
                         layerOptions={{
                             type: 'circle',
                             paint: mapStyles.resourcePoint.circle,
-                            enableHover: true,
                         }}
                     />
                     <MapLayer

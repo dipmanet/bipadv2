@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
+import { isDefined, unique } from '@togglecorp/fujs';
 
-import { isDefined } from '@togglecorp/fujs';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
 
+import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
 import {
     hazardTypesSelector,
@@ -221,6 +222,14 @@ class IncidentMap extends React.PureComponent {
             },
         } = this.props;
 
+
+        const icons = unique(
+            incidentList
+                .filter(incident => incident.hazardInfo && incident.hazardInfo.icon)
+                .map(incident => incident.hazardInfo.icon),
+            icon => icon,
+        );
+
         const pointFeatureCollection = this.getPointFeatureCollection(incidentList, hazards);
         const polygonFeatureCollection = this.getPolygonFeatureCollection(incidentList, hazards);
 
@@ -245,6 +254,14 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="incidents" />
+                {icons.map(icon => (
+                    <SVGMapIcon
+                        key={icon}
+                        src={icon}
+                        name={icon}
+                        fillColor="#222222"
+                    />
+                ))}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}
@@ -282,7 +299,6 @@ class IncidentMap extends React.PureComponent {
                             paint: isHovered
                                 ? mapStyles.incidentPoint.dimFill
                                 : mapStyles.incidentPoint.fill,
-                            enableHover: true,
                         }}
                         onClick={this.handleIncidentClick}
                         onMouseEnter={this.handleIncidentMouseEnter}

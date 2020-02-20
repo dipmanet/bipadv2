@@ -348,21 +348,25 @@ export default class RealTimeMap extends React.PureComponent {
                 <SVGMapIcon
                     src={RainIcon}
                     name="rain"
+                    fillColor="#222222"
                 />
                 <SVGMapIcon
                     src={RiverIcon}
                     name="river"
+                    fillColor="#222222"
                 />
                 <SVGMapIcon
                     src={EarthquakeIcon}
                     name="earthquake"
+                    fillColor="#222222"
                 />
                 <SVGMapIcon
                     src={PollutionIcon}
                     name="pollution"
+                    fillColor="#222222"
                 />
                 <SVGMapIcon
-                    fillColor="#ffffff"
+                    fillColor="#222222"
                     src={FireIcon}
                     name="forest-fire"
                 />
@@ -426,7 +430,6 @@ export default class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.rainPoint.paint,
-                                    enableHover: true,
                                 }}
                             />
                             <MapLayer
@@ -437,7 +440,6 @@ export default class RealTimeMap extends React.PureComponent {
                                         'icon-image': 'rain',
                                         'icon-size': 0.2,
                                     },
-                                    enableHover: true,
                                 }}
                             />
                         </>
@@ -457,7 +459,6 @@ export default class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.riverPoint.paint,
-                                    enableHover: true,
                                 }}
                             />
                             <MapLayer
@@ -468,7 +469,6 @@ export default class RealTimeMap extends React.PureComponent {
                                         'icon-image': 'river',
                                         'icon-size': 0.2,
                                     },
-                                    enableHover: true,
                                 }}
                             />
                         </>
@@ -489,7 +489,6 @@ export default class RealTimeMap extends React.PureComponent {
                                     type: 'circle',
                                     property: 'earthquakeId',
                                     paint: mapStyles.earthquakePoint.fill,
-                                    enableHover: true,
                                 }}
                             />
                             <MapLayer
@@ -509,7 +508,6 @@ export default class RealTimeMap extends React.PureComponent {
                                         'icon-image': 'earthquake',
                                         'icon-size': 0.2,
                                     },
-                                    enableHover: true,
                                 }}
                             />
                         </React.Fragment>
@@ -529,7 +527,6 @@ export default class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.firePoint.paint,
-                                    enableHover: true,
                                 }}
                             />
                             <MapLayer
@@ -561,7 +558,6 @@ export default class RealTimeMap extends React.PureComponent {
                                     type: 'circle',
                                     property: 'pollutionId',
                                     paint: mapStyles.pollutionPoint.fill,
-                                    enableHover: true,
                                 }}
                             />
                             <MapLayer
