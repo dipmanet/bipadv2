@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 
 const contactKeySelector = (d: Contact) => d.id;
 
-const requests: { [key: string]: ClientAttributes<Props, Params> } = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     municipalityContactRequest: {
         url: '/municipality-contact/',
         method: methods.GET,

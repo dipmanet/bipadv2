@@ -1,0 +1,29 @@
+.item {
+    .title {
+        flex-grow: 1;
+        padding: var(--spacing-extra-small) var(--spacing-small);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .download {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        .icon {
+            flex-shrink: 0;
+            margin: var(--spacing-small);
+            color: var(--color-accent);
+            font-size: var(--font-size-large);
+        }
+
+        .text {
+            flex-grow: 1;
+            padding: var(--spacing-small);
+        }
+
+        &:hover {
+            background-color: var(--color-background-hover);
+        }
+    }
+}

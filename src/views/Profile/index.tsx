@@ -10,10 +10,11 @@ import DisasterProfile from './DisasterProfile';
 import ProjectsProfile from './ProjectsProfile';
 import Indicator from './Indicator';
 import Contact from './Contact';
+import Document from './Document';
 
 import styles from './styles.scss';
 
-type TabKeys = 'summary' | 'projectsProfile' | 'contact';
+type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';
 
 interface Props {
 }
@@ -43,6 +44,10 @@ export default class Profile extends React.PureComponent<Props, State> {
 
     private handleContactButtonClick = () => {
         this.setState({ activeView: 'contact' });
+    }
+
+    private handleDocumentButtonClick = () => {
+        this.setState({ activeView: 'document' });
     }
 
     public render() {
@@ -100,6 +105,22 @@ export default class Profile extends React.PureComponent<Props, State> {
                                         </div>
                                     </div>
                                 </div>
+                                <div
+                                    className={_cs(styles.tab, activeView === 'document' && styles.active)}
+                                    onClick={this.handleDocumentButtonClick}
+                                    role="presentation"
+                                >
+                                    <Icon
+                                        className={styles.visualizationIcon}
+                                        name="document"
+                                    />
+                                    <div className={styles.title}>
+                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
+                                        <div className={styles.text}>
+                                            Document
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className={styles.actions}>
                                 <IndicatorButton
@@ -124,6 +145,11 @@ export default class Profile extends React.PureComponent<Props, State> {
                         )}
                         {activeView === 'contact' && (
                             <Contact
+                                className={styles.profile}
+                            />
+                        )}
+                        {activeView === 'document' && (
+                            <Document
                                 className={styles.profile}
                             />
                         )}
