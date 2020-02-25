@@ -3,14 +3,17 @@
     padding: var(--spacing-medium);
     overflow-y: auto;
 
-    .situation-report-full {
-        background-color: var(--color-foreground);
+    .download-button-container {
+        display: flex;
+        justify-content: flex-end;
+
+        .download-button {
+            margin: var(--spacing-small) var(--spacing-large);
+        }
     }
 
-    .download-button {
-        position: absolute;
-        top: var(--spacing-large);
-        right: var(--spacing-large);
+    .situation-report-full {
+        background-color: var(--color-foreground);
     }
 
     .header {

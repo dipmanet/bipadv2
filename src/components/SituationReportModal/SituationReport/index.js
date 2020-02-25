@@ -335,7 +335,7 @@ class SituationReport extends React.PureComponent {
 
         return (
             <div className={_cs(styles.situationReport, className)}>
-                <div className={styles.situationReportFull}>
+                <div className={styles.downloadButtonContainer}>
                     <Button
                         className={styles.downloadButton}
                         onClick={this.handleDownloadClick}
@@ -343,6 +343,8 @@ class SituationReport extends React.PureComponent {
                     >
                         Download
                     </Button>
+                </div>
+                <div className={styles.situationReportFull}>
                     <header className={styles.header}>
                         <h2>Incident Situation Report</h2>
                     </header>
