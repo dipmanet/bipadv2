@@ -301,6 +301,7 @@ export default class TabularView extends React.PureComponent {
                     <DownloadButton
                         onClick={this.handleClick}
                         value={lossAndDamageListForExport}
+                        name="damage-and-losses"
                     >
                         Download csv
                     </DownloadButton>

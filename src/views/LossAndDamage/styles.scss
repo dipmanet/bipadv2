@@ -84,10 +84,19 @@
     }
 
     .actions {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
+        justify-content: flex-end;
+        padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-small));
 
         .compare-button {
-            margin: var(--spacing-medium) var(--spacing-large);
+            margin: var(--spacing-small);
+        }
+
+        .show-table-button {
+            margin: var(--spacing-small);
+            font-size: var(--font-size-large);
         }
     }
 
@@ -123,4 +132,18 @@
         }
     }
 
+}
+
+.loss-and-damage-table-modal {
+    width: 90vw;
+    height: 90vh;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .table {
+            flex-grow: 1;
+        }
+    }
 }

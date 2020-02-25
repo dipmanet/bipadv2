@@ -23,6 +23,10 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
 
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+
 import { lossMetrics } from '#utils/domain';
 import {
     sum,
@@ -46,6 +50,7 @@ import LossDetails from '#components/LossDetails';
 import Loading from '#components/Loading';
 import Page from '#components/Page';
 
+import TabularView from './TabularView';
 import Comparative from './Comparative';
 import { getSanitizedIncidents } from './common';
 
@@ -57,7 +62,31 @@ import {
 import styles from './styles.scss';
 import Overview from './Overview';
 
-const CompareButton = modalize(Button);
+const ModalButton = modalize(Button);
+
+const IncidentTableModal = ({
+    closeModal,
+    incidentList,
+}) => (
+    <Modal className={styles.lossAndDamageTableModal}>
+        <ModalHeader
+            title="Incidents"
+            rightComponent={(
+                <Button
+                    iconName="close"
+                    onClick={closeModal}
+                    transparent
+                />
+            )}
+        />
+        <ModalBody className={styles.body}>
+            <TabularView
+                className={styles.table}
+                lossAndDamageList={incidentList}
+            />
+        </ModalBody>
+    </Modal>
+);
 
 interface State {
 }
@@ -374,13 +403,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 </div>
                             </div>
                             <div className={styles.actions}>
-                                <CompareButton
+                                <ModalButton
                                     disabled={pending}
                                     className={styles.compareButton}
                                     modal={<Comparative lossAndDamageList={incidentList} />}
                                 >
                                     Compare regions
-                                </CompareButton>
+                                </ModalButton>
+                                <ModalButton
+                                    title="Show data in tabular format"
+                                    className={styles.showTableButton}
+                                    iconName="table"
+                                    transparent
+                                    modal={(
+                                        <IncidentTableModal
+                                            incidentList={incidentList}
+                                        />
+                                    )}
+                                />
                             </div>
                             <div className={styles.mainContent}>
                                 <LossDetails
