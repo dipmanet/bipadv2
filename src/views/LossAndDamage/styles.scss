@@ -80,6 +80,15 @@
                 }
             }
         }
+
+    }
+
+    .actions {
+        flex-shrink: 0;
+
+        .compare-button {
+            margin: var(--spacing-medium) var(--spacing-large);
+        }
     }
 
     .main-content {
@@ -114,15 +123,4 @@
         }
     }
 
-    .footer {
-        flex-shrink: 0;
-
-        .compare-button {
-            margin: var(--spacing-medium) var(--spacing-large);
-        }
-
-        .configuration-options {
-            padding: 0 var(--spacing-large);
-        }
-    }
 }

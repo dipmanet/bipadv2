@@ -20,15 +20,8 @@
             font-weight: var(--font-weight-bold);
         }
 
-        .show-layer-details-button {
-            transition: .2s opacity ease-in-out;
-            opacity: 0;
-        }
-
-        &:hover {
-            .show-layer-details-button {
-                opacity: 1;
-            }
+        .show-data-table-button {
+            font-size: var(--font-size-large);
         }
     }
 

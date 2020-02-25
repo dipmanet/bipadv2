@@ -1,13 +1,12 @@
 .legend {
     position: absolute;
     bottom: var(--spacing-medium);
-    left: calc(var(--width-left-panel) + var(--spacing-medium));
     z-index: 11;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--radius-border-pane);
     background-color: var(--color-foreground);
     padding: var(--spacing-medium);
-    width: 240px;
+    width: 40vw;
 
     &.left-pane-expanded {
         left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
@@ -36,10 +35,18 @@
 
     .scale {
         display: flex;
-        height: var(--font-size-medium);
+        margin-top: var(--spacing-medium);
 
-        .color-unit-width {
-            border: 1px solid red;
+        .scale-element {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            text-align: right;
+
+            .color-unit {
+                flex-shrink: 0;
+                height: var(--font-size-small);
+            }
         }
     }
 }

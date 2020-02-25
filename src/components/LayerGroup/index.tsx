@@ -50,7 +50,7 @@ class LayerGroup extends React.PureComponent<Props, State> {
                         { data.title }
                     </h3>
                     { (data.longDescription || data.metadata) && (
-                        <div className={styles.hiddenActions}>
+                        <div className={styles.actions}>
                             <LayerDetailModalButton
                                 layer={data}
                                 className={styles.infoButton}

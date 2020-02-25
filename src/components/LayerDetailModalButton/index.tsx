@@ -29,6 +29,79 @@ interface ModalProps {
     layer: Layer;
     closeModal?: () => void;
 }
+
+const orderedKeys = {
+    general: {
+        dateOfReceipt: '',
+        abstract: '',
+        purpose: '',
+        descriptiveKeyword: '',
+    },
+    metadataRecordInfo: {
+        language: '',
+        charset: '',
+        hierarchyLevel: '',
+        date: '',
+        standardName: '',
+    },
+    contact: {
+        name: '',
+        organizationName: '',
+        positionName: '',
+        role: '',
+        email: '',
+    },
+    identificationInfo: {
+        title: '',
+        date: '',
+        dateType: '',
+        abstract: '',
+        purpose: '',
+        status: '',
+        charset: '',
+        topicCategory: '',
+        spaticalRepresentationType: '',
+        spaticalResolutionEquivalentScale: '',
+    },
+    pointOfContact: {
+        name: '',
+        organizationName: '',
+        positionName: '',
+        role: '',
+    },
+    geographicExtend: {
+        geographicExtend: '',
+        geographicExtendEast: '',
+        geographicExtendWest: '',
+        geographicExtendNorth: '',
+        geographicExtendSouth: '',
+    },
+    resourceMaintenanceInformation: {
+        maintenanceAndUpdateFrequency: '',
+        userDefinedUpdateFrequency: '',
+        dateOfNextUpdate: '',
+    },
+    legalConstraints: {
+        useLimitation: '',
+        accessConstraints: '',
+        useConstraints: '',
+    },
+    referenceSystemInformation: {
+        code: '',
+    },
+    dataQualityInfo: {
+        hierarchyLevel: '',
+        statement: '',
+    },
+    distributorInfo: {
+        individualName: '',
+        organizationName: '',
+        positionName: '',
+        email: '',
+        role: '',
+    },
+};
+
 class LayerDetailModal extends React.PureComponent<ModalProps> {
     public state = {
         activeView: 'details',
@@ -83,35 +156,53 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                 }
 
                 const groups = layer.metadata.value;
-                const groupKeys = Object.keys(groups);
+                const orderedKeyList = Object.keys(orderedKeys);
 
                 return (
                     <div className={styles.metadata}>
-                        { groupKeys.map(groupKey => (
-                            <div
-                                key={groupKey}
-                                className={styles.group}
-                            >
-                                <div className={styles.groupTitle}>
-                                    { camelToNormal(groupKey) }
+                        { orderedKeyList.map((groupKey) => {
+                            const group = groups[groupKey];
+                            if (!group) {
+                                return null;
+                            }
+
+                            const orderGroup = orderedKeys[groupKey];
+
+
+                            return (
+                                <div
+                                    key={groupKey}
+                                    className={styles.group}
+                                >
+                                    <div className={styles.groupTitle}>
+                                        { camelToNormal(groupKey) }
+                                    </div>
+                                    <div className={styles.rows}>
+                                        { Object.keys(orderGroup).map((mk) => {
+                                            const metadata = group[mk];
+
+                                            if (!metadata) {
+                                                return null;
+                                            }
+
+                                            return (
+                                                <div
+                                                    className={styles.metadataItem}
+                                                    key={mk}
+                                                >
+                                                    <div className={styles.label}>
+                                                        {camelToNormal(mk)}
+                                                    </div>
+                                                    <div className={styles.value}>
+                                                        {metadata || '-'}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                                <div className={styles.rows}>
-                                    { Object.keys(groups[groupKey]).map(m => (
-                                        <div
-                                            className={styles.metadataItem}
-                                            key={m}
-                                        >
-                                            <div className={styles.label}>
-                                                {camelToNormal(m)}
-                                            </div>
-                                            <div className={styles.value}>
-                                                {groups[groupKey][m] || '-'}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 );
             },

@@ -537,9 +537,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         <div className={styles.title}>
                             Climate change
                         </div>
-                        {!pending && isActive && (
+                        {!pending && (
                             <>
                                 <DataTableModalButton
+                                    className={styles.showDataTableButton}
                                     modal={(
                                         <ClimateChangeTable
                                             data={flatData}
