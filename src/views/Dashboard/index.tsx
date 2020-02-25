@@ -178,7 +178,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/event/',
         method: methods.GET,
         query: ({ props: { filters } }) => ({
-            ...transformFilters(filters, { start: 'ended_on_gt', end: 'started_on_lt' }),
+            ...transformFilters(filters, { start: 'ended_on__gt', end: 'started_on__lt' }),
             ordering: '-created_on',
             // expand: 'hazard',
         }),

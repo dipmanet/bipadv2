@@ -108,6 +108,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     ),
                                 },
                             }}
+                            onClick={layer.onClick ? layer.onClick : undefined}
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
                             onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
                         />

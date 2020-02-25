@@ -1,7 +1,7 @@
 import React from 'react';
 import { extent } from 'd3-array';
 import memoize from 'memoize-one';
-import { _cs, mean, listToMap } from '@togglecorp/fujs';
+import { _cs, mean, listToMap, doesObjectHaveNoData } from '@togglecorp/fujs';
 import Switch from 'react-input-switch';
 import {
     ResponsiveContainer,
@@ -111,6 +111,8 @@ interface State {
     isActive: boolean;
     scenario: string;
     timePeriodKey: string;
+    selectedDistrictName?: string;
+    selectedDistrict?: number;
     measurementType: MeasurementType;
 }
 
@@ -138,14 +140,14 @@ const measurementOptions: {
         label: 'Temperature',
         axisLabel: 'Temperature (°C)',
         legendTitle: 'Temperature (°C)',
-        chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
+        chartTitle: 'Ensemble Mean of Annual Temperature of',
     },
     {
         key: 'precipitation',
         label: 'Precipitation',
         axisLabel: 'Precipitation (mm/year)',
         legendTitle: 'Precipitation (mm/year)',
-        chartTitle: 'Ensemble Mean of Annual Temperature of Nepal',
+        chartTitle: 'Ensemble Mean of Annual Temperature of',
     },
 ];
 
@@ -162,12 +164,22 @@ const scenarioOptions: Scenario[] = [
 
 const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     napTemperatureGetRequest: {
-        url: '/nap-temperature/',
+        url: '/nap-temperature/?region=district',
+        method: methods.GET,
+        onMount: true,
+    },
+    napNationalTemperatureGetRequest: {
+        url: '/nap-temperature/?region=national',
+        method: methods.GET,
+        onMount: true,
+    },
+    napNationalPrecipitationGetRequest: {
+        url: '/nap-precipitation/?region=national',
         method: methods.GET,
         onMount: true,
     },
     napPrecipitationGetRequest: {
-        url: '/nap-precipitation/',
+        url: '/nap-precipitation/?region=district',
         method: methods.GET,
         onMount: true,
     },
@@ -190,6 +202,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
         this.state = {
             isActive: false,
             scenario: 'rcp45',
+            selectedDistrictName: undefined,
+            selectedDistrict: undefined,
             timePeriodKey: 'reference-period',
             measurementType: 'temperature',
         };
@@ -261,71 +275,59 @@ class ClimateChange extends React.PureComponent<Props, State> {
         }
     }
 
-    private getChartData = (measurementType: string) => {
+    private getChartData = (measurementType: string, district?: number) => {
         const {
             requests,
         } = this.props;
 
-        const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
-        const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
+        const nationalTemperature = getResults(requests, 'napNationalTemperatureGetRequest') as NapData[];
+        const nationalPrecipitation = getResults(requests, 'napNationalPrecipitationGetRequest') as NapData[];
+        let data = measurementType === 'temperature' ? nationalTemperature : nationalPrecipitation;
+        if (district) {
+            const districtTemperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
+            const districtPrecipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
+            const selectedData = measurementType === 'temperature' ? districtTemperature : districtPrecipitation;
+            data = selectedData.filter(d => d.district === district);
+        }
 
-        const data = measurementType === 'temperature' ? temperature : precipitation;
-        const yearlyAverageData = data.map(({ rcp45, sdRcp45, rcp85, sdRcp85 }) => {
-            const mapSdRcp45 = listToMap(sdRcp45, d => d.year, d => d.value);
-            const mapRcp85 = listToMap(rcp85, d => d.year, d => d.value);
-            const mapSdRcp85 = listToMap(sdRcp85, d => d.year, d => d.value);
-            const yearWiseData = rcp45.map(({ year, value }) => ({
-                year,
-                rcp45: [value || 0],
-                sdRcp45: [mapSdRcp45[year] || 0],
-                rcp85: [mapRcp85[year] || 0],
-                sdRcp85: [mapSdRcp85[year] || 0],
-            }));
-            return yearWiseData;
-        }).reduce((acc, value) => {
-            if (acc.length === 0) {
-                acc.push(...value);
-            } else {
-                value.forEach((v) => {
-                    const { year, rcp45, sdRcp45, rcp85, sdRcp85 } = v;
-                    const yearlyValue = acc.find(y => y.year === year);
-                    if (yearlyValue) {
-                        yearlyValue.rcp45.push(...rcp45);
-                        yearlyValue.sdRcp45.push(...sdRcp45);
-                        yearlyValue.rcp85.push(...rcp85);
-                        yearlyValue.sdRcp85.push(...sdRcp85);
-                    } else {
-                        acc.push(v);
-                    }
-                });
-            }
-            return acc;
-        }, []).map(({ year, rcp45, sdRcp45, rcp85, sdRcp85 }) => {
-            const rcp45Value = mean(rcp45);
-            const rcp85Value = mean(rcp85);
-            const sdRcp45Value = mean(sdRcp45);
-            const sdRcp85Value = mean(sdRcp85);
+        if (doesObjectHaveNoData(data)) {
+            return undefined;
+        }
+
+        const { rcp45, sdRcp45, rcp85, sdRcp85 } = data[0];
+        const mapSdRcp45 = listToMap(sdRcp45, d => d.year, d => d.value);
+        const mapRcp85 = listToMap(rcp85, d => d.year, d => d.value);
+        const mapSdRcp85 = listToMap(sdRcp85, d => d.year, d => d.value);
+        const yearWiseData = rcp45.map(({ year, value }) => ({
+            year,
+            rcp45Value: value || 0,
+            sdRcp45Value: mapSdRcp45[year] || 0,
+            rcp85Value: mapRcp85[year] || 0,
+            sdRcp85Value: mapSdRcp85[year] || 0,
+        })).map(({ year, rcp45Value, sdRcp45Value, rcp85Value, sdRcp85Value }) => {
             if (year < 2010) {
                 return {
                     year,
-                    'Reference Period': rcp45Value.toFixed(2),
+                    'Reference Period': Number(rcp45Value.toFixed(2)),
                 };
             }
+
             return {
                 year,
-                'RCP 4.5': rcp45Value.toFixed(2),
+                'RCP 4.5': Number(rcp45Value.toFixed(2)),
                 'SD RCP 4.5': [
-                    (rcp45Value - sdRcp45Value).toFixed(2),
-                    (rcp45Value + sdRcp45Value).toFixed(2),
+                    Number((rcp45Value - sdRcp45Value).toFixed(2)),
+                    Number((rcp45Value + sdRcp45Value).toFixed(2)),
                 ],
-                'RCP 8.5': rcp85Value.toFixed(2),
+                'RCP 8.5': Number(rcp85Value.toFixed(2)),
                 'SD RCP 8.5': [
-                    (rcp85Value - sdRcp85Value).toFixed(2),
-                    (rcp85Value + sdRcp85Value).toFixed(2),
+                    Number((rcp85Value - sdRcp85Value).toFixed(2)),
+                    Number((rcp85Value + sdRcp85Value).toFixed(2)),
                 ],
             };
         });
-        return yearlyAverageData;
+
+        return yearWiseData;
     }
 
     private getMapState = (
@@ -379,7 +381,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
                     : (100 * (filteredAverage - referenceAverage) / referenceAverage),
             });
         });
-
         return filteredData;
     }
 
@@ -407,20 +408,20 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const selectedScenario = scenarioOptions.find(s => s.key === scenario);
         const selectedTimePeriod = timePeriodOptions.find(t => t.key === timePeriodKey);
 
-        let unitInPercent = false;
+        let precipitationChangeInPercent = false;
         if (selectedMeasurement && selectedTimePeriod) {
-            unitInPercent = selectedMeasurement.key === 'precipitation' && selectedTimePeriod.key !== 'reference-period';
+            precipitationChangeInPercent = selectedMeasurement.key === 'precipitation' && selectedTimePeriod.key !== 'reference-period';
         }
 
-        let isTemperatureChange = false;
+        let temperatureChangeInPercent = false;
         if (selectedMeasurement && selectedTimePeriod) {
-            isTemperatureChange = selectedTimePeriod.key !== 'reference-period';
+            temperatureChangeInPercent = selectedMeasurement.key === 'temperature' && selectedTimePeriod.key !== 'reference-period';
         }
 
         const legendTitle = `
-            ${unitInPercent ? 'Precipitation change (%) / ' : ''}
-            ${isTemperatureChange ? 'Temperature change (°C) / ' : ''}
-            ${(!unitInPercent && !isTemperatureChange && selectedMeasurement) ? selectedMeasurement.legendTitle : ''} 
+            ${precipitationChangeInPercent ? 'Precipitation change (%) / ' : ''}
+            ${temperatureChangeInPercent ? 'Temperature change (%) / ' : ''}
+            ${(!precipitationChangeInPercent && !temperatureChangeInPercent && selectedMeasurement) ? selectedMeasurement.legendTitle : ''}
              ${selectedTimePeriod ? selectedTimePeriod.label : ''}
             [${selectedScenario ? selectedScenario.label : ''}]
         `;
@@ -442,8 +443,28 @@ class ClimateChange extends React.PureComponent<Props, State> {
             scenarioName,
             tooltipRenderer: ClimateChangeTooltip,
             minValue: min,
+            onClick: this.handleClick,
         };
     };
+
+    private handleClick = (feature: unknown) => {
+        const { id, properties: { title } } = feature;
+        const {
+            requests,
+        } = this.props;
+
+        this.setState({
+            selectedDistrictName: title,
+            selectedDistrict: id,
+        });
+    }
+
+    private handleDistrictUnselect = () => {
+        this.setState({
+            selectedDistrictName: undefined,
+            selectedDistrict: undefined,
+        });
+    }
 
     private handleChange = (value: boolean) => {
         const {
@@ -506,6 +527,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             timePeriodKey,
             measurementType,
+            selectedDistrictName,
+            selectedDistrict,
             scenario,
             isActive,
         } = this.state;
@@ -513,10 +536,13 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
         const pending = isAnyRequestPending(requests);
+
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
-        const chartTitle = selectedOption && selectedOption.chartTitle;
-        const data = this.getChartData(measurementType);
+        const chartName = selectedDistrictName || 'Nepal';
+        const chartTitle = selectedOption && `${selectedOption.chartTitle} ${chartName}`;
+        const chartData = this.getChartData(measurementType, selectedDistrict);
+
         const rawData = measurementType === 'temperature' ? temperature : precipitation;
         const flatData = this.getFlatData(rawData);
         const layer = this.getLayer(layerGroupList, measurementType);
@@ -628,12 +654,23 @@ class ClimateChange extends React.PureComponent<Props, State> {
                     </div>
                     { !pending && isActive && (
                         <div className={styles.bottom}>
-                            <div className={styles.header}>
-                                {chartTitle}
+                            <div className={styles.heading}>
+                                <div className={styles.header}>
+                                    {chartTitle}
+                                </div>
+                                { selectedDistrict && (
+                                    <Button
+                                        className={styles.button}
+                                        onClick={this.handleDistrictUnselect}
+                                        transparent
+                                    >
+                                        Show National Data
+                                    </Button>
+                                )}
                             </div>
                             <ResponsiveContainer className={styles.chart}>
                                 <ComposedChart
-                                    data={data}
+                                    data={chartData}
                                     margin={{
                                         top: 15,
                                         right: 5,
@@ -657,7 +694,6 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                     <YAxis
                                         type="number"
                                         domain={['auto', 'auto']}
-                                        allowDecimals={false}
                                         padding={{ top: 5, bottom: 0 }}
                                     >
                                         <Label
