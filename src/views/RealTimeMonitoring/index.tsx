@@ -254,6 +254,10 @@ const pollutionLegendItems = [
     { color: '#7e0023', label: 'Hazardous (<= 500.4)', style: styles.symbol },
 ];
 
+const forestFireLegendItems = [
+    { color: '#e53935', label: 'Forest fire', style: styles.symbol },
+];
+
 const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
@@ -425,7 +429,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             data={pollutionLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
-                            // iconSelector={iconSelector}
                             labelSelector={legendLabelSelector}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
@@ -457,6 +460,16 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 Forest Fire
                             </h4>
                         </header>
+                        <Legend
+                            className={styles.legend}
+                            data={forestFireLegendItems}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            labelSelector={legendLabelSelector}
+                            symbolClassNameSelector={classNameSelector}
+                            colorSelector={legendColorSelector}
+                            emptyComponent={null}
+                        />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 Source:

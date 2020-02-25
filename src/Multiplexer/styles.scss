@@ -57,10 +57,12 @@
             left: var(--width-left-panel);
             transform: translateY(-100%);
             transition: .3s left ease-in-out;
-            z-index: 1111;
-            border: var(--width-separator-thin) solid var(--color-separator);
+            z-index: 11;
+            border: var(--width-separator-thin) solid var(--color-separator-light);
+            border-left: 0;
             border-top-right-radius: 7px;
             border-bottom-right-radius: 7px;
+            box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.5);
             background-color: var(--color-foreground);
             cursor: pointer;
             padding: var(--spacing-medium) var(--spacing-small);
@@ -85,7 +87,7 @@
                 position: absolute;
                 top: var(--spacing-medium);
                 left: var(--spacing-medium);
-                z-index: 11;
+                z-index: 1;
                 border: var(--width-separator-medium) solid var(--color-separator);
                 border-radius: 5px;
                 background-color: var(--color-foreground);

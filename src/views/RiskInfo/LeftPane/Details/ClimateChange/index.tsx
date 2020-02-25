@@ -705,9 +705,14 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         />
                                     </YAxis>
                                     <Tooltip
-                                        labelFormatter={value => `year: ${value}`}
+                                        labelFormatter={value => `Year: ${value}`}
                                     />
-                                    <Legend verticalAlign="top" />
+                                    <Legend
+                                        verticalAlign="top"
+                                        wrapperStyle={{
+                                            marginTop: '-16px',
+                                        }}
+                                    />
                                     <Area
                                         type="monotone"
                                         dataKey="SD RCP 8.5"
