@@ -16,16 +16,22 @@ export default class MapDownloadButton extends React.PureComponent {
     };
 
     static defaultProps = {
-        name: 'downloadFiled.csv',
+        name: 'data',
         disabled: false,
         value: undefined,
     }
 
     handleClick = () => {
-        const { value, name } = this.props;
+        const {
+            value,
+            name,
+        } = this.props;
         const csv = convertJsonToCsv(value);
         const blob = new Blob([csv], { type: 'text/csv' });
-        saveAs(blob, name);
+
+        const currentTimestamp = (new Date()).getTime();
+        const fileName = `${name}-${currentTimestamp}.csv`;
+        saveAs(blob, fileName);
     }
 
     render() {

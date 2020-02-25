@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 
@@ -9,7 +9,6 @@ import PageContext from '#components/PageContext';
 
 import { AppState } from '#store/types';
 import {
-    Ward,
     District,
     Province,
     Municipality,
@@ -284,7 +283,7 @@ const MapDownloadButton = (props: Props) => {
                 Promise.all(allPromises).then(() => {
                     canvas.toBlob((blob) => {
                         const link = document.createElement('a');
-                        link.download = 'map-export.png';
+                        link.download = `map-export-${(new Date()).getTime()}.png`;
                         link.href = URL.createObjectURL(blob);
                         link.click();
                         setPending(false);
