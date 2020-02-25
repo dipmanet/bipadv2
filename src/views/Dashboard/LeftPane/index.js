@@ -275,6 +275,30 @@ export default class LeftPane extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
+                        { activeView === 'alerts' && (
+                            <Cloak hiddenIf={p => !p.change_alert}>
+                                <AccentButton
+                                    className={styles.addAlertButton}
+                                    onClick={this.handleAddAlertButtonClick}
+                                    iconName="add"
+                                    transparent
+                                >
+                                    New alert
+                                </AccentButton>
+                            </Cloak>
+                        )}
+                        { activeView === 'events' && (
+                            <Cloak hiddenIf={p => !p.change_event}>
+                                <AccentButton
+                                    className={styles.addEventButton}
+                                    onClick={this.handleAddEventButtonClick}
+                                    iconName="add"
+                                    transparent
+                                >
+                                    New event
+                                </AccentButton>
+                            </Cloak>
+                        )}
                         <AlertTableModalButton
                             title="Show data in tabular format"
                             className={styles.showTableButton}
@@ -294,15 +318,6 @@ export default class LeftPane extends React.PureComponent {
                     )}
                     { activeView === 'alerts' && (
                         <div className={styles.alertList}>
-                            <Cloak hiddenIf={p => !p.change_alert}>
-                                <header className={styles.header}>
-                                    <AccentButton
-                                        onClick={this.handleAddAlertButtonClick}
-                                    >
-                                        Add new alert
-                                    </AccentButton>
-                                </header>
-                            </Cloak>
                             <VirtualizedListView
                                 className={styles.content}
                                 data={alertList}
@@ -315,15 +330,6 @@ export default class LeftPane extends React.PureComponent {
                     )}
                     { activeView === 'events' && (
                         <div className={styles.eventList}>
-                            <Cloak hiddenIf={p => !p.change_event}>
-                                <header className={styles.header}>
-                                    <AccentButton
-                                        onClick={this.handleAddEventButtonClick}
-                                    >
-                                        Add new event
-                                    </AccentButton>
-                                </header>
-                            </Cloak>
                             <VirtualizedListView
                                 className={styles.content}
                                 data={eventList}

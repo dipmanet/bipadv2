@@ -16,9 +16,9 @@ import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
-import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Checkbox from '#rsci/Checkbox';
+import ConfirmButton from '#rsca/ConfirmButton';
 
 import LocationInput from '#components/LocationInput';
 
@@ -427,7 +427,18 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disbled={pending}
                 >
-                    <ModalHeader title="Add / edit alert" />
+                    <ModalHeader
+                        title="Add / edit alert"
+                        rightComponent={(
+                            <ConfirmButton
+                                disabled={pending}
+                                onClick={onCloseButtonClick}
+                                transparent
+                                iconName="close"
+                                confirmationMessage="Are you sure you want to close the form?"
+                            />
+                        )}
+                    />
                     <ModalBody className={styles.body}>
                         <div className={styles.generalInputs}>
                             <TextArea
@@ -504,12 +515,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            disabled={pending}
-                            onClick={onCloseButtonClick}
-                        >
-                            Close
-                        </DangerButton>
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}

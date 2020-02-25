@@ -67,9 +67,19 @@
         }
 
         .actions {
+            display: flex;
+            align-items: center;
             align-self: center;
             flex-shrink: 0;
             padding: var(--spacing-medium) var(--spacing-large);
+
+            .add-alert-button {
+                font-size: var(--font-size-medium);
+            }
+
+            .add-event-button {
+                font-size: var(--font-size-medium);
+            }
 
             .show-table-button {
                 font-size: var(--font-size-large);

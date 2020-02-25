@@ -248,6 +248,7 @@ class Filters extends React.PureComponent<Props, State> {
                     <h3 className={styles.heading}>
                         Filters
                     </h3>
+                    {/*
                     <Button
                         className={styles.resetFiltersButton}
                         title="Reset filters"
@@ -256,6 +257,7 @@ class Filters extends React.PureComponent<Props, State> {
                         transparent
                         disabled
                     />
+                    */}
                 </header>
                 <div className={styles.content}>
                     <ScrollTabs
