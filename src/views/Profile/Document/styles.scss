@@ -1,29 +1,78 @@
-.item {
-    .title {
-        flex-grow: 1;
-        padding: var(--spacing-extra-small) var(--spacing-small);
-        font-weight: var(--font-weight-bold);
+.documents {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+    padding: calc(var(--spacing-large) - var(--spacing-medium));
+
+    >.header {
+        flex-shrink: 0;
+
+        .heading {
+            padding: var(--spacing-medium);
+        }
     }
 
-    .download {
+    .content {
+        flex-grow: 1;
+    }
+}
+
+.document-details {
+    padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
+
+    .header {
         display: flex;
         align-items: center;
-        cursor: pointer;
 
-        .icon {
-            flex-shrink: 0;
-            margin: var(--spacing-small);
-            color: var(--color-accent);
-            font-size: var(--font-size-large);
-        }
-
-        .text {
+        .heading {
             flex-grow: 1;
-            padding: var(--spacing-small);
+            padding: var(--spacing-extra-small) var(--spacing-medium);
         }
 
-        &:hover {
-            background-color: var(--color-background-hover);
+        .actions {
+            flex-shrink: 0;
+            padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+
+            .download-link {
+                display: flex;
+                align-items: center;
+                color: var(--color-accent);
+
+                .icon {
+                    margin: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                }
+
+                .text {
+                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                    text-transform: uppercase;
+                    font-weight: var(--font-weight-bold);
+                }
+            }
         }
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
+
+    .label {
+        padding: 0 var(--spacing-small);
+        color: var(--color-text-label);
+        font-size: var(--font-size-small);
+        font-weight: var(--font-weight-bold);
+
+        &:after {
+            content: ':',
+        }
+    }
+
+    .value {
+        padding: 0 var(--spacing-small);
     }
 }

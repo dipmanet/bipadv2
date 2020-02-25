@@ -413,6 +413,7 @@ class ContactPage extends React.PureComponent<Props> {
             contactList,
             region,
             municipalityList,
+            className,
             filters: {
                 faramValues: filterValues,
             },
@@ -475,11 +476,11 @@ class ContactPage extends React.PureComponent<Props> {
                         }}
                     />
                 </MapSource>
-                <div className={styles.left}>
+                <div className={_cs(className, styles.left)}>
                     <header className={styles.header}>
-                        <h3 className={styles.heading}>
+                        <h2 className={styles.heading}>
                             Contact personnels
-                        </h3>
+                        </h2>
                     </header>
                     <ListView
                         className={styles.contactDetailsList}

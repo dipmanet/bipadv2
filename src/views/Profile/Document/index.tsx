@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import memoize from 'memoize-one';
 import {
     _cs,
     doesObjectHaveNoData,
+    listToMap,
 } from '@togglecorp/fujs';
 
 import FormattedDate from '#rscv/FormattedDate';
@@ -75,15 +77,33 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         onMount: true,
     },
+    documentCategoryGetRequest: {
+        url: '/document-category/',
+        method: methods.GET,
+        onMount: true,
+    },
 };
 
 interface DocumentProps {
     document: DocumentItem;
 }
+
+const DetailItem = ({
+    label,
+    value,
+}) => (
+    <div className={styles.detailItem}>
+        <div className={styles.label}>
+            { label }
+        </div>
+        <div className={styles.value}>
+            { value }
+        </div>
+    </div>
+);
+
 const DocumentRenderer = (props: DocumentProps) => {
-    const {
-        document,
-    } = props;
+    const { document } = props;
 
     const {
         title,
@@ -94,38 +114,56 @@ const DocumentRenderer = (props: DocumentProps) => {
     } = document;
 
     return (
-        <div className={styles.item}>
-            <div className={styles.title}>
-                { title }
-            </div>
-            <div className={styles.title}>
-                { region }
-            </div>
-            <div className={styles.title}>
-                { category }
-            </div>
-            <FormattedDate
-                value={publishedDate}
-                mode="yyyy-MM-dd"
-            />
-            <a
-                className={styles.download}
-                href={file}
-            >
-                <Icon
-                    className={styles.icon}
-                    name="download"
-                />
-                <div className={styles.text}>
-                    Download
+        <div className={styles.documentDetails}>
+            <header className={styles.header}>
+                <h3 className={styles.heading}>
+                    { title }
+                </h3>
+                <div className={styles.actions}>
+                    <a
+                        className={styles.downloadLink}
+                        href={file}
+                    >
+                        <Icon
+                            className={styles.icon}
+                            name="download"
+                        />
+                        <div className={styles.text}>
+                            Download
+                        </div>
+                    </a>
                 </div>
-            </a>
+            </header>
+            <div className={styles.details}>
+                <DetailItem
+                    label="Date of publication"
+                    value={(
+                        <FormattedDate
+                            value={publishedDate}
+                            mode="yyyy-MM-dd"
+                        />
+                    )}
+                />
+                <DetailItem
+                    label="Region"
+                    value={region}
+                />
+                <DetailItem
+                    label="Category"
+                    value={category}
+                />
+            </div>
         </div>
     );
 };
 const keySelector = (d: DocumentItem) => d.id;
 class Document extends React.PureComponent<Props> {
-    private rendererParams = (_: string, data: DocumentItem) => ({ document: data });
+    private getCategoryExpandedDocuments = memoize((documents, documentCategories) => {
+        const documentCategoryMap = listToMap(documentCategories, d => d.id, d => d.title);
+        return documents.map(d => ({ ...d, category: documentCategoryMap[d.category] }));
+    })
+
+    private rendererParams = (_: string, data: DocumentItem) => ({ document: data })
 
     private getFilteredDocuments = (documents: DocumentItem[], region: Region) => {
         if (!doesObjectHaveNoData(region)) {
@@ -151,18 +189,21 @@ class Document extends React.PureComponent<Props> {
         } = this.props;
 
         const documents = getResults(requests, 'documentsGetRequest');
-        const filteredDocuments = this.getFilteredDocuments(documents, region);
+        const documentCategories = getResults(requests, 'documentCategoryGetRequest');
+        const expandedDocuments = this.getCategoryExpandedDocuments(documents, documentCategories);
+
+        const filteredDocuments = this.getFilteredDocuments(expandedDocuments, region);
         const pending = isAnyRequestPending(requests);
         return (
-            <div className={_cs(className, styles.document)}>
+            <div className={_cs(className, styles.documents)}>
                 <Loading pending={pending} />
                 <header className={styles.header}>
-                    <h3 className={styles.heading}>
+                    <h2 className={styles.heading}>
                         Documents
-                    </h3>
+                    </h2>
                 </header>
                 <ListView
-                    className={styles.info}
+                    className={styles.content}
                     data={filteredDocuments}
                     renderer={DocumentRenderer}
                     keySelector={keySelector}

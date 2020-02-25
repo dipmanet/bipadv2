@@ -30,7 +30,7 @@ export default class Profile extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            activeView: 'summary',
+            activeView: 'document',
         };
     }
 
@@ -57,7 +57,7 @@ export default class Profile extends React.PureComponent<Props, State> {
             <Page
                 leftContentContainerClassName={styles.leftContentContainer}
                 leftContent={(
-                    <div>
+                    <>
                         <header className={styles.header}>
                             <div className={styles.tabs}>
                                 <div
@@ -135,43 +135,27 @@ export default class Profile extends React.PureComponent<Props, State> {
                         </header>
                         {activeView === 'summary' && (
                             <DisasterProfile
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
                         {activeView === 'projectsProfile' && (
                             <ProjectsProfile
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
                         {activeView === 'contact' && (
                             <Contact
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
                         {activeView === 'document' && (
                             <Document
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
-                    </div>
+                    </>
                 )}
             />
         );
     }
 }
-
-/*
-
-                    <>
-                        <ScrollTabs
-                            className={_cs(styles.tabs)}
-                            tabs={tabs}
-                            useHash
-                        >
-                        </ScrollTabs>
-                        <MultiViewContainer
-                            views={this.views}
-                            useHash
-                        />
-                    </>
-*/

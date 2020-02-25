@@ -1,6 +1,7 @@
 .left-content-container {
     display: flex;
     flex-direction: column;
+    overflow: auto;
 
     .header {
         display: flex;
@@ -51,6 +52,8 @@
         }
     }
 
-    .profile {
+    .view {
+        flex-grow: 1;
+        overflow: auto;
     }
 }

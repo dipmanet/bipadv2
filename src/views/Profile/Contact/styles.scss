@@ -1,10 +1,13 @@
 .left {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground);
+
     .header {
         flex-shrink: 0;
 
         .heading {
-            padding: var(--spacing-medium);
-            color: var(--color-primary);
+            padding: var(--spacing-medium) var(--spacing-large);
         }
     }
 
