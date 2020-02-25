@@ -24,8 +24,8 @@ const state: PageState = {
         hazard: [],
         dataDateRange: {
             rangeInDays: 30,
-            startDate: getInitialStartDate(3),
-            endDate: (new Date()).toISOString(),
+            startDate: undefined,
+            endDate: undefined,
         },
     },
 

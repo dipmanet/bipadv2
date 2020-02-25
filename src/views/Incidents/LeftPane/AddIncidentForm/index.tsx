@@ -471,14 +471,13 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                 onClose={closeModal}
             >
                 <ModalHeader
-                    className={styles.header}
-                    title="Add Incident"
+                    title="Add / edit incident"
                     rightComponent={(
                         <ConfirmButton
                             onClick={closeModal}
                             transparent
                             iconName="close"
-                            confirmationMessage="Are you sure you want to close?"
+                            confirmationMessage="Are you sure you want to close the form?"
                         />
                     )}
                 />

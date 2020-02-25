@@ -15,13 +15,17 @@ import {
 } from '#selectors';
 
 import Loading from '#components/Loading';
-import Page from '#components/Page';
+import PageContext from '#components/PageContext';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
 } from '#request';
+import {
+    isAnyRequestPending,
+    getResults,
+} from '#utils/request';
 
-// import ProjectsProfileFilter from './Filter';
+import ProjectsProfileFilter from './Filter';
 import LeftPane from './LeftPane';
 import Map from './Map';
 
@@ -253,107 +257,45 @@ const mapStateToProps = (state, props) => ({
 
 const wsEndpoint = process.env.REACT_APP_PROJECT_SERVER_URL || 'http://165.22.215.64/';
 
-const requests = {
+const requestOptions = {
     ndrrsapRequest: {
         url: `${wsEndpoint}/pims/api/v1/ndrrsap`,
         onMount: true,
-        // TODO: add schema
     },
     drrcycleRequest: {
         url: `${wsEndpoint}/pims/api/v1/drrcycle`,
         onMount: true,
-        // TODO: add schema
     },
     categoryRequest: {
         url: `${wsEndpoint}/pims/api/v1/category`,
         onMount: true,
-        // TODO: add schema
     },
     organizationRequest: {
         url: `${wsEndpoint}/pims/api/v1/organization`,
         onMount: true,
-        // TODO: add schema
     },
     projectRequest: {
         url: `${wsEndpoint}/pims/api/v1/project`,
         onMount: true,
-        // TODO: add schema
     },
 };
 
 class ProjectsProfile extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            leftPaneExpanded: true,
-            rightPaneExpanded: true,
-        };
-    }
-
-    handleRightPaneExpandChange = (rightPaneExpanded) => {
-        this.setState({ rightPaneExpanded });
-    }
-
-    handleLeftPaneExpandChange = (leftPaneExpanded) => {
-        this.setState({ leftPaneExpanded });
-    }
-
     render() {
         const {
-            leftPaneExpanded,
-            rightPaneExpanded,
-        } = this.state;
-        const {
             regions,
-        } = this.props;
-
-        const {
-            requests: {
-                ndrrsapRequest: {
-                    pending: ndrrsapPending,
-                    response: {
-                        results: ndrrsap = emptyList,
-                    } = {},
-                },
-                drrcycleRequest: {
-                    pending: drrcyclePending,
-                    response: {
-                        results: drrcycle = emptyList,
-                    } = {},
-                },
-                categoryRequest: {
-                    pending: categoryPending,
-                    response: {
-                        results: category = emptyList,
-                    } = {},
-                },
-                organizationRequest: {
-                    pending: organizationPending,
-                    response: {
-                        results: organization = emptyList,
-                    } = {},
-                },
-                projectRequest: {
-                    pending: projectPending,
-                    response: {
-                        results: projects = emptyList,
-                    } = {},
-                },
-            },
-            filters: {
-                faramValues = emptyObject,
-            } = {},
+            requests,
+            filters: { faramValues = emptyObject } = {},
             regionLevel,
         } = this.props;
 
-        const pending = (
-            ndrrsapPending
-            || drrcyclePending
-            || categoryPending
-            || organizationPending
-            || projectPending
-        );
+        const ndrrsap = getResults(requests, 'ndrrsapRequest');
+        const drrcycle = getResults(requests, 'drrcycleRequest');
+        const category = getResults(requests, 'categoryRequest');
+        const organization = getResults(requests, 'organizationRequest');
+        const projects = getResults(requests, 'projectRequest');
+
+        const pending = isAnyRequestPending(requests);
 
         // NDRRSAP
 
@@ -402,12 +344,11 @@ class ProjectsProfile extends React.PureComponent {
         const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
         const categoryMap = listToMap(category, categoryKeySelector, item => item);
 
+
         return (
             <React.Fragment>
                 <Loading pending={pending} />
                 <Map
-                    leftPaneExpanded={leftPaneExpanded}
-                    rightPaneExpanded={rightPaneExpanded}
                     projects={filteredProjects}
                     regions={regions}
                     regionLevel={regionLevel}
@@ -423,23 +364,24 @@ class ProjectsProfile extends React.PureComponent {
                     projectMap={projectMap}
                 />
                 {/*
-                    <ProjectsProfileFilter
-                        onExpandChange={this.handleRightPaneExpandChange}
-                        drrCycleOptions={drrcycle}
-                        elementsOptions={category}
-                        organizationOptions={organization}
-                        priorityOptions={priorityOptions}
-                        subPriorityOptions={subPriorityOptions}
-                        activityOptions={activityOptions}
-                    />
+                <ProjectsProfileFilter
+                    drrCycleOptions={drrcycle}
+                    elementsOptions={category}
+                    organizationOptions={organization}
+                    priorityOptions={priorityOptions}
+                    subPriorityOptions={subPriorityOptions}
+                    activityOptions={activityOptions}
+                />
                 */}
             </React.Fragment>
         );
     }
 }
 
+ProjectsProfile.contextType = PageContext;
+
 export default compose(
     connect(mapStateToProps),
     createConnectedRequestCoordinator(),
-    createRequestClient(requests),
+    createRequestClient(requestOptions),
 )(ProjectsProfile);

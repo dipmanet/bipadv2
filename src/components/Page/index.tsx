@@ -1,9 +1,7 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
 
 import PageContext, { PageContextProps } from '#components/PageContext';
 
-import styles from './styles.scss';
 
 interface Props {
     className?: string;

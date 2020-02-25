@@ -105,18 +105,20 @@ export default class EventItem extends React.PureComponent {
                 />
                 <div className={styles.right}>
                     <div className={styles.top}>
-                        <div className={styles.title}>
+                        <h3 className={styles.title}>
                             {title}
-                        </div>
+                        </h3>
                         <Cloak hiddenIf={p => !p.change_event}>
                             <Button
                                 transparent
                                 className={styles.editButton}
                                 onClick={this.handleEditButtonClick}
+                                iconName="edit"
                             >
                                 Edit
                             </Button>
                             <DangerConfirmButton
+                                iconName="delete"
                                 transparent
                                 className={styles.deleteButton}
                                 onClick={this.handleDeleteButtonClick}

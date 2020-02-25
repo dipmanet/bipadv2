@@ -35,16 +35,18 @@
             .edit-button {
                 flex-shrink: 0;
                 padding: var(--spacing-extra-small) var(--spacing-small);
+                font-size: var(--font-size-medium);
             }
 
             .delete-button {
                 flex-shrink: 0;
                 padding: var(--spacing-extra-small) var(--spacing-small);
+                font-size: var(--font-size-medium);
             }
         }
 
         .bottom {
-            padding: var(--spacing-extra-small) var(--spacing-medium);
+            padding: 0;
         }
     }
 
