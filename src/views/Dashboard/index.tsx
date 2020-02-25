@@ -21,7 +21,7 @@ import {
 } from '#request';
 
 import {
-    transformDataRangeToFilter,
+    pastDaysToDateRange,
     transformRegionToFilter,
 } from '#utils/transformations';
 
@@ -49,6 +49,7 @@ import {
     AlertElement,
     EventElement,
     FiltersElement,
+    DataDateRangeValueElement,
 } from '#types';
 
 import styles from './styles.scss';
@@ -92,13 +93,43 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setEventList: params => dispatch(setEventListAction(params)),
 });
 
+interface DateFilterParamName{
+    start: string;
+    end: string;
+}
+
+const transformDataRangeToFilter = (
+    dataRange: DataDateRangeValueElement,
+    { start, end }: DateFilterParamName,
+) => {
+    const { rangeInDays } = dataRange;
+
+    const getFilter = (startDate?: Date, endDate?: Date) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [start]: startDate ? startDate.toISOString() : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [end]: endDate ? endDate.toISOString() : undefined,
+    });
+
+    if (rangeInDays !== 'custom') {
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        return getFilter(startDate, endDate);
+    }
+
+    const { startDate, endDate } = dataRange;
+    return getFilter(
+        startDate ? new Date(startDate) : undefined,
+        endDate ? new Date(endDate) : undefined,
+    );
+};
+
 const transformFilters = ({
     dataDateRange,
     region,
     ...otherFilters
-}: FiltersElement) => ({
+}: FiltersElement, dateFilterParamName: DateFilterParamName) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, 'expire_on'),
+    ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
     ...transformRegionToFilter(region),
 });
 
@@ -107,7 +138,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/alert/',
         method: methods.GET,
         query: ({ props: { filters } }) => ({
-            ...transformFilters(filters),
+            ...transformFilters(filters, { start: 'expire_on__gt', end: 'started_on__lt' }),
             expand: ['event'],
             ordering: '-created_on',
         }),
@@ -136,7 +167,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 prevProps: { filters: prevFilters },
             }) => {
                 const shouldRequest = filters !== prevFilters;
-
                 return shouldRequest;
             },
         },
@@ -148,7 +178,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/event/',
         method: methods.GET,
         query: ({ props: { filters } }) => ({
-            ...transformFilters(filters),
+            ...transformFilters(filters, { start: 'ended_on_gt', end: 'started_on_lt' }),
             ordering: '-created_on',
             // expand: 'hazard',
         }),
