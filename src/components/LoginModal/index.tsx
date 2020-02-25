@@ -16,7 +16,6 @@ import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextInput from '#rsci/TextInput';
-import Page from '#components/Page';
 
 import { User } from '#store/atom/auth/types';
 

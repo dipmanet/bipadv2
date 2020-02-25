@@ -2,16 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import produce from 'immer';
-import {
-    _cs,
-    padStart as p,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
+
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
-
-import FixedTabs from '#rscv/FixedTabs';
-import MultiViewContainer from '#rscv/MultiViewContainer';
 
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -29,6 +24,10 @@ import LocationInput from '#components/LocationInput';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
+import {
+    encodeDate,
+    encodeTime,
+} from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -51,10 +50,31 @@ interface Params {
     onFailure: (faramErrors: object) => void;
 }
 
+interface FaramValues {
+    source?: string;
+    description?: string;
+    hazard?: number;
+    event?: number;
+    point?: string;
+    polygon?: string;
+    district?: string;
+    municipality?: string;
+    wards?: number[];
+    startedOnDate?: string;
+    startedOnTime?: string;
+    expireOnDate?: string;
+    expireOnTime?: string;
+    geoJson?: string;
+    verified?: boolean;
+    public?: boolean;
+
+}
+
 interface OwnProps {
     closeModal?: () => void;
     onUpdate?: () => void;
     className?: string;
+    data?: {};
 }
 
 interface PropsFromState {
@@ -79,31 +99,10 @@ interface Views {
 interface FaramErrors {
 }
 
-interface FaramValues {
-    source?: string;
-    description?: string;
-    hazard?: number;
-    event?: number;
-    point?: string;
-    polygon?: string;
-    district?: string;
-    municipality?: string;
-    wards?: number[];
-    startedOnDate?: string;
-    startedOnTime?: string;
-    expireOnDate?: string;
-    expireOnTime?: string;
-    geoJson?: string;
-    verified?: boolean;
-    public?: boolean;
-
-}
-
 interface State {
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
-    currentView: keyof Tabs;
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
@@ -167,126 +166,31 @@ class AddAlertForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
-        this.tabs = {
-            general: 'General',
-            location: 'Location',
-        };
-
-        const {
-            eventList,
-            sourceList,
-            hazardList,
-        } = this.props;
-
-        this.views = {
-            general: {
-                component: () => (
-                    <div className={styles.generalInputs}>
-                        <TextArea
-                            className={styles.descriptionInput}
-                            faramElementName="description"
-                            label="Description"
-                            persistantHintAndError={false}
-                        />
-                        <SelectInput
-                            className={styles.eventInput}
-                            faramElementName="event"
-                            options={eventList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Event"
-                        />
-                        <SelectInput
-                            className={styles.sourceInput}
-                            faramElementName="source"
-                            options={sourceList}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                            label="Source"
-                        />
-                        <SelectInput
-                            className={styles.hazardInput}
-                            faramElementName="hazard"
-                            options={hazardList}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            label="Hazard"
-                        />
-                        <div className={styles.startedOnInputs}>
-                            <DateInput
-                                className={styles.startedOnDate}
-                                faramElementName="startedOnDate"
-                                label="Started on"
-                            />
-                            <TimeInput
-                                className={styles.startedOnTime}
-                                faramElementName="startedOnTime"
-                            />
-                        </div>
-                        <div className={styles.expiresOnInputs}>
-                            <DateInput
-                                label="Expires on"
-                                faramElementName="expireOnDate"
-                            />
-                            <TimeInput
-                                className={styles.startedOnTime}
-                                faramElementName="expireOnTime"
-                            />
-                        </div>
-                        <div className={styles.checkboxes}>
-                            <Checkbox
-                                className={styles.isPublicSelectionCheckbox}
-                                label="Public"
-                                faramElementName="public"
-                            />
-                            <Checkbox
-                                className={styles.isVerifiedSelectionCheckbox}
-                                label="Verified"
-                                faramElementName="verified"
-                            />
-                        </div>
-                    </div>
-                ),
-            },
-            location: {
-                component: () => {
-                    const {
-                        faramValues: {
-                            hazard,
-                        },
-                    } = this.state;
-
-                    return (
-                        <LocationInput
-                            className={styles.locationInput}
-                            faramElementName="location"
-                        />
-                    );
-                },
-            },
-        };
-
         let initialData = {};
+        const { data } = props;
 
-        if (props.data) {
-            const startedOn = new Date(props.data.startedOn);
-            const startedOnDate = `${p(startedOn.getFullYear(), 2)}-${p(startedOn.getMonth() + 1, 2)}-${p(startedOn.getDate(), 2)}`;
-            const startedOnTime = `${p(startedOn.getHours(), 2)}:${p(startedOn.getMinutes(), 2)}:${p(startedOn.getSeconds(), 2)}`;
+        if (data) {
+            const startedOn = new Date(data.startedOn);
+            const startedOnDate = encodeDate(startedOn);
+            const startedOnTime = encodeTime(startedOn);
 
-            const expireOn = new Date(props.data.expireOn);
-            const expireOnDate = `${p(expireOn.getFullYear(), 2)}-${p(expireOn.getMonth() + 1, 2)}-${p(expireOn.getDate(), 2)}`;
-            const expireOnTime = `${p(expireOn.getHours(), 2)}:${p(expireOn.getMinutes(), 2)}:${p(expireOn.getSeconds(), 2)}`;
+            const expireOn = new Date(data.expireOn);
+            const expireOnDate = encodeDate(expireOn);
+            const expireOnTime = encodeTime(expireOn);
 
             const geoJson = {
                 type: 'FeatureCollection',
                 features: [{
                     type: 'Feature',
-                    geometry: props.data.point || {
+                    geometry: data.point || {
                         type: 'Point',
                         coordinates: [],
                     },
                     properties: {
-                        hazardColor: this.getActiveHazardColor(props.data.hazard, props.hazardList),
+                        hazardColor: this.getActiveHazardColor(
+                            data.hazard,
+                            props.hazardList,
+                        ),
                     },
                 }],
             };
@@ -299,25 +203,25 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             };
 
             const region = {
-                adminLevel: adminLevelMap[props.data.region],
-                geoarea: props.data.regionId,
+                adminLevel: adminLevelMap[data.region],
+                geoarea: data.regionId,
             };
 
             initialData = {
-                source: props.data.source,
-                description: props.data.description,
-                hazard: props.data.hazard,
+                source: data.source,
+                description: data.description,
+                hazard: data.hazard,
                 startedOnDate,
                 startedOnTime,
-                public: props.data.public,
-                verified: props.data.verified,
-                event: (props.data.event || {}).id,
+                public: data.public,
+                verified: data.verified,
+                event: (data.event || {}).id,
                 expireOnDate,
                 expireOnTime,
                 location: {
                     region,
                     geoJson,
-                    wards: props.data.wards,
+                    wards: data.wards,
                 },
             };
         }
@@ -331,7 +235,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             },
             faramErrors: {},
             pristine: true,
-            currentView: 'general',
         };
     }
 
@@ -351,15 +254,11 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             municipality: [],
             wards: [],
             geoJson: [],
-            location: [],
+            location: [requiredCondition],
             expireOnDate: [],
             expireOnTime: [],
         },
     };
-
-    private tabs: Tabs;
-
-    private views: Views;
 
     private getActiveHazardColor = (
         activeHazardKey: PageType.HazardType['id'] | undefined,
@@ -379,10 +278,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         const hazardColor = this.getActiveHazardColor(faramValues.hazard, this.props.hazardList);
-        const location = produce(faramValues.location, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.geoJson.features[0].properties.hazardColor = hazardColor;
-        });
+        let location;
+
+        if (faramValues.location) {
+            location = produce(faramValues.location, (deferedState) => {
+                // eslint-disable-next-line no-param-reassign
+                deferedState.geoJson.features[0].properties.hazardColor = hazardColor;
+            });
+        }
 
         this.setState({
             faramValues: {
@@ -432,8 +335,8 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             };
         };
 
-        const startedOn = new Date(`${startedOnDate}T${startedOnTime}`).toISOString();
-        const expireOn = new Date(`${expireOnDate}T${expireOnTime}`).toISOString();
+        const startedOn = startedOnDate && startedOnTime ? new Date(`${startedOnDate}T${startedOnTime}`).toISOString() : undefined;
+        const expireOn = expireOnDate && expireOnTime ? new Date(`${expireOnDate}T${expireOnTime}`).toISOString() : undefined;
         const point = location.geoJson.features[0].geometry;
         const wards = location.wards;
         const {
@@ -487,6 +390,8 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             className,
             closeModal,
             hazardList,
+            eventList,
+            sourceList,
             onCloseButtonClick,
             requests: {
                 addAlertRequest: {
@@ -500,7 +405,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
 
         const {
             pristine,
-            currentView,
             faramValues,
             faramErrors,
         } = this.state;
@@ -525,15 +429,78 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 >
                     <ModalHeader title="Add / edit alert" />
                     <ModalBody className={styles.body}>
-                        <FixedTabs
-                            className={styles.tabs}
-                            tabs={this.tabs}
-                            onClick={this.handleTabClick}
-                            active={currentView}
-                        />
-                        <MultiViewContainer
-                            views={this.views}
-                            active={currentView}
+                        <div className={styles.generalInputs}>
+                            <TextArea
+                                className={styles.descriptionInput}
+                                faramElementName="description"
+                                label="Description"
+                                persistantHintAndError={false}
+                            />
+                            <div className={styles.inputRow}>
+                                <SelectInput
+                                    className={styles.hazardInput}
+                                    faramElementName="hazard"
+                                    options={hazardList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label="Hazard"
+                                />
+                                <SelectInput
+                                    className={styles.sourceInput}
+                                    faramElementName="source"
+                                    options={sourceList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label="Source"
+                                />
+                                <SelectInput
+                                    className={styles.eventInput}
+                                    faramElementName="event"
+                                    options={eventList}
+                                    keySelector={keySelector}
+                                    labelSelector={labelSelector}
+                                    label="Event"
+                                />
+                            </div>
+                            <div className={styles.dateTimeInputs}>
+                                <div className={styles.startedOnInputs}>
+                                    <DateInput
+                                        className={styles.startedOnDate}
+                                        faramElementName="startedOnDate"
+                                        label="Started on"
+                                    />
+                                    <TimeInput
+                                        className={styles.startedOnTime}
+                                        faramElementName="startedOnTime"
+                                    />
+                                </div>
+                                <div className={styles.expiresOnInputs}>
+                                    <DateInput
+                                        label="Expires on"
+                                        faramElementName="expireOnDate"
+                                    />
+                                    <TimeInput
+                                        className={styles.startedOnTime}
+                                        faramElementName="expireOnTime"
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.checkboxes}>
+                                <Checkbox
+                                    className={styles.isPublicSelectionCheckbox}
+                                    label="Public"
+                                    faramElementName="public"
+                                />
+                                <Checkbox
+                                    className={styles.isVerifiedSelectionCheckbox}
+                                    label="Verified"
+                                    faramElementName="verified"
+                                />
+                            </div>
+                        </div>
+                        <LocationInput
+                            className={styles.locationInput}
+                            faramElementName="location"
                         />
                     </ModalBody>
                     <ModalFooter>
