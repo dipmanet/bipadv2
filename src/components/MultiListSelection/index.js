@@ -101,7 +101,6 @@ export default class MultiListSelection extends React.PureComponent {
         <div
             role="presentation"
             className={_cs(className, isActive && styles.active)}
-            transparent
             onClick={() => this.handleOptionClick(optionKey)}
             title={title}
         >
