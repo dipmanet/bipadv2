@@ -255,7 +255,7 @@ class SituationReport extends React.PureComponent {
     });
 
     handleDownloadClick = () => {
-        const element = document.getElementsByClassName(styles.situationReport)[0];
+        const element = document.getElementsByClassName(styles.situationReportFull)[0];
 
         html2canvas(element).then((canvas) => {
             canvas.toBlob((blob) => {
@@ -335,175 +335,179 @@ class SituationReport extends React.PureComponent {
 
         return (
             <div className={_cs(styles.situationReport, className)}>
-                <Button
-                    className={styles.downloadButton}
-                    onClick={this.handleDownloadClick}
-                    iconName="download"
-                >
-                    Download
-                </Button>
-                <header className={styles.header}>
-                    <h2>Incident Situation Report</h2>
-                </header>
-                <div className={styles.map}>
-                    <h3 className={styles.mapHeading}>
-                        Incident Statistics
-                    </h3>
-                    <Map
-                        mapStyle={mapStyle}
-                        mapOptions={{
-                            logoPosition: 'top-left',
-                            minZoom: 5,
-                        }}
-                        scaleControlShown
-                        scaleControlPosition="bottom-right"
-                        navControlShown
-                        navControlPosition="bottom-right"
+                <div className={styles.downloadButtonContainer}>
+                    <Button
+                        className={styles.downloadButton}
+                        onClick={this.handleDownloadClick}
+                        iconName="download"
                     >
-                        <MapContainer className={styles.mapContainer} />
-                        <IncidentMap
-                            sourceKey="situation-report-incidents"
-                            incidentList={incidents}
-                            isProviceOnlyMap
-                        />
-                        <HazardsLegend
-                            filteredHazardTypes={filteredHazardTypes}
-                            className={styles.hazardLegend}
-                            itemClassName={styles.legendItem}
-                        />
-                    </Map>
+                        Download
+                    </Button>
                 </div>
-                <div className={styles.vizContainer}>
-                    <h3 className={styles.heading}>Disaster Summary</h3>
-                    <div style={{ height: hazardSummary.length * 32 }}>
-                        <ResponsiveContainer>
-                            <BarChart
-                                data={hazardSummary}
-                                layout="vertical"
-                            >
-                                <XAxis
-                                    dataKey="value"
-                                    type="number"
-                                    hide
-                                />
-                                <Bar
-                                    fill="#e04656"
-                                    dataKey="value"
+                <div className={styles.situationReportFull}>
+                    <header className={styles.header}>
+                        <h2>Incident Situation Report</h2>
+                    </header>
+                    <div className={styles.map}>
+                        <h3 className={styles.mapHeading}>
+                            Incident Statistics
+                        </h3>
+                        <Map
+                            mapStyle={mapStyle}
+                            mapOptions={{
+                                logoPosition: 'top-left',
+                                minZoom: 5,
+                            }}
+                            scaleControlShown
+                            scaleControlPosition="bottom-right"
+                            navControlShown
+                            navControlPosition="bottom-right"
+                        >
+                            <MapContainer className={styles.mapContainer} />
+                            <IncidentMap
+                                sourceKey="situation-report-incidents"
+                                incidentList={incidents}
+                                isProviceOnlyMap
+                            />
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                            />
+                        </Map>
+                    </div>
+                    <div className={styles.vizContainer}>
+                        <h3 className={styles.heading}>Disaster Summary</h3>
+                        <div style={{ height: hazardSummary.length * 32 }}>
+                            <ResponsiveContainer>
+                                <BarChart
+                                    data={hazardSummary}
                                     layout="vertical"
                                 >
-                                    <LabelList
+                                    <XAxis
+                                        dataKey="value"
+                                        type="number"
+                                        hide
+                                    />
+                                    <Bar
+                                        fill="#e04656"
+                                        dataKey="value"
+                                        layout="vertical"
+                                    >
+                                        <LabelList
+                                            dataKey="label"
+                                            position="insideLeft"
+                                        />
+                                    </Bar>
+                                    <YAxis
                                         dataKey="label"
-                                        position="insideLeft"
+                                        type="category"
+                                        hide
                                     />
-                                </Bar>
-                                <YAxis
-                                    dataKey="label"
-                                    type="category"
-                                    hide
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
-                </div>
-                <div className={styles.map}>
-                    <h3 className={styles.mapHeading}>
-                        Casuality Statistics
-                    </h3>
-                    <Map
-                        mapStyle={mapStyle}
-                        mapOptions={{
-                            logoPosition: 'top-left',
-                            minZoom: 5,
-                        }}
-                        scaleControlShown
-                        scaleControlPosition="bottom-right"
-                        navControlShown
-                        navControlPosition="bottom-right"
-                    >
-                        <MapContainer className={styles.mapContainer} />
-                        <ProvinceChoroplethMap
-                            sourceKey="inci-choro"
-                            paint={colorPaint.paint}
-                            mapState={mapState}
-                        />
-                        <LayerLegend
-                            layer={{
-                                type: 'choropleth',
-                                minValue: minCasuality,
-                                legendTitle: 'Casualty Statistics',
-                                legend: colorPaint.legend,
+                    <div className={styles.map}>
+                        <h3 className={styles.mapHeading}>
+                            Casuality Statistics
+                        </h3>
+                        <Map
+                            mapStyle={mapStyle}
+                            mapOptions={{
+                                logoPosition: 'top-left',
+                                minZoom: 5,
                             }}
-                        />
-                    </Map>
-                </div>
-                <div className={styles.charts}>
-                    <div className={styles.pieCharts}>
-                        <div className={styles.pieChart}>
-                            <h4>People Loss</h4>
-                            <PieChart width={240} height={240}>
-                                <Pie
-                                    data={peopleLossPieData}
-                                    dataKey="value"
-                                    cx={120}
-                                    cy={120}
-                                    outerRadius={60}
-                                >
+                            scaleControlShown
+                            scaleControlPosition="bottom-right"
+                            navControlShown
+                            navControlPosition="bottom-right"
+                        >
+                            <MapContainer className={styles.mapContainer} />
+                            <ProvinceChoroplethMap
+                                sourceKey="inci-choro"
+                                paint={colorPaint.paint}
+                                mapState={mapState}
+                            />
+                            <LayerLegend
+                                layer={{
+                                    type: 'choropleth',
+                                    minValue: minCasuality,
+                                    legendTitle: 'Casualty Statistics',
+                                    legend: colorPaint.legend,
+                                }}
+                            />
+                        </Map>
+                    </div>
+                    <div className={styles.charts}>
+                        <div className={styles.pieCharts}>
+                            <div className={styles.pieChart}>
+                                <h4>People Loss</h4>
+                                <PieChart width={240} height={240}>
+                                    <Pie
+                                        data={peopleLossPieData}
+                                        dataKey="value"
+                                        cx={120}
+                                        cy={120}
+                                        outerRadius={60}
+                                    >
+                                        {peopleLossPieData.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${entry.name}`}
+                                                fill={pieColors[index % pieColors.length]}
+                                            />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                                <div className={styles.legendContainer}>
                                     {peopleLossPieData.map((entry, index) => (
-                                        <Cell
+                                        <LegendItem
+                                            className={styles.legend}
                                             key={`cell-${entry.name}`}
-                                            fill={pieColors[index % pieColors.length]}
+                                            color={pieColors[index % pieColors.length]}
+                                            label={`${entry.name} (${entry.value})`}
                                         />
                                     ))}
-                                </Pie>
-                            </PieChart>
-                            <div className={styles.legendContainer}>
-                                {peopleLossPieData.map((entry, index) => (
-                                    <LegendItem
-                                        className={styles.legend}
-                                        key={`cell-${entry.name}`}
-                                        color={pieColors[index % pieColors.length]}
-                                        label={`${entry.name} (${entry.value})`}
-                                    />
-                                ))}
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.pieChart}>
-                            <h4>Family Loss</h4>
-                            <PieChart width={240} height={240}>
-                                <Pie
-                                    data={familyLossPieData}
-                                    dataKey="value"
-                                    cx={120}
-                                    cy={120}
-                                    outerRadius={60}
-                                >
+                            <div className={styles.pieChart}>
+                                <h4>Family Loss</h4>
+                                <PieChart width={240} height={240}>
+                                    <Pie
+                                        data={familyLossPieData}
+                                        dataKey="value"
+                                        cx={120}
+                                        cy={120}
+                                        outerRadius={60}
+                                    >
+                                        {familyLossPieData.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${entry.name}`}
+                                                fill={pieColors[index % pieColors.length]}
+                                            />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                                <div className={styles.legendContainer}>
                                     {familyLossPieData.map((entry, index) => (
-                                        <Cell
+                                        <LegendItem
+                                            className={styles.legend}
                                             key={`cell-${entry.name}`}
-                                            fill={pieColors[index % pieColors.length]}
+                                            color={pieColors[index % pieColors.length]}
+                                            label={`${entry.name} (${entry.value})`}
                                         />
                                     ))}
-                                </Pie>
-                            </PieChart>
-                            <div className={styles.legendContainer}>
-                                {familyLossPieData.map((entry, index) => (
-                                    <LegendItem
-                                        className={styles.legend}
-                                        key={`cell-${entry.name}`}
-                                        color={pieColors[index % pieColors.length]}
-                                        label={`${entry.name} (${entry.value})`}
-                                    />
-                                ))}
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <Table
+                        className={styles.table}
+                        data={hazardGroupedIncidents}
+                        aggregatedStat={aggregatedStat}
+                        hazardTypes={hazardTypes}
+                    />
                 </div>
-                <Table
-                    className={styles.table}
-                    data={hazardGroupedIncidents}
-                    aggregatedStat={aggregatedStat}
-                    hazardTypes={hazardTypes}
-                />
             </div>
         );
     }

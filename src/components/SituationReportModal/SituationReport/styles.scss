@@ -1,19 +1,23 @@
 .situation-report {
-    display: flex;
     position: relative;
-    flex-direction: column;
-    padding: var(--spacing-large);
+    padding: var(--spacing-medium);
     overflow-y: auto;
 
-    .download-button {
-        position: absolute;
-        top: var(--spacing-large);
-        right: var(--spacing-large);
+    .download-button-container {
+        display: flex;
+        justify-content: flex-end;
+
+        .download-button {
+            margin: var(--spacing-small) var(--spacing-large);
+        }
+    }
+
+    .situation-report-full {
+        background-color: var(--color-foreground);
     }
 
     .header {
         display: flex;
-        flex-shrink: 0;
         justify-content: center;
         padding: var(--spacing-large);
     }
@@ -23,12 +27,10 @@
     }
 
     .viz-container {
-        flex-shrink: 0;
         padding: var(--spacing-large);
     }
 
     .map {
-        flex-shrink: 0;
         padding: var(--spacing-large);
         width: 100%;
 
@@ -57,9 +59,8 @@
     .charts {
         display: flex;
         flex-direction: column;
-        flex-shrink: 0;
-        overflow-y: auto;
         padding: var(--spacing-large);
+        overflow-y: auto;
 
         .pie-charts {
             display: flex;
@@ -85,7 +86,6 @@
     }
 
     .table {
-        flex-shrink: 0;
         padding: var(--spacing-large);
     }
 }
