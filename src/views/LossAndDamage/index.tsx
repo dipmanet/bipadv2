@@ -238,13 +238,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         return filteredIncidents;
     }
 
-    private getDataAggregatedByYear = memoize((
-        data,
-        hazardTypes,
-        hazardFilter,
-        regionFilter,
-        regions,
-    ) => {
+    private getFilteredData = memoize((data, hazardTypes, hazardFilter, regionFilter, regions) => {
         const hazardFilterMap = listToMap(hazardFilter, d => d, () => true);
         const sanitizedIncidents = getSanitizedIncidents(data, regions, hazardTypes);
         const regionFilteredData = this.filterByRegion(sanitizedIncidents, regionFilter);
@@ -253,7 +247,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             ? regionFilteredData.filter(d => hazardFilterMap[d.hazard])
             : regionFilteredData;
 
-        const dataWithYear = filteredData.map((d) => {
+        return filteredData;
+    })
+
+    private getDataAggregatedByYear = memoize((data) => {
+        const dataWithYear = data.map((d) => {
             const incidentDate = new Date(d.incidentOn);
             incidentDate.setDate(1);
             incidentDate.setHours(0);
@@ -325,13 +323,14 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
 
-        const chartData = this.getDataAggregatedByYear(
+        const filteredData = this.getFilteredData(
             incidentList,
             hazardTypes,
             hazardFilter,
             regionFilter,
             regions,
         );
+        const chartData = this.getDataAggregatedByYear(filteredData);
 
         return (
             <>
@@ -406,7 +405,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <ModalButton
                                     disabled={pending}
                                     className={styles.compareButton}
-                                    modal={<Comparative lossAndDamageList={incidentList} />}
+                                    modal={<Comparative lossAndDamageList={filteredData} />}
                                 >
                                     Compare regions
                                 </ModalButton>
@@ -417,7 +416,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     transparent
                                     modal={(
                                         <IncidentTableModal
-                                            incidentList={incidentList}
+                                            incidentList={filteredData}
                                         />
                                     )}
                                 />
@@ -425,7 +424,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                             <div className={styles.mainContent}>
                                 <LossDetails
                                     className={styles.lossDetails}
-                                    data={incidentList}
+                                    data={filteredData}
                                 />
                                 <div className={styles.chartList}>
                                     { Object.values(incidentMetricChartParams).map(metric => (
@@ -506,7 +505,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     )}
                     mainContent={(
                         <Overview
-                            lossAndDamageList={incidentList}
+                            lossAndDamageList={filteredData}
                         />
                     )}
                 />
