@@ -1,66 +1,8 @@
-@import '~base-scss/base';
+.filter-form {
+    padding: var(--spacing-medium);
+    overflow: auto;
 
-$width-right-panel: var(--width-right-panel);
-.filter {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - var(--spacing-medium) * 2);
-
-    .header {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-
-        .heading {
-            flex-grow: 1;
-            padding: $spacing-medium $spacing-small;
-            color: $color-primary;
-        }
-
-        button {
-            flex-shrink: 0;
-        }
-    }
-
-    .show-filter-button-container {
-        top: 0;
-        right: 0;
-        transform-origin: 100% 0;
-    }
-
-    .filters-container {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        transform-origin: 100% 0;
-        border: $width-separator-thin solid $color-separator-light;
-        border-radius: $radius-border-large;
-        background-color: rgba(255, 255, 255, .9);
-        padding: 0 $spacing-small;
-        width: $width-right-panel;
-        overflow: auto;
-
-        .filter-form {
-            flex-grow: 1;
-            padding: var(--spacing-small);
-            overflow: auto;
-
-            .region-select-input {
-                margin-bottom: var(--spacing-medium);
-            }
-        }
-    }
-
-    :global {
-        .expanded-container-ghost,
-        .collapsed-container-ghost {
-            top: 0;
-            right: 0;
-        }
-
-        .expanded-container-expanding {
-            top: 0;
-            right: 0;
-        }
+    .region-select-input {
+        margin-bottom: var(--spacing-medium);
     }
 }

@@ -5,7 +5,6 @@ import { _cs, mapToList, isNotDefined } from '@togglecorp/fujs';
 import Numeral from '#rscv/Numeral';
 
 import ChoroplethMap from '#components/ChoroplethMap';
-import { getMapPaddings } from '#constants';
 
 import styles from './styles.scss';
 
