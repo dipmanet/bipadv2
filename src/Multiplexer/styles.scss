@@ -183,8 +183,9 @@
 
     .mapboxgl-ctrl-bottom-right {
         .mapboxgl-ctrl-attrib {
-            margin-right: var(--spacing-medium)!important;
-            padding: 0!important;
+            display: none;
+            // margin-right: var(--spacing-medium)!important;
+            // padding: 0!important;
         }
     }
 

@@ -67,6 +67,7 @@ const labelSelector = (d: Tab) => d.label;
 class DisasterProfile extends React.PureComponent<Props> {
     public state = {
         activeView: 'resources',
+        // activeView: 'demographics',
     }
 
     private views = {

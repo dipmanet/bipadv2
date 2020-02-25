@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
     _cs,
     doesObjectHaveNoData,
+    listToMap,
 } from '@togglecorp/fujs';
 import {
     ResponsiveContainer,
@@ -14,21 +15,29 @@ import {
     Cell,
 } from 'recharts';
 import { format } from 'd3-format';
+import { extent } from 'd3-array';
+
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapState from '#re-map/MapSource/MapState';
+import ListView from '#rscv/List/ListView';
+import SegmentInput from '#rsci/SegmentInput';
+
+import { generatePaint } from '#utils/domain';
+import { mapSources } from '#constants';
 import {
     regionSelector,
     regionNameSelector,
     municipalitiesSelector,
 } from '#selectors';
-import {
-    AppState,
-} from '#store/types';
+import { AppState } from '#store/types';
 import {
     Region,
     Municipality,
 } from '#store/atom/page/types';
 import { KeyValue } from '#types';
 import SummaryItem from '#components/SummaryItem';
-import ListView from '#rscv/List/ListView';
+import ChoroplethLegend from '#components/ChoroplethLegend';
 
 import styles from './styles.scss';
 
@@ -94,7 +103,42 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     region: regionSelector(state),
     regionName: regionNameSelector(state),
 });
+
+const colorGrade = [
+    '#31ad5c',
+    '#94c475',
+    '#d3dba0',
+    '#fff5d8',
+    '#e9bf8c',
+    '#d98452',
+    '#c73c32',
+];
+
+const attributeList = [
+    {
+        key: 'totalPopulation',
+        title: 'Total population',
+        type: 'negative',
+    },
+    {
+        key: 'householdCount',
+        title: 'Household count',
+        type: 'positive',
+    },
+    {
+        key: 'literacyRate',
+        title: 'Literacy rate',
+        type: 'positive',
+    },
+];
+
+const attributes = listToMap(attributeList, d => d.key, d => d);
+
 class Demographics extends React.PureComponent<Props> {
+    public state = {
+        selectedAttribute: 'totalPopulation',
+    }
+
     private getPopulationData = (data: DemographicsData[], region: Region) => {
         let filteredData = data;
         if (!doesObjectHaveNoData(region)) {
@@ -268,6 +312,19 @@ class Demographics extends React.PureComponent<Props> {
 
     private rendererParams = (_: string, data: KeyValue) => ({ data });
 
+    private handleAttributeSelectInputChange = (selectedAttribute) => {
+        this.setState({ selectedAttribute });
+    }
+
+    private getMapState = (data, selectedAttribute) => {
+        const mapState = data.map(d => ({
+            id: d.municipality,
+            value: +d[selectedAttribute] || 0,
+        }));
+
+        return mapState;
+    }
+
     public render() {
         const {
             pending,
@@ -276,6 +333,13 @@ class Demographics extends React.PureComponent<Props> {
             regionName,
             region,
         } = this.props;
+
+        const { selectedAttribute } = this.state;
+
+        const mapState = this.getMapState(data, selectedAttribute);
+        const [min, max] = extent(mapState, d => d.value);
+        const colors = attributes[selectedAttribute].type === 'positive' ? [...colorGrade].reverse() : [...colorGrade];
+        const { paint, legend } = generatePaint(colors, min, max);
 
         const demographics = this.getPopulationData(data, region);
         const populationSummary = this.getPopulationSummary(demographics);
@@ -289,184 +353,224 @@ class Demographics extends React.PureComponent<Props> {
         const title = `Demographics of ${regionName}`;
 
         return (
-            <div className={_cs(styles.demographics, className)}>
-                <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        {title}
-                    </h2>
-                </header>
-                { !pending && (
-                    <div className={styles.content}>
-                        <div className={styles.demographyContainer}>
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Population
-                                </h3>
-                            </header>
-                            <ListView
-                                className={styles.info}
-                                data={populationSummary}
-                                renderer={SummaryItem}
-                                keySelector={keySelector}
-                                rendererParams={this.rendererParams}
-                            />
-                            <div className={styles.chartContainer}>
-                                <ResponsiveContainer>
-                                    <BarChart
-                                        data={sexRatio}
-                                        layout="vertical"
-                                        margin={chartMargin}
-                                    >
-                                        <XAxis type="number" />
-                                        <YAxis
-                                            width={yAxisWidth}
-                                            dataKey="label"
-                                            type="category"
-                                        />
-                                        <Bar
-                                            dataKey="value"
-                                            fill="#dcdcde"
+            <>
+                <div className={_cs(styles.demographics, className)}>
+                    <header className={styles.header}>
+                        <h2 className={styles.heading}>
+                            {title}
+                        </h2>
+                    </header>
+                    { !pending && (
+                        <div className={styles.content}>
+                            <div className={styles.demographyContainer}>
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Population
+                                    </h3>
+                                </header>
+                                <ListView
+                                    className={styles.info}
+                                    data={populationSummary}
+                                    renderer={SummaryItem}
+                                    keySelector={keySelector}
+                                    rendererParams={this.rendererParams}
+                                />
+                                <div className={styles.chartContainer}>
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            data={sexRatio}
+                                            layout="vertical"
+                                            margin={chartMargin}
                                         >
-                                            { sexRatio.map(v => (
-                                                <Cell
-                                                    key={v.key}
-                                                    fill={v.color}
-                                                />
-                                            ))}
-                                            <LabelList
-                                                className={styles.label}
-                                                dataKey="percent"
-                                                position="insideRight"
-                                                formatter={value => `${value} %`}
+                                            <XAxis type="number" />
+                                            <YAxis
+                                                width={yAxisWidth}
+                                                dataKey="label"
+                                                type="category"
                                             />
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                        <div className={styles.demographyContainer}>
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Literacy
-                                </h3>
-                            </header>
-                            <ListView
-                                className={styles.info}
-                                data={literacySummary}
-                                renderer={SummaryItem}
-                                keySelector={keySelector}
-                                rendererParams={this.rendererParams}
-                            />
-                            <div className={styles.chartContainer}>
-                                <ResponsiveContainer>
-                                    <BarChart
-                                        data={literacyRatio}
-                                        layout="vertical"
-                                        margin={chartMargin}
-                                    >
-                                        <XAxis type="number" />
-                                        <YAxis
-                                            width={yAxisWidth}
-                                            dataKey="label"
-                                            type="category"
-                                        />
-                                        <Bar
-                                            dataKey="value"
-                                        >
-                                            { literacyRatio.map(v => (
-                                                <Cell
-                                                    key={v.key}
-                                                    fill={v.color}
-                                                />
-                                            ))}
-                                            <LabelList
-                                                className={styles.label}
+                                            <Bar
                                                 dataKey="value"
-                                                position="insideRight"
-                                                formatter={value => `${Number(value).toFixed(2)} %`}
-                                            />
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                                fill="#dcdcde"
+                                            >
+                                                { sexRatio.map(v => (
+                                                    <Cell
+                                                        key={v.key}
+                                                        fill={v.color}
+                                                    />
+                                                ))}
+                                                <LabelList
+                                                    className={styles.label}
+                                                    dataKey="percent"
+                                                    position="insideRight"
+                                                    formatter={value => `${value} %`}
+                                                />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.demographyContainer}>
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Household
-                                </h3>
-                            </header>
-                            <ListView
-                                className={styles.info}
-                                data={householdSummary}
-                                renderer={SummaryItem}
-                                keySelector={keySelector}
-                                rendererParams={this.rendererParams}
-                            />
-                            <div className={styles.chartContainer}>
-                                <ResponsiveContainer>
-                                    <BarChart
-                                        margin={chartMargin}
-                                        data={householdSummary}
-                                        layout="vertical"
-                                    >
-                                        <XAxis type="number" />
-                                        <YAxis
-                                            width={yAxisWidth}
-                                            dataKey="label"
-                                            type="category"
-                                        />
-                                        <Bar
-                                            dataKey="value"
-                                            fill="#e35163"
+                            <div className={styles.demographyContainer}>
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Literacy
+                                    </h3>
+                                </header>
+                                <ListView
+                                    className={styles.info}
+                                    data={literacySummary}
+                                    renderer={SummaryItem}
+                                    keySelector={keySelector}
+                                    rendererParams={this.rendererParams}
+                                />
+                                <div className={styles.chartContainer}>
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            data={literacyRatio}
+                                            layout="vertical"
+                                            margin={chartMargin}
                                         >
-                                            <LabelList
-                                                className={styles.label}
-                                                dataKey="value"
-                                                position="insideRight"
-                                                formatter={value => format('.2s')(value)}
+                                            <XAxis type="number" />
+                                            <YAxis
+                                                width={yAxisWidth}
+                                                dataKey="label"
+                                                type="category"
                                             />
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                            <Bar
+                                                dataKey="value"
+                                            >
+                                                { literacyRatio.map(v => (
+                                                    <Cell
+                                                        key={v.key}
+                                                        fill={v.color}
+                                                    />
+                                                ))}
+                                                <LabelList
+                                                    className={styles.label}
+                                                    dataKey="value"
+                                                    position="insideRight"
+                                                    formatter={value => `${Number(value).toFixed(2)} %`}
+                                                />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                            <div className={styles.demographyContainer}>
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Household
+                                    </h3>
+                                </header>
+                                <ListView
+                                    className={styles.info}
+                                    data={householdSummary}
+                                    renderer={SummaryItem}
+                                    keySelector={keySelector}
+                                    rendererParams={this.rendererParams}
+                                />
+                                <div className={styles.chartContainer}>
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            margin={chartMargin}
+                                            data={householdSummary}
+                                            layout="vertical"
+                                        >
+                                            <XAxis type="number" />
+                                            <YAxis
+                                                width={yAxisWidth}
+                                                dataKey="label"
+                                                type="category"
+                                            />
+                                            <Bar
+                                                dataKey="value"
+                                                fill="#e35163"
+                                            >
+                                                <LabelList
+                                                    className={styles.label}
+                                                    dataKey="value"
+                                                    position="insideRight"
+                                                    formatter={value => format('.2s')(value)}
+                                                />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                            <div className={_cs(styles.demographyContainer, styles.ageGroup)}>
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        Age Group
+                                    </h3>
+                                </header>
+                                <div className={styles.chartContainer}>
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            margin={chartMargin}
+                                            data={ageGroupSummary}
+                                            layout="vertical"
+                                        >
+                                            <XAxis type="number" />
+                                            <YAxis
+                                                width={yAxisWidth}
+                                                dataKey="label"
+                                                type="category"
+                                            />
+                                            <Bar
+                                                dataKey="male"
+                                                fill="#64b5f6"
+                                                stackId="a"
+                                            />
+                                            <Bar
+                                                dataKey="female"
+                                                fill="#f06292"
+                                                stackId="a"
+                                            />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
                         </div>
-                        <div className={_cs(styles.demographyContainer, styles.ageGroup)}>
-                            <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    Age Group
-                                </h3>
-                            </header>
-                            <div className={styles.chartContainer}>
-                                <ResponsiveContainer>
-                                    <BarChart
-                                        margin={chartMargin}
-                                        data={ageGroupSummary}
-                                        layout="vertical"
-                                    >
-                                        <XAxis type="number" />
-                                        <YAxis
-                                            width={yAxisWidth}
-                                            dataKey="label"
-                                            type="category"
-                                        />
-                                        <Bar
-                                            dataKey="male"
-                                            fill="#64b5f6"
-                                            stackId="a"
-                                        />
-                                        <Bar
-                                            dataKey="female"
-                                            fill="#f06292"
-                                            stackId="a"
-                                        />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+                <MapSource
+                    sourceKey="demographics-profile"
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepal.url,
+                    }}
+                >
+                    <MapLayer
+                        layerKey="choropleth-layer"
+                        layerOptions={{
+                            type: 'fill',
+                            'source-layer': mapSources.nepal.layers.municipality,
+                            paint,
+                        }}
+                    />
+                    <MapState
+                        attributes={mapState}
+                        attributeKey="value"
+                        sourceLayer={mapSources.nepal.layers.municipality}
+                    />
+                </MapSource>
+                <div className={_cs('map-legend-container', styles.legendContainer)}>
+                    <SegmentInput
+                        className={styles.attributeSelectInput}
+                        options={attributeList}
+                        labelSelector={d => d.title}
+                        keySelector={d => d.key}
+                        value={selectedAttribute}
+                        onChange={this.handleAttributeSelectInputChange}
+                        showLabel={false}
+                        showHintAndError={false}
+                    />
+                    <ChoroplethLegend
+                        className={styles.legend}
+                        legend={legend}
+                        minValue={min}
+                    />
+                </div>
+            </>
         );
     }
 }

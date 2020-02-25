@@ -1,0 +1,29 @@
+.choropleth-legend {
+    display: flex;
+    position: relative;
+
+    .min {
+        position: absolute;
+        top: var(--font-size-small);
+        left: calc(-1 * var(--spacing-small));
+        color: var(--color-text-label);
+        font-size: var(--font-size-small);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .legend-element {
+        flex-grow: 1;
+
+        .color {
+            height: var(--font-size-small);
+        }
+
+        .value {
+            margin-right: calc(-1 * var(--spacing-small));
+            text-align: right;
+            color: var(--color-text-label);
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-bold);
+        }
+    }
+}

@@ -50,3 +50,20 @@
         }
     }
 }
+
+.legend-container {
+    position: absolute;
+    bottom: var(--spacing-medium);
+    left: calc(var(--width-left-panel) + var(--spacing-medium));
+    background-color: var(--color-foreground);
+    padding: var(--spacing-medium);
+    width: 40vw;
+
+    .legend {
+        margin: var(--spacing-small);
+    }
+
+    .attribute-select-input {
+        margin: var(--spacing-small);
+    }
+}

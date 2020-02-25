@@ -85,7 +85,7 @@ const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
                         <Numeral
                             normal
                             value={value}
-                            precision={1}
+                            precision={2}
                         />
                     </div>
                 </div>

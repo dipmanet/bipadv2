@@ -92,6 +92,7 @@ export default class LossAndDamageMap extends React.PureComponent {
             <React.Fragment>
                 <div
                     className={_cs(
+                        'map-legend-container',
                         styles.legend,
                         isTimeline && styles.timeline,
                     )}
