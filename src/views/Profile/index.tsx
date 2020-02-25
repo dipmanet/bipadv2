@@ -30,7 +30,7 @@ export default class Profile extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            activeView: 'document',
+            activeView: 'summary',
         };
     }
 
@@ -56,6 +56,8 @@ export default class Profile extends React.PureComponent<Props, State> {
         return (
             <Page
                 leftContentContainerClassName={styles.leftContentContainer}
+                hideHazardFilter
+                hideDataRangeFilter
                 leftContent={(
                     <>
                         <header className={styles.header}>

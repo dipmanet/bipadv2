@@ -67,7 +67,7 @@ const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
                 className={styles.min}
                 normal
                 value={minValue}
-                precision={1}
+                precision={2}
             />
         )}
         { Object.keys(legend).map((color) => {

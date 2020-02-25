@@ -212,14 +212,14 @@ class Login extends React.PureComponent<Props, State> {
                             className={styles.input}
                             faramElementName="username"
                             label="Username"
-                            placeholder="shyam"
+                            placeholder="Username"
                             autoFocus
                         />
                         <TextInput
                             className={styles.input}
                             faramElementName="password"
                             label="Password"
-                            placeholder="********"
+                            placeholder="Password"
                             type="password"
                         />
                     </ModalBody>

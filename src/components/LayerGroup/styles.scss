@@ -12,11 +12,9 @@
             font-size: var(--font-size-large);
         }
 
-        .hidden-actions {
+        .actions {
             display: flex;
             align-items: center;
-            transition: .2s opacity ease-in-out;
-            opacity: 0;
             padding: var(--spacing-extra-small);
 
             .info-button {
@@ -44,12 +42,6 @@
 
             &:hover {
                 color: var(--color-text);
-            }
-        }
-
-        &:hover {
-            .hidden-actions {
-                opacity: 1;
             }
         }
     }

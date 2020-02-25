@@ -102,7 +102,10 @@ export default class LossAndDamageMap extends React.PureComponent {
                         labelSelector={d => d.label}
                         value={metricKey}
                         onChange={onMetricChange}
+                        showLabel={false}
+                        showHintAndError={false}
                     />
+                    {/*
                     <h5 className={styles.heading}>
                         {metricName}
                     </h5>
@@ -118,17 +121,29 @@ export default class LossAndDamageMap extends React.PureComponent {
                             precision={0}
                         />
                     </div>
+                    */}
                     <div className={styles.scale}>
-                        { colorGrade.map(c => (
-                            <div
-                                key={c}
-                                className={styles.colorUnit}
-                                style={{
-                                    width: colorUnitWidth,
-                                    backgroundColor: c,
-                                }}
-                            />
-                        ))}
+                        { color.map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { Math.round(color[i - 1]) }
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
                 <ChoroplethMap

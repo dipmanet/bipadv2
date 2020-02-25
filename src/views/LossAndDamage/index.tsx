@@ -18,17 +18,21 @@ import {
     Brush,
 } from 'recharts';
 
+import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 
 import { lossMetrics } from '#utils/domain';
-import { sum } from '#utils/common';
+import {
+    sum,
+    encodeDate,
+} from '#utils/common';
 import {
     hazardTypesSelector,
     hazardFilterSelector,
     regionFilterSelector,
+    regionsSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -43,7 +47,7 @@ import Loading from '#components/Loading';
 import Page from '#components/Page';
 
 import Comparative from './Comparative';
-import { getMinDate } from './common';
+import { getSanitizedIncidents } from './common';
 
 import {
     getResults,
@@ -73,21 +77,41 @@ const chartMargin = {
     left: 0,
 };
 
+const today = new Date();
+const oneYearAgo = new Date();
+oneYearAgo.setMonth(today.getMonth() - 6);
+
+const DEFAULT_START_DATE = oneYearAgo;
+const DEFAULT_END_DATE = today;
+
+const requestQuery = ({
+    params: {
+        startDate = DEFAULT_START_DATE.toISOString(),
+        endDate = DEFAULT_END_DATE.toISOString(),
+    } = {},
+}) => ({
+    expand: ['loss.peoples', 'wards'],
+    limit: -1,
+    incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
+    incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
+    ordering: '-incident_on',
+    // lnd: true,
+});
+
 const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     incidentsGetRequest: {
         url: '/incident/',
         method: methods.GET,
-        query: {
-            expand: ['loss.peoples', 'wards'],
-            // limit: 100,
-            limit: -1,
-            ordering: '-incident_on',
-            lnd: true,
-        },
+        query: requestQuery,
         onMount: true,
         // extras: { schemaName: 'incidentWithPeopleResponse' },
     },
 };
+
+const getDatesInIsoString = (startDate: string, endDate: string) => ({
+    startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
+    endDate: endDate ? (new Date(endDate)).toISOString() : undefined,
+});
 
 const timeTickFormatter = (timestamp: number) => {
     const date = new Date();
@@ -123,11 +147,10 @@ const incidentMetricChartParams = {
     },
 };
 
-
-type TabKey = 'overview' | 'timeline' | 'comparative';
-
 class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
+        startDate: encodeDate(DEFAULT_START_DATE),
+        endDate: encodeDate(DEFAULT_END_DATE),
     }
 
     private calculateSummary = (data) => {
@@ -167,11 +190,39 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         return counts;
     }
 
-    private getDataAggregatedByYear = memoize((data, hazardTypes, hazardFilter, regionFilter) => {
+    private filterByRegion = (sanitizedIncidents, regionFilter) => {
+        if (!regionFilter.adminLevel) {
+            return sanitizedIncidents;
+        }
+
+        const regionNameMap = {
+            1: 'province',
+            2: 'district',
+            3: 'municipality',
+            4: 'ward',
+        };
+
+        const filterableProperty = regionNameMap[regionFilter.adminLevel];
+        const filteredIncidents = sanitizedIncidents
+            .filter(d => d[filterableProperty] === regionFilter.geoarea);
+
+        return filteredIncidents;
+    }
+
+    private getDataAggregatedByYear = memoize((
+        data,
+        hazardTypes,
+        hazardFilter,
+        regionFilter,
+        regions,
+    ) => {
         const hazardFilterMap = listToMap(hazardFilter, d => d, () => true);
+        const sanitizedIncidents = getSanitizedIncidents(data, regions, hazardTypes);
+        const regionFilteredData = this.filterByRegion(sanitizedIncidents, regionFilter);
+
         const filteredData = hazardFilter.length > 0
-            ? data.filter(d => hazardFilterMap[d.hazard])
-            : data;
+            ? regionFilteredData.filter(d => hazardFilterMap[d.hazard])
+            : regionFilteredData;
 
         const dataWithYear = filteredData.map((d) => {
             const incidentDate = new Date(d.incidentOn);
@@ -210,7 +261,23 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         );
     })
 
-    private getMinDate = memoize(getMinDate);
+    private handleStartDateChange = (startDate) => {
+        const { endDate } = this.state;
+        const { requests: { incidentsGetRequest } } = this.props;
+
+        incidentsGetRequest.do({
+            ...getDatesInIsoString(startDate, endDate),
+        });
+    }
+
+    private handleEndDateChange = (endDate) => {
+        const { startDate } = this.state;
+        const { requests: { incidentsGetRequest } } = this.props;
+
+        incidentsGetRequest.do({
+            ...getDatesInIsoString(startDate, endDate),
+        });
+    }
 
     public render() {
         const {
@@ -218,7 +285,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardTypes,
             hazardFilter,
             regionFilter,
+            regions,
         } = this.props;
+
+        const {
+            startDate,
+            endDate,
+        } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
@@ -228,8 +301,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             hazardTypes,
             hazardFilter,
             regionFilter,
+            regions,
         );
-        const minDate = this.getMinDate(incidentList);
 
         return (
             <>
@@ -248,20 +321,24 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        Data available from
+                                        Showing data from
                                     </div>
-                                    <FormattedDate
-                                        className={styles.dateFrom}
-                                        value={minDate}
-                                        mode="yyyy-MM-dd"
+                                    <DateInput
+                                        showLabel={false}
+                                        showHintAndError={false}
+                                        className={styles.dateFromInput}
+                                        value={startDate}
+                                        onChange={this.handleStartDateChange}
                                     />
                                     <div className={styles.label}>
                                         to
                                     </div>
-                                    <FormattedDate
-                                        className={styles.dateTo}
-                                        value={new Date()}
-                                        mode="yyyy-MM-dd"
+                                    <DateInput
+                                        showLabel={false}
+                                        showHintAndError={false}
+                                        className={styles.dateToInput}
+                                        value={endDate}
+                                        onChange={this.handleEndDateChange}
                                     />
                                 </div>
                                 <div className={styles.sourceDetails}>
@@ -295,6 +372,15 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className={styles.actions}>
+                                <CompareButton
+                                    disabled={pending}
+                                    className={styles.compareButton}
+                                    modal={<Comparative lossAndDamageList={incidentList} />}
+                                >
+                                    Compare regions
+                                </CompareButton>
                             </div>
                             <div className={styles.mainContent}>
                                 <LossDetails
@@ -376,15 +462,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     </div>
                                 </div>
                             </div>
-                            <footer className={styles.footer}>
-                                <CompareButton
-                                    disabled={pending}
-                                    className={styles.compareButton}
-                                    modal={<Comparative lossAndDamageList={incidentList} />}
-                                >
-                                    Compare regions
-                                </CompareButton>
-                            </footer>
                         </>
                     )}
                     mainContent={(
@@ -401,7 +478,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
     hazardFilter: hazardFilterSelector(state),
-    regionSelector: regionFilterSelector(state),
+    regionFilter: regionFilterSelector(state),
+    regions: regionsSelector(state),
 });
 
 export default compose(

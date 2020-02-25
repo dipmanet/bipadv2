@@ -96,9 +96,11 @@
     transform: none;
 
     .legend-container {
+        display: flex;
+        flex-direction: column;
         border: var(--width-separator-thin) solid var(--color-separator);
         background-color: var(--color-foreground);
-        max-width: 170px;
+        max-width: 13vw;
         overflow: auto;
 
         .header {
