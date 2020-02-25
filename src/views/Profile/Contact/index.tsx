@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 
 const contactKeySelector = (d: Contact) => d.id;
 
-const requests: { [key: string]: ClientAttributes<Props, Params> } = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     municipalityContactRequest: {
         url: '/municipality-contact/',
         method: methods.GET,
@@ -413,6 +413,7 @@ class ContactPage extends React.PureComponent<Props> {
             contactList,
             region,
             municipalityList,
+            className,
             filters: {
                 faramValues: filterValues,
             },
@@ -475,11 +476,11 @@ class ContactPage extends React.PureComponent<Props> {
                         }}
                     />
                 </MapSource>
-                <div className={styles.left}>
+                <div className={_cs(className, styles.left)}>
                     <header className={styles.header}>
-                        <h3 className={styles.heading}>
+                        <h2 className={styles.heading}>
                             Contact personnels
-                        </h3>
+                        </h2>
                     </header>
                     <ListView
                         className={styles.contactDetailsList}

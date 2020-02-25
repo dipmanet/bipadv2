@@ -10,10 +10,11 @@ import DisasterProfile from './DisasterProfile';
 import ProjectsProfile from './ProjectsProfile';
 import Indicator from './Indicator';
 import Contact from './Contact';
+import Document from './Document';
 
 import styles from './styles.scss';
 
-type TabKeys = 'summary' | 'projectsProfile' | 'contact';
+type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';
 
 interface Props {
 }
@@ -29,7 +30,7 @@ export default class Profile extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            activeView: 'summary',
+            activeView: 'document',
         };
     }
 
@@ -45,6 +46,10 @@ export default class Profile extends React.PureComponent<Props, State> {
         this.setState({ activeView: 'contact' });
     }
 
+    private handleDocumentButtonClick = () => {
+        this.setState({ activeView: 'document' });
+    }
+
     public render() {
         const { activeView } = this.state;
 
@@ -52,7 +57,7 @@ export default class Profile extends React.PureComponent<Props, State> {
             <Page
                 leftContentContainerClassName={styles.leftContentContainer}
                 leftContent={(
-                    <div>
+                    <>
                         <header className={styles.header}>
                             <div className={styles.tabs}>
                                 <div
@@ -100,6 +105,22 @@ export default class Profile extends React.PureComponent<Props, State> {
                                         </div>
                                     </div>
                                 </div>
+                                <div
+                                    className={_cs(styles.tab, activeView === 'document' && styles.active)}
+                                    onClick={this.handleDocumentButtonClick}
+                                    role="presentation"
+                                >
+                                    <Icon
+                                        className={styles.visualizationIcon}
+                                        name="document"
+                                    />
+                                    <div className={styles.title}>
+                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
+                                        <div className={styles.text}>
+                                            Document
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className={styles.actions}>
                                 <IndicatorButton
@@ -114,38 +135,27 @@ export default class Profile extends React.PureComponent<Props, State> {
                         </header>
                         {activeView === 'summary' && (
                             <DisasterProfile
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
                         {activeView === 'projectsProfile' && (
                             <ProjectsProfile
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
                         {activeView === 'contact' && (
                             <Contact
-                                className={styles.profile}
+                                className={styles.view}
                             />
                         )}
-                    </div>
+                        {activeView === 'document' && (
+                            <Document
+                                className={styles.view}
+                            />
+                        )}
+                    </>
                 )}
             />
         );
     }
 }
-
-/*
-
-                    <>
-                        <ScrollTabs
-                            className={_cs(styles.tabs)}
-                            tabs={tabs}
-                            useHash
-                        >
-                        </ScrollTabs>
-                        <MultiViewContainer
-                            views={this.views}
-                            useHash
-                        />
-                    </>
-*/
