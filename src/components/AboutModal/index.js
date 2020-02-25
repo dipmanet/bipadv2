@@ -9,9 +9,9 @@ import ModalBody from '#rscv/Modal/Body';
 import Button from '#rsca/Button';
 
 import About from './About';
-import PrivacyPolicy from './PrivacyPolicy';
-import Metadata from './Metadata';
-import Disclaimer from './Disclaimer';
+// import PrivacyPolicy from './PrivacyPolicy';
+// import Metadata from './Metadata';
+// import Disclaimer from './Disclaimer';
 import Manual from './Manual';
 
 import styles from './styles.scss';
@@ -25,9 +25,9 @@ export default class AboutUs extends React.PureComponent {
         };
 
         this.tabs = {
-            about: 'About',
-            privacyPolicy: 'Privacy policy',
-            metadata: 'Metadata',
+            about: 'Description',
+            // privacyPolicy: 'Privacy policy',
+            // metadata: 'Metadata',
             // disclaimer: 'Disclaimer',
             manual: 'Publications',
         };
@@ -39,6 +39,7 @@ export default class AboutUs extends React.PureComponent {
                 component: About,
                 rendererParams,
             },
+            /*
             privacyPolicy: {
                 component: PrivacyPolicy,
                 rendererParams,
@@ -51,6 +52,7 @@ export default class AboutUs extends React.PureComponent {
                 component: Disclaimer,
                 rendererParams,
             },
+            */
             manual: {
                 component: Manual,
                 rendererParams,
@@ -78,7 +80,7 @@ export default class AboutUs extends React.PureComponent {
             >
                 <ModalHeader
                     className={styles.header}
-                    title="Bipad"
+                    title="BIPAD"
                     rightComponent={(
                         <Button
                             onClick={closeModal}
