@@ -27,12 +27,14 @@ const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    emptyComponent: PropTypes.func,
     className: PropTypes.string,
 };
 
 const defaultProps = {
     alertList: [],
     className: undefined,
+    emptyComponent: undefined,
 };
 
 // eslint-disable-next-line react/no-multi-comp
@@ -112,6 +114,7 @@ export default class AlertTable extends React.PureComponent {
         const {
             className,
             alertList,
+            emptyComponent,
         } = this.props;
 
         const alertListForExport = this.convertValues(alertList, this.columns);
@@ -129,6 +132,7 @@ export default class AlertTable extends React.PureComponent {
                         settings={this.state.settings}
                         onChange={this.handleSettingsChange}
                         rowHeight={30}
+                        emptyComponent={emptyComponent}
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>

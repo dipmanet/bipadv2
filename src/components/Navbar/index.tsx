@@ -47,7 +47,7 @@ const MenuItemLikeButton = ({
     iconName,
     disabled,
 }: {
-    title: string;
+    title: strning;
     className?: string;
     onClick: () => void;
     iconName?: string;

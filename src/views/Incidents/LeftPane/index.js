@@ -14,6 +14,7 @@ import modalize from '#rscg/Modalize';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
+import DateRangeInfo from '#components/DateRangeInfo';
 
 import { calculateCategorizedSeverity, severityScaleFactor, calculateSeverity } from '#utils/domain';
 import LossDetails from '#components/LossDetails';
@@ -31,6 +32,10 @@ import Visualizations from './Visualizations';
 import IncidentListView from './ListView';
 import IncidentTable from './TabularView';
 import AddIncidentForm from './AddIncidentForm';
+
+import {
+    pastDaysToDateRange,
+} from '#utils/transformations';
 
 import styles from './styles.scss';
 
@@ -70,11 +75,13 @@ const propTypes = {
     onIncidentHover: PropTypes.func.isRequired,
     recentDay: PropTypes.number.isRequired,
     hoveredIncidentId: PropTypes.number,
+    dateRange: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
     hoveredIncidentId: undefined,
+    dateRange: undefined,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -157,6 +164,7 @@ class LeftPane extends React.PureComponent {
             recentDay,
             onIncidentHover,
             hoveredIncidentId,
+            dateRange,
         } = this.props;
 
         const {
@@ -166,9 +174,22 @@ class LeftPane extends React.PureComponent {
         } = this.state;
 
         const incidentList = this.getMappedIncidentList(incidentListFromProps);
+        const { rangeInDays } = dateRange;
+        let startDate;
+        let endDate;
+        if (rangeInDays !== 'custom') {
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+        } else {
+            ({ startDate, endDate } = dateRange);
+        }
 
         return (
             <div className={_cs(className, styles.leftPane)}>
+                <DateRangeInfo
+                    className={styles.dateRange}
+                    startDate={startDate}
+                    endDate={endDate}
+                />
                 <LossDetails
                     className={styles.lossDetails}
                     data={incidentList}

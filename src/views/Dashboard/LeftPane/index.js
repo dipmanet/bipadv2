@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
+import Message from '#rscv/Message';
 import VirtualizedListView from '#rscv/VirtualizedListView';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -16,6 +17,7 @@ import Button from '#rsca/Button';
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
 import Cloak from '#components/Cloak';
+import DateRangeInfo from '#components/DateRangeInfo';
 
 import EventItem from './EventItem';
 import AlertItem from './AlertItem';
@@ -24,6 +26,10 @@ import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
 import AlertTable from './AlertTable';
 
+import {
+    pastDaysToDateRange,
+} from '#utils/transformations';
+
 import styles from './styles.scss';
 
 const propTypes = {
@@ -31,12 +37,13 @@ const propTypes = {
     eventList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
+    dateRange: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
-
 const defaultProps = {
     alertList: [],
     eventList: [],
     hazardTypes: {},
+    dateRange: undefined,
     className: undefined,
 };
 
@@ -51,6 +58,11 @@ const AlertEmptyComponent = () => (
     </div>
 );
 
+const AlertTableEmptyComponent = () => (
+    <Message>
+        <AlertEmptyComponent />
+    </Message>
+);
 const EventEmptyComponent = () => (
     <div className={styles.eventEmpty}>
         There are no major events at the moment.
@@ -76,6 +88,7 @@ const AlertTableModal = ({
             <AlertTable
                 className={styles.table}
                 alertList={alertList}
+                emptyComponent={AlertTableEmptyComponent}
             />
         </ModalBody>
     </Modal>
@@ -216,6 +229,7 @@ export default class LeftPane extends React.PureComponent {
             alertList,
             eventList,
             hazardTypes,
+            dateRange,
         } = this.props;
 
         const {
@@ -226,8 +240,22 @@ export default class LeftPane extends React.PureComponent {
             activeView,
         } = this.state;
 
+        const { rangeInDays } = dateRange;
+        let startDate;
+        let endDate;
+        if (rangeInDays !== 'custom') {
+            ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+        } else {
+            ({ startDate, endDate } = dateRange);
+        }
+
         return (
             <div className={_cs(className, styles.leftPane)}>
+                <DateRangeInfo
+                    className={styles.dateRange}
+                    startDate={startDate}
+                    endDate={endDate}
+                />
                 <header className={styles.header}>
                     <div className={styles.tabs}>
                         <div
@@ -304,7 +332,11 @@ export default class LeftPane extends React.PureComponent {
                             className={styles.showTableButton}
                             iconName="table"
                             transparent
-                            modal={<AlertTableModal alertList={alertList} />}
+                            modal={(
+                                <AlertTableModal
+                                    alertList={alertList}
+                                />
+                            )}
                         />
                     </div>
                 </header>

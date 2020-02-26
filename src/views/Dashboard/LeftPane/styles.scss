@@ -4,6 +4,11 @@
     width: var(--width-left-panel);
     overflow: auto;
 
+    .date-range {
+        display: flex;
+        flex-shrink: 0;
+    }
+
     >.header {
         display: flex;
         flex-shrink: 0;

@@ -14,22 +14,37 @@
     height: 117px;
 
     .hazard-legend {
-        border-left: var(--width-separator-thin) solid var(--color-separator);
+        display: flex;
+        flex-direction: column;
         background-color: var(--color-foreground);
         padding: var(--spacing-medium);
-        overflow: auto;
 
-        .legend-item {
-            padding: var(--spacing-extra-small) 0;
+        .legend-title {
+            padding: 0 var(--spacing-medium);
+            color: var(--color-primary);
+            font-size: var(--font-size-medium);
+            font-weight: var(--font-weight-bold);
+        }
 
-            >:first-child {
-                border-radius: 50%;
-                width: var(--font-size-small);
-                height: var(--font-size-small);
-            }
+        .legend {
+            display: flex;
+            flex-direction: column;
+            border-left: var(--width-separator-thin) solid var(--color-separator);
+            padding: var(--spacing-medium);
+            overflow: auto;
 
-            >:nth-child(2) {
-                font-size: var(--font-size-small);
+            .legend-item {
+                padding: var(--spacing-extra-small) 0;
+
+                >:first-child {
+                    border-radius: 50%;
+                    width: var(--font-size-small);
+                    height: var(--font-size-small);
+                }
+
+                >:nth-child(2) {
+                    font-size: var(--font-size-small);
+                }
             }
         }
     }

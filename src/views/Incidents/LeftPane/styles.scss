@@ -5,6 +5,12 @@
     width: var(--width-left-panel);
     overflow: auto;
 
+    .date-range {
+        display: flex;
+        flex-shrink: 0;
+        background-color: var(--color-background);
+    }
+
     .loss-details {
         flex-shrink: 0;
         background-color: var(--color-background);
