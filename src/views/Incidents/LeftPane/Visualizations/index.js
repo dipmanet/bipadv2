@@ -3,30 +3,34 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
+import {
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+} from 'recharts';
 import { groupList } from '#utils/common';
-
 import HorizontalBar from '#rscz/HorizontalBar';
-import DonutChart from '#rscz/DonutChart';
 import Legend from '#rscz/Legend';
 
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     incidentList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
     incidentList: [],
+    hazardTypes: {},
 };
 
 const barChartValueSelector = d => d.value;
 const barChartLabelSelector = d => d.label;
 const barChartColorSelector = d => d.color;
 const donutChartValueSelector = d => d.value;
-const donutChartLabelSelector = d => d.label;
-const donutChartColorSelector = d => d.color;
 
 const colors = scaleOrdinal().range(schemeAccent);
 
@@ -127,23 +131,36 @@ export default class Visualizations extends React.PureComponent {
                             Severity
                         </h4>
                     </header>
-                    <DonutChart
-                        sideLengthRatio={0.5}
-                        className={styles.chart}
-                        data={severitySummary}
-                        labelSelector={donutChartLabelSelector}
-                        valueSelector={donutChartValueSelector}
-                        colorSelector={donutChartColorSelector}
-                    />
-                    <Legend
-                        className={styles.legend}
-                        data={severitySummary}
-                        itemClassName={styles.legendItem}
-                        keySelector={itemSelector}
-                        labelSelector={legendLabelSelector}
-                        valueSelector={donutChartValueSelector}
-                        colorSelector={legendColorSelector}
-                    />
+                    <div className={styles.chart}>
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    dataKey="value"
+                                    nameKey="label"
+                                    data={severitySummary}
+                                    innerRadius={50}
+                                    outerRadius={90}
+                                    label
+                                >
+                                    { severitySummary.map(severity => (
+                                        <Cell
+                                            key={severity.label}
+                                            fill={severity.color}
+                                        />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                        <Legend
+                            className={styles.legend}
+                            data={severitySummary}
+                            itemClassName={styles.legendItem}
+                            keySelector={itemSelector}
+                            labelSelector={legendLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            colorSelector={legendColorSelector}
+                        />
+                    </div>
                 </div>
             </div>
         );

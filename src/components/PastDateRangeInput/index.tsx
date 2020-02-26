@@ -29,7 +29,7 @@ const pastDateRangeOptions = [
         key: 30,
     },
     {
-        label: '6 month',
+        label: '6 months',
         key: 183,
     },
     {

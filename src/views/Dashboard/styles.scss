@@ -8,9 +8,18 @@
 }
 
 .hazard-legend-container {
+    display: flex;
+    flex-direction: column;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
     width: 300px;
+
+    .legend-title {
+        padding: var(--spacing-small) var(--spacing-large);
+        color: var(--color-primary);
+        font-size: var(--font-size-medium);
+        font-weight: var(--font-weight-bold);
+    }
 
     .hazard-legend {
         display: flex;

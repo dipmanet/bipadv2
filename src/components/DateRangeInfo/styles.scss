@@ -1,0 +1,28 @@
+.date-details {
+    display: flex;
+    align-items: center;
+    padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+    .info-icon-container {
+        flex-shrink: 0;
+        padding: 0 var(--spacing-small);
+
+        .info-icon {
+            font-size: var(--font-size-medium);
+        }
+    }
+
+    .label {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+
+    .start-date {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .end-date {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+        font-weight: var(--font-weight-bold);
+    }
+}

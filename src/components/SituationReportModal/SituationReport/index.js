@@ -369,11 +369,14 @@ class SituationReport extends React.PureComponent {
                                 incidentList={incidents}
                                 isProviceOnlyMap
                             />
-                            <HazardsLegend
-                                filteredHazardTypes={filteredHazardTypes}
-                                className={styles.hazardLegend}
-                                itemClassName={styles.legendItem}
-                            />
+                            <div className={styles.legend}>
+                                <div className={styles.legendTitle}>Hazards Legend</div>
+                                <HazardsLegend
+                                    filteredHazardTypes={filteredHazardTypes}
+                                    className={styles.hazardLegend}
+                                    itemClassName={styles.legendItem}
+                                />
+                            </div>
                         </Map>
                     </div>
                     <div className={styles.vizContainer}>

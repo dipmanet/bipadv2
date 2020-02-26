@@ -221,6 +221,7 @@ class Incidents extends React.PureComponent<Props, State> {
             },
             regions,
             hazardTypes,
+            filters,
         } = this.props;
 
         const { hoveredIncidentId } = this.state;
@@ -256,6 +257,7 @@ class Incidents extends React.PureComponent<Props, State> {
                             recentDay={RECENT_DAY}
                             onIncidentHover={this.handleIncidentHover}
                             hoveredIncidentId={hoveredIncidentId}
+                            dateRange={filters.dataDateRange}
                         />
                     )}
                     mainContentContainerClassName={_cs(styles.legendContainer, 'map-legend-container')}
@@ -280,11 +282,14 @@ class Incidents extends React.PureComponent<Props, State> {
                                 />
                             </div>
                             {filteredHazardTypes.length > 0 && (
-                                <HazardsLegend
-                                    filteredHazardTypes={filteredHazardTypes}
-                                    className={styles.hazardLegend}
-                                    itemClassName={styles.legendItem}
-                                />
+                                <div className={styles.hazardLegend}>
+                                    <div className={styles.legendTitle}>Hazards Legend</div>
+                                    <HazardsLegend
+                                        filteredHazardTypes={filteredHazardTypes}
+                                        className={styles.legend}
+                                        itemClassName={styles.legendItem}
+                                    />
+                                </div>
                             )}
                         </React.Fragment>
                     )}

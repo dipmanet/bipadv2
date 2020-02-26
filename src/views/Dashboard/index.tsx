@@ -369,6 +369,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 alertsRequest: { pending: alertsPending },
                 eventsRequest: { pending: eventsPending },
             },
+            filters,
         } = this.props;
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);
@@ -414,15 +415,19 @@ class Dashboard extends React.PureComponent<Props, State> {
                             hoveredEventId={hoveredEventId}
                             onEventHover={this.handleEventHover}
                             onAlertHover={this.handleAlertHover}
+                            dateRange={filters.dataDateRange}
                         />
                     )}
                     mainContentContainerClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
                     mainContent={(
-                        <HazardsLegend
-                            filteredHazardTypes={filteredHazardTypes}
-                            className={styles.hazardLegend}
-                            itemClassName={styles.legendItem}
-                        />
+                        <>
+                            <div className={styles.legendTitle}>Hazards Legend</div>
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.hazardLegend}
+                                itemClassName={styles.legendItem}
+                            />
+                        </>
                     )}
                 />
             </React.Fragment>

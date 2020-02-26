@@ -1,10 +1,13 @@
 @import '~base-scss/base';
 
 .visualizations {
-    padding-top: $spacing-small;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: var(--spacing-medium);
     overflow: auto;
 
-    %chart-container {
+    .hazard-statistics-chart {
         .header {
             .heading {
                 padding: 0 $spacing-medium;
@@ -28,23 +31,27 @@
         }
     }
 
-    .hazard-statistics-chart {
-        @extend %chart-container;
-    }
-
-    .event-statistics-chart {
-        @extend %chart-container;
-    }
-
     .severity-summary {
-        @extend %chart-container;
+        .header {
+            .heading {
+                padding: 0 $spacing-medium;
+                color: $color-accent;
+            }
+        }
 
         .chart {
-            height: 200px;
+            height: 220px;
         }
-    }
 
-    .inducer-summary {
-        @extend %chart-container;
+        .legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 $spacing-medium;
+
+            .legend-item {
+                padding: $spacing-small;
+            }
+        }
     }
 }
