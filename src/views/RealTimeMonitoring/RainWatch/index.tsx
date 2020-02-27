@@ -7,7 +7,9 @@ import {
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
 import Table from '#rscv/Table';
+import DownloadButton from '#components/DownloadButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { Header } from '#store/atom/table/types';
@@ -15,6 +17,10 @@ import {
     WaterLevelAverage,
     RealTimeRain,
 } from '#store/atom/page/types';
+
+import {
+    convertNormalTableToCsv,
+} from '#utils/table';
 
 import styles from './styles.scss';
 
@@ -165,6 +171,7 @@ class RainWatch extends React.PureComponent<Props> {
             closeModal,
         } = this.props;
 
+        const formattedTableData = convertNormalTableToCsv(realTimeRain, this.rainWatchHeader);
         return (
             <Modal
                 closeOnEscape
@@ -196,6 +203,14 @@ class RainWatch extends React.PureComponent<Props> {
                         keySelector={rainWatchKeySelector}
                     />
                 </ModalBody>
+                <ModalFooter>
+                    <DownloadButton
+                        value={formattedTableData}
+                        name="Rainfall Watch.csv"
+                    >
+                        Download
+                    </DownloadButton>
+                </ModalFooter>
             </Modal>
         );
     }

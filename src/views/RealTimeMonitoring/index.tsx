@@ -485,6 +485,31 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </div>
                     </div>
                 )}
+                { showStreamflow && (
+                    <div className={styles.legendContainer}>
+                        <header className={styles.header}>
+                            <svg className={styles.legendIcon}>
+                                <line x1="0" y1="5" x2="20" y2="5" style={{ stroke: '#7cb5ec', strokeWidth: 5 }} />
+                            </svg>
+                            <h4 className={styles.heading}>
+                                Streamflow
+                            </h4>
+                        </header>
+                        <div className={styles.sourceDetails}>
+                            <div className={styles.label}>
+                                Source:
+                            </div>
+                            <a
+                                className={styles.link}
+                                href="http://tethys.icimod.org/apps/hiwatnepal/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                HIWAT-NEPAL
+                            </a>
+                        </div>
+                    </div>
+                )}
             </>
         );
     }

@@ -36,6 +36,22 @@ export const convertTableToCsv = (data, columns) => (
     })
 );
 
+export const convertNormalTableToCsv = (data, headers) => (
+    data.map((datum) => {
+        const val = {};
+        headers.forEach((header) => {
+            const {
+                key,
+                label,
+                modifier,
+            } = header;
+            const value = modifier ? modifier(datum) : datum[key];
+            val[label] = value;
+        });
+        return val;
+    })
+);
+
 const cellRendererParams = ({ datum, column, columnKey }) => ({
     value: column.transformer ? column.transformer(datum) : readNestedValue(datum, columnKey),
 });

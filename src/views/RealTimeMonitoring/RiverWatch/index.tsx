@@ -8,10 +8,16 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import Table from '#rscv/Table';
+import ModalFooter from '#rscv/Modal/Footer';
+import DownloadButton from '#components/DownloadButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { Header } from '#store/atom/table/types';
 import { RealTimeRiver } from '#store/atom/page/types';
+
+import {
+    convertNormalTableToCsv,
+} from '#utils/table';
 
 import styles from './styles.scss';
 
@@ -116,6 +122,7 @@ class RiverWatch extends React.PureComponent<Props> {
             closeModal,
         } = this.props;
 
+        const formattedTableData = convertNormalTableToCsv(realTimeRiver, this.riverWatchHeader);
         return (
             <Modal
                 closeOnEscape
@@ -141,6 +148,14 @@ class RiverWatch extends React.PureComponent<Props> {
                         keySelector={riverWatchKeySelector}
                     />
                 </ModalBody>
+                <ModalFooter>
+                    <DownloadButton
+                        value={formattedTableData}
+                        name="River Watch.csv"
+                    >
+                        Download
+                    </DownloadButton>
+                </ModalFooter>
             </Modal>
         );
     }
