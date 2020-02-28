@@ -4,7 +4,6 @@ import { _cs } from '@togglecorp/fujs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import SegmentInput from '#rsci/SegmentInput';
 
-import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import {
     createConnectedRequestCoordinator,
@@ -141,9 +140,6 @@ class DisasterProfile extends React.PureComponent<Props> {
                     <MultiViewContainer
                         views={this.views}
                         active={activeView}
-                    />
-                    <CommonMap
-                        sourceKey="profile-disaster"
                     />
                 </div>
             </>

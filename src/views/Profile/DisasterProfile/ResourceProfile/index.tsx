@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
 
+import CommonMap from '#components/CommonMap';
 import EducationIcon from '#resources/icons/Education.svg';
 import HealthIcon from '#resources/icons/Health-facility.svg';
 import FinanceIcon from '#resources/icons/Financing.svg';
@@ -85,6 +86,9 @@ class ResourceProfile extends React.PureComponent<Props> {
                     </h2>
                 </header>
                 <div className={styles.content}>
+                    <CommonMap
+                        sourceKey="profile-resource"
+                    />
                     { Object.keys(attributes).map(key => (
                         <div
                             key={key}

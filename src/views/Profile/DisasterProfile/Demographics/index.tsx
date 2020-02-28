@@ -17,6 +17,7 @@ import {
 import { format } from 'd3-format';
 import { extent } from 'd3-array';
 
+import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
@@ -553,6 +554,9 @@ class Demographics extends React.PureComponent<Props> {
                         sourceLayer={mapSources.nepal.layers.municipality}
                     />
                 </MapSource>
+                <CommonMap
+                    sourceKey="profile-demographics"
+                />
                 <div className={_cs('map-legend-container', styles.legendContainer)}>
                     <SegmentInput
                         className={styles.attributeSelectInput}

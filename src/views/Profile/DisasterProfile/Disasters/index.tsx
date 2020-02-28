@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import CommonMap from '#components/CommonMap';
 import Chart from '../Chart';
 
 import styles from './styles.scss';
@@ -38,6 +39,9 @@ class Disasters extends React.PureComponent<Props> {
                     </h2>
                 </header>
                 <div className={styles.content}>
+                    <CommonMap
+                        sourceKey="profile-disaster"
+                    />
                     {attributeKeyList.map(key => (
                         <Chart
                             key={key}

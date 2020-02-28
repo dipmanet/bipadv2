@@ -344,7 +344,6 @@ class ProjectsProfile extends React.PureComponent {
         const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
         const categoryMap = listToMap(category, categoryKeySelector, item => item);
 
-
         return (
             <React.Fragment>
                 <Loading pending={pending} />
