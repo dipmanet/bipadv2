@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { listToMap, isNotDefined, isDefined } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+import { listToMap, isNotDefined } from '@togglecorp/fujs';
 
 import { AppState } from '#store/types';
 import { User } from '#store/atom/auth/types';
-import { District, Province, Municipality } from '#store/atom/page/types';
+import { District, Municipality } from '#store/atom/page/types';
 import {
     districtsSelector,
     municipalitiesSelector,
@@ -86,143 +86,147 @@ function getMunicipalitiesForProvince(
     );
 }
 
-class Cloak extends React.Component<Props> {
-    private getParams = memoize((user: User | undefined): Params => {
-        if (!user) {
-            return {};
-        }
+export function getParams(user: User | undefined): Params {
+    if (!user) {
+        return {};
+    }
 
-        let mapping = listToMap(
-            user.userPermissions,
-            p => p.codename,
-            () => true,
-        );
+    let mapping = listToMap(
+        user.userPermissions,
+        p => p.codename,
+        () => true,
+    );
 
-        if (user.groups) {
-            user.groups.forEach((group) => {
-                mapping = {
-                    ...mapping,
-                    ...listToMap(
-                        group.permissions,
-                        p => p.codename,
-                        () => true,
-                    ),
-                };
-            });
-        }
-
-        return mapping;
-    })
-
-    private getAccessibleRegionMapping = memoize((
-        user: User | undefined,
-        districts: District[],
-        municipalities: Municipality[],
-    ): Mapping => {
-        // TODO: if region is set, then this is a regional user
-        // 1. by default it is a national user
-        // 2. no need to check for national user
-        // 3. for others, create an access mapping and check if current resource is in that mapping
-
-        const defaultMapping = {
-            province: {},
-            district: {},
-            municipality: {},
-        };
-
-        if (!user) {
-            return defaultMapping;
-        }
-
-        const {
-            isSuperuser,
-            profile: {
-                region,
-                province,
-                municipality,
-                district,
-            },
-        } = user;
-
-        // No need to calculate for national user or super user
-        if (isSuperuser || region === 'national') {
-            return defaultMapping;
-        }
-
-        if (region === 'province' && province) {
-            return {
-                province: { [province]: true },
-                district: getDistrictsForProvince(province, districts),
-                municipality: getMunicipalitiesForProvince(province, districts, municipalities),
+    if (user.groups) {
+        user.groups.forEach((group) => {
+            mapping = {
+                ...mapping,
+                ...listToMap(
+                    group.permissions,
+                    p => p.codename,
+                    () => true,
+                ),
             };
-        }
-        if (region === 'district' && district) {
-            return {
-                ...defaultMapping,
-                district: { [district]: true },
-                municipality: getMunicipalitiesForDistrict(district, municipalities),
-            };
-        }
-        if (region === 'municipality' && municipality) {
-            return {
-                ...defaultMapping,
-                municipality: { [municipality]: true },
-            };
-        }
+        });
+    }
 
+    return mapping;
+}
+
+function getAccessibleRegionMapping(
+    user: User | undefined,
+    districts: District[],
+    municipalities: Municipality[],
+): Mapping {
+    // TODO: if region is set, then this is a regional user
+    // 1. by default it is a national user
+    // 2. no need to check for national user
+    // 3. for others, create an access mapping and check if current resource is in that mapping
+
+    const defaultMapping = {
+        province: {},
+        district: {},
+        municipality: {},
+    };
+
+    if (!user) {
         return defaultMapping;
-    })
+    }
 
-    private isRegionAccessible = memoize((
-        regionLevel: Props['regionLevel'] | undefined,
-        regionId: Props['regionId'] | undefined,
-        user: User | undefined,
-        districts: District[],
-        municipalities: Municipality[],
-    ) => {
-        // Get no access if there is no user
-        if (!user) {
-            return false;
-        }
-        // Get full access if resource is not associated with region
-        if (isNotDefined(regionLevel)) {
-            return true;
-        }
+    const {
+        isSuperuser,
+        profile: {
+            region,
+            province,
+            municipality,
+            district,
+        },
+    } = user;
 
-        const {
-            profile: {
-                region: userRegion,
-            },
-        } = user;
+    // No need to calculate for national user or super user
+    if (isSuperuser || region === 'national') {
+        return defaultMapping;
+    }
 
-        // Get no access if there is no user.profile.region
-        if (isNotDefined(userRegion)) {
-            return false;
-        }
+    if (region === 'province' && province) {
+        return {
+            province: { [province]: true },
+            district: getDistrictsForProvince(province, districts),
+            municipality: getMunicipalitiesForProvince(province, districts, municipalities),
+        };
+    }
+    if (region === 'district' && district) {
+        return {
+            ...defaultMapping,
+            district: { [district]: true },
+            municipality: getMunicipalitiesForDistrict(district, municipalities),
+        };
+    }
+    if (region === 'municipality' && municipality) {
+        return {
+            ...defaultMapping,
+            municipality: { [municipality]: true },
+        };
+    }
 
-        // NOTE: Get access to national level if user is national user
-        if (regionLevel === 'national' && userRegion === 'national') {
-            return true;
-        }
+    return defaultMapping;
+}
 
-        // NOTE: Get no access if regionLevel is not national, and there is no region id
-        if (isNotDefined(regionId)) {
-            return false;
-        }
+export function isRegionAccessible(
+    regionLevel: Props['regionLevel'] | undefined,
+    regionId: Props['regionId'] | undefined,
+    user: User | undefined,
+    districts: District[],
+    municipalities: Municipality[],
+) {
+    // Get no access if there is no user
+    if (!user) {
+        return false;
+    }
+    // Get full access if resource is not associated with region
+    if (isNotDefined(regionLevel)) {
+        return true;
+    }
 
-        const mapping = this.getAccessibleRegionMapping(
-            user,
-            districts,
-            municipalities,
-        );
+    const {
+        profile: {
+            region: userRegion,
+        },
+    } = user;
 
-        // Get access to other regional level, if they are in the mapping
-        return (
-            (regionLevel === 'province' && mapping.province[regionId])
-            || (regionLevel === 'district' && mapping.district[regionId])
-            || (regionLevel === 'municipality' && mapping.municipality[regionId])
-        );
-    })
+    // Get no access if there is no user.profile.region
+    if (isNotDefined(userRegion)) {
+        return false;
+    }
+
+    // NOTE: Get access to national level if user is national user
+    if (regionLevel === 'national' && userRegion === 'national') {
+        return true;
+    }
+
+    // NOTE: Get no access if regionLevel is not national, and there is no region id
+    if (isNotDefined(regionId)) {
+        return false;
+    }
+
+    const mapping = getAccessibleRegionMapping(
+        user,
+        districts,
+        municipalities,
+    );
+
+    // Get access to other regional level, if they are in the mapping
+    return (
+        (regionLevel === 'province' && mapping.province[regionId])
+        || (regionLevel === 'district' && mapping.district[regionId])
+        || (regionLevel === 'municipality' && mapping.municipality[regionId])
+    );
+}
+
+class Cloak extends React.Component<Props> {
+    private getUserParams = memoize(getParams);
+
+    private isRegionAccessibleToUser = memoize(isRegionAccessible);
 
     public render() {
         const {
@@ -245,10 +249,9 @@ class Cloak extends React.Component<Props> {
             return children;
         }
 
+        const params = this.getUserParams(user);
 
-        const params = this.getParams(user);
-
-        const hidden = (hiddenIf && hiddenIf(params)) || !this.isRegionAccessible(
+        const hidden = (hiddenIf && hiddenIf(params)) || !this.isRegionAccessibleToUser(
             regionLevel,
             regionId,
 
