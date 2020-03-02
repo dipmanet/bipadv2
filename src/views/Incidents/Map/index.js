@@ -8,6 +8,7 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
+import { getParams } from '#components/Cloak';
 
 import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
@@ -18,6 +19,7 @@ import {
     districtsMapSelector,
     municipalitiesMapSelector,
     wardsMapSelector,
+    userSelector,
 } from '#selectors';
 
 import {
@@ -65,11 +67,14 @@ const propTypes = {
     requests: PropTypes.object.isRequired,
     sourceKey: PropTypes.string,
     isProviceOnlyMap: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types, react/no-unused-prop-types
+    user: PropTypes.object,
 };
 
 const defaultProps = {
     sourceKey: 'incidents',
     isProviceOnlyMap: false,
+    user: undefined,
 };
 
 const mapStateToProps = state => ({
@@ -78,6 +83,7 @@ const mapStateToProps = state => ({
     districtsMap: districtsMapSelector(state),
     municipalitiesMap: municipalitiesMapSelector(state),
     wardsMap: wardsMapSelector(state),
+    user: userSelector(state),
 });
 
 const visibleLayout = {
@@ -120,6 +126,8 @@ class IncidentMap extends React.PureComponent {
         this.prevTimestamp = undefined;
         this.state = {};
     }
+
+    getUserParams = memoize(getParams);
 
     getPointFeatureCollection = memoize(incidentPointToGeojson)
 
@@ -219,6 +227,7 @@ class IncidentMap extends React.PureComponent {
             provincesMap,
             districtsMap,
             municipalitiesMap,
+            user,
             isHovered,
             requests: {
                 incidentDeleteRequest: {
@@ -258,6 +267,8 @@ class IncidentMap extends React.PureComponent {
         const lossServerId = incident && incident.loss && incident.loss.id;
         const incidentServerId = incident && incident.id;
         const Map = isProviceOnlyMap ? ProvinceMap : CommonMap;
+        const params = this.getUserParams(user);
+        const showActions = !!(params && params.change_incident);
 
         return (
             <React.Fragment>
@@ -338,6 +349,7 @@ class IncidentMap extends React.PureComponent {
                                 districtsMap={districtsMap}
                                 municipalitiesMap={municipalitiesMap}
                                 className={styles.incidentInfo}
+                                showActions={showActions}
                                 onEditIncident={this.handleEditIncidentClick}
                                 onDeleteIncident={this.handleIncidentDelete}
                                 incidentDeletePending={incidentDeletePending}
