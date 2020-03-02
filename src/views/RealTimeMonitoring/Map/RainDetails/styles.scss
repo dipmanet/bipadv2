@@ -85,6 +85,10 @@
                         .table {
                             flex-shrink: 0;
                             overflow: auto;
+
+                            :global .table-header {
+                                text-transform: none;
+                            }
                         }
 
                         .chart-container {

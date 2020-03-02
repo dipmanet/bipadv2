@@ -8,6 +8,7 @@ import Faram, {
     lengthGreaterThanCondition,
 } from '@togglecorp/faram';
 
+import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -206,6 +207,26 @@ class Login extends React.PureComponent<Props, State> {
                         )}
                     />
                     <ModalBody className={styles.body}>
+                        <div className={styles.externalLink}>
+                            <h4 className={styles.header}>
+                                To get access to BIPAD Project Information Management System (PIMS),
+                                Please go to following link
+                            </h4>
+                            <a
+                                className={styles.link}
+                                href="http://bipad.gov.np/pims/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Icon
+                                    className={styles.icon}
+                                    name="externalLink"
+                                />
+                                <div className={styles.text}>
+                                    PMIS
+                                </div>
+                            </a>
+                        </div>
                         <NonFieldErrors faramElement />
                         <TextInput
                             className={styles.input}

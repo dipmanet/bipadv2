@@ -167,6 +167,7 @@ export interface VulnerabilityOption {
 export interface VulnerabilityType {
     id: string;
     indicatorType: 'positive' | 'negative';
+    shortDescription?: string;
     children: VulnerabilityType[];
     isParent?: boolean;
     valueType: 'index' | 'count';

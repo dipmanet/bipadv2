@@ -1,4 +1,43 @@
 .login-modal {
+    display: flex;
+    flex-direction: column;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+
+        .external-link {
+            display: flex;
+            flex-direction: column;
+
+            .header {
+                padding: var(--spacing-small) var(--spacing-small);
+            }
+
+            .link {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                padding: 0 calc(var(--spacing-small) - var(--spacing-small));
+
+                .icon {
+                    flex-shrink: 0;
+                    margin: var(--spacing-small);
+                    color: var(--color-accent);
+                    font-size: var(--font-size-large);
+                }
+
+                .text {
+                    flex-grow: 1;
+                    padding: var(--spacing-small);
+                }
+
+                &:hover {
+                    background-color: var(--color-background-hover);
+                }
+            }
+        }
+    }
     .input {
         margin: var(--spacing-medium);
     }

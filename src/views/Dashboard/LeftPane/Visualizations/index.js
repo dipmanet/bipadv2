@@ -76,7 +76,7 @@ export default class Visualization extends React.PureComponent {
                 <div className={styles.alertSummary}>
                     <header className={styles.header}>
                         <h3 className={styles.heading}>
-                            Alerts summary
+                            Number of Alerts
                         </h3>
                     </header>
                     <div className={styles.content}>

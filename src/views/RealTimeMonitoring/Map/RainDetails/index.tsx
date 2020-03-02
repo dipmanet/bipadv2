@@ -97,18 +97,18 @@ class RainDetails extends React.PureComponent<Props> {
         this.latestWaterLevelHeader = [
             {
                 key: 'interval',
-                label: 'Interval',
+                label: 'INTERVAL',
                 order: 1,
             },
             {
                 key: 'value',
-                label: 'Value (mm)',
+                label: 'VALUE (mm)',
                 order: 2,
                 modifier: row => `${row.value || '-'}`,
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: 'STATUS',
                 order: 3,
                 modifier: (row) => {
                     const {
@@ -133,7 +133,7 @@ class RainDetails extends React.PureComponent<Props> {
         this.rainHeader = [
             {
                 key: 'createdOn',
-                label: 'Date',
+                label: 'DATE',
                 order: 1,
                 modifier: row => (
                     <FormattedDate
@@ -144,7 +144,7 @@ class RainDetails extends React.PureComponent<Props> {
             },
             {
                 key: 'averages',
-                label: 'Average Rainfall (mm)',
+                label: 'AVERAGE RAINFALL (mm)',
                 order: 2,
                 modifier: (row) => {
                     const {
