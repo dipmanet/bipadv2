@@ -6,13 +6,15 @@ import { scaleOrdinal } from 'd3-scale';
 import {
     ResponsiveContainer,
     PieChart,
+    BarChart,
+    XAxis,
+    YAxis,
+    Legend,
+    Bar,
     Pie,
     Cell,
 } from 'recharts';
 import { groupList } from '#utils/common';
-import HorizontalBar from '#rscz/HorizontalBar';
-import Legend from '#rscz/Legend';
-
 import styles from './styles.scss';
 
 const propTypes = {
@@ -27,16 +29,7 @@ const defaultProps = {
     hazardTypes: {},
 };
 
-const barChartValueSelector = d => d.value;
-const barChartLabelSelector = d => d.label;
-const barChartColorSelector = d => d.color;
-const donutChartValueSelector = d => d.value;
-
 const colors = scaleOrdinal().range(schemeAccent);
-
-const itemSelector = d => d.label;
-const legendColorSelector = d => d.color;
-const legendLabelSelector = d => d.label;
 
 export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
@@ -103,14 +96,28 @@ export default class Visualizations extends React.PureComponent {
                             Hazard Occurence Statistics
                         </h4>
                     </header>
-                    <HorizontalBar
-                        className={styles.chart}
-                        data={hazardSummary}
-                        labelSelector={barChartLabelSelector}
-                        valueSelector={barChartValueSelector}
-                        colorSelector={barChartColorSelector}
-                        tiltLabels
-                    />
+                    <div className={styles.chart}>
+                        <ResponsiveContainer>
+                            <BarChart
+                                layout="vertical"
+                                data={hazardSummary}
+                                margin={{ top: 20, right: 10, left: 20, bottom: 5 }}
+                            >
+                                <YAxis dataKey="label" type="category" />
+                                <XAxis dataKey="value" type="number" />
+                                <Bar
+                                    dataKey="value"
+                                >
+                                    { hazardSummary.map(hazard => (
+                                        <Cell
+                                            key={hazard.label}
+                                            fill={hazard.color}
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
                 {/* <div className={styles.eventStatisticsChart}>
                     <header className={styles.header}>
@@ -149,17 +156,9 @@ export default class Visualizations extends React.PureComponent {
                                         />
                                     ))}
                                 </Pie>
+                                <Legend />
                             </PieChart>
                         </ResponsiveContainer>
-                        <Legend
-                            className={styles.legend}
-                            data={severitySummary}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            colorSelector={legendColorSelector}
-                        />
                     </div>
                 </div>
             </div>
