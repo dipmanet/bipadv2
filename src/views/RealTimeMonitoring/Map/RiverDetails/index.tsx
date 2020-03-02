@@ -8,6 +8,7 @@ import {
     isDefined,
 } from '@togglecorp/fujs';
 
+import Message from '#rscv/Message';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -45,6 +46,11 @@ interface LegendItem {
     label: string;
     color: string;
 }
+const RiverEmptyComponent = () => (
+    <Message>
+        Data is currently not available
+    </Message>
+);
 
 const riverLegendData: LegendItem[] = [
     { key: 'waterLevel', label: 'Water Level', color: '#4daf4a' },
@@ -355,6 +361,7 @@ class RiverDetails extends React.PureComponent<Props> {
                                         data={hourlyRiverDetails}
                                         headers={this.riverHeader}
                                         keySelector={riverKeySelector}
+                                        emptyComponent={RiverEmptyComponent}
                                     />
                                 </div>
                                 <div className={styles.waterLevelChartContainer}>

@@ -12,6 +12,7 @@ import {
 } from '@togglecorp/fujs';
 import { timeFormat } from 'd3-time-format';
 
+import Message from '#rscv/Message';
 import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -53,6 +54,12 @@ interface LegendItem {
     label: string;
     color: string;
 }
+
+const RainEmptyComponent = () => (
+    <Message>
+        Data is currently not available
+    </Message>
+);
 
 const rainLegendData: LegendItem[] = [
     { key: 'averages', label: 'Average Rainfall (mm)', color: '#7fc97f' },
@@ -395,6 +402,7 @@ class RainDetails extends React.PureComponent<Props> {
                                             data={latestRainDetail.averages}
                                             headers={this.latestWaterLevelHeader}
                                             keySelector={waterLevelKeySelector}
+                                            emptyComponent={RainEmptyComponent}
                                         />
                                         <div className={styles.chartContainer}>
                                             <header className={styles.header}>

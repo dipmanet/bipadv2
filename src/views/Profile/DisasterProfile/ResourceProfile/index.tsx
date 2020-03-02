@@ -24,22 +24,22 @@ interface Params {}
 const attributes = {
     education: {
         dataKey: 'educationCount',
-        title: 'Educational instutions',
+        title: 'Education',
         icon: EducationIcon,
     },
     health: {
         dataKey: 'healthCount',
-        title: 'Health facilities',
+        title: 'Health',
         icon: HealthIcon,
     },
     finance: {
         dataKey: 'financeCount',
-        title: 'Finance count',
+        title: 'Finance',
         icon: FinanceIcon,
     },
     communication: {
         dataKey: 'communicationCount',
-        title: 'Communication source',
+        title: 'Communication',
         icon: CommunicationIcon,
     },
     governance: {
@@ -49,7 +49,7 @@ const attributes = {
     },
     tourism: {
         dataKey: 'tourismCount',
-        title: 'Tourism places',
+        title: 'Tourism',
         icon: TourismIcon,
     },
     industry: {
@@ -59,7 +59,7 @@ const attributes = {
     },
     cultural: {
         dataKey: 'culturalCount',
-        title: 'Cultural places',
+        title: 'Religious sites',
         icon: CulturalIcon,
     },
     energy: {
