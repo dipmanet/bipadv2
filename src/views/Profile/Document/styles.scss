@@ -12,6 +12,13 @@
         }
     }
 
+    .filters {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: var(--spacing-medium);
+    }
+
     .content {
         flex-grow: 1;
     }
