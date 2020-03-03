@@ -385,7 +385,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         </div>
                                         <div className={styles.source}>
                                             <div className={styles.text}>
-                                                Nepal Disaster Risk Reduction Portal
+                                                DRR Portal
                                             </div>
                                             <a
                                                 className={styles.link}

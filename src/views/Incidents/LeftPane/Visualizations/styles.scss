@@ -18,17 +18,6 @@
         .chart {
             height: 320px;
         }
-
-        .legend {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 $spacing-medium;
-
-            .legend-item {
-                padding: $spacing-small;
-            }
-        }
     }
 
     .severity-summary {
@@ -41,17 +30,6 @@
 
         .chart {
             height: 220px;
-        }
-
-        .legend {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 $spacing-medium;
-
-            .legend-item {
-                padding: $spacing-small;
-            }
         }
     }
 }
