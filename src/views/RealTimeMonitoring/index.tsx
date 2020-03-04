@@ -501,11 +501,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             </div>
                             <a
                                 className={styles.link}
-                                href="http://tethys.icimod.org/apps/hiwatnepal/"
+                                href="http://tethys.icimod.org/apps/ecmwf/#"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                HIWAT-NEPAL
+                                Streamflow Prediction System (Nepal)
                             </a>
                         </div>
                     </div>
