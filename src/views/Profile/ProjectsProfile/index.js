@@ -6,6 +6,7 @@ import {
     isNotDefined,
     listToMap,
     getHexFromString,
+    _cs,
 } from '@togglecorp/fujs';
 
 import {
@@ -255,27 +256,27 @@ const mapStateToProps = (state, props) => ({
     filters: projectsProfileFiltersSelector(state),
 });
 
-const wsEndpoint = process.env.REACT_APP_PROJECT_SERVER_URL || 'http://165.22.215.64';
+const wsEndpoint = process.env.REACT_APP_PROJECT_SERVER_URL || 'http://165.22.215.64/pims';
 
 const requestOptions = {
     ndrrsapRequest: {
-        url: `${wsEndpoint}/pims/api/v1/ndrrsap`,
+        url: `${wsEndpoint}/api/v1/ndrrsap`,
         onMount: true,
     },
     drrcycleRequest: {
-        url: `${wsEndpoint}/pims/api/v1/drrcycle`,
+        url: `${wsEndpoint}/api/v1/drrcycle`,
         onMount: true,
     },
     categoryRequest: {
-        url: `${wsEndpoint}/pims/api/v1/category`,
+        url: `${wsEndpoint}/api/v1/category`,
         onMount: true,
     },
     organizationRequest: {
-        url: `${wsEndpoint}/pims/api/v1/organization`,
+        url: `${wsEndpoint}/api/v1/organization`,
         onMount: true,
     },
     projectRequest: {
-        url: `${wsEndpoint}/pims/api/v1/project`,
+        url: `${wsEndpoint}/api/v1/project`,
         onMount: true,
     },
 };
@@ -287,6 +288,7 @@ class ProjectsProfile extends React.PureComponent {
             requests,
             filters: { faramValues = emptyObject } = {},
             regionLevel,
+            className,
         } = this.props;
 
         const ndrrsap = getResults(requests, 'ndrrsapRequest');
@@ -353,7 +355,7 @@ class ProjectsProfile extends React.PureComponent {
                     regionLevel={regionLevel}
                 />
                 <LeftPane
-                    className={styles.leftPane}
+                    className={_cs(styles.leftPane, className)}
                     projects={filteredProjects}
                     drrCycleData={drrPieData}
                     categoryData={categoryPieData}

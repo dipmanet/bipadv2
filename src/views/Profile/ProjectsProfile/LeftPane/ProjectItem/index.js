@@ -47,7 +47,7 @@ const Output = ({
                 label="Budget"
                 value={budget}
                 isNumericValue
-                prefix="Rs."
+                prefix="Rs. "
             />
         </div>
     </div>
@@ -134,14 +134,16 @@ class ProjectItem extends React.PureComponent {
                         {title}
                     </h4>
                     <TextOutput
+                        className={styles.budget}
                         label="Budget"
                         value={budget}
                         isNumericValue
                         alwaysVisible
-                        prefix="Rs."
+                        prefix="Rs. "
                     />
                     <div className={styles.dateContainer}>
                         <TextOutput
+                            className={styles.startDate}
                             label="Start Date"
                             value={(
                                 <FormattedDate
@@ -152,6 +154,7 @@ class ProjectItem extends React.PureComponent {
                             alwaysVisible
                         />
                         <TextOutput
+                            className={styles.endDate}
                             label="End Date"
                             value={(
                                 <FormattedDate
@@ -175,7 +178,7 @@ class ProjectItem extends React.PureComponent {
                             rightComponent={(
                                 <Button
                                     transparent
-                                    iconName={iconNames.close}
+                                    iconName="close"
                                     onClick={this.handleModalClose}
                                 />
                             )}
@@ -193,7 +196,7 @@ class ProjectItem extends React.PureComponent {
                                     label="Budget"
                                     value={budget}
                                     isNumericValue
-                                    prefix="Rs."
+                                    prefix="Rs. "
                                     type="table"
                                 />
                                 <TextOutput

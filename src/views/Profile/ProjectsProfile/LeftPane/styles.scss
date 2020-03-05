@@ -2,29 +2,35 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
-    width: var(--width-left-pane);
-    overflow-y: auto;
+    overflow: auto;
 
-    .stats-container {
-        flex-grow: 1;
+    .visualizations {
+        display: flex;
         flex-shrink: 0;
         padding: var(--spacing-small) var(--spacing-medium);
 
         .chart {
-            height: 250px;
+            width: 50%!important;
+            height: 240px;
             overflow: hidden;
         }
+
+        :global {
+            .recharts-legend-item-text {
+                font-size: var(--font-size-small);
+            }
+        }
+    }
+
+    .stat {
+        flex-basis: unset;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding: var(--spacing-small) var(--spacing-large);
     }
 
     .projects-list {
         flex-grow: 1;
-        margin-top: var(--spacing-medium);
-        overflow-y: auto;
-
-        .heading {
-            border-bottom: var(--width-separator-thin) solid var(--color-separator);
-            padding: var(--spacing-small) var(--spacing-medium);
-            color: var(--color-accent);
-        }
+        overflow: auto;
     }
 }

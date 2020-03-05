@@ -1,19 +1,27 @@
 @import '~base-scss/base';
 
 .project {
-    border-bottom: $width-separator-thin solid $color-separator;
     cursor: pointer;
-    padding: $spacing-small $spacing-medium;
+    padding: var(--spacing-medium);
 
     .heading {
-        padding-bottom: $spacing-small;
+        padding: 0 var(--spacing-small);
         text-transform: capitalize;
+    }
+
+    .budget {
+        align-items: baseline;
+        padding: 0 var(--spacing-small);
+        font-size: var(--font-size-large);
     }
 
     .date-container {
         display: flex;
-        justify-content: space-between;
-        padding-top: $spacing-extra-small;
+
+        .end-date,
+        .start-date {
+            padding: 0 var(--spacing-small);
+        }
     }
 
     &:hover {

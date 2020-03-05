@@ -70,13 +70,9 @@ class ProjectsProfileLeftPane extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.leftPane)}>
-                <div className={styles.statsContainer}>
-                    <StatOutput
-                        label="No. of Projects"
-                        value={projects.length}
-                    />
+                <div className={styles.visualizations}>
                     { projects && projects.length > 0 && (
-                        <div>
+                        <>
                             <div className={styles.chart}>
                                 <ResponsiveContainer>
                                     <PieChart>
@@ -85,7 +81,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                             dataKey="value"
                                             nameKey="label"
                                             innerRadius="60%"
-                                            outerRadisu="90%"
+                                            outerRadius="70%"
                                             label
                                         >
                                             { drrCycleData.map(d => (
@@ -93,7 +89,10 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                             ))}
                                         </Pie>
                                         <Tooltip />
-                                        <Legend />
+                                        <Legend
+                                            align="left"
+                                            iconSize={10}
+                                        />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
@@ -105,7 +104,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                             dataKey="value"
                                             nameKey="label"
                                             innerRadius="60%"
-                                            outerRadisu="90%"
+                                            outerRadius="70%"
                                             label
                                         >
                                             { categoryData.map(d => (
@@ -113,24 +112,28 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                             ))}
                                         </Pie>
                                         <Tooltip />
-                                        <Legend />
+                                        <Legend
+                                            align="left"
+                                            iconSize={10}
+                                        />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div>
+                        </>
                     )}
                 </div>
-                <div className={styles.projectsList}>
-                    <h3 className={styles.heading}>
-                        Projects
-                    </h3>
-                    <ListView
-                        data={projects}
-                        renderer={Project}
-                        keySelector={projectKeySelector}
-                        rendererParams={this.projectRendererParams}
-                    />
-                </div>
+                <StatOutput
+                    className={styles.stat}
+                    label="No. of Projects"
+                    value={projects.length}
+                />
+                <ListView
+                    className={styles.projectsList}
+                    data={projects}
+                    renderer={Project}
+                    keySelector={projectKeySelector}
+                    rendererParams={this.projectRendererParams}
+                />
             </div>
         );
     }
