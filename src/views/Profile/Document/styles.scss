@@ -12,40 +12,67 @@
         }
     }
 
+    .filters {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+        .region-select-input,
+        .category-select-input {
+            margin: var(--spacing-small);
+        }
+    }
+
     .content {
         flex-grow: 1;
     }
 }
 
 .document-details {
+    display: flex;
     padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
 
-    .header {
-        display: flex;
-        align-items: center;
+    .document-icon {
+        flex-shrink: 0;
+        padding: var(--spacing-small) var(--spacing-medium);
 
-        .heading {
-            flex-grow: 1;
-            padding: var(--spacing-extra-small) var(--spacing-medium);
+        .svg {
+            width: 48px;
+            height: 48px;
         }
+    }
 
-        .actions {
-            flex-shrink: 0;
-            padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+    .details {
+        flex-grow: 1;
 
-            .download-link {
-                display: flex;
-                align-items: center;
-                color: var(--color-accent);
+        .header {
+            display: flex;
+            align-items: center;
 
-                .icon {
-                    margin: var(--spacing-extra-small) var(--spacing-extra-small-alt);
-                }
+            .heading {
+                flex-grow: 1;
+                padding: var(--spacing-extra-small) var(--spacing-medium);
+            }
 
-                .text {
-                    padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
-                    text-transform: uppercase;
-                    font-weight: var(--font-weight-bold);
+            .actions {
+                flex-shrink: 0;
+                padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+
+                .download-link {
+                    display: flex;
+                    align-items: center;
+                    color: var(--color-accent);
+
+                    .download-icon {
+                        margin: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                    }
+
+                    .text {
+                        padding: var(--spacing-extra-small) var(--spacing-extra-small-alt);
+                        text-transform: uppercase;
+                        font-weight: var(--font-weight-bold);
+                    }
                 }
             }
         }
