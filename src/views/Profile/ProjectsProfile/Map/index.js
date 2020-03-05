@@ -33,7 +33,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
         'fill-color': [
             'interpolate',
             ['linear'],
-            ['feature-state', 'count'],
+            ['feature-state', 'value'],
             ...color,
         ],
     }))
@@ -63,7 +63,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
 
         return mapToList(
             selectedRegion,
-            (_, key) => ({ id: key, value: { count: mapping[key] || 0 } }),
+            (_, key) => ({ id: key, value: mapping[key] || 0 }),
         );
     });
 
@@ -77,7 +77,7 @@ export default class ProjectsProfileMap extends React.PureComponent {
         } = this.props;
 
         const mapState = this.generateMapState(projects, regionLevel, regions);
-        const maxValue = Math.max(1, ...mapState.map(item => item.value.count));
+        const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         const colorPaint = this.generatePaint(color);

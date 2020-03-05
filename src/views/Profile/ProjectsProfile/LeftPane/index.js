@@ -70,63 +70,70 @@ class ProjectsProfileLeftPane extends React.PureComponent {
 
         return (
             <div className={_cs(className, styles.leftPane)}>
-                <div className={styles.statsContainer}>
-                    <StatOutput
-                        label="No. of Projects"
-                        value={projects.length}
-                    />
-                    <div className={styles.chart}>
-                        <ResponsiveContainer>
-                            <PieChart>
-                                <Pie
-                                    data={drrCycleData}
-                                    dataKey="value"
-                                    nameKey="label"
-                                    innerRadius="60%"
-                                    outerRadisu="90%"
-                                    label
-                                >
-                                    { drrCycleData.map(d => (
-                                        <Cell key={d.label} fill={d.color} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className={styles.chart}>
-                        <ResponsiveContainer>
-                            <PieChart>
-                                <Pie
-                                    data={categoryData}
-                                    dataKey="value"
-                                    nameKey="label"
-                                    innerRadius="60%"
-                                    outerRadisu="90%"
-                                    label
-                                >
-                                    { categoryData.map(d => (
-                                        <Cell key={d.label} fill={d.color} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </div>
+                <div className={styles.visualizations}>
+                    { projects && projects.length > 0 && (
+                        <>
+                            <div className={styles.chart}>
+                                <ResponsiveContainer>
+                                    <PieChart>
+                                        <Pie
+                                            data={drrCycleData}
+                                            dataKey="value"
+                                            nameKey="label"
+                                            innerRadius="60%"
+                                            outerRadius="70%"
+                                            label
+                                        >
+                                            { drrCycleData.map(d => (
+                                                <Cell key={d.label} fill={d.color} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend
+                                            align="left"
+                                            iconSize={10}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className={styles.chart}>
+                                <ResponsiveContainer>
+                                    <PieChart>
+                                        <Pie
+                                            data={categoryData}
+                                            dataKey="value"
+                                            nameKey="label"
+                                            innerRadius="60%"
+                                            outerRadius="70%"
+                                            label
+                                        >
+                                            { categoryData.map(d => (
+                                                <Cell key={d.label} fill={d.color} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend
+                                            align="left"
+                                            iconSize={10}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </>
+                    )}
                 </div>
-                <div className={styles.projectsList}>
-                    <h3 className={styles.heading}>
-                        Projects
-                    </h3>
-                    <ListView
-                        data={projects}
-                        renderer={Project}
-                        keySelector={projectKeySelector}
-                        rendererParams={this.projectRendererParams}
-                    />
-                </div>
+                <StatOutput
+                    className={styles.stat}
+                    label="No. of Projects"
+                    value={projects.length}
+                />
+                <ListView
+                    className={styles.projectsList}
+                    data={projects}
+                    renderer={Project}
+                    keySelector={projectKeySelector}
+                    rendererParams={this.projectRendererParams}
+                />
             </div>
         );
     }

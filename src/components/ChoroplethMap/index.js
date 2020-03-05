@@ -261,7 +261,46 @@ class ChoroplethMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
-
+                    <MapLayer
+                        layerKey="ward-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.ward,
+                            type: 'line',
+                            paint: mapStyles.ward.outline,
+                            layout: showWard ? visibleLayout : noneLayout,
+                            filter: wardFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="municipality-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.municipality,
+                            type: 'line',
+                            paint: mapStyles.municipality.outline,
+                            layout: showMunicipality ? visibleLayout : noneLayout,
+                            filter: municipalityFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="district-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.district,
+                            type: 'line',
+                            paint: mapStyles.district.outline,
+                            layout: showDistrict ? visibleLayout : noneLayout,
+                            filter: districtFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="province-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.province,
+                            type: 'line',
+                            paint: mapStyles.province.outline,
+                            layout: showProvince ? visibleLayout : noneLayout,
+                            filter: provinceFilter,
+                        }}
+                    />
                     <MapLayer
                         layerKey="province-label"
                         layerOptions={{
