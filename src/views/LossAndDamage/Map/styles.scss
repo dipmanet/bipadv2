@@ -1,20 +1,9 @@
 .legend {
-    position: absolute;
-    bottom: var(--spacing-medium);
-    z-index: 11;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--radius-border-pane);
     background-color: var(--color-foreground);
     padding: var(--spacing-medium);
-    width: 40vw;
-
-    &.left-pane-expanded {
-        left: calc(var(--width-left-panel) + var(--spacing-medium) * 2);
-    }
-
-    &.timeline {
-        bottom: calc(var(--height-timeline-main-content) + var(--spacing-medium) * 2);
-    }
+    width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 128px);
 
     .heading {
         padding-bottom: var(--spacing-medium);

@@ -1,55 +1,52 @@
-@import '~base-scss/base';
-
 .visualization-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: var(--spacing-medium);
+    .bar-charts {
+        padding: 0;
+    }
+
+    .donut-charts {
+        display: flex;
+    }
 
     %visualization-container {
         flex-basis: calc(100% / 2);
-        padding: $spacing-large;
+        // padding: var(--spacing-medium);
 
         .header {
             .heading {
-                padding: $spacing-small $spacing-medium;
+                padding: var(--spacing-small) var(--spacing-medium);
             }
-        }
-
-        .chart {
-            height: 320px;
         }
     }
 
     .bar-chart-container {
         @extend %visualization-container;
-
-        .chart {
-            height: 480px;
-        }
     }
 
     .donut-container {
-        flex-grow: 1;
         @extend %visualization-container;
+        flex-grow: 1;
 
-        .content {
-            .chart {
-                height: 320px;
-            }
+        .heading {
+            text-align: center;
+        }
 
-            .legend {
-                display: flex;
-                flex-grow: 1;
-                flex-wrap: wrap;
+        .chart {
+            height: 160px;
+        }
+    }
 
-                .legend-item {
-                    flex-basis: calc(100% / 3);
-                    padding: $spacing-small;
-                    color: $color-text-label;
-                    font-size: $font-size-small;
-                    font-weight: $font-weight-bold;
-                }
-            }
+    .legend {
+        display: flex;
+        flex-grow: 1;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+        .legend-item {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            color: var(--color-text-label);
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-bold);
         }
     }
 }

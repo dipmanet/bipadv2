@@ -105,7 +105,7 @@ const schema = {
         incidentOnTime: [],
         streetAddress: [],
         location: [requiredCondition],
-        recaptcha: [],
+        recaptcha: [requiredCondition],
 
         image: [],
         /*

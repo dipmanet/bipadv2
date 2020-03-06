@@ -47,11 +47,11 @@ export default class MenuItem extends React.PureComponent<Props, State> {
             <Link
                 to={link}
                 getProps={this.getProps}
+                title={title}
             >
                 <Icon
                     className={styles.icon}
                     name={iconName}
-                    title={title}
                 />
                 <div className={_cs(titleClassName, styles.title)}>
                     {title}

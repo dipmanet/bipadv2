@@ -255,7 +255,7 @@ const pollutionLegendItems = [
 ];
 
 const forestFireLegendItems = [
-    { color: '#e53935', label: 'Forest fire', style: styles.symbol },
+    { color: '#ff8300', label: 'Forest fire', style: styles.symbol },
 ];
 
 const itemSelector = (d: { label: string }) => d.label;
@@ -505,7 +505,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Streamflow Prediction System (Nepal)
+                                ICIMOD (ecmwf)
                             </a>
                         </div>
                     </div>

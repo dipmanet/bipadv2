@@ -414,9 +414,9 @@ export default {
             'text-size': 24,
         },
         paint: {
-            'circle-radius': 10,
-            'circle-color': '#e05648',
-            'circle-opacity': 0.8,
+            'circle-radius': 7,
+            'circle-color': '#ff8300',
+            'circle-opacity': 0.6,
             // 'circle-opacity': ['get', 'opacity'],
             'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],

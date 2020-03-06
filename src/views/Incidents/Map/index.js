@@ -10,7 +10,7 @@ import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
 import { getParams } from '#components/Cloak';
 
-import SVGMapIcon from '#components/SVGMapIcon';
+// import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
 import ProvinceMap from '#components/ProvinceMap';
 import {
@@ -273,14 +273,14 @@ class IncidentMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <Map sourceKey={sourceKey} />
-                {icons.map(icon => (
+                {/* icons.map(icon => (
                     <SVGMapIcon
                         key={icon}
                         src={icon}
                         name={icon}
                         fillColor="#222222"
                     />
-                ))}
+                )) */}
                 <MapSource
                     sourceKey="incident-polygons"
                     sourceOptions={{ type: 'geojson' }}
@@ -323,6 +323,7 @@ class IncidentMap extends React.PureComponent {
                         onMouseEnter={this.handleIncidentMouseEnter}
                         onMouseLeave={this.handleIncidentMouseLeave}
                     />
+                    {/*
                     <MapLayer
                         layerKey="incident-point-icon"
                         layerOptions={{
@@ -336,6 +337,7 @@ class IncidentMap extends React.PureComponent {
                                 : { 'icon-opacity': 0.9 },
                         }}
                     />
+                    */}
                     { incidentLngLat && (
                         <MapTooltip
                             coordinates={incidentLngLat}

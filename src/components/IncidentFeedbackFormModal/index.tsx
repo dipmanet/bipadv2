@@ -58,7 +58,7 @@ const schema = {
         email: [requiredCondition, emailCondition],
         mobileNumber: [requiredCondition],
         comment: [requiredCondition],
-        recaptcha: [],
+        recaptcha: [requiredCondition],
     },
 };
 

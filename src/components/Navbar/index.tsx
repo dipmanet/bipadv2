@@ -47,7 +47,7 @@ const MenuItemLikeButton = ({
     iconName,
     disabled,
 }: {
-    title: strning;
+    title: string;
     className?: string;
     onClick: () => void;
     iconName?: string;
@@ -57,6 +57,7 @@ const MenuItemLikeButton = ({
         role="presentation"
         className={_cs(styles.menuItemLikeButton, className)}
         onClick={!disabled ? onClick : undefined}
+        title={title}
     >
         <Icon
             className={styles.icon}

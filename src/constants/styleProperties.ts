@@ -9,7 +9,7 @@ const styleProperties = {
     widthLeftPanel: '480px',
     widthRightPanel: '256px',
     widthRightPanelLarge: '360px',
-    widthNavbarRight: '50px',
+    widthNavbar: '60px',
     widthResponseFilters: '240px',
     heightNavbar: '56px',
     colorAccent: '#e35163',

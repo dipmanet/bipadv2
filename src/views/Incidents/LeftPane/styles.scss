@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
-    width: var(--width-left-panel);
     overflow: auto;
 
     .date-range {
@@ -93,11 +92,18 @@
         }
     }
 
+    .content {
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+    /*
     .incident-list {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
         overflow: auto;
+        border: 2px solid green;
 
         .header {
             display: flex;
@@ -135,6 +141,7 @@
             overflow: auto;
         }
     }
+    */
 }
 
 .incident-table-modal {

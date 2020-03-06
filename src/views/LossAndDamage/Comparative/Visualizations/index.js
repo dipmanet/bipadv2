@@ -70,6 +70,7 @@ const estimatedMonetaryLossLabelModifier = (label, value) => (
     `<div>${label}</div>`
     + `<div>${Numeral.renderText({ prefix: 'Rs. ', value, precision: 0 })}</div>`
 );
+
 const deathsLabelModifier = (label, value) => (
     `<div>${label}</div>`
     + `<div>${value}</div>`
@@ -148,8 +149,49 @@ class Visualizations extends React.PureComponent {
         const lossSummary = this.getLossSummary(lossAndDamageList);
 
         return (
-            <React.Fragment>
-                <div className={styles.visualizationContainer}>
+            <div className={styles.visualizationContainer}>
+                <div className={styles.donutCharts}>
+                    <div className={styles.donutContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Death toll by disaster
+                            </h4>
+                        </header>
+                        <DonutChart
+                            sideLengthRatio={0.2}
+                            className={styles.chart}
+                            data={hazardDeaths}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            labelModifier={deathsLabelModifier}
+                            colorSelector={donutChartColorSelector}
+                            hideLabel
+                        />
+                    </div>
+                    <div className={styles.donutContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                Estimated economic loss by disaster
+                            </h4>
+                        </header>
+                        <DonutChart
+                            sideLengthRatio={0.2}
+                            className={styles.chart}
+                            data={hazardLossEstimate}
+                            labelSelector={donutChartLabelSelector}
+                            valueSelector={donutChartValueSelector}
+                            labelModifier={donutChartLabelModifier}
+                            colorSelector={donutChartColorSelector}
+                            hideLabel
+                        />
+                    </div>
+                </div>
+                <HazardsLegend
+                    filteredHazardTypes={filteredHazardTypesList}
+                    className={styles.legend}
+                    itemClassName={styles.legendItem}
+                />
+                <div className={styles.barCharts}>
                     <div className={styles.barChartContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
@@ -157,6 +199,9 @@ class Visualizations extends React.PureComponent {
                             </h4>
                         </header>
                         <HorizontalBar
+                            svgStyle={{
+                                height: `${60 + lossSummary.length * 40}px`,
+                            }}
                             className={styles.chart}
                             data={lossSummary}
                             labelSelector={deathCountLabelSelector}
@@ -173,6 +218,9 @@ class Visualizations extends React.PureComponent {
                             </h4>
                         </header>
                         <HorizontalBar
+                            svgStyle={{
+                                height: `${60 + lossSummary.length * 40}px`,
+                            }}
                             className={styles.chart}
                             data={lossSummary}
                             labelSelector={estimatedLossLabelSelector}
@@ -183,47 +231,8 @@ class Visualizations extends React.PureComponent {
                             tiltLabels
                         />
                     </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Total people death by hazard
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.4}
-                            className={styles.chart}
-                            data={hazardDeaths}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={deathsLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                        />
-                    </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss by Hazard
-                            </h4>
-                        </header>
-                        <div className={styles.content}>
-                            <DonutChart
-                                sideLengthRatio={0.4}
-                                className={styles.chart}
-                                data={hazardLossEstimate}
-                                labelSelector={donutChartLabelSelector}
-                                valueSelector={donutChartValueSelector}
-                                labelModifier={donutChartLabelModifier}
-                                colorSelector={donutChartColorSelector}
-                            />
-                            <HazardsLegend
-                                filteredHazardTypes={filteredHazardTypesList}
-                                className={styles.legend}
-                                itemClassName={styles.legendItem}
-                            />
-                        </div>
-                    </div>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 }

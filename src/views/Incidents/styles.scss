@@ -11,15 +11,18 @@
 .legend-container {
     display: flex;
     border: var(--width-separator-thin) solid var(--color-separator);
-    height: 117px;
+    background-color: var(--color-foreground);
+    height: 120px;
+    overflow: auto;
 
     .hazard-legend {
         display: flex;
         flex-direction: column;
-        background-color: var(--color-foreground);
+        flex-grow: 1;
         padding: var(--spacing-medium);
 
         .legend-title {
+            flex-shrink: 0;
             padding: 0 var(--spacing-medium);
             color: var(--color-primary);
             font-size: var(--font-size-medium);
@@ -28,10 +31,13 @@
 
         .legend {
             display: flex;
-            flex-direction: column;
-            border-left: var(--width-separator-thin) solid var(--color-separator);
-            padding: var(--spacing-medium);
-            overflow: auto;
+            align-content: flex-start;
+            align-items: flex-start;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding: var(--spacing-small) var(--spacing-medium);
+            max-width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 128px - 172px);
 
             .legend-item {
                 padding: var(--spacing-extra-small) 0;
@@ -50,6 +56,7 @@
     }
 
     .point-size-legend-container {
+        flex-shrink: 0;
         background-color: var(--color-foreground);
         padding: var(--spacing-medium);
 

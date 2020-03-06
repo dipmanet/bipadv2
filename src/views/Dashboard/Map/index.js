@@ -13,7 +13,7 @@ import MapTooltip from '#re-map/MapTooltip';
 
 import FormattedDate from '#rscv/FormattedDate';
 
-import SVGMapIcon from '#components/SVGMapIcon';
+// import SVGMapIcon from '#components/SVGMapIcon';
 import CommonMap from '#components/CommonMap';
 import TextOutput from '#components/TextOutput';
 
@@ -318,14 +318,14 @@ class AlertEventMap extends React.PureComponent {
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
-                {icons.map(icon => (
+                {/* icons.map(icon => (
                     <SVGMapIcon
                         key={icon}
                         src={icon}
                         name={icon}
                         fillColor="#222222"
                     />
-                ))}
+                )) */}
                 <List
                     keySelector={hazardKeySelector}
                     data={hazardList}
@@ -395,6 +395,7 @@ class AlertEventMap extends React.PureComponent {
                         onMouseLeave={this.handleAlertLeave}
                         onClick={this.handleAlertClick}
                     />
+                    {/*
                     <MapLayer
                         layerKey="alerts-point-icon"
                         layerOptions={{
@@ -408,6 +409,7 @@ class AlertEventMap extends React.PureComponent {
                                 : { 'icon-opacity': 0.9 },
                         }}
                     />
+                    */}
                     {alertClickLngLat && (
                         <MapTooltip
                             coordinates={alertClickLngLat}

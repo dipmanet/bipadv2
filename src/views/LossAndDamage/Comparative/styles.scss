@@ -53,7 +53,8 @@
 
                 >h2 {
                     flex-basis: 50%;
-                    padding: 0 $spacing-medium;
+                    flex-shrink: 0;
+                    padding: var(--spacing-medium);
                 }
             }
 
@@ -62,15 +63,10 @@
                 flex-shrink: 0;
                 height: 360px;
 
-                .map-1 {
-                    flex-basis: 50%;
-                    margin: $spacing-medium;
-                    height: 100%;
-                }
-
+                .map-1,
                 .map-2 {
-                    flex-basis: 50%;
-                    margin: $spacing-medium;
+                    flex-basis: calc(50% - var(--spacing-small) * 2);
+                    margin: 0 var(--spacing-small);
                     height: 100%;
                 }
             }
@@ -82,24 +78,21 @@
                     .aggregated-stat {
                         display: flex;
                         flex-basis: 50%;
+                        flex-shrink: 0;
                         flex-wrap: wrap;
-                        padding: var(--spacing-large);
-
-                        .stat-metric {
-                            padding: $spacing-large;
-                        }
+                        padding: var(--spacing-medium);
                     } 
                 }
 
                 .other-visualizations {
                     display: flex;
 
-                    .region1-container {
-                        flex-basis: 50%;
-                    }
-
+                    .region1-container,
                     .region2-container {
                         flex-basis: 50%;
+                        flex-grow: 0;
+                        flex-shrink: 0;
+                        width: 50%;
                     }
                 }
             }
