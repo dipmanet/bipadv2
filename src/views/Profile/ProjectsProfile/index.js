@@ -364,7 +364,6 @@ class ProjectsProfile extends React.PureComponent {
                     organizationMap={organizationMap}
                     projectMap={projectMap}
                 />
-                {/*
                 <ProjectsProfileFilter
                     drrCycleOptions={drrcycle}
                     elementsOptions={category}
@@ -373,7 +372,6 @@ class ProjectsProfile extends React.PureComponent {
                     subPriorityOptions={subPriorityOptions}
                     activityOptions={activityOptions}
                 />
-                */}
             </React.Fragment>
         );
     }
