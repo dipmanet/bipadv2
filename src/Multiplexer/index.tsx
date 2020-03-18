@@ -34,6 +34,7 @@ import {
     Municipality,
     // HazardType,
 } from '#store/atom/page/types';
+import { User } from '#store/atom/auth/types';
 
 // import SVGMapIcon from '#components/SVGMapIcon';
 import Loading from '#components/Loading';
@@ -48,6 +49,7 @@ import AppBrand from '#components/AppBrand';
 import Filters from '#components/Filters';
 
 import {
+    userSelector,
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
@@ -174,6 +176,7 @@ interface OwnProps {
 }
 
 interface PropsFromState {
+    user?: User;
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
@@ -197,6 +200,7 @@ interface Coords {
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    user: userSelector(state),
     filters: filtersSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -215,9 +219,9 @@ const getMatchingRegion = (
     provinces: Province[],
     districts: District[],
     municipalities: Municipality[],
-): RegionValueElement => {
+): RegionValueElement | undefined => {
     if (!subdomain) {
-        return {};
+        return undefined;
     }
 
     const province = provinces.find(p => p.code === subdomain);
@@ -244,7 +248,7 @@ const getMatchingRegion = (
         };
     }
 
-    return {};
+    return undefined;
 };
 
 const layerNameMap = {
@@ -252,6 +256,30 @@ const layerNameMap = {
     choropleth: 'choropleth-layer',
 };
 
+const getUserRegion = (user?: User): RegionValueElement => {
+    if (user && user.profile) {
+        const { profile: { region, province, municipality, district } } = user;
+        if (region === 'province' && province) {
+            return {
+                adminLevel: 1,
+                geoarea: province,
+            };
+        }
+        if (region === 'district' && district) {
+            return {
+                adminLevel: 2,
+                geoarea: district,
+            };
+        }
+        if (region === 'municipality' && municipality) {
+            return {
+                adminLevel: 3,
+                geoarea: municipality,
+            };
+        }
+    }
+    return {};
+};
 
 class Multiplexer extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -278,10 +306,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
             municipalities,
             filters,
             setFilters,
+            user,
         } = this.props;
 
         if (!pending) {
-            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
     }
 
@@ -297,11 +326,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
             districts,
             filters,
             setFilters,
+            user,
         } = nextProps;
 
         // NOTE: this means data has been loaded
         if (oldPending !== newPending && !newPending) {
-            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters);
+            this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
     }
 
@@ -317,6 +347,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         municipalities: Municipality[],
         filters: PropsFromState['filters'],
         setFilters: PropsFromDispatch['setFilters'],
+        user?: User,
     ) => {
         const { hostname } = window.location;
 
@@ -326,16 +357,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
             : undefined;
 
         const region = getMatchingRegion(subDomain, provinces, districts, municipalities);
+        const userRegion = getUserRegion(user);
 
         const {
             geoarea: currentGeoarea,
             adminLevel: currentAdminLevel,
-        } = region || {};
+        } = region || userRegion;
 
         const {
             geoarea: oldGeoarea,
             adminLevel: oldAdminLevel,
-        } = filters.region || {};
+        } = filters.region || userRegion;
 
         if (currentGeoarea && currentAdminLevel && (
             currentGeoarea !== oldGeoarea || oldAdminLevel !== currentAdminLevel
@@ -343,7 +375,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             setFilters({
                 filters: {
                     ...filters,
-                    region,
+                    region: region || userRegion,
                 },
             });
         }
