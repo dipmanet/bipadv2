@@ -53,7 +53,7 @@ const propTypes = {
     incidentList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     hazards: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     recentDay: PropTypes.number.isRequired, // eslint-disable-line react/forbid-prop-types
-    onIncidentHover: PropTypes.func.isRequired,
+    onIncidentHover: PropTypes.func,
     mapHoverAttributes: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     wardsMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     provincesMap: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -75,6 +75,7 @@ const defaultProps = {
     sourceKey: 'incidents',
     isProviceOnlyMap: false,
     user: undefined,
+    onIncidentHover: undefined,
 };
 
 const mapStateToProps = state => ({
@@ -149,11 +150,23 @@ class IncidentMap extends React.PureComponent {
     })
 
     handleIncidentMouseEnter = (feature) => {
-        this.props.onIncidentHover(feature.id);
+        const {
+            onIncidentHover,
+        } = this.props;
+
+        if (onIncidentHover) {
+            onIncidentHover(feature.id);
+        }
     }
 
     handleIncidentMouseLeave = () => {
-        this.props.onIncidentHover(undefined);
+        const {
+            onIncidentHover,
+        } = this.props;
+
+        if (onIncidentHover) {
+            onIncidentHover(undefined);
+        }
     }
 
     handleIncidentClick = (feature, lngLat) => {

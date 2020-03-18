@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import html2canvas from 'html2canvas';
+import JsPDF from 'jspdf';
 import {
     _cs,
     listToMap,
@@ -258,12 +259,24 @@ class SituationReport extends React.PureComponent {
         const element = document.getElementsByClassName(styles.situationReportFull)[0];
 
         html2canvas(element).then((canvas) => {
-            canvas.toBlob((blob) => {
-                const link = document.createElement('a');
-                link.download = 'situation-report.png';
-                link.href = URL.createObjectURL(blob);
-                link.click();
-            }, 'image/png');
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210;
+            const pageHeight = 295;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            const doc = new JsPDF('p', 'mm');
+            let position = 10; // give some top padding to first page
+
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position += heightLeft - imgHeight; // top padding for other pages
+                doc.addPage();
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+            doc.save('situation-report.pdf');
         });
     }
 
@@ -357,11 +370,10 @@ class SituationReport extends React.PureComponent {
                             mapOptions={{
                                 logoPosition: 'top-left',
                                 minZoom: 5,
+                                interactive: false,
                             }}
-                            scaleControlShown
-                            scaleControlPosition="bottom-right"
-                            navControlShown
-                            navControlPosition="bottom-right"
+                            scaleControlShown={false}
+                            navControlShown={false}
                         >
                             <MapContainer className={styles.mapContainer} />
                             <IncidentMap
@@ -420,11 +432,10 @@ class SituationReport extends React.PureComponent {
                             mapOptions={{
                                 logoPosition: 'top-left',
                                 minZoom: 5,
+                                interactive: false,
                             }}
-                            scaleControlShown
-                            scaleControlPosition="bottom-right"
-                            navControlShown
-                            navControlPosition="bottom-right"
+                            scaleControlShown={false}
+                            navControlShown={false}
                         >
                             <MapContainer className={styles.mapContainer} />
                             <ProvinceChoroplethMap
