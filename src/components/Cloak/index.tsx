@@ -20,6 +20,15 @@ interface Mapping {
 }
 
 interface Params {
+    add_incident?: boolean;
+    delete_incident?: boolean;
+    verify_incident?: boolean;
+    approve_incident?: boolean;
+    change_incident?: boolean;
+
+    verify_people?: boolean;
+    verify_livestock?: boolean;
+    verify_family?: boolean;
 }
 
 interface OwnProps {

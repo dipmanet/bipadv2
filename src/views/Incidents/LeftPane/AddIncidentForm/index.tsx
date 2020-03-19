@@ -206,8 +206,8 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         } = this.props;
 
         const faramValuesForState = {
-            approved: true,
-            verified: true,
+            approved: false,
+            verified: false,
             ...incidentDetails,
             location: getLocationDetails(incidentDetails),
             event: incidentDetails.event && incidentDetails.event.id,

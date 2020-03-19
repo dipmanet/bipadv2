@@ -17,6 +17,7 @@ import {
     Field,
 } from '#store/atom/page/types';
 
+import Cloak from '#components/Cloak';
 import Button from '#rsca/Button';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
@@ -260,14 +261,18 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                             faramElementName="economicLoss"
                             label="Economic Loss"
                         />
-                        <Checkbox
-                            faramElementName="verified"
-                            label="Verified"
-                        />
-                        <TextInput
-                            faramElementName="verificationMessage"
-                            label="Verification Message"
-                        />
+                        <Cloak hiddenIf={p => !p.verify_livestock}>
+                            <>
+                                <Checkbox
+                                    faramElementName="verified"
+                                    label="Verified"
+                                />
+                                <TextInput
+                                    faramElementName="verificationMessage"
+                                    label="Verification Message"
+                                />
+                            </>
+                        </Cloak>
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton

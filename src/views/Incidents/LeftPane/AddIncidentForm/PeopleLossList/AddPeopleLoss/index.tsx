@@ -27,6 +27,7 @@ import {
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
+import Cloak from '#components/Cloak';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -270,14 +271,18 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                             faramElementName="count"
                             label="Count"
                         />
-                        <Checkbox
-                            faramElementName="verified"
-                            label="Verified"
-                        />
-                        <TextInput
-                            faramElementName="verificationMessage"
-                            label="Verification Message"
-                        />
+                        <Cloak hiddenIf={p => !p.verify_people}>
+                            <>
+                                <Checkbox
+                                    faramElementName="verified"
+                                    label="Verified"
+                                />
+                                <TextInput
+                                    faramElementName="verificationMessage"
+                                    label="Verification Message"
+                                />
+                            </>
+                        </Cloak>
                         <SelectInput
                             faramElementName="nationality"
                             label="Nationality"

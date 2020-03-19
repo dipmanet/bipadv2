@@ -273,7 +273,7 @@ class IncidentItem extends React.PureComponent {
                                 Edit
                             </ModalAccentButton>
                         </Cloak>
-                        <Cloak hiddenIf={p => !p.change_incident}>
+                        <Cloak hiddenIf={p => !p.delete_incident}>
                             <DangerConfirmButton
                                 iconName="delete"
                                 className={styles.button}
