@@ -16,6 +16,7 @@ import {
     Field,
 } from '#store/atom/page/types';
 
+import Cloak from '#components/Cloak';
 import Button from '#rsca/Button';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
@@ -258,14 +259,18 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                             faramElementName="count"
                             label="Count"
                         />
-                        <Checkbox
-                            faramElementName="verified"
-                            label="Verified"
-                        />
-                        <TextInput
-                            faramElementName="verificationMessage"
-                            label="Verification Message"
-                        />
+                        <Cloak hiddenIf={p => !p.verify_family}>
+                            <>
+                                <Checkbox
+                                    faramElementName="verified"
+                                    label="Verified"
+                                />
+                                <TextInput
+                                    faramElementName="verificationMessage"
+                                    label="Verification Message"
+                                />
+                            </>
+                        </Cloak>
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton

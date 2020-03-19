@@ -227,7 +227,7 @@ class LeftPane extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.actions}>
-                        <Cloak hiddenIf={p => !p.change_incident}>
+                        <Cloak hiddenIf={p => !p.add_incident}>
                             <AccentModalButton
                                 className={styles.addIncidentButton}
                                 iconName="add"

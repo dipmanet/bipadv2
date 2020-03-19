@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import Cloak from '#components/Cloak';
 import TextInput from '#rsci/TextInput';
 import DateInput from '#rsci/DateInput';
 import TimeInput from '#rsci/TimeInput';
@@ -115,16 +116,20 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                     />
                 </div>
                 <div className={styles.inputGroup}>
-                    <Checkbox
-                        className={styles.input}
-                        label="Approved"
-                        faramElementName="approved"
-                    />
-                    <Checkbox
-                        className={styles.input}
-                        label="Verified"
-                        faramElementName="verified"
-                    />
+                    <Cloak hiddenIf={p => !p.approve_incident}>
+                        <Checkbox
+                            className={styles.input}
+                            label="Approved"
+                            faramElementName="approved"
+                        />
+                    </Cloak>
+                    <Cloak hiddenIf={p => !p.verify_incident}>
+                        <Checkbox
+                            className={styles.input}
+                            label="Verified"
+                            faramElementName="verified"
+                        />
+                    </Cloak>
                     <Checkbox
                         className={styles.input}
                         label="Need Followup"
@@ -140,11 +145,13 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                     className={_cs(styles.locationInput, styles.input)}
                     faramElementName="location"
                 />
-                <TextArea
-                    className={styles.input}
-                    faramElementName="verificationMessage"
-                    label="Verification Message"
-                />
+                <Cloak hiddenIf={p => !p.verify_incident}>
+                    <TextArea
+                        className={styles.input}
+                        faramElementName="verificationMessage"
+                        label="Verification Message"
+                    />
+                </Cloak>
             </div>
         );
     }
