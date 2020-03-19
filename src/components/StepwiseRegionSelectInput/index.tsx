@@ -45,6 +45,7 @@ interface OwnProps {
     districtInputClassName?: string;
     municipalityInputClassName?: string;
     wardInputClassName?: string;
+    wardsHidden?: boolean;
 }
 
 interface State {
@@ -250,6 +251,8 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             districtInputClassName,
             municipalityInputClassName,
             wardInputClassName,
+
+            wardsHidden,
         } = this.props;
 
         const {
@@ -317,18 +320,20 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     showHintAndError={false}
                     placeholder="All municipalities"
                 />
-                <SelectInput
-                    className={_cs(wardInputClassName, styles.wardInput)}
-                    label="Ward"
-                    options={wardOptions}
-                    keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
-                    value={selectedWardId}
-                    onChange={this.handleWardChange}
-                    disabled={shouldDisableWardInput}
-                    showHintAndError={false}
-                    placeholder="All wards"
-                />
+                {!wardsHidden && (
+                    <SelectInput
+                        className={_cs(wardInputClassName, styles.wardInput)}
+                        label="Ward"
+                        options={wardOptions}
+                        keySelector={regionKeySelector}
+                        labelSelector={regionLabelSelector}
+                        value={selectedWardId}
+                        onChange={this.handleWardChange}
+                        disabled={shouldDisableWardInput}
+                        showHintAndError={false}
+                        placeholder="All wards"
+                    />
+                )}
             </div>
         );
     }

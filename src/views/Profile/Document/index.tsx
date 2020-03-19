@@ -7,12 +7,16 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 import Loading from '#components/Loading';
 import ListView from '#rscv/List/ListView';
 import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+
 import documentIcon from '#resources/icons/file-document.svg';
 
 import {
@@ -39,16 +43,23 @@ import {
 import {
     Region,
     DocumentCategory,
+    DocumentItem,
 } from '#store/atom/page/types';
+
 import CommonMap from '#components/CommonMap';
 
+import AddDocumentForm from './AddDocumentForm';
+
 import styles from './styles.scss';
+
+const ModalPrimaryButton = modalize(PrimaryButton);
 
 interface ComponentProps {
     className?: string;
 }
 
 interface Params {
+    documentId?: number;
 }
 
 interface State {
@@ -59,19 +70,6 @@ interface State {
 interface PropsFromState {
     regionName: string;
     region: Region;
-}
-
-interface DocumentItem {
-    id: number;
-    title: string;
-    region: string;
-    file: string;
-    publishedDate: string;
-    category: number | string;
-    province: number;
-    district: number;
-    municipality: number;
-    event: number;
 }
 
 interface RegionOption {
@@ -104,10 +102,21 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         onMount: true,
     },
+    documentDeleteRequest: {
+        url: ({ params }) => `/document/${params && params.documentId}`,
+        method: methods.DELETE,
+        // onMount: true,
+        onSuccess: ({ props }) => {
+            props.requests.documentsGetRequest.do();
+        },
+    },
 };
 
 interface DocumentProps {
-    document: DocumentItem;
+    document: DocumentItem & { categoryName?: string };
+    onUpdate: () => void;
+    onDelete: (id: number) => void;
+    disabled?: boolean;
 }
 
 const DetailItem = ({
@@ -128,15 +137,20 @@ const DetailItem = ({
 );
 
 const DocumentRenderer = (props: DocumentProps) => {
-    const { document } = props;
+    const { document, onUpdate, onDelete, disabled } = props;
 
     const {
+        id,
         title,
         region,
         file,
         publishedDate,
-        category,
+        categoryName,
     } = document;
+
+    const handleDelete = () => {
+        onDelete(id);
+    };
 
     return (
         <div className={styles.documentDetails}>
@@ -152,6 +166,23 @@ const DocumentRenderer = (props: DocumentProps) => {
                         { title }
                     </h3>
                     <div className={styles.actions}>
+                        <ModalPrimaryButton
+                            modal={(
+                                <AddDocumentForm
+                                    value={document}
+                                    onUpdate={onUpdate}
+                                />
+                            )}
+                            disabled={disabled}
+                        >
+                            Edit
+                        </ModalPrimaryButton>
+                        <Button
+                            onClick={handleDelete}
+                            disabled={disabled}
+                        >
+                            Delete
+                        </Button>
                         <a
                             className={styles.downloadLink}
                             href={file}
@@ -182,7 +213,7 @@ const DocumentRenderer = (props: DocumentProps) => {
                     />
                     <DetailItem
                         label="Category"
-                        value={category}
+                        value={categoryName}
                     />
                 </div>
             </div>
@@ -202,13 +233,26 @@ class Document extends React.PureComponent<Props, State> {
         this.state = {};
     }
 
-    private getCategoryExpandedDocuments = memoize((documents, documentCategories) => {
-        const documentCategoryMap = listToMap(documentCategories, d => d.id, d => d.title);
+    private getCategoryExpandedDocuments = memoize((
+        documents: DocumentItem[],
+        documentCategories: DocumentCategory[],
+    ) => {
+        const documentCategoryMap = listToMap(
+            documentCategories,
+            d => d.id,
+            d => d.title,
+        );
+
         return documents
-            .map((d: DocumentItem) => ({ ...d, category: documentCategoryMap[d.category] }));
+            .map((d: DocumentItem) => ({ ...d, categoryName: documentCategoryMap[d.category] }));
     })
 
-    private rendererParams = (_: string, data: DocumentItem) => ({ document: data })
+    private rendererParams = (_: string, data: DocumentItem) => ({
+        document: data,
+        onUpdate: this.handleUpdate,
+        onDelete: this.handleDelete,
+        disabled: this.props.requests.documentDeleteRequest.pending,
+    })
 
     private getFilteredDocuments = (
         documents: DocumentItem[],
@@ -239,6 +283,16 @@ class Document extends React.PureComponent<Props, State> {
         return filtered;
     }
 
+    private handleUpdate = () => {
+        this.props.requests.documentsGetRequest.do();
+    }
+
+    private handleDelete = (id: number) => {
+        this.props.requests.documentDeleteRequest.do({
+            documentId: id,
+        });
+    }
+
     private handleCategorySelection = (category: number) => {
         this.setState({
             selectedCategory: category,
@@ -258,9 +312,14 @@ class Document extends React.PureComponent<Props, State> {
             region,
         } = this.props;
 
-        const { selectedCategory, selectedRegion } = this.state;
+        const {
+            selectedCategory,
+            selectedRegion,
+        } = this.state;
+
         const documents = getResults(requests, 'documentsGetRequest');
         const documentCategories = getResults(requests, 'documentCategoryGetRequest');
+
         const filteredDocuments = this.getFilteredDocuments(
             documents,
             region,
@@ -274,6 +333,7 @@ class Document extends React.PureComponent<Props, State> {
         );
 
         const pending = isAnyRequestPending(requests);
+
         return (
             <div className={_cs(className, styles.documents)}>
                 <Loading pending={pending} />
@@ -282,6 +342,15 @@ class Document extends React.PureComponent<Props, State> {
                     <h2 className={styles.heading}>
                         Documents
                     </h2>
+                    <ModalPrimaryButton
+                        modal={(
+                            <AddDocumentForm
+                                onUpdate={this.handleUpdate}
+                            />
+                        )}
+                    >
+                        Add
+                    </ModalPrimaryButton>
                 </header>
                 <div className={styles.filters}>
                     <SelectInput

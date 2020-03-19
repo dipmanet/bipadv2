@@ -54,9 +54,21 @@ export interface SeverityType extends Field {
 }
 export interface ResourceType extends Field {
 }
-
 export interface DocumentCategory extends Field {
 }
+export interface DocumentItem {
+    id: number;
+    title: string;
+    region: 'national' | 'province' | 'district' | 'municipality';
+    file: string;
+    publishedDate: string;
+    category: number;
+    province: number;
+    district: number;
+    municipality: number;
+    event: number;
+}
+
 export interface Event extends Field {
     createdOn: string;
     description: string;
