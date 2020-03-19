@@ -3,15 +3,24 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 
+import {
+    ResponsiveContainer,
+    PieChart,
+    BarChart,
+    XAxis,
+    YAxis,
+    Legend,
+    Tooltip,
+    Bar,
+    Pie,
+    Cell,
+} from 'recharts';
+
 import { isDefined } from '@togglecorp/fujs';
 
 import Numeral from '#rscv/Numeral';
-import HorizontalBar from '#rscz/HorizontalBar';
-import DonutChart from '#rscz/DonutChart';
-
 import { hazardTypesList } from '#utils/domain';
 import { groupList, sum } from '#utils/common';
-import HazardsLegend from '#components/HazardsLegend';
 
 import {
     hazardTypesSelector,
@@ -29,23 +38,7 @@ const defaultProps = {
 
 const emptyList = [];
 
-const peopleDeathChartColorScheme = [
-    '#e53935',
-];
-
-const estimatedLossChartColorScheme = [
-    '#ffefc3',
-];
-
-const barChartMargins = {
-    left: 48,
-    top: 10,
-    right: 10,
-    bottom: 48,
-};
-
-const estimatedLossValueSelector = d => d.estimatedLoss;
-const estimatedLossValueLabelSelector = (d) => {
+const estimatedLossValueFormatter = (d) => {
     const { number, normalizeSuffix } = Numeral.getNormalizedNumber({
         value: d,
         normal: true,
@@ -56,6 +49,7 @@ const estimatedLossValueLabelSelector = (d) => {
     }
     return number;
 };
+
 const estimatedLossLabelSelector = d => d.label;
 
 const deathCountValueSelector = d => d.peopleDeathCount;
@@ -145,91 +139,137 @@ class Visualizations extends React.PureComponent {
 
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
         const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
-        const filteredHazardTypesList = this.getHazardTypes(lossAndDamageList);
         const lossSummary = this.getLossSummary(lossAndDamageList);
+        // height: `${60 + lossSummary.length * 40}px`,
 
         return (
             <div className={styles.visualizationContainer}>
-                <div className={styles.donutCharts}>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Death toll by disaster
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.2}
-                            className={styles.chart}
-                            data={hazardDeaths}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={deathsLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                            hideLabel
-                        />
-                    </div>
-                    <div className={styles.donutContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated economic loss by disaster
-                            </h4>
-                        </header>
-                        <DonutChart
-                            sideLengthRatio={0.2}
-                            className={styles.chart}
-                            data={hazardLossEstimate}
-                            labelSelector={donutChartLabelSelector}
-                            valueSelector={donutChartValueSelector}
-                            labelModifier={donutChartLabelModifier}
-                            colorSelector={donutChartColorSelector}
-                            hideLabel
-                        />
+                <div className={styles.chartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            People death count
+                        </h4>
+                    </header>
+                    <div
+                        className={styles.barChart}
+                        style={{ height: `${60 + lossSummary.length * 40}px` }}
+                    >
+                        <ResponsiveContainer>
+                            <BarChart
+                                data={lossSummary}
+                                layout="vertical"
+                            >
+                                <Tooltip
+                                    formatter={value => ([value, 'No of Deaths'])}
+                                />
+                                <Bar
+                                    layout="vertical"
+                                    dataKey="peopleDeathCount"
+                                    fill="#ff6361"
+                                />
+                                <XAxis
+                                    dataKey="peopleDeathCount"
+                                    type="number"
+                                />
+                                <YAxis
+                                    dataKey="label"
+                                    type="category"
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
-                <HazardsLegend
-                    filteredHazardTypes={filteredHazardTypesList}
-                    className={styles.legend}
-                    itemClassName={styles.legendItem}
-                />
-                <div className={styles.barCharts}>
-                    <div className={styles.barChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                People death count
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            svgStyle={{
-                                height: `${60 + lossSummary.length * 40}px`,
-                            }}
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={deathCountLabelSelector}
-                            valueSelector={deathCountValueSelector}
-                            colorScheme={peopleDeathChartColorScheme}
-                            tiltLabels
-                            margins={barChartMargins}
-                        />
+                <div className={styles.chartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated Monetary Loss
+                        </h4>
+                    </header>
+                    <div
+                        className={styles.barChart}
+                        style={{ height: `${60 + lossSummary.length * 40}px` }}
+                    >
+                        <ResponsiveContainer>
+                            <BarChart
+                                data={lossSummary}
+                                layout="vertical"
+                            >
+                                <Tooltip
+                                    formatter={value => ([estimatedLossValueFormatter(value), 'Estimated Monetary Loss'])}
+                                />
+                                <Bar
+                                    layout="vertical"
+                                    dataKey="estimatedLoss"
+                                    fill="#58508d"
+                                />
+                                <XAxis
+                                    dataKey="estimatedLoss"
+                                    type="number"
+                                />
+                                <YAxis
+                                    dataKey="label"
+                                    type="category"
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
-                    <div className={styles.barChartContainer}>
-                        <header className={styles.header}>
-                            <h4 className={styles.heading}>
-                                Estimated Monetary Loss
-                            </h4>
-                        </header>
-                        <HorizontalBar
-                            svgStyle={{
-                                height: `${60 + lossSummary.length * 40}px`,
-                            }}
-                            className={styles.chart}
-                            data={lossSummary}
-                            labelSelector={estimatedLossLabelSelector}
-                            valueSelector={estimatedLossValueSelector}
-                            valueLabelFormat={estimatedLossValueLabelSelector}
-                            colorScheme={estimatedLossChartColorScheme}
-                            margins={barChartMargins}
-                            tiltLabels
-                        />
+                </div>
+                <div className={styles.chartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Death toll by disaster
+                        </h4>
+                    </header>
+                    <div className={styles.pieChart}>
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Tooltip />
+                                <Pie
+                                    dataKey="value"
+                                    nameKey="label"
+                                    data={hazardDeaths}
+                                    innerRadius="70%"
+                                    outerRadius="90%"
+                                >
+                                    { hazardDeaths.map(hazard => (
+                                        <Cell
+                                            key={hazard.label}
+                                            fill={hazard.color}
+                                        />
+                                    ))}
+                                </Pie>
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+                <div className={styles.chartContainer}>
+                    <header className={styles.header}>
+                        <h4 className={styles.heading}>
+                            Estimated economic loss by disaster
+                        </h4>
+                    </header>
+                    <div className={styles.pieChart}>
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Tooltip />
+                                <Pie
+                                    dataKey="value"
+                                    nameKey="label"
+                                    data={hazardLossEstimate}
+                                    innerRadius="70%"
+                                    outerRadius="90%"
+                                >
+                                    { hazardLossEstimate.map(loss => (
+                                        <Cell
+                                            key={loss.label}
+                                            fill={loss.color}
+                                        />
+                                    ))}
+                                </Pie>
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
             </div>
