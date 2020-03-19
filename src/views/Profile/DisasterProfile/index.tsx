@@ -77,6 +77,7 @@ class DisasterProfile extends React.PureComponent<Props> {
                 const resourceSummary = getResponse(requests, 'resourceProfileGetRequest');
 
                 return {
+                    onResourceAdd: this.handleResourceAdd,
                     data: resourceSummary.data,
                     className: styles.view,
                 };
@@ -112,6 +113,11 @@ class DisasterProfile extends React.PureComponent<Props> {
 
     private handleTabClick = (activeView: string) => {
         this.setState({ activeView });
+    }
+
+    private handleResourceAdd = () => {
+        const { requests: { resourceProfileGetRequest } } = this.props;
+        resourceProfileGetRequest.do();
     }
 
     public render() {

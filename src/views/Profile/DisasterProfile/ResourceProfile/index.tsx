@@ -3,6 +3,9 @@ import { _cs } from '@togglecorp/fujs';
 
 import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
 
+import modalize from '#rscg/Modalize';
+import AccentButton from '#rsca/Button/AccentButton';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import CommonMap from '#components/CommonMap';
 import EducationIcon from '#resources/icons/Education.svg';
 import HealthIcon from '#resources/icons/Health-facility.svg';
@@ -14,9 +17,13 @@ import IndustryIcon from '#resources/icons/Factory.svg';
 import CulturalIcon from '#resources/icons/Dreamcatcher.svg';
 import EnergyIcon from '#resources/icons/Energy.svg';
 
+import AddResourceForm from './AddResourceForm';
 import styles from './styles.scss';
 
+
 interface Props {
+    data: unknown;
+    onResourceAdd: () => void;
     className?: string;
 }
 
@@ -70,10 +77,12 @@ const attributes = {
     },
 };
 
+const AccentModalButton = modalize(AccentButton);
 class ResourceProfile extends React.PureComponent<Props> {
     public render() {
         const {
             className,
+            onResourceAdd,
             data = {},
         } = this.props;
 
@@ -84,6 +93,20 @@ class ResourceProfile extends React.PureComponent<Props> {
                     <h2 className={styles.heading}>
                         Available resources
                     </h2>
+                    <div className={styles.actions}>
+                        <AccentModalButton
+                            iconName="add"
+                            title="Add New Resource"
+                            transparent
+                            modal={(
+                                <AddResourceForm
+                                    onUpdate={onResourceAdd}
+                                />
+                            )}
+                        >
+                            Add Resource
+                        </AccentModalButton>
+                    </div>
                 </header>
                 <div className={styles.content}>
                     <CommonMap
