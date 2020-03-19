@@ -3,23 +3,27 @@ import Redux, {
     compose,
 } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { encodeDate, _cs, isDefined, isNotDefined } from '@togglecorp/fujs';
 import Faram, {
     requiredCondition,
+    FaramInputElement,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import TextInput from '#rsci/TextInput';
-import DateInput from '#rsci/DateInput';
+// import DateInput from '#rsci/DateInput';
 import SelectInput from '#rsci/SelectInput';
 import RawFileInput from '#rsci/RawFileInput';
-import HiddenInput from '#rsci/HiddenInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+
+import NormalStepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import {
     setEventListAction,
@@ -44,17 +48,18 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { UploadBuilder } from '#rsu/upload';
+
+const StepwiseRegionSelectInput = FaramInputElement(NormalStepwiseRegionSelectInput);
 
 interface Params {
     body: object;
-    onSuccess: () => void;
     onFailure: (faramErrors: object) => void;
 }
 
 interface OwnProps {
     closeModal?: () => void;
-    onUpdate?: () => void;
+    value?: PageType.DocumentItem;
+    onUpdate?: (document: PageType.DocumentItem) => void;
     className?: string;
 }
 
@@ -71,15 +76,20 @@ interface PropsFromDispatch {
 
 interface FaramValues {
     title?: string;
-    category?: string;
-    region?: string;
-    province?: string;
-    district?: string;
-    municipality?: string;
+    category?: number;
+    region?: 'national' | 'province' | 'district' | 'municipality';
     file?: File;
-    event?: string;
+    event?: number;
+    // severity?: string;
+
+    // Temporary
+    stepwiseRegion?: PageType.Region;
+
+    // Filled automatically
+    province?: number | null;
+    district?: number | null;
+    municipality?: number | null;
     publishedDate?: string;
-    severity?: string;
 }
 
 interface FaramErrors {
@@ -115,18 +125,35 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
         onMount: true,
     },
+
     addDocumentPostRequest: {
-        url: '/document/',
-        method: methods.POST,
+        url: ({ props }) => (
+            props.value
+                ? `/document/${props.value.id}/`
+                : '/document/'
+        ),
+        method: ({ props }) => (
+            props.value
+                ? methods.PATCH
+                : methods.POST
+        ),
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
+        onSuccess: ({ response, props }) => {
+            if (props.onUpdate) {
+                props.onUpdate(response as PageType.DocumentItem);
+            }
+            if (props.closeModal) {
+                props.closeModal();
             }
         },
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.onFailure) {
+                params.onFailure({ $internal: ['Some error occurred'] });
             }
         },
         extras: {
@@ -149,29 +176,99 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setDocumentCategoryList: params => dispatch(setDocumentCategoryListAction(params)),
 });
 
+function getAdminLevel(province?: number, district?: number, municipality?: number) {
+    if (isDefined(province)) {
+        return 1;
+    }
+    if (isDefined(district)) {
+        return 2;
+    }
+    if (isDefined(municipality)) {
+        return 3;
+    }
+    return 0;
+}
+
+function getGeoArea(province?: number, district?: number, municipality?: number) {
+    if (isDefined(province)) {
+        return province;
+    }
+    if (isDefined(district)) {
+        return district;
+    }
+    if (isDefined(municipality)) {
+        return municipality;
+    }
+    return undefined;
+}
+
 class AddDocumentForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
+
+        const {
+            file,
+            province,
+            district,
+            municipality,
+            ...otherValues
+        } = props.value || {};
+
+        const adminLevel = getAdminLevel(province, district, municipality);
+        const geoarea = getGeoArea(province, district, municipality);
+
         this.state = {
-            faramValues: {},
+            faramValues: {
+                ...otherValues,
+                stepwiseRegion: {
+                    adminLevel,
+                    geoarea,
+                },
+            },
             faramErrors: {},
             pristine: true,
         };
+
+        this.schema = {
+            fields: {
+                title: [requiredCondition],
+                file: [requiredCondition],
+                category: [],
+                region: [],
+                event: [],
+                stepwiseRegion: [],
+                // province: [],
+                // district: [],
+                // municipality: [],
+                // publishedDate: [],
+            },
+            validation: (faramValues: FaramValues) => {
+                const errors: string[] = [];
+                const { region, stepwiseRegion } = faramValues;
+                if (
+                    (isDefined(region) && isNotDefined(stepwiseRegion))
+                    || (isDefined(region) && isNotDefined(stepwiseRegion))
+                ) {
+                    errors.push('Proper region is not selected');
+                } if (isDefined(region) && isDefined(stepwiseRegion)) {
+                    const { regionList } = this.props;
+                    const currentRegion = regionList.find(
+                        item => item.id === stepwiseRegion.adminLevel,
+                    );
+                    if (currentRegion && region !== currentRegion.title) {
+                        errors.push('Proper region is not selected');
+                    }
+                }
+                return errors;
+            },
+        };
+
+        if (props.value) {
+            delete this.schema.fields.file;
+        }
     }
 
-    private static schema = {
-        fields: {
-            title: [requiredCondition],
-            file: [requiredCondition],
-            category: [],
-            region: [],
-            province: [],
-            district: [],
-            municipality: [],
-            event: [],
-            publishedDate: [],
-        },
-    };
+    private schema: unknown;
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         this.setState({
@@ -188,27 +285,51 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (_: unknown, faramValues: FaramValues) => {
-        const { requests: { addDocumentPostRequest }, onUpdate, closeModal } = this.props;
         const {
-            publishedDate: date,
+            requests: { addDocumentPostRequest },
+        } = this.props;
+        const {
+            // publishedDate: date,
+            stepwiseRegion,
             ...others
         } = faramValues;
 
-        let newBody: object = { ...others };
-        if (date) {
-            const publishedDate = new Date(date).toISOString();
-            newBody = { publishedDate, ...others };
+        const date = new Date();
+        const publishedDate = encodeDate(new Date(date));
+        const newBody = {
+            ...others,
+            publishedDate,
+        };
+
+        if (stepwiseRegion) {
+            switch (stepwiseRegion.adminLevel) {
+                case 0:
+                    newBody.province = null;
+                    newBody.district = null;
+                    newBody.municipality = null;
+                    break;
+                case 1:
+                    newBody.province = stepwiseRegion.geoarea;
+                    newBody.district = null;
+                    newBody.municipality = null;
+                    break;
+                case 2:
+                    newBody.province = null;
+                    newBody.district = stepwiseRegion.geoarea;
+                    newBody.municipality = null;
+                    break;
+                case 3:
+                    newBody.province = null;
+                    newBody.district = null;
+                    newBody.municipality = stepwiseRegion.geoarea;
+                    break;
+                default:
+                    break;
+            }
         }
 
         addDocumentPostRequest.do({
             body: newBody,
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                } else if (closeModal) {
-                    closeModal();
-                }
-            },
             onFailure: (faramErrors: object) => {
                 this.setState({ faramErrors });
             },
@@ -222,6 +343,10 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             eventList,
             regionList,
             categoryList,
+            requests: {
+                addDocumentPostRequest: { pending },
+            },
+            value,
         } = this.props;
 
         const {
@@ -236,16 +361,19 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                 onClose={closeModal}
                 closeOnEscape
             >
+                {pending && <LoadingAnimation />}
                 <Faram
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddDocumentForm.schema}
+                    schema={this.schema}
                     value={faramValues}
                     error={faramErrors}
+                    disabled={pending}
                 >
                     <ModalHeader title="Add Document" />
                     <ModalBody>
+                        <NonFieldErrors faramElement />
                         <TextInput
                             faramElementName="title"
                             label="Title"
@@ -264,6 +392,11 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             labelSelector={labelSelector}
                             label="Region"
                         />
+                        <StepwiseRegionSelectInput
+                            faramElementName="stepwiseRegion"
+                            wardsHidden
+                        />
+
                         <SelectInput
                             faramElementName="event"
                             options={eventList}
@@ -271,19 +404,18 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             labelSelector={labelSelector}
                             label="Event"
                         />
-                        <div>
-                            <div>Add Document </div>
+                        {!value && (
                             <RawFileInput
                                 className={styles.fileInput}
                                 faramElementName="file"
-                                error={faramErrors.file}
+                                // error={faramErrors.file}
                             >
+                                <Icon name="upload" />
                                 <span className={styles.load}>
-                                    <Icon name="upload" />
+                                    Add document
                                 </span>
                             </RawFileInput>
-                            <HiddenInput faramElementName="file" />
-                        </div>
+                        )}
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>
@@ -292,6 +424,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
+                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>
