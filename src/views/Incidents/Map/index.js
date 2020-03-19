@@ -251,7 +251,6 @@ class IncidentMap extends React.PureComponent {
             isProviceOnlyMap,
         } = this.props;
 
-
         const icons = unique(
             incidentList
                 .filter(incident => incident.hazardInfo && incident.hazardInfo.icon)
