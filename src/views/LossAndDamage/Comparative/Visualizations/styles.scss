@@ -1,69 +1,11 @@
 .visualization-container {
-    .bar-charts {
+    padding: var(--spacing-medium);
+
+    .bar-chart {
         padding: 0;
     }
 
-    .donut-charts {
-        display: flex;
-    }
-
-    %visualization-container {
-        flex-basis: calc(100% / 2);
-        // padding: var(--spacing-medium);
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        overflow-y: auto;
-    }
-
-    .chart-container {
-        flex-grow: 1;
-        padding: var(--spacing-large);
-
-        .header {
-            .heading {
-                padding: var(--spacing-small) var(--spacing-medium);
-            }
-        }
-    }
-
-    .bar-chart-container {
-        @extend %visualization-container;
-    }
-
-    .donut-container {
-        @extend %visualization-container;
-        flex-grow: 1;
-
-        .heading {
-            text-align: center;
-        }
-
-        .chart {
-            height: 160px;
-        }
-    }
-
-    .legend {
-        display: flex;
-        flex-grow: 1;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-medium) - var(--spacing-small));
-
-        .legend-item {
-            padding: var(--spacing-extra-small) var(--spacing-small);
-            color: var(--color-text-label);
-            font-size: var(--font-size-small);
-            font-weight: var(--font-weight-bold);
-
-            .bar-chart {
-              height: 240px;
-            }
-
-            .chart {
-                height: 320px;
-            }
-        }
+    .pie-chart {
+        height: 200px;
     }
 }

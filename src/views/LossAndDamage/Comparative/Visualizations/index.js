@@ -150,7 +150,10 @@ class Visualizations extends React.PureComponent {
                             People death count
                         </h4>
                     </header>
-                    <div className={styles.barChart}>
+                    <div
+                        className={styles.barChart}
+                        style={{ height: `${60 + lossSummary.length * 40}px` }}
+                    >
                         <ResponsiveContainer>
                             <BarChart
                                 data={lossSummary}
@@ -182,7 +185,10 @@ class Visualizations extends React.PureComponent {
                             Estimated Monetary Loss
                         </h4>
                     </header>
-                    <div className={styles.barChart}>
+                    <div
+                        className={styles.barChart}
+                        style={{ height: `${60 + lossSummary.length * 40}px` }}
+                    >
                         <ResponsiveContainer>
                             <BarChart
                                 data={lossSummary}
@@ -211,10 +217,10 @@ class Visualizations extends React.PureComponent {
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            Total people death by hazard
+                            Death toll by disaster
                         </h4>
                     </header>
-                    <div className={styles.chart}>
+                    <div className={styles.pieChart}>
                         <ResponsiveContainer>
                             <PieChart>
                                 <Tooltip />
@@ -222,7 +228,7 @@ class Visualizations extends React.PureComponent {
                                     dataKey="value"
                                     nameKey="label"
                                     data={hazardDeaths}
-                                    innerRadius="50%"
+                                    innerRadius="70%"
                                     outerRadius="90%"
                                 >
                                     { hazardDeaths.map(hazard => (
@@ -240,10 +246,10 @@ class Visualizations extends React.PureComponent {
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            Estimated Monetary Loss by Hazard
+                            Estimated economic loss by disaster
                         </h4>
                     </header>
-                    <div className={styles.chart}>
+                    <div className={styles.pieChart}>
                         <ResponsiveContainer>
                             <PieChart>
                                 <Tooltip />
@@ -251,7 +257,7 @@ class Visualizations extends React.PureComponent {
                                     dataKey="value"
                                     nameKey="label"
                                     data={hazardLossEstimate}
-                                    innerRadius="50%"
+                                    innerRadius="70%"
                                     outerRadius="90%"
                                 >
                                     { hazardLossEstimate.map(loss => (
