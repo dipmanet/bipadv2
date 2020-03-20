@@ -209,8 +209,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleFaramValidationSuccess = (faramValues: FaramValues, otherValues: FaramValues) => {
-        console.warn('otherValues', faramValues, otherValues);
+    private handleFaramValidationSuccess = (_: FaramValues, faramValues: FaramValues) => {
         const { requests: { addResourcePostRequest }, onUpdate, closeModal } = this.props;
         addResourcePostRequest.do({
             body: faramValues,

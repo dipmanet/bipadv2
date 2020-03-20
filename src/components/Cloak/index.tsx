@@ -29,6 +29,8 @@ interface Params {
     verify_people?: boolean;
     verify_livestock?: boolean;
     verify_family?: boolean;
+
+    add_resource?: boolean;
 }
 
 interface OwnProps {

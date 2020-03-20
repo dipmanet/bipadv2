@@ -4,8 +4,8 @@ import { _cs } from '@togglecorp/fujs';
 import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
 
 import modalize from '#rscg/Modalize';
+import Cloak from '#components/Cloak';
 import AccentButton from '#rsca/Button/AccentButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 import CommonMap from '#components/CommonMap';
 import EducationIcon from '#resources/icons/Education.svg';
 import HealthIcon from '#resources/icons/Health-facility.svg';
@@ -94,18 +94,20 @@ class ResourceProfile extends React.PureComponent<Props> {
                         Available resources
                     </h2>
                     <div className={styles.actions}>
-                        <AccentModalButton
-                            iconName="add"
-                            title="Add New Resource"
-                            transparent
-                            modal={(
-                                <AddResourceForm
-                                    onUpdate={onResourceAdd}
-                                />
-                            )}
-                        >
-                            Add Resource
-                        </AccentModalButton>
+                        <Cloak hiddenIf={p => !p.add_resource}>
+                            <AccentModalButton
+                                iconName="add"
+                                title="Add New Resource"
+                                transparent
+                                modal={(
+                                    <AddResourceForm
+                                        onUpdate={onResourceAdd}
+                                    />
+                                )}
+                            >
+                                Add Resource
+                            </AccentModalButton>
+                        </Cloak>
                     </div>
                 </header>
                 <div className={styles.content}>
