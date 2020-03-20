@@ -8,6 +8,8 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -20,10 +22,10 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import {
     setInventoryItemListActionRP,
-    setResourceListActionRP,
+    // setResourceListActionRP,
 } from '#actionCreators';
 import {
-    resourceListSelectorRP,
+    // resourceListSelectorRP,
     inventoryItemListSelectorRP,
 } from '#selectors';
 
@@ -41,29 +43,26 @@ import styles from './styles.scss';
 
 interface Params {
     body: object;
-    onSuccess: () => void;
+    onSuccess?: () => void;
     onFailure: (faramErrors: object) => void;
 }
 interface OwnProps {
     closeModal?: () => void;
+    value?: PageType.Inventory;
     onUpdate?: () => void;
     className?: string;
+    resourceId: number;
 }
 interface PropsFromState {
     inventoryItemList: PageType.InventoryItem[];
-    resourceList: PageType.Resource[];
+    // resourceList: PageType.Resource[];
 }
 interface PropsFromDispatch {
     setInventoryItemList: typeof setInventoryItemListActionRP;
-    setResourceList: typeof setResourceListActionRP;
+    // setResourceList: typeof setResourceListActionRP;
 }
 
-interface FaramValues {
-    itemId?: number;
-    quantity?: number;
-    resource?: number;
-    description?: string;
-}
+type FaramValues = Partial<PageType.Inventory>;
 interface FaramErrors {
 }
 interface State {
@@ -75,12 +74,12 @@ type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    resourceList: resourceListSelectorRP(state),
+    // resourceList: resourceListSelectorRP(state),
     inventoryItemList: inventoryItemListSelectorRP(state),
 });
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInventoryItemList: params => dispatch(setInventoryItemListActionRP(params)),
-    setResourceList: params => dispatch(setResourceListActionRP(params)),
+    // setResourceList: params => dispatch(setResourceListActionRP(params)),
 });
 
 const keySelector = (d: PageType.Field) => d.id;
@@ -97,6 +96,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             setInventoryItemList({ inventoryItemList });
         },
     },
+    /*
     resourceListGetRequest: {
         url: '/resource/',
         method: methods.GET,
@@ -107,18 +107,35 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             setResourceList({ resourceList });
         },
     },
+    */
     addInventoryPostRequest: {
-        url: '/inventory/',
-        method: methods.POST,
+        url: ({ props }) => (
+            props.value
+                ? `/inventory/${props.value.id}/`
+                : '/inventory/'
+        ),
+        method: ({ props }) => (
+            props.value
+                ? methods.PATCH
+                : methods.POST
+        ),
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
+        onSuccess: ({ props }) => {
+            if (props.onUpdate) {
+                props.onUpdate();
+            }
+            if (props.closeModal) {
+                props.closeModal();
             }
         },
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.onFailure) {
+                params.onFailure({ $internal: ['Some error occurred'] });
             }
         },
     },
@@ -128,8 +145,14 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
+        const {
+            ...otherValues
+        } = props.value || {};
+
         this.state = {
-            faramValues: {},
+            faramValues: {
+                ...otherValues,
+            },
             faramErrors: {},
             pristine: true,
         };
@@ -139,7 +162,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
         fields: {
             itemId: [requiredCondition],
             quantity: [requiredCondition],
-            resource: [requiredCondition],
+            // resource: [requiredCondition],
             description: [],
         },
     };
@@ -159,16 +182,15 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        const { requests: { addInventoryPostRequest }, onUpdate, closeModal } = this.props;
+        const {
+            requests: { addInventoryPostRequest },
+            resourceId,
+        } = this.props;
 
         addInventoryPostRequest.do({
-            body: faramValues,
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                } else if (closeModal) {
-                    closeModal();
-                }
+            body: {
+                ...faramValues,
+                resource: resourceId,
             },
             onFailure: (faramErrors: object) => {
                 this.setState({ faramErrors });
@@ -181,7 +203,13 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
             className,
             closeModal,
             inventoryItemList,
-            resourceList,
+            // resourceList,
+            requests: {
+                addInventoryPostRequest: {
+                    pending,
+                },
+            },
+            value,
         } = this.props;
 
         const {
@@ -196,6 +224,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                 onClose={closeModal}
                 closeOnEscape
             >
+                {pending && <LoadingAnimation />}
                 <Faram
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
@@ -203,9 +232,15 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                     schema={AddInventoryForm.schema}
                     value={faramValues}
                     error={faramErrors}
+                    disabled={pending}
                 >
-                    <ModalHeader title="Add Inventory" />
+                    <ModalHeader
+                        title={
+                            value ? 'Edit Inventory' : 'Add Inventory'
+                        }
+                    />
                     <ModalBody>
+                        <NonFieldErrors faramElement />
                         <SelectInput
                             faramElementName="itemId"
                             options={inventoryItemList}
@@ -221,6 +256,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                             faramElementName="description"
                             label="Description"
                         />
+                        {/*
                         <SelectInput
                             faramElementName="resource"
                             options={resourceList}
@@ -228,6 +264,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                             labelSelector={labelSelector}
                             label="Resource"
                         />
+                        */}
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>
@@ -236,6 +273,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
+                            pending={pending}
                         >
                             Submit
                         </PrimaryButton>

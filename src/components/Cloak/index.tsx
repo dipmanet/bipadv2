@@ -26,6 +26,10 @@ interface Params {
     approve_incident?: boolean;
     change_incident?: boolean;
 
+    add_document?: boolean;
+    delete_document?: boolean;
+    change_document?: boolean;
+
     verify_people?: boolean;
     verify_livestock?: boolean;
     verify_family?: boolean;

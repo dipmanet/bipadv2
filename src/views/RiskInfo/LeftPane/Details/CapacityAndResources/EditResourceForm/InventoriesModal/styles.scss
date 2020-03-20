@@ -1,0 +1,33 @@
+.inventories-modal {
+    width: 80vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .inventory-list {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+}
+
+.inventory {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
+
+    .title,
+    .category,
+    .quantity,
+    .description,
+    .created-on {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+
+    &:hover {
+        background-color: var(--color-background);
+    }
+}

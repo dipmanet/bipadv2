@@ -371,7 +371,11 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader title="Add Document" />
+                    <ModalHeader
+                        title={
+                            value ? 'Edit Document' : 'Add Document'
+                        }
+                    />
                     <ModalBody>
                         <NonFieldErrors faramElement />
                         <TextInput

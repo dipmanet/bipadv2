@@ -1,55 +1,23 @@
 .edit-resource-form {
     display: flex;
-    position: relative;
-    flex-direction: column;
-    padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
+    overflow-y: auto;
 
-    >.header {
-        display: flex;
+    .header {
         flex-shrink: 0;
-        padding: 0 calc(var(--spacing-medium) - var(--spacing-small));
-
-        .heading {
-            flex-grow: 1;
-            padding: var(--spacing-small);
-        }
-
-        .actions {
-            flex-shrink: 0;
-            padding: var(--spacing-small);
-        }
     }
 
-    >.content {
+    .faram {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        overflow: auto;
+        overflow-y: auto;
 
-        .form-input-elements {
+        .body {
             flex-grow: 1;
-            padding: var(--spacing-medium);
-            overflow: auto;
-
-            :global {
-                .text-input,
-                .text-area,
-                .checkbox,
-                .number-input {
-                    margin: var(--spacing-medium) 0;
-                }
-            }
+            overflow-y: auto;
         }
-
-        .actions {
-            display: flex;
+        .footer {
             flex-shrink: 0;
-            justify-content: flex-end;
-            padding: var(--spacing-small) calc(var(--spacing-medium) - var(--spacing-extra-small-alt));
-
-            button {
-                margin: 0 var(--spacing-extra-small-alt);
-            }
         }
     }
 }
