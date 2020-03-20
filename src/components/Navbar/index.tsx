@@ -26,6 +26,7 @@ import CitizenReportsModal from '#components/CitizenReportsModal';
 import LoginModal from '#components/LoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
+import Relief from '#components/ReliefModal';
 
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
@@ -159,6 +160,12 @@ class Navbar extends React.PureComponent<Props, State> {
                         title="Situation Report"
                         iconName="aboutUs"
                         modal={<SituationReport />}
+                    />
+                    <ModalButton
+                        className={styles.reliefButton}
+                        title="Relief"
+                        iconName="aboutUs"
+                        modal={<Relief />}
                     />
                     {authenticated && (
                         <ModalButton

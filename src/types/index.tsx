@@ -226,3 +226,29 @@ export interface ModelEnum {
     enums: ResourceEnum[];
 }
 
+export interface Flow {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    type: string;
+    amount: number;
+    date: string;
+    description: string;
+    createdBy: string;
+    updatedBy: string;
+    receiverOrganization: number;
+    providerOrganization: number;
+    event: number;
+    fiscalYear: number;
+}
+
+export interface Organization {
+    id: number;
+    title: string;
+    shortName: string;
+    longName: string;
+    description: string;
+    incidentVerificationDuration: number;
+    responsibleFor: unknown;
+    wards: unknown;
+}
