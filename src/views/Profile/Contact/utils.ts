@@ -22,6 +22,8 @@ export const trainingValueList = mapToList(
 export const committeeValues: {
     [key in Contact['committee']]: string;
 } = {
+    PDMC: 'Province Disaster Management Committee',
+    DDMC: 'District Disaster Management Committee',
     LDMC: 'Local Disaster Management Committee',
     WDMC: 'Ward Disaster Management Committee',
     CDMC: 'Community Disaster Management Committee',
@@ -32,3 +34,6 @@ export const committeeValueList = mapToList(
     committeeValues,
     (v, k) => ({ key: k, label: v }),
 );
+
+export const committeeKeySelector = (committee: { key: string }) => committee.key;
+export const committeeLabelSelector = (committee: { label: string }) => committee.label;

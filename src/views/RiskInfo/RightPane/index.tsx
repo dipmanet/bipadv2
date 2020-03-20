@@ -85,6 +85,7 @@ class RiskInfoRightPane extends React.PureComponent<Props, State> {
                     className={styles.stepwiseRegionSelectInput}
                     value={faramValues.region}
                     onChange={this.handleRegionChange}
+                    wardsHidden
                 />
             </div>
         );

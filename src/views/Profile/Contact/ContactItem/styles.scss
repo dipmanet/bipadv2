@@ -53,6 +53,15 @@
             }
         }
     }
+
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+
+        .button {
+            margin-left: var(--spacing-small);
+        }
+    }
 }
 
 .icon-detail {

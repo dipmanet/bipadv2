@@ -1,9 +1,9 @@
 import React from 'react';
+import produce from 'immer';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
     _cs,
-    mapToList,
     listToMap,
 } from '@togglecorp/fujs';
 
@@ -237,9 +237,41 @@ class ContactPage extends React.PureComponent<Props, State> {
     }
 
     private contactRendererParams = (_: string, data: Contact) => ({
+        contactId: data.id,
         contact: data,
         municipalityList: this.props.municipalityList,
+        onContactEdit: this.handleContactEdit,
+        onContactDelete: this.handleContactDelete,
     })
+
+    private handleContactEdit = (contactId: Contact['id'], contact: Contact) => {
+        const { contactList } = this.state;
+        const newContactList = produce(contactList, (safeContactList) => {
+            const contactIndex = safeContactList.findIndex(c => c.id === contactId);
+            if (contactIndex !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeContactList[contactIndex] = {
+                    ...safeContactList[contactIndex],
+                    ...contact,
+                };
+            }
+        });
+
+        this.setState({ contactList: newContactList });
+    }
+
+    private handleContactDelete = (contactId: Contact['id']) => {
+        const { contactList } = this.state;
+        const newContactList = produce(contactList, (safeContactList) => {
+            const contactIndex = safeContactList.findIndex(c => c.id === contactId);
+            if (contactIndex !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeContactList = safeContactList.splice(contactIndex, 1);
+            }
+        });
+
+        this.setState({ contactList: newContactList });
+    }
 
     public render() {
         const {

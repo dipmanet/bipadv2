@@ -59,6 +59,7 @@ const FilterModal = ({
             >
                 <StepwiseRegionSelectInput
                     faramElementName="region"
+                    wardsHidden
                 />
                 { showMetricSelect && (
                     <SelectInput

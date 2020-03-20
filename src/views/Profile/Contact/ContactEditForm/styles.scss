@@ -1,0 +1,20 @@
+.contact-form-modal {
+    .modal-body {
+        .form {
+            .action-buttons {
+                display: flex;
+                justify-content: flex-end;
+
+                .button {
+                    margin-left: var(--spacing-small);
+                }
+            }
+
+            .location-input {
+                flex-grow: 1;
+                // FIXME: Here
+                min-height: 30vh;
+            }
+        }
+    }
+}
