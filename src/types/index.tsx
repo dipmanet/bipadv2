@@ -212,3 +212,17 @@ export interface KeyValue {
     label: string;
     value: number;
 }
+export interface KeyLabel {
+    key: string;
+    label: string;
+}
+
+export interface ResourceEnum {
+    attribute: string;
+    choices: string[];
+}
+export interface ModelEnum {
+    model: string;
+    enums: ResourceEnum[];
+}
+

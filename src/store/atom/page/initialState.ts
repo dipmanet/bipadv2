@@ -86,6 +86,10 @@ const state: PageState = {
             id: 7,
             title: 'industry',
         },
+        {
+            id: 8,
+            title: 'communication',
+        },
     ],
     lossList: [],
     severityList: [

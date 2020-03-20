@@ -1,0 +1,152 @@
+import {
+    requiredCondition,
+} from '@togglecorp/faram';
+import { ResourceType } from '#types';
+
+type Schema = {
+    [key in ResourceType]: object;
+};
+
+const schema: Schema = {
+    education: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            classroomCount: [],
+            operatoryType: [],
+            openingHours: [],
+            phoneNumber: [],
+            emailAddress: [],
+            noOfEmployee: [],
+            noOfStudent: [],
+            type: [requiredCondition],
+        },
+    },
+    health: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            bedCount: [],
+            cbsCode: [],
+            phoneNumber: [],
+            emailAddress: [],
+            emergencyService: [],
+            icu: [],
+            nicu: [],
+            operationTheater: [],
+            xRay: [],
+            ambulanceService: [],
+            openingHours: [],
+            operatorType: [],
+            noOfStaffs: [],
+            specialization: [],
+            type: [requiredCondition],
+        },
+    },
+    finance: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            cbsCode: [],
+            population: [],
+            channel: [],
+            accessPointCount: [requiredCondition],
+            type: [requiredCondition],
+            phoneNumber: [],
+            emailAddress: [],
+            website: [],
+            openingHours: [],
+            operatorType: [],
+            bankType: [],
+            atmAvailable: [],
+            placeAddress: [],
+            network: [],
+        },
+    },
+    tourism: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            type: [requiredCondition],
+        },
+    },
+    communication: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            type: [requiredCondition],
+            towersName: [],
+            isp: [],
+            operatorType: [],
+            coverageRadius: [],
+            offGridCellSites: [],
+            phoneNumber: [],
+            emailAddress: [],
+            website: [],
+            openingHours: [],
+            frequency: [],
+            internetType: [],
+        },
+    },
+    governance: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            type: [requiredCondition],
+            phoneNumber: [],
+            emailAddress: [],
+            website: [],
+            openingHours: [],
+            noOfEmployee: [],
+        },
+    },
+    industry: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            type: [requiredCondition],
+        },
+    },
+    cultural: {
+        fields: {
+            title: [requiredCondition],
+            description: [],
+            point: [],
+            ward: [],
+            resourceType: [requiredCondition],
+            type: [requiredCondition],
+            religion: [],
+            phoneNumber: [],
+            emailAddress: [],
+            openingHours: [],
+            drinkingWater: [],
+            toilet: [],
+        },
+    },
+    energy: {
+        fields: {},
+    },
+};
+
+export default schema;

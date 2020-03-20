@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import memoize from 'memoize-one';
 import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
@@ -21,7 +22,7 @@ import {
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-
+import { ResourceEnum, ModelEnum, ResourceType } from '#types';
 import {
     createRequestClient,
     NewProps,
@@ -38,6 +39,11 @@ import HealthFields from './HealthFields';
 import FinanceFields from './FinanceFields';
 import GovernanceFields from './GovernanceFields';
 import CulturalFields from './CulturalFields';
+import TourismFields from './TourismFields';
+import CommunicationFields from './CommunicationFields';
+import IndustryFields from './IndustryFields';
+import schemaMap from './schema';
+
 import styles from './styles.scss';
 
 interface Params {
@@ -60,7 +66,6 @@ interface FaramValues {
     description?: string;
     point?: string;
     ward?: number;
-    type?: number;
     resourceType?: string;
 }
 interface FaramErrors {
@@ -81,6 +86,11 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 const labelSelector = (d: PageType.Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+    resourceEnumGetRequest: {
+        url: '/resource-enum/',
+        method: methods.GET,
+        onMount: true,
+    },
     addResourcePostRequest: {
         url: '/resource/',
         method: methods.POST,
@@ -100,24 +110,59 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 interface ExtraFieldProps {
     title: string;
+    resourceEnums: ResourceEnum[];
 }
 
-const ExtraFields = ({ title }: ExtraFieldProps) => {
+const ExtraFields = ({ title, resourceEnums }: ExtraFieldProps) => {
     switch (title) {
         case 'education':
-            return (<EducationFields />);
+            return (
+                <EducationFields
+                    resourceEnums={resourceEnums}
+                />
+            );
 
         case 'health':
-            return (<HealthFields />);
+            return (
+                <HealthFields
+                    resourceEnums={resourceEnums}
+                />
+            );
 
         case 'finance':
-            return (<FinanceFields />);
+            return (
+                <FinanceFields
+                    resourceEnums={resourceEnums}
+                />
+            );
 
         case 'governance':
-            return (<GovernanceFields />);
+            return (
+                <GovernanceFields
+                    resourceEnums={resourceEnums}
+                />
+            );
 
         case 'cultural':
-            return (<CulturalFields />);
+            return (
+                <CulturalFields
+                    resourceEnums={resourceEnums}
+                />
+            );
+        case 'tourism':
+            return (
+                <TourismFields />
+            );
+        case 'communication':
+            return (
+                <CommunicationFields
+                    resourceEnums={resourceEnums}
+                />
+            );
+        case 'industry':
+            return (
+                <IndustryFields />
+            );
         default:
             return null;
     }
@@ -134,16 +179,21 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         };
     }
 
-    private static schema = {
-        fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [],
-            type: [requiredCondition],
-        },
-    };
+    private getSchema = memoize((resourceType?: ResourceType) => {
+        if (resourceType) {
+            return schemaMap[resourceType];
+        }
+
+        return {
+            fields: {
+                title: [requiredCondition],
+                description: [],
+                point: [],
+                ward: [],
+                resourceType: [requiredCondition],
+            },
+        };
+    });
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         this.setState({
@@ -159,13 +209,16 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+    private handleFaramValidationSuccess = (_: FaramValues, faramValues: FaramValues) => {
         const { requests: { addResourcePostRequest }, onUpdate, closeModal } = this.props;
         addResourcePostRequest.do({
             body: faramValues,
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
+                    if (closeModal) {
+                        closeModal();
+                    }
                 } else if (closeModal) {
                     closeModal();
                 }
@@ -176,11 +229,28 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         });
     }
 
+    private filterResourceEnum = (
+        resourceEnums: ModelEnum[],
+        resourceType: string,
+    ) => {
+        const options = resourceEnums.find(({ model }) => model.toLowerCase() === resourceType);
+        if (options) {
+            return options.enums;
+        }
+        return [];
+    }
+
     public render() {
         const {
             className,
             closeModal,
             resourceTypeList,
+            requests: {
+                resourceEnumGetRequest: {
+                    response = [],
+                    pending,
+                },
+            },
         } = this.props;
 
         const {
@@ -190,6 +260,12 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         } = this.state;
 
         const { resourceType } = faramValues;
+        let resourceEnums: ResourceEnum[] = [];
+        if (resourceType && !pending) {
+            resourceEnums = this.filterResourceEnum(response as ModelEnum[], resourceType);
+        }
+
+        const schema = this.getSchema(resourceType as ResourceType);
 
         return (
             <Modal
@@ -201,7 +277,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddResourceForm.schema}
+                    schema={schema}
                     value={faramValues}
                     error={faramErrors}
                 >
@@ -213,7 +289,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             options={resourceTypeList}
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
-                            label="Hazard"
+                            label="Resource Type"
                         />
                         <TextInput
                             faramElementName="title"
@@ -224,9 +300,10 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             label="Description"
                         />
                         {
-                            resourceType && (
+                            !pending && resourceType && (
                                 <ExtraFields
                                     title={resourceType}
+                                    resourceEnums={resourceEnums}
                                 />
                             )
                         }

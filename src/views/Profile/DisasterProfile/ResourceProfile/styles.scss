@@ -2,7 +2,20 @@
     padding: 0 calc(var(--spacing-large) - var(--spacing-medium));
 
     .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--color-background);
+
         .heading {
+            display: flex;
+            flex-shrink: 0;
+            padding: var(--spacing-medium);
+        }
+
+        .actions {
+            display: flex;
+            flex-shrink: 0;
             padding: var(--spacing-medium);
         }
     }
