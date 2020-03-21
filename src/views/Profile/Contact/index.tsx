@@ -7,9 +7,12 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 
+import Cloak from '#components/Cloak';
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import ListView from '#rscv/List/ListView';
@@ -38,8 +41,11 @@ import {
 import { mapStyles } from '#constants';
 
 import ContactItem from './ContactItem';
+import ContactEditForm from './ContactEditForm';
 
 import styles from './styles.scss';
+
+const ModalButton = modalize(Button);
 
 interface OwnProps {
     className?: string;
@@ -260,6 +266,16 @@ class ContactPage extends React.PureComponent<Props, State> {
         this.setState({ contactList: newContactList });
     }
 
+    private handleContactAdd = (contact: Contact) => {
+        const { contactList } = this.state;
+        const newContactList = [
+            contact,
+            ...contactList,
+        ];
+
+        this.setState({ contactList: newContactList });
+    }
+
     private handleContactDelete = (contactId: Contact['id']) => {
         const { contactList } = this.state;
         const newContactList = produce(contactList, (safeContactList) => {
@@ -349,6 +365,19 @@ class ContactPage extends React.PureComponent<Props, State> {
                         <h2 className={styles.heading}>
                             Contact personnels
                         </h2>
+                        <Cloak hiddenIf={p => !p.add_contact}>
+                            <ModalButton
+                                className={styles.button}
+                                iconName="add"
+                                modal={(
+                                    <ContactEditForm
+                                        onAddSuccess={this.handleContactAdd}
+                                    />
+                                )}
+                            >
+                                Add Contact
+                            </ModalButton>
+                        </Cloak>
                     </header>
                     <ListView
                         className={styles.contactDetailsList}

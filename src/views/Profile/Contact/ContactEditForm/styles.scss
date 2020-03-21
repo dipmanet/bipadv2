@@ -1,6 +1,20 @@
 .contact-form-modal {
+    padding: 0;
+
     .modal-body {
+        display: flex;
+        padding: 0;
+        width: 100%;
+
         .form {
+            flex-basis: 100%;
+            padding: var(--spacing-medium);
+            overflow-y: auto;
+
+            .checkbox {
+                padding: var(--spacing-small) 0;
+            }
+
             .action-buttons {
                 display: flex;
                 justify-content: flex-end;
@@ -9,11 +23,20 @@
                     margin-left: var(--spacing-small);
                 }
             }
+        }
 
-            .location-input {
-                flex-grow: 1;
-                // FIXME: Here
-                min-height: 30vh;
+        .training-list {
+            flex-basis: 40%;
+            border-left: var(--width-separator-thin) solid var(--color-separator);
+        }
+    }
+
+    &.large-modal {
+        width: 960px;
+
+        .modal-body {
+            .form {
+                flex-basis: 60%;
             }
         }
     }

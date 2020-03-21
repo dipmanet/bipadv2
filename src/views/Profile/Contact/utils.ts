@@ -19,6 +19,9 @@ export const trainingValueList = mapToList(
     (v, k) => ({ key: k, label: v }),
 );
 
+export const trainingKeySelector = (committee: { key: string }) => committee.key;
+export const trainingLabelSelector = (committee: { label: string }) => committee.label;
+
 export const committeeValues: {
     [key in Contact['committee']]: string;
 } = {

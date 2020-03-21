@@ -1,7 +1,8 @@
-.left {
+.list-container {
     display: flex;
+    position: relative;
     flex-direction: column;
-    background-color: var(--color-foreground);
+    overflow-y: auto;
 
     .header {
         display: flex;
@@ -12,10 +13,14 @@
         .heading {
             flex-grow: 1;
         }
+
+        .button {
+            flex-shrink: 0;
+        }
     }
 
-    .contact-details-list {
+    .table {
         flex-grow: 1;
-        overflow: auto;
+        border-top: var(--width-separator-thin) solid var(--color-separator);
     }
 }

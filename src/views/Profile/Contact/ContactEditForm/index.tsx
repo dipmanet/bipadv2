@@ -1,5 +1,8 @@
 import React from 'react';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    _cs,
+    isDefined,
+} from '@togglecorp/fujs';
 import Faram, {
     FaramInputElement,
     requiredCondition,
@@ -13,9 +16,9 @@ import ModalBody from '#rscv/Modal/Body';
 import TextInput from '#rsci/TextInput';
 import NumberInput from '#rsci/NumberInput';
 import SelectInput from '#rsci/SelectInput';
-import Checkbox from '#rsci/Checkbox';
+import SimpleCheckbox from '#rsu/../v2/Input/Checkbox';
+import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import DangerButton from '#rsca/Button/DangerButton';
 import FullStepwiseRegionSelectInput from '#components/FullStepwiseRegionSelectInput';
 
 import {
@@ -29,6 +32,7 @@ import { MultiResponse } from '#store/atom/response/types';
 import {
     Contact,
     Organization,
+    Training as ContactTraining,
 } from '#store/atom/page/types';
 
 import {
@@ -37,14 +41,17 @@ import {
     committeeLabelSelector,
 } from '../utils';
 
+import ContactTrainingList from './ContactTrainingList';
 import styles from './styles.scss';
 
 const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
+const Checkbox = FaramInputElement(SimpleCheckbox);
 
 interface OwnProps {
     contactId?: Contact['id'];
-    details: Contact;
-    onEditSuccess: (contactId: Contact['id'], contact: Contact) => void;
+    details?: Contact;
+    onEditSuccess?: (contactId: Contact['id'], contact: Contact) => void;
+    onAddSuccess?: (contact: Contact) => void;
     closeModal?: () => void;
 }
 
@@ -64,7 +71,7 @@ interface State {
 
 interface Params {
     body?: FaramValues;
-    setPristine: (pristine: boolean) => void;
+    setPristine?: (pristine: boolean) => void;
     setOrganizationList?: (organizationList: Organization[]) => void;
 }
 
@@ -92,15 +99,22 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             expand: ['trainings', 'organization'],
         },
     },
-    contactTrainingRequest: {
-        url: '/contact-training/',
-        query: ({ props }) => ({
-            contact: props.contactId,
-        }),
-        method: methods.GET,
-        onMount: ({ props }) => !!props.contactId,
-        onSuccess: ({ response }) => {
-            // console.warn('here', response);
+    municipalityContactAddRequest: {
+        url: '/municipality-contact/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            const editedContact = response as Contact;
+            const { onAddSuccess, closeModal } = props;
+            if (onAddSuccess) {
+                onAddSuccess(editedContact);
+            }
+            if (closeModal) {
+                closeModal();
+            }
+        },
+        query: {
+            expand: ['trainings', 'organization'],
         },
     },
     organizationGetRequest: {
@@ -125,27 +139,29 @@ class ContactForm extends React.PureComponent<Props, State> {
         super(props);
 
         const {
-            contactId,
             details,
             requests: {
                 organizationGetRequest,
             },
         } = this.props;
 
-        const {
-            province,
-            district,
-            municipality,
-            ward,
-            isDrrFocalPerson,
-            organization,
-            ...otherValues
-        } = details;
+        let faramValues = {
+            isDrrFocalPerson: false,
+            stepwiseRegion: {},
+        };
 
-        organizationGetRequest.setDefaultParams({ setOrganizationList: this.setOrganizationList });
+        if (details) {
+            const {
+                province,
+                district,
+                municipality,
+                ward,
+                isDrrFocalPerson,
+                organization,
+                ...otherValues
+            } = details;
 
-        this.state = {
-            faramValues: {
+            faramValues = {
                 ...otherValues,
                 isDrrFocalPerson: !!isDrrFocalPerson,
                 organization: organization ? organization.id : undefined,
@@ -155,7 +171,13 @@ class ContactForm extends React.PureComponent<Props, State> {
                     ward,
                     municipality,
                 },
-            },
+            };
+        }
+
+        organizationGetRequest.setDefaultParams({ setOrganizationList: this.setOrganizationList });
+
+        this.state = {
+            faramValues,
             faramErrors: {},
             pristine: true,
         };
@@ -202,7 +224,9 @@ class ContactForm extends React.PureComponent<Props, State> {
         const {
             requests: {
                 municipalityContactEditRequest,
+                municipalityContactAddRequest,
             },
+            contactId,
         } = this.props;
 
         const {
@@ -218,10 +242,27 @@ class ContactForm extends React.PureComponent<Props, State> {
             ...others,
         };
 
-        municipalityContactEditRequest.do({
-            body: newBody,
-            setPristine: this.setPristine,
-        });
+        if (isDefined(contactId)) {
+            municipalityContactEditRequest.do({
+                body: newBody,
+                setPristine: this.setPristine,
+            });
+        } else {
+            municipalityContactAddRequest.do({
+                body: newBody,
+            });
+        }
+    }
+
+    private handleContactTrainingListChange = (newList: ContactTraining[]) => {
+        const {
+            onEditSuccess,
+            contactId,
+        } = this.props;
+
+        if (contactId && onEditSuccess) {
+            onEditSuccess(contactId, { trainings: newList });
+        }
     }
 
     public render() {
@@ -231,6 +272,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             requests: {
                 organizationGetRequest: { pending: organizationPending },
                 municipalityContactEditRequest: { pending: contactEditPending },
+                municipalityContactAddRequest: { pending: contactAddPending },
             },
         } = this.props;
 
@@ -242,9 +284,22 @@ class ContactForm extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={styles.contactFormModal}>
+            <Modal
+                className={_cs(
+                    styles.contactFormModal,
+                    isDefined(contactId) && styles.largeModal,
+                )}
+            >
                 <ModalHeader
                     title={isDefined(contactId) ? 'Edit Contact' : 'Add Contact'}
+                    rightComponent={(
+                        <Button
+                            iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
+                            transparent
+                        />
+                    )}
                 />
                 <ModalBody className={styles.modalBody}>
                     {organizationPending && <LoadingAnimation />}
@@ -282,6 +337,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                             label="Mobile Number"
                         />
                         <Checkbox
+                            className={styles.checkbox}
                             faramElementName="isDrrFocalPerson"
                             label="Is DRR Focal Person"
                         />
@@ -303,22 +359,23 @@ class ContactForm extends React.PureComponent<Props, State> {
                             faramElementName="stepwiseRegion"
                         />
                         <div className={styles.actionButtons}>
-                            <DangerButton
-                                className={styles.button}
-                                onClick={closeModal}
-                            >
-                                Cancel
-                            </DangerButton>
                             <PrimaryButton
                                 disabled={pristine}
                                 className={styles.button}
-                                pending={contactEditPending}
+                                pending={contactEditPending || contactAddPending}
                                 type="submit"
                             >
                                 {isDefined(contactId) ? 'Edit' : 'Add'}
                             </PrimaryButton>
                         </div>
                     </Faram>
+                    {isDefined(contactId) && (
+                        <ContactTrainingList
+                            className={styles.trainingList}
+                            contactId={contactId}
+                            onListChange={this.handleContactTrainingListChange}
+                        />
+                    )}
                 </ModalBody>
             </Modal>
         );
