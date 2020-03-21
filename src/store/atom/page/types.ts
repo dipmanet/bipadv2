@@ -760,23 +760,29 @@ export interface SetLpGasCookList {
     type: typeof PageType.DPP__SET_LP_GAS_COOK_LIST;
     lpGasCookList: LpGasCook[];
 }
+
+export interface Organization {
+    id: number;
+    title: string;
+}
+
 export interface Contact {
-    committee: 'LDMC' | 'WDMC' | 'CDMC' | 'non_committee';
+    committee: 'PDMC' | 'DDMC' | 'LDMC' | 'WDMC' | 'CDMC' | 'non_committee';
     email: string;
     id: string;
     image?: string;
     mobileNumber: string;
-    municipality: string;
     name: string;
     point?: number[];
     position: string;
     trainings: Training[];
-    ward?: string;
+    province?: number;
+    district?: number;
+    municipality?: number;
+    ward?: number;
     workNumber: string;
     isDrrFocalPerson: boolean;
-    organization: {
-        title: string;
-    };
+    organization: Organization;
 }
 
 export interface Training {

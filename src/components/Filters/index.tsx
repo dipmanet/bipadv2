@@ -125,6 +125,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <StepwiseRegionSelectInput
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="region"
+                    wardsHidden
                 />
             ),
         },

@@ -1,5 +1,6 @@
 import React from 'react';
 import Redux from 'redux';
+import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
@@ -20,6 +21,7 @@ import {
     MunicipalityElement,
     WardElement,
     Region,
+    RegionValues,
 } from '#types';
 
 import { AppState } from '#store/types';
@@ -40,7 +42,7 @@ interface OwnProps {
     className?: string;
     disabled?: boolean;
     value?: Region;
-    onChange: (region: Region) => void;
+    onChange: (region: Region, regionValues: RegionValues) => void;
     provinceInputClassName?: string;
     districtInputClassName?: string;
     municipalityInputClassName?: string;
@@ -87,7 +89,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             props.value,
             props.districtList,
             props.municipalityList,
-            // props.wardList,
+            props.wardList,
         );
 
         // TODO: componentWillReceiveProps
@@ -99,11 +101,11 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         };
     }
 
-    private getRegionsFromValue = (
+    private getRegionsFromValue = memoize((
         value: Region | undefined,
         districtList: DistrictElement[],
         municipalityList: MunicipalityElement[],
-        // wardList: WardElement[],
+        wardList: WardElement[],
     ) => {
         let provinceId;
         let districtId;
@@ -147,6 +149,17 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     }
                 }
                 break;
+            case 4:
+                {
+                    const ward = wardList.find(d => d.id === geoarea);
+                    if (ward) {
+                        provinceId = ward.province;
+                        districtId = ward.district;
+                        municipalityId = ward.municipality;
+                        wardId = ward.id;
+                    }
+                }
+                break;
             default:
         }
 
@@ -156,7 +169,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             municipalityId,
             wardId,
         };
-    }
+    })
 
     private getRegionOptions = (
         provinceList: ProvinceElement[],
@@ -190,6 +203,24 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         };
     }
 
+    private handleRegionChange = (newValue: Region) => {
+        const {
+            onChange,
+            districtList,
+            municipalityList,
+            wardList,
+        } = this.props;
+
+        const newRegionValues = this.getRegionsFromValue(
+            newValue, districtList, municipalityList, wardList,
+        );
+
+        if (onChange) {
+            console.warn('here', newValue);
+            onChange(newValue, newRegionValues);
+        }
+    }
+
     private handleProvinceChange = (selectedProvinceId: number) => {
         this.setState({
             selectedProvinceId,
@@ -198,8 +229,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedWardId: undefined,
         });
 
-        const { onChange } = this.props;
-        onChange({
+        this.handleRegionChange({
             adminLevel: selectedProvinceId ? 1 : undefined,
             geoarea: selectedProvinceId,
         });
@@ -213,8 +243,8 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedProvinceId } = this.state;
-        const { onChange } = this.props;
-        onChange({
+
+        this.handleRegionChange({
             adminLevel: selectedDistrictId ? 2 : 1,
             geoarea: selectedDistrictId || selectedProvinceId,
         });
@@ -227,8 +257,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedDistrictId } = this.state;
-        const { onChange } = this.props;
-        onChange({
+        this.handleRegionChange({
             adminLevel: selectedMunicipalityId ? 3 : 2,
             geoarea: selectedMunicipalityId || selectedDistrictId,
         });
@@ -236,6 +265,12 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
     private handleWardChange = (selectedWardId: number) => {
         this.setState({ selectedWardId });
+        const { selectedMunicipalityId } = this.state;
+
+        this.handleRegionChange({
+            adminLevel: selectedWardId ? 4 : 3,
+            geoarea: selectedWardId || selectedMunicipalityId,
+        });
     }
 
     public render() {

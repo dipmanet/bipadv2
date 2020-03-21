@@ -37,8 +37,8 @@ import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import styles from './styles.scss';

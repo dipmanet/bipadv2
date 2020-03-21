@@ -1,10 +1,9 @@
 import React from 'react';
-import { Dispatch } from 'redux';
+import produce from 'immer';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
     _cs,
-    mapToList,
     listToMap,
 } from '@togglecorp/fujs';
 
@@ -16,11 +15,6 @@ import Loading from '#components/Loading';
 import ListView from '#rscv/List/ListView';
 
 import {
-    setProfileContactListAction,
-} from '#actionCreators';
-
-import {
-    profileContactListSelector,
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
@@ -32,7 +26,6 @@ import {
     Contact,
     Municipality,
     Region,
-    Training,
 } from '#store/atom/page/types';
 
 import {
@@ -42,44 +35,38 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { mapStyles } from '#constants';
 
-import {
-    iconNames,
-    mapStyles,
-} from '#constants';
+import ContactItem from './ContactItem';
 
-import Filter from './Filter';
 import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
 }
 
-interface Params {}
-interface PropsFromDispatch {
-    setProfileContactList: typeof setProfileContactListAction;
+interface Params {
+    setProfileContactList: (contactList: Contact[]) => void;
 }
+
 interface PropsFromState {
     municipalityList: Municipality[];
-    contactList: Contact[];
     region: Region;
     filters: {
         faramValues: unknown;
     };
 }
 
-type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
+type ReduxProps = OwnProps & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
+interface State {
+    contactList: Contact[];
+}
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    contactList: profileContactListSelector(state),
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
-});
-
-const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
-    setProfileContactList: params => dispatch(setProfileContactListAction(params)),
 });
 
 const contactKeySelector = (d: Contact) => d.id;
@@ -88,11 +75,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     municipalityContactRequest: {
         url: '/municipality-contact/',
         method: methods.GET,
-        onSuccess: ({ response, props: { setProfileContactList } }) => {
+        onSuccess: ({ response, params }) => {
             interface Response { results: Contact[] }
             const { results: contactList = [] } = response as Response;
 
-            setProfileContactList({ contactList });
+            if (params && params.setProfileContactList) {
+                params.setProfileContactList(contactList);
+            }
         },
         onMount: true,
         query: {
@@ -101,43 +90,29 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-const committeeValues: {
-    [key in Contact['committee']]: string;
-} = {
-    LDMC: 'Local Disaster Management Committee',
-    WDMC: 'Ward Disaster Management Committee',
-    CDMC: 'Community Disaster Management Committee',
-    non_committee: 'Non committee members', // eslint-disable-line @typescript-eslint/camelcase
-};
-
-const committeeValueList = mapToList(
-    committeeValues,
-    (v, k) => ({ key: k, label: v }),
-);
-
-const trainingValues: {
-    [key in Training['title']]: string;
-} = {
-    LSAR: 'Lite Search and Rescue',
-    rapid_assessment: 'Rapid Assessment', // eslint-disable-line @typescript-eslint/camelcase
-    first_aid: 'First Aid', // eslint-disable-line @typescript-eslint/camelcase
-    fire_fighting: 'Fire Fighting', // eslint-disable-line @typescript-eslint/camelcase
-};
-
-const trainingValueList = mapToList(
-    trainingValues,
-    (v, k) => ({ key: k, label: v }),
-);
-
 interface SelectInputOption {
     key: string;
     label: string;
 }
 
-class ContactPage extends React.PureComponent<Props> {
-    private getMunicipalityMap = (municipalityList: Municipality[]) => (
-        listToMap(municipalityList, d => d.id, d => d.title)
-    )
+class ContactPage extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        const {
+            requests: {
+                municipalityContactRequest,
+            },
+        } = this.props;
+
+        municipalityContactRequest.setDefaultParams({
+            setProfileContactList: this.setProfileContactList,
+        });
+
+        this.state = {
+            contactList: [],
+        };
+    }
 
     private getPositionOptions = memoize((contactList: Contact[]) => {
         const contactPositionList = [...new Set(
@@ -257,160 +232,49 @@ class ContactPage extends React.PureComponent<Props> {
         return [];
     })
 
+    private setProfileContactList = (contactList: Contact[]) => {
+        this.setState({ contactList });
+    }
+
     private contactRendererParams = (_: string, data: Contact) => ({
+        contactId: data.id,
         contact: data,
         municipalityList: this.props.municipalityList,
+        onContactEdit: this.handleContactEdit,
+        onContactDelete: this.handleContactDelete,
     })
 
-    private renderDetail = (p: {
-        label: string;
-        value: string;
-        className?: string;
-    }) => {
-        const {
-            label,
-            value,
-            className,
-        } = p;
+    private handleContactEdit = (contactId: Contact['id'], contact: Contact) => {
+        const { contactList } = this.state;
+        const newContactList = produce(contactList, (safeContactList) => {
+            const contactIndex = safeContactList.findIndex(c => c.id === contactId);
+            if (contactIndex !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeContactList[contactIndex] = {
+                    ...safeContactList[contactIndex],
+                    ...contact,
+                };
+            }
+        });
 
-        return (
-            <div className={_cs(styles.detail, className)}>
-                <div className={styles.label}>
-                    { label }
-                </div>
-                <div className={styles.value}>
-                    { value }
-                </div>
-            </div>
-        );
+        this.setState({ contactList: newContactList });
     }
 
-    private renderIconDetail = (p: {
-        value: string;
-        iconName: string;
-        className?: string;
-    }) => {
-        const {
-            value,
-            iconName,
-            className,
-        } = p;
+    private handleContactDelete = (contactId: Contact['id']) => {
+        const { contactList } = this.state;
+        const newContactList = produce(contactList, (safeContactList) => {
+            const contactIndex = safeContactList.findIndex(c => c.id === contactId);
+            if (contactIndex !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeContactList = safeContactList.splice(contactIndex, 1);
+            }
+        });
 
-        return (
-            <div className={_cs(styles.iconDetail, className)}>
-                <div className={_cs(styles.icon, iconName)} />
-                <div className={styles.value}>
-                    { value }
-                </div>
-            </div>
-        );
-    }
-
-    private renderContactDetails = (p: { contact: Contact; municipalityList: Municipality[] }) => {
-        const {
-            contact,
-            municipalityList,
-        } = p;
-
-        if (!contact) {
-            return null;
-        }
-
-        const {
-            image,
-            name,
-            email,
-            committee,
-            position,
-            trainings = [],
-            mobileNumber,
-            isDrrFocalPerson,
-            municipality,
-            organization,
-        } = contact;
-
-        const Detail = this.renderDetail;
-        const IconDetail = this.renderIconDetail;
-
-        const trainingValueString = trainings.map(
-            d => trainingValues[d.title],
-        ).join(', ') || '-';
-        const municipalities = this.getMunicipalityMap(municipalityList);
-
-        return (
-            <div className={_cs(
-                styles.contactDetails,
-                isDrrFocalPerson && styles.focalPerson,
-            )}
-            >
-                <div className={styles.personalDetails}>
-                    <div className={styles.displayImageContainer}>
-                        { image ? (
-                            <img
-                                className={styles.image}
-                                src={image}
-                                alt="img"
-                            />
-                        ) : (
-                            <span
-                                className={_cs(
-                                    styles.icon,
-                                    iconNames.user,
-                                )}
-                            />
-                        )}
-                    </div>
-                    <div className={styles.right}>
-                        <h4 className={styles.name}>
-                            { name }
-                            { isDrrFocalPerson && (
-                                <span
-                                    className={_cs(
-                                        styles.focalPersonIcon,
-                                        iconNames.star,
-                                    )}
-                                    title="DRR focal person"
-                                />
-                            )}
-                        </h4>
-                        <IconDetail
-                            iconName={iconNames.telephone}
-                            value={mobileNumber || 'Not available'}
-                        />
-                        <IconDetail
-                            iconName={iconNames.email}
-                            value={email || 'Not available'}
-                        />
-                    </div>
-                </div>
-                <Detail
-                    label="Municipality"
-                    value={municipalities[municipality]}
-                />
-                <Detail
-                    label="Organization"
-                    value={(organization ? organization.title : undefined) || '-'}
-                />
-                <Detail
-                    label="Comittee"
-                    value={committeeValues[committee] || '-'}
-                />
-                <Detail
-                    className={styles.position}
-                    label="Position"
-                    value={position}
-                />
-                <Detail
-                    label="Training"
-                    value={trainingValueString}
-                />
-            </div>
-        );
+        this.setState({ contactList: newContactList });
     }
 
     public render() {
         const {
-            contactList,
             region,
             municipalityList,
             className,
@@ -423,6 +287,10 @@ class ContactPage extends React.PureComponent<Props> {
                 } = {},
             },
         } = this.props;
+
+        const {
+            contactList,
+        } = this.state;
 
         const filteredContactList = this.getFilteredContactList(
             contactList,
@@ -438,7 +306,7 @@ class ContactPage extends React.PureComponent<Props> {
         const positionOptions = this.getPositionOptions(contactList);
 
         return (
-            <React.Fragment>
+            <>
                 <Loading pending={pending} />
                 <CommonMap sourceKey="profile-contact" />
                 <MapSource
@@ -485,17 +353,17 @@ class ContactPage extends React.PureComponent<Props> {
                     <ListView
                         className={styles.contactDetailsList}
                         data={filteredContactList}
-                        renderer={this.renderContactDetails}
+                        renderer={ContactItem}
                         rendererParams={this.contactRendererParams}
                         keySelector={contactKeySelector}
                     />
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             ContactPage,

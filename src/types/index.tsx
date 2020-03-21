@@ -124,6 +124,14 @@ export interface Region {
     geoarea: number;
 }
 
+export interface RegionValues {
+    wardId?: number;
+    provinceId?: number;
+    districtId?: number;
+    municipalityId?: number;
+}
+
+
 export interface VulnerabilityItem {
     id: number;
     createdOn: string;
