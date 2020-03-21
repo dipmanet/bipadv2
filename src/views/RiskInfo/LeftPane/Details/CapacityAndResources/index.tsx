@@ -481,15 +481,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             { resourceListInsidePolygon.length }
                         </div>
                     ) */}
-                    { showResourceForm && resourceDetails && (
-                        <EditResourceForm
-                            className={styles.editResourceForm}
-                            resourceId={resourceDetails.id}
-                            resourceType={activeLayerKey}
-                            resourceDetails={resourceDetails}
-                            onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
-                        />
-                    )}
                     <MapImage
                         url={HealthIcon}
                         name="health"
@@ -584,6 +575,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         </>
                     )}
                 </div>
+                { showResourceForm && resourceDetails && (
+                    <EditResourceForm
+                        resourceId={resourceDetails.id}
+                        resourceType={activeLayerKey}
+                        resourceDetails={resourceDetails}
+                        onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
+                    />
+                )}
             </>
         );
     }

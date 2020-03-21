@@ -171,6 +171,17 @@ export interface InventoryItem extends Field {
     description: string;
 }
 
+export interface Inventory {
+    id: number;
+    item: InventoryItem;
+    itemId: number;
+    createdOn: string;
+    modifiedOn: string;
+    quantity: number;
+    description?: string;
+    resource: number;
+}
+
 export interface Loss {
     id: number;
     description?: string;

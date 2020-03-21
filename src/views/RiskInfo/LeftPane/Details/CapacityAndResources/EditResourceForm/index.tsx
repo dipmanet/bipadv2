@@ -1,7 +1,18 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, isDefined } from '@togglecorp/fujs';
 
 import Faram from '@togglecorp/faram';
+
+import modalize from '#rscg/Modalize';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+import Button from '#rsca/Button';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+import DangerButton from '#rsca/Button/DangerButton';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import {
     createRequestClient,
@@ -17,15 +28,14 @@ import {
     Resource,
 } from '#store/atom/page/types';
 
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-import DangerButton from '#rsca/Button/DangerButton';
-import LoadingAnimation from '#rscv/LoadingAnimation';
-
+import InventoriesModal from './InventoriesModal';
 import FinanceForm, { financeSchema } from './FinanceForm';
 import HealthForm, { healthSchema } from './HealthForm';
 import GovernanceForm, { governanceSchema } from './GovernanceForm';
 
 import styles from './styles.scss';
+
+const ModalButton = modalize(Button);
 
 interface OwnProps {
     resourceDetails: Resource;
@@ -37,7 +47,6 @@ interface OwnProps {
 
 interface Params {
     body?: object;
-    onSuccess: () => void;
     onFailure: (faramErrors: object) => void;
 }
 
@@ -61,14 +70,19 @@ const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
         method: methods.PUT,
         body: ({ params: { body } = { body: {} } }) => body,
         onMount: false,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
-            if (onSuccess) {
-                onSuccess();
+        onSuccess: ({ props }) => {
+            if (props.onCloseButtonClick) {
+                props.onCloseButtonClick();
             }
         },
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.onFailure) {
+                params.onFailure({ $internal: ['Some error occurred'] });
             }
         },
     },
@@ -140,11 +154,6 @@ class EditResourceModal extends React.PureComponent<Props, State> {
             body: {
                 ...faramValues,
             },
-            onSuccess: () => {
-                if (onCloseButtonClick) {
-                    onCloseButtonClick();
-                }
-            },
             onFailure: (faramErrors: object) => {
                 this.setState({ faramErrors });
             },
@@ -153,9 +162,9 @@ class EditResourceModal extends React.PureComponent<Props, State> {
 
     public render() {
         const {
-            resourceId,
             resourceType,
-            className,
+            // className,
+            resourceId,
             onCloseButtonClick,
             requests: {
                 editResourcePutRequest: {
@@ -174,14 +183,20 @@ class EditResourceModal extends React.PureComponent<Props, State> {
         const schema = this.getSchema(resourceType);
 
         return (
-            <div className={_cs(className, styles.editResourceForm)}>
-                <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Edit Resource
-                    </h2>
-                </header>
+            <Modal className={styles.editResourceForm}>
+                <ModalHeader
+                    className={styles.header}
+                    title="Edit Resource"
+                    rightComponent={(
+                        <Button
+                            iconName="close"
+                            onClick={onCloseButtonClick}
+                            transparent
+                        />
+                    )}
+                />
                 <Faram
-                    className={styles.content}
+                    className={styles.faram}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
@@ -189,11 +204,29 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    {pending && <LoadingAnimation />}
-                    <div className={styles.formInputElements}>
-                        { form }
-                    </div>
-                    <div className={styles.actions}>
+                    <ModalBody
+                        className={styles.body}
+                    >
+                        {pending && <LoadingAnimation />}
+                        <div>
+                            <NonFieldErrors faramElement />
+                            { form }
+                            {isDefined(resourceId) && (
+                                <ModalButton
+                                    modal={(
+                                        <InventoriesModal
+                                            resourceId={resourceId}
+                                        />
+                                    )}
+                                >
+                                    Show inventory
+                                </ModalButton>
+                            )}
+                        </div>
+                    </ModalBody>
+                    <ModalFooter
+                        className={styles.footer}
+                    >
                         <DangerButton
                             onClick={onCloseButtonClick}
                         >
@@ -206,9 +239,9 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                         >
                             Submit
                         </PrimaryButton>
-                    </div>
+                    </ModalFooter>
                 </Faram>
-            </div>
+            </Modal>
         );
     }
 }
