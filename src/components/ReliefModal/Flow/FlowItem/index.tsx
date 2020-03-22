@@ -1,4 +1,5 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 
 import DateOutput from '#components/DateOutput';
 import TextOutput from '#components/TextOutput';
@@ -16,10 +17,13 @@ import {
     methods,
 } from '#request';
 
+import styles from './styles.scss';
+
 
 const ModalAccentButton = modalize(AccentButton);
 
 interface OwnProps{
+    className?: string;
     onUpdate: () => void;
     data: Flow;
 }
@@ -55,6 +59,7 @@ class FlowItem extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            className,
         } = this.props;
 
         const {
@@ -69,8 +74,8 @@ class FlowItem extends React.PureComponent<Props, State> {
         } = data;
 
         return (
-            <div>
-                <div>
+            <div className={_cs(className, styles.flowItem)}>
+                <div className={styles.basicDetails}>
                     <TextOutput
                         label="type"
                         value={type}
@@ -88,7 +93,7 @@ class FlowItem extends React.PureComponent<Props, State> {
                         value={providerOrganization}
                     />
                 </div>
-                <div>
+                <div className={styles.eventDetails}>
                     <TextOutput
                         label="Event"
                         value={event}
@@ -101,10 +106,10 @@ class FlowItem extends React.PureComponent<Props, State> {
                         value={fiscalYear}
                     />
                 </div>
-                <div>
+                <div className={styles.description}>
                     {description}
                 </div>
-                <div>
+                <div className={styles.actions}>
                     <ModalAccentButton
                         transparent
                         iconName="edit"

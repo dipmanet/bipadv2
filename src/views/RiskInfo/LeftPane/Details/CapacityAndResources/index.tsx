@@ -29,6 +29,7 @@ import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
+import Cloak from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
@@ -56,6 +57,7 @@ import EditResourceForm from './EditResourceForm';
 
 import Summary from './Summary';
 import CapacityResourceTable from './CapacityResourceTable';
+import AddResourceForm from './AddResourceForm';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -83,8 +85,9 @@ interface Params {
 
 type Props = NewProps<ComponentProps, Params>
 
-const SummaryButton = modalize(AccentButton);
+// const SummaryButton = modalize(AccentButton);
 const TableModalButton = modalize(Button);
+const AccentModalButton = modalize(AccentButton);
 
 const resourceLayerList: ResourceElement[] = [
     // { key: 'education', title: 'Education' },
@@ -435,39 +438,55 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         <h2 className={styles.heading}>
                             Layers
                         </h2>
-                        <DangerButton
-                            disabled={!activeLayerKey}
-                            onClick={this.handleLayerUnselect}
-                            className={styles.clearButton}
-                            transparent
-                        >
-                            Clear
-                        </DangerButton>
-                        <SummaryButton
-                            transparent
-                            className={styles.summaryButton}
-                            disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
-                            modal={(
-                                <Summary
-                                    data={polygonResources}
-                                    resourceType={activeLayerKey}
-                                />
-                            )}
-                        >
-                            Show summary
-                        </SummaryButton>
-                        <TableModalButton
-                            modal={(
-                                <CapacityResourceTable
-                                    data={resourceList}
-                                    name={activeLayerKey}
-                                />
-                            )}
-                            initialShowModal={false}
-                            iconName="table"
-                            transparent
-                            disabled={pending || !activeLayerKey}
-                        />
+                        <div className={styles.actions}>
+                            <Cloak hiddenIf={p => !p.add_resource}>
+                                <AccentModalButton
+                                    iconName="add"
+                                    title="Add New Resource"
+                                    transparent
+                                    modal={(
+                                        <AddResourceForm />
+                                    )}
+                                >
+                                    Add Resource
+                                </AccentModalButton>
+                            </Cloak>
+                            <DangerButton
+                                disabled={!activeLayerKey}
+                                onClick={this.handleLayerUnselect}
+                                className={styles.clearButton}
+                                transparent
+                            >
+                                Clear
+                            </DangerButton>
+                            {/*
+                            <SummaryButton
+                                transparent
+                                className={styles.summaryButton}
+                                disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                                modal={(
+                                    <Summary
+                                        data={polygonResources}
+                                        resourceType={activeLayerKey}
+                                    />
+                                )}
+                            >
+                                Show summary
+                            </SummaryButton>
+                            */}
+                            <TableModalButton
+                                modal={(
+                                    <CapacityResourceTable
+                                        data={resourceList}
+                                        name={activeLayerKey}
+                                    />
+                                )}
+                                initialShowModal={false}
+                                iconName="table"
+                                transparent
+                                disabled={pending || !activeLayerKey}
+                            />
+                        </div>
                     </header>
                     <ListView
                         className={styles.content}

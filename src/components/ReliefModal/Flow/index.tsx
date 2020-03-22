@@ -1,4 +1,5 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 
 import {
     createRequestClient,
@@ -22,6 +23,7 @@ import styles from './styles.scss';
 
 interface OwnProps {
     onUpdate?: () => void;
+    className?: string;
 }
 
 interface State {
@@ -62,6 +64,7 @@ class ReliefFlow extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            className,
         } = this.props;
 
         let flowList: Flow[] = [];
@@ -71,26 +74,28 @@ class ReliefFlow extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div>
-                <div>
-                    <header>
-                        <h3>Flows</h3>
-                        <ModalButton
-                            title="Add Flow"
-                            iconName="add"
-                            transparent
-                            modal={(
-                                <AddFlowForm
-                                    onUpdate={this.handleReliefFlowChange}
-                                />
-                            )}
-                        >
-                            Add Flow
-                        </ModalButton>
-                    </header>
-                </div>
+            <div className={_cs(className, styles.flow)}>
                 { pending && <LoadingAnimation />}
+                <header className={styles.header}>
+                    <h3 className={styles.heading}>
+                        Flows
+                    </h3>
+                    <ModalButton
+                        className={styles.addFlowButton}
+                        title="Add Flow"
+                        iconName="add"
+                        transparent
+                        modal={(
+                            <AddFlowForm
+                                onUpdate={this.handleReliefFlowChange}
+                            />
+                        )}
+                    >
+                        Add Flow
+                    </ModalButton>
+                </header>
                 <ListView
+                    className={styles.content}
                     data={flowList}
                     keySelector={flowKeySelector}
                     renderer={FlowItem}

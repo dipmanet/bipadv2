@@ -1,0 +1,25 @@
+.flow {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+
+        .heading {
+            flex-grow: 1;
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
+
+        .add-flow-button {
+            flex-shrink: 0;
+            margin: var(--spacing-small) var(--spacing-medium);
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: auto;
+    }
+}

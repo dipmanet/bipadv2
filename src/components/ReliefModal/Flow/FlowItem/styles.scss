@@ -1,0 +1,30 @@
+.flow-item {
+    padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
+
+    .basic-details {
+        display: flex;
+        padding: var(--spacing-extra-small) calc(var(--spacing-medium) - var(--spacing-small));
+
+        >* {
+            padding: 0 var(--spacing-small);
+        }
+    }
+
+    .event-details {
+        display: flex;
+        padding: var(--spacing-extra-small) calc(var(--spacing-medium) - var(--spacing-small));
+
+        >* {
+            padding: 0 var(--spacing-small);
+        }
+    }
+
+    .description {
+        padding: var(--spacing-extra-small) var(--spacing-medium);
+    }
+
+    .actions {
+        display: flex;
+        padding: 0;
+    }
+}

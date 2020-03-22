@@ -44,6 +44,7 @@ class ReliefModal extends React.PureComponent<Props, State> {
             flows: {
                 component: () => <Flow />,
             },
+
             releases: {
                 component: () => null,
             },
