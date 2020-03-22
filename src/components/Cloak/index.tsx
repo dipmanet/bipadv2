@@ -34,6 +34,10 @@ interface Params {
     verify_livestock?: boolean;
     verify_family?: boolean;
 
+    add_contact?: boolean;
+    change_contact?: boolean;
+    delete_contact?: boolean;
+
     add_resource?: boolean;
 }
 
@@ -259,6 +263,7 @@ class Cloak extends React.Component<Props> {
             regionId,
         } = this.props;
 
+        console.warn('here', user);
         // NOTE: No restriction for super user
         if (user && user.isSuperuser) {
             return children;

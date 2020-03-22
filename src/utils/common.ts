@@ -68,7 +68,7 @@ export const sanitizeResponse = (data: unknown): any => {
         let newData = {};
         forEach(data, (k, val) => {
             const newEntry = sanitizeResponse(val);
-            if (newEntry) {
+            if (newEntry !== null && newEntry !== undefined) {
                 newData = {
                     ...newData,
                     [k]: newEntry,

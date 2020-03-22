@@ -769,7 +769,7 @@ export interface Organization {
 export interface Contact {
     committee: 'PDMC' | 'DDMC' | 'LDMC' | 'WDMC' | 'CDMC' | 'non_committee';
     email: string;
-    id: string;
+    id: number;
     image?: string;
     mobileNumber: string;
     name: string;
@@ -786,8 +786,10 @@ export interface Contact {
 }
 
 export interface Training {
-    id: string;
+    id: number;
     title: 'LSAR' | 'rapid_assessment' | 'first_aid' | 'fire_fighting';
+    durationDays: number;
+    contact: number;
 }
 
 export interface SetProfileContactList {

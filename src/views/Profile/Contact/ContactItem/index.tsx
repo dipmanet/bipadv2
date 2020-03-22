@@ -19,6 +19,7 @@ import { iconNames } from '#constants';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import Cloak from '#components/Cloak';
 
 import {
     trainingValues,
@@ -219,26 +220,30 @@ const ContactItem = (props: Props) => {
                 value={trainingValueString}
             />
             <div className={styles.actionButtons}>
-                <ModalButton
-                    className={styles.button}
-                    modal={(
-                        <ContactEditForm
-                            contactId={contactId}
-                            details={contact}
-                            onEditSuccess={onContactEdit}
-                        />
-                    )}
-                >
-                    Edit
-                </ModalButton>
-                <DangerConfirmButton
-                    className={styles.button}
-                    confirmationMessage={confirmationMessage}
-                    pending={pending}
-                    onClick={handleContactDelete}
-                >
-                    Delete
-                </DangerConfirmButton>
+                <Cloak hiddenIf={p => !p.change_contact}>
+                    <ModalButton
+                        className={styles.button}
+                        modal={(
+                            <ContactEditForm
+                                contactId={contactId}
+                                details={contact}
+                                onEditSuccess={onContactEdit}
+                            />
+                        )}
+                    >
+                        Edit
+                    </ModalButton>
+                </Cloak>
+                <Cloak hiddenIf={p => !p.delete_contact}>
+                    <DangerConfirmButton
+                        className={styles.button}
+                        confirmationMessage={confirmationMessage}
+                        pending={pending}
+                        onClick={handleContactDelete}
+                    >
+                        Delete
+                    </DangerConfirmButton>
+                </Cloak>
             </div>
         </div>
     );
