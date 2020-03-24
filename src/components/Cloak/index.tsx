@@ -39,6 +39,11 @@ interface Params {
     delete_contact?: boolean;
 
     add_resource?: boolean;
+    change_resource?: boolean;
+
+    add_inventory?: boolean;
+    change_inventory?: boolean;
+    delete_inventory?: boolean;
 }
 
 interface OwnProps {

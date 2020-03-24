@@ -10,11 +10,12 @@ import ListView from '#rscv/List/ListView';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import Numeral from '#rscv/Numeral';
-import ModalFooter from '#rscv/Modal/Footer';
 import ModalHeader from '#rscv/Modal/Header';
 
+import Cloak from '#components/Cloak';
+
 import * as PageType from '#store/atom/page/types';
-import { AppState } from '#store/types';
+// import { AppState } from '#store/types';
 import {
     createRequestClient,
     NewProps,
@@ -106,24 +107,28 @@ const InventoryItem = (props: InventoryItemProps) => {
                 value={createdOn}
                 mode="yyyy-MM-dd"
             />
-            <ModalButton
-                modal={(
-                    <AddInventoryForm
-                        onUpdate={onUpdate}
-                        value={data}
-                        resourceId={resourceId}
-                    />
-                )}
-                disabled={disabled}
-            >
-                Edit
-            </ModalButton>
-            <Button
-                onClick={handleDelete}
-                disabled={disabled}
-            >
-                Delete
-            </Button>
+            <Cloak hiddenIf={p => !p.change_inventory}>
+                <ModalButton
+                    modal={(
+                        <AddInventoryForm
+                            onUpdate={onUpdate}
+                            value={data}
+                            resourceId={resourceId}
+                        />
+                    )}
+                    disabled={disabled}
+                >
+                    Edit
+                </ModalButton>
+            </Cloak>
+            <Cloak hiddenIf={p => !p.delete_inventory}>
+                <Button
+                    onClick={handleDelete}
+                    disabled={disabled}
+                >
+                    Delete
+                </Button>
+            </Cloak>
         </div>
     );
 };
@@ -229,18 +234,20 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                     )}
                 />
                 <ModalBody className={styles.modalBody}>
-                    <ModalButton
-                        modal={(
-                            <AddInventoryForm
-                                onUpdate={this.handleRefresh}
-                                // value={data}
-                                resourceId={resourceId}
-                            />
-                        )}
-                        disabled={pending}
-                    >
-                        Add
-                    </ModalButton>
+                    <Cloak hiddenIf={p => !p.add_inventory}>
+                        <ModalButton
+                            modal={(
+                                <AddInventoryForm
+                                    onUpdate={this.handleRefresh}
+                                    // value={data}
+                                    resourceId={resourceId}
+                                />
+                            )}
+                            disabled={pending}
+                        >
+                            Add
+                        </ModalButton>
+                    </Cloak>
                     <ListView
                         className={styles.inventoryList}
                         data={inventoryList}

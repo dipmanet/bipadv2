@@ -602,6 +602,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         onHide={this.handleTooltipClose}
                                     >
                                         <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                             {...resourceInfo}
                                             {...resourceDetails}
                                             onEditClick={this.handleEditClick}

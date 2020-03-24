@@ -252,7 +252,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 
         const { resourceType } = faramValues;
         const schema = this.getSchema(resourceType as ResourceTypeKeys);
-        console.warn(schema);
 
         let resourceEnums: ResourceEnum[] = [];
         if (resourceType && !pending) {

@@ -12,12 +12,14 @@ import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
-import Loading from '#components/Loading';
 import ListView from '#rscv/List/ListView';
 import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 import documentIcon from '#resources/icons/file-document.svg';
+
+import Loading from '#components/Loading';
+import Cloak from '#components/Cloak';
 
 import {
     createRequestClient,
@@ -166,23 +168,27 @@ const DocumentRenderer = (props: DocumentProps) => {
                         { title }
                     </h3>
                     <div className={styles.actions}>
-                        <ModalPrimaryButton
-                            modal={(
-                                <AddDocumentForm
-                                    value={document}
-                                    onUpdate={onUpdate}
-                                />
-                            )}
-                            disabled={disabled}
-                        >
-                            Edit
-                        </ModalPrimaryButton>
-                        <Button
-                            onClick={handleDelete}
-                            disabled={disabled}
-                        >
-                            Delete
-                        </Button>
+                        <Cloak hiddenIf={p => !p.change_document}>
+                            <ModalPrimaryButton
+                                modal={(
+                                    <AddDocumentForm
+                                        value={document}
+                                        onUpdate={onUpdate}
+                                    />
+                                )}
+                                disabled={disabled}
+                            >
+                                Edit
+                            </ModalPrimaryButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.delete_document}>
+                            <Button
+                                onClick={handleDelete}
+                                disabled={disabled}
+                            >
+                                Delete
+                            </Button>
+                        </Cloak>
                         <a
                             className={styles.downloadLink}
                             href={file}
@@ -342,15 +348,17 @@ class Document extends React.PureComponent<Props, State> {
                     <h2 className={styles.heading}>
                         Documents
                     </h2>
-                    <ModalPrimaryButton
-                        modal={(
-                            <AddDocumentForm
-                                onUpdate={this.handleUpdate}
-                            />
-                        )}
-                    >
-                        Add
-                    </ModalPrimaryButton>
+                    <Cloak hiddenIf={p => !p.add_document}>
+                        <ModalPrimaryButton
+                            modal={(
+                                <AddDocumentForm
+                                    onUpdate={this.handleUpdate}
+                                />
+                            )}
+                        >
+                            Add
+                        </ModalPrimaryButton>
+                    </Cloak>
                 </header>
                 <div className={styles.filters}>
                     <SelectInput
