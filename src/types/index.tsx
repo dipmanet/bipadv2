@@ -211,7 +211,7 @@ export interface RiskData {
     };
 }
 
-export type ResourceType = 'education' | 'health' | 'tourism' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy';
+export type ResourceTypeKeys = 'education' | 'health' | 'tourism' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy';
 
 export type IncidentAttributeType = 'estimatedLoss' | 'incidentCount' | 'livestockDestroyedCount' | 'peopleDeathCount' | 'peopleInjuredCount' | 'peopleMissingCount'| 'totalInfrastructureDestroyedCount';
 

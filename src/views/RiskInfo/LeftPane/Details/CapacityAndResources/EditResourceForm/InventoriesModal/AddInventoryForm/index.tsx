@@ -83,7 +83,9 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const keySelector = (d: PageType.Field) => d.id;
-const labelSelector = (d: PageType.Field) => d.title;
+const labelSelector = (d: PageType.Field) => (
+    d.unit ? `${d.title} (${d.unit})` : d.title
+);
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     inventoryItemListGetRequest: {

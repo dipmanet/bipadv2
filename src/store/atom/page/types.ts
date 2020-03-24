@@ -1,5 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
-import { FiltersElement } from '#types';
+import { FiltersElement, ResourceTypeKeys } from '#types';
 
 export interface Field {
     id: number;
@@ -53,6 +53,8 @@ export interface EventType extends Field {
 export interface SeverityType extends Field {
 }
 export interface ResourceType extends Field {
+    id: number;
+    title: ResourceTypeKeys;
 }
 export interface DocumentCategory extends Field {
 }

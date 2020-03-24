@@ -1,20 +1,24 @@
 import {
     requiredCondition,
 } from '@togglecorp/faram';
-import { ResourceType } from '#types';
+import { ResourceTypeKeys } from '#types';
 
 type Schema = {
-    [key in ResourceType]: object;
+    [key in ResourceTypeKeys]: object;
+};
+
+const defaultFields = {
+    resourceType: [requiredCondition],
+    title: [requiredCondition],
+    description: [],
+    point: [],
+    ward: [],
 };
 
 const schema: Schema = {
     education: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             classroomCount: [],
             operatoryType: [],
             openingHours: [],
@@ -27,11 +31,7 @@ const schema: Schema = {
     },
     health: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             bedCount: [],
             cbsCode: [],
             phoneNumber: [],
@@ -51,11 +51,7 @@ const schema: Schema = {
     },
     finance: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             cbsCode: [],
             population: [],
             channel: [],
@@ -74,21 +70,13 @@ const schema: Schema = {
     },
     tourism: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             type: [requiredCondition],
         },
     },
     communication: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             type: [requiredCondition],
             towersName: [],
             isp: [],
@@ -105,11 +93,7 @@ const schema: Schema = {
     },
     governance: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             type: [requiredCondition],
             phoneNumber: [],
             emailAddress: [],
@@ -120,21 +104,13 @@ const schema: Schema = {
     },
     industry: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             type: [requiredCondition],
         },
     },
     cultural: {
         fields: {
-            title: [requiredCondition],
-            description: [],
-            point: [],
-            ward: [],
-            resourceType: [requiredCondition],
+            ...defaultFields,
             type: [requiredCondition],
             religion: [],
             phoneNumber: [],
@@ -145,8 +121,14 @@ const schema: Schema = {
         },
     },
     energy: {
-        fields: {},
+        fields: {
+            ...defaultFields,
+        },
     },
+};
+
+export const defaultSchema = {
+    fields: defaultFields,
 };
 
 export default schema;

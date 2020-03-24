@@ -1,11 +1,11 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
     _cs,
     mapToList,
-    isFalsy,
-    isTruthy,
 } from '@togglecorp/fujs';
 
 import {
@@ -15,11 +15,15 @@ import {
     methods,
 } from '#request';
 
+import {
+    resourceTypeListSelector,
+} from '#selectors';
+
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import DangerButton from '#rsca/Button/DangerButton';
 import AccentButton from '#rsca/Button/AccentButton';
-import ListView from '#rscv/List/ListView';
+import ListView from '#rsu/../v2/View/ListView';
 
 import { Draw } from '#re-map/type';
 import MapSource from '#re-map/MapSource';
@@ -45,20 +49,95 @@ import FinanceIcon from '#resources/icons/Financing.png';
 import FoodWarehouseIcon from '#resources/icons/Food-warehouse.png';
 // import EducationIcon from '#resources/icons/Education.png';
 
-import {
-    ResourceType,
-} from '#types';
-
-import {
-    Resource,
-} from '#store/atom/page/types';
+import { ResourceTypeKeys } from '#types';
+import { AppState } from '#store/types';
+import * as PageType from '#store/atom/page/types';
 
 import EditResourceForm from './EditResourceForm';
 
-import Summary from './Summary';
+// import Summary from './Summary';
 import CapacityResourceTable from './CapacityResourceTable';
 import AddResourceForm from './AddResourceForm';
 import styles from './styles.scss';
+
+// const SummaryButton = modalize(AccentButton);
+const TableModalButton = modalize(Button);
+
+const AccentModalButton = modalize(AccentButton);
+
+const camelCaseToSentence = (text: string) => {
+    const result = text.replace(/([A-Z])/g, ' $1');
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+
+    return finalResult;
+};
+
+const emptyResourceList: PageType.Resource[] = [];
+
+interface ResourceTooltipProps extends PageType.Resource {
+    onEditClick: () => void;
+}
+
+const ResourceTooltip = (props: ResourceTooltipProps) => {
+    const { onEditClick, ...resourceDetails } = props;
+
+    const { id, point, title, ...resource } = resourceDetails;
+
+    const data = mapToList(
+        resource,
+        (value, key) => ({ label: key, value }),
+    );
+
+    const resourceKeySelector = (d: typeof data) => d.label;
+
+    const rendererParams = (_: string, item: PageType.Resource) => ({
+        className: styles.item,
+        labelClassName: styles.label,
+        valueClassName: styles.value,
+        ...item,
+        label: camelCaseToSentence(item.label),
+    });
+
+    return (
+        <div className={styles.resourceTooltip}>
+            <h3 className={styles.heading}>
+                {title}
+            </h3>
+            <ListView
+                className={styles.content}
+                data={data}
+                keySelector={resourceKeySelector}
+                renderer={TextOutput}
+                rendererParams={rendererParams}
+            />
+            <div className={styles.actions}>
+                <AccentButton
+                    title="Edit"
+                    onClick={onEditClick}
+                    transparent
+                    className={styles.editButton}
+                >
+                    Edit data
+                </AccentButton>
+            </div>
+        </div>
+    );
+};
+
+
+/*
+const resourceLayerList: ResourceElement[] = [
+    // { key: 'education', title: 'Education' },
+    { key: 'finance', title: 'Finance' },
+    { key: 'health', title: 'Health' },
+    { key: 'governance', title: 'Governance' },
+];
+
+interface ResourceElement {
+    key: ResourceTypeKeys;
+    title: string;
+}
+*/
 
 interface ComponentProps {
     className?: string;
@@ -66,15 +145,14 @@ interface ComponentProps {
 
 interface State {
     resourceLngLat: [number, number] | undefined;
-    activeLayerKey: ResourceType | undefined;
-    resourceInfo: Resource | undefined;
+    activeLayerKey: ResourceTypeKeys | undefined;
+    resourceInfo: PageType.Resource | undefined;
     showResourceForm: boolean;
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
 }
 
-interface ResourceElement {
-    key: ResourceType;
-    title: string;
+interface PropsFromState {
+    resourceTypeList: PageType.ResourceType[];
 }
 
 interface Params {
@@ -83,18 +161,11 @@ interface Params {
     coordinates?: [number, number][];
 }
 
-type Props = NewProps<ComponentProps, Params>
+type Props = NewProps<ComponentProps & PropsFromState, Params>
 
-// const SummaryButton = modalize(AccentButton);
-const TableModalButton = modalize(Button);
-const AccentModalButton = modalize(AccentButton);
-
-const resourceLayerList: ResourceElement[] = [
-    // { key: 'education', title: 'Education' },
-    { key: 'finance', title: 'Finance' },
-    { key: 'health', title: 'Health' },
-    { key: 'governance', title: 'Governance' },
-];
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    resourceTypeList: resourceTypeListSelector(state),
+});
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
     resourceGetRequest: {
@@ -146,61 +217,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
     },
 };
 
-const emptyResourceList: Resource[] = [];
-
-interface ResourceTooltipParams extends Resource {
-    onEditClick: () => void;
-}
-
-const camelCaseToSentence = (text: string) => {
-    const result = text.replace(/([A-Z])/g, ' $1');
-    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-
-    return finalResult;
-};
-
-const ResourceTooltip = (params: ResourceTooltipParams) => {
-    const { onEditClick, ...resourceDetails } = params;
-
-    const { id, point, title, ...resource } = resourceDetails;
-
-    const data = mapToList(resource, (value, key) => ({ label: key, value }));
-    const resourceKeySelector = (d: typeof data) => d.label;
-
-    const rendererParams = (_: string, item: Resource) => ({
-        className: styles.item,
-        labelClassName: styles.label,
-        valueClassName: styles.value,
-        ...item,
-        label: camelCaseToSentence(item.label),
-    });
-
-    return (
-        <div className={styles.resourceTooltip}>
-            <h3 className={styles.heading}>
-                {title}
-            </h3>
-            <ListView
-                className={styles.content}
-                data={data}
-                keySelector={resourceKeySelector}
-                renderer={TextOutput}
-                rendererParams={rendererParams}
-            />
-            <div className={styles.actions}>
-                <AccentButton
-                    title="Edit"
-                    onClick={onEditClick}
-                    transparent
-                    className={styles.editButton}
-                >
-                    Edit data
-                </AccentButton>
-            </div>
-        </div>
-    );
-};
-
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -214,7 +230,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         };
     }
 
-    private getGeojson = memoize((resourceList: Resource[]) => {
+    private getGeojson = memoize((resourceList: PageType.Resource[]) => {
         const geojson = {
             type: 'FeatureCollection',
             features: resourceList.map(r => ({
@@ -227,9 +243,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         return geojson;
     })
 
-    private getLayerRendererParams = (key: string, layer: ResourceElement) => ({
+    private getLayerRendererParams = (key: ResourceTypeKeys, layer: PageType.ResourceType) => ({
         optionKey: key,
-        label: layer.title,
+        label: key,
         onClick: this.handleLayerClick,
         isActive: this.state.activeLayerKey === key,
     })
@@ -297,7 +313,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
-    private handleLayerClick = (layerKey: ResourceType) => {
+    private handleLayerClick = (layerKey: ResourceTypeKeys) => {
         this.setState({
             activeLayerKey: layerKey,
             showResourceForm: false,
@@ -387,48 +403,50 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            resourceTypeList,
         } = this.props;
 
-        const { activeLayerKey } = this.state;
-        const resourceList = getResults(
-            requests,
-            'resourceGetRequest',
-            emptyResourceList,
-        ) as Resource[];
         const {
-            resourceDetailGetRequest: {
-                response,
-            },
-            polygonResourceDetailGetRequest: {
-                pending: polygonSelectPending,
-            },
-        } = requests;
-        const polygonResources = getResults(
-            requests,
-            'polygonResourceDetailGetRequest',
-            emptyResourceList,
-        ) as Resource[];
-
-        const geojson = this.getGeojson(resourceList);
-
-        const pending = isAnyRequestPending(requests);
-        const {
+            activeLayerKey,
             showResourceForm,
             resourceLngLat,
             resourceInfo,
             selectedFeatures,
         } = this.state;
 
+        const resourceList = getResults(
+            requests,
+            'resourceGetRequest',
+            emptyResourceList,
+        ) as PageType.Resource[];
+
+        /*
+        const polygonResources = getResults(
+            requests,
+            'polygonResourceDetailGetRequest',
+            emptyResourceList,
+        ) as PageType.Resource[];
+         */
+
+        let resourceDetails: PageType.Resource | undefined;
+        const {
+            resourceDetailGetRequest: {
+                response,
+            },
+        } = requests;
+        if (response) {
+            resourceDetails = response as PageType.Resource;
+        }
+
+        const pending = isAnyRequestPending(requests);
+
+        const geojson = this.getGeojson(resourceList);
+
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
             offset: 10,
         };
-
-        let resourceDetails: Resource | undefined;
-        if (response) {
-            resourceDetails = response as Resource;
-        }
 
         return (
             <>
@@ -490,8 +508,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     </header>
                     <ListView
                         className={styles.content}
-                        data={resourceLayerList}
-                        keySelector={d => d.key}
+                        data={resourceTypeList}
+                        keySelector={d => d.title}
                         renderer={Option}
                         rendererParams={this.getLayerRendererParams}
                     />
@@ -608,4 +626,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 }
 
 CapacityAndResources.contextType = MapChildContext;
-export default createRequestClient(requestOptions)(CapacityAndResources);
+export default compose(
+    connect(mapStateToProps),
+    createRequestClient(requestOptions),
+)(CapacityAndResources);

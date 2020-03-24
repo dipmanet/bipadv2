@@ -8,11 +8,10 @@ This is the web client for *Bipad*
 
 ## Getting started
 
-### Install react-store
+### Install dependencies
 
 ```bash
-mkdir -p src/vendor
-git clone https://github.com/toggle-corp/react-store --branch=bipad src/vendor/react-store
+yarn vendor:clone
 ```
 
 ### Start server

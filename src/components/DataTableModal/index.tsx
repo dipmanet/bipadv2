@@ -15,6 +15,10 @@ interface Props {
     title: string;
     className?: string;
     closeModal?: boolean;
+
+    keySelector: (item: unknown) => unknown;
+    data: unknown[];
+    headers: unknown[];
 }
 
 class DataTableModal extends React.PureComponent<Props> {

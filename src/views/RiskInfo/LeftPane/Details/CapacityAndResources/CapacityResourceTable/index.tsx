@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import DataTableModal from '#components/DataTableModal';
 
 import { wardsMapSelector } from '#selectors';
+import * as PageType from '#store/atom/page/types';
 
 interface Props {
     className?: string;
     title: string;
     closeModal?: boolean;
+    data: PageType.Resource[];
 }
 
 const headers = [

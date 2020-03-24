@@ -7,7 +7,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 
 import {
-    ResourceType,
+    ResourceTypeKeys,
 } from '#types';
 import {
     Resource,
@@ -18,7 +18,7 @@ import styles from './styles.scss';
 interface Props {
     data: Resource[];
     closeModal: boolean;
-    resourceType: ResourceType | undefined;
+    resourceType: ResourceTypeKeys | undefined;
 
 }
 interface State {}
@@ -53,7 +53,7 @@ const SummaryItem = (d: SummaryData) => (
 );
 
 class Summary extends React.PureComponent<Props, State> {
-    private getSummary = (data: Resource[], resourceType: ResourceType) => {
+    private getSummary = (data: Resource[], resourceType: ResourceTypeKeys) => {
         const summary: {
             [key: string]: number;
         } = {

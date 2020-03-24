@@ -21,9 +21,7 @@ import {
     methods,
 } from '#request';
 
-import {
-    ResourceType,
-} from '#types';
+import { ResourceTypeKeys } from '#types';
 import {
     Resource,
 } from '#store/atom/page/types';
@@ -42,7 +40,7 @@ interface OwnProps {
     className?: string;
     onCloseButtonClick?: () => void;
     resourceId: number | undefined;
-    resourceType: ResourceType | undefined;
+    resourceType: ResourceTypeKeys | undefined;
 }
 
 interface Params {
@@ -100,7 +98,7 @@ class EditResourceModal extends React.PureComponent<Props, State> {
         };
     }
 
-    private getForm = (resourceType: ResourceType | undefined) => {
+    private getForm = (resourceType: ResourceTypeKeys | undefined) => {
         if (resourceType === 'finance') {
             return <FinanceForm />;
         }
@@ -114,7 +112,7 @@ class EditResourceModal extends React.PureComponent<Props, State> {
         return null;
     }
 
-    private getSchema = (resourceType: ResourceType | undefined) => {
+    private getSchema = (resourceType: ResourceTypeKeys | undefined) => {
         if (resourceType === 'finance') {
             return financeSchema;
         }

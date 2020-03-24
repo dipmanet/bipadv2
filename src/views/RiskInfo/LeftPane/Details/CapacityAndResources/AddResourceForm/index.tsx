@@ -22,7 +22,7 @@ import {
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-import { ResourceEnum, ModelEnum, ResourceType } from '#types';
+import { ResourceEnum, ModelEnum, ResourceTypeKeys } from '#types';
 import {
     createRequestClient,
     NewProps,
@@ -42,7 +42,7 @@ import CulturalFields from './CulturalFields';
 import TourismFields from './TourismFields';
 import CommunicationFields from './CommunicationFields';
 import IndustryFields from './IndustryFields';
-import schemaMap from './schema';
+import schemaMap, { defaultSchema } from './schema';
 
 import styles from './styles.scss';
 
@@ -179,20 +179,11 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         };
     }
 
-    private getSchema = memoize((resourceType?: ResourceType) => {
+    private getSchema = memoize((resourceType?: ResourceTypeKeys) => {
         if (resourceType) {
             return schemaMap[resourceType];
         }
-
-        return {
-            fields: {
-                title: [requiredCondition],
-                description: [],
-                point: [],
-                ward: [],
-                resourceType: [requiredCondition],
-            },
-        };
+        return defaultSchema;
     });
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
@@ -260,12 +251,13 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         } = this.state;
 
         const { resourceType } = faramValues;
+        const schema = this.getSchema(resourceType as ResourceTypeKeys);
+        console.warn(schema);
+
         let resourceEnums: ResourceEnum[] = [];
         if (resourceType && !pending) {
             resourceEnums = this.filterResourceEnum(response as ModelEnum[], resourceType);
         }
-
-        const schema = this.getSchema(resourceType as ResourceType);
 
         return (
             <Modal
