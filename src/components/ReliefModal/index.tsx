@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import Flow from './Flow';
+import Release from './Release';
 
 import styles from './styles.scss';
 
@@ -46,7 +47,7 @@ class ReliefModal extends React.PureComponent<Props, State> {
             },
 
             releases: {
-                component: () => null,
+                component: () => <Release />,
             },
         };
 

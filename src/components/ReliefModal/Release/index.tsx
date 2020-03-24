@@ -1,6 +1,5 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-
 import {
     createRequestClient,
     NewProps,
@@ -13,11 +12,11 @@ import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 
-import { Flow } from '#types';
+import { Release } from '#types';
 import { MultiResponse } from '#store/atom/response/types';
 
-import FlowItem from './FlowItem';
-import AddFlowForm from './AddFlowForm';
+import ReleaseItem from './ReleaseItem';
+import AddReleaseForm from './AddReleaseForm';
 
 import styles from './styles.scss';
 
@@ -35,31 +34,31 @@ interface Params {
 const ModalButton = modalize(Button);
 
 const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
-    reliefFlowGetRequest: {
-        url: '/relief-flow/',
+    reliefReleaseGetRequest: {
+        url: '/relief-release/',
         method: methods.GET,
         onMount: true,
     },
 };
 
 type Props = NewProps<OwnProps, Params>;
-const flowKeySelector = (flow: Flow) => flow.id;
+const releaseKeySelector = (release: Release) => release.id;
 
-class ReliefFlow extends React.PureComponent<Props, State> {
-    private getFlowRendererParams = (_: number, flow: Flow) => ({
-        data: flow,
-        onUpdate: this.handleReliefFlowChange,
+class ReliefRelease extends React.PureComponent<Props, State> {
+    private getReleaseRendererParams = (_: number, release: Release) => ({
+        data: release,
+        onUpdate: this.handleReliefReleaseChange,
     });
 
-    private handleReliefFlowChange = () => {
-        const { requests: { reliefFlowGetRequest } } = this.props;
-        reliefFlowGetRequest.do();
+    private handleReliefReleaseChange = () => {
+        const { requests: { reliefReleaseGetRequest } } = this.props;
+        reliefReleaseGetRequest.do();
     }
 
     public render() {
         const {
             requests: {
-                reliefFlowGetRequest: {
+                reliefReleaseGetRequest: {
                     response,
                     pending,
                 },
@@ -67,43 +66,43 @@ class ReliefFlow extends React.PureComponent<Props, State> {
             className,
         } = this.props;
 
-        let flowList: Flow[] = [];
+        let releaseList: Release[] = [];
         if (!pending && response) {
-            const flowResponse = response as MultiResponse<Flow>;
-            flowList = flowResponse.results;
+            const releaseResponse = response as MultiResponse<Release>;
+            releaseList = releaseResponse.results;
         }
 
         return (
-            <div className={_cs(className, styles.flow)}>
+            <div className={_cs(className, styles.release)}>
                 { pending && <LoadingAnimation />}
                 <header className={styles.header}>
                     <h3 className={styles.heading}>
-                        Flows
+                        Releases
                     </h3>
                     <ModalButton
-                        className={styles.addFlowButton}
-                        title="Add Flow"
+                        className={styles.addReleaseButton}
+                        title="Add Release"
                         iconName="add"
                         transparent
                         modal={(
-                            <AddFlowForm
-                                onUpdate={this.handleReliefFlowChange}
+                            <AddReleaseForm
+                                onUpdate={this.handleReliefReleaseChange}
                             />
                         )}
                     >
-                        Add Flow
+                        Add Release
                     </ModalButton>
                 </header>
                 <ListView
                     className={styles.content}
-                    data={flowList}
-                    keySelector={flowKeySelector}
-                    renderer={FlowItem}
-                    rendererParams={this.getFlowRendererParams}
+                    data={releaseList}
+                    keySelector={releaseKeySelector}
+                    renderer={ReleaseItem}
+                    rendererParams={this.getReleaseRendererParams}
                 />
             </div>
         );
     }
 }
 
-export default createRequestClient(requestOptions)(ReliefFlow);
+export default createRequestClient(requestOptions)(ReliefRelease);
