@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import Cloak from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
@@ -119,27 +120,31 @@ class ReleaseItem extends React.PureComponent<Props, State> {
                     {description}
                 </div>
                 <div className={styles.actions}>
-                    <ModalAccentButton
-                        transparent
-                        iconName="edit"
-                        modal={(
-                            <AddReleaseForm
-                                value={data}
-                                onUpdate={onUpdate}
-                            />
-                        )}
-                    >
-                        Edit
-                    </ModalAccentButton>
-                    <DangerConfirmButton
-                        iconName="delete"
-                        confirmationMessage="Are you sure you want to delete this relief release?"
-                        onClick={this.handleReleaseDelete}
-                        pending={pending}
-                        transparent
-                    >
-                        Delete
-                    </DangerConfirmButton>
+                    <Cloak hiddenIf={p => !p.change_release}>
+                        <ModalAccentButton
+                            transparent
+                            iconName="edit"
+                            modal={(
+                                <AddReleaseForm
+                                    value={data}
+                                    onUpdate={onUpdate}
+                                />
+                            )}
+                        >
+                            Edit
+                        </ModalAccentButton>
+                    </Cloak>
+                    <Cloak hiddenIf={p => !p.delete_release}>
+                        <DangerConfirmButton
+                            iconName="delete"
+                            confirmationMessage="Are you sure you want to delete this relief release?"
+                            onClick={this.handleReleaseDelete}
+                            pending={pending}
+                            transparent
+                        >
+                            Delete
+                        </DangerConfirmButton>
+                    </Cloak>
                 </div>
             </div>
         );

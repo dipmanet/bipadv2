@@ -8,6 +8,7 @@ import {
     methods,
 } from '#request';
 
+import Cloak from '#components/Cloak';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
@@ -80,19 +81,21 @@ class ReliefFlow extends React.PureComponent<Props, State> {
                     <h3 className={styles.heading}>
                         Flows
                     </h3>
-                    <ModalButton
-                        className={styles.addFlowButton}
-                        title="Add Flow"
-                        iconName="add"
-                        transparent
-                        modal={(
-                            <AddFlowForm
-                                onUpdate={this.handleReliefFlowChange}
-                            />
-                        )}
-                    >
-                        Add Flow
-                    </ModalButton>
+                    <Cloak hiddenIf={p => !p.add_flow}>
+                        <ModalButton
+                            className={styles.addFlowButton}
+                            title="Add Flow"
+                            iconName="add"
+                            transparent
+                            modal={(
+                                <AddFlowForm
+                                    onUpdate={this.handleReliefFlowChange}
+                                />
+                            )}
+                        >
+                            Add Flow
+                        </ModalButton>
+                    </Cloak>
                 </header>
                 <ListView
                     className={styles.content}

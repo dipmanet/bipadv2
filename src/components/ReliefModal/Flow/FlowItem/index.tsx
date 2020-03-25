@@ -6,6 +6,7 @@ import TextOutput from '#components/TextOutput';
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
+import Cloak from '#components/Cloak';
 
 import { Flow } from '#types';
 
@@ -110,27 +111,31 @@ class FlowItem extends React.PureComponent<Props, State> {
                     {description}
                 </div>
                 <div className={styles.actions}>
-                    <ModalAccentButton
-                        transparent
-                        iconName="edit"
-                        modal={(
-                            <AddFlowForm
-                                value={data}
-                                onUpdate={onUpdate}
-                            />
-                        )}
-                    >
-                        Edit
-                    </ModalAccentButton>
-                    <DangerConfirmButton
-                        iconName="delete"
-                        confirmationMessage="Are you sure you want to delete this relief flow?"
-                        onClick={this.handleFlowDelete}
-                        pending={pending}
-                        transparent
-                    >
-                        Delete
-                    </DangerConfirmButton>
+                    <Cloak hiddenIf={p => !p.change_flow}>
+                        <ModalAccentButton
+                            transparent
+                            iconName="edit"
+                            modal={(
+                                <AddFlowForm
+                                    value={data}
+                                    onUpdate={onUpdate}
+                                />
+                            )}
+                        >
+                            Edit
+                        </ModalAccentButton>
+                    </Cloak>
+                    <Cloak hiddenIf={p => !p.delete_flow}>
+                        <DangerConfirmButton
+                            iconName="delete"
+                            confirmationMessage="Are you sure you want to delete this relief flow?"
+                            onClick={this.handleFlowDelete}
+                            pending={pending}
+                            transparent
+                        >
+                            Delete
+                        </DangerConfirmButton>
+                    </Cloak>
                 </div>
             </div>
         );

@@ -20,13 +20,35 @@ interface Mapping {
 }
 
 interface Params {
+    add_agriculture?: boolean;
+    change_agriculture?: boolean;
+    delete_agriculture?: boolean;
+    verify_agriculture?: boolean;
+
     add_alert?: boolean;
     change_alert?: boolean;
     delete_alert?: boolean;
 
+    add_contact?: boolean;
+    change_contact?: boolean;
+    delete_contact?: boolean;
+
+    add_document?: boolean;
+    delete_document?: boolean;
+    change_document?: boolean;
+
     add_event?: boolean;
     change_event?: boolean;
     delete_event?: boolean;
+
+    add_family?: boolean;
+    change_family?: boolean;
+    delete_family?: boolean;
+    verify_family?: boolean;
+
+    add_flow?: boolean;
+    change_flow?: boolean;
+    delete_flow?: boolean;
 
     add_incident?: boolean;
     delete_incident?: boolean;
@@ -34,25 +56,17 @@ interface Params {
     approve_incident?: boolean;
     change_incident?: boolean;
 
-    add_document?: boolean;
-    delete_document?: boolean;
-    change_document?: boolean;
-
-    add_contact?: boolean;
-    change_contact?: boolean;
-    delete_contact?: boolean;
-
-    add_resource?: boolean;
-    change_resource?: boolean;
+    add_infrastructure?: boolean;
+    change_infrastructure?: boolean;
 
     add_inventory?: boolean;
     change_inventory?: boolean;
     delete_inventory?: boolean;
 
-    add_agriculture?: boolean;
-    change_agriculture?: boolean;
-    delete_agriculture?: boolean;
-    verify_agriculture?: boolean;
+    add_livestock?: boolean;
+    change_livestock?: boolean;
+    delete_livestock?: boolean;
+    verify_livestock?: boolean;
 
     add_loss?: boolean;
     change_loss?: boolean;
@@ -64,18 +78,12 @@ interface Params {
     delete_people?: boolean;
     verify_people?: boolean;
 
-    add_family?: boolean;
-    change_family?: boolean;
-    delete_family?: boolean;
-    verify_family?: boolean;
+    add_release?: boolean;
+    change_release?: boolean;
+    delete_release?: boolean;
 
-    add_livestock?: boolean;
-    change_livestock?: boolean;
-    delete_livestock?: boolean;
-    verify_livestock?: boolean;
-
-    add_infrastructure?: boolean;
-    change_infrastructure?: boolean;
+    add_resource?: boolean;
+    change_resource?: boolean;
 
     add_training?: boolean;
     change_training?: boolean;
@@ -304,12 +312,10 @@ class Cloak extends React.Component<Props> {
             regionId,
         } = this.props;
 
-        console.warn('here', user);
         // NOTE: No restriction for super user
         if (user && user.isSuperuser) {
             return children;
         }
-
         const params = this.getUserParams(user);
 
         const hidden = (hiddenIf && hiddenIf(params)) || !this.isRegionAccessibleToUser(

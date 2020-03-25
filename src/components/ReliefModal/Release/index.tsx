@@ -11,6 +11,7 @@ import LoadingAnimation from '#rscv/LoadingAnimation';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
+import Cloak from '#components/Cloak';
 
 import { Release } from '#types';
 import { MultiResponse } from '#store/atom/response/types';
@@ -79,19 +80,21 @@ class ReliefRelease extends React.PureComponent<Props, State> {
                     <h3 className={styles.heading}>
                         Releases
                     </h3>
-                    <ModalButton
-                        className={styles.addReleaseButton}
-                        title="Add Release"
-                        iconName="add"
-                        transparent
-                        modal={(
-                            <AddReleaseForm
-                                onUpdate={this.handleReliefReleaseChange}
-                            />
-                        )}
-                    >
-                        Add Release
-                    </ModalButton>
+                    <Cloak hiddenIf={p => !p.add_release}>
+                        <ModalButton
+                            className={styles.addReleaseButton}
+                            title="Add Release"
+                            iconName="add"
+                            transparent
+                            modal={(
+                                <AddReleaseForm
+                                    onUpdate={this.handleReliefReleaseChange}
+                                />
+                            )}
+                        >
+                            Add Release
+                        </ModalButton>
+                    </Cloak>
                 </header>
                 <ListView
                     className={styles.content}
