@@ -2,6 +2,7 @@ import React from 'react';
 import {
     _cs,
     isDefined,
+    isTruthy,
 } from '@togglecorp/fujs';
 import Faram, {
     FaramInputElement,
@@ -20,8 +21,10 @@ import SelectInput from '#rsci/SelectInput';
 import SimpleCheckbox from '#rsu/../v2/Input/Checkbox';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
 import FullStepwiseRegionSelectInput from '#components/FullStepwiseRegionSelectInput';
+import { sanitizeResponse } from '#utils/common';
 
 import {
     createRequestClient,
@@ -100,6 +103,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         query: {
             expand: ['trainings', 'organization'],
         },
+        extras: { hasFile: true },
     },
     municipalityContactAddRequest: {
         url: '/municipality-contact/',
@@ -118,6 +122,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         query: {
             expand: ['trainings', 'organization'],
         },
+        extras: { hasFile: true },
     },
     organizationGetRequest: {
         url: '/organization/',
@@ -180,6 +185,8 @@ class ContactForm extends React.PureComponent<Props, State> {
                 ...otherValues
             } = details;
 
+            console.warn('here', details);
+
             faramValues = {
                 ...otherValues,
                 isDrrFocalPerson: !!isDrrFocalPerson,
@@ -212,6 +219,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             mobileNumber: [],
             isDrrFocalPerson: [],
             committee: [requiredCondition],
+            image: [],
             communityAddress: [],
             location: [],
             organization: [],
@@ -252,19 +260,49 @@ class ContactForm extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
+            name,
+            position,
+            email,
+            workNumber,
+            mobileNumber,
+            isDrrFocalPerson,
+            committee,
+            communityAddress,
+            organization,
             stepwiseRegion,
             location,
-            ...others
+            image,
         } = faramValues;
 
-        const newBody = {
+        const point = location
+            ? JSON.stringify(location.geoJson.features[0].geometry)
+            : undefined;
+
+        const body = {
+            name,
+            position,
+            email,
+            point,
+            workNumber,
+            mobileNumber,
+            isDrrFocalPerson: JSON.stringify(isDrrFocalPerson),
+            organization,
+            communityAddress,
             province: stepwiseRegion.province,
             ward: stepwiseRegion.ward,
             municipality: stepwiseRegion.municipality,
             district: stepwiseRegion.district,
-            point: location && location.geoJson.features[0].geometry,
-            ...others,
         };
+        let newBody = {
+            ...sanitizeResponse(body),
+            organization: null,
+        };
+        if (typeof image === 'object') {
+            newBody = {
+                ...sanitizeResponse(body),
+                image,
+            };
+        }
 
         if (isDefined(contactId)) {
             municipalityContactEditRequest.do({
@@ -307,8 +345,6 @@ class ContactForm extends React.PureComponent<Props, State> {
             pristine,
             organizationList,
         } = this.state;
-
-        console.warn('here', details, faramValues);
 
         return (
             <Modal
@@ -356,6 +392,14 @@ class ContactForm extends React.PureComponent<Props, State> {
                             label="Email"
                             placeholder="ram@neoc.gov.np"
                         />
+                        <RawFileInput
+                            className={styles.fileInput}
+                            faramElementName="image"
+                            showStatus
+                            accept="image/*"
+                        >
+                            Upload Image
+                        </RawFileInput>
                         <NumberInput
                             faramElementName="workNumber"
                             label="Work Number"
