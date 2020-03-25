@@ -223,6 +223,7 @@ const ContactItem = (props: Props) => {
                 <Cloak hiddenIf={p => !p.change_contact}>
                     <ModalButton
                         className={styles.button}
+                        transparent
                         modal={(
                             <ContactEditForm
                                 contactId={contactId}
@@ -240,6 +241,7 @@ const ContactItem = (props: Props) => {
                         confirmationMessage={confirmationMessage}
                         pending={pending}
                         onClick={handleContactDelete}
+                        transparent
                     >
                         Delete
                     </DangerConfirmButton>

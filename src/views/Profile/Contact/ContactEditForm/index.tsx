@@ -9,6 +9,7 @@ import Faram, {
     emailCondition,
 } from '@togglecorp/faram';
 
+import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
@@ -19,6 +20,7 @@ import SelectInput from '#rsci/SelectInput';
 import SimpleCheckbox from '#rsu/../v2/Input/Checkbox';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import LocationInput from '#components/LocationInput';
 import FullStepwiseRegionSelectInput from '#components/FullStepwiseRegionSelectInput';
 
 import {
@@ -134,6 +136,22 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
 const organizationKeySelector = (o: Organization) => o.id;
 const organizationLabelSelector = (o: Organization) => o.title;
 
+const getLocationDetails = (point) => {
+    const geoJson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: point,
+            },
+        ],
+    };
+
+    return ({
+        geoJson,
+    });
+};
+
 class ContactForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -158,6 +176,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                 ward,
                 isDrrFocalPerson,
                 organization,
+                point,
                 ...otherValues
             } = details;
 
@@ -165,6 +184,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                 ...otherValues,
                 isDrrFocalPerson: !!isDrrFocalPerson,
                 organization: organization ? organization.id : undefined,
+                location: point && getLocationDetails(point),
                 stepwiseRegion: {
                     province,
                     district,
@@ -192,6 +212,8 @@ class ContactForm extends React.PureComponent<Props, State> {
             mobileNumber: [],
             isDrrFocalPerson: [],
             committee: [requiredCondition],
+            communityAddress: [],
+            location: [],
             organization: [],
             stepwiseRegion: [],
         },
@@ -231,6 +253,7 @@ class ContactForm extends React.PureComponent<Props, State> {
 
         const {
             stepwiseRegion,
+            location,
             ...others
         } = faramValues;
 
@@ -239,6 +262,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             ward: stepwiseRegion.ward,
             municipality: stepwiseRegion.municipality,
             district: stepwiseRegion.district,
+            point: location && location.geoJson.features[0].geometry,
             ...others,
         };
 
@@ -274,6 +298,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                 municipalityContactEditRequest: { pending: contactEditPending },
                 municipalityContactAddRequest: { pending: contactAddPending },
             },
+            details,
         } = this.props;
 
         const {
@@ -282,6 +307,8 @@ class ContactForm extends React.PureComponent<Props, State> {
             pristine,
             organizationList,
         } = this.state;
+
+        console.warn('here', details, faramValues);
 
         return (
             <Modal
@@ -358,6 +385,14 @@ class ContactForm extends React.PureComponent<Props, State> {
                         />
                         <StepwiseRegionSelectInput
                             faramElementName="stepwiseRegion"
+                        />
+                        <TextInput
+                            faramElementName="communityAddress"
+                            label="Community Address"
+                        />
+                        <LocationInput
+                            className={styles.locationInput}
+                            faramElementName="location"
                         />
                         <div className={styles.actionButtons}>
                             <PrimaryButton

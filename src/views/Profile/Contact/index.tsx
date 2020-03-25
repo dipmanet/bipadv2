@@ -369,6 +369,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                             <ModalButton
                                 className={styles.button}
                                 iconName="add"
+                                transparent
                                 modal={(
                                     <ContactEditForm
                                         onAddSuccess={this.handleContactAdd}
