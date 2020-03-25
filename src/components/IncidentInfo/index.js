@@ -34,14 +34,16 @@ const propTypes = {
     onEditIncident: PropTypes.func,
     onDeleteIncident: PropTypes.func,
     incidentDeletePending: PropTypes.bool,
-    showActions: PropTypes.bool,
+    showEditIncident: PropTypes.bool,
+    showDeleteIncident: PropTypes.bool,
 };
 
 const defaultProps = {
     onEditIncident: undefined,
     onDeleteIncident: undefined,
     incidentDeletePending: false,
-    showActions: false,
+    showEditIncident: false,
+    showDeleteIncident: false,
 };
 
 export default class IncidentInfo extends React.PureComponent {
@@ -61,6 +63,8 @@ export default class IncidentInfo extends React.PureComponent {
             className,
             hideLink,
 
+            showEditIncident,
+            showDeleteIncident,
             onEditIncident,
             onDeleteIncident,
 
@@ -120,29 +124,25 @@ export default class IncidentInfo extends React.PureComponent {
                         )}
                     </div>
                     <div className={styles.right}>
-                        { showActions && (
-                            <>
-                                { onEditIncident && (
-                                    <AccentButton
-                                        className={styles.button}
-                                        transparent
-                                        onClick={onEditIncident}
-                                    >
-                                        Edit
-                                    </AccentButton>
-                                )}
-                                { onDeleteIncident && (
-                                    <DangerConfirmButton
-                                        className={styles.button}
-                                        confirmationMessage="Are you sure you want to delete this incident?"
-                                        onClick={onDeleteIncident}
-                                        pending={incidentDeletePending}
-                                        transparent
-                                    >
-                                         Delete
-                                    </DangerConfirmButton>
-                                )}
-                            </>
+                        { showEditIncident && onEditIncident && (
+                            <AccentButton
+                                className={styles.button}
+                                transparent
+                                onClick={onEditIncident}
+                            >
+                                Edit
+                            </AccentButton>
+                        )}
+                        { showDeleteIncident && onDeleteIncident && (
+                            <DangerConfirmButton
+                                className={styles.button}
+                                confirmationMessage="Are you sure you want to delete this incident?"
+                                onClick={onDeleteIncident}
+                                pending={incidentDeletePending}
+                                transparent
+                            >
+                                Delete
+                            </DangerConfirmButton>
                         )}
                     </div>
                 </div>

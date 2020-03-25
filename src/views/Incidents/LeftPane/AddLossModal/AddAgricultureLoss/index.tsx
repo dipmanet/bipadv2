@@ -37,6 +37,7 @@ import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 
@@ -217,14 +218,18 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
                     faramElementName="economicLoss"
                     label="Economic Loss"
                 />
-                <Checkbox
-                    faramElementName="verified"
-                    label="Verified"
-                />
-                <TextInput
-                    faramElementName="verificationMessage"
-                    label="Verification Message"
-                />
+                <Cloak hiddenIf={p => !p.verify_agriculture}>
+                    <>
+                        <Checkbox
+                            faramElementName="verified"
+                            label="Verified"
+                        />
+                        <TextInput
+                            faramElementName="verificationMessage"
+                            label="Verification Message"
+                        />
+                    </>
+                </Cloak>
                 <SelectInput
                     faramElementName="type"
                     label="Type"

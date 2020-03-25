@@ -304,7 +304,7 @@ export default class LeftPane extends React.PureComponent {
                     </div>
                     <div className={styles.actions}>
                         { activeView === 'alerts' && (
-                            <Cloak hiddenIf={p => !p.change_alert}>
+                            <Cloak hiddenIf={p => !p.add_alert}>
                                 <AccentButton
                                     className={styles.addAlertButton}
                                     onClick={this.handleAddAlertButtonClick}
@@ -316,7 +316,7 @@ export default class LeftPane extends React.PureComponent {
                             </Cloak>
                         )}
                         { activeView === 'events' && (
-                            <Cloak hiddenIf={p => !p.change_event}>
+                            <Cloak hiddenIf={p => !p.add_event}>
                                 <AccentButton
                                     className={styles.addEventButton}
                                     onClick={this.handleAddEventButtonClick}

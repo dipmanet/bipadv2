@@ -20,6 +20,14 @@ interface Mapping {
 }
 
 interface Params {
+    add_alert?: boolean;
+    change_alert?: boolean;
+    delete_alert?: boolean;
+
+    add_event?: boolean;
+    change_event?: boolean;
+    delete_event?: boolean;
+
     add_incident?: boolean;
     delete_incident?: boolean;
     verify_incident?: boolean;
@@ -29,10 +37,6 @@ interface Params {
     add_document?: boolean;
     delete_document?: boolean;
     change_document?: boolean;
-
-    verify_people?: boolean;
-    verify_livestock?: boolean;
-    verify_family?: boolean;
 
     add_contact?: boolean;
     change_contact?: boolean;
@@ -44,6 +48,38 @@ interface Params {
     add_inventory?: boolean;
     change_inventory?: boolean;
     delete_inventory?: boolean;
+
+    add_agriculture?: boolean;
+    change_agriculture?: boolean;
+    delete_agriculture?: boolean;
+    verify_agriculture?: boolean;
+
+    add_loss?: boolean;
+    change_loss?: boolean;
+    delete_loss?: boolean;
+    verify_loss?: boolean;
+
+    add_people?: boolean;
+    change_people?: boolean;
+    delete_people?: boolean;
+    verify_people?: boolean;
+
+    add_family?: boolean;
+    change_family?: boolean;
+    delete_family?: boolean;
+    verify_family?: boolean;
+
+    add_livestock?: boolean;
+    change_livestock?: boolean;
+    delete_livestock?: boolean;
+    verify_livestock?: boolean;
+
+    add_infrastructure?: boolean;
+    change_infrastructure?: boolean;
+
+    add_training?: boolean;
+    change_training?: boolean;
+    delete_training?: boolean;
 }
 
 interface OwnProps {
