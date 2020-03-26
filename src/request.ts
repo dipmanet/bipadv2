@@ -3,7 +3,10 @@ import {
     methods,
     CoordinatorAttributes,
 } from '@togglecorp/react-rest-request';
+import { isList } from '@togglecorp/fujs';
+
 import { AppState } from '#store/types';
+
 
 import store from '#store';
 import {
@@ -17,18 +20,45 @@ import { getAuthState } from '#utils/session';
 const wsEndpoint = process.env.REACT_APP_API_SERVER_URL;
 const domain = process.env.REACT_APP_DOMAIN;
 
-const getFormData = (jsonData: any) => {
+const isFile = (input: any): input is File => (
+    'File' in window && input instanceof File
+);
+const isBlob = (input: any): input is Blob => (
+    'Blob' in window && input instanceof Blob
+);
+
+const sanitizeFormData = (value: any) => {
+    if (value === null) {
+        return '';
+    }
+    if (isFile(value) || isBlob(value) || typeof value === 'string') {
+        return value;
+    }
+    return JSON.stringify(value);
+};
+
+const getFormData = (jsonData: object | undefined) => {
     const formData = new FormData();
-    Object.keys(jsonData || {}).forEach(
-        (key) => {
-            const value: any = jsonData[key] || {};
-            if (value.prop && value.prop.constructor === Array) {
-                value.map((v: any) => formData.append(key, v));
-            } else {
-                formData.append(key, value);
+    if (!jsonData) {
+        return formData;
+    }
+
+    Object.entries(jsonData).forEach(
+        ([key, value]) => {
+            if (isList(value)) {
+                value.forEach((val: unknown) => {
+                    if (val !== undefined) {
+                        const sanitizedVal = sanitizeFormData(val);
+                        formData.append(key, sanitizedVal);
+                    }
+                });
+            } else if (value !== undefined) {
+                const sanitizedValue = sanitizeFormData(value);
+                formData.append(key, sanitizedValue);
             }
         },
     );
+
     return formData;
 };
 

@@ -42,7 +42,7 @@ function getGeoArea(adminLevel?: number, province?: number,
     return undefined;
 }
 
-interface RegionValuesAlt {
+export interface RegionValuesAlt {
     province?: number;
     municipality?: number;
     district?: number;

@@ -2,7 +2,6 @@ import React from 'react';
 import {
     _cs,
     isDefined,
-    isTruthy,
 } from '@togglecorp/fujs';
 import Faram, {
     FaramInputElement,
@@ -10,20 +9,20 @@ import Faram, {
     emailCondition,
 } from '@togglecorp/faram';
 
-import Icon from '#rscg/Icon';
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import TextInput from '#rsci/TextInput';
-import NumberInput from '#rsci/NumberInput';
 import SelectInput from '#rsci/SelectInput';
 import SimpleCheckbox from '#rsu/../v2/Input/Checkbox';
 import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
-import FullStepwiseRegionSelectInput from '#components/FullStepwiseRegionSelectInput';
+import FullStepwiseRegionSelectInput, {
+    RegionValuesAlt,
+} from '#components/FullStepwiseRegionSelectInput';
 import { sanitizeResponse } from '#utils/common';
 
 import {
@@ -50,7 +49,24 @@ import ContactTrainingList from './ContactTrainingList';
 import styles from './styles.scss';
 
 const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
+
 const Checkbox = FaramInputElement(SimpleCheckbox);
+
+const getLocationDetails = (point: unknown) => {
+    const geoJson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: point,
+            },
+        ],
+    };
+
+    return ({
+        geoJson,
+    });
+};
 
 interface OwnProps {
     contactId?: Contact['id'];
@@ -62,6 +78,18 @@ interface OwnProps {
 
 // TODO: Write appropriate types
 interface FaramValues {
+    name?: string | null;
+    position?: string | null;
+    email?: string | null;
+    image?: File | null;
+    workNumber?: string | null;
+    mobileNumber?: string | null;
+    isDrrFocalPerson?: boolean | null;
+    organization?: number | null;
+    committee?: Contact['committee'] | null;
+    stepwiseRegion?: RegionValuesAlt | null;
+    communityAddress?: string | null;
+    location?: ReturnType<typeof getLocationDetails> | null;
 }
 
 interface FaramErrors {
@@ -141,22 +169,6 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
 const organizationKeySelector = (o: Organization) => o.id;
 const organizationLabelSelector = (o: Organization) => o.title;
 
-const getLocationDetails = (point) => {
-    const geoJson = {
-        type: 'FeatureCollection',
-        features: [
-            {
-                type: 'Feature',
-                geometry: point,
-            },
-        ],
-    };
-
-    return ({
-        geoJson,
-    });
-};
-
 class ContactForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -168,7 +180,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        let faramValues = {
+        let faramValues: FaramValues = {
             isDrrFocalPerson: false,
             stepwiseRegion: {},
         };
@@ -182,10 +194,9 @@ class ContactForm extends React.PureComponent<Props, State> {
                 isDrrFocalPerson,
                 organization,
                 point,
+                image, // just capturing this here
                 ...otherValues
             } = details;
-
-            console.warn('here', details);
 
             faramValues = {
                 ...otherValues,
@@ -266,12 +277,12 @@ class ContactForm extends React.PureComponent<Props, State> {
             workNumber,
             mobileNumber,
             isDrrFocalPerson,
-            committee,
             communityAddress,
-            organization,
             stepwiseRegion,
             location,
             image,
+            organization,
+            committee,
         } = faramValues;
 
         const point = location
@@ -285,33 +296,31 @@ class ContactForm extends React.PureComponent<Props, State> {
             point,
             workNumber,
             mobileNumber,
-            isDrrFocalPerson: JSON.stringify(isDrrFocalPerson),
-            organization,
+            isDrrFocalPerson,
             communityAddress,
-            province: stepwiseRegion.province,
-            ward: stepwiseRegion.ward,
-            municipality: stepwiseRegion.municipality,
-            district: stepwiseRegion.district,
+            committee,
+            image,
+            organization,
+
+            province: stepwiseRegion && stepwiseRegion.province,
+            ward: stepwiseRegion && stepwiseRegion.ward,
+            municipality: stepwiseRegion && stepwiseRegion.municipality,
+            district: stepwiseRegion && stepwiseRegion.district,
         };
-        let newBody = {
-            ...sanitizeResponse(body),
-            organization: null,
-        };
-        if (typeof image === 'object') {
-            newBody = {
-                ...sanitizeResponse(body),
-                image,
-            };
+
+        // NOTE; not un-setting image when user doesn't pick a new image
+        if (body.image === null) {
+            body.image = undefined;
         }
 
         if (isDefined(contactId)) {
             municipalityContactEditRequest.do({
-                body: newBody,
+                body,
                 setPristine: this.setPristine,
             });
         } else {
             municipalityContactAddRequest.do({
-                body: newBody,
+                body,
             });
         }
     }
@@ -322,6 +331,7 @@ class ContactForm extends React.PureComponent<Props, State> {
             contactId,
         } = this.props;
 
+        // FIXME: this looks problematic
         if (contactId && onEditSuccess) {
             onEditSuccess(contactId, { trainings: newList });
         }
@@ -374,7 +384,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                         schema={ContactForm.schema}
                         value={faramValues}
                         error={faramErrors}
-                        disabled={organizationPending}
+                        disabled={organizationPending || contactEditPending || contactAddPending}
                     >
                         <TextInput
                             faramElementName="name"
@@ -392,20 +402,33 @@ class ContactForm extends React.PureComponent<Props, State> {
                             label="Email"
                             placeholder="ram@neoc.gov.np"
                         />
+                        {details && details.image && (
+                            <div className={styles.previousImage}>
+                                <div>
+                                    Previous Image
+                                </div>
+                                <img
+                                    className={styles.image}
+                                    src={details.image}
+                                    alt="profile"
+                                />
+                            </div>
+                        )}
                         <RawFileInput
-                            className={styles.fileInput}
                             faramElementName="image"
                             showStatus
                             accept="image/*"
                         >
                             Upload Image
                         </RawFileInput>
-                        <NumberInput
+                        <TextInput
                             faramElementName="workNumber"
+                            type="number"
                             label="Work Number"
                         />
-                        <NumberInput
+                        <TextInput
                             faramElementName="mobileNumber"
+                            type="number"
                             label="Mobile Number"
                         />
                         <Checkbox

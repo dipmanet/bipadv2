@@ -15,6 +15,13 @@
                 padding: var(--spacing-small) 0;
             }
 
+            .previous-image {
+                .image {
+                    max-width: 80px;
+                    max-height: 40px;
+                }
+            }
+
             .location-input {
                 height: 240px;
             }
