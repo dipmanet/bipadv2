@@ -17,6 +17,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Table from '#rscv/Table';
 import modalize from '#rscg/Modalize';
+import Cloak from '#components/Cloak';
 
 import * as PageType from '#store/atom/page/types';
 import { Header } from '#store/atom/table/types';
@@ -142,11 +143,13 @@ class FamilyLossList extends React.PureComponent<Props, State> {
 
                     return (
                         <div className={styles.actionButton}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                confirmationMessage="Are you sure you want to delete this item?"
-                                onClick={() => this.handleItemRemove(rowKey)}
-                            />
+                            <Cloak hiddenIf={p => !p.delete_family}>
+                                <DangerConfirmButton
+                                    iconName="delete"
+                                    confirmationMessage="Are you sure you want to delete this item?"
+                                    onClick={() => this.handleItemRemove(rowKey)}
+                                />
+                            </Cloak>
                         </div>
                     );
                 },
@@ -220,18 +223,20 @@ class FamilyLossList extends React.PureComponent<Props, State> {
                     <h2 className={styles.heading}>
                         Family Loss
                     </h2>
-                    <ModalButton
-                        className={styles.button}
-                        iconName="add"
-                        modal={(
-                            <AddFamilyLossModal
-                                lossServerId={lossServerId}
-                                onAddSuccess={this.handleListItemAdd}
-                            />
-                        )}
-                    >
-                        Add Family Loss
-                    </ModalButton>
+                    <Cloak hiddenIf={p => !p.add_family}>
+                        <ModalButton
+                            className={styles.button}
+                            iconName="add"
+                            modal={(
+                                <AddFamilyLossModal
+                                    lossServerId={lossServerId}
+                                    onAddSuccess={this.handleListItemAdd}
+                                />
+                            )}
+                        >
+                            Add Family Loss
+                        </ModalButton>
+                    </Cloak>
                 </header>
                 <Table
                     className={styles.table}
