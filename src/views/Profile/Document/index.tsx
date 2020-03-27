@@ -8,7 +8,7 @@ import {
 } from '@togglecorp/fujs';
 
 import modalize from '#rscg/Modalize';
-import Button from '#rsca/Button';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
@@ -177,17 +177,22 @@ const DocumentRenderer = (props: DocumentProps) => {
                                     />
                                 )}
                                 disabled={disabled}
+                                iconName="edit"
+                                transparent
                             >
                                 Edit
                             </ModalPrimaryButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_document}>
-                            <Button
+                            <DangerConfirmButton
                                 onClick={handleDelete}
                                 disabled={disabled}
+                                iconName="delete"
+                                transparent
+                                confirmationMessage="Are you sure you want to delete this document?"
                             >
                                 Delete
-                            </Button>
+                            </DangerConfirmButton>
                         </Cloak>
                         <a
                             className={styles.downloadLink}
