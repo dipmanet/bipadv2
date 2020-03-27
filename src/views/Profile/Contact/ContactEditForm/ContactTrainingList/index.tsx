@@ -14,6 +14,7 @@ import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Table from '#rscv/Table';
 import modalize from '#rscg/Modalize';
+import Cloak from '#components/Cloak';
 
 import * as PageType from '#store/atom/page/types';
 import { Header } from '#store/atom/table/types';
@@ -199,18 +200,20 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
                     <h4 className={styles.heading}>
                         Contact Training
                     </h4>
-                    <ModalButton
-                        className={styles.button}
-                        iconName="add"
-                        modal={(
-                            <AddTraining
-                                contactId={contactId}
-                                onAddSuccess={this.handleListItemAdd}
-                            />
-                        )}
-                    >
-                        Add Training
-                    </ModalButton>
+                    <Cloak hiddenIf={p => !p.add_training}>
+                        <ModalButton
+                            className={styles.button}
+                            iconName="add"
+                            modal={(
+                                <AddTraining
+                                    contactId={contactId}
+                                    onAddSuccess={this.handleListItemAdd}
+                                />
+                            )}
+                        >
+                            Add Training
+                        </ModalButton>
+                    </Cloak>
                 </header>
                 <Table
                     className={styles.table}

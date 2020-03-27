@@ -18,6 +18,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ConfirmButton from '#rsca/ConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import Cloak from '#components/Cloak';
 
 import {
     createRequestClient,
@@ -51,6 +52,19 @@ interface Params {
     body?: object;
     onAddFailure?: (faramErrors: object) => void;
     incidentServerId?: number;
+}
+
+interface CloakParams {
+    add_incident?: boolean;
+    change_incident?: boolean;
+    add_loss?: boolean;
+    change_loss?: boolean;
+    add_people?: boolean;
+    change_people?: boolean;
+    add_family?: boolean;
+    change_family?: boolean;
+    add_livestock?: boolean;
+    change_livestock?: boolean;
 }
 
 interface OwnProps {
@@ -215,6 +229,40 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
             ...getReportedDateTime(incidentDetails.reportedOn),
         };
 
+        const isIncidentHidden = (p: CloakParams) => {
+            if (incidentDetails) {
+                return !p.change_incident;
+            }
+            return !p.add_incident;
+        };
+        const isLossHidden = (p: CloakParams) => {
+            if (incidentDetails) {
+                return !p.change_loss;
+            }
+
+            return !p.add_loss;
+        };
+        const isPeopleLossHidden = (p: CloakParams) => {
+            if (incidentDetails) {
+                return !p.change_people;
+            }
+
+            return !p.add_people;
+        };
+        const isFamilyLossHidden = (p: CloakParams) => {
+            if (incidentDetails) {
+                return !p.change_family;
+            }
+
+            return !p.add_family;
+        };
+        const isLivestockLossHidden = (p: CloakParams) => {
+            if (incidentDetails) {
+                return !p.change_livestock;
+            }
+            return !p.add_livestock;
+        };
+
         this.views = {
             general: {
                 component: () => {
@@ -233,26 +281,28 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     } = this.props;
 
                     return (
-                        <Faram
-                            onChange={this.handleFaramChange}
-                            onValidationFailure={this.handleFaramValidationFailure}
-                            onValidationSuccess={this.handleFaramValidationSuccess}
-                            schema={AddIncidentForm.schema}
-                            value={faramValues}
-                            error={faramErrors}
-                            className={styles.generalInputs}
-                        >
-                            <GeneralDetails />
-                            <div className={styles.footer}>
-                                <PrimaryButton
-                                    type="submit"
-                                    pending={incidentPending}
-                                    disabled={pristine}
-                                >
-                                    Submit
-                                </PrimaryButton>
-                            </div>
-                        </Faram>
+                        <Cloak hiddenIf={isIncidentHidden}>
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddIncidentForm.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                className={styles.generalInputs}
+                            >
+                                <GeneralDetails />
+                                <div className={styles.footer}>
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={incidentPending}
+                                        disabled={pristine}
+                                    >
+                                        Submit
+                                    </PrimaryButton>
+                                </div>
+                            </Faram>
+                        </Cloak>
                     );
                 },
             },
@@ -265,11 +315,13 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     } = this.props;
 
                     return (
-                        <Loss
-                            lossServerId={lossServerId}
-                            incidentServerId={incidentServerId}
-                            onLossChange={onLossChange}
-                        />
+                        <Cloak hiddenIf={isLossHidden}>
+                            <Loss
+                                lossServerId={lossServerId}
+                                incidentServerId={incidentServerId}
+                                onLossChange={onLossChange}
+                            />
+                        </Cloak>
                     );
                 },
             },
@@ -282,10 +334,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     }
 
                     return (
-                        <PeopleLossList
-                            className={styles.peopleLossList}
-                            lossServerId={lossServerId}
-                        />
+                        <Cloak hiddenIf={isPeopleLossHidden}>
+                            <PeopleLossList
+                                className={styles.peopleLossList}
+                                lossServerId={lossServerId}
+                            />
+                        </Cloak>
                     );
                 },
             },
@@ -298,10 +352,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     }
 
                     return (
-                        <FamiliesLossList
-                            className={styles.peopleLossList}
-                            lossServerId={lossServerId}
-                        />
+                        <Cloak hiddenIf={isFamilyLossHidden}>
+                            <FamiliesLossList
+                                className={styles.peopleLossList}
+                                lossServerId={lossServerId}
+                            />
+                        </Cloak>
                     );
                 },
             },
@@ -314,10 +370,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     }
 
                     return (
-                        <LivestockLossList
-                            className={styles.peopleLossList}
-                            lossServerId={lossServerId}
-                        />
+                        <Cloak hiddenIf={isLivestockLossHidden}>
+                            <LivestockLossList
+                                className={styles.peopleLossList}
+                                lossServerId={lossServerId}
+                            />
+                        </Cloak>
                     );
                 },
             },

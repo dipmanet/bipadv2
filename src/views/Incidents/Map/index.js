@@ -280,7 +280,8 @@ class IncidentMap extends React.PureComponent {
         const incidentServerId = incident && incident.id;
         const Map = isProviceOnlyMap ? ProvinceMap : CommonMap;
         const params = this.getUserParams(user);
-        const showActions = !!(params && params.change_incident);
+        const showEditIncident = !!(params && params.change_incident);
+        const showDeleteIncident = !!(params && params.delete_incident);
 
         return (
             <React.Fragment>
@@ -363,7 +364,8 @@ class IncidentMap extends React.PureComponent {
                                 districtsMap={districtsMap}
                                 municipalitiesMap={municipalitiesMap}
                                 className={styles.incidentInfo}
-                                showActions={showActions}
+                                showEditIncident={showEditIncident}
+                                showDeleteIncident={showDeleteIncident}
                                 onEditIncident={this.handleEditIncidentClick}
                                 onDeleteIncident={this.handleIncidentDelete}
                                 incidentDeletePending={incidentDeletePending}

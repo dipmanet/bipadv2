@@ -126,6 +126,8 @@ export default class AlertItem extends React.PureComponent {
                             >
                                 Edit
                             </Button>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.delete_alert}>
                             <DangerConfirmButton
                                 iconName="delete"
                                 transparent
