@@ -9,7 +9,7 @@ import {
 
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import modalize from '#rscg/Modalize';
 import Cloak from '#components/Cloak';
 
@@ -32,7 +32,7 @@ interface State {
 interface Params {
     body?: object;
 }
-const ModalButton = modalize(Button);
+const ModalAccentButton = modalize(AccentButton);
 
 const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     reliefReleaseGetRequest: {
@@ -81,7 +81,7 @@ class ReliefRelease extends React.PureComponent<Props, State> {
                         Releases
                     </h3>
                     <Cloak hiddenIf={p => !p.add_release}>
-                        <ModalButton
+                        <ModalAccentButton
                             className={styles.addReleaseButton}
                             title="Add Release"
                             iconName="add"
@@ -92,8 +92,8 @@ class ReliefRelease extends React.PureComponent<Props, State> {
                                 />
                             )}
                         >
-                            Add Release
-                        </ModalButton>
+                            New Release
+                        </ModalAccentButton>
                     </Cloak>
                 </header>
                 <ListView

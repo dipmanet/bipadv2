@@ -1,17 +1,16 @@
+button {
+    outline: none;
+    filter: saturate(10%);
+
+    &:hover {
+        filter: saturate(100%);
+    }
+}
 .multiplexer {
     display: flex;
     width: 100vw;
     height: 100vh;
     overflow: auto;
-
-    button {
-        outline: none;
-        filter: saturate(10%);
-
-        &:hover {
-            filter: saturate(100%);
-        }
-    }
 
     .navbar {
         flex-shrink: 0;

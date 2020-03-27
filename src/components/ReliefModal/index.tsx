@@ -43,11 +43,11 @@ class ReliefModal extends React.PureComponent<Props, State> {
 
         this.views = {
             flows: {
-                component: () => <Flow />,
+                component: () => <Flow className={styles.flow} />,
             },
 
             releases: {
-                component: () => <Release />,
+                component: () => <Release className={styles.release} />,
             },
         };
 
@@ -87,7 +87,7 @@ class ReliefModal extends React.PureComponent<Props, State> {
                         />
                     )}
                 />
-                <ModalBody>
+                <ModalBody className={styles.modalBody}>
                     <ScrollTabs
                         className={styles.tabs}
                         tabs={this.tabs}

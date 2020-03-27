@@ -25,6 +25,11 @@
 
     .actions {
         display: flex;
+        justify-content: flex-end;
         padding: 0;
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
     }
 }

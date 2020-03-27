@@ -47,6 +47,8 @@ import {
 } from '#actionCreators';
 import { MultiResponse } from '#store/atom/response/types';
 
+import styles from './styles.scss';
+
 interface FaramValues {
     incident?: number;
     people?: number;
@@ -322,12 +324,12 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
         const pending = addReliefPending
             || organizationsGetPending || incidentsGetPending;
 
+
         return (
             <Modal
                 onClose={closeModal}
-                // closeOnEscape
+                closeOnEscape
             >
-                { pending && <LoadingAnimation />}
                 <Faram
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
@@ -337,8 +339,18 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader title="Add Release" />
-                    <ModalBody>
+                    <ModalHeader
+                        title="Add Release"
+                        rightComponent={(
+                            <DangerButton
+                                onClick={closeModal}
+                                transparent
+                                iconName="close"
+                            />
+                        )}
+                    />
+                    <ModalBody className={styles.modalBody}>
+                        { pending && <LoadingAnimation />}
                         <NonFieldErrors faramElement />
                         <TextInput
                             faramElementName="description"
