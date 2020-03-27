@@ -54,6 +54,7 @@ interface State {
 
 interface Params {
     body?: object;
+    setFaramErrors?: (error: object) => void;
 }
 
 type Props = NewProps<ComponentProps, Params>;
@@ -74,6 +75,22 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
             props.onSuccess(feedback);
             if (props.closeModal) {
                 props.closeModal();
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
     },
@@ -107,7 +124,10 @@ class IncidentFeedbackAckFormModal extends React.PureComponent<Props, State> {
             acknowledged: true,
         };
 
-        incidentFeedbackPostRequest.do({ body });
+        incidentFeedbackPostRequest.do({
+            body,
+            setFaramErrors: this.handleFaramValidationFailure,
+        });
     }
 
     public render() {

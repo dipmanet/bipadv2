@@ -37,8 +37,8 @@ interface FaramErrors {
 }
 
 interface OwnProps {
-    className?: string;
-    onUpdate?: () => void;
+    // className?: string;
+    // onUpdate?: () => void;
 }
 
 interface PropsFromState {
@@ -55,7 +55,7 @@ interface Params {
     setResources?: (resourceList: Resource[]) => void;
     setInfrastructureUnits?: (infrastructureUnitList: InfrastructureUnit[]) => void;
     setInfrastructureTypes?: (infrastructureTypeList: InfrastructureType[]) => void;
-    onFailure?: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface State {
@@ -139,9 +139,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             console.warn('response', response);
         },
         */
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
     },
@@ -243,7 +254,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
             requests: {
                 addInfrastructureLossRequest,
             },
-            onUpdate,
+            // onUpdate,
         } = this.props;
 
         const {
@@ -256,21 +267,23 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
 
         addInfrastructureLossRequest.do({
             body: { ...faramValues, serviceDisrupted },
+            /*
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
                 }
             },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            */
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
     public render() {
+        /*
         const {
             className,
         } = this.props;
+        */
 
         const {
             infrastructureTypeList,

@@ -54,7 +54,7 @@ const StepwiseRegionSelectInput = FaramInputElement(NormalStepwiseRegionSelectIn
 
 interface Params {
     body: object;
-    onFailure: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface OwnProps {
@@ -147,14 +147,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 props.closeModal();
             }
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.onFailure) {
-                params.onFailure({ $internal: ['Some error occurred'] });
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
         extras: {
@@ -331,9 +337,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
 
         addDocumentPostRequest.do({
             body: newBody,
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 

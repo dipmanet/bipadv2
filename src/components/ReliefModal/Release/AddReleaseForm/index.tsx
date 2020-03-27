@@ -83,7 +83,7 @@ interface State {
 interface Params {
     body?: object;
     incident?: number;
-    onFailure?: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
     setPeople?: (people: Person[]) => void;
 }
 
@@ -176,9 +176,20 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
                 props.closeModal();
             }
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
     },
@@ -266,9 +277,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
         const { requests: { reliefReleaseAddRequest } } = this.props;
         reliefReleaseAddRequest.do({
             body: faramValues,
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 

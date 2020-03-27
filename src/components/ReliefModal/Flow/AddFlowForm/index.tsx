@@ -73,7 +73,7 @@ interface State {
 
 interface Params {
     body: object;
-    onFailure: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface FlowType {
@@ -158,9 +158,20 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
                 props.closeModal();
             }
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem ocurred'],
+                });
             }
         },
     },
@@ -211,9 +222,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
         const { requests: { reliefFlowAddRequest } } = this.props;
         reliefFlowAddRequest.do({
             body: faramValues,
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
