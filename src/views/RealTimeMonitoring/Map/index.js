@@ -279,7 +279,7 @@ export default class RealTimeMap extends React.PureComponent {
 
     handleStreamflowClick = (feature) => {
         const { properties: { comid } } = feature;
-        console.warn('feature', feature);
+        // console.warn('feature', feature);
         this.setState({
             streamflowId: comid,
         });

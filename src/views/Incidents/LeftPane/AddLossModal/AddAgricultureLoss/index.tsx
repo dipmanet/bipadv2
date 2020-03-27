@@ -103,9 +103,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/loss-agriculture/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
+        /*
         onSuccess: ({ params, response }) => {
             console.warn('response', response);
         },
+        */
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
