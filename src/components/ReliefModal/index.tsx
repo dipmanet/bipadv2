@@ -81,9 +81,10 @@ class ReliefModal extends React.PureComponent<Props, State> {
                     title="Relief"
                     rightComponent={(
                         <DangerButton
-                            onClick={closeModal}
                             transparent
                             iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

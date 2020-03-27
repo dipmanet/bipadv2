@@ -99,7 +99,17 @@ class AddLossModal extends React.PureComponent<Props, State> {
                 onClose={closeModal}
                 // closeOnEscape
             >
-                <ModalHeader title="Add Loss" />
+                <ModalHeader
+                    title="Add Loss"
+                    rightComponent={(
+                        <DangerButton
+                            transparent
+                            iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
+                        />
+                    )}
+                />
                 <ModalBody>
                     <FixedTabs
                         className={styles.tabs}

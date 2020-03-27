@@ -21,6 +21,7 @@ import {
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import Icon from '#rscg/Icon';
 
 import Modal from '#rscv/Modal';
@@ -72,10 +73,11 @@ const IncidentTableModal = ({
         <ModalHeader
             title="Incidents"
             rightComponent={(
-                <Button
+                <DangerButton
+                    transparent
                     iconName="close"
                     onClick={closeModal}
-                    transparent
+                    title="Close Modal"
                 />
             )}
         />

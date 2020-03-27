@@ -5,6 +5,13 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
+import TextInput from '#rsci/TextInput';
+import SelectInput from '#rsci/SelectInput';
+import NumberInput from '#rsci/NumberInput';
+import Checkbox from '#rsci/Checkbox';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+
 import {
     createRequestClient,
     ClientAttributes,
@@ -19,12 +26,6 @@ import {
     Field,
     InfrastructureType,
 } from '#store/atom/page/types';
-
-import TextInput from '#rsci/TextInput';
-import SelectInput from '#rsci/SelectInput';
-import NumberInput from '#rsci/NumberInput';
-import Checkbox from '#rsci/Checkbox';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import styles from './styles.scss';
 
@@ -289,6 +290,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                 value={faramValues}
                 error={faramErrors}
             >
+                <NonFieldErrors faramElement />
                 <TextInput
                     faramElementName="title"
                     label="Title"

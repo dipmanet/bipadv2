@@ -186,10 +186,11 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                     className={styles.header}
                     title="Edit Resource"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={onCloseButtonClick}
-                            transparent
+                            title="Close Modal"
                         />
                     )}
                 />

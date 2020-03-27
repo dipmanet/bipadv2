@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ListView from '#rscv/List/ListView';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -125,10 +125,11 @@ class Summary extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Capacity & Resources Summary"
                     rightComponent={(
-                        <Button
+                        <DangerButton
                             transparent
                             iconName="close"
                             onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

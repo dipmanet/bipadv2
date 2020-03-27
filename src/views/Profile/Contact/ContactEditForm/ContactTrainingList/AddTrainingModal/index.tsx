@@ -10,6 +10,7 @@ import {
     methods,
 } from '#request';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import { Training as ContactTraining } from '#store/atom/page/types';
@@ -156,11 +157,11 @@ class AddTraining extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add Training"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
-                            transparent
                         />
                     )}
                 />
@@ -174,6 +175,7 @@ class AddTraining extends React.PureComponent<Props, State> {
                 >
                     <ModalBody className={styles.modalBody}>
                         {pending && <LoadingAnimation />}
+                        <NonFieldErrors faramElement />
                         <SelectInput
                             faramElementName="title"
                             options={trainingValueList}

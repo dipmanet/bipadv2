@@ -7,6 +7,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -17,7 +18,7 @@ import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import ConfirmButton from '#rsca/ConfirmButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import LocationInput from '#components/LocationInput';
 
@@ -358,16 +359,19 @@ class AddEventForm extends React.PureComponent<Props, State> {
                     <ModalHeader
                         title="Add / edit event"
                         rightComponent={(
-                            <ConfirmButton
-                                onClick={onCloseButtonClick}
+                            <DangerConfirmButton
                                 transparent
                                 iconName="close"
+                                onClick={onCloseButtonClick}
+                                title="Close Modal"
+
                                 confirmationMessage="Are you sure you want to close the form?"
                             />
                         )}
                     />
                     <ModalBody className={styles.body}>
                         <div className={styles.generalInputs}>
+                            <NonFieldErrors faramElement />
                             <TextInput
                                 className={styles.titleInput}
                                 faramElementName="title"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalFooter from '#rscv/Modal/Footer';
@@ -37,9 +37,11 @@ class DataTableModal extends React.PureComponent<Props> {
                 <ModalHeader
                     title={title}
                     rightComponent={(
-                        <Button
-                            onClick={closeModal}
+                        <DangerButton
+                            transparent
                             iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

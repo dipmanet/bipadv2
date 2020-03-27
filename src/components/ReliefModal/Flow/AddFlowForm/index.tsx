@@ -275,7 +275,17 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader title="Add Flow" />
+                    <ModalHeader
+                        title="Add Flow"
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
                     <ModalBody>
                         <NonFieldErrors faramElement />
                         <TextInput

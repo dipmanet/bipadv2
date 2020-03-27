@@ -3,15 +3,11 @@ import { _cs, Obj } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 import FormattedDate from '#rscv/FormattedDate';
-import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import DangerButton from '#rsca/Button/DangerButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-import LoadingAnimation from '#rscv/LoadingAnimation';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
-import ModalFooter from '#rscv/Modal/Footer';
 import ModalHeader from '#rscv/Modal/Header';
 
 import * as PageType from '#store/atom/page/types';
@@ -161,11 +157,11 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Citizen Reports"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            title="Close modal"
-                            transparent
+                            title="Close Modal"
                         />
                     )}
                 />

@@ -83,9 +83,10 @@ export default class AboutUs extends React.PureComponent {
                     title="BIPAD"
                     rightComponent={(
                         <DangerButton
-                            onClick={closeModal}
                             transparent
                             iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

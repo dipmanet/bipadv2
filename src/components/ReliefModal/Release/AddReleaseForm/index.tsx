@@ -6,6 +6,7 @@ import { isDefined, isNotDefined } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
+import TextArea from '#rsci/TextArea';
 import TextInput from '#rsci/TextInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -343,16 +344,17 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                         title="Add Release"
                         rightComponent={(
                             <DangerButton
-                                onClick={closeModal}
                                 transparent
                                 iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
                             />
                         )}
                     />
                     <ModalBody className={styles.modalBody}>
                         { pending && <LoadingAnimation />}
                         <NonFieldErrors faramElement />
-                        <TextInput
+                        <TextArea
                             faramElementName="description"
                             label="Description"
                             autoFocus

@@ -240,6 +240,14 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                         title={
                             value ? 'Edit Inventory' : 'Add Inventory'
                         }
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
                     />
                     <ModalBody>
                         <NonFieldErrors faramElement />

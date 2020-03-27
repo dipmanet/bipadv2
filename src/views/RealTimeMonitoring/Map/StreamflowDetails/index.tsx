@@ -142,6 +142,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
                             transparent
                             iconName="close"
                             onClick={handleModalClose}
+                            title="Close Modal"
                         />
                     )}
                 />

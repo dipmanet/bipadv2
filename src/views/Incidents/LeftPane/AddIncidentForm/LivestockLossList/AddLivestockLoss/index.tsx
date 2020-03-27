@@ -16,8 +16,7 @@ import {
     Field,
 } from '#store/atom/page/types';
 
-import Cloak from '#components/Cloak';
-import Button from '#rsca/Button';
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -29,6 +28,8 @@ import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
+
+import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 import { MultiResponse } from '#store/atom/response/types';
@@ -216,10 +217,10 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add Family Loss"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            transparent
                             title="Close Modal"
                         />
                     )}
@@ -233,6 +234,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                     error={faramErrors}
                 >
                     <ModalBody className={styles.modalBody}>
+                        <NonFieldErrors faramElement />
                         {pending && <LoadingAnimation />}
                         <TextInput
                             faramElementName="title"

@@ -3,7 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import ListView from '#rscv/List/ListView';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -235,11 +235,11 @@ class IncidentFeedbacksModal extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Incident Feedbacks"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            title="Close modal"
-                            transparent
+                            title="Close Modal"
                         />
                     )}
                 />

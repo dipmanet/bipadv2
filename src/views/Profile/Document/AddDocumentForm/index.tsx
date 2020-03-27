@@ -376,6 +376,14 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         title={
                             value ? 'Edit Document' : 'Add Document'
                         }
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
                     />
                     <ModalBody>
                         <NonFieldErrors faramElement />

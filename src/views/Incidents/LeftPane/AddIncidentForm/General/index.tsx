@@ -11,6 +11,7 @@ import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import Checkbox from '#rsci/Checkbox';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import NonFieldErrors from '#rsci/NonFieldErrors';
 
 import LocationInput from '#components/LocationInput';
 
@@ -59,6 +60,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
         return (
             <div className={_cs(styles.general, className)}>
                 {pending && <LoadingAnimation />}
+                <NonFieldErrors faramElement />
                 <TextArea
                     className={styles.input}
                     faramElementName="description"

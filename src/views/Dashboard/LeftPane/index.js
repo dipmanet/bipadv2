@@ -13,6 +13,7 @@ import modalize from '#rscg/Modalize';
 import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
 import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 
 import { getHazardColor } from '#utils/domain';
 import { groupList } from '#utils/common';
@@ -77,10 +78,11 @@ const AlertTableModal = ({
         <ModalHeader
             title="Alerts"
             rightComponent={(
-                <Button
+                <DangerButton
+                    transparent
                     iconName="close"
                     onClick={closeModal}
-                    transparent
+                    title="Close Modal"
                 />
             )}
         />

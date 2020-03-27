@@ -17,13 +17,15 @@ import ModalBody from '#rscv/Modal/Body';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import SimpleCheckbox from '#rsu/../v2/Input/Checkbox';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+
 
 import {
     createRequestClient,
@@ -366,11 +368,11 @@ class ContactForm extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title={isDefined(contactId) ? 'Edit Contact' : 'Add Contact'}
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
-                            transparent
                         />
                     )}
                 />
@@ -386,6 +388,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                         error={faramErrors}
                         disabled={organizationPending || contactEditPending || contactAddPending}
                     >
+                        <NonFieldErrors faramElementName />
                         <div className={styles.inputsContainer}>
                             <TextInput
                                 faramElementName="name"

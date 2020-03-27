@@ -27,7 +27,6 @@ import {
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
-import Cloak from '#components/Cloak';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -37,9 +36,12 @@ import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import Checkbox from '#rsci/Checkbox';
-import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+
+
+import Cloak from '#components/Cloak';
 
 import styles from './styles.scss';
 
@@ -223,11 +225,11 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add People Loss"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
-                            transparent
                         />
                     )}
                 />
@@ -241,6 +243,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                 >
                     <ModalBody className={styles.modalBody}>
                         {pending && <LoadingAnimation />}
+                        <NonFieldErrors faramElement />
                         <SelectInput
                             faramElementName="status"
                             label="Status"
