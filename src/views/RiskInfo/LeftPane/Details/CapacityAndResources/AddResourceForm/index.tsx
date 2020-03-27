@@ -7,6 +7,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -284,6 +285,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                         )}
                     />
                     <ModalBody>
+                        <NonFieldErrors faramElement />
                         <SelectInput
                             className={styles.hazardInput}
                             faramElementName="resourceType"

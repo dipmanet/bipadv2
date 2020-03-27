@@ -5,9 +5,6 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
-import { Region } from '#store/atom/page/types';
-import { lossMetrics } from '#utils/domain';
-
 import DangerButton from '#rsca/Button/DangerButton';
 import Button from '#rsca/Button';
 import SelectInput from '#rsci/SelectInput';
@@ -16,6 +13,9 @@ import DateInput from '#rsci/DateInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+
+import { Region } from '#store/atom/page/types';
+import { lossMetrics } from '#utils/domain';
 
 import styles from './styles.scss';
 

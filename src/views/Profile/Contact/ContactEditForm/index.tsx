@@ -24,6 +24,8 @@ import LocationInput from '#components/LocationInput';
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+
 
 import {
     createRequestClient,
@@ -386,6 +388,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                         error={faramErrors}
                         disabled={organizationPending || contactEditPending || contactAddPending}
                     >
+                        <NonFieldErrors faramElementName />
                         <div className={styles.inputsContainer}>
                             <TextInput
                                 faramElementName="name"

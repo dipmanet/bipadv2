@@ -8,6 +8,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
@@ -443,6 +444,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     />
                     <ModalBody className={styles.body}>
                         <div className={styles.generalInputs}>
+                            <NonFieldErrors faramElement />
                             <TextArea
                                 className={styles.descriptionInput}
                                 faramElementName="description"

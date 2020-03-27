@@ -16,8 +16,8 @@ import {
     Field,
 } from '#store/atom/page/types';
 
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import Cloak from '#components/Cloak';
-import Button from '#rsca/Button';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -233,6 +233,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                 >
                     <ModalBody className={styles.modalBody}>
                         {pending && <LoadingAnimation />}
+                        <NonFieldErrors faramElement />
                         <TextInput
                             faramElementName="ownerName"
                             label="Owner Name"
