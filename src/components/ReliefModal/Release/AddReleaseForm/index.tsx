@@ -2,6 +2,7 @@ import React from 'react';
 import Redux, {
     compose,
 } from 'redux';
+import { isDefined, isNotDefined } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
@@ -13,6 +14,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import SelectInput from '#rsci/SelectInput';
+import SearchSelectInput from '#rsci/SearchSelectInput';
 import NumberInput from '#rsci/NumberInput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import NonFieldErrors from '#rsci/NonFieldErrors';
@@ -48,6 +50,8 @@ import { MultiResponse } from '#store/atom/response/types';
 
 interface FaramValues {
     incident?: number;
+    people?: number;
+    benificiary?: number;
 }
 interface FaramErrors {
 }
@@ -70,12 +74,15 @@ interface State {
     faramValues: FaramValues;
     faramErrors: object;
     pristine: boolean;
+
+    people: Person[];
 }
 
 interface Params {
     body?: object;
     incident?: number;
     onFailure?: (faramErrors: object) => void;
+    setPeople?: (people: Person[]) => void;
 }
 
 interface StatusOptions {
@@ -101,6 +108,7 @@ const statusList: StatusOptions[] = [
         label: 'affected',
     },
 ];
+
 type PropsWithRedux = OwnProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<PropsWithRedux, Params>;
 
@@ -131,14 +139,34 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         url: '/incident/',
         method: methods.GET,
         onMount: true,
+        query: {
+            fields: ['id', 'title'],
+            limit: -1,
+        },
     },
     peopleGetRequest: {
         url: '/loss-people/',
-        query: ({ params: { incident } = { incident: undefined } }) => ({
-            incident,
-        }),
+        query: ({ params, props }) => {
+            if (isDefined(params) && isDefined(params.incident)) {
+                return {
+                    incident: params.incident,
+                };
+            }
+            if (isDefined(props.value) && isDefined(props.value.incident)) {
+                return {
+                    incident: props.value.incident,
+                };
+            }
+            return undefined;
+        },
         method: methods.GET,
-        onMount: false,
+        onSuccess: ({ params, response }) => {
+            if (params && params.setPeople) {
+                const people = response as MultiResponse<Person>;
+                params.setPeople(people.results);
+            }
+        },
+        onMount: ({ props }) => isDefined(props.value) && isDefined(props.value.incident),
     },
     reliefReleaseAddRequest: {
         url: ({ props }) => (
@@ -172,11 +200,14 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
-        const { value } = this.props;
+        const { value, requests } = this.props;
         this.state = {
-            faramValues: value as FaramValues,
+            faramValues: isDefined(value)
+                ? value as FaramValues
+                : {},
             faramErrors: {},
             pristine: true,
+            people: [],
         };
 
         this.schema = {
@@ -194,18 +225,44 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                 description: [],
             },
         };
+
+        requests.peopleGetRequest.setDefaultParams({
+            setPeople: (people: Person[]) => {
+                this.setState({ people });
+            },
+        });
     }
 
     private schema: object;
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        const { incident } = faramValues;
-        if (incident) {
-            const { requests: { peopleGetRequest } } = this.props;
-            peopleGetRequest.do({ incident });
+        const { faramValues: { incident: oldIncident } } = this.state;
+        const { incident: newIncident } = faramValues;
+
+        let newFaramValues = faramValues;
+
+        if (oldIncident !== newIncident) {
+            if (isNotDefined(newIncident)) {
+                this.setState({ people: [] });
+            } else {
+                const { requests: { peopleGetRequest } } = this.props;
+                peopleGetRequest.do({
+                    incident: newIncident,
+                    setPeople: (people: Person[]) => {
+                        this.setState({ people });
+                    },
+                });
+            }
+
+            newFaramValues = {
+                ...faramValues,
+                people: undefined,
+                benificiary: undefined,
+            };
         }
+
         this.setState({
-            faramValues,
+            faramValues: newFaramValues,
             faramErrors,
             pristine: false,
         });
@@ -243,7 +300,6 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                     pending: incidentsGetPending,
                 },
                 peopleGetRequest: {
-                    response: peopleResponse,
                     pending: peopleGetPending,
                 },
             },
@@ -253,6 +309,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
             faramValues,
             faramErrors,
             pristine,
+            people: personList,
         } = this.state;
 
         let organizationList: Organization[] = [];
@@ -265,12 +322,6 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
         if (!incidentsGetPending && incidentsResponse) {
             const incidents = incidentsResponse as MultiResponse<Incident>;
             incidentList = incidents.results;
-        }
-
-        let personList: Person[] = [];
-        if (!peopleGetPending && peopleResponse) {
-            const people = peopleResponse as MultiResponse<Person>;
-            personList = people.results;
         }
 
         const pending = addReliefPending
@@ -294,6 +345,10 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                     <ModalHeader title="Add Release" />
                     <ModalBody>
                         <NonFieldErrors faramElement />
+                        <TextInput
+                            faramElementName="description"
+                            label="Description"
+                        />
                         <SelectInput
                             faramElementName="providerOrganization"
                             label="Provider Organization"
@@ -305,7 +360,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             faramElementName="amount"
                             label="Amount"
                         />
-                        <SelectInput
+                        <SearchSelectInput
                             faramElementName="incident"
                             label="Incident"
                             options={incidentList}
@@ -318,7 +373,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             options={personList}
                             keySelector={personKeySelector}
                             labelSelector={personLabelSelector}
-                            disabled={peopleGetPending}
+                            disabled={peopleGetPending || isNotDefined(faramValues.incident)}
                         />
                         <SelectInput
                             faramElementName="benificiary"
@@ -326,11 +381,11 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             options={personList}
                             keySelector={personKeySelector}
                             labelSelector={personLabelSelector}
-                            disabled={peopleGetPending}
+                            disabled={peopleGetPending || isNotDefined(faramValues.incident)}
                         />
                         <TextInput
                             faramElementName="benificiaryOther"
-                            label="Benificiary Other"
+                            label="Beneficiary Other"
                         />
                         <SelectInput
                             faramElementName="status"
@@ -339,14 +394,6 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             keySelector={statusKeySelector}
                             labelSelector={statusLabelSelector}
                         />
-                        <NumberInput
-                            faramElementName="amount"
-                            label="Amount"
-                        />
-                        <TextInput
-                            faramElementName="description"
-                            label="Description"
-                        />
                     </ModalBody>
                     <ModalFooter>
                         <DangerButton onClick={closeModal}>
@@ -354,8 +401,8 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                         </DangerButton>
                         <PrimaryButton
                             type="submit"
-                            pending={pending}
-                            disabled={pristine}
+                            pending={addReliefPending}
+                            disabled={pristine || pending}
                         >
                             Submit
                         </PrimaryButton>

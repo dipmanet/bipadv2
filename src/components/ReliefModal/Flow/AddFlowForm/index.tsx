@@ -326,8 +326,8 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                         </DangerButton>
                         <PrimaryButton
                             type="submit"
-                            pending={pending}
-                            disabled={pristine}
+                            pending={addReliefPending}
+                            disabled={pristine || pending}
                         >
                             Submit
                         </PrimaryButton>

@@ -125,7 +125,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/ward/',
         method: methods.GET,
         query: {
-            limit: 9999,
+            limit: -1,
         },
         onSuccess: ({ response, props: { setWards } }) => {
             interface Response { results: PageTypes.Ward[] }
