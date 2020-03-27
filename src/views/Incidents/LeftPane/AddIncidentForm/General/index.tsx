@@ -63,6 +63,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                     className={styles.input}
                     faramElementName="description"
                     label="Description"
+                    autoFocus
                 />
                 <TextArea
                     className={styles.input}

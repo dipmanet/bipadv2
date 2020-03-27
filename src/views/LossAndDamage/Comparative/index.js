@@ -203,6 +203,7 @@ class Comparative extends React.PureComponent {
                             className={styles.regionInput}
                             faramElementName="region1"
                             showHintAndError={false}
+                            // autoFocus
                         />
                         <RegionSelectInput
                             label="Second location"

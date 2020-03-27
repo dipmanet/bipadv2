@@ -262,7 +262,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addResourceModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 <Faram
                     onChange={this.handleFaramChange}
@@ -281,6 +281,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
                             label="Resource Type"
+                            autoFocus
                         />
                         <TextInput
                             faramElementName="title"
@@ -307,7 +308,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             type="submit"
                             disabled={pristine}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

@@ -47,6 +47,14 @@ class LossAndDamageFilter extends React.PureComponent {
 
     static defaultProps = defaultProps;
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showFilters: true,
+        };
+    }
+
     static schema = {
         fields: {
             dateRange: [],
@@ -54,14 +62,6 @@ class LossAndDamageFilter extends React.PureComponent {
             hazard: [],
             metric: 'count',
         },
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            showFilters: true,
-        };
     }
 
     handleShowFiltersButtonClick = () => {
@@ -88,17 +88,6 @@ class LossAndDamageFilter extends React.PureComponent {
             faramErrors,
             pristine: false,
         });
-    }
-
-    handleFaramFailure = (faramErrors) => {
-        this.props.setFilters({
-            faramErrors,
-            pristine: true,
-        });
-    }
-
-    handleFaramSuccess = (_, values) => {
-        // console.warn('Filters', values);
     }
 
     render() {
@@ -181,6 +170,7 @@ class LossAndDamageFilter extends React.PureComponent {
                                 className={styles.startDateInput}
                                 label="Start Date"
                                 faramElementName="start"
+                                // autoFocus
                             />
                             <DateInput
                                 className={styles.endDateInput}

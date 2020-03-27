@@ -136,6 +136,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                     options={priorityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
+                    // autoFocus
                 />
                 <SelectInput
                     faramElementName="subPriority"

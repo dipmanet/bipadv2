@@ -158,6 +158,7 @@ class IncidentFeedbackAckFormModal extends React.PureComponent<Props, State> {
                             className={styles.input}
                             faramElementName="acknowledgedMessage"
                             label="Acknowledge Message"
+                            autoFocus
                         />
                     </ModalBody>
                     <ModalFooter>
@@ -165,7 +166,7 @@ class IncidentFeedbackAckFormModal extends React.PureComponent<Props, State> {
                             type="submit"
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

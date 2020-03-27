@@ -261,7 +261,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 { pending && <LoadingAnimation />}
                 <Faram
@@ -282,6 +282,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                             options={organizationList}
                             keySelector={organizationKeySelector}
                             labelSelector={organizationLabelSelector}
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="providerOrganization"
@@ -326,10 +327,10 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                         </DangerButton>
                         <PrimaryButton
                             type="submit"
-                            pending={pending}
-                            disabled={pristine}
+                            pending={addReliefPending}
+                            disabled={pristine || pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

@@ -1,4 +1,4 @@
-.flow-item {
+.release-item {
     padding: calc(var(--spacing-medium) - var(--spacing-extra-small)) 0;
 
     .basic-details {
@@ -10,7 +10,7 @@
         }
     }
 
-    .event-details {
+    .incident-details {
         display: flex;
         padding: var(--spacing-extra-small) calc(var(--spacing-medium) - var(--spacing-small));
 

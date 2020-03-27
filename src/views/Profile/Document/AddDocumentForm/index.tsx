@@ -359,7 +359,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addDocumentModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram
@@ -381,6 +381,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         <TextInput
                             faramElementName="title"
                             label="Title"
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="category"
@@ -430,7 +431,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             disabled={pristine}
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

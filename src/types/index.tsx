@@ -260,3 +260,38 @@ export interface Organization {
     responsibleFor: unknown;
     wards: unknown;
 }
+
+export interface Release {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    benificiaryOther: number;
+    amount: number;
+    description: string;
+    providerOrganization: number;
+    incident: number;
+    ward: number;
+    person: number;
+    benificiary: number;
+    status: number;
+}
+
+export interface Person {
+    id: number;
+    createdOn: string;
+    modifiedOn: string;
+    status: string;
+    name: string;
+    age: number;
+    gender: string;
+    belowPoverty: boolean;
+    count: number;
+    verified: boolean;
+    verificationMessage: string;
+    nationality: number;
+    ward: number;
+    disability: number;
+    loss: number;
+}
+
+export type Status = 'dead' | 'missing' | 'injured' | 'affected';

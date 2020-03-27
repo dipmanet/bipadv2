@@ -133,9 +133,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/loss-infrastructure/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
+        /*
         onSuccess: ({ response }) => {
             console.warn('response', response);
         },
+        */
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
@@ -235,7 +237,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        console.warn('handleFaramValidationSuccess', faramValues);
+        // console.warn('handleFaramValidationSuccess', faramValues);
         const {
             requests: {
                 addInfrastructureLossRequest,
@@ -290,6 +292,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                 <TextInput
                     faramElementName="title"
                     label="Title"
+                    autoFocus
                 />
                 <SelectInput
                     faramElementName="status"
@@ -363,7 +366,7 @@ class AddInfrastructureLoss extends React.PureComponent<Props, State> {
                         type="submit"
                         disabled={pristine}
                     >
-                        Submit
+                        Save
                     </PrimaryButton>
                 </div>
             </Faram>

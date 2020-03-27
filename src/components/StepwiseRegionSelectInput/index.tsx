@@ -48,6 +48,8 @@ interface OwnProps {
     municipalityInputClassName?: string;
     wardInputClassName?: string;
     wardsHidden?: boolean;
+
+    autoFocus?: boolean;
 }
 
 interface State {
@@ -288,6 +290,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             wardInputClassName,
 
             wardsHidden,
+            autoFocus,
         } = this.props;
 
         const {
@@ -330,6 +333,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     disabled={shouldDisableProvinceInput}
                     showHintAndError={false}
                     placeholder="All provinces"
+                    autoFocus={autoFocus}
                 />
                 <SelectInput
                     className={_cs(districtInputClassName, styles.districtInput)}

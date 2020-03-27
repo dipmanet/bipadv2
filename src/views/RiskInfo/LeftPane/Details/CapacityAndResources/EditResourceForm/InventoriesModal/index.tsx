@@ -5,6 +5,7 @@ import { _cs, Obj, isDefined } from '@togglecorp/fujs';
 import modalize from '#rscg/Modalize';
 import FormattedDate from '#rscv/FormattedDate';
 import Button from '#rsca/Button';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import ListView from '#rscv/List/ListView';
 // import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Modal from '#rscv/Modal';
@@ -117,17 +118,22 @@ const InventoryItem = (props: InventoryItemProps) => {
                         />
                     )}
                     disabled={disabled}
+                    iconName="edit"
+                    transparent
                 >
                     Edit
                 </ModalButton>
             </Cloak>
             <Cloak hiddenIf={p => !p.delete_inventory}>
-                <Button
+                <DangerConfirmButton
                     onClick={handleDelete}
                     disabled={disabled}
+                    iconName="delete"
+                    transparent
+                    confirmationMessage="Are you sure you want to delete this inventory?"
                 >
                     Delete
-                </Button>
+                </DangerConfirmButton>
             </Cloak>
         </div>
     );

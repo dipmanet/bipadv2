@@ -224,6 +224,7 @@ class AddLoss extends React.PureComponent<Props, State> {
                     <TextArea
                         faramElementName="description"
                         label="Description"
+                        autoFocus
                     />
                     <NumberInput
                         faramElementName="estimatedLoss"
@@ -235,7 +236,7 @@ class AddLoss extends React.PureComponent<Props, State> {
                             pending={lossEditPending || incidentPending}
                             disabled={pristine}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </div>
                 </div>

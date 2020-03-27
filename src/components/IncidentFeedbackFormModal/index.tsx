@@ -155,6 +155,7 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
                             className={styles.input}
                             faramElementName="name"
                             label="Name"
+                            autoFocus
                         />
                         <TextInput
                             className={styles.input}
@@ -181,7 +182,7 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
                             type="submit"
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

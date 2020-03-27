@@ -49,7 +49,9 @@ const FilterModal = ({
     showDateRange?: boolean;
 }) => (
     <Modal>
-        <ModalHeader title="Select filters" />
+        <ModalHeader
+            title="Select filters"
+        />
         <ModalBody>
             <Faram
                 error={faramErrors}
@@ -60,6 +62,7 @@ const FilterModal = ({
                 <StepwiseRegionSelectInput
                     faramElementName="region"
                     wardsHidden
+                    // autoFocus
                 />
                 { showMetricSelect && (
                     <SelectInput

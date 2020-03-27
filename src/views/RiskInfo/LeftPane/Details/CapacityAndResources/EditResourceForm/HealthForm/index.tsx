@@ -11,6 +11,7 @@ function HealthForm() {
             <TextInput
                 faramElementName="title"
                 label="Title"
+                autoFocus
             />
             <TextArea
                 faramElementName="description"

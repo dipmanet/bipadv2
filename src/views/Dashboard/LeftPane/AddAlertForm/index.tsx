@@ -415,7 +415,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addAlertFormModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 <Faram
                     className={styles.addAlertForm}
@@ -446,6 +446,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 faramElementName="description"
                                 label="Description"
                                 persistantHintAndError={false}
+                                autoFocus
                             />
                             <div className={styles.inputRow}>
                                 <SelectInput
@@ -520,7 +521,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                             disabled={pristine}
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

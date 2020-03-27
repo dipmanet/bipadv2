@@ -6,7 +6,7 @@ import ScrollTabs from '#rscv/ScrollTabs';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 
 import About from './About';
 // import PrivacyPolicy from './PrivacyPolicy';
@@ -82,7 +82,7 @@ export default class AboutUs extends React.PureComponent {
                     className={styles.header}
                     title="BIPAD"
                     rightComponent={(
-                        <Button
+                        <DangerButton
                             onClick={closeModal}
                             transparent
                             iconName="close"

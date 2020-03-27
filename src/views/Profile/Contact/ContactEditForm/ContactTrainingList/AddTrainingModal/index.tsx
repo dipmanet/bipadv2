@@ -180,6 +180,7 @@ class AddTraining extends React.PureComponent<Props, State> {
                             keySelector={trainingKeySelector}
                             labelSelector={trainingLabelSelector}
                             label="Title"
+                            autoFocus
                         />
                         <NumberInput
                             faramElementName="durationDays"
@@ -197,7 +198,7 @@ class AddTraining extends React.PureComponent<Props, State> {
                             disabled={pristine}
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

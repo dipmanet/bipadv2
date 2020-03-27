@@ -224,7 +224,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addInventoryModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram
@@ -249,6 +249,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Item"
+                            autoFocus
                         />
                         <NumberInput
                             faramElementName="quantity"
@@ -277,7 +278,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                             disabled={pristine}
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

@@ -373,6 +373,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                                 faramElementName="title"
                                 label="Title"
                                 persistantHintAndError={false}
+                                autoFocus
                             />
                             <TextArea
                                 className={styles.descriptionInput}
@@ -421,7 +422,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                             type="submit"
                             disabled={pristine}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

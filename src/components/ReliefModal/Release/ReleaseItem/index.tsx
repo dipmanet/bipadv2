@@ -1,16 +1,15 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import DateOutput from '#components/DateOutput';
+import Cloak from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
-import Cloak from '#components/Cloak';
 
-import { Flow } from '#types';
+import { Release } from '#types';
 
-import AddFlowForm from '../AddFlowForm';
+import AddReleaseForm from '../AddReleaseForm';
 import {
     createRequestClient,
     NewProps,
@@ -20,13 +19,12 @@ import {
 
 import styles from './styles.scss';
 
-
 const ModalAccentButton = modalize(AccentButton);
 
 interface OwnProps{
     className?: string;
     onUpdate: () => void;
-    data: Flow;
+    data: Release;
 }
 interface State {}
 
@@ -34,8 +32,8 @@ interface Params {}
 
 type Props = NewProps<OwnProps, Params>;
 const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
-    reliefFlowDeleteRequest: {
-        url: ({ props: { data: { id } } }) => `/relief-flow/${id}/`,
+    reliefReleaseDeleteRequest: {
+        url: ({ props: { data: { id } } }) => `/relief-release/${id}/`,
         method: methods.DELETE,
         onSuccess: ({ props }) => {
             if (props.onUpdate) {
@@ -45,10 +43,10 @@ const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     },
 };
 
-class FlowItem extends React.PureComponent<Props, State> {
-    private handleFlowDelete = () => {
-        const { requests: { reliefFlowDeleteRequest } } = this.props;
-        reliefFlowDeleteRequest.do();
+class ReleaseItem extends React.PureComponent<Props, State> {
+    private handleReleaseDelete = () => {
+        const { requests: { reliefReleaseDeleteRequest } } = this.props;
+        reliefReleaseDeleteRequest.do();
     }
 
     public render() {
@@ -56,7 +54,7 @@ class FlowItem extends React.PureComponent<Props, State> {
             data,
             onUpdate,
             requests: {
-                reliefFlowDeleteRequest: {
+                reliefReleaseDeleteRequest: {
                     pending,
                 },
             },
@@ -64,59 +62,70 @@ class FlowItem extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
-            type,
+            benificiaryOther,
             amount,
-            date,
             description,
-            receiverOrganization,
             providerOrganization,
-            event,
-            fiscalYear,
+            incident,
+            ward,
+            person,
+            benificiary,
+            status,
         } = data;
 
         return (
-            <div className={_cs(className, styles.flowItem)}>
+            <div className={_cs(className, styles.releaseItem)}>
                 <div className={styles.basicDetails}>
                     <TextOutput
-                        label="type"
-                        value={type}
+                        label="incident"
+                        value={incident}
                     />
                     <TextOutput
                         label="Amount"
                         value={amount}
                     />
                     <TextOutput
-                        label="Received By"
-                        value={receiverOrganization}
-                    />
-                    <TextOutput
                         label="Provided By"
                         value={providerOrganization}
                     />
                 </div>
-                <div className={styles.eventDetails}>
+
+                <div className={styles.incidentDetails}>
                     <TextOutput
-                        label="Event"
-                        value={event}
-                    />
-                    <DateOutput
-                        value={date}
+                        label="Incident"
+                        value={incident}
                     />
                     <TextOutput
-                        label="Fiscal Year"
-                        value={fiscalYear}
+                        label="Person"
+                        value={person}
+                    />
+                    <TextOutput
+                        label="Status"
+                        value={status}
+                    />
+                    <TextOutput
+                        label="Benificiary"
+                        value={benificiary}
+                    />
+                    <TextOutput
+                        label="Other Benificiary"
+                        value={benificiaryOther}
+                    />
+                    <TextOutput
+                        label="Ward"
+                        value={ward}
                     />
                 </div>
                 <div className={styles.description}>
                     {description}
                 </div>
                 <div className={styles.actions}>
-                    <Cloak hiddenIf={p => !p.change_flow}>
+                    <Cloak hiddenIf={p => !p.change_release}>
                         <ModalAccentButton
                             transparent
                             iconName="edit"
                             modal={(
-                                <AddFlowForm
+                                <AddReleaseForm
                                     value={data}
                                     onUpdate={onUpdate}
                                 />
@@ -125,11 +134,11 @@ class FlowItem extends React.PureComponent<Props, State> {
                             Edit
                         </ModalAccentButton>
                     </Cloak>
-                    <Cloak hiddenIf={p => !p.delete_flow}>
+                    <Cloak hiddenIf={p => !p.delete_release}>
                         <DangerConfirmButton
                             iconName="delete"
-                            confirmationMessage="Are you sure you want to delete this relief flow?"
-                            onClick={this.handleFlowDelete}
+                            confirmationMessage="Are you sure you want to delete this relief release?"
+                            onClick={this.handleReleaseDelete}
                             pending={pending}
                             transparent
                         >
@@ -143,5 +152,5 @@ class FlowItem extends React.PureComponent<Props, State> {
 }
 
 export default createRequestClient(requestOptions)(
-    FlowItem,
+    ReleaseItem,
 );

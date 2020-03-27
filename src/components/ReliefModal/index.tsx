@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import Flow from './Flow';
+import Release from './Release';
 
 import styles from './styles.scss';
 
@@ -42,11 +43,11 @@ class ReliefModal extends React.PureComponent<Props, State> {
 
         this.views = {
             flows: {
-                component: () => <Flow />,
+                component: () => <Flow className={styles.flow} />,
             },
 
             releases: {
-                component: () => null,
+                component: () => <Release className={styles.release} />,
             },
         };
 
@@ -86,7 +87,7 @@ class ReliefModal extends React.PureComponent<Props, State> {
                         />
                     )}
                 />
-                <ModalBody>
+                <ModalBody className={styles.modalBody}>
                     <ScrollTabs
                         className={styles.tabs}
                         tabs={this.tabs}

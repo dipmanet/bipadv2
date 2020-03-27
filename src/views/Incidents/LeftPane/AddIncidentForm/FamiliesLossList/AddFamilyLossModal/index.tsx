@@ -236,6 +236,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                         <TextInput
                             faramElementName="ownerName"
                             label="Owner Name"
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="status"
@@ -283,7 +284,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                             disabled={pristine}
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

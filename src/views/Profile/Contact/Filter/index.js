@@ -142,6 +142,7 @@ class ProfileContactFilter extends React.PureComponent {
                             <RegionSelectInput
                                 className={styles.regionSelectInput}
                                 faramElementName="region"
+                                // autoFocus
                             />
                             <Checkbox
                                 className={styles.drrFocalPersonCheckbox}

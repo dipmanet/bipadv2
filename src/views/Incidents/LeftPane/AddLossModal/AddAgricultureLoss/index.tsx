@@ -103,9 +103,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/loss-agriculture/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
+        /*
         onSuccess: ({ params, response }) => {
             console.warn('response', response);
         },
+        */
         onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
             if (onFailure) {
                 onFailure((error as { faramErrors: object }).faramErrors);
@@ -201,6 +203,7 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
                     options={agricultureLossStatusList}
                     keySelector={labelSelector}
                     labelSelector={labelSelector}
+                    autoFocus
                 />
                 <TextInput
                     faramElementName="beneficiaryOwner"
@@ -242,7 +245,7 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
                         type="submit"
                         disabled={pristine}
                     >
-                        Submit
+                        Save
                     </PrimaryButton>
                 </div>
             </Faram>

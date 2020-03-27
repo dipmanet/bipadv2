@@ -317,6 +317,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                             faramElementName="name"
                             label="Name"
                             placeholder="Hari"
+                            autoFocus
                         />
                         <TextInput
                             faramElementName="position"
@@ -365,7 +366,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                                 pending={contactEditPending || contactAddPending}
                                 type="submit"
                             >
-                                {isDefined(contactId) ? 'Edit' : 'Add'}
+                                Save
                             </PrimaryButton>
                         </div>
                     </Faram>

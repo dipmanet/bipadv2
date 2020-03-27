@@ -13,6 +13,7 @@ function GovernanceForm() {
             <TextInput
                 faramElementName="title"
                 label="Title"
+                autoFocus
             />
             <TextArea
                 faramElementName="description"
