@@ -170,6 +170,7 @@ class LossAndDamageFilter extends React.PureComponent {
                                 className={styles.startDateInput}
                                 label="Start Date"
                                 faramElementName="start"
+                                // autoFocus
                             />
                             <DateInput
                                 className={styles.endDateInput}

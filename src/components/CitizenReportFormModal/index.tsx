@@ -234,6 +234,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                             className={styles.input}
                             faramElementName="description"
                             label="Description"
+                            autoFocus
                         />
                         <div className={styles.inputGroup}>
                             <SelectInput

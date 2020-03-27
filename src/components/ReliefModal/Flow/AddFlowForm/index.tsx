@@ -282,6 +282,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                             options={organizationList}
                             keySelector={organizationKeySelector}
                             labelSelector={organizationLabelSelector}
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="providerOrganization"

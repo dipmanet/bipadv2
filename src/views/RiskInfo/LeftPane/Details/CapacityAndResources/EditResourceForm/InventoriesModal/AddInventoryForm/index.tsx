@@ -249,6 +249,7 @@ class AddInventoryForm extends React.PureComponent<Props, State> {
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Item"
+                            autoFocus
                         />
                         <NumberInput
                             faramElementName="quantity"

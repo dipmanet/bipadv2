@@ -446,6 +446,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 faramElementName="description"
                                 label="Description"
                                 persistantHintAndError={false}
+                                autoFocus
                             />
                             <div className={styles.inputRow}>
                                 <SelectInput

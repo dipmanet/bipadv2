@@ -111,6 +111,7 @@ class RealTimeMonitoringFilter extends React.PureComponent<Props, State> {
                     keySelector={sourceKeySelector}
                     labelSelector={sourceLabelSelector}
                     showHintAndError={false}
+                    // autoFocus
                 />
                 <ListSelection
                     label="Other layers"

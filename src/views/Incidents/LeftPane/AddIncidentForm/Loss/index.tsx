@@ -224,6 +224,7 @@ class AddLoss extends React.PureComponent<Props, State> {
                     <TextArea
                         faramElementName="description"
                         label="Description"
+                        autoFocus
                     />
                     <NumberInput
                         faramElementName="estimatedLoss"

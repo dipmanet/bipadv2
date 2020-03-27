@@ -348,6 +348,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                         <TextInput
                             faramElementName="description"
                             label="Description"
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="providerOrganization"

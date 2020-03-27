@@ -281,6 +281,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
                             label="Resource Type"
+                            autoFocus
                         />
                         <TextInput
                             faramElementName="title"

@@ -163,6 +163,7 @@ class StockPileFilter extends React.PureComponent {
                     options={inventoryItemList}
                     showHintAndError={false}
                     className={styles.input}
+                    // autoFocus
                 />
                 <NumberInput
                     key="quantity"

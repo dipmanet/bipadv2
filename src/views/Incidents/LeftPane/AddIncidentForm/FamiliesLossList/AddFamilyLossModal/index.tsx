@@ -236,6 +236,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                         <TextInput
                             faramElementName="ownerName"
                             label="Owner Name"
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="status"

@@ -180,6 +180,7 @@ class AddTraining extends React.PureComponent<Props, State> {
                             keySelector={trainingKeySelector}
                             labelSelector={trainingLabelSelector}
                             label="Title"
+                            autoFocus
                         />
                         <NumberInput
                             faramElementName="durationDays"

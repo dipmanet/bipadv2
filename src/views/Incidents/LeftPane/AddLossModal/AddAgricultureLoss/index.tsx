@@ -203,6 +203,7 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
                     options={agricultureLossStatusList}
                     keySelector={labelSelector}
                     labelSelector={labelSelector}
+                    autoFocus
                 />
                 <TextInput
                     faramElementName="beneficiaryOwner"

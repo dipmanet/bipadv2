@@ -60,6 +60,7 @@ const FilterModal = ({
                 <StepwiseRegionSelectInput
                     faramElementName="region"
                     wardsHidden
+                    // autoFocus
                 />
                 { showMetricSelect && (
                     <SelectInput

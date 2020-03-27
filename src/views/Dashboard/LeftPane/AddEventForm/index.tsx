@@ -373,6 +373,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                                 faramElementName="title"
                                 label="Title"
                                 persistantHintAndError={false}
+                                autoFocus
                             />
                             <TextArea
                                 className={styles.descriptionInput}

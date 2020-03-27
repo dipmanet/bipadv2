@@ -36,6 +36,7 @@ const propTypes = {
     municipalities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     provinces: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     showHintAndError: PropTypes.bool,
+    autoFocus: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -43,6 +44,7 @@ const defaultProps = {
     value: {},
     showHintAndError: false,
     maxOptions: 0,
+    autoFocus: false,
 };
 
 const mapStateToProps = state => ({
@@ -134,6 +136,7 @@ export default class RegionSelectInput extends React.PureComponent {
             districts,
             municipalities,
             maxOptions,
+            autoFocus,
             ...otherProps
         } = this.props;
 
@@ -175,6 +178,7 @@ export default class RegionSelectInput extends React.PureComponent {
                     keySelector={geoareaKeySelector}
                     labelSelector={geoareaLabelSelector}
                     onChange={this.handleGeoAreaChange}
+                    autoFocus={autoFocus}
                 />
             </div>
         );

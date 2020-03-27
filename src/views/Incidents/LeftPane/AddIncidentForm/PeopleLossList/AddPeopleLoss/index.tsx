@@ -247,6 +247,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                             options={peopleLossStatusList}
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
+                            autoFocus
                         />
                         <TextInput
                             faramElementName="name"

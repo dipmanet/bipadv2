@@ -381,6 +381,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         <TextInput
                             faramElementName="title"
                             label="Title"
+                            autoFocus
                         />
                         <SelectInput
                             faramElementName="category"

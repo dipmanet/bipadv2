@@ -12,6 +12,7 @@ function FinanceForm() {
             <TextInput
                 faramElementName="title"
                 label="Title"
+                autoFocus
             />
             <TextArea
                 faramElementName="description"

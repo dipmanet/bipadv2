@@ -317,6 +317,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                             faramElementName="name"
                             label="Name"
                             placeholder="Hari"
+                            autoFocus
                         />
                         <TextInput
                             faramElementName="position"

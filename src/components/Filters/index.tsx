@@ -126,6 +126,7 @@ class Filters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="region"
                     wardsHidden
+                    // autoFocus
                 />
             ),
         },
@@ -134,6 +135,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <HazardSelectionInput
                     className={styles.activeView}
                     faramElementName="hazard"
+                    // autoFocus
                 />
             ),
         },
@@ -142,6 +144,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <div className={styles.activeView}>
                     <PastDateRangeInput
                         faramElementName="dataDateRange"
+                        // autoFocus
                     />
                 </div>
             ),
