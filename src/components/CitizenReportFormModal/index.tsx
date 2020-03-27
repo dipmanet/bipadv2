@@ -136,14 +136,14 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
                 // TODO: handle error
                 console.warn('failure', error);
                 params.setFaramErrors({
-                    $internal: ['Some problem ocurred'],
+                    $internal: ['Some problem occurred'],
                 });
             }
         },
         onFatal: ({ params }) => {
             if (params && params.setFaramErrors) {
                 params.setFaramErrors({
-                    $internal: ['Some problem ocurred'],
+                    $internal: ['Some problem occurred'],
                 });
             }
         },
