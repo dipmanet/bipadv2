@@ -175,7 +175,7 @@ class RainWatch extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={closeModal}
+                // onClose={closeModal}
                 className={styles.rainWatchModal}
             >
                 <ModalHeader

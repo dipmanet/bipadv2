@@ -146,7 +146,7 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addIncidentFeedbackFormModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <Faram
                     className={styles.form}

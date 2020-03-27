@@ -126,7 +126,7 @@ class RiverWatch extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={closeModal}
+                // onClose={closeModal}
                 className={styles.riverWatchModal}
             >
                 <ModalHeader

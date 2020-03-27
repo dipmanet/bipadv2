@@ -309,7 +309,7 @@ class RainDetails extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={handleModalClose}
+                // onClose={handleModalClose}
                 className={_cs(className, styles.rainDetailModal)}
             >
                 <ModalHeader

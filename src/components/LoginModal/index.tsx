@@ -184,7 +184,7 @@ class Login extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.loginModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <Faram
                     onChange={this.handleFaramChange}

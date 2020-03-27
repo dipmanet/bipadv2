@@ -532,7 +532,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addIncidentFormModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <ModalHeader
                     title="Add / edit incident"

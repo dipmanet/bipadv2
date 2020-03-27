@@ -270,10 +270,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
             || organizationsGetPending || fiscalYearsGetPending;
 
         return (
-            <Modal
-                onClose={closeModal}
-                // closeOnEscape
-            >
+            <Modal>
                 { pending && <LoadingAnimation />}
                 <Faram
                     onChange={this.handleFaramChange}
