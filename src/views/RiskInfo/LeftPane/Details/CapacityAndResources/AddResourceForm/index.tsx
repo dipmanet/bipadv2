@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import Faram, {
-    requiredCondition,
 } from '@togglecorp/faram';
 
+import LocationInput from '#components/LocationInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -62,10 +62,12 @@ interface PropsFromState {
 }
 interface PropsFromDispatch {
 }
+
 interface FaramValues {
     title?: string;
     description?: string;
     point?: string;
+    location?: Location;
     ward?: number;
     resourceType?: string;
 }
@@ -95,6 +97,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addResourcePostRequest: {
         url: '/resource/',
         method: methods.POST,
+        query: () => ({ meta: true }),
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
             if (onSuccess) {
@@ -202,9 +205,19 @@ class AddResourceForm extends React.PureComponent<Props, State> {
     }
 
     private handleFaramValidationSuccess = (_: FaramValues, faramValues: FaramValues) => {
+        const {
+            location,
+            ...others
+        } = faramValues;
+        let values = others;
+        if (location) {
+            const point = location.geoJson.features[0].geometry;
+            const { ward } = location.region;
+            values = { ...values, point, ward };
+        }
         const { requests: { addResourcePostRequest }, onUpdate, closeModal } = this.props;
         addResourcePostRequest.do({
-            body: faramValues,
+            body: values,
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
@@ -302,6 +315,10 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                         <TextArea
                             faramElementName="description"
                             label="Description"
+                        />
+                        <LocationInput
+                            className={styles.locationInput}
+                            faramElementName="location"
                         />
                         {
                             !pending && resourceType && (

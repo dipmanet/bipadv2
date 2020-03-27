@@ -31,7 +31,7 @@ const TourismFields: FunctionComponent<Props> = ({ resourceEnums }: Props) => {
             />
             <SelectInput
                 faramElementName="towersName"
-                label="Tower Type"
+                label="Tower Name"
                 options={towerNameOptions}
                 keySelector={keySelector}
                 labelSelector={labelSelector}

@@ -83,6 +83,10 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums }: Props) => {
                 faramElementName="noOfStaffs"
                 label="No of staffs"
             />
+            <NumberInput
+                faramElementName="noOfBeds"
+                label="No of beds"
+            />
             <TextInput
                 faramElementName="specialization"
                 label="Specialization"
