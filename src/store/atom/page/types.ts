@@ -6,25 +6,31 @@ export interface Field {
     title: string;
 }
 
+interface Centroid {
+    type: 'Point';
+    coordinates: [number, number];
+}
+type BBox = [number, number, number, number];
+
 export interface Province {
     id: number;
-    bbox: number[];
-    centroid: number[];
+    bbox: BBox;
+    centroid: Centroid;
     title: string;
     code?: string;
 }
 export interface District {
     id: number;
-    bbox: number[];
-    centroid: number[];
+    bbox: BBox;
+    centroid: Centroid;
     title: string;
     province: number;
     code?: string;
 }
 export interface Municipality {
     id: number;
-    bbox: number[];
-    centroid: number[];
+    bbox: BBox;
+    centroid: Centroid;
     title: string;
     province?: number;
     district: number;
@@ -32,8 +38,8 @@ export interface Municipality {
 }
 export interface Ward {
     id: number;
-    // bbox: number[];
-    centroid: number[];
+    // bbox: BBox;
+    centroid: Centroid;
     title: string;
     province?: number;
     district?: number;

@@ -139,7 +139,11 @@ class ContactPage extends React.PureComponent<Props, State> {
         contactList: Contact[],
         municipalityList: Municipality[],
     ) => {
-        const municipalityBounds = listToMap(municipalityList, d => d.id, d => d.centroid);
+        const municipalityBounds = listToMap(
+            municipalityList,
+            d => d.id,
+            d => d.centroid,
+        );
 
         const pointList = contactList
             .filter(d => d.point || d.municipality)
