@@ -365,7 +365,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                                 pending={contactEditPending || contactAddPending}
                                 type="submit"
                             >
-                                {isDefined(contactId) ? 'Edit' : 'Add'}
+                                Save
                             </PrimaryButton>
                         </div>
                     </Faram>

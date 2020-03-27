@@ -421,7 +421,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                             type="submit"
                             disabled={pristine}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

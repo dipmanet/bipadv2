@@ -165,7 +165,7 @@ class IncidentFeedbackAckFormModal extends React.PureComponent<Props, State> {
                             type="submit"
                             pending={pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

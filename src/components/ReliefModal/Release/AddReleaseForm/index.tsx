@@ -404,7 +404,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             pending={addReliefPending}
                             disabled={pristine || pending}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </ModalFooter>
                 </Faram>

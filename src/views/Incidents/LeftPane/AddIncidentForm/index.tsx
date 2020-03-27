@@ -298,7 +298,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                         pending={incidentPending}
                                         disabled={pristine}
                                     >
-                                        Submit
+                                        Save
                                     </PrimaryButton>
                                 </div>
                             </Faram>

@@ -235,7 +235,7 @@ class AddLoss extends React.PureComponent<Props, State> {
                             pending={lossEditPending || incidentPending}
                             disabled={pristine}
                         >
-                            Submit
+                            Save
                         </PrimaryButton>
                     </div>
                 </div>
