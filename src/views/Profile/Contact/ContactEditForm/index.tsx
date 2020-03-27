@@ -21,6 +21,8 @@ import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
@@ -390,6 +392,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                     >
                         <NonFieldErrors faramElementName />
                         <div className={styles.inputsContainer}>
+                            <NonFieldErrors faramElement />
                             <TextInput
                                 faramElementName="name"
                                 label="Name"
