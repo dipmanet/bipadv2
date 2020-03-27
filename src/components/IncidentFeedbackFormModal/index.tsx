@@ -199,6 +199,9 @@ class IncidentFeedbackFormModal extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
+                        <DangerButton onClick={closeModal}>
+                            Close
+                        </DangerButton>
                         <PrimaryButton
                             type="submit"
                             pending={pending}

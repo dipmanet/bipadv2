@@ -6,7 +6,6 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
-import Button from '#rsca/Button';
 import SelectInput from '#rsci/SelectInput';
 import DateInput from '#rsci/DateInput';
 
@@ -107,9 +106,9 @@ const FilterModal = ({
             </Faram>
         </ModalBody>
         <ModalFooter>
-            <Button onClick={closeModal}>
+            <DangerButton onClick={closeModal}>
                 Close
-            </Button>
+            </DangerButton>
         </ModalFooter>
     </Modal>
 );

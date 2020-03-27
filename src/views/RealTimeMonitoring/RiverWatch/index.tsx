@@ -150,6 +150,9 @@ class RiverWatch extends React.PureComponent<Props> {
                     />
                 </ModalBody>
                 <ModalFooter>
+                    <DangerButton onClick={closeModal}>
+                        Close
+                    </DangerButton>
                     <DownloadButton
                         value={formattedTableData}
                         name="River Watch.csv"

@@ -199,10 +199,8 @@ class AddTraining extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            onClick={closeModal}
-                        >
-                            Cancel
+                        <DangerButton onClick={closeModal}>
+                            Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"

@@ -286,10 +286,8 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                         </Cloak>
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            onClick={closeModal}
-                        >
-                            Cancel
+                        <DangerButton onClick={closeModal}>
+                            Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"

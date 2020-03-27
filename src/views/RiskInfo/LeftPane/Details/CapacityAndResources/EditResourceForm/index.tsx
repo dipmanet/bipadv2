@@ -230,10 +230,8 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                     <ModalFooter
                         className={styles.footer}
                     >
-                        <DangerButton
-                            onClick={onCloseButtonClick}
-                        >
-                            Cancel
+                        <DangerButton onClick={onCloseButtonClick}>
+                            Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"

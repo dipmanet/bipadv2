@@ -284,9 +284,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                         </Cloak>
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            onClick={closeModal}
-                        >
+                        <DangerButton onClick={closeModal}>
                             Cancel
                         </DangerButton>
                         <PrimaryButton

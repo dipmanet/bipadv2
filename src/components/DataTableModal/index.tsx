@@ -54,6 +54,9 @@ class DataTableModal extends React.PureComponent<Props> {
                     />
                 </ModalBody>
                 <ModalFooter className={styles.modalFooter}>
+                    <DangerButton onClick={closeModal}>
+                        Close
+                    </DangerButton>
                     <DownloadButton
                         value={data}
                         name={`${title}.csv`}
