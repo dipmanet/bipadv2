@@ -2,11 +2,11 @@ import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
-import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextArea from '#rsci/TextArea';
@@ -145,10 +145,11 @@ class IncidentFeedbackAckFormModal extends React.PureComponent<Props, State> {
                         className={styles.header}
                         title="Acknowledge Feedback"
                         rightComponent={(
-                            <Button
-                                onClick={closeModal}
+                            <DangerButton
                                 transparent
                                 iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
                             />
                         )}
                     />

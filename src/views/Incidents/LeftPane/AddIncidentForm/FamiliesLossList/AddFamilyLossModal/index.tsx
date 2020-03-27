@@ -215,10 +215,10 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add Family Loss"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            transparent
                             title="Close Modal"
                         />
                     )}

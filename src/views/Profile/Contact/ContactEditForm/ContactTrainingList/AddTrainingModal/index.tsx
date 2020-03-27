@@ -156,11 +156,11 @@ class AddTraining extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add Training"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
-                            transparent
                         />
                     )}
                 />

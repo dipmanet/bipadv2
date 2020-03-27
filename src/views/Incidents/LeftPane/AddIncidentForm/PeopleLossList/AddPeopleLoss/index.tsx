@@ -223,11 +223,11 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add People Loss"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
                             title="Close Modal"
-                            transparent
                         />
                     )}
                 />

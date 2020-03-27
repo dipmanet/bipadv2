@@ -8,6 +8,7 @@ import ModalFooter from '#rscv/Modal/Footer';
 import { Region } from '#store/atom/page/types';
 import { lossMetrics } from '#utils/domain';
 
+import DangerButton from '#rsca/Button/DangerButton';
 import Button from '#rsca/Button';
 import SelectInput from '#rsci/SelectInput';
 import DateInput from '#rsci/DateInput';
@@ -51,6 +52,14 @@ const FilterModal = ({
     <Modal>
         <ModalHeader
             title="Select filters"
+            rightComponent={(
+                <DangerButton
+                    transparent
+                    iconName="close"
+                    onClick={closeModal}
+                    title="Close Modal"
+                />
+            )}
         />
         <ModalBody>
             <Faram

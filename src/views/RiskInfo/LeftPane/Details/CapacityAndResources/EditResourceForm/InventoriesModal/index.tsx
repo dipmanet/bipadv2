@@ -5,6 +5,7 @@ import { _cs, Obj, isDefined } from '@togglecorp/fujs';
 import modalize from '#rscg/Modalize';
 import FormattedDate from '#rscv/FormattedDate';
 import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import ListView from '#rscv/List/ListView';
 // import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -231,11 +232,11 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Inventories"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            title="Close modal"
-                            transparent
+                            title="Close Modal"
                         />
                     )}
                 />

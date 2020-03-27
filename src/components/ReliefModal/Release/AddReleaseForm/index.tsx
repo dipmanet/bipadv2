@@ -343,9 +343,10 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                         title="Add Release"
                         rightComponent={(
                             <DangerButton
-                                onClick={closeModal}
                                 transparent
                                 iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
                             />
                         )}
                     />

@@ -17,7 +17,6 @@ import {
 } from '#store/atom/page/types';
 
 import Cloak from '#components/Cloak';
-import Button from '#rsca/Button';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -216,10 +215,10 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add Family Loss"
                     rightComponent={(
-                        <Button
+                        <DangerButton
+                            transparent
                             iconName="close"
                             onClick={closeModal}
-                            transparent
                             title="Close Modal"
                         />
                     )}

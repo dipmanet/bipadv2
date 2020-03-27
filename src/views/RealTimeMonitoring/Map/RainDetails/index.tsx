@@ -319,6 +319,7 @@ class RainDetails extends React.PureComponent<Props> {
                             transparent
                             iconName="close"
                             onClick={handleModalClose}
+                            title="Close Modal"
                         />
                     )}
                 />

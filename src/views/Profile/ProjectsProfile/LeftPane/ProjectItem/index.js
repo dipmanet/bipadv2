@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import FormattedDate from '#rscv/FormattedDate';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ListView from '#rscv/List/ListView';
 import ModalHeader from '#rscv/Modal/Header';
@@ -176,10 +176,11 @@ class ProjectItem extends React.PureComponent {
                             className={styles.modalHeader}
                             title={title}
                             rightComponent={(
-                                <Button
+                                <DangerButton
                                     transparent
                                     iconName="close"
                                     onClick={this.handleModalClose}
+                                    title="Close Modal"
                                 />
                             )}
                         />

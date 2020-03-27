@@ -4,7 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
-import Button from '#rsca/Button';
+import DangerButton from '#rsca/Button/DangerButton';
 
 import template from './source.html';
 import styles from './styles.scss';
@@ -17,10 +17,11 @@ const Indicator = ({
         <ModalHeader
             title="Indicators"
             rightComponent={(
-                <Button
-                    iconName="close"
+                <DangerButton
                     transparent
+                    iconName="close"
                     onClick={closeModal}
+                    title="Close Modal"
                 />
             )}
         />

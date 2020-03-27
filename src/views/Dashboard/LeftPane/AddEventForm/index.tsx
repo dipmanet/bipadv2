@@ -17,7 +17,7 @@ import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import ConfirmButton from '#rsca/ConfirmButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import LocationInput from '#components/LocationInput';
 
@@ -358,10 +358,12 @@ class AddEventForm extends React.PureComponent<Props, State> {
                     <ModalHeader
                         title="Add / edit event"
                         rightComponent={(
-                            <ConfirmButton
-                                onClick={onCloseButtonClick}
+                            <DangerConfirmButton
                                 transparent
                                 iconName="close"
+                                onClick={onCloseButtonClick}
+                                title="Close Modal"
+
                                 confirmationMessage="Are you sure you want to close the form?"
                             />
                         )}

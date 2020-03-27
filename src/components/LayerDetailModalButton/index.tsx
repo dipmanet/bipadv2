@@ -4,6 +4,7 @@ import {
     camelToNormal,
 } from '@togglecorp/fujs';
 
+import DangerButton from '#rsca/Button/DangerButton';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -227,10 +228,11 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                 <ModalHeader
                     title="Layer details"
                     rightComponent={(
-                        <Button
+                        <DangerButton
                             transparent
                             iconName="close"
                             onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

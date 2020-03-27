@@ -272,7 +272,17 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     value={faramValues}
                     error={faramErrors}
                 >
-                    <ModalHeader title="Add Resource" />
+                    <ModalHeader
+                        title="Add Resource"
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
                     <ModalBody>
                         <SelectInput
                             className={styles.hazardInput}

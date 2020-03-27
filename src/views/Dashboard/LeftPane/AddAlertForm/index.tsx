@@ -18,7 +18,7 @@ import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Checkbox from '#rsci/Checkbox';
-import ConfirmButton from '#rsca/ConfirmButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import LocationInput from '#components/LocationInput';
 
@@ -430,12 +430,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     <ModalHeader
                         title="Add / edit alert"
                         rightComponent={(
-                            <ConfirmButton
-                                disabled={pending}
-                                onClick={onCloseButtonClick}
+                            <DangerConfirmButton
                                 transparent
                                 iconName="close"
+                                onClick={onCloseButtonClick}
+                                title="Close Modal"
+
                                 confirmationMessage="Are you sure you want to close the form?"
+                                disabled={pending}
                             />
                         )}
                     />

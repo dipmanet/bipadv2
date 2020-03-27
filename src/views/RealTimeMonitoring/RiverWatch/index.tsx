@@ -136,6 +136,7 @@ class RiverWatch extends React.PureComponent<Props> {
                             transparent
                             iconName="close"
                             onClick={closeModal}
+                            title="Close Modal"
                         />
                     )}
                 />

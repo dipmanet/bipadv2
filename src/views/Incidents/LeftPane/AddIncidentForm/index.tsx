@@ -16,7 +16,7 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import ConfirmButton from '#rsca/ConfirmButton';
+import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Cloak from '#components/Cloak';
 
@@ -531,10 +531,12 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title="Add / edit incident"
                     rightComponent={(
-                        <ConfirmButton
-                            onClick={closeModal}
+                        <DangerConfirmButton
                             transparent
                             iconName="close"
+                            onClick={closeModal}
+                            title="Close Modal"
+
                             confirmationMessage="Are you sure you want to close the form?"
                         />
                     )}
