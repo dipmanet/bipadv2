@@ -359,7 +359,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addDocumentModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram

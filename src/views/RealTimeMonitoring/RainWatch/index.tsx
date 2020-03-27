@@ -174,7 +174,7 @@ class RainWatch extends React.PureComponent<Props> {
         const formattedTableData = convertNormalTableToCsv(realTimeRain, this.rainWatchHeader);
         return (
             <Modal
-                closeOnEscape
+                // closeOnEscape
                 onClose={closeModal}
                 className={styles.rainWatchModal}
             >

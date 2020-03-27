@@ -169,8 +169,8 @@ class ProjectItem extends React.PureComponent {
                 {showModal && (
                     <Modal
                         className={styles.modal}
-                        closeOnEscape
-                        closeOnOutsideClick
+                        // closeOnEscape
+                        // closeOnOutsideClick
                     >
                         <ModalHeader
                             className={styles.modalHeader}

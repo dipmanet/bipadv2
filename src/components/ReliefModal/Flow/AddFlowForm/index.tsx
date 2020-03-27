@@ -261,7 +261,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 { pending && <LoadingAnimation />}
                 <Faram

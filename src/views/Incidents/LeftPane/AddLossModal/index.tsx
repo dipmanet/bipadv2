@@ -97,7 +97,7 @@ class AddLossModal extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addLossModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 <ModalHeader title="Add Loss" />
                 <ModalBody>

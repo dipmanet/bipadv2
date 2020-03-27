@@ -125,7 +125,7 @@ class RiverWatch extends React.PureComponent<Props> {
         const formattedTableData = convertNormalTableToCsv(realTimeRiver, this.riverWatchHeader);
         return (
             <Modal
-                closeOnEscape
+                // closeOnEscape
                 onClose={closeModal}
                 className={styles.riverWatchModal}
             >

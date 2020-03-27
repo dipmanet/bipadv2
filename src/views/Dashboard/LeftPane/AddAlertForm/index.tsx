@@ -415,7 +415,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addAlertFormModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 <Faram
                     className={styles.addAlertForm}

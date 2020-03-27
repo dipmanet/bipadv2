@@ -233,7 +233,7 @@ class RiverDetails extends React.PureComponent<Props> {
 
         return (
             <Modal
-                closeOnEscape
+                // closeOnEscape
                 onClose={handleModalClose}
                 className={styles.riverDetailModal}
             >

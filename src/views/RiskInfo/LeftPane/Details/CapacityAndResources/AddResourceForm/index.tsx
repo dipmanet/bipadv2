@@ -262,7 +262,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addResourceModal, className)}
                 onClose={closeModal}
-                closeOnEscape
+                // closeOnEscape
             >
                 <Faram
                     onChange={this.handleFaramChange}

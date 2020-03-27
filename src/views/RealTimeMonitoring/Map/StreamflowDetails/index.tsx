@@ -131,7 +131,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
         const pending = isAnyRequestPending(requests);
         return (
             <Modal
-                closeOnEscape
+                // closeOnEscape
                 onClose={handleModalClose}
                 className={styles.streamflowModal}
             >
