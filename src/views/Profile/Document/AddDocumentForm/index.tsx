@@ -22,6 +22,7 @@ import SelectInput from '#rsci/SelectInput';
 import RawFileInput from '#rsci/RawFileInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import DateInput from '#rsci/DateInput';
 
 import NormalStepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
@@ -240,7 +241,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                 // province: [],
                 // district: [],
                 // municipality: [],
-                // publishedDate: [],
+                publishedDate: [],
             },
             validation: (faramValues: FaramValues) => {
                 const errors: string[] = [];
@@ -289,13 +290,13 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             requests: { addDocumentPostRequest },
         } = this.props;
         const {
-            // publishedDate: date,
+            publishedDate,
             stepwiseRegion,
             ...others
         } = faramValues;
 
-        const date = new Date();
-        const publishedDate = encodeDate(new Date(date));
+        // const date = new Date();
+        // const publishedDate = encodeDate(new Date(date));
         const newBody = {
             ...others,
             publishedDate,
@@ -389,6 +390,10 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Category"
+                        />
+                        <DateInput
+                            faramElementName="publishedDate"
+                            label="Published Date"
                         />
                         <SelectInput
                             faramElementName="region"

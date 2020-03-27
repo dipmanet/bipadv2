@@ -141,6 +141,14 @@ export function createConnectedRequestCoordinator<OwnProps>() {
             } = request;
             const sanitizedResponse = sanitizeResponse(body);
 
+
+            /*
+            if (methods.POST || methods.PUT || methods.PATCH || methods.DELETE) {
+                // eslint-disable-next-line
+                alert('Success');
+            }
+            */
+
             const extras = requestOptions as { schemaName?: string };
             if (!extras || extras.schemaName === undefined) {
                 // NOTE: usually there is no response body for DELETE

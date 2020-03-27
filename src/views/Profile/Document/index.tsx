@@ -197,6 +197,8 @@ const DocumentRenderer = (props: DocumentProps) => {
                         <a
                             className={styles.downloadLink}
                             href={file}
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <Icon
                                 className={styles.downloadIcon}

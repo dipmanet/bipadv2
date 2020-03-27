@@ -5,6 +5,7 @@ import Redux, {
 import { connect } from 'react-redux';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
+import TextInput from '#rsci/TextInput';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Modal from '#rscv/Modal';
@@ -178,6 +179,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
 
         this.schema = {
             fields: {
+                description: [],
                 receiverOrganization: [requiredCondition],
                 providerOrganization: [],
                 amount: [requiredCondition],
@@ -276,6 +278,11 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                     <ModalHeader title="Add Flow" />
                     <ModalBody>
                         <NonFieldErrors faramElement />
+                        <TextInput
+                            autoFocus
+                            faramElementName="description"
+                            label="Description"
+                        />
                         <SelectInput
                             faramElementName="receiverOrganization"
                             label="Receiver Organization"

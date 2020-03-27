@@ -330,7 +330,7 @@ export const incidentSelector = createSelector(
 
 export const resourceListSelectorRP = createSelector(
     responsePageSelector,
-    ({ resourceList }) => resourceList,
+    ({ resourceList }) => [...resourceList].sort(),
 );
 
 
