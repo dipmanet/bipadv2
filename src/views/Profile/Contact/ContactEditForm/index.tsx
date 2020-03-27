@@ -12,6 +12,7 @@ import Faram, {
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import ModalHeader from '#rscv/Modal/Header';
+import Message from '#rscv/Message';
 import ModalBody from '#rscv/Modal/Body';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
@@ -23,7 +24,6 @@ import LocationInput from '#components/LocationInput';
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
-import { sanitizeResponse } from '#utils/common';
 
 import {
     createRequestClient,
@@ -386,81 +386,101 @@ class ContactForm extends React.PureComponent<Props, State> {
                         error={faramErrors}
                         disabled={organizationPending || contactEditPending || contactAddPending}
                     >
-                        <TextInput
-                            faramElementName="name"
-                            label="Name"
-                            placeholder="Hari"
-                            autoFocus
-                        />
-                        <TextInput
-                            faramElementName="position"
-                            label="Position"
-                            placeholder="Officer"
-                        />
-                        <TextInput
-                            faramElementName="email"
-                            label="Email"
-                            placeholder="ram@neoc.gov.np"
-                        />
-                        {details && details.image && (
-                            <div className={styles.previousImage}>
-                                <div>
-                                    Previous Image
-                                </div>
-                                <img
-                                    className={styles.image}
-                                    src={details.image}
-                                    alt="profile"
+                        <div className={styles.inputsContainer}>
+                            <TextInput
+                                faramElementName="name"
+                                label="Name"
+                                placeholder="Hari"
+                                autoFocus
+                            />
+                            <TextInput
+                                faramElementName="position"
+                                label="Position"
+                                placeholder="Officer"
+                            />
+                            <TextInput
+                                faramElementName="email"
+                                label="Email"
+                                placeholder="ram@neoc.gov.np"
+                            />
+                        </div>
+                        <div className={styles.inputsContainer}>
+                            <div className={styles.imageContainer}>
+                                {details && details.image ? (
+                                    <>
+                                        <div>
+                                            Previous Image
+                                        </div>
+                                        <img
+                                            className={styles.image}
+                                            src={details.image}
+                                            alt="profile"
+                                        />
+                                    </>
+                                ) : (
+                                    <div className={styles.noImageMessage}>
+                                        <Message>
+                                            No Image Available
+                                        </Message>
+                                    </div>
+                                )}
+                                <RawFileInput
+                                    faramElementName="image"
+                                    showStatus
+                                    accept="image/*"
+                                >
+                                    Upload Image
+                                </RawFileInput>
+                            </div>
+                            <div className={styles.verticalInputsContainer}>
+                                <TextInput
+                                    faramElementName="workNumber"
+                                    type="number"
+                                    label="Work Number"
+                                />
+                                <TextInput
+                                    faramElementName="mobileNumber"
+                                    type="number"
+                                    label="Mobile Number"
+                                />
+                                <Checkbox
+                                    className={styles.checkbox}
+                                    faramElementName="isDrrFocalPerson"
+                                    label="Is DRR Focal Person"
+                                />
+                                <SelectInput
+                                    faramElementName="organization"
+                                    label="Organization"
+                                    options={organizationList}
+                                    keySelector={organizationKeySelector}
+                                    labelSelector={organizationLabelSelector}
+                                />
+                                <SelectInput
+                                    faramElementName="committee"
+                                    label="Committee"
+                                    options={committeeValueList}
+                                    keySelector={committeeKeySelector}
+                                    labelSelector={committeeLabelSelector}
                                 />
                             </div>
-                        )}
-                        <RawFileInput
-                            faramElementName="image"
-                            showStatus
-                            accept="image/*"
-                        >
-                            Upload Image
-                        </RawFileInput>
-                        <TextInput
-                            faramElementName="workNumber"
-                            type="number"
-                            label="Work Number"
-                        />
-                        <TextInput
-                            faramElementName="mobileNumber"
-                            type="number"
-                            label="Mobile Number"
-                        />
-                        <Checkbox
-                            className={styles.checkbox}
-                            faramElementName="isDrrFocalPerson"
-                            label="Is DRR Focal Person"
-                        />
-                        <SelectInput
-                            faramElementName="organization"
-                            label="Organization"
-                            options={organizationList}
-                            keySelector={organizationKeySelector}
-                            labelSelector={organizationLabelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="committee"
-                            label="Committee"
-                            options={committeeValueList}
-                            keySelector={committeeKeySelector}
-                            labelSelector={committeeLabelSelector}
-                        />
-                        <StepwiseRegionSelectInput
-                            faramElementName="stepwiseRegion"
-                        />
-                        <TextInput
-                            faramElementName="communityAddress"
-                            label="Community Address"
-                        />
-                        <LocationInput
-                            className={styles.locationInput}
-                            faramElementName="location"
-                        />
+                        </div>
+                        <div className={styles.inputsContainer}>
+                            <TextInput
+                                faramElementName="communityAddress"
+                                label="Community Address"
+                            />
+                            <StepwiseRegionSelectInput
+                                className={styles.stepwiseInput}
+                                faramElementName="stepwiseRegion"
+                                showHintAndError
+                            />
+                        </div>
+                        <div className={styles.inputsContainer}>
+                            <LocationInput
+                                className={styles.locationInput}
+                                faramElementName="location"
+                            />
+                        </div>
                         <div className={styles.actionButtons}>
                             <PrimaryButton
                                 disabled={pristine}

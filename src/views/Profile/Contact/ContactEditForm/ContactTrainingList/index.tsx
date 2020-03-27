@@ -9,7 +9,7 @@ import {
     methods,
 } from '#request';
 
-import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Table from '#rscv/Table';
@@ -24,7 +24,7 @@ import AddTraining from './AddTrainingModal';
 import { trainingValues } from '../../utils';
 import styles from './styles.scss';
 
-const ModalButton = modalize(Button);
+const ModalAccentButton = modalize(AccentButton);
 
 interface ExtraHeader {
     // FIXME: Not sure what to put here
@@ -201,8 +201,9 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
                         Contact Training
                     </h4>
                     <Cloak hiddenIf={p => !p.add_training}>
-                        <ModalButton
+                        <ModalAccentButton
                             className={styles.button}
+                            transparent
                             iconName="add"
                             modal={(
                                 <AddTraining
@@ -212,7 +213,7 @@ class ContactTrainingList extends React.PureComponent<Props, State> {
                             )}
                         >
                             Add Training
-                        </ModalButton>
+                        </ModalAccentButton>
                     </Cloak>
                 </header>
                 <Table

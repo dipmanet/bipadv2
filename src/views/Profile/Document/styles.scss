@@ -2,13 +2,15 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground);
-    padding: calc(var(--spacing-large) - var(--spacing-medium));
 
-    >.header {
+    .header {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
+        padding: var(--spacing-medium);
 
         .heading {
-            padding: var(--spacing-medium);
+            flex-grow: 1;
         }
     }
 
@@ -56,8 +58,22 @@
             }
 
             .actions {
+                display: flex;
+                align-items: center;
                 flex-shrink: 0;
                 padding: 0 calc(var(--spacing-medium) - var(--spacing-extra-small));
+
+                .edit-button {
+                    flex-shrink: 0;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-size: var(--font-size-medium);
+                }
+
+                .delete-button {
+                    flex-shrink: 0;
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                    font-size: var(--font-size-medium);
+                }
 
                 .download-link {
                     display: flex;

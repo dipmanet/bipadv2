@@ -48,8 +48,8 @@ interface OwnProps {
     municipalityInputClassName?: string;
     wardInputClassName?: string;
     wardsHidden?: boolean;
-
     autoFocus?: boolean;
+    showHintAndError?: boolean;
 }
 
 interface State {
@@ -291,6 +291,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
             wardsHidden,
             autoFocus,
+            showHintAndError,
         } = this.props;
 
         const {
@@ -331,7 +332,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     value={selectedProvinceId}
                     onChange={this.handleProvinceChange}
                     disabled={shouldDisableProvinceInput}
-                    showHintAndError={false}
+                    showHintAndError={showHintAndError}
                     placeholder="All provinces"
                     autoFocus={autoFocus}
                 />
@@ -344,7 +345,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     value={selectedDistrictId}
                     onChange={this.handleDistrictChange}
                     disabled={shouldDisableDistrictInput}
-                    showHintAndError={false}
+                    showHintAndError={showHintAndError}
                     placeholder="All districts"
                 />
                 <SelectInput
@@ -356,7 +357,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     value={selectedMunicipalityId}
                     onChange={this.handleMunicipalityChange}
                     disabled={shouldDisableMunicipalityInput}
-                    showHintAndError={false}
+                    showHintAndError={showHintAndError}
                     placeholder="All municipalities"
                 />
                 {!wardsHidden && (
@@ -369,7 +370,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         value={selectedWardId}
                         onChange={this.handleWardChange}
                         disabled={shouldDisableWardInput}
-                        showHintAndError={false}
+                        showHintAndError={showHintAndError}
                         placeholder="All wards"
                     />
                 )}

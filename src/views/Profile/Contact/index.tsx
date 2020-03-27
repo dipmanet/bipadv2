@@ -9,6 +9,7 @@ import {
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 
@@ -46,6 +47,7 @@ import ContactEditForm from './ContactEditForm';
 import styles from './styles.scss';
 
 const ModalButton = modalize(Button);
+const AccentModalButton = modalize(AccentButton);
 
 interface OwnProps {
     className?: string;
@@ -366,7 +368,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                             Contact personnels
                         </h2>
                         <Cloak hiddenIf={p => !p.add_contact}>
-                            <ModalButton
+                            <AccentModalButton
                                 className={styles.button}
                                 iconName="add"
                                 transparent
@@ -377,7 +379,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                                 )}
                             >
                                 Add Contact
-                            </ModalButton>
+                            </AccentModalButton>
                         </Cloak>
                     </header>
                     <ListView

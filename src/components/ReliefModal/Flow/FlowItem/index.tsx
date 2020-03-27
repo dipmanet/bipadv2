@@ -4,7 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 import DateOutput from '#components/DateOutput';
 import TextOutput from '#components/TextOutput';
 import modalize from '#rscg/Modalize';
-import AccentButton from '#rsca/Button/AccentButton';
+import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
 
@@ -20,8 +20,7 @@ import {
 
 import styles from './styles.scss';
 
-
-const ModalAccentButton = modalize(AccentButton);
+const ModalButton = modalize(Button);
 
 interface OwnProps{
     className?: string;
@@ -112,7 +111,7 @@ class FlowItem extends React.PureComponent<Props, State> {
                 </div>
                 <div className={styles.actions}>
                     <Cloak hiddenIf={p => !p.change_flow}>
-                        <ModalAccentButton
+                        <ModalButton
                             transparent
                             iconName="edit"
                             modal={(
@@ -123,7 +122,7 @@ class FlowItem extends React.PureComponent<Props, State> {
                             )}
                         >
                             Edit
-                        </ModalAccentButton>
+                        </ModalButton>
                     </Cloak>
                     <Cloak hiddenIf={p => !p.delete_flow}>
                         <DangerConfirmButton

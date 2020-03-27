@@ -10,6 +10,8 @@ import {
 import modalize from '#rscg/Modalize';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import Button from '#rsca/Button';
+import AccentButton from '#rsca/Button/AccentButton';
 import FormattedDate from '#rscv/FormattedDate';
 import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
@@ -54,7 +56,8 @@ import AddDocumentForm from './AddDocumentForm';
 
 import styles from './styles.scss';
 
-const ModalPrimaryButton = modalize(PrimaryButton);
+const ModalButton = modalize(Button);
+const AccentModalButton = modalize(AccentButton);
 
 interface ComponentProps {
     className?: string;
@@ -169,7 +172,10 @@ const DocumentRenderer = (props: DocumentProps) => {
                     </h3>
                     <div className={styles.actions}>
                         <Cloak hiddenIf={p => !p.change_document}>
-                            <ModalPrimaryButton
+                            <ModalButton
+                                className={styles.editButton}
+                                iconName="edit"
+                                transparent
                                 modal={(
                                     <AddDocumentForm
                                         value={document}
@@ -177,19 +183,18 @@ const DocumentRenderer = (props: DocumentProps) => {
                                     />
                                 )}
                                 disabled={disabled}
-                                iconName="edit"
-                                transparent
                             >
                                 Edit
-                            </ModalPrimaryButton>
+                            </ModalButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_document}>
                             <DangerConfirmButton
-                                onClick={handleDelete}
+                                className={styles.deleteButton}
+                                confirmationMessage="Are you sure you want to delete this document?"
                                 disabled={disabled}
                                 iconName="delete"
+                                onClick={handleDelete}
                                 transparent
-                                confirmationMessage="Are you sure you want to delete this document?"
                             >
                                 Delete
                             </DangerConfirmButton>
@@ -356,15 +361,17 @@ class Document extends React.PureComponent<Props, State> {
                         Documents
                     </h2>
                     <Cloak hiddenIf={p => !p.add_document}>
-                        <ModalPrimaryButton
+                        <AccentModalButton
+                            transparent
+                            iconName="add"
                             modal={(
                                 <AddDocumentForm
                                     onUpdate={this.handleUpdate}
                                 />
                             )}
                         >
-                            Add
-                        </ModalPrimaryButton>
+                            New document
+                        </AccentModalButton>
                     </Cloak>
                 </header>
                 <div className={styles.filters}>

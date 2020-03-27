@@ -4,7 +4,7 @@ import { _cs } from '@togglecorp/fujs';
 import Cloak from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import modalize from '#rscg/Modalize';
-import AccentButton from '#rsca/Button/AccentButton';
+import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 
 import { Release } from '#types';
@@ -19,7 +19,7 @@ import {
 
 import styles from './styles.scss';
 
-const ModalAccentButton = modalize(AccentButton);
+const ModalButton = modalize(Button);
 
 interface OwnProps{
     className?: string;
@@ -121,7 +121,7 @@ class ReleaseItem extends React.PureComponent<Props, State> {
                 </div>
                 <div className={styles.actions}>
                     <Cloak hiddenIf={p => !p.change_release}>
-                        <ModalAccentButton
+                        <ModalButton
                             transparent
                             iconName="edit"
                             modal={(
@@ -132,7 +132,7 @@ class ReleaseItem extends React.PureComponent<Props, State> {
                             )}
                         >
                             Edit
-                        </ModalAccentButton>
+                        </ModalButton>
                     </Cloak>
                     <Cloak hiddenIf={p => !p.delete_release}>
                         <DangerConfirmButton
