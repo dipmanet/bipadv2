@@ -32,7 +32,6 @@ import {
     Release,
     Organization,
     Person,
-    Status,
 } from '#types';
 
 import {
@@ -85,29 +84,10 @@ interface Params {
     setPeople?: (people: Person[]) => void;
 }
 
-interface StatusOptions {
-    id: Status;
-    label: Status;
+interface StatusOption {
+    id: number;
+    title: string;
 }
-
-const statusList: StatusOptions[] = [
-    {
-        id: 'dead',
-        label: 'dead',
-    },
-    {
-        id: 'missing',
-        label: 'missing',
-    },
-    {
-        id: 'injured',
-        label: 'injured',
-    },
-    {
-        id: 'affected',
-        label: 'affected',
-    },
-];
 
 type PropsWithRedux = OwnProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<PropsWithRedux, Params>;
@@ -126,8 +106,8 @@ const organizationKeySelector = (o: Organization) => o.id;
 const organizationLabelSelector = (o: Organization) => o.title;
 const personKeySelector = (i: Person) => i.id;
 const personLabelSelector = (i: Person) => i.name;
-const statusKeySelector = (s: StatusOptions) => s.id;
-const statusLabelSelector = (s: StatusOptions) => s.label;
+const statusKeySelector = (s: StatusOption) => s.id;
+const statusLabelSelector = (s: StatusOption) => s.title;
 
 const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> } = {
     organizationGetRequest: {
@@ -167,6 +147,11 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
             }
         },
         onMount: ({ props }) => isDefined(props.value) && isDefined(props.value.incident),
+    },
+    releaseStatusGetRequest: {
+        url: '/relief-release-status/',
+        method: methods.GET,
+        onMount: true,
     },
     reliefReleaseAddRequest: {
         url: ({ props }) => (
@@ -302,6 +287,10 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                 peopleGetRequest: {
                     pending: peopleGetPending,
                 },
+                releaseStatusGetRequest: {
+                    response: releaseStatusResponse,
+                    pending: releaseStatusGetPending,
+                },
             },
         } = this.props;
 
@@ -322,6 +311,12 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
         if (!incidentsGetPending && incidentsResponse) {
             const incidents = incidentsResponse as MultiResponse<Incident>;
             incidentList = incidents.results;
+        }
+
+        let statusList: StatusOption[] = [];
+        if (!releaseStatusGetPending && releaseStatusResponse) {
+            const releaseStatus = releaseStatusResponse as MultiResponse<StatusOption>;
+            statusList = releaseStatus.results;
         }
 
         const pending = addReliefPending
