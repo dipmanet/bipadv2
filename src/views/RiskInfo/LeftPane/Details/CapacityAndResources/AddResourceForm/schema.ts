@@ -10,9 +10,10 @@ type Schema = {
 const defaultFields = {
     resourceType: [requiredCondition],
     title: [requiredCondition],
-    description: [],
     point: [],
+    description: [],
     ward: [],
+    location: [],
 };
 
 const schema: Schema = {
@@ -45,6 +46,7 @@ const schema: Schema = {
             openingHours: [],
             operatorType: [],
             noOfStaffs: [],
+            noOfBeds: [],
             specialization: [],
             type: [requiredCondition],
         },

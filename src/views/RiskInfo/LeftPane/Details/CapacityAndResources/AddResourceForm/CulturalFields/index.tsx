@@ -33,6 +33,10 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums }: Props) => {
                 faramElementName="openingHours"
                 label="Opening Hours"
             />
+            <TextInput
+                faramElementName="emailAddress"
+                label="Email Address"
+            />
             <Checkbox
                 faramElementName="drinkingWater"
                 label="Drinking Water"
@@ -40,6 +44,10 @@ const CulturalFields: FunctionComponent<Props> = ({ resourceEnums }: Props) => {
             <Checkbox
                 faramElementName="toilet"
                 label="Toilet"
+            />
+            <TextInput
+                faramElementName="type"
+                label="Type"
             />
         </>
     );

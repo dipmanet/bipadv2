@@ -87,6 +87,10 @@ const FinanceFields: FunctionComponent<Props> = ({ resourceEnums }: Props) => {
                 faramElementName="placeAddress"
                 label="Place Address"
             />
+            <TextInput
+                faramElementName="network"
+                label="Network"
+            />
         </>
     );
 };
