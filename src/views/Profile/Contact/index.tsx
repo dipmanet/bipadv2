@@ -8,7 +8,6 @@ import {
 } from '@togglecorp/fujs';
 
 import modalize from '#rscg/Modalize';
-import Button from '#rsca/Button';
 import AccentButton from '#rsca/Button/AccentButton';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';

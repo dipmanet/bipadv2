@@ -1,10 +1,13 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isNotDefined,
+    isDefined,
+} from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-import Faram, {
-} from '@togglecorp/faram';
+import Faram from '@togglecorp/faram';
 
 import LocationInput from '#components/LocationInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
@@ -45,15 +48,37 @@ import schemaMap, { defaultSchema } from './schema';
 
 import styles from './styles.scss';
 
+const getLocationDetails = (point: unknown, ward?: number) => {
+    const geoJson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: point,
+            },
+        ],
+    };
+
+    return ({
+        geoJson,
+        region: {
+            ward,
+        },
+    });
+};
+
 interface Params {
-    body: object;
-    onSuccess: () => void;
+    resourceId?: number;
+    body?: object;
+    onSuccess?: (resource: PageType.Resource) => void;
     setFaramErrors?: (error: object) => void;
 }
 interface OwnProps {
     closeModal?: () => void;
     onUpdate?: () => void;
     className?: string;
+    resourceId?: number;
+    resourceDetails?: PageType.Resource;
 }
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
@@ -66,7 +91,7 @@ interface FaramValues {
     title?: string;
     description?: string;
     point?: string;
-    location?: Location;
+    location?: ReturnType<typeof getLocationDetails> | null;
     ward?: number;
     resourceType?: string;
 }
@@ -76,6 +101,7 @@ interface State {
     faramValues: FaramValues;
     faramErrors: FaramErrors;
     pristine: boolean;
+    resourceId?: number;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -92,11 +118,45 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addResourcePostRequest: {
         url: '/resource/',
         method: methods.POST,
-        query: () => ({ meta: true }),
+        query: { meta: true },
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess: ({ params: { onSuccess } = { onSuccess: undefined } }) => {
+        onSuccess: ({
+            params: { onSuccess } = { onSuccess: undefined },
+            response,
+        }) => {
             if (onSuccess) {
-                onSuccess();
+                onSuccess(response as PageType.Resource);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+    },
+    editResourcePutRequest: {
+        url: ({ params: { resourceId } }) => `/resource/${resourceId}/`,
+        method: methods.PUT,
+        query: { meta: true },
+        body: ({ params: { body } = { body: {} } }) => body,
+        onMount: false,
+        onSuccess: ({
+            params: { onSuccess } = { onSuccess: undefined },
+            response,
+        }) => {
+            if (onSuccess) {
+                onSuccess(response as PageType.Resource);
             }
         },
         onFailure: ({ error, params }) => {
@@ -182,10 +242,29 @@ class AddResourceForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
+        const {
+            resourceId,
+            resourceDetails,
+        } = this.props;
+
+        let faramValues = {};
+        if (resourceDetails) {
+            const {
+                point,
+                ward,
+            } = resourceDetails;
+
+            faramValues = {
+                ...resourceDetails,
+                location: point && getLocationDetails(point, ward),
+            };
+        }
+
         this.state = {
-            faramValues: {},
+            faramValues,
             faramErrors: {},
             pristine: true,
+            resourceId,
         };
     }
 
@@ -215,27 +294,61 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             location,
             ...others
         } = faramValues;
+        const {
+            resourceId,
+        } = this.state;
+
+        console.warn('here', faramValues);
+
         let values = others;
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
-            values = { ...values, point, ward };
+
+            values = {
+                ...values,
+                point,
+                ward,
+            };
         }
-        const { requests: { addResourcePostRequest }, onUpdate, closeModal } = this.props;
-        addResourcePostRequest.do({
-            body: values,
-            onSuccess: () => {
-                if (onUpdate) {
-                    onUpdate();
-                    if (closeModal) {
-                        closeModal();
-                    }
-                } else if (closeModal) {
-                    closeModal();
-                }
+        const {
+            requests: {
+                addResourcePostRequest,
+                editResourcePutRequest,
             },
-            setFaramErrors: this.handleFaramValidationFailure,
-        });
+        } = this.props;
+
+        if (isNotDefined(resourceId)) {
+            addResourcePostRequest.do({
+                body: values,
+                onSuccess: this.handleAddResourceSuccess,
+                setFaramErrors: this.handleFaramValidationFailure,
+            });
+        } else {
+            editResourcePutRequest.do({
+                resourceId,
+                body: values,
+                onSuccess: this.handleEditResourceSuccess,
+                setFaramErrors: this.handleFaramValidationFailure,
+            });
+        }
+    }
+
+    private handleAddResourceSuccess = (resource: PageType.Resource) => {
+        const {
+            onUpdate,
+        } = this.props;
+
+        if (onUpdate) {
+            onUpdate();
+        }
+
+        this.setState({ resourceId: resource.id });
+    }
+
+    private handleEditResourceSuccess = () => {
+        // TODO: Handle Appropriately
+        console.warn('Successfully edited');
     }
 
     private filterEnumItem = (
@@ -255,12 +368,21 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             closeModal,
             resourceTypeList,
             enumOptions,
+            requests: {
+                editResourcePutRequest: {
+                    pending: editResourcePending,
+                },
+                addResourcePostRequest: {
+                    pending: addResourcePending,
+                },
+            },
         } = this.props;
 
         const {
             faramValues,
             faramErrors,
             pristine,
+            resourceId,
         } = this.state;
 
         const { resourceType } = faramValues;
@@ -299,13 +421,13 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     <ModalBody className={styles.modalBody}>
                         <NonFieldErrors faramElement />
                         <SelectInput
-                            className={styles.hazardInput}
                             faramElementName="resourceType"
                             options={resourceTypeList}
                             keySelector={labelSelector}
                             labelSelector={labelSelector}
                             label="Resource Type"
                             autoFocus
+                            disabled={isDefined(resourceId)}
                         />
                         <TextInput
                             faramElementName="title"
@@ -335,6 +457,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}
+                            pending={addResourcePending || editResourcePending}
                         >
                             Save
                         </PrimaryButton>

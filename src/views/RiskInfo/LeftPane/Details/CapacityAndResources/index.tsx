@@ -55,10 +55,8 @@ import { ResourceTypeKeys } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
-import EditResourceForm from './EditResourceForm';
-import InventoriesModal from './InventoriesModal';
-
 import CapacityResourceTable from './CapacityResourceTable';
+import InventoriesModal from './InventoriesModal';
 import AddResourceForm from './AddResourceForm';
 import styles from './styles.scss';
 
@@ -649,11 +647,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )}
                 </div>
                 { showResourceForm && resourceDetails && (
-                    <EditResourceForm
+                    <AddResourceForm
                         resourceId={resourceDetails.id}
-                        resourceType={activeLayerKey}
                         resourceDetails={resourceDetails}
-                        onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
+                        closeModal={this.handleEditResourceFormCloseButtonClick}
                     />
                 )}
                 {showInventoryModal
