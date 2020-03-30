@@ -284,10 +284,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
-                // onClose={closeModal}
-                // closeOnEscape
             >
                 <Faram
+                    className={styles.form}
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
@@ -296,6 +295,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     error={faramErrors}
                 >
                     <ModalHeader
+                        className={styles.header}
                         title="Add Resource"
                         rightComponent={(
                             <DangerButton
@@ -306,7 +306,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             />
                         )}
                     />
-                    <ModalBody>
+                    <ModalBody className={styles.modalBody}>
                         <NonFieldErrors faramElement />
                         <SelectInput
                             className={styles.hazardInput}
@@ -338,7 +338,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             )
                         }
                     </ModalBody>
-                    <ModalFooter>
+                    <ModalFooter className={styles.footer}>
                         <DangerButton onClick={closeModal}>
                             Close
                         </DangerButton>

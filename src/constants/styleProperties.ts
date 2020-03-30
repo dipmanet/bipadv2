@@ -26,7 +26,9 @@ const styleProperties = {
     fontWeightBold: '700',
 
     fontSizeMedium: '12px',
-    fontSizeSmall: '10px',
+    fontSizeSmall: '11px',
+    fontSizeExtraSmallAlt: '10px',
+    fontSizeExtraSmall: '10px',
     fontSizeUltraLarge: '32px',
     fontSizeUltraLargeAlt: '48px',
 

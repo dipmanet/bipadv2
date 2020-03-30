@@ -1,11 +1,17 @@
 .inventories-modal {
-    width: 80vw;
     height: 90vh;
 
     .modal-body {
         display: flex;
         flex-direction: column;
+        padding: 0;
         overflow: auto;
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            padding: var(--spacing-medium);
+        }
 
         .inventory-list {
             flex-grow: 1;
@@ -19,15 +25,20 @@
     flex-direction: column;
     padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
 
-    .title,
-    .category,
     .quantity,
-    .description,
     .created-on {
         padding: var(--spacing-extra-small) var(--spacing-small);
     }
 
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+
+        .button {
+            margin-left: var(--spacing-extra-small);
+        }
+    }
     &:hover {
-        background-color: var(--color-background);
+        background-color: var(--color-background-hover);
     }
 }

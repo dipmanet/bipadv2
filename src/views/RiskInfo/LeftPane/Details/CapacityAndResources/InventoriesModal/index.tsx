@@ -1,14 +1,13 @@
 import React from 'react';
 import { _cs, Obj, isDefined } from '@togglecorp/fujs';
-// import { connect } from 'react-redux';
 
 import modalize from '#rscg/Modalize';
+import TextOutput from '#components/TextOutput';
 import FormattedDate from '#rscv/FormattedDate';
 import Button from '#rsca/Button';
 import DangerButton from '#rsca/Button/DangerButton';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import ListView from '#rscv/List/ListView';
-// import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import Numeral from '#rscv/Numeral';
@@ -17,20 +16,12 @@ import ModalHeader from '#rscv/Modal/Header';
 import Cloak from '#components/Cloak';
 
 import * as PageType from '#store/atom/page/types';
-// import { AppState } from '#store/types';
 import {
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-/*
-import {
-    hazardTypesSelector,
-} from '#selectors';
- */
-
-// import alertIcon from '#resources/icons/Alert.svg';
 
 import { MultiResponse } from '#store/atom/response/types';
 
@@ -73,69 +64,73 @@ const InventoryItem = (props: InventoryItemProps) => {
         }
     };
 
-
-    /*
-            <ModalButton
-                modal={(
-                    AddInventoryForm
-                        value={data}
-                    />
-                )}
-            >
-                Edit
-            </ModalButton>
-    */
-
     return (
         <div className={_cs(className, styles.inventory)}>
-            <div className={styles.title}>
-                {item.title}
-            </div>
-            <div className={styles.category}>
-                {item.category}
-            </div>
-            {isDefined(quantity) && (
-                <Numeral
-                    className={styles.quantity}
-                    value={quantity}
-                    suffix={item.unit}
-                />
-            )}
-            <div className={styles.description}>
-                {description || 'No description'}
-            </div>
-            <FormattedDate
-                className={styles.createdOn}
-                value={createdOn}
-                mode="yyyy-MM-dd"
+            <TextOutput
+                label="Title"
+                value={item.title}
             />
-            <Cloak hiddenIf={p => !p.change_inventory}>
-                <ModalButton
-                    modal={(
-                        <AddInventoryForm
-                            onUpdate={onUpdate}
-                            value={data}
-                            resourceId={resourceId}
+            <TextOutput
+                label="Category"
+                value={item.category}
+            />
+            {isDefined(quantity) && (
+                <TextOutput
+                    label="Quantity"
+                    value={(
+                        <Numeral
+                            className={styles.quantity}
+                            value={quantity}
+                            suffix={item.unit}
                         />
                     )}
-                    disabled={disabled}
-                    iconName="edit"
-                    transparent
-                >
-                    Edit
-                </ModalButton>
-            </Cloak>
-            <Cloak hiddenIf={p => !p.delete_inventory}>
-                <DangerConfirmButton
-                    onClick={handleDelete}
-                    disabled={disabled}
-                    iconName="delete"
-                    transparent
-                    confirmationMessage="Are you sure you want to delete this inventory?"
-                >
-                    Delete
-                </DangerConfirmButton>
-            </Cloak>
+                />
+            )}
+            <TextOutput
+                label="Created On"
+                value={(
+                    <FormattedDate
+                        className={styles.createdOn}
+                        value={createdOn}
+                        mode="yyyy-MM-dd"
+                    />
+                )}
+            />
+            <TextOutput
+                label="Description"
+                value={description || 'No description'}
+            />
+            <div className={styles.actionButtons}>
+                <Cloak hiddenIf={p => !p.change_inventory}>
+                    <ModalButton
+                        className={styles.button}
+                        modal={(
+                            <AddInventoryForm
+                                onUpdate={onUpdate}
+                                value={data}
+                                resourceId={resourceId}
+                            />
+                        )}
+                        disabled={disabled}
+                        iconName="edit"
+                        transparent
+                    >
+                        Edit
+                    </ModalButton>
+                </Cloak>
+                <Cloak hiddenIf={p => !p.delete_inventory}>
+                    <DangerConfirmButton
+                        className={styles.button}
+                        onClick={handleDelete}
+                        disabled={disabled}
+                        iconName="delete"
+                        transparent
+                        confirmationMessage="Are you sure you want to delete this inventory?"
+                    >
+                        Delete
+                    </DangerConfirmButton>
+                </Cloak>
+            </div>
         </div>
     );
 };
@@ -151,8 +146,6 @@ interface OwnProps {
 interface StateProps {
     hazardTypes: Obj<PageType.HazardType>;
 }
-
-// type ReduxProps = OwnProps & StateProps;
 
 interface State {
 }
@@ -182,20 +175,12 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
 };
 
 class InventoriesModal extends React.PureComponent<Props, State> {
-    /*
-    public constructor(props: Props) {
-        super(props);
-        this.state = {};
-    }
-    */
-
     private rendererParams = (key: number, data: PageType.Inventory) => ({
         data,
         onUpdate: this.handleRefresh,
         onDelete: this.handleInventoryDelete,
         disabled: this.props.requests.inventoriesGetRequest.pending,
         resourceId: this.props.resourceId,
-        // hazardTypes: this.props.hazardTypes,
     })
 
     private handleRefresh = () => {
@@ -242,18 +227,22 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                 />
                 <ModalBody className={styles.modalBody}>
                     <Cloak hiddenIf={p => !p.add_inventory}>
-                        <ModalButton
-                            modal={(
-                                <AddInventoryForm
-                                    onUpdate={this.handleRefresh}
-                                    // value={data}
-                                    resourceId={resourceId}
-                                />
-                            )}
-                            disabled={pending}
-                        >
-                            Add
-                        </ModalButton>
+                        <div className={styles.header}>
+                            <ModalButton
+                                className={styles.addButton}
+                                modal={(
+                                    <AddInventoryForm
+                                        onUpdate={this.handleRefresh}
+                                        resourceId={resourceId}
+                                    />
+                                )}
+                                iconName="add"
+                                transparent
+                                disabled={pending}
+                            >
+                                New Inventory
+                            </ModalButton>
+                        </div>
                     </Cloak>
                     <ListView
                         className={styles.inventoryList}
@@ -269,21 +258,6 @@ class InventoriesModal extends React.PureComponent<Props, State> {
     }
 }
 
-/*
-const mapStateToProps = (state: AppState): StateProps => ({
-    hazardTypes: hazardTypesSelector(state),
-});
-*/
-
-
 export default createRequestClient(requests)(
     InventoriesModal,
 );
-
-/*
-export default connect(mapStateToProps)(
-    createRequestClient(requests)(
-        InventoriesModal,
-    ),
-);
-*/

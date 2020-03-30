@@ -1,6 +1,25 @@
 .add-resource-modal {
-    display: flex;
-    flex-grow: 1;
+    max-height: 90vh;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .header {
+        flex-shrink: 0;
+    }
+
+    .modal-body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    .footer {
+        flex-shrink: 0;
+    }
 
     .location-input {
         height: 300px;
