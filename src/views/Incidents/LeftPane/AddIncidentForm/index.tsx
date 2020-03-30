@@ -16,6 +16,7 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Cloak from '#components/Cloak';
@@ -293,16 +294,18 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     return (
                         <Cloak hiddenIf={isIncidentHidden}>
                             <Faram
+                                className={styles.generalInputs}
                                 onChange={this.handleFaramChange}
                                 onValidationFailure={this.handleFaramValidationFailure}
                                 onValidationSuccess={this.handleFaramValidationSuccess}
                                 schema={AddIncidentForm.schema}
                                 value={faramValues}
                                 error={faramErrors}
-                                className={styles.generalInputs}
                             >
-                                <GeneralDetails />
-                                <div className={styles.footer}>
+                                <ModalBody className={styles.body}>
+                                    <GeneralDetails />
+                                </ModalBody>
+                                <ModalFooter className={styles.footer}>
                                     <PrimaryButton
                                         type="submit"
                                         pending={incidentPending}
@@ -310,7 +313,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                                     >
                                         Save
                                     </PrimaryButton>
-                                </div>
+                                </ModalFooter>
                             </Faram>
                         </Cloak>
                     );
@@ -327,6 +330,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                     return (
                         <Cloak hiddenIf={isLossHidden}>
                             <Loss
+                                className={styles.generalInputs}
                                 lossServerId={lossServerId}
                                 incidentServerId={incidentServerId}
                                 onLossChange={onLossChange}
@@ -547,22 +551,18 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
                         />
                     )}
                 />
-                <div className={styles.addIncidentForm}>
-                    <ModalBody className={styles.body}>
-                        {incidentPending && <LoadingAnimation />}
-                        <ScrollTabs
-                            className={styles.tabs}
-                            tabs={this.tabs}
-                            onClick={this.handleTabClick}
-                            active={currentView}
-                            disabledTabs={disabledTabs}
-                        />
-                        <MultiViewContainer
-                            views={this.views}
-                            active={currentView}
-                        />
-                    </ModalBody>
-                </div>
+                {incidentPending && <LoadingAnimation />}
+                <ScrollTabs
+                    className={styles.tabs}
+                    tabs={this.tabs}
+                    onClick={this.handleTabClick}
+                    active={currentView}
+                    disabledTabs={disabledTabs}
+                />
+                <MultiViewContainer
+                    views={this.views}
+                    active={currentView}
+                />
             </Modal>
         );
     }

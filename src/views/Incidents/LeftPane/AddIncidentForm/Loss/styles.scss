@@ -1,13 +1,10 @@
 .loss-form {
-    position: relative;
-    flex-grow: 1;
+    .body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
 
-    .container {
-        padding: var(--spacing-large);
-
-        .footer {
-            display: flex;
-            justify-content: flex-end;
-        }
+    .footer {
+        flex-shrink: 0;
     }
 }

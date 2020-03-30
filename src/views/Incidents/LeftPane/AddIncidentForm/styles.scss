@@ -6,41 +6,35 @@
     height: 80vh;
     overflow-y: auto;
 
-    .add-incident-form {
+    .tabs {
+        flex-shrink: 0;
+    }
+
+    .general-inputs {
         display: flex;
+        position: relative;
         flex-direction: column;
         flex-grow: 1;
-        overflow: auto;
+        width: 100%;
+        overflow-y: auto;
 
         .body {
-            display: flex;
-            position: relative;
-            flex-direction: column;
             flex-grow: 1;
-            padding: 0;
-
-            .tabs {
-                flex-shrink: 0;
-            }
-
-            .general-inputs {
-                flex-grow: 1;
-                width: 100%;
-                overflow: auto;
-            }
-
-            .people-loss-list {
-                flex-grow: 1;
-                width: 100%;
-                overflow: auto;
-            }
-
-            .footer {
-                display: flex;
-                justify-content: flex-end;
-                padding: var(--spacing-medium);
-            }
+            overflow-y: auto;
         }
+
+        .footer {
+            flex-shrink: 0;
+        }
+    }
+
+    .people-loss-list {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 100%;
+        overflow-y: auto;
     }
 }
 

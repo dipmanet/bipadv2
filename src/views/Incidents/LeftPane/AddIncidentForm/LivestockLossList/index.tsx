@@ -12,6 +12,7 @@ import {
     methods,
 } from '#request';
 
+import ModalBody from '#rscv/Modal/Body';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
@@ -222,16 +223,15 @@ class LivestockLossList extends React.PureComponent<Props, State> {
         const pending = listPending || itemRemovePending;
 
         return (
-            <div className={_cs(styles.listContainer, className)}>
+            <ModalBody className={_cs(styles.listContainer, className)}>
                 {pending && <LoadingAnimation />}
                 <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Livestock Loss
-                    </h2>
+                    <div className={styles.heading} />
                     <Cloak hiddenIf={p => !p.add_livestock}>
                         <ModalButton
                             className={styles.button}
                             iconName="add"
+                            transparent
                             modal={(
                                 <AddLivestockLoss
                                     lossServerId={lossServerId}
@@ -249,7 +249,7 @@ class LivestockLossList extends React.PureComponent<Props, State> {
                     data={list}
                     keySelector={keySelector}
                 />
-            </div>
+            </ModalBody>
         );
     }
 }
