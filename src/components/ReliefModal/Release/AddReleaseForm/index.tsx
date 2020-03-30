@@ -19,6 +19,8 @@ import SearchSelectInput from '#rsci/SearchSelectInput';
 import NumberInput from '#rsci/NumberInput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import NonFieldErrors from '#rsci/NonFieldErrors';
+import Button from '#rsca/Button';
+import modalize from '#rscg/Modalize';
 
 import {
     createRequestClient,
@@ -48,7 +50,10 @@ import {
 } from '#actionCreators';
 import { MultiResponse } from '#store/atom/response/types';
 
+import AddOrganizationModal from '#components/AddOrganizationModal';
 import styles from './styles.scss';
+
+const ModalButton = modalize(Button);
 
 interface FaramValues {
     incident?: number;
@@ -78,6 +83,7 @@ interface State {
     pristine: boolean;
 
     people: Person[];
+    organizationList?: Organization[];
 }
 
 interface Params {
@@ -85,6 +91,7 @@ interface Params {
     incident?: number;
     setFaramErrors?: (error: object) => void;
     setPeople?: (people: Person[]) => void;
+    setOrganizations?: (organizationList: Organization[]) => void;
 }
 
 interface StatusOption {
@@ -117,6 +124,13 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         url: '/organization/',
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ response, params }) => {
+            const organizations = response as MultiResponse<Organization>;
+            const organizationList = organizations.results;
+            if (params && params.setOrganizations) {
+                params.setOrganizations(organizationList);
+            }
+        },
     },
     incidentListGetRequest: {
         url: '/incident/',
@@ -200,6 +214,11 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
         super(props);
 
         const { value, requests } = this.props;
+
+        requests.organizationGetRequest.setDefaultParams({
+            setOrganizations: this.setOrganizations,
+        });
+
         this.state = {
             faramValues: isDefined(value)
                 ? value as FaramValues
@@ -207,6 +226,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
             faramErrors: {},
             pristine: true,
             people: [],
+            organizationList: undefined,
         };
 
         this.schema = {
@@ -233,6 +253,33 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
     }
 
     private schema: object;
+
+    private setOrganizations = (organizationList: Organization[]) => {
+        this.setState({ organizationList });
+    }
+
+    private handleOrganizationAdd = (organization: Organization) => {
+        const {
+            organizationList = [],
+            faramValues,
+        } = this.state;
+
+        const newOrganizationList = [
+            organization,
+            ...organizationList,
+        ];
+
+        const newFaramValues = {
+            ...faramValues,
+            organization: organization.id,
+        };
+
+        this.setState({
+            organizationList: newOrganizationList,
+            faramValues: newFaramValues,
+            pristine: false,
+        });
+    }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
         const { faramValues: { incident: oldIncident } } = this.state;
@@ -289,7 +336,6 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                     pending: addReliefPending,
                 },
                 organizationGetRequest: {
-                    response,
                     pending: organizationsGetPending,
                 },
                 incidentListGetRequest: {
@@ -311,13 +357,8 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
             faramErrors,
             pristine,
             people: personList,
+            organizationList,
         } = this.state;
-
-        let organizationList: Organization[] = [];
-        if (!organizationsGetPending && response) {
-            const organizations = response as MultiResponse<Organization>;
-            organizationList = organizations.results;
-        }
 
         let incidentList: Incident[] = [];
         if (!incidentsGetPending && incidentsResponse) {
@@ -365,13 +406,25 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                             label="Description"
                             autoFocus
                         />
-                        <SelectInput
-                            faramElementName="providerOrganization"
-                            label="Provider Organization"
-                            options={organizationList}
-                            keySelector={organizationKeySelector}
-                            labelSelector={organizationLabelSelector}
-                        />
+                        <div className={styles.organizationContainer}>
+                            <SelectInput
+                                faramElementName="providerOrganization"
+                                label="Provider Organization"
+                                options={organizationList}
+                                keySelector={organizationKeySelector}
+                                labelSelector={organizationLabelSelector}
+                            />
+                            <ModalButton
+                                className={styles.button}
+                                modal={(
+                                    <AddOrganizationModal
+                                        onOrganizationAdd={this.handleOrganizationAdd}
+                                    />
+                                )}
+                                iconName="add"
+                                transparent
+                            />
+                        </div>
                         <NumberInput
                             faramElementName="amount"
                             label="Amount"

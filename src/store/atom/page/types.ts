@@ -778,6 +778,10 @@ export interface SetLpGasCookList {
 export interface Organization {
     id: number;
     title: string;
+    shortName?: string;
+    longName?: string;
+    description?: string;
+    incidentVerificationDuration: number;
 }
 
 export interface Contact {

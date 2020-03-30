@@ -17,6 +17,8 @@ import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import NonFieldErrors from '#rsci/NonFieldErrors';
+import Button from '#rsca/Button';
+import modalize from '#rscg/Modalize';
 
 import {
     createRequestClient,
@@ -45,6 +47,10 @@ import {
     setEventListAction,
 } from '#actionCreators';
 import { MultiResponse } from '#store/atom/response/types';
+import AddOrganizationModal from '#components/AddOrganizationModal';
+import styles from './styles.scss';
+
+const ModalButton = modalize(Button);
 
 interface FaramValues {
 }
@@ -69,11 +75,13 @@ interface State {
     faramValues: FaramValues;
     faramErrors: object;
     pristine: boolean;
+    organizationList?: Organization[];
 }
 
 interface Params {
-    body: object;
+    body?: object;
     setFaramErrors?: (error: object) => void;
+    setOrganizations?: (organizationList: Organization[]) => void;
 }
 
 interface FlowType {
@@ -127,6 +135,13 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         url: '/organization/',
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ response, params }) => {
+            const organizations = response as MultiResponse<Organization>;
+            const organizationList = organizations.results;
+            if (params && params.setOrganizations) {
+                params.setOrganizations(organizationList);
+            }
+        },
     },
     eventTypesGetRequest: {
         url: '/event/',
@@ -181,11 +196,22 @@ class AddFlowForm extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
-        const { value } = this.props;
+        const {
+            value,
+            requests: {
+                organizationGetRequest,
+            },
+        } = this.props;
+
+        organizationGetRequest.setDefaultParams({
+            setOrganizations: this.setOrganizations,
+        });
+
         this.state = {
             faramValues: value as FaramValues,
             faramErrors: {},
             pristine: true,
+            organizationList: undefined,
         };
 
         this.schema = {
@@ -208,6 +234,33 @@ class AddFlowForm extends React.PureComponent<Props, State> {
         this.setState({
             faramValues,
             faramErrors,
+            pristine: false,
+        });
+    }
+
+    private setOrganizations = (organizationList: Organization[]) => {
+        this.setState({ organizationList });
+    }
+
+    private handleOrganizationAdd = (organization: Organization) => {
+        const {
+            organizationList = [],
+            faramValues,
+        } = this.state;
+
+        const newOrganizationList = [
+            organization,
+            ...organizationList,
+        ];
+
+        const newFaramValues = {
+            ...faramValues,
+            organization: organization.id,
+        };
+
+        this.setState({
+            organizationList: newOrganizationList,
+            faramValues: newFaramValues,
             pristine: false,
         });
     }
@@ -249,16 +302,11 @@ class AddFlowForm extends React.PureComponent<Props, State> {
         } = this.props;
 
         const {
+            organizationList,
             faramValues,
             faramErrors,
             pristine,
         } = this.state;
-
-        let organizationList: Organization[] = [];
-        if (!organizationsGetPending && response) {
-            const organizations = response as MultiResponse<Organization>;
-            organizationList = organizations.results;
-        }
 
         let fiscalYearOptions: FiscalYearType[] = [];
         if (!fiscalYearsGetPending && fiscalYearsResponse) {
@@ -299,21 +347,47 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                             faramElementName="description"
                             label="Description"
                         />
-                        <SelectInput
-                            faramElementName="receiverOrganization"
-                            label="Receiver Organization"
-                            options={organizationList}
-                            keySelector={organizationKeySelector}
-                            labelSelector={organizationLabelSelector}
-                            autoFocus
-                        />
-                        <SelectInput
-                            faramElementName="providerOrganization"
-                            label="Provider Organization"
-                            options={organizationList}
-                            keySelector={organizationKeySelector}
-                            labelSelector={organizationLabelSelector}
-                        />
+                        <div className={styles.organizationContainer}>
+                            <SelectInput
+                                className={styles.input}
+                                faramElementName="receiverOrganization"
+                                label="Receiver Organization"
+                                options={organizationList}
+                                keySelector={organizationKeySelector}
+                                labelSelector={organizationLabelSelector}
+                                autoFocus
+                            />
+                            <ModalButton
+                                className={styles.button}
+                                modal={(
+                                    <AddOrganizationModal
+                                        onOrganizationAdd={this.handleOrganizationAdd}
+                                    />
+                                )}
+                                iconName="add"
+                                transparent
+                            />
+                        </div>
+                        <div className={styles.organizationContainer}>
+                            <SelectInput
+                                className={styles.input}
+                                faramElementName="providerOrganization"
+                                label="Provider Organization"
+                                options={organizationList}
+                                keySelector={organizationKeySelector}
+                                labelSelector={organizationLabelSelector}
+                            />
+                            <ModalButton
+                                className={styles.button}
+                                modal={(
+                                    <AddOrganizationModal
+                                        onOrganizationAdd={this.handleOrganizationAdd}
+                                    />
+                                )}
+                                iconName="add"
+                                transparent
+                            />
+                        </div>
                         <NumberInput
                             faramElementName="amount"
                             label="Amount"

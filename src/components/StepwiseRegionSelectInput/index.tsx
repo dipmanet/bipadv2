@@ -218,7 +218,6 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         );
 
         if (onChange) {
-            console.warn('here', newValue);
             onChange(newValue, newRegionValues);
         }
     }

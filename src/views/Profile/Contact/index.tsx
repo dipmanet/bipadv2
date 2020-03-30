@@ -46,7 +46,6 @@ import ContactEditForm from './ContactEditForm';
 
 import styles from './styles.scss';
 
-const ModalButton = modalize(Button);
 const AccentModalButton = modalize(AccentButton);
 
 interface OwnProps {

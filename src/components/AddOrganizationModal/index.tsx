@@ -1,5 +1,6 @@
 import React from 'react';
 import Faram, {
+    FaramInputElement,
     requiredCondition,
 } from '@togglecorp/faram';
 
@@ -13,22 +14,29 @@ import {
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import Modal from '#rscv/Modal';
-import { Training as ContactTraining } from '#store/atom/page/types';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalFooter from '#rscv/Modal/Footer';
+import TextInput from '#rsci/TextInput';
 import NumberInput from '#rsci/NumberInput';
-import SelectInput from '#rsci/SelectInput';
+import TextArea from '#rsci/TextArea';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
+import { Organization } from '#types';
 
-import {
-    trainingKeySelector,
-    trainingLabelSelector,
-    trainingValueList,
-} from '../../../utils';
+import FullStepwiseRegionSelectInput, {
+    RegionValuesAlt,
+} from '#components/FullStepwiseRegionSelectInput';
+
+const StepwiseRegionSelectInput = FaramInputElement(FullStepwiseRegionSelectInput);
 
 interface FaramValues {
+    title?: string;
+    longName?: string;
+    shortName?: string;
+    description?: string;
+    incidentVerificationDuration?: number;
+    stepwiseRegion?: RegionValuesAlt | null;
 }
 
 interface FaramErrors {
@@ -36,8 +44,7 @@ interface FaramErrors {
 
 interface OwnProps {
     className?: string;
-    contactId: number;
-    onAddSuccess: (contactTraining: ContactTraining) => void;
+    onOrganizationAdd: (organization: Organization) => void;
     closeModal?: () => void;
 }
 
@@ -55,19 +62,19 @@ interface State {
 }
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
-    addTrainingRequest: {
-        url: '/contact-training/',
+    addOrganizationRequest: {
+        url: '/organization/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ props, response }) => {
             const {
-                onAddSuccess,
+                onOrganizationAdd,
                 closeModal,
             } = props;
-            const trainingResponse = response as ContactTraining;
+            const organizationResponse = response as Organization;
 
-            if (onAddSuccess) {
-                onAddSuccess(trainingResponse);
+            if (onOrganizationAdd) {
+                onOrganizationAdd(organizationResponse);
             }
             if (closeModal) {
                 closeModal();
@@ -92,13 +99,13 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params>} = {
     },
 };
 
-class AddTraining extends React.PureComponent<Props, State> {
+class AddOrganization extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
         this.state = {
             faramValues: {
-                verified: false,
+                stepwiseRegion: {},
             },
             faramErrors: {},
             pristine: true,
@@ -108,7 +115,11 @@ class AddTraining extends React.PureComponent<Props, State> {
     private static schema = {
         fields: {
             title: [requiredCondition],
-            durationDays: [requiredCondition],
+            shortName: [],
+            longName: [],
+            incidentVerificationDuration: [requiredCondition],
+            description: [],
+            stepwiseRegion: [],
         },
     }
 
@@ -128,15 +139,25 @@ class AddTraining extends React.PureComponent<Props, State> {
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
-            requests: { addTrainingRequest },
-            contactId,
+            requests: { addOrganizationRequest },
         } = this.props;
 
-        addTrainingRequest.do({
-            body: {
-                ...faramValues,
-                contact: contactId,
-            },
+        const {
+            stepwiseRegion,
+            ...otherValues
+        } = faramValues;
+
+        const body = {
+            ...otherValues,
+
+            province: stepwiseRegion && stepwiseRegion.province,
+            wards: [stepwiseRegion && stepwiseRegion.ward],
+            municipality: stepwiseRegion && stepwiseRegion.municipality,
+            district: stepwiseRegion && stepwiseRegion.district,
+        };
+
+        addOrganizationRequest.do({
+            body,
             setFaramErrors: this.handleFaramValidationFailure,
         });
     }
@@ -146,7 +167,7 @@ class AddTraining extends React.PureComponent<Props, State> {
             className,
             closeModal,
             requests: {
-                addTrainingRequest: {
+                addOrganizationRequest: {
                     pending,
                 },
             },
@@ -161,7 +182,7 @@ class AddTraining extends React.PureComponent<Props, State> {
         return (
             <Modal className={className}>
                 <ModalHeader
-                    title="Add Training"
+                    title="Add Organization"
                     rightComponent={(
                         <DangerButton
                             transparent
@@ -175,24 +196,36 @@ class AddTraining extends React.PureComponent<Props, State> {
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
                     onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddTraining.schema}
+                    schema={AddOrganization.schema}
                     value={faramValues}
                     error={faramErrors}
                 >
                     <ModalBody>
                         {pending && <LoadingAnimation />}
                         <NonFieldErrors faramElement />
-                        <SelectInput
+                        <TextInput
                             faramElementName="title"
-                            options={trainingValueList}
-                            keySelector={trainingKeySelector}
-                            labelSelector={trainingLabelSelector}
                             label="Title"
-                            autoFocus
+                        />
+                        <TextInput
+                            faramElementName="shortName"
+                            label="Short Name"
+                        />
+                        <TextInput
+                            faramElementName="longName"
+                            label="Long Name"
                         />
                         <NumberInput
-                            faramElementName="durationDays"
-                            label="Duration in Days"
+                            faramElementName="incidentVerificationDuration"
+                            label="Incident Verification Duration"
+                        />
+                        <TextArea
+                            faramElementName="description"
+                            label="Description"
+                        />
+                        <StepwiseRegionSelectInput
+                            faramElementName="stepwiseRegion"
+                            showHintAndError
                         />
                     </ModalBody>
                     <ModalFooter>
@@ -213,4 +246,4 @@ class AddTraining extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requests)(AddTraining);
+export default createRequestClient(requests)(AddOrganization);

@@ -1,3 +1,16 @@
 .modal-body {
     position: relative;
 }
+
+.organization-container {
+    display: flex;
+    align-items: center;
+
+    .input {
+        flex-grow: 1;
+    }
+
+    .button {
+        flex-shrink: 0;
+    }
+}
