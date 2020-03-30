@@ -4,11 +4,11 @@ import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import NumberInput from '#rsci/NumberInput';
 
-import { ResourceEnum, KeyLabel } from '#types';
+import { EnumItem, KeyLabel } from '#types';
 import { getAttributeOptions } from '#utils/domain';
 
 interface Props {
-    resourceEnums: ResourceEnum[];
+    resourceEnums: EnumItem[];
 }
 
 const keySelector = (d: KeyLabel) => d.key;

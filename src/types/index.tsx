@@ -225,13 +225,13 @@ export interface KeyLabel {
     label: string;
 }
 
-export interface ResourceEnum {
+export interface EnumItem {
     attribute: string;
     choices: string[];
 }
 export interface ModelEnum {
     model: string;
-    enums: ResourceEnum[];
+    enums: EnumItem[];
 }
 
 export interface Flow {

@@ -5,11 +5,11 @@ import TextInput from '#rsci/TextInput';
 import Checkbox from '#rsci/Checkbox';
 import SelectInput from '#rsci/SelectInput';
 
-import { ResourceEnum, KeyLabel } from '#types';
+import { EnumItem, KeyLabel } from '#types';
 import { getAttributeOptions } from '#utils/domain';
 
 interface Props {
-    resourceEnums: ResourceEnum[];
+    resourceEnums: EnumItem[];
 }
 
 const keySelector = (d: KeyLabel) => d.key;

@@ -18,6 +18,7 @@ import {
     setMunicipalitiesAction,
     setWardsAction,
     setHazardTypesAction,
+    setEnumOptionsAction,
     setAuthAction,
     setUserDetailAction,
 } from '#actionCreators';
@@ -30,6 +31,7 @@ import { getAuthState } from '#utils/session';
 
 import Multiplexer from '../Multiplexer';
 import styles from './styles.scss';
+import { ModelEnum } from '#types';
 
 interface State {}
 interface Params {}
@@ -44,6 +46,7 @@ interface PropsFromDispatch {
     setMunicipalities: typeof setMunicipalitiesAction;
     setWards: typeof setWardsAction;
     setHazardTypes: typeof setHazardTypesAction;
+    setEnumOptions: typeof setEnumOptionsAction;
     // setEventTypes: typeof setEventTypesAction;
     setAuth: typeof setAuthAction;
     setUserDetail: typeof setUserDetailAction;
@@ -62,6 +65,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setMunicipalities: params => dispatch(setMunicipalitiesAction(params)),
     setWards: params => dispatch(setWardsAction(params)),
     setHazardTypes: params => dispatch(setHazardTypesAction(params)),
+    setEnumOptions: params => dispatch(setEnumOptionsAction(params)),
     setAuth: params => dispatch(setAuthAction(params)),
     // setEventTypes: params => dispatch(setEventTypesAction(params)),
     setUserDetail: params => dispatch(setUserDetailAction(params)),
@@ -150,18 +154,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: true,
     },
-    /*
-    eventTypesRequest: {
-        url: '/event/',
+    enumOptionsGetRequest: {
+        url: '/enum-choice/',
         method: methods.GET,
-        onSuccess: ({ response, props: { setEventTypes } }) => {
-            interface Response { results: PageTypes.EventType[] }
-            const { results: eventTypes = [] } = response as Response;
-            setEventTypes({ eventTypes });
-        },
         onMount: true,
+        onSuccess: ({ response, props: { setEnumOptions } }) => {
+            const enumList: ModelEnum[] = response as ModelEnum[];
+            setEnumOptions({ enumList });
+        },
     },
-    */
+    /*
+       eventTypesRequest: {
+       url: '/event/',
+       method: methods.GET,
+       onSuccess: ({ response, props: { setEventTypes } }) => {
+       interface Response { results: PageTypes.EventType[] }
+       const { results: eventTypes = [] } = response as Response;
+       setEventTypes({ eventTypes });
+       },
+       onMount: true,
+       },
+     */
 };
 
 // NOTE: BrowserRouter is acting weird so not using React.PureComponent

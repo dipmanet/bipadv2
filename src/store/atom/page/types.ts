@@ -1,5 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
-import { FiltersElement, ResourceTypeKeys } from '#types';
+import { FiltersElement, ResourceTypeKeys, ModelEnum, KeyValue } from '#types';
 
 export interface Field {
     id: number;
@@ -481,6 +481,7 @@ export interface PageState {
 
     resourceTypeList: ResourceType[];
     hazardTypes: Obj<HazardType>;
+    enumList: ModelEnum[];
 
     dashboardPage: DashboardPage;
     incidentPage: IncidentPage;
@@ -517,6 +518,7 @@ export enum PageType {
     SET_SHOW_WARD = 'page/SET_SHOW_WARD',
 
     SET_FILTERS = 'page/SET_FILTERS',
+    SET_ENUM_OPTIONS = 'page/SET_ENUM_OPTIONS',
 
     // dashboard
     DP__SET_ALERTS = 'page/DASHBOARD/SET_ALERTS',
@@ -579,6 +581,10 @@ export interface SetInitialPopupHidden {
 export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
     hazardTypes: HazardType[];
+}
+export interface SetEnumOptionsType {
+    type: typeof PageType.SET_ENUM_OPTIONS;
+    enumList: ModelEnum[];
 }
 export interface SetEventType {
     type: typeof PageType.SET_EVENT_TYPES;
@@ -822,5 +828,5 @@ export type PageActionTypes = (
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
-    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList
+    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType
 );

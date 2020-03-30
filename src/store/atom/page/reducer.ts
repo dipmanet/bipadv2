@@ -4,6 +4,7 @@ import { listToMap } from '@togglecorp/fujs';
 import * as Type from './types';
 import initialState from './initialState';
 
+import { ModelEnum } from '#types';
 // ACTION CREATORS
 
 export const setRegionAction = (
@@ -25,6 +26,13 @@ export const setHazardTypesAction = (
 ) => ({
     type: Type.PageType.SET_HAZARD_TYPES,
     hazardTypes,
+});
+
+export const setEnumOptionsAction = (
+    { enumList }: { enumList: ModelEnum[] },
+) => ({
+    type: Type.PageType.SET_ENUM_OPTIONS,
+    enumList,
 });
 
 export const setEventTypesAction = (
@@ -367,6 +375,16 @@ const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
             hazardType => hazardType.id,
             hazardType => hazardType,
         );
+    });
+    return newState;
+};
+
+const setEnumOptions = (state: Type.PageState, action: Type.SetEnumOptionsType) => {
+    const { enumList } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.enumList = enumList;
+        /* eslint-enable no-param-reassign */
     });
     return newState;
 };
@@ -1160,6 +1178,8 @@ export default function routeReducer(
             return setCountryList(state, action);
         case Type.PageType.SET_AGRICULTURE_LOSS_TYPE_LIST:
             return setAgricultureLossTypeList(state, action);
+        case Type.PageType.SET_ENUM_OPTIONS:
+            return setEnumOptions(state, action);
         default:
             return state;
     }

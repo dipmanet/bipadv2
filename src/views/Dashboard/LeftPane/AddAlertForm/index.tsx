@@ -41,10 +41,10 @@ import {
 
 import {
     eventListSelector,
+    sourceOptionsSelector,
     hazardTypeListSelector,
 } from '#selectors';
-import { getAttributeOptions } from '#utils/domain';
-import { ModelEnum, ResourceEnum, KeyLabel } from '#types';
+import { KeyLabel } from '#types';
 
 interface Params {
     body: object;
@@ -80,6 +80,7 @@ interface OwnProps {
 }
 
 interface PropsFromState {
+    sourceOptions: KeyLabel[];
     eventList: PageType.Event[];
     hazardList: PageType.HazardType[];
 }
@@ -107,6 +108,7 @@ interface State {
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    sourceOptions: sourceOptionsSelector(state),
     eventList: eventListSelector(state),
     hazardList: hazardTypeListSelector(state),
 });
@@ -145,11 +147,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 });
             }
         },
-    },
-    enumGetRequest: {
-        url: '/enum-choice/',
-        method: methods.GET,
-        onMount: true,
     },
     editAlertRequest: {
         url: ({ props }) => `/alert/${props.data.id}/`,
@@ -410,6 +407,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             // closeModal,
             hazardList,
             eventList,
+            sourceOptions,
             onCloseButtonClick,
             requests: {
                 addAlertRequest: {
@@ -417,10 +415,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 },
                 editAlertRequest: {
                     pending: editAlertRequestPending,
-                },
-                enumGetRequest: {
-                    response: enumResponse,
-                    pending: enumPending,
                 },
             },
         } = this.props;
@@ -431,17 +425,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramErrors,
         } = this.state;
 
-        let sourceOptions: KeyLabel[] = [];
-        if (!enumPending && enumResponse) {
-            const enumList: ModelEnum[] = enumResponse as ModelEnum[];
-            const alertEnum = enumList.find(v => v.model === 'Alert');
-
-            if (alertEnum && alertEnum.enums) {
-                sourceOptions = getAttributeOptions(alertEnum.enums, 'source');
-            }
-        }
-
-        const pending = addAlertRequestPending || editAlertRequestPending || enumPending;
+        const pending = addAlertRequestPending || editAlertRequestPending;
 
         return (
             <Modal

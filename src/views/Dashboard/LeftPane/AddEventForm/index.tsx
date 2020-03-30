@@ -44,6 +44,7 @@ import {
     hazardTypeListSelector,
     severityListSelector,
 } from '#selectors';
+import { KeyLabel } from '#types';
 
 interface Tabs {
     general: string;
@@ -98,6 +99,9 @@ interface State {
 }
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
+const severityKeySelector = (d: KeyLabel) => d.key;
+const severityLabelSelector = (d: KeyLabel) => d.label;
+
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addEventRequest: {
@@ -411,8 +415,8 @@ class AddEventForm extends React.PureComponent<Props, State> {
                                     className={styles.severityInput}
                                     faramElementName="severity"
                                     options={severityList}
-                                    keySelector={labelSelector}
-                                    labelSelector={labelSelector}
+                                    keySelector={severityKeySelector}
+                                    labelSelector={severityLabelSelector}
                                     label="Severity"
                                 />
                                 <SelectInput
