@@ -87,6 +87,8 @@ const iconNames = {
     contacts: 'ion-ios-contact-outline',
     briefcase: 'ion-briefcase',
     document: 'ion-android-document',
+    textDocument: 'ion-document-text',
+    cart: 'ion-ios-cart-outline',
 };
 
 export default iconNames;
