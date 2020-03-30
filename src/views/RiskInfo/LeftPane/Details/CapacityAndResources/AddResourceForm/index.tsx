@@ -75,15 +75,18 @@ interface Params {
 }
 interface OwnProps {
     closeModal?: () => void;
-    onUpdate?: () => void;
     className?: string;
     resourceId?: number;
     resourceDetails?: PageType.Resource;
+    onAddSuccess?: (resource: PageType.Resource) => void;
+    onEditSuccess?: (resourceId: PageType.Resource['id'], resource: PageType.Resource) => void;
 }
+
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
     enumOptions: ModelEnum[];
 }
+
 interface PropsFromDispatch {
 }
 
@@ -335,20 +338,21 @@ class AddResourceForm extends React.PureComponent<Props, State> {
     }
 
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
-        const {
-            onUpdate,
-        } = this.props;
+        const { onAddSuccess } = this.props;
 
-        if (onUpdate) {
-            onUpdate();
+        if (onAddSuccess) {
+            onAddSuccess(resource);
         }
 
         this.setState({ resourceId: resource.id });
     }
 
-    private handleEditResourceSuccess = () => {
-        // TODO: Handle Appropriately
-        console.warn('Successfully edited');
+    private handleEditResourceSuccess = (resource: PageType.Resource) => {
+        const { onEditSuccess } = this.props;
+
+        if (onEditSuccess) {
+            onEditSuccess(resource.id, resource);
+        }
     }
 
     private filterEnumItem = (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import produce from 'immer';
 import memoize from 'memoize-one';
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
@@ -16,10 +17,7 @@ import {
     methods,
 } from '#request';
 
-import {
-    userSelector,
-    resourceTypeListSelector,
-} from '#selectors';
+import { resourceTypeListSelector } from '#selectors';
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -33,6 +31,7 @@ import MapImage from '#re-map/MapImage';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
+import { MultiResponse } from '#store/atom/response/types';
 import { MapChildContext } from '#re-map/context';
 
 import Cloak, { getParams } from '#components/Cloak';
@@ -40,16 +39,11 @@ import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
 
-import {
-    getResults,
-    isAnyRequestPending,
-} from '#utils/request';
 import { mapStyles } from '#constants';
 
 import HealthIcon from '#resources/icons/Health-facility.png';
 import FinanceIcon from '#resources/icons/Financing.png';
 import FoodWarehouseIcon from '#resources/icons/Food-warehouse.png';
-// import EducationIcon from '#resources/icons/Education.png';
 
 import { ResourceTypeKeys } from '#types';
 import { AppState } from '#store/types';
@@ -70,8 +64,6 @@ const camelCaseToSentence = (text: string) => {
 
     return finalResult;
 };
-
-const emptyResourceList: PageType.Resource[] = [];
 
 interface ResourceTooltipProps extends PageType.Resource {
     onEditClick: () => void;
@@ -132,21 +124,6 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
     );
 };
 
-
-/*
-const resourceLayerList: ResourceElement[] = [
-    // { key: 'education', title: 'Education' },
-    { key: 'finance', title: 'Finance' },
-    { key: 'health', title: 'Health' },
-    { key: 'governance', title: 'Governance' },
-];
-
-interface ResourceElement {
-    key: ResourceTypeKeys;
-    title: string;
-}
-*/
-
 interface ComponentProps {
     className?: string;
 }
@@ -158,6 +135,7 @@ interface State {
     showResourceForm: boolean;
     showInventoryModal: boolean;
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
+    resourceList: PageType.Resource[];
 }
 
 interface PropsFromState {
@@ -168,13 +146,13 @@ interface Params {
     resourceType?: string;
     resourceId?: number;
     coordinates?: [number, number][];
+    setResourceList?: (resources: PageType.Resource[]) => void;
 }
 
 type Props = NewProps<ComponentProps & PropsFromState, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
-    // user: userSelector(state),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
@@ -192,6 +170,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
                 resource_type: params.resourceType,
                 limit: 99999,
             };
+        },
+        onSuccess: ({ params, response }) => {
+            const resources = response as MultiResponse<PageType.Resource>;
+            if (params && params.setResourceList) {
+                params.setResourceList(resources.results);
+            }
         },
     },
     resourceDetailGetRequest: {
@@ -230,6 +214,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
+        const {
+            requests: {
+                resourceGetRequest,
+            },
+        } = this.props;
+        resourceGetRequest.setDefaultParams({ setResourceList: this.setResourceList });
 
         this.state = {
             activeLayerKey: undefined,
@@ -238,10 +228,42 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             showResourceForm: false,
             showInventoryModal: false,
             selectedFeatures: undefined,
+            resourceList: [],
         };
     }
 
     private getUserParams = memoize(getParams);
+
+    private setResourceList = (resourceList: PageType.Resource[]) => {
+        this.setState({ resourceList });
+    }
+
+    private handleResourceAdd = (resource: PageType.Resource) => {
+        const {
+            resourceList,
+        } = this.state;
+        const newResourceList = [
+            resource,
+            ...resourceList,
+        ];
+        this.setState({ resourceList: newResourceList });
+    }
+
+    private handleResourceEdit = (resourceId: PageType.Resource['id'], resource: PageType.Resource) => {
+        const {
+            resourceList,
+        } = this.state;
+
+        const newResourceList = produce(resourceList, (safeResourceList) => {
+            const index = resourceList.findIndex(r => r.id === resourceId);
+            if (index !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeResourceList[index] = resource;
+            }
+        });
+
+        this.setState({ resourceList: newResourceList });
+    }
 
     private getGeojson = memoize((resourceList: PageType.Resource[]) => {
         const geojson = {
@@ -431,11 +453,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             className,
             requests,
             resourceTypeList,
-            // user,
         } = this.props;
-
-        // const userParams = this.getUserParams(user);
-        // console.warn('user params', userParams);
 
         const {
             activeLayerKey,
@@ -444,33 +462,30 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceLngLat,
             resourceInfo,
             selectedFeatures,
+            resourceList,
         } = this.state;
 
-        const resourceList = getResults(
-            requests,
-            'resourceGetRequest',
-            emptyResourceList,
-        ) as PageType.Resource[];
-
-        /*
-        const polygonResources = getResults(
-            requests,
-            'polygonResourceDetailGetRequest',
-            emptyResourceList,
-        ) as PageType.Resource[];
-         */
-
-        let resourceDetails: PageType.Resource | undefined;
         const {
             resourceDetailGetRequest: {
                 response,
+                pending: resourceDetailPending,
+            },
+            resourceGetRequest: {
+                pending: resourceGetPending,
+            },
+            polygonResourceDetailGetRequest: {
+                pending: polygonResourceGetPending,
             },
         } = requests;
+
+        let resourceDetails: PageType.Resource | undefined;
         if (response) {
             resourceDetails = response as PageType.Resource;
         }
 
-        const pending = isAnyRequestPending(requests);
+        const pending = resourceDetailPending
+            || resourceGetPending
+            || polygonResourceGetPending;
 
         const geojson = this.getGeojson(resourceList);
 
@@ -495,7 +510,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     title="Add New Resource"
                                     transparent
                                     modal={(
-                                        <AddResourceForm />
+                                        <AddResourceForm
+                                            onAddSuccess={this.handleResourceAdd}
+                                            onEditSuccess={this.handleResourceEdit}
+                                        />
                                     )}
                                 >
                                     Add Resource
@@ -650,6 +668,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     <AddResourceForm
                         resourceId={resourceDetails.id}
                         resourceDetails={resourceDetails}
+                        onEditSuccess={this.handleResourceEdit}
                         closeModal={this.handleEditResourceFormCloseButtonClick}
                     />
                 )}
