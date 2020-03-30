@@ -18,9 +18,6 @@ import TextArea from '#rsci/TextArea';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import {
-} from '#actionCreators';
-
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { EnumItem, ModelEnum, ResourceTypeKeys } from '#types';
@@ -32,6 +29,7 @@ import {
 } from '#request';
 
 import {
+    enumOptionsSelector,
     resourceTypeListSelector,
 } from '#selectors';
 
@@ -59,6 +57,7 @@ interface OwnProps {
 }
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
+    enumOptions: ModelEnum[];
 }
 interface PropsFromDispatch {
 }
@@ -84,16 +83,12 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
+    enumOptions: enumOptionsSelector(state),
 });
 
 const labelSelector = (d: PageType.Field) => d.title;
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    resourceEnumGetRequest: {
-        url: '/resource-enum/',
-        method: methods.GET,
-        onMount: true,
-    },
     addResourcePostRequest: {
         url: '/resource/',
         method: methods.POST,
@@ -259,12 +254,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             className,
             closeModal,
             resourceTypeList,
-            requests: {
-                resourceEnumGetRequest: {
-                    response = [],
-                    pending,
-                },
-            },
+            enumOptions,
         } = this.props;
 
         const {
@@ -277,8 +267,8 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         const schema = this.getSchema(resourceType as ResourceTypeKeys);
 
         let resourceEnums: EnumItem[] = [];
-        if (resourceType && !pending) {
-            resourceEnums = this.filterEnumItem(response as ModelEnum[], resourceType);
+        if (resourceType) {
+            resourceEnums = this.filterEnumItem(enumOptions, resourceType);
         }
 
         return (
@@ -330,7 +320,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             faramElementName="location"
                         />
                         {
-                            !pending && resourceType && (
+                            resourceType && (
                                 <ExtraFields
                                     title={resourceType}
                                     resourceEnums={resourceEnums}
