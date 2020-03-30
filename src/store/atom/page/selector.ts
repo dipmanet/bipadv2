@@ -4,9 +4,12 @@ import {
     listToMap,
     doesObjectHaveNoData,
 } from '@togglecorp/fujs';
+import { KeyLabel, KeyValue } from '#types';
+
+import { getAttributeOptions } from '#utils/domain';
 
 import { AppState } from '../../types';
-import { Region } from './types';
+import { Region, Status } from './types';
 
 const emptyList: unknown[] = [];
 
@@ -190,6 +193,8 @@ export const hazardTypeListSelector = createSelector(
     hazardTypes => mapToList(hazardTypes, hazardType => hazardType),
 );
 
+export const enumOptionsSelector = ({ page }: AppState) => page.enumList;
+
 // map styles
 
 // export const mapStylesSelector = ({ page }: AppState) => page.mapStyles;
@@ -203,19 +208,70 @@ export const sourcesSelector = ({ page }: AppState) => (
     listToMap(page.sourceList, d => d.id, d => d.title)
 );
 
-export const severityListSelector = ({ page }: AppState) => page.severityList;
+export const severityListSelector = createSelector(
+    enumOptionsSelector,
+    (enumList) => {
+        const eventEnum = enumList.find(v => v.model === 'Event');
+        let severityList: KeyLabel[] = [];
+        if (eventEnum && eventEnum.enums) {
+            severityList = getAttributeOptions(eventEnum.enums, 'severity');
+        }
+        return severityList;
+    },
+);
+
+export const sourceOptionsSelector = createSelector(
+    enumOptionsSelector,
+    (enumList) => {
+        const alertEnum = enumList.find(v => v.model === 'Alert');
+        let sourceOptions: KeyLabel[] = [];
+        if (alertEnum && alertEnum.enums) {
+            sourceOptions = getAttributeOptions(alertEnum.enums, 'source');
+        }
+        return sourceOptions;
+    },
+);
 
 export const documentCategoryListSelector = ({ page }: AppState) => page.documentCategoryList;
 
-export const genderListSelector = ({ page }: AppState) => page.genderList;
+export const genderListSelector = createSelector(
+    enumOptionsSelector,
+    (enumList) => {
+        const peopleEnum = enumList.find(v => v.model === 'People');
+        let genderOptions: Status[] = [];
+        if (peopleEnum && peopleEnum.enums) {
+            genderOptions = getAttributeOptions(peopleEnum.enums, 'gender')
+                .map(({ label }, index) => ({ id: index, title: label }));
+        }
+        return genderOptions;
+    },
+);
 
-export const peopleLossStatusListSelector = (
-    { page }: AppState,
-) => page.peopleLossStatusList;
+export const peopleLossStatusListSelector = createSelector(
+    enumOptionsSelector,
+    (enumList) => {
+        const peopleEnum = enumList.find(v => v.model === 'People');
+        let peopleLossStatusList: Status[] = [];
+        if (peopleEnum && peopleEnum.enums) {
+            peopleLossStatusList = getAttributeOptions(peopleEnum.enums, 'status')
+                .map(({ label }, index) => ({ id: index, title: label }));
+        }
+        return peopleLossStatusList;
+    },
+);
 
-export const agricultureLossStatusListSelector = (
-    { page }: AppState,
-) => page.agricultureLossStatusList;
+export const agricultureLossStatusListSelector = createSelector(
+    enumOptionsSelector,
+    (enumList) => {
+        const agricultureEnum = enumList.find(v => v.model === 'Agriculture');
+        let agricultureLossStatusList: Status[] = [];
+        if (agricultureEnum && agricultureEnum.enums) {
+            agricultureLossStatusList = getAttributeOptions(agricultureEnum.enums, 'status')
+                .map(({ label }, index) => ({ id: index, title: label }));
+        }
+        return agricultureLossStatusList;
+    },
+);
 
 export const agricultureLossTypeListSelector = (
     { page }: AppState,

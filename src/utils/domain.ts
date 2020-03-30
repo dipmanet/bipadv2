@@ -26,7 +26,7 @@ import {
     LegendItem,
     LayerHierarchy,
     LayerMap,
-    ResourceEnum,
+    EnumItem,
 } from '#types';
 
 import { groupList } from '#utils/common';
@@ -849,7 +849,7 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
     return { paint, legend };
 };
 
-export const getAttributeOptions = (resourceEnums: ResourceEnum[], attribute: string) => {
+export const getAttributeOptions = (resourceEnums: EnumItem[], attribute: string) => {
     const value = resourceEnums.find(r => r.attribute === attribute);
     const choices = (value && value.choices) || [];
     const options = choices.map(v => ({ key: v, label: v }));

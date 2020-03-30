@@ -23,7 +23,7 @@ import {
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-import { ResourceEnum, ModelEnum, ResourceTypeKeys } from '#types';
+import { EnumItem, ModelEnum, ResourceTypeKeys } from '#types';
 import {
     createRequestClient,
     NewProps,
@@ -125,7 +125,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 interface ExtraFieldProps {
     title: string;
-    resourceEnums: ResourceEnum[];
+    resourceEnums: EnumItem[];
 }
 
 const ExtraFields = ({ title, resourceEnums }: ExtraFieldProps) => {
@@ -243,7 +243,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         });
     }
 
-    private filterResourceEnum = (
+    private filterEnumItem = (
         resourceEnums: ModelEnum[],
         resourceType: string,
     ) => {
@@ -276,9 +276,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         const { resourceType } = faramValues;
         const schema = this.getSchema(resourceType as ResourceTypeKeys);
 
-        let resourceEnums: ResourceEnum[] = [];
+        let resourceEnums: EnumItem[] = [];
         if (resourceType && !pending) {
-            resourceEnums = this.filterResourceEnum(response as ModelEnum[], resourceType);
+            resourceEnums = this.filterEnumItem(response as ModelEnum[], resourceType);
         }
 
         return (
