@@ -5,10 +5,13 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NumberInput from '#rsci/NumberInput';
 import TextArea from '#rsci/TextArea';
+import NonFieldErrors from '#rsci/NonFieldErrors';
 
 import {
     createRequestClient,
@@ -220,7 +223,8 @@ class AddLoss extends React.PureComponent<Props, State> {
                 error={faramErrors}
             >
                 {pending && <LoadingAnimation />}
-                <div className={styles.container}>
+                <ModalBody className={styles.body}>
+                    <NonFieldErrors faramElement />
                     <TextArea
                         faramElementName="description"
                         label="Description"
@@ -230,16 +234,16 @@ class AddLoss extends React.PureComponent<Props, State> {
                         faramElementName="estimatedLoss"
                         label="Estimated loss"
                     />
-                    <div className={styles.footer}>
-                        <PrimaryButton
-                            type="submit"
-                            pending={lossEditPending || incidentPending}
-                            disabled={pristine}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </div>
-                </div>
+                </ModalBody>
+                <ModalFooter className={styles.footer}>
+                    <PrimaryButton
+                        type="submit"
+                        pending={lossEditPending || incidentPending}
+                        disabled={pristine}
+                    >
+                        Save
+                    </PrimaryButton>
+                </ModalFooter>
             </Faram>
         );
     }
