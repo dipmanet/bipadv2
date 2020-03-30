@@ -41,9 +41,10 @@ import {
 
 import {
     eventListSelector,
-    sourceListSelector,
     hazardTypeListSelector,
 } from '#selectors';
+import { getAttributeOptions } from '#utils/domain';
+import { ModelEnum, ResourceEnum, KeyLabel } from '#types';
 
 interface Params {
     body: object;
@@ -80,7 +81,6 @@ interface OwnProps {
 
 interface PropsFromState {
     eventList: PageType.Event[];
-    sourceList: PageType.Source[];
     hazardList: PageType.HazardType[];
 }
 
@@ -108,12 +108,13 @@ interface State {
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     eventList: eventListSelector(state),
-    sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
 });
 
-const keySelector = (d: PageType.Field) => d.id;
-const labelSelector = (d: PageType.Field) => d.title;
+const hazardKeySelector = (d: PageType.HazardType) => d.id;
+const hazardLabelSelector = (d: PageType.HazardType) => d.title;
+const keySelector = (d: KeyLabel) => d.key;
+const labelSelector = (d: KeyLabel) => d.label;
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
@@ -144,6 +145,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 });
             }
         },
+    },
+    enumGetRequest: {
+        url: '/enum-choice/',
+        method: methods.GET,
+        onMount: true,
     },
     editAlertRequest: {
         url: ({ props }) => `/alert/${props.data.id}/`,
@@ -404,7 +410,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             // closeModal,
             hazardList,
             eventList,
-            sourceList,
             onCloseButtonClick,
             requests: {
                 addAlertRequest: {
@@ -412,6 +417,10 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                 },
                 editAlertRequest: {
                     pending: editAlertRequestPending,
+                },
+                enumGetRequest: {
+                    response: enumResponse,
+                    pending: enumPending,
                 },
             },
         } = this.props;
@@ -422,7 +431,17 @@ class AddAlertForm extends React.PureComponent<Props, State> {
             faramErrors,
         } = this.state;
 
-        const pending = addAlertRequestPending || editAlertRequestPending;
+        let sourceOptions: KeyLabel[] = [];
+        if (!enumPending && enumResponse) {
+            const enumList: ModelEnum[] = enumResponse as ModelEnum[];
+            const alertEnum = enumList.find(v => v.model === 'Alert');
+
+            if (alertEnum && alertEnum.enums) {
+                sourceOptions = getAttributeOptions(alertEnum.enums, 'source');
+            }
+        }
+
+        const pending = addAlertRequestPending || editAlertRequestPending || enumPending;
 
         return (
             <Modal
@@ -469,14 +488,14 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                     className={styles.hazardInput}
                                     faramElementName="hazard"
                                     options={hazardList}
-                                    keySelector={keySelector}
-                                    labelSelector={labelSelector}
+                                    keySelector={hazardKeySelector}
+                                    labelSelector={hazardLabelSelector}
                                     label="Hazard"
                                 />
                                 <SelectInput
                                     className={styles.sourceInput}
                                     faramElementName="source"
-                                    options={sourceList}
+                                    options={sourceOptions}
                                     keySelector={keySelector}
                                     labelSelector={labelSelector}
                                     label="Source"
