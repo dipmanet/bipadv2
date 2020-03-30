@@ -2,8 +2,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
-import MapSource from '#rscz/Map/MapSource';
-import MapLayer from '#rscz/Map/MapLayer';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import MapBounds from '#re-map/MapBounds';
 
 import { mapSources, mapStyles } from '#constants';
 
@@ -85,43 +86,59 @@ class LocationInputMap extends React.PureComponent<Props, State> {
             <Fragment>
                 <MapSource
                     sourceKey={'location-input-country'}
-                    url={mapSources.nepal.url}
-                    bounds={bounds}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepal.url,
+                    }}
                 >
-                    <MapLayer
-                        layerKey="ward-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.ward}
-                        paint={mapStyles.ward.outline}
-                        filter={wardFilter}
-                    />
-                    <MapLayer
-                        layerKey="municipality-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.municipality}
-                        paint={mapStyles.municipality.outline}
-                        filter={municipalityFilter}
-                    />
-                    <MapLayer
-                        layerKey="district-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.district}
-                        paint={mapStyles.district.outline}
-                        filter={districtFilter}
-                    />
-                    <MapLayer
-                        layerKey="province-outline"
-                        type="line"
-                        sourceLayer={mapSources.nepal.layers.province}
-                        paint={mapStyles.province.outline}
-                        filter={provinceFilter}
+                    <MapBounds
+                        bounds={bounds}
+                        padding={5}
                     />
                     <MapLayer
                         layerKey="ward-fill"
-                        type="fill"
-                        sourceLayer={mapSources.nepal.layers.ward}
-                        paint={mapStyles.ward.fill}
-                        filter={wardFilter}
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.ward,
+                            type: 'fill',
+                            paint: mapStyles.ward.fill,
+                            filter: wardFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="ward-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.ward,
+                            type: 'line',
+                            paint: mapStyles.ward.outline,
+                            filter: wardFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="municipality-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.municipality,
+                            type: 'line',
+                            paint: mapStyles.municipality.outline,
+                            filter: municipalityFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="district-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.district,
+                            type: 'line',
+                            paint: mapStyles.district.outline,
+                            filter: districtFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="province-outline"
+                        layerOptions={{
+                            'source-layer': mapSources.nepal.layers.province,
+                            type: 'line',
+                            paint: mapStyles.province.outline,
+                            filter: provinceFilter,
+                        }}
                     />
                 </MapSource>
             </Fragment>

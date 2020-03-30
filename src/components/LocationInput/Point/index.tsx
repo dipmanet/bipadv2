@@ -4,20 +4,21 @@ import produce from 'immer';
 
 import { _cs } from '@togglecorp/fujs';
 
-import MapContext from '#rscz/Map/context';
-import MapSource from '#rscz/Map/MapSource';
-import MapLayer from '#rscz/Map/MapLayer';
+import { MapChildContext as MapContext } from '#re-map/context';
+import MapSource from '#re-map/MapSource';
+import MapLayer from '#re-map/MapSource/MapLayer';
+import { getLayerName } from '#re-map/utils';
 
 import TextInput from '#rsci/TextInput';
+
 import RegionSelectInput from '#components/RegionSelectInput';
+import { Province, District, Municipality } from '#store/atom/page/types';
 
 import { mapStyles } from '#constants';
 
 import styles from './styles.scss';
 
-const emptyObject = {};
-
-const defaultGeoJson = {
+const defaultGeoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {
     type: 'FeatureCollection',
     features: [{
         type: 'Feature',
@@ -31,7 +32,7 @@ const defaultGeoJson = {
     }],
 };
 
-type GeoJson = typeof defaultGeoJson;
+// type GeoJson = typeof defaultGeoJson;
 
 interface Region {
     geoarea: number;
@@ -39,11 +40,29 @@ interface Region {
     ward?: number;
 }
 
+interface Field {
+    id: number;
+    title: string;
+}
+
 interface Props {
     pointColor: string;
-    geoJson: GeoJson;
-    onPointMove: (geoJson: GeoJson, region: Region) => {};
+    geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+    onPointMove: (
+        geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry>,
+        region: Region | undefined,
+    ) => void;
     pointShape?: 'rect' | 'circle';
+
+    provinces: Province[];
+    districts: District[];
+    municipalities: Municipality[];
+
+    className?: string;
+    region?: Region;
+
+    hint?: string;
+    error?: string;
 }
 
 interface State {
@@ -54,11 +73,198 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         pointShape: 'circle',
     }
 
-    private handleMove = (e: {}) => {
+    public componentDidUpdate() {
+        const { pointShape } = this.props;
+        this.setMapEvents(this.context.map, pointShape);
+    }
+
+    private setMapEvents = memoize((map: unknown, pointShape: 'rect' | 'circle') => {
+        if (!map) {
+            return;
+        }
+
+        const shapeName = getLayerName(
+            'alert-point',
+            pointShape === 'rect' ? 'rect-symbol' : 'alert-point-fill',
+        );
+
+        map.on('click', this.handleMouseClick);
+
+        map.on(
+            'mousedown',
+            shapeName,
+            (e: { preventDefault: () => void }) => {
+                e.preventDefault();
+                map.on('mousemove', this.handleMove);
+                map.once('mouseup', this.handleEnd);
+            },
+        );
+
+        map.on(
+            'touchstart',
+            shapeName,
+            () => {
+                map.on('touchmove', this.handleMove);
+                map.once('touchend', this.handleEnd);
+            },
+        );
+    });
+
+    private getFormData = (geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined) => {
+        if (!geoJson) {
+            return { lng: undefined, lat: undefined };
+        }
+
+        const feature = geoJson.features[0];
+        if (feature.geometry.type !== 'Point') {
+            return { lng: undefined, lat: undefined };
+        }
+
+        const { coordinates } = feature.geometry;
+
+        const lng = coordinates[0];
+        const lat = coordinates[1];
+
+        return {
+            lng,
+            lat,
+        };
+    }
+
+    private handleRegionSelectInputChange = (
+        newRegion: { adminLevel: number; geoarea: number },
+    ) => {
         const {
-            geoJson,
+            municipalities,
+            districts,
+            provinces,
+            geoJson = defaultGeoJson,
             onPointMove,
         } = this.props;
+
+        if (!onPointMove) {
+            return;
+        }
+
+        const regionMap: {
+            [key: number]: (Province | District | Municipality)[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regions = newRegion.adminLevel
+            ? regionMap[newRegion.adminLevel]
+            : undefined;
+
+        if (!regions) {
+            return;
+        }
+
+        const selectedRegion = regions.find(
+            d => d.id === newRegion.geoarea,
+        );
+        // const point = this.context.map.project(selectedRegion.centroid.coordinates);
+
+        if (!selectedRegion) {
+            return;
+        }
+
+        const newGeoJson = produce(geoJson, (deferedState) => {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.features[0].geometry.coordinates = selectedRegion.centroid.coordinates;
+        });
+
+        onPointMove(newGeoJson, newRegion);
+    }
+
+    /*
+    private handleLatInputChange = (lat: number) => {
+        const {
+            geoJson = defaultGeoJson,
+            onPointMove,
+        } = this.props;
+
+        if (!onPointMove) {
+            return;
+        }
+
+        const { lng } = this.getFormData(geoJson);
+
+        const newGeoJson = produce(geoJson, (deferedState) => {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.features[0].geometry.coordinates = [lng, lat];
+        });
+
+        const point = this.context.map.project([lng, lat]);
+
+        const features = this.context.map.queryRenderedFeatures(
+            point,
+            { layers: [getLayerName('location-input-country', 'ward-fill')] },
+        );
+
+        let region;
+        if (features.length > 0) {
+            const feature = features[0];
+            const wardId = feature.id;
+            const municipalityId = feature.properties.municipality;
+
+            region = {
+                geoarea: municipalityId,
+                adminLevel: 3,
+                ward: wardId,
+            };
+        }
+
+        onPointMove(newGeoJson, region);
+    }
+    */
+
+    /*
+    private handleLngInputChange = (lng: number) => {
+        const {
+            geoJson = defaultGeoJson,
+            onPointMove,
+        } = this.props;
+
+        if (!onPointMove) {
+            return;
+        }
+
+        const { lat } = this.getFormData(geoJson);
+
+        const newGeoJson = produce(geoJson, (deferedState) => {
+            // eslint-disable-next-line no-param-reassign
+            deferedState.features[0].geometry.coordinates = [lng, lat];
+        });
+
+        const point = this.context.map.project([lng, lat]);
+        const features = this.context.map.queryRenderedFeatures(
+            point,
+            { layers: [getLayerName('location-input-country', 'ward-fill')] },
+        );
+
+        let region;
+
+        if (features.length > 0) {
+            const feature = features[0];
+            const wardId = feature.id;
+            const municipalityId = feature.properties.municipality;
+
+            region = {
+                geoarea: municipalityId,
+                adminLevel: 3,
+                ward: wardId,
+            };
+        }
+
+        onPointMove(newGeoJson, region);
+    }
+    */
+
+    private handleMove = (e: unknown) => {
+        const { geoJson } = this.props;
 
         const {
             lngLat: {
@@ -83,7 +289,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         this.context.map.getSource('alert-point').setData(newGeoJson);
     }
 
-    private handleEnd = (e: any) => {
+    private handleEnd = (e: unknown) => {
         this.context.map.off('mousemove', this.handleMove);
         this.context.map.off('touchmove', this.handleMove);
 
@@ -92,7 +298,12 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             onPointMove,
         } = this.props;
 
+        if (!onPointMove) {
+            return;
+        }
+
         const {
+            point,
             lngLat: {
                 lng,
                 lat,
@@ -114,37 +325,40 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         // this.context.map.getSource('alert-point').setData(newGeoJson);
 
-        if (onPointMove) {
-            const features = this.context.map.queryRenderedFeatures(
-                e.point,
-                { layers: ['ward-fill'] },
-            );
+        const features = this.context.map.queryRenderedFeatures(
+            point,
+            { layers: [getLayerName('location-input-country', 'ward-fill')] },
+        );
 
-            let region;
+        let region;
 
-            if (features.length > 0) {
-                const feature = features[0];
-                const wardId = feature.id;
-                const municipalityId = feature.properties.municipality;
+        if (features.length > 0) {
+            const feature = features[0];
+            const wardId = feature.id;
+            const municipalityId = feature.properties.municipality;
 
-                region = {
-                    geoarea: municipalityId,
-                    adminLevel: 3,
-                    ward: wardId,
-                };
-            }
-
-            onPointMove(newGeoJson, region);
+            region = {
+                geoarea: municipalityId,
+                adminLevel: 3,
+                ward: wardId,
+            };
         }
+
+        onPointMove(newGeoJson, region);
     }
 
-    private handleMouseClick = (e: any) => {
+    private handleMouseClick = (e: unknown) => {
         const {
             geoJson = defaultGeoJson,
             onPointMove,
         } = this.props;
 
+        if (!onPointMove) {
+            return;
+        }
+
         const {
+            point,
             lngLat: {
                 lng,
                 lat,
@@ -160,159 +374,8 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         if (onPointMove) {
             const features = this.context.map.queryRenderedFeatures(
-                e.point,
-                { layers: ['ward-fill'] },
-            );
-
-            let region;
-
-            if (features.length > 0) {
-                const feature = features[0];
-                const wardId = feature.id;
-                const municipalityId = feature.properties.municipality;
-
-                region = {
-                    geoarea: municipalityId,
-                    adminLevel: 3,
-                    ward: wardId,
-                };
-            }
-
-            onPointMove(newGeoJson, region);
-        }
-    }
-
-    private setMapEvents = memoize((map, pointShape) => {
-        if (map) {
-            map.on('click', this.handleMouseClick);
-            map.on('mousedown', pointShape === 'rect' ? 'rect-symbol' : 'alert-point-fill', (e: {
-                preventDefault: () => void;
-            }) => {
-                e.preventDefault();
-
-                map.on('mousemove', this.handleMove);
-                map.once('mouseup', this.handleEnd);
-            });
-
-            map.on('touchstart', 'alert-point-fill', () => {
-                map.on('touchmove', this.handleMove);
-                map.once('touchend', this.handleEnd);
-            });
-        }
-    });
-
-    public componentDidUpdate() {
-        const {
-            pointShape,
-        } = this.props;
-        this.setMapEvents(this.context.map, pointShape);
-    }
-
-    private getFormData = (geoJson) => {
-        if (!geoJson) {
-            return {
-                lng: undefined,
-                lat: undefined,
-            };
-        }
-
-        const feature = geoJson.features[0];
-        const { coordinates } = feature.geometry;
-
-        const lng = coordinates[0];
-        const lat = coordinates[1];
-
-        return {
-            lng,
-            lat,
-        };
-    }
-
-    private handleRegionSelectInputChange = (newRegion) => {
-        const {
-            municipalities,
-            districts,
-            provinces,
-            geoJson = defaultGeoJson,
-            onPointMove,
-        } = this.props;
-
-        const regionMap = {
-            1: provinces,
-            2: districts,
-            3: municipalities,
-        };
-
-        const regions = regionMap[newRegion.adminLevel];
-        if (regions) {
-            const selectedRegion = regions.find(d => d.id === newRegion.geoarea);
-            const point = this.context.map.project(selectedRegion.centroid.coordinates);
-
-            const newGeoJson = produce(geoJson, (deferedState) => {
-                // eslint-disable-next-line no-param-reassign
-                deferedState.features[0].geometry.coordinates = selectedRegion.centroid.coordinates;
-            });
-
-            onPointMove(newGeoJson, newRegion);
-        }
-    }
-
-    private handleLatInputChange = (lat) => {
-        const {
-            geoJson = defaultGeoJson,
-            onPointMove,
-        } = this.props;
-        const { lng } = this.getFormData(geoJson);
-
-        const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
-        });
-
-        const point = this.context.map.project([lng, lat]);
-
-        if (onPointMove) {
-            const features = this.context.map.queryRenderedFeatures(
                 point,
-                { layers: ['ward-fill'] },
-            );
-
-            let region;
-
-            if (features.length > 0) {
-                const feature = features[0];
-                const wardId = feature.id;
-                const municipalityId = feature.properties.municipality;
-
-                region = {
-                    geoarea: municipalityId,
-                    adminLevel: 3,
-                    ward: wardId,
-                };
-            }
-
-            onPointMove(newGeoJson, region);
-        }
-    }
-
-    private handleLngInputChange = (lng) => {
-        const {
-            geoJson = defaultGeoJson,
-            onPointMove,
-        } = this.props;
-        const { lat } = this.getFormData(geoJson);
-
-        const newGeoJson = produce(geoJson, (deferedState) => {
-            // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
-        });
-
-        const point = this.context.map.project([lng, lat]);
-
-        if (onPointMove) {
-            const features = this.context.map.queryRenderedFeatures(
-                point,
-                { layers: ['ward-fill'] },
+                { layers: [getLayerName('location-input-country', 'ward-fill')] },
             );
 
             let region;
@@ -353,20 +416,27 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                 { geoJson && (
                     <MapSource
                         sourceKey="alert-point"
+                        sourceOptions={{
+                            type: 'geojson',
+                        }}
                         geoJson={geoJson}
                     >
                         { pointShape === 'rect' ? (
                             <MapLayer
                                 layerKey="rect-symbol"
-                                type="symbol"
-                                layout={mapStyles.eventSymbol.layout}
-                                paint={mapStyles.eventSymbol.paint}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    paint: mapStyles.eventSymbol.paint,
+                                    layout: mapStyles.eventSymbol.layout,
+                                }}
                             />
                         ) : (
                             <MapLayer
-                                type="circle"
                                 layerKey="alert-point-fill"
-                                paint={mapStyles.alertPoint.circle}
+                                layerOptions={{
+                                    type: 'circle',
+                                    paint: mapStyles.alertPoint.circle,
+                                }}
                             />
                         )}
                     </MapSource>
@@ -389,7 +459,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         type="number"
                         label="Latitude"
                         value={lat}
-                        onChange={this.handleLatInputChange}
+                        // onChange={this.handleLatInputChange}
                     />
                     <TextInput
                         className={styles.lngInput}
@@ -397,7 +467,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         type="number"
                         label="Longitude"
                         value={lng}
-                        onChange={this.handleLngInputChange}
+                        // onChange={this.handleLngInputChange}
                     />
                 </div>
             </div>

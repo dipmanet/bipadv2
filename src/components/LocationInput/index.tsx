@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 
-import Map from '#rscz/Map';
-import MapContainer from '#rscz/Map/MapContainer';
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
 
 import { AppState } from '#store/types';
 import {
@@ -114,14 +114,16 @@ class LocationInput extends React.PureComponent<Props, State> {
             <div className={_cs(className, styles.locationInput)}>
                 <Map
                     mapStyle={mapStyle}
-                    fitBoundsDuration={200}
-                    minZoom={5}
-                    logoPosition="top-left"
 
-                    showScaleControl
+                    mapOptions={{
+                        logoPosition: 'top-left',
+                        minZoom: 5,
+                    }}
+
+                    scaleControlShown
                     scaleControlPosition="bottom-right"
 
-                    showNavControl
+                    navControlShown
                     navControlPosition="bottom-right"
                 >
                     <AreaMap />
