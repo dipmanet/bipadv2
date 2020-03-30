@@ -85,6 +85,7 @@ interface State {
 
 interface Params {
     body?: object;
+    setFaramErrors?: (error: object) => void;
 }
 
 type PropsWithRedux = ComponentProps & PropsFromAppState;
@@ -128,6 +129,22 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         onSuccess: ({ response, props }) => {
             if (props.closeModal) {
                 props.closeModal();
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
         extras: { hasFile: true },
@@ -179,7 +196,10 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
             image,
         };
 
-        citizenReportPostRequest.do({ body });
+        citizenReportPostRequest.do({
+            body,
+            setFaramErrors: this.handleFaramValidationFailure,
+        });
     }
 
     public render() {
@@ -204,7 +224,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addCitizenReportFormModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <Faram
                     className={styles.form}

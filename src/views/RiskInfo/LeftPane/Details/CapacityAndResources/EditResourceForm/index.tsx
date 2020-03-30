@@ -45,7 +45,7 @@ interface OwnProps {
 
 interface Params {
     body?: object;
-    onFailure: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface FaramValues {
@@ -73,14 +73,20 @@ const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
                 props.onCloseButtonClick();
             }
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.onFailure) {
-                params.onFailure({ $internal: ['Some error occurred'] });
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
     },
@@ -152,9 +158,7 @@ class EditResourceModal extends React.PureComponent<Props, State> {
             body: {
                 ...faramValues,
             },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
@@ -226,10 +230,8 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                     <ModalFooter
                         className={styles.footer}
                     >
-                        <DangerButton
-                            onClick={onCloseButtonClick}
-                        >
-                            Cancel
+                        <DangerButton onClick={onCloseButtonClick}>
+                            Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"

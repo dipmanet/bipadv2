@@ -55,7 +55,7 @@ interface PropsFromDispatch {
 
 interface Params {
     body?: object;
-    onFailure?: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
     setLivestockTypes?: (livestockTypes: LivestockType[]) => void;
 }
 
@@ -91,9 +91,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
             closeModal();
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
     },
@@ -188,9 +199,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                 loss: lossServerId,
                 ...faramValues,
             },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
@@ -277,10 +286,8 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                         </Cloak>
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton
-                            onClick={closeModal}
-                        >
-                            Cancel
+                        <DangerButton onClick={closeModal}>
+                            Close
                         </DangerButton>
                         <PrimaryButton
                             type="submit"

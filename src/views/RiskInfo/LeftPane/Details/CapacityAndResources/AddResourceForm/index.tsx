@@ -50,7 +50,7 @@ import styles from './styles.scss';
 interface Params {
     body: object;
     onSuccess: () => void;
-    onFailure: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
 }
 interface OwnProps {
     closeModal?: () => void;
@@ -104,9 +104,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 onSuccess();
             }
         },
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
     },
@@ -228,9 +239,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     closeModal();
                 }
             },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
@@ -275,7 +284,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
                 // closeOnEscape
             >
                 <Faram

@@ -132,7 +132,7 @@ class StreamflowDetails extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={handleModalClose}
+                // onClose={handleModalClose}
                 className={styles.streamflowModal}
             >
                 <ModalHeader

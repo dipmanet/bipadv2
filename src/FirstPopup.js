@@ -165,7 +165,7 @@ export default class FirstPopup extends React.PureComponent {
 
         return (
             <Modal
-                closeOnEscape
+                // closeOnEscape
                 // onClose={this.handleSplashScreenModalClose}
                 className={styles.splashScreenModal}
             >

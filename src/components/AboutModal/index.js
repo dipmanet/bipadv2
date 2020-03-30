@@ -76,7 +76,7 @@ export default class AboutUs extends React.PureComponent {
         return (
             <Modal
                 className={_cs(styles.loginModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <ModalHeader
                     className={styles.header}

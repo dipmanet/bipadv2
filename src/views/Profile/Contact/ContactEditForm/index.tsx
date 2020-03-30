@@ -21,10 +21,11 @@ import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import RawFileInput from '#rsci/RawFileInput';
 import LocationInput from '#components/LocationInput';
+import NonFieldErrors from '#rsci/NonFieldErrors';
+
 import FullStepwiseRegionSelectInput, {
     RegionValuesAlt,
 } from '#components/FullStepwiseRegionSelectInput';
-import NonFieldErrors from '#rsci/NonFieldErrors';
 
 
 import {
@@ -108,6 +109,7 @@ interface Params {
     body?: FaramValues;
     setPristine?: (pristine: boolean) => void;
     setOrganizationList?: (organizationList: Organization[]) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 type Props = NewProps<OwnProps, Params>;
@@ -117,6 +119,9 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         url: ({ props }) => `/municipality-contact/${props.contactId}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
+        query: {
+            expand: ['trainings', 'organization'],
+        },
         onSuccess: ({ response, props, params }) => {
             const editedContact = response as Contact;
             const {
@@ -130,8 +135,21 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                 params.setPristine(true);
             }
         },
-        query: {
-            expand: ['trainings', 'organization'],
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
         },
         extras: { hasFile: true },
     },
@@ -139,6 +157,9 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         url: '/municipality-contact/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
+        query: {
+            expand: ['trainings', 'organization'],
+        },
         onSuccess: ({ response, props }) => {
             const editedContact = response as Contact;
             const { onAddSuccess, closeModal } = props;
@@ -149,8 +170,21 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                 closeModal();
             }
         },
-        query: {
-            expand: ['trainings', 'organization'],
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
         },
         extras: { hasFile: true },
     },
@@ -319,10 +353,12 @@ class ContactForm extends React.PureComponent<Props, State> {
             municipalityContactEditRequest.do({
                 body,
                 setPristine: this.setPristine,
+                setFaramErrors: this.handleFaramValidationFailure,
             });
         } else {
             municipalityContactAddRequest.do({
                 body,
+                setFaramErrors: this.handleFaramValidationFailure,
             });
         }
     }
@@ -390,6 +426,7 @@ class ContactForm extends React.PureComponent<Props, State> {
                     >
                         <NonFieldErrors faramElementName />
                         <div className={styles.inputsContainer}>
+                            <NonFieldErrors faramElement />
                             <TextInput
                                 faramElementName="name"
                                 label="Name"

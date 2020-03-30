@@ -56,12 +56,12 @@ interface Views {
 
 interface Params {
     body: object;
-    onSuccess: () => void;
-    onFailure: (faramErrors: object) => void;
+    onSuccess: (response: PageType.Alert) => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 interface OwnProps {
-    closeModal?: () => void;
+    // closeModal?: () => void;
     onUpdate?: () => void;
     className?: string;
 }
@@ -99,46 +99,58 @@ interface State {
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
-const onSuccess = ({
-    params,
-    response,
-}: {
-    params: Params;
-    response: PageType.Event;
-}) => {
-    if (params && params.onSuccess) {
-        params.onSuccess(response);
-    }
-};
-
-const onFailure = ({
-    error,
-    params,
-}: {
-    params: Params;
-    error: {
-        faramErrors: {};
-    };
-}) => {
-    if (params.onFailure) {
-        onFailure(error.faramErrors);
-    }
-};
-
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addEventRequest: {
         url: '/event/',
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
-        onSuccess,
-        onFailure,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                params.onSuccess(response as PageType.Event);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
     },
     editEventRequest: {
         url: ({ props }) => `/event/${props.data.id}/`,
         method: methods.PUT,
         body: ({ params: { body } }) => body,
-        onSuccess,
-        onFailure,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                params.onSuccess(response as PageType.Event);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
     },
 };
 
@@ -157,8 +169,8 @@ class AddEventForm extends React.PureComponent<Props, State> {
         super(props);
 
         let initialData = {};
-        const { data } = props;
 
+        const { data } = props;
         if (data) {
             const startedOn = new Date(data.startedOn);
             const startedOnDate = encodeDate(startedOn);
@@ -281,7 +293,7 @@ class AddEventForm extends React.PureComponent<Props, State> {
                 editEventRequest,
             },
             onUpdate,
-            closeModal,
+            // closeModal,
             data,
         } = this.props;
 
@@ -307,33 +319,32 @@ class AddEventForm extends React.PureComponent<Props, State> {
             editEventRequest.do({
                 body,
                 onSuccess: this.handleRequestSuccess,
-                onFailure: this.handleRequestFailure,
+                setFaramErrors: this.handleFaramValidationFailure,
             });
         } else {
             addEventRequest.do({
                 body,
                 onSuccess: this.handleRequestSuccess,
-                onFailure: this.handleRequestFailure,
+                setFaramErrors: this.handleFaramValidationFailure,
             });
         }
     }
 
     private handleRequestSuccess = (response: PageType.Alert) => {
         const { onRequestSuccess } = this.props;
-
         if (onRequestSuccess) {
             onRequestSuccess(response);
         }
     }
 
-    private handleRequestFailure = (faramErrors) => {
+    private handleRequestFailure = (faramErrors: object) => {
         this.setState({ faramErrors });
     }
 
     public render() {
         const {
             className,
-            closeModal,
+            // closeModal,
             onCloseButtonClick,
             severityList,
             hazardList,
@@ -422,6 +433,13 @@ class AddEventForm extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
+                        <DangerConfirmButton
+                            onClick={onCloseButtonClick}
+
+                            confirmationMessage="Are you sure you want to close the form?"
+                        >
+                            Close
+                        </DangerConfirmButton>
                         <PrimaryButton
                             type="submit"
                             disabled={pristine}

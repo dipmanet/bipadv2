@@ -175,7 +175,7 @@ class RainWatch extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={closeModal}
+                // onClose={closeModal}
                 className={styles.rainWatchModal}
             >
                 <ModalHeader
@@ -205,6 +205,9 @@ class RainWatch extends React.PureComponent<Props> {
                     />
                 </ModalBody>
                 <ModalFooter>
+                    <DangerButton onClick={closeModal}>
+                        Close
+                    </DangerButton>
                     <DownloadButton
                         value={formattedTableData}
                         name="Rainfall Watch.csv"

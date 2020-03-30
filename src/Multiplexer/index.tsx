@@ -74,7 +74,7 @@ function reloadPage() {
 
 const ErrorInPage = () => (
     <div className={styles.errorInPage}>
-        Some problem occured.
+        Some problem occurred.
         <DangerButton
             transparent
             onClick={reloadPage}
@@ -86,7 +86,7 @@ const ErrorInPage = () => (
 
 const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
     <div className={styles.retryableErrorInPage}>
-        Some problem occured.
+        Some problem occurred.
         <DangerButton
             onClick={retry}
             transparent

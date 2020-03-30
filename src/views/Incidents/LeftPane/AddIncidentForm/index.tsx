@@ -50,7 +50,7 @@ interface Views {
 }
 interface Params {
     body?: object;
-    onAddFailure?: (faramErrors: object) => void;
+    setFaramErrors?: (error: object) => void;
     incidentServerId?: number;
 }
 
@@ -135,9 +135,19 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
         onFailure: ({ error, params }) => {
-            if (params && params.onAddFailure) {
-                const { faramErrors } = error as { faramErrors: object };
-                params.onAddFailure(faramErrors);
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
     },
@@ -179,7 +189,7 @@ const getLocationDetails = (incidentDetails) => {
     });
 };
 
-const getIncidentDateTime = (incidentOn) => {
+const getIncidentDateTime = (incidentOn: string | number | undefined) => {
     if (!incidentOn) {
         return {};
     }
@@ -191,7 +201,7 @@ const getIncidentDateTime = (incidentOn) => {
     };
 };
 
-const getReportedDateTime = (reportedOn) => {
+const getReportedDateTime = (reportedOn: string | number | undefined) => {
     if (!reportedOn) {
         return {};
     }
@@ -487,14 +497,10 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
 
         incidentRequest.do({
             body,
-            onAddFailure: this.handleRequestFailure,
+            setFaramErrors: this.handleFaramValidationFailure,
         });
 
         this.setState({ pristine: true });
-    }
-
-    private handleRequestFailure = (faramErrors: object) => {
-        this.setState({ faramErrors });
     }
 
     private handleTabClick = (newTab: keyof Tabs) => {
@@ -526,7 +532,7 @@ class AddIncidentForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addIncidentFormModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <ModalHeader
                     title="Add / edit incident"

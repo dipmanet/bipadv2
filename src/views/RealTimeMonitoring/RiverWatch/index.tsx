@@ -126,7 +126,7 @@ class RiverWatch extends React.PureComponent<Props> {
         return (
             <Modal
                 // closeOnEscape
-                onClose={closeModal}
+                // onClose={closeModal}
                 className={styles.riverWatchModal}
             >
                 <ModalHeader
@@ -150,6 +150,9 @@ class RiverWatch extends React.PureComponent<Props> {
                     />
                 </ModalBody>
                 <ModalFooter>
+                    <DangerButton onClick={closeModal}>
+                        Close
+                    </DangerButton>
                     <DownloadButton
                         value={formattedTableData}
                         name="River Watch.csv"

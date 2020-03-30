@@ -105,14 +105,14 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 // TODO: handle error
                 console.warn('failure', error);
                 params.setFaramErrors({
-                    $internal: ['Some problem ocurred'],
+                    $internal: ['Some problem occurred'],
                 });
             }
         },
         onFatal: ({ params }) => {
             if (params && params.setFaramErrors) {
                 params.setFaramErrors({
-                    $internal: ['Some problem ocurred'],
+                    $internal: ['Some problem occurred'],
                 });
             }
         },
@@ -184,7 +184,7 @@ class Login extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.loginModal, className)}
-                onClose={closeModal}
+                // onClose={closeModal}
             >
                 <Faram
                     onChange={this.handleFaramChange}
@@ -245,6 +245,9 @@ class Login extends React.PureComponent<Props, State> {
                         />
                     </ModalBody>
                     <ModalFooter>
+                        <DangerButton onClick={closeModal}>
+                            Close
+                        </DangerButton>
                         <PrimaryButton
                             type="submit"
                             pending={pending}

@@ -50,8 +50,8 @@ interface FaramErrors {
 }
 
 interface OwnProps {
-    className?: string;
-    onUpdate?: () => void;
+    // className?: string;
+    // onUpdate?: () => void;
 }
 
 interface PropsFromState {
@@ -64,8 +64,8 @@ interface PropsFromDispatch {
 }
 interface Params {
     body: object;
-    onSuccess: () => void;
-    onFailure: (faramErrors: object) => void;
+    onSuccess?: () => void;
+    setFaramErrors?: (error: object) => void;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -110,9 +110,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             console.warn('response', response);
         },
         */
-        onFailure: ({ error, params: { onFailure } = { onFailure: undefined } }) => {
-            if (onFailure) {
-                onFailure((error as { faramErrors: object }).faramErrors);
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
             }
         },
     },
@@ -161,25 +172,25 @@ class AddAgricultureLoss extends React.PureComponent<Props, State> {
             requests: {
                 addAgricultureLossRequest,
             },
-            onUpdate,
+            // onUpdate,
         } = this.props;
 
         addAgricultureLossRequest.do({
             body: faramValues,
+            /*
             onSuccess: () => {
                 if (onUpdate) {
                     onUpdate();
                 }
             },
-            onFailure: (faramErrors: object) => {
-                this.setState({ faramErrors });
-            },
+            */
+            setFaramErrors: this.handleFaramValidationFailure,
         });
     }
 
     public render() {
         const {
-            className,
+            // className,
             agricultureLossStatusList,
             agricultureLossTypeList,
         } = this.props;
