@@ -1,15 +1,11 @@
 import React from 'react';
-import { _cs, isDefined } from '@togglecorp/fujs';
-
 import Faram from '@togglecorp/faram';
 
-import modalize from '#rscg/Modalize';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import NonFieldErrors from '#rsci/NonFieldErrors';
-import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
 import LoadingAnimation from '#rscv/LoadingAnimation';
@@ -25,15 +21,11 @@ import { ResourceTypeKeys } from '#types';
 import {
     Resource,
 } from '#store/atom/page/types';
-
-import InventoriesModal from './InventoriesModal';
 import FinanceForm, { financeSchema } from './FinanceForm';
 import HealthForm, { healthSchema } from './HealthForm';
 import GovernanceForm, { governanceSchema } from './GovernanceForm';
 
 import styles from './styles.scss';
-
-const ModalButton = modalize(Button);
 
 interface OwnProps {
     resourceDetails: Resource;
@@ -151,7 +143,6 @@ class EditResourceModal extends React.PureComponent<Props, State> {
             requests: {
                 editResourcePutRequest,
             },
-            onCloseButtonClick,
         } = this.props;
 
         editResourcePutRequest.do({
@@ -165,8 +156,6 @@ class EditResourceModal extends React.PureComponent<Props, State> {
     public render() {
         const {
             resourceType,
-            // className,
-            resourceId,
             onCloseButtonClick,
             requests: {
                 editResourcePutRequest: {
@@ -214,17 +203,6 @@ class EditResourceModal extends React.PureComponent<Props, State> {
                         <div>
                             <NonFieldErrors faramElement />
                             { form }
-                            {isDefined(resourceId) && (
-                                <ModalButton
-                                    modal={(
-                                        <InventoriesModal
-                                            resourceId={resourceId}
-                                        />
-                                    )}
-                                >
-                                    Show inventory
-                                </ModalButton>
-                            )}
                         </div>
                     </ModalBody>
                     <ModalFooter

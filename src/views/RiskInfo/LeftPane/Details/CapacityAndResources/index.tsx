@@ -5,6 +5,7 @@ import memoize from 'memoize-one';
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
     _cs,
+    isDefined,
     mapToList,
 } from '@togglecorp/fujs';
 
@@ -16,6 +17,7 @@ import {
 } from '#request';
 
 import {
+    userSelector,
     resourceTypeListSelector,
 } from '#selectors';
 
@@ -33,7 +35,7 @@ import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MapChildContext } from '#re-map/context';
 
-import Cloak from '#components/Cloak';
+import Cloak, { getParams } from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
 import Loading from '#components/Loading';
@@ -54,13 +56,12 @@ import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 
 import EditResourceForm from './EditResourceForm';
+import InventoriesModal from './InventoriesModal';
 
-// import Summary from './Summary';
 import CapacityResourceTable from './CapacityResourceTable';
 import AddResourceForm from './AddResourceForm';
 import styles from './styles.scss';
 
-// const SummaryButton = modalize(AccentButton);
 const TableModalButton = modalize(Button);
 
 const AccentModalButton = modalize(AccentButton);
@@ -76,10 +77,11 @@ const emptyResourceList: PageType.Resource[] = [];
 
 interface ResourceTooltipProps extends PageType.Resource {
     onEditClick: () => void;
+    onShowInventoryClick: () => void;
 }
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
-    const { onEditClick, ...resourceDetails } = props;
+    const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
 
     const { id, point, title, ...resource } = resourceDetails;
 
@@ -119,6 +121,14 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 >
                     Edit data
                 </AccentButton>
+                <AccentButton
+                    title="Show Inventory"
+                    onClick={onShowInventoryClick}
+                    transparent
+                    className={styles.editButton}
+                >
+                    Show Inventory
+                </AccentButton>
             </div>
         </div>
     );
@@ -148,6 +158,7 @@ interface State {
     activeLayerKey: ResourceTypeKeys | undefined;
     resourceInfo: PageType.Resource | undefined;
     showResourceForm: boolean;
+    showInventoryModal: boolean;
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
 }
 
@@ -165,6 +176,7 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
+    // user: userSelector(state),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
@@ -226,9 +238,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceLngLat: undefined,
             resourceInfo: undefined,
             showResourceForm: false,
+            showInventoryModal: false,
             selectedFeatures: undefined,
         };
     }
+
+    private getUserParams = memoize(getParams);
 
     private getGeojson = memoize((resourceList: PageType.Resource[]) => {
         const geojson = {
@@ -317,6 +332,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({
             activeLayerKey: layerKey,
             showResourceForm: false,
+            showInventoryModal: false,
         });
 
         this.props.requests.resourceGetRequest.do({
@@ -393,9 +409,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleShowInventoryClick = () => {
+        this.setState({
+            showInventoryModal: true,
+            resourceLngLat: undefined,
+        });
+    }
+
     private handleEditResourceFormCloseButtonClick = () => {
         this.setState({
             showResourceForm: false,
+        });
+    }
+
+    private handleInventoryModalClose = () => {
+        this.setState({
+            showInventoryModal: false,
         });
     }
 
@@ -404,11 +433,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             className,
             requests,
             resourceTypeList,
+            // user,
         } = this.props;
+
+        // const userParams = this.getUserParams(user);
+        // console.warn('user params', userParams);
 
         const {
             activeLayerKey,
             showResourceForm,
+            showInventoryModal,
             resourceLngLat,
             resourceInfo,
             selectedFeatures,
@@ -606,6 +640,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             {...resourceInfo}
                                             {...resourceDetails}
                                             onEditClick={this.handleEditClick}
+                                            onShowInventoryClick={this.handleShowInventoryClick}
                                         />
                                     </MapTooltip>
                                 )}
@@ -621,6 +656,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         onCloseButtonClick={this.handleEditResourceFormCloseButtonClick}
                     />
                 )}
+                {showInventoryModal
+                    && isDefined(resourceDetails)
+                    && isDefined(resourceDetails.id)
+                    && (
+                        <InventoriesModal
+                            resourceId={resourceDetails.id}
+                            closeModal={this.handleInventoryModalClose}
+                        />
+                    )
+                }
             </>
         );
     }
