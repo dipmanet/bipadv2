@@ -2,16 +2,16 @@ import React from 'react';
 import { _cs, Obj } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
-import FormattedDate from '#rscv/FormattedDate';
+
 import ListView from '#rscv/List/ListView';
 import DangerButton from '#rsca/Button/DangerButton';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 
 import * as PageType from '#store/atom/page/types';
 import { AppState } from '#store/types';
+import { CitizenReport } from '#types';
 import {
     createRequestClient,
     NewProps,
@@ -22,77 +22,9 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
-import alertIcon from '#resources/icons/Alert.svg';
-
 import { MultiResponse } from '#store/atom/response/types';
-
+import CitizenReportItem from './CitizenReportItem';
 import styles from './styles.scss';
-
-interface CitizenReport {
-    id: number;
-    description: string;
-    comment: string;
-    image?: string;
-    point: {
-        type: 'Point';
-        coordinates: [number, number];
-    };
-    verified: boolean;
-    incident?: number;
-    hazard: number;
-    ward: number;
-
-    createdOn: string;
-}
-
-interface CitizenReportItemProps {
-    className?: string;
-    data: CitizenReport;
-    hazardTypes: Obj<PageType.HazardType>;
-}
-
-const CitizenReportItem = (props: CitizenReportItemProps) => {
-    const {
-        className,
-        hazardTypes,
-        data: {
-            description,
-            verified,
-            createdOn,
-            hazard,
-            // ward,
-        },
-    } = props;
-
-    const hazardDetail = hazardTypes[hazard] || {};
-
-    return (
-        <div className={_cs(className, styles.citizenReport)}>
-            <div className={styles.iconContainer}>
-                <ScalableVectorGraphics
-                    className={styles.hazardIcon}
-                    src={hazardDetail.icon || alertIcon}
-                    style={{ color: hazardDetail.color || '#4666b0' }}
-                />
-            </div>
-            <div className={styles.details}>
-                <div className={styles.description}>
-                    {description || 'No description'}
-                </div>
-                <FormattedDate
-                    className={styles.createdOn}
-                    value={createdOn}
-                    mode="yyyy-MM-dd"
-                />
-                {verified && (
-                    <div className={styles.verified}>
-                        Verified
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
 
 const keySelector = (c: CitizenReport) => c.id;
 
@@ -108,9 +40,11 @@ interface StateProps {
 type ReduxProps = OwnProps & StateProps;
 
 interface State {
+    incidents: PageType.Incident[];
 }
 
 interface Params {
+    onSuccess?: (incidents: PageType.Incident[]) => void;
 }
 
 type Props = NewProps<ReduxProps, Params>;
@@ -121,17 +55,59 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: methods.GET,
         onMount: true,
     },
+    incidentsGetRequest: {
+        url: '/incident/',
+        method: methods.GET,
+        query: () => {
+            const today = new Date();
+            const oneWeekAgo = new Date(new Date().setDate(today.getDate() - 7));
+            return {
+                fields: ['id', 'title'],
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                incident_on__lt: today.toISOString(),
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                incident_on__gt: oneWeekAgo.toISOString(),
+            };
+        },
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                const incidentsResponse = response as MultiResponse<PageType.Incident>;
+                const { onSuccess } = params;
+                onSuccess(incidentsResponse.results);
+            }
+        },
+        onMount: true,
+    },
 };
 
 class CitizenReportsModal extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            incidents: [],
+        };
+        const {
+            requests: {
+                incidentsGetRequest,
+            },
+        } = this.props;
+
+        incidentsGetRequest.setDefaultParams({
+            onSuccess: this.setIncidents,
+        });
     }
 
-    private rendererParams = (key: number, data: CitizenReport) => ({
+    private setIncidents = (list: PageType.Incident[]) => {
+        this.setState({
+            incidents: list,
+        });
+    }
+
+    private rendererParams = (_: number, data: CitizenReport) => ({
         data,
         hazardTypes: this.props.hazardTypes,
+        incidents: this.state.incidents,
+        incidentsGetPending: this.props.requests.incidentsGetRequest.pending,
     })
 
     public render() {

@@ -1,0 +1,62 @@
+.citizen-report {
+    display: flex;
+    padding: calc(var(--spacing-large) - var(--spacing-extra-small)) calc(var(--spacing-large) - var(--spacing-small));
+
+    .icon-container {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+
+        .hazard-icon {
+            width: 32px;
+            height: 32px;
+
+            path {
+                fill: currentColor;
+            }
+        }
+    }
+
+    .details {
+        display: flex;
+        flex-basis: 50%;
+        flex-grow: 1;
+
+        .created-on {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
+
+        .description {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
+
+        .incident {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+        }
+
+    }
+
+    .add-incident {
+        display: flex;
+        align-items: flex-end;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: center;
+        padding: var(--spacing-extra-small) var(--spacing-small);
+
+        .add-incident-form {
+            display: flex;
+            flex-grow: 1;
+
+            .incidents {
+                flex-grow: 1;
+            }
+
+            .button {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background);
+    }
+}

@@ -295,3 +295,20 @@ export interface Person {
 }
 
 export type Status = 'dead' | 'missing' | 'injured' | 'affected';
+
+export interface CitizenReport {
+    id: number;
+    description: string;
+    comment: string;
+    image?: string;
+    point: {
+        type: 'Point';
+        coordinates: [number, number];
+    };
+    verified: boolean;
+    incident?: number;
+    hazard: number;
+    ward: number;
+
+    createdOn: string;
+}
