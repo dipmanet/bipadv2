@@ -15,6 +15,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { iconNames } from '#constants';
 
 import { HazardType, Incident, Field } from '#store/atom/page/types';
 import { CitizenReport } from '#types';
@@ -156,6 +157,22 @@ class CitizenReportItem extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(className, styles.citizenReport)}>
+                <div className={styles.imageContainer}>
+                    { data.image ? (
+                        <img
+                            className={styles.image}
+                            src={data.image}
+                            alt="report"
+                        />
+                    ) : (
+                        <span
+                            className={_cs(
+                                styles.icon,
+                                iconNames.document,
+                            )}
+                        />
+                    )}
+                </div>
                 <div className={styles.iconContainer}>
                     <ScalableVectorGraphics
                         className={styles.hazardIcon}
