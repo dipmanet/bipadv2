@@ -1,0 +1,93 @@
+.citizen-report {
+    padding: var(--spacing-medium);
+
+    .row-container {
+        display: flex;
+        align-items: flex-start;
+
+        .icon-container {
+            padding: var(--spacing-extra-small) var(--spacing-small);
+
+            .hazard-icon {
+                width: 32px;
+                height: 32px;
+
+                path {
+                    fill: currentColor;
+                }
+            }
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+
+            .details-top-container {
+                display: flex;
+                justify-content: space-between;
+
+                .created-on {
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                }
+            }
+
+            .description {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+
+            .incident {
+                padding: var(--spacing-extra-small) var(--spacing-small);
+            }
+        }
+
+        .add-incident {
+            display: flex;
+            align-items: flex-end;
+            flex-shrink: 0;
+            justify-content: center;
+            padding: var(--spacing-extra-small) var(--spacing-small);
+            width: 240px;
+
+            .add-incident-form {
+                display: flex;
+                flex-grow: 1;
+
+                .incidents {
+                    flex-grow: 1;
+                }
+
+                .button {
+                    padding: var(--spacing-extra-small) var(--spacing-small);
+                }
+            }
+        }
+
+        .expand-button {
+            opacity: 1;
+
+            &.hide {
+                opacity: 0;
+                pointer-events: none;
+            }
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-background-hover);
+    }
+
+    .expanded-content {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: center;
+        border-bottom: var(--width-separator-thin) solid var(--color-separator);
+        padding: var(--spacing-small) var(--spacing-medium);
+
+        .image {
+            height: 360px;
+            object-fit: contain;
+        }
+    }
+}
