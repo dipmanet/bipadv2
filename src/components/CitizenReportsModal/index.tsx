@@ -41,10 +41,13 @@ type ReduxProps = OwnProps & StateProps;
 
 interface State {
     incidents: PageType.Incident[];
+    citizenReports: CitizenReport[];
+    expandedReport?: CitizenReport['id'];
 }
 
 interface Params {
     onSuccess?: (incidents: PageType.Incident[]) => void;
+    setCitizenReports?: (citizenReports: CitizenReport[]) => void;
 }
 
 type Props = NewProps<ReduxProps, Params>;
@@ -54,6 +57,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/citizen-report/',
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+            if (params && params.setCitizenReports) {
+                params.setCitizenReports(citizenReportList);
+            }
+        },
     },
     incidentsGetRequest: {
         url: '/incident/',
@@ -83,17 +94,26 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 class CitizenReportsModal extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
+
         this.state = {
             incidents: [],
+            citizenReports: [],
+            expandedReport: undefined,
         };
+
         const {
             requests: {
                 incidentsGetRequest,
+                citizenReportsGetRequest,
             },
         } = this.props;
 
         incidentsGetRequest.setDefaultParams({
             onSuccess: this.setIncidents,
+        });
+
+        citizenReportsGetRequest.setDefaultParams({
+            setCitizenReports: this.setCitizenReports,
         });
     }
 
@@ -103,9 +123,19 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
         });
     }
 
+    private setCitizenReports = (list: CitizenReport[]) => {
+        this.setState({ citizenReports: list });
+    }
+
+    private setExpandedReport = (expandedReport?: CitizenReport['id']) => {
+        this.setState({ expandedReport });
+    }
+
     private rendererParams = (_: number, data: CitizenReport) => ({
         data,
         hazardTypes: this.props.hazardTypes,
+        isExpandedReport: data.id === this.state.expandedReport,
+        setExpandedReport: this.setExpandedReport,
         incidents: this.state.incidents,
         incidentsGetPending: this.props.requests.incidentsGetRequest.pending,
     })
@@ -117,16 +147,11 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
             requests: {
                 citizenReportsGetRequest: {
                     pending,
-                    response,
                 },
             },
         } = this.props;
 
-        let citizenReportList: CitizenReport[] = [];
-        if (!pending && response) {
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
-        }
+        const { citizenReports } = this.state;
 
         return (
             <Modal className={_cs(styles.citizenReportsModal, className)}>
@@ -144,7 +169,7 @@ class CitizenReportsModal extends React.PureComponent<Props, State> {
                 <ModalBody className={styles.modalBody}>
                     <ListView
                         className={styles.citizenReportList}
-                        data={citizenReportList}
+                        data={citizenReports}
                         keySelector={keySelector}
                         renderer={CitizenReportItem}
                         rendererParams={this.rendererParams}

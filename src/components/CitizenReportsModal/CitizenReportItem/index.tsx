@@ -3,19 +3,20 @@ import Faram from '@togglecorp/faram';
 import { _cs, Obj } from '@togglecorp/fujs';
 
 import FormattedDate from '#rscv/FormattedDate';
+import TextOutput from '#components/TextOutput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Button from '#rsca/Button';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import alertIcon from '#resources/icons/Alert.svg';
 import SelectInput from '#rsci/SelectInput';
+import Badge from '#components/Badge';
 
 import {
-    createConnectedRequestCoordinator,
     createRequestClient,
     NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-import { iconNames } from '#constants';
 
 import { HazardType, Incident, Field } from '#store/atom/page/types';
 import { CitizenReport } from '#types';
@@ -28,6 +29,8 @@ interface OwnProps {
     hazardTypes: Obj<HazardType>;
     incidents: Incident[];
     incidentsGetPending: boolean;
+    isExpandedReport: boolean;
+    setExpandedReport: (id?: CitizenReport['id']) => void;
 }
 interface FaramValues {
     incident?: number;
@@ -102,17 +105,11 @@ class CitizenReportItem extends React.PureComponent<Props, State> {
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
         const {
-            data: {
-                id,
-            },
-            requests: {
-                citizenReportPatchRequest,
-            },
+            data: { id },
+            requests: { citizenReportPatchRequest },
         } = this.props;
 
-        const {
-            incident,
-        } = faramValues;
+        const { incident } = faramValues;
 
         const body = {
             id,
@@ -130,6 +127,18 @@ class CitizenReportItem extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleReportExpansion = () => {
+        const {
+            setExpandedReport,
+            data,
+            isExpandedReport,
+        } = this.props;
+
+        if (setExpandedReport) {
+            setExpandedReport(isExpandedReport ? undefined : data.id);
+        }
+    }
+
     public render() {
         const {
             className,
@@ -137,6 +146,7 @@ class CitizenReportItem extends React.PureComponent<Props, State> {
             data,
             incidentsGetPending,
             incidents,
+            isExpandedReport,
             requests: {
                 citizenReportPatchRequest: {
                     pending: patchPending,
@@ -150,88 +160,92 @@ class CitizenReportItem extends React.PureComponent<Props, State> {
             disabled,
         } = this.state;
 
-        console.warn('incidents', incidents, data);
         const pending = incidentsGetPending || patchPending;
-
         const hazardDetail = hazardTypes[data.hazard] || {};
 
         return (
             <div className={_cs(className, styles.citizenReport)}>
-                <div className={styles.imageContainer}>
-                    { data.image ? (
+                <div className={styles.rowContainer}>
+                    <div className={styles.iconContainer}>
+                        <ScalableVectorGraphics
+                            className={styles.hazardIcon}
+                            src={hazardDetail.icon || alertIcon}
+                            style={{ color: hazardDetail.color || '#4666b0' }}
+                        />
+                    </div>
+                    <div className={styles.details}>
+                        <div className={styles.detailsTopContainer}>
+                            <TextOutput
+                                label="Created On"
+                                value={(
+                                    <FormattedDate
+                                        className={styles.createdOn}
+                                        value={data.createdOn}
+                                        mode="yyyy-MM-dd"
+                                    />
+                                )}
+                            />
+                            {data.verified && (
+                                <Badge
+                                    title="Verified"
+                                    icon="check"
+                                />
+                            )}
+                        </div>
+                        <div className={styles.description}>
+                            {data.description || 'No description'}
+                        </div>
+                    </div>
+                    <div className={styles.addIncident}>
+                        <Faram
+                            className={styles.addIncidentForm}
+                            onChange={this.handleFaramChange}
+                            onValidationFailure={this.handleFaramValidationFailure}
+                            onValidationSuccess={this.handleFaramValidationSuccess}
+                            schema={CitizenReportItem.schema}
+                            value={faramValues}
+                            error={faramErrors}
+                            disabled={pending}
+                        >
+                            <SelectInput
+                                className={styles.incidents}
+                                faramElementName="incident"
+                                label="Incident"
+                                options={incidents}
+                                keySelector={keySelector}
+                                labelSelector={labelSelector}
+                            />
+                            <PrimaryButton
+                                className={styles.button}
+                                transparent
+                                type="submit"
+                                disabled={disabled}
+                                pending={patchPending}
+                            >
+                                Save
+                            </PrimaryButton>
+                        </Faram>
+                    </div>
+                    <Button
+                        className={_cs(styles.expandButton, !data.image && styles.hide)}
+                        iconName={isExpandedReport ? 'chevronUp' : 'chevronDown'}
+                        onClick={this.handleReportExpansion}
+                    />
+                </div>
+                {isExpandedReport && data.image && (
+                    <div className={styles.expandedContent}>
                         <img
                             className={styles.image}
                             src={data.image}
                             alt="report"
                         />
-                    ) : (
-                        <span
-                            className={_cs(
-                                styles.icon,
-                                iconNames.document,
-                            )}
-                        />
-                    )}
-                </div>
-                <div className={styles.iconContainer}>
-                    <ScalableVectorGraphics
-                        className={styles.hazardIcon}
-                        src={hazardDetail.icon || alertIcon}
-                        style={{ color: hazardDetail.color || '#4666b0' }}
-                    />
-                </div>
-                <div className={styles.details}>
-                    <div className={styles.description}>
-                        {data.description || 'No description'}
                     </div>
-                    <FormattedDate
-                        className={styles.createdOn}
-                        value={data.createdOn}
-                        mode="yyyy-MM-dd"
-                    />
-                    {data.verified && (
-                        <div className={styles.verified}>
-                            Verified
-                        </div>
-                    )}
-                </div>
-                <div className={styles.addIncident}>
-                    <Faram
-                        className={styles.addIncidentForm}
-                        onChange={this.handleFaramChange}
-                        onValidationFailure={this.handleFaramValidationFailure}
-                        onValidationSuccess={this.handleFaramValidationSuccess}
-                        schema={CitizenReportItem.schema}
-                        value={faramValues}
-                        error={faramErrors}
-                        disabled={pending}
-                    >
-                        <SelectInput
-                            className={styles.incidents}
-                            faramElementName="incident"
-                            label="Incident"
-                            options={incidents}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                        />
-                        <PrimaryButton
-                            className={styles.button}
-                            transparent
-                            type="submit"
-                            disabled={disabled}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </Faram>
-                </div>
+                )}
             </div>
         );
     }
 }
 
-export default createConnectedRequestCoordinator<OwnProps>()(
-    createRequestClient(requestOptions)(
-        CitizenReportItem,
-    ),
+export default createRequestClient(requestOptions)(
+    CitizenReportItem,
 );
