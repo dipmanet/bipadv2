@@ -10,8 +10,9 @@ import {
 } from 'recharts';
 
 import ListView from '#rscv/List/ListView';
-
+import Button from '#rsca/Button';
 import StatOutput from '#components/StatOutput';
+import { saveChart } from '#utils/common';
 
 import Project from './ProjectItem';
 import styles from './styles.scss';
@@ -28,6 +29,11 @@ class ProjectsProfileLeftPane extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
+
+    handleSaveClick = () => {
+        saveChart('drrCycleData', 'drrCycle');
+        saveChart('categoryData', 'category');
+    }
 
     handleExpand = () => {
         this.props.onExpandChange(true);
@@ -72,54 +78,71 @@ class ProjectsProfileLeftPane extends React.PureComponent {
             <div className={_cs(className, styles.leftPane)}>
                 <div className={styles.visualizations}>
                     { projects && projects.length > 0 && (
-                        <>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer>
-                                    <PieChart>
-                                        <Pie
-                                            data={drrCycleData}
-                                            dataKey="value"
-                                            nameKey="label"
-                                            innerRadius="60%"
-                                            outerRadius="70%"
-                                            label
-                                        >
-                                            { drrCycleData.map(d => (
-                                                <Cell key={d.label} fill={d.color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                        <Legend
-                                            align="left"
-                                            iconSize={10}
-                                        />
-                                    </PieChart>
-                                </ResponsiveContainer>
+                        <div className={styles.container}>
+                            <Button
+                                title="Download Chart"
+                                className={styles.chartDownload}
+                                transparent
+                                onClick={this.handleSaveClick}
+                                iconName="download"
+                            />
+                            <div
+                                className={styles.chartContainer}
+                            >
+                                <div
+                                    className={styles.chart}
+                                    id="drrCycleData"
+                                >
+                                    <ResponsiveContainer>
+                                        <PieChart>
+                                            <Pie
+                                                data={drrCycleData}
+                                                dataKey="value"
+                                                nameKey="label"
+                                                innerRadius="60%"
+                                                outerRadius="70%"
+                                                label
+                                            >
+                                                { drrCycleData.map(d => (
+                                                    <Cell key={d.label} fill={d.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip />
+                                            <Legend
+                                                align="left"
+                                                iconSize={10}
+                                            />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div
+                                    className={styles.chart}
+                                    id="categoryData"
+                                >
+                                    <ResponsiveContainer>
+                                        <PieChart>
+                                            <Pie
+                                                data={categoryData}
+                                                dataKey="value"
+                                                nameKey="label"
+                                                innerRadius="60%"
+                                                outerRadius="70%"
+                                                label
+                                            >
+                                                { categoryData.map(d => (
+                                                    <Cell key={d.label} fill={d.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip />
+                                            <Legend
+                                                align="left"
+                                                iconSize={10}
+                                            />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer>
-                                    <PieChart>
-                                        <Pie
-                                            data={categoryData}
-                                            dataKey="value"
-                                            nameKey="label"
-                                            innerRadius="60%"
-                                            outerRadius="70%"
-                                            label
-                                        >
-                                            { categoryData.map(d => (
-                                                <Cell key={d.label} fill={d.color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                        <Legend
-                                            align="left"
-                                            iconSize={10}
-                                        />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
                 <StatOutput

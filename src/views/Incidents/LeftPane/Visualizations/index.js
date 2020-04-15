@@ -14,7 +14,13 @@ import {
     Pie,
     Cell,
 } from 'recharts';
-import { groupList } from '#utils/common';
+
+import Button from '#rsca/Button';
+
+import {
+    saveChart,
+    groupList,
+} from '#utils/common';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -35,6 +41,11 @@ export default class Visualizations extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
+
+    handleSaveClick = () => {
+        saveChart('hazardSummary', 'hazardSummary');
+        saveChart('hazardSeverity', 'hazardSeverity');
+    }
 
     getHazardSummary = memoize((incidentList) => {
         const { hazardTypes } = this.props;
@@ -90,13 +101,25 @@ export default class Visualizations extends React.PureComponent {
 
         return (
             <div className={styles.visualizations}>
-                <div className={styles.hazardStatisticsChart}>
+                <div
+                    className={styles.hazardStatisticsChart}
+                >
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
                             Hazard Occurence Statistics
                         </h4>
+                        <Button
+                            title="Download Chart"
+                            className={styles.chartDownload}
+                            transparent
+                            onClick={this.handleSaveClick}
+                            iconName="download"
+                        />
                     </header>
-                    <div className={styles.chart}>
+                    <div
+                        className={styles.chart}
+                        id="hazardSummary"
+                    >
                         <ResponsiveContainer>
                             <BarChart
                                 layout="vertical"
@@ -132,7 +155,10 @@ export default class Visualizations extends React.PureComponent {
                     valueSelector={barChartValueSelector}
                     />
                     </div> */}
-                <div className={styles.severitySummary}>
+                <div
+                    className={styles.severitySummary}
+                    id="hazardSeverity"
+                >
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
                             Severity

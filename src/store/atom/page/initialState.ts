@@ -101,7 +101,7 @@ const state: PageState = {
         alertList: [],
         filters: {
             faramValues: {
-                dateRange: 30,
+                dateRange: 7,
             },
             faramErrors: {},
             pristine: true,
@@ -112,7 +112,7 @@ const state: PageState = {
         incidentList: [],
         filters: {
             faramValues: {
-                dateRange: 30,
+                dateRange: 7,
             },
             faramErrors: {},
             pristine: true,

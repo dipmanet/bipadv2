@@ -6,18 +6,37 @@
 
     .visualizations {
         display: flex;
+        flex-direction: column;
         flex-shrink: 0;
         padding: var(--spacing-small) var(--spacing-medium);
 
-        .chart {
-            width: 50%!important;
-            height: 240px;
-            overflow: hidden;
-        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-shrink: 0;
 
-        :global {
-            .recharts-legend-item-text {
-                font-size: var(--font-size-small);
+            .chart-download {
+                display: flex;
+                align-self: flex-end;
+            }
+
+            .chart-container {
+                display: flex;
+                flex-grow: 1;
+                flex-shrink: 0;
+
+                .chart {
+                    width: 50%!important;
+                    height: 240px;
+                    overflow: hidden;
+                }
+            }
+
+            :global {
+                .recharts-legend-item-text {
+                    font-size: var(--font-size-small);
+                }
             }
         }
     }

@@ -5,6 +5,9 @@ import {
     isList,
 } from '@togglecorp/fujs';
 
+import domtoimage from 'dom-to-image';
+import { saveAs } from 'file-saver';
+
 interface Row {
     [key: string]: string | number | boolean | undefined | null;
 }
@@ -207,3 +210,10 @@ export const imageUrlToDataUrl = (url, callback) => {
     xhr.responseType = 'blob';
     xhr.send();
 };
+
+export function saveChart(elementId: string, name: string) {
+    domtoimage.toBlob(document.getElementById(elementId))
+        .then(blob => (
+            saveAs(blob, `${name}.png`)
+        ));
+}

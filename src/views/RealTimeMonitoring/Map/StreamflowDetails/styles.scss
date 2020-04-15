@@ -14,8 +14,14 @@
             flex-grow: 1;
 
             .header {
+                display: flex;
                 flex-shrink: 0;
                 .heading {
+                    flex-grow: 1;
+                    padding: var(--spacing-small) var(--spacing-large);
+                }
+
+                .chart-download {
                     padding: var(--spacing-small) var(--spacing-large);
                 }
             }

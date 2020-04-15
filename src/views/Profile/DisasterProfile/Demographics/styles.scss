@@ -6,18 +6,31 @@
     overflow: auto;
 
     >.header {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
         flex-shrink: 0;
+        justify-content: space-between;
 
         .heading {
             padding: var(--spacing-small) var(--spacing-large);
         }
+
+        .chart-download {
+            padding: var(--spacing-medium);
+        }
     }
 
     .content {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow: auto;
 
         .demography-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
             padding: calc(var(--spacing-large) - var(--spacing-small)) 0;
 
             >.header {

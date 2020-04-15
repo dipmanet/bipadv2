@@ -9,9 +9,15 @@
 
     .hazard-statistics-chart {
         .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             .heading {
                 padding: 0 $spacing-medium;
                 color: $color-accent;
+            }
+            .chart-download {
+                padding: 0 $spacing-medium;
             }
         }
 

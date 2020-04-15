@@ -30,6 +30,7 @@ import SelectInput from '#rsci/SelectInput';
 import Icon from '#rscg/Icon';
 
 import { generatePaint } from '#utils/domain';
+import { saveChart } from '#utils/common';
 
 import {
     NapData,
@@ -494,6 +495,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
         }
     }
 
+    private handleSaveClick = () => {
+        saveChart('climateChange', 'climateChange');
+    }
+
     private getFlatData = (data: NapData[]) => {
         const flatData = data.map((item) => {
             const { district, rcp45, sdRcp45, rcp85, sdRcp85 } = item;
@@ -653,7 +658,10 @@ class ClimateChange extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                     { !pending && isActive && (
-                        <div className={styles.bottom}>
+                        <div
+                            className={styles.bottom}
+                            id="climateChange"
+                        >
                             <div className={styles.heading}>
                                 <div className={styles.header}>
                                     {chartTitle}
@@ -667,6 +675,12 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                         Show National Data
                                     </Button>
                                 )}
+                                <Button
+                                    title="Download Chart"
+                                    transparent
+                                    onClick={this.handleSaveClick}
+                                    iconName="download"
+                                />
                             </div>
                             <ResponsiveContainer className={styles.chart}>
                                 <ComposedChart

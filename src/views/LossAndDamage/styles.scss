@@ -101,9 +101,16 @@
     }
 
     .main-content {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow-x: hidden;
         overflow-y: scroll;
+
+        .download-button {
+            align-self: flex-end;
+            padding: var(--spacing-medium);
+        }
 
         .chart-list {
             padding: var(--spacing-medium) 0;

@@ -23,6 +23,7 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import ListView from '#rscv/List/ListView';
 import SegmentInput from '#rsci/SegmentInput';
+import Button from '#rsca/Button';
 
 import { generatePaint } from '#utils/domain';
 import { mapSources } from '#constants';
@@ -39,6 +40,7 @@ import {
 import { KeyValue } from '#types';
 import SummaryItem from '#components/SummaryItem';
 import ChoroplethLegend from '#components/ChoroplethLegend';
+import { saveChart } from '#utils/common';
 
 import styles from './styles.scss';
 
@@ -138,6 +140,13 @@ const attributes = listToMap(attributeList, d => d.key, d => d);
 class Demographics extends React.PureComponent<Props> {
     public state = {
         selectedAttribute: 'totalPopulation',
+    }
+
+    private handleSaveClick = () => {
+        saveChart('polulation', 'population');
+        saveChart('literacy', 'literacy');
+        saveChart('agegroup', 'agegroup');
+        saveChart('household', 'household');
     }
 
     private getPopulationData = (data: DemographicsData[], region: Region) => {
@@ -360,10 +369,22 @@ class Demographics extends React.PureComponent<Props> {
                         <h2 className={styles.heading}>
                             {title}
                         </h2>
+                        <Button
+                            title="Download Chart"
+                            className={styles.chartDownload}
+                            transparent
+                            onClick={this.handleSaveClick}
+                            iconName="download"
+                        />
                     </header>
                     { !pending && (
-                        <div className={styles.content}>
-                            <div className={styles.demographyContainer}>
+                        <div
+                            className={styles.content}
+                        >
+                            <div
+                                className={styles.demographyContainer}
+                                id="population"
+                            >
                                 <header className={styles.header}>
                                     <h3 className={styles.heading}>
                                         Population
@@ -410,7 +431,10 @@ class Demographics extends React.PureComponent<Props> {
                                     </ResponsiveContainer>
                                 </div>
                             </div>
-                            <div className={styles.demographyContainer}>
+                            <div
+                                className={styles.demographyContainer}
+                                id="literacy"
+                            >
                                 <header className={styles.header}>
                                     <h3 className={styles.heading}>
                                         Literacy
@@ -456,7 +480,10 @@ class Demographics extends React.PureComponent<Props> {
                                     </ResponsiveContainer>
                                 </div>
                             </div>
-                            <div className={styles.demographyContainer}>
+                            <div
+                                className={styles.demographyContainer}
+                                id="household"
+                            >
                                 <header className={styles.header}>
                                     <h3 className={styles.heading}>
                                         Household
@@ -497,7 +524,10 @@ class Demographics extends React.PureComponent<Props> {
                                     </ResponsiveContainer>
                                 </div>
                             </div>
-                            <div className={_cs(styles.demographyContainer, styles.ageGroup)}>
+                            <div
+                                className={_cs(styles.demographyContainer, styles.ageGroup)}
+                                id="agegroup"
+                            >
                                 <header className={styles.header}>
                                     <h3 className={styles.heading}>
                                         Age Group
