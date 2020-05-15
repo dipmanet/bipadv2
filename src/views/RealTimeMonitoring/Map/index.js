@@ -371,7 +371,7 @@ export default class RealTimeMap extends React.PureComponent {
                         sourceOptions={{
                             type: 'geojson',
                         }}
-                        geoJson="https://bipad.staging.nepware.com/media/streamflow.json"
+                        geoJson="https://bipad.gov.np/media/streamflow.json"
                     >
                         <MapLayer
                             layerKey="streamflow-layer"
