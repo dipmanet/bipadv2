@@ -182,7 +182,7 @@ button {
 
     .mapboxgl-ctrl-bottom-right {
         .mapboxgl-ctrl-attrib {
-            display: none;
+            // display: none;
             // margin-right: var(--spacing-medium)!important;
             // padding: 0!important;
         }
@@ -201,6 +201,10 @@ button {
 
     .mapboxgl-ctrl-logo {
         display: none!important;
+    }
+
+    .mapbox-improve-map {
+        display: none;
     }
 
     .modal {
