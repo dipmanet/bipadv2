@@ -301,48 +301,6 @@ class ChoroplethMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
-                    <MapLayer
-                        layerKey="province-label"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.provinceLabel,
-                            type: 'symbol',
-                            paint: mapStyles.provinceLabel.paint,
-                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
-                            filter: provinceFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="district-label"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.districtLabel,
-                            type: 'symbol',
-                            paint: mapStyles.districtLabel.paint,
-                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
-                            filter: districtFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="municipality-label"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.municipalityLabel,
-                            type: 'symbol',
-                            paint: mapStyles.municipalityLabel.paint,
-                            layout: showMunicipalityLabel
-                                ? mapStyles.municipalityLabel.layout : noneLayout,
-                            filter: municipalityFilter,
-                        }}
-                    />
-                    <MapLayer
-                        layerKey="ward-label"
-                        layerOptions={{
-                            'source-layer': mapSources.nepal.layers.wardLabel,
-                            type: 'symbol',
-                            paint: mapStyles.wardLabel.paint,
-                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
-                            filter: wardFilter,
-                        }}
-                    />
-
                     {TooltipRenderer && hoverLngLat && (
                         <MapTooltip
                             coordinates={hoverLngLat}
@@ -383,6 +341,55 @@ class ChoroplethMap extends React.PureComponent {
                             sourceLayer={province}
                         />
                     )}
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-label`}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepalCentroid.url,
+                    }}
+                >
+                    <MapLayer
+                        layerKey="province-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.province,
+                            type: 'symbol',
+                            paint: mapStyles.provinceLabel.paint,
+                            layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
+                            filter: provinceFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="district-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.district,
+                            type: 'symbol',
+                            paint: mapStyles.districtLabel.paint,
+                            layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
+                            filter: districtFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="municipality-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.municipality,
+                            type: 'symbol',
+                            paint: mapStyles.municipalityLabel.paint,
+                            layout: showMunicipalityLabel
+                                ? mapStyles.municipalityLabel.layout : noneLayout,
+                            filter: municipalityFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="ward-label"
+                        layerOptions={{
+                            'source-layer': mapSources.nepalCentroid.layers.ward,
+                            type: 'symbol',
+                            paint: mapStyles.wardLabel.paint,
+                            layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
+                            filter: wardFilter,
+                        }}
+                    />
                 </MapSource>
             </Fragment>
         );
