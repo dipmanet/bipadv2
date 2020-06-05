@@ -20,13 +20,13 @@ import styles from './styles.scss';
 const mapStyles = [
     {
         name: 'none',
-        style: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
+        style: 'mapbox://styles/neocmoha/ckb0ocjkn0xtc1iqamczc8lfe',
         color: '#dddddd',
     },
     {
         name: 'light',
-        style: 'mapbox://styles/adityakhatri/cjtn5thbw2g8s1fmnx0kqovev',
-        color: '#ff8867',
+        style: 'mapbox://styles/neocmoha/ckb0oaqx30xrj1iqawdyabrjn',
+        color: '#cdcdcd',
     },
     {
         name: 'roads',
@@ -49,11 +49,6 @@ const mapStyles = [
         style: osmStyle,
     },
     /*
-    {
-        name: 'light',
-        style: 'mapbox://styles/mapbox/light-v10',
-        color: '#cdcdcd',
-    },
     {
         name: 'outdoor',
         style: 'mapbox://styles/mapbox/outdoors-v11',

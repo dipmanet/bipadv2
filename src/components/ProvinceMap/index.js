@@ -69,10 +69,18 @@ class CommonMap extends React.PureComponent {
                             layout: visibleLayout,
                         }}
                     />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-outlines`}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepalCentroid.url,
+                    }}
+                >
                     <MapLayer
                         layerKey="province-label"
                         layerOptions={{
-                            'source-layer': mapSources.nepal.layers.provinceLabel,
+                            'source-layer': mapSources.nepalCentroid.layers.province,
                             type: 'symbol',
                             paint: mapStyles.provinceLabel.paint,
                             layout: mapStyles.provinceLabel.layout,

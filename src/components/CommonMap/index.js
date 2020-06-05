@@ -237,10 +237,18 @@ class CommonMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
+                </MapSource>
+                <MapSource
+                    sourceKey={`${sourceKey}-label`}
+                    sourceOptions={{
+                        type: 'vector',
+                        url: mapSources.nepalCentroid.url,
+                    }}
+                >
                     <MapLayer
                         layerKey="province-label"
                         layerOptions={{
-                            'source-layer': mapSources.nepal.layers.provinceLabel,
+                            'source-layer': mapSources.nepalCentroid.layers.province,
                             type: 'symbol',
                             paint: mapStyles.provinceLabel.paint,
                             layout: showProvinceLabel ? mapStyles.provinceLabel.layout : noneLayout,
@@ -250,7 +258,7 @@ class CommonMap extends React.PureComponent {
                     <MapLayer
                         layerKey="district-label"
                         layerOptions={{
-                            'source-layer': mapSources.nepal.layers.districtLabel,
+                            'source-layer': mapSources.nepalCentroid.layers.district,
                             type: 'symbol',
                             paint: mapStyles.districtLabel.paint,
                             layout: showDistrictLabel ? mapStyles.districtLabel.layout : noneLayout,
@@ -260,7 +268,7 @@ class CommonMap extends React.PureComponent {
                     <MapLayer
                         layerKey="municipality-label"
                         layerOptions={{
-                            'source-layer': mapSources.nepal.layers.municipalityLabel,
+                            'source-layer': mapSources.nepalCentroid.layers.municipality,
                             type: 'symbol',
                             paint: mapStyles.municipalityLabel.paint,
                             layout: showMunicipalityLabel
@@ -272,7 +280,7 @@ class CommonMap extends React.PureComponent {
                     <MapLayer
                         layerKey="ward-label"
                         layerOptions={{
-                            'source-layer': mapSources.nepal.layers.wardLabel,
+                            'source-layer': mapSources.nepalCentroid.layers.ward,
                             type: 'symbol',
                             paint: mapStyles.wardLabel.paint,
                             layout: showWardLabel ? mapStyles.wardLabel.layout : noneLayout,
