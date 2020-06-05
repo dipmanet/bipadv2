@@ -31,6 +31,7 @@ import ModalBody from '#rscv/Modal/Body';
 import { lossMetrics } from '#utils/domain';
 import {
     sum,
+    saveChart,
     encodeDate,
 } from '#utils/common';
 import {
@@ -182,6 +183,10 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
         startDate: encodeDate(DEFAULT_START_DATE),
         endDate: encodeDate(DEFAULT_END_DATE),
+    }
+
+    private handleSaveClick = () => {
+        saveChart('chartList', 'lndChart');
     }
 
     private calculateSummary = (data) => {
@@ -428,7 +433,18 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.lossDetails}
                                     data={filteredData}
                                 />
-                                <div className={styles.chartList}>
+                                <Button
+                                    title="Download Chart"
+                                    className={styles.downloadButton}
+                                    transparent
+                                    disabled={pending}
+                                    onClick={this.handleSaveClick}
+                                    iconName="download"
+                                />
+                                <div
+                                    className={styles.chartList}
+                                    id="chartList"
+                                >
                                     { Object.values(incidentMetricChartParams).map(metric => (
                                         <div
                                             key={metric.dataKey}

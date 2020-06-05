@@ -21,7 +21,9 @@ import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
+import { saveChart } from '#utils/common';
 
+import Button from '#rsca/Button';
 import ListView from '#rscv/List/ListView';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import DangerButton from '#rsca/Button/DangerButton';
@@ -80,6 +82,10 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 type Props = NewProps<OwnProps, Params>
 const keySelector = (d: KeyValue) => d.key;
 class StreamflowDetails extends React.PureComponent<Props> {
+    private handleSaveClick = () => {
+        saveChart('streamflowChart', 'streamflow');
+    }
+
     private getChartData = (data: FlowData[] = []) => (
         data.map((d) => {
             const { date, values } = d;
@@ -166,8 +172,19 @@ class StreamflowDetails extends React.PureComponent<Props> {
                                 <h3 className={styles.heading}>
                                     Streamflow
                                 </h3>
+                                <Button
+                                    title="Download Chart"
+                                    className={styles.chartDownload}
+                                    transparent
+                                    disabled={pending}
+                                    onClick={this.handleSaveClick}
+                                    iconName="download"
+                                />
                             </header>
-                            <ResponsiveContainer className={styles.chart}>
+                            <ResponsiveContainer
+                                className={styles.chart}
+                                id="streamflowChart"
+                            >
                                 <ComposedChart
                                     data={chartData}
                                 >

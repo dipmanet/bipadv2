@@ -30,8 +30,10 @@ import {
 
 import CommonMap from '#components/CommonMap';
 import RegionSelectInput from '#components/RegionSelectInput';
+import { saveChart } from '#utils/common';
 
 import { getSanitizedIncidents } from '../common';
+
 
 import Visualizations from './Visualizations';
 
@@ -127,6 +129,10 @@ class Comparative extends React.PureComponent {
         }
     }
 
+    handleSaveClick = () => {
+        saveChart('comparative', 'comparative');
+    }
+
     filterIncidents = (incidents = emptyList, regions, region) => {
         if (!region) {
             return [];
@@ -214,12 +220,22 @@ class Comparative extends React.PureComponent {
                         />
                     </Faram>
                     <Button
+                        title="Download Chart"
+                        className={styles.chartDownload}
+                        transparent
+                        disabled={!region1 && !region2}
+                        onClick={this.handleSaveClick}
+                        iconName="download"
+                    />
+                    <Button
                         onClick={closeModal}
                         iconName="close"
                         className={styles.closeButton}
                     />
                 </header>
-                <div className={styles.content}>
+                <div
+                    className={styles.content}
+                >
                     { (!region1 && !region2) ? (
                         <div className={styles.preComparisionMessage}>
                             Please select locations to start the comparison
@@ -286,7 +302,10 @@ class Comparative extends React.PureComponent {
                                     </Map>
                                 )}
                             </div>
-                            <div className={styles.visualizations}>
+                            <div
+                                className={styles.visualizations}
+                                id="comparative"
+                            >
                                 <div className={styles.aggregatedStats}>
                                     { isRegionValid(faramValues.region1) && (
                                         <LossDetails
