@@ -691,7 +691,7 @@ export function getProvinceFilter(selectedProvinceId: number | undefined) {
 
 export function getRasterTile(layer: { layername: string }) {
     const tileUrl = [
-        'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
@@ -709,9 +709,8 @@ export function getRasterTile(layer: { layername: string }) {
 }
 
 export function getRasterLegendUrl(layer: { layername: string }) {
-    // const url = `https://geoserver.naxa.com.np/geoserver/Bipad/wms?&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Bipad:${layername}&format=image/png`;
     const legendUrl = [
-        'https://geoserver.naxa.com.np/geoserver/Bipad/wms?',
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetLegendGraphic',
