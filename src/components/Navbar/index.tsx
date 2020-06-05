@@ -158,13 +158,13 @@ class Navbar extends React.PureComponent<Props, State> {
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="Situation Report"
-                        iconName="aboutUs"
+                        iconName="textDocument"
                         modal={<SituationReport />}
                     />
                     <ModalButton
                         className={styles.reliefButton}
                         title="Relief"
-                        iconName="aboutUs"
+                        iconName="cart"
                         modal={<Relief />}
                     />
                     {authenticated && (
