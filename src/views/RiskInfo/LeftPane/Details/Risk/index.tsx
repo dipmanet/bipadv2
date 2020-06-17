@@ -26,10 +26,11 @@ import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import RiskTable from './RiskTable';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
-import { RiskData } from '#types';
+import { RiskData, LandslideDataGeoJson, LandslideDataFeature } from '#types';
 
 import {
     getResults,
+    getResponse,
     isAnyRequestPending,
 } from '#utils/request';
 
@@ -59,6 +60,21 @@ interface State {
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
     riskGetRequest: {
         url: '/earthquake-riskscore/',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideDistrictRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&maxFeatures=50&outputFormat=application%2Fjson&propertyName=district_d,District_r',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideMunicipalityRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&maxFeatures=50&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideWardRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&maxFeatures=50&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4',
         method: methods.GET,
         onMount: true,
     },
@@ -118,9 +134,73 @@ const RiskTooltip = ({ layer, feature }) => (
     </div>
 );
 
+const LandslideTooltip = ({ layer, feature }) => (
+    <div className={styles.riskTooltip}>
+        <h3 className={styles.heading}>
+            { feature.properties.title }
+        </h3>
+        <div className={styles.content}>
+            {
+                feature.state.value && (
+                    <RiskTooltipOutput
+                        label="Risk Score:"
+                        value={feature.state.value}
+                    />
+                )
+            }
+        </div>
+    </div>
+);
+
 const getRankMap = memoize(data => (
     listToMap(data, d => d.district, d => d.rank)
 ));
+
+const transformLandslideDataToLayer = (
+    {
+        data = [],
+        title,
+        adminLevel,
+        legendTitle,
+        dataKey,
+        dataValue,
+    }: {
+        data: LandslideDataFeature[];
+        title: string;
+        adminLevel: string;
+        legendTitle: string;
+        dataKey: string;
+        dataValue: string;
+    },
+    layer = {},
+) => {
+    const mapState = data.map(d => ({
+        id: d.properties[dataKey],
+        value: d.properties[dataValue],
+    }));
+
+    const layerGroup = layer.group || {};
+
+    const [min, max] = extent(mapState, d => d.value);
+    const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
+
+    return {
+        longDescription: layerGroup.longDescription,
+        metadata: layerGroup.metadata,
+        id: title,
+        title,
+        type: 'choropleth',
+        adminLevel,
+        layername: title,
+        legendTitle,
+        opacity: 1,
+        mapState,
+        paint,
+        legend,
+        tooltipRenderer: LandslideTooltip,
+        minValue: min,
+    };
+};
 
 const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
     const mapState = data.map(d => ({
@@ -170,17 +250,6 @@ class Risk extends React.PureComponent<Props, State> {
             showMetricSettings: false,
             opacityValue: 1,
         };
-    }
-
-    private handleRiskGetRequestSuccess = (response) => {
-        const { addLayer } = this.context;
-        const { metricValues } = this.state;
-        const riskData = this.getRiskData(response.results, metricValues);
-        const riskLayer = transformRiskDataToLayer(riskData);
-
-        if (addLayer) {
-            addLayer(riskLayer);
-        }
     }
 
     private handleMetricSliderChange = (key, value) => {
@@ -255,7 +324,49 @@ class Risk extends React.PureComponent<Props, State> {
 
         const pending = isAnyRequestPending(requests);
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
+        const districtLandslideRaw = getResponse(requests, 'durhamLandslideDistrictRequest') as LandslideDataGeoJson;
+        const municipalityLandslideRaw = getResponse(requests, 'durhamLandslideMunicipalityRequest') as LandslideDataGeoJson;
+        const wardLandslideRaw = getResponse(requests, 'durhamLandslideWardRequest') as LandslideDataGeoJson;
         const riskData = this.getRiskData(riskDataRaw, metricValues);
+        const districtLandslideLayer = transformLandslideDataToLayer(
+            {
+                data: districtLandslideRaw.features,
+                title: 'District Level Landslide Risk',
+                adminLevel: 'district',
+                legendTitle: 'Landslide Risk',
+                dataKey: 'district_d',
+                dataValue: 'District_r',
+            },
+            {
+                longDescription: 'District Level Landslide Risk',
+            },
+        );
+        const municipalityLandslideLayer = transformLandslideDataToLayer(
+            {
+                data: municipalityLandslideRaw.features,
+                title: 'Municipality Level Landslide Risk',
+                adminLevel: 'municipality',
+                legendTitle: 'Landslide Risk',
+                dataKey: 'municipali',
+                dataValue: 'Palika_ris',
+            },
+            {
+                longDescription: 'Municipality Level Landslide Risk',
+            },
+        );
+        const wardLandslideLayer = transformLandslideDataToLayer(
+            {
+                data: wardLandslideRaw.features,
+                title: 'Ward Level Landslide Risk',
+                adminLevel: 'ward',
+                legendTitle: 'Landslide Risk',
+                dataKey: 'ward_id',
+                dataValue: 'Ward_War_4',
+            },
+            {
+                longDescription: 'Ward Level Landslide Risk',
+            },
+        );
         const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
             <>
                 <DataTableModalButton
@@ -350,6 +461,18 @@ class Risk extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
+                        <LayerSelectionItem
+                            data={districtLandslideLayer}
+                            disabled={pending}
+                        />
+                        <LayerSelectionItem
+                            data={municipalityLandslideLayer}
+                            disabled={pending}
+                        />
+                        <LayerSelectionItem
+                            data={wardLandslideLayer}
+                            disabled={pending}
+                        />
                     </div>
                 </div>
             </>

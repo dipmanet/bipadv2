@@ -23,6 +23,7 @@ interface State {
 const sourceLayerByAdminLevel = {
     municipality: mapSources.nepal.layers.municipality,
     district: mapSources.nepal.layers.district,
+    ward: mapSources.nepal.layers.ward,
 };
 
 const tooltipOptions = {

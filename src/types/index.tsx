@@ -211,6 +211,16 @@ export interface RiskData {
     };
 }
 
+export interface LandslideDataFeature {
+    type: string;
+    properties: {};
+}
+
+export interface LandslideDataGeoJson {
+    type: string;
+    features: LandslideDataFeature[];
+}
+
 export type ResourceTypeKeys = 'education' | 'health' | 'tourism' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy';
 
 export type IncidentAttributeType = 'estimatedLoss' | 'incidentCount' | 'livestockDestroyedCount' | 'peopleDeathCount' | 'peopleInjuredCount' | 'peopleMissingCount'| 'totalInfrastructureDestroyedCount';
