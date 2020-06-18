@@ -60,6 +60,26 @@ interface ChoroplethLegendProps {
     legend: Layer['legend'];
 }
 
+const getPrecision = (value: number | string) => {
+    const numericValue = +value;
+
+    if (Number.isNaN(numericValue)) {
+        return 0;
+    }
+
+    const diff = numericValue - Math.floor(numericValue);
+
+    if (diff === 0) {
+        return 0;
+    }
+
+    if (diff > 0.1) {
+        return 1;
+    }
+
+    return 2;
+};
+
 const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
     <div className={styles.choroplethLegend}>
         { isDefined(minValue) && (
@@ -67,7 +87,7 @@ const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
                 className={styles.min}
                 normal
                 value={minValue}
-                precision={2}
+                precision={getPrecision(minValue)}
             />
         )}
         { Object.keys(legend).map((color) => {
@@ -85,7 +105,7 @@ const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
                         <Numeral
                             normal
                             value={value}
-                            precision={2}
+                            precision={getPrecision(value)}
                         />
                     </div>
                 </div>

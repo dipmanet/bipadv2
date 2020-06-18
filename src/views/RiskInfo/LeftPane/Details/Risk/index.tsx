@@ -2,6 +2,7 @@ import React from 'react';
 import {
     _cs,
     listToMap,
+    isDefined,
 } from '@togglecorp/fujs';
 import { extent } from 'd3-array';
 import RangeInput from 'react-input-range';
@@ -64,17 +65,17 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         onMount: true,
     },
     durhamLandslideDistrictRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&maxFeatures=50&outputFormat=application%2Fjson&propertyName=district_d,District_r',
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&outputFormat=application%2Fjson&propertyName=district_d,District_r',
         method: methods.GET,
         onMount: true,
     },
     durhamLandslideMunicipalityRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&maxFeatures=50&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali',
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali',
         method: methods.GET,
         onMount: true,
     },
     durhamLandslideWardRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&maxFeatures=50&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4',
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4',
         method: methods.GET,
         onMount: true,
     },
@@ -103,6 +104,18 @@ const colorGrade = [
     '#c95733',
     '#be3b20',
     '#b31010',
+];
+
+const landslideColorGrade = [
+    '#4288bd',
+    '#6692b5',
+    '#abddc4',
+    '#e6f598',
+    '#ffffbf',
+    '#fee08b',
+    '#fdae61',
+    '#f46d43',
+    '#d53e4f',
 ];
 
 const RiskTooltipOutput = ({ label, value }) => (
@@ -141,7 +154,7 @@ const LandslideTooltip = ({ layer, feature }) => (
         </h3>
         <div className={styles.content}>
             {
-                feature.state.value && (
+                isDefined(feature.state.value) && (
                     <RiskTooltipOutput
                         label="Risk Score:"
                         value={feature.state.value}
@@ -159,16 +172,12 @@ const getRankMap = memoize(data => (
 const transformLandslideDataToLayer = (
     {
         data = [],
-        title,
         adminLevel,
-        legendTitle,
         dataKey,
         dataValue,
     }: {
         data: LandslideDataFeature[];
-        title: string;
         adminLevel: string;
-        legendTitle: string;
         dataKey: string;
         dataValue: string;
     },
@@ -181,18 +190,20 @@ const transformLandslideDataToLayer = (
 
     const layerGroup = layer.group || {};
 
-    const [min, max] = extent(mapState, d => d.value);
-    const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
+    // const [min, max] = extent(mapState, d => d.value);
+    const min = 0;
+    const max = 1;
+    const { paint, legend } = generatePaint(landslideColorGrade, min || 0, max || 0);
 
     return {
         longDescription: layerGroup.longDescription,
         metadata: layerGroup.metadata,
-        id: title,
-        title,
+        id: layer.title,
+        title: layer.title,
         type: 'choropleth',
         adminLevel,
-        layername: title,
-        legendTitle,
+        layername: layer.title,
+        legendTitle: layer.legendTitle,
         opacity: 1,
         mapState,
         paint,
@@ -328,45 +339,31 @@ class Risk extends React.PureComponent<Props, State> {
         const municipalityLandslideRaw = getResponse(requests, 'durhamLandslideMunicipalityRequest') as LandslideDataGeoJson;
         const wardLandslideRaw = getResponse(requests, 'durhamLandslideWardRequest') as LandslideDataGeoJson;
         const riskData = this.getRiskData(riskDataRaw, metricValues);
-        const districtLandslideLayer = transformLandslideDataToLayer(
-            {
+
+        const landslideLayerToDataMap = {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_district: {
                 data: districtLandslideRaw.features,
-                title: 'District Level Landslide Risk',
                 adminLevel: 'district',
-                legendTitle: 'Landslide Risk',
                 dataKey: 'district_d',
                 dataValue: 'District_r',
             },
-            {
-                longDescription: 'District Level Landslide Risk',
-            },
-        );
-        const municipalityLandslideLayer = transformLandslideDataToLayer(
-            {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_municipality: {
                 data: municipalityLandslideRaw.features,
-                title: 'Municipality Level Landslide Risk',
                 adminLevel: 'municipality',
-                legendTitle: 'Landslide Risk',
                 dataKey: 'municipali',
                 dataValue: 'Palika_ris',
             },
-            {
-                longDescription: 'Municipality Level Landslide Risk',
-            },
-        );
-        const wardLandslideLayer = transformLandslideDataToLayer(
-            {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_ward: {
                 data: wardLandslideRaw.features,
-                title: 'Ward Level Landslide Risk',
                 adminLevel: 'ward',
-                legendTitle: 'Landslide Risk',
                 dataKey: 'ward_id',
                 dataValue: 'Ward_War_4',
             },
-            {
-                longDescription: 'Ward Level Landslide Risk',
-            },
-        );
+        };
+
         const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
             <>
                 <DataTableModalButton
@@ -392,7 +389,6 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             </>
         ));
-        const layer = layerList[0];
 
         return (
             <>
@@ -404,75 +400,90 @@ class Risk extends React.PureComponent<Props, State> {
                         </h2>
                     </header>
                     <div className={styles.content}>
-                        <LayerSelectionItem
-                            data={riskLayer}
-                            disabled={pending}
-                        />
-                        <div className={styles.description}>
-                            { layer && layer.group && layer.group.shortDescription }
-                        </div>
-                        <div className={styles.options}>
-                            { showMetricSettings && (
-                                <div className={styles.metricSettings}>
-                                    <header className={styles.header}>
-                                        <h4 className={styles.heading}>
-                                            Configure risk parameters
-                                        </h4>
-                                        <Button
-                                            title="Hide risk parameter configuration settings"
-                                            transparent
-                                            iconName="chevronUp"
-                                            onClick={() => (
-                                                this.setState({ showMetricSettings: false })
-                                            )}
-                                        />
-                                    </header>
-                                    <div className={styles.content}>
-                                        {metricKeys.map(m => (
-                                            <div
-                                                key={m}
-                                                className={styles.metricInput}
-                                            >
-                                                <div className={styles.label}>
-                                                    { metrices[m] }
-                                                </div>
-                                                <RangeInput
-                                                    classNames={{
-                                                        ...rangeInputDefaultClassNames,
-                                                        minLabel: styles.minLabel,
-                                                        maxLabel: styles.maxLabel,
-                                                        valueLabel: styles.valueLabel,
-                                                        inputRange: _cs(
-                                                            rangeInputDefaultClassNames.inputRange,
-                                                            styles.rangeInput,
-                                                        ),
-                                                    }}
-                                                    minValue={0}
-                                                    maxValue={5}
-                                                    step={1}
-                                                    value={this.state.metricValues[m]}
-                                                    onChange={(value) => {
-                                                        this.handleMetricSliderChange(m, value);
-                                                    }}
-                                                />
-                                            </div>
-                                        ))}
+                        { layerList.map(layer => (
+                            layer.layername === 'durham_earthquake_risk_score' ? (
+                                <React.Fragment key={layer.id}>
+                                    <LayerSelectionItem
+                                        data={riskLayer}
+                                        disabled={pending}
+                                    />
+                                    <div className={styles.description}>
+                                        { layer && layer.group && layer.group.shortDescription }
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                        <LayerSelectionItem
-                            data={districtLandslideLayer}
-                            disabled={pending}
-                        />
-                        <LayerSelectionItem
-                            data={municipalityLandslideLayer}
-                            disabled={pending}
-                        />
-                        <LayerSelectionItem
-                            data={wardLandslideLayer}
-                            disabled={pending}
-                        />
+                                    <div className={styles.options}>
+                                        { showMetricSettings && (
+                                            <div className={styles.metricSettings}>
+                                                <header className={styles.header}>
+                                                    <h4 className={styles.heading}>
+                                                        Configure risk parameters
+                                                    </h4>
+                                                    <Button
+                                                        title="Hide risk parameter configuration settings"
+                                                        transparent
+                                                        iconName="chevronUp"
+                                                        onClick={() => (
+                                                            this.setState({
+                                                                showMetricSettings: false,
+                                                            })
+                                                        )}
+                                                    />
+                                                </header>
+                                                <div className={styles.content}>
+                                                    {metricKeys.map(m => (
+                                                        <div
+                                                            key={m}
+                                                            className={styles.metricInput}
+                                                        >
+                                                            <div className={styles.label}>
+                                                                { metrices[m] }
+                                                            </div>
+                                                            <RangeInput
+                                                                classNames={{
+                                                                    ...rangeInputDefaultClassNames,
+                                                                    minLabel: styles.minLabel,
+                                                                    maxLabel: styles.maxLabel,
+                                                                    valueLabel: styles.valueLabel,
+                                                                    inputRange: _cs(
+                                                                        rangeInputDefaultClassNames
+                                                                            .inputRange,
+                                                                        styles.rangeInput,
+                                                                    ),
+                                                                }}
+                                                                minValue={0}
+                                                                maxValue={5}
+                                                                step={1}
+                                                                value={this.state.metricValues[m]}
+                                                                onChange={(value) => {
+                                                                    this.handleMetricSliderChange(
+                                                                        m,
+                                                                        value,
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </React.Fragment>
+                            ) : (
+                                <LayerSelectionItem
+                                    key={layer.id}
+                                    data={
+                                        layer.type === 'custom' ? (
+                                            transformLandslideDataToLayer(
+                                                landslideLayerToDataMap[layer.layername],
+                                                layer,
+                                            )
+                                        ) : (
+                                            layer
+                                        )
+                                    }
+                                    disabled={pending}
+                                />
+                            )
+                        ))}
                     </div>
                 </div>
             </>
