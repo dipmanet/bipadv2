@@ -1,0 +1,71 @@
+@import '~base-scss/base';
+
+.pollution {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-foreground-alt);
+    overflow: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: space-between;
+
+        .show-details-button {
+            flex-shrink: 0;
+            margin: var(--spacing-extra-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+    }
+
+    .table-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: auto;
+
+        .pollution-table {
+            display: flex;
+            flex-grow: 1;
+
+            .water-level {
+                font-weight: var(--font-weight-bold);
+
+                &.below {
+                    color: var(--color-success);
+                }
+
+                &.above {
+                    color: var(--color-warning);
+                }
+
+                &.danger {
+                    color: var(--color-danger);
+                }
+            }
+
+            :global {
+                .table {
+                    .header {
+                        border: 0;
+                        background-color: var(--color-foreground-alt);
+                    }
+
+                    .body {
+                        .row {
+                            .cell {
+                                border: 0;
+
+                                &.title {
+                                    color: var(--color-text-label);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

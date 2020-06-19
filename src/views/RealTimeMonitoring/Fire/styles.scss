@@ -1,0 +1,22 @@
+.fire-modal {
+  width: 90vw;
+  height: 90vh;
+  overflow: auto;
+
+  .body {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+
+      .fire-table {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          overflow: auto;
+      }
+
+      .fire {
+        color: black;
+      }
+  }
+}
