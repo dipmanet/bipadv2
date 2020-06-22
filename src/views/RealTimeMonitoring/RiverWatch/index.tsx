@@ -28,6 +28,11 @@ interface Props {
 
 const riverWatchKeySelector = (river: RealTimeRiver) => river.id;
 
+const defaultSort = {
+    key: 'status',
+    order: 'asc',
+};
+
 class RiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
@@ -67,7 +72,9 @@ class RiverWatch extends React.PureComponent<Props> {
                 label: 'Water Level (m)',
                 order: 5,
                 sortable: true,
-                comparator: (a, b) => compareNumber(a.waterLevel, b.waterLevel),
+                comparator: (a, b) => compareNumber(
+                    a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
+                ),
             },
             {
                 key: 'warningLevel',
@@ -147,6 +154,7 @@ class RiverWatch extends React.PureComponent<Props> {
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}
                         keySelector={riverWatchKeySelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>

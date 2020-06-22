@@ -27,7 +27,7 @@ const riverWatchKeySelector = (station: RealTimeRiver) => station.id;
 
 const defaultSort = {
     key: 'waterLevel',
-    order: 'asc',
+    order: 'dsc',
 };
 
 class MiniRiverWatch extends React.PureComponent<Props> {
@@ -47,7 +47,9 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 label: 'Water level',
                 order: 2,
                 sortable: true,
-                comparator: (a, b) => compareNumber(a.waterLevel, b.waterLevel),
+                comparator: (a, b) => compareNumber(
+                    a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
+                ),
                 modifier: (row: RealTimeRiver) => {
                     const {
                         status,

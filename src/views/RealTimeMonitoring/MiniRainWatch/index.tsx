@@ -56,7 +56,7 @@ const durationOptions: KeyValue[] = [
 
 const defaultSort = {
     key: 'lastHour',
-    order: 'asc',
+    order: 'dsc',
 };
 
 const durationLabelSelector = (d: KeyValue) => d.label;
@@ -68,10 +68,10 @@ const compareIntervalValues = (
     interval: number,
 ) => {
     const aAverage = a.find(av => av.interval === interval);
-    const aValue = aAverage ? aAverage.value : 0;
+    const aValue = aAverage && aAverage.value ? aAverage.value : 0;
 
     const bAverage = b.find(av => av.interval === interval);
-    const bValue = bAverage ? bAverage.value : 0;
+    const bValue = bAverage && bAverage.value ? bAverage.value : 0;
 
     return compareNumber(aValue, bValue);
 };
