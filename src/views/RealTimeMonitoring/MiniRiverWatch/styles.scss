@@ -29,33 +29,53 @@
             display: flex;
             flex-grow: 1;
 
+            .below {
+                background-color: var(--color-success);
+            }
+
+            .above {
+                background-color: var(--color-success);
+            }
+
+            .danger {
+                background-color: var(--color-danger);
+            }
+
+            .none {
+                background-color: var(--color-foreground-alt);
+            }
+
             .water-level {
-                font-weight: var(--font-weight-bold);
+                font-weight: var(--font-weight-normal);
 
-                &.below {
-                    color: var(--color-success);
-                }
+                // &.below {
+                //     color: var(--color-success);
+                // }
 
-                &.above {
-                    color: var(--color-warning);
-                }
+                // &.above {
+                //     color: var(--color-warning);
+                // }
 
-                &.danger {
-                    color: var(--color-danger);
-                }
+                // &.danger {
+                //     color: var(--color-danger);
+                // }
             }
 
             :global {
                 .table {
                     .header {
-                        border: 0;
+                        border-bottom: .1px solid grey;
+                        border-right: .1px solid grey;
+                        border-top: .1px solid grey;
                         background-color: var(--color-foreground-alt);
+                        font-weight: var(--font-weight-bold);
                     }
 
                     .body {
                         .row {
                             .cell {
-                                border: 0;
+                                border-bottom: .1px solid grey;
+                                border-right: .1px solid grey;
 
                                 &.title {
                                     color: var(--color-text-label);

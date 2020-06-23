@@ -100,7 +100,7 @@ class RiverWatch extends React.PureComponent<Props> {
         ];
     }
 
-    private getClassName = (row: RealTimeRain) => {
+    private getClassName = (row: RealTimeRiver) => {
         const { status } = row;
         if (status === 'BELOW WARNING LEVEL') {
             return styles.below;
