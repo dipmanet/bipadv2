@@ -365,6 +365,30 @@ export default {
         },
     },
 
+    rainSymbol: {
+        layout: {
+            'text-field': '▲',
+            'text-allow-overlap': true,
+            'text-size': 32,
+        },
+        paint: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            'text-opacity': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
+                0.3,
+            ],
+        },
+    },
+
     riverPoint: {
         layout: {
             'text-field': [
@@ -378,7 +402,7 @@ export default {
             'text-size': 24,
         },
         paint: {
-            'circle-radius': 10,
+            'circle-radius': 8,
             'circle-color': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',

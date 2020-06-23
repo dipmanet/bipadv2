@@ -247,7 +247,15 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
+// the code below is different due to the requirement of rain icon to be triangle
 const rainLegendItems = [
+    { color: 'transparent', label: 'Below Warning Level', style: styles.triangleBelowWarning },
+    { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
+    { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
+    { color: 'transparent', label: 'Status Not Available', style: styles.triangle },
+];
+
+const riverLegendItems = [
     { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
     { color: '#FDD835', label: 'Above Warning Level', style: styles.symbol },
     { color: '#e53935', label: 'Above Danger Level', style: styles.symbol },
@@ -362,7 +370,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </header>
                         <Legend
                             className={styles.legend}
-                            data={rainLegendItems}
+                            data={riverLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}

@@ -419,12 +419,22 @@ export default class RealTimeMap extends React.PureComponent {
                 >
                     { showRain && (
                         <>
-                            <MapLayer
+                            {/* the layer below is to render circles for rain */}
+                            {/* <MapLayer
                                 layerKey="real-time-rain-circle"
                                 onClick={this.handleRainClick}
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.rainPoint.paint,
+                                }}
+                            /> */}
+                            <MapLayer
+                                layerKey="real-time-rain-triangle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.rainSymbol.layout,
+                                    paint: mapStyles.rainSymbol.paint,
                                 }}
                             />
                             <MapLayer
