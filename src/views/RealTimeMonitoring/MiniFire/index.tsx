@@ -28,7 +28,7 @@ const ModalButton = modalize(Button);
 const fireKeySelector = (station: RealTimeFire) => station.id;
 
 const defaultSort = {
-    key: 'confidence',
+    key: 'brightness',
     order: 'dsc',
 };
 
@@ -55,15 +55,32 @@ class Minifire extends React.PureComponent<Props> {
                 },
             },
             {
+                key: 'time',
+                label: 'Time',
+                order: 2,
+                sortable: false,
+                modifier: (row: RealTimeFire) => {
+                    const { eventOn } = row;
+                    if (eventOn) {
+                        return (
+                            <div>
+                                {/* parsing date to time format */}
+                                {eventOn.split('T')[1].split('.')[0].split('+')[0]}
+                            </div>
+                        );
+                    } return undefined;
+                },
+            },
+            {
                 key: 'landCover',
                 label: 'Land Cover',
-                order: 2,
+                order: 3,
                 sortable: false,
             },
             {
                 key: 'brightness',
                 label: 'Brightness',
-                order: 3,
+                order: 4,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.brightness, b.brightness),
             },

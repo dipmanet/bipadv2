@@ -31,6 +31,11 @@ interface Props {
 
 const fireSelector = (fire: RealTimeFireExtended) => fire.id;
 
+const defaultSort = {
+    key: 'brightness',
+    order: 'dsc',
+};
+
 class Fire extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
@@ -45,12 +50,7 @@ class Fire extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.title, b.title),
                 modifier: (row: RealTimeFireExtended) => {
                     const { title } = row;
-                    return (title)
-                        ? (
-                            <div>
-                                { title }
-                            </div>
-                        ) : undefined;
+                    return (title) || undefined;
                 },
             },
             {
@@ -62,33 +62,21 @@ class Fire extends React.PureComponent<Props> {
                 modifier: (row: RealTimeFireExtended) => {
                     const { eventOn } = row;
 
-                    return (eventOn) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {eventOn.substring(0, eventOn.indexOf('T'))}
-                        </div>
-                    ) : undefined;
+                    return (eventOn) ? eventOn.substring(0, eventOn.indexOf('T')) : undefined;
                 },
             },
-            // fix after propertime format is available on eventOn parameter
-            // {
-            //     key: 'time',
-            //     label: 'time',
-            //     order: 3,
-            //     sortable: false,
-            //     modifier: (row: RealTimeFireExtended) => {
-            //         const { eventOn } = row;
-            //         if (eventOn) {
-            //             const date = new Date(eventOn);
-            //             return (
-            //                 <div>
-            //                     {/* parsing date to time format */}
-            //                     {date.toISOString().split('T')[1].split('.')[0]}
-            //                 </div>
-            //             );
-            //         } return undefined;
-            //     },
-            // },
+            {
+                key: 'time',
+                label: 'Time',
+                order: 3,
+                sortable: false,
+                modifier: (row: RealTimeFire) => {
+                    const { eventOn } = row;
+                    if (eventOn) {
+                        return eventOn.split('T')[1].split('.')[0].split('+')[0];
+                    } return undefined;
+                },
+            },
             {
                 key: 'landCover',
                 label: 'Land Cover',
@@ -107,7 +95,7 @@ class Fire extends React.PureComponent<Props> {
 
     private fireHeader: Header<RealTimeFireExtended>[];
 
-    private getClassName = (row: RealTimeEarthquake) => 'fire'
+    private getClassName = () => 'fire';
 
     public render() {
         const {
@@ -141,6 +129,7 @@ class Fire extends React.PureComponent<Props> {
                         data={realTimeFire}
                         headers={this.fireHeader}
                         keySelector={fireSelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>

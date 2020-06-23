@@ -3,6 +3,25 @@
   height: 90vh;
   overflow: auto;
 
+  :global {
+    .table {
+        .header {
+            border: .1px solid black;
+            background-color: var(--color-foreground-alt);
+            font-weight: bold;
+        }
+  
+        .body {
+            .row {
+                .cell {
+                    border-bottom: .1px solid black;
+                    border-right: .1px solid black;
+                }
+            }
+        }
+    }
+  }
+
   .body {
       display: flex;
       flex-direction: column;

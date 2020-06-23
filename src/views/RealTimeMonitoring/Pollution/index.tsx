@@ -34,6 +34,11 @@ interface Props {
 
 const pollutionSelector = (pollution: RealTimePollutionExtended) => pollution.id;
 
+const defaultSort = {
+    key: 'aqi',
+    order: 'dsc',
+};
+
 class Pollution extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
@@ -48,9 +53,7 @@ class Pollution extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.title, b.title),
                 modifier: (row: RealTimePollutionExtended) => {
                     const { title } = row;
-                    return (title) ? (
-                        <div>{title}</div>
-                    ) : undefined;
+                    return (title) || undefined;
                 },
             },
             {
@@ -61,13 +64,8 @@ class Pollution extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.createdOn, b.createdOn),
                 modifier: (row: RealTimePollutionExtended) => {
                     const { createdOn } = row;
-
-                    return (createdOn) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {createdOn.substring(0, createdOn.indexOf('T'))}
-                        </div>
-                    ) : undefined;
+                    // parsing date to appropiate format
+                    return (createdOn) ? createdOn.substring(0, createdOn.indexOf('T')) : undefined;
                 },
             },
             {
@@ -79,12 +77,8 @@ class Pollution extends React.PureComponent<Props> {
                     const { createdOn } = row;
                     if (createdOn) {
                         const date = new Date(createdOn);
-                        return (
-                            <div>
-                                {/* parsing date to time format */}
-                                {date.toISOString().split('T')[1].split('.')[0]}
-                            </div>
-                        );
+                        // parsing date to time format
+                        return date.toISOString().split('T')[1].split('.')[0];
                     } return undefined;
                 },
             },
@@ -97,9 +91,7 @@ class Pollution extends React.PureComponent<Props> {
                 modifier: (row: RealTimePollutionExtended) => {
                     const { aqi } = row;
 
-                    return (aqi) ? (
-                        <div>{`${aqi} µg/m³`}</div>
-                    ) : undefined;
+                    return (aqi) ? `${aqi.toFixed(2)} µg/m³` : undefined;
                 },
             },
         ];
@@ -146,7 +138,7 @@ class Pollution extends React.PureComponent<Props> {
                 className={styles.pollutionModal}
             >
                 <ModalHeader
-                    title="Earthquake"
+                    title="Pollution"
                     rightComponent={(
                         <DangerButton
                             transparent
@@ -163,6 +155,7 @@ class Pollution extends React.PureComponent<Props> {
                         data={realTimePollution}
                         headers={this.pollutionHeader}
                         keySelector={pollutionSelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>

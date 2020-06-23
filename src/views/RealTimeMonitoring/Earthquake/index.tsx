@@ -28,6 +28,11 @@ interface Props {
 
 const earthquakeSelector = (earthquake: RealTimeEarthquake) => earthquake.id;
 
+const defaultSort = {
+    key: 'magnitude',
+    order: 'dsc',
+};
+
 class Earthquake extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
@@ -50,13 +55,7 @@ class Earthquake extends React.PureComponent<Props> {
                 modifier: (row: RealTimeEarthquake) => {
                     const { magnitude } = row;
                     return (magnitude)
-                        ? (
-                            <div>
-                                {magnitude}
-                                {' '}
-ML
-                            </div>
-                        ) : undefined;
+                        ? `${magnitude} ML` : undefined;
                 },
             },
             {
@@ -68,12 +67,8 @@ ML
                 modifier: (row: RealTimeEarthquake) => {
                     const { eventOn } = row;
 
-                    return (eventOn) ? (
-                        <div>
-                            {/* parsing date to appropiate format */}
-                            {eventOn.substring(0, eventOn.indexOf('T'))}
-                        </div>
-                    ) : undefined;
+                    // parsing date to appropiate format
+                    return (eventOn) ? eventOn.substring(0, eventOn.indexOf('T')) : undefined;
                 },
             },
             {
@@ -85,12 +80,8 @@ ML
                     const { eventOn } = row;
                     if (eventOn) {
                         const date = new Date(eventOn);
-                        return (
-                            <div>
-                                {/* parsing date to time format */}
-                                {date.toISOString().split('T')[1].split('.')[0]}
-                            </div>
-                        );
+                        // parsing date to time format
+                        return date.toISOString().split('T')[1].split('.')[0];
                     } return undefined;
                 },
             },
@@ -162,6 +153,7 @@ ML
                         data={realTimeEarthquake}
                         headers={this.earthquakeHeader}
                         keySelector={earthquakeSelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>
