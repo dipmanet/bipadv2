@@ -1,6 +1,6 @@
 @import '~base-scss/base';
 
-.river-watch {
+.pollution {
     display: flex;
     flex-direction: column;
     background-color: var(--color-foreground-alt);
@@ -25,57 +25,21 @@
         flex-grow: 1;
         overflow: auto;
 
-        .river-watch-table {
+        .pollution-table {
             display: flex;
             flex-grow: 1;
-
-            .below {
-                background-color: var(--color-success);
-            }
-
-            .above {
-                background-color: var(--color-success);
-            }
-
-            .danger {
-                background-color: var(--color-danger);
-            }
-
-            .none {
-                background-color: var(--color-foreground-alt);
-            }
-
-            .water-level {
-                font-weight: var(--font-weight-normal);
-
-                // &.below {
-                //     color: var(--color-success);
-                // }
-
-                // &.above {
-                //     color: var(--color-warning);
-                // }
-
-                // &.danger {
-                //     color: var(--color-danger);
-                // }
-            }
 
             :global {
                 .table {
                     .header {
-                        border-bottom: .1px solid grey;
-                        border-right: .1px solid grey;
-                        border-top: .1px solid grey;
+                        border: 0;
                         background-color: var(--color-foreground-alt);
-                        font-weight: var(--font-weight-bold);
                     }
 
                     .body {
                         .row {
                             .cell {
-                                border-bottom: .1px solid grey;
-                                border-right: .1px solid grey;
+                                border: 0;
 
                                 &.title {
                                     color: var(--color-text-label);

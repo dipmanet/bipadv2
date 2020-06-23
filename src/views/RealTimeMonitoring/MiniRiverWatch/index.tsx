@@ -36,16 +36,23 @@ class MiniRiverWatch extends React.PureComponent<Props> {
 
         this.riverWatchHeader = [
             {
+                key: 'basin',
+                label: 'Basin',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareString(a.basin, b.basin),
+            },
+            {
                 key: 'title',
                 label: 'Station Name',
-                order: 1,
+                order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
                 key: 'waterLevel',
                 label: 'Water level',
-                order: 2,
+                order: 3,
                 sortable: true,
                 comparator: (a, b) => compareNumber(
                     a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
@@ -76,6 +83,20 @@ class MiniRiverWatch extends React.PureComponent<Props> {
 
     private riverWatchHeader: Header<RealTimeRiver>[];
 
+    private getClassName = (row: RealTimeRiver) => {
+        const { status } = row;
+        if (status === 'BELOW WARNING LEVEL') {
+            return styles.below;
+        }
+        if (status === 'ABOVE WARNING LEVEL') {
+            return styles.above;
+        }
+        if (status === 'ABOVE DANGER LEVEL') {
+            return styles.danger;
+        }
+        return styles.none;
+    }
+
     public render() {
         const {
             realTimeRiver,
@@ -100,6 +121,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 </header>
                 <div className={styles.tableContainer}>
                     <Table
+                        rowClassNameSelector={this.getClassName}
                         className={styles.riverWatchTable}
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}

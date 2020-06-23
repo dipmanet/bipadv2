@@ -90,16 +90,23 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
     private getRainHeader = (duration: number) => ([
         {
+            key: 'basin',
+            label: 'Basin',
+            order: 1,
+            sortable: true,
+            comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.basin, b.basin),
+        },
+        {
             key: 'title',
             label: 'Station Name',
-            order: 1,
+            order: 2,
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.title, b.title),
         },
         {
             key: 'lastHour',
             label: 'Rainfall',
-            order: 2,
+            order: 3,
             modifier: (row: RealTimeRain) => {
                 const {
                     status,
@@ -132,6 +139,20 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         this.setState({
             duration,
         });
+    }
+
+    private getClassName = (row: RealTimeRain) => {
+        const { status } = row;
+        if (status === 'BELOW WARNING LEVEL') {
+            return styles.below;
+        }
+        if (status === 'ABOVE WARNING LEVEL') {
+            return styles.above;
+        }
+        if (status === 'ABOVE DANGER LEVEL') {
+            return styles.danger;
+        }
+        return styles.none;
     }
 
     public render() {
@@ -171,6 +192,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                 </header>
                 <div className={styles.tableContainer}>
                     <Table
+                        rowClassNameSelector={this.getClassName}
                         className={styles.rainWatchTable}
                         data={realTimeRain}
                         headers={rainHeader}

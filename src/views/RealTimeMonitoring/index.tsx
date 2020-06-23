@@ -9,6 +9,7 @@ import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
+import { FiltersElement } from '#types';
 
 import {
     createConnectedRequestCoordinator,
@@ -18,7 +19,7 @@ import {
     methods,
 } from '#request';
 
-import { transformDateRangeFilterParam } from '#utils/transformations';
+import { transformDateRangeFilterParam, transformDataRangeToFilter } from '#utils/transformations';
 
 import {
     setRealTimeRainListAction,
@@ -37,6 +38,7 @@ import {
     realTimeFiltersValuesSelector,
     realTimeSourceListSelector,
     otherSourceListSelector,
+    filtersSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -52,6 +54,9 @@ import Map from './Map';
 import RealTimeMonitoringFilter from './Filter';
 import MiniRiverWatch from './MiniRiverWatch';
 import MiniRainWatch from './MiniRainWatch';
+import MiniEarthquake from './MiniEarthquake';
+import MiniPollution from './MiniPollution';
+import MiniFire from './MiniFire';
 
 import styles from './styles.scss';
 import {
@@ -80,6 +85,7 @@ interface PropsFromState {
     realTimeSourceList: PageType.RealTimeSource[];
     otherSourceList: PageType.OtherSource[];
     filters: PageType.FiltersWithRegion['faramValues'];
+    globalFilters: FiltersElement;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -95,6 +101,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     realTimeSourceList: realTimeSourceListSelector(state),
     otherSourceList: otherSourceListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
+    globalFilters: filtersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -109,9 +116,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimeRainRequest: {
         url: '/rain/',
         method: methods.GET,
-        query: ({ props: { filters } }) => ({
+        query: ({ props: { filters, globalFilters } }) => ({
             // FIXME: obsolete
             ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {
             interface Response { results: PageType.RealTimeRain[] }
@@ -125,6 +133,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                     region: prevRegion,
                 } },
             }) => region !== prevRegion,
+            globalFilters: true,
         },
         onMount: true,
         extras: {
@@ -134,8 +143,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimeRiverRequest: {
         url: '/river/',
         method: methods.GET,
-        query: ({ props: { filters } }) => ({
+        query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeRiverList } }) => {
             interface Response { results: PageType.RealTimeRiver[] }
@@ -149,6 +159,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                     region: prevRegion,
                 } },
             }) => region !== prevRegion,
+            globalFilters: true,
         },
         onMount: true,
         extras: {
@@ -158,8 +169,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
         method: methods.GET,
-        query: ({ props: { filters } }) => ({
+        query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
         }),
         onSuccess: ({ response, props: { setRealTimeEarthquakeList } }) => {
             interface Response { results: PageType.RealTimeEarthquake[] }
@@ -173,6 +185,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                     region: prevRegion,
                 } },
             }) => region !== prevRegion,
+            globalFilters: true,
         },
         onMount: true,
         extras: {
@@ -182,8 +195,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimeFireRequest: {
         url: '/fire/',
         method: methods.GET,
-        query: ({ props: { filters } }) => ({
+        query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeFireList } }) => {
             interface Response { results: PageType.RealTimeFire[] }
@@ -198,6 +212,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                     region: prevRegion,
                 } },
             }) => region !== prevRegion,
+            globalFilters: true,
         },
         onMount: true,
         extras: {
@@ -207,8 +222,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimePollutionRequest: {
         url: '/pollution/',
         method: methods.GET,
-        query: ({ props: { filters } }) => ({
+        query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
+            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
             interface Response { results: PageType.RealTimePollution[] }
@@ -222,6 +238,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                     region: prevRegion,
                 } },
             }) => region !== prevRegion,
+            globalFilters: true,
         },
         onMount: true,
         extras: {
@@ -230,7 +247,15 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
+// the code below is different due to the requirement of rain icon to be triangle
 const rainLegendItems = [
+    { color: 'transparent', label: 'Below Warning Level', style: styles.triangleBelowWarning },
+    { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
+    { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
+    { color: 'transparent', label: 'Status Not Available', style: styles.triangle },
+];
+
+const riverLegendItems = [
     { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
     { color: '#FDD835', label: 'Above Warning Level', style: styles.symbol },
     { color: '#e53935', label: 'Above Danger Level', style: styles.symbol },
@@ -265,7 +290,7 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
-type ActiveView = 'rainwatch' | 'riverwatch';
+type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire';
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
@@ -345,7 +370,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </header>
                         <Legend
                             className={styles.legend}
-                            data={rainLegendItems}
+                            data={riverLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
@@ -523,6 +548,18 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.setState({ activeView: 'rainwatch' });
     }
 
+    private handleEarthquakeButtonClick = () => {
+        this.setState({ activeView: 'earthquake' });
+    }
+
+    private handlePollutionButtonClick = () => {
+        this.setState({ activeView: 'pollution' });
+    }
+
+    private handleFireButtonClick = () => {
+        this.setState({ activeView: 'fire' });
+    }
+
     public render() {
         const {
             realTimeRainList,
@@ -552,7 +589,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const pending = isAnyRequestPending(requests);
 
         let validActiveView = activeView;
-        if (!showRain && !showRiver) {
+        if (!showRain && !showRiver && !showEarthquake && !showPollution && !showFire) {
             validActiveView = undefined;
         }
 
@@ -574,7 +611,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 />
                 <Page
                     hideHazardFilter
-                    hideDataRangeFilter
                     leftContentContainerClassName={styles.left}
                     leftContent={(
                         <>
@@ -618,6 +654,63 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                             </div>
                                         </div>
                                     )}
+                                    {showEarthquake && (
+                                        <div
+                                            className={_cs(styles.tab, validActiveView === 'earthquake' && styles.active)}
+                                            onClick={this.handleEarthquakeButtonClick}
+                                            role="presentation"
+                                        >
+                                            <div className={styles.value}>
+                                                {realTimeEarthquakeList.length}
+                                            </div>
+                                            <div className={styles.title}>
+                                                <div
+                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                                />
+                                                <div className={styles.text}>
+                                                    Earthquake
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {showPollution && (
+                                        <div
+                                            className={_cs(styles.tab, validActiveView === 'pollution' && styles.active)}
+                                            onClick={this.handlePollutionButtonClick}
+                                            role="presentation"
+                                        >
+                                            <div className={styles.value}>
+                                                {realTimePollutionList.length}
+                                            </div>
+                                            <div className={styles.title}>
+                                                <div
+                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                                />
+                                                <div className={styles.text}>
+                                                    Pollution
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {showFire && (
+                                        <div
+                                            className={_cs(styles.tab, validActiveView === 'fire' && styles.active)}
+                                            onClick={this.handleFireButtonClick}
+                                            role="presentation"
+                                        >
+                                            <div className={styles.value}>
+                                                {realTimeFireList.length}
+                                            </div>
+                                            <div className={styles.title}>
+                                                <div
+                                                    className={_cs(styles.icon, styles.eventIcon)}
+                                                />
+                                                <div className={styles.text}>
+                                                    Fire
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </header>
                             <div className={styles.content}>
@@ -633,12 +726,30 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                         realTimeRain={realTimeRainList}
                                     />
                                 )}
+                                {validActiveView === 'earthquake' && (
+                                    <MiniEarthquake
+                                        className={styles.rainwatchList}
+                                        realTimeEarthquake={realTimeEarthquakeList}
+                                    />
+                                )}
+                                {validActiveView === 'pollution' && (
+                                    <MiniPollution
+                                        className={styles.rainwatchList}
+                                        realTimePollution={realTimePollutionList}
+                                    />
+                                )}
+                                {validActiveView === 'fire' && (
+                                    <MiniFire
+                                        className={styles.rainwatchList}
+                                        realTimeFire={realTimeFireList}
+                                    />
+                                )}
                                 {!validActiveView && (
                                     <div
                                         className={styles.message}
                                     >
                                         <Message>
-                                            Select rain or river to see details
+                                            Select a category to see details
                                         </Message>
                                     </div>
                                 )}

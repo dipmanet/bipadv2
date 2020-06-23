@@ -159,6 +159,29 @@
             .symbol {
                 border-radius: 50%;
             }
+
+            .triangle {
+                width: 0; 
+                height: 0; 
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 7px solid #ACACAB;
+              }
+
+            .triangle-below-warning {
+                @extend .triangle;
+                border-bottom: 7px solid #7CB342;
+            }
+
+            .triangle-above-warning {
+                @extend .triangle;
+                border-bottom: 7px solid #FDD835;
+            }
+
+            .triangle-above-danger {
+                @extend .triangle;
+                border-bottom: 7px solid #e53935;
+            }
         }
 
         .source-details {
