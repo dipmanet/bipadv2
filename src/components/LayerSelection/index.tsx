@@ -10,11 +10,13 @@ interface Props {
     className?: string;
     layerList: LayerHierarchy[];
     pending?: boolean;
+    layerSelectionItem?: React.ReactNode;
 }
 
 class LayerSelection extends React.PureComponent<Props> {
     private getLayerRendererParams = (layerId: LayerHierarchy['id'], layer: LayerHierarchy) => ({
         data: layer,
+        layerSelectionItem: this.props.layerSelectionItem,
     })
 
     public render() {

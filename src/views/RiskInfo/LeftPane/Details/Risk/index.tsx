@@ -20,9 +20,9 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 
 import LayerSelectionItem from '#components/LayerSelectionItem';
+import LayerSelection from '#components/LayerSelection';
 import Loading from '#components/Loading';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
 import RiskTable from './RiskTable';
 
@@ -35,9 +35,11 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { generatePaint } from '#utils/domain';
+import {
+    generatePaint,
+    getLayerHierarchy,
+} from '#utils/domain';
 
-import metadata from './metadata.json';
 import styles from './styles.scss';
 
 const DataTableModalButton = modalize(Button);
@@ -198,11 +200,11 @@ const transformLandslideDataToLayer = (
     return {
         longDescription: layerGroup.longDescription,
         metadata: layerGroup.metadata,
-        id: layer.title,
+        id: layer.id,
         title: layer.title,
         type: 'choropleth',
         adminLevel,
-        layername: layer.title,
+        layername: layer.layername,
         legendTitle: layer.legendTitle,
         opacity: 1,
         mapState,
@@ -219,20 +221,20 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         value: d.data.riskScore,
     }));
 
-    const layerGroup = layer.group || {};
+    // const layerGroup = layer.group || {};
 
     const [min, max] = extent(mapState, d => d.value);
     const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
 
     return {
-        longDescription: layerGroup.longDescription,
-        metadata: layerGroup.metadata,
-        id: 'durham-earthquake-risk',
-        title: 'Durham earthquake risk',
+        // longDescription: layerGroup.longDescription,
+        // metadata: layerGroup.metadata,
+        id: layer.id,
+        title: layer.title,
         type: 'choropleth',
         adminLevel: 'district',
-        layername: 'Durham earthquake risk',
-        legendTitle: 'Risk score',
+        layername: layer.layername,
+        legendTitle: layer.legendTitle,
         opacity: 1,
         mapState,
         paint,
@@ -319,12 +321,20 @@ class Risk extends React.PureComponent<Props, State> {
         }));
     }
 
+    private getHierarchy = memoize(getLayerHierarchy);
+
     public render() {
         const {
             className,
             requests,
             layerList,
+            layerGroupList,
         } = this.props;
+
+        const layers = this.getHierarchy(
+            layerList,
+            layerGroupList,
+        );
 
         const {
             showMetricSettings,
@@ -390,102 +400,101 @@ class Risk extends React.PureComponent<Props, State> {
             </>
         ));
 
+        const RiskLayerSelectionItem = (p) => {
+            const { data: layer } = p;
+            if (layer.layername === 'durham_earthquake_risk_score') {
+                return (
+                    <React.Fragment>
+                        <LayerSelectionItem
+                            data={riskLayer}
+                            disabled={pending}
+                        />
+                        <div className={styles.options}>
+                            { showMetricSettings && (
+                                <div className={styles.metricSettings}>
+                                    <header className={styles.header}>
+                                        <h4 className={styles.heading}>
+                                            Configure risk parameters
+                                        </h4>
+                                        <Button
+                                            title="Hide risk parameter configuration settings"
+                                            transparent
+                                            iconName="chevronUp"
+                                            onClick={() => (
+                                                this.setState({
+                                                    showMetricSettings: false,
+                                                })
+                                            )}
+                                        />
+                                    </header>
+                                    <div className={styles.content}>
+                                        {metricKeys.map(m => (
+                                            <div
+                                                key={m}
+                                                className={styles.metricInput}
+                                            >
+                                                <div className={styles.label}>
+                                                    { metrices[m] }
+                                                </div>
+                                                <RangeInput
+                                                    classNames={{
+                                                        ...rangeInputDefaultClassNames,
+                                                        minLabel: styles.minLabel,
+                                                        maxLabel: styles.maxLabel,
+                                                        valueLabel: styles.valueLabel,
+                                                        inputRange: _cs(
+                                                            rangeInputDefaultClassNames
+                                                                .inputRange,
+                                                            styles.rangeInput,
+                                                        ),
+                                                    }}
+                                                    minValue={0}
+                                                    maxValue={5}
+                                                    step={1}
+                                                    value={this.state.metricValues[m]}
+                                                    onChange={(value) => {
+                                                        this.handleMetricSliderChange(
+                                                            m,
+                                                            value,
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </React.Fragment>
+                );
+            }
+
+            return (
+                <LayerSelectionItem
+                    key={layer.id}
+                    data={
+                        landslideLayerToDataMap[layer.layername] ? (
+                            transformLandslideDataToLayer(
+                                landslideLayerToDataMap[layer.layername],
+                                layer,
+                            )
+                        ) : (
+                            layer
+                        )
+                    }
+                    disabled={pending}
+                />
+            );
+        };
+
         return (
             <>
                 <Loading pending={pending} />
-                <div className={_cs(styles.risk, className)}>
-                    <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            Layers
-                        </h2>
-                    </header>
-                    <div className={styles.content}>
-                        { layerList.map(layer => (
-                            layer.layername === 'durham_earthquake_risk_score' ? (
-                                <React.Fragment key={layer.id}>
-                                    <LayerSelectionItem
-                                        data={riskLayer}
-                                        disabled={pending}
-                                    />
-                                    <div className={styles.description}>
-                                        { layer && layer.group && layer.group.shortDescription }
-                                    </div>
-                                    <div className={styles.options}>
-                                        { showMetricSettings && (
-                                            <div className={styles.metricSettings}>
-                                                <header className={styles.header}>
-                                                    <h4 className={styles.heading}>
-                                                        Configure risk parameters
-                                                    </h4>
-                                                    <Button
-                                                        title="Hide risk parameter configuration settings"
-                                                        transparent
-                                                        iconName="chevronUp"
-                                                        onClick={() => (
-                                                            this.setState({
-                                                                showMetricSettings: false,
-                                                            })
-                                                        )}
-                                                    />
-                                                </header>
-                                                <div className={styles.content}>
-                                                    {metricKeys.map(m => (
-                                                        <div
-                                                            key={m}
-                                                            className={styles.metricInput}
-                                                        >
-                                                            <div className={styles.label}>
-                                                                { metrices[m] }
-                                                            </div>
-                                                            <RangeInput
-                                                                classNames={{
-                                                                    ...rangeInputDefaultClassNames,
-                                                                    minLabel: styles.minLabel,
-                                                                    maxLabel: styles.maxLabel,
-                                                                    valueLabel: styles.valueLabel,
-                                                                    inputRange: _cs(
-                                                                        rangeInputDefaultClassNames
-                                                                            .inputRange,
-                                                                        styles.rangeInput,
-                                                                    ),
-                                                                }}
-                                                                minValue={0}
-                                                                maxValue={5}
-                                                                step={1}
-                                                                value={this.state.metricValues[m]}
-                                                                onChange={(value) => {
-                                                                    this.handleMetricSliderChange(
-                                                                        m,
-                                                                        value,
-                                                                    );
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </React.Fragment>
-                            ) : (
-                                <LayerSelectionItem
-                                    key={layer.id}
-                                    data={
-                                        layer.type === 'custom' ? (
-                                            transformLandslideDataToLayer(
-                                                landslideLayerToDataMap[layer.layername],
-                                                layer,
-                                            )
-                                        ) : (
-                                            layer
-                                        )
-                                    }
-                                    disabled={pending}
-                                />
-                            )
-                        ))}
-                    </div>
-                </div>
+                <LayerSelection
+                    layerList={layers}
+                    layerSelectionItem={RiskLayerSelectionItem}
+                    className={_cs(styles.risk, className)}
+                />
             </>
         );
     }
