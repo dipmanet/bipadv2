@@ -3,7 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 
 import Button from '#rsca/Button';
 
-import LayerSelection from '#components/LayerSelection';
+import DefaultLayerSelection from '#components/LayerSelection';
 import LayerDetailModalButton from '#components/LayerDetailModalButton';
 import { LayerHierarchy } from '#types';
 
@@ -12,6 +12,8 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     data: LayerHierarchy;
+    layerSelection?: React.ReactNode;
+    layerSelectionItem?: React.ReactNode;
 }
 
 interface State {
@@ -31,6 +33,8 @@ class LayerGroup extends React.PureComponent<Props, State> {
         const {
             data,
             className,
+            layerSelection: LayerSelection = DefaultLayerSelection,
+            layerSelectionItem,
         } = this.props;
 
         const { isContentShown } = this.state;
@@ -81,7 +85,10 @@ class LayerGroup extends React.PureComponent<Props, State> {
                 { isContentShown && (
                     <div className={styles.content}>
                         {data.children.length !== 0 && (
-                            <LayerSelection layerList={data.children as LayerHierarchy[]} />
+                            <LayerSelection
+                                layerList={data.children as LayerHierarchy[]}
+                                layerSelectionItem={layerSelectionItem}
+                            />
                         )}
                     </div>
                 )}
