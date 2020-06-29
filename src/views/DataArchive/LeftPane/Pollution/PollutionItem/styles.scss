@@ -1,0 +1,36 @@
+.pollution {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-medium-alt) var(--spacing-large);
+    border-bottom: 1px solid grey;
+    cursor: pointer;
+    &:hover {
+        background-color: #f6f6f6;
+    }
+    .left {
+        .location {
+           font-size: var(--font-size-large); 
+           font-weight: var(--font-weight-bold);
+           margin-bottom: var(--spacing-small);
+        }
+
+        .event-on {
+            display: flex;
+            font-size: var(--font-size-medium);
+            font-weight: var(--font-size-medium);
+            .date {
+                display: flex;
+                margin-right: var(--spacing-small-alt);
+            }
+
+            .time {
+                display: flex;
+            }
+
+            .icon {
+                margin-right: var(--spacing-small);
+            }
+        }
+    }    
+}

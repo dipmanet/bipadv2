@@ -70,6 +70,14 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
+        name: 'dataArchive',
+        title: 'Data Archive',
+        path: '/data-archive/',
+        iconName: 'clipboard',
+        load: () => import('../views/DataArchive'),
+        navbar: true,
+    },
+    {
         name: 'profile',
         title: 'Profile',
         path: '/profile/',
