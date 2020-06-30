@@ -20,22 +20,22 @@ import styles from './styles.scss';
 const mapStyles = [
     {
         name: 'none',
-        style: 'mapbox://styles/neocmoha/ckb0ocjkn0xtc1iqamczc8lfe',
+        style: `${process.env.REACT_APP_MAP_STYLE_NONE}`,
         color: '#dddddd',
     },
     {
         name: 'light',
-        style: 'mapbox://styles/neocmoha/ckb0oaqx30xrj1iqawdyabrjn',
+        style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
         color: '#cdcdcd',
     },
     {
         name: 'roads',
-        style: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
+        style: `${process.env.REACT_APP_MAP_STYLE_ROADS}`,
         color: '#671076',
     },
     {
         name: 'satellite',
-        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
         color: '#c89966',
     },
     {
