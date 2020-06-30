@@ -3,6 +3,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import Switch from 'react-input-switch';
 import ReduxContext from '#components/ReduxContext';
 
 import Checkbox from '#rsu/../v2/Input/Checkbox';
@@ -84,34 +85,82 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 dropdownClassName={styles.container}
                 tooltip="Select administrative boundary"
             >
-                <Checkbox
+                <Switch
+                    className={styles.switch}
+                    on
+                    off={false}
+                    value={showProvince}
+                    onChange={(value) => {
+                        setShowProvince({ value });
+                    }}
+                />
+                Show Province
+                <br />
+
+                <Switch
+                    className={styles.switch}
+                    on
+                    off={false}
+                    value={showDistrict}
+                    onChange={(value) => {
+                        setShowDistrict({ value });
+                    }}
+                />
+                Show District
+                <br />
+
+                <Switch
+                    className={styles.switch}
+                    on
+                    off={false}
+                    value={showMunicipality}
+                    onChange={(value) => {
+                        setShowMunicipality({ value });
+                    }}
+                />
+                Show Municipality
+                <br />
+
+                <Switch
+                    className={styles.switch}
+                    on
+                    off={false}
+                    value={showWard}
+                    onChange={(value) => {
+                        setShowWard({ value });
+                    }}
+                />
+                Show Ward
+                <br />
+                {/* incase we need checkbox back again */}
+                {/* <Checkbox
                     label="Show Province"
                     onChange={(value) => {
                         setShowProvince({ value });
                     }}
                     value={showProvince}
-                />
-                <Checkbox
+                /> */}
+                {/* <Checkbox
                     label="Show District"
                     onChange={(value) => {
                         setShowDistrict({ value });
                     }}
                     value={showDistrict}
-                />
-                <Checkbox
+                /> */}
+                {/* <Checkbox
                     label="Show Municipality"
                     onChange={(value) => {
                         setShowMunicipality({ value });
                     }}
                     value={showMunicipality}
-                />
-                <Checkbox
+                /> */}
+                {/* <Checkbox
                     label="Show Ward"
                     onChange={(value) => {
                         setShowWard({ value });
                     }}
                     value={showWard}
-                />
+                /> */}
             </DropdownMenu>
         );
     }
