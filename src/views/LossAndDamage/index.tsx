@@ -342,9 +342,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             endDate,
         } = this.state;
 
-        console.log('StartDate: ', startDate);
-        console.log('EndDate: ', endDate);
-
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
 
