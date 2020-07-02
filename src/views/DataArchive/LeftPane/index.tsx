@@ -4,6 +4,7 @@ import * as PageType from '#store/atom/page/types';
 
 import Header from './Header';
 import Pollution from './Pollution';
+import Earthquake from './Earthquake';
 import MiniOption from './MiniOption';
 
 import styles from './styles.scss';
@@ -17,6 +18,7 @@ interface Props {
     fireList: PageType.RealTimeFire[];
     pollutionList: PageType.RealTimePollution[];
     chosenOption: Options;
+    handleOptionClick: Function;
 }
 interface State {
     activeView: string;
@@ -74,9 +76,9 @@ class LeftPane extends React.PureComponent <Props, State> {
 
     public render() {
         const { activeView, chosenOption } = this.state;
-        // const {
-        //     chosenOption,
-        // } = this.props;
+        const {
+            handleOptionClick,
+        } = this.props;
         const chosenData = this.getChosenData(chosenOption);
         return (
             <div className={styles.leftPane}>
@@ -87,9 +89,13 @@ class LeftPane extends React.PureComponent <Props, State> {
                     activeView={activeView}
                     chosenOption={chosenOption}
                 />
-                { chosenOption === 'Pollution' && activeView === 'data' && <Pollution data={chosenData} /> }
+                <div className={styles.content}>
+                    { chosenOption === 'Pollution' && activeView === 'data' && <Pollution data={chosenData} /> }
+                    { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake data={chosenData} /> }
+                </div>
                 <MiniOption
                     handleMiniOptionsClick={this.handleMiniOptionsClick}
+                    handleOptionClick={handleOptionClick}
                     chosenOption={chosenOption}
                 />
             </div>

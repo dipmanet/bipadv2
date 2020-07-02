@@ -4,6 +4,7 @@ import { compose, Dispatch } from 'redux';
 
 import Page from '#components/Page';
 import LeftPane from '../LeftPane';
+import Map from '../Map';
 
 import {
     createConnectedRequestCoordinator,
@@ -52,6 +53,7 @@ type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefine
 interface Params {}
 interface OwnProps {
     chosenOption: Options;
+    handleOptionClick: Function;
 }
 
 interface PropsFromDispatch {
@@ -246,11 +248,17 @@ class RegularPage extends React.PureComponent <Props, State> {
             pollutionList,
             requests,
             chosenOption,
+            handleOptionClick,
         } = this.props;
         const pending = isAnyRequestPending(requests);
         return (
             <div className="regularPage">
                 <Loading pending={pending} />
+                <Map
+                    earthquakeList={earthquakeList}
+                    pollutionList={pollutionList}
+                    chosenOption={chosenOption}
+                />
                 <Page
                     leftContent={(
                         <LeftPane
@@ -260,6 +268,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                             fireList={fireList}
                             pollutionList={pollutionList}
                             chosenOption={chosenOption}
+                            handleOptionClick={handleOptionClick}
                         />
                     )}
                 />

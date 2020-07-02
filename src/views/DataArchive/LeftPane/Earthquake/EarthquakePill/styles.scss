@@ -1,0 +1,44 @@
+
+.earthquakePill {
+    min-width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-extra-small-alt) ;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.minor {
+    border: 2px solid #fee5d9;
+}
+
+.light {
+    border: 2.5px solid #fcbba1;
+}
+
+.moderate {
+    border: 3px solid #fc9272;
+}
+
+.strong {
+    border: 3.5px solid #fb6a4a;
+}
+
+.major {
+    border: 4px solid #de2d26;
+}
+
+.great {
+    border: 5px solid #a50f15;
+}
+
+span {
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-size-small);
+    margin-left: var(--spacing-extra-small-alt);
+}
+

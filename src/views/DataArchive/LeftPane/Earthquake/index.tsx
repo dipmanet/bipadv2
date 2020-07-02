@@ -1,9 +1,8 @@
 import React from 'react';
 import * as PageType from '#store/atom/page/types';
 
-import PollutionItem from './PollutionItem';
+import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
-
 
 import styles from './styles.scss';
 
@@ -18,13 +17,7 @@ interface Props {
     data: Data;
 }
 
-interface PollutionData {
-    aqi: number;
-    createdOn: string;
-    observation: {}[];
-    title: string;
-}
-class Pollution extends React.PureComponent<Props> {
+class Earthquake extends React.PureComponent<Props> {
     public render() {
         const { data } = this.props;
 
@@ -40,16 +33,15 @@ class Pollution extends React.PureComponent<Props> {
             );
         }
         return (
-            <div className={styles.pollution}>
-                { data.map((datum: PollutionData) => (
-                    <PollutionItem
+            <div className={styles.earthquake}>
+                { data.map((datum: PageType.DataArchiveEarthquake) => (
+                    <EarthquakeItem
                         data={datum}
                     />
                 )) }
-                {/* <PollutionItem title="Bhaktapur" date="2019-11-13" time="11:25PM" /> */}
             </div>
         );
     }
 }
 
-export default Pollution;
+export default Earthquake;

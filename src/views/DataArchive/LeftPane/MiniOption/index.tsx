@@ -16,19 +16,23 @@ type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefine
 
 interface Props {
     handleMiniOptionsClick: Function;
+    handleOptionClick: Function;
     chosenOption: Options;
 }
 
 class MiniOption extends React.PureComponent<Props> {
     public render() {
-        const { handleMiniOptionsClick, chosenOption } = this.props;
+        const { handleMiniOptionsClick, handleOptionClick, chosenOption } = this.props;
         return (
             <div
                 className={styles.miniOption}
             >
                 <div
                     role="presentation"
-                    onClick={() => handleMiniOptionsClick('Rain')}
+                    onClick={() => {
+                        handleMiniOptionsClick('Rain');
+                        handleOptionClick('Rain');
+                    }}
                     className={_cs(styles.option, chosenOption === 'Rain' && styles.active)}
                 >
                     <ScalableVectorGraphics
@@ -40,7 +44,10 @@ class MiniOption extends React.PureComponent<Props> {
                 </div>
                 <div
                     role="presentation"
-                    onClick={() => handleMiniOptionsClick('River')}
+                    onClick={() => {
+                        handleMiniOptionsClick('River');
+                        handleOptionClick('River');
+                    }}
                     className={_cs(styles.option, chosenOption === 'River' && styles.active)}
                 >
                     <ScalableVectorGraphics
@@ -52,7 +59,10 @@ class MiniOption extends React.PureComponent<Props> {
                 </div>
                 <div
                     role="presentation"
-                    onClick={() => handleMiniOptionsClick('Earthquake')}
+                    onClick={() => {
+                        handleMiniOptionsClick('Earthquake');
+                        handleOptionClick('Earthquake');
+                    }}
                     className={_cs(styles.option, chosenOption === 'Earthquake' && styles.active)}
                 >
                     <ScalableVectorGraphics
@@ -64,7 +74,10 @@ class MiniOption extends React.PureComponent<Props> {
                 </div>
                 <div
                     role="presentation"
-                    onClick={() => handleMiniOptionsClick('Pollution')}
+                    onClick={() => {
+                        handleMiniOptionsClick('Pollution');
+                        handleOptionClick('Pollution');
+                    }}
                     className={_cs(styles.option, chosenOption === 'Pollution' && styles.active)}
                 >
                     <ScalableVectorGraphics
@@ -76,7 +89,10 @@ class MiniOption extends React.PureComponent<Props> {
                 </div>
                 <div
                     role="presentation"
-                    onClick={() => handleMiniOptionsClick('Fire')}
+                    onClick={() => {
+                        handleMiniOptionsClick('Fire');
+                        handleOptionClick('Fire');
+                    }}
                     className={_cs(styles.option, chosenOption === 'Fire' && styles.active)}
                 >
                     <ScalableVectorGraphics

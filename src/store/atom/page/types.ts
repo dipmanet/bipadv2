@@ -493,6 +493,19 @@ export interface PageState {
     profileContactPage: ProfileContactPage;
 }
 
+// Data Archive
+export interface DataArchiveEarthquake {
+    id?: number;
+    description?: string;
+    point?: {
+        type: string;
+        coordinates: [ number, number];
+    };
+    magnitude: number;
+    address: string;
+    eventOn: string;
+}
+
 // ACTION TYPES
 
 // eslint-disable-next-line import/prefer-default-export

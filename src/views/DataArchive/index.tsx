@@ -271,7 +271,10 @@ class DataArchive extends React.PureComponent <Props, State> {
                     />
                 )}
                 {!showInitial && (
-                    <RegularPage chosenOption={chosenOption} />
+                    <RegularPage
+                        handleOptionClick={this.handleOptionClick}
+                        chosenOption={chosenOption}
+                    />
                 )}
             </>
         );

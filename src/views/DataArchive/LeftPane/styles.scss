@@ -5,4 +5,9 @@
     background-color: var(--color-foreground);
     overflow: auto;
     height: 100%;
+
+    .content {
+        flex: 1;
+        overflow: auto;
+    }
 }

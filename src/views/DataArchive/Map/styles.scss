@@ -1,0 +1,40 @@
+.tooltip {
+    border: 1px solid black;
+    padding: var(--spacing-medium);
+    width: 200px;
+    background-color: white;
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-medium);
+      margin-bottom: var(--spacing-small);
+      
+      span {
+        background-color: red;
+        padding: .3rem .5rem;
+        color: white;
+        border-radius: 16px;
+        min-width: 45px;
+        text-align: center;
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  
+    .description {
+      margin-bottom: 8px;
+      font-size: var(--font-size-small);
+    }
+
+    .key {
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+      
+      .value {
+        font-size: 0.8rem;
+      }
+  }
+
+  
