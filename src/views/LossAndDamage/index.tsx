@@ -296,18 +296,33 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     })
 
     private handleStartDateChange = (startDate) => {
-        const { endDate } = this.state;
-        const { requests: { incidentsGetRequest } } = this.props;
+        // const { endDate } = this.state;
+        // const { requests: { incidentsGetRequest } } = this.props;
 
-        incidentsGetRequest.do({
-            ...getDatesInIsoString(startDate, endDate),
-        });
+        // incidentsGetRequest.do({
+        //     ...getDatesInIsoString(startDate, endDate),
+        // });
+
+        this.setState({ startDate });
     }
 
     private handleEndDateChange = (endDate) => {
-        const { startDate } = this.state;
-        const { requests: { incidentsGetRequest } } = this.props;
+        // const { startDate } = this.state;
+        // const { requests: { incidentsGetRequest } } = this.props;
 
+        // incidentsGetRequest.do({
+        //     ...getDatesInIsoString(startDate, endDate),
+        // });
+        this.setState({ endDate });
+    }
+
+    private handleSubmitClick = () => {
+        const { startDate, endDate } = this.state;
+
+        if (startDate > endDate) {
+            return;
+        }
+        const { requests: { incidentsGetRequest } } = this.props;
         incidentsGetRequest.do({
             ...getDatesInIsoString(startDate, endDate),
         });
@@ -326,6 +341,9 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             startDate,
             endDate,
         } = this.state;
+
+        console.log('StartDate: ', startDate);
+        console.log('EndDate: ', endDate);
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
         const pending = getPending(requests, 'incidentsGetRequest');
@@ -375,7 +393,21 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         value={endDate}
                                         onChange={this.handleEndDateChange}
                                     />
+                                    <div
+                                        className={styles.submitButton}
+                                        onClick={this.handleSubmitClick}
+                                        role="presentation"
+                                    >
+                                        Submit
+                                    </div>
                                 </div>
+                                { startDate > endDate
+                                        && (
+                                            <div className={styles.warningText}>
+                                                WARNING! Start date cannot be greater than End Date
+                                            </div>
+                                        )
+                                }
                                 <div className={styles.sourceDetails}>
                                     <div className={styles.infoIconContainer}>
                                         <Icon
