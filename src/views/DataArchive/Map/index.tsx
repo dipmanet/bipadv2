@@ -79,12 +79,34 @@ class DataArchiveMap extends React.PureComponent<Props> {
         return true;
     }
 
+    private magnitudeClassSelector = (magnitude: number): string => {
+        if (magnitude < 4) {
+            return styles.minor;
+        }
+        if (magnitude < 5) {
+            return styles.light;
+        }
+        if (magnitude < 6) {
+            return styles.moderate;
+        }
+        if (magnitude < 7) {
+            return styles.strong;
+        }
+        if (magnitude < 8) {
+            return styles.major;
+        }
+        if (magnitude >= 8) {
+            return styles.great;
+        }
+        return styles.good;
+    }
+
     private earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }:
     {address: string; description: string; eventOn: string; magnitude: number}) => (
         <div className={styles.tooltip}>
             <div className={styles.header}>
                 <h3>{ address }</h3>
-                <span>
+                <span className={this.magnitudeClassSelector(magnitude)}>
                     { magnitude }
                     {' '}
                     ML

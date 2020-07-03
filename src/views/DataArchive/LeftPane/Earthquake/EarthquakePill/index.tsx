@@ -9,22 +9,22 @@ interface Props {
 
 class EarthquakePill extends React.PureComponent <Props> {
     private magnitudeClassSelector = (magnitude: number): string => {
-        if (magnitude <= 3) {
+        if (magnitude < 4) {
             return styles.minor;
         }
-        if (magnitude <= 4) {
+        if (magnitude < 5) {
             return styles.light;
         }
-        if (magnitude <= 5) {
+        if (magnitude < 6) {
             return styles.moderate;
         }
-        if (magnitude <= 6) {
+        if (magnitude < 7) {
             return styles.strong;
         }
-        if (magnitude <= 7) {
+        if (magnitude < 8) {
             return styles.major;
         }
-        if (magnitude > 8) {
+        if (magnitude >= 8) {
             return styles.great;
         }
         return styles.good;
