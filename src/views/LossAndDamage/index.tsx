@@ -118,8 +118,10 @@ const DEFAULT_END_DATE = today;
 
 const requestQuery = ({
     params: {
-        startDate = DEFAULT_START_DATE.toISOString(),
-        endDate = DEFAULT_END_DATE.toISOString(),
+        // startDate = DEFAULT_START_DATE.toISOString(),
+        // endDate = DEFAULT_END_DATE.toISOString(),
+        startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
+        endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
     } = {},
 }) => ({
     expand: ['loss.peoples', 'wards'],
@@ -143,6 +145,11 @@ const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> 
 const getDatesInIsoString = (startDate: string, endDate: string) => ({
     startDate: startDate ? (new Date(startDate)).toISOString() : undefined,
     endDate: endDate ? (new Date(endDate)).toISOString() : undefined,
+});
+
+const getDatesInLocaleTime = (startDate: string, endDate: string) => ({
+    startDate: startDate ? `${startDate}T00:00:00+05:45` : undefined,
+    endDate: endDate ? `${endDate}T23:59:59+05:45` : undefined,
 });
 
 const timeTickFormatter = (timestamp: number) => {
@@ -324,7 +331,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         }
         const { requests: { incidentsGetRequest } } = this.props;
         incidentsGetRequest.do({
-            ...getDatesInIsoString(startDate, endDate),
+            ...getDatesInLocaleTime(startDate, endDate),
         });
     }
 
