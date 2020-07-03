@@ -93,15 +93,17 @@ export default class TabularView extends React.PureComponent {
             {
                 key: 'incidentOn',
                 value: { title: 'Incident on' },
-                cellRenderer: TableDateCell,
-                comparator: createComparator(compareDate, 'incidentOn'),
+                // cellRenderer: TableDateCell,
+                // comparator: createComparator(compareDate, 'incidentOn'),
+                comparator: createComparator(compareNumber, 'incidentOn'),
+                transformer: value => (value ? new Date(value.incidentOn).toISOString().split('T')[0] : ''),
             },
-            {
-                key: 'createdOn',
-                value: { title: 'Created on' },
-                cellRenderer: TableDateCell,
-                comparator: createComparator(compareDate, 'createdOn'),
-            },
+            // {
+            //     key: 'createdOn',
+            //     value: { title: 'Created on' },
+            //     cellRenderer: TableDateCell,
+            //     comparator: createComparator(compareDate, 'createdOn'),
+            // },
             {
                 key: 'provinceTitle',
                 value: { title: 'Province' },
