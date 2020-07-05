@@ -2,6 +2,7 @@ import React from 'react';
 import {
     _cs,
     listToMap,
+    isDefined,
 } from '@togglecorp/fujs';
 import { extent } from 'd3-array';
 import RangeInput from 'react-input-range';
@@ -19,23 +20,26 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 
 import LayerSelectionItem from '#components/LayerSelectionItem';
+import LayerSelection from '#components/LayerSelection';
 import Loading from '#components/Loading';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import LayerDetailModalButton from '#components/LayerDetailModalButton';
 
 import RiskTable from './RiskTable';
 
 import { LayerWithGroup, LayerGroup } from '#store/atom/page/types';
-import { RiskData } from '#types';
+import { RiskData, LandslideDataGeoJson, LandslideDataFeature } from '#types';
 
 import {
     getResults,
+    getResponse,
     isAnyRequestPending,
 } from '#utils/request';
 
-import { generatePaint } from '#utils/domain';
+import {
+    generatePaint,
+    getLayerHierarchy,
+} from '#utils/domain';
 
-import metadata from './metadata.json';
 import styles from './styles.scss';
 
 const DataTableModalButton = modalize(Button);
@@ -59,6 +63,21 @@ interface State {
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
     riskGetRequest: {
         url: '/earthquake-riskscore/',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideDistrictRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&outputFormat=application%2Fjson&propertyName=district_d,District_r',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideMunicipalityRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali',
+        method: methods.GET,
+        onMount: true,
+    },
+    durhamLandslideWardRequest: {
+        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4',
         method: methods.GET,
         onMount: true,
     },
@@ -87,6 +106,18 @@ const colorGrade = [
     '#c95733',
     '#be3b20',
     '#b31010',
+];
+
+const landslideColorGrade = [
+    '#4288bd',
+    '#6692b5',
+    '#abddc4',
+    '#e6f598',
+    '#ffffbf',
+    '#fee08b',
+    '#fdae61',
+    '#f46d43',
+    '#d53e4f',
 ];
 
 const RiskTooltipOutput = ({ label, value }) => (
@@ -118,9 +149,71 @@ const RiskTooltip = ({ layer, feature }) => (
     </div>
 );
 
+const LandslideTooltip = ({ layer, feature }) => (
+    <div className={styles.riskTooltip}>
+        <h3 className={styles.heading}>
+            { feature.properties.title }
+        </h3>
+        <div className={styles.content}>
+            {
+                isDefined(feature.state.value) && (
+                    <RiskTooltipOutput
+                        label="Risk Score:"
+                        value={feature.state.value}
+                    />
+                )
+            }
+        </div>
+    </div>
+);
+
 const getRankMap = memoize(data => (
     listToMap(data, d => d.district, d => d.rank)
 ));
+
+const transformLandslideDataToLayer = (
+    {
+        data = [],
+        adminLevel,
+        dataKey,
+        dataValue,
+    }: {
+        data: LandslideDataFeature[];
+        adminLevel: string;
+        dataKey: string;
+        dataValue: string;
+    },
+    layer = {},
+) => {
+    const mapState = data.map(d => ({
+        id: d.properties[dataKey],
+        value: d.properties[dataValue],
+    }));
+
+    const layerGroup = layer.group || {};
+
+    // const [min, max] = extent(mapState, d => d.value);
+    const min = 0;
+    const max = 1;
+    const { paint, legend } = generatePaint(landslideColorGrade, min || 0, max || 0);
+
+    return {
+        longDescription: layerGroup.longDescription,
+        metadata: layerGroup.metadata,
+        id: layer.id,
+        title: layer.title,
+        type: 'choropleth',
+        adminLevel,
+        layername: layer.layername,
+        legendTitle: layer.legendTitle,
+        opacity: 1,
+        mapState,
+        paint,
+        legend,
+        tooltipRenderer: LandslideTooltip,
+        minValue: min,
+    };
+};
 
 const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
     const mapState = data.map(d => ({
@@ -128,20 +221,20 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         value: d.data.riskScore,
     }));
 
-    const layerGroup = layer.group || {};
+    // const layerGroup = layer.group || {};
 
     const [min, max] = extent(mapState, d => d.value);
     const { paint, legend } = generatePaint(colorGrade, min || 0, max || 0);
 
     return {
-        longDescription: layerGroup.longDescription,
-        metadata: layerGroup.metadata,
-        id: 'durham-earthquake-risk',
-        title: 'Durham earthquake risk',
+        // longDescription: layerGroup.longDescription,
+        // metadata: layerGroup.metadata,
+        id: layer.id,
+        title: layer.title,
         type: 'choropleth',
         adminLevel: 'district',
-        layername: 'Durham earthquake risk',
-        legendTitle: 'Risk score',
+        layername: layer.layername,
+        legendTitle: layer.legendTitle,
         opacity: 1,
         mapState,
         paint,
@@ -170,17 +263,6 @@ class Risk extends React.PureComponent<Props, State> {
             showMetricSettings: false,
             opacityValue: 1,
         };
-    }
-
-    private handleRiskGetRequestSuccess = (response) => {
-        const { addLayer } = this.context;
-        const { metricValues } = this.state;
-        const riskData = this.getRiskData(response.results, metricValues);
-        const riskLayer = transformRiskDataToLayer(riskData);
-
-        if (addLayer) {
-            addLayer(riskLayer);
-        }
     }
 
     private handleMetricSliderChange = (key, value) => {
@@ -239,12 +321,20 @@ class Risk extends React.PureComponent<Props, State> {
         }));
     }
 
+    private getHierarchy = memoize(getLayerHierarchy);
+
     public render() {
         const {
             className,
             requests,
             layerList,
+            layerGroupList,
         } = this.props;
+
+        const layers = this.getHierarchy(
+            layerList,
+            layerGroupList,
+        );
 
         const {
             showMetricSettings,
@@ -255,7 +345,35 @@ class Risk extends React.PureComponent<Props, State> {
 
         const pending = isAnyRequestPending(requests);
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
+        const districtLandslideRaw = getResponse(requests, 'durhamLandslideDistrictRequest') as LandslideDataGeoJson;
+        const municipalityLandslideRaw = getResponse(requests, 'durhamLandslideMunicipalityRequest') as LandslideDataGeoJson;
+        const wardLandslideRaw = getResponse(requests, 'durhamLandslideWardRequest') as LandslideDataGeoJson;
         const riskData = this.getRiskData(riskDataRaw, metricValues);
+
+        const landslideLayerToDataMap = {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_district: {
+                data: districtLandslideRaw.features,
+                adminLevel: 'district',
+                dataKey: 'district_d',
+                dataValue: 'District_r',
+            },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_municipality: {
+                data: municipalityLandslideRaw.features,
+                adminLevel: 'municipality',
+                dataKey: 'municipali',
+                dataValue: 'Palika_ris',
+            },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            durham_landslide_hazard_risk_ward: {
+                data: wardLandslideRaw.features,
+                adminLevel: 'ward',
+                dataKey: 'ward_id',
+                dataValue: 'Ward_War_4',
+            },
+        };
+
         const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
             <>
                 <DataTableModalButton
@@ -281,25 +399,16 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             </>
         ));
-        const layer = layerList[0];
 
-        return (
-            <>
-                <Loading pending={pending} />
-                <div className={_cs(styles.risk, className)}>
-                    <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            Layers
-                        </h2>
-                    </header>
-                    <div className={styles.content}>
+        const RiskLayerSelectionItem = (p) => {
+            const { data: layer } = p;
+            if (layer.layername === 'durham_earthquake_risk_score') {
+                return (
+                    <React.Fragment>
                         <LayerSelectionItem
                             data={riskLayer}
                             disabled={pending}
                         />
-                        <div className={styles.description}>
-                            { layer && layer.group && layer.group.shortDescription }
-                        </div>
                         <div className={styles.options}>
                             { showMetricSettings && (
                                 <div className={styles.metricSettings}>
@@ -312,7 +421,9 @@ class Risk extends React.PureComponent<Props, State> {
                                             transparent
                                             iconName="chevronUp"
                                             onClick={() => (
-                                                this.setState({ showMetricSettings: false })
+                                                this.setState({
+                                                    showMetricSettings: false,
+                                                })
                                             )}
                                         />
                                     </header>
@@ -332,7 +443,8 @@ class Risk extends React.PureComponent<Props, State> {
                                                         maxLabel: styles.maxLabel,
                                                         valueLabel: styles.valueLabel,
                                                         inputRange: _cs(
-                                                            rangeInputDefaultClassNames.inputRange,
+                                                            rangeInputDefaultClassNames
+                                                                .inputRange,
                                                             styles.rangeInput,
                                                         ),
                                                     }}
@@ -341,7 +453,10 @@ class Risk extends React.PureComponent<Props, State> {
                                                     step={1}
                                                     value={this.state.metricValues[m]}
                                                     onChange={(value) => {
-                                                        this.handleMetricSliderChange(m, value);
+                                                        this.handleMetricSliderChange(
+                                                            m,
+                                                            value,
+                                                        );
                                                     }}
                                                 />
                                             </div>
@@ -350,8 +465,36 @@ class Risk extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
-                    </div>
-                </div>
+                    </React.Fragment>
+                );
+            }
+
+            return (
+                <LayerSelectionItem
+                    key={layer.id}
+                    data={
+                        landslideLayerToDataMap[layer.layername] ? (
+                            transformLandslideDataToLayer(
+                                landslideLayerToDataMap[layer.layername],
+                                layer,
+                            )
+                        ) : (
+                            layer
+                        )
+                    }
+                    disabled={pending}
+                />
+            );
+        };
+
+        return (
+            <>
+                <Loading pending={pending} />
+                <LayerSelection
+                    layerList={layers}
+                    layerSelectionItem={RiskLayerSelectionItem}
+                    className={_cs(styles.risk, className)}
+                />
             </>
         );
     }
