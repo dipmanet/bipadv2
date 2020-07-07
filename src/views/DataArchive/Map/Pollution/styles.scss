@@ -1,0 +1,95 @@
+.main-wrapper {
+    border: 1px solid black;
+    width: 270px;
+    background-color: white;
+
+    .line {
+        border: 0.5px solid rgb(240, 240, 240);
+    }
+
+    .get-details {
+        padding: var(--spacing-small) var(--spacing-medium);
+        text-align: right;
+      
+        span {
+        cursor: pointer;
+        color: #4A9A67;
+        font-weight: bold !important;
+        font-size: var(--font-size-extra-small);
+        text-transform: uppercase;
+
+            &:hover {
+                font-weight: bolder;
+                color: #E35163;
+            }
+        }        
+    }
+}
+.tooltip {
+    padding: var(--spacing-medium);
+    padding-bottom: var(--spacing-extra-small-alt);
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-medium);
+      margin-bottom: var(--spacing-small);
+      
+      span {
+        padding: .3rem .5rem;
+        border-radius: 16px;
+        min-width: 45px;
+        text-align: center;
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  
+    .description {
+      margin-bottom: var(--spacing-small);
+      font-size: var(--font-size-super-small);
+    }
+
+    .key {
+        font-weight: bold;
+        font-size: var(--font-size-extra-small);
+      }
+      
+      .value {
+        font-size: var(--font-size-extra-small-alt);
+      }
+}
+
+.data-archive-pollution-map {
+    
+}
+
+.good {
+    background-color: #4A9A67;
+    color: white;
+}
+
+.moderate {
+    background-color: #FEDE33;
+    color: black;
+}
+
+.unhealthy-for-sensitive {
+    background-color: #F39732;
+    color: black;
+}
+
+.unhealthy {
+    background-color: #CE3D32;
+    color: white;
+}
+
+.very-unhealthy {
+    background-color: #6A3D98;
+    color: white;
+}
+
+.hazardous {
+    background-color: #7F2323;
+    color: white;
+}

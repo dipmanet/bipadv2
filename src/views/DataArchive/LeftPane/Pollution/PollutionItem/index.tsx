@@ -6,15 +6,8 @@ import PollutionPill from '../PollutionPill';
 
 import styles from './styles.scss';
 
-interface PollutionData {
-    aqi: number;
-    createdOn: string;
-    observation: {}[];
-    title: string;
-}
-
 interface Props {
-    data: PollutionData;
+    data: PageType.DataArchivePollution;
 }
 
 class PollutionItem extends React.PureComponent<Props> {
@@ -37,14 +30,20 @@ class PollutionItem extends React.PureComponent<Props> {
                                 className={styles.icon}
                                 name="calendar"
                             />
-                            <div className={styles.dateValue}>{this.parseDate(createdOn)}</div>
+                            <div className={styles.dateValue}>
+                                {
+                                    createdOn && this.parseDate(createdOn)}
+                            </div>
                         </div>
                         <div className={styles.time}>
                             <Icon
                                 className={styles.icon}
                                 name="dataRange"
                             />
-                            <div className={styles.timeValue}>{this.parseTime(createdOn)}</div>
+                            <div className={styles.timeValue}>
+                                {
+                                    createdOn && this.parseTime(createdOn)}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -267,6 +267,22 @@ export const setRealTimeFiltersAction = (
     pristine,
 });
 
+// data archive action creator
+
+export const setDataArchivePollutionListAction = (
+    { dataArchivePollutionList }:
+    { dataArchivePollutionList: Type.DataArchivePollution[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST,
+    dataArchivePollutionList,
+});
+
+export const setDataArchiveEarthquakeListAction = (
+    { dataArchiveEarthquakeList }:
+    { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST,
+    dataArchiveEarthquakeList,
+});
+
 // loss and damage action creator
 export const setLossAndDamageFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
@@ -917,6 +933,42 @@ export const setRealTimeFilters = (
     return newState;
 };
 
+// data archive
+export const setDataArchivePollutionList = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionList,
+) => {
+    const {
+        dataArchivePollutionList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchivePollutionList = dataArchivePollutionList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveEarthquakeList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeList,
+) => {
+    const {
+        dataArchiveEarthquakeList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveEarthquakeList = dataArchiveEarthquakeList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+
 // loss and damage page
 export const setLossAndDamageFilters = (
     state: Type.PageState,
@@ -1154,6 +1206,10 @@ export default function routeReducer(
             return setRealTimeFireList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST:
             return setRealTimePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST:
+            return setDataArchivePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST:
+            return setDataArchiveEarthquakeList(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:

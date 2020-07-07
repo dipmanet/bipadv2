@@ -431,6 +431,15 @@ export interface RealTimeMonitoringPage {
     filters: Filters;
 }
 
+export interface DataArchivePage {
+    // dataArchiveRainList: DataArchiveRain[];
+    // dataArchiveRiverList: DataArchiveRiver[];
+    dataArchiveEarthquakeList: DataArchiveEarthquake[];
+    // dataArchiveFireList: DataArchiveFire[];
+    dataArchivePollutionList: DataArchivePollution[];
+    filters: Filters;
+}
+
 export interface ProjectsProfileFilters {
     faramValues: {
         region?: Region;
@@ -487,6 +496,7 @@ export interface PageState {
     incidentPage: IncidentPage;
     responsePage: ResponsePage;
     realTimeMonitoringPage: RealTimeMonitoringPage;
+    dataArchivePage: DataArchivePage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
@@ -504,6 +514,13 @@ export interface DataArchiveEarthquake {
     magnitude: number;
     address: string;
     eventOn: string;
+}
+
+export interface DataArchivePollution extends RealTimePollution{
+    title?: string;
+    description?: string;
+    elevation?: number | null;
+    createdOn?: string;
 }
 
 // ACTION TYPES
@@ -557,6 +574,10 @@ export enum PageType {
     RTM__SET_REAL_TIME_FIRE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FIRE',
     RTM__SET_REAL_TIME_POLLUTION_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_POLLUTION',
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
+
+    // data archive
+    DA__SET_DATA_ARCHIVE_POLLUTION_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -762,6 +783,18 @@ export interface SetRealTimeFilters extends FiltersWithRegion {
     type: typeof PageType.RTM__SET_REAL_TIME_FILTERS;
 }
 
+// data archive
+
+export interface SetDataArchivePollutionList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST;
+    dataArchivePollutionList: DataArchivePollution[];
+}
+
+export interface SetDataArchiveEarthquakeList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST;
+    dataArchiveEarthquakeList: DataArchiveEarthquake[];
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -845,5 +878,6 @@ export type PageActionTypes = (
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
-    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType
+    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
+    SetDataArchivePollutionList | SetDataArchiveEarthquakeList
 );

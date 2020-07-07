@@ -9,6 +9,8 @@ import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
+import DataArchiveContext from '#components/DataArchiveContext';
+
 
 import {
     mapStyles,
@@ -22,18 +24,10 @@ import {
     fireToGeojson,
     pollutionToGeojson,
 } from '#utils/domain';
-import * as PageType from '#store/atom/page/types';
 
 
 import styles from './styles.scss';
 
-type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
-
-interface Props {
-    earthquakeList: PageType.RealTimeEarthquake[];
-    pollutionList: PageType.RealTimePollution[];
-    chosenOption: Options;
-}
 
 const DataArchiveToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -44,18 +38,17 @@ DataArchiveToolTip.propTypes = {
     params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-class DataArchiveMap extends React.PureComponent<Props> {
-    public constructor(props: Props) {
+class DataArchiveMap extends React.PureComponent {
+    constructor(props) {
         super(props);
-
         this.state = {};
     }
 
-    private getEarthquakeFeatureCollection = memoize(earthquakeToGeojson);
+    getEarthquakeFeatureCollection = memoize(earthquakeToGeojson);
 
-    private getPollutionFeatureCollection = memoize(pollutionToGeojson);
+    getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
-    private handleEarthquakeClick = (feature, lngLat) => {
+    handleEarthquakeClick = (feature, lngLat) => {
         const {
             properties: {
                 address,
@@ -79,7 +72,7 @@ class DataArchiveMap extends React.PureComponent<Props> {
         return true;
     }
 
-    private magnitudeClassSelector = (magnitude: number): string => {
+    magnitudeClassSelector = (magnitude) => {
         if (magnitude < 4) {
             return styles.minor;
         }
@@ -101,8 +94,7 @@ class DataArchiveMap extends React.PureComponent<Props> {
         return styles.good;
     }
 
-    private earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }:
-    {address: string; description: string; eventOn: string; magnitude: number}) => (
+    earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
         <div className={styles.tooltip}>
             <div className={styles.header}>
                 <h3>{ address }</h3>
@@ -127,32 +119,10 @@ class DataArchiveMap extends React.PureComponent<Props> {
                     />
                 </div>
             </div>
-            {/* <h3>
-                {address}
-            </h3>
-            <TextOutput
-                label="Description"
-                value={description}
-            />
-            <TextOutput
-                label="Event On"
-                value={(
-                    <FormattedDate
-                        value={eventOn}
-                        mode="yyyy-MM-dd hh:mm"
-                    />
-                )}
-            />
-            <TextOutput
-                label="Magnitude"
-                value={magnitude}
-                isNumericValue
-                precision={1}
-            /> */}
         </div>
     )
 
-    private handleTooltipClose = () => {
+    handleTooltipClose = () => {
         this.setState({
             tooltipRenderer: null,
             coordinates: undefined,
@@ -160,8 +130,12 @@ class DataArchiveMap extends React.PureComponent<Props> {
         });
     }
 
-    private render() {
-        const { earthquakeList, pollutionList, chosenOption } = this.props;
+    componentDidMount() {
+        this.handleTooltipClose();
+    }
+
+    render() {
+        const { chosenOption, data } = this.props;
 
         const {
             tooltipRenderer,
@@ -170,17 +144,16 @@ class DataArchiveMap extends React.PureComponent<Props> {
         } = this.state;
 
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
-            earthquakeList,
+            data,
         );
         const pollutionFeatureCollection = this.getPollutionFeatureCollection(
-            pollutionList,
+            data,
         );
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
             offset: 8,
         };
-        console.log('Map Option: ', chosenOption);
         return (
             <div className={styles.dataArchiveMap}>
                 <CommonMap
@@ -273,4 +246,5 @@ class DataArchiveMap extends React.PureComponent<Props> {
     }
 }
 
+DataArchiveMap.contextType = DataArchiveContext;
 export default DataArchiveMap;

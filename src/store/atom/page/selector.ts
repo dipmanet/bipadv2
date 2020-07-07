@@ -21,6 +21,8 @@ const responsePageSelector = ({ page }: AppState) => page.responsePage;
 
 const realTimeMonitoringPageSelector = ({ page }: AppState) => page.realTimeMonitoringPage;
 
+const dataArchivePageSelector = ({ page }: AppState) => page.dataArchivePage;
+
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
@@ -455,6 +457,17 @@ export const realTimeFiltersSelector = createSelector(
 export const realTimeFiltersValuesSelector = createSelector(
     realTimeFiltersSelector,
     ({ faramValues }) => faramValues,
+);
+
+// data archive
+export const dataArchivePollutionListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchivePollutionList }) => dataArchivePollutionList,
+);
+
+export const dataArchiveEarthquakeListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveEarthquakeList }) => dataArchiveEarthquakeList,
 );
 
 // loss and damage page

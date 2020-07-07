@@ -4,7 +4,9 @@ import { compose, Dispatch } from 'redux';
 
 import Page from '#components/Page';
 import LeftPane from '../LeftPane';
-import Map from '../Map';
+import EarthquakeMap from '../Map/Earthquake';
+import PollutionMap from '../Map/Pollution';
+import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 
 import {
     createConnectedRequestCoordinator,
@@ -14,17 +16,11 @@ import {
     methods,
 } from '#request';
 
-import {
-    isAnyRequestPending,
-} from '#utils/request';
-
 import * as PageType from '#store/atom/page/types';
 
 import { FiltersElement } from '#types';
 
 import { AppState } from '#store/types';
-
-import Loading from '#components/Loading';
 
 import {
     setRealTimeRainListAction,
@@ -100,7 +96,9 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 
-interface State {}
+interface State {
+    data: [];
+}
 
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -157,32 +155,32 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             schemaName: 'riverResponse',
         },
     },
-    realTimeEarthquakeRequest: {
-        url: '/earthquake/',
-        method: methods.GET,
-        query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
-        }),
-        onSuccess: ({ response, props: { setRealTimeEarthquakeList } }) => {
-            interface Response { results: PageType.RealTimeEarthquake[] }
-            const { results: realTimeEarthquakeList = [] } = response as Response;
-            setRealTimeEarthquakeList({ realTimeEarthquakeList });
-        },
-        onPropsChanged: {
-            filters: ({
-                props: { filters: { region } },
-                prevProps: { filters: {
-                    region: prevRegion,
-                } },
-            }) => region !== prevRegion,
-            globalFilters: true,
-        },
-        onMount: true,
-        extras: {
-            schemaName: 'earthquakeResponse',
-        },
-    },
+    // realTimeEarthquakeRequest: {
+    //     url: '/earthquake/',
+    //     method: methods.GET,
+    //     query: ({ props: { filters, globalFilters } }) => ({
+    //         ...transformDateRangeFilterParam(filters, 'incident_on'),
+    //         ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
+    //     }),
+    //     onSuccess: ({ response, props: { setRealTimeEarthquakeList } }) => {
+    //         interface Response { results: PageType.RealTimeEarthquake[] }
+    //         const { results: realTimeEarthquakeList = [] } = response as Response;
+    //         setRealTimeEarthquakeList({ realTimeEarthquakeList });
+    //     },
+    //     onPropsChanged: {
+    //         filters: ({
+    //             props: { filters: { region } },
+    //             prevProps: { filters: {
+    //                 region: prevRegion,
+    //             } },
+    //         }) => region !== prevRegion,
+    //         globalFilters: true,
+    //     },
+    //     onMount: true,
+    //     extras: {
+    //         schemaName: 'earthquakeResponse',
+    //     },
+    // },
     realTimeFireRequest: {
         url: '/fire/',
         method: methods.GET,
@@ -210,35 +208,46 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             schemaName: 'fireResponse',
         },
     },
-    realTimePollutionRequest: {
-        url: '/pollution/',
-        method: methods.GET,
-        query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-        }),
-        onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
-            interface Response { results: PageType.DataArchivePollution[] }
-            const { results: realTimePollutionList = [] } = response as Response;
-            setRealTimePollutionList({ realTimePollutionList });
-        },
-        onPropsChanged: {
-            filters: ({
-                props: { filters: { region } },
-                prevProps: { filters: {
-                    region: prevRegion,
-                } },
-            }) => region !== prevRegion,
-            globalFilters: true,
-        },
-        onMount: true,
-        extras: {
-            schemaName: 'pollutionResponse',
-        },
-    },
+    // realTimePollutionRequest: {
+    //     url: '/pollution/',
+    //     method: methods.GET,
+    //     query: ({ props: { filters, globalFilters } }) => ({
+    //         ...transformDateRangeFilterParam(filters, 'incident_on'),
+    //         ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+    //     }),
+    //     onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
+    //         interface Response { results: PageType.DataArchivePollution[] }
+    //         const { results: realTimePollutionList = [] } = response as Response;
+    //         setRealTimePollutionList({ realTimePollutionList });
+    //     },
+    //     onPropsChanged: {
+    //         filters: ({
+    //             props: { filters: { region } },
+    //             prevProps: { filters: {
+    //                 region: prevRegion,
+    //             } },
+    //         }) => region !== prevRegion,
+    //         globalFilters: true,
+    //     },
+    //     onMount: true,
+    //     extras: {
+    //         schemaName: 'pollutionResponse',
+    //     },
+    // },
 };
 
 class RegularPage extends React.PureComponent <Props, State> {
+    public constructor(props: Props) {
+        super(props);
+        this.state = {
+            data: [],
+        };
+    }
+
+    private setData = (data: []) => {
+        this.setState({ data });
+    }
+
     public render() {
         const {
             rainList,
@@ -250,29 +259,45 @@ class RegularPage extends React.PureComponent <Props, State> {
             chosenOption,
             handleOptionClick,
         } = this.props;
-        const pending = isAnyRequestPending(requests);
+        const { data } = this.state;
+        const contextProps: DataArchiveContextProps = {
+            chosenOption,
+            handleOptionClick,
+            setData: this.setData,
+            data,
+        };
         return (
-            <div className="regularPage">
-                <Loading pending={pending} />
-                <Map
-                    earthquakeList={earthquakeList}
-                    pollutionList={pollutionList}
-                    chosenOption={chosenOption}
-                />
-                <Page
-                    leftContent={(
-                        <LeftPane
-                            rainList={rainList}
-                            riverList={riverList}
-                            earthquakeList={earthquakeList}
-                            fireList={fireList}
-                            pollutionList={pollutionList}
+            <DataArchiveContext.Provider value={contextProps}>
+                <div className="regularPage">
+                    {chosenOption === 'Earthquake' && (
+                        <EarthquakeMap
+                            data={data}
                             chosenOption={chosenOption}
-                            handleOptionClick={handleOptionClick}
                         />
                     )}
-                />
-            </div>
+                    {chosenOption === 'Pollution' && (
+                        <PollutionMap
+                            data={data}
+                            chosenOption={chosenOption}
+                        />
+                    )}
+                    <Page
+                        leftContent={(
+                            <DataArchiveContext.Provider value={contextProps}>
+                                <LeftPane
+                                    rainList={rainList}
+                                    riverList={riverList}
+                                    earthquakeList={earthquakeList}
+                                    fireList={fireList}
+                                    pollutionList={pollutionList}
+                                    chosenOption={chosenOption}
+                                    handleOptionClick={handleOptionClick}
+                                />
+                            </DataArchiveContext.Provider>
+                        )}
+                    />
+                </div>
+            </DataArchiveContext.Provider>
         );
     }
 }
