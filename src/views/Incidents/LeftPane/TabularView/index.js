@@ -52,6 +52,13 @@ const createComparator = (comparator, key) => (a, b, d) => comparator(
     d,
 );
 
+const getDateFromMilliseconds = (milliseconds) => {
+    const date = new Date(milliseconds);
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split('T')[0];
+};
+
 export default class TabularView extends React.PureComponent {
     static propTypes = propTypes
 
@@ -96,7 +103,7 @@ export default class TabularView extends React.PureComponent {
                 // cellRenderer: TableDateCell,
                 // comparator: createComparator(compareDate, 'incidentOn'),
                 comparator: createComparator(compareNumber, 'incidentOn'),
-                transformer: value => (value ? new Date(value.incidentOn).toISOString().split('T')[0] : ''),
+                transformer: value => (value ? getDateFromMilliseconds(value.incidentOn) : ''),
             },
             // {
             //     key: 'createdOn',
