@@ -106,9 +106,11 @@ const transformDataRangeToFilter = (
 
     const getFilter = (startDate?: Date, endDate?: Date) => ({
         // eslint-disable-next-line @typescript-eslint/camelcase
-        [start]: startDate ? startDate.toISOString() : undefined,
+        // [start]: startDate ? startDate.toISOString() : undefined,
+        [start]: startDate ? `${startDate.toISOString().split('T')[0]}T00:00:00+05:45` : undefined,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        [end]: endDate ? endDate.toISOString() : undefined,
+        // [end]: endDate ? endDate.toISOString() : undefined,
+        [end]: endDate ? `${endDate.toISOString().split('T')[0]}T23:59:59+05:45` : undefined,
     });
 
     if (rangeInDays !== 'custom') {
