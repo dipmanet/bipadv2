@@ -727,6 +727,7 @@ export function getRasterLegendUrl(layer: { layername: string }) {
 export function getLayerHierarchy(
     layerList: LayerWithGroup[],
     layerGroupList: LayerGroup[],
+    layerType = 'raster',
 ) {
     const tree: LayerHierarchy[] = [];
     const lookup: LayerMap = {};

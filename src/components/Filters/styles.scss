@@ -1,6 +1,18 @@
 .filters {
     padding: calc(var(--spacing-medium) - var(--spacing-small)) calc(var(--spacing-large) - var(--spacing-medium));
+    .submit-button {
+        padding: var(--spacing-small) var(--spacing-medium);
+        margin: var(--spacing-small) var(--spacing-medium);
+        background-color: #E35163;
+        display: inline-block;
+        font-weight: normal;
+        color: white;
+        cursor: pointer;
 
+        &:hover {
+            font-weight: bold;
+        }
+    }
     >.header {
         display: flex;
 
@@ -22,7 +34,7 @@
         .tabs {
             padding: var(--spacing-small) var(--spacing-medium);
         }
-
+        
         .filter-view-container {
             display: flex;
             flex-direction: column;

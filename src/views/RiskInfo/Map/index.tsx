@@ -8,7 +8,7 @@ import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
 
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-import { mapSources } from '#constants';
+import { mapSources, mapStyles } from '#constants';
 
 import CommonMap from '#components/CommonMap';
 
@@ -23,6 +23,13 @@ interface State {
 const sourceLayerByAdminLevel = {
     municipality: mapSources.nepal.layers.municipality,
     district: mapSources.nepal.layers.district,
+    ward: mapSources.nepal.layers.ward,
+};
+
+const linePaintByAdminLevel = {
+    municipality: mapStyles.municipality.choroplethOutline,
+    district: mapStyles.district.choroplethOutline,
+    ward: mapStyles.ward.choroplethOutline,
 };
 
 const tooltipOptions = {
@@ -96,6 +103,14 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             url: mapSources.nepal.url,
                         }}
                     >
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel[layer.adminLevel],
+                            }}
+                        />
                         <MapLayer
                             layerKey="choropleth-layer"
                             layerOptions={{

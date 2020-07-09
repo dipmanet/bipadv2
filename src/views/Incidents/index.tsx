@@ -36,6 +36,7 @@ import { hazardTypesList } from '#utils/domain';
 import {
     transformDataRangeToFilter,
     transformRegionToFilter,
+    transformDataRangeLocaleToFilter,
 } from '#utils/transformations';
 
 import Page from '#components/Page';
@@ -102,7 +103,8 @@ const transformFilters = ({
     ...otherFilters
 }: FiltersElement) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
 

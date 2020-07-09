@@ -29,7 +29,8 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.6,
+            'line-opacity': 0.8,
         },
         fill: {
             'fill-color': '#000000',
@@ -43,7 +44,8 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.27,
+            'line-opacity': 0.6,
         },
         fill: {
             'fill-color': '#000000',
@@ -57,7 +59,8 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.1,
+            'line-opacity': 0.5,
         },
         fill: {
             'fill-color': '#000000',
