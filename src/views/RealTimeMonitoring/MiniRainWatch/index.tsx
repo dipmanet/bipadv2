@@ -55,8 +55,8 @@ const durationOptions: KeyValue[] = [
 ];
 
 const defaultSort = {
-    key: 'lastHour',
-    order: 'dsc',
+    key: 'status',
+    order: 'asc',
 };
 
 const durationLabelSelector = (d: KeyValue) => d.label;
@@ -106,7 +106,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         {
             key: 'lastHour',
             label: 'Rainfall',
-            order: 3,
+            order: 5,
             modifier: (row: RealTimeRain) => {
                 const {
                     status,
@@ -132,6 +132,48 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             comparator: (a: RealTimeRain, b: RealTimeRain) => (
                 compareIntervalValues(a.averages, b.averages, duration)
             ),
+        },
+        {
+            key: 'createdOn',
+            label: 'Date',
+            order: 3,
+            sortable: true,
+            comparator: (a, b) => compareString(a.eventOn, b.eventOn),
+            modifier: (row: RealTimeRain) => {
+                const { createdOn } = row;
+
+                return (createdOn) ? (
+                    <div style={{ width: '60px' }}>
+                        {/* parsing date to appropiate format */}
+                        {createdOn.substring(0, createdOn.indexOf('T'))}
+                    </div>
+                ) : undefined;
+            },
+        },
+        {
+            key: 'time',
+            label: 'Time',
+            order: 4,
+            sortable: false,
+            modifier: (row: RealTimeRain) => {
+                const { createdOn } = row;
+                if (createdOn) {
+                    const date = new Date(createdOn);
+                    return (
+                        <div>
+                            {/* parsing date to time format */}
+                            {date.toISOString().split('T')[1].split('.')[0]}
+                        </div>
+                    );
+                } return undefined;
+            },
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            order: 6,
+            sortable: true,
+            comparator: (a, b) => compareString(a.status, b.status),
         },
     ]);
 

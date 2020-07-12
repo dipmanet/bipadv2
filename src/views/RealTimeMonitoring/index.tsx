@@ -250,8 +250,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 // the code below is different due to the requirement of rain icon to be triangle
 const rainLegendItems = [
     { color: 'transparent', label: 'Below Warning Level', style: styles.triangleBelowWarning },
-    { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
-    { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
+    // { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
+    { color: 'transparent', label: 'Warning Level', style: styles.triangleAboveWarning },
+    // { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
     { color: 'transparent', label: 'Status Not Available', style: styles.triangle },
 ];
 
