@@ -1,6 +1,6 @@
 export default {
     nepal: {
-        url: 'mapbox://neocmoha.9sgqk05q',
+        url: `${process.env.REACT_APP_MAP_SOURCE_NEPAL}`,
         layers: {
             province: 'provincegeo',
             district: 'districtgeo',
@@ -10,7 +10,7 @@ export default {
     },
 
     nepalCentroid: {
-        url: 'mapbox://neocmoha.21in8y6a',
+        url: `${process.env.REACT_APP_MAP_SOURCE_NEPAL_CENTROID}`,
         layers: {
             province: 'provincecentroidgeo',
             district: 'districtcentroidgeo',
