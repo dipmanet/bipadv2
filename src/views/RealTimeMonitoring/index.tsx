@@ -249,17 +249,29 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 // the code below is different due to the requirement of rain icon to be triangle
 const rainLegendItems = [
-    { color: 'transparent', label: 'Below Warning Level', style: styles.triangleBelowWarning },
+    { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
     // { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
-    { color: 'transparent', label: 'Warning Level', style: styles.triangleAboveWarning },
+    { color: '#FDD835', label: 'Warning Level', style: styles.symbol },
     // { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
-    { color: 'transparent', label: 'Status Not Available', style: styles.triangle },
+    { color: '#ACACAB', label: 'Status Not Available', style: styles.symbol },
 ];
 
 const riverLegendItems = [
     { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
     { color: '#FDD835', label: 'Above Warning Level', style: styles.symbol },
     { color: '#e53935', label: 'Above Danger Level', style: styles.symbol },
+];
+
+const newRiverLegendItems = [
+    { color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
+    { color: 'transparent', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
+    { color: 'transparent', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
+    { color: '#FDD835', label: 'Above Warning Level and Steady', style: styles.box },
+    { color: 'transparent', label: 'Above Warning Level and Rising', style: styles.triangleRisingAboveWarning },
+    { color: 'transparent', label: 'Above Warning Level and Falling', style: styles.triangleFallingAboveWarning },
+    { color: '#E53935', label: 'Above Danger Level and Steady', style: styles.box },
+    { color: 'transparent', label: 'Above Danger Level and Rising', style: styles.triangleRisingAboveDanger },
+    { color: 'transparent', label: 'Above Danger Level and Falling', style: styles.triangleFallingAboveDanger },
 ];
 
 const earthquakeLegendItems = [
@@ -371,7 +383,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </header>
                         <Legend
                             className={styles.legend}
-                            data={riverLegendItems}
+                            // data={riverLegendItems}
+                            data={newRiverLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
