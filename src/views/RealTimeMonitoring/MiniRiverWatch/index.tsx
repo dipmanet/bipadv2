@@ -26,8 +26,8 @@ const ModalButton = modalize(Button);
 const riverWatchKeySelector = (station: RealTimeRiver) => station.id;
 
 const defaultSort = {
-    key: 'waterLevel',
-    order: 'dsc',
+    key: 'status',
+    order: 'asc',
 };
 
 class MiniRiverWatch extends React.PureComponent<Props> {
@@ -52,7 +52,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
             {
                 key: 'waterLevel',
                 label: 'Water level',
-                order: 3,
+                order: 5,
                 sortable: true,
                 comparator: (a, b) => compareNumber(
                     a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
@@ -77,6 +77,48 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         </div>
                     ) : undefined;
                 },
+            },
+            {
+                key: 'createdOn',
+                label: 'Date',
+                order: 3,
+                sortable: true,
+                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                modifier: (row: RealTimeRiver) => {
+                    const { createdOn } = row;
+
+                    return (createdOn) ? (
+                        <div style={{ width: '60px' }}>
+                            {/* parsing date to appropiate format */}
+                            {createdOn.substring(0, createdOn.indexOf('T'))}
+                        </div>
+                    ) : undefined;
+                },
+            },
+            {
+                key: 'time',
+                label: 'Time',
+                order: 4,
+                sortable: false,
+                modifier: (row: RealTimeRiver) => {
+                    const { createdOn } = row;
+                    if (createdOn) {
+                        const date = new Date(createdOn);
+                        return (
+                            <div>
+                                {/* parsing date to time format */}
+                                {date.toISOString().split('T')[1].split('.')[0]}
+                            </div>
+                        );
+                    } return undefined;
+                },
+            },
+            {
+                key: 'status',
+                label: 'Status',
+                order: 6,
+                sortable: true,
+                comparator: (a, b) => compareString(a.status, b.status),
             },
         ];
     }
