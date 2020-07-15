@@ -276,9 +276,6 @@ class Filters extends React.PureComponent<Props, State> {
 
         const { faramValues: fv } = this.state;
 
-        console.log('Filters: ', this.props.filters);
-        console.log('State Filters: ', fv);
-
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
@@ -288,13 +285,10 @@ class Filters extends React.PureComponent<Props, State> {
 
         const { activeView } = this.state;
 
-        console.log('Active View:', activeView);
 
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
-        console.log('Valid Active View:', validActiveView);
 
         return (
             <div className={_cs(styles.filters, className)}>
