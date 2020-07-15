@@ -187,10 +187,27 @@ class Filters extends React.PureComponent<Props, State> {
         name: iconNames[key],
         title,
         className: styles.icon,
-        isFiltered: getIsFiltered(key, this.props.filters),
+        // isFiltered: getIsFiltered(key, this.props.filters),
+        isFiltered: getIsFiltered(key, this.state.faramValues),
     })
 
     private handleResetFiltersButtonClick = () => {
+        this.setState({ activeView: undefined,
+            faramValues: {
+                dataDateRange: {
+                    rangeInDays: 7,
+                    startDate: undefined,
+                    endDate: undefined,
+                },
+                hazard: [],
+                region: {},
+            } });
+
+        const { setFilters } = this.props;
+        const { faramValues } = this.state;
+        if (faramValues) {
+            setFilters({ filters: faramValues });
+        }
     }
 
     private handleCloseCurrentFilterButtonClick = () => {
@@ -204,7 +221,6 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private handleSubmitClick = () => {
-        console.log(this.state);
         const { setFilters } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
@@ -260,6 +276,9 @@ class Filters extends React.PureComponent<Props, State> {
 
         const { faramValues: fv } = this.state;
 
+        console.log('Filters: ', this.props.filters);
+        console.log('State Filters: ', fv);
+
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
@@ -269,9 +288,13 @@ class Filters extends React.PureComponent<Props, State> {
 
         const { activeView } = this.state;
 
+        console.log('Active View:', activeView);
+
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
+
+        console.log('Valid Active View:', validActiveView);
 
         return (
             <div className={_cs(styles.filters, className)}>
@@ -279,16 +302,16 @@ class Filters extends React.PureComponent<Props, State> {
                     <h3 className={styles.heading}>
                         Filters
                     </h3>
-                    {/*
+
                     <Button
                         className={styles.resetFiltersButton}
                         title="Reset filters"
                         onClick={this.handleResetFiltersButtonClick}
                         iconName="refresh"
                         transparent
-                        disabled
+                        disabled={!validActiveView}
                     />
-                    */}
+
                 </header>
                 <div className={styles.content}>
                     <ScrollTabs
@@ -324,13 +347,15 @@ class Filters extends React.PureComponent<Props, State> {
                             active={validActiveView}
                         />
                     </Faram>
-                    <div
-                        onClick={this.handleSubmitClick}
-                        className={styles.submitButton}
-                        role="presentation"
-                    >
+                    {validActiveView && (
+                        <div
+                            onClick={this.handleSubmitClick}
+                            className={styles.submitButton}
+                            role="presentation"
+                        >
                         Submit
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
