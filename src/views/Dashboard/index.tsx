@@ -125,13 +125,59 @@ const transformDataRangeToFilter = (
     );
 };
 
+const transformDataRangeToLocaleFilter = (
+    dataRange: DataDateRangeValueElement,
+    { start, end }: DateFilterParamName,
+) => {
+    const { rangeInDays } = dataRange;
+
+    const getFilter = (startDate?: Date, endDate?: Date) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        // [start]: startDate ? startDate.toISOString() : undefined,
+        [start]: startDate ? `${startDate.toISOString().split('T')[0]}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        // [end]: endDate ? endDate.toISOString() : undefined,
+        [end]: endDate ? `${endDate.toISOString().split('T')[0]}T23:59:59+05:45` : undefined,
+    });
+
+    const formatDate = (date: Date) => {
+        const currentDate = date.toLocaleDateString('en-GB').split('/');
+        const day = currentDate[0];
+        const month = currentDate[1];
+        const year = currentDate[2];
+        return `${year}-${month}-${day}`;
+    };
+
+    const getNonCustomFilter = (startDate?: string, endDate?: string) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [start]: startDate ? `${startDate}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [end]: endDate ? `${endDate}T23:59:59+05:45` : undefined,
+    });
+
+    if (rangeInDays !== 'custom') {
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+        return getNonCustomFilter(formattedStartDate, formattedEndDate);
+    }
+
+    const { startDate, endDate } = dataRange;
+    return getFilter(
+        startDate ? new Date(startDate) : undefined,
+        endDate ? new Date(endDate) : undefined,
+    );
+};
+
+
 const transformFilters = ({
     dataDateRange,
     region,
     ...otherFilters
 }: FiltersElement, dateFilterParamName: DateFilterParamName) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    // ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    ...transformDataRangeToLocaleFilter(dataDateRange, dateFilterParamName),
     ...transformRegionToFilter(region),
 });
 

@@ -19,7 +19,7 @@ import {
     methods,
 } from '#request';
 
-import { transformDateRangeFilterParam, transformDataRangeToFilter } from '#utils/transformations';
+import { transformDateRangeFilterParam, transformDataRangeToFilter, transformDataRangeLocaleToFilter } from '#utils/transformations';
 
 import {
     setRealTimeRainListAction,
@@ -119,7 +119,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { filters, globalFilters } }) => ({
             // FIXME: obsolete
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {
             interface Response { results: PageType.RealTimeRain[] }
@@ -145,7 +146,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeRiverList } }) => {
             interface Response { results: PageType.RealTimeRiver[] }
@@ -171,7 +173,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
+            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event__on'),
         }),
         onSuccess: ({ response, props: { setRealTimeEarthquakeList } }) => {
             interface Response { results: PageType.RealTimeEarthquake[] }
@@ -197,7 +200,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeFireList } }) => {
             interface Response { results: PageType.RealTimeFire[] }
@@ -224,7 +228,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
         }),
         onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
             interface Response { results: PageType.RealTimePollution[] }
