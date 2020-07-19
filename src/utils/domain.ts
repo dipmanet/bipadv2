@@ -43,6 +43,11 @@ interface Shape {
     coordinates: unknown[];
 }
 
+interface AlertsWithReference extends Alert {
+    referenceType?: string;
+    referenceData?: string;
+}
+
 const hasMultiplePolygon = (polygon: Shape) => (
     polygon.type === 'MultiPolygon' && polygon.coordinates.length > 1
 );
@@ -209,7 +214,7 @@ export const alertToConvexPolygonGeojson = (alertList: Alert[], hazards: Obj<Haz
     return geojson;
 };
 
-export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
+export const alertToPointGeojson = (alertList: AlertsWithReference[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: alertList
@@ -223,6 +228,8 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
                     description,
                     hazard: hazardId,
                     createdOn,
+                    referenceType,
+                    referenceData,
                 } = alert;
 
                 const geometry = polygon
@@ -242,6 +249,9 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
                         hazardIcon: hazard.icon,
                         hazardColor: hazard.color || '#4666b0',
                         createdOn: new Date(createdOn).getTime(),
+                        referenceType,
+                        referenceData,
+                        createdDate: createdOn,
                     },
                 };
             }),

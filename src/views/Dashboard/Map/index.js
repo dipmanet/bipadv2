@@ -32,18 +32,42 @@ import { getYesterday, framize, getImage } from '#utils/common';
 
 import { hazardTypesSelector } from '#selectors';
 
+import RainTooltip from './Tooltips/Alerts/Rain';
+import RiverTooltip from './Tooltips/Alerts/River';
+
 import styles from './styles.scss';
 
-const AlertTooltip = ({ title, description }) => (
-    <div className={styles.alertTooltip}>
-        <h3 className={styles.heading}>
-            {title}
-        </h3>
-        <div className={styles.description}>
-            { description }
-        </div>
-    </div>
-);
+// const AlertTooltip = ({ title, description }) => (
+// <div className={styles.alertTooltip}>
+//     <h3 className={styles.heading}>
+//         {title}
+//     </h3>
+//     <div className={styles.description}>
+//         { description }
+//     </div>
+// </div>
+// );
+
+const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
+    if (referenceType && referenceType === 'rain') {
+        return RainTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'river') {
+        return RiverTooltip(title, description, createdDate, referenceData);
+    }
+    if (title) {
+        return (
+            <div className={styles.alertTooltip}>
+                <h3 className={styles.heading}>
+                    {title}
+                </h3>
+                <div className={styles.description}>
+                    { description }
+                </div>
+            </div>
+        );
+    } return null;
+};
 
 AlertTooltip.propTypes = {
     title: PropTypes.string.isRequired,
@@ -179,12 +203,21 @@ class AlertEventMap extends React.PureComponent {
     })
 
     handleAlertClick = (feature, lngLat) => {
-        const { properties: { title, description } } = feature;
+        const { properties:
+            { title,
+                description,
+                referenceType,
+                referenceData,
+                createdDate } } = feature;
+        const data = JSON.parse(referenceData);
 
         this.setState({
             alertTitle: title,
             alertDescription: description,
             alertClickLngLat: lngLat,
+            alertReferenceType: referenceType,
+            alertReferenceData: data,
+            alertCreatedDate: createdDate,
         });
     }
 
@@ -295,6 +328,9 @@ class AlertEventMap extends React.PureComponent {
             alertTitle,
             alertDescription,
             alertClickLngLat,
+            alertReferenceType,
+            alertReferenceData,
+            alertCreatedDate,
         } = this.state;
 
         const tooltipOptions = {
@@ -419,6 +455,9 @@ class AlertEventMap extends React.PureComponent {
                             <AlertTooltip
                                 title={alertTitle}
                                 description={alertDescription}
+                                referenceType={alertReferenceType}
+                                referenceData={alertReferenceData}
+                                createdDate={alertCreatedDate}
                             />
                         </MapTooltip>
                     )}

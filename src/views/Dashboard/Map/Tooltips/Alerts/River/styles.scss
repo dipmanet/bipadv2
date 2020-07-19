@@ -1,0 +1,73 @@
+.river-tooltip {
+    width: 250px;
+    font-size: var(--font-size-medium-alt);
+    .header {
+      background-color: var(--color-primary);
+      padding: var(--spacing-medium) var(--spacing-medium-alt);
+      color: var(--color-text-on-primary);
+      .title {
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+      }
+      
+      .date {
+        color: white;
+        margin-top: 5px
+      }
+    }
+    
+    .content {
+      background-color: white;
+      max-height:20vh;
+      overflow: auto;
+      .basin {
+        padding: var(--spacing-medium) var(--spacing-medium-alt);
+        border-bottom: 1px solid #ececec;
+
+      .title {
+        font-weight: bold;
+        }
+    }
+
+    .station {
+        padding: var(--spacing-small) var(--spacing-medium-alt);
+
+      .title {
+        font-weight: bold;
+      }
+    }
+
+    .water-level {
+        padding: var(--spacing-medium) var(--spacing-medium-alt);
+        border-bottom: 1px solid #ececec;
+
+      .title {
+        font-weight: bold;
+        }
+    }
+
+    .status {
+        padding: var(--spacing-medium) var(--spacing-medium-alt);
+        border-bottom: 1px solid #ececec;
+
+      .title {
+        font-weight: bold;
+        }
+    }
+    
+     
+      .source {
+        padding: var(--spacing-small) var(--spacing-medium-alt);
+
+      .title {
+        font-weight: bold;
+      }
+      .value {
+        color: red;
+      }
+    }
+    }
+
+    
+  }
