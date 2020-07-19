@@ -95,6 +95,15 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             order: 1,
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.basin, b.basin),
+            modifier: (row: RealTimeRain) => {
+                const { basin } = row;
+
+                return (basin) ? (
+                    <div style={{ width: '60px' }}>
+                        {basin}
+                    </div>
+                ) : undefined;
+            },
         },
         {
             key: 'title',
@@ -138,7 +147,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             label: 'Date',
             order: 3,
             sortable: true,
-            comparator: (a, b) => compareString(a.eventOn, b.eventOn),
+            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
             modifier: (row: RealTimeRain) => {
                 const { createdOn } = row;
 
