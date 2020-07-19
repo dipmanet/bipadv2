@@ -160,7 +160,14 @@
                 border-radius: 50%;
             }
 
-            .triangle {
+            .box {
+                width: 10px !important;
+                height: 10px !important;
+                margin-right: 8px;
+                margin-left: 2px;
+            }
+
+            .triangle-rising {
                 width: 0; 
                 height: 0; 
                 border-left: 7px solid transparent;
@@ -168,19 +175,42 @@
                 border-bottom: 7px solid #ACACAB;
               }
 
-            .triangle-below-warning {
-                @extend .triangle;
+            .triangle-rising-below-warning {
+                @extend .triangle-rising;
                 border-bottom: 7px solid #7CB342;
             }
 
-            .triangle-above-warning {
-                @extend .triangle;
+            .triangle-rising-above-warning {
+                @extend .triangle-rising;
                 border-bottom: 7px solid #FDD835;
             }
 
-            .triangle-above-danger {
-                @extend .triangle;
+            .triangle-rising-above-danger {
+                @extend .triangle-rising;
                 border-bottom: 7px solid #e53935;
+            }
+
+            .triangle-falling {
+                width: 0; 
+                height: 0; 
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-top: 7px solid #ACACAB;
+              }
+
+            .triangle-falling-below-warning {
+                @extend .triangle-falling;
+                border-top: 7px solid #7CB342;
+            }
+
+            .triangle-falling-above-warning {
+                @extend .triangle-falling;
+                border-top: 7px solid #FDD835;
+            }
+
+            .triangle-falling-above-danger {
+                @extend .triangle-falling;
+                border-top: 7px solid #e53935;
             }
         }
 

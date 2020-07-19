@@ -419,16 +419,16 @@ export default class RealTimeMap extends React.PureComponent {
                 >
                     { showRain && (
                         <>
-                            {/* the layer below is to render circles for rain */}
-                            {/* <MapLayer
+                            <MapLayer
                                 layerKey="real-time-rain-circle"
                                 onClick={this.handleRainClick}
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.rainPoint.paint,
                                 }}
-                            /> */}
-                            <MapLayer
+                            />
+                            {/* the layer below is to render traingles for rain */}
+                            {/* <MapLayer
                                 layerKey="real-time-rain-triangle"
                                 onClick={this.handleRainClick}
                                 layerOptions={{
@@ -436,7 +436,7 @@ export default class RealTimeMap extends React.PureComponent {
                                     layout: mapStyles.rainSymbol.layout,
                                     paint: mapStyles.rainSymbol.paint,
                                 }}
-                            />
+                            /> */}
                             <MapLayer
                                 layerKey="real-time-rain-symbol"
                                 layerOptions={{
@@ -458,11 +458,20 @@ export default class RealTimeMap extends React.PureComponent {
                 >
                     { showRiver && (
                         <>
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="real-time-river-circle"
                                 onClick={this.handleRiverClick}
                                 layerOptions={{
                                     type: 'circle',
+                                    paint: mapStyles.riverPoint.paint,
+                                }}
+                            /> */}
+                            <MapLayer
+                                layerKey="real-time-river-custom"
+                                onClick={this.handleRiverClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.riverPoint.layout,
                                     paint: mapStyles.riverPoint.paint,
                                 }}
                             />
