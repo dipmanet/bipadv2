@@ -340,7 +340,7 @@ export default {
 
     rainPoint: {
         paint: {
-            'circle-radius': 10,
+            'circle-radius': 8,
             'circle-color': [
                 'case',
                 // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
@@ -349,13 +349,14 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-opacity': [
-                'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
-                0.2,
-            ],
+            // 'circle-opacity': [
+            //     'case',
+            //     ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
+            //     ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+            //     ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
+            //     0.2,
+            // ],
+            'circle-opacity': 1,
             'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -401,10 +402,10 @@ export default {
                 ['==', ['get', 'steady'], 'STEADY'], '■',
                 ['==', ['get', 'steady'], 'RISING'], '▲',
                 ['==', ['get', 'steady'], 'FALLING'], '▼',
-                '\u25CF',
+                '■',
             ],
             'text-allow-overlap': true,
-            'text-size': 36,
+            'text-size': 24,
         },
         paint: {
             'text-color': [

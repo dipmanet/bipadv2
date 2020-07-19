@@ -247,13 +247,12 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-// the code below is different due to the requirement of rain icon to be triangle
 const rainLegendItems = [
-    { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
+    { color: '#2373a9', label: 'Below Warning Level', style: styles.symbol },
     // { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
     { color: '#FDD835', label: 'Warning Level', style: styles.symbol },
     // { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
-    { color: '#ACACAB', label: 'Status Not Available', style: styles.symbol },
+    // { color: '#ACACAB', label: 'Status Not Available', style: styles.symbol },
 ];
 
 const riverLegendItems = [
@@ -261,7 +260,7 @@ const riverLegendItems = [
     { color: '#FDD835', label: 'Above Warning Level', style: styles.symbol },
     { color: '#e53935', label: 'Above Danger Level', style: styles.symbol },
 ];
-
+// the code below is different due to the requirement of rain icon to be triangle
 const newRiverLegendItems = [
     { color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
     { color: 'transparent', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
