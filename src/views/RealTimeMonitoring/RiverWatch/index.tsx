@@ -13,7 +13,7 @@ import DownloadButton from '#components/DownloadButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { Header } from '#store/atom/table/types';
-import { RealTimeRiver } from '#store/atom/page/types';
+import { RealTimeRiver as RealTimeRiverOld } from '#store/atom/page/types';
 
 import {
     convertNormalTableToCsv,
@@ -24,6 +24,10 @@ import styles from './styles.scss';
 interface Props {
     realTimeRiver: RealTimeRiver[];
     closeModal?: () => void;
+}
+
+interface RealTimeRiver extends RealTimeRiverOld{
+    stationSeriesId?: number;
 }
 
 const riverWatchKeySelector = (river: RealTimeRiver) => river.id;
@@ -54,11 +58,11 @@ class RiverWatch extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
-                key: 'stationId',
+                key: 'stationSeriesId',
                 label: 'Station Id',
                 order: 3,
                 sortable: true,
-                comparator: (a, b) => compareNumber(a.stationId, b.stationId),
+                comparator: (a, b) => compareNumber(a.stationSeriesId, b.stationSeriesId),
             },
             {
                 key: 'district',

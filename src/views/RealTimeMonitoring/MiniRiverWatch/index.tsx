@@ -11,7 +11,7 @@ import Table from '#rscv/Table';
 
 import { Header } from '#store/atom/table/types';
 import {
-    RealTimeRiver,
+    RealTimeRiver as RealTimeRiverOld,
 } from '#store/atom/page/types';
 
 import RiverWatch from '../RiverWatch';
@@ -29,6 +29,10 @@ const defaultSort = {
     key: 'status',
     order: 'asc',
 };
+
+interface RealTimeRiver extends RealTimeRiverOld{
+    waterLevelOn: string;
+}
 
 class MiniRiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
@@ -79,18 +83,18 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 },
             },
             {
-                key: 'createdOn',
+                key: 'waterLevelOn',
                 label: 'Date',
                 order: 3,
                 sortable: true,
-                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                comparator: (a, b) => compareString(a.waterLevelOn, b.waterLevelOn),
                 modifier: (row: RealTimeRiver) => {
-                    const { createdOn } = row;
+                    const { waterLevelOn } = row;
 
-                    return (createdOn) ? (
+                    return (waterLevelOn) ? (
                         <div style={{ width: '60px' }}>
                             {/* parsing date to appropiate format */}
-                            {createdOn.substring(0, createdOn.indexOf('T'))}
+                            {waterLevelOn.substring(0, waterLevelOn.indexOf('T'))}
                         </div>
                     ) : undefined;
                 },
@@ -101,13 +105,12 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 order: 4,
                 sortable: false,
                 modifier: (row: RealTimeRiver) => {
-                    const { createdOn } = row;
-                    if (createdOn) {
-                        const date = new Date(createdOn);
+                    const { waterLevelOn } = row;
+                    if (waterLevelOn) {
                         return (
                             <div>
                                 {/* parsing date to time format */}
-                                {date.toISOString().split('T')[1].split('.')[0]}
+                                {waterLevelOn.split('T')[1].split('+')[0]}
                             </div>
                         );
                     } return undefined;
