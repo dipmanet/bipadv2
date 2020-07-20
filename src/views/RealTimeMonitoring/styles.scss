@@ -135,7 +135,8 @@
         >.legend {
             flex-grow: 1;
             padding: var(--spacing-small) var(--spacing-medium);
-
+            max-height: 15vh;
+            overflow: auto;
             .size-legend-item {
                 margin: var(--spacing-small) 0;
                 height: var(--font-size-medium);
