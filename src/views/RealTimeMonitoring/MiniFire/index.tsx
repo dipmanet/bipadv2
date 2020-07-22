@@ -28,7 +28,7 @@ const ModalButton = modalize(Button);
 const fireKeySelector = (station: RealTimeFire) => station.id;
 
 const defaultSort = {
-    key: 'brightness',
+    key: 'eventOn',
     order: 'dsc',
 };
 

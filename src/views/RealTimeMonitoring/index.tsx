@@ -201,7 +201,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeFireList } }) => {
             interface Response { results: PageType.RealTimeFire[] }
@@ -307,7 +307,7 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
-type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire';
+type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire' | undefined;
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
@@ -316,6 +316,50 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.state = {
             activeView: 'rainwatch',
         };
+    }
+
+    private setStateFromFilter = (realtimeSources?: number[], otherSources?: number[]) => {
+        let availableFilter = 0;
+        const setFilterFromSources = () => {
+            if (availableFilter === 3) {
+                this.setState({ activeView: 'rainwatch' });
+            }
+            if (availableFilter === 2) {
+                this.setState({ activeView: 'riverwatch' });
+            }
+        };
+
+        const setFilterFromOtherSources = () => {
+            if (availableFilter === 1) {
+                this.setState({ activeView: 'earthquake' });
+            }
+
+            if (availableFilter === 4) {
+                this.setState({ activeView: 'fire' });
+            }
+
+            if (availableFilter === 5) {
+                this.setState({ activeView: 'pollution' });
+            }
+
+            if (availableFilter === 5) {
+                this.setState({ activeView: 'pollution' });
+            }
+        };
+
+        if (realtimeSources && realtimeSources.length > 0) {
+            availableFilter = realtimeSources[0];
+            setFilterFromSources();
+        }
+        if (otherSources && otherSources.length > 0) {
+            availableFilter = otherSources[0];
+            setFilterFromOtherSources();
+        }
+        // for streamFlow: REMOVE when leftpane is setup of it
+        if (availableFilter === 6 && otherSources && otherSources.length > 1) {
+            availableFilter = otherSources[1];
+            setFilterFromOtherSources();
+        }
     }
 
     private renderLegend = () => {
@@ -607,9 +651,34 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const pending = isAnyRequestPending(requests);
 
         let validActiveView = activeView;
+        // To not show anything when no filters are selected
         if (!showRain && !showRiver && !showEarthquake && !showPollution && !showFire) {
             validActiveView = undefined;
+            this.setState({ activeView: undefined });
         }
+
+        /*
+        TO fix the state issues between RealTimeFilters and LeftPane
+        Sets activeView to the selected Filter if only one filter is selected
+
+        Changes the activeView to other View if the current activeView has
+        just been deselected */
+        const validateActiveView = (
+            firstCondition: boolean,
+            secondCondition: boolean | undefined,
+        ) => {
+            if (firstCondition && secondCondition) {
+                this.setStateFromFilter(realtimeSources, otherSources);
+            }
+        };
+        validateActiveView(activeView === 'rainwatch', !showRain);
+        validateActiveView(activeView === 'riverwatch', !showRiver);
+        validateActiveView(activeView === 'earthquake', !showEarthquake);
+        validateActiveView(activeView === 'pollution', !showPollution);
+        validateActiveView(activeView === 'fire', !showFire);
+        validateActiveView(activeView === undefined,
+            (showRain || showRiver || showPollution || showEarthquake || showFire));
+
 
         return (
             <>

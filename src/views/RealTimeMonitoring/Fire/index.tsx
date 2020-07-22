@@ -32,7 +32,7 @@ interface Props {
 const fireSelector = (fire: RealTimeFireExtended) => fire.id;
 
 const defaultSort = {
-    key: 'brightness',
+    key: 'eventOn',
     order: 'dsc',
 };
 
