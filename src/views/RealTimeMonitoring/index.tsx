@@ -9,7 +9,7 @@ import Legend from '#rscz/Legend';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-import { FiltersElement } from '#types';
+import { FiltersElement, MapStateElement } from '#types';
 
 import {
     createConnectedRequestCoordinator,
@@ -65,6 +65,7 @@ import {
 
 interface State {
     activeView?: ActiveView;
+    hoveredHazardId?: number;
 }
 interface Params {}
 interface OwnProps {}
@@ -307,6 +308,8 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
+const emptyHazardHoverAttributeList: MapStateElement[] = [];
+
 type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire';
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
@@ -315,7 +318,19 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         this.state = {
             activeView: 'rainwatch',
+            hoveredHazardId: undefined,
         };
+    }
+
+    private getHazardMapHoverAttributes = (hoveredHazardId: number | undefined) => {
+        if (!hoveredHazardId) {
+            return emptyHazardHoverAttributeList;
+        }
+
+        return [{
+            id: hoveredHazardId,
+            value: true,
+        }];
     }
 
     private renderLegend = () => {
@@ -578,6 +593,10 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.setState({ activeView: 'fire' });
     }
 
+    private onHazardHover = (hoveredHazardId: number) => {
+        this.setState({ hoveredHazardId });
+    }
+
     public render() {
         const {
             realTimeRainList,
@@ -611,6 +630,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             validActiveView = undefined;
         }
 
+        const {
+            hoveredHazardId,
+        } = this.state;
+
+        const hazardMapHoverAttributes = this.getHazardMapHoverAttributes(hoveredHazardId);
+
         return (
             <>
                 <Loading pending={pending} />
@@ -626,6 +651,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                     showFire={showFire}
                     showPollution={showPollution}
                     showStreamflow={showStreamflow}
+                    onHazardHover={this.onHazardHover}
+                    hazardHoveredAttribute={hazardMapHoverAttributes}
+                    isHovered={!!hoveredHazardId}
                 />
                 <Page
                     hideHazardFilter
@@ -736,30 +764,35 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                     <MiniRiverWatch
                                         className={styles.riverwatchList}
                                         realTimeRiver={realTimeRiverList}
+                                        onHazardHover={this.onHazardHover}
                                     />
                                 )}
                                 {validActiveView === 'rainwatch' && (
                                     <MiniRainWatch
                                         className={styles.rainwatchList}
                                         realTimeRain={realTimeRainList}
+                                        onHazardHover={this.onHazardHover}
                                     />
                                 )}
                                 {validActiveView === 'earthquake' && (
                                     <MiniEarthquake
                                         className={styles.rainwatchList}
                                         realTimeEarthquake={realTimeEarthquakeList}
+                                        onHazardHover={this.onHazardHover}
                                     />
                                 )}
                                 {validActiveView === 'pollution' && (
                                     <MiniPollution
                                         className={styles.rainwatchList}
                                         realTimePollution={realTimePollutionList}
+                                        onHazardHover={this.onHazardHover}
                                     />
                                 )}
                                 {validActiveView === 'fire' && (
                                     <MiniFire
                                         className={styles.rainwatchList}
                                         realTimeFire={realTimeFireList}
+                                        onHazardHover={this.onHazardHover}
                                     />
                                 )}
                                 {!validActiveView && (

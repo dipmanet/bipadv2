@@ -22,6 +22,7 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     realTimeFire: RealTimeFire[];
+    onHazardHover: Function;
 }
 
 const ModalButton = modalize(Button);
@@ -93,6 +94,7 @@ class Minifire extends React.PureComponent<Props> {
         const {
             realTimeFire,
             className,
+            onHazardHover,
         } = this.props;
 
         return (
@@ -117,6 +119,8 @@ class Minifire extends React.PureComponent<Props> {
                         data={realTimeFire}
                         headers={this.fireHeader}
                         keySelector={fireKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>

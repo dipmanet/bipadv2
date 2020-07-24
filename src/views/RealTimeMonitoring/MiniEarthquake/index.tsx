@@ -21,6 +21,7 @@ import Earthquake from '../Earthquake';
 interface Props {
     className?: string;
     realTimeEarthquake: RealTimeEarthquake[];
+    onHazardHover: Function;
 }
 
 const ModalButton = modalize(Button);
@@ -104,6 +105,7 @@ ML
         const {
             realTimeEarthquake,
             className,
+            onHazardHover,
         } = this.props;
 
         return (
@@ -128,6 +130,8 @@ ML
                         data={realTimeEarthquake}
                         headers={this.earthquakeHeader}
                         keySelector={earthquakeKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>

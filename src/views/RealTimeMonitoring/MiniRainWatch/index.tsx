@@ -22,6 +22,7 @@ import styles from './styles.scss';
 interface Props {
     realTimeRain: RealTimeRain[];
     className?: string;
+    onHazardHover: Function;
 }
 interface State {
     duration: number;
@@ -210,6 +211,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         const {
             className,
             realTimeRain,
+            onHazardHover,
         } = this.props;
 
         const { duration } = this.state;
@@ -248,6 +250,8 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                         data={realTimeRain}
                         headers={rainHeader}
                         keySelector={rainWatchKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>
