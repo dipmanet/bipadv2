@@ -19,6 +19,16 @@ interface ReferenceData {
     };
 }
 
+const nullData = {
+    fields: {
+        averages: [],
+        basin: '',
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        created_on: '',
+        title: '',
+    },
+};
+
 const RainTooltip = (
     title: string,
     description: string,
@@ -31,7 +41,7 @@ const RainTooltip = (
             basin,
             created_on: createdOn,
             title: referenceDataTitle },
-    } = referenceData;
+    } = referenceData || nullData;
 
     const oneHourInterval = averages[0].value;
     const threeHourInterval = averages[1].value;
@@ -50,7 +60,7 @@ const RainTooltip = (
         <div className={styles.rainfallTooltip}>
             <div className={styles.header}>
                 <div className={styles.title}>{renderedTitle}</div>
-                <div className={styles.date}>{createdDate.split('T')[0] || 'N/A'}</div>
+                <div className={styles.date}>{createdDate ? createdDate.split('T')[0] : 'N/A'}</div>
             </div>
             <div className={styles.content}>
                 <div className={styles.basin}>

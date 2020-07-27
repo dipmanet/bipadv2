@@ -11,6 +11,16 @@ interface ReferenceData {
     };
 }
 
+const nullData = {
+    fields: {
+        title: '',
+        status: '',
+        basin: '',
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        water_level: 0,
+    },
+};
+
 const RiverTooltip = (
     title: string,
     description: string,
@@ -21,7 +31,7 @@ const RiverTooltip = (
         { title: headerTitle,
             basin,
             water_level: waterLevel,
-            status } } = referenceData;
+            status } } = referenceData || nullData;
     return (
         <div className={styles.riverTooltip}>
             <div className={styles.header}>

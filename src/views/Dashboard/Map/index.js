@@ -209,7 +209,7 @@ class AlertEventMap extends React.PureComponent {
                 referenceType,
                 referenceData,
                 createdDate } } = feature;
-        const data = JSON.parse(referenceData);
+        const data = referenceData ? JSON.parse(referenceData) : undefined;
 
         this.setState({
             alertTitle: title,
