@@ -29,6 +29,7 @@ interface RealTimePollutionExtended extends RealTimePollution {
 interface Props {
     className?: string;
     realTimePollution: RealTimePollutionExtended[];
+    onHazardHover: Function;
 }
 
 const ModalButton = modalize(Button);
@@ -149,6 +150,7 @@ class MiniPollution extends React.PureComponent<Props> {
         const {
             realTimePollution,
             className,
+            onHazardHover,
         } = this.props;
 
         return (
@@ -173,6 +175,8 @@ class MiniPollution extends React.PureComponent<Props> {
                         data={realTimePollution}
                         headers={this.pollutionHeader}
                         keySelector={pollutionKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>

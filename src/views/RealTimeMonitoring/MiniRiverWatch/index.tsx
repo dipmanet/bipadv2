@@ -20,6 +20,7 @@ import styles from './styles.scss';
 interface Props {
     className?: string;
     realTimeRiver: RealTimeRiver[];
+    onHazardHover: Function;
 }
 
 const ModalButton = modalize(Button);
@@ -146,6 +147,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
         const {
             realTimeRiver,
             className,
+            onHazardHover,
         } = this.props;
 
         return (
@@ -171,6 +173,8 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}
                         keySelector={riverWatchKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>
