@@ -201,7 +201,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event_on'),
         }),
         onSuccess: ({ response, props: { setRealTimeFireList } }) => {
             interface Response { results: PageType.RealTimeFire[] }
