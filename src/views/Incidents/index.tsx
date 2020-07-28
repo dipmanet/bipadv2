@@ -241,7 +241,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const pending = pendingEvents || pendingIncidents;
 
         return (
-            <React.Fragment>
+            <div>
                 <Loading pending={pending} />
                 <Map
                     incidentList={sanitizedIncidentList}
@@ -264,7 +264,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     )}
                     mainContentContainerClassName={_cs(styles.legendContainer, 'map-legend-container')}
                     mainContent={(
-                        <React.Fragment>
+                        <div>
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -293,10 +293,10 @@ class Incidents extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                             )}
-                        </React.Fragment>
+                        </div>
                     )}
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }
