@@ -34,6 +34,9 @@ import { hazardTypesSelector } from '#selectors';
 
 import RainTooltip from './Tooltips/Alerts/Rain';
 import RiverTooltip from './Tooltips/Alerts/River';
+import EarthquakeTooltip from './Tooltips/Alerts/Earthquake';
+import FireTooltip from './Tooltips/Alerts/Fire';
+import PollutionTooltip from './Tooltips/Alerts/Pollution';
 
 import styles from './styles.scss';
 
@@ -54,6 +57,15 @@ const AlertTooltip = ({ title, description, referenceType, referenceData, create
     }
     if (referenceType && referenceType === 'river') {
         return RiverTooltip(title, description, createdDate, referenceData);
+    }
+    if (title.toUpperCase().includes('EARTH') && referenceData) {
+        return EarthquakeTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'fire') {
+        return FireTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'pollution') {
+        return PollutionTooltip(title, description, createdDate, referenceData);
     }
     if (title) {
         return (
