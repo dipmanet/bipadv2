@@ -258,6 +258,34 @@ export default class LeftPane extends React.PureComponent {
                     startDate={startDate}
                     endDate={endDate}
                 />
+                <div className={styles.sourceDetails}>
+                    <div className={styles.infoIconContainer}>
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                        />
+                    </div>
+                    <div className={styles.label}>
+                        Data sources:
+                    </div>
+                    <div className={styles.value}>
+                        <div className={styles.source}>
+                            <div className={styles.text}>
+                                Realtime Module
+                            </div>
+                            {/* <a
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="http://drrportal.gov.np"
+                            >
+                                <Icon
+                                    name="externalLink"
+                                />
+                            </a> */}
+                        </div>
+                    </div>
+                </div>
                 <header className={styles.header}>
                     <div className={styles.tabs}>
                         <div
