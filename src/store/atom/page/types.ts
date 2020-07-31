@@ -500,6 +500,7 @@ export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
+    SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
     SET_EVENT_TYPES = 'page/SET_EVENT_TYPES',
     SET_MAP_STYLES = 'page/SET_MAP_STYLES',
     SET_MAP_STYLE = 'page/SET_MAP_STYLE',
@@ -582,6 +583,12 @@ export interface SetHazardType {
     type: typeof PageType.SET_HAZARD_TYPES;
     hazardTypes: HazardType[];
 }
+
+export interface SetDashboardHazardType {
+    type: typeof PageType.SET_DASHBOARD_HAZARD_TYPES;
+    hazardTypes: HazardType[];
+}
+
 export interface SetEnumOptionsType {
     type: typeof PageType.SET_ENUM_OPTIONS;
     enumList: ModelEnum[];
@@ -832,5 +839,6 @@ export type PageActionTypes = (
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
-    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType
+    SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
+    SetDashboardHazardType
 );

@@ -56,11 +56,12 @@ class HazardSelectionInput extends React.PureComponent {
 
         hazardTypeValues.forEach((hazardKey) => {
             const hazardType = hazardTypes[hazardKey];
-
-            if (!groupedHazardTypes[hazardType.type]) {
-                console.warn('Unknown hazard type', hazardType.type);
-            } else {
-                groupedHazardTypes[hazardType.type].push(hazardType.id);
+            if (hazardType) {
+                if (!groupedHazardTypes[hazardType.type]) {
+                    console.warn('Unknown hazard type', hazardType.type);
+                } else {
+                    groupedHazardTypes[hazardType.type].push(hazardType.id);
+                }
             }
         });
 
@@ -116,7 +117,6 @@ class HazardSelectionInput extends React.PureComponent {
 
         const groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
         const groupedValues = this.getGroupedHazardTypeValues(value);
-
         return (
             <div className={_cs(className, styles.hazardSelectionInput)}>
                 <MultiListSelection

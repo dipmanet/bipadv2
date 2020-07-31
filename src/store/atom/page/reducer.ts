@@ -28,6 +28,13 @@ export const setHazardTypesAction = (
     hazardTypes,
 });
 
+export const setDashboardHazardTypesAction = (
+    { hazardTypes }: { hazardTypes: Type.HazardType[] },
+) => ({
+    type: Type.PageType.SET_DASHBOARD_HAZARD_TYPES,
+    hazardTypes,
+});
+
 export const setEnumOptionsAction = (
     { enumList }: { enumList: ModelEnum[] },
 ) => ({
@@ -367,6 +374,63 @@ const setHazardTypes = (state: Type.PageState, action: Type.SetHazardType) => {
         ...hazardType,
         type: hazardType.type === 'natural' ? 'natural' : 'artificial',
     }));
+
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.hazardTypes = listToMap(
+            hazardTypes,
+            hazardType => hazardType.id,
+            hazardType => hazardType,
+        );
+    });
+    return newState;
+};
+
+
+const setDashboardHazardTypes = (state: Type.PageState, action: Type.SetDashboardHazardType) => {
+    const { hazardTypes: hazardTypesFromAction } = action;
+
+    // TODO Remove this after we get type from server
+    // const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
+    //     ...hazardType,
+    //     type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    // }));
+
+    let hazardTypes = hazardTypesFromAction.map((hazardType, i) => {
+        if (hazardType.title.toUpperCase() === 'HEAVY RAINFALL') {
+            return {
+                ...hazardType,
+                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+            };
+        }
+        if (hazardType.title.toUpperCase() === 'ENVIRONMENTAL POLLUTION') {
+            return {
+                ...hazardType,
+                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+            };
+        }
+        if (hazardType.title.toUpperCase() === 'FIRE') {
+            return {
+                ...hazardType,
+                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+            };
+        }
+        if (hazardType.title.toUpperCase() === 'EARTHQUAKE') {
+            return {
+                ...hazardType,
+                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+            };
+        }
+        if (hazardType.title.toUpperCase() === 'FLOOD') {
+            return {
+                ...hazardType,
+                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+            };
+        }
+        return null;
+    });
+
+    hazardTypes = hazardTypes.filter(hazardType => hazardType);
 
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
@@ -1098,6 +1162,8 @@ export default function routeReducer(
             return setInitialPopupHidden(state, action);
         case Type.PageType.SET_HAZARD_TYPES:
             return setHazardTypes(state, action);
+        case Type.PageType.SET_DASHBOARD_HAZARD_TYPES:
+            return setDashboardHazardTypes(state, action);
         case Type.PageType.SET_EVENT_TYPES:
             return setEventTypes(state, action);
         case Type.PageType.SET_MAP_STYLES:

@@ -30,6 +30,9 @@ import { hazardTypesList } from '#utils/domain';
 import {
     setAlertListActionDP,
     setEventListAction,
+    setDashboardHazardTypesAction,
+    setFiltersAction,
+    setHazardTypesAction,
 } from '#actionCreators';
 
 import {
@@ -60,6 +63,7 @@ const emptyEventHoverAttributeList: MapStateElement[] = [];
 interface State {
     hoveredAlertId: AlertElement['id'] | undefined;
     hoveredEventId: EventElement['id'] | undefined;
+    hazardTypes: PageTypes.HazardType[] | undefined;
 }
 
 interface Params {
@@ -76,6 +80,9 @@ interface PropsFromAppState {
 interface PropsFromDispatch {
     setEventList: typeof setEventListAction;
     setAlertList: typeof setAlertListActionDP;
+    setDashboardHazardTypes: typeof setDashboardHazardTypesAction;
+    setHazardTypes: typeof setHazardTypesAction;
+    setFilters: typeof setFiltersAction;
 }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -91,6 +98,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAlertList: params => dispatch(setAlertListActionDP(params)),
     setEventList: params => dispatch(setEventListAction(params)),
+    setDashboardHazardTypes: params => dispatch(setDashboardHazardTypesAction(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
+    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
 });
 
 interface DateFilterParamName{
@@ -275,6 +285,19 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    dashBoardHazardTypesRequest: {
+        url: '/hazard/',
+        method: methods.GET,
+        onSuccess: ({ response, props: { setDashboardHazardTypes } }) => {
+            interface Response { results: PageTypes.HazardType[] }
+            const { results: hazardTypes = [] } = response as Response;
+            setDashboardHazardTypes({ hazardTypes });
+        },
+        extras: {
+            schemaName: 'hazardResponse',
+        },
+        onMount: true,
+    },
 };
 
 const RECENT_DAY = 1;
@@ -286,6 +309,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.state = {
             hoveredAlertId: undefined,
             hoveredEventId: undefined,
+            hazardTypes: undefined,
         };
 
         const {
@@ -300,7 +324,32 @@ class Dashboard extends React.PureComponent<Props, State> {
         });
     }
 
+    public componentDidMount(): void {
+        const xmlHttp = new XMLHttpRequest();
+        const url = 'https://bipaddev.yilab.org.np/api/v1/hazard/';
+        xmlHttp.open('GET', url, false); // false for synchronous request
+        xmlHttp.send(null);
+        const hazardTypes = JSON.parse(xmlHttp.responseText);
+        const { results } = hazardTypes;
+        this.setState({ hazardTypes: results });
+    }
+
     public componentWillUnmount(): void {
+        const noFilter = {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+        const { setFilters } = this.props;
+        setFilters({ filters: noFilter });
+        const { hazardTypes } = this.state;
+        if (hazardTypes) {
+            this.props.setHazardTypes({ hazardTypes });
+        }
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
     }
