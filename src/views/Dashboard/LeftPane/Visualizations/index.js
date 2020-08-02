@@ -165,7 +165,7 @@ export default class Visualization extends React.PureComponent {
                                 ))}
                                 <LabelList
                                     dataKey="value"
-                                    position="right"
+                                    position="center"
                                     angle={0}
                                     className={styles.labelList}
                                 />
