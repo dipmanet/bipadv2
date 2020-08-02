@@ -325,33 +325,39 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount(): void {
-        const xmlHttp = new XMLHttpRequest();
-        const url = 'https://bipaddev.yilab.org.np/api/v1/hazard/';
-        xmlHttp.open('GET', url, false); // false for synchronous request
-        xmlHttp.send(null);
-        const hazardTypes = JSON.parse(xmlHttp.responseText);
-        const { results } = hazardTypes;
-        this.setState({ hazardTypes: results });
+        this.getInitialHazardList();
     }
 
     public componentWillUnmount(): void {
-        const noFilter = {
-            dataDateRange: {
-                rangeInDays: 7,
-                startDate: undefined,
-                endDate: undefined,
-            },
-            hazard: [],
-            region: {},
-        };
-        const { setFilters } = this.props;
-        setFilters({ filters: noFilter });
+        // const noFilter = {
+        //     dataDateRange: {
+        //         rangeInDays: 7,
+        //         startDate: undefined,
+        //         endDate: undefined,
+        //     },
+        //     hazard: [],
+        //     region: {},
+        // };
+        // const { setFilters } = this.props;
+        // setFilters({ filters: noFilter });
         const { hazardTypes } = this.state;
         if (hazardTypes) {
-            this.props.setHazardTypes({ hazardTypes });
+            const { setHazardTypes } = this.props;
+            setHazardTypes({ hazardTypes });
         }
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
+    }
+
+    private getInitialHazardList = () => {
+        const xmlHttp = new XMLHttpRequest();
+        const url = `${process.env.REACT_APP_API_SERVER_URL}/hazard/`;
+        xmlHttp.open('GET', url, false); // false for synchronous request
+        xmlHttp.send(null);
+        const { responseText } = xmlHttp;
+        const hazardTypes = JSON.parse(responseText);
+        const { results } = hazardTypes;
+        this.setState({ hazardTypes: results });
     }
 
     private getAlertHazardTypesList = memoize((
@@ -471,7 +477,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);
         const pending = alertsPending || eventsPending;
-
         const {
             hoveredAlertId,
             hoveredEventId,

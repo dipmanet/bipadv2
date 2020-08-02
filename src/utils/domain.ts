@@ -347,20 +347,23 @@ export const eventToPointGeojson = (eventList: Event[], hazards: Obj<HazardType>
 
                 const hazard = hazards[hazardId];
 
-                return {
-                    id,
-                    type: 'Feature',
-                    geometry: { ...geometry },
-                    properties: {
-                        title,
-                        description,
-                        severity,
-                        createdOn,
-                        hazardTitle: hazard.title,
-                        hazardIcon: hazard.icon,
-                        hazardColor: hazard.color || '#4666b0',
-                    },
-                };
+                if (hazard) {
+                    return {
+                        id,
+                        type: 'Feature',
+                        geometry: { ...geometry },
+                        properties: {
+                            title,
+                            description,
+                            severity,
+                            createdOn,
+                            hazardTitle: hazard.title,
+                            hazardIcon: hazard.icon,
+                            hazardColor: hazard.color || '#4666b0',
+                        },
+                    };
+                }
+                return {};
             }),
     };
     return geojson;
@@ -385,20 +388,22 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
             } = incident;
 
             const hazard = hazards[hazardId];
-
-            return {
-                id,
-                type: 'Feature',
-                geometry: { ...point },
-                properties: {
-                    incidentId: id,
-                    severity: calculateCategorizedSeverity(severityValue),
-                    hazardTitle: hazard.title,
-                    hazardIcon: hazard.icon,
-                    hazardColor: hazard.color || '#4666b0',
-                    incidentOn: new Date(incidentOn).getTime(),
-                },
-            };
+            if (hazard) {
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: { ...point },
+                    properties: {
+                        incidentId: id,
+                        severity: calculateCategorizedSeverity(severityValue),
+                        hazardTitle: hazard.title,
+                        hazardIcon: hazard.icon,
+                        hazardColor: hazard.color || '#4666b0',
+                        incidentOn: new Date(incidentOn).getTime(),
+                    },
+                };
+            }
+            return {};
         }),
 });
 
