@@ -153,14 +153,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                                 transparent
                             />
                             <h2 className={styles.heading}>
-                                Risk info / &nbsp;
+                                Risk Info / &nbsp;
                                 { attributeNames[activeAttribute] }
                             </h2>
                         </>
                     ) : (
                         <>
                             <h2 className={styles.heading}>
-                                Risk info
+                                Risk Info
                             </h2>
                             <CommonMap sourceKey="risk-info" />
                         </>
