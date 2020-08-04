@@ -12,14 +12,14 @@
     display: flex;
     border: var(--width-separator-thin) solid var(--color-separator);
     background-color: var(--color-foreground);
-    height: 120px;
+    // height: 120px;
     overflow: auto;
 
     .hazard-legend {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: var(--spacing-medium);
+        padding: var(--spacing-medium) 0;
 
         .legend-title {
             flex-shrink: 0;
@@ -58,14 +58,16 @@
     .point-size-legend-container {
         flex-shrink: 0;
         background-color: var(--color-foreground);
+        // padding: var(--spacing-medium);
         padding: var(--spacing-medium);
+        padding-bottom: 0;
 
         .header {
             display: flex;
             align-items: center;
             flex-shrink: 0;
             justify-content: flex-end;
-            margin-bottom: var(--spacing-medium);
+            // margin-bottom: var(--spacing-medium);
 
             .heading {
                 align-self: flex-start;
@@ -75,19 +77,30 @@
         }
 
         .point-size-legend {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0, 0.1);
+
             .legend-item {
                 margin: var(--spacing-small) 0;
-                height: var(--font-size-medium);
+                // height: var(--font-size-medium);
                 overflow: hidden;
 
                 >:nth-child(2) {
-                    padding: 0 var(--spacing-medium);
+                    // padding: 0 var(--spacing-medium);
+                    padding: 0 var(--spacing-extra-small-alt);
                     font-size: var(--font-size-small);
                 }
             }
 
             .symbol {
                 border-radius: 50%;
+                background-color: transparent !important;
+                border: 1px solid rgba(0,0,0, 0.4);
+                box-sizing: border-box;
+                margin: 0 !important;
+                padding: 0 !important;
+                padding-left: var(--spacing-medium) !important;
             }
         }
     }
