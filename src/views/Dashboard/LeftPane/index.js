@@ -266,7 +266,7 @@ export default class LeftPane extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.label}>
-                        Data sources:
+                        Data source:
                     </div>
                     <div className={styles.value}>
                         <div className={styles.source}>
