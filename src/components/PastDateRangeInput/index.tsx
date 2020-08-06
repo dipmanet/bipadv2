@@ -117,6 +117,7 @@ class PastDateRangeInput extends React.PureComponent<Props> {
                     options={pastDateRangeOptions}
                     onChange={this.handleRadioInputChange}
                     value={value.rangeInDays}
+                    contentClassName={styles.dateRanges}
                 />
                 { value.rangeInDays === 'custom' && (
                     <div className={styles.customRange}>

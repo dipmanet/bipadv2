@@ -133,7 +133,8 @@ button {
             border-radius: 5px;
             box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .3);
             background-color: var(--color-foreground);
-            width: 200px;
+            // width: 200px;
+            width: 220px;
             max-height: calc(100vh - 140px - 2 * var(--spacing-medium));
 
             .right-content-container {
