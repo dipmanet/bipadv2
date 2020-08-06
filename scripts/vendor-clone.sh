@@ -5,8 +5,8 @@ if [ -d "src/vendor/react-store" ]; then
     echo "Skipping react-store (already cloned)"
 else
     echo "Cloning react-store to src/vendor/react-store"
-    git clone git@gitlab.com:bipad/react-store.git src/vendor/react-store
-    git checkout feature/bipad-v2
+    git clone git@gitlab.com:bipad2/react-store.git src/vendor/react-store
+    git checkout bipad-main
 fi
 
 # Clone re-map if necessary
