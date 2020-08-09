@@ -701,6 +701,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 mapOptions={{
                                     logoPosition: 'top-left',
                                     minZoom: 5,
+                                    // makes initial map center to Nepal
+                                    center: {
+                                        lng: 85.300140,
+                                        lat: 27.700769,
+                                    },
                                 }}
                                 // debug
 
