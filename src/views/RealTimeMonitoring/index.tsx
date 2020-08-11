@@ -63,6 +63,13 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
+
+interface LegendItem {
+    color: string;
+    label: string;
+    style: string;
+    radius?: number;
+}
 interface State {
     activeView?: ActiveView;
     hoveredHazardId?: number;
@@ -376,6 +383,24 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             setFilterFromOtherSources();
         }
     }
+    // uncomment for Dynamic River Legends
+    // private getRealTimeLegends = (dataList: [], legendItems: []) => {
+    //     const uniqueLegendItems = [...new Set(dataList.map(
+    //         item => `${item.status} and ${item.steady}`.toUpperCase(),
+    //     ))];
+    //     const autoLegends: LegendItem[] = [];
+    //     uniqueLegendItems.map((item) => {
+    //         legendItems.map((legendItem) => {
+    //             if (item === legendItem.label.toUpperCase()) {
+    //                 autoLegends.push(legendItem);
+    //             }
+    //             return null;
+    //         });
+    //         return null;
+    //     });
+
+    //     return autoLegends;
+    // }
 
     private renderLegend = () => {
         const {
@@ -383,6 +408,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 realtimeSources,
                 otherSources,
             },
+            // realTimeRiverList,
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -391,6 +417,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showFire = otherSources && otherSources.findIndex(v => v === 4) !== -1;
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
+
+        // uncomment for dymanic River Legends
+        // const autoRiverLegends = this.getRealTimeLegends(realTimeRiverList, newRiverLegendItems);
 
         return (
             <>
@@ -448,6 +477,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             className={styles.legend}
                             // data={riverLegendItems}
                             data={newRiverLegendItems}
+                            // data={autoRiverLegends}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
