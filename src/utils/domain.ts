@@ -865,20 +865,21 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
 };
 
 // eslint-disable-next-line max-len
-export const generatePaintForVulnerability = (colorDomain: string[], minValue: number, maxValue: number) => {
+export const generatePaintForVulnerability = (colorDomain: string[], minValue: number, maxValue: number, intervals: number[]) => {
     const range = maxValue - minValue;
     const gap = range / colorDomain.length;
 
-    const gapIntervals = [0.01, 0.04, 0.05, 0.1, 0.2, 0.4, 0.2];
-    const preDefinedGap: number[] = [];
-    gapIntervals.forEach((interval) => {
-        preDefinedGap.push(interval * (maxValue - minValue));
-    });
+    // const gapIntervals = [0.01, 0.04, 0.05, 0.1, 0.2, 0.4, 0.2];
+    const countBasedIntervals = intervals;
+    // const preDefinedGap: number[] = [];
+    // gapIntervals.forEach((interval) => {
+    //     preDefinedGap.push(interval * (maxValue - minValue));
+    // });
     const colors: (string | number)[] = [];
     const legend: {
         [key: string]: number;
     } = {};
-    let sum = minValue;
+    // let sum = minValue;
     if (maxValue <= 1 || gap < 1) {
         colorDomain.forEach((color, i) => {
             const val = +(minValue + (i + 1) * gap).toFixed(1);
@@ -892,15 +893,15 @@ export const generatePaintForVulnerability = (colorDomain: string[], minValue: n
         });
     } else {
         colorDomain.forEach((color, i) => {
-            sum += preDefinedGap[i];
+            // sum += preDefinedGap[i];
 
             // NOTE: avoid duplicates
-            if (colors.length > 0 && colors[colors.length - 1] === sum) {
+            if (colors.length > 0 && colors[colors.length - 1] === countBasedIntervals[i]) {
                 return;
             }
             colors.push(color);
-            colors.push(sum);
-            legend[color] = sum;
+            colors.push(countBasedIntervals[i]);
+            legend[color] = countBasedIntervals[i];
         });
     }
 
