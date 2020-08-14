@@ -52,6 +52,7 @@ import * as PageType from '#store/atom/page/types';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
 import AddResourceForm from './AddResourceForm';
+import SwitchView from './SwitchView';
 import styles from './styles.scss';
 
 const TableModalButton = modalize(Button);
@@ -69,6 +70,9 @@ interface ResourceTooltipProps extends PageType.Resource {
     onEditClick: () => void;
     onShowInventoryClick: () => void;
 }
+
+type toggleValues = 'education' | 'health' | 'finance' | 'governance' |
+'tourism' | 'cultural' | 'industry' | 'communication';
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
     const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
@@ -136,6 +140,26 @@ interface State {
     showInventoryModal: boolean;
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
     resourceList: PageType.Resource[];
+    resourceCollection: {
+        education: PageType.Resource[];
+        health: PageType.Resource[];
+        finance: PageType.Resource[];
+        governance: PageType.Resource[];
+        tourism: PageType.Resource[];
+        cultural: PageType.Resource[];
+        industry: PageType.Resource[];
+        communication: PageType.Resource[];
+    };
+    activeLayersIndication: {
+        education: boolean;
+        health: boolean;
+        finance: boolean;
+        governance: boolean;
+        tourism: boolean;
+        cultural: boolean;
+        industry: boolean;
+        communication: boolean;
+    };
 }
 
 interface PropsFromState {
@@ -147,6 +171,7 @@ interface Params {
     resourceId?: number;
     coordinates?: [number, number][];
     setResourceList?: (resources: PageType.Resource[]) => void;
+    setIndividualResourceList?: (key: toggleValues, resources: PageType.Resource[]) => void;
 }
 
 type Props = NewProps<ComponentProps & PropsFromState, Params>
@@ -173,8 +198,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         },
         onSuccess: ({ params, response }) => {
             const resources = response as MultiResponse<PageType.Resource>;
-            if (params && params.setResourceList) {
+            if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
+                if (params.resourceType) {
+                    params.setIndividualResourceList(params.resourceType, resources.results);
+                }
             }
         },
     },
@@ -219,7 +247,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceGetRequest,
             },
         } = this.props;
-        resourceGetRequest.setDefaultParams({ setResourceList: this.setResourceList });
+        resourceGetRequest.setDefaultParams(
+            { setResourceList: this.setResourceList,
+                setIndividualResourceList: this.setIndividualResourceList },
+        );
 
         this.state = {
             activeLayerKey: undefined,
@@ -229,13 +260,54 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             showInventoryModal: false,
             selectedFeatures: undefined,
             resourceList: [],
+            resourceCollection: {
+                education: [],
+                health: [],
+                finance: [],
+                governance: [],
+                tourism: [],
+                cultural: [],
+                industry: [],
+                communication: [],
+            },
+            activeLayersIndication: {
+                education: false,
+                health: false,
+                finance: false,
+                governance: false,
+                tourism: false,
+                cultural: false,
+                industry: false,
+                communication: false,
+            },
         };
+    }
+
+    private handleToggleClick = (key: toggleValues, value: boolean) => {
+        const { activeLayersIndication, resourceCollection } = this.state;
+        const temp = { ...activeLayersIndication };
+        temp[key] = value;
+        this.setState({ activeLayersIndication: temp });
+        console.log(`${key}: ${temp[key]}`);
+        if (temp[key] && resourceCollection[key].length === 0) {
+            this.props.requests.resourceGetRequest.do({
+                resourceType: key,
+            });
+        }
     }
 
     private getUserParams = memoize(getParams);
 
     private setResourceList = (resourceList: PageType.Resource[]) => {
         this.setState({ resourceList });
+    }
+
+    private setIndividualResourceList = (key: toggleValues, resourceList: PageType.Resource[]) => {
+        const { resourceCollection } = this.state;
+        const temp = { ...resourceCollection };
+        temp[key] = resourceList;
+        this.setState({ resourceCollection: temp });
+        console.log(this.state.resourceCollection);
     }
 
     private handleResourceAdd = (resource: PageType.Resource) => {
@@ -367,7 +439,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             88.20166918432409, 30.44702867091792,
         ];
         map.fitBounds(nepalBounds);
-        this.setState({ activeLayerKey: undefined });
+        // this.setState({ activeLayerKey: undefined });
+        this.setState({
+            activeLayerKey: undefined,
+            activeLayersIndication: {
+                education: false,
+                health: false,
+                finance: false,
+                governance: false,
+                tourism: false,
+                cultural: false,
+                industry: false,
+                communication: false,
+            },
+        });
     }
 
     private handlePolygonCreate = (features: MapboxGeoJSONFeature[], draw: Draw) => {
@@ -454,7 +539,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             requests,
             resourceTypeList,
         } = this.props;
-
         const {
             activeLayerKey,
             showResourceForm,
@@ -463,6 +547,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceInfo,
             selectedFeatures,
             resourceList,
+            activeLayersIndication,
+            resourceCollection,
         } = this.state;
 
         const {
@@ -487,14 +573,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             || resourceGetPending
             || polygonResourceGetPending;
 
-        const geojson = this.getGeojson(resourceList);
-
+        // const geojson = this.getGeojson(resourceList);
+        const geojson = this.getGeojson(resourceCollection.education);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
             offset: 10,
         };
-
         return (
             <>
                 <Loading pending={pending} />
@@ -520,7 +605,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 </AccentModalButton>
                             </Cloak>
                             <DangerButton
-                                disabled={!activeLayerKey}
+                                // disabled={!activeLayerKey}
+                                disabled={!Object.values(activeLayersIndication).some(Boolean)
+                                    && !activeLayerKey}
                                 onClick={this.handleLayerUnselect}
                                 className={styles.clearButton}
                                 transparent
@@ -556,6 +643,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             />
                         </div>
                     </header>
+                    <SwitchView
+                        activeLayersIndication={activeLayersIndication}
+                        handleToggleClick={this.handleToggleClick}
+                    />
                     <ListView
                         className={styles.content}
                         data={resourceTypeList}
@@ -580,7 +671,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         url={FoodWarehouseIcon}
                         name="governance"
                     />
-                    { activeLayerKey && (
+                    { Object.values(activeLayersIndication).some(Boolean) && (
                         <>
                             <MapShapeEditor
                                 geoJsons={selectedFeatures}
