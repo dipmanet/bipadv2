@@ -864,6 +864,80 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
     return { paint, legend };
 };
 
+// eslint-disable-next-line max-len
+export const generatePaintForVulnerability = (colorDomain: string[], minValue: number, maxValue: number, intervals: number[]) => {
+    const range = maxValue - minValue;
+    const gap = range / colorDomain.length;
+
+    // const gapIntervals = [0.01, 0.04, 0.05, 0.1, 0.2, 0.4, 0.2];
+    const countBasedIntervals = intervals;
+    // const preDefinedGap: number[] = [];
+    // gapIntervals.forEach((interval) => {
+    //     preDefinedGap.push(interval * (maxValue - minValue));
+    // });
+    const colors: (string | number)[] = [];
+    const legend: {
+        [key: string]: number;
+    } = {};
+    // let sum = minValue;
+    if (maxValue <= 1 || gap < 1) {
+        colorDomain.forEach((color, i) => {
+            const val = +(minValue + (i + 1) * gap).toFixed(1);
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === val) {
+                return;
+            }
+            colors.push(color);
+            colors.push(val);
+            legend[color] = val;
+        });
+    } else {
+        colorDomain.forEach((color, i) => {
+            // sum += preDefinedGap[i];
+
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === countBasedIntervals[i]) {
+                return;
+            }
+            colors.push(color);
+            colors.push(countBasedIntervals[i]);
+            legend[color] = countBasedIntervals[i];
+        });
+    }
+
+    let paint: {
+        'fill-color': string | any[];
+        'fill-opacity': number | any[];
+    } = {
+        'fill-color': 'white',
+        'fill-opacity': 0.1,
+    };
+
+    if (colors.length !== 0) {
+        const fillColor = [
+            'step',
+            ['feature-state', 'value'],
+            ...colors.slice(0, -1),
+        ];
+
+        const fillOpacity = [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            0,
+            ['==', ['feature-state', 'hovered'], true],
+            0.5,
+            1,
+        ];
+
+        paint = {
+            'fill-color': fillColor,
+            'fill-opacity': fillOpacity,
+        };
+    }
+
+    return { paint, legend };
+};
+
 export const getAttributeOptions = (resourceEnums: EnumItem[], attribute: string) => {
     const value = resourceEnums.find(r => r.attribute === attribute);
     const choices = (value && value.choices) || [];
