@@ -132,6 +132,17 @@ interface ComponentProps {
     className?: string;
 }
 
+interface ResourceColletion {
+    education: PageType.Resource[];
+    health: PageType.Resource[];
+    finance: PageType.Resource[];
+    governance: PageType.Resource[];
+    tourism: PageType.Resource[];
+    cultural: PageType.Resource[];
+    industry: PageType.Resource[];
+    communication: PageType.Resource[];
+}
+
 interface State {
     resourceLngLat: [number, number] | undefined;
     activeLayerKey: ResourceTypeKeys | undefined;
@@ -140,16 +151,7 @@ interface State {
     showInventoryModal: boolean;
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
     resourceList: PageType.Resource[];
-    resourceCollection: {
-        education: PageType.Resource[];
-        health: PageType.Resource[];
-        finance: PageType.Resource[];
-        governance: PageType.Resource[];
-        tourism: PageType.Resource[];
-        cultural: PageType.Resource[];
-        industry: PageType.Resource[];
-        communication: PageType.Resource[];
-    };
+    resourceCollection: ResourceColletion;
     activeLayersIndication: {
         education: boolean;
         health: boolean;
@@ -310,22 +312,59 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         console.log(this.state.resourceCollection);
     }
 
+    private getNewResourceCollection = (
+        resource: PageType.Resource,
+        resourceCollection: ResourceColletion,
+    ): ResourceColletion => {
+        let newResourceCollection: ResourceColletion = {
+            education: [],
+            health: [],
+            finance: [],
+            governance: [],
+            tourism: [],
+            cultural: [],
+            industry: [],
+            communication: [],
+        };
+        const { resourceType } = resource;
+        const { [resourceType]: singleResource } = resourceCollection;
+
+        const newSingleResource = [
+            ...singleResource,
+            resource,
+        ];
+        newResourceCollection = {
+            ...resourceCollection,
+            [resourceType]: newSingleResource,
+        };
+
+        return newResourceCollection;
+    }
+
     private handleResourceAdd = (resource: PageType.Resource) => {
         const {
             resourceList,
+            resourceCollection,
         } = this.state;
         const newResourceList = [
             resource,
             ...resourceList,
         ];
-        this.setState({ resourceList: newResourceList });
+        const newResourceCollection: ResourceColletion = this.getNewResourceCollection(
+            resource, resourceCollection,
+        );
+        this.setState({ resourceList: newResourceList, resourceCollection: newResourceCollection });
+        console.log('After Add: ', resourceCollection);
     }
 
     private handleResourceEdit = (resourceId: PageType.Resource['id'], resource: PageType.Resource) => {
         const {
             resourceList,
+            resourceCollection,
         } = this.state;
 
+        const { resourceType } = resource;
+        const { [resourceType]: singleResource } = resourceCollection;
         const newResourceList = produce(resourceList, (safeResourceList) => {
             const index = resourceList.findIndex(r => r.id === resourceId);
             if (index !== -1) {
@@ -334,7 +373,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
         });
 
-        this.setState({ resourceList: newResourceList });
+        const newSingleResource = produce(singleResource, (safeSingleResource) => {
+            const index = singleResource.findIndex(r => r.id === resourceId);
+            if (index !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                safeSingleResource[index] = resource;
+            }
+        });
+
+        const newResourceCollection = {
+            ...resourceCollection,
+            [resourceType]: newSingleResource,
+        };
+
+        // this.setState({ resourceList: newResourceList });
+        this.setState({ resourceList: newResourceList, resourceCollection: newResourceCollection });
     }
 
     private getGeojson = memoize((resourceList: PageType.Resource[]) => {
@@ -574,7 +627,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             || polygonResourceGetPending;
 
         // const geojson = this.getGeojson(resourceList);
-        const geojson = this.getGeojson(resourceCollection.education);
+        const educationGeoJson = this.getGeojson(resourceCollection.education);
+        const healthGeoJson = this.getGeojson(resourceCollection.health);
+        const financeGeoJson = this.getGeojson(resourceCollection.finance);
+        const governanceGeoJson = this.getGeojson(resourceCollection.governance);
+        const tourismGeoJson = this.getGeojson(resourceCollection.tourism);
+        const culturalGeoJson = this.getGeojson(resourceCollection.cultural);
+        const industryGeoJson = this.getGeojson(resourceCollection.industry);
+        const communicationGeoJson = this.getGeojson(resourceCollection.communication);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -647,13 +707,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         activeLayersIndication={activeLayersIndication}
                         handleToggleClick={this.handleToggleClick}
                     />
-                    <ListView
+                    {/* for previous radio buttons structure starts */}
+                    {/* <ListView
                         className={styles.content}
                         data={resourceTypeList}
                         keySelector={d => d.title}
                         renderer={Option}
                         rendererParams={this.getLayerRendererParams}
-                    />
+                    /> */}
+                    {/* for previous radio buttons structure ends */}
                     {/* resourceListInsidePolygon.length !== 0 && (
                         <div className={styles.polygonSelectedLayerInfo}>
                             { resourceListInsidePolygon.length }
@@ -686,7 +748,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     },
                                 }}
                             />
-                            <MapSource
+                            {/* previously implemented logic */}
+                            {/* <MapSource
                                 sourceKey="resource-symbol"
                                 sourceOptions={{
                                     type: 'geojson',
@@ -751,7 +814,561 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         />
                                     </MapTooltip>
                                 )}
-                            </MapSource>
+                            </MapSource> */}
+                            {/* new structure starts */}
+                            {/* Education */}
+                            {activeLayersIndication.education && (
+                                <MapSource
+                                    sourceKey="resource-symbol-education"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={educationGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-education"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.education,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-education"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-education"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.education,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-education"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'education',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Health */}
+                            {activeLayersIndication.health && (
+                                <MapSource
+                                    sourceKey="resource-symbol-health"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={healthGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-health"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.health,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-health"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-health"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.health,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-health"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'health',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Finance */}
+                            {activeLayersIndication.finance && (
+                                <MapSource
+                                    sourceKey="resource-symbol-finance"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={financeGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-finance"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.finance,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-finance"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-finance"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.finance,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-finance"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'finance',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Governance */}
+                            {activeLayersIndication.governance && (
+                                <MapSource
+                                    sourceKey="resource-symbol-governance"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={governanceGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-governance"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.governance,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-governance"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-governance"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.governance,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-governance"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'governance',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Tourism */}
+                            {activeLayersIndication.tourism && (
+                                <MapSource
+                                    sourceKey="resource-symbol-tourism"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={tourismGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-tourism"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.tourism,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-tourism"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-tourism"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.tourism,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-tourism"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'tourism',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Cultural */}
+                            {activeLayersIndication.cultural && (
+                                <MapSource
+                                    sourceKey="resource-symbol-cultural"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={culturalGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-cultural"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.cultural,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-cultural"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-cultural"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.cultural,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-cultural"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'cultural',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Industry */}
+                            {activeLayersIndication.industry && (
+                                <MapSource
+                                    sourceKey="resource-symbol-industry"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={industryGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-industry"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.industry,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-industry"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-industry"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.industry,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-industry"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'industry',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Communication */}
+                            {activeLayersIndication.communication && (
+                                <MapSource
+                                    sourceKey="resource-symbol-communication"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={communicationGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-communication"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.communication,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-communication"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-communication"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.communication,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-communication"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'communication',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* new structure ends */}
                         </>
                     )}
                 </div>
