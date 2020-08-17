@@ -130,6 +130,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
 interface ComponentProps {
     className?: string;
+    handleCarActive: Function;
 }
 
 interface ResourceColletion {
@@ -285,12 +286,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         };
     }
 
+    public componentDidMount() {
+        const { handleCarActive } = this.props;
+        handleCarActive(true);
+    }
+
+    public componentWillUnmount() {
+        const { handleCarActive } = this.props;
+        handleCarActive(false);
+    }
+
     private handleToggleClick = (key: toggleValues, value: boolean) => {
         const { activeLayersIndication, resourceCollection } = this.state;
         const temp = { ...activeLayersIndication };
         temp[key] = value;
         this.setState({ activeLayersIndication: temp });
-        console.log(`${key}: ${temp[key]}`);
         if (temp[key] && resourceCollection[key].length === 0) {
             this.props.requests.resourceGetRequest.do({
                 resourceType: key,
@@ -309,7 +319,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const temp = { ...resourceCollection };
         temp[key] = resourceList;
         this.setState({ resourceCollection: temp });
-        console.log(this.state.resourceCollection);
     }
 
     private getNewResourceCollection = (
@@ -354,7 +363,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resource, resourceCollection,
         );
         this.setState({ resourceList: newResourceList, resourceCollection: newResourceCollection });
-        console.log('After Add: ', resourceCollection);
     }
 
     private handleResourceEdit = (resourceId: PageType.Resource['id'], resource: PageType.Resource) => {

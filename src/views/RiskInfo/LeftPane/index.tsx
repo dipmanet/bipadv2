@@ -36,6 +36,7 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
+    handleCarActive: Function;
 }
 
 interface Params {
@@ -124,6 +125,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            handleCarActive,
         } = this.props;
 
         const { activeAttribute } = this.state;
@@ -174,6 +176,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             layerMap={groupedLayers}
                             layerGroupList={layerGroupList}
                             activeView={activeAttribute}
+                            handleCarActive={handleCarActive}
                         />
                     )}
                     <Overview
