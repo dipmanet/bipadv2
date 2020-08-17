@@ -238,22 +238,25 @@ export const alertToPointGeojson = (alertList: AlertsWithReference[], hazards: O
 
                 const hazard = hazards[hazardId];
 
-                return {
-                    id,
-                    type: 'Feature',
-                    geometry: { ...geometry },
-                    properties: {
-                        title,
-                        description,
-                        hazardTitle: hazard.title,
-                        hazardIcon: hazard.icon,
-                        hazardColor: hazard.color || '#4666b0',
-                        createdOn: new Date(createdOn).getTime(),
-                        referenceType,
-                        referenceData,
-                        createdDate: createdOn,
-                    },
-                };
+                if (hazard) {
+                    return {
+                        id,
+                        type: 'Feature',
+                        geometry: { ...geometry },
+                        properties: {
+                            title,
+                            description,
+                            hazardTitle: hazard.title,
+                            hazardIcon: hazard.icon,
+                            hazardColor: hazard.color || '#4666b0',
+                            createdOn: new Date(createdOn).getTime(),
+                            referenceType,
+                            referenceData,
+                            createdDate: createdOn,
+                        },
+                    };
+                }
+                return {};
             }),
     };
 
