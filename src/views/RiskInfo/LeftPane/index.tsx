@@ -73,7 +73,7 @@ const attributeNames = {
     exposure: 'Exposure',
     vulnerability: 'Vulnerability',
     risk: 'Risk',
-    'capacity-and-resources': 'Capacity & resources',
+    'capacity-and-resources': 'Capacity and Resources',
     'climate-change': 'Climate change',
 };
 

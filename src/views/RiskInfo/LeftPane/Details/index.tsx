@@ -63,7 +63,7 @@ export default class Details extends React.PureComponent<Props, State> {
             }),
         },
         'capacity-and-resources': {
-            title: 'Capacity & resources',
+            title: 'Capacity and resources',
             component: CapacityAndResources,
             rendererParams: () => ({
                 className: styles.content,
