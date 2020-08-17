@@ -313,7 +313,8 @@ class AlertEventMap extends React.PureComponent {
         const featurePolygonCollection = this.getPolygonAlertsFeatureCollection(alertList, hazards);
         const featurePointCollection = this.getPointAlertsFeatureCollection(alertList, hazards);
 
-        const hazardList = this.getHazardList(alertList);
+        let hazardList = this.getHazardList(alertList);
+        hazardList = hazardList.filter(item => item);
 
         const eventsConvexFeatureCollection = this.getConvexEventsFeatureCollection(
             eventList,
