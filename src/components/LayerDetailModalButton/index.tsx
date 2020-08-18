@@ -31,9 +31,82 @@ interface ModalProps {
     closeModal?: () => void;
 }
 
+// const orderedKeys = {
+//     general: {
+//         dateOfReceipt: '',
+//         abstract: '',
+//         purpose: '',
+//         descriptiveKeyword: '',
+//     },
+//     metadataRecordInfo: {
+//         language: '',
+//         charset: '',
+//         hierarchyLevel: '',
+//         date: '',
+//         standardName: '',
+//     },
+//     contact: {
+//         name: '',
+//         organizationName: '',
+//         positionName: '',
+//         role: '',
+//         email: '',
+//     },
+//     identificationInfo: {
+//         title: '',
+//         date: '',
+//         dateType: '',
+//         abstract: '',
+//         purpose: '',
+//         status: '',
+//         charset: '',
+//         topicCategory: '',
+//         spaticalRepresentationType: '',
+//         spaticalResolutionEquivalentScale: '',
+//     },
+//     pointOfContact: {
+//         name: '',
+//         organizationName: '',
+//         positionName: '',
+//         role: '',
+//     },
+//     geographicExtend: {
+//         geographicExtend: '',
+//         geographicExtendEast: '',
+//         geographicExtendWest: '',
+//         geographicExtendNorth: '',
+//         geographicExtendSouth: '',
+//     },
+//     resourceMaintenanceInformation: {
+//         maintenanceAndUpdateFrequency: '',
+//         userDefinedUpdateFrequency: '',
+//         dateOfNextUpdate: '',
+//     },
+//     legalConstraints: {
+//         useLimitation: '',
+//         accessConstraints: '',
+//         useConstraints: '',
+//     },
+//     referenceSystemInformation: {
+//         code: '',
+//     },
+//     dataQualityInfo: {
+//         hierarchyLevel: '',
+//         statement: '',
+//     },
+//     distributorInfo: {
+//         individualName: '',
+//         organizationName: '',
+//         positionName: '',
+//         email: '',
+//         role: '',
+//     },
+// };
+
 const orderedKeys = {
     general: {
-        dateOfReceipt: '',
+        datasetTitle: '',
+        datasetCreationDate: '',
         abstract: '',
         purpose: '',
         descriptiveKeyword: '',
@@ -53,11 +126,7 @@ const orderedKeys = {
         email: '',
     },
     identificationInfo: {
-        title: '',
-        date: '',
-        dateType: '',
-        abstract: '',
-        purpose: '',
+        dataType: '',
         status: '',
         charset: '',
         topicCategory: '',
@@ -70,12 +139,11 @@ const orderedKeys = {
         positionName: '',
         role: '',
     },
-    geographicExtend: {
-        geographicExtend: '',
-        geographicExtendEast: '',
-        geographicExtendWest: '',
-        geographicExtendNorth: '',
-        geographicExtendSouth: '',
+    geographicExtent: {
+        geographicExtentEast: '',
+        geographicExtentWest: '',
+        geographicExtentNorth: '',
+        geographicExtentSouth: '',
     },
     resourceMaintenanceInformation: {
         maintenanceAndUpdateFrequency: '',
@@ -145,7 +213,6 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                 const {
                     layer,
                 } = this.props;
-
                 if (!layer.metadata) {
                     return (
                         <div className={styles.metadata}>
@@ -168,7 +235,6 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
                             }
 
                             const orderGroup = orderedKeys[groupKey];
-
 
                             return (
                                 <div
