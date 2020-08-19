@@ -1,5 +1,17 @@
 .manual {
     overflow: auto;
+
+    .header{
+        font-size: var(--font-size-large);
+        margin: var(--spacing-small) 0;
+        font-weight: var(--font-weight-bold);
+        text-decoration: dotted;
+        letter-spacing: var(--spacing-extra-small);
+        padding: var(--spacing-small-alt);
+        padding-bottom: 0;
+        display: inline-block;
+        border-bottom: 1px solid red;
+    }
 }
 
 .manual-item {

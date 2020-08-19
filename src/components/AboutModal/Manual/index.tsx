@@ -3,6 +3,9 @@ import { _cs } from '@togglecorp/fujs';
 
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import List from '#rscv/List';
+import {
+    arrayGroupBy,
+} from '#utils/common';
 
 import Icon from '#rscg/Icon';
 
@@ -97,15 +100,36 @@ class Manual extends React.PureComponent<Props> {
 
         const { results = manualItemEmptyList } = response as ManualResponse;
 
+        // grouping by year and removing undefined year values
+        const temp = arrayGroupBy(results, 'year');
+        delete temp[`${undefined}`];
+
+        // previous logic
+        // return (
+        //     <div className={_cs(className, styles.manual)}>
+        //         { pending && <LoadingAnimation /> }
+        //         <List
+        //             data={results}
+        //             renderer={ManualItem}
+        //             rendererParams={manualItemRendererParams}
+        //             keySelector={manualItemKeySelector}
+        //         />
+        //     </div>
+        // );
         return (
             <div className={_cs(className, styles.manual)}>
                 { pending && <LoadingAnimation /> }
-                <List
-                    data={results}
-                    renderer={ManualItem}
-                    rendererParams={manualItemRendererParams}
-                    keySelector={manualItemKeySelector}
-                />
+                {Object.keys(temp).sort((a, b) => b - a).map(key => (
+                    <div key={key} className={styles.item}>
+                        <div className={styles.header}>{key}</div>
+                        <List
+                            data={temp[key]}
+                            renderer={ManualItem}
+                            rendererParams={manualItemRendererParams}
+                            keySelector={manualItemKeySelector}
+                        />
+                    </div>
+                ))}
             </div>
         );
     }
