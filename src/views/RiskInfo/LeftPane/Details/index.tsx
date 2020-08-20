@@ -20,6 +20,7 @@ interface Props {
     layerGroupList: LayerGroup[];
     attribute?: AttributeKey;
     activeView: string;
+    handleCarActive: Function;
 }
 
 interface State {
@@ -62,12 +63,13 @@ export default class Details extends React.PureComponent<Props, State> {
             }),
         },
         'capacity-and-resources': {
-            title: 'Capacity & resources',
+            title: 'Capacity and resources',
             component: CapacityAndResources,
             rendererParams: () => ({
                 className: styles.content,
                 layerList: this.props.layerMap.capacity_resource || [],
                 layerGroupList: this.props.layerGroupList.filter(group => group.category === 'capacity_resource'),
+                handleCarActive: this.props.handleCarActive,
             }),
         },
         'climate-change': {
