@@ -16,6 +16,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Message from '#rscv/Message';
 
 import ManualIcon from '#resources/images/manualicon.png';
 import styles from './styles.scss';
@@ -40,6 +41,8 @@ interface ManualElement {
 interface ManualResponse {
     results: ManualElement[];
 }
+
+const isEmpty = (obj: {}) => Object.keys(obj).length === 0;
 
 const ManualItem = ({ data, className }: {
     className?: string;
@@ -101,29 +104,41 @@ class Manual extends React.PureComponent<Props> {
         const { results = manualItemEmptyList } = response as ManualResponse;
 
         // grouping by year and removing undefined year values
-        const temp = arrayGroupBy(results, 'year');
-        delete temp[`${undefined}`];
-
+        const yearWiseList = arrayGroupBy(results, 'year');
+        delete yearWiseList[`${undefined}`];
         // previous logic
-        // return (
-        //     <div className={_cs(className, styles.manual)}>
-        //         { pending && <LoadingAnimation /> }
-        //         <List
-        //             data={results}
-        //             renderer={ManualItem}
-        //             rendererParams={manualItemRendererParams}
-        //             keySelector={manualItemKeySelector}
-        //         />
-        //     </div>
-        // );
+        /* return (
+            <div className={_cs(className, styles.manual)}>
+                { pending && <LoadingAnimation /> }
+                <List
+                    data={results}
+                    renderer={ManualItem}
+                    rendererParams={manualItemRendererParams}
+                    keySelector={manualItemKeySelector}
+                />
+            </div>
+        ); */
+
+        // new logic
+        if (isEmpty(yearWiseList)) {
+            return (
+                <div
+                    className={styles.message}
+                >
+                    <Message>
+                        No Publications to display
+                    </Message>
+                </div>
+            );
+        }
         return (
             <div className={_cs(className, styles.manual)}>
                 { pending && <LoadingAnimation /> }
-                {Object.keys(temp).sort((a, b) => b - a).map(key => (
+                {Object.keys(yearWiseList).sort((a, b) => b - a).map(key => (
                     <div key={key} className={styles.item}>
                         <div className={styles.header}>{key}</div>
                         <List
-                            data={temp[key]}
+                            data={yearWiseList[key]}
                             renderer={ManualItem}
                             rendererParams={manualItemRendererParams}
                             keySelector={manualItemKeySelector}

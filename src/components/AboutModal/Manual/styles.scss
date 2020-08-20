@@ -54,3 +54,8 @@
         background-color: var(--color-background-alt);
     }
 }
+
+.message {
+    display: flex;
+    flex-grow: 1;
+}
