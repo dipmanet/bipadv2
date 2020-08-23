@@ -217,3 +217,11 @@ export function saveChart(elementId: string, name: string) {
             saveAs(blob, `${name}.png`)
         ));
 }
+
+export const arrayGroupBy = (array: any[], key: any) => array.reduce((result, currentValue) => {
+    // eslint-disable-next-line no-param-reassign
+    (result[currentValue[key]] = result[currentValue[key]] || []).push(
+        currentValue,
+    );
+    return result;
+}, {});

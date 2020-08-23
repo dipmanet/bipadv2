@@ -1,5 +1,21 @@
 .manual {
     overflow: auto;
+
+    .header{
+        font-size: var(--font-size-large);
+        margin: var(--spacing-small) 0;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: var(--spacing-extra-small);
+        padding: var(--spacing-small-alt);
+        padding-bottom: 0;
+        display: inline-block;
+        border-bottom: 1px solid red;
+    }
+
+    .item {
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.4);
+
+    }
 }
 
 .manual-item {
@@ -37,4 +53,9 @@
     &:hover {
         background-color: var(--color-background-alt);
     }
+}
+
+.message {
+    display: flex;
+    flex-grow: 1;
 }

@@ -42,7 +42,7 @@ export const attributeList: AttributeItem[] = [
     },
     {
         key: 'capacity-and-resources',
-        title: 'Capacity & resources',
+        title: 'Capacity and resources',
         description: 'The combination of all the strengths, attributes and resources available within an organization, community or society to manage and reduce disaster risks and strengthen resilience.',
         color: '#1976d2',
         icon: 'CR',

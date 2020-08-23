@@ -7,6 +7,35 @@ const incidentCircleRadii = [
     8,
 ];
 
+const resourceClusterInitial = {
+    'circle-color': '#ffeb3b',
+    'circle-radius': [
+        'step',
+        ['get', 'point_count'],
+        10,
+        100,
+        20,
+        750,
+        30,
+    ],
+    'circle-stroke-width': 1,
+    'circle-stroke-color': '#000000',
+    'circle-stroke-opacity': 0.3,
+};
+
+const resourcePointInitial = {
+    'circle-color': '#ffffff',
+    'circle-radius': 13,
+    'circle-opacity': 0.9,
+    'circle-stroke-width': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        2,
+        1,
+    ],
+    'circle-stroke-color': '#000000',
+    'circle-stroke-opacity': 0.3,
+};
+
 export default {
     province: {
         outline: {
@@ -313,6 +342,38 @@ export default {
             'circle-stroke-color': '#000000',
             'circle-stroke-opacity': 0.3,
         },
+        education: {
+            ...resourceClusterInitial,
+            'circle-color': '#ffd046',
+        },
+        health: {
+            ...resourceClusterInitial,
+            'circle-color': '#EADAA2',
+        },
+        finance: {
+            ...resourceClusterInitial,
+            'circle-color': '#BD93BD',
+        },
+        governance: {
+            ...resourceClusterInitial,
+            'circle-color': '#82ddf0',
+        },
+        tourism: {
+            ...resourceClusterInitial,
+            'circle-color': '#7dcd85',
+        },
+        cultural: {
+            ...resourceClusterInitial,
+            'circle-color': '#c4b2bc',
+        },
+        industry: {
+            ...resourceClusterInitial,
+            'circle-color': '#a6a867',
+        },
+        communication: {
+            ...resourceClusterInitial,
+            'circle-color': '#efa8b8',
+        },
     },
 
     resourcePoint: {
@@ -327,6 +388,38 @@ export default {
             ],
             'circle-stroke-color': '#000000',
             'circle-stroke-opacity': 0.3,
+        },
+        education: {
+            ...resourcePointInitial,
+            'circle-color': '#ffd046',
+        },
+        health: {
+            ...resourcePointInitial,
+            'circle-color': '#EADAA2',
+        },
+        finance: {
+            ...resourcePointInitial,
+            'circle-color': '#bd93bd',
+        },
+        governance: {
+            ...resourcePointInitial,
+            'circle-color': '#82ddf0',
+        },
+        tourism: {
+            ...resourcePointInitial,
+            'circle-color': '#7dcd85',
+        },
+        cultural: {
+            ...resourcePointInitial,
+            'circle-color': '#c4b2bc',
+        },
+        industry: {
+            ...resourcePointInitial,
+            'circle-color': '#a6a867',
+        },
+        communication: {
+            ...resourcePointInitial,
+            'circle-color': '#efa8b8',
         },
     },
 
