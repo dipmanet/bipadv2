@@ -38,11 +38,11 @@ const mapStyles = [
         style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
         color: '#c89966',
     },
-    {
-        name: 'osm',
-        color: '#000000',
-        style: osmLibertyStyle,
-    },
+    // {
+    //     name: 'osm',
+    //     color: '#000000',
+    //     style: osmLibertyStyle,
+    // },
     {
         name: 'osm-raster',
         color: '#f0ff0f',
