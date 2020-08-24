@@ -134,17 +134,21 @@ class Manual extends React.PureComponent<Props> {
         return (
             <div className={_cs(className, styles.manual)}>
                 { pending && <LoadingAnimation /> }
-                {Object.keys(yearWiseList).sort((a, b) => b - a).map(key => (
-                    <div key={key} className={styles.item}>
-                        <div className={styles.header}>{key}</div>
-                        <List
-                            data={yearWiseList[key]}
-                            renderer={ManualItem}
-                            rendererParams={manualItemRendererParams}
-                            keySelector={manualItemKeySelector}
-                        />
-                    </div>
-                ))}
+                {Object.keys(yearWiseList).sort((a, b) => b - a).map((key) => {
+                    const orderedManauals = yearWiseList[key]
+                        .sort((a, b) => (a.order < b.order ? -1 : 1));
+                    return (
+                        <div key={key} className={styles.item}>
+                            <div className={styles.header}>{key}</div>
+                            <List
+                                data={orderedManauals}
+                                renderer={ManualItem}
+                                rendererParams={manualItemRendererParams}
+                                keySelector={manualItemKeySelector}
+                            />
+                        </div>
+                    );
+                })}
             </div>
         );
     }
