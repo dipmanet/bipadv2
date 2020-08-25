@@ -266,23 +266,25 @@ const MapDownloadButton = (props: Props) => {
                             console.log('legendElement: ', legendElement);
                             return elCanvas;
                         });
-                        console.log('legendPromise: ', legendPromise);
                         Promise.all(promises).then((canvases) => {
                             canvases.forEach((c, i) => {
-                                console.log('canvases: ', canvases);
+                                console.log('canvases: ', c);
                                 const y = mapCanvas.height - c.height - 6;
                                 const x = 6 + c.width * i;
-                                context.drawImage(c, x, y);
+                                context.drawImage(c, x, y, c.width, c.height);
+                                console.log('drawing done');
                             });
 
                             resolve();
                         });
                     });
 
+                    console.log('Legend Promise: ', legendPromise);
                     allPromises.push(legendPromise);
                 }
 
                 Promise.all(allPromises).then(() => {
+                    console.log('allPromises: ', allPromises);
                     canvas.toBlob((blob) => {
                         const link = document.createElement('a');
                         link.download = `map-export-${(new Date()).getTime()}.png`;
