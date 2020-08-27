@@ -1,4 +1,5 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 import Legend from '#rscz/Legend';
 
 import styles from './styles.scss';
@@ -43,7 +44,7 @@ const CapacityAndResourcesLegend = () => {
     //     return activeLegends;
     // };
     return (
-        <div className={styles.wrapper}>
+        <div className={_cs(styles.wrapper, 'map-legend-container')}>
             <div className={styles.title}>Capacity and Resources Legends</div>
             <Legend
                 className={styles.legend}
