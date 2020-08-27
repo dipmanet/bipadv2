@@ -226,7 +226,6 @@ const MapDownloadButton = (props: Props) => {
 
                 const legendContainerClassName = 'map-legend-container';
                 const legend = document.getElementsByClassName(legendContainerClassName);
-                console.log('legend: ', legend);
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
 
                 const today = new Date();
@@ -263,28 +262,23 @@ const MapDownloadButton = (props: Props) => {
                     const legendPromise = new Promise((resolve) => {
                         const promises = Array.from(legend).map((legendElement) => {
                             const elCanvas = html2canvas(legendElement as HTMLElement);
-                            console.log('legendElement: ', legendElement);
                             return elCanvas;
                         });
                         Promise.all(promises).then((canvases) => {
                             canvases.forEach((c, i) => {
-                                console.log('canvases: ', c);
                                 const y = mapCanvas.height - c.height - 6;
                                 const x = 6 + c.width * i;
                                 context.drawImage(c, x, y, c.width, c.height);
-                                console.log('drawing done');
                             });
 
                             resolve();
                         });
                     });
 
-                    console.log('Legend Promise: ', legendPromise);
                     allPromises.push(legendPromise);
                 }
 
                 Promise.all(allPromises).then(() => {
-                    console.log('allPromises: ', allPromises);
                     canvas.toBlob((blob) => {
                         const link = document.createElement('a');
                         link.download = `map-export-${(new Date()).getTime()}.png`;
