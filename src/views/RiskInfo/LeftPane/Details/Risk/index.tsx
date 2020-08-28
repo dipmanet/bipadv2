@@ -267,16 +267,16 @@ class Risk extends React.PureComponent<Props, State> {
 
     private handleMetricSliderChange = (key, value) => {
         const { addLayer } = this.context;
-        const { requests } = this.props;
+        // const { requests } = this.props;
+        const { requests, layerList } = this.props;
+        const earthquakeLayer = layerList.filter(layer => layer.title.toUpperCase() === 'EARTHQUAKE');
         const { metricValues } = this.state;
-
         const newMetricValues = { ...metricValues };
         newMetricValues[key] = value;
         this.setState({ metricValues: newMetricValues });
-
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
         const riskData = this.getRiskData(riskDataRaw, newMetricValues);
-        const riskLayer = transformRiskDataToLayer(riskData);
+        const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], {});
 
         if (addLayer) {
             addLayer(riskLayer);
@@ -335,7 +335,6 @@ class Risk extends React.PureComponent<Props, State> {
             layerList,
             layerGroupList,
         );
-
         const {
             showMetricSettings,
             showOpacitySettings,
@@ -373,8 +372,9 @@ class Risk extends React.PureComponent<Props, State> {
                 dataValue: 'Ward_War_4',
             },
         };
-
-        const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
+        const earthquakeLayer = layerList.filter(layer => layer.title.toUpperCase() === 'EARTHQUAKE');
+        // const riskLayer = transformRiskDataToLayer(riskData, layerList[0], (
+        const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], (
             <>
                 <DataTableModalButton
                     modal={(

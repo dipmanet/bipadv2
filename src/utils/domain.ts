@@ -867,22 +867,48 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
     return { paint, legend };
 };
 
-// eslint-disable-next-line max-len
-export const generatePaintForVulnerability = (colorDomain: string[], minValue: number, maxValue: number, intervals: number[]) => {
+/**
+ * @param colorDomain List of color to be shown in the legend
+ * @param minValue Min value in the supplied data
+ * @param maxValue Max value in the supplied data
+ * @param categoryData Data that is to be distributed by quantile method
+ * @param parts Number of divisions for quantile division
+ */
+export const generatePaintByQuantile = (
+    colorDomain: string[],
+    minValue: number,
+    maxValue: number,
+    categoryData: number[],
+    parts: number,
+) => {
     const range = maxValue - minValue;
     const gap = range / colorDomain.length;
 
-    // const gapIntervals = [0.01, 0.04, 0.05, 0.1, 0.2, 0.4, 0.2];
+    /* Quantile Division starts */
+    const data = categoryData;
+    // Divide into equal number of events
+    const divider = Math.ceil(data.length / parts);
+    data.sort((a, b) => a - b);
+    const dividedSpecificData = new Array(Math.ceil(data.length / divider))
+        .fill()
+        .map(_ => data.splice(0, divider));
+
+    // remove any empty array from specific data
+    const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
+
+    const intervals: number[] = [];
+    // push max value from each array inside nonEmptyData
+    // plus 1 added to fix 0 - 0 issue
+    nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+        ? Math.max(...d) + 1 : Math.max(...d)));
+
+    /* Quantile Division ends */
+
     const countBasedIntervals = intervals;
-    // const preDefinedGap: number[] = [];
-    // gapIntervals.forEach((interval) => {
-    //     preDefinedGap.push(interval * (maxValue - minValue));
-    // });
     const colors: (string | number)[] = [];
     const legend: {
         [key: string]: number;
     } = {};
-    // let sum = minValue;
     if (maxValue <= 1 || gap < 1) {
         colorDomain.forEach((color, i) => {
             const val = +(minValue + (i + 1) * gap).toFixed(1);
@@ -896,8 +922,6 @@ export const generatePaintForVulnerability = (colorDomain: string[], minValue: n
         });
     } else {
         colorDomain.forEach((color, i) => {
-            // sum += preDefinedGap[i];
-
             // NOTE: avoid duplicates
             if (colors.length > 0 && colors[colors.length - 1] === countBasedIntervals[i]) {
                 return;
