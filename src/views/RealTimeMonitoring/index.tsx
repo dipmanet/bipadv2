@@ -279,6 +279,11 @@ const emptyHazardHoverAttributeList: MapStateElement[] = [];
 
 type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire' | undefined;
 
+interface Source {
+    id: number;
+    title: ActiveView;
+}
+
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -299,47 +304,56 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             value: true,
         }];
     }
+    /**
+     *
+     * @param realtimeSources List of which realtime sources is active
+     * @param otherSources List of which realtime other sources is active
+     */
 
     private setStateFromFilter = (realtimeSources?: number[], otherSources?: number[]) => {
-        let availableFilter = 0;
+        let availableFilter = -99;
+
+        const sources: Source[] = [
+            { id: 2, title: 'riverwatch' },
+            { id: 3, title: 'rainwatch' },
+        ];
+
+        const othSources: Source[] = [
+            { id: 1, title: 'earthquake' },
+            { id: 4, title: 'fire' },
+            { id: 5, title: 'pollution' },
+            // { id: 6, title: 'streamflow' },
+        ];
 
         const setFilterFromSources = () => {
-            if (availableFilter === 3) {
-                this.setState({ activeView: 'rainwatch' });
-            }
-            if (availableFilter === 2) {
-                this.setState({ activeView: 'riverwatch' });
-            }
+            sources.forEach((source) => {
+                if (availableFilter === source.id) {
+                    this.setState({ activeView: source.title });
+                }
+            });
         };
 
         const setFilterFromOtherSources = () => {
-            if (availableFilter === 1) {
-                this.setState({ activeView: 'earthquake' });
-            }
-
-            if (availableFilter === 4) {
-                this.setState({ activeView: 'fire' });
-            }
-
-            if (availableFilter === 5) {
-                this.setState({ activeView: 'pollution' });
-            }
-
-            if (availableFilter === 5) {
-                this.setState({ activeView: 'pollution' });
-            }
+            othSources.forEach((oSources) => {
+                if (availableFilter === oSources.id) {
+                    this.setState({ activeView: oSources.title });
+                }
+            });
         };
 
         if (realtimeSources && realtimeSources.length > 0) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = realtimeSources[0];
             setFilterFromSources();
-        }
-        if (otherSources && otherSources.length > 0) {
+        } else if (otherSources && otherSources.length > 0) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = otherSources[0];
             setFilterFromOtherSources();
         }
+
         // for streamFlow: REMOVE when leftpane is setup of it
         if (availableFilter === 6 && otherSources && otherSources.length > 1) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = otherSources[1];
             setFilterFromOtherSources();
         }
