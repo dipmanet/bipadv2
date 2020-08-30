@@ -27,6 +27,7 @@ interface OwnProps {
     className?: string;
     disabled?: boolean;
     pending?: boolean;
+    onPendingStateChange?: (pending: boolean) => void;
 }
 
 interface State {
@@ -122,6 +123,8 @@ const MapDownloadButton = (props: Props) => {
         municipalities,
         provinces,
 
+        onPendingStateChange,
+
         ...otherProps
     } = props;
 
@@ -129,6 +132,13 @@ const MapDownloadButton = (props: Props) => {
     const pageContext = useContext(PageContext);
 
     const [pending, setPending] = useState(false);
+    const setDownloadPending = useCallback((isPending) => {
+        setPending(isPending);
+
+        if (onPendingStateChange) {
+            onPendingStateChange(isPending);
+        }
+    }, [setPending, onPendingStateChange]);
 
     const handleExport = useCallback(
         () => {
@@ -169,7 +179,7 @@ const MapDownloadButton = (props: Props) => {
                 source = 'Nepal police';
             }
 
-            setPending(true);
+            setDownloadPending(true);
 
             const { map } = mapContext;
 
@@ -181,7 +191,7 @@ const MapDownloadButton = (props: Props) => {
 
             const context = canvas.getContext('2d');
             if (!context) {
-                setPending(false);
+                setDownloadPending(false);
                 return;
             }
 
@@ -286,7 +296,7 @@ const MapDownloadButton = (props: Props) => {
                         link.download = `map-export-${(new Date()).getTime()}.png`;
                         link.href = URL.createObjectURL(blob);
                         link.click();
-                        setPending(false);
+                        setDownloadPending(false);
                     }, 'image/png');
                 });
             };
