@@ -520,6 +520,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 communication: false,
             },
         });
+        const { handleActiveLayerIndication } = this.props;
+        handleActiveLayerIndication(initialActiveLayersIndication);
     }
 
     private handlePolygonCreate = (features: MapboxGeoJSONFeature[], draw: Draw) => {
