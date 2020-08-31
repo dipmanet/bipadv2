@@ -18,6 +18,7 @@ interface Props {
         communication: boolean;
     };
     handleToggleClick: (key: toggleValues, value: boolean) => void;
+    disabled?: boolean;
 
 }
 const SwitchView = (props: Props) => {
@@ -29,12 +30,14 @@ const SwitchView = (props: Props) => {
         cultural,
         industry,
         communication },
-    handleToggleClick } = props;
+    handleToggleClick,
+    disabled } = props;
     return (
         <div className={styles.lists}>
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={education}
@@ -47,6 +50,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={health}
@@ -59,6 +63,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={finance}
@@ -71,6 +76,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={governance}
@@ -83,6 +89,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={tourism}
@@ -95,6 +102,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={cultural}
@@ -107,6 +115,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={industry}
@@ -119,6 +128,7 @@ const SwitchView = (props: Props) => {
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
+                    disabled={disabled}
                     on
                     off={false}
                     value={communication}
