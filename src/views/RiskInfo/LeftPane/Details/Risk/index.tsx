@@ -212,6 +212,7 @@ const transformLandslideDataToLayer = (
         legend,
         tooltipRenderer: LandslideTooltip,
         minValue: min,
+        maxValueCapped: true,
     };
 };
 
