@@ -449,7 +449,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         if (coordinates && map) {
             map.flyTo({
                 center: coordinates,
-                zoom: 10,
+                // zoom: 10,
             });
         }
 
