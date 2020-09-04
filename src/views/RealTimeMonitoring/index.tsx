@@ -6,6 +6,14 @@ import { _cs } from '@togglecorp/fujs';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
+import {
+    rainLegendItems,
+    newRiverLegendItems,
+    earthquakeLegendItems,
+    forestFireLegendItems,
+    pollutionLegendItems,
+    noLegend,
+} from './legendItems';
 
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -260,54 +268,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-const rainLegendItems = [
-    { color: '#2373a9', label: 'Below Warning Level', style: styles.symbol },
-    // { color: 'transparent', label: 'Above Warning Level', style: styles.triangleAboveWarning },
-    { color: '#FDD835', label: 'Warning Level', style: styles.symbol },
-    // { color: 'transparent', label: 'Above Danger Level', style: styles.triangleAboveDanger },
-    // { color: '#ACACAB', label: 'Status Not Available', style: styles.symbol },
-];
-
-const riverLegendItems = [
-    { color: '#7CB342', label: 'Below Warning Level', style: styles.symbol },
-    { color: '#FDD835', label: 'Above Warning Level', style: styles.symbol },
-    { color: '#e53935', label: 'Above Danger Level', style: styles.symbol },
-];
-// the code below is different due to the requirement of rain icon to be triangle
-const newRiverLegendItems = [
-    { color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
-    { color: 'transparent', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
-    { color: '#FDD835', label: 'Above Warning Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Above Warning Level and Rising', style: styles.triangleRisingAboveWarning },
-    { color: 'transparent', label: 'Above Warning Level and Falling', style: styles.triangleFallingAboveWarning },
-    { color: '#E53935', label: 'Above Danger Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Above Danger Level and Rising', style: styles.triangleRisingAboveDanger },
-    { color: 'transparent', label: 'Above Danger Level and Falling', style: styles.triangleFallingAboveDanger },
-];
-
-const earthquakeLegendItems = [
-    { color: '#fee5d9', label: 'Minor (>= 3)', radius: 6, style: styles.symbol },
-    { color: '#fcbba1', label: 'Light (>= 4)', radius: 8, style: styles.symbol },
-    { color: '#fc9272', label: 'Moderate (>= 5)', radius: 12, style: styles.symbol },
-    { color: '#fb6a4a', label: 'Strong (>= 6)', radius: 16, style: styles.symbol },
-    { color: '#de2d26', label: 'Major (>= 7)', radius: 18, style: styles.symbol },
-    { color: '#a50f15', label: 'Great (>= 8)', radius: 22, style: styles.symbol },
-];
-
-const pollutionLegendItems = [
-    { color: '#009966', label: 'Good (<= 12)', style: styles.symbol },
-    { color: '#ffde33', label: 'Moderate (<= 35.4)', style: styles.symbol },
-    { color: '#ff9933', label: 'Unhealthy for Sensitive Groups (<= 55.4)', style: styles.symbol },
-    { color: '#cc0033', label: 'Unhealthy (<= 150.4)', style: styles.symbol },
-    { color: '#660099', label: 'Very Unhealthy (<= 350.4)', style: styles.symbol },
-    { color: '#7e0023', label: 'Hazardous (<= 500.4)', style: styles.symbol },
-];
-
-const forestFireLegendItems = [
-    { color: '#ff8300', label: 'Forest fire', style: styles.symbol },
-];
-
 const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
@@ -318,6 +278,11 @@ const classNameSelector = (d: { style: string }) => d.style;
 const emptyHazardHoverAttributeList: MapStateElement[] = [];
 
 type ActiveView = 'rainwatch' | 'riverwatch' | 'earthquake' | 'pollution' | 'fire' | undefined;
+
+interface Source {
+    id: number;
+    title: ActiveView;
+}
 
 class RealTimeMonitoring extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
@@ -339,68 +304,79 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             value: true,
         }];
     }
+    /**
+     *
+     * @param realtimeSources List of which realtime sources is active
+     * @param otherSources List of which realtime other sources is active
+     */
 
     private setStateFromFilter = (realtimeSources?: number[], otherSources?: number[]) => {
-        let availableFilter = 0;
+        let availableFilter = -99;
+
+        const sources: Source[] = [
+            { id: 2, title: 'riverwatch' },
+            { id: 3, title: 'rainwatch' },
+        ];
+
+        const othSources: Source[] = [
+            { id: 1, title: 'earthquake' },
+            { id: 4, title: 'fire' },
+            { id: 5, title: 'pollution' },
+            // { id: 6, title: 'streamflow' },
+        ];
+
         const setFilterFromSources = () => {
-            if (availableFilter === 3) {
-                this.setState({ activeView: 'rainwatch' });
-            }
-            if (availableFilter === 2) {
-                this.setState({ activeView: 'riverwatch' });
-            }
+            sources.forEach((source) => {
+                if (availableFilter === source.id) {
+                    this.setState({ activeView: source.title });
+                }
+            });
         };
 
         const setFilterFromOtherSources = () => {
-            if (availableFilter === 1) {
-                this.setState({ activeView: 'earthquake' });
-            }
-
-            if (availableFilter === 4) {
-                this.setState({ activeView: 'fire' });
-            }
-
-            if (availableFilter === 5) {
-                this.setState({ activeView: 'pollution' });
-            }
-
-            if (availableFilter === 5) {
-                this.setState({ activeView: 'pollution' });
-            }
+            othSources.forEach((oSources) => {
+                if (availableFilter === oSources.id) {
+                    this.setState({ activeView: oSources.title });
+                }
+            });
         };
 
         if (realtimeSources && realtimeSources.length > 0) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = realtimeSources[0];
             setFilterFromSources();
-        }
-        if (otherSources && otherSources.length > 0) {
+        } else if (otherSources && otherSources.length > 0) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = otherSources[0];
             setFilterFromOtherSources();
         }
+
         // for streamFlow: REMOVE when leftpane is setup of it
         if (availableFilter === 6 && otherSources && otherSources.length > 1) {
+            // eslint-disable-next-line prefer-destructuring
             availableFilter = otherSources[1];
             setFilterFromOtherSources();
         }
     }
-    // uncomment for Dynamic River Legends
-    // private getRealTimeLegends = (dataList: [], legendItems: []) => {
-    //     const uniqueLegendItems = [...new Set(dataList.map(
-    //         item => `${item.status} and ${item.steady}`.toUpperCase(),
-    //     ))];
-    //     const autoLegends: LegendItem[] = [];
-    //     uniqueLegendItems.map((item) => {
-    //         legendItems.map((legendItem) => {
-    //             if (item === legendItem.label.toUpperCase()) {
-    //                 autoLegends.push(legendItem);
-    //             }
-    //             return null;
-    //         });
-    //         return null;
-    //     });
 
-    //     return autoLegends;
-    // }
+    private getAutoRealTimeRiverLegends = (
+        dataList: PageType.RealTimeRiver[],
+        legendItems: LegendItem[],
+    ) => {
+        const uniqueLegendItems = [...new Set(dataList.map(
+            item => `${item.status} and ${item.steady || 'steady'}`.toUpperCase(),
+        ))];
+        const autoLegends: LegendItem[] = [];
+        uniqueLegendItems.forEach((item) => {
+            legendItems.forEach((legendItem) => {
+                if (item === legendItem.label.toUpperCase()) {
+                    autoLegends.push(legendItem);
+                }
+            });
+        });
+
+        return autoLegends;
+    }
 
     private renderLegend = () => {
         const {
@@ -408,7 +384,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 realtimeSources,
                 otherSources,
             },
-            // realTimeRiverList,
+            realTimeRiverList,
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -418,8 +394,9 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
 
-        // uncomment for dymanic River Legends
-        // const autoRiverLegends = this.getRealTimeLegends(realTimeRiverList, newRiverLegendItems);
+        const autoRiverLegends = this.getAutoRealTimeRiverLegends(
+            realTimeRiverList, newRiverLegendItems,
+        );
 
         return (
             <>
@@ -476,8 +453,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         <Legend
                             className={styles.legend}
                             // data={riverLegendItems}
-                            data={newRiverLegendItems}
-                            // data={autoRiverLegends}
+                            // data={newRiverLegendItems}
+                            data={
+                                realTimeRiverList.length > 0
+                                    ? autoRiverLegends
+                                    : noLegend
+                            }
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}

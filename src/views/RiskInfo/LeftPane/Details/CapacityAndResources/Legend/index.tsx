@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Legend from '#rscz/Legend';
+import legendItems from './legendItems';
 
 import styles from './styles.scss';
 
@@ -22,33 +23,31 @@ const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 const legendColorSelector = (d: { color: string }) => d.color;
 
-const CapacityAndResourcesLegend = () => {
-    const capacityAndResourcesLegendItems = [
-        { color: '#ffd046', key: 'education', label: 'Education', style: styles.symbol },
-        { color: '#EADAA2', key: 'health', label: 'Health', style: styles.symbol },
-        { color: '#BD93BD', key: 'finance', label: 'Finance', style: styles.symbol },
-        { color: '#82ddf0', key: 'governance', label: 'Governance', style: styles.symbol },
-        { color: '#7dcd85', key: 'tourism', label: 'Tourism', style: styles.symbol },
-        { color: '#c4b2bc', key: 'cultural', label: 'Cultural', style: styles.symbol },
-        { color: '#a6a867', key: 'industry', label: 'Industry', style: styles.symbol },
-        { color: '#efa8b8', key: 'communication', label: 'Communication', style: styles.symbol },
-    ];
+const CapacityAndResourcesLegend = (props: Props) => {
     // for dynamic legend render
-    // const getActiveLegends = () => {
-    //     const { activeLayersIndication } = props;
-    //     const activeLegends = capacityAndResourcesLegendItems.filter((item) => {
-    //         if (activeLayersIndication[item.key]) {
-    //             return item;
-    //         }
-    //     });
-    //     return activeLegends;
-    // };
+    const getActiveLegends = () => {
+        const { activeLayersIndication } = props;
+        const activeLegends = legendItems.filter((item) => {
+            if (activeLayersIndication[item.key]) {
+                return item;
+            }
+            return null;
+        });
+        return activeLegends;
+    };
+    const activeLegends = getActiveLegends();
+
+    if (activeLegends.length === 0) {
+        return null;
+    }
+
     return (
         <div className={_cs(styles.wrapper, 'map-legend-container')}>
             <div className={styles.title}>Capacity and Resources Legends</div>
             <Legend
                 className={styles.legend}
-                data={capacityAndResourcesLegendItems}
+                // data={capacityAndResourcesLegendItems}
+                data={activeLegends}
                 itemClassName={styles.legendItem}
                 keySelector={itemSelector}
             // iconSelector={iconSelector}
