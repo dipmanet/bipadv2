@@ -15,6 +15,14 @@ import { setMapStyleAction } from '#actionCreators';
 import { mapStyleSelector } from '#selectors';
 
 import LayerButton from './LayerButton';
+
+// Icons
+import OutLineIcon from '#resources/images/outline.png';
+import MapboxLightIcon from '#resources/images/mapbox-light.png';
+import MapboxRoadsIcon from '#resources/images/mapbox-roads.png';
+import MapboxSatelliteIcon from '#resources/images/mapbox-satellite.png';
+import OSMIcon from '#resources/images/osm.png';
+
 import styles from './styles.scss';
 
 const mapStyles = [
@@ -22,21 +30,37 @@ const mapStyles = [
         name: 'none',
         style: `${process.env.REACT_APP_MAP_STYLE_NONE}`,
         color: '#dddddd',
+        title: 'Outline',
+        description: `A national political and administrative boundary layer.
+        It's a default map view`,
+        icon: OutLineIcon,
     },
     {
         name: 'light',
         style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
         color: '#cdcdcd',
+        title: 'Mapbox Light',
+        description: `Mapbox Light is a map view designed to provide geographic
+        context while highlighting the data...`,
+        icon: MapboxLightIcon,
     },
     {
         name: 'roads',
         style: `${process.env.REACT_APP_MAP_STYLE_ROADS}`,
         color: '#671076',
+        title: 'Mapbox Roads',
+        description: `Mapbox Roads is a map view highligting the reoad features
+        designed specifically for ...`,
+        icon: MapboxRoadsIcon,
     },
     {
         name: 'satellite',
         style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
         color: '#c89966',
+        title: 'Mapbox Satellite',
+        description: `Mapbox Satellite overlays satelliete imagery onto the mao
+        and highlights roads, buildings`,
+        icon: MapboxSatelliteIcon,
     },
     // {
     //     name: 'osm',
@@ -47,6 +71,10 @@ const mapStyles = [
         name: 'osm-raster',
         color: '#f0ff0f',
         style: osmStyle,
+        title: 'OpenStreetMap',
+        description: `OpenStreetMap (OSM) is a collabarative project to create a
+        free editable map of the...`,
+        icon: OSMIcon,
     },
     /*
     {

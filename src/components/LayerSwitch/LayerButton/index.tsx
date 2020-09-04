@@ -12,6 +12,9 @@ interface Props {
     onClick?: (style: string) => void;
     className?: string;
     isActive: boolean;
+    title: string;
+    description: string;
+    icon: string;
 }
 
 export default class LayerButton extends React.PureComponent<Props> {
@@ -32,6 +35,9 @@ export default class LayerButton extends React.PureComponent<Props> {
             color,
             className,
             isActive,
+            title,
+            description,
+            icon,
         } = this.props;
 
         return (
@@ -44,12 +50,22 @@ export default class LayerButton extends React.PureComponent<Props> {
                 )}
                 transparent
             >
-                <div
+                {/* <div
                     className={styles.colorPreview}
                     style={{ backgroundColor: color }}
                 />
                 <div className={styles.title}>
-                    { name }
+                    { title }
+                </div> */}
+                <div className={styles.content}>
+                    <img src={icon} alt="LayerSpecificIcon" />
+                    <div className={styles.description}>
+                        <b>{title}</b>
+                        {''}
+                          :
+                        {' '}
+                        {description}
+                    </div>
                 </div>
             </Button>
         );
