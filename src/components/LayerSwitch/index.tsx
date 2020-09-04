@@ -58,7 +58,7 @@ const mapStyles = [
         style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
         color: '#c89966',
         title: 'Mapbox Satellite',
-        description: `Mapbox Satellite overlays satelliete imagery onto the mao
+        description: `Mapbox Satellite overlays satelliete imagery onto the map
         and highlights roads, buildings`,
         icon: MapboxSatelliteIcon,
     },
