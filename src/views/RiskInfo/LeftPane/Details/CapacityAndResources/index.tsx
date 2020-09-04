@@ -74,6 +74,17 @@ interface ResourceTooltipProps extends PageType.Resource {
 type toggleValues = 'education' | 'health' | 'finance' | 'governance' |
 'tourism' | 'cultural' | 'industry' | 'communication';
 
+const initialActiveLayersIndication = {
+    education: false,
+    health: false,
+    finance: false,
+    governance: false,
+    tourism: false,
+    cultural: false,
+    industry: false,
+    communication: false,
+};
+
 const ResourceTooltip = (props: ResourceTooltipProps) => {
     const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
 
@@ -131,6 +142,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 interface ComponentProps {
     className?: string;
     handleCarActive: Function;
+    handleActiveLayerIndication: Function;
 }
 
 interface ResourceColletion {
@@ -273,16 +285,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 industry: [],
                 communication: [],
             },
-            activeLayersIndication: {
-                education: false,
-                health: false,
-                finance: false,
-                governance: false,
-                tourism: false,
-                cultural: false,
-                industry: false,
-                communication: false,
-            },
+            activeLayersIndication: { ...initialActiveLayersIndication },
         };
     }
 
@@ -292,8 +295,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     public componentWillUnmount() {
-        const { handleCarActive } = this.props;
+        const { handleCarActive, handleActiveLayerIndication } = this.props;
         handleCarActive(false);
+        handleActiveLayerIndication(initialActiveLayersIndication);
     }
 
     private handleToggleClick = (key: toggleValues, value: boolean) => {
@@ -301,6 +305,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const temp = { ...activeLayersIndication };
         temp[key] = value;
         this.setState({ activeLayersIndication: temp });
+        const { handleActiveLayerIndication } = this.props;
+        handleActiveLayerIndication(temp);
         if (temp[key] && resourceCollection[key].length === 0) {
             this.props.requests.resourceGetRequest.do({
                 resourceType: key,
@@ -443,7 +449,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         if (coordinates && map) {
             map.flyTo({
                 center: coordinates,
-                zoom: 10,
+                // zoom: 10,
             });
         }
 
@@ -514,6 +520,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 communication: false,
             },
         });
+        const { handleActiveLayerIndication } = this.props;
+        handleActiveLayerIndication(initialActiveLayersIndication);
     }
 
     private handlePolygonCreate = (features: MapboxGeoJSONFeature[], draw: Draw) => {
@@ -714,6 +722,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     <SwitchView
                         activeLayersIndication={activeLayersIndication}
                         handleToggleClick={this.handleToggleClick}
+                        disabled={pending}
                     />
                     {/* for previous radio buttons structure starts */}
                     {/* <ListView
