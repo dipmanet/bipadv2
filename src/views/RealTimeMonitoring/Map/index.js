@@ -24,6 +24,8 @@ import {
     pollutionToGeojson,
 } from '#utils/domain';
 
+import { httpGet } from '#utils/common';
+
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
@@ -40,6 +42,15 @@ RealTimeTooltip.propTypes = {
     params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
+].join('');
+
 export default class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -48,7 +59,13 @@ export default class RealTimeMap extends React.PureComponent {
             rainTitle: undefined,
             riverTitle: undefined,
             streamflowId: undefined,
+            gis: undefined,
         };
+    }
+
+    componentDidMount() {
+        const result = JSON.parse(httpGet(GIS_URL));
+        this.setState({ gis: result });
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -340,6 +357,7 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle,
             rainTitle,
             streamflowId,
+            gis,
         } = this.state;
 
         const tooltipOptions = {
@@ -426,6 +444,25 @@ export default class RealTimeMap extends React.PureComponent {
                             params={tooltipParams}
                         />
                     </MapTooltip>
+                )}
+                {gis && (showRain || showRiver) && (
+                    <MapSource
+                        sourceKey="gis-layer"
+                        sourceOptions={{ type: 'geojson' }}
+                        geoJson={gis}
+                        supportHover
+                    >
+                        <MapLayer
+                            layerKey="gis-outline"
+                            layerOptions={{
+                                type: 'line',
+                                paint: {
+                                    'line-color': 'red',
+                                    'line-width': 2,
+                                },
+                            }}
+                        />
+                    </MapSource>
                 )}
                 <MapSource
                     sourceKey="real-time-rain-points"
