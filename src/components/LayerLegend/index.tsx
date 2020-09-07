@@ -58,6 +58,7 @@ const RasterLegend = (props: RasterLegendProps) => {
 interface ChoroplethLegendProps {
     minValue: Layer['minValue'];
     legend: Layer['legend'];
+    maxValueCapped: boolean;
 }
 
 const getPrecision = (value: number | string) => {
@@ -73,46 +74,69 @@ const getPrecision = (value: number | string) => {
         return 0;
     }
 
-    if (diff > 0.1) {
+    if (diff >= 0.1) {
         return 1;
     }
 
     return 2;
 };
 
-const ChoroplethLegend = ({ minValue, legend }: ChoroplethLegendProps) => (
-    <div className={styles.choroplethLegend}>
-        { isDefined(minValue) && (
-            <Numeral
-                className={styles.min}
-                normal
-                value={minValue}
-                precision={getPrecision(minValue)}
-            />
-        )}
-        { Object.keys(legend).map((color) => {
-            const value = legend[color];
-            return (
-                <div
-                    className={styles.legendElement}
-                    key={color}
-                >
+const ChoroplethLegend = ({ minValue, legend, maxValueCapped }: ChoroplethLegendProps) => {
+    const legendKeys = Object.keys(legend);
+    const lastElementKey = legendKeys.pop();
+    const lastElementValue = lastElementKey ? legend[lastElementKey] : 0;
+
+    return (
+        <div className={styles.choroplethLegend}>
+            { isDefined(minValue) && (
+                <Numeral
+                    className={styles.min}
+                    normal
+                    value={minValue}
+                    precision={getPrecision(minValue)}
+                />
+            )}
+            { legendKeys.map((color) => {
+                const value = legend[color];
+                return (
                     <div
-                        className={styles.color}
-                        style={{ backgroundColor: color }}
-                    />
-                    <div className={styles.value}>
-                        <Numeral
-                            normal
-                            value={value}
-                            precision={getPrecision(value)}
+                        className={styles.legendElement}
+                        key={color}
+                    >
+                        <div
+                            className={styles.color}
+                            style={{ backgroundColor: color }}
                         />
+                        <div className={styles.value}>
+                            <Numeral
+                                normal
+                                value={value}
+                                precision={getPrecision(value)}
+                            />
+                        </div>
                     </div>
+                );
+            })}
+            <div
+                className={styles.legendElement}
+                key={lastElementKey}
+            >
+                <div
+                    className={styles.color}
+                    style={{ backgroundColor: lastElementKey }}
+                />
+                <div className={styles.value}>
+                    <Numeral
+                        normal
+                        value={lastElementValue}
+                        precision={getPrecision(lastElementValue)}
+                    />
+                    { maxValueCapped && '+' }
                 </div>
-            );
-        })}
-    </div>
-);
+            </div>
+        </div>
+    );
+};
 
 interface Props {
     className?: string;
@@ -154,6 +178,7 @@ const LayerLegend = (props: Props) => {
                 <ChoroplethLegend
                     minValue={layer.minValue}
                     legend={layer.legend}
+                    maxValueCapped={layer.maxValueCapped}
                 />
             )}
         </div>
