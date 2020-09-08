@@ -31,36 +31,8 @@ const mapStyles = [
         style: `${process.env.REACT_APP_MAP_STYLE_NONE}`,
         color: '#dddddd',
         title: 'Outline',
-        description: `A national political and administrative boundary layer.
-        It's a default map view`,
+        description: 'A national political and administrative boundary layer. It’s a default map view.',
         icon: OutLineIcon,
-    },
-    {
-        name: 'light',
-        style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
-        color: '#cdcdcd',
-        title: 'Mapbox Light',
-        description: `Mapbox Light is a map view designed to provide geographic
-        context while highlighting the data...`,
-        icon: MapboxLightIcon,
-    },
-    {
-        name: 'roads',
-        style: `${process.env.REACT_APP_MAP_STYLE_ROADS}`,
-        color: '#671076',
-        title: 'Mapbox Roads',
-        description: `Mapbox Roads is a map view highligting the reoad features
-        designed specifically for ...`,
-        icon: MapboxRoadsIcon,
-    },
-    {
-        name: 'satellite',
-        style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
-        color: '#c89966',
-        title: 'Mapbox Satellite',
-        description: `Mapbox Satellite overlays satelliete imagery onto the map
-        and highlights roads, buildings`,
-        icon: MapboxSatelliteIcon,
     },
     // {
     //     name: 'osm',
@@ -72,9 +44,32 @@ const mapStyles = [
         color: '#f0ff0f',
         style: osmStyle,
         title: 'OpenStreetMap',
-        description: `OpenStreetMap (OSM) is a collabarative project to create a
-        free editable map of the...`,
+        description: 'OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world.',
         icon: OSMIcon,
+    },
+    {
+        name: 'light',
+        style: `${process.env.REACT_APP_MAP_STYLE_LIGHT}`,
+        color: '#cdcdcd',
+        title: 'Mapbox Light',
+        description: 'Mapbox Light is map view designed to provide geographic context while highlighting the data on your dashboard, data visualization, or data overlay.',
+        icon: MapboxLightIcon,
+    },
+    {
+        name: 'roads',
+        style: `${process.env.REACT_APP_MAP_STYLE_ROADS}`,
+        color: '#671076',
+        title: 'Mapbox Roads',
+        description: 'Mapbox Roads is a map view highlighting the road features designed specifically for navigation.',
+        icon: MapboxRoadsIcon,
+    },
+    {
+        name: 'satellite',
+        style: `${process.env.REACT_APP_MAP_STYLE_SATELLITE}`,
+        color: '#c89966',
+        title: 'Mapbox Satellite',
+        description: 'Mapbox Satellite overlays satellite imagery onto the map and highlights roads, buildings and major landmarks for easy identification.',
+        icon: MapboxSatelliteIcon,
     },
     /*
     {
