@@ -64,8 +64,13 @@ export default class RealTimeMap extends React.PureComponent {
     }
 
     componentDidMount() {
-        const result = JSON.parse(httpGet(GIS_URL));
-        this.setState({ gis: result });
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
