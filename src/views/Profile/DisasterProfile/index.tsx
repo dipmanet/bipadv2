@@ -18,6 +18,8 @@ import {
     getPending,
 } from '#utils/request';
 
+import { TitleContext, Profile } from '#components/TitleContext';
+
 import ResourceProfile from './ResourceProfile';
 import Disasters from './Disasters';
 import Demographics from './Demographics';
@@ -68,6 +70,8 @@ class DisasterProfile extends React.PureComponent<Props> {
         activeView: 'resources',
         // activeView: 'demographics',
     }
+
+    public static contextType = TitleContext;
 
     private views = {
         resources: {
@@ -125,7 +129,16 @@ class DisasterProfile extends React.PureComponent<Props> {
             className,
             requests,
         } = this.props;
+        const { setProfile } = this.context;
 
+        if (setProfile) {
+            setProfile((prevProfile: Profile) => {
+                if (prevProfile.mainModule !== 'Summary') {
+                    return { ...prevProfile, mainModule: 'Summary' };
+                }
+                return prevProfile;
+            });
+        }
         const { activeView } = this.state;
         const pending = isAnyRequestPending(requests);
 
