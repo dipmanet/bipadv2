@@ -64,8 +64,13 @@ export default class RealTimeMap extends React.PureComponent {
     }
 
     componentDidMount() {
-        const result = JSON.parse(httpGet(GIS_URL));
-        this.setState({ gis: result });
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -457,8 +462,8 @@ export default class RealTimeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'line',
                                 paint: {
-                                    'line-color': 'red',
-                                    'line-width': 2,
+                                    'line-color': '#004d40',
+                                    'line-width': 1,
                                 },
                             }}
                         />
