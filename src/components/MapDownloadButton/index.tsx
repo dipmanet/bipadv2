@@ -23,6 +23,7 @@ import {
     provincesSelector,
     regionSelector,
     filtersSelector,
+    realTimeFiltersSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
@@ -46,6 +47,10 @@ interface PropsFromAppState {
     provinces: Province[];
     municipalities: Municipality[];
     filters: FiltersElement;
+    realtimeFilters: {
+        faramValues: object;
+        faramErrors: object;
+    };
 }
 
 type Props = OwnProps & PropsFromAppState;
@@ -64,6 +69,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
     filters: filtersSelector(state),
+    realtimeFilters: realTimeFiltersSelector(state),
 });
 
 interface GeoPoint {
@@ -131,6 +137,7 @@ const MapDownloadButton = (props: Props) => {
         municipalities,
         provinces,
         filters: { hazard },
+        realtimeFilters,
         onPendingStateChange,
 
         ...otherProps
@@ -252,7 +259,14 @@ const MapDownloadButton = (props: Props) => {
                 const exportText = `Exported on: ${today.toLocaleDateString()}`;
 
                 // setting routewise title
-                title = getRouteWiseTitle(pageTitle, pageContext, titleContext, regionName, hazard);
+                title = getRouteWiseTitle(
+                    pageTitle,
+                    pageContext,
+                    titleContext,
+                    regionName,
+                    hazard,
+                    realtimeFilters,
+                );
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
@@ -290,7 +304,10 @@ const MapDownloadButton = (props: Props) => {
                             canvases.forEach((c, i) => {
                                 const y = mapCanvas.height - c.height - 6;
                                 const x = 6 + c.width * i;
-                                context.drawImage(c, x, y, c.width, c.height);
+                                // context.drawImage(c, x, y, c.width, c.height);
+                                if (c.width !== 0 || c.height !== 0) {
+                                    context.drawImage(c, x, y, c.width, c.height);
+                                }
                             });
 
                             resolve();
@@ -321,6 +338,7 @@ const MapDownloadButton = (props: Props) => {
             pageContext,
             titleContext,
             hazard,
+            realtimeFilters,
         ],
     );
 

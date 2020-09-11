@@ -276,10 +276,18 @@ export const getRouteWiseTitle = (
     titleContext: TitleContextProps,
     regionName: string,
     hazardList: number[],
+    realtimeFilters: {
+        faramValues: {
+            realtimeSources?: number[];
+            otherSources?: number[];
+        };
+        faramErrors: object;
+    },
 ): string => {
     if (pageContext && pageContext.activeRouteDetails) {
         const { name: routeName } = pageContext.activeRouteDetails;
-        // dashboard
+
+        // Dashboard
         if (routeName === 'dashboard') {
             const { dashboard } = titleContext;
             if (dashboard) {
@@ -287,7 +295,7 @@ export const getRouteWiseTitle = (
             }
         }
 
-        // incident
+        // Incident
         if (routeName === 'incident') {
             const { incident } = titleContext;
             if (incident) {
@@ -295,7 +303,7 @@ export const getRouteWiseTitle = (
             }
         }
 
-        // damageAndLoss
+        // Damage and Loss
         if (routeName === 'lossAndDamage') {
             const { damageAndLoss } = titleContext;
             const multipleHazards = hazardList.length > 1 || hazardList.length === 0;
@@ -317,6 +325,57 @@ export const getRouteWiseTitle = (
                 }
                 if (capitalizedTitle === 'LIVESTOCK DESTROYED') {
                     return damageAndLossTitleParser('livestock destroyed', multipleHazards, regionName, hazardList, startDate, endDate);
+                }
+            }
+        }
+
+        // RealTime
+        if (routeName === 'realtime') {
+            const { realtime } = titleContext;
+            const { faramValues } = realtimeFilters;
+
+            const { realtimeSources = [], otherSources = [] } = faramValues;
+            const activeLayers = [...realtimeSources, ...otherSources];
+
+            if (activeLayers.length !== 1) {
+                return `Realtime, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 1) {
+                return `Earthquake, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 2) {
+                return `River Watch, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 4) {
+                return `Forest Fire, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 5) {
+                return `Air Quality Index, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 6) {
+                return `Stream Flow Prediction, ${regionName}`;
+            }
+
+            if (activeLayers[0] === 3) {
+                if (realtime === 1) {
+                    return `1 hour Rain Watch, ${regionName}`;
+                }
+                if (realtime === 3) {
+                    return `3 hours Rain Watch, ${regionName}`;
+                }
+                if (realtime === 6) {
+                    return `6 hours Rain Watch, ${regionName}`;
+                }
+                if (realtime === 12) {
+                    return `12 hours Rain Watch, ${regionName}`;
+                }
+                if (realtime === 24) {
+                    return `24 hours Rain Watch, ${regionName}`;
                 }
             }
         }

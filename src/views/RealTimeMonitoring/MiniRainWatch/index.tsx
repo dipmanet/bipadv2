@@ -17,6 +17,8 @@ import {
 } from '#store/atom/page/types';
 
 import RainWatch from '../RainWatch';
+import { TitleContext } from '#components/TitleContext';
+
 import styles from './styles.scss';
 
 interface Props {
@@ -88,6 +90,8 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             duration: 24,
         };
     }
+
+    public static contextType = TitleContext;
 
     private getRainHeader = (duration: number) => ([
         {
@@ -216,6 +220,17 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
         const { duration } = this.state;
         const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration);
+        const { setRealtime } = this.context;
+
+        if (setRealtime) {
+            setRealtime((prevProfile: number) => {
+                const { duration: selectedHour } = this.state;
+                if (prevProfile !== selectedHour) {
+                    return selectedHour;
+                }
+                return prevProfile;
+            });
+        }
 
         return (
             <div className={_cs(className, styles.rainWatch)}>

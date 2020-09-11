@@ -15,13 +15,13 @@ export interface TitleContextProps {
     dashboard?: string;
     incident?: string;
     damageAndLoss?: DamageAndLoss;
-    realTime?: object;
+    realtime?: number;
     profile?: Profile;
     riskInfo?: object;
     setDashboard?: Function;
     setIncident?: Function;
     setDamageAndLoss?: Function;
-    setRealTime?: Function;
+    setRealtime?: Function;
     setProfile?: Function;
     setRiskInfo?: Function;
 }
@@ -42,7 +42,7 @@ const TitleContextProvider = (props: Props) => {
         startDate: '',
         endDate: '',
     });
-    const [realtime, setRealTime] = useState({});
+    const [realtime, setRealtime] = useState(0);
     const [profile, setProfile] = useState<Profile>({
         mainModule: '',
         subModule: '',
@@ -59,7 +59,7 @@ const TitleContextProvider = (props: Props) => {
         setDashboard,
         setIncident,
         setDamageAndLoss,
-        setRealTime,
+        setRealtime,
         setProfile,
         setRiskInfo,
     };
