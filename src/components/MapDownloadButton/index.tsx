@@ -5,10 +5,12 @@ import html2canvas from 'html2canvas';
 import Button from '#rsca/Button';
 import { MapChildContext } from '#re-map/context';
 
-import PageContext, { PageContextProps } from '#components/PageContext';
-import { TitleContext, TitleContextProps } from '#components/TitleContext';
+import PageContext from '#components/PageContext';
+import { TitleContext } from '#components/TitleContext';
 
 import { AppState } from '#store/types';
+import { FiltersElement } from '#types';
+
 import {
     District,
     Province,
@@ -20,9 +22,12 @@ import {
     municipalitiesSelector,
     provincesSelector,
     regionSelector,
+    filtersSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
+
+import { getRouteWiseTitle } from './utils';
 
 interface OwnProps {
     className?: string;
@@ -40,6 +45,7 @@ interface PropsFromAppState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
+    filters: FiltersElement;
 }
 
 type Props = OwnProps & PropsFromAppState;
@@ -49,7 +55,7 @@ const indexBounds = {
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
 
-const largeFont = '24px Source Sans Pro';
+const largeFont = '20px Source Sans Pro';
 const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -57,6 +63,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
+    filters: filtersSelector(state),
 });
 
 interface GeoPoint {
@@ -113,79 +120,6 @@ const drawText = (
     context.restore();
 };
 
-const getRouteWiseTitle = (
-    pageTitle: string,
-    pageContext: PageContextProps,
-    titleContext: TitleContextProps,
-    regionName: string,
-): string => {
-    if (pageContext && pageContext.activeRouteDetails) {
-        const { name: routeName } = pageContext.activeRouteDetails;
-        // dashboard
-        if (routeName === 'dashboard') {
-            const { dashboard } = titleContext;
-            if (dashboard) {
-                return `${dashboard}, ${regionName}`;
-            }
-        }
-
-        // incident
-        if (routeName === 'incident') {
-            const { incident } = titleContext;
-            if (incident) {
-                return `${incident}, ${regionName}`;
-            }
-        }
-
-        // damageAndLoss
-        if (routeName === 'lossAndDamage') {
-            const { damageAndLoss } = titleContext;
-            if (damageAndLoss) {
-                const capitalizedTitle = damageAndLoss.toUpperCase().trim();
-                if (capitalizedTitle === 'INCIDENTS') {
-                    return `Number of hazard Incidents in ${regionName}`;
-                }
-                if (capitalizedTitle === 'PEOPLE DEATH') {
-                    return `Number of deaths due to hazard in ${regionName}`;
-                }
-                if (capitalizedTitle === 'ESTIMATED LOSS (NPR)') {
-                    return `Estimated loss(NPR) caused by hazard in ${regionName}`;
-                }
-                if (capitalizedTitle === 'INFRASTRUCTURE DESTROYED') {
-                    return `Number of infrastructure(s) destroyed due to hazard in ${regionName}`;
-                }
-                if (capitalizedTitle === 'LIVESTOCK DESTROYED') {
-                    return `Number of livestock destroyed due to hazard(s) in ${regionName}`;
-                }
-            }
-        }
-
-        // Profile
-        if (routeName === 'profile') {
-            const { profile } = titleContext;
-
-            if (profile && profile.mainModule) {
-                const { mainModule, subModule } = profile;
-                if (mainModule === 'Projects') {
-                    return `Map showing number of projects in ${regionName}`;
-                }
-                if (mainModule === 'Summary' && subModule) {
-                    if (subModule === 'totalPopulation') {
-                        return `Population Distribution Map of ${regionName}`;
-                    }
-                    if (subModule === 'householdCount') {
-                        return `Household Distribution Map of ${regionName}`;
-                    }
-                    if (subModule === 'literacyRate') {
-                        return `Map showing Literacy Rate of ${regionName}`;
-                    }
-                }
-            }
-        }
-    }
-    return `${pageTitle} for ${regionName}`;
-};
-
 const MapDownloadButton = (props: Props) => {
     const {
         disabled,
@@ -196,7 +130,7 @@ const MapDownloadButton = (props: Props) => {
         districts,
         municipalities,
         provinces,
-
+        filters: { hazard },
         onPendingStateChange,
 
         ...otherProps
@@ -318,7 +252,7 @@ const MapDownloadButton = (props: Props) => {
                 const exportText = `Exported on: ${today.toLocaleDateString()}`;
 
                 // setting routewise title
-                title = getRouteWiseTitle(pageTitle, pageContext, titleContext, regionName);
+                title = getRouteWiseTitle(pageTitle, pageContext, titleContext, regionName, hazard);
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
@@ -378,7 +312,16 @@ const MapDownloadButton = (props: Props) => {
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [region, districts, provinces, municipalities, mapContext, pageContext, titleContext],
+        [
+            region,
+            districts,
+            provinces,
+            municipalities,
+            mapContext,
+            pageContext,
+            titleContext,
+            hazard,
+        ],
     );
 
     return (

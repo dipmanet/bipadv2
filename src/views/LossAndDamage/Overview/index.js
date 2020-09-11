@@ -94,12 +94,13 @@ class Overview extends React.PureComponent {
 
             regions,
             hazardTypes,
+            startDate,
+            endDate,
         } = this.props;
         const {
             selectedMetricKey = 'count',
         } = this.state;
 
-        const { setDamageAndLoss } = this.context;
 
         const sanitizedList = getSanitizedIncidents(
             lossAndDamageList,
@@ -122,8 +123,17 @@ class Overview extends React.PureComponent {
             || provinces
         );
 
+        const { setDamageAndLoss } = this.context;
+
         if (setDamageAndLoss) {
-            setDamageAndLoss(selectedMetric.label);
+            setDamageAndLoss((prevState) => {
+                if (prevState.mainModule !== selectedMetric.label
+                || prevState.startDate !== startDate
+                || prevState.endDate !== endDate) {
+                    return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
+                }
+                return prevState;
+            });
         }
 
         return (

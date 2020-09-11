@@ -5,10 +5,16 @@ export interface Profile {
     subModule: string;
 }
 
+export interface DamageAndLoss {
+    mainModule: string;
+    startDate: string;
+    endDate: string;
+}
+
 export interface TitleContextProps {
     dashboard?: string;
     incident?: string;
-    damageAndLoss?: string;
+    damageAndLoss?: DamageAndLoss;
     realTime?: object;
     profile?: Profile;
     riskInfo?: object;
@@ -31,7 +37,11 @@ const TitleContextProvider = (props: Props) => {
     const { children } = props;
     const [dashboard, setDashboard] = useState('Alerts');
     const [incident, setIncident] = useState('Incidents');
-    const [damageAndLoss, setDamageAndLoss] = useState('');
+    const [damageAndLoss, setDamageAndLoss] = useState<DamageAndLoss>({
+        mainModule: '',
+        startDate: '',
+        endDate: '',
+    });
     const [realtime, setRealTime] = useState({});
     const [profile, setProfile] = useState<Profile>({
         mainModule: '',
