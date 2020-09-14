@@ -283,6 +283,7 @@ export const getRouteWiseTitle = (
         };
         faramErrors: object;
     },
+    riskInfoActiveLayers: any[],
 ): string => {
     if (pageContext && pageContext.activeRouteDetails) {
         const { name: routeName } = pageContext.activeRouteDetails;
@@ -399,6 +400,214 @@ export const getRouteWiseTitle = (
                     if (subModule === 'literacyRate') {
                         return `Map showing Literacy Rate of ${regionName}`;
                     }
+                }
+            }
+        }
+
+        // Risk Info
+        if (routeName === 'riskInfo') {
+            const activeLayer = riskInfoActiveLayers[0];
+            const appURL = window.location.href;
+            const hashIndex = appURL.indexOf('#') + 2;
+            const riskInfoSubModule = appURL.substring(hashIndex);
+
+            // RiskInfo Capacity and Resources
+            /*
+                Since capacity and resource has differenct structure
+                compoared to other modules, it is checked first.
+            */
+            if (riskInfoSubModule === 'capacity-and-resources') {
+                const { capacityAndResources: activeResource } = titleContext;
+                if (activeResource) {
+                    return `Capacity and Resources (${activeResource}), ${regionName}`;
+                }
+            }
+
+            if (riskInfoActiveLayers.length !== 1) {
+                return `RiskInfo, ${regionName}`;
+            }
+
+            // RiskInfo - Hazard
+            if (riskInfoSubModule === 'hazard') {
+                // Risk Info - Hazard
+                if (activeLayer.category === 'hazard'
+                    && activeLayer.fullName
+                    && activeLayer.layername
+                ) {
+                    const subStringFloodDowri = 'FLOOD_DEPTH';
+                    const subStringFloodMeteor = 'FLUVIAL_DEFENDED';
+                    const subStringFloodWfp = 'FLOOD INUNDATION';
+                    const subStringEarthquakeSeismic = 'SEISMIC HAZARD';
+                    const earthquakeTriggeredLandlsideDurham = 'EARTHQUAKE-TRIGGERED LANDSLIDE';
+                    const nationwiseLandslideDurham = 'NATIONWIDE LANDSLIDE HAZARD';
+
+                    const layerNameUpperCase = activeLayer.layername.toUpperCase();
+                    const fullNameUpperCase = activeLayer.fullName.toUpperCase();
+
+                    // Flood
+
+                    // Flood Hazard - Source: Department of Water Resources and Irrigation (DoWRI)
+                    if (layerNameUpperCase.includes(subStringFloodDowri)) {
+                        const { fullName } = activeLayer;
+                        const [region, period] = fullName.split('/');
+                        return `Flood Hazard ${period.trim()} return period, ${region.trim()} River Basin`;
+                    }
+
+                    // Flood Hazard - Source: METEOR project
+                    if (layerNameUpperCase.includes(subStringFloodMeteor)) {
+                        const { fullName } = activeLayer;
+                        const [hazard, period] = fullName.split('/');
+                        return `${hazard.trim()} ${period.trim()} return period, ${regionName}`;
+                    }
+
+                    // Flood Inundation - Source: World Food Programme (WFP) 2019 & 2017
+                    if (fullNameUpperCase.includes(subStringFloodWfp)) {
+                        const { fullName } = activeLayer;
+                        const period = fullName.split('/')[1];
+                        return `Flood inundated areas in ${period.trim()}, ${regionName}`;
+                    }
+
+                    // Earthquake
+
+                    // Seismic Hazard - Source: METEOR project
+                    if (fullNameUpperCase.includes(subStringEarthquakeSeismic)) {
+                        const { fullName } = activeLayer;
+                        const pga = fullName.split('/')[1];
+                        return `${pga.trim()}, ${regionName}`;
+                    }
+
+                    // Landslide
+
+                    // Earthquake-triggered Landslide - Source: Durham University
+                    if (fullNameUpperCase.includes(earthquakeTriggeredLandlsideDurham)) {
+                        const { fullName } = activeLayer;
+                        const landslideType = fullName.split('/')[1];
+                        return `${landslideType.trim()}, ${regionName}`;
+                    }
+
+                    // Nationwide Landslide Hazard - Source: Durham University
+                    if (fullNameUpperCase.includes(nationwiseLandslideDurham)) {
+                        const { fullName } = activeLayer;
+                        const landslideType = fullName.split('/')[1];
+                        return `${landslideType.trim().replace('Level', 'Landslide')}, ${regionName}`;
+                    }
+                }
+            }
+
+            // Risk Info - Vulnerability
+            if (riskInfoSubModule === 'vulnerability') {
+                let vulnerabilityTitle = '';
+
+                // Layers
+                const vulnerabilityLayers = [
+                    'HDI',
+                    'lifeExpectancy',
+                    'hpi',
+                    'percapita',
+                    'remoteness',
+                ];
+                vulnerabilityLayers.forEach((v) => {
+                    if (activeLayer.id === v) {
+                        vulnerabilityTitle = activeLayer.layername;
+                    }
+                });
+
+                // Access to Communication
+                const vulnerabilityCommunication = [
+                    'radio',
+                    'computer',
+                    'internet',
+                    'telephone',
+                    'television',
+                    'mobilePhone',
+                    'cableTelevision',
+                ];
+
+                vulnerabilityCommunication.forEach((v) => {
+                    if (activeLayer.id === v) {
+                        vulnerabilityTitle = `Access to communication (${activeLayer.layername})`;
+                    }
+                });
+
+                // Access to Water
+                const vulnerabilityWater = [
+                    'tapWater',
+                    'wellWater',
+                    'riverWater',
+                    'spoutWater',
+                    'othersWater',
+                    'coveredWellKuwaWater',
+                    'uncoveredWellKuwaWater',
+                    'notStatedWater',
+                ];
+
+                vulnerabilityWater.forEach((v) => {
+                    if (activeLayer.id === v) {
+                        vulnerabilityTitle = `Access to water (${activeLayer.layername})`;
+                    }
+                });
+
+                // Access to Toilet
+                const vulnerabilityToilet = [
+                    'ordinaryToilet',
+                    'flushToilet',
+                    'noToiletFacility',
+                    'toiletFacilityNotStated',
+                ];
+
+                vulnerabilityToilet.forEach((v) => {
+                    if (activeLayer.id === v) {
+                        vulnerabilityTitle = `Access to toilet (${activeLayer.layername})`;
+                    }
+                });
+
+                // Education
+                const vulnerabilityEducation = [
+                    'boysStudent',
+                    'totalSchool',
+                    'girlsStudent',
+                    'totalStudent',
+                    'communitySchool',
+                    'institutionalSchool',
+                ];
+
+                vulnerabilityEducation.forEach((v) => {
+                    if (activeLayer.id === v) {
+                        vulnerabilityTitle = `Education (${activeLayer.layername})`;
+                    }
+                });
+
+                if (vulnerabilityTitle) {
+                    return `${vulnerabilityTitle}, ${regionName}`;
+                }
+            }
+
+            // RiskInfo Risk
+            if (riskInfoSubModule === 'risk') {
+                const { title } = activeLayer;
+                // Earthquake
+                if (title === 'Earthquake') {
+                    return `Earthquake Risk, ${regionName}`;
+                }
+
+                // Landslide
+                if (title.includes('Landslide')) {
+                    return `${title.replace(' level', '')}, ${regionName}`;
+                }
+            }
+
+            // RiskInfo Climate change
+            if (riskInfoSubModule === 'climate-change') {
+                const { title, scenarioName, legendTitle } = activeLayer;
+                if (title && scenarioName && legendTitle) {
+                    let measurement = title.split('/')[1].trim();
+                    measurement = measurement.charAt(0).toUpperCase() + measurement.slice(1);
+                    const timePeriod = legendTitle.split('\n')[4].trim();
+
+                    if (!timePeriod.includes('Reference period')) {
+                        measurement = `Change in ${measurement}`;
+                    }
+                    return `${measurement} for ${timePeriod} [${scenarioName}], ${regionName}`;
                 }
             }
         }

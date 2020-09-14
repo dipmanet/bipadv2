@@ -7,6 +7,8 @@ import { MapChildContext } from '#re-map/context';
 
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+
 
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -146,6 +148,7 @@ const MapDownloadButton = (props: Props) => {
     const mapContext = useContext(MapChildContext);
     const pageContext = useContext(PageContext);
     const titleContext = useContext(TitleContext);
+    const riskInfoLayerContext = useContext(RiskInfoLayerContext);
 
     const [pending, setPending] = useState(false);
     const setDownloadPending = useCallback((isPending) => {
@@ -165,6 +168,16 @@ const MapDownloadButton = (props: Props) => {
 
             if (!pageContext || !pageContext.activeRouteDetails) {
                 console.warn('Page context not found');
+                return;
+            }
+
+            if (!titleContext) {
+                console.warn('Title context not found');
+                return;
+            }
+
+            if (!riskInfoLayerContext) {
+                console.warn('RiskInfo context not found');
                 return;
             }
 
@@ -200,7 +213,7 @@ const MapDownloadButton = (props: Props) => {
             const { map } = mapContext;
 
             const mapCanvas = map.getCanvas();
-
+            const { activeLayers: riskInfoActiveLayers } = riskInfoLayerContext;
             const canvas = document.createElement('canvas');
             canvas.width = mapCanvas.width;
             canvas.height = mapCanvas.height;
@@ -266,6 +279,7 @@ const MapDownloadButton = (props: Props) => {
                     regionName,
                     hazard,
                     realtimeFilters,
+                    riskInfoActiveLayers,
                 );
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');

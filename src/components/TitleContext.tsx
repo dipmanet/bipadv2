@@ -17,13 +17,13 @@ export interface TitleContextProps {
     damageAndLoss?: DamageAndLoss;
     realtime?: number;
     profile?: Profile;
-    riskInfo?: object;
+    capacityAndResources?: string;
     setDashboard?: Function;
     setIncident?: Function;
     setDamageAndLoss?: Function;
     setRealtime?: Function;
     setProfile?: Function;
-    setRiskInfo?: Function;
+    setCapacityAndResources?: Function;
 }
 
 export const TitleContext = React.createContext<TitleContextProps>({});
@@ -47,7 +47,7 @@ const TitleContextProvider = (props: Props) => {
         mainModule: '',
         subModule: '',
     });
-    const [riskInfo, setRiskInfo] = useState({});
+    const [capacityAndResources, setCapacityAndResources] = useState('');
 
     const titleProps = {
         dashboard,
@@ -55,13 +55,13 @@ const TitleContextProvider = (props: Props) => {
         damageAndLoss,
         realtime,
         profile,
-        riskInfo,
+        capacityAndResources,
         setDashboard,
         setIncident,
         setDamageAndLoss,
         setRealtime,
         setProfile,
-        setRiskInfo,
+        setCapacityAndResources,
     };
 
     return (
