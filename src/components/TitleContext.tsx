@@ -18,12 +18,14 @@ export interface TitleContextProps {
     realtime?: number;
     profile?: Profile;
     capacityAndResources?: string;
+    source?: string;
     setDashboard?: Function;
     setIncident?: Function;
     setDamageAndLoss?: Function;
     setRealtime?: Function;
     setProfile?: Function;
     setCapacityAndResources?: Function;
+    setSource?: Function;
 }
 
 export const TitleContext = React.createContext<TitleContextProps>({});
@@ -48,6 +50,7 @@ const TitleContextProvider = (props: Props) => {
         subModule: '',
     });
     const [capacityAndResources, setCapacityAndResources] = useState('');
+    const [source, setSource] = useState('');
 
     const titleProps = {
         dashboard,
@@ -56,12 +59,14 @@ const TitleContextProvider = (props: Props) => {
         realtime,
         profile,
         capacityAndResources,
+        source,
         setDashboard,
         setIncident,
         setDamageAndLoss,
         setRealtime,
         setProfile,
         setCapacityAndResources,
+        setSource,
     };
 
     return (

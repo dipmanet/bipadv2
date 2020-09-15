@@ -30,7 +30,7 @@ import {
 
 import indexMapImage from '#resources/images/index-map.png';
 
-import { getRouteWiseTitle } from './utils';
+import { getRouteWiseTitleAndSource } from './utils';
 
 interface OwnProps {
     className?: string;
@@ -202,11 +202,12 @@ const MapDownloadButton = (props: Props) => {
             }
 
             let source = '';
-            if (pageContext.activeRouteDetails.name === 'realtime') {
-                source = 'Rain / river: DHM';
-            } else if (pageContext.activeRouteDetails.name === 'incident') {
-                source = 'Nepal police';
-            }
+            // previous source logic
+            // if (pageContext.activeRouteDetails.name === 'realtime') {
+            //     source = 'Rain / river: DHM';
+            // } else if (pageContext.activeRouteDetails.name === 'incident') {
+            //     source = 'Nepal police';
+            // }
 
             setDownloadPending(true);
 
@@ -270,9 +271,7 @@ const MapDownloadButton = (props: Props) => {
                 const today = new Date();
                 let title = `${pageTitle} for ${regionName}`;
                 const exportText = `Exported on: ${today.toLocaleDateString()}`;
-
-                // setting routewise title
-                title = getRouteWiseTitle(
+                const [specificTitle, specificSource] = getRouteWiseTitleAndSource(
                     pageTitle,
                     pageContext,
                     titleContext,
@@ -280,7 +279,9 @@ const MapDownloadButton = (props: Props) => {
                     hazard,
                     realtimeFilters,
                     riskInfoActiveLayers,
-                ) || `${pageTitle} for ${regionName}`;
+                );
+                title = specificTitle || `${pageTitle} for ${regionName}`;
+                source = specificSource || '';
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');

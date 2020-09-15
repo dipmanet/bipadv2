@@ -247,11 +247,11 @@ export const damageAndLossList = [
 ];
 
 export const realtimeList = [
-    { key: 1, titlePart: 'Earthquake' },
-    { key: 2, titlePart: 'River Watch' },
-    { key: 4, titlePart: 'Forest Fire' },
-    { key: 5, titlePart: 'Air Quality Index' },
-    { key: 6, titlePart: 'Strem Flow Prediction' },
+    { key: 1, titlePart: 'Earthquake', source: 'Department of Mines and Geology' },
+    { key: 2, titlePart: 'River Watch', source: 'Department of Hydrology and Meteorology' },
+    { key: 4, titlePart: 'Forest Fire', source: 'International Centre for Integrated Mountain Development' },
+    { key: 5, titlePart: 'Air Quality Index', source: 'Ministry of Forests and Environment' },
+    { key: 6, titlePart: 'Strem Flow Prediction', source: 'ICIMOD (ecmwf)' },
 ];
 
 export const realtimeHourList = [
@@ -289,7 +289,7 @@ export const vulnerabilityCommunication = [
     'radio',
     'computer',
     'internet',
-    'telephone',
+    'telePhone',
     'television',
     'mobilePhone',
     'cableTelevision',
