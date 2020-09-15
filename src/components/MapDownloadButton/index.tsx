@@ -280,7 +280,7 @@ const MapDownloadButton = (props: Props) => {
                     hazard,
                     realtimeFilters,
                     riskInfoActiveLayers,
-                );
+                ) || `${pageTitle} for ${regionName}`;
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');

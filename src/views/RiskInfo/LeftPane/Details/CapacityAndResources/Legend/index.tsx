@@ -62,6 +62,12 @@ const CapacityAndResourcesLegend = (props: Props) => {
         }
     }
 
+    if (activeLegends.length > 1) {
+        if (setCapacityAndResources) {
+            setCapacityAndResources('');
+        }
+    }
+
     return (
         <div className={_cs(styles.wrapper, 'map-legend-container')}>
             <div className={styles.title}>Capacity and Resources Legends</div>
