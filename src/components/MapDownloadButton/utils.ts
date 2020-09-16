@@ -24,6 +24,15 @@ const getHazard = (id: number) => HAZARD_LIST.filter(h => h.id === id);
 
 const setSimpleTitle = (title: string, regionName: string) => `${title}, ${regionName}`;
 
+
+/**
+ * @param event Name of Damage and Loss event
+ * @param multipleHazards True if multiple hazards are selected
+ * @param regionName Location Name
+ * @param hazardList Static lists of hazards in the filter
+ * @param startDate StartDate value
+ * @param endDate End Date value
+ */
 const damageAndLossTitleParser = (
     event: string,
     multipleHazards: boolean,
@@ -56,18 +65,31 @@ const defineSource = (source: string, setSource?: Function) => {
 /* Route wise functions */
 
 // Dashboard
+/**
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ */
 const setDashBoardTitle = (titleContext: TitleContextProps, regionName: string) => {
     const { dashboard } = titleContext;
     return dashboard ? setSimpleTitle(dashboard, regionName) : '';
 };
 
 // Incidents
+/**
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ */
 const setIncidentTitle = (titleContext: TitleContextProps, regionName: string) => {
     const { incident } = titleContext;
     return incident ? setSimpleTitle(incident, regionName) : '';
 };
 
 // Damage And Loss
+/**
+ * @param titleContext Context for Titles
+ * @param hazardList List of hazards from Filter
+ * @param regionName Location Name
+ */
 const setDamageAndLossTitle = (
     titleContext: TitleContextProps,
     hazardList: number[],
@@ -98,6 +120,11 @@ const setDamageAndLossTitle = (
 };
 
 // Realtime
+/**
+ * @param titleContext Context for Titles
+ * @param realtimeFilters Realtime filters
+ * @param regionName Location Name
+ */
 const setRealTimeTitle = (
     titleContext: TitleContextProps,
     realtimeFilters: RealTimeFilters,
@@ -140,6 +167,10 @@ const setRealTimeTitle = (
 };
 
 // Profile
+/**
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ */
 const setProfileTitle = (titleContext: TitleContextProps, regionName: string) => {
     const { profile, setSource } = titleContext;
     let profileTitle = '';
@@ -169,6 +200,10 @@ const setProfileTitle = (titleContext: TitleContextProps, regionName: string) =>
 /* Risk Info Submodules */
 
 // Capacity and Resourecs
+/**
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ */
 const setCapacityAndResourcesTitle = (titleContext: TitleContextProps, regionName: string) => {
     const { capacityAndResources: activeResource, setSource } = titleContext;
     if (activeResource) {
@@ -179,6 +214,12 @@ const setCapacityAndResourcesTitle = (titleContext: TitleContextProps, regionNam
 };
 
 // Hazard
+/**
+ *
+ * @param activeLayer Currently active riskinfo Layer
+ * @param regionName Location Name
+ * @param setSource Function to set source
+ */
 const setRiskInfoHazardTitle = (
     activeLayer: ActiveLayer,
     regionName: string,
@@ -253,6 +294,11 @@ const setRiskInfoHazardTitle = (
 };
 
 // Vulnerability
+/**
+ * @param activeLayer Currently active RiskInfo Layer
+ * @param regionName Location Name
+ * @param setSource Function to set source
+ */
 const setRiskInfoVulnerabilityTitle = (
     activeLayer: ActiveLayer,
     regionName: string,
@@ -312,6 +358,11 @@ const setRiskInfoVulnerabilityTitle = (
 };
 
 // Risk
+/**
+ * @param activeLayer Currently active RiskInfo Layer
+ * @param regionName Location name
+ * @param setSource Function to set source
+ */
 const setRiskInfoRiskTitle = (
     activeLayer: ActiveLayer,
     regionName: string,
@@ -333,6 +384,11 @@ const setRiskInfoRiskTitle = (
 };
 
 // Climate Change
+/**
+ * @param activeLayer currently active RiskInfo layer
+ * @param regionName Location Name
+ * @param setSource Function to set soruce
+ */
 const setRiskInfoClimateChangeTitle = (
     activeLayer: ActiveLayer,
     regionName: string,
@@ -356,6 +412,15 @@ const setRiskInfoClimateChangeTitle = (
 
 /* Risk Info Submodules ends */
 
+/**
+ * @param pageTitle Default Page title
+ * @param pageContext Context for the page
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ * @param hazardList Selected Hazard List from filters
+ * @param realtimeFilters Selected Realtime filters
+ * @param riskInfoActiveLayers List of active riskinfo Layers
+ */
 export const getRouteWiseTitleAndSource = (
     pageTitle: string,
     pageContext: PageContextProps,
