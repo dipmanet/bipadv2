@@ -22,6 +22,7 @@ import styles from './styles.scss';
 interface Props {
     realTimeRain: RealTimeRain[];
     className?: string;
+    onHazardHover: Function;
 }
 interface State {
     duration: number;
@@ -55,7 +56,7 @@ const durationOptions: KeyValue[] = [
 ];
 
 const defaultSort = {
-    key: 'lastHour',
+    key: 'status',
     order: 'asc',
 };
 
@@ -68,10 +69,10 @@ const compareIntervalValues = (
     interval: number,
 ) => {
     const aAverage = a.find(av => av.interval === interval);
-    const aValue = aAverage ? aAverage.value : 0;
+    const aValue = aAverage && aAverage.value ? aAverage.value : 0;
 
     const bAverage = b.find(av => av.interval === interval);
-    const bValue = bAverage ? bAverage.value : 0;
+    const bValue = bAverage && bAverage.value ? bAverage.value : 0;
 
     return compareNumber(aValue, bValue);
 };
@@ -90,16 +91,32 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
     private getRainHeader = (duration: number) => ([
         {
+            key: 'basin',
+            label: 'Basin',
+            order: 1,
+            sortable: true,
+            comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.basin, b.basin),
+            modifier: (row: RealTimeRain) => {
+                const { basin } = row;
+
+                return (basin) ? (
+                    <div style={{ width: '60px' }}>
+                        {basin}
+                    </div>
+                ) : undefined;
+            },
+        },
+        {
             key: 'title',
             label: 'Station Name',
-            order: 1,
+            order: 2,
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.title, b.title),
         },
         {
             key: 'lastHour',
             label: 'Rainfall',
-            order: 2,
+            order: 5,
             modifier: (row: RealTimeRain) => {
                 const {
                     status,
@@ -126,6 +143,48 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                 compareIntervalValues(a.averages, b.averages, duration)
             ),
         },
+        {
+            key: 'createdOn',
+            label: 'Date',
+            order: 3,
+            sortable: true,
+            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+            modifier: (row: RealTimeRain) => {
+                const { createdOn } = row;
+
+                return (createdOn) ? (
+                    <div style={{ width: '60px' }}>
+                        {/* parsing date to appropiate format */}
+                        {createdOn.substring(0, createdOn.indexOf('T'))}
+                    </div>
+                ) : undefined;
+            },
+        },
+        {
+            key: 'time',
+            label: 'Time',
+            order: 4,
+            sortable: false,
+            modifier: (row: RealTimeRain) => {
+                const { createdOn } = row;
+                if (createdOn) {
+                    const date = new Date(createdOn);
+                    return (
+                        <div>
+                            {/* parsing date to time format */}
+                            {date.toISOString().split('T')[1].split('.')[0]}
+                        </div>
+                    );
+                } return undefined;
+            },
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            order: 6,
+            sortable: true,
+            comparator: (a, b) => compareString(a.status, b.status),
+        },
     ]);
 
     private handleDurationSelect = (duration: number) => {
@@ -134,10 +193,25 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         });
     }
 
+    private getClassName = (row: RealTimeRain) => {
+        const { status } = row;
+        if (status === 'BELOW WARNING LEVEL') {
+            return styles.below;
+        }
+        if (status === 'ABOVE WARNING LEVEL') {
+            return styles.above;
+        }
+        if (status === 'ABOVE DANGER LEVEL') {
+            return styles.danger;
+        }
+        return styles.none;
+    }
+
     public render() {
         const {
             className,
             realTimeRain,
+            onHazardHover,
         } = this.props;
 
         const { duration } = this.state;
@@ -171,10 +245,13 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                 </header>
                 <div className={styles.tableContainer}>
                     <Table
+                        rowClassNameSelector={this.getClassName}
                         className={styles.rainWatchTable}
                         data={realTimeRain}
                         headers={rainHeader}
                         keySelector={rainWatchKeySelector}
+                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />
                 </div>

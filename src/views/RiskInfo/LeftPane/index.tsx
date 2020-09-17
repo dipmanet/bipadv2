@@ -36,6 +36,8 @@ import styles from './styles.scss';
 
 interface OwnProps {
     className?: string;
+    handleCarActive: Function;
+    handleActiveLayerIndication: Function;
 }
 
 interface Params {
@@ -72,7 +74,7 @@ const attributeNames = {
     exposure: 'Exposure',
     vulnerability: 'Vulnerability',
     risk: 'Risk',
-    'capacity-and-resources': 'Capacity & resources',
+    'capacity-and-resources': 'Capacity and Resources',
     'climate-change': 'Climate change',
 };
 
@@ -124,6 +126,8 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         const {
             className,
             requests,
+            handleCarActive,
+            handleActiveLayerIndication,
         } = this.props;
 
         const { activeAttribute } = this.state;
@@ -153,14 +157,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                                 transparent
                             />
                             <h2 className={styles.heading}>
-                                Risk info / &nbsp;
+                                Risk Info / &nbsp;
                                 { attributeNames[activeAttribute] }
                             </h2>
                         </>
                     ) : (
                         <>
                             <h2 className={styles.heading}>
-                                Risk info
+                                Risk Info
                             </h2>
                             <CommonMap sourceKey="risk-info" />
                         </>
@@ -174,6 +178,8 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             layerMap={groupedLayers}
                             layerGroupList={layerGroupList}
                             activeView={activeAttribute}
+                            handleCarActive={handleCarActive}
+                            handleActiveLayerIndication={handleActiveLayerIndication}
                         />
                     )}
                     <Overview

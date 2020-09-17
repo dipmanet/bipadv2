@@ -1,5 +1,27 @@
+@import '~base-scss/base';
+
 .visualizations {
     padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
+    
+    .hazard-statistics-chart {
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .heading {
+                padding: 0 $spacing-medium;
+                color: $color-accent;
+            }
+            .chart-download {
+                padding: 0 $spacing-medium;
+            }
+        }
+
+        .chart {
+            height: 320px;
+            background-color: #fff;
+        }
+    }
 
     .alert-summary {
         .header {
@@ -30,9 +52,26 @@
                 }
             }
         }
+
+        
     }
 
     .container {
         // min-height: 100px;
     }
+}
+
+.message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.label-list {
+    // fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
+    font-size: 1rem;
+    font-weight: normal;
+    fill: #efefef;
+    margin: 10rem;
 }

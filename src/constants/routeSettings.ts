@@ -92,7 +92,7 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/RiskInfo'),
         navbar: true,
         disabled: false,
-        iconName: 'riskInfo',
+        iconName: 'riskInfoSvg',
     },
     {
         name: 'fourHundredThree',

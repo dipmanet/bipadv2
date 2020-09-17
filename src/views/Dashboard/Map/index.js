@@ -32,18 +32,54 @@ import { getYesterday, framize, getImage } from '#utils/common';
 
 import { hazardTypesSelector } from '#selectors';
 
+import RainTooltip from './Tooltips/Alerts/Rain';
+import RiverTooltip from './Tooltips/Alerts/River';
+import EarthquakeTooltip from './Tooltips/Alerts/Earthquake';
+import FireTooltip from './Tooltips/Alerts/Fire';
+import PollutionTooltip from './Tooltips/Alerts/Pollution';
+
 import styles from './styles.scss';
 
-const AlertTooltip = ({ title, description }) => (
-    <div className={styles.alertTooltip}>
-        <h3 className={styles.heading}>
-            {title}
-        </h3>
-        <div className={styles.description}>
-            { description }
-        </div>
-    </div>
-);
+// const AlertTooltip = ({ title, description }) => (
+// <div className={styles.alertTooltip}>
+//     <h3 className={styles.heading}>
+//         {title}
+//     </h3>
+//     <div className={styles.description}>
+//         { description }
+//     </div>
+// </div>
+// );
+
+const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
+    if (referenceType && referenceType === 'rain') {
+        return RainTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'river') {
+        return RiverTooltip(title, description, createdDate, referenceData);
+    }
+    if (title.toUpperCase().includes('EARTH') && referenceData) {
+        return EarthquakeTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'fire') {
+        return FireTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'pollution') {
+        return PollutionTooltip(title, description, createdDate, referenceData);
+    }
+    if (title) {
+        return (
+            <div className={styles.alertTooltip}>
+                <h3 className={styles.heading}>
+                    {title}
+                </h3>
+                <div className={styles.description}>
+                    { description }
+                </div>
+            </div>
+        );
+    } return null;
+};
 
 AlertTooltip.propTypes = {
     title: PropTypes.string.isRequired,
@@ -179,12 +215,21 @@ class AlertEventMap extends React.PureComponent {
     })
 
     handleAlertClick = (feature, lngLat) => {
-        const { properties: { title, description } } = feature;
+        const { properties:
+            { title,
+                description,
+                referenceType,
+                referenceData,
+                createdDate } } = feature;
+        const data = referenceData ? JSON.parse(referenceData) : undefined;
 
         this.setState({
             alertTitle: title,
             alertDescription: description,
             alertClickLngLat: lngLat,
+            alertReferenceType: referenceType,
+            alertReferenceData: data,
+            alertCreatedDate: createdDate,
         });
     }
 
@@ -268,7 +313,8 @@ class AlertEventMap extends React.PureComponent {
         const featurePolygonCollection = this.getPolygonAlertsFeatureCollection(alertList, hazards);
         const featurePointCollection = this.getPointAlertsFeatureCollection(alertList, hazards);
 
-        const hazardList = this.getHazardList(alertList);
+        let hazardList = this.getHazardList(alertList);
+        hazardList = hazardList.filter(item => item);
 
         const eventsConvexFeatureCollection = this.getConvexEventsFeatureCollection(
             eventList,
@@ -295,6 +341,9 @@ class AlertEventMap extends React.PureComponent {
             alertTitle,
             alertDescription,
             alertClickLngLat,
+            alertReferenceType,
+            alertReferenceData,
+            alertCreatedDate,
         } = this.state;
 
         const tooltipOptions = {
@@ -419,6 +468,9 @@ class AlertEventMap extends React.PureComponent {
                             <AlertTooltip
                                 title={alertTitle}
                                 description={alertDescription}
+                                referenceType={alertReferenceType}
+                                referenceData={alertReferenceData}
+                                createdDate={alertCreatedDate}
                             />
                         </MapTooltip>
                     )}

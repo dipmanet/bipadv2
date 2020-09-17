@@ -3,6 +3,8 @@
 .table-header {
     display: flex;
     padding: $spacing-small 0;
+    align-items: center;
+    cursor: pointer;
 
     .sort-button {
         flex-shrink: 0;
@@ -13,5 +15,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .icon {
+        margin: 0 var(--spacing-small);
     }
 }

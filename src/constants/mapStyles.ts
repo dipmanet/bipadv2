@@ -7,6 +7,35 @@ const incidentCircleRadii = [
     8,
 ];
 
+const resourceClusterInitial = {
+    'circle-color': '#ffeb3b',
+    'circle-radius': [
+        'step',
+        ['get', 'point_count'],
+        10,
+        100,
+        20,
+        750,
+        30,
+    ],
+    'circle-stroke-width': 1,
+    'circle-stroke-color': '#000000',
+    'circle-stroke-opacity': 0.3,
+};
+
+const resourcePointInitial = {
+    'circle-color': '#ffffff',
+    'circle-radius': 13,
+    'circle-opacity': 0.9,
+    'circle-stroke-width': ['case',
+        ['boolean', ['feature-state', 'hover'], false],
+        2,
+        1,
+    ],
+    'circle-stroke-color': '#000000',
+    'circle-stroke-opacity': 0.3,
+};
+
 export default {
     province: {
         outline: {
@@ -29,7 +58,8 @@ export default {
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.6,
+            'line-opacity': 0.8,
         },
         fill: {
             'fill-color': '#000000',
@@ -38,12 +68,14 @@ export default {
     },
     municipality: {
         outline: {
-            'line-color': '#72b6ac',
+            // 'line-color': '#72b6ac',
+            'line-color': '#C1292E',
             'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.27,
+            'line-opacity': 0.6,
         },
         fill: {
             'fill-color': '#000000',
@@ -52,12 +84,14 @@ export default {
     },
     ward: {
         outline: {
-            'line-color': '#d0e8e4',
+            // 'line-color': '#d0e8e4',
+            'line-color': '#9883E5',
             'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
-            'line-width': 1,
+            'line-width': 0.1,
+            'line-opacity': 0.5,
         },
         fill: {
             'fill-color': '#000000',
@@ -308,6 +342,38 @@ export default {
             'circle-stroke-color': '#000000',
             'circle-stroke-opacity': 0.3,
         },
+        education: {
+            ...resourceClusterInitial,
+            'circle-color': '#ffd046',
+        },
+        health: {
+            ...resourceClusterInitial,
+            'circle-color': '#EADAA2',
+        },
+        finance: {
+            ...resourceClusterInitial,
+            'circle-color': '#BD93BD',
+        },
+        governance: {
+            ...resourceClusterInitial,
+            'circle-color': '#82ddf0',
+        },
+        tourism: {
+            ...resourceClusterInitial,
+            'circle-color': '#7dcd85',
+        },
+        cultural: {
+            ...resourceClusterInitial,
+            'circle-color': '#c4b2bc',
+        },
+        industry: {
+            ...resourceClusterInitial,
+            'circle-color': '#a6a867',
+        },
+        communication: {
+            ...resourceClusterInitial,
+            'circle-color': '#efa8b8',
+        },
     },
 
     resourcePoint: {
@@ -323,6 +389,38 @@ export default {
             'circle-stroke-color': '#000000',
             'circle-stroke-opacity': 0.3,
         },
+        education: {
+            ...resourcePointInitial,
+            'circle-color': '#ffd046',
+        },
+        health: {
+            ...resourcePointInitial,
+            'circle-color': '#EADAA2',
+        },
+        finance: {
+            ...resourcePointInitial,
+            'circle-color': '#bd93bd',
+        },
+        governance: {
+            ...resourcePointInitial,
+            'circle-color': '#82ddf0',
+        },
+        tourism: {
+            ...resourcePointInitial,
+            'circle-color': '#7dcd85',
+        },
+        cultural: {
+            ...resourcePointInitial,
+            'circle-color': '#c4b2bc',
+        },
+        industry: {
+            ...resourcePointInitial,
+            'circle-color': '#a6a867',
+        },
+        communication: {
+            ...resourcePointInitial,
+            'circle-color': '#efa8b8',
+        },
     },
 
     resourceSymbol: {
@@ -336,22 +434,64 @@ export default {
     },
 
     rainPoint: {
-        paint: {
-            'circle-radius': 10,
+        circle: {
             'circle-color': [
                 'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#2373a9',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-opacity': [
-                'case',
-                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
-                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
-                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
-                0.2,
+            'circle-radius': 8,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                1,
             ],
+            'circle-opacity': 0.9,
+        },
+        circleDim: {
+            'circle-color': [
+                'case',
+                // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#2373a9',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            'circle-radius': 8,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                0,
+            ],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
+        },
+        paint: {
+            'circle-radius': 8,
+            'circle-color': [
+                'case',
+                // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#2373a9',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            // 'circle-opacity': [
+            //     'case',
+            //     ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 0.3,
+            //     ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+            //     ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
+            //     0.2,
+            // ],
+            'circle-opacity': 1,
             'circle-stroke-color': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
                 '#000000',
@@ -365,45 +505,113 @@ export default {
         },
     },
 
-    riverPoint: {
+    rainSymbol: {
         layout: {
-            'text-field': [
-                'case',
-                ['==', ['get', 'steady'], 'STEADY'], '●',
-                ['==', ['get', 'steady'], 'RISING'], '▲',
-                ['==', ['get', 'steady'], 'FALLING'], '▼',
-                '\u25CF',
-            ],
+            'text-field': '▲',
             'text-allow-overlap': true,
-            'text-size': 24,
+            'text-size': 32,
         },
         paint: {
-            'circle-radius': 10,
-            'circle-color': [
+            'text-color': [
                 'case',
                 ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
                 ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-opacity': [
+            'text-opacity': [
                 'case',
-                ['==', ['get', 'steady'], 'STEADY'], 0.3,
-                ['==', ['get', 'steady'], 'RISING'], 1,
-                ['==', ['get', 'steady'], 'FALLING'], 1,
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], 1,
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], 1,
                 0.3,
             ],
+        },
+    },
 
-            'circle-stroke-color': ['case',
-                ['boolean', ['feature-state', 'hover'], false],
-                '#000000',
-                'rgba(0, 0, 0, 0)',
+    riverPoint: {
+        layout: {
+            'text-field': [
+                'case',
+                // ['==', ['get', 'steady'], 'STEADY'], '●',
+                ['==', ['get', 'steady'], 'STEADY'], '■',
+                ['==', ['get', 'steady'], 'RISING'], '▲',
+                ['==', ['get', 'steady'], 'FALLING'], '▼',
+                '■',
             ],
-            'circle-stroke-width': ['case',
+            'text-allow-overlap': true,
+            'text-size': 32,
+        },
+        text: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            'text-halo-color': '#000',
+            'text-halo-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
+                3,
                 1,
+            ],
+            'text-opacity': 0.9,
+        },
+        textDim: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            'text-halo-color': '#000',
+            'text-halo-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
                 0,
             ],
+            'text-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.2,
+            ],
+        },
+        paint: {
+            'text-color': [
+                'case',
+                ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+                ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+                ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+                '#000000',
+            ],
+            // 'circle-radius': 8,
+            // 'circle-color': [
+            //     'case',
+            //     ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
+            //     ['==', ['get', 'status'], 'ABOVE WARNING LEVEL'], '#FDD835',
+            //     ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
+            //     '#000000',
+            // ],
+            // 'circle-opacity': [
+            //     'case',
+            //     ['==', ['get', 'steady'], 'STEADY'], 0.3,
+            //     ['==', ['get', 'steady'], 'RISING'], 1,
+            //     ['==', ['get', 'steady'], 'FALLING'], 1,
+            //     0.3,
+            // ],
+
+            // 'circle-stroke-color': ['case',
+            //     ['boolean', ['feature-state', 'hover'], false],
+            //     '#000000',
+            //     'rgba(0, 0, 0, 0)',
+            // ],
+            // 'circle-stroke-width': ['case',
+            //     ['boolean', ['feature-state', 'hover'], false],
+            //     1,
+            //     0,
+            // ],
         },
     },
 
@@ -429,12 +637,72 @@ export default {
                 0,
             ],
         },
+        circle: {
+            'circle-color': '#ff8300',
+            'circle-radius': 8,
+            'circle-stroke-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                1,
+            ],
+            'circle-opacity': 0.6,
+        },
+        circleDim: {
+            'circle-color': '#ff8300',
+            'circle-radius': 8,
+            'circle-stroke-color': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                '#000000',
+                'rgba(0, 0, 0, 0)',
+            ],
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                0,
+            ],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
+        },
     },
 
     pollutionPoint: {
         fill: {
             'circle-radius': 10,
             'circle-color': ['get', 'aqiColor'],
+        },
+        circle: {
+            'circle-color': ['get', 'aqiColor'],
+            'circle-radius': 10,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                1,
+            ],
+            'circle-opacity': 0.9,
+        },
+        circleDim: {
+            'circle-color': ['get', 'aqiColor'],
+            'circle-radius': 10,
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                0,
+            ],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
         },
     },
     pollutionText: {
@@ -453,6 +721,66 @@ export default {
     },
 
     earthquakePoint: {
+        circle: {
+            'circle-color': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], '#a50f15',
+                ['>=', ['get', 'magnitude'], 7], '#de2d26',
+                ['>=', ['get', 'magnitude'], 6], '#fb6a4a',
+                ['>=', ['get', 'magnitude'], 5], '#fc9272',
+                ['>=', ['get', 'magnitude'], 4], '#fcbba1',
+                '#fee5d9',
+            ],
+            'circle-radius': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 21,
+                ['>=', ['get', 'magnitude'], 7], 18,
+                ['>=', ['get', 'magnitude'], 6], 15,
+                ['>=', ['get', 'magnitude'], 5], 11,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                ['>=', ['get', 'magnitude'], 3], 6,
+                6,
+            ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                0,
+            ],
+            'circle-opacity': 0.9,
+        },
+        circleDim: {
+            'circle-color': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], '#a50f15',
+                ['>=', ['get', 'magnitude'], 7], '#de2d26',
+                ['>=', ['get', 'magnitude'], 6], '#fb6a4a',
+                ['>=', ['get', 'magnitude'], 5], '#fc9272',
+                ['>=', ['get', 'magnitude'], 4], '#fcbba1',
+                '#fee5d9',
+            ],
+            'circle-radius': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 21,
+                ['>=', ['get', 'magnitude'], 7], 18,
+                ['>=', ['get', 'magnitude'], 6], 15,
+                ['>=', ['get', 'magnitude'], 5], 11,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                ['>=', ['get', 'magnitude'], 3], 6,
+                6,
+            ],
+            'circle-stroke-color': '#000000',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                0,
+            ],
+            'circle-opacity': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                1,
+                0.1,
+            ],
+        },
         fill: {
             'circle-radius': [
                 'case',

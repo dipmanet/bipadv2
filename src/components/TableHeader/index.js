@@ -1,5 +1,8 @@
 import React from 'react';
+import { _cs } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
+
+import Icon from '#rscg/Icon';
 
 import { iconNames } from '#constants';
 
@@ -13,15 +16,29 @@ const getSortIcon = (sortOrder) => {
     return iconNames[mapping[sortOrder] || 'sort'];
 };
 
+const iconClassName = _cs(
+    styles.icon,
+);
+
+const iconName = 'sort';
+
 export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
-    <div className={styles.tableHeader}>
-        { sortable && (
-            <Button
-                className={styles.sortButton}
-                onClick={() => onSortClick(columnKey)}
-                iconName={getSortIcon(sortOrder)}
-                transparent
-                smallVerticalPadding
+    <div
+        role="presentation"
+        onClick={() => onSortClick(columnKey)}
+        className={styles.tableHeader}
+    >
+        {sortable && (
+            // <Button
+            //     className={styles.sortButton}
+            //     onClick={() => onSortClick(columnKey)}
+            //     iconName={getSortIcon(sortOrder)}
+            //     transparent
+            //     smallVerticalPadding
+            // />
+            <Icon
+                name={iconName}
+                className={iconClassName}
             />
         )}
         <div
@@ -30,5 +47,6 @@ export default ({ columnKey, title, sortable, sortOrder, onSortClick }) => (
         >
             {title}
         </div>
+
     </div>
 );

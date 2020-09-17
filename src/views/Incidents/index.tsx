@@ -36,6 +36,7 @@ import { hazardTypesList } from '#utils/domain';
 import {
     transformDataRangeToFilter,
     transformRegionToFilter,
+    transformDataRangeLocaleToFilter,
 } from '#utils/transformations';
 
 import Page from '#components/Page';
@@ -102,7 +103,8 @@ const transformFilters = ({
     ...otherFilters
 }: FiltersElement) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
 
@@ -239,7 +241,7 @@ class Incidents extends React.PureComponent<Props, State> {
         const pending = pendingEvents || pendingIncidents;
 
         return (
-            <React.Fragment>
+            <div>
                 <Loading pending={pending} />
                 <Map
                     incidentList={sanitizedIncidentList}
@@ -262,7 +264,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     )}
                     mainContentContainerClassName={_cs(styles.legendContainer, 'map-legend-container')}
                     mainContent={(
-                        <React.Fragment>
+                        <div>
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
@@ -291,10 +293,10 @@ class Incidents extends React.PureComponent<Props, State> {
                                     />
                                 </div>
                             )}
-                        </React.Fragment>
+                        </div>
                     )}
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }

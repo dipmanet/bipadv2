@@ -39,6 +39,7 @@ interface PropsFromDispatch {
 
 interface State {
     activeView: TabKey | undefined;
+    faramValues: FiltersElement;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -117,7 +118,21 @@ const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
 class Filters extends React.PureComponent<Props, State> {
     public state = {
         activeView: undefined,
+        faramValues: {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        },
     };
+
+    public componentDidMount() {
+        const { filters: faramValues } = this.props;
+        this.setState({ faramValues });
+    }
 
     private views = {
         location: {
@@ -172,10 +187,27 @@ class Filters extends React.PureComponent<Props, State> {
         name: iconNames[key],
         title,
         className: styles.icon,
-        isFiltered: getIsFiltered(key, this.props.filters),
+        // isFiltered: getIsFiltered(key, this.props.filters),
+        isFiltered: getIsFiltered(key, this.state.faramValues),
     })
 
     private handleResetFiltersButtonClick = () => {
+        this.setState({ activeView: undefined,
+            faramValues: {
+                dataDateRange: {
+                    rangeInDays: 7,
+                    startDate: undefined,
+                    endDate: undefined,
+                },
+                hazard: [],
+                region: {},
+            } });
+
+        const { setFilters } = this.props;
+        const { faramValues } = this.state;
+        if (faramValues) {
+            setFilters({ filters: faramValues });
+        }
     }
 
     private handleCloseCurrentFilterButtonClick = () => {
@@ -183,8 +215,17 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: FiltersElement) => {
+        // const { setFilters } = this.props;
+        // setFilters({ filters: faramValues });
+        this.setState({ faramValues });
+    }
+
+    private handleSubmitClick = () => {
         const { setFilters } = this.props;
-        setFilters({ filters: faramValues });
+        const { faramValues } = this.state;
+        if (faramValues) {
+            setFilters({ filters: faramValues });
+        }
     }
 
     private getTabs = memoize(
@@ -233,6 +274,8 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
         } = this.props;
 
+        const { faramValues: fv } = this.state;
+
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
@@ -241,6 +284,7 @@ class Filters extends React.PureComponent<Props, State> {
         );
 
         const { activeView } = this.state;
+
 
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
@@ -252,16 +296,16 @@ class Filters extends React.PureComponent<Props, State> {
                     <h3 className={styles.heading}>
                         Filters
                     </h3>
-                    {/*
+
                     <Button
                         className={styles.resetFiltersButton}
                         title="Reset filters"
                         onClick={this.handleResetFiltersButtonClick}
                         iconName="refresh"
                         transparent
-                        disabled
+                        disabled={!validActiveView}
                     />
-                    */}
+
                 </header>
                 <div className={styles.content}>
                     <ScrollTabs
@@ -275,7 +319,8 @@ class Filters extends React.PureComponent<Props, State> {
                     <Faram
                         schema={filterSchema}
                         onChange={this.handleFaramChange}
-                        value={faramValues}
+                        // value={faramValues}
+                        value={fv}
                         className={styles.filterViewContainer}
                     >
                         {validActiveView && (
@@ -296,6 +341,15 @@ class Filters extends React.PureComponent<Props, State> {
                             active={validActiveView}
                         />
                     </Faram>
+                    {validActiveView && (
+                        <div
+                            onClick={this.handleSubmitClick}
+                            className={styles.submitButton}
+                            role="presentation"
+                        >
+                        Submit
+                        </div>
+                    )}
                 </div>
             </div>
         );

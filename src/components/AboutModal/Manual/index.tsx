@@ -3,6 +3,9 @@ import { _cs } from '@togglecorp/fujs';
 
 import LoadingAnimation from '#rscv/LoadingAnimation';
 import List from '#rscv/List';
+import {
+    arrayGroupBy,
+} from '#utils/common';
 
 import Icon from '#rscg/Icon';
 
@@ -13,6 +16,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Message from '#rscv/Message';
 
 import ManualIcon from '#resources/images/manualicon.png';
 import styles from './styles.scss';
@@ -37,6 +41,8 @@ interface ManualElement {
 interface ManualResponse {
     results: ManualElement[];
 }
+
+const isEmpty = (obj: {}) => Object.keys(obj).length === 0;
 
 const ManualItem = ({ data, className }: {
     className?: string;
@@ -97,7 +103,11 @@ class Manual extends React.PureComponent<Props> {
 
         const { results = manualItemEmptyList } = response as ManualResponse;
 
-        return (
+        // grouping by year and removing undefined year values
+        const yearWiseList = arrayGroupBy(results, 'year');
+        delete yearWiseList[`${undefined}`];
+        // previous logic
+        /* return (
             <div className={_cs(className, styles.manual)}>
                 { pending && <LoadingAnimation /> }
                 <List
@@ -106,6 +116,39 @@ class Manual extends React.PureComponent<Props> {
                     rendererParams={manualItemRendererParams}
                     keySelector={manualItemKeySelector}
                 />
+            </div>
+        ); */
+
+        // new logic
+        if (isEmpty(yearWiseList)) {
+            return (
+                <div
+                    className={styles.message}
+                >
+                    <Message>
+                        No Publications to display
+                    </Message>
+                </div>
+            );
+        }
+        return (
+            <div className={_cs(className, styles.manual)}>
+                { pending && <LoadingAnimation /> }
+                {Object.keys(yearWiseList).sort((a, b) => b - a).map((key) => {
+                    const orderedManauals = yearWiseList[key]
+                        .sort((a, b) => (a.order < b.order ? -1 : 1));
+                    return (
+                        <div key={key} className={styles.item}>
+                            <div className={styles.header}>{key}</div>
+                            <List
+                                data={orderedManauals}
+                                renderer={ManualItem}
+                                rendererParams={manualItemRendererParams}
+                                keySelector={manualItemKeySelector}
+                            />
+                        </div>
+                    );
+                })}
             </div>
         );
     }

@@ -162,6 +162,7 @@ interface State {
     hideDataRangeFilter?: boolean;
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
+    mapDownloadPending: boolean;
 }
 
 interface BoundingClientRect {
@@ -293,6 +294,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeRouteDetails: undefined,
             activeLayers: [],
             leftContainerHidden: false,
+            mapDownloadPending: false,
         };
     }
 
@@ -451,6 +453,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private setActiveRouteDetails = (activeRouteDetails: RouteDetailElement) => {
         this.setState({ activeRouteDetails });
+    }
+
+    private handleMapDownloadStateChange = (mapDownloadPending: boolean) => {
+        this.setState({ mapDownloadPending });
     }
 
     private hideMap = () => {
@@ -647,6 +653,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeRouteDetails,
             activeLayers,
             leftContainerHidden,
+            mapDownloadPending,
         } = this.state;
 
         const pageProps = {
@@ -692,6 +699,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 <div className={_cs(
                     styles.multiplexer,
                     leftContainerHidden && styles.leftContainerHidden,
+                    mapDownloadPending && styles.downloadingMap,
                 )}
                 >
                     <div className={_cs(styles.content, 'bipad-main-content')}>
@@ -701,6 +709,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 mapOptions={{
                                     logoPosition: 'top-left',
                                     minZoom: 5,
+                                    // makes initial map center to Nepal
+                                    center: {
+                                        lng: 85.300140,
+                                        lat: 27.700769,
+                                    },
                                 }}
                                 // debug
 
@@ -779,6 +792,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 transparent
                                                 title="Download current map"
                                                 iconName="download"
+                                                onPendingStateChange={
+                                                    this.handleMapDownloadStateChange
+                                                }
                                             />
                                             <LayerSwitch
                                                 className={styles.layerSwitch}

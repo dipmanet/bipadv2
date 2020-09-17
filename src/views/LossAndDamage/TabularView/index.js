@@ -53,6 +53,13 @@ const defaultProps = {
     className: undefined,
 };
 
+const getDateFromMilliseconds = (milliseconds) => {
+    const date = new Date(milliseconds);
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split('T')[0];
+};
+
 export default class TabularView extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -94,15 +101,17 @@ export default class TabularView extends React.PureComponent {
             {
                 key: 'incidentOn',
                 value: { title: 'Incident on' },
-                cellRenderer: TableDateCell,
-                comparator: createComparator(compareDate, 'incidentOn'),
+                // cellRenderer: TableDateCell,
+                // comparator: createComparator(compareDate, 'incidentOn'),
+                comparator: createComparator(compareNumber, 'incidentOn'),
+                transformer: value => (value ? getDateFromMilliseconds(value.incidentOn) : ''),
             },
-            {
-                key: 'createdOn',
-                value: { title: 'Created on' },
-                cellRenderer: TableDateCell,
-                comparator: createComparator(compareDate, 'createdOn'),
-            },
+            // {
+            //     key: 'createdOn',
+            //     value: { title: 'Created on' },
+            //     cellRenderer: TableDateCell,
+            //     comparator: createComparator(compareDate, 'createdOn'),
+            // },
             {
                 key: 'provinceTitle',
                 value: { title: 'Province' },

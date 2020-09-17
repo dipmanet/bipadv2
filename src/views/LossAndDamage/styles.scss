@@ -34,6 +34,25 @@
             .date-to {
                 padding: var(--spacing-extra-small) var(--spacing-small);
             }
+
+            .submit-button {
+                border: 0;
+                background-color: #E35163 !important;
+                padding: var(--spacing-small) var(--spacing-small);
+                margin-left: var(--spacing-medium);
+                color: white;
+                font-weight: var(--font-size-medium);
+                cursor: pointer;
+                    
+                    &:hover {
+                            font-weight: bold;
+                    }
+            }
+        }
+
+        .warning-text {
+            color: red;
+            padding: calc(var(--spacing-large) - var(--spacing-extra-small-alt)) calc(var(--spacing-large) - var(--spacing-small));
         }
 
         .source-details {

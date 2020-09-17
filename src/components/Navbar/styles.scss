@@ -10,7 +10,7 @@
 
         .menu-item {
             border-bottom: var(--width-separator-thin) solid var(--color-separator-light);
-            padding: var(--spacing-medium) 0;
+            padding: var(--spacing-small-alt) 0;
         }
     }
 
@@ -20,7 +20,7 @@
         flex-shrink: 0;
 
         .menu-item {
-            padding: var(--spacing-medium) 0;
+            padding: var(--spacing-small-alt) 0;
         }
 
         .user-icon {
@@ -57,9 +57,9 @@
         font-size: var(--font-size-extra-small);
         font-weight: bold;
 
-        @media (max-height: 768px) {
-            display: none;
-        }
+        // @media (max-height: 768px) {
+        //     display: none;
+        // }
     }
 
     &:hover {

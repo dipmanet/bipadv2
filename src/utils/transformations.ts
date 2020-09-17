@@ -115,3 +115,47 @@ export const transformDataRangeToFilter = (
         endDate ? new Date(endDate) : undefined,
     );
 };
+
+export const transformDataRangeLocaleToFilter = (
+    dataRange: DataDateRangeValueElement,
+    dateParamName: string,
+) => {
+    const { rangeInDays } = dataRange;
+
+    const getFilter = (startDate?: Date, endDate?: Date) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__gt`]: startDate ? `${startDate.toISOString().split('T')[0]}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__lt`]: endDate ? `${endDate.toISOString().split('T')[0]}T23:59:59+05:45` : undefined,
+    });
+
+    const formatDate = (date: Date) => {
+        const currentDate = date.toLocaleDateString('en-GB').split('/');
+        const day = currentDate[0];
+        const month = currentDate[1];
+        const year = currentDate[2];
+        return `${year}-${month}-${day}`;
+    };
+
+    const getNonCustomFilter = (startDate?: string, endDate?: string) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__gt`]: startDate ? `${startDate}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [`${dateParamName}__lt`]: endDate ? `${endDate}T23:59:59+05:45` : undefined,
+    });
+
+    if (rangeInDays !== 'custom') {
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+        return getNonCustomFilter(formattedStartDate, formattedEndDate);
+        // return getFilter(startDate, endDate);
+    }
+
+    const { startDate, endDate } = dataRange;
+
+    return getFilter(
+        startDate ? new Date(startDate) : undefined,
+        endDate ? new Date(endDate) : undefined,
+    );
+};

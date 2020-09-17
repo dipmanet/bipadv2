@@ -6,6 +6,7 @@ button {
         filter: saturate(100%);
     }
 }
+
 .multiplexer {
     display: flex;
     width: 100vw;
@@ -28,7 +29,6 @@ button {
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            transition: .3s margin-left ease-in-out;
             z-index: 11;
             box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.3);
             width: var(--width-left-panel);
@@ -55,7 +55,6 @@ button {
             top: 50%;
             left: var(--width-left-panel);
             transform: translateY(-100%);
-            transition: .3s left ease-in-out;
             z-index: 11;
             border: var(--width-separator-thin) solid var(--color-separator-light);
             border-left: 0;
@@ -133,7 +132,8 @@ button {
             border-radius: 5px;
             box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .3);
             background-color: var(--color-foreground);
-            width: 200px;
+            // width: 200px;
+            width: 220px;
             max-height: calc(100vh - 140px - 2 * var(--spacing-medium));
 
             .right-content-container {
@@ -146,6 +146,16 @@ button {
             }
         }
 
+    }
+
+    &:not(.downloading-map) {
+        .left {
+            transition: .3s margin-left ease-in-out;
+        }
+
+        .toggle-left-container-visibility-button {
+            transition: .3s left ease-in-out;
+        }
     }
 
     &.left-container-hidden {

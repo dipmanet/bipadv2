@@ -25,7 +25,7 @@ import ListView from '#rscv/List/ListView';
 import SegmentInput from '#rsci/SegmentInput';
 import Button from '#rsca/Button';
 
-import { generatePaint } from '#utils/domain';
+import { generatePaint, generatePaintByQuantile } from '#utils/domain';
 import { mapSources } from '#constants';
 import {
     regionSelector,
@@ -349,7 +349,11 @@ class Demographics extends React.PureComponent<Props> {
         const mapState = this.getMapState(data, selectedAttribute);
         const [min, max] = extent(mapState, d => d.value);
         const colors = attributes[selectedAttribute].type === 'positive' ? [...colorGrade].reverse() : [...colorGrade];
-        const { paint, legend } = generatePaint(colors, min, max);
+        const specificData: number[] = mapState.map(d => d.value || 0);
+        // const { paint, legend } = generatePaint(colors, min, max);
+        const { paint, legend } = generatePaintByQuantile(
+            colors, min, max, specificData, colorGrade.length,
+        );
 
         const demographics = this.getPopulationData(data, region);
         const populationSummary = this.getPopulationSummary(demographics);

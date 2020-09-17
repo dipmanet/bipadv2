@@ -5,6 +5,8 @@ import memoize from 'memoize-one';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
+import MapState from '#re-map/MapSource/MapState';
+
 import FormattedDate from '#rscv/FormattedDate';
 
 import TextOutput from '#components/TextOutput';
@@ -22,6 +24,8 @@ import {
     pollutionToGeojson,
 } from '#utils/domain';
 
+import { httpGet } from '#utils/common';
+
 import RiverDetails from './RiverDetails';
 import RainDetails from './RainDetails';
 import StreamflowDetails from './StreamflowDetails';
@@ -38,6 +42,15 @@ RealTimeTooltip.propTypes = {
     params: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
+].join('');
+
 export default class RealTimeMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -46,7 +59,18 @@ export default class RealTimeMap extends React.PureComponent {
             rainTitle: undefined,
             riverTitle: undefined,
             streamflowId: undefined,
+            gis: undefined,
         };
+    }
+
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
@@ -285,6 +309,17 @@ export default class RealTimeMap extends React.PureComponent {
         });
     }
 
+    handleHazardEnter = (feature) => {
+        const { id } = feature;
+        const { onHazardHover } = this.props;
+        onHazardHover(id);
+    }
+
+    handleHazardLeave = () => {
+        const { onHazardHover } = this.props;
+        onHazardHover();
+    }
+
     render() {
         const {
             realTimeRainList,
@@ -301,6 +336,9 @@ export default class RealTimeMap extends React.PureComponent {
             showStreamflow,
             rightPaneExpanded,
             leftPaneExpanded,
+            onHazardHover,
+            hazardHoveredAttribute,
+            isHovered,
         } = this.props;
 
         const rainFeatureCollection = this.getRainFeatureCollection(realTimeRainList);
@@ -324,6 +362,7 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle,
             rainTitle,
             streamflowId,
+            gis,
         } = this.state;
 
         const tooltipOptions = {
@@ -371,7 +410,7 @@ export default class RealTimeMap extends React.PureComponent {
                         sourceOptions={{
                             type: 'geojson',
                         }}
-                        geoJson="https://bipad.gov.np/media/streamflow.json"
+                        geoJson={`${process.env.REACT_APP_STREAMFLOW_URL}`}
                     >
                         <MapLayer
                             layerKey="streamflow-layer"
@@ -411,6 +450,25 @@ export default class RealTimeMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+                {gis && (showRain || showRiver) && (
+                    <MapSource
+                        sourceKey="gis-layer"
+                        sourceOptions={{ type: 'geojson' }}
+                        geoJson={gis}
+                        supportHover
+                    >
+                        <MapLayer
+                            layerKey="gis-outline"
+                            layerOptions={{
+                                type: 'line',
+                                paint: {
+                                    'line-color': '#004d40',
+                                    'line-width': 1,
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )}
                 <MapSource
                     sourceKey="real-time-rain-points"
                     sourceOptions={{ type: 'geojson' }}
@@ -424,9 +482,24 @@ export default class RealTimeMap extends React.PureComponent {
                                 onClick={this.handleRainClick}
                                 layerOptions={{
                                     type: 'circle',
-                                    paint: mapStyles.rainPoint.paint,
+                                    // paint: mapStyles.rainPoint.paint,
+                                    paint: isHovered
+                                        ? mapStyles.rainPoint.circleDim
+                                        : mapStyles.rainPoint.circle,
                                 }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
                             />
+                            {/* the layer below is to render traingles for rain */}
+                            {/* <MapLayer
+                                layerKey="real-time-rain-triangle"
+                                onClick={this.handleRainClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.rainSymbol.layout,
+                                    paint: mapStyles.rainSymbol.paint,
+                                }}
+                            /> */}
                             <MapLayer
                                 layerKey="real-time-rain-symbol"
                                 layerOptions={{
@@ -439,6 +512,10 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </>
                     )}
+                    <MapState
+                        attributes={hazardHoveredAttribute}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-river-points"
@@ -448,13 +525,27 @@ export default class RealTimeMap extends React.PureComponent {
                 >
                     { showRiver && (
                         <>
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="real-time-river-circle"
                                 onClick={this.handleRiverClick}
                                 layerOptions={{
                                     type: 'circle',
                                     paint: mapStyles.riverPoint.paint,
                                 }}
+                            /> */}
+                            <MapLayer
+                                layerKey="real-time-river-custom"
+                                onClick={this.handleRiverClick}
+                                layerOptions={{
+                                    type: 'symbol',
+                                    layout: mapStyles.riverPoint.layout,
+                                    // paint: mapStyles.riverPoint.paint,
+                                    paint: isHovered
+                                        ? mapStyles.riverPoint.textDim
+                                        : mapStyles.riverPoint.text,
+                                }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
                             />
                             <MapLayer
                                 layerKey="real-time-river-symbol"
@@ -468,6 +559,10 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </>
                     )}
+                    <MapState
+                        attributes={hazardHoveredAttribute}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-earthquake-points"
@@ -483,8 +578,13 @@ export default class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     property: 'earthquakeId',
-                                    paint: mapStyles.earthquakePoint.fill,
+                                    // paint: mapStyles.earthquakePoint.fill,
+                                    paint: isHovered
+                                        ? mapStyles.earthquakePoint.circleDim
+                                        : mapStyles.earthquakePoint.circle,
                                 }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
                             />
                             <MapLayer
                                 layerKey="real-time-earthquake-text"
@@ -494,6 +594,7 @@ export default class RealTimeMap extends React.PureComponent {
                                     layout: mapStyles.earthquakeText.layout,
                                     paint: mapStyles.earthquakeText.paint,
                                 }}
+
                             />
                             <MapLayer
                                 layerKey="real-time-earthquake-symbol"
@@ -507,6 +608,10 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </React.Fragment>
                     )}
+                    <MapState
+                        attributes={hazardHoveredAttribute}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-fire-points"
@@ -521,8 +626,13 @@ export default class RealTimeMap extends React.PureComponent {
                                 onClick={this.handleFireClick}
                                 layerOptions={{
                                     type: 'circle',
-                                    paint: mapStyles.firePoint.paint,
+                                    // paint: mapStyles.firePoint.paint,
+                                    paint: isHovered
+                                        ? mapStyles.firePoint.circleDim
+                                        : mapStyles.firePoint.circle,
                                 }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
                             />
                             <MapLayer
                                 layerKey="real-time-fire-points-symbol"
@@ -537,6 +647,10 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </>
                     )}
+                    <MapState
+                        attributes={hazardHoveredAttribute}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 <MapSource
                     sourceKey="real-time-pollution-points"
@@ -552,8 +666,13 @@ export default class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     property: 'pollutionId',
-                                    paint: mapStyles.pollutionPoint.fill,
+                                    // paint: mapStyles.pollutionPoint.fill,
+                                    paint: isHovered
+                                        ? mapStyles.pollutionPoint.circleDim
+                                        : mapStyles.pollutionPoint.circle,
                                 }}
+                                onMouseEnter={this.handleHazardEnter}
+                                onMouseLeave={this.handleHazardLeave}
                             />
                             <MapLayer
                                 layerKey="real-time-pollution-text"
@@ -576,6 +695,10 @@ export default class RealTimeMap extends React.PureComponent {
                             />
                         </React.Fragment>
                     )}
+                    <MapState
+                        attributes={hazardHoveredAttribute}
+                        attributeKey="hover"
+                    />
                 </MapSource>
                 {riverTitle && (
                     <RiverDetails

@@ -37,12 +37,17 @@ const compareIntervalValues = (
     interval: number,
 ) => {
     const aAverage = a.find(av => av.interval === interval);
-    const aValue = aAverage ? aAverage.value : 0;
+    const aValue = aAverage && aAverage.value ? aAverage.value : 0;
 
     const bAverage = b.find(av => av.interval === interval);
-    const bValue = bAverage ? bAverage.value : 0;
+    const bValue = bAverage && bAverage.value ? bAverage.value : 0;
 
     return compareNumber(aValue, bValue);
+};
+
+const defaultSort = {
+    key: 'status',
+    order: 'asc',
 };
 
 class RainWatch extends React.PureComponent<Props> {
@@ -202,6 +207,7 @@ class RainWatch extends React.PureComponent<Props> {
                         data={realTimeRain}
                         headers={this.rainWatchHeader}
                         keySelector={rainWatchKeySelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>

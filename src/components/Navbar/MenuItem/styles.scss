@@ -16,9 +16,9 @@
         font-size: var(--font-size-extra-small);
         font-weight: bold;
 
-        @media (max-height: 768px) {
-            display: none;
-        }
+        // @media (max-height: 768px) {
+        //     display: none;
+        // }
     }
 
     &:hover {

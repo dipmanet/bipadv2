@@ -30,6 +30,9 @@ import { hazardTypesList } from '#utils/domain';
 import {
     setAlertListActionDP,
     setEventListAction,
+    setDashboardHazardTypesAction,
+    setFiltersAction,
+    setHazardTypesAction,
 } from '#actionCreators';
 
 import {
@@ -60,6 +63,7 @@ const emptyEventHoverAttributeList: MapStateElement[] = [];
 interface State {
     hoveredAlertId: AlertElement['id'] | undefined;
     hoveredEventId: EventElement['id'] | undefined;
+    hazardTypes: PageTypes.HazardType[] | undefined;
 }
 
 interface Params {
@@ -76,6 +80,9 @@ interface PropsFromAppState {
 interface PropsFromDispatch {
     setEventList: typeof setEventListAction;
     setAlertList: typeof setAlertListActionDP;
+    setDashboardHazardTypes: typeof setDashboardHazardTypesAction;
+    setHazardTypes: typeof setHazardTypesAction;
+    setFilters: typeof setFiltersAction;
 }
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
@@ -91,6 +98,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAlertList: params => dispatch(setAlertListActionDP(params)),
     setEventList: params => dispatch(setEventListAction(params)),
+    setDashboardHazardTypes: params => dispatch(setDashboardHazardTypesAction(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
+    setHazardTypes: params => dispatch(setHazardTypesAction(params)),
 });
 
 interface DateFilterParamName{
@@ -106,9 +116,11 @@ const transformDataRangeToFilter = (
 
     const getFilter = (startDate?: Date, endDate?: Date) => ({
         // eslint-disable-next-line @typescript-eslint/camelcase
-        [start]: startDate ? startDate.toISOString() : undefined,
+        // [start]: startDate ? startDate.toISOString() : undefined,
+        [start]: startDate ? `${startDate.toISOString().split('T')[0]}T00:00:00+05:45` : undefined,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        [end]: endDate ? endDate.toISOString() : undefined,
+        // [end]: endDate ? endDate.toISOString() : undefined,
+        [end]: endDate ? `${endDate.toISOString().split('T')[0]}T23:59:59+05:45` : undefined,
     });
 
     if (rangeInDays !== 'custom') {
@@ -123,13 +135,59 @@ const transformDataRangeToFilter = (
     );
 };
 
+const transformDataRangeToLocaleFilter = (
+    dataRange: DataDateRangeValueElement,
+    { start, end }: DateFilterParamName,
+) => {
+    const { rangeInDays } = dataRange;
+
+    const getFilter = (startDate?: Date, endDate?: Date) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        // [start]: startDate ? startDate.toISOString() : undefined,
+        [start]: startDate ? `${startDate.toISOString().split('T')[0]}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        // [end]: endDate ? endDate.toISOString() : undefined,
+        [end]: endDate ? `${endDate.toISOString().split('T')[0]}T23:59:59+05:45` : undefined,
+    });
+
+    const formatDate = (date: Date) => {
+        const currentDate = date.toLocaleDateString('en-GB').split('/');
+        const day = currentDate[0];
+        const month = currentDate[1];
+        const year = currentDate[2];
+        return `${year}-${month}-${day}`;
+    };
+
+    const getNonCustomFilter = (startDate?: string, endDate?: string) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [start]: startDate ? `${startDate}T00:00:00+05:45` : undefined,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        [end]: endDate ? `${endDate}T23:59:59+05:45` : undefined,
+    });
+
+    if (rangeInDays !== 'custom') {
+        const { startDate, endDate } = pastDaysToDateRange(rangeInDays);
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+        return getNonCustomFilter(formattedStartDate, formattedEndDate);
+    }
+
+    const { startDate, endDate } = dataRange;
+    return getFilter(
+        startDate ? new Date(startDate) : undefined,
+        endDate ? new Date(endDate) : undefined,
+    );
+};
+
+
 const transformFilters = ({
     dataDateRange,
     region,
     ...otherFilters
 }: FiltersElement, dateFilterParamName: DateFilterParamName) => ({
     ...otherFilters,
-    ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    // ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    ...transformDataRangeToLocaleFilter(dataDateRange, dateFilterParamName),
     ...transformRegionToFilter(region),
 });
 
@@ -227,6 +285,19 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    dashBoardHazardTypesRequest: {
+        url: '/hazard/',
+        method: methods.GET,
+        onSuccess: ({ response, props: { setDashboardHazardTypes } }) => {
+            interface Response { results: PageTypes.HazardType[] }
+            const { results: hazardTypes = [] } = response as Response;
+            setDashboardHazardTypes({ hazardTypes });
+        },
+        extras: {
+            schemaName: 'hazardResponse',
+        },
+        onMount: true,
+    },
 };
 
 const RECENT_DAY = 1;
@@ -238,6 +309,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.state = {
             hoveredAlertId: undefined,
             hoveredEventId: undefined,
+            hazardTypes: undefined,
         };
 
         const {
@@ -252,9 +324,40 @@ class Dashboard extends React.PureComponent<Props, State> {
         });
     }
 
+    public componentDidMount(): void {
+        this.getInitialHazardList();
+    }
+
     public componentWillUnmount(): void {
+        // const noFilter = {
+        //     dataDateRange: {
+        //         rangeInDays: 7,
+        //         startDate: undefined,
+        //         endDate: undefined,
+        //     },
+        //     hazard: [],
+        //     region: {},
+        // };
+        // const { setFilters } = this.props;
+        // setFilters({ filters: noFilter });
+        const { hazardTypes } = this.state;
+        if (hazardTypes) {
+            const { setHazardTypes } = this.props;
+            setHazardTypes({ hazardTypes });
+        }
         window.clearTimeout(this.alertTimeout);
         window.clearTimeout(this.eventTimeout);
+    }
+
+    private getInitialHazardList = () => {
+        const xmlHttp = new XMLHttpRequest();
+        const url = `${process.env.REACT_APP_API_SERVER_URL}/hazard/`;
+        xmlHttp.open('GET', url, false); // false for synchronous request
+        xmlHttp.send(null);
+        const { responseText } = xmlHttp;
+        const hazardTypes = JSON.parse(responseText);
+        const { results } = hazardTypes;
+        this.setState({ hazardTypes: results });
     }
 
     private getAlertHazardTypesList = memoize((
@@ -374,7 +477,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const filteredHazardTypes = this.getAlertHazardTypesList(alertList, eventList);
         const pending = alertsPending || eventsPending;
-
         const {
             hoveredAlertId,
             hoveredEventId,

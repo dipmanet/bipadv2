@@ -21,7 +21,8 @@
             display: flex;
             flex-shrink: 0;
             transition: .2s opacity ease-in-out;
-            opacity: 0;
+            // opacity: 0;
+            opacity: 1;
 
             .info-button {
                 flex-shrink: 0;
@@ -30,11 +31,11 @@
             }
         }
 
-        &:hover {
-            .actions {
-                opacity: 1;
-            }
-        }
+        // &:hover {
+        //     .actions {
+        //         opacity: 1;
+        //     }
+        // }
     }
 
     .short-description {

@@ -43,6 +43,11 @@ interface Shape {
     coordinates: unknown[];
 }
 
+interface AlertsWithReference extends Alert {
+    referenceType?: string;
+    referenceData?: string;
+}
+
 const hasMultiplePolygon = (polygon: Shape) => (
     polygon.type === 'MultiPolygon' && polygon.coordinates.length > 1
 );
@@ -209,7 +214,7 @@ export const alertToConvexPolygonGeojson = (alertList: Alert[], hazards: Obj<Haz
     return geojson;
 };
 
-export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>) => {
+export const alertToPointGeojson = (alertList: AlertsWithReference[], hazards: Obj<HazardType>) => {
     const geojson = {
         type: 'FeatureCollection',
         features: alertList
@@ -223,6 +228,8 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
                     description,
                     hazard: hazardId,
                     createdOn,
+                    referenceType,
+                    referenceData,
                 } = alert;
 
                 const geometry = polygon
@@ -231,19 +238,25 @@ export const alertToPointGeojson = (alertList: Alert[], hazards: Obj<HazardType>
 
                 const hazard = hazards[hazardId];
 
-                return {
-                    id,
-                    type: 'Feature',
-                    geometry: { ...geometry },
-                    properties: {
-                        title,
-                        description,
-                        hazardTitle: hazard.title,
-                        hazardIcon: hazard.icon,
-                        hazardColor: hazard.color || '#4666b0',
-                        createdOn: new Date(createdOn).getTime(),
-                    },
-                };
+                if (hazard) {
+                    return {
+                        id,
+                        type: 'Feature',
+                        geometry: { ...geometry },
+                        properties: {
+                            title,
+                            description,
+                            hazardTitle: hazard.title,
+                            hazardIcon: hazard.icon,
+                            hazardColor: hazard.color || '#4666b0',
+                            createdOn: new Date(createdOn).getTime(),
+                            referenceType,
+                            referenceData,
+                            createdDate: createdOn,
+                        },
+                    };
+                }
+                return {};
             }),
     };
 
@@ -337,20 +350,23 @@ export const eventToPointGeojson = (eventList: Event[], hazards: Obj<HazardType>
 
                 const hazard = hazards[hazardId];
 
-                return {
-                    id,
-                    type: 'Feature',
-                    geometry: { ...geometry },
-                    properties: {
-                        title,
-                        description,
-                        severity,
-                        createdOn,
-                        hazardTitle: hazard.title,
-                        hazardIcon: hazard.icon,
-                        hazardColor: hazard.color || '#4666b0',
-                    },
-                };
+                if (hazard) {
+                    return {
+                        id,
+                        type: 'Feature',
+                        geometry: { ...geometry },
+                        properties: {
+                            title,
+                            description,
+                            severity,
+                            createdOn,
+                            hazardTitle: hazard.title,
+                            hazardIcon: hazard.icon,
+                            hazardColor: hazard.color || '#4666b0',
+                        },
+                    };
+                }
+                return {};
             }),
     };
     return geojson;
@@ -375,20 +391,22 @@ export const incidentPointToGeojson = (incidentList: Incident[], hazards: Obj<Ha
             } = incident;
 
             const hazard = hazards[hazardId];
-
-            return {
-                id,
-                type: 'Feature',
-                geometry: { ...point },
-                properties: {
-                    incidentId: id,
-                    severity: calculateCategorizedSeverity(severityValue),
-                    hazardTitle: hazard.title,
-                    hazardIcon: hazard.icon,
-                    hazardColor: hazard.color || '#4666b0',
-                    incidentOn: new Date(incidentOn).getTime(),
-                },
-            };
+            if (hazard) {
+                return {
+                    id,
+                    type: 'Feature',
+                    geometry: { ...point },
+                    properties: {
+                        incidentId: id,
+                        severity: calculateCategorizedSeverity(severityValue),
+                        hazardTitle: hazard.title,
+                        hazardIcon: hazard.icon,
+                        hazardColor: hazard.color || '#4666b0',
+                        incidentOn: new Date(incidentOn).getTime(),
+                    },
+                };
+            }
+            return {};
         }),
 });
 
@@ -727,6 +745,7 @@ export function getRasterLegendUrl(layer: { layername: string }) {
 export function getLayerHierarchy(
     layerList: LayerWithGroup[],
     layerGroupList: LayerGroup[],
+    layerType = 'raster',
 ) {
     const tree: LayerHierarchy[] = [];
     const lookup: LayerMap = {};
@@ -812,6 +831,104 @@ export const generatePaint = (colorDomain: string[], minValue: number, maxValue:
             colors.push(color);
             colors.push(val);
             legend[color] = val;
+        });
+    }
+
+    let paint: {
+        'fill-color': string | any[];
+        'fill-opacity': number | any[];
+    } = {
+        'fill-color': 'white',
+        'fill-opacity': 0.1,
+    };
+
+    if (colors.length !== 0) {
+        const fillColor = [
+            'step',
+            ['feature-state', 'value'],
+            ...colors.slice(0, -1),
+        ];
+
+        const fillOpacity = [
+            'case',
+            ['==', ['feature-state', 'value'], null],
+            0,
+            ['==', ['feature-state', 'hovered'], true],
+            0.5,
+            1,
+        ];
+
+        paint = {
+            'fill-color': fillColor,
+            'fill-opacity': fillOpacity,
+        };
+    }
+
+    return { paint, legend };
+};
+
+/**
+ * @param colorDomain List of color to be shown in the legend
+ * @param minValue Min value in the supplied data
+ * @param maxValue Max value in the supplied data
+ * @param categoryData Data that is to be distributed by quantile method
+ * @param parts Number of divisions for quantile division
+ */
+export const generatePaintByQuantile = (
+    colorDomain: string[],
+    minValue: number,
+    maxValue: number,
+    categoryData: number[],
+    parts: number,
+) => {
+    const range = maxValue - minValue;
+    const gap = range / colorDomain.length;
+
+    /* Quantile Division starts */
+    const data = categoryData;
+    // Divide into equal number of events
+    const divider = Math.ceil(data.length / parts);
+    data.sort((a, b) => a - b);
+    const dividedSpecificData = new Array(Math.ceil(data.length / divider))
+        .fill()
+        .map(_ => data.splice(0, divider));
+
+    // remove any empty array from specific data
+    const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
+
+    const intervals: number[] = [];
+    // push max value from each array inside nonEmptyData
+    // plus 1 added to fix 0 - 0 issue
+    nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+        ? Math.max(...d) + 1 : Math.max(...d)));
+
+    /* Quantile Division ends */
+
+    const countBasedIntervals = intervals;
+    const colors: (string | number)[] = [];
+    const legend: {
+        [key: string]: number;
+    } = {};
+    if (maxValue <= 1 || gap < 1) {
+        colorDomain.forEach((color, i) => {
+            const val = +(minValue + (i + 1) * gap).toFixed(1);
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === val) {
+                return;
+            }
+            colors.push(color);
+            colors.push(val);
+            legend[color] = val;
+        });
+    } else {
+        colorDomain.forEach((color, i) => {
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === countBasedIntervals[i]) {
+                return;
+            }
+            colors.push(color);
+            colors.push(countBasedIntervals[i]);
+            legend[color] = countBasedIntervals[i];
         });
     }
 

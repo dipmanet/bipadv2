@@ -1,5 +1,11 @@
 .past-date-range-input {
     .custom-range {
         padding: var(--spacing-medium);
+        padding-bottom: 0;
     }
+}
+
+.date-ranges {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }

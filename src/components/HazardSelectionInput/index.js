@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { FaramInputElement } from '@togglecorp/faram';
-import { _cs, compareString } from '@togglecorp/fujs';
+import { _cs, compareString, compareNumber } from '@togglecorp/fujs';
 
 import { hazardIcons } from '#resources/data';
 import MultiListSelection from '#components/MultiListSelection';
@@ -28,10 +28,16 @@ const hazardTypeLabelSelector = d => d.title;
 const hazardTypeTitleSelector = d => d.description;
 const hazardTypeKeySelector = d => d.id;
 const hazardTypeIconSelector = d => d.icon || hazardIcons.unknown;
+const hazardTypeOrderSelector = d => d.order;
 
-const compareHazard = (a, b) => compareString(
-    hazardTypeLabelSelector(a),
-    hazardTypeLabelSelector(b),
+// const compareHazard = (a, b) => compareString(
+//     hazardTypeLabelSelector(a),
+//     hazardTypeLabelSelector(b),
+// );
+
+const compareHazard = (a, b) => compareNumber(
+    hazardTypeOrderSelector(a),
+    hazardTypeOrderSelector(b),
 );
 
 class HazardSelectionInput extends React.PureComponent {
@@ -56,11 +62,12 @@ class HazardSelectionInput extends React.PureComponent {
 
         hazardTypeValues.forEach((hazardKey) => {
             const hazardType = hazardTypes[hazardKey];
-
-            if (!groupedHazardTypes[hazardType.type]) {
-                console.warn('Unknown hazard type', hazardType.type);
-            } else {
-                groupedHazardTypes[hazardType.type].push(hazardType.id);
+            if (hazardType) {
+                if (!groupedHazardTypes[hazardType.type]) {
+                    console.warn('Unknown hazard type', hazardType.type);
+                } else {
+                    groupedHazardTypes[hazardType.type].push(hazardType.id);
+                }
             }
         });
 
@@ -116,7 +123,6 @@ class HazardSelectionInput extends React.PureComponent {
 
         const groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
         const groupedValues = this.getGroupedHazardTypeValues(value);
-
         return (
             <div className={_cs(className, styles.hazardSelectionInput)}>
                 <MultiListSelection

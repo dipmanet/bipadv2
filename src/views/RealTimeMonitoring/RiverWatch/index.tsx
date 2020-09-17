@@ -13,7 +13,7 @@ import DownloadButton from '#components/DownloadButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import { Header } from '#store/atom/table/types';
-import { RealTimeRiver } from '#store/atom/page/types';
+import { RealTimeRiver as RealTimeRiverOld } from '#store/atom/page/types';
 
 import {
     convertNormalTableToCsv,
@@ -26,7 +26,16 @@ interface Props {
     closeModal?: () => void;
 }
 
+interface RealTimeRiver extends RealTimeRiverOld{
+    stationSeriesId?: number;
+}
+
 const riverWatchKeySelector = (river: RealTimeRiver) => river.id;
+
+const defaultSort = {
+    key: 'status',
+    order: 'asc',
+};
 
 class RiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
@@ -49,11 +58,11 @@ class RiverWatch extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
-                key: 'stationId',
+                key: 'stationSeriesId',
                 label: 'Station Id',
                 order: 3,
                 sortable: true,
-                comparator: (a, b) => compareNumber(a.stationId, b.stationId),
+                comparator: (a, b) => compareNumber(a.stationSeriesId, b.stationSeriesId),
             },
             {
                 key: 'district',
@@ -67,7 +76,9 @@ class RiverWatch extends React.PureComponent<Props> {
                 label: 'Water Level (m)',
                 order: 5,
                 sortable: true,
-                comparator: (a, b) => compareNumber(a.waterLevel, b.waterLevel),
+                comparator: (a, b) => compareNumber(
+                    a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
+                ),
             },
             {
                 key: 'warningLevel',
@@ -100,7 +111,7 @@ class RiverWatch extends React.PureComponent<Props> {
         ];
     }
 
-    private getClassName = (row: RealTimeRain) => {
+    private getClassName = (row: RealTimeRiver) => {
         const { status } = row;
         if (status === 'BELOW WARNING LEVEL') {
             return styles.below;
@@ -147,6 +158,7 @@ class RiverWatch extends React.PureComponent<Props> {
                         data={realTimeRiver}
                         headers={this.riverWatchHeader}
                         keySelector={riverWatchKeySelector}
+                        defaultSort={defaultSort}
                     />
                 </ModalBody>
                 <ModalFooter>
