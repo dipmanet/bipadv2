@@ -20,17 +20,17 @@ interface Props {
     chosenOption: Options;
 }
 
-// class MiniOption extends React.PureComponent<Props> {
+const miniOptions = [
+    { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
+    { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
+    { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+    { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+    { id: 'fire', option: 'Fire', alt: 'Fire', icon: FireIcon },
+    // { id: 'landslide', option: 'Landslide', alt: 'Landslide', icon: RainIcon },
+];
+
 const MiniOption = (props: Props) => {
     const { handleMiniOptionsClick, handleOptionClick, chosenOption } = props;
-    const miniOptions = [
-        { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
-        { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
-        { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
-        { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
-        { id: 'fire', option: 'Fire', alt: 'Fire', icon: FireIcon },
-        // { id: 'landslide', option: 'Landslide', alt: 'Landslide', icon: RainIcon },
-    ];
     return (
         <div
             className={styles.miniOption}
