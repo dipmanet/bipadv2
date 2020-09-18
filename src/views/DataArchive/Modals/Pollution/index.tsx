@@ -12,28 +12,34 @@ interface Props {
     title: string;
 }
 
-class PollutionModal extends React.PureComponent<Props> {
-    public render() {
-        const { title = 'Pollution Modal',
-            handleModalClose } = this.props;
-        return (
-            <Modal className={styles.pollutionModal}>
-                <ModalHeader
-                    title={title}
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={handleModalClose}
-                        />
-                    )}
-                />
-                <ModalBody className={styles.body}>
-                    Pollution Body
-                </ModalBody>
-            </Modal>
-        );
-    }
-}
+// class PollutionModal extends React.PureComponent<Props> {
+const PollutionModal = (props: Props) => {
+    const { title = 'Pollution Modal',
+        handleModalClose } = props;
+    return (
+        <Modal className={styles.pollutionModal}>
+            <ModalHeader
+                title={title}
+                rightComponent={(
+                    <DangerButton
+                        transparent
+                        iconName="close"
+                        onClick={handleModalClose}
+                    />
+                )}
+            />
+            <ModalBody className={styles.body}>
+                <div className={styles.modalRow}>
+                    <div className={styles.modalMap}>Modal Map</div>
+                    <div className={styles.modalDetails}>Modal Details</div>
+                </div>
+                <div className={styles.modalRow}>
+                    <div className={styles.modalOneMonth}>Modal One Month Graph</div>
+                    <div className={styles.modalTwelveMonth}>Modal Tweleve Month Graph</div>
+                </div>
+            </ModalBody>
+        </Modal>
+    );
+};
 
 export default PollutionModal;

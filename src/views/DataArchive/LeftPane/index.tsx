@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Header from './Header';
 import Pollution from './Pollution';
@@ -11,66 +11,56 @@ import styles from './styles.scss';
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
 
 interface Props {}
-interface State {
-    activeView: string;
-    chosenOption: Options;
-}
 
+const LeftPane = () => {
+    const {
+        handleOptionClick,
+        data,
+        chosenOption: chosenOptionContext,
+    }: DataArchiveContextProps = useContext(DataArchiveContext);
+    const [activeView, setActiveView] = useState('');
+    const [chosenOption, setChosenOption] = useState<Options>(undefined);
 
-class LeftPane extends React.PureComponent <Props, State> {
-    public constructor(props: Props) {
-        super(props);
-        this.state = {
-            activeView: 'data',
-            chosenOption: undefined,
-        };
-    }
+    useEffect(() => {
+        if (chosenOptionContext) {
+            setActiveView('data');
+            setChosenOption(chosenOptionContext);
+        }
+    }, [chosenOptionContext]);
 
-    public componentDidMount() {
-        const { chosenOption } = this.context;
-        this.setState({ chosenOption });
-    }
+    const handleDataButtonClick = () => {
+        setActiveView('data');
+    };
 
-    private handleDataButtonClick = () => {
-        this.setState({ activeView: 'data' });
-    }
+    const handleVisualizationsButtonClick = () => {
+        setActiveView('visualizations');
+    };
 
-    private handleVisualizationsButtonClick = () => {
-        this.setState({ activeView: 'visualizations' });
-    }
+    const handleMiniOptionsClick = (miniOption: Options) => {
+        setChosenOption(miniOption);
+        setActiveView('data');
+    };
 
-    private handleMiniOptionsClick = (miniOption: Options) => {
-        this.setState({ chosenOption: miniOption, activeView: 'data' });
-    }
-
-    public render() {
-        const { activeView, chosenOption } = this.state;
-        const {
-            handleOptionClick,
-            data,
-        }: DataArchiveContextProps = this.context;
-        return (
-            <div className={styles.leftPane}>
-                <Header
-                    handleDataButtonClick={this.handleDataButtonClick}
-                    handleVisualizationsButtonClick={this.handleVisualizationsButtonClick}
-                    dataCount={data ? data.length : 0}
-                    activeView={activeView}
-                    chosenOption={chosenOption}
-                />
-                <div className={styles.content}>
-                    { chosenOption === 'Pollution' && activeView === 'data' && <Pollution /> }
-                    { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake /> }
-                </div>
-                <MiniOption
-                    handleMiniOptionsClick={this.handleMiniOptionsClick}
-                    handleOptionClick={handleOptionClick || (() => {})}
-                    chosenOption={chosenOption}
-                />
+    return (
+        <div className={styles.leftPane}>
+            <Header
+                handleDataButtonClick={handleDataButtonClick}
+                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+                dataCount={data ? data.length : 0}
+                activeView={activeView}
+                chosenOption={chosenOption}
+            />
+            <div className={styles.content}>
+                { chosenOption === 'Pollution' && activeView === 'data' && <Pollution /> }
+                { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake /> }
             </div>
-        );
-    }
-}
+            <MiniOption
+                handleMiniOptionsClick={handleMiniOptionsClick}
+                handleOptionClick={handleOptionClick || (() => {})}
+                chosenOption={chosenOption}
+            />
+        </div>
+    );
+};
 
-LeftPane.contextType = DataArchiveContext;
 export default LeftPane;

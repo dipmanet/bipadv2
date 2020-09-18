@@ -46,7 +46,6 @@ Option.propTypes = {
     count: PropTypes.number,
     alt: PropTypes.string,
     icon: PropTypes.string,
-
 };
 
 export default Option;

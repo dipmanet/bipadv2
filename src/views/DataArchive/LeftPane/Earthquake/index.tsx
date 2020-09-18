@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
@@ -7,7 +7,6 @@ import * as PageType from '#store/atom/page/types';
 import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
-
 
 import {
     createConnectedRequestCoordinator,
@@ -98,43 +97,44 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-class Earthquake extends React.PureComponent<Props, State> {
-    public render() {
-        const { earthquakeList, requests } = this.props;
-        const pending = isAnyRequestPending(requests);
+const Earthquake = (props: Props) => {
+    const { earthquakeList, requests } = props;
+    const pending = isAnyRequestPending(requests);
 
-        const {
-            setData,
-        }: DataArchiveContextProps = this.context;
+    const {
+        setData,
+    } = useContext(DataArchiveContext);
+
+    useEffect(() => {
         if (setData) {
             setData(earthquakeList);
         }
+    }, [earthquakeList, setData]);
 
-        if (earthquakeList.length < 1) {
-            return (
-                <div
-                    className={styles.message}
-                >
-                    <Message>
-                        No data available in the database.
-                    </Message>
-                </div>
-            );
-        }
+    if (earthquakeList.length < 1) {
         return (
-            <div className={styles.earthquake}>
-                <Loading pending={pending} />
-                { earthquakeList.map((datum: PageType.DataArchiveEarthquake) => (
-                    <EarthquakeItem
-                        data={datum}
-                    />
-                )) }
+            <div
+                className={styles.message}
+            >
+                <Message>
+                    No data available in the database.
+                </Message>
             </div>
         );
     }
-}
+    return (
+        <div className={styles.earthquake}>
+            <Loading pending={pending} />
+            { earthquakeList.map((datum: PageType.DataArchiveEarthquake) => (
+                <EarthquakeItem
+                    key={datum.id}
+                    data={datum}
+                />
+            )) }
+        </div>
+    );
+};
 
-Earthquake.contextType = DataArchiveContext;
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),

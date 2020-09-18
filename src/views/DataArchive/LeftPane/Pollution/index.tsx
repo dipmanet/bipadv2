@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
@@ -103,43 +103,45 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-class Pollution extends React.PureComponent<Props, State> {
-    public render() {
-        const { pollutionList, requests } = this.props;
-        const pending = isAnyRequestPending(requests);
-        const {
-            setData,
-        }: DataArchiveContextProps = this.context;
+// class Pollution extends React.PureComponent<Props, State> {
+const Pollution = (props: Props) => {
+    const { pollutionList, requests } = props;
+    const pending = isAnyRequestPending(requests);
+    const {
+        setData,
+    }: DataArchiveContextProps = useContext(DataArchiveContext);
+
+    useEffect(() => {
         if (setData) {
             setData(pollutionList);
         }
+    }, [pollutionList, setData]);
 
-        if (pollutionList.length < 1) {
-            return (
-                <div
-                    className={styles.message}
-                >
-                    <Message>
-                        No data available in the database.
-                    </Message>
-                </div>
-            );
-        }
+    if (pollutionList.length < 1) {
         return (
-            <div className={styles.pollution}>
-                <Loading pending={pending} />
-
-                { pollutionList.map((datum: PageType.DataArchivePollution) => (
-                    <PollutionItem
-                        data={datum}
-                    />
-                )) }
+            <div
+                className={styles.message}
+            >
+                <Message>
+                    No data available in the database.
+                </Message>
             </div>
         );
     }
-}
+    return (
+        <div className={styles.pollution}>
+            <Loading pending={pending} />
 
-Pollution.contextType = DataArchiveContext;
+            { pollutionList.map((datum: PageType.DataArchivePollution) => (
+                <PollutionItem
+                    data={datum}
+                    key={datum.id}
+                />
+            )) }
+        </div>
+    );
+};
+
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),

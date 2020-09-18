@@ -20,103 +20,60 @@ interface Props {
     chosenOption: Options;
 }
 
-class MiniOption extends React.PureComponent<Props> {
-    public render() {
-        const { handleMiniOptionsClick, handleOptionClick, chosenOption } = this.props;
-        return (
+// class MiniOption extends React.PureComponent<Props> {
+const MiniOption = (props: Props) => {
+    const { handleMiniOptionsClick, handleOptionClick, chosenOption } = props;
+    const miniOptions = [
+        { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
+        { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
+        { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+        { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+        { id: 'fire', option: 'Fire', alt: 'Fire', icon: FireIcon },
+        // { id: 'landslide', option: 'Landslide', alt: 'Landslide', icon: RainIcon },
+    ];
+    return (
+        <div
+            className={styles.miniOption}
+        >
+            {miniOptions.map((miniOption) => {
+                const { id, option, alt, icon } = miniOption;
+                return (
+                    <div
+                        key={id}
+                        role="presentation"
+                        onClick={() => {
+                            handleMiniOptionsClick(option);
+                            handleOptionClick(option);
+                        }}
+                        className={_cs(styles.option, chosenOption === option && styles.active)}
+                    >
+                        <ScalableVectorGraphics
+                            className={styles.optionIcon}
+                            src={icon}
+                            alt={alt}
+                        />
+                        {option}
+                    </div>
+                );
+            })}
+            {/*
+                Add Landslide to minioptions once data is available
+                Handle Onclicks as well
+            */}
             <div
-                className={styles.miniOption}
+                role="presentation"
+                // onClick={() => handleMiniOptionsClick('Rain')}
+                className={styles.option}
             >
-                <div
-                    role="presentation"
-                    onClick={() => {
-                        handleMiniOptionsClick('Rain');
-                        handleOptionClick('Rain');
-                    }}
-                    className={_cs(styles.option, chosenOption === 'Rain' && styles.active)}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={RainIcon}
-                        alt="Rain"
-                    />
-                    Rain
-                </div>
-                <div
-                    role="presentation"
-                    onClick={() => {
-                        handleMiniOptionsClick('River');
-                        handleOptionClick('River');
-                    }}
-                    className={_cs(styles.option, chosenOption === 'River' && styles.active)}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={RiverIcon}
-                        alt="River"
-                    />
-                    River
-                </div>
-                <div
-                    role="presentation"
-                    onClick={() => {
-                        handleMiniOptionsClick('Earthquake');
-                        handleOptionClick('Earthquake');
-                    }}
-                    className={_cs(styles.option, chosenOption === 'Earthquake' && styles.active)}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={EarthquakeIcon}
-                        alt="Earthquake"
-                    />
-                    Earthquake
-                </div>
-                <div
-                    role="presentation"
-                    onClick={() => {
-                        handleMiniOptionsClick('Pollution');
-                        handleOptionClick('Pollution');
-                    }}
-                    className={_cs(styles.option, chosenOption === 'Pollution' && styles.active)}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={PollutionIcon}
-                        alt="Pollution"
-                    />
-                    Pollution
-                </div>
-                <div
-                    role="presentation"
-                    onClick={() => {
-                        handleMiniOptionsClick('Fire');
-                        handleOptionClick('Fire');
-                    }}
-                    className={_cs(styles.option, chosenOption === 'Fire' && styles.active)}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={FireIcon}
-                        alt="Fire"
-                    />
-                    Fire
-                </div>
-                <div
-                    role="presentation"
-                    // onClick={() => handleMiniOptionsClick('Rain')}
-                    className={styles.option}
-                >
-                    <ScalableVectorGraphics
-                        className={styles.optionIcon}
-                        src={EarthquakeIcon}
-                        alt="Landslide"
-                    />
-                    Landslide
-                </div>
+                <ScalableVectorGraphics
+                    className={styles.optionIcon}
+                    src={EarthquakeIcon}
+                    alt="Landslide"
+                />
+                Landslide
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default MiniOption;

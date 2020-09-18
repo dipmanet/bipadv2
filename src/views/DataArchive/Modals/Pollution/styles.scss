@@ -5,5 +5,32 @@
 
     .body {
         display: flex;
+        flex-direction: column;
+        .modal-row {
+            display: flex;
+            // border: 2px solid red;
+            height: 50%;
+            & > * {
+                background-color: rosybrown;
+                border: 1px solid red;
+                margin: 4px;
+                padding: 4px;
+            }
+            .modal-map {
+                flex-grow: 3;
+            }
+
+            .modal-details {
+                flex-grow: 2;
+            }
+
+            .modal-one-month {
+                flex-grow: 1;
+            }
+
+            .modal-twelve-month {
+                flex-grow: 1;
+            }
+        }
     }
 }

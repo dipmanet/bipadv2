@@ -13,7 +13,8 @@
             flex-direction: column;
             justify-content: center;
             cursor: pointer;
-            padding: var(--spacing-medium);
+            min-width: 85px;
+            padding: var(--spacing-small);
   
             .value {
                 color: var(--color-accent);

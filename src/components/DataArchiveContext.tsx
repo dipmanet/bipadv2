@@ -8,5 +8,7 @@ export interface DataArchiveContextProps {
     setData?: Function;
     data?: [];
 }
+const DataArchiveContext = React.createContext<DataArchiveContextProps>({});
+DataArchiveContext.displayName = 'DataArchiveContext';
 
-export default React.createContext<DataArchiveContextProps>({});
+export default DataArchiveContext;
