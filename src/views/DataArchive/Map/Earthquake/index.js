@@ -4,7 +4,7 @@ import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-import FormattedDate from '#rscv/FormattedDate';
+import Tooltip from './Tooltip';
 
 import {
     mapStyles,
@@ -58,7 +58,7 @@ class EarthquakeMap extends React.PureComponent {
         } = feature;
 
         this.setState({
-            tooltipRenderer: this.earthquakeTooltipRenderer,
+            tooltipRenderer: Tooltip,
             tooltipParams: {
                 address,
                 description,
@@ -70,56 +70,6 @@ class EarthquakeMap extends React.PureComponent {
 
         return true;
     }
-
-    magnitudeClassSelector = (magnitude) => {
-        if (magnitude < 4) {
-            return styles.minor;
-        }
-        if (magnitude < 5) {
-            return styles.light;
-        }
-        if (magnitude < 6) {
-            return styles.moderate;
-        }
-        if (magnitude < 7) {
-            return styles.strong;
-        }
-        if (magnitude < 8) {
-            return styles.major;
-        }
-        if (magnitude >= 8) {
-            return styles.great;
-        }
-        return styles.good;
-    }
-
-    earthquakeTooltipRenderer = ({ address, description, eventOn, magnitude }) => (
-        <div className={styles.tooltip}>
-            <div className={styles.header}>
-                <h3>{ address }</h3>
-                <span className={this.magnitudeClassSelector(magnitude)}>
-                    { magnitude }
-                    {' '}
-                    ML
-                </span>
-            </div>
-
-            <div className={styles.description}>
-                <div className={styles.key}>Description:</div>
-                <div className={styles.value}>{ description }</div>
-            </div>
-
-            <div className={styles.eventOn}>
-                <div className={styles.key}>Event On:</div>
-                <div className={styles.value}>
-                    <FormattedDate
-                        value={eventOn}
-                        mode="yyyy-MM-dd hh:mm"
-                    />
-                </div>
-            </div>
-        </div>
-    )
 
     handleTooltipClose = () => {
         this.setState({
@@ -143,6 +93,7 @@ class EarthquakeMap extends React.PureComponent {
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
             data,
         );
+        console.log('earthquakeFeatureCollection: ', earthquakeFeatureCollection);
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
