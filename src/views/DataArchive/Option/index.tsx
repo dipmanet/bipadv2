@@ -6,7 +6,7 @@ import styles from './styles.scss';
 
 interface Props {
     title: string;
-    count: number;
+    count: number | string;
     icon: string;
     alt: string;
     handleOptionClick: Function;
@@ -43,7 +43,10 @@ Option.defaultProps = {
 
 Option.propTypes = {
     title: PropTypes.string,
-    count: PropTypes.number,
+    count: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
     alt: PropTypes.string,
     icon: PropTypes.string,
 };

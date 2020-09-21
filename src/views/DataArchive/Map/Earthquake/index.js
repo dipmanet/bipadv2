@@ -93,11 +93,7 @@ class EarthquakeMap extends React.PureComponent {
         const earthquakeFeatureCollection = this.getEarthquakeFeatureCollection(
             data,
         );
-        console.log('earthquakeFeatureCollection: ', earthquakeFeatureCollection);
-
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
-
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
