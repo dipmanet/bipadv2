@@ -3,6 +3,8 @@ import styles from './styles.scss';
 
 import icons from './icons';
 import Option from '../Option';
+import Loading from '#components/Loading';
+
 
 interface View {
     id: string;
@@ -53,8 +55,10 @@ const LandingPage = (props: Props) => {
         { id: 'fire', title: 'Fire', alt: 'fire', icon: FireIcon, count: getCount(counts, 'fire') },
         { id: 'landslide', title: 'Landslide', alt: 'landslide', icon: RainIcon, count: getCount(counts, 'landslide') },
     ];
+    const pending = Object.keys(counts).length === 0;
     return (
         <div className={styles.initialPage}>
+            <Loading pending={pending} />
             <div className={styles.optionContainer}>
                 <div className={styles.mainTitle}>
                 Data Archive

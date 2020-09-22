@@ -28,6 +28,7 @@ import {
     setRealTimeEarthquakeListAction,
     setRealTimeFireListAction,
     setRealTimePollutionListAction,
+    setFiltersAction,
 } from '#actionCreators';
 
 import {
@@ -58,6 +59,7 @@ interface PropsFromDispatch {
     setRealTimeEarthquakeList: typeof setRealTimeEarthquakeListAction;
     setRealTimeFireList: typeof setRealTimeFireListAction;
     setRealTimePollutionList: typeof setRealTimePollutionListAction;
+    setFilters: typeof setFiltersAction;
 }
 
 interface PropsFromState {
@@ -92,6 +94,7 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setRealTimeEarthquakeList: params => dispatch(setRealTimeEarthquakeListAction(params)),
     setRealTimeFireList: params => dispatch(setRealTimeFireListAction(params)),
     setRealTimePollutionList: params => dispatch(setRealTimePollutionListAction(params)),
+    setFilters: params => dispatch(setFiltersAction(params)),
 });
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -235,6 +238,11 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     //     },
     // },
 };
+const ARCHIVE_DEFAULT_DATE_RANGE = {
+    startDate: undefined,
+    endDate: undefined,
+    rangeInDays: 183, // 6 months
+};
 
 class RegularPage extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
@@ -242,6 +250,16 @@ class RegularPage extends React.PureComponent <Props, State> {
         this.state = {
             data: [],
         };
+    }
+
+    public componentDidMount = () => {
+        const { setFilters, globalFilters } = this.props;
+        if (globalFilters) {
+            setFilters({ filters: {
+                ...globalFilters,
+                dataDateRange: ARCHIVE_DEFAULT_DATE_RANGE,
+            } });
+        }
     }
 
     private setData = (data: []) => {
@@ -266,6 +284,7 @@ class RegularPage extends React.PureComponent <Props, State> {
             setData: this.setData,
             data,
         };
+
         return (
             <DataArchiveContext.Provider value={contextProps}>
                 <div className="regularPage">
@@ -282,6 +301,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                         />
                     )}
                     <Page
+                        hideHazardFilter
                         leftContent={(
                             <DataArchiveContext.Provider value={contextProps}>
                                 <LeftPane

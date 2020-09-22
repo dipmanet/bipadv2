@@ -159,3 +159,21 @@ export const transformDataRangeLocaleToFilter = (
         endDate ? new Date(endDate) : undefined,
     );
 };
+
+export const transformRegion = (region: {
+    adminLevel?: number;
+    geoarea?: number;
+}) => {
+    const { adminLevel, geoarea } = region;
+
+    if (adminLevel === 1) {
+        return { province: geoarea };
+    }
+    if (adminLevel === 2) {
+        return { district: geoarea };
+    }
+    if (adminLevel === 3) {
+        return { municipality: geoarea };
+    }
+    return {};
+};

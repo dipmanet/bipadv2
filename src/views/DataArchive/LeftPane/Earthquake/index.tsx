@@ -1,12 +1,12 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
-
+// import SegmentInput from '#rsci/SegmentInput';
 import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
-import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
+import DataArchiveContext from '#components/DataArchiveContext';
 
 import {
     createConnectedRequestCoordinator,
@@ -20,7 +20,7 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDateRangeFilterParam, transformDataRangeToFilter } from '#utils/transformations';
+import { transformDataRangeLocaleToFilter, transformRegion } from '#utils/transformations';
 
 import {
     setDataArchiveEarthquakeListAction,
@@ -65,16 +65,19 @@ interface OwnProps {}
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
-
-interface State {}
+/* const sortOptions = [
+    { key: 'magnitude', label: 'Magnitude' },
+    { key: 'eventOn', label: 'Event On' },
+    { key: 'address', label: 'Epicenter' },
+]; */
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
         method: methods.GET,
-        query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'event__on'),
+        query: ({ props: { globalFilters } }) => ({
+            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event__on'),
+            ...transformRegion(globalFilters.region),
         }),
         onSuccess: ({ response, props: { setDataArchiveEarthquakeList } }) => {
             interface Response { results: PageType.DataArchiveEarthquake[] }
@@ -82,12 +85,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             setDataArchiveEarthquakeList({ dataArchiveEarthquakeList });
         },
         onPropsChanged: {
-            filters: ({
-                props: { filters: { region } },
-                prevProps: { filters: {
-                    region: prevRegion,
-                } },
-            }) => region !== prevRegion,
             globalFilters: true,
         },
         onMount: true,
@@ -98,6 +95,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 };
 
 const Earthquake = (props: Props) => {
+    const [sortKey, setSortKey] = useState('magnitude');
     const { earthquakeList, requests } = props;
     const pending = isAnyRequestPending(requests);
 
@@ -122,15 +120,32 @@ const Earthquake = (props: Props) => {
             </div>
         );
     }
+
+    const compare = (a: any, b: any) => {
+        if (a[sortKey] < b[sortKey]) {
+            return 1;
+        }
+        if (a[sortKey] > b[sortKey]) {
+            return -1;
+        }
+        return 0;
+    };
+
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending} />
-            { earthquakeList.map((datum: PageType.DataArchiveEarthquake) => (
-                <EarthquakeItem
-                    key={datum.id}
-                    data={datum}
-                />
-            )) }
+            {/* <SegmentInput
+                options={sortOptions}
+                value={sortKey}
+                onChange={setSortKey}
+            /> */}
+            { earthquakeList.sort(compare)
+                .map((datum: PageType.DataArchiveEarthquake) => (
+                    <EarthquakeItem
+                        key={datum.id}
+                        data={datum}
+                    />
+                )) }
         </div>
     );
 };
