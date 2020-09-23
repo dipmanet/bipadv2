@@ -78,6 +78,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { globalFilters } }) => ({
             ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event__on'),
             ...transformRegion(globalFilters.region),
+            expand: ['province', 'district', 'municipality'],
         }),
         onSuccess: ({ response, props: { setDataArchiveEarthquakeList } }) => {
             interface Response { results: PageType.DataArchiveEarthquake[] }
