@@ -31,6 +31,8 @@ import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
+import Header from '../Header';
+import EarthquakeViz from './Visualization';
 
 import {
     dataArchiveEarthquakeListSelector,
@@ -97,12 +99,20 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('magnitude');
+    const [activeView, setActiveView] = useState('data');
     const { earthquakeList, requests } = props;
     const pending = isAnyRequestPending(requests);
 
     const {
         setData,
     } = useContext(DataArchiveContext);
+
+    const handleDataButtonClick = () => {
+        setActiveView('data');
+    };
+    const handleVisualizationsButtonClick = () => {
+        setActiveView('visualizations');
+    };
 
     useEffect(() => {
         if (setData) {
@@ -131,22 +141,32 @@ const Earthquake = (props: Props) => {
         }
         return 0;
     };
-
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending} />
+            <Header
+                chosenOption="Earthquake"
+                dataCount={earthquakeList.length || 0}
+                activeView={activeView}
+                handleDataButtonClick={handleDataButtonClick}
+                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+            />
             {/* <SegmentInput
                 options={sortOptions}
                 value={sortKey}
                 onChange={setSortKey}
             /> */}
-            { earthquakeList.sort(compare)
+            { activeView === 'data' && earthquakeList.sort(compare)
                 .map((datum: PageType.DataArchiveEarthquake) => (
                     <EarthquakeItem
                         key={datum.id}
                         data={datum}
                     />
                 )) }
+
+            {activeView === 'visualizations' && (
+                <EarthquakeViz earthquakeList={earthquakeList} />
+            )}
         </div>
     );
 };

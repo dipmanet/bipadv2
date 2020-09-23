@@ -1,11 +1,11 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
 import PollutionItem from './PollutionItem';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
-
+import Header from '../Header';
 import Message from '#rscv/Message';
 
 import {
@@ -31,6 +31,7 @@ import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
+import PollutionViz from './Visualization';
 
 import {
     dataArchivePollutionListSelector,
@@ -105,11 +106,19 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 // class Pollution extends React.PureComponent<Props, State> {
 const Pollution = (props: Props) => {
+    const [activeView, setActiveView] = useState('data');
     const { pollutionList, requests } = props;
     const pending = isAnyRequestPending(requests);
     const {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
+
+    const handleDataButtonClick = () => {
+        setActiveView('data');
+    };
+    const handleVisualizationsButtonClick = () => {
+        setActiveView('visualizations');
+    };
 
     useEffect(() => {
         if (setData) {
@@ -131,13 +140,22 @@ const Pollution = (props: Props) => {
     return (
         <div className={styles.pollution}>
             <Loading pending={pending} />
-
-            { pollutionList.map((datum: PageType.DataArchivePollution) => (
+            <Header
+                chosenOption="Pollution"
+                dataCount={pollutionList.length || 0}
+                activeView={activeView}
+                handleDataButtonClick={handleDataButtonClick}
+                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+            />
+            { activeView === 'data' && pollutionList.map((datum: PageType.DataArchivePollution) => (
                 <PollutionItem
                     data={datum}
                     key={datum.id}
                 />
             )) }
+            { activeView === 'visualizations' && (
+                <PollutionViz pollutionList={pollutionList} />
+            ) }
         </div>
     );
 };

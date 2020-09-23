@@ -43,13 +43,13 @@ const LeftPane = () => {
 
     return (
         <div className={styles.leftPane}>
-            <Header
+            {/* <Header
                 handleDataButtonClick={handleDataButtonClick}
                 handleVisualizationsButtonClick={handleVisualizationsButtonClick}
                 dataCount={data ? data.length : 0}
                 activeView={activeView}
                 chosenOption={chosenOption}
-            />
+            /> */}
             <div className={styles.content}>
                 { chosenOption === 'Pollution' && activeView === 'data' && <Pollution /> }
                 { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake /> }
