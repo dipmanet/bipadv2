@@ -147,13 +147,15 @@ const Earthquake = (props: Props) => {
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || earthquakeList.length < 1} />
-            <Header
-                chosenOption="Earthquake"
-                dataCount={earthquakeList.length || 0}
-                activeView={activeView}
-                handleDataButtonClick={handleDataButtonClick}
-                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
-            />
+            <div className={styles.header}>
+                <Header
+                    chosenOption="Earthquake"
+                    dataCount={earthquakeList.length || 0}
+                    activeView={activeView}
+                    handleDataButtonClick={handleDataButtonClick}
+                    handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+                />
+            </div>
             {/* <SegmentInput
                 options={sortOptions}
                 value={sortKey}

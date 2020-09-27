@@ -1,6 +1,10 @@
 .earthquake {
     flex: 1;
-    overflow: auto;
+    .header {
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
 }
 .message {
     flex-grow: 1;

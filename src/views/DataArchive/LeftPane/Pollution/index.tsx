@@ -141,13 +141,15 @@ const Pollution = (props: Props) => {
     return (
         <div className={styles.pollution}>
             <Loading pending={pending} />
-            <Header
-                chosenOption="Pollution"
-                dataCount={pollutionList.length || 0}
-                activeView={activeView}
-                handleDataButtonClick={handleDataButtonClick}
-                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
-            />
+            <div className={styles.header}>
+                <Header
+                    chosenOption="Pollution"
+                    dataCount={pollutionList.length || 0}
+                    activeView={activeView}
+                    handleDataButtonClick={handleDataButtonClick}
+                    handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+                />
+            </div>
             { activeView === 'data' && pollutionList.map((datum: PageType.DataArchivePollution) => (
                 <PollutionItem
                     data={datum}
