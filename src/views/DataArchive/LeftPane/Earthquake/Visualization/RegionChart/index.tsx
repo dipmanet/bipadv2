@@ -15,6 +15,11 @@ import {
 import Message from '#rscv/Message';
 import Button from '#rsca/Button';
 
+import ArchiveLegend from '../ArchiveLegend';
+
+// constants
+import { stackedBars, legendData } from '../constants';
+
 import styles from './styles.scss';
 
 interface ChartData {
@@ -51,14 +56,6 @@ const removeZero = (federalWiseData: ChartData[]) => {
     });
     return cleanData;
 };
-
-const bars = [
-    { dataKey: 'mag4', stackId: 'magnitude', fill: '#A40E4C' },
-    { dataKey: 'mag5', stackId: 'magnitude', fill: '#2C2C54' },
-    { dataKey: 'mag6', stackId: 'magnitude', fill: '#A4BAB7' },
-    { dataKey: 'mag7', stackId: 'magnitude', fill: '#C57B57' },
-    { dataKey: 'mag8', stackId: 'magnitude', fill: '#F49D6E' },
-];
 
 const RegionChart = (props: Props) => {
     const { federalWiseData, chartTitle } = props;
@@ -108,7 +105,7 @@ const RegionChart = (props: Props) => {
                                 type="number"
                             />
                             {/* <Tooltip cursor={false} /> */}
-                            { bars.map((bar) => {
+                            { stackedBars.map((bar) => {
                                 const { dataKey, stackId, fill } = bar;
                                 return (
                                     <Bar
@@ -129,6 +126,7 @@ const RegionChart = (props: Props) => {
                             }) }
                         </BarChart>
                     </ResponsiveContainer>
+                    <ArchiveLegend legendData={legendData} />
                 </div>
             </div>
         </div>
