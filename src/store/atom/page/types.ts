@@ -504,7 +504,27 @@ export interface PageState {
 }
 
 // Data Archive
-export interface DataArchiveEarthquake {
+export interface Federal {
+    id: number;
+    bbox: [number, number, number, number];
+    centroid: {
+        type: string;
+        coordinates: [number, number];
+    };
+    title: string;
+    titleEn: string;
+    titleNe: string;
+    code: string;
+    order: number;
+}
+
+export interface FederalLocation {
+    province?: Federal;
+    district?: Federal;
+    municipality?: Federal;
+}
+
+export interface DataArchiveEarthquake extends FederalLocation{
     id?: number;
     description?: string;
     point?: {

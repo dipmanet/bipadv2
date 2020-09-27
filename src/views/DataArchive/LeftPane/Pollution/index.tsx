@@ -131,6 +131,7 @@ const Pollution = (props: Props) => {
             <div
                 className={styles.message}
             >
+                <Loading pending />
                 <Message>
                     No data available in the database.
                 </Message>

@@ -102,6 +102,7 @@ const Earthquake = (props: Props) => {
     const [activeView, setActiveView] = useState('data');
     const { earthquakeList, requests } = props;
     const pending = isAnyRequestPending(requests);
+    const { globalFilters } = props;
 
     const {
         setData,
@@ -121,12 +122,14 @@ const Earthquake = (props: Props) => {
     }, [earthquakeList, setData]);
 
     if (earthquakeList.length < 1) {
+        const message = pending ? '' : 'No data available for the applied filter';
         return (
             <div
                 className={styles.message}
             >
+                <Loading pending={pending} />
                 <Message>
-                    No data available in the database.
+                    {message}
                 </Message>
             </div>
         );
@@ -143,7 +146,7 @@ const Earthquake = (props: Props) => {
     };
     return (
         <div className={styles.earthquake}>
-            <Loading pending={pending} />
+            <Loading pending={pending || earthquakeList.length < 1} />
             <Header
                 chosenOption="Earthquake"
                 dataCount={earthquakeList.length || 0}
@@ -165,7 +168,10 @@ const Earthquake = (props: Props) => {
                 )) }
 
             {activeView === 'visualizations' && (
-                <EarthquakeViz earthquakeList={earthquakeList} />
+                <EarthquakeViz
+                    earthquakeList={earthquakeList}
+                    globalFilters={globalFilters}
+                />
             )}
         </div>
     );
