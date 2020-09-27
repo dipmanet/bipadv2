@@ -7,9 +7,7 @@ import {
     BarChart,
     Bar,
     LabelList,
-    Cell,
-    Tooltip,
-    Legend,
+    // Tooltip,
 } from 'recharts';
 import {
     saveChart,
@@ -22,11 +20,15 @@ import styles from './styles.scss';
 interface ChartData {
     label: string | number;
     value: number;
+    mag4: number;
+    mag5: number;
+    mag6: number;
+    mag7: number;
+    mag8: number;
 }
 
 interface Props {
-    federalWiseData?: ChartData[];
-    barColor?: string;
+    federalWiseData: ChartData[];
     chartTitle?: string;
 }
 
@@ -34,12 +36,33 @@ const handleSaveClick = () => {
     saveChart('earthquakeSummary', 'earthquakeSummary');
 };
 
-const DEFAULT_BAR_COLOR = '#E35163';
 const DEFAULT_CHART_TITLE = 'Occurence Statictics';
 
+const removeZero = (federalWiseData: ChartData[]) => {
+    const cleanData = federalWiseData.map((data) => {
+        const keys = ['mag4', 'mag5', 'mag6', 'mag7', 'mag8'];
+        keys.forEach((key) => {
+            if (data[key] === 0) {
+                // eslint-disable-next-line no-param-reassign
+                delete data[key];
+            }
+        });
+        return { ...data };
+    });
+    return cleanData;
+};
+
+const bars = [
+    { dataKey: 'mag4', stackId: 'magnitude', fill: '#A40E4C' },
+    { dataKey: 'mag5', stackId: 'magnitude', fill: '#2C2C54' },
+    { dataKey: 'mag6', stackId: 'magnitude', fill: '#A4BAB7' },
+    { dataKey: 'mag7', stackId: 'magnitude', fill: '#C57B57' },
+    { dataKey: 'mag8', stackId: 'magnitude', fill: '#F49D6E' },
+];
+
 const RegionChart = (props: Props) => {
-    const { federalWiseData, barColor, chartTitle } = props;
-    console.log(federalWiseData);
+    const { federalWiseData, chartTitle } = props;
+    const cleanData = removeZero(federalWiseData);
     if (!federalWiseData || federalWiseData.length === 0) {
         return (
             <div
@@ -76,7 +99,7 @@ const RegionChart = (props: Props) => {
                     <ResponsiveContainer className={styles.container}>
                         <BarChart
                             layout="vertical"
-                            data={federalWiseData}
+                            data={cleanData}
                             margin={{ top: 20, right: 10, left: 40, bottom: 5 }}
                         >
                             <YAxis dataKey="label" type="category" />
@@ -84,30 +107,26 @@ const RegionChart = (props: Props) => {
                                 dataKey="value"
                                 type="number"
                             />
-                            <Tooltip cursor={false} />
-                            <Legend
-                                verticalAlign="bottom"
-                                height={36}
-                                align="center"
-                                iconSize={0}
-                                formatter={() => '  No. of Events  '}
-                            />
-                            <Bar
-                                dataKey="value"
-                            >
-                                {federalWiseData.map(datum => (
-                                    <Cell
-                                        key={datum.label}
-                                        fill={barColor || DEFAULT_BAR_COLOR}
-                                    />
-                                ))}
-                                <LabelList
-                                    dataKey="value"
-                                    position="center"
-                                    angle={0}
-                                    className={styles.labelList}
-                                />
-                            </Bar>
+                            {/* <Tooltip cursor={false} /> */}
+                            { bars.map((bar) => {
+                                const { dataKey, stackId, fill } = bar;
+                                return (
+                                    <Bar
+                                        key={dataKey}
+                                        isAnimationActive={false}
+                                        dataKey={dataKey}
+                                        stackId={stackId}
+                                        fill={fill}
+                                    >
+                                        <LabelList
+                                            dataKey={dataKey}
+                                            position="center"
+                                            angle={0}
+                                            className={styles.labelList}
+                                        />
+                                    </Bar>
+                                );
+                            }) }
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

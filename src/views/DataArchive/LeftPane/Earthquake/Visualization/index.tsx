@@ -16,6 +16,11 @@ interface EarthquakeWithFederals extends PageType.DataArchiveEarthquake {
 interface ChartData {
     label: string | number;
     value: number;
+    mag4: number;
+    mag5: number;
+    mag6: number;
+    mag7: number;
+    mag8: number;
 }
 
 
@@ -49,7 +54,7 @@ const withFederalsList = (earthquakeList: PageType.DataArchiveEarthquake[]) => {
 const getMagCount = (selectedFederal: {
     key: string | number;
     value: EarthquakeWithFederals[];
-}[]) => {
+}[]): ChartData[] => {
     const visualData = selectedFederal.map((s) => {
         const { key, value: regionwiseData } = s;
         let mag4 = 0;
@@ -57,7 +62,6 @@ const getMagCount = (selectedFederal: {
         let mag6 = 0;
         let mag7 = 0;
         let mag8 = 0;
-        console.log('key: ===========', key);
         regionwiseData.forEach((data) => {
             const { magnitude } = data;
             if (magnitude < 5) {
@@ -83,6 +87,7 @@ const getMagCount = (selectedFederal: {
 
         return {
             ...s,
+            label: key,
             value: regionwiseData.length,
             mag4,
             mag5,
@@ -120,13 +125,7 @@ const getEarthquakeSummary = memoize(
             selectedFederal = provinceFreqCount;
         }
         if (selectedFederal) {
-            console.log('With Mag Count: ', getMagCount(selectedFederal));
-            return selectedFederal.map(e => (
-                {
-                    label: e.key,
-                    value: e.value.length,
-                }
-            )).sort((a, b) => (a.value - b.value));
+            return getMagCount(selectedFederal);
         }
         return undefined;
     },
