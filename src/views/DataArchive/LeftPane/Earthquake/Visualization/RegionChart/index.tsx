@@ -32,13 +32,21 @@ interface ChartData {
     mag8: number;
 }
 
-interface Props {
-    federalWiseData: ChartData[];
-    chartTitle?: string;
+interface LegendData {
+    id: number;
+    label: string;
+    fill: string;
 }
 
-const handleSaveClick = () => {
-    saveChart('earthquakeSummary', 'earthquakeSummary');
+interface Props {
+    federalWiseData: ChartData[];
+    downloadId: string;
+    chartTitle?: string;
+    legendData?: LegendData[];
+}
+
+const handleSaveClick = (downloadId: string) => {
+    saveChart(downloadId || 'chartIdBipad', downloadId || 'chartIdBipad');
 };
 
 const DEFAULT_CHART_TITLE = 'Occurence Statictics';
@@ -58,7 +66,12 @@ const removeZero = (federalWiseData: ChartData[]) => {
 };
 
 const RegionChart = (props: Props) => {
-    const { federalWiseData, chartTitle } = props;
+    const {
+        federalWiseData,
+        chartTitle,
+        legendData: legendDataFromProps,
+        downloadId,
+    } = props;
     const cleanData = removeZero(federalWiseData);
     if (!federalWiseData || federalWiseData.length === 0) {
         return (
@@ -85,13 +98,13 @@ const RegionChart = (props: Props) => {
                         title="Download Chart"
                         className={styles.chartDownload}
                         transparent
-                        onClick={handleSaveClick}
+                        onClick={() => handleSaveClick(downloadId)}
                         iconName="download"
                     />
                 </header>
                 <div
                     className={styles.chart}
-                    id="earthquakeSummary"
+                    id={downloadId}
                 >
                     <ResponsiveContainer className={styles.container}>
                         <BarChart
@@ -126,7 +139,7 @@ const RegionChart = (props: Props) => {
                             }) }
                         </BarChart>
                     </ResponsiveContainer>
-                    <ArchiveLegend legendData={legendData} />
+                    <ArchiveLegend legendData={legendDataFromProps || legendData} />
                 </div>
             </div>
         </div>
