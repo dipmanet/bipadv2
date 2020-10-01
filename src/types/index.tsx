@@ -53,6 +53,15 @@ export interface FiltersElement {
     dataDateRange: DataDateRangeValueElement;
 }
 
+export interface DAEarthquakeFiltersElement {
+    region: RegionValueElement;
+    dataDateRange: DataDateRangeValueElement;
+    magnitude: {
+        min: number;
+        max: number;
+    }
+}
+
 export interface AlertElement extends Alert {}
 export interface EventElement extends Event {}
 

@@ -1,5 +1,11 @@
 import { Obj } from '@togglecorp/fujs';
-import { FiltersElement, ResourceTypeKeys, ModelEnum, KeyValue } from '#types';
+import {
+    FiltersElement,
+    ResourceTypeKeys,
+    ModelEnum,
+    KeyValue,
+    DAEarthquakeFiltersElement,
+} from '#types';
 
 export interface Field {
     id: number;
@@ -465,6 +471,8 @@ export interface PageState {
 
     region: Region;
     filters: FiltersElement;
+
+    daEarthquakeFilter: DAEarthquakeFiltersElement;
 
     adminLevelList: AdminLevel[];
 

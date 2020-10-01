@@ -29,6 +29,19 @@ const state: PageState = {
         },
     },
 
+    daEarthquakeFilter: {
+        region: {},
+        dataDateRange: {
+            rangeInDays: 183,
+            startDate: undefined,
+            endDate: undefined,
+        },
+        magnitude: {
+            min: 0,
+            max: 0,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,
