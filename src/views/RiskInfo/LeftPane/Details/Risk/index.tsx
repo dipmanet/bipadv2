@@ -67,17 +67,17 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
         onMount: true,
     },
     durhamLandslideDistrictRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&outputFormat=application%2Fjson&propertyName=district_d,District_r',
+        url: `https://geoserver.${process.env.REACT_APP_BIPAD_PORTAL}/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_district&outputFormat=application%2Fjson&propertyName=district_d,District_r`,
         method: methods.GET,
         onMount: true,
     },
     durhamLandslideMunicipalityRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali',
+        url: `https://geoserver.${process.env.REACT_APP_BIPAD_PORTAL}/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_municipality&outputFormat=application%2Fjson&propertyName=Palika_ris,municipali`,
         method: methods.GET,
         onMount: true,
     },
     durhamLandslideWardRequest: {
-        url: 'https://geoserver.bipad.gov.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4',
+        url: `https://geoserver.${process.env.REACT_APP_BIPAD_PORTAL}/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad%3Adurham_landslide_hazard_risk_ward&outputFormat=application%2Fjson&propertyName=ward_id,Ward_War_4`,
         method: methods.GET,
         onMount: true,
     },

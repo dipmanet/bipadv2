@@ -215,7 +215,7 @@ class Login extends React.PureComponent<Props, State> {
                             </h4>
                             <a
                                 className={styles.link}
-                                href="http://bipad.gov.np/pims/"
+                                href={`http://${process.env.REACT_APP_BIPAD_PORTAL}/pims/`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
