@@ -181,7 +181,7 @@ const setProfileTitle = (titleContext: TitleContextProps, regionName: string) =>
         }
 
         if (mainModule === 'Contacts') {
-            return `Number of DRR focal persions, ${regionName}`;
+            return `Number of DRR focal person, ${regionName}`;
         }
 
         if (mainModule === 'Summary' && subModule) {
@@ -210,7 +210,7 @@ const setCapacityAndResourcesTitle = (titleContext: TitleContextProps, regionNam
         defineSource('OpenStreetMap', setSource);
         return `${activeResource}, ${regionName}`;
     }
-    return '';
+    return `Capacity and Resources, ${regionName}`;
 };
 
 // Hazard
@@ -484,7 +484,9 @@ export const getRouteWiseTitleAndSource = (
                 title = setCapacityAndResourcesTitle(titleContext, regionName);
             }
 
-            if (riskInfoActiveLayers.length !== 1) {
+            if (riskInfoActiveLayers.length !== 1
+                && riskInfoSubModule !== 'capacity-and-resources'
+            ) {
                 defineSource('', setSource);
                 title = `RiskInfo, ${regionName}`;
                 return [title, ''];
