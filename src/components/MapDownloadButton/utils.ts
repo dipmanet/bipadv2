@@ -306,10 +306,9 @@ const setRiskInfoVulnerabilityTitle = (
 ) => {
     let vulnerabilityTitle = '';
     const { id, layername } = activeLayer;
-
     // Layers
     vulnerabilityLayers.forEach((v) => {
-        if (v === 'remoteness') {
+        if (id === 'remoteness') {
             defineSource('Government of Nepal, USAID / Nepal, SEDAC at Columbia University', setSource);
         } else {
             defineSource('National Planning Commission (NPC)', setSource);
@@ -376,7 +375,11 @@ const setRiskInfoRiskTitle = (
     }
 
     // Landslide
-    if (title && title.includes('Landslide')) {
+    if (title && title.toUpperCase().includes('WARD')) {
+        defineSource('Durham University', setSource);
+        return `${title}, ${regionName}`;
+    }
+    if (title && title.toUpperCase().includes('LANDSLIDE')) {
         defineSource('Durham University', setSource);
         return `${title.replace(' level', '')}, ${regionName}`;
     }
