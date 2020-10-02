@@ -1,5 +1,8 @@
+import { populateFormat, breakFormat } from '@togglecorp/fujs';
 import { PageContextProps } from '#components/PageContext';
 import { TitleContextProps } from '#components/TitleContext';
+import { DataDateRangeValueElement } from '#types';
+import { pastDaysToDateRange } from '#utils/transformations';
 
 import {
     HAZARD_LIST,
@@ -14,7 +17,6 @@ import {
     vulnerabilityToilet,
     vulnerabilityEducation,
 } from './constants';
-
 import { RealTimeFilters, ActiveLayer } from './types';
 
 let calculatedSourceTitle = '';
@@ -24,7 +26,38 @@ const getHazard = (id: number) => HAZARD_LIST.filter(h => h.id === id);
 
 const setSimpleTitle = (title: string, regionName: string) => `${title}, ${regionName}`;
 
+const formatDate = (date: Date, mode: string) => (
+    populateFormat(breakFormat(mode), date)
+        .map((e) => {
+            if (e.type === 'date') {
+                return e.value;
+            }
+            if (e.type === 'time') {
+                return e.value;
+            }
+            return e.value;
+        })
+);
 
+const getStartAndEndDate = (dataDateRange: DataDateRangeValueElement) => {
+    let startDate;
+    let endDate;
+    const mode = 'yyyy-MM-dd';
+    const { rangeInDays } = dataDateRange;
+
+    if (rangeInDays !== 'custom') {
+        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+    } else {
+        ({ startDate, endDate } = dataDateRange);
+    }
+    if (startDate) {
+        [startDate] = formatDate(new Date(startDate), mode);
+    }
+    if (endDate) {
+        [endDate] = formatDate(new Date(endDate), mode);
+    }
+    return [startDate, endDate];
+};
 /**
  * @param event Name of Damage and Loss event
  * @param multipleHazards True if multiple hazards are selected
@@ -69,9 +102,16 @@ const defineSource = (source: string, setSource?: Function) => {
  * @param titleContext Context for Titles
  * @param regionName Location Name
  */
-const setDashBoardTitle = (titleContext: TitleContextProps, regionName: string) => {
+const setDashBoardTitle = (
+    titleContext: TitleContextProps,
+    regionName: string,
+    dataDateRange: DataDateRangeValueElement,
+) => {
     const { dashboard } = titleContext;
-    return dashboard ? setSimpleTitle(dashboard, regionName) : '';
+    const [startDate, endDate] = getStartAndEndDate(dataDateRange);
+    const dashboardTitle = `${dashboard} from ${startDate} to ${endDate}`;
+    // return dashboard ? setSimpleTitle(dashboard, regionName) : '';
+    return dashboard ? setSimpleTitle(dashboardTitle, regionName) : '';
 };
 
 // Incidents
@@ -79,9 +119,16 @@ const setDashBoardTitle = (titleContext: TitleContextProps, regionName: string) 
  * @param titleContext Context for Titles
  * @param regionName Location Name
  */
-const setIncidentTitle = (titleContext: TitleContextProps, regionName: string) => {
+const setIncidentTitle = (
+    titleContext: TitleContextProps,
+    regionName: string,
+    dataDateRange: DataDateRangeValueElement,
+) => {
     const { incident } = titleContext;
-    return incident ? setSimpleTitle(incident, regionName) : '';
+    const [startDate, endDate] = getStartAndEndDate(dataDateRange);
+    const incidentTitle = `${incident} from ${startDate} to ${endDate}`;
+    // return incident ? setSimpleTitle(incident, regionName) : '';
+    return incident ? setSimpleTitle(incidentTitle, regionName) : '';
 };
 
 // Damage And Loss
@@ -438,6 +485,7 @@ export const getRouteWiseTitleAndSource = (
         faramErrors: object;
     },
     riskInfoActiveLayers: any[],
+    dataDateRange: DataDateRangeValueElement,
 ): [string, string] => {
     if (pageContext && pageContext.activeRouteDetails) {
         const { name: routeName } = pageContext.activeRouteDetails;
@@ -446,13 +494,13 @@ export const getRouteWiseTitleAndSource = (
         // Dashboard
         if (routeName === 'dashboard') {
             defineSource('Realtime Module', setSource);
-            title = setDashBoardTitle(titleContext, regionName);
+            title = setDashBoardTitle(titleContext, regionName, dataDateRange);
         }
 
         // Incident
         if (routeName === 'incident') {
             defineSource('Nepal Police, DRR Portal', setSource);
-            title = setIncidentTitle(titleContext, regionName);
+            title = setIncidentTitle(titleContext, regionName, dataDateRange);
         }
 
         // Damage and Loss

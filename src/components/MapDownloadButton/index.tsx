@@ -138,7 +138,7 @@ const MapDownloadButton = (props: Props) => {
         districts,
         municipalities,
         provinces,
-        filters: { hazard },
+        filters: { hazard, dataDateRange },
         realtimeFilters,
         onPendingStateChange,
 
@@ -279,6 +279,7 @@ const MapDownloadButton = (props: Props) => {
                     hazard,
                     realtimeFilters,
                     riskInfoActiveLayers,
+                    dataDateRange,
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';
