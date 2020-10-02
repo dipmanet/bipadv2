@@ -2,6 +2,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { listToMap } from '@togglecorp/fujs';
+import { TitleContext } from '#components/TitleContext';
 
 import {
     provincesSelector,
@@ -53,6 +54,8 @@ class Overview extends React.PureComponent {
         this.state = {};
     }
 
+    static contextType = TitleContext;
+
     generateOverallDataset = memoize((incidents, regionLevel) => {
         if (!incidents || incidents.length <= 0) {
             return {
@@ -91,10 +94,13 @@ class Overview extends React.PureComponent {
 
             regions,
             hazardTypes,
+            startDate,
+            endDate,
         } = this.props;
         const {
             selectedMetricKey = 'count',
         } = this.state;
+
 
         const sanitizedList = getSanitizedIncidents(
             lossAndDamageList,
@@ -116,6 +122,19 @@ class Overview extends React.PureComponent {
             || (regionLevel === 1 && districts)
             || provinces
         );
+
+        const { setDamageAndLoss } = this.context;
+
+        if (setDamageAndLoss) {
+            setDamageAndLoss((prevState) => {
+                if (prevState.mainModule !== selectedMetric.label
+                || prevState.startDate !== startDate
+                || prevState.endDate !== endDate) {
+                    return { ...prevState, mainModule: selectedMetric.label, startDate, endDate };
+                }
+                return prevState;
+            });
+        }
 
         return (
             <Map

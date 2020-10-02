@@ -190,6 +190,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
     public state = {
         startDate: encodeDate(DEFAULT_START_DATE),
         endDate: encodeDate(DEFAULT_END_DATE),
+        submittedStartDate: encodeDate(DEFAULT_START_DATE),
+        submittedEndDate: encodeDate(DEFAULT_END_DATE),
     }
 
     private handleSaveClick = () => {
@@ -333,6 +335,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         incidentsGetRequest.do({
             ...getDatesInLocaleTime(startDate, endDate),
         });
+        this.setState({ submittedStartDate: startDate, submittedEndDate: endDate });
     }
 
     public render() {
@@ -347,6 +350,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const {
             startDate,
             endDate,
+            submittedStartDate,
+            submittedEndDate,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -560,6 +565,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                     mainContent={(
                         <Overview
                             lossAndDamageList={filteredData}
+                            startDate={submittedStartDate}
+                            endDate={submittedEndDate}
                         />
                     )}
                 />

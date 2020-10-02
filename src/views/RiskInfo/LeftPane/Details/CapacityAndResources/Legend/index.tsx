@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Legend from '#rscz/Legend';
 import legendItems from './legendItems';
+
+import { TitleContext, Profile } from '#components/TitleContext';
 
 import styles from './styles.scss';
 
@@ -24,6 +26,7 @@ const classNameSelector = (d: { style: string }) => d.style;
 const legendColorSelector = (d: { color: string }) => d.color;
 
 const CapacityAndResourcesLegend = (props: Props) => {
+    const titleContext = useContext(TitleContext);
     // for dynamic legend render
     const getActiveLegends = () => {
         const { activeLayersIndication } = props;
@@ -37,8 +40,32 @@ const CapacityAndResourcesLegend = (props: Props) => {
     };
     const activeLegends = getActiveLegends();
 
+    const { setCapacityAndResources } = titleContext;
+
     if (activeLegends.length === 0) {
+        if (setCapacityAndResources) {
+            setCapacityAndResources('');
+        }
         return null;
+    }
+
+
+    if (activeLegends.length === 1) {
+        const { label } = activeLegends[0];
+        if (setCapacityAndResources) {
+            setCapacityAndResources((prevState: string) => {
+                if (prevState !== label) {
+                    return label;
+                }
+                return prevState;
+            });
+        }
+    }
+
+    if (activeLegends.length > 1) {
+        if (setCapacityAndResources) {
+            setCapacityAndResources('');
+        }
     }
 
     return (

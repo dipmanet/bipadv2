@@ -42,6 +42,8 @@ import SummaryItem from '#components/SummaryItem';
 import ChoroplethLegend from '#components/ChoroplethLegend';
 import { saveChart } from '#utils/common';
 
+import { TitleContext, Profile } from '#components/TitleContext';
+
 import styles from './styles.scss';
 
 interface PropsFromState {
@@ -141,6 +143,21 @@ class Demographics extends React.PureComponent<Props> {
     public state = {
         selectedAttribute: 'totalPopulation',
     }
+
+    public componentWillUnmount() {
+        const { profile, setProfile } = this.context;
+
+        if (setProfile) {
+            setProfile((prevProfile: Profile) => {
+                if (profile.mainModule === 'Summary' && prevProfile.subModule !== '') {
+                    return { ...prevProfile, subModule: '' };
+                }
+                return prevProfile;
+            });
+        }
+    }
+
+    public static contextType = TitleContext;
 
     private handleSaveClick = () => {
         saveChart('polulation', 'population');
@@ -366,6 +383,16 @@ class Demographics extends React.PureComponent<Props> {
         const ageGroupSummary = this.getAgeGroupSummary(demographics);
         const title = `Demographics of ${regionName}`;
 
+        const { profile, setProfile } = this.context;
+
+        if (setProfile) {
+            setProfile((prevProfile: Profile) => {
+                if (profile.mainModule === 'Summary' && prevProfile.subModule !== selectedAttribute) {
+                    return { ...prevProfile, subModule: selectedAttribute };
+                }
+                return prevProfile;
+            });
+        }
         return (
             <>
                 <div className={_cs(styles.demographics, className)}>

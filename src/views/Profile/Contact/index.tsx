@@ -38,6 +38,9 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+
+import { TitleContext, Profile } from '#components/TitleContext';
+
 import { mapStyles } from '#constants';
 
 import ContactItem from './ContactItem';
@@ -119,6 +122,8 @@ class ContactPage extends React.PureComponent<Props, State> {
             contactList: [],
         };
     }
+
+    public static contextType = TitleContext;
 
     private getPositionOptions = memoize((contactList: Contact[]) => {
         const contactPositionList = [...new Set(
@@ -307,6 +312,17 @@ class ContactPage extends React.PureComponent<Props, State> {
                 } = {},
             },
         } = this.props;
+
+        const { setProfile } = this.context;
+
+        if (setProfile) {
+            setProfile((prevProfile: Profile) => {
+                if (prevProfile.mainModule !== 'Contacts') {
+                    return { ...prevProfile, mainModule: 'Contacts' };
+                }
+                return prevProfile;
+            });
+        }
 
         const {
             contactList,
