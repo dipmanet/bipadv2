@@ -110,7 +110,6 @@ const setDashBoardTitle = (
     const { dashboard } = titleContext;
     const [startDate, endDate] = getStartAndEndDate(dataDateRange);
     const dashboardTitle = `${dashboard} from ${startDate} to ${endDate}`;
-    // return dashboard ? setSimpleTitle(dashboard, regionName) : '';
     return dashboard ? setSimpleTitle(dashboardTitle, regionName) : '';
 };
 
@@ -127,7 +126,6 @@ const setIncidentTitle = (
     const { incident } = titleContext;
     const [startDate, endDate] = getStartAndEndDate(dataDateRange);
     const incidentTitle = `${incident} from ${startDate} to ${endDate}`;
-    // return incident ? setSimpleTitle(incident, regionName) : '';
     return incident ? setSimpleTitle(incidentTitle, regionName) : '';
 };
 
