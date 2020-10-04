@@ -36,10 +36,7 @@ const state: PageState = {
             startDate: undefined,
             endDate: undefined,
         },
-        magnitude: {
-            min: 0,
-            max: 0,
-        },
+        magnitude: [],
     },
 
     adminLevelList: [

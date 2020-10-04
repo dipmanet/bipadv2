@@ -56,10 +56,7 @@ export interface FiltersElement {
 export interface DAEarthquakeFiltersElement {
     region: RegionValueElement;
     dataDateRange: DataDateRangeValueElement;
-    magnitude: {
-        min: number;
-        max: number;
-    }
+    magnitude: number[];
 }
 
 export interface AlertElement extends Alert {}
