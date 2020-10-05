@@ -17,6 +17,7 @@ import { FiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
+import MagnitudeSelector from './Magnitude';
 
 import styles from './styles.scss';
 
@@ -200,6 +201,7 @@ const EarthquakeFilters = (props: Props) => {
     };
 
     const handleFaramChange = (fv: FiltersElement) => {
+        console.log('FV: ', fv);
         setFaramValues(fv);
     };
 
@@ -233,7 +235,7 @@ const EarthquakeFilters = (props: Props) => {
         dataRange: {
             component: () => (
                 <div className={styles.activeView}>
-                    <PastDateRangeInput
+                    <MagnitudeSelector
                         faramElementName="dataDateRange"
                         // autoFocus
                     />

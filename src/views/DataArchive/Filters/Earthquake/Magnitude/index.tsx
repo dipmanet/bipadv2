@@ -4,27 +4,43 @@ import Checkbox from '#rsci/Checkbox';
 
 import styles from './styles.scss';
 
-interface Props {}
+interface Props {
+    onChange: Function;
+}
 
 interface Options {
+    range: string;
     label: string;
     tooltip: string;
     selected: boolean;
 }
 const initialOptions: Options[] = [
-    { label: '4 - 4.9 ML', tooltip: '4 - 4.9 ML', selected: false },
-    { label: '5 - 5.9 ML', tooltip: '5 - 5.9 ML', selected: false },
-    { label: '6 - 6.9 ML', tooltip: '6 - 6.9 ML', selected: false },
-    { label: '7 - 7.9 ML', tooltip: '7 - 7.9 ML', selected: false },
-    { label: '8 ML and above', tooltip: '8 ML and above', selected: false },
+    { range: '4', label: '4 - 4.9 ML', tooltip: '4 - 4.9 ML', selected: false },
+    { range: '5', label: '5 - 5.9 ML', tooltip: '5 - 5.9 ML', selected: false },
+    { range: '6', label: '6 - 6.9 ML', tooltip: '6 - 6.9 ML', selected: false },
+    { range: '7', label: '7 - 7.9 ML', tooltip: '7 - 7.9 ML', selected: false },
+    { range: '8', label: '8 ML and above', tooltip: '8 ML and above', selected: false },
 ];
+
+const extractTrues = (items: Options[]) => {
+    const trueValues: string[] = [];
+    items.forEach((item) => {
+        const { range, selected } = item;
+        if (selected) {
+            trueValues.push(range);
+        }
+    });
+    return trueValues;
+};
+
 const MagnitudeSelector = (props: Props) => {
+    const { onChange: onChangeFromProps } = props;
     const [options, setOptions] = useState<Options[]>(initialOptions);
     const onChange = (index: number, checked: boolean) => {
         const temp = [...options];
         temp[index].selected = checked;
         setOptions(temp);
-        console.log('checked: ', checked);
+        onChangeFromProps(extractTrues(temp));
     };
     return (
         <div className={styles.magnitudeSelector}>

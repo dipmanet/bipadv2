@@ -7,6 +7,7 @@ import LeftPane from '../LeftPane';
 import EarthquakeMap from '../Map/Earthquake';
 import PollutionMap from '../Map/Pollution';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
+import EarthquakeFilters from '../Filters/Earthquake';
 
 import {
     createConnectedRequestCoordinator,
@@ -315,6 +316,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                                 />
                             </DataArchiveContext.Provider>
                         )}
+                        rightContent={(<EarthquakeFilters />)}
                     />
                 </div>
             </DataArchiveContext.Provider>
