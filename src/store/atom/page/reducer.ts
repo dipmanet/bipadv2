@@ -290,6 +290,13 @@ export const setDataArchiveEarthquakeListAction = (
     dataArchiveEarthquakeList,
 });
 
+export const setDataArchiveEarthquakeFilterAction = (
+    { dataArchiveEarthquakeFilters }:
+    { dataArchiveEarthquakeFilters: Type.DataArchiveEarthquakeFilters}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
+    dataArchiveEarthquakeFilters,
+});
+
 // loss and damage action creator
 export const setLossAndDamageFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
@@ -1031,6 +1038,22 @@ export const setDataArchiveEarthquakeList = (
 
     return newState;
 };
+export const setDataArchiveEarthquakeFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeFilters,
+) => {
+    const {
+        dataArchiveEarthquakeFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daEarthquakeFilter = dataArchiveEarthquakeFilters.dataArchiveEarthquakeFilter;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 
 // loss and damage page
@@ -1276,6 +1299,8 @@ export default function routeReducer(
             return setDataArchivePollutionList(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST:
             return setDataArchiveEarthquakeList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS:
+            return setDataArchiveEarthquakeFilters(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:

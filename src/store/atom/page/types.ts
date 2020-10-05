@@ -551,6 +551,10 @@ export interface DataArchivePollution extends RealTimePollution{
     createdOn?: string;
 }
 
+export interface DataArchiveEarthquakeFilters {
+    dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
+}
+
 // ACTION TYPES
 
 // eslint-disable-next-line import/prefer-default-export
@@ -607,6 +611,7 @@ export enum PageType {
     // data archive
     DA__SET_DATA_ARCHIVE_POLLUTION_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -830,6 +835,11 @@ export interface SetDataArchiveEarthquakeList {
     dataArchiveEarthquakeList: DataArchiveEarthquake[];
 }
 
+export interface SetDataArchiveEarthquakeFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS;
+    dataArchiveEarthquakeFilters: DataArchiveEarthquakeFilters;
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -914,5 +924,6 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
-    SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType
+    SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
+    SetDataArchiveEarthquakeFilters
 );
