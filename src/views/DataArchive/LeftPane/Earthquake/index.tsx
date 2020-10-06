@@ -26,7 +26,7 @@ import {
     setDataArchiveEarthquakeListAction,
 } from '#actionCreators';
 
-import { FiltersElement } from '#types';
+import { DAEarthquakeFiltersElement } from '#types';
 
 import { AppState } from '#store/types';
 
@@ -36,8 +36,7 @@ import EarthquakeViz from './Visualization';
 
 import {
     dataArchiveEarthquakeListSelector,
-    realTimeFiltersValuesSelector,
-    filtersSelector,
+    eqFiltersSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -47,15 +46,13 @@ interface PropsFromDispatch {
 }
 
 interface PropsFromState {
-    filters: PageType.FiltersWithRegion['faramValues'];
-    globalFilters: FiltersElement;
     earthquakeList: PageType.DataArchiveEarthquake[];
+    eqFilters: DAEarthquakeFiltersElement;
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    filters: realTimeFiltersValuesSelector(state),
-    globalFilters: filtersSelector(state),
     earthquakeList: dataArchiveEarthquakeListSelector(state),
+    eqFilters: eqFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -77,9 +74,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     realTimeEarthquakeRequest: {
         url: '/earthquake/',
         method: methods.GET,
-        query: ({ props: { globalFilters } }) => ({
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'event__on'),
-            ...transformRegion(globalFilters.region),
+        query: ({ props: { eqFilters } }) => ({
+            ...transformDataRangeLocaleToFilter(eqFilters.dataDateRange, 'event__on'),
+            ...transformRegion(eqFilters.region),
             expand: ['province', 'district', 'municipality'],
         }),
         onSuccess: ({ response, props: { setDataArchiveEarthquakeList } }) => {
@@ -88,7 +85,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             setDataArchiveEarthquakeList({ dataArchiveEarthquakeList });
         },
         onPropsChanged: {
-            globalFilters: true,
+            eqFilters: true,
         },
         onMount: true,
         extras: {
@@ -102,7 +99,7 @@ const Earthquake = (props: Props) => {
     const [activeView, setActiveView] = useState('data');
     const { earthquakeList, requests } = props;
     const pending = isAnyRequestPending(requests);
-    const { globalFilters } = props;
+    const { eqFilters } = props;
 
     const {
         setData,
@@ -172,7 +169,7 @@ const Earthquake = (props: Props) => {
             {activeView === 'visualizations' && (
                 <EarthquakeViz
                     earthquakeList={earthquakeList}
-                    globalFilters={globalFilters}
+                    eqFilters={eqFilters}
                 />
             )}
         </div>

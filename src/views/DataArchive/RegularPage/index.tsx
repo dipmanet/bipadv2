@@ -303,6 +303,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                     )}
                     <Page
                         hideHazardFilter
+                        hideFilter
                         leftContent={(
                             <DataArchiveContext.Provider value={contextProps}>
                                 <LeftPane

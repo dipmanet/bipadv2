@@ -2,7 +2,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 import { groupList } from '#utils/common';
 import * as PageType from '#store/atom/page/types';
-import { FiltersElement } from '#types';
+import { DAEarthquakeFiltersElement } from '#types';
 import RegionChart from './RegionChart';
 import { getTemporals } from './utils';
 import styles from './styles.scss';
@@ -32,7 +32,7 @@ interface ChartData {
 
 interface Props {
     earthquakeList: PageType.DataArchiveEarthquake[];
-    globalFilters: FiltersElement;
+    eqFilters: DAEarthquakeFiltersElement;
 }
 
 type AdminLevel = 1 | 2 | 3 | undefined;
@@ -212,8 +212,8 @@ const getFederalLevel = (adminLevel: AdminLevel): FederalLevel => {
 };
 
 const EarthquakeViz = (props: Props) => {
-    const { earthquakeList, globalFilters } = props;
-    const { region: { adminLevel } } = globalFilters;
+    const { earthquakeList, eqFilters } = props;
+    const { region: { adminLevel } } = eqFilters;
 
     const earthquakeWithFedetals = withFederalsList(earthquakeList);
     const earthquakeSummary = getEarthquakeSummary(
