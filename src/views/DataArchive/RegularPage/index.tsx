@@ -239,28 +239,12 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     //     },
     // },
 };
-const ARCHIVE_DEFAULT_DATE_RANGE = {
-    startDate: undefined,
-    endDate: undefined,
-    rangeInDays: 183, // 6 months
-};
-
 class RegularPage extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
         super(props);
         this.state = {
             data: [],
         };
-    }
-
-    public componentDidMount = () => {
-        const { setFilters, globalFilters } = this.props;
-        if (globalFilters) {
-            setFilters({ filters: {
-                ...globalFilters,
-                dataDateRange: ARCHIVE_DEFAULT_DATE_RANGE,
-            } });
-        }
     }
 
     private setData = (data: []) => {
