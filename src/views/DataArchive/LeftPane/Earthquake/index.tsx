@@ -71,7 +71,7 @@ type Props = NewProps<ReduxProps, Params>;
 ]; */
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    realTimeEarthquakeRequest: {
+    dataArchiveEarthquakeRequest: {
         url: '/earthquake/',
         method: methods.GET,
         query: ({ props: { eqFilters } }) => ({
@@ -95,12 +95,39 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
+const filterByMagnitudeRange = (
+    magnitudeFromFilter: number[],
+    earthquakes: PageType.DataArchiveEarthquake[],
+) => {
+    const filteredEarthquakes: PageType.DataArchiveEarthquake[] = [];
+    const MAX_MAG = 8;
+    if (magnitudeFromFilter.length === 0) {
+        return earthquakes;
+    }
+    magnitudeFromFilter.forEach((mag) => {
+        earthquakes.forEach((earthquake) => {
+            const { magnitude } = earthquake;
+            if (mag === MAX_MAG) {
+                if (magnitude >= MAX_MAG) {
+                    filteredEarthquakes.push(earthquake);
+                }
+                return;
+            }
+            const magRange = `${magnitude}`.split('.')[0];
+            if (magRange.includes(`${mag}`)) {
+                filteredEarthquakes.push(earthquake);
+            }
+        });
+    });
+    return filteredEarthquakes;
+};
+
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('magnitude');
     const [activeView, setActiveView] = useState('data');
-    const { earthquakeList, requests } = props;
+    const { earthquakeList, requests, eqFilters } = props;
     const pending = isAnyRequestPending(requests);
-    const { eqFilters } = props;
+    const filteredEarthquakes = filterByMagnitudeRange(eqFilters.magnitude, earthquakeList);
 
     const {
         setData,
@@ -115,11 +142,12 @@ const Earthquake = (props: Props) => {
 
     useEffect(() => {
         if (setData) {
-            setData(earthquakeList);
+            const filtered = filterByMagnitudeRange(eqFilters.magnitude, earthquakeList);
+            setData(filtered);
         }
-    }, [earthquakeList, setData]);
+    }, [earthquakeList, eqFilters.magnitude, setData]);
 
-    if (earthquakeList.length < 1) {
+    if (filteredEarthquakes.length < 1) {
         const message = pending ? '' : 'No data available for the applied filter';
         return (
             <div
@@ -144,11 +172,11 @@ const Earthquake = (props: Props) => {
     };
     return (
         <div className={styles.earthquake}>
-            <Loading pending={pending || earthquakeList.length < 1} />
+            <Loading pending={pending || filteredEarthquakes.length < 1} />
             <div className={styles.header}>
                 <Header
                     chosenOption="Earthquake"
-                    dataCount={earthquakeList.length || 0}
+                    dataCount={filteredEarthquakes.length || 0}
                     activeView={activeView}
                     handleDataButtonClick={handleDataButtonClick}
                     handleVisualizationsButtonClick={handleVisualizationsButtonClick}
@@ -159,7 +187,7 @@ const Earthquake = (props: Props) => {
                 value={sortKey}
                 onChange={setSortKey}
             /> */}
-            { activeView === 'data' && earthquakeList.sort(compare)
+            { activeView === 'data' && filteredEarthquakes.sort(compare)
                 .map((datum: PageType.DataArchiveEarthquake) => (
                     <EarthquakeItem
                         key={datum.id}
@@ -169,7 +197,7 @@ const Earthquake = (props: Props) => {
 
             {activeView === 'visualizations' && (
                 <EarthquakeViz
-                    earthquakeList={earthquakeList}
+                    earthquakeList={filteredEarthquakes}
                     eqFilters={eqFilters}
                 />
             )}
