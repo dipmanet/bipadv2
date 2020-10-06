@@ -10,12 +10,11 @@ import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
 
-import { setFiltersAction } from '#actionCreators';
-import { filtersSelector } from '#selectors';
+import { setDataArchiveEarthquakeFilterAction } from '#actionCreators';
+import { eqFiltersSelector } from '#selectors';
 import { AppState } from '#store/types';
-import { FiltersElement } from '#types';
+import { DAEarthquakeFiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
-import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import MagnitudeSelector from './Magnitude';
 
@@ -27,35 +26,37 @@ interface ComponentProps {
     extraContentContainerClassName?: string;
     hideLocationFilter?: boolean;
     hideDataRangeFilter?: boolean;
-    hideHazardFilter?: boolean;
+    hideMagnitudeFilter?: boolean;
 }
 
 interface PropsFromAppState {
-    filters: FiltersElement;
+    eqFilters: DAEarthquakeFiltersElement;
 }
 
 interface PropsFromDispatch {
-    setFilters: typeof setFiltersAction;
+    setDataArchiveEarthquakeFilter: typeof setDataArchiveEarthquakeFilterAction;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState) => ({
-    filters: filtersSelector(state),
+    eqFilters: eqFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setFilters: params => dispatch(setFiltersAction(params)),
+    setDataArchiveEarthquakeFilter: params => dispatch(
+        setDataArchiveEarthquakeFilterAction(params),
+    ),
 });
 
-type TabKey = 'location' | 'hazard' | 'dataRange' | 'others';
+type TabKey = 'location' | 'dataRange' | 'others' | 'magnitude';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
     location: 'distance',
-    hazard: 'warning',
     dataRange: 'dataRange',
+    magnitude: 'filter',
     others: 'filter',
 };
 
@@ -80,23 +81,22 @@ const FilterIcon = ({
     />
 );
 
-const filterSchema = {
+const eqFilterSchema = {
     fields: {
         dataDateRange: [],
-        hazard: [],
+        magnitude: [],
         region: [],
     },
 };
 
-const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
+const getIsFiltered = (key: TabKey | undefined, filters: DAEarthquakeFiltersElement) => {
     if (!key || key === 'others') {
         return false;
     }
-
     const tabKeyToFilterMap: {
-        [key in Exclude<TabKey, 'others'>]: keyof FiltersElement;
+        [key in Exclude<TabKey, 'others'>]: keyof DAEarthquakeFiltersElement;
     } = {
-        hazard: 'hazard',
+        magnitude: 'magnitude',
         location: 'region',
         dataRange: 'dataDateRange',
     };
@@ -111,13 +111,13 @@ const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
     return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
-const initialFaramValues = {
+const initialEqFaramValues = {
     dataDateRange: {
-        rangeInDays: 7,
+        rangeInDays: 183,
         startDate: undefined,
         endDate: undefined,
     },
-    hazard: [],
+    magnitude: [],
     region: {},
 };
 
@@ -125,15 +125,15 @@ const getTabs = memoize(
     (
         extraContent: React.ReactNode,
         hideLocationFilter,
-        hideHazardFilter,
+        hideMagnitudeFilter,
         hideDataRangeFilter,
     ): {
         [key in TabKey]?: string;
     } => {
         const tabs = {
             location: 'Location',
-            hazard: 'Hazard',
             dataRange: 'Data range',
+            magnitude: 'Magnitude',
             others: 'Others',
         };
 
@@ -145,8 +145,8 @@ const getTabs = memoize(
             delete tabs.location;
         }
 
-        if (hideHazardFilter) {
-            delete tabs.hazard;
+        if (hideMagnitudeFilter) {
+            delete tabs.magnitude;
         }
 
         if (hideDataRangeFilter) {
@@ -163,17 +163,19 @@ const EarthquakeFilters = (props: Props) => {
         extraContent,
         extraContentContainerClassName,
         hideDataRangeFilter,
-        hideHazardFilter,
+        hideMagnitudeFilter,
         hideLocationFilter,
     } = props;
-
     const [activeView, setActiveView] = useState<TabKey | undefined>(undefined);
-    const [faramValues, setFaramValues] = useState<FiltersElement>(initialFaramValues);
+    const [faramValues, setFaramValues] = useState<DAEarthquakeFiltersElement>(
+        initialEqFaramValues,
+    );
 
     useEffect(() => {
-        const { filters: fv } = props;
+        const { eqFilters: fv } = props;
         setFaramValues(fv);
-    }, [props]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleTabClick = (av: TabKey) => {
         setActiveView(av);
@@ -188,11 +190,11 @@ const EarthquakeFilters = (props: Props) => {
 
     const handleResetFiltersButtonClick = () => {
         setActiveView(undefined);
-        setFaramValues(initialFaramValues);
+        setFaramValues(initialEqFaramValues);
 
-        const { setFilters } = props;
+        const { setDataArchiveEarthquakeFilter } = props;
         if (faramValues) {
-            setFilters({ filters: faramValues });
+            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
         }
     };
 
@@ -200,15 +202,14 @@ const EarthquakeFilters = (props: Props) => {
         setActiveView(undefined);
     };
 
-    const handleFaramChange = (fv: FiltersElement) => {
-        console.log('FV: ', fv);
+    const handleFaramChange = (fv: DAEarthquakeFiltersElement) => {
         setFaramValues(fv);
     };
 
     const handleSubmitClick = () => {
-        const { setFilters } = props;
+        const { setDataArchiveEarthquakeFilter } = props;
         if (faramValues) {
-            setFilters({ filters: faramValues });
+            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
         }
     };
 
@@ -223,23 +224,23 @@ const EarthquakeFilters = (props: Props) => {
                 />
             ),
         },
-        hazard: {
-            component: () => (
-                <HazardSelectionInput
-                    className={styles.activeView}
-                    faramElementName="hazard"
-                    // autoFocus
-                />
-            ),
-        },
         dataRange: {
             component: () => (
                 <div className={styles.activeView}>
-                    <MagnitudeSelector
+                    <PastDateRangeInput
                         faramElementName="dataDateRange"
                         // autoFocus
                     />
                 </div>
+            ),
+        },
+        magnitude: {
+            component: () => (
+                <MagnitudeSelector
+                    className={styles.activeView}
+                    faramElementName="magnitude"
+                    // autoFocus
+                />
             ),
         },
         others: {
@@ -263,7 +264,7 @@ const EarthquakeFilters = (props: Props) => {
     const tabs = getTabs(
         extraContent,
         hideLocationFilter,
-        hideHazardFilter,
+        hideMagnitudeFilter,
         hideDataRangeFilter,
     );
 
@@ -299,7 +300,7 @@ const EarthquakeFilters = (props: Props) => {
                     className={styles.tabs}
                 />
                 <Faram
-                    schema={filterSchema}
+                    schema={eqFilterSchema}
                     onChange={handleFaramChange}
                     value={fv}
                     className={styles.filterViewContainer}

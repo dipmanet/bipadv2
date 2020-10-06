@@ -292,7 +292,7 @@ export const setDataArchiveEarthquakeListAction = (
 
 export const setDataArchiveEarthquakeFilterAction = (
     { dataArchiveEarthquakeFilters }:
-    { dataArchiveEarthquakeFilters: Type.DataArchiveEarthquakeFilters}) => ({
+    { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters']}) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
     dataArchiveEarthquakeFilters,
 });
@@ -1048,7 +1048,7 @@ export const setDataArchiveEarthquakeFilters = (
 
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
-        deferedState.daEarthquakeFilter = dataArchiveEarthquakeFilters.dataArchiveEarthquakeFilter;
+        deferedState.daEarthquakeFilter = dataArchiveEarthquakeFilters;
         /* eslint-enable no-param-reassign */
     });
 

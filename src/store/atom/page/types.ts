@@ -837,7 +837,7 @@ export interface SetDataArchiveEarthquakeList {
 
 export interface SetDataArchiveEarthquakeFilters {
     type: typeof PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS;
-    dataArchiveEarthquakeFilters: DataArchiveEarthquakeFilters;
+    dataArchiveEarthquakeFilters: DAEarthquakeFiltersElement;
 }
 
 // loss and damage

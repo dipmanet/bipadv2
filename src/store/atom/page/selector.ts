@@ -33,6 +33,9 @@ export const resourceTypeListSelector = ({ page }: AppState) => (
 
 export const filtersSelector = ({ page }: AppState) => page.filters;
 
+export const eqFiltersSelector = ({ page }: AppState) => page.daEarthquakeFilter;
+
+
 // Popup
 
 export const hidePopupSelector = ({ page }: AppState) => page.hidePopup;
