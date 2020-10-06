@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import Checkbox from '#rsci/Checkbox';
 
@@ -6,6 +6,7 @@ import styles from './styles.scss';
 
 interface Props {
     onChange: Function;
+    value: string[];
 }
 
 interface Options {
@@ -34,7 +35,14 @@ const extractTrues = (items: Options[]) => {
 };
 
 const MagnitudeSelector = (props: Props) => {
-    const { onChange: onChangeFromProps } = props;
+    const { onChange: onChangeFromProps, value } = props;
+
+    if (value) {
+        initialOptions.forEach((option) => {
+            // eslint-disable-next-line no-param-reassign
+            option.selected = value.includes(option.range);
+        });
+    }
     const [options, setOptions] = useState<Options[]>(initialOptions);
     const onChange = (index: number, checked: boolean) => {
         const temp = [...options];
@@ -42,18 +50,19 @@ const MagnitudeSelector = (props: Props) => {
         setOptions(temp);
         onChangeFromProps(extractTrues(temp));
     };
+
     return (
         <div className={styles.magnitudeSelector}>
             <div className={styles.selection}>
                 { options.map((option, index) => {
-                    const { label, tooltip, selected } = option;
+                    const { label, tooltip, range } = option;
                     return (
                         <Checkbox
                             key={label}
                             label={label}
                             tooltip={tooltip}
                             onChange={(checked: boolean) => onChange(index, checked)}
-                            value={selected}
+                            value={value.includes(range)}
                         />
                     );
                 }) }
