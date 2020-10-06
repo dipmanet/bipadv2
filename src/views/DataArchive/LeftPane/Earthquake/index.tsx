@@ -20,7 +20,7 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDataRangeLocaleToFilter, transformRegion } from '#utils/transformations';
+import { transformDataRangeLocaleToFilter, transformRegion, transformMagnitude } from '#utils/transformations';
 
 import {
     setDataArchiveEarthquakeListAction,
@@ -77,6 +77,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { eqFilters } }) => ({
             ...transformDataRangeLocaleToFilter(eqFilters.dataDateRange, 'event__on'),
             ...transformRegion(eqFilters.region),
+            ...transformMagnitude(eqFilters.magnitude),
             expand: ['province', 'district', 'municipality'],
         }),
         onSuccess: ({ response, props: { setDataArchiveEarthquakeList } }) => {
