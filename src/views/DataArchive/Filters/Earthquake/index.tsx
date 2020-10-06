@@ -193,8 +193,8 @@ const EarthquakeFilters = (props: Props) => {
         setFaramValues(initialEqFaramValues);
 
         const { setDataArchiveEarthquakeFilter } = props;
-        if (faramValues) {
-            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
+        if (setDataArchiveEarthquakeFilter) {
+            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: initialEqFaramValues });
         }
     };
 
