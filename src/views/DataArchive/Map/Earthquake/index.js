@@ -1,10 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import memoize from 'memoize-one';
 import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import Tooltip from './Tooltip';
+import {
+    eqFiltersSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+} from '#selectors';
 
 import {
     mapStyles,
@@ -21,6 +29,54 @@ const EarthquakeToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
 );
 
+const mapStateToProps = state => ({
+    eqFilters: eqFiltersSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+});
+
+const getRegionDetails = (region) => {
+    const { adminLevel, geoarea } = region;
+    const regionDetail = {
+        regionLevel: adminLevel,
+        provinceLevel: undefined,
+        districtLevel: undefined,
+        municipalityLevel: undefined,
+    };
+    if (adminLevel === 1) {
+        regionDetail.provinceLevel = geoarea;
+    }
+    if (adminLevel === 2) {
+        regionDetail.districtLevel = geoarea;
+    }
+    if (adminLevel === 3) {
+        regionDetail.municipalityLevel = geoarea;
+    }
+    return regionDetail;
+};
+
+const getRegionBoundings = (region, provinces, districts, municipalities) => {
+    const nepalBounds = [
+        80.05858661752784, 26.347836996368667,
+        88.20166918432409, 30.44702867091792,
+    ];
+
+    const { adminLevel, geoarea } = region;
+    const geoAreas = (
+        (adminLevel === 1 && provinces)
+        || (adminLevel === 2 && districts)
+        || (adminLevel === 3 && municipalities)
+    );
+    if (!geoAreas) {
+        return nepalBounds;
+    }
+    const geoArea = geoAreas.find(g => g.id === geoarea);
+    if (!geoArea) {
+        return nepalBounds;
+    }
+    return geoArea.bbox;
+};
 class EarthquakeMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -82,7 +138,11 @@ class EarthquakeMap extends React.PureComponent {
     render() {
         const { data,
             rightPaneExpanded,
-            leftPaneExpanded } = this.props;
+            leftPaneExpanded,
+            eqFilters: { region },
+            provinces,
+            districts,
+            municipalities } = this.props;
 
         const {
             tooltipRenderer,
@@ -99,11 +159,26 @@ class EarthquakeMap extends React.PureComponent {
             closeButton: false,
             offset: 8,
         };
+        const { regionLevel,
+            provinceLevel,
+            districtLevel,
+            municipalityLevel } = getRegionDetails(region);
+        const regionBoundings = getRegionBoundings(
+            region,
+            provinces,
+            districts,
+            municipalities,
+        );
         return (
             <div className={styles.dataArchiveEarthquakeMap}>
                 <CommonMap
                     sourceKey="dataArchiveEarthquake"
                     boundsPadding={boundsPadding}
+                    regionFromComp={regionLevel}
+                    provinceFromComp={provinceLevel}
+                    districtFromComp={districtLevel}
+                    municipalityFromComp={municipalityLevel}
+                    boundingsFromComp={regionBoundings}
                 />
                 { coordinates && (
                     <MapTooltip
@@ -159,4 +234,4 @@ class EarthquakeMap extends React.PureComponent {
     }
 }
 
-export default EarthquakeMap;
+export default connect(mapStateToProps, [])(EarthquakeMap);
