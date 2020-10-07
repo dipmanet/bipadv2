@@ -29,6 +29,10 @@ interface ComponentProps {
     hideMagnitudeFilter?: boolean;
 }
 
+interface State {
+    activeView: TabKey | undefined;
+    faramValues: DAEarthquakeFiltersElement;
+}
 interface PropsFromAppState {
     eqFilters: DAEarthquakeFiltersElement;
 }
@@ -111,109 +115,26 @@ const getIsFiltered = (key: TabKey | undefined, filters: DAEarthquakeFiltersElem
     return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
-const initialEqFaramValues = {
-    dataDateRange: {
-        rangeInDays: 183,
-        startDate: undefined,
-        endDate: undefined,
-    },
-    magnitude: [],
-    region: {},
-};
-
-const getTabs = memoize(
-    (
-        extraContent: React.ReactNode,
-        hideLocationFilter,
-        hideMagnitudeFilter,
-        hideDataRangeFilter,
-    ): {
-        [key in TabKey]?: string;
-    } => {
-        const tabs = {
-            location: 'Location',
-            dataRange: 'Data range',
-            magnitude: 'Magnitude',
-            others: 'Others',
-        };
-
-        if (!extraContent) {
-            delete tabs.others;
-        }
-
-        if (hideLocationFilter) {
-            delete tabs.location;
-        }
-
-        if (hideMagnitudeFilter) {
-            delete tabs.magnitude;
-        }
-
-        if (hideDataRangeFilter) {
-            delete tabs.dataRange;
-        }
-
-        return tabs;
-    },
-);
-
-const EarthquakeFilters = (props: Props) => {
-    const {
-        className,
-        extraContent,
-        extraContentContainerClassName,
-        hideDataRangeFilter,
-        hideMagnitudeFilter,
-        hideLocationFilter,
-    } = props;
-    const [activeView, setActiveView] = useState<TabKey | undefined>(undefined);
-    const [faramValues, setFaramValues] = useState<DAEarthquakeFiltersElement>(
-        initialEqFaramValues,
-    );
-
-    useEffect(() => {
-        const { eqFilters: fv } = props;
-        setFaramValues(fv);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleTabClick = (av: TabKey) => {
-        setActiveView(av);
+class EarthquakeFilters extends React.PureComponent<Props, State> {
+    public state = {
+        activeView: undefined,
+        faramValues: {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            magnitude: [],
+            region: {},
+        },
     };
 
-    const getFilterTabRendererParams = (key: TabKey, title: string) => ({
-        name: iconNames[key],
-        title,
-        className: styles.icon,
-        isFiltered: getIsFiltered(key, faramValues),
-    });
+    public componentDidMount() {
+        const { eqFilters: faramValues } = this.props;
+        this.setState({ faramValues });
+    }
 
-    const handleResetFiltersButtonClick = () => {
-        setActiveView(undefined);
-        setFaramValues(initialEqFaramValues);
-
-        const { setDataArchiveEarthquakeFilter } = props;
-        if (setDataArchiveEarthquakeFilter) {
-            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: initialEqFaramValues });
-        }
-    };
-
-    const handleCloseCurrentFilterButtonClick = () => {
-        setActiveView(undefined);
-    };
-
-    const handleFaramChange = (fv: DAEarthquakeFiltersElement) => {
-        setFaramValues(fv);
-    };
-
-    const handleSubmitClick = () => {
-        const { setDataArchiveEarthquakeFilter } = props;
-        if (faramValues) {
-            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
-        }
-    };
-
-    const views = {
+    private views = {
         location: {
             component: () => (
                 <StepwiseRegionSelectInput
@@ -245,96 +166,193 @@ const EarthquakeFilters = (props: Props) => {
         },
         others: {
             component: () => (
-                extraContent ? (
+                this.props.extraContent ? (
                     <div className={_cs(
                         styles.activeView,
-                        extraContentContainerClassName,
+                        this.props.extraContentContainerClassName,
                     )}
                     >
-                        { extraContent }
+                        { this.props.extraContent }
                     </div>
                 ) : null
             ),
         },
-    };
+    }
+
+    private handleTabClick = (activeView: TabKey) => {
+        this.setState({ activeView });
+    }
+
+    private getFilterTabRendererParams = (key: TabKey, title: string) => ({
+        name: iconNames[key],
+        title,
+        className: styles.icon,
+        // isFiltered: getIsFiltered(key, this.props.filters),
+        isFiltered: getIsFiltered(key, this.state.faramValues),
+    })
+
+    private handleResetFiltersButtonClick = () => {
+        this.setState({ activeView: undefined,
+            faramValues: {
+                dataDateRange: {
+                    rangeInDays: 183,
+                    startDate: undefined,
+                    endDate: undefined,
+                },
+                magnitude: [],
+                region: {},
+            } });
+
+        const { setDataArchiveEarthquakeFilter } = this.props;
+        const { faramValues } = this.state;
+        if (faramValues) {
+            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
+        }
+    }
+
+    private handleCloseCurrentFilterButtonClick = () => {
+        this.setState({ activeView: undefined });
+    }
+
+    private handleFaramChange = (faramValues: DAEarthquakeFiltersElement) => {
+        // const { setFilters } = this.props;
+        // setFilters({ filters: faramValues });
+        this.setState({ faramValues });
+    }
+
+    private handleSubmitClick = () => {
+        const { setDataArchiveEarthquakeFilter } = this.props;
+        const { faramValues } = this.state;
+        if (faramValues) {
+            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
+        }
+    }
+
+    private getTabs = memoize(
+        (
+            extraContent: React.ReactNode,
+            hideLocationFilter,
+            hideMagnitudeFilter,
+            hideDataRangeFilter,
+        ): {
+            [key in TabKey]?: string;
+        } => {
+            const tabs = {
+                location: 'Location',
+                dataRange: 'Data range',
+                magnitude: 'Magnitude',
+                others: 'Others',
+            };
+
+            if (!extraContent) {
+                delete tabs.others;
+            }
+
+            if (hideLocationFilter) {
+                delete tabs.location;
+            }
+
+            if (hideMagnitudeFilter) {
+                delete tabs.magnitude;
+            }
+
+            if (hideDataRangeFilter) {
+                delete tabs.dataRange;
+            }
+
+            return tabs;
+        },
+    )
+
+    public render() {
+        const {
+            className,
+            extraContent,
+            hideDataRangeFilter,
+            hideMagnitudeFilter,
+            hideLocationFilter,
+        } = this.props;
+
+        const { faramValues: fv } = this.state;
+
+        const tabs = this.getTabs(
+            extraContent,
+            hideLocationFilter,
+            hideMagnitudeFilter,
+            hideDataRangeFilter,
+        );
+
+        const { activeView } = this.state;
 
 
-    const fv = faramValues;
+        const validActiveView = isDefined(activeView) && tabs[activeView]
+            ? activeView
+            : undefined;
 
-    const tabs = getTabs(
-        extraContent,
-        hideLocationFilter,
-        hideMagnitudeFilter,
-        hideDataRangeFilter,
-    );
+        return (
+            <div className={_cs(styles.filters, className)}>
+                <header className={styles.header}>
+                    <h3 className={styles.heading}>
+                        Filters
+                    </h3>
 
-
-    const validActiveView = isDefined(activeView) && tabs[activeView]
-        ? activeView
-        : undefined;
-
-    return (
-        <div className={_cs(styles.filters, className)}>
-            <header className={styles.header}>
-                <h3 className={styles.heading}>
-                    Filters
-                </h3>
-
-                <Button
-                    className={styles.resetFiltersButton}
-                    title="Reset filters"
-                    onClick={handleResetFiltersButtonClick}
-                    iconName="refresh"
-                    transparent
-                    disabled={!validActiveView}
-                />
-
-            </header>
-            <div className={styles.content}>
-                <ScrollTabs
-                    tabs={tabs}
-                    active={validActiveView}
-                    onClick={handleTabClick}
-                    renderer={FilterIcon}
-                    rendererParams={getFilterTabRendererParams}
-                    className={styles.tabs}
-                />
-                <Faram
-                    schema={eqFilterSchema}
-                    onChange={handleFaramChange}
-                    value={fv}
-                    className={styles.filterViewContainer}
-                >
-                    {validActiveView && (
-                        <header className={styles.header}>
-                            <h3 className={styles.heading}>
-                                { tabs[validActiveView] }
-                            </h3>
-                            <Button
-                                className={styles.closeButton}
-                                transparent
-                                iconName="chevronUp"
-                                onClick={handleCloseCurrentFilterButtonClick}
-                            />
-                        </header>
-                    )}
-                    <MultiViewContainer
-                        views={views}
-                        active={validActiveView}
+                    <Button
+                        className={styles.resetFiltersButton}
+                        title="Reset filters"
+                        onClick={this.handleResetFiltersButtonClick}
+                        iconName="refresh"
+                        transparent
+                        disabled={!validActiveView}
                     />
-                </Faram>
-                {validActiveView && (
-                    <div
-                        onClick={handleSubmitClick}
-                        className={styles.submitButton}
-                        role="presentation"
+
+                </header>
+                <div className={styles.content}>
+                    <ScrollTabs
+                        tabs={tabs}
+                        active={validActiveView}
+                        onClick={this.handleTabClick}
+                        renderer={FilterIcon}
+                        rendererParams={this.getFilterTabRendererParams}
+                        className={styles.tabs}
+                    />
+                    <Faram
+                        schema={eqFilterSchema}
+                        onChange={this.handleFaramChange}
+                        // value={faramValues}
+                        value={fv}
+                        className={styles.filterViewContainer}
                     >
-                    Submit
-                    </div>
-                )}
+                        {validActiveView && (
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    { tabs[validActiveView] }
+                                </h3>
+                                <Button
+                                    className={styles.closeButton}
+                                    transparent
+                                    iconName="chevronUp"
+                                    onClick={this.handleCloseCurrentFilterButtonClick}
+                                />
+                            </header>
+                        )}
+                        <MultiViewContainer
+                            views={this.views}
+                            active={validActiveView}
+                        />
+                    </Faram>
+                    {validActiveView && (
+                        <div
+                            onClick={this.handleSubmitClick}
+                            className={styles.submitButton}
+                            role="presentation"
+                        >
+                        Submit
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(EarthquakeFilters);
