@@ -247,6 +247,20 @@ class RegularPage extends React.PureComponent <Props, State> {
         };
     }
 
+    public componentDidMount() {
+        const { setFilters } = this.props;
+        const initialFilter = {
+            dataDateRange: {
+                rangeInDays: 7,
+                startDate: undefined,
+                endDate: undefined,
+            },
+            hazard: [],
+            region: {},
+        };
+        setFilters({ filters: initialFilter });
+    }
+
     private setData = (data: []) => {
         this.setState({ data });
     }
@@ -269,7 +283,6 @@ class RegularPage extends React.PureComponent <Props, State> {
             setData: this.setData,
             data,
         };
-
         return (
             <DataArchiveContext.Provider value={contextProps}>
                 <div className="regularPage">
