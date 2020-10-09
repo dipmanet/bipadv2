@@ -7,6 +7,7 @@ import * as PageType from '#store/atom/page/types';
 import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
 import DataArchiveContext from '#components/DataArchiveContext';
+import ScatterChartViz from './Visualization/ScatterChart';
 
 import {
     createConnectedRequestCoordinator,
@@ -207,7 +208,10 @@ const Earthquake = (props: Props) => {
                 />
             )}
             {activeView === 'charts' && (
-                <div> CHarts Views </div>
+                <ScatterChartViz
+                    earthquakeList={filteredEarthquakes}
+                    downloadId="earthquakeTemporalChart"
+                />
             )}
         </div>
     );
