@@ -31,7 +31,7 @@ import { DAEarthquakeFiltersElement } from '#types';
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
-import Header from '../Header';
+import Header from './Header';
 import EarthquakeViz from './Visualization';
 
 import {
@@ -63,6 +63,7 @@ interface OwnProps {}
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
+type ActiveView = 'data' | 'visualizations' | 'charts';
 
 /* const sortOptions = [
     { key: 'magnitude', label: 'Magnitude' },
@@ -124,7 +125,7 @@ const filterByMagnitudeRange = (
 
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('magnitude');
-    const [activeView, setActiveView] = useState('data');
+    const [activeView, setActiveView] = useState<ActiveView>('data');
     const { earthquakeList, requests, eqFilters } = props;
     const pending = isAnyRequestPending(requests);
     const filteredEarthquakes = filterByMagnitudeRange(eqFilters.magnitude, earthquakeList);
@@ -138,6 +139,9 @@ const Earthquake = (props: Props) => {
     };
     const handleVisualizationsButtonClick = () => {
         setActiveView('visualizations');
+    };
+    const handleChartsButtonClick = () => {
+        setActiveView('charts');
     };
 
     useEffect(() => {
@@ -180,6 +184,7 @@ const Earthquake = (props: Props) => {
                     activeView={activeView}
                     handleDataButtonClick={handleDataButtonClick}
                     handleVisualizationsButtonClick={handleVisualizationsButtonClick}
+                    handleChartsButtonClick={handleChartsButtonClick}
                 />
             </div>
             {/* <SegmentInput
@@ -200,6 +205,9 @@ const Earthquake = (props: Props) => {
                     earthquakeList={filteredEarthquakes}
                     eqFilters={eqFilters}
                 />
+            )}
+            {activeView === 'charts' && (
+                <div> CHarts Views </div>
             )}
         </div>
     );
