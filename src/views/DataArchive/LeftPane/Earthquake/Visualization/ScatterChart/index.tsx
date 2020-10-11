@@ -14,20 +14,15 @@ import * as PageType from '#store/atom/page/types';
 import { getTemporals } from '../utils';
 import { saveChart } from '#utils/common';
 import Button from '#rsca/Button';
+import ToolTip from './Tooltip';
 
 import styles from './styles.scss';
 
-interface EarthquakeWithTemporals extends PageType.DataArchiveEarthquake {
-    temporalYear: string;
-    temporalMonth: string;
-    temporalWeek: string;
-}
 interface Props {
     earthquakeList: PageType.DataArchiveEarthquake[];
     chartTitle?: string;
     downloadId: string;
 }
-
 
 const withTemporalList = (earthquakeList: PageType.DataArchiveEarthquake[]) => {
     const withTemporals = (earthquakeList.map((earthquakeItem) => {
@@ -98,10 +93,20 @@ const ScatterChartViz = (props: Props) => {
                                 domain={[4, 'auto']}
                                 interval={0}
                                 allowDecimals={false}
+                                label={{
+                                    value: 'Magnitude', position: 'insideBottom', dy: 10,
+                                }}
                             />
-                            <ZAxis dataKey={'magnitude'} range={[30, 500]} />
+                            <ZAxis
+                                dataKey={'magnitude'}
+                                range={[30, 500]}
+                                name="Score"
+                            />
                             <CartesianGrid />
-                            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                            <Tooltip
+                                cursor={{ strokeDasharray: '3 3' }}
+                                content={<ToolTip />}
+                            />
                             {/* <Legend /> */}
                             <Scatter
                                 name="A
