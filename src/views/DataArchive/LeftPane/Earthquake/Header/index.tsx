@@ -64,8 +64,8 @@ const Header = (props: Props) => {
                     onClick={handleChartsButtonClick}
                 >
                     <Icon
-                        className={styles.visualizationIcon}
-                        name="bars"
+                        className={styles.chartIcon}
+                        name="earhtquakeCharts"
                     />
                     <div className={styles.text}>
                         Chart

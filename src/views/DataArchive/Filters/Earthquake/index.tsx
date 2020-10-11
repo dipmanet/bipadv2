@@ -60,7 +60,7 @@ const iconNames: {
 } = {
     location: 'distance',
     dataRange: 'dataRange',
-    magnitude: 'filter',
+    magnitude: 'pulse',
     others: 'filter',
 };
 
