@@ -105,6 +105,10 @@ const RegionChart = (props: Props) => {
                 <div
                     className={styles.chart}
                     id={downloadId}
+                    style={{
+                        height: `${cleanData.length * 50}px`,
+                        minHeight: '320px',
+                    }}
                 >
                     <ResponsiveContainer className={styles.container}>
                         <BarChart

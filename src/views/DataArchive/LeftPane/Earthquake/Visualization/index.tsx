@@ -103,7 +103,7 @@ const getMagCount = (selectedFederal: {
                 mag8 += 1;
             }
         });
-
+        const { eventOn } = regionwiseData[0];
         return {
             ...s,
             label: key,
@@ -113,9 +113,13 @@ const getMagCount = (selectedFederal: {
             mag6,
             mag7,
             mag8,
+            eventOn,
         };
     });
-    return visualData;
+    const sortedData = visualData.sort(
+        (a, b) => (a.eventOn < b.eventOn ? 1 : -1),
+    );
+    return sortedData;
 };
 
 const getEarthquakeSummary = memoize(
@@ -225,6 +229,7 @@ const EarthquakeViz = (props: Props) => {
         earthquakeWithTemporals,
         'year',
     );
+
     const chartTitle = getChartTitle(adminLevel);
     return (
         <div className={styles.earthquakeViz}>
