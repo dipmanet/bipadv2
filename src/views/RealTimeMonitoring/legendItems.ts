@@ -40,7 +40,7 @@ export const pollutionLegendItems = [
     { color: '#009966', label: 'Good (0 to 50)', style: styles.symbol },
     { color: '#ffde33', label: 'Moderate (51 to 100)', style: styles.symbol },
     { color: '#ff9933', label: 'Unhealthy for Sensitive Groups (101 to 150)', style: styles.symbol },
-    { color: '#cc0033', label: 'Unhealthy (151 to 100)', style: styles.symbol },
+    { color: '#cc0033', label: 'Unhealthy (151 to 200)', style: styles.symbol },
     { color: '#660099', label: 'Very Unhealthy (201 to 300)', style: styles.symbol },
     { color: '#7e0023', label: 'Hazardous (301 to 400)', style: styles.symbol },
     { color: '#7e0023', label: 'Very Hazardous (401 to 500)', style: styles.symbol },
