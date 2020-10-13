@@ -535,7 +535,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                     2.5
                                 </sub>
                                 ) */}
-                                Pollution (AQI)
+                                Pollution (AQI Value)
                             </h4>
                         </header>
                         <Legend
