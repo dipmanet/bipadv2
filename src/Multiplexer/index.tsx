@@ -40,6 +40,7 @@ import { User } from '#store/atom/auth/types';
 import Loading from '#components/Loading';
 import Navbar from '#components/Navbar';
 import PageContext from '#components/PageContext';
+import TitleContextProvider from '#components/TitleContext';
 import LayerSwitch from '#components/LayerSwitch';
 import LayerToggle from '#components/LayerToggle';
 import MapDownloadButton from '#components/MapDownloadButton';
@@ -696,83 +697,84 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         return (
             <PageContext.Provider value={pageProps}>
-                <div className={_cs(
-                    styles.multiplexer,
-                    leftContainerHidden && styles.leftContainerHidden,
-                    mapDownloadPending && styles.downloadingMap,
-                )}
-                >
-                    <div className={_cs(styles.content, 'bipad-main-content')}>
-                        <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
-                            <Map
-                                mapStyle={mapStyle}
-                                mapOptions={{
-                                    logoPosition: 'top-left',
-                                    minZoom: 5,
-                                    // makes initial map center to Nepal
-                                    center: {
-                                        lng: 85.300140,
-                                        lat: 27.700769,
-                                    },
-                                }}
+                <TitleContextProvider>
+                    <div className={_cs(
+                        styles.multiplexer,
+                        leftContainerHidden && styles.leftContainerHidden,
+                        mapDownloadPending && styles.downloadingMap,
+                    )}
+                    >
+                        <div className={_cs(styles.content, 'bipad-main-content')}>
+                            <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
+                                <Map
+                                    mapStyle={mapStyle}
+                                    mapOptions={{
+                                        logoPosition: 'top-left',
+                                        minZoom: 5,
+                                        // makes initial map center to Nepal
+                                        center: {
+                                            lng: 85.300140,
+                                            lat: 27.700769,
+                                        },
+                                    }}
                                 // debug
 
-                                scaleControlShown
-                                scaleControlPosition="bottom-right"
+                                    scaleControlShown
+                                    scaleControlPosition="bottom-right"
 
-                                navControlShown
-                                navControlPosition="bottom-right"
-                            >
-                                { leftContent && (
-                                    <aside className={_cs(
-                                        styles.left,
-                                        leftContainerHidden && styles.hidden,
+                                    navControlShown
+                                    navControlPosition="bottom-right"
+                                >
+                                    { leftContent && (
+                                        <aside className={_cs(
+                                            styles.left,
+                                            leftContainerHidden && styles.hidden,
+                                        )}
+                                        >
+                                            <AppBrand
+                                                className={styles.brand}
+                                                regionName={regionName}
+                                            />
+                                            <div
+                                                className={_cs(
+                                                    styles.leftContentContainer,
+                                                    leftContentContainerClassName,
+                                                )}
+                                            >
+                                                { leftContent }
+                                            </div>
+                                        </aside>
                                     )}
-                                    >
-                                        <AppBrand
-                                            className={styles.brand}
-                                            regionName={regionName}
-                                        />
+                                    { leftContent && (
                                         <div
-                                            className={_cs(
-                                                styles.leftContentContainer,
-                                                leftContentContainerClassName,
-                                            )}
+                                            role="presentation"
+                                            className={styles.toggleLeftContainerVisibilityButton}
+                                            onClick={
+                                                this.handleToggleLeftContainerVisibilityButtonClick
+                                            }
                                         >
-                                            { leftContent }
-                                        </div>
-                                    </aside>
-                                )}
-                                { leftContent && (
-                                    <div
-                                        role="presentation"
-                                        className={styles.toggleLeftContainerVisibilityButton}
-                                        onClick={
-                                            this.handleToggleLeftContainerVisibilityButtonClick
-                                        }
-                                    >
-                                        <Icon
-                                            name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
-                                        />
-                                    </div>
-                                )}
-                                <main className={styles.main}>
-                                    { mainContent && (
-                                        <div className={_cs(
-                                            styles.mainContentContainer,
-                                            mainContentContainerClassName,
-                                        )}
-                                        >
-                                            { mainContent }
+                                            <Icon
+                                                name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
+                                            />
                                         </div>
                                     )}
-                                    <MapContainer
-                                        className={_cs(
-                                            styles.map,
-                                            hideMap && styles.hidden,
+                                    <main className={styles.main}>
+                                        { mainContent && (
+                                            <div className={_cs(
+                                                styles.mainContentContainer,
+                                                mainContentContainerClassName,
+                                            )}
+                                            >
+                                                { mainContent }
+                                            </div>
                                         )}
-                                    />
-                                    {/* hazardList.map((item) => {
+                                        <MapContainer
+                                            className={_cs(
+                                                styles.map,
+                                                hideMap && styles.hidden,
+                                            )}
+                                        />
+                                        {/* hazardList.map((item) => {
                                         if (!item.icon) {
                                             return null;
                                         }
@@ -785,57 +787,58 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                         );
                                     }) */}
-                                    { !hideMap && (
-                                        <div className={styles.mapActions}>
-                                            <MapDownloadButton
-                                                className={styles.mapDownloadButton}
-                                                transparent
-                                                title="Download current map"
-                                                iconName="download"
-                                                onPendingStateChange={
-                                                    this.handleMapDownloadStateChange
-                                                }
-                                            />
-                                            <LayerSwitch
-                                                className={styles.layerSwitch}
-                                            />
-                                            <LayerToggle />
-                                        </div>
-                                    )}
-                                </main>
-                                {(rightContent || !hideFilters) && (
-                                    <aside className={styles.right}>
-                                        { rightContent && (
-                                            <div
-                                                className={_cs(
-                                                    styles.rightContentContainer,
-                                                    rightContentContainerClassName,
-                                                )}
-                                            >
-                                                { rightContent }
+                                        { !hideMap && (
+                                            <div className={styles.mapActions}>
+                                                <MapDownloadButton
+                                                    className={styles.mapDownloadButton}
+                                                    transparent
+                                                    title="Download current map"
+                                                    iconName="download"
+                                                    onPendingStateChange={
+                                                        this.handleMapDownloadStateChange
+                                                    }
+                                                />
+                                                <LayerSwitch
+                                                    className={styles.layerSwitch}
+                                                />
+                                                <LayerToggle />
                                             </div>
                                         )}
-                                        { !hideFilter && (
-                                            <Filters
-                                                className={styles.filters}
-                                                hideLocationFilter={hideLocationFilter}
-                                                hideHazardFilter={hideHazardFilter}
-                                                hideDataRangeFilter={hideDataRangeFilter}
-                                                extraContent={filterContent}
-                                                extraContentContainerClassName={
-                                                    filterContentContainerClassName
-                                                }
-                                            />
-                                        )}
-                                    </aside>
-                                )}
-                                {this.renderRoutes()}
-                                <MapOrder ordering={orderedLayers} />
-                            </Map>
-                        </RiskInfoLayerContext.Provider>
+                                    </main>
+                                    {(rightContent || !hideFilters) && (
+                                        <aside className={styles.right}>
+                                            { rightContent && (
+                                                <div
+                                                    className={_cs(
+                                                        styles.rightContentContainer,
+                                                        rightContentContainerClassName,
+                                                    )}
+                                                >
+                                                    { rightContent }
+                                                </div>
+                                            )}
+                                            { !hideFilter && (
+                                                <Filters
+                                                    className={styles.filters}
+                                                    hideLocationFilter={hideLocationFilter}
+                                                    hideHazardFilter={hideHazardFilter}
+                                                    hideDataRangeFilter={hideDataRangeFilter}
+                                                    extraContent={filterContent}
+                                                    extraContentContainerClassName={
+                                                        filterContentContainerClassName
+                                                    }
+                                                />
+                                            )}
+                                        </aside>
+                                    )}
+                                    {this.renderRoutes()}
+                                    <MapOrder ordering={orderedLayers} />
+                                </Map>
+                            </RiskInfoLayerContext.Provider>
+                        </div>
+                        <Navbar className={styles.navbar} />
                     </div>
-                    <Navbar className={styles.navbar} />
-                </div>
+                </TitleContextProvider>
             </PageContext.Provider>
         );
     }

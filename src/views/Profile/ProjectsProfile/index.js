@@ -17,6 +17,8 @@ import {
 
 import Loading from '#components/Loading';
 import PageContext from '#components/PageContext';
+import { TitleContext } from '#components/TitleContext';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -347,32 +349,48 @@ class ProjectsProfile extends React.PureComponent {
         const categoryMap = listToMap(category, categoryKeySelector, item => item);
 
         return (
-            <React.Fragment>
-                <Loading pending={pending} />
-                <Map
-                    projects={filteredProjects}
-                    regions={regions}
-                    regionLevel={regionLevel}
-                />
-                <LeftPane
-                    className={_cs(styles.leftPane, className)}
-                    projects={filteredProjects}
-                    drrCycleData={drrPieData}
-                    categoryData={categoryPieData}
-                    drrCycleMap={drrCycleMap}
-                    categoryMap={categoryMap}
-                    organizationMap={organizationMap}
-                    projectMap={projectMap}
-                />
-                <ProjectsProfileFilter
-                    drrCycleOptions={drrcycle}
-                    elementsOptions={category}
-                    organizationOptions={organization}
-                    priorityOptions={priorityOptions}
-                    subPriorityOptions={subPriorityOptions}
-                    activityOptions={activityOptions}
-                />
-            </React.Fragment>
+            <TitleContext.Consumer>
+                {(titleContext) => {
+                    const { setProfile } = titleContext;
+
+                    if (setProfile) {
+                        setProfile((prevProfile) => {
+                            if (prevProfile.mainModule !== 'Projects') {
+                                return { ...prevProfile, mainModule: 'Projects' };
+                            }
+                            return prevProfile;
+                        });
+                    }
+                    return (
+                        <React.Fragment>
+                            <Loading pending={pending} />
+                            <Map
+                                projects={filteredProjects}
+                                regions={regions}
+                                regionLevel={regionLevel}
+                            />
+                            <LeftPane
+                                className={_cs(styles.leftPane, className)}
+                                projects={filteredProjects}
+                                drrCycleData={drrPieData}
+                                categoryData={categoryPieData}
+                                drrCycleMap={drrCycleMap}
+                                categoryMap={categoryMap}
+                                organizationMap={organizationMap}
+                                projectMap={projectMap}
+                            />
+                            <ProjectsProfileFilter
+                                drrCycleOptions={drrcycle}
+                                elementsOptions={category}
+                                organizationOptions={organization}
+                                priorityOptions={priorityOptions}
+                                subPriorityOptions={subPriorityOptions}
+                                activityOptions={activityOptions}
+                            />
+                        </React.Fragment>
+                    );
+                }}
+            </TitleContext.Consumer>
         );
     }
 }

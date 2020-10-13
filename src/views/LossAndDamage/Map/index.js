@@ -130,7 +130,7 @@ export default class LossAndDamageMap extends React.PureComponent {
                             }
 
                             return (
-                                <div className={styles.scaleElement}>
+                                <div className={styles.scaleElement} key={c}>
                                     <div
                                         key={c}
                                         className={styles.colorUnit}

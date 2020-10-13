@@ -30,6 +30,8 @@ import {
     methods,
 } from '#request';
 
+import { TitleContext, Profile } from '#components/TitleContext';
+
 import {
     getResults,
     isAnyRequestPending,
@@ -251,6 +253,8 @@ class Document extends React.PureComponent<Props, State> {
         this.state = {};
     }
 
+    public static contextType = TitleContext;
+
     private getCategoryExpandedDocuments = memoize((
         documents: DocumentItem[],
         documentCategories: DocumentCategory[],
@@ -351,6 +355,17 @@ class Document extends React.PureComponent<Props, State> {
         );
 
         const pending = isAnyRequestPending(requests);
+
+        const { setProfile } = this.context;
+
+        if (setProfile) {
+            setProfile((prevProfile: Profile) => {
+                if (prevProfile.mainModule !== 'Document') {
+                    return { ...prevProfile, mainModule: 'Document' };
+                }
+                return prevProfile;
+            });
+        }
 
         return (
             <div className={_cs(className, styles.documents)}>

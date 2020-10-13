@@ -6,8 +6,13 @@ import Button from '#rsca/Button';
 import { MapChildContext } from '#re-map/context';
 
 import PageContext from '#components/PageContext';
+import { TitleContext } from '#components/TitleContext';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+
 
 import { AppState } from '#store/types';
+import { FiltersElement } from '#types';
+
 import {
     District,
     Province,
@@ -19,9 +24,13 @@ import {
     municipalitiesSelector,
     provincesSelector,
     regionSelector,
+    filtersSelector,
+    realTimeFiltersSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
+
+import { getRouteWiseTitleAndSource } from './utils';
 
 interface OwnProps {
     className?: string;
@@ -39,6 +48,11 @@ interface PropsFromAppState {
     districts: District[];
     provinces: Province[];
     municipalities: Municipality[];
+    filters: FiltersElement;
+    realtimeFilters: {
+        faramValues: object;
+        faramErrors: object;
+    };
 }
 
 type Props = OwnProps & PropsFromAppState;
@@ -48,7 +62,7 @@ const indexBounds = {
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
 
-const largeFont = '24px Source Sans Pro';
+const largeFont = '20px Source Sans Pro';
 const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -56,6 +70,8 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
+    filters: filtersSelector(state),
+    realtimeFilters: realTimeFiltersSelector(state),
 });
 
 interface GeoPoint {
@@ -122,7 +138,8 @@ const MapDownloadButton = (props: Props) => {
         districts,
         municipalities,
         provinces,
-
+        filters: { hazard, dataDateRange },
+        realtimeFilters,
         onPendingStateChange,
 
         ...otherProps
@@ -130,6 +147,8 @@ const MapDownloadButton = (props: Props) => {
 
     const mapContext = useContext(MapChildContext);
     const pageContext = useContext(PageContext);
+    const titleContext = useContext(TitleContext);
+    const riskInfoLayerContext = useContext(RiskInfoLayerContext);
 
     const [pending, setPending] = useState(false);
     const setDownloadPending = useCallback((isPending) => {
@@ -149,6 +168,16 @@ const MapDownloadButton = (props: Props) => {
 
             if (!pageContext || !pageContext.activeRouteDetails) {
                 console.warn('Page context not found');
+                return;
+            }
+
+            if (!titleContext) {
+                console.warn('Title context not found');
+                return;
+            }
+
+            if (!riskInfoLayerContext) {
+                console.warn('RiskInfo context not found');
                 return;
             }
 
@@ -173,18 +202,19 @@ const MapDownloadButton = (props: Props) => {
             }
 
             let source = '';
-            if (pageContext.activeRouteDetails.name === 'realtime') {
-                source = 'Rain / river: DHM';
-            } else if (pageContext.activeRouteDetails.name === 'incident') {
-                source = 'Nepal police';
-            }
+            // previous source logic
+            // if (pageContext.activeRouteDetails.name === 'realtime') {
+            //     source = 'Rain / river: DHM';
+            // } else if (pageContext.activeRouteDetails.name === 'incident') {
+            //     source = 'Nepal police';
+            // }
 
             setDownloadPending(true);
 
             const { map } = mapContext;
 
             const mapCanvas = map.getCanvas();
-
+            const { activeLayers: riskInfoActiveLayers } = riskInfoLayerContext;
             const canvas = document.createElement('canvas');
             canvas.width = mapCanvas.width;
             canvas.height = mapCanvas.height;
@@ -239,8 +269,20 @@ const MapDownloadButton = (props: Props) => {
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
 
                 const today = new Date();
-                const title = `${pageTitle} for ${regionName}`;
+                let title = `${pageTitle} for ${regionName}`;
                 const exportText = `Exported on: ${today.toLocaleDateString()}`;
+                const [specificTitle, specificSource] = getRouteWiseTitleAndSource(
+                    pageTitle,
+                    pageContext,
+                    titleContext,
+                    regionName,
+                    hazard,
+                    realtimeFilters,
+                    riskInfoActiveLayers,
+                    dataDateRange,
+                );
+                title = specificTitle || `${pageTitle} for ${regionName}`;
+                source = specificSource || '';
 
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
@@ -278,7 +320,10 @@ const MapDownloadButton = (props: Props) => {
                             canvases.forEach((c, i) => {
                                 const y = mapCanvas.height - c.height - 6;
                                 const x = 6 + c.width * i;
-                                context.drawImage(c, x, y, c.width, c.height);
+                                // context.drawImage(c, x, y, c.width, c.height);
+                                if (c.width !== 0 || c.height !== 0) {
+                                    context.drawImage(c, x, y, c.width, c.height);
+                                }
                             });
 
                             resolve();
@@ -299,7 +344,18 @@ const MapDownloadButton = (props: Props) => {
                 });
             };
         },
-        [region, districts, provinces, municipalities, mapContext, pageContext],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [
+            region,
+            districts,
+            provinces,
+            municipalities,
+            mapContext,
+            pageContext,
+            titleContext,
+            hazard,
+            realtimeFilters,
+        ],
     );
 
     return (
