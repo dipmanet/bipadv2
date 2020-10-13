@@ -530,11 +530,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Pollution"
                             />
                             <h4 className={styles.heading}>
-                                Pollution (PM&nbsp;
+                                {/* Pollution (PM&nbsp;
                                 <sub>
                                     2.5
                                 </sub>
-                                )
+                                ) */}
+                                Pollution (AQI)
                             </h4>
                         </header>
                         <Legend
