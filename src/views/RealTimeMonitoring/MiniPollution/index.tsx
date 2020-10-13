@@ -102,7 +102,8 @@ class MiniPollution extends React.PureComponent<Props> {
                     const { aqi } = row;
 
                     return (aqi) ? (
-                        <div>{`${aqi.toFixed(2)} µg/m³`}</div>
+                        // <div>{`${aqi.toFixed(2)} µg/m³`}</div>
+                        <div>{aqi.toFixed(2)}</div>
                     ) : undefined;
                 },
             },
@@ -115,7 +116,12 @@ class MiniPollution extends React.PureComponent<Props> {
                     const { aqi } = row;
 
                     return (aqi) ? (
-                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`, width: '10px', height: '10px', borderRadius: '50%' }} />
+                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`,
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            margin: 'auto' }}
+                        />
                     ) : undefined;
                 },
             },
