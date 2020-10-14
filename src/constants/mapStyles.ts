@@ -374,6 +374,15 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#efa8b8',
         },
+        openspace: {
+            ...resourceClusterInitial,
+            'circle-color': '#297eff',
+        },
+
+        communityspace: {
+            ...resourceClusterInitial,
+            'circle-color': '#FEE94E',
+        },
     },
 
     resourcePoint: {
@@ -420,6 +429,14 @@ export default {
         communication: {
             ...resourcePointInitial,
             'circle-color': '#efa8b8',
+        },
+        openspace: {
+            ...resourcePointInitial,
+            'circle-color': '#297eff',
+        },
+        communityspace: {
+            ...resourcePointInitial,
+            'circle-color': '#FEE94E',
         },
     },
 

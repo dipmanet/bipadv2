@@ -58,7 +58,11 @@ import OpenspaceMetaDataModal from './OpenspaceModals/OpenspaceMetaDataModal';
 import CommunityMetaDataModal from './OpenspaceModals/CommunityMetaDataModal';
 import AllOpenspacesModal from './OpenspaceModals/AllOpenspacesModal';
 import AllCommunitySpaceModal from './OpenspaceModals/AllCommunitySpaceModal';
+import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/main';
+import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
+// import '#resources/openspace-css/humanitarian-fonts.css';
+
 
 const TableModalButton = modalize(Button);
 
@@ -74,6 +78,8 @@ const camelCaseToSentence = (text: string) => {
 interface ResourceTooltipProps extends PageType.Resource {
     onEditClick: () => void;
     onShowInventoryClick: () => void;
+    handleShowOpenspaceDetailsClick: () => void;
+    handleShowCommunitypaceDetailsClick: () => void;
 }
 
 type toggleValues =
@@ -143,12 +149,20 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                     Edit data
                 </AccentButton>
                 <AccentButton
-                    title="Show Inventory"
+                    title={
+                        resourceDetails.resourceType === 'openspace'
+                            || 'communityspace'
+                            ? 'View Details'
+                            : 'Show Inventory'
+                    }
                     onClick={onShowInventoryClick}
                     transparent
                     className={styles.editButton}
                 >
-                    Show Inventory
+                    {resourceDetails.resourceType === 'openspace'
+                        || 'communityspace'
+                        ? 'View Details'
+                        : 'Show Inventory'}
                 </AccentButton>
             </div>
         </div>
@@ -644,6 +658,48 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     };
 
+    private handleShowOpenspaceDetailsClick = (openspaceDeleted?: boolean) => {
+        this.setState(prevState => ({
+            singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
+        }));
+        if (openspaceDeleted) {
+            this.setState({
+                resourceLngLat: undefined,
+                resourceInfo: undefined,
+            });
+            const { map } = this.context;
+            const nepalBounds = [
+                80.05858661752784,
+                26.347836996368667,
+                88.20166918432409,
+                30.44702867091792,
+            ];
+            map.fitBounds(nepalBounds);
+        }
+    };
+
+    private handleShowCommunitypaceDetailsClick = (
+        communityspaceDeleted: boolean,
+    ) => {
+        this.setState(prevState => ({
+            CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
+        }));
+        if (communityspaceDeleted) {
+            this.setState({
+                resourceLngLat: undefined,
+                resourceInfo: undefined,
+            });
+            const { map } = this.context;
+            const nepalBounds = [
+                80.05858661752784,
+                26.347836996368667,
+                88.20166918432409,
+                30.44702867091792,
+            ];
+            map.fitBounds(nepalBounds);
+        }
+    };
+
     public render() {
         const {
             className,
@@ -694,6 +750,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const culturalGeoJson = this.getGeojson(resourceCollection.cultural);
         const industryGeoJson = this.getGeojson(resourceCollection.industry);
         const communicationGeoJson = this.getGeojson(resourceCollection.communication);
+        const openspaceGeoJson = this.getGeojson(resourceCollection.openspace);
+        const communityspaceGeoJson = this.getGeojson(
+            resourceCollection.communityspace,
+        );
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -1428,6 +1488,182 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         </MapTooltip>
                                     )}
                                 </MapSource>
+                            )}
+                            {/* communityspace */}
+                            {activeLayersIndication.communityspace && (
+                                <>
+                                    <MapSource
+                                        sourceKey="resource-symbol-communityspace"
+                                        sourceOptions={{
+                                            type: 'geojson',
+                                            cluster: true,
+                                            clusterMaxZoom: 10,
+                                        }}
+                                        geoJson={communityspaceGeoJson}
+                                    >
+                                        <MapLayer
+                                            layerKey="cluster-communityspace"
+                                            onClick={this.handleClusterClick}
+                                            layerOptions={{
+                                                type: 'circle',
+                                                paint:
+                                                    mapStyles.resourceCluster
+                                                        .communityspace,
+                                                filter: ['has', 'point_count'],
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="cluster-count-communication"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: ['has', 'point_count'],
+                                                layout: {
+                                                    'text-field':
+                                                        '{point_count_abbreviated}',
+                                                    'text-size': 12,
+                                                },
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="resource-symbol-background-community"
+                                            onClick={this.handleResourceClick}
+                                            onMouserEnter={
+                                                this.handleResourceMouseEnter
+                                            }
+                                            layerOptions={{
+                                                type: 'circle',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                paint:
+                                                    mapStyles.resourcePoint
+                                                        .communityspace,
+                                            }}
+                                        />
+                                        {/* <MapLayer
+                                        layerKey="-resourece-symbol-icon-communityspace"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: [
+                                                '!',
+                                                ['has', 'point_count'],
+                                            ],
+                                            layout: {
+                                                'icon-image': 'communityspace',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    /> */}
+
+                                        {resourceLngLat && resourceInfo && (
+                                            <MapTooltip
+                                                coordinates={resourceLngLat}
+                                                tooltipOptions={tooltipOptions}
+                                                onHide={this.handleTooltipClose}
+                                            >
+                                                <ResourceTooltip
+                                                // FIXME: hide tooltip edit if no permission
+                                                    {...resourceInfo}
+                                                    {...resourceDetails}
+                                                    onEditClick={
+                                                        this.handleEditClick
+                                                    }
+                                                    onShowInventoryClick={
+                                                        () => this.handleShowOpenspaceDetailsClick()
+                                                    }
+                                                />
+                                            </MapTooltip>
+                                        )}
+                                    </MapSource>
+                                    {resourceInfo && (
+                                        <PolygonBoundaryCommunity
+                                            resourceInfo={resourceInfo}
+                                        />
+                                    )}
+                                </>
+                            )}
+                            {/* openspace */}
+                            {activeLayersIndication.openspace && (
+                                <>
+                                    <MapSource
+                                        sourceKey="resource-symbol-openspace"
+                                        sourceOptions={{
+                                            type: 'geojson',
+                                            cluster: true,
+                                            clusterMaxZoom: 10,
+                                        }}
+                                        geoJson={openspaceGeoJson}
+                                    >
+                                        <MapLayer
+                                            layerKey="cluster-openspace"
+                                            onClick={this.handleClusterClick}
+                                            layerOptions={{
+                                                type: 'circle',
+                                                paint:
+                                                    mapStyles.resourceCluster
+                                                        .openspace,
+                                                filter: ['has', 'point_count'],
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="cluster-count-openspace"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: ['has', 'point_count'],
+                                                layout: {
+                                                    'text-field':
+                                                        '{point_count_abbreviated}',
+                                                    'text-size': 12,
+                                                },
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="resource-symbol-background-openspace"
+                                            onClick={this.handleResourceClick}
+                                            onMouserEnter={
+                                                this.handleResourceMouseEnter
+                                            }
+                                            layerOptions={{
+                                                type: 'circle',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                paint:
+                                                    mapStyles.resourcePoint
+                                                        .openspace,
+                                            }}
+                                        />
+
+                                        {resourceLngLat && resourceInfo && (
+                                            <MapTooltip
+                                                coordinates={resourceLngLat}
+                                                tooltipOptions={tooltipOptions}
+                                                onHide={this.handleTooltipClose}
+                                            >
+                                                <ResourceTooltip
+                                                // FIXME: hide tooltip edit if no permission
+                                                    {...resourceInfo}
+                                                    {...resourceDetails}
+                                                    onEditClick={
+                                                        this.handleEditClick
+                                                    }
+                                                    onShowInventoryClick={
+                                                        () => this.handleShowOpenspaceDetailsClick()
+                                                    }
+                                                />
+                                            </MapTooltip>
+                                        )}
+                                    </MapSource>
+                                    {resourceInfo && (
+                                        <>
+                                            <PolygonBoundary
+                                                resourceInfo={resourceInfo}
+                                            />
+                                        </>
+                                    )}
+                                </>
                             )}
                             {/* new structure ends */}
                         </>
