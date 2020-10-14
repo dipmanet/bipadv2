@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -53,6 +54,10 @@ import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
 import AddResourceForm from './AddResourceForm';
 import SwitchView from './SwitchView';
+import OpenspaceMetaDataModal from './OpenspaceModals/OpenspaceMetaDataModal';
+import CommunityMetaDataModal from './OpenspaceModals/CommunityMetaDataModal';
+import AllOpenspacesModal from './OpenspaceModals/AllOpenspacesModal';
+import AllCommunitySpaceModal from './OpenspaceModals/AllCommunitySpaceModal';
 import styles from './styles.scss';
 
 const TableModalButton = modalize(Button);
@@ -71,8 +76,17 @@ interface ResourceTooltipProps extends PageType.Resource {
     onShowInventoryClick: () => void;
 }
 
-type toggleValues = 'education' | 'health' | 'finance' | 'governance' |
-'tourism' | 'cultural' | 'industry' | 'communication';
+type toggleValues =
+    | 'education'
+    | 'health'
+    | 'finance'
+    | 'governance'
+    | 'tourism'
+    | 'cultural'
+    | 'industry'
+    | 'communication'
+    | 'openspace'
+    | 'communityspace';
 
 const initialActiveLayersIndication = {
     education: false,
@@ -83,6 +97,8 @@ const initialActiveLayersIndication = {
     cultural: false,
     industry: false,
     communication: false,
+    openspace: false,
+    communityspace: false,
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
@@ -154,6 +170,8 @@ interface ResourceColletion {
     cultural: PageType.Resource[];
     industry: PageType.Resource[];
     communication: PageType.Resource[];
+    openspace: PageType.Resource[];
+    communityspace: PageType.Resource[];
 }
 
 interface State {
@@ -165,6 +183,11 @@ interface State {
     selectedFeatures: MapboxGeoJSONFeature[] | undefined;
     resourceList: PageType.Resource[];
     resourceCollection: ResourceColletion;
+    activeModal: string | undefined;
+    openspaceTooltip: boolean;
+    singleOpenspaceDetailsModal: boolean;
+    CommunitySpaceDetailsModal: boolean;
+    openspaceBoundary: null | unknown;
     activeLayersIndication: {
         education: boolean;
         health: boolean;
@@ -174,6 +197,8 @@ interface State {
         cultural: boolean;
         industry: boolean;
         communication: boolean;
+        openspace: boolean;
+        communityspace: boolean;
     };
 }
 
@@ -275,6 +300,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             showInventoryModal: false,
             selectedFeatures: undefined,
             resourceList: [],
+            activeModal: undefined,
+            openspaceTooltip: false,
+            singleOpenspaceDetailsModal: false,
+            CommunitySpaceDetailsModal: false,
+            openspaceBoundary: null,
             resourceCollection: {
                 education: [],
                 health: [],
@@ -284,6 +314,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 cultural: [],
                 industry: [],
                 communication: [],
+                openspace: [],
+                communityspace: [],
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
         };
@@ -340,6 +372,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             cultural: [],
             industry: [],
             communication: [],
+            openspace: [],
+            communityspace: [],
         };
         const { resourceType } = resource;
         const { [resourceType]: singleResource } = resourceCollection;
@@ -518,6 +552,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 cultural: false,
                 industry: false,
                 communication: false,
+                openspace: false,
+                communityspace: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -602,6 +638,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleIconClick = (key: string) => {
+        this.setState({
+            activeModal: key,
+        });
+    };
+
     public render() {
         const {
             className,
@@ -618,6 +660,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceList,
             activeLayersIndication,
             resourceCollection,
+            activeModal,
         } = this.state;
 
         const {
@@ -722,6 +765,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     <SwitchView
                         activeLayersIndication={activeLayersIndication}
                         handleToggleClick={this.handleToggleClick}
+                        handleIconClick={this.handleIconClick}
                         disabled={pending}
                     />
                     {/* for previous radio buttons structure starts */}
@@ -1407,6 +1451,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         />
                     )
                 }
+                {activeModal === 'showOpenSpaceInfoModal' ? (
+                    <OpenspaceMetaDataModal closeModal={this.handleIconClick} />
+                ) : activeModal === 'communityMetaModal' ? (
+                    <CommunityMetaDataModal closeModal={this.handleIconClick} />
+                ) : activeModal === 'showAllOpenspacesModal' ? (
+                    <AllOpenspacesModal
+                        closeModal={this.handleIconClick}
+                        handelListClick={this.handelListClick}
+                    />
+                ) : activeModal === 'showAllCommunityModal' ? (
+                    <AllCommunitySpaceModal
+                        closeModal={this.handleIconClick}
+                        handelListClick={this.handelListClick}
+                    />
+                ) : null}
             </>
         );
     }

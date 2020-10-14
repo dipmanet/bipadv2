@@ -14,3 +14,25 @@
         font-weight: var(--font-weight-bold);
     }
 }
+
+.listItemOpen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .switch {
+        margin: var(--spacing-small-alt) var(--spacing-small-alt);
+    }
+
+    .switchWrap {
+        display: flex;
+        align-items: center;
+    }
+
+    .actionsIcon {
+        span {
+            &:not(:last-child) {
+                margin-right: 15px;
+            }
+        }
+    }
+}

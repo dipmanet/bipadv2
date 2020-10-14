@@ -1,10 +1,20 @@
 import React from 'react';
 import Switch from 'react-input-switch';
-
+import { _cs } from '@togglecorp/fujs';
+import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
-type toggleValues = 'education' | 'health' | 'finance' | 'governance' |
-'tourism' | 'cultural' | 'industry' | 'communication';
+type toggleValues =
+    | 'education'
+    | 'health'
+    | 'finance'
+    | 'governance'
+    | 'tourism'
+    | 'cultural'
+    | 'industry'
+    | 'communication'
+    | 'communityspace'
+    | 'openspace';
 
 interface Props {
     activeLayersIndication: {
@@ -16,8 +26,11 @@ interface Props {
         cultural: boolean;
         industry: boolean;
         communication: boolean;
+        openspace: boolean;
+        communityspace: boolean;
     };
     handleToggleClick: (key: toggleValues, value: boolean) => void;
+    handleIconClick: (key: string) => void;
     disabled?: boolean;
 
 }
@@ -29,8 +42,11 @@ const SwitchView = (props: Props) => {
         tourism,
         cultural,
         industry,
-        communication },
+        communication,
+        openspace,
+        communityspace },
     handleToggleClick,
+    handleIconClick,
     disabled } = props;
     return (
         <div className={styles.lists}>
@@ -137,6 +153,64 @@ const SwitchView = (props: Props) => {
                     }}
                 />
                 <div className={styles.listTitle}> Communication </div>
+            </div>
+            <div className={styles.listItemOpen}>
+                <div className={styles.switchWrap}>
+                    <Switch
+                        className={styles.switch}
+                        on
+                        off={false}
+                        value={openspace}
+                        onChange={(value: boolean) => {
+                            handleToggleClick('openspace', value);
+                        }}
+                    />
+                    <div className={styles.listTitle}> Openspace </div>
+                </div>
+
+                <div className={styles.actionsIcon}>
+                    <Icon
+                        title={'All Openspaces'}
+                        className={_cs(styles.infoIcon)}
+                        name="list"
+                        onClick={() => handleIconClick('showAllOpenspacesModal')}
+                    />
+                    <Icon
+                        title={'Metadata'}
+                        className={_cs(styles.infoIcon)}
+                        name="infoOutline"
+                        onClick={() => handleIconClick('showOpenSpaceInfoModal')}
+                    />
+                </div>
+            </div>
+            <div className={styles.listItemOpen}>
+                <div className={styles.switchWrap}>
+                    <Switch
+                        className={styles.switch}
+                        on
+                        off={false}
+                        value={communityspace}
+                        onChange={(value: boolean) => {
+                            handleToggleClick('communityspace', value);
+                        }}
+                    />
+                    <div className={styles.listTitle}> Community Space </div>
+                </div>
+
+                <div className={styles.actionsIcon}>
+                    <Icon
+                        title={'All Openspaces'}
+                        className={_cs(styles.infoIcon)}
+                        name="list"
+                        onClick={() => handleIconClick('showAllCommunityModal')}
+                    />
+                    <Icon
+                        title={'Metadata'}
+                        className={_cs(styles.infoIcon)}
+                        name="infoOutline"
+                        onClick={() => handleIconClick('communityMetaModal')}
+                    />
+                </div>
             </div>
         </div>
     );

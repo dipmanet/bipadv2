@@ -1,0 +1,29 @@
+.login-modal {
+    display: flex;
+    background-color: var(--color-foreground);
+    width: 100%;
+    max-width: 40vw;
+    // height: 100%;
+    padding: 10px 0 !important;
+
+    .header {
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .tabs {
+            flex-shrink: 0;
+            padding: 0 10px;
+        }
+
+        .view {
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            // flex-grow: 1;
+            // overflow: auto;
+        }
+    }
+}
