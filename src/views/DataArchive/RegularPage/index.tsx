@@ -8,6 +8,7 @@ import EarthquakeMap from '../Map/Earthquake';
 import PollutionMap from '../Map/Pollution';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
+import EarthquakeLegend from '../Legends/Earthquake';
 
 import {
     NewProps,
@@ -116,6 +117,8 @@ class RegularPage extends React.PureComponent <Props, State> {
                             </DataArchiveContext.Provider>
                         )}
                         rightContent={(<EarthquakeFilters />)}
+                        mainContentContainerClassName="map-legend-container"
+                        mainContent={(<EarthquakeLegend />)}
                     />
                 </div>
             </DataArchiveContext.Provider>
