@@ -73,7 +73,7 @@ const getAqiCount = (stationWise: {
         };
     });
     const sortedData = visualData.sort(
-        (a, b) => (a.createdOn < b.createdOn ? 1 : -1),
+        (a, b) => (a.label < b.label ? -1 : 1),
     );
     return sortedData;
 };
