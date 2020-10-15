@@ -82,6 +82,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { filters, globalFilters } }) => ({
             ...transformDateRangeFilterParam(filters, 'incident_on'),
             ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+            historical: true,
         }),
         onSuccess: ({ response, props: { setDataArchivePollutionList } }) => {
             interface Response { results: PageType.DataArchivePollution[] }
