@@ -98,6 +98,9 @@ const AqiChart = (props: Props) => {
                                 dataKey="value"
                                 type="number"
                                 allowDecimals={false}
+                                label={{
+                                    value: 'No. of events', position: 'insideBottom', dy: 10,
+                                }}
                             />
                             {/* <Tooltip cursor={false} /> */}
                             { stackedBars.map((bar) => {
