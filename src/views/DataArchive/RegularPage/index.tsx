@@ -9,6 +9,7 @@ import PollutionMap from '../Map/Pollution';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
 import EarthquakeLegend from '../Legends/Earthquake';
+import PollutionLegend from '../Legends/Pollution';
 
 import {
     NewProps,
@@ -55,6 +56,15 @@ interface State {
     data: [];
 }
 
+const getLegend = (chosenOption: Options) => {
+    if (chosenOption === 'Earthquake') {
+        return <EarthquakeLegend />;
+    }
+    if (chosenOption === 'Pollution') {
+        return <PollutionLegend />;
+    }
+    return null;
+};
 class RegularPage extends React.PureComponent <Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -118,7 +128,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                         )}
                         rightContent={(<EarthquakeFilters />)}
                         mainContentContainerClassName="map-legend-container"
-                        mainContent={(<EarthquakeLegend />)}
+                        mainContent={getLegend(chosenOption)}
                     />
                 </div>
             </DataArchiveContext.Provider>
