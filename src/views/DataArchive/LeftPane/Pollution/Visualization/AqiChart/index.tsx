@@ -11,7 +11,8 @@ import {
 
 import { saveChart } from '#utils/common';
 import Button from '#rsca/Button';
-import stackedBars from './constants';
+import { stackedBars, legendData } from './constants';
+import PollutionLegend from './Legend';
 
 import styles from './styles.scss';
 
@@ -26,10 +27,16 @@ interface ChartData {
     hazardous: number;
 }
 
+interface LegendData {
+    id: number;
+    label: string;
+    fill: string;
+}
 interface Props {
     chartTitle?: string;
     downloadId: string;
     stationWiseData: ChartData[];
+    legendData?: LegendData[];
 }
 
 const DEFAULT_CHART_TITLE = 'Occurence Statictics';
@@ -60,7 +67,12 @@ const removeZero = (staionWiseData: ChartData[]) => {
 };
 
 const AqiChart = (props: Props) => {
-    const { chartTitle, downloadId, stationWiseData } = props;
+    const {
+        chartTitle,
+        downloadId,
+        stationWiseData,
+        legendData: legendDataFromProps,
+    } = props;
     const cleanData = removeZero(stationWiseData);
     return (
         <div className={styles.visualizations}>
@@ -83,7 +95,7 @@ const AqiChart = (props: Props) => {
                     className={styles.chart}
                     id={downloadId}
                     style={{
-                        height: `${cleanData.length * 50}px`,
+                        height: `${cleanData.length * 40}px`,
                         minHeight: '320px',
                     }}
                 >
@@ -124,6 +136,7 @@ const AqiChart = (props: Props) => {
                             }) }
                         </BarChart>
                     </ResponsiveContainer>
+                    <PollutionLegend legendData={legendDataFromProps || legendData} />
                 </div>
             </div>
         </div>

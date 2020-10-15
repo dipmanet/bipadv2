@@ -1,0 +1,21 @@
+.pollution-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: white;
+    padding: var(--spacing-medium);
+    .legend-item {
+        display: flex;
+        padding: var(--spacing-small) var(--spacing-medium);
+        .text {
+            font-weight: var(--font-weight-bold);
+        }
+        .icon {
+            border-radius: 5px;
+            margin-left: 3px;
+            width: 15px;
+            height: 15px;
+        }
+    }
+}
