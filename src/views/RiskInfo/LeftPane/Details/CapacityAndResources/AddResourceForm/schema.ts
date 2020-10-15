@@ -127,6 +127,35 @@ const schema: Schema = {
             ...defaultFields,
         },
     },
+    openspace: {
+        fields: {
+            ...defaultFields,
+            issue: [],
+            currentLandse: [],
+            catchmentArea: [],
+            ownership: [],
+            elevation: [],
+            acessToSite: [],
+            specialFeature: [],
+            image: [],
+            shapeFile: [],
+
+        },
+    },
+    communityspace: {
+        fields: {
+            ...defaultFields,
+            currentLandUse: [],
+            elevation: [],
+            address: [],
+            ward: [],
+            capacity: [],
+            totalArea: [],
+            usableArea: [],
+            coverImage: [],
+            shapeFile: [],
+        },
+    },
 };
 
 export const defaultSchema = {

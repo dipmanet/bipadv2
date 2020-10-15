@@ -58,6 +58,8 @@ import OpenspaceMetaDataModal from './OpenspaceModals/OpenspaceMetaDataModal';
 import CommunityMetaDataModal from './OpenspaceModals/CommunityMetaDataModal';
 import AllOpenspacesModal from './OpenspaceModals/AllOpenspacesModal';
 import AllCommunitySpaceModal from './OpenspaceModals/AllCommunitySpaceModal';
+import SingleOpenspaceDetails from './OpenspaceModals/OpenspaceDetailsModal/index';
+import CommunityOpenspaceDetails from './OpenspaceModals/CommunitySpaceDetails';
 import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/main';
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
@@ -173,6 +175,7 @@ interface ComponentProps {
     className?: string;
     handleCarActive: Function;
     handleActiveLayerIndication: Function;
+    setResourceId: Function;
 }
 
 interface ResourceColletion {
@@ -226,6 +229,7 @@ interface Params {
     coordinates?: [number, number][];
     setResourceList?: (resources: PageType.Resource[]) => void;
     setIndividualResourceList?: (key: toggleValues, resources: PageType.Resource[]) => void;
+    closeModal?: (key?: boolean) => void;
 }
 
 type Props = NewProps<ComponentProps & PropsFromState, Params>
@@ -289,6 +293,24 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
                     coordinates: params.coordinates,
                 }),
             };
+        },
+    },
+    openspaceDeleteRequest: {
+        url: ({ params }) => `/resource/${params.id}/`,
+        method: methods.DELETE,
+        onSuccess: ({ params }) => {
+            if (params && params.closeModal) {
+                params.closeModal(true);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
         },
     },
 };
@@ -504,13 +526,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const {
             requests: {
                 resourceDetailGetRequest,
-            },
+            }, setResourceId,
         } = this.props;
 
         if (!id) {
             return;
         }
-
+        setResourceId(id);
         resourceDetailGetRequest.do({
             resourceId: id,
         });
@@ -529,6 +551,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleTooltipClose = () => {
+        const { setResourceId } = this.props;
+        setResourceId(undefined);
         this.setState({
             resourceLngLat: undefined,
             resourceInfo: undefined,
@@ -700,11 +724,24 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     };
 
+    private routeToOpenspace = (point) => {
+        if (window.navigator.geolocation) {
+            // Geolocation available
+            const { coordinates } = point;
+            window.navigator.geolocation.getCurrentPosition((position) => {
+                const directionsUrl = `https://www.google.com/maps/dir/'${position.coords.latitude},${position.coords.longitude}'/${coordinates[1]},${coordinates[0]}`;
+
+                window.open(directionsUrl, '_blank');
+            }, console.log('please provide location access'));
+        }
+    };
+
     public render() {
         const {
             className,
             requests,
             resourceTypeList,
+            requests: { openspaceDeleteRequest },
         } = this.props;
         const {
             activeLayerKey,
@@ -717,6 +754,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayersIndication,
             resourceCollection,
             activeModal,
+            singleOpenspaceDetailsModal,
+            CommunitySpaceDetailsModal,
+            openspaceBoundary,
         } = this.state;
 
         const {
@@ -1702,6 +1742,25 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         handelListClick={this.handelListClick}
                     />
                 ) : null}
+                {singleOpenspaceDetailsModal && (
+                    <SingleOpenspaceDetails
+                        {...resourceDetails}
+                        closeModal={this.handleShowOpenspaceDetailsClick}
+                        openspaceDeleteRequest={openspaceDeleteRequest}
+                        onEdit={this.handleEditClick}
+                        routeToOpenspace={this.routeToOpenspace}
+                        type={resourceDetails && resourceDetails.resourceType}
+                    />
+                )}
+                {CommunitySpaceDetailsModal && (
+                    <CommunityOpenspaceDetails
+                        {...resourceDetails}
+                        closeModal={this.handleShowCommunitypaceDetailsClick}
+                        onEdit={this.handleEditClick}
+                        routeToOpenspace={this.routeToOpenspace}
+                        openspaceDeleteRequest={openspaceDeleteRequest}
+                    />
+                )}
             </>
         );
     }

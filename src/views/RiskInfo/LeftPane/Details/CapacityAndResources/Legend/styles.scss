@@ -1,5 +1,6 @@
 .wrapper {
-
+    background: transparent !important;
+    border: 0 !important;
     .title{
         font-weight: var(--font-weight-bold);
         padding: var(--spacing-small) var(--spacing-medium);
@@ -37,4 +38,9 @@
         }
 
     }
+}
+
+.capacityWrapper {
+    background: #fff;
+
 }

@@ -188,7 +188,6 @@ class Polygon extends React.PureComponent<Props, State> {
 
     public render() {
         const { opacityValue, openspaceTitle, geoserverUrl } = this.state;
-        // console.log('wms', openspaceTitle, geoserverUrl);
 
         return (
             <>

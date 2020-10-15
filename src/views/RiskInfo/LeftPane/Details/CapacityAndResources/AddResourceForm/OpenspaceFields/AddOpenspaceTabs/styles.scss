@@ -1,0 +1,109 @@
+.add-resource-modal {
+    max-height: 90vh;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .header {
+        flex-shrink: 0;
+    }
+
+    .modal-body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    .footer {
+        flex-shrink: 0;
+    }
+
+    .location-input {
+        height: 300px;
+    }
+}
+
+.location-input {
+    flex-shrink: 0;
+    // margin: var(--spacing-medium);
+    height: 300px;
+}
+
+.amenitiesDiv {
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addInventoryModal {
+    overflow: auto;
+}
+
+#profileOutput{
+    height: 350px;
+    width: 350px;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.detailsInputGroup {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0 5px 0;
+}
+
+.detailsInput{
+    outline: none;
+    border: 0;
+    border-bottom: var(--width-separator-thin) solid var(--color-separator);
+    background-color: transparent;
+    padding: var(--spacing-extra-small) 0;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.detailsLabel {
+    overflow: hidden;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-text-label);
+    font-size: var(--font-size-extra-small);
+    font-weight: var(--font-weight-bold);
+}
+
+
+.stepButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.galleryRow {
+    // background: #;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.galleryRow > .flexRowItem {
+    flex: 1 1 1; /*grow | shrink | basis */
+    height: 100px;
+}
+
+// .flexRowItem {
+//   background-color: #fff4e6;
+//   border: 1px solid #f76707;
+// }
+
+

@@ -15,6 +15,7 @@ interface Props {
 class RiskInfo extends React.PureComponent<Props> {
     public state = {
         carActive: false,
+        resourceIdForLegend: null,
         activeLayersIndication: {
             education: false,
             health: false,
@@ -24,6 +25,8 @@ class RiskInfo extends React.PureComponent<Props> {
             cultural: false,
             industry: false,
             communication: false,
+            openspace: false,
+            communityspace: false,
         },
     }
 
@@ -35,8 +38,12 @@ class RiskInfo extends React.PureComponent<Props> {
         this.setState({ activeLayersIndication: value });
     }
 
+    public setResourceId = (id: number) => {
+        this.setState({ resourceIdForLegend: id });
+    }
+
     public render() {
-        const { carActive, activeLayersIndication } = this.state;
+        const { carActive, activeLayersIndication, resourceIdForLegend } = this.state;
         return (
             <>
                 <RiskInfoMap />
@@ -49,6 +56,7 @@ class RiskInfo extends React.PureComponent<Props> {
                             className={styles.leftPane}
                             handleCarActive={this.handleCarActive}
                             handleActiveLayerIndication={this.handleActiveLayerIndication}
+                            setResourceId={this.setResourceId}
                         />
                     )}
                     mainContentContainerClassName={styles.mainContent}
@@ -58,6 +66,7 @@ class RiskInfo extends React.PureComponent<Props> {
                     mainContent={carActive ? (
                         <CapacityAndResourcesLegend
                             activeLayersIndication={activeLayersIndication}
+                            resourceIdForLegend={resourceIdForLegend}
                         />
                     )
                         : (<ActiveLayers className={styles.activeLayerList} />)}

@@ -90,6 +90,14 @@ const state: PageState = {
             id: 8,
             title: 'communication',
         },
+        {
+            id: 9,
+            title: 'openspace',
+        },
+        {
+            id: 10,
+            title: 'communityspace',
+        },
     ],
     lossList: [],
     countryList: [],
