@@ -14,7 +14,7 @@ import {
     pollutionLegendItems,
     noLegend,
 } from './legendItems';
-
+import getPollutionLegends from './utils';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { FiltersElement, MapStateElement } from '#types';
@@ -385,6 +385,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 otherSources,
             },
             realTimeRiverList,
+            realTimePollutionList,
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -397,7 +398,10 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const autoRiverLegends = this.getAutoRealTimeRiverLegends(
             realTimeRiverList, newRiverLegendItems,
         );
-
+        const autoPollutionLegends = getPollutionLegends(
+            realTimePollutionList,
+            pollutionLegendItems,
+        );
         return (
             <>
                 {showRain && (
@@ -540,7 +544,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                         </header>
                         <Legend
                             className={styles.legend}
-                            data={pollutionLegendItems}
+                            // data={pollutionLegendItems}
+                            data={
+                                realTimePollutionList.length > 0
+                                    ? autoPollutionLegends
+                                    : noLegend
+                            }
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             labelSelector={legendLabelSelector}

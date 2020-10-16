@@ -37,13 +37,13 @@ export const earthquakeLegendItems = [
 ];
 
 export const pollutionLegendItems = [
-    { color: '#009966', label: 'Good (0 to 50)', style: styles.symbol },
-    { color: '#ffde33', label: 'Moderate (51 to 100)', style: styles.symbol },
-    { color: '#ff9933', label: 'Unhealthy for Sensitive Groups (101 to 150)', style: styles.symbol },
-    { color: '#cc0033', label: 'Unhealthy (151 to 200)', style: styles.symbol },
-    { color: '#660099', label: 'Very Unhealthy (201 to 300)', style: styles.symbol },
-    { color: '#7e0023', label: 'Hazardous (301 to 400)', style: styles.symbol },
-    { color: '#7e0023', label: 'Very Hazardous (401 to 500)', style: styles.symbol },
+    { order: 1, color: '#009966', key: 'good', label: 'Good (0 to 50)', style: styles.symbol },
+    { order: 2, color: '#ffde33', key: 'moderate', label: 'Moderate (51 to 100)', style: styles.symbol },
+    { order: 3, color: '#ff9933', key: 'unhealthyForSensitive', label: 'Unhealthy for Sensitive Groups (101 to 150)', style: styles.symbol },
+    { order: 4, color: '#cc0033', key: 'unhealthy', label: 'Unhealthy (151 to 200)', style: styles.symbol },
+    { order: 5, color: '#660099', key: 'veryUnhealthy', label: 'Very Unhealthy (201 to 300)', style: styles.symbol },
+    { order: 6, color: '#7e0023', key: 'hazardous', label: 'Hazardous (301 to 400)', style: styles.symbol },
+    { order: 7, color: '#7e0023', key: 'veryHazardous', label: 'Very Hazardous (401 to 500)', style: styles.symbol },
 ];
 
 export const forestFireLegendItems = [
