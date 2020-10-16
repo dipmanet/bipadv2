@@ -120,6 +120,7 @@ class MiniPollution extends React.PureComponent<Props> {
                             width: '10px',
                             height: '10px',
                             borderRadius: '50%',
+                            border: '1px solid black',
                             margin: 'auto' }}
                         />
                     ) : undefined;
@@ -132,24 +133,24 @@ class MiniPollution extends React.PureComponent<Props> {
 
     private renderAqiIndicator = (aqi: number): string => {
         if (aqi <= 50) {
-            return '#009966';
+            return '#00fa2f';
         }
         if (aqi <= 100) {
-            return '#ffde33';
+            return '#f7ff00';
         }
         if (aqi <= 150) {
-            return '#ff9933';
+            return '#ff7300';
         }
         if (aqi <= 200) {
-            return '#cc0033';
+            return '#ff0000';
         }
         if (aqi <= 300) {
-            return '#660099';
+            return '#9e0095';
         }
         if (aqi > 300) {
-            return '#7e0023';
+            return '#8a0014';
         }
-        return '#009966';
+        return '#00fa2f';
     }
 
     public render() {
