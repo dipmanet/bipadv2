@@ -8,6 +8,28 @@ interface LegendItem {
     radius?: number;
     order: number;
 }
+
+// river
+export const getAutoRealTimeRiverLegends = (
+    dataList: PageType.RealTimeRiver[],
+    legendItems: LegendItem[],
+) => {
+    const uniqueLegendItems = [...new Set(dataList.map(
+        item => `${item.status} and ${item.steady || 'steady'}`.toUpperCase(),
+    ))];
+    const autoLegends: LegendItem[] = [];
+    uniqueLegendItems.forEach((item) => {
+        legendItems.forEach((legendItem) => {
+            if (item === legendItem.label.toUpperCase()) {
+                autoLegends.push(legendItem);
+            }
+        });
+    });
+
+    return autoLegends;
+};
+
+// pollution
 const getPollutionRanges = (pollutionItems: PageType.RealTimePollution[]) => {
     const allLegendKeys: string[] = [];
     pollutionItems.forEach((item) => {
@@ -44,7 +66,7 @@ const getPollutionRanges = (pollutionItems: PageType.RealTimePollution[]) => {
     return uniqueLegends;
 };
 
-const getPollutionLegends = (
+export const getPollutionLegends = (
     pollutionItems: PageType.RealTimePollution[],
     pollutionLegendItems: LegendItem[],
 ) => {
@@ -63,5 +85,3 @@ const getPollutionLegends = (
     const sortedPollutionLegends = pollutionLegends.sort((a, b) => (a.order > b.order ? 1 : -1));
     return sortedPollutionLegends;
 };
-
-export default getPollutionLegends;

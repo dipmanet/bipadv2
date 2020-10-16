@@ -16,15 +16,15 @@ export const riverLegendItems = [
 
 // the code below is different due to the requirement of river icon to be triangle
 export const newRiverLegendItems = [
-    { color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
-    { color: 'transparent', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
-    { color: '#FDD835', label: 'Above Warning Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Above Warning Level and Rising', style: styles.triangleRisingAboveWarning },
-    { color: 'transparent', label: 'Above Warning Level and Falling', style: styles.triangleFallingAboveWarning },
-    { color: '#E53935', label: 'Above Danger Level and Steady', style: styles.box },
-    { color: 'transparent', label: 'Above Danger Level and Rising', style: styles.triangleRisingAboveDanger },
-    { color: 'transparent', label: 'Above Danger Level and Falling', style: styles.triangleFallingAboveDanger },
+    { order: 1, color: '#7CB342', label: 'Below Warning Level and Steady', style: styles.box },
+    { order: 2, color: 'transparent', label: 'Below Warning Level and Rising', style: styles.triangleRisingBelowWarning },
+    { order: 3, color: 'transparent', label: 'Below Warning Level and Falling', style: styles.triangleFallingBelowWarning },
+    { order: 4, color: '#FDD835', label: 'Above Warning Level and Steady', style: styles.box },
+    { order: 5, color: 'transparent', label: 'Above Warning Level and Rising', style: styles.triangleRisingAboveWarning },
+    { order: 6, color: 'transparent', label: 'Above Warning Level and Falling', style: styles.triangleFallingAboveWarning },
+    { order: 7, color: '#E53935', label: 'Above Danger Level and Steady', style: styles.box },
+    { order: 8, color: 'transparent', label: 'Above Danger Level and Rising', style: styles.triangleRisingAboveDanger },
+    { order: 9, color: 'transparent', label: 'Above Danger Level and Falling', style: styles.triangleFallingAboveDanger },
 ];
 
 export const earthquakeLegendItems = [
