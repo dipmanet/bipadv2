@@ -51,5 +51,5 @@ export const forestFireLegendItems = [
 ];
 
 export const noLegend = [
-    { color: 'transparent', label: 'No legends to display', style: styles.symbol },
+    { color: 'transparent', label: 'No legends to display', style: styles.noSymbol },
 ];
