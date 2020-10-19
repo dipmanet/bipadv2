@@ -120,6 +120,7 @@ const RegionChart = (props: Props) => {
                             <XAxis
                                 dataKey="value"
                                 type="number"
+                                allowDecimals={false}
                             />
                             {/* <Tooltip cursor={false} /> */}
                             { stackedBars.map((bar) => {
