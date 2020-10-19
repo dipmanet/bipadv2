@@ -63,7 +63,7 @@ import CommunityOpenspaceDetails from './OpenspaceModals/CommunitySpaceDetails';
 import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/main';
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
-// import '#resources/openspace-css/humanitarian-fonts.css';
+import '#resources/openspace-css/humanitarian-fonts.css';
 
 
 const TableModalButton = modalize(Button);
@@ -129,6 +129,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         label: camelCaseToSentence(item.label),
     });
 
+    const filtered = data.filter(el => el.label !== 'description');
+
     return (
         <div className={styles.resourceTooltip}>
             <h3 className={styles.heading}>
@@ -136,7 +138,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             </h3>
             <ListView
                 className={styles.content}
-                data={data}
+                data={filtered}
                 keySelector={resourceKeySelector}
                 renderer={TextOutput}
                 rendererParams={rendererParams}
@@ -201,10 +203,8 @@ interface State {
     resourceList: PageType.Resource[];
     resourceCollection: ResourceColletion;
     activeModal: string | undefined;
-    openspaceTooltip: boolean;
     singleOpenspaceDetailsModal: boolean;
     CommunitySpaceDetailsModal: boolean;
-    openspaceBoundary: null | unknown;
     activeLayersIndication: {
         education: boolean;
         health: boolean;
@@ -337,10 +337,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             selectedFeatures: undefined,
             resourceList: [],
             activeModal: undefined,
-            openspaceTooltip: false,
             singleOpenspaceDetailsModal: false,
             CommunitySpaceDetailsModal: false,
-            openspaceBoundary: null,
             resourceCollection: {
                 education: [],
                 health: [],
@@ -736,6 +734,46 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         }
     };
 
+    private handelListClick = (features: any, resourceType: string) => {
+        const { map } = this.context;
+        const {
+            id,
+            title,
+            ward,
+            point: { coordinates },
+            point,
+        } = features;
+
+        if (coordinates && map) {
+            map.flyTo({
+                center: coordinates,
+                zoom: 16,
+            });
+        }
+
+        const {
+            requests: { resourceDetailGetRequest },
+        } = this.props;
+
+        if (!id) {
+            return;
+        }
+
+        resourceDetailGetRequest.do({
+            resourceId: id,
+        });
+        this.setState({
+            resourceLngLat: coordinates,
+            resourceInfo: {
+                id,
+                title,
+                ward,
+                resourceType,
+                point,
+            },
+        });
+    };
+
     public render() {
         const {
             className,
@@ -756,7 +794,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeModal,
             singleOpenspaceDetailsModal,
             CommunitySpaceDetailsModal,
-            openspaceBoundary,
         } = this.state;
 
         const {
