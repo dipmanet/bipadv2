@@ -7,7 +7,7 @@ import {
     BarChart,
     Bar,
     LabelList,
-    // Tooltip,
+    Tooltip,
 } from 'recharts';
 import {
     saveChart,
@@ -16,7 +16,7 @@ import Message from '#rscv/Message';
 import Button from '#rsca/Button';
 
 import ArchiveLegend from '../ArchiveLegend';
-
+import CustomTooltip from './Tooltip';
 // constants
 import { stackedBars, legendData } from '../constants';
 
@@ -122,7 +122,10 @@ const RegionChart = (props: Props) => {
                                 type="number"
                                 allowDecimals={false}
                             />
-                            {/* <Tooltip cursor={false} /> */}
+                            <Tooltip
+                                cursor={false}
+                                content={<CustomTooltip />}
+                            />
                             { stackedBars.map((bar) => {
                                 const { dataKey, stackId, fill } = bar;
                                 return (

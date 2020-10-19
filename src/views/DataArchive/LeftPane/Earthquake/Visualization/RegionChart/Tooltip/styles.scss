@@ -1,0 +1,37 @@
+.tooltip {
+    background-color: var(--color-background-disabled);
+    padding: var(--spacing-small) var(--spacing-medium);
+    border: 1px solid black;
+    border-radius: 5px;
+    min-width: 150px;
+    .label {
+        text-decoration: underline;
+        font-size: var(--font-size-medium-alt);
+        padding: var(--spacing-small) 0;
+    }
+
+    .total-count {
+        font-size: var(--font-size-medium-alt);
+        padding: var(--spacing-small) 0;
+    }
+
+    .sub-label {
+        padding: var(--spacing-extra-small-alt) 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        // justify-content: center;
+        & > * {
+            margin-right: var(--spacing-extra-small-alt);
+        }
+        .box {
+            height: 12px;
+            width: 12px;
+            border-radius: 3px;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+    }
+}
