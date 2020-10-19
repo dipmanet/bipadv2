@@ -1,9 +1,8 @@
-const MAG_4_COLOR = '#A40E4C';
-const MAG_5_COLOR = '#2C2C54';
-const MAG_6_COLOR = '#A4BAB7';
-const MAG_7_COLOR = '#C57B57';
-const MAG_8_COLOR = '#F49D6E';
-
+const MAG_4_COLOR = '#fcbba1';
+const MAG_5_COLOR = '#fc9272';
+const MAG_6_COLOR = '#fb6a4a';
+const MAG_7_COLOR = '#de2d26';
+const MAG_8_COLOR = '#a50f15';
 
 export const stackedBars = [
     { dataKey: 'mag4', stackId: 'magnitude', fill: MAG_4_COLOR },
