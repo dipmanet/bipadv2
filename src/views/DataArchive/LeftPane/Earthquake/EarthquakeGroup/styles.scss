@@ -1,0 +1,42 @@
+.earthquake-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-medium) var(--spacing-large);
+    border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
+    // cursor: pointer;
+    
+    &:hover {
+        background-color: #f6f6f6;
+    }
+    
+    .address {
+        font-size: var(--font-size-large); 
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-small);
+    }
+    
+    .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .count {
+            background-color: var(--color-accent);
+            border-radius: 1rem;
+            padding: var(--spacing-medium);
+            font-weight: var(--font-weight-bold);
+            color: white;
+            margin-right: var(--spacing-small);
+        }
+
+        .chevron {
+            border-radius: 50%;
+            border: none !important;
+            font-size: 1rem;
+            background-color: inherit !important;
+            &:hover {
+                background-color: inherit !important;
+            }
+        }
+    }
+}
