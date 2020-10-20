@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
+import { groupList } from '#utils/common';
 
 // import SegmentInput from '#rsci/SegmentInput';
 import EarthquakeItem from './EarthquakeItem';
 import Message from '#rscv/Message';
 import DataArchiveContext from '#components/DataArchiveContext';
 import ScatterChartViz from './Visualization/ScatterChart';
+import EarthquakeGroup from './EarthquakeGroup';
 
 import {
     createConnectedRequestCoordinator,
@@ -175,6 +177,10 @@ const Earthquake = (props: Props) => {
         }
         return 0;
     };
+    const groupedEarthquakeList = groupList(
+        filteredEarthquakes.filter(e => e.address),
+        earthquake => earthquake.address,
+    );
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || filteredEarthquakes.length < 1} />
@@ -193,14 +199,26 @@ const Earthquake = (props: Props) => {
                 value={sortKey}
                 onChange={setSortKey}
             /> */}
-            { activeView === 'data' && filteredEarthquakes.sort(compare)
+            {/* { activeView === 'data' && filteredEarthquakes.sort(compare)
                 .map((datum: PageType.DataArchiveEarthquake) => (
                     <EarthquakeItem
                         key={datum.id}
                         data={datum}
                     />
-                )) }
-
+                )) } */}
+            { activeView === 'data' && groupedEarthquakeList.map((group) => {
+                const { key, value } = group;
+                if (value.length > 1) {
+                    return (
+                        <EarthquakeGroup
+                            address={key}
+                            data={value}
+                            key={key}
+                        />
+                    );
+                }
+                return <EarthquakeItem key={key} data={value[0]} />;
+            })}
             {activeView === 'visualizations' && (
                 <EarthquakeViz
                     earthquakeList={filteredEarthquakes}
