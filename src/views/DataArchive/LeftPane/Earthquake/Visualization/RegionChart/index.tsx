@@ -121,6 +121,9 @@ const RegionChart = (props: Props) => {
                                 dataKey="value"
                                 type="number"
                                 allowDecimals={false}
+                                label={{
+                                    value: 'No. of Events', position: 'insideBottom', dy: 10,
+                                }}
                             />
                             <Tooltip
                                 cursor={false}

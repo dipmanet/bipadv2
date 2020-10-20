@@ -3,6 +3,7 @@
     align-items: center;
     justify-content: center;
     background: white;
+    margin: var(--spacing-small) 0;
     .legend-item {
         display: flex;
         padding: var(--spacing-small) var(--spacing-medium);
