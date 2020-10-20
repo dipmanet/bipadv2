@@ -27,31 +27,31 @@ const farmatLabels = (name: string, value: string | number) => {
     switch (name) {
         case 'mag4':
             return {
-                name: 'Light',
+                name: 'Light (<5)',
                 color: '#fcbba1',
                 value,
             };
         case 'mag5':
             return {
-                name: 'Moderate',
+                name: 'Moderate (<6)',
                 color: '#fc9272',
                 value,
             };
         case 'mag6':
             return {
-                name: 'Strong',
+                name: 'Strong (<7)',
                 color: '#fb6a4a',
                 value,
             };
         case 'mag7':
             return {
-                name: 'Major',
+                name: 'Major (<8)',
                 color: '#de2d26',
                 value,
             };
         case 'mag8':
             return {
-                name: 'Great',
+                name: 'Great (>8)',
                 color: '#a50f15',
                 value,
             };
