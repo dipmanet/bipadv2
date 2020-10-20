@@ -2,8 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--spacing-medium) var(--spacing-large);
+    padding: var(--spacing-small) var(--spacing-medium);
     border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
+    min-height: 72px;
     // cursor: pointer;
     &:hover {
         background-color: #f6f6f6;
