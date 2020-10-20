@@ -28,12 +28,12 @@ export const newRiverLegendItems = [
 ];
 
 export const earthquakeLegendItems = [
-    { color: '#fee5d9', label: 'Minor (>= 3)', radius: 6, style: styles.symbol },
-    { color: '#fcbba1', label: 'Light (>= 4)', radius: 8, style: styles.symbol },
-    { color: '#fc9272', label: 'Moderate (>= 5)', radius: 12, style: styles.symbol },
-    { color: '#fb6a4a', label: 'Strong (>= 6)', radius: 16, style: styles.symbol },
-    { color: '#de2d26', label: 'Major (>= 7)', radius: 18, style: styles.symbol },
-    { color: '#a50f15', label: 'Great (>= 8)', radius: 22, style: styles.symbol },
+    { color: '#fee5d9', label: 'Minor (>= 3)', radius: 6, style: styles.magnitude },
+    { color: '#fcbba1', label: 'Light (>= 4)', radius: 8, style: styles.magnitude },
+    { color: '#fc9272', label: 'Moderate (>= 5)', radius: 12, style: styles.magnitude },
+    { color: '#fb6a4a', label: 'Strong (>= 6)', radius: 16, style: styles.magnitude },
+    { color: '#de2d26', label: 'Major (>= 7)', radius: 18, style: styles.magnitude },
+    { color: '#a50f15', label: 'Great (>= 8)', radius: 22, style: styles.magnitude },
 ];
 
 export const pollutionLegendItems = [
