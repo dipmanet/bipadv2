@@ -127,7 +127,7 @@ const filterByMagnitudeRange = (
 };
 
 const Earthquake = (props: Props) => {
-    const [sortKey, setSortKey] = useState('magnitude');
+    const [sortKey, setSortKey] = useState('eventOn');
     const [activeView, setActiveView] = useState<ActiveView>('data');
     const { earthquakeList, requests, eqFilters } = props;
     const pending = isAnyRequestPending(requests);
@@ -180,7 +180,7 @@ const Earthquake = (props: Props) => {
     const groupedEarthquakeList = groupList(
         filteredEarthquakes.filter(e => e.address),
         earthquake => earthquake.address,
-    );
+    ).sort(compare);
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || filteredEarthquakes.length < 1} />
