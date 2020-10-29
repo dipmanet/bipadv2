@@ -7,6 +7,7 @@ import PollutionItem from './PollutionItem';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import Header from '../Header';
 import Message from '#rscv/Message';
+import { groupList } from '#utils/common';
 
 import {
     createConnectedRequestCoordinator,
@@ -105,8 +106,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-// class Pollution extends React.PureComponent<Props, State> {
 const Pollution = (props: Props) => {
+    const [sortKey, setSortKey] = useState('createdOn');
     const [activeView, setActiveView] = useState('data');
     const { pollutionList, requests } = props;
     const pending = isAnyRequestPending(requests);
@@ -139,6 +140,21 @@ const Pollution = (props: Props) => {
             </div>
         );
     }
+    const compare = (a: any, b: any) => {
+        if (a[sortKey] < b[sortKey]) {
+            return 1;
+        }
+        if (a[sortKey] > b[sortKey]) {
+            return -1;
+        }
+        return 0;
+    };
+
+    const groupedPollutionList = groupList(
+        pollutionList.filter(e => e.title),
+        pollution => pollution.title || 'N/A',
+    ).sort(compare);
+
     return (
         <div className={styles.pollution}>
             <Loading pending={pending} />
