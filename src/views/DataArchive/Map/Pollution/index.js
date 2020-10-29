@@ -8,16 +8,10 @@ import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
 
 import PollutionModal from '../../Modals/Pollution';
-
 import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-
-import {
-    pollutionToGeojson,
-} from '#utils/domain';
-
 
 import styles from './styles.scss';
 
@@ -25,6 +19,26 @@ const PollutionToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
 );
 
+const pollutionToGeojson = (pollutionList) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: pollutionList
+            .filter(pollution => pollution.point)
+            .map(pollution => ({
+                id: pollution.id,
+                type: 'Feature',
+                geometry: {
+                    ...pollution.point,
+                },
+                properties: {
+                    ...pollution,
+                    aqi: Math.round(pollution.aqi),
+                    date: Date.parse(pollution.createdOn) || 1,
+                },
+            })),
+    };
+    return geojson;
+};
 class PollutionMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -195,7 +209,6 @@ class PollutionMap extends React.PureComponent {
         const pollutionFeatureCollection = this.getPollutionFeatureCollection(
             data,
         );
-
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
 
         const tooltipOptions = {
@@ -244,8 +257,8 @@ class PollutionMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'symbol',
                                 property: 'pollutionId',
-                                layout: mapStyles.pollutionText.layout,
-                                paint: mapStyles.pollutionText.paint,
+                                layout: mapStyles.archivePollutionText.layout,
+                                paint: mapStyles.archivePollutionText.paint,
                             }}
                         />
                     </React.Fragment>

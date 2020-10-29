@@ -719,6 +719,20 @@ export default {
             'text-halo-width': 1.5,
         },
     },
+    archivePollutionText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'aqi'],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'date']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
 
     earthquakePoint: {
         circle: {
