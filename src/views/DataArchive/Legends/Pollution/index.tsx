@@ -21,45 +21,42 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
-const PollutionLegend = () => {
-    console.log('Pollution Legend');
-    return (
-        <div className={styles.legendContainer}>
-            <header className={styles.header}>
-                <ScalableVectorGraphics
-                    className={styles.legendIcon}
-                    src={PollutionIcon}
-                    alt="Pollution"
-                />
-                <h4 className={styles.heading}>
-                    Pollution (AQI Value)
-                </h4>
-            </header>
-            <Legend
-                className={styles.legend}
-                data={pollutionLegendItems}
-                itemClassName={styles.legendItem}
-                keySelector={itemSelector}
-                labelSelector={legendLabelSelector}
-                symbolClassNameSelector={classNameSelector}
-                colorSelector={legendColorSelector}
-                emptyComponent={null}
+const PollutionLegend = () => (
+    <div className={styles.legendContainer}>
+        <header className={styles.header}>
+            <ScalableVectorGraphics
+                className={styles.legendIcon}
+                src={PollutionIcon}
+                alt="Pollution"
             />
-            <div className={styles.sourceDetails}>
-                <div className={styles.label}>
+            <h4 className={styles.heading}>
+                    Pollution (AQI Value)
+            </h4>
+        </header>
+        <Legend
+            className={styles.legend}
+            data={pollutionLegendItems}
+            itemClassName={styles.legendItem}
+            keySelector={itemSelector}
+            labelSelector={legendLabelSelector}
+            symbolClassNameSelector={classNameSelector}
+            colorSelector={legendColorSelector}
+            emptyComponent={null}
+        />
+        <div className={styles.sourceDetails}>
+            <div className={styles.label}>
                     Source:
-                </div>
-                <a
-                    className={styles.link}
-                    href="http://mofe.gov.np"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Ministry of Forests and Environment
-                </a>
             </div>
+            <a
+                className={styles.link}
+                href="http://mofe.gov.np"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                    Ministry of Forests and Environment
+            </a>
         </div>
-    );
-};
+    </div>
+);
 
 export default PollutionLegend;
