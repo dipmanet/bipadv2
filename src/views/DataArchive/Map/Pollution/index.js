@@ -1,6 +1,6 @@
 import React from 'react';
 import memoize from 'memoize-one';
-
+import { _cs } from '@togglecorp/fujs';
 import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
@@ -17,6 +17,7 @@ import {
 import {
     pollutionToGeojson,
 } from '#utils/domain';
+
 
 import styles from './styles.scss';
 
@@ -106,12 +107,34 @@ class PollutionMap extends React.PureComponent {
         return styles.good;
     }
 
+    getAqiRemark = (aqi) => {
+        if (aqi <= 50) {
+            return 'Good';
+        }
+        if (aqi <= 100) {
+            return 'Moderate';
+        }
+        if (aqi <= 150) {
+            return 'Unhealthy for Sensitive Group';
+        }
+        if (aqi <= 200) {
+            return 'Unhealthy';
+        }
+        if (aqi <= 300) {
+            return 'Very Unhealthy';
+        }
+        if (aqi > 300) {
+            return 'Hazardous';
+        }
+        return 'Good';
+    }
+
     pollutionTooltipRenderer = ({ title, description, aqi, measuredOn }) => (
         <div className={styles.mainWrapper}>
             <div className={styles.tooltip}>
-                <div className={styles.header}>
+                <div className={_cs(this.aqiClassSelector(aqi), styles.header)}>
                     <h3>{title}</h3>
-                    <span className={this.aqiClassSelector(aqi)}>
+                    <span>
                         AQI
                         {' '}
                         {aqi}
@@ -119,18 +142,23 @@ class PollutionMap extends React.PureComponent {
                 </div>
 
                 <div className={styles.description}>
-                    <div className={styles.key}>Description:</div>
-                    <div className={styles.value}>{description}</div>
+                    <div className={styles.key}>PH 2.5:</div>
+                    <div className={styles.value}>{aqi}</div>
                 </div>
 
                 <div className={styles.eventOn}>
-                    <div className={styles.key}>Event On:</div>
+                    <div className={styles.key}>MEASURED ON:</div>
                     <div className={styles.value}>
                         <FormattedDate
                             value={measuredOn}
                             mode="yyyy-MM-dd hh:mm"
                         />
                     </div>
+                </div>
+
+                <div className={styles.remark}>
+                    <div className={styles.key}>REMARK:</div>
+                    <div className={styles.value}>{this.getAqiRemark(aqi)}</div>
                 </div>
             </div>
             <div className={styles.line} />
@@ -164,13 +192,11 @@ class PollutionMap extends React.PureComponent {
             tooltipParams,
             coordinates,
         } = this.state;
-
         const pollutionFeatureCollection = this.getPollutionFeatureCollection(
             data,
         );
 
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
 
         const tooltipOptions = {
             closeOnClick: true,

@@ -26,15 +26,13 @@
     }
 }
 .tooltip {
-    padding: var(--spacing-medium);
-    padding-bottom: var(--spacing-extra-small-alt);
-  
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: var(--font-size-medium);
-      margin-bottom: var(--spacing-small);
+      padding: var(--spacing-small) var(--spacing-medium);
       
       span {
         padding: .3rem .5rem;
@@ -46,8 +44,19 @@
     }
   
     .description {
-      margin-bottom: var(--spacing-small);
       font-size: var(--font-size-super-small);
+      padding: var(--spacing-extra-small-alt) var(--spacing-medium);
+      padding-bottom: 0;
+    }
+
+    .event-on {
+        padding: var(--spacing-medium);
+        padding-bottom: 0;
+    }
+
+    .remark {
+        padding: var(--spacing-medium);
+        padding-bottom: var(--spacing-extra-small-alt);
     }
 
     .key {
@@ -66,7 +75,7 @@
 
 .good {
     background-color: #4A9A67;
-    color: white;
+    color: black;
 }
 
 .moderate {
@@ -76,7 +85,7 @@
 
 .unhealthy-for-sensitive {
     background-color: #F39732;
-    color: black;
+    color: white;
 }
 
 .unhealthy {
