@@ -8,6 +8,7 @@ import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArc
 import Header from '../Header';
 import Message from '#rscv/Message';
 import { groupList } from '#utils/common';
+import PollutionGroup from './PollutionGroup';
 
 import {
     createConnectedRequestCoordinator,
@@ -167,12 +168,28 @@ const Pollution = (props: Props) => {
                     handleVisualizationsButtonClick={handleVisualizationsButtonClick}
                 />
             </div>
-            { activeView === 'data' && pollutionList.map((datum: PageType.DataArchivePollution) => (
-                <PollutionItem
-                    data={datum}
-                    key={datum.id}
-                />
-            )) }
+            {/* {
+                activeView === 'data' && pollutionList.map(
+                    (datum: PageType.DataArchivePollution) => (
+                    <PollutionItem
+                        data={datum}
+                        key={datum.id}
+                    />
+                ))
+            } */}
+            { activeView === 'data' && groupedPollutionList.map((group) => {
+                const { key, value } = group;
+                if (value.length > 1) {
+                    return (
+                        <PollutionGroup
+                            title={key}
+                            data={value}
+                            key={key}
+                        />
+                    );
+                }
+                return <PollutionItem key={key} data={value[0]} />;
+            })}
             { activeView === 'visualizations' && (
                 <PollutionViz pollutionList={pollutionList} />
             ) }

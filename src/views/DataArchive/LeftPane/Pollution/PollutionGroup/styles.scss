@@ -1,0 +1,50 @@
+.pollution-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
+    min-height: 72px;
+    
+    // cursor: pointer;
+    
+    &:hover {
+        background-color: #f6f6f6;
+    }
+    
+    .title {
+        font-size: var(--font-size-large); 
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-small);
+    }
+    
+    .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .count {
+            background-color: var(--color-accent);
+            border-radius: 5px;
+            padding: var(--spacing-medium);
+            font-weight: var(--font-weight-bold);
+            color: white;
+            margin-right: var(--spacing-small);
+        }
+
+        .chevron {
+            border-radius: 50%;
+            border: none !important;
+            font-size: 1rem;
+            background-color: inherit !important;
+            &:hover {
+                background-color: inherit !important;
+            }
+        }
+    }
+}
+
+.child {
+    .wrapper {
+        border-left: 7px solid var(--color-accent);
+    }
+}
