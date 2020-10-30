@@ -6,6 +6,10 @@
         left: 0;
         z-index: 1;
     }
+    .date-range {
+        display: flex;
+        flex-shrink: 0;
+    }
 }
 .message {
     flex-grow: 1;

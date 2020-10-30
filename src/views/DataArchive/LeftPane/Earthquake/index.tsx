@@ -10,6 +10,7 @@ import Message from '#rscv/Message';
 import DataArchiveContext from '#components/DataArchiveContext';
 import ScatterChartViz from './Visualization/ScatterChart';
 import EarthquakeGroup from './EarthquakeGroup';
+import DateRangeInfo from '#components/DateRangeInfo';
 
 import {
     createConnectedRequestCoordinator,
@@ -23,7 +24,12 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDataRangeLocaleToFilter, transformRegion, transformMagnitude } from '#utils/transformations';
+import {
+    transformDataRangeLocaleToFilter,
+    transformRegion,
+    transformMagnitude,
+    pastDaysToDateRange,
+} from '#utils/transformations';
 
 import {
     setDataArchiveEarthquakeListAction,
@@ -126,6 +132,19 @@ const filterByMagnitudeRange = (
     return filteredEarthquakes;
 };
 
+const getDates = (eqFilters: DAEarthquakeFiltersElement) => {
+    const { dataDateRange } = eqFilters;
+    const { rangeInDays } = dataDateRange;
+    let startDate;
+    let endDate;
+    if (rangeInDays !== 'custom') {
+        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
+    } else {
+        ({ startDate, endDate } = dataDateRange);
+    }
+    return [startDate, endDate];
+};
+
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('eventOn');
     const [activeView, setActiveView] = useState<ActiveView>('data');
@@ -177,13 +196,22 @@ const Earthquake = (props: Props) => {
         }
         return 0;
     };
+
     const groupedEarthquakeList = groupList(
         filteredEarthquakes.filter(e => e.address),
         earthquake => earthquake.address,
     ).sort(compare);
+
+    const [startDate, endDate] = getDates(eqFilters);
+
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || filteredEarthquakes.length < 1} />
+            <DateRangeInfo
+                className={styles.dateRange}
+                startDate={startDate || 'N/A'}
+                endDate={endDate || 'N/A'}
+            />
             <div className={styles.header}>
                 <Header
                     chosenOption="Earthquake"
