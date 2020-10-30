@@ -53,10 +53,10 @@ const getRegionDetails = (region) => {
 };
 
 const getRegionBoundings = (region, provinces, districts, municipalities) => {
-    const nepalBounds = [
-        80.05858661752784, 26.347836996368667,
-        88.20166918432409, 30.44702867091792,
-    ];
+    // const nepalBounds = [
+    //     80.05858661752784, 26.347836996368667,
+    //     88.20166918432409, 30.44702867091792,
+    // ];
 
     const { adminLevel, geoarea } = region;
     const geoAreas = (
@@ -65,11 +65,13 @@ const getRegionBoundings = (region, provinces, districts, municipalities) => {
         || (adminLevel === 3 && municipalities)
     );
     if (!geoAreas) {
-        return nepalBounds;
+        // return nepalBounds;
+        return null;
     }
     const geoArea = geoAreas.find(g => g.id === geoarea);
     if (!geoArea) {
-        return nepalBounds;
+        // return nepalBounds;
+        return null;
     }
     return geoArea.bbox;
 };
