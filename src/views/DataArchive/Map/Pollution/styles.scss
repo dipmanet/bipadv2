@@ -1,6 +1,6 @@
 .main-wrapper {
     border: 1px solid black;
-    width: 270px;
+    width: 250px;
     background-color: white;
 
     .line {
@@ -45,17 +45,17 @@
   
     .description {
       font-size: var(--font-size-super-small);
-      padding: var(--spacing-extra-small-alt) var(--spacing-medium);
+      padding: var(--spacing-small-alt) var(--spacing-medium);
       padding-bottom: 0;
     }
 
     .event-on {
-        padding: var(--spacing-medium);
+        padding: var(--spacing-small) var(--spacing-medium);
         padding-bottom: 0;
     }
 
     .remark {
-        padding: var(--spacing-medium);
+        padding: var(--spacing-small) var(--spacing-medium);
         padding-bottom: var(--spacing-extra-small-alt);
     }
 
@@ -74,31 +74,31 @@
 }
 
 .good {
-    background-color: #4A9A67;
+    background-color: #00fa2f;
     color: black;
 }
 
 .moderate {
-    background-color: #FEDE33;
+    background-color: #f7ff00;
     color: black;
 }
 
 .unhealthy-for-sensitive {
-    background-color: #F39732;
+    background-color: #ff7300;
     color: white;
 }
 
 .unhealthy {
-    background-color: #CE3D32;
+    background-color: #ff0000;
     color: white;
 }
 
 .very-unhealthy {
-    background-color: #6A3D98;
+    background-color: #9e0095;
     color: white;
 }
 
 .hazardous {
-    background-color: #7F2323;
+    background-color: #8a0014;
     color: white;
 }
