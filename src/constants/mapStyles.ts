@@ -846,6 +846,29 @@ export default {
             'text-halo-width': 1.5,
         },
     },
+    archiveEarthquakeText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'magnitude'],
+            'text-allow-overlap': false,
+            'text-size': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 12,
+                ['>=', ['get', 'magnitude'], 7], 11,
+                ['>=', ['get', 'magnitude'], 6], 10,
+                ['>=', ['get', 'magnitude'], 5], 9,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                7,
+            ],
+            // NOTE: should negate idk why
+            'symbol-sort-key': ['-', ['get', 'date']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
     contactPoint: {
         circle: {
             'circle-color': '#1565c0',

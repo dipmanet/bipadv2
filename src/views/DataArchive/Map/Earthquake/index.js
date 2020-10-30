@@ -19,10 +19,6 @@ import {
     getMapPaddings,
 } from '#constants';
 
-import {
-    earthquakeToGeojson,
-} from '#utils/domain';
-
 import styles from './styles.scss';
 
 const EarthquakeToolTip = ({ renderer: Renderer, params }) => (
@@ -76,6 +72,31 @@ const getRegionBoundings = (region, provinces, districts, municipalities) => {
         return nepalBounds;
     }
     return geoArea.bbox;
+};
+
+const earthquakeToGeojson = (earthquakeList) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: earthquakeList
+            .filter(earthquake => earthquake.point)
+            .map(earthquake => ({
+                id: earthquake.id,
+                type: 'Feature',
+                geometry: {
+                    ...earthquake.point,
+                },
+                properties: {
+                    earthquakeId: earthquake.id,
+                    address: earthquake.address,
+                    description: earthquake.description,
+                    eventOn: earthquake.eventOn,
+                    magnitude: earthquake.magnitude,
+                    date: Date.parse(earthquake.eventOn) || 1,
+                },
+            }))
+            .sort((a, b) => (a.properties.magnitude - b.properties.magnitude)),
+    };
+    return geojson;
 };
 class EarthquakeMap extends React.PureComponent {
     constructor(props) {
@@ -213,18 +234,8 @@ class EarthquakeMap extends React.PureComponent {
                             layerOptions={{
                                 type: 'symbol',
                                 property: 'earthquakeId',
-                                layout: mapStyles.earthquakeText.layout,
-                                paint: mapStyles.earthquakeText.paint,
-                            }}
-                        />
-                        <MapLayer
-                            layerKey="real-time-earthquake-symbol"
-                            layerOptions={{
-                                type: 'symbol',
-                                layout: {
-                                    'icon-image': 'earthquake',
-                                    'icon-size': 0.2,
-                                },
+                                layout: mapStyles.archiveEarthquakeText.layout,
+                                paint: mapStyles.archiveEarthquakeText.paint,
                             }}
                         />
                     </React.Fragment>
