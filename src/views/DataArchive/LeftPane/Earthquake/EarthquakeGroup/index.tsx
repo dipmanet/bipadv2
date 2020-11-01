@@ -21,6 +21,12 @@ const compare = (a: any, b: any) => {
     return 0;
 };
 
+const getCount = (data: PageType.DataArchiveEarthquake[]) => {
+    const count = data.length;
+    const LIMIT = 99;
+
+    return count > LIMIT ? `${LIMIT} +` : `${count}`;
+};
 const EarthquakeGroup = (props: Props) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { address, data } = props;
@@ -34,9 +40,9 @@ const EarthquakeGroup = (props: Props) => {
                     {`Epicenter: ${address}`}
                 </div>
                 <div className={styles.right}>
-                    {/* <div className={styles.count}>
-                        {`${data.length} `}
-                    </div> */}
+                    <div className={styles.count}>
+                        <span>{getCount(data)}</span>
+                    </div>
                     <Button
                         className={styles.chevron}
                         iconName={isExpanded ? 'chevronUp' : 'chevronDown'}
