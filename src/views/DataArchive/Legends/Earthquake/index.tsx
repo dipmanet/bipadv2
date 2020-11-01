@@ -19,46 +19,43 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const classNameSelector = (d: { style: string }) => d.style;
 
-const EarthquakeLegend = () => {
-    console.log('Earthquake Legend');
-    return (
-        <div className={styles.legendContainer}>
-            <header className={styles.header}>
-                <ScalableVectorGraphics
-                    className={styles.legendIcon}
-                    src={EarthquakeIcon}
-                    alt="Earthquake"
-                />
-                <h4 className={styles.heading}>
-                    Earthquake (Richter Scale)
-                </h4>
-            </header>
-            <Legend
-                className={styles.legend}
-                data={earthquakeLegendItems}
-                itemClassName={styles.sizeLegendItem}
-                keySelector={itemSelector}
-                radiusSelector={radiusSelector}
-                labelSelector={legendLabelSelector}
-                symbolClassNameSelector={classNameSelector}
-                colorSelector={legendColorSelector}
-                emptyComponent={null}
+const EarthquakeLegend = () => (
+    <div className={styles.legendContainer}>
+        <header className={styles.header}>
+            <ScalableVectorGraphics
+                className={styles.legendIcon}
+                src={EarthquakeIcon}
+                alt="Earthquake"
             />
-            <div className={styles.sourceDetails}>
-                <div className={styles.label}>
+            <h4 className={styles.heading}>
+                    Earthquake (Richter Scale)
+            </h4>
+        </header>
+        <Legend
+            className={styles.legend}
+            data={earthquakeLegendItems}
+            itemClassName={styles.sizeLegendItem}
+            keySelector={itemSelector}
+            radiusSelector={radiusSelector}
+            labelSelector={legendLabelSelector}
+            symbolClassNameSelector={classNameSelector}
+            colorSelector={legendColorSelector}
+            emptyComponent={null}
+        />
+        <div className={styles.sourceDetails}>
+            <div className={styles.label}>
                                 Source:
-                </div>
-                <a
-                    className={styles.link}
-                    href="https://www.seismonepal.gov.np"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Department of Mines and Geology
-                </a>
             </div>
+            <a
+                className={styles.link}
+                href="https://www.seismonepal.gov.np"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                    Department of Mines and Geology
+            </a>
         </div>
-    );
-};
+    </div>
+);
 
 export default EarthquakeLegend;
