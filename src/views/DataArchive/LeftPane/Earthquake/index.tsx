@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 import { groupList } from '#utils/common';
+import modalize from '#rscg/Modalize';
+import Button from '#rsca/Button';
 
 // import SegmentInput from '#rsci/SegmentInput';
 import EarthquakeItem from './EarthquakeItem';
@@ -11,7 +13,7 @@ import DataArchiveContext from '#components/DataArchiveContext';
 import ScatterChartViz from './Visualization/ScatterChart';
 import EarthquakeGroup from './EarthquakeGroup';
 import DateRangeInfo from '#components/DateRangeInfo';
-
+import EarthquakeModal from './Modal';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -145,6 +147,8 @@ const getDates = (eqFilters: DAEarthquakeFiltersElement) => {
     return [startDate, endDate];
 };
 
+const ModalButton = modalize(Button);
+
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('eventOn');
     const [activeView, setActiveView] = useState<ActiveView>('data');
@@ -207,11 +211,24 @@ const Earthquake = (props: Props) => {
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || filteredEarthquakes.length < 1} />
-            <DateRangeInfo
-                className={styles.dateRange}
-                startDate={startDate || 'N/A'}
-                endDate={endDate || 'N/A'}
-            />
+            <div className={styles.topBar}>
+                <DateRangeInfo
+                    className={styles.dateRange}
+                    startDate={startDate || 'N/A'}
+                    endDate={endDate || 'N/A'}
+                />
+                <ModalButton
+                    className={styles.showDetailsButton}
+                    transparent
+                    iconName="table"
+                    title="Show all data"
+                    modal={(
+                        <EarthquakeModal
+                            dataArchiveEarthquake={filteredEarthquakes}
+                        />
+                    )}
+                />
+            </div>
             <div className={styles.header}>
                 <Header
                     chosenOption="Earthquake"
