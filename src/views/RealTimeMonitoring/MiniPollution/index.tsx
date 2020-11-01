@@ -102,7 +102,8 @@ class MiniPollution extends React.PureComponent<Props> {
                     const { aqi } = row;
 
                     return (aqi) ? (
-                        <div>{`${aqi.toFixed(2)} µg/m³`}</div>
+                        // <div>{`${aqi.toFixed(2)} µg/m³`}</div>
+                        <div>{aqi.toFixed(2)}</div>
                     ) : undefined;
                 },
             },
@@ -115,7 +116,13 @@ class MiniPollution extends React.PureComponent<Props> {
                     const { aqi } = row;
 
                     return (aqi) ? (
-                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`, width: '10px', height: '10px', borderRadius: '50%' }} />
+                        <div style={{ backgroundColor: `${this.renderAqiIndicator(aqi)}`,
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            border: '1px solid black',
+                            margin: 'auto' }}
+                        />
                     ) : undefined;
                 },
             },
@@ -125,25 +132,25 @@ class MiniPollution extends React.PureComponent<Props> {
     private pollutionHeader: Header<RealTimePollutionExtended>[];
 
     private renderAqiIndicator = (aqi: number): string => {
-        if (aqi <= 12) {
-            return '#009966';
+        if (aqi <= 50) {
+            return '#00fa2f';
         }
-        if (aqi <= 35.4) {
-            return '#ffde33';
+        if (aqi <= 100) {
+            return '#f7ff00';
         }
-        if (aqi <= 55.4) {
-            return '#ff9933';
+        if (aqi <= 150) {
+            return '#ff7300';
         }
-        if (aqi <= 150.4) {
-            return '#cc0033';
+        if (aqi <= 200) {
+            return '#ff0000';
         }
-        if (aqi <= 350.4) {
-            return '#660099';
+        if (aqi <= 300) {
+            return '#9e0095';
         }
-        if (aqi >= 500.4) {
-            return '#7e0023';
+        if (aqi > 300) {
+            return '#8a0014';
         }
-        return '#009966';
+        return '#00fa2f';
     }
 
     public render() {

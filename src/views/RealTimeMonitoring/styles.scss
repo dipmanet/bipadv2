@@ -159,6 +159,15 @@
 
             .symbol {
                 border-radius: 50%;
+                border: 1px solid black;
+            }
+
+            .no-symbol {
+                display: none;
+            }
+
+            .magnitude {
+                border-radius: 50%;
             }
 
             .box {

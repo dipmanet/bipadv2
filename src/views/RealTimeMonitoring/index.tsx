@@ -14,7 +14,7 @@ import {
     pollutionLegendItems,
     noLegend,
 } from './legendItems';
-
+import { getAutoRealTimeRiverLegends, getPollutionLegends } from './utils';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
 import { FiltersElement, MapStateElement } from '#types';
@@ -71,13 +71,6 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-
-interface LegendItem {
-    color: string;
-    label: string;
-    style: string;
-    radius?: number;
-}
 interface State {
     activeView?: ActiveView;
     hoveredHazardId?: number;
@@ -359,25 +352,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         }
     }
 
-    private getAutoRealTimeRiverLegends = (
-        dataList: PageType.RealTimeRiver[],
-        legendItems: LegendItem[],
-    ) => {
-        const uniqueLegendItems = [...new Set(dataList.map(
-            item => `${item.status} and ${item.steady || 'steady'}`.toUpperCase(),
-        ))];
-        const autoLegends: LegendItem[] = [];
-        uniqueLegendItems.forEach((item) => {
-            legendItems.forEach((legendItem) => {
-                if (item === legendItem.label.toUpperCase()) {
-                    autoLegends.push(legendItem);
-                }
-            });
-        });
-
-        return autoLegends;
-    }
-
     private renderLegend = () => {
         const {
             filters: {
@@ -385,6 +359,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                 otherSources,
             },
             realTimeRiverList,
+            realTimePollutionList,
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -394,10 +369,13 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const showPollution = otherSources && otherSources.findIndex(v => v === 5) !== -1;
         const showStreamflow = otherSources && otherSources.findIndex(v => v === 6) !== -1;
 
-        const autoRiverLegends = this.getAutoRealTimeRiverLegends(
+        const autoRiverLegends = getAutoRealTimeRiverLegends(
             realTimeRiverList, newRiverLegendItems,
         );
-
+        const autoPollutionLegends = getPollutionLegends(
+            realTimePollutionList,
+            pollutionLegendItems,
+        );
         return (
             <>
                 {showRain && (
@@ -530,16 +508,22 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Pollution"
                             />
                             <h4 className={styles.heading}>
-                                Pollution (PM&nbsp;
+                                {/* Pollution (PM&nbsp;
                                 <sub>
                                     2.5
                                 </sub>
-                                )
+                                ) */}
+                                Pollution (AQI Value)
                             </h4>
                         </header>
                         <Legend
                             className={styles.legend}
-                            data={pollutionLegendItems}
+                            // data={pollutionLegendItems}
+                            data={
+                                realTimePollutionList.length > 0
+                                    ? autoPollutionLegends
+                                    : noLegend
+                            }
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             labelSelector={legendLabelSelector}
