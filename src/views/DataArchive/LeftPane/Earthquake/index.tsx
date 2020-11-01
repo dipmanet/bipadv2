@@ -231,7 +231,6 @@ const Earthquake = (props: Props) => {
             </div>
             <div className={styles.header}>
                 <Header
-                    chosenOption="Earthquake"
                     dataCount={filteredEarthquakes.length || 0}
                     activeView={activeView}
                     handleDataButtonClick={handleDataButtonClick}

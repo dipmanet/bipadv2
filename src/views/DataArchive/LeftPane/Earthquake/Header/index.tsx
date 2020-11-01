@@ -7,12 +7,10 @@ import {
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
-type Options = 'Earthquake' | undefined;
 type ActiveView = 'data' | 'visualizations' | 'charts';
 
 interface Props {
     activeView: ActiveView;
-    chosenOption: Options;
     dataCount: number;
     handleDataButtonClick: () => void;
     handleVisualizationsButtonClick: () => void;
@@ -23,7 +21,6 @@ const Header = (props: Props) => {
     const {
         activeView,
         dataCount,
-        chosenOption,
         handleDataButtonClick,
         handleVisualizationsButtonClick,
         handleChartsButtonClick,
@@ -41,7 +38,7 @@ const Header = (props: Props) => {
                     </div>
                     <div className={styles.title}>
                         <div className={styles.text}>
-                            {chosenOption}
+                            Total Events
                         </div>
                     </div>
                 </div>
