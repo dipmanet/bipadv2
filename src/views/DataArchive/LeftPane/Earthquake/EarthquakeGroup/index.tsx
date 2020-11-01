@@ -31,7 +31,7 @@ const EarthquakeGroup = (props: Props) => {
         <div>
             <div className={styles.earthquakeGroup}>
                 <div className={styles.address}>
-                    {address}
+                    {`Epicenter: ${address}`}
                 </div>
                 <div className={styles.right}>
                     {/* <div className={styles.count}>

@@ -21,7 +21,7 @@ const EarthquakeItem = (props: Props) => {
         <div className={styles.earthquake}>
             <div className={styles.left}>
                 <div className={styles.location}>
-                    {address}
+                    {`Epicenter: ${address}`}
                 </div>
                 <div className={styles.eventOn}>
                     <div className={styles.date}>
