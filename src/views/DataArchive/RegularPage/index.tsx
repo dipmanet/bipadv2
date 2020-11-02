@@ -8,6 +8,7 @@ import EarthquakeMap from '../Map/Earthquake';
 import PollutionMap from '../Map/Pollution';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
+import PollutionFilters from '../Filters/Pollution';
 import EarthquakeLegend from '../Legends/Earthquake';
 import PollutionLegend from '../Legends/Pollution';
 
@@ -55,6 +56,16 @@ type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 interface State {
     data: [];
 }
+
+const getFilter = (chosenOption: Options) => {
+    if (chosenOption === 'Earthquake') {
+        return <EarthquakeFilters />;
+    }
+    if (chosenOption === 'Pollution') {
+        return <PollutionFilters />;
+    }
+    return null;
+};
 
 const getLegend = (chosenOption: Options) => {
     if (chosenOption === 'Earthquake') {
@@ -126,7 +137,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                                 <LeftPane />
                             </DataArchiveContext.Provider>
                         )}
-                        rightContent={(<EarthquakeFilters />)}
+                        rightContent={getFilter(chosenOption)}
                         mainContentContainerClassName="map-legend-container"
                         mainContent={getLegend(chosenOption)}
                     />
