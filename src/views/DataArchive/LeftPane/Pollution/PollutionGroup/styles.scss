@@ -13,7 +13,7 @@
     }
     
     .title {
-        font-size: var(--font-size-large); 
+        font-size: var(--font-size-medium-alt); 
         font-weight: var(--font-weight-bold);
         margin-bottom: var(--spacing-small);
     }
@@ -23,12 +23,13 @@
         align-items: center;
         justify-content: center;
         .count {
-            background-color: var(--color-accent);
-            border-radius: 5px;
-            padding: var(--spacing-medium);
-            font-weight: var(--font-weight-bold);
-            color: white;
-            margin-right: var(--spacing-small);
+            background-color: rgba($color: grey, $alpha: 0.5);
+            color: black;
+            border-radius: 50%;
+            text-align: center;
+            height: 25px;
+            min-width: 25px;
+            line-height: 25px;
         }
 
         .chevron {

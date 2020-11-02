@@ -21,6 +21,13 @@ const compare = (a: any, b: any) => {
     return 0;
 };
 
+const getCount = (data: PageType.DataArchivePollution[]) => {
+    const count = data.length;
+    const LIMIT = 99;
+
+    return count > LIMIT ? `${LIMIT} +` : `${count}`;
+};
+
 const PollutionGroup = (props: Props) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { title, data } = props;
@@ -34,9 +41,9 @@ const PollutionGroup = (props: Props) => {
                     {title}
                 </div>
                 <div className={styles.right}>
-                    {/* <div className={styles.count}>
-                        {`${data.length} `}
-                    </div> */}
+                    <div className={styles.count}>
+                        <span>{getCount(data)}</span>
+                    </div>
                     <Button
                         className={styles.chevron}
                         iconName={isExpanded ? 'chevronUp' : 'chevronDown'}
