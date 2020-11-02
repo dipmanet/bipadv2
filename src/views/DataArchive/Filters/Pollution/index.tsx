@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
@@ -14,9 +14,8 @@ import { setDataArchiveEarthquakeFilterAction } from '#actionCreators';
 import { eqFiltersSelector } from '#selectors';
 import { AppState } from '#store/types';
 import { DAEarthquakeFiltersElement } from '#types';
-import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
-import MagnitudeSelector from '../Earthquake/Magnitude';
+import StationSelector from './Station';
 
 import styles from './styles.scss';
 
@@ -26,7 +25,6 @@ interface ComponentProps {
     extraContentContainerClassName?: string;
     hideLocationFilter?: boolean;
     hideDataRangeFilter?: boolean;
-    hideMagnitudeFilter?: boolean;
 }
 
 interface State {
@@ -53,14 +51,13 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     ),
 });
 
-type TabKey = 'location' | 'dataRange' | 'others' | 'magnitude';
+type TabKey = 'location' | 'dataRange' | 'others';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
-    location: 'distance',
+    location: 'gps',
     dataRange: 'dataRange',
-    magnitude: 'filter',
     others: 'filter',
 };
 
@@ -88,7 +85,6 @@ const FilterIcon = ({
 const eqFilterSchema = {
     fields: {
         dataDateRange: [],
-        magnitude: [],
         region: [],
     },
 };
@@ -100,7 +96,6 @@ const getIsFiltered = (key: TabKey | undefined, filters: DAEarthquakeFiltersElem
     const tabKeyToFilterMap: {
         [key in Exclude<TabKey, 'others'>]: keyof DAEarthquakeFiltersElement;
     } = {
-        magnitude: 'magnitude',
         location: 'region',
         dataRange: 'dataDateRange',
     };
@@ -115,7 +110,7 @@ const getIsFiltered = (key: TabKey | undefined, filters: DAEarthquakeFiltersElem
     return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
-class EarthquakeFilters extends React.PureComponent<Props, State> {
+class PollutionFilters extends React.PureComponent<Props, State> {
     public state = {
         activeView: undefined,
         faramValues: {
@@ -124,7 +119,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
                 startDate: undefined,
                 endDate: undefined,
             },
-            magnitude: [],
             region: {},
         },
     };
@@ -137,7 +131,7 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
     private views = {
         location: {
             component: () => (
-                <StepwiseRegionSelectInput
+                <StationSelector
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="region"
                     wardsHidden
@@ -153,15 +147,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
                         // autoFocus
                     />
                 </div>
-            ),
-        },
-        magnitude: {
-            component: () => (
-                <MagnitudeSelector
-                    className={styles.activeView}
-                    faramElementName="magnitude"
-                    // autoFocus
-                />
             ),
         },
         others: {
@@ -199,7 +184,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
                     startDate: undefined,
                     endDate: undefined,
                 },
-                magnitude: [],
                 region: {},
             } });
 
@@ -232,15 +216,13 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
         (
             extraContent: React.ReactNode,
             hideLocationFilter,
-            hideMagnitudeFilter,
             hideDataRangeFilter,
         ): {
             [key in TabKey]?: string;
         } => {
             const tabs = {
-                location: 'Location',
+                location: 'Stations',
                 dataRange: 'Data range',
-                magnitude: 'Magnitude',
                 others: 'Others',
             };
 
@@ -250,10 +232,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
 
             if (hideLocationFilter) {
                 delete tabs.location;
-            }
-
-            if (hideMagnitudeFilter) {
-                delete tabs.magnitude;
             }
 
             if (hideDataRangeFilter) {
@@ -269,7 +247,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
             className,
             extraContent,
             hideDataRangeFilter,
-            hideMagnitudeFilter,
             hideLocationFilter,
         } = this.props;
 
@@ -278,7 +255,6 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
-            hideMagnitudeFilter,
             hideDataRangeFilter,
         );
 
@@ -355,4 +331,4 @@ class EarthquakeFilters extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EarthquakeFilters);
+export default connect(mapStateToProps, mapDispatchToProps)(PollutionFilters);
