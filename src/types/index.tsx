@@ -59,6 +59,21 @@ export interface DAEarthquakeFiltersElement {
     magnitude: number[];
 }
 
+interface StationElement {
+    id?: number;
+    title?: string;
+    code?: string;
+    bbox?: number[];
+    centroid?: {
+        type: string;
+        coordinates: number[];
+    };
+}
+export interface DAPollutionFiltersElement {
+    station: StationElement;
+    dataDateRange: DataDateRangeValueElement;
+}
+
 export interface AlertElement extends Alert {}
 export interface EventElement extends Event {}
 

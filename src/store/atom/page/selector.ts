@@ -35,6 +35,7 @@ export const filtersSelector = ({ page }: AppState) => page.filters;
 
 export const eqFiltersSelector = ({ page }: AppState) => page.daEarthquakeFilter;
 
+export const pollutionFiltersSelector = ({ page }: AppState) => page.daPollutionFilter;
 
 // Popup
 

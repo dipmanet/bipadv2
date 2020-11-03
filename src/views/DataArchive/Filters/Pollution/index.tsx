@@ -10,10 +10,10 @@ import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
 
-import { setDataArchiveEarthquakeFilterAction } from '#actionCreators';
-import { eqFiltersSelector } from '#selectors';
+import { setDataArchivePollutionFilterAction } from '#actionCreators';
+import { pollutionFiltersSelector } from '#selectors';
 import { AppState } from '#store/types';
-import { DAEarthquakeFiltersElement } from '#types';
+import { DAPollutionFiltersElement } from '#types';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StationSelector from './Station';
 
@@ -29,34 +29,34 @@ interface ComponentProps {
 
 interface State {
     activeView: TabKey | undefined;
-    faramValues: DAEarthquakeFiltersElement;
+    faramValues: DAPollutionFiltersElement;
 }
 interface PropsFromAppState {
-    eqFilters: DAEarthquakeFiltersElement;
+    pollutionFilters: DAPollutionFiltersElement;
 }
 
 interface PropsFromDispatch {
-    setDataArchiveEarthquakeFilter: typeof setDataArchiveEarthquakeFilterAction;
+    setDataArchivePollutionFilter: typeof setDataArchivePollutionFilterAction;
 }
 
 type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState) => ({
-    eqFilters: eqFiltersSelector(state),
+    pollutionFilters: pollutionFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setDataArchiveEarthquakeFilter: params => dispatch(
-        setDataArchiveEarthquakeFilterAction(params),
+    setDataArchivePollutionFilter: params => dispatch(
+        setDataArchivePollutionFilterAction(params),
     ),
 });
 
-type TabKey = 'location' | 'dataRange' | 'others';
+type TabKey = 'station' | 'dataRange' | 'others';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
-    location: 'gps',
+    station: 'gps',
     dataRange: 'dataRange',
     others: 'filter',
 };
@@ -82,26 +82,25 @@ const FilterIcon = ({
     />
 );
 
-const eqFilterSchema = {
+const pollutionFilterSchema = {
     fields: {
         dataDateRange: [],
-        region: [],
+        station: [],
     },
 };
 
-const getIsFiltered = (key: TabKey | undefined, filters: DAEarthquakeFiltersElement) => {
+const getIsFiltered = (key: TabKey | undefined, filters: DAPollutionFiltersElement) => {
     if (!key || key === 'others') {
         return false;
     }
     const tabKeyToFilterMap: {
-        [key in Exclude<TabKey, 'others'>]: keyof DAEarthquakeFiltersElement;
+        [key in Exclude<TabKey, 'others'>]: keyof DAPollutionFiltersElement;
     } = {
-        location: 'region',
+        station: 'station',
         dataRange: 'dataDateRange',
     };
 
     const filter = filters[tabKeyToFilterMap[key]];
-
     if (Array.isArray(filter)) {
         return filter.length !== 0;
     }
@@ -119,21 +118,21 @@ class PollutionFilters extends React.PureComponent<Props, State> {
                 startDate: undefined,
                 endDate: undefined,
             },
-            region: {},
+            station: {},
         },
     };
 
     public componentDidMount() {
-        const { eqFilters: faramValues } = this.props;
+        const { pollutionFilters: faramValues } = this.props;
         this.setState({ faramValues });
     }
 
     private views = {
-        location: {
+        station: {
             component: () => (
                 <StationSelector
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                    faramElementName="region"
+                    faramElementName="station"
                     wardsHidden
                     // autoFocus
                 />
@@ -184,13 +183,13 @@ class PollutionFilters extends React.PureComponent<Props, State> {
                     startDate: undefined,
                     endDate: undefined,
                 },
-                region: {},
+                station: {},
             } });
 
-        const { setDataArchiveEarthquakeFilter } = this.props;
+        const { setDataArchivePollutionFilter } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
-            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
+            setDataArchivePollutionFilter({ dataArchivePollutionFilters: faramValues });
         }
     }
 
@@ -198,17 +197,17 @@ class PollutionFilters extends React.PureComponent<Props, State> {
         this.setState({ activeView: undefined });
     }
 
-    private handleFaramChange = (faramValues: DAEarthquakeFiltersElement) => {
+    private handleFaramChange = (faramValues: DAPollutionFiltersElement) => {
         // const { setFilters } = this.props;
         // setFilters({ filters: faramValues });
         this.setState({ faramValues });
     }
 
     private handleSubmitClick = () => {
-        const { setDataArchiveEarthquakeFilter } = this.props;
+        const { setDataArchivePollutionFilter } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
-            setDataArchiveEarthquakeFilter({ dataArchiveEarthquakeFilters: faramValues });
+            setDataArchivePollutionFilter({ dataArchivePollutionFilters: faramValues });
         }
     }
 
@@ -221,7 +220,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
             [key in TabKey]?: string;
         } => {
             const tabs = {
-                location: 'Stations',
+                station: 'Stations',
                 dataRange: 'Data range',
                 others: 'Others',
             };
@@ -231,7 +230,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
             }
 
             if (hideLocationFilter) {
-                delete tabs.location;
+                delete tabs.station;
             }
 
             if (hideDataRangeFilter) {
@@ -292,7 +291,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
                         className={styles.tabs}
                     />
                     <Faram
-                        schema={eqFilterSchema}
+                        schema={pollutionFilterSchema}
                         onChange={this.handleFaramChange}
                         // value={faramValues}
                         value={fv}

@@ -39,6 +39,15 @@ const state: PageState = {
         magnitude: [],
     },
 
+    daPollutionFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 183,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,

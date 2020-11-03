@@ -18,20 +18,24 @@ interface StationElement {
     };
 }
 
-interface Props {}
+interface Props {
+    onChange: Function;
+    value: string[];
+}
 
 const stationOptions: StationElement[] = stations;
 const stationKeySelector = (r: RegionElement) => r.id;
 const StationLabelSelector = (r: RegionElement) => r.title;
 
 const StationSelector = (props: Props) => {
-    console.log('Station Selector');
+    const { onChange: onChangeFromProps } = props;
     const [selectedStation, setSelectedStation] = useState(0);
 
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
+        const station = stations.filter(s => s.id === stationId)[0];
+        onChangeFromProps(station);
     };
-    console.log('Selected Station: ', selectedStation);
     return (
         <div className={styles.stationSelector}>
             <SelectInput

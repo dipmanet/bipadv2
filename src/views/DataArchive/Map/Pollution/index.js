@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 import CommonMap from '#components/CommonMap';
@@ -12,8 +14,12 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-
+import { pollutionFiltersSelector } from '#selectors';
 import styles from './styles.scss';
+
+const mapStateToProps = state => ({
+    pollutionFilters: pollutionFiltersSelector(state),
+});
 
 const PollutionToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -199,6 +205,7 @@ class PollutionMap extends React.PureComponent {
 
     render() {
         const { data,
+            pollutionFilters,
             rightPaneExpanded,
             leftPaneExpanded } = this.props;
         const {
@@ -210,7 +217,7 @@ class PollutionMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-
+        const { station: { bbox } } = pollutionFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -223,6 +230,7 @@ class PollutionMap extends React.PureComponent {
                 <CommonMap
                     sourceKey="dataArchivePollution"
                     boundsPadding={boundsPadding}
+                    boundingsFromComp={bbox}
                 />
                 {coordinates && (
                     <MapTooltip
@@ -275,4 +283,4 @@ class PollutionMap extends React.PureComponent {
     }
 }
 
-export default PollutionMap;
+export default connect(mapStateToProps, [])(PollutionMap);
