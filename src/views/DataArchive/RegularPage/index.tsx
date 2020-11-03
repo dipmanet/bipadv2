@@ -139,7 +139,11 @@ class RegularPage extends React.PureComponent <Props, State> {
                         )}
                         rightContent={getFilter(chosenOption)}
                         mainContentContainerClassName="map-legend-container"
-                        mainContent={getLegend(chosenOption)}
+                        mainContent={(
+                            <DataArchiveContext.Provider value={contextProps}>
+                                {getLegend(chosenOption)}
+                            </DataArchiveContext.Provider>
+                        )}
                     />
                 </div>
             </DataArchiveContext.Provider>
