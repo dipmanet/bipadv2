@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 import { groupList } from '#utils/common';
-import modalize from '#rscg/Modalize';
-import Button from '#rsca/Button';
+import TopBar from './TopBar';
 
 // import SegmentInput from '#rsci/SegmentInput';
 import EarthquakeItem from './EarthquakeItem';
@@ -12,8 +11,7 @@ import Message from '#rscv/Message';
 import DataArchiveContext from '#components/DataArchiveContext';
 import ScatterChartViz from './Visualization/ScatterChart';
 import EarthquakeGroup from './EarthquakeGroup';
-import DateRangeInfo from '#components/DateRangeInfo';
-import EarthquakeModal from './Modal';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -30,7 +28,6 @@ import {
     transformDataRangeLocaleToFilter,
     transformRegion,
     transformMagnitude,
-    pastDaysToDateRange,
 } from '#utils/transformations';
 
 import {
@@ -134,21 +131,6 @@ const filterByMagnitudeRange = (
     return filteredEarthquakes;
 };
 
-const getDates = (eqFilters: DAEarthquakeFiltersElement) => {
-    const { dataDateRange } = eqFilters;
-    const { rangeInDays } = dataDateRange;
-    let startDate;
-    let endDate;
-    if (rangeInDays !== 'custom') {
-        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
-    } else {
-        ({ startDate, endDate } = dataDateRange);
-    }
-    return [startDate, endDate];
-};
-
-const ModalButton = modalize(Button);
-
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('eventOn');
     const [activeView, setActiveView] = useState<ActiveView>('data');
@@ -206,29 +188,13 @@ const Earthquake = (props: Props) => {
         earthquake => earthquake.address,
     ).sort(compare);
 
-    const [startDate, endDate] = getDates(eqFilters);
-
     return (
         <div className={styles.earthquake}>
             <Loading pending={pending || filteredEarthquakes.length < 1} />
-            <div className={styles.topBar}>
-                <DateRangeInfo
-                    className={styles.dateRange}
-                    startDate={startDate || 'N/A'}
-                    endDate={endDate || 'N/A'}
-                />
-                <ModalButton
-                    className={styles.showDetailsButton}
-                    transparent
-                    iconName="table"
-                    title="Show all data"
-                    modal={(
-                        <EarthquakeModal
-                            dataArchiveEarthquake={filteredEarthquakes}
-                        />
-                    )}
-                />
-            </div>
+            <TopBar
+                eqFilters={eqFilters}
+                earthquakeList={filteredEarthquakes}
+            />
             <div className={styles.header}>
                 <Header
                     dataCount={filteredEarthquakes.length || 0}

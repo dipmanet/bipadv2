@@ -6,15 +6,15 @@ import Button from '#rsca/Button';
 import PollutionModal from '../Modal';
 
 import { pastDaysToDateRange } from '#utils/transformations';
-import { DAPollutionFiltersElement } from '#types';
+import { DAEarthquakeFiltersElement } from '#types';
 import * as PageType from '#store/atom/page/types';
 
 import styles from './styles.scss';
 
 const ModalButton = modalize(Button);
 
-const getDates = (pollutionFilters: DAPollutionFiltersElement) => {
-    const { dataDateRange } = pollutionFilters;
+const getDates = (eqFilters: DAEarthquakeFiltersElement) => {
+    const { dataDateRange } = eqFilters;
     const { rangeInDays } = dataDateRange;
     let startDate;
     let endDate;
@@ -27,13 +27,13 @@ const getDates = (pollutionFilters: DAPollutionFiltersElement) => {
 };
 
 interface Props {
-    pollutionFilters: DAPollutionFiltersElement;
-    pollutionList: PageType.DataArchivePollution[];
+    eqFilters: DAEarthquakeFiltersElement;
+    earthquakeList: PageType.DataArchiveEarthquake[];
 }
 
 const TopBar = (props: Props) => {
-    const { pollutionFilters, pollutionList } = props;
-    const [startDate, endDate] = getDates(pollutionFilters);
+    const { eqFilters, earthquakeList } = props;
+    const [startDate, endDate] = getDates(eqFilters);
 
     return (
         <div className={styles.topBar}>
@@ -49,7 +49,7 @@ const TopBar = (props: Props) => {
                 title="Show all data"
                 modal={(
                     <PollutionModal
-                        dataArchivePollution={pollutionList}
+                        dataArchiveEarthquake={earthquakeList}
                     />
                 )}
             />
