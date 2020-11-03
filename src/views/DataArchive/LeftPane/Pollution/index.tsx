@@ -22,13 +22,13 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDateRangeFilterParam, transformDataRangeToFilter } from '#utils/transformations';
+import { transformDataRangeLocaleToFilter } from '#utils/transformations';
 
 import {
     setDataArchivePollutionListAction,
 } from '#actionCreators';
 
-import { FiltersElement } from '#types';
+import { DAPollutionFiltersElement } from '#types';
 
 import { AppState } from '#store/types';
 
@@ -37,8 +37,7 @@ import PollutionViz from './Visualization';
 
 import {
     dataArchivePollutionListSelector,
-    realTimeFiltersValuesSelector,
-    filtersSelector,
+    pollutionFiltersSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -48,15 +47,13 @@ interface PropsFromDispatch {
 }
 
 interface PropsFromState {
-    filters: PageType.FiltersWithRegion['faramValues'];
-    globalFilters: FiltersElement;
     pollutionList: PageType.DataArchivePollution[];
+    pollutionFilters: DAPollutionFiltersElement;
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    filters: realTimeFiltersValuesSelector(state),
-    globalFilters: filtersSelector(state),
     pollutionList: dataArchivePollutionListSelector(state),
+    pollutionFilters: pollutionFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -68,22 +65,14 @@ interface OwnProps {}
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
-interface PollutionData {
-    aqi: number;
-    createdOn: string;
-    observation: {}[];
-    title: string;
-}
-
 interface State {}
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimePollutionRequest: {
         url: '/pollution/',
         method: methods.GET,
-        query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
-            ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
+        query: ({ props: { pollutionFilters } }) => ({
+            ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
             historical: true,
         }),
         onSuccess: ({ response, props: { setDataArchivePollutionList } }) => {
@@ -92,13 +81,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             setDataArchivePollutionList({ dataArchivePollutionList });
         },
         onPropsChanged: {
-            filters: ({
-                props: { filters: { region } },
-                prevProps: { filters: {
-                    region: prevRegion,
-                } },
-            }) => region !== prevRegion,
-            globalFilters: true,
+            pollutionFilters: true,
         },
         onMount: true,
         extras: {
