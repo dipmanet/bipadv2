@@ -91,7 +91,8 @@ class Pollution extends React.PureComponent<Props> {
                 modifier: (row: RealTimePollutionExtended) => {
                     const { aqi } = row;
 
-                    return (aqi) ? `${aqi.toFixed(2)} µg/m³` : undefined;
+                    // return (aqi) ? `${aqi.toFixed(2)} µg/m³` : undefined;
+                    return (aqi) ? `${aqi.toFixed(2)}` : undefined;
                 },
             },
         ];
@@ -99,22 +100,22 @@ class Pollution extends React.PureComponent<Props> {
 
     private getClassName = (row: RealTimePollutionExtended) => {
         const { aqi } = row;
-        if (aqi <= 12) {
+        if (aqi <= 50) {
             return styles.good;
         }
-        if (aqi <= 35.4) {
+        if (aqi <= 100) {
             return styles.moderate;
         }
-        if (aqi <= 55.4) {
+        if (aqi <= 150) {
             return styles.unhealthyForSensitive;
         }
-        if (aqi <= 150.4) {
+        if (aqi <= 200) {
             return styles.unhealthy;
         }
-        if (aqi <= 350.4) {
+        if (aqi <= 300) {
             return styles.veryUnhealthy;
         }
-        if (aqi >= 500.4) {
+        if (aqi > 300) {
             return styles.hazardous;
         }
 

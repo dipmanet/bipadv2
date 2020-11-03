@@ -132,7 +132,7 @@ class ProjectsProfileFilter extends React.PureComponent {
             >
                 <SelectInput
                     faramElementName="priority"
-                    label="priority"
+                    label="priority area"
                     options={priorityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
@@ -140,7 +140,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                 />
                 <SelectInput
                     faramElementName="subPriority"
-                    label="sub priority"
+                    label="priority action"
                     disabled={!faramValues.priority}
                     options={subPriorityOptions}
                     keySelector={ndrrsapKeySelector}
@@ -148,13 +148,13 @@ class ProjectsProfileFilter extends React.PureComponent {
                 />
                 <SelectInput
                     faramElementName="activity"
-                    label="activity"
+                    label="activities"
                     disabled={!faramValues.subPriority}
                     options={activityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
                 />
-                <MultiSelectInput
+                {/* <MultiSelectInput
                     label="drr cycles"
                     faramElementName="drrCycles"
                     keySelector={drrCyclesKeySelector}
@@ -167,7 +167,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                     options={elementsOptions}
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
-                />
+                /> */}
                 <MultiSelectInput
                     label="organization"
                     faramElementName="organizations"

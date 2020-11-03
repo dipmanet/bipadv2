@@ -32,14 +32,18 @@
             :global {
                 .table {
                     .header {
-                        border: 0;
+                        border-bottom: .1px solid grey;
+                        border-right: .1px solid grey;
+                        border-top: .1px solid grey;
                         background-color: var(--color-foreground-alt);
+                        font-weight: var(--font-weight-bold);
                     }
 
                     .body {
                         .row {
                             .cell {
-                                border: 0;
+                                border-bottom: .1px solid grey;
+                                border-right: .1px solid grey;
 
                                 &.title {
                                     color: var(--color-text-label);
