@@ -10,9 +10,10 @@ interface Props {
     postBasicInfo: () => void;
     handleTabClick: (tab: string) => void;
     openspacePostError: boolean;
+    resourceId: number | undefined;
 }
 // eslint-disable-next-line max-len
-export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError }: Props) => (
+export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError, resourceId }: Props) => (
     <React.Fragment>
         <br />
         <TextInput
@@ -40,7 +41,7 @@ export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, open
         />
         <div className={styles.inputGroup}>
             <TextInput faramElementName="address" label="Address" />
-            <NumberInput faramElementName="ward" label="Ward" />
+            {/* <NumberInput faramElementName="ward" label="Ward" /> */}
         </div>
         <div className={styles.inputGroup}>
             {/* <NumberInput faramElementName="capacity" label="Capacity" /> */}
@@ -58,6 +59,9 @@ export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, open
                 />
             )
         }
+        {resourceId === undefined
+
+&& <span>Please make sure to complete all the steps while filling the form.</span>}
         <div className={styles.stepButtons}>
             <PrimaryButton
                 type="submit"

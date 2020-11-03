@@ -104,7 +104,7 @@ const headCells = [
         label: 'S.N.',
     },
     { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-    { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
+    { id: 'ward', numeric: false, disablePadding: false, label: 'Ward' },
     {
         id: 'total',
         numeric: true,
@@ -274,7 +274,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         const headers = {
             serial: 'S.N',
             name: 'Name',
-            address: 'Address',
+            ward: 'Ward',
             total: 'Total Area(Sq. Ft.)',
             capacity: 'Capacity(Persons)',
         };
@@ -282,7 +282,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         const itemsNotFormatted = rows.map((data: any, index) => ({
             serial: index + 1,
             name: data.title,
-            address: this.removeCommas(data.ward),
+            ward: this.removeCommas(data.ward),
             total: data.totalArea,
             capacity: (data.totalArea / 3.5).toFixed(0),
         }));
@@ -367,7 +367,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
                     createData(
                         index + 1,
                         item.title,
-                        item.catchmentArea,
+                        item.ward ? item.ward : "N/A",
                         item.totalArea,
                         parseInt((item.totalArea / 5).toFixed(0), 10),
                         item.id,
@@ -389,7 +389,6 @@ class OpenSpaces extends React.PureComponent<Props, State> {
                 mediaGetRequest: { pending },
             },
         } = this.props;
-
         return (
             <div className={styles.listWarpper}>
                 {dataArray.length === 0 && (
@@ -419,7 +418,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        label="Search by Open Space"
+                                        label="Search by Community Space"
                                         variant="outlined"
                                     />
                                 )}

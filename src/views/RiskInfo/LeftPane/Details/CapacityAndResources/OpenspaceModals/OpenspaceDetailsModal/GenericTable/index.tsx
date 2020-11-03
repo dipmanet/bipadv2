@@ -14,8 +14,8 @@ interface Props {
 
 interface AllData {
     title: string;
-    province: any;
-    municipality: any;
+    // province: any;
+    // municipality: any;
     usableArea: number;
     totalArea: number;
     ownership: string;
@@ -71,8 +71,8 @@ const TableComponent: React.FC<Props> = (props) => {
     const { allData } = props;
     const rows = [
         createData(1, 'Name of OpenSpace', allData.title),
-        createData(2, 'Province', allData.province),
-        createData(3, 'Municipality', allData.municipality),
+        // createData(2, 'Province', allData.province),
+        // createData(3, 'Municipality', allData.municipality),
         createData(4, 'Capacity', (allData.usableArea / 3.5).toFixed(0)),
         createData(5, 'Total Area', allData.totalArea),
         createData(6, 'Usable Area', allData.usableArea),

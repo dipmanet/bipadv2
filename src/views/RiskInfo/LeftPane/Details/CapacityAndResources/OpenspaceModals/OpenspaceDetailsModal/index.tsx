@@ -206,7 +206,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                             padding: '0 10px',
                             objectFit: 'cover',
                         }}
-                        alt="cat"
+                        alt="cover"
                     />
                     <ModalBody className={styles.content}>
                         {type !== 'communityspace' && (

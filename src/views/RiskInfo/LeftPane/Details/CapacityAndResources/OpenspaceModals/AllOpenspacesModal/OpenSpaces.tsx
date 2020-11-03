@@ -263,11 +263,9 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         } else {
             this.setState({ searchedData: [value] });
         }
-        console.log('event value', value);
     };
 
     public removeCommas = (location: string) => {
-        console.log('location', location);
         const substring = ',';
 
         if (location) {
@@ -295,7 +293,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         const itemsNotFormatted = rows.map((data: any, index) => ({
             serial: index + 1,
             name: data.title,
-            address: this.removeCommas(data.catchmentArea),
+            address: data.address,
             total: data.totalArea,
             usable: data.usableArea,
             capacity: (data.usableArea / 3.5).toFixed(0),
@@ -382,7 +380,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
                     createData(
                         index + 1,
                         item.title,
-                        item.catchmentArea,
+                        item.address ? item.address : "N/A",
                         item.totalArea,
                         item.usableArea,
                         parseInt((item.usableArea / 5).toFixed(0), 10),
@@ -406,8 +404,6 @@ class OpenSpaces extends React.PureComponent<Props, State> {
                 mediaGetRequest: { pending },
             },
         } = this.props;
-
-
         return (
             <div className={styles.listWarpper}>
                 {dataArray.length === 0 && (

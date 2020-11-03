@@ -81,7 +81,7 @@ interface ResourceTooltipProps extends PageType.Resource {
     onEditClick: () => void;
     onShowInventoryClick: () => void;
     handleShowOpenspaceDetailsClick: () => void;
-    handleShowCommunitypaceDetailsClick: () => void;
+    handleShowCommunitypaceDetails: () => void;
 }
 
 type toggleValues =
@@ -681,6 +681,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     };
 
     private handleShowOpenspaceDetailsClick = (openspaceDeleted?: boolean) => {
+        console.log('openspaceclick');
+
         this.setState(prevState => ({
             singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
         }));
@@ -697,11 +699,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 30.44702867091792,
             ];
             map.fitBounds(nepalBounds);
+            window.location.reload();
         }
     };
 
-    private handleShowCommunitypaceDetailsClick = (
-        communityspaceDeleted: boolean,
+    private handleShowCommunitypaceDetails = (
+        communityspaceDeleted?: boolean,
     ) => {
         this.setState(prevState => ({
             CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
@@ -845,21 +848,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            <Cloak hiddenIf={p => !p.add_resource}>
-                                <AccentModalButton
-                                    iconName="add"
-                                    title="Add New Resource"
-                                    transparent
-                                    modal={(
-                                        <AddResourceForm
-                                            onAddSuccess={this.handleResourceAdd}
-                                            onEditSuccess={this.handleResourceEdit}
-                                        />
-                                    )}
-                                >
+                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
+                            <AccentModalButton
+                                iconName="add"
+                                title="Add New Resource"
+                                transparent
+                                modal={(
+                                    <AddResourceForm
+                                        onAddSuccess={this.handleResourceAdd}
+                                        onEditSuccess={this.handleResourceEdit}
+                                    />
+                                )}
+                            >
                                     Add Resource
-                                </AccentModalButton>
-                            </Cloak>
+                            </AccentModalButton>
+                            {/* </Cloak> */}
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)
@@ -1590,7 +1593,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="cluster-count-communication"
+                                            layerKey="cluster-count-communityspace"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: ['has', 'point_count'],
@@ -1618,20 +1621,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         .communityspace,
                                             }}
                                         />
-                                        {/* <MapLayer
-                                        layerKey="-resourece-symbol-icon-communityspace"
-                                        layerOptions={{
-                                            type: 'symbol',
-                                            filter: [
-                                                '!',
-                                                ['has', 'point_count'],
-                                            ],
-                                            layout: {
-                                                'icon-image': 'communityspace',
-                                                'icon-size': 0.03,
-                                            },
-                                        }}
-                                    /> */}
+                                        <MapLayer
+                                            layerKey="-resourece-symbol-icon-communityspace"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                layout: {
+                                                    'icon-image': 'communityspace',
+                                                    'icon-size': 0.03,
+                                                },
+                                            }}
+                                        />
 
                                         {resourceLngLat && resourceInfo && (
                                             <MapTooltip
@@ -1647,7 +1650,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         this.handleEditClick
                                                     }
                                                     onShowInventoryClick={
-                                                        () => this.handleShowOpenspaceDetailsClick()
+                                                        () => this.handleShowCommunitypaceDetails()
                                                     }
                                                 />
                                             </MapTooltip>
@@ -1710,6 +1713,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 paint:
                                                     mapStyles.resourcePoint
                                                         .openspace,
+                                            }}
+                                        />
+                                        <MapLayer
+                                            layerKey="-resourece-symbol-icon-openspace"
+                                            layerOptions={{
+                                                type: 'symbol',
+                                                filter: [
+                                                    '!',
+                                                    ['has', 'point_count'],
+                                                ],
+                                                layout: {
+                                                    'icon-image': 'openspace',
+                                                    'icon-size': 0.03,
+                                                },
                                             }}
                                         />
 
@@ -1792,7 +1809,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 {CommunitySpaceDetailsModal && (
                     <CommunityOpenspaceDetails
                         {...resourceDetails}
-                        closeModal={this.handleShowCommunitypaceDetailsClick}
+                        closeModal={this.handleShowCommunitypaceDetails}
                         onEdit={this.handleEditClick}
                         routeToOpenspace={this.routeToOpenspace}
                         openspaceDeleteRequest={openspaceDeleteRequest}

@@ -162,9 +162,15 @@ class Details extends React.PureComponent<Props, State> {
             // credentials: 'same origin'
         };
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/openspace-detail/${objectId}/`, requestOptions)
-            .then(response => response.json())
-            .then(() => {
-                this.props.handleTabClick('suggestedUses');
+            .then((res) => {
+                console.log('resss', res);
+                if (res.status === 200) {
+                    this.props.handleTabClick('suggestedUses');
+                } else {
+                    this.setState({
+                        openspacePostError: true,
+                    });
+                }
             })
             .catch(() => {
                 this.setState({

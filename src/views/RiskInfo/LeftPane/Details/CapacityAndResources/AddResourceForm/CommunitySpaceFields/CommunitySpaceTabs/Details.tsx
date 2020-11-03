@@ -136,6 +136,8 @@ class Details extends React.PureComponent<Props, State> {
         const {
             openspaceId, closeModal,
         } = this.props;
+        console.log('post', openspaceId);
+
         const formdata = new FormData();
         formdata.append('communitySpace', JSON.stringify(openspaceId));
         if (coverImage) formdata.append('image', coverImage);
@@ -161,6 +163,8 @@ class Details extends React.PureComponent<Props, State> {
     }
 
     private setSingleDetails = (details: DetailsResponse) => {
+        console.log('det', details);
+
         const {
             id,
             geoserverUrl,
@@ -176,6 +180,8 @@ class Details extends React.PureComponent<Props, State> {
     }
 
     public render() {
+        console.log('idd', this.props.openspaceId);
+
         const { resourceId } = this.props;
         const { objectId, openspacePostError,
             geoserverUrl,

@@ -14,9 +14,9 @@ interface State {
 
 interface State {
     map: unknown;
-    opacityValue: number;
-    openspaceTitle: string;
-    geoserverUrl: string;
+    // opacityValue: number;
+    // openspaceTitle: string;
+    // geoserverUrl: string;
 }
 interface Params {
     openspaceId: number;
@@ -40,9 +40,9 @@ class Polygon extends React.PureComponent<Props, State> {
         super(props);
         this.state = {
             map: '',
-            opacityValue: 100,
-            openspaceTitle: '',
-            geoserverUrl: '',
+            // opacityValue: 100,
+            // openspaceTitle: '',
+            // geoserverUrl: '',
         };
     }
 
@@ -103,10 +103,14 @@ class Polygon extends React.PureComponent<Props, State> {
 
         const { map } = this.state;
         if (response) {
-            this.setState({
-                openspaceTitle: response.results[0].layerName,
-                geoserverUrl: response.results[0].geoserverUrl,
-            });
+            // this.setState({
+            //     openspaceTitle: response.results[0]
+            //     && response.results[0].layerName
+            //     && response.results[0].layerName,
+            //     geoserverUrl: response.results[0]
+            //     && response.results[0].geoserverUrl
+            //     && response.results[0].geoserverUrl,
+            // });
         }
 
         const polygonsCoordinates = response
@@ -187,7 +191,7 @@ class Polygon extends React.PureComponent<Props, State> {
     };
 
     public render() {
-        const { opacityValue, openspaceTitle, geoserverUrl } = this.state;
+        // const { opacityValue, openspaceTitle, geoserverUrl } = this.state;
 
         return (
             <>

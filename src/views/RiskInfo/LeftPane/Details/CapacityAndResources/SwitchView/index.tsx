@@ -199,7 +199,7 @@ const SwitchView = (props: Props) => {
 
                 <div className={styles.actionsIcon}>
                     <Icon
-                        title={'All Openspaces'}
+                        title={'All Community Spaces'}
                         className={_cs(styles.infoIcon)}
                         name="list"
                         onClick={() => handleIconClick('showAllCommunityModal')}

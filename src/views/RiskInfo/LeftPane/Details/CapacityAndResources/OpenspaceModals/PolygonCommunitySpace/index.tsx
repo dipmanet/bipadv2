@@ -98,6 +98,8 @@ class Polygon extends React.PureComponent<Props, State> {
 
         const polygonsCoordinates = response
             && response.results[0]
+            && response.results[0].polygons
+            && response.results[0].polygons.coordinates
             && response.results[0].polygons.coordinates[0];
 
         if (polygonsCoordinates) {

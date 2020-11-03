@@ -124,21 +124,21 @@ class Info extends Component {
                     <div className={styles.areaUnit}>
                         <div className={styles.upper}>
                             {totalArea || 'N/A'}
-                            sq.m
+                            <span style={{ marginLeft: '3px' }}>sq.m </span>
                         </div>
                         <div className={styles.lower}> Total Area</div>
                     </div>
                     <div className={styles.areaUnit}>
                         <div className={styles.upper}>
                             {usableArea || 'N/A'}
-                            sq.m
+                            <span style={{ marginLeft: '3px' }}>sq.m </span>
                         </div>
                         <div className={styles.lower}> Usable Area</div>
                     </div>
                     <div className={styles.areaUnit}>
                         <div className={styles.upper}>
                             {(usableArea / 5).toFixed(0)}
-                            persons
+                            <span style={{ marginLeft: '3px' }}>persons </span>
                         </div>
                         <div className={styles.lower}> Capacity</div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './styles.scss';
 
 interface Props {
@@ -8,7 +8,8 @@ interface Props {
 
 class Info extends React.PureComponent<Props> {
     public render() {
-        const { usableArea, totalArea, description } = this.props.allData;
+        // eslint-disable-next-line react/destructuring-assignment
+        const { totalArea, description, elevation } = this.props.allData;
 
         return (
             <div className={styles.infoContainer}>
@@ -16,24 +17,26 @@ class Info extends React.PureComponent<Props> {
                     <div className={styles.areaUnit}>
                         <div className={styles.upper}>
                             {totalArea || 'N/A'}
-                            sq.m
+                            <span style={{ marginLeft: '3px' }}>sq.m </span>
+
                         </div>
                         <div className={styles.lower}> Total Area</div>
                     </div>
                     <div className={styles.areaUnit}>
                         <div className={styles.upper}>
-                            {usableArea || 'N/A'}
-                            sq.m
+                            {elevation || 'N/A'}
+                            <span style={{ marginLeft: '3px' }}>m </span>
+
                         </div>
-                        <div className={styles.lower}> Usable Area</div>
+                        <div className={styles.lower}> Elevation</div>
                     </div>
-                    <div className={styles.areaUnit}>
+                    {/*   <div className={styles.areaUnit}>
                         <div className={styles.upper}>
                             {(totalArea / 5).toFixed(0)}
                             persons
                         </div>
                         <div className={styles.lower}> Capacity</div>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className={styles.description}>{description}</div>

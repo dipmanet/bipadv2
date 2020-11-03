@@ -127,12 +127,22 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
             getDetailsRequest: { response },
         } = requests;
         let geoserverUrl = '';
+        let layerName = '';
+        let workspace = '';
+        let wmsUrl = '';
         // let title = '';
         if (response) {
             geoserverUrl = response.results
                 && response.results[0]
                 && response.results[0].geoserverUrl;
-            // title = response.results[0].geoserverUrl;
+            layerName = response.results
+                && response.results[0]
+                && response.results[0].layerName;
+            workspace = response.results
+                && response.results[0]
+                && response.results[0].workspace;
+            // 'https://geoserver.yilab.org.np/geoserver/wms?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&width=256&height=256&layers=Bipad%3ADistrict'
+            wmsUrl = `${geoserverUrl}?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&width=256&height=256&layers=${workspace}:${layerName}`;
         }
         if (map.getLayer('wms-openspace-layer')) {
             map.removeLayer('wms-openspace-layer');
@@ -207,7 +217,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
                                 <div className={styles.rangeSliderr}>
                                     <input
                                         type="checkbox"
-                                        onChange={e => this.handleWmsCheck(e, geoserverUrl)}
+                                        onChange={e => this.handleWmsCheck(e, wmsUrl)}
                                     />
 
 
