@@ -165,7 +165,7 @@ class PollutionModal extends React.PureComponent<Props> {
                     </DangerButton>
                     <DownloadButton
                         value={formattedTableData}
-                        name="Pollution.csv"
+                        name="DataArchivePollution.csv"
                     >
                         Download
                     </DownloadButton>

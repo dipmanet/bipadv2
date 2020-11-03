@@ -2,8 +2,6 @@ import React, { useEffect, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
-import modalize from '#rscg/Modalize';
-import Button from '#rsca/Button';
 
 import PollutionItem from './PollutionItem';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
@@ -11,8 +9,7 @@ import Header from '../Header';
 import Message from '#rscv/Message';
 import { groupList } from '#utils/common';
 import PollutionGroup from './PollutionGroup';
-import DateRangeInfo from '#components/DateRangeInfo';
-import PollutionModal from './Modal';
+import TopBar from './TopBar';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -25,7 +22,7 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDataRangeLocaleToFilter, pastDaysToDateRange } from '#utils/transformations';
+import { transformDataRangeLocaleToFilter } from '#utils/transformations';
 
 import {
     setDataArchivePollutionListAction,
@@ -92,20 +89,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
     },
 };
-const getDates = (pollutionFilters: DAPollutionFiltersElement) => {
-    const { dataDateRange } = pollutionFilters;
-    const { rangeInDays } = dataDateRange;
-    let startDate;
-    let endDate;
-    if (rangeInDays !== 'custom') {
-        ({ startDate, endDate } = pastDaysToDateRange(rangeInDays));
-    } else {
-        ({ startDate, endDate } = dataDateRange);
-    }
-    return [startDate, endDate];
-};
-
-const ModalButton = modalize(Button);
 
 const Pollution = (props: Props) => {
     const [sortKey, setSortKey] = useState('createdOn');
@@ -156,29 +139,13 @@ const Pollution = (props: Props) => {
         pollution => pollution.title || 'N/A',
     ).sort(compare);
 
-    const [startDate, endDate] = getDates(pollutionFilters);
-
     return (
         <div className={styles.pollution}>
             <Loading pending={pending} />
-            <div className={styles.topBar}>
-                <DateRangeInfo
-                    className={styles.dateRange}
-                    startDate={startDate || 'N/A'}
-                    endDate={endDate || 'N/A'}
-                />
-                <ModalButton
-                    className={styles.showDetailsButton}
-                    transparent
-                    iconName="table"
-                    title="Show all data"
-                    modal={(
-                        <PollutionModal
-                            dataArchivePollution={pollutionList}
-                        />
-                    )}
-                />
-            </div>
+            <TopBar
+                pollutionFilters={pollutionFilters}
+                pollutionList={pollutionList}
+            />
             <div className={styles.header}>
                 <Header
                     chosenOption="Pollution"
