@@ -239,7 +239,7 @@ class PollutionMap extends React.PureComponent {
                 <CommonMap
                     sourceKey="dataArchivePollution"
                     boundsPadding={boundsPadding}
-                    // boundingsFromComp={bbox}
+                    boundingsFromComp={bbox}
                 />
                 {coordinates && (
                     <MapTooltip
