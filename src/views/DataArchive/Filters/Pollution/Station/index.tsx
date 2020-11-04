@@ -34,7 +34,7 @@ const StationSelector = (props: Props) => {
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
         const station = stations.filter(s => s.id === stationId)[0];
-        onChangeFromProps(station);
+        onChangeFromProps(station || {});
     };
     return (
         <div className={styles.stationSelector}>
