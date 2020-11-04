@@ -254,20 +254,19 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         console.log('event value', value);
     };
 
-    public removeCommas = (location: string) => {
-        console.log('location', location);
-        const substring = ',';
+    // public removeCommas = (location: string) => {
+    //     const substring = ',';
 
-        if (location) {
-            if (location.includes(substring)) {
-                return location.replace(/,/g, ' ');
-            } else {
-                return location;
-            }
-        } else {
-            return null;
-        }
-    };
+    //     if (location) {
+    //         if (location.includes(substring)) {
+    //             return location.replace(/,/g, ' ');
+    //         } else {
+    //             return location;
+    //         }
+    //     } else {
+    //         return null;
+    //     }
+    // };
 
     public downloadCsv = () => {
         const rows = this.state.apiData;
@@ -282,7 +281,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         const itemsNotFormatted = rows.map((data: any, index) => ({
             serial: index + 1,
             name: data.title,
-            ward: this.removeCommas(data.ward),
+            ward: data.ward? data.ward:'N/A',
             total: data.totalArea,
             capacity: (data.totalArea / 3.5).toFixed(0),
         }));
@@ -292,7 +291,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         this.exportCSVFile(headers, itemsNotFormatted, fileTitle);
     };
 
-    public exportCSVFile = (headers: any, items: any, fileTitle: string) => {
+     public exportCSVFile = (headers: any, items: any, fileTitle: string) => {
         if (headers) {
             items.unshift(headers);
         }

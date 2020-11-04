@@ -292,8 +292,9 @@ class OpenSpaces extends React.PureComponent<Props, State> {
 
         const itemsNotFormatted = rows.map((data: any, index) => ({
             serial: index + 1,
-            name: data.title,
-            address: data.address,
+            name: this.removeCommas(data.title),
+            // address:'add add add',
+            address: data.address?this.removeCommas(data.address):'N/A',
             total: data.totalArea,
             usable: data.usableArea,
             capacity: (data.usableArea / 3.5).toFixed(0),
