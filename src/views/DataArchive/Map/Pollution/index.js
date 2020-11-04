@@ -8,6 +8,7 @@ import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
 import FormattedDate from '#rscv/FormattedDate';
+import { MapChildContext } from '#re-map/context';
 
 import PollutionModal from '../../Modals/Pollution';
 import {
@@ -217,7 +218,7 @@ class PollutionMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { station: { bbox } } = pollutionFilters;
+        const { station: { bbox, centroid } } = pollutionFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -225,12 +226,20 @@ class PollutionMap extends React.PureComponent {
         };
 
         const { showModal } = this.state;
+        const { map } = this.context;
+        if (centroid && map) {
+            const { coordinates: stationCords } = centroid;
+            map.flyTo({
+                center: stationCords,
+                zoom: 10,
+            });
+        }
         return (
             <div className={styles.dataArchivePollutionMap}>
                 <CommonMap
                     sourceKey="dataArchivePollution"
                     boundsPadding={boundsPadding}
-                    boundingsFromComp={bbox}
+                    // boundingsFromComp={bbox}
                 />
                 {coordinates && (
                     <MapTooltip
@@ -283,4 +292,5 @@ class PollutionMap extends React.PureComponent {
     }
 }
 
+PollutionMap.contextType = MapChildContext;
 export default connect(mapStateToProps, [])(PollutionMap);
