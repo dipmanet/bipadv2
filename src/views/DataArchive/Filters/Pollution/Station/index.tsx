@@ -15,6 +15,17 @@ interface Props {
 const stationKeySelector = (r: PollutionStation) => r.id;
 const StationLabelSelector = (r: PollutionStation) => r.name;
 
+const compare = (a: PollutionStation, b: PollutionStation) => {
+    const sortKey = 'name';
+    if (a[sortKey] < b[sortKey]) {
+        return -1;
+    }
+    if (a[sortKey] > b[sortKey]) {
+        return 1;
+    }
+    return 0;
+};
+
 const StationSelector = (props: Props) => {
     const { onChange: onChangeFromProps, stations: stationsFromProps } = props;
     const [selectedStation, setSelectedStation] = useState(0);
@@ -23,12 +34,13 @@ const StationSelector = (props: Props) => {
         const station = stationsFromProps.filter(s => s.id === stationId)[0];
         onChangeFromProps(station || {});
     };
+    const sortedStations = stationsFromProps.sort(compare);
     return (
         <div className={styles.stationSelector}>
             <SelectInput
                 className={styles.stationInput}
                 label="Station Name"
-                options={stationsFromProps}
+                options={sortedStations}
                 keySelector={stationKeySelector}
                 labelSelector={StationLabelSelector}
                 value={selectedStation}
