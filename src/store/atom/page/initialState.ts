@@ -71,7 +71,7 @@ const state: PageState = {
     districts: [],
     municipalities: [],
     wards: [],
-
+    pollutionStations: [],
     documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',

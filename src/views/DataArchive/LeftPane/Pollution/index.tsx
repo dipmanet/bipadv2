@@ -26,9 +26,10 @@ import { transformDataRangeLocaleToFilter } from '#utils/transformations';
 
 import {
     setDataArchivePollutionListAction,
+    setDataArchivePollutionStationAction,
 } from '#actionCreators';
 
-import { DAPollutionFiltersElement } from '#types';
+import { DAPollutionFiltersElement, PollutionStation } from '#types';
 
 import { AppState } from '#store/types';
 
@@ -38,26 +39,33 @@ import PollutionViz from './Visualization';
 import {
     dataArchivePollutionListSelector,
     pollutionFiltersSelector,
+    pollutionStationsSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
 
 interface PropsFromDispatch {
     setDataArchivePollutionList: typeof setDataArchivePollutionListAction;
+    setDataArchivePollutionStations: typeof setDataArchivePollutionStationAction;
 }
 
 interface PropsFromState {
     pollutionList: PageType.DataArchivePollution[];
     pollutionFilters: DAPollutionFiltersElement;
+    pollutionStations: PollutionStation[];
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     pollutionList: dataArchivePollutionListSelector(state),
     pollutionFilters: pollutionFiltersSelector(state),
+    pollutionStations: pollutionStationsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setDataArchivePollutionList: params => dispatch(setDataArchivePollutionListAction(params)),
+    setDataArchivePollutionStations: params => dispatch(
+        setDataArchivePollutionStationAction(params),
+    ),
 });
 interface Params {}
 interface OwnProps {}
@@ -88,12 +96,25 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             schemaName: 'pollutionResponse',
         },
     },
+    pollutionStationRequest: {
+        url: '/pollution-stations/',
+        method: methods.GET,
+        query: () => ({
+            fields: ['id', 'province', 'district', 'municipality', 'ward', 'name', 'point'],
+        }),
+        onSuccess: ({ response, props: { setDataArchivePollutionStations } }) => {
+            interface Response { results: PollutionStation[] }
+            const { results: dataArchivePollutionStations = [] } = response as Response;
+            setDataArchivePollutionStations({ dataArchivePollutionStations });
+        },
+        onMount: true,
+    },
 };
 
 const Pollution = (props: Props) => {
     const [sortKey, setSortKey] = useState('createdOn');
     const [activeView, setActiveView] = useState('data');
-    const { pollutionList, requests, pollutionFilters } = props;
+    const { pollutionList, requests, pollutionFilters, pollutionStations } = props;
     const pending = isAnyRequestPending(requests);
     const {
         setData,

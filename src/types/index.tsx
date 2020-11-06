@@ -74,6 +74,49 @@ export interface DAPollutionFiltersElement {
     dataDateRange: DataDateRangeValueElement;
 }
 
+export interface PollutionObservation {
+    data: {
+        aqi: number;
+        value: number;
+        datatime: string;
+    };
+    unit: string;
+    seriesId: number;
+    seriesName: string;
+    parameterCode: string;
+    parameterName: string;
+}
+
+export interface PollutionTags {
+    id: number;
+    name: string;
+    description: string;
+}
+export interface PollutionStation {
+    id: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+    name: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    createdOn?: string;
+    modifiedOn?: string;
+    nepaliName?: string;
+    identifier?: string;
+    dataSource?: string;
+    aqiColor?: string;
+    aqi?: number;
+    observation?: PollutionObservation[];
+    tags?: PollutionTags[];
+    images?: string[];
+    elevation?: string | number;
+    description?: string;
+}
+
 export interface AlertElement extends Alert {}
 export interface EventElement extends Event {}
 

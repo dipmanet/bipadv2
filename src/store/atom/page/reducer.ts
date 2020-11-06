@@ -304,6 +304,13 @@ export const setDataArchivePollutionFilterAction = (
     dataArchivePollutionFilters,
 });
 
+export const setDataArchivePollutionStationAction = (
+    { dataArchivePollutionStations }:
+    { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS,
+    dataArchivePollutionStations,
+});
+
 // loss and damage action creator
 export const setLossAndDamageFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
@@ -1079,6 +1086,23 @@ export const setDataArchivePollutionFilters = (
     return newState;
 };
 
+export const setDataArchivePollutionStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionStations,
+) => {
+    const {
+        dataArchivePollutionStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.pollutionStations = dataArchivePollutionStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 // loss and damage page
 export const setLossAndDamageFilters = (
@@ -1327,6 +1351,8 @@ export default function routeReducer(
             return setDataArchiveEarthquakeFilters(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS:
             return setDataArchivePollutionFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS:
+            return setDataArchivePollutionStations(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:

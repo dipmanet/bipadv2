@@ -6,6 +6,7 @@ import {
     KeyValue,
     DAEarthquakeFiltersElement,
     DAPollutionFiltersElement,
+    PollutionStation,
 } from '#types';
 
 export interface Field {
@@ -488,6 +489,7 @@ export interface PageState {
     districts: District[];
     municipalities: Municipality[];
     wards: Ward[];
+    pollutionStations: PollutionStation[];
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
@@ -614,6 +616,7 @@ export enum PageType {
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
     DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_FILTERS/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -847,6 +850,11 @@ export interface SetDataArchivePollutionFilters {
     dataArchivePollutionFilters: DAPollutionFiltersElement;
 }
 
+export interface SetDataArchivePollutionStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS;
+    dataArchivePollutionStations: PollutionStation[];
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -932,5 +940,6 @@ export type PageActionTypes = (
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
-    SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters
+    SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
+    SetDataArchivePollutionStations
 );
