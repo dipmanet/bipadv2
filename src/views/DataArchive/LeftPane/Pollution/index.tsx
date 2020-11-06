@@ -111,15 +111,28 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
+const filterByStationName = (
+    pollutionFilters: DAPollutionFiltersElement,
+    pollutionList: PageType.DataArchivePollution[],
+) => {
+    const { station: { name: stationName } } = pollutionFilters;
+    if (!stationName) {
+        return pollutionList;
+    }
+    const filteredList = pollutionList.filter(pollutionItem => pollutionItem.title === stationName);
+    return filteredList;
+};
+
 const Pollution = (props: Props) => {
     const [sortKey, setSortKey] = useState('createdOn');
     const [activeView, setActiveView] = useState('data');
-    const { pollutionList, requests, pollutionFilters, pollutionStations } = props;
+    const { pollutionList, requests, pollutionFilters } = props;
     const pending = isAnyRequestPending(requests);
     const {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
 
+    const filteredPollutionList = filterByStationName(pollutionFilters, pollutionList);
     const handleDataButtonClick = () => {
         setActiveView('data');
     };
@@ -129,11 +142,12 @@ const Pollution = (props: Props) => {
 
     useEffect(() => {
         if (setData) {
-            setData(pollutionList);
+            const filtered = filterByStationName(pollutionFilters, pollutionList);
+            setData(filtered);
         }
-    }, [pollutionList, setData]);
+    }, [pollutionFilters, pollutionList, setData]);
 
-    if (pollutionList.length < 1) {
+    if (filteredPollutionList.length < 1) {
         return (
             <div
                 className={styles.message}
@@ -156,7 +170,7 @@ const Pollution = (props: Props) => {
     };
 
     const groupedPollutionList = groupList(
-        pollutionList.filter(e => e.title),
+        filteredPollutionList.filter(e => e.title),
         pollution => pollution.title || 'N/A',
     ).sort(compare);
 
@@ -165,19 +179,19 @@ const Pollution = (props: Props) => {
             <Loading pending={pending} />
             <TopBar
                 pollutionFilters={pollutionFilters}
-                pollutionList={pollutionList}
+                pollutionList={filteredPollutionList}
             />
             <div className={styles.header}>
                 <Header
                     chosenOption="Pollution"
-                    dataCount={pollutionList.length || 0}
+                    dataCount={filteredPollutionList.length || 0}
                     activeView={activeView}
                     handleDataButtonClick={handleDataButtonClick}
                     handleVisualizationsButtonClick={handleVisualizationsButtonClick}
                 />
             </div>
             {/* {
-                activeView === 'data' && pollutionList.map(
+                activeView === 'data' && filteredPollutionList.map(
                     (datum: PageType.DataArchivePollution) => (
                     <PollutionItem
                         data={datum}
@@ -199,7 +213,7 @@ const Pollution = (props: Props) => {
                 return <PollutionItem key={key} data={value[0]} />;
             })}
             { activeView === 'visualizations' && (
-                <PollutionViz pollutionList={pollutionList} />
+                <PollutionViz pollutionList={filteredPollutionList} />
             ) }
         </div>
     );
