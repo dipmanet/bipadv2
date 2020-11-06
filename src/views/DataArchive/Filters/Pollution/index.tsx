@@ -11,9 +11,9 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
 
 import { setDataArchivePollutionFilterAction } from '#actionCreators';
-import { pollutionFiltersSelector } from '#selectors';
+import { pollutionFiltersSelector, pollutionStationsSelector } from '#selectors';
 import { AppState } from '#store/types';
-import { DAPollutionFiltersElement } from '#types';
+import { DAPollutionFiltersElement, PollutionStation } from '#types';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StationSelector from './Station';
 
@@ -33,6 +33,7 @@ interface State {
 }
 interface PropsFromAppState {
     pollutionFilters: DAPollutionFiltersElement;
+    pollutionStations: PollutionStation[];
 }
 
 interface PropsFromDispatch {
@@ -43,6 +44,7 @@ type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState) => ({
     pollutionFilters: pollutionFiltersSelector(state),
+    pollutionStations: pollutionStationsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -134,6 +136,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="station"
                     wardsHidden
+                    stations={this.props.pollutionStations}
                     // autoFocus
                 />
             ),
