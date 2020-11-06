@@ -35,6 +35,16 @@ const StationSelector = (props: Props) => {
         onChangeFromProps(station || {});
     };
     const sortedStations = stationsFromProps.sort(compare);
+    if (!sortedStations || sortedStations.length < 1) {
+        return (
+            <div className={styles.stationSelector}>
+                <span className={styles.stationInput}>
+                    No station filters
+                </span>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.stationSelector}>
             <SelectInput
