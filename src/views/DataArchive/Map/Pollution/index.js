@@ -46,6 +46,12 @@ const pollutionToGeojson = (pollutionList) => {
     };
     return geojson;
 };
+
+const nepalBounds = [
+    80.05858661752784, 26.347836996368667,
+    88.20166918432409, 30.44702867091792,
+];
+
 class PollutionMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -218,7 +224,7 @@ class PollutionMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { station: { bbox, centroid } } = pollutionFilters;
+        const { station: { point } } = pollutionFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -227,19 +233,20 @@ class PollutionMap extends React.PureComponent {
 
         const { showModal } = this.state;
         const { map } = this.context;
-        if (centroid && map) {
-            const { coordinates: stationCords } = centroid;
+        if (point && map) {
+            const { coordinates: stationCords } = point;
             map.flyTo({
                 center: stationCords,
                 zoom: 10,
             });
+        } else {
+            map.fitBounds(nepalBounds);
         }
         return (
             <div className={styles.dataArchivePollutionMap}>
                 <CommonMap
                     sourceKey="dataArchivePollution"
                     boundsPadding={boundsPadding}
-                    boundingsFromComp={bbox}
                 />
                 {coordinates && (
                     <MapTooltip
