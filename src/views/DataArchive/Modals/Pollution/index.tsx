@@ -9,17 +9,16 @@ import styles from './styles.scss';
 
 interface Props {
     handleModalClose: () => void;
-    title: string;
+    stationName: string;
 }
 
-// class PollutionModal extends React.PureComponent<Props> {
 const PollutionModal = (props: Props) => {
-    const { title = 'Pollution Modal',
+    const { stationName = 'Pollution Modal',
         handleModalClose } = props;
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
-                title={title}
+                title={stationName}
                 rightComponent={(
                     <DangerButton
                         transparent

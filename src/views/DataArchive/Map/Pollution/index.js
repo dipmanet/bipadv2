@@ -242,6 +242,7 @@ class PollutionMap extends React.PureComponent {
         } else {
             map.fitBounds(nepalBounds);
         }
+        const { title: stationName } = tooltipParams || {};
         return (
             <div className={styles.dataArchivePollutionMap}>
                 <CommonMap
@@ -291,6 +292,7 @@ class PollutionMap extends React.PureComponent {
                 && (
                     <PollutionModal
                         handleModalClose={this.handleModalClose}
+                        stationName={stationName}
                     />
                 )
                 }
