@@ -281,6 +281,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
 
     public downloadCsv = () => {
         const rows = this.state.apiData;
+        const {searchedData}=this.state;
         const headers = {
             serial: 'S.N',
             name: 'Name',
@@ -290,15 +291,33 @@ class OpenSpaces extends React.PureComponent<Props, State> {
             capacity: 'Capacity(Persons)',
         };
 
-        const itemsNotFormatted = rows.map((data: any, index) => ({
-            serial: index + 1,
-            name: this.removeCommas(data.title),
-            // address:'add add add',
-            address: data.address?this.removeCommas(data.address):'N/A',
-            total: data.totalArea,
-            usable: data.usableArea,
-            capacity: (data.usableArea / 3.5).toFixed(0),
-        }));
+       let itemsNotFormatted;
+
+     
+
+        if(searchedData.length>0){
+            itemsNotFormatted = searchedData.map((data: any, index) => ({
+                serial: index + 1,
+                name: this.removeCommas(data.name),
+                // address:'add add add',
+                address: data.location?this.removeCommas(data.location):'N/A',
+                total: data.total,
+                usable: data.usable,
+                capacity: (data.usable / 3.5).toFixed(0),
+            }));  
+        } else{
+            itemsNotFormatted = rows.map((data: any, index) => ({
+                serial: index + 1,
+                name: this.removeCommas(data.title),
+                // address:'add add add',
+                address: data.address?this.removeCommas(data.address):'N/A',
+                total: data.totalArea,
+                usable: data.usableArea,
+                capacity: (data.usableArea / 3.5).toFixed(0),
+            }));
+        }
+
+      
 
         const fileTitle = 'Open Spaces List';
 
@@ -306,6 +325,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
     };
 
     public exportCSVFile = (headers: any, items: any, fileTitle: string) => {
+        console.log("items in open space",headers,items,fileTitle);
         if (headers) {
             items.unshift(headers);
         }

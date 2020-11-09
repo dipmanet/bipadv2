@@ -269,6 +269,7 @@ class OpenSpaces extends React.PureComponent<Props, State> {
     // };
 
     public downloadCsv = () => {
+        const {searchedData}=this.state;
         const rows = this.state.apiData;
         const headers = {
             serial: 'S.N',
@@ -278,20 +279,42 @@ class OpenSpaces extends React.PureComponent<Props, State> {
             capacity: 'Capacity(Persons)',
         };
 
-        const itemsNotFormatted = rows.map((data: any, index) => ({
-            serial: index + 1,
-            name: data.title,
-            ward: data.ward? data.ward:'N/A',
-            total: data.totalArea,
-            capacity: (data.totalArea / 3.5).toFixed(0),
-        }));
+        let itemsNotFormatted;
+
+        if(searchedData.length>0){
+            console.log("search applied",searchedData);
+             itemsNotFormatted = searchedData.map((data: any, index) => ({
+                serial: index + 1,
+                name: data.name,
+                ward: data.location? data.location:'N/A',
+                total: data.total,
+                capacity: (data.total / 3.5).toFixed(0),
+            }));
+        
+        } else{
+            console.log("normal consition applied",searchedData);
+             itemsNotFormatted = rows.map((data: any, index) => ({
+                serial: index + 1,
+                name: data.title,
+                ward: data.ward? data.ward:'N/A',
+                total: data.totalArea,
+                capacity: (data.totalArea / 3.5).toFixed(0),
+            }));
+
+           
+        }
+
+    
 
         const fileTitle = 'Community Spaces List';
+
+        console.log("items in community space",itemsNotFormatted)
 
         this.exportCSVFile(headers, itemsNotFormatted, fileTitle);
     };
 
      public exportCSVFile = (headers: any, items: any, fileTitle: string) => {
+        console.log("items in community space",headers,items,fileTitle);
         if (headers) {
             items.unshift(headers);
         }
