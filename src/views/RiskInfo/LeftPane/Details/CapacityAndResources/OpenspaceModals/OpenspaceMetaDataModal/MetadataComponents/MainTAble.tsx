@@ -1,7 +1,9 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import styles from './styles.scss';
-import './table.css';
+// import './table.css';
+import 'semantic-ui-css/components/table.min.css';
+
 
 export default class MetaData extends React.PureComponent {
     public render() {

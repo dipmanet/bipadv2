@@ -282,7 +282,6 @@ class OpenSpaces extends React.PureComponent<Props, State> {
         let itemsNotFormatted;
 
         if(searchedData.length>0){
-            console.log("search applied",searchedData);
              itemsNotFormatted = searchedData.map((data: any, index) => ({
                 serial: index + 1,
                 name: data.name,
@@ -292,7 +291,6 @@ class OpenSpaces extends React.PureComponent<Props, State> {
             }));
         
         } else{
-            console.log("normal consition applied",searchedData);
              itemsNotFormatted = rows.map((data: any, index) => ({
                 serial: index + 1,
                 name: data.title,
@@ -308,13 +306,11 @@ class OpenSpaces extends React.PureComponent<Props, State> {
 
         const fileTitle = 'Community Spaces List';
 
-        console.log("items in community space",itemsNotFormatted)
 
         this.exportCSVFile(headers, itemsNotFormatted, fileTitle);
     };
 
      public exportCSVFile = (headers: any, items: any, fileTitle: string) => {
-        console.log("items in community space",headers,items,fileTitle);
         if (headers) {
             items.unshift(headers);
         }
