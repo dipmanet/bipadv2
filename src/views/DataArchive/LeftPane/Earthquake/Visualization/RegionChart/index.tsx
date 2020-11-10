@@ -49,7 +49,7 @@ const handleSaveClick = (downloadId: string) => {
     saveChart(downloadId || 'chartIdBipad', downloadId || 'chartIdBipad');
 };
 
-const DEFAULT_CHART_TITLE = 'Occurence Statictics';
+const DEFAULT_CHART_TITLE = 'Occurence Statistics';
 
 const removeZero = (federalWiseData: ChartData[]) => {
     const cleanData = federalWiseData.map((data) => {

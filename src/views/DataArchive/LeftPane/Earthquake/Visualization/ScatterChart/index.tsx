@@ -38,7 +38,7 @@ const withTemporalList = (earthquakeList: PageType.DataArchiveEarthquake[]) => {
     return withTemporals;
 };
 
-const DEFAULT_CHART_TITLE = 'Occurence Statictics';
+const DEFAULT_CHART_TITLE = 'Occurence Statistics';
 
 const handleSaveClick = (downloadId: string) => {
     saveChart(downloadId || 'chartIdBipad', downloadId || 'chartIdBipad');
