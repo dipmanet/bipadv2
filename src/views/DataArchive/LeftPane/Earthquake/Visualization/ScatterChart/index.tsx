@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import * as PageType from '#store/atom/page/types';
 import { getTemporals } from '../utils';
-import { saveChart } from '#utils/common';
+import { saveChart, groupList } from '#utils/common';
 import Button from '#rsca/Button';
 import ToolTip from './Tooltip';
 
@@ -50,6 +50,10 @@ const ScatterChartViz = (props: Props) => {
     const sortedEarthquakeWithTemporals = earthquakeWithTemporals.sort(
         (a, b) => (a.eventOn < b.eventOn ? -1 : 1),
     );
+    const groupedByYear = groupList(
+        earthquakeWithTemporals.filter(e => e.temporalYear),
+        earthquake => earthquake.temporalYear,
+    );
     return (
         <div className={styles.visualizations}>
             <div
@@ -71,7 +75,7 @@ const ScatterChartViz = (props: Props) => {
                     className={styles.chart}
                     id={downloadId}
                     style={{
-                        height: `${earthquakeWithTemporals.length * 20}px`,
+                        height: `${groupedByYear.length * 30}px`,
                         minHeight: '320px',
                     }}
                 >
