@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable arrow-body-style */
 import React from 'react';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { Tabs } from '@material-ui/core';
 import styles from './styles.scss';
@@ -18,7 +19,13 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import SubHeader from './SubHeader';
 import EiaComponent from './EIA';
 import GenericTable from './GenericTable';
-import { createRequestClient, ClientAttributes, methods } from '#request';
+import { createRequestClient,
+    ClientAttributes,
+    methods,
+    createConnectedRequestCoordinator } from '#request';
+import { AppState } from '#store/types';
+import { authStateSelector } from '#selectors';
+import { AuthState } from '#store/atom/auth/types';
 
 interface State {
     currentView: string;
@@ -37,11 +44,18 @@ interface Props {
     type: any;
     routeToOpenspace: any;
     openspaceDeleteRequest: any;
+    authState: any;
 }
 
 interface Params {
     openspaceId?: number;
 }
+
+interface PropsFromState {
+    authState: AuthState;
+}
+
+type ReduxProps = PropsFromState ;
 
 interface Tabs {
     info: string;
@@ -164,10 +178,12 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
             type,
             routeToOpenspace,
             requests,
+            authState: { authenticated },
         } = this.props;
         const { currentView, deleteModal } = this.state;
         const { handleDeleteModal, confirmDelete } = this;
         let imageUrl = '';
+
 
         const {
             coverPictureRequest: { response },
@@ -197,6 +213,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                         title={title}
                         location={address}
                         onEdit={this.props.onEdit}
+                        authenticated={authenticated}
                     />
                     <img
                         src={imageUrl}
@@ -259,4 +276,12 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requestOptions)(SingleOpenspaceDetails);
+const mapStateToProps = (state: AppState) => ({
+    authState: authStateSelector(state),
+});
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requestOptions)(SingleOpenspaceDetails),
+    ),
+);

@@ -9,7 +9,11 @@ export default class MetaData extends React.PureComponent {
         return (
             <div>
                 <MainTable />
+                <br />
+                <hr />
                 <Template />
+                <br />
+                <hr />
                 <CheckList />
             </div>
         );
