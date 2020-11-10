@@ -6,10 +6,10 @@ import Legend from '#rscz/Legend';
 import styles from './styles.scss';
 
 const earthquakeLegendItems = [
-    { color: '#fcbba1', label: 'Light (< 5)', radius: 8, style: styles.symbol },
-    { color: '#fc9272', label: 'Moderate (< 6)', radius: 12, style: styles.symbol },
-    { color: '#fb6a4a', label: 'Strong (< 7)', radius: 16, style: styles.symbol },
-    { color: '#de2d26', label: 'Major (< 8)', radius: 18, style: styles.symbol },
+    { color: '#fcbba1', label: 'Light (4.0 - 4.9)', radius: 8, style: styles.symbol },
+    { color: '#fc9272', label: 'Moderate (5.0 -5.9)', radius: 12, style: styles.symbol },
+    { color: '#fb6a4a', label: 'Strong (6.0 - 6.9)', radius: 16, style: styles.symbol },
+    { color: '#de2d26', label: 'Major (7.0 - 7.9)', radius: 18, style: styles.symbol },
     { color: '#a50f15', label: 'Great (> 8)', radius: 22, style: styles.symbol },
 ];
 
@@ -28,7 +28,7 @@ const EarthquakeLegend = () => (
                 alt="Earthquake"
             />
             <h4 className={styles.heading}>
-                    Earthquake (Richter Scale)
+                    Earthquake (Richter Scale (ML))
             </h4>
         </header>
         <Legend
