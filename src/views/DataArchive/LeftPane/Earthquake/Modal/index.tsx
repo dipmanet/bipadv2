@@ -101,15 +101,18 @@ class EarthquakeModal extends React.PureComponent<Props> {
             return styles.minor;
         }
         if (magnitude <= 4) {
-            return styles.light;
+            return styles.minor;
         }
         if (magnitude <= 5) {
-            return styles.moderate;
+            return styles.light;
         }
         if (magnitude <= 6) {
-            return styles.strong;
+            return styles.moderate;
         }
         if (magnitude <= 7) {
+            return styles.strong;
+        }
+        if (magnitude < 8) {
             return styles.major;
         }
         if (magnitude >= 8) {
