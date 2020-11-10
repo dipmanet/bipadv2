@@ -1,9 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import TextInput from '#rsci/TextInput';
-import NumberInput from '#rsci/NumberInput';
 import styles from '../styles.scss';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
+import { createConnectedRequestCoordinator } from '#request';
+import { AppState } from '#store/types';
+import { authStateSelector } from '#selectors';
+import { AuthState } from '#store/atom/auth/types';
+
+interface PropsFromState {
+    authState: AuthState;
+}
+
+type ReduxProps = PropsFromState ;
 
 
 interface Props {
@@ -11,9 +21,11 @@ interface Props {
     handleTabClick: (tab: string) => void;
     openspacePostError: boolean;
     resourceId: number | undefined;
+    authState: any;
 }
 // eslint-disable-next-line max-len
-export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError, resourceId }: Props) => (
+const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError, resourceId, authState }: Props) => (
+
     <React.Fragment>
         <br />
         <TextInput
@@ -69,15 +81,27 @@ export const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, open
                 // pending={addResourcePending || editResourcePending}
                 onClick={() => handleTabClick('closeModal')}
             >
-                Close
+            Close
             </PrimaryButton>
-            <PrimaryButton
-                onClick={() => postBasicInfo()}
-            >
-                Save and Continue
-            </PrimaryButton>
+            {authState.authenticated
+             && (
+                 <PrimaryButton
+                     onClick={() => postBasicInfo()}
+                 >
+         Save and Continue
+                 </PrimaryButton>
+             ) }
+
         </div>
     </React.Fragment>
+
+
 );
 
-export default BasicInfo;
+const mapStateToProps = (state: AppState) => ({
+    authState: authStateSelector(state),
+});
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(BasicInfo),
+);
