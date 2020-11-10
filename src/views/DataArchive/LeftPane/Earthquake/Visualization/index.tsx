@@ -188,11 +188,11 @@ const getEarthquakeTemporalSummary = memoize(
 
 const getChartTitle = (adminLevel: AdminLevel) => {
     const titles = [
-        { level: 1, title: 'Province Wise Chart' },
-        { level: 2, title: 'District Wise Chart' },
-        { level: 3, title: 'Municipality Wise Chart' },
+        { level: 1, title: 'Occurence Statistics (District Wise)' },
+        { level: 2, title: 'Occurence Statistics (Municipality Wise)' },
+        { level: 3, title: 'Occurence Statistics (Municipality)' },
     ];
-    let chartTitle = '';
+    let chartTitle = 'Occurence Statistics (Province Wise)';
     titles.forEach((t) => {
         const { level, title } = t;
         if (level === adminLevel) {
