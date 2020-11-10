@@ -274,13 +274,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
             this.setState({ currentView: 'details' });
         });
     }
-    // private getSchema = memoize((openspaceTab?: OpenspaceTabs) => {
-    //     if (openspaceTab) {
-    //         return schemaMap[openspaceTab];
-    //     }
-    //     return defaultSchema;
-    // });
-
+ 
 
     public render() {
         const { currentView } = this.state;
