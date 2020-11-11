@@ -9,9 +9,9 @@ export default class MetaData extends React.PureComponent {
                 <Table celled structured>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell rowSpan="1" textAlign="right">
+                            {/* <Table.HeaderCell rowSpan="1" textAlign="right">
                                 SN
-                            </Table.HeaderCell>
+                            </Table.HeaderCell> */}
                             <Table.HeaderCell rowSpan="2" textAlign="right">
                                 Palika
                             </Table.HeaderCell>
@@ -26,7 +26,7 @@ export default class MetaData extends React.PureComponent {
 
                     <Table.Body>
                         <Table.Row>
-                            <Table.Cell> 1</Table.Cell>
+                            {/* <Table.Cell> 1</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Bhimeshwor
                             </Table.Cell>
@@ -34,7 +34,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell textAlign="right">17</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 2</Table.Cell>
+                            {/* <Table.Cell> 2</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Chautara Sangachowkgadhi
                             </Table.Cell>
@@ -42,7 +42,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell textAlign="right">37</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 3</Table.Cell>
+                            {/* <Table.Cell> 3</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Neelakantha
                             </Table.Cell>
@@ -50,13 +50,13 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell textAlign="right">51</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 4</Table.Cell>
+                            {/* <Table.Cell> 4</Table.Cell> */}
                             <Table.Cell textAlign="right">Gorkha</Table.Cell>
                             <Table.Cell textAlign="right">11</Table.Cell>
                             <Table.Cell textAlign="right">74</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 5</Table.Cell>
+                            {/* <Table.Cell> 5</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Gosainkunda
                             </Table.Cell>

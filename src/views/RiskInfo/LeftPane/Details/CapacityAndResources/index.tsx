@@ -681,8 +681,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     };
 
     private handleShowOpenspaceDetailsClick = (openspaceDeleted?: boolean) => {
-        console.log('openspaceclick');
-
         this.setState(prevState => ({
             singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
         }));
@@ -699,7 +697,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 30.44702867091792,
             ];
             map.fitBounds(nepalBounds);
-            window.location.reload();
         }
     };
 

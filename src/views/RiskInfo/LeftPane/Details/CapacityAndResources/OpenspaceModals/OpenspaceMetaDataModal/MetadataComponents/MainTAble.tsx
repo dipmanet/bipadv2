@@ -60,7 +60,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell textAlign="center">
                                 Gokarneshwor Municipality
                             </Table.Cell>
-                            <Table.Cell textAlign="right">1</Table.Cell>
+                            {/* <Table.Cell textAlign="right">1</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Kathmandu Valley
                             </Table.Cell>
@@ -116,7 +116,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell textAlign="center">
                                 Nagarjun Municipality
                             </Table.Cell>
-                            <Table.Cell textAlign="right">1</Table.Cell>
+                            {/* <Table.Cell textAlign="right">1</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Kathmandu Valley
                             </Table.Cell>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { isNotDefined, isDefined } from '@togglecorp/fujs';
 import {
@@ -274,13 +275,6 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
             this.setState({ currentView: 'details' });
         });
     }
-    // private getSchema = memoize((openspaceTab?: OpenspaceTabs) => {
-    //     if (openspaceTab) {
-    //         return schemaMap[openspaceTab];
-    //     }
-    //     return defaultSchema;
-    // });
-
 
     public render() {
         const { currentView } = this.state;
