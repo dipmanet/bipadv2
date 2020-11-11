@@ -22,6 +22,7 @@ import { MultiResponse } from '#store/atom/response/types';
 import * as PageType from '#store/atom/page/types';
 
 import MiniMap from './MiniMap';
+import Details from './Details';
 
 import styles from './styles.scss';
 
@@ -60,6 +61,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         query: ({ props: { stationId } }) => ({
             station: stationId,
             historical: 'true',
+            expand: ['province', 'district', 'municipality', 'ward'],
         }),
         onMount: true,
         onPropsChanged: ['stationId'],
@@ -133,7 +135,11 @@ const PollutionModal = (props: Props) => {
                             coordinates={coordinates}
                         />
                     </div>
-                    <div className={styles.modalDetails}>Modal Details</div>
+                    <div className={styles.modalDetails}>
+                        <Details
+                            latestPollutionDetail={latestPollutionDetail}
+                        />
+                    </div>
                 </div>
                 <div className={styles.modalRow}>
                     <div className={styles.modalOneMonth}>Modal One Month Graph</div>
