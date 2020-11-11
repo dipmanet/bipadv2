@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { isNotDefined, isDefined } from '@togglecorp/fujs';
 import {
@@ -274,7 +275,6 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
             this.setState({ currentView: 'details' });
         });
     }
- 
 
     public render() {
         const { currentView } = this.state;
