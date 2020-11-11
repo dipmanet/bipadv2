@@ -99,6 +99,7 @@ class PollutionMap extends React.PureComponent {
                 createdOn: measuredOn,
                 station: stationId,
             },
+            geometry,
         } = feature;
         this.setState({
             tooltipRenderer: this.pollutionTooltipRenderer,
@@ -108,6 +109,7 @@ class PollutionMap extends React.PureComponent {
                 aqi,
                 measuredOn,
                 stationId,
+                geometry,
             },
             coordinates: lngLat,
         });
@@ -244,7 +246,7 @@ class PollutionMap extends React.PureComponent {
         } else {
             map.fitBounds(nepalBounds);
         }
-        const { title: stationName, stationId } = tooltipParams || {};
+        const { title: stationName, stationId, geometry } = tooltipParams || {};
         return (
             <div className={styles.dataArchivePollutionMap}>
                 <CommonMap
@@ -296,6 +298,7 @@ class PollutionMap extends React.PureComponent {
                         handleModalClose={this.handleModalClose}
                         stationName={stationName}
                         stationId={stationId}
+                        geometry={geometry}
                     />
                 )
                 }

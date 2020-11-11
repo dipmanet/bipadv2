@@ -1,5 +1,6 @@
-import React from 'react';
-
+import React, { useContext } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import memoize from 'memoize-one';
 import {
     _cs,
@@ -11,6 +12,9 @@ import {
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
+import CommonMap from '#components/CommonMap';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -29,13 +33,21 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { AppState } from '#store/types';
+import { mapStyleSelector } from '#selectors';
 
 interface Params {}
 
+interface Geometry {
+    type: string;
+    coordinates: [number, number];
+}
 interface OwnProps {
     handleModalClose: () => void;
     stationName: string;
     stationId: number;
+    geometry: Geometry;
+    mapStyle: string;
 }
 
 interface ArchivePollution extends PageType.DataArchivePollution {
@@ -72,6 +84,10 @@ const getTodaysPollutionDetails = memoize((pollutionDetails: ArchivePollution[])
     return todaysData;
 });
 
+const mapStateToProps = (state: AppState) => ({
+    mapStyle: mapStyleSelector(state),
+});
+
 const PollutionModal = (props: Props) => {
     const { stationName = 'Pollution Modal',
         requests: {
@@ -80,6 +96,8 @@ const PollutionModal = (props: Props) => {
                 pending,
             },
         },
+        mapStyle,
+        geometry,
         handleModalClose } = props;
     let pollutionDetails: ArchivePollution[] = emptyArray;
     if (!pending && response) {
@@ -92,6 +110,9 @@ const PollutionModal = (props: Props) => {
     const sortedPollutionDetails = getSortedPollutionData(pollutionDetails);
     const todaysPollutionDetails = getTodaysPollutionDetails(sortedPollutionDetails);
     const latestPollutionDetail = sortedPollutionDetails[0];
+
+    // get map center
+    const { coordinates } = geometry;
 
     return (
         <Modal className={styles.pollutionModal}>
@@ -107,7 +128,29 @@ const PollutionModal = (props: Props) => {
             />
             <ModalBody className={styles.body}>
                 <div className={styles.modalRow}>
-                    <div className={styles.modalMap}>Modal Map</div>
+                    <div className={styles.modalMap}>
+                        <Map
+                            mapStyle={mapStyle}
+                            mapOptions={{
+                                logoPosition: 'top-left',
+                                minZoom: 8,
+                                center: coordinates,
+                            }}
+                            // debug
+                            scaleControlShown
+                            scaleControlPosition="bottom-right"
+
+                            navControlShown
+                            navControlPosition="bottom-right"
+                        >
+                            <MapContainer className={styles.map1} />
+                            <CommonMap
+                                sourceKey="comparative-first"
+                                // region={faramValues.region1}
+                                debug
+                            />
+                        </Map>
+                    </div>
                     <div className={styles.modalDetails}>Modal Details</div>
                 </div>
                 <div className={styles.modalRow}>
@@ -119,6 +162,8 @@ const PollutionModal = (props: Props) => {
     );
 };
 
-export default createConnectedRequestCoordinator<OwnProps>()(
-    createRequestClient(requests)(PollutionModal),
-);
+export default compose(
+    connect(mapStateToProps, {}),
+    createConnectedRequestCoordinator<OwnProps>(),
+    createRequestClient(requests),
+)(PollutionModal);
