@@ -290,13 +290,12 @@ class PollutionMap extends React.PureComponent {
                         />
                     </React.Fragment>
                 </MapSource>
-                {/* {showModal */}
-                {(showModal || true)
+                {showModal
                 && (
                     <PollutionModal
                         handleModalClose={this.handleModalClose}
                         stationName={stationName}
-                        stationId={stationId || 1}
+                        stationId={stationId}
                     />
                 )
                 }
