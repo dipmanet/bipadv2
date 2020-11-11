@@ -12,9 +12,6 @@ import {
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
-import Map from '#re-map';
-import MapContainer from '#re-map/MapContainer';
-import CommonMap from '#components/CommonMap';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -23,6 +20,8 @@ import DangerButton from '#rsca/Button/DangerButton';
 import { MultiResponse } from '#store/atom/response/types';
 
 import * as PageType from '#store/atom/page/types';
+
+import MiniMap from './MiniMap';
 
 import styles from './styles.scss';
 
@@ -129,27 +128,10 @@ const PollutionModal = (props: Props) => {
             <ModalBody className={styles.body}>
                 <div className={styles.modalRow}>
                     <div className={styles.modalMap}>
-                        <Map
+                        <MiniMap
                             mapStyle={mapStyle}
-                            mapOptions={{
-                                logoPosition: 'top-left',
-                                minZoom: 8,
-                                center: coordinates,
-                            }}
-                            // debug
-                            scaleControlShown
-                            scaleControlPosition="bottom-right"
-
-                            navControlShown
-                            navControlPosition="bottom-right"
-                        >
-                            <MapContainer className={styles.map1} />
-                            <CommonMap
-                                sourceKey="comparative-first"
-                                // region={faramValues.region1}
-                                debug
-                            />
-                        </Map>
+                            coordinates={coordinates}
+                        />
                     </div>
                     <div className={styles.modalDetails}>Modal Details</div>
                 </div>
