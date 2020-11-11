@@ -460,6 +460,27 @@ const setRiskInfoClimateChangeTitle = (
 
 /* Risk Info Submodules ends */
 
+// DataArchive
+/**
+ * @param titleContext Context for Titles
+ * @param regionName Location Name
+ */
+const setDataArchiveTitle = (
+    titleContext: TitleContextProps,
+) => {
+    const { dataArchive, setSource } = titleContext;
+    if (dataArchive) {
+        const { mainModule, location, startDate, endDate } = dataArchive;
+
+        // Earthquake
+        if (mainModule === 'Earthquake') {
+            defineSource('Department of Mines and Geology', setSource);
+            return `Historial Earthquake Data (${startDate} to ${endDate}), ${location}`;
+        }
+    }
+    return '';
+};
+
 /**
  * @param pageTitle Default Page title
  * @param pageContext Context for the page
@@ -560,6 +581,10 @@ export const getRouteWiseTitleAndSource = (
             if (riskInfoSubModule === 'climate-change') {
                 title = setRiskInfoClimateChangeTitle(activeLayer, regionName, setSource);
             }
+        }
+
+        if (routeName === 'dataArchive') {
+            title = setDataArchiveTitle(titleContext);
         }
         const tempSource = calculatedSourceTitle;
         calculatedSourceTitle = '';

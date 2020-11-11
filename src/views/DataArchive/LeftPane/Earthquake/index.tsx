@@ -28,6 +28,7 @@ import {
     transformDataRangeLocaleToFilter,
     transformRegion,
     transformMagnitude,
+    pastDaysToDateRange,
 } from '#utils/transformations';
 
 import {
@@ -45,7 +46,11 @@ import EarthquakeViz from './Visualization';
 import {
     dataArchiveEarthquakeListSelector,
     eqFiltersSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
 } from '#selectors';
+import { TitleContext, DataArchive } from '#components/TitleContext';
 
 import styles from './styles.scss';
 
@@ -56,11 +61,17 @@ interface PropsFromDispatch {
 interface PropsFromState {
     earthquakeList: PageType.DataArchiveEarthquake[];
     eqFilters: DAEarthquakeFiltersElement;
+    districts: PageType.District[];
+    provinces: PageType.Province[];
+    municipalities: PageType.Municipality[];
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     earthquakeList: dataArchiveEarthquakeListSelector(state),
     eqFilters: eqFiltersSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -131,10 +142,61 @@ const filterByMagnitudeRange = (
     return filteredEarthquakes;
 };
 
+const getLocationName = (
+    region: PageType.Region,
+    provinces: PageType.Province[],
+    districts: PageType.District[],
+    municipalities: PageType.Municipality[],
+) => {
+    let locationName = 'Nepal';
+    if (region.adminLevel === 1) {
+        const province = provinces.find(d => d.id === region.geoarea);
+        if (province) {
+            locationName = province.title;
+        }
+    } else if (region.adminLevel === 2) {
+        const district = districts.find(d => d.id === region.geoarea);
+        if (district) {
+            locationName = district.title;
+        }
+    } else if (region.adminLevel === 3) {
+        const municipality = municipalities.find(d => d.id === region.geoarea);
+        if (municipality) {
+            locationName = municipality.title;
+        }
+    }
+    return locationName;
+};
+
+const getYYYYMMDD = (date: Date) => {
+    const d = new Date(date);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
+};
+
+const getDates = (eqFilters: DAEarthquakeFiltersElement) => {
+    const { dataDateRange } = eqFilters;
+    const { rangeInDays } = dataDateRange;
+    let startDate;
+    let endDate;
+    if (rangeInDays !== 'custom') {
+        const { startDate: sDate, endDate: eDate } = pastDaysToDateRange(rangeInDays);
+        startDate = getYYYYMMDD(sDate);
+        endDate = getYYYYMMDD(eDate);
+    } else {
+        ({ startDate, endDate } = dataDateRange);
+    }
+    return [startDate, endDate];
+};
+
 const Earthquake = (props: Props) => {
     const [sortKey, setSortKey] = useState('eventOn');
     const [activeView, setActiveView] = useState<ActiveView>('data');
-    const { earthquakeList, requests, eqFilters } = props;
+    const { earthquakeList,
+        requests,
+        eqFilters,
+        provinces,
+        districts,
+        municipalities } = props;
     const pending = isAnyRequestPending(requests);
     const filteredEarthquakes = filterByMagnitudeRange(eqFilters.magnitude, earthquakeList);
 
@@ -142,6 +204,8 @@ const Earthquake = (props: Props) => {
         setData,
     } = useContext(DataArchiveContext);
 
+    const { setDataArchive } = useContext(TitleContext);
+    const { region } = eqFilters;
     const handleDataButtonClick = () => {
         setActiveView('data');
     };
@@ -158,6 +222,21 @@ const Earthquake = (props: Props) => {
             setData(filtered);
         }
     }, [earthquakeList, eqFilters.magnitude, setData]);
+
+    const location = getLocationName(region, provinces, districts, municipalities);
+    const [startDate, endDate] = getDates(eqFilters);
+
+    if (setDataArchive) {
+        setDataArchive((prevState: DataArchive) => {
+            if (prevState.mainModule !== 'Earthquake'
+            || prevState.location !== location
+            || prevState.startDate !== startDate
+            || prevState.endDate !== endDate) {
+                return { ...prevState, mainModule: 'Earthquake', location, startDate, endDate };
+            }
+            return prevState;
+        });
+    }
 
     if (filteredEarthquakes.length < 1) {
         const message = pending ? '' : 'No data available for the applied filter';
