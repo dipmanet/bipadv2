@@ -15,7 +15,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.HeaderCell rowSpan="2">
                                 Category
                             </Table.HeaderCell>
-                            <Table.HeaderCell rowSpan="1">SN</Table.HeaderCell>
+                            {/* <Table.HeaderCell rowSpan="1">SN</Table.HeaderCell> */}
                             <Table.HeaderCell rowSpan="2">
                                 District Name
                             </Table.HeaderCell>
@@ -42,7 +42,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell rowSpan="7">
                                 Open Spaces in Kathmandu Valley
                             </Table.Cell>
-                            <Table.Cell>1</Table.Cell>
+                            {/* <Table.Cell>1</Table.Cell> */}
                             <Table.Cell textAlign="right">Kathmandu</Table.Cell>
                             <Table.Cell textAlign="right">
                                 Kathmandu Metropolitan City
@@ -55,7 +55,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell rowSpan="7">83</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 1</Table.Cell>
+                            {/* <Table.Cell> 1</Table.Cell> */}
                             <Table.Cell textAlign="right">Kathmandu</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Gokarneshwor Municipality
@@ -69,7 +69,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 1</Table.Cell>
+                            {/* <Table.Cell> 1</Table.Cell> */}
                             <Table.Cell textAlign="right">Kathmandu</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Kirtipur Municipality
@@ -83,7 +83,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 2</Table.Cell>
+                            {/* <Table.Cell> 2</Table.Cell> */}
                             <Table.Cell textAlign="right">Bhaktapur</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Bhaktapur Municipality City
@@ -97,7 +97,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 3</Table.Cell>
+                            {/* <Table.Cell> 3</Table.Cell> */}
                             <Table.Cell textAlign="right">Lalitpur</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Lalitpur Metropolitan City
@@ -111,7 +111,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 1</Table.Cell>
+                            {/* <Table.Cell> 1</Table.Cell> */}
                             <Table.Cell textAlign="right">Kathmandu</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Nagarjun Municipality
@@ -125,7 +125,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 1</Table.Cell>
+                            {/* <Table.Cell> 1</Table.Cell> */}
                             <Table.Cell textAlign="right">Kathmandu</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Tokha Municipality
@@ -140,7 +140,7 @@ export default class MetaData extends React.PureComponent {
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell rowSpan="5">Open Spaces Out</Table.Cell>
-                            <Table.Cell>4</Table.Cell>
+                            {/* <Table.Cell>4</Table.Cell> */}
                             <Table.Cell textAlign="right">Gorkha</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Gorkha Municipality
@@ -151,7 +151,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell rowSpan="5">31</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 5</Table.Cell>
+                            {/* <Table.Cell> 5</Table.Cell> */}
                             <Table.Cell textAlign="right">Dolakha</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Bhimeshwor Municipality
@@ -165,7 +165,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 6</Table.Cell>
+                            {/* <Table.Cell> 6</Table.Cell> */}
                             <Table.Cell textAlign="right">
                                 Sindupalchowk
                             </Table.Cell>
@@ -182,7 +182,7 @@ export default class MetaData extends React.PureComponent {
                         </Table.Row>
 
                         <Table.Row>
-                            <Table.Cell> 7</Table.Cell>
+                            {/* <Table.Cell> 7</Table.Cell> */}
                             <Table.Cell textAlign="right">Rasuwa</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Gosainkunda Rural Municipality
@@ -197,7 +197,7 @@ export default class MetaData extends React.PureComponent {
                         </Table.Row>
 
                         <Table.Row>
-                            <Table.Cell> 8</Table.Cell>
+                            {/* <Table.Cell> 8</Table.Cell> */}
                             <Table.Cell textAlign="right">Dhading</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Neelakantha Municipality
@@ -214,7 +214,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell rowSpan="5">
                                 Open Space Datasets from Western Region
                             </Table.Cell>
-                            <Table.Cell>9</Table.Cell>
+                            {/* <Table.Cell>9</Table.Cell> */}
                             <Table.Cell textAlign="right">Kaski</Table.Cell>
                             <Table.Cell textAlign="right">
                                 Pokhara Metropolitan City
@@ -228,7 +228,7 @@ export default class MetaData extends React.PureComponent {
                             <Table.Cell rowSpan="5">40</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 10</Table.Cell>
+                            {/* <Table.Cell> 10</Table.Cell> */}
                             <Table.Cell textAlign="right">Baglung</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Baglung Bazar Municipality
@@ -242,7 +242,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 11</Table.Cell>
+                            {/* <Table.Cell> 11</Table.Cell> */}
                             <Table.Cell textAlign="right">Palpa</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Tansen Municipality
@@ -256,7 +256,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 12</Table.Cell>
+                            {/* <Table.Cell> 12</Table.Cell> */}
                             <Table.Cell textAlign="right">Syangja</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Putali Bazar Municipality
@@ -270,7 +270,7 @@ export default class MetaData extends React.PureComponent {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell> 13</Table.Cell>
+                            {/* <Table.Cell> 13</Table.Cell> */}
                             <Table.Cell textAlign="right">Gulmi</Table.Cell>
                             <Table.Cell textAlign="center">
                                 Resunga Municipality
