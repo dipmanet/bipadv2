@@ -83,14 +83,13 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             >
             Close
             </PrimaryButton>
-            {authState.authenticated
-             && (
-                 <PrimaryButton
-                     onClick={() => postBasicInfo()}
-                 >
+
+            <PrimaryButton
+                onClick={() => postBasicInfo()}
+            >
          Save and Continue
-                 </PrimaryButton>
-             ) }
+            </PrimaryButton>
+
 
         </div>
     </React.Fragment>

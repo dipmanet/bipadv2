@@ -33,32 +33,28 @@ export default class SubHeader extends React.PureComponent<Props> {
             <div className={styles.subHeader}>
                 <div className={styles.topRow}>
                     <div className={styles.header}>{title}</div>
-                    {authenticated
-                       && (
-                           <div
-                               className={styles.option}
-                               onClick={() => {
-                                   onEdit();
-                               }}
-                               onKeyDown={() => {
-                                   onEdit();
-                               }}
-                           >
-                               <Icon icon={Edit} size={15} />
+
+                    <div
+                        className={styles.option}
+                        onClick={() => {
+                            onEdit();
+                        }}
+                        onKeyDown={() => {
+                            onEdit();
+                        }}
+                    >
+                        <Icon icon={Edit} size={15} />
                        Edit
-                           </div>
-                       )}
-                    {authenticated && (
-                        <div
-                            className={styles.option}
-                            onClick={() => handleDeleteModal()}
-                            onKeyDown={() => handleDeleteModal()}
-                        >
-                            {' '}
-                            <Icon icon={Delete} size={15} />
+                    </div>
+                    <div
+                        className={styles.option}
+                        onClick={() => handleDeleteModal()}
+                        onKeyDown={() => handleDeleteModal()}
+                    >
+                        {' '}
+                        <Icon icon={Delete} size={15} />
                         Delete
-                        </div>
-                    )}
+                    </div>
 
 
                     <div
