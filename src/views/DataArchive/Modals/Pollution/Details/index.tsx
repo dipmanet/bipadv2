@@ -36,7 +36,7 @@ const Details = (props: Props) => {
             {details.map((detail) => {
                 const { title: itemTitle, value: itemValue, style: itemStyle } = detail;
                 return (
-                    <div key={title} className={itemStyle || styles.item}>
+                    <div key={itemTitle} className={itemStyle || styles.item}>
                         <div className={styles.title}>
                             {itemTitle}
                         </div>
