@@ -19,11 +19,10 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import { MultiResponse } from '#store/atom/response/types';
 
-import * as PageType from '#store/atom/page/types';
-
 import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
+import { Geometry, ArchivePollution } from './types';
 
 import styles from './styles.scss';
 
@@ -39,44 +38,13 @@ import { mapStyleSelector } from '#selectors';
 
 interface Params {}
 
-interface Geometry {
-    type: string;
-    coordinates: [number, number];
-}
+
 interface OwnProps {
     handleModalClose: () => void;
     stationName: string;
     stationId: number;
     geometry: Geometry;
     mapStyle: string;
-}
-
-interface Federal {
-    bbox: [number, number, number, number];
-    centroid: {
-        type: string;
-        coordinates: [number, number];
-    };
-    code: string;
-    id: number;
-    order: number;
-    title: string;
-    titleEn: string;
-    titleNe: string;
-}
-
-interface District extends Federal {
-    province: number;
-}
-
-interface ArchivePollution extends PageType.DataArchivePollution {
-    createdOn: string;
-    province: Federal;
-    district: District;
-    point: {
-        type: string;
-        coordinates: [number, number];
-    };
 }
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {

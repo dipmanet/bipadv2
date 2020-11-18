@@ -1,34 +1,7 @@
 import React from 'react';
-import * as PageType from '#store/atom/page/types';
 
+import { ArchivePollution } from '../types';
 import styles from './styles.scss';
-
-interface Federal {
-    bbox: [number, number, number, number];
-    centroid: {
-        type: string;
-        coordinates: [number, number];
-    };
-    code: string;
-    id: number;
-    order: number;
-    title: string;
-    titleEn: string;
-    titleNe: string;
-}
-
-interface District extends Federal {
-    province: number;
-}
-interface ArchivePollution extends PageType.DataArchivePollution {
-    createdOn: string;
-    province: Federal;
-    district: District;
-    point: {
-        type: string;
-        coordinates: [number, number];
-    };
-}
 
 interface Props {
     latestPollutionDetail: ArchivePollution;
