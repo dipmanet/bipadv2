@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DateSelector from './DateSelector';
 import styles from './styles.scss';
 
 const Filters = () => (
@@ -9,11 +10,8 @@ const Filters = () => (
         </div>
         <div className={styles.selectors}>
             <div className={styles.date}>
-                <div className={styles.title}>
-                    Date Selectors
-                </div>
                 <div className={styles.element}>
-                    Date Element
+                    <DateSelector />
                 </div>
             </div>
             <div className={styles.parameters}>
