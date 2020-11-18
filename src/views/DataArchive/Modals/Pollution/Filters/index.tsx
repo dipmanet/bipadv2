@@ -1,6 +1,8 @@
 import React from 'react';
 
 import DateSelector from './DateSelector';
+import ParameterSelector from './ParameterSelector';
+
 import styles from './styles.scss';
 
 const Filters = () => (
@@ -19,7 +21,7 @@ const Filters = () => (
                     Parameter Selector
                 </div>
                 <div className={styles.element}>
-                    Parameter Element
+                    <ParameterSelector />
                 </div>
             </div>
             <div className={styles.period}>

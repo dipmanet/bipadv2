@@ -32,3 +32,8 @@ export interface ArchivePollution extends PageType.DataArchivePollution {
         coordinates: [number, number];
     };
 }
+
+export interface Parameters {
+    parameterCode: string;
+    parameterName: string;
+}
