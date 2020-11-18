@@ -7,17 +7,16 @@
         display: flex;
         flex-direction: column;
         .modal-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             // border: 2px solid red;
             height: 50%;
             & > * {
-                background-color: rosybrown;
                 border: 1px solid red;
                 margin: 4px;
                 padding: 4px;
             }
             .modal-map {
-                flex-grow: 1;
                 .map-1 {
                     flex-basis: calc(50% - var(--spacing-small) * 2);
                     margin: 0 var(--spacing-small);
@@ -26,15 +25,14 @@
             }
 
             .modal-details {
-                flex-grow: 1;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .modal-one-month {
-                flex-grow: 1;
             }
 
             .modal-twelve-month {
-                flex-grow: 1;
             }
         }
     }

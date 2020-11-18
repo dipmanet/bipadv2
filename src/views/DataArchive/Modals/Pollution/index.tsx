@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
@@ -23,6 +23,7 @@ import * as PageType from '#store/atom/page/types';
 
 import MiniMap from './MiniMap';
 import Details from './Details';
+import Filters from './Filters';
 
 import styles from './styles.scss';
 
@@ -50,8 +51,32 @@ interface OwnProps {
     mapStyle: string;
 }
 
+interface Federal {
+    bbox: [number, number, number, number];
+    centroid: {
+        type: string;
+        coordinates: [number, number];
+    };
+    code: string;
+    id: number;
+    order: number;
+    title: string;
+    titleEn: string;
+    titleNe: string;
+}
+
+interface District extends Federal {
+    province: number;
+}
+
 interface ArchivePollution extends PageType.DataArchivePollution {
     createdOn: string;
+    province: Federal;
+    district: District;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
 }
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
@@ -139,6 +164,7 @@ const PollutionModal = (props: Props) => {
                         <Details
                             latestPollutionDetail={latestPollutionDetail}
                         />
+                        <Filters />
                     </div>
                 </div>
                 <div className={styles.modalRow}>
