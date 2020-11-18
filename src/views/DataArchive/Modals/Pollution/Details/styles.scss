@@ -2,7 +2,9 @@
     display: grid;
     padding: var(--spacing-large);
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: var(--spacing-medium);;
+    grid-gap: var(--spacing-medium);
+    border-right: 1px solid red;
+
     .item {
         font-weight: var(--font-weight-bold);
         .title {
@@ -11,5 +13,9 @@
         .value {
             font-size: var(--font-size-large);
         }
+    }
+    .full {
+        @extend .item;
+        grid-column: auto / span 2;
     }
 }

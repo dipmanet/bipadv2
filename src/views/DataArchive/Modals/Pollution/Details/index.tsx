@@ -3,10 +3,27 @@ import * as PageType from '#store/atom/page/types';
 
 import styles from './styles.scss';
 
+interface Federal {
+    bbox: [number, number, number, number];
+    centroid: {
+        type: string;
+        coordinates: [number, number];
+    };
+    code: string;
+    id: number;
+    order: number;
+    title: string;
+    titleEn: string;
+    titleNe: string;
+}
+
+interface District extends Federal {
+    province: number;
+}
 interface ArchivePollution extends PageType.DataArchivePollution {
     createdOn: string;
-    province: string;
-    district: string;
+    province: Federal;
+    district: District;
     point: {
         type: string;
         coordinates: [number, number];
@@ -21,60 +38,41 @@ const defaltLngLat = [0, 0];
 const emptyObject = {};
 const Details = (props: Props) => {
     const { latestPollutionDetail } = props;
-    console.log('Latest Data: ', latestPollutionDetail);
-    const { title, point, description, province, district } = latestPollutionDetail || emptyObject;
+    const {
+        title,
+        point,
+        description,
+        province,
+        district,
+    } = latestPollutionDetail || emptyObject;
     const { coordinates } = point || emptyObject;
-    const [longitude, latittude] = coordinates || defaltLngLat;
+    const [longitude, latitude] = coordinates || defaltLngLat;
+    const { title: provinceTitle } = province || emptyObject;
+    const { title: districtTitle } = district || emptyObject;
+
+    const details = [
+        { title: 'Station Name', value: title || 'N/A' },
+        { title: 'Province', value: provinceTitle || 'N/A' },
+        { title: 'Longitude', value: longitude || 'N/A' },
+        { title: 'District', value: districtTitle || 'N/A' },
+        { title: 'Latitude', value: latitude || 'N/A', style: styles.full },
+        { title: 'Description', value: description || 'N/A', style: styles.full },
+    ];
     return (
         <div className={styles.details}>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    Station Name
-                </div>
-                <div className={styles.value}>
-                    {title || 'N/A'}
-                </div>
-            </div>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    Province
-                </div>
-                <div className={styles.value}>
-                    {province || 'N/A'}
-                </div>
-            </div>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    Longitude
-                </div>
-                <div className={styles.value}>
-                    {longitude || 'N/A'}
-                </div>
-            </div>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    District
-                </div>
-                <div className={styles.value}>
-                    {district || 'N/A'}
-                </div>
-            </div>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    Latitude
-                </div>
-                <div className={styles.value}>
-                    {latittude || 'N/A'}
-                </div>
-            </div>
-            <div className={styles.item}>
-                <div className={styles.title}>
-                    Description
-                </div>
-                <div className={styles.value}>
-                    {description || 'N/A'}
-                </div>
-            </div>
+            {details.map((detail) => {
+                const { title: itemTitle, value: itemValue, style: itemStyle } = detail;
+                return (
+                    <div key={title} className={itemStyle || styles.item}>
+                        <div className={styles.title}>
+                            {itemTitle}
+                        </div>
+                        <div className={styles.value}>
+                            {itemValue}
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
