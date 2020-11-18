@@ -1,3 +1,28 @@
 .filters{
-    
+    padding: var(--spacing-large);
+    .header {
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-large);
+    }
+    .selectors {
+        display: grid;
+        // grid-template-columns: repeat(2, 1fr);
+        grid-gap: var(--spacing-medium);
+        .title {
+            font-weight: bold;
+            font-size: var(--font-size-medium-alt);
+        }
+        .date {
+            border: 1px solid green;
+        }
+
+        .parameters {
+
+        }
+
+        .period {
+
+        }
+    }
 }
+
