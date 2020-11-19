@@ -4,6 +4,18 @@
         font-weight: var(--font-weight-bold);
         font-size: var(--font-size-large);
     }
+    .submit-button {
+        padding: var(--spacing-small) var(--spacing-medium);
+        background-color: #E35163;
+        display: inline-block;
+        font-weight: normal;
+        color: white;
+        cursor: pointer;
+        
+        &:hover {
+            font-weight: bold;
+        }
+    }
     .selectors {
         display: grid;
         // grid-template-columns: repeat(2, 1fr);
