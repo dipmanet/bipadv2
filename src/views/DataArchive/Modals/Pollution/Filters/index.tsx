@@ -9,9 +9,9 @@ import styles from './styles.scss';
 
 const pollutionFilterSchema = {
     fields: {
-        dataDateRange: {},
-        parameter: {},
-        period: {},
+        dataDateRange: [],
+        parameter: [],
+        period: [],
     },
 };
 
