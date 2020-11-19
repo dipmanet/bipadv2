@@ -293,14 +293,14 @@ const setRiskInfoHazardTitle = (
         if (layerNameUpperCase.includes(floodDowri)) {
             const [region, period] = fullName.split('/');
             defineSource('Department of Water Resources and Irrigation (DoWRI)', setSource);
-            return `Flood Hazard ${period.trim()} return period, ${region.trim()} River Basin`;
+            return `Flood Hazard ${period.trim()}, ${region.trim()} River Basin`;
         }
 
         // Flood Hazard - Source: METEOR project
         if (layerNameUpperCase.includes(floodMeteor)) {
             const [hazard, period] = fullName.split('/');
             defineSource('METEOR project', setSource);
-            return `${hazard.trim()} ${period.trim()} return period, ${regionName}`;
+            return `${hazard.trim()} ${period.trim()}, ${regionName}`;
         }
 
         // Flood Inundation - Source: World Food Programme (WFP) 2019 & 2017

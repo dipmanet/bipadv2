@@ -1,69 +1,83 @@
 .spacesListModal {
-    display: flex;
-    background-color: var(--color-foreground);
-    width: 100%;
-    max-width: 70vw;
-    // height: 100%;
-    padding: 10px 0 !important;
+  display: flex;
+  background-color: var(--color-foreground);
+  width: 100%;
+  max-width: 70vw;
+  // height: 100%;
+  padding: 10px 0 !important;
 }
 
 .serialNumber {
-    max-width: 2vw;
+  max-width: 2vw;
 }
 
 .noData {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .visuallyHidden {
-    border: 0;
-    clip: 'rect(0 0 0 0)';
-    height: 1;
-    margin: -1;
-    overflow: 'hidden';
-    padding: 0;
-    position: 'absolute';
-    top: 20;
-    width: 1;
+  border: 0;
+  clip: "rect(0 0 0 0)";
+  height: 1;
+  margin: -1;
+  overflow: "hidden";
+  padding: 0;
+  position: "absolute";
+  top: 20;
+  width: 1;
 }
 
 .listWarpper {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .searchBar {
+  flex: 1;
+  display: flex;
+  margin-bottom: 3vh;
+
+  .searchField {
+    flex: 6;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .downloadField {
     flex: 1;
     display: flex;
-    margin-bottom: 3vh;
+    justify-content: flex-start;
+    align-items: flex-end;
 
-    .searchField {
-        flex: 6;
-        display: flex;
-        justify-content: flex-end;
+    .button {
+      padding: var(--spacing-small) var(--spacing-medium);
+
+      background-color: #e35163;
+      display: inline-block;
+      font-weight: normal;
+      color: white;
+      cursor: pointer;
     }
-
-    .downloadField {
-        flex: 1;
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
-
-        .button {
-            padding: var(--spacing-small) var(--spacing-medium);
-
-            background-color: #e35163;
-            display: inline-block;
-            font-weight: normal;
-            color: white;
-            cursor: pointer;
-        }
-    }
+  }
 }
 
 .listTable {
-    flex: 8;
-    width: 100%;
-    height: 100%;
+  flex: 8;
+  width: 100%;
+  height: 100%;
+}
+
+.incident-table-modal {
+  width: 64.15vw;
+  height: 90vh;
+
+  .body {
+    display: flex;
+    flex-direction: column;
+
+    .table {
+      flex-grow: 1;
+    }
+  }
 }

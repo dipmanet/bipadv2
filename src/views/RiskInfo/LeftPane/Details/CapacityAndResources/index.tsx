@@ -18,7 +18,7 @@ import {
     methods,
 } from '#request';
 
-import { resourceTypeListSelector } from '#selectors';
+import { resourceTypeListSelector, authStateSelector } from '#selectors';
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -82,6 +82,7 @@ interface ResourceTooltipProps extends PageType.Resource {
     onShowInventoryClick: () => void;
     handleShowOpenspaceDetailsClick: () => void;
     handleShowCommunitypaceDetails: () => void;
+    authenticated: boolean;
 }
 
 type toggleValues =
@@ -110,7 +111,7 @@ const initialActiveLayersIndication = {
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
-    const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
+    const { onEditClick, onShowInventoryClick, authenticated, ...resourceDetails } = props;
 
     const { id, point, title, ...resource } = resourceDetails;
 
@@ -129,7 +130,17 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         label: camelCaseToSentence(item.label),
     });
 
-    const filtered = data.filter(el => el.label !== 'description');
+    let filtered = data;
+
+    if (resourceDetails.resourceType === 'openspace') {
+        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward');
+    } else if (resourceDetails.resourceType === 'communityspace') {
+        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward');
+    }
+
+    const resourceTypeCheck = resourceDetails.resourceType === 'communityspace' || resourceDetails.resourceType === 'openspace';
+    const authCheck = resourceTypeCheck && authenticated;
+
 
     return (
         <div className={styles.resourceTooltip}>
@@ -144,14 +155,18 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 rendererParams={rendererParams}
             />
             <div className={styles.actions}>
-                <AccentButton
-                    title="Edit"
-                    onClick={onEditClick}
-                    transparent
-                    className={styles.editButton}
-                >
-                    Edit data
-                </AccentButton>
+                {authCheck
+                && (
+                    <AccentButton
+                        title="Edit"
+                        onClick={onEditClick}
+                        transparent
+                        className={styles.editButton}
+                    >
+                Edit data
+                    </AccentButton>
+                ) }
+
                 <AccentButton
                     title={
                         resourceDetails.resourceType === 'openspace'
@@ -238,6 +253,7 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
+    authState: authStateSelector(state),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params>} = {
@@ -793,7 +809,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceTypeList,
             droneImagePending,
             requests: { openspaceDeleteRequest },
+            authState: { authenticated },
         } = this.props;
+
+
         const {
             activeLayerKey,
             showResourceForm,
@@ -1663,6 +1682,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     onShowInventoryClick={
                                                         () => this.handleShowCommunitypaceDetails()
                                                     }
+                                                    authenticated={authenticated}
                                                 />
                                             </MapTooltip>
                                         )}
@@ -1757,6 +1777,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     onShowInventoryClick={
                                                         () => this.handleShowOpenspaceDetailsClick()
                                                     }
+                                                    authenticated={authenticated}
                                                 />
                                             </MapTooltip>
                                         )}

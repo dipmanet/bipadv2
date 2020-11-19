@@ -210,8 +210,8 @@ class Login extends React.PureComponent<Props, State> {
                     <ModalBody className={styles.body}>
                         <div className={styles.externalLink}>
                             <h4 className={styles.header}>
-                                To get access to BIPAD Project Information Management System (PIMS),
-                                Please go to following link
+                                To get access to Monitor for Disaster Strategic Action Plans (MDSA),
+                                please go to following link
                             </h4>
                             <a
                                 className={styles.link}
@@ -224,7 +224,7 @@ class Login extends React.PureComponent<Props, State> {
                                     name="externalLink"
                                 />
                                 <div className={styles.text}>
-                                    PMIS
+                                    MDSA
                                 </div>
                             </a>
                         </div>
