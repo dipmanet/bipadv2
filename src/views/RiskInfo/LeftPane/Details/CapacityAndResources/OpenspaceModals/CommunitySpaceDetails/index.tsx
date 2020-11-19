@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { _cs } from '@togglecorp/fujs';
 import { Tabs } from '@material-ui/core';
 import styles from './styles.scss';
@@ -178,7 +179,7 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         handleDeleteModal={handleDeleteModal}
                         authenticated={authenticated}
                     />
-                    <img
+                    {/* <img
                         src={imageUrl}
                         style={{
                             width: '100%',
@@ -187,6 +188,12 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                             objectFit: 'cover',
                         }}
                         alt="cover"
+                    /> */}
+                    <LazyLoadImage
+                        alt="cover"
+                        height="225"
+                        src={imageUrl}
+                        width="100%"
                     />
                     <ModalBody className={styles.content}>
                         <MultiViewContainer
