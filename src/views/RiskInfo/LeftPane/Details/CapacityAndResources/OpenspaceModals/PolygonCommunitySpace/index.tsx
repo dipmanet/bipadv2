@@ -10,7 +10,6 @@ interface Props {
 
 interface State {
     map: any;
-    opacityValue: number;
 }
 
 interface Params {
@@ -36,7 +35,6 @@ class Polygon extends React.PureComponent<Props, State> {
         super(props);
         this.state = {
             map: '',
-            opacityValue: 100,
         };
     }
 
@@ -124,67 +122,15 @@ class Polygon extends React.PureComponent<Props, State> {
                     'fill-opacity': 0.8,
                 },
             });
+            map.flyTo({
+                zoom: 16,
+            });
         }
-    };
-
-    private opacitySlideHandler = (e) => {
-        const { map } = this.state;
-        const { value } = e.target;
-        // let name = e.target.getAttribute("name");
-        this.setState({
-            opacityValue: value,
-        });
-        console.log('set opacity', value);
-        map.setPaintProperty(
-            'community-sorce-layer',
-            'fill-opacity',
-            parseInt(value, 10) / 100,
-        );
-        const sliderValue = document.getElementById('slider-value');
-        sliderValue.textContent = `${value}%`;
-    };
-
-    private handleWmsCheck = (e) => {
-        const { map } = this.state;
-        const { checked } = e.target;
-        if (checked) {
-            this.addWmsLayer(map);
-        } else {
-            map.removeLayer('wms-openspace-layer');
-            map.removeSource('wms-openspace-source');
-        }
-    };
-
-    private addWmsLayer = (map) => {
-        console.log('adding wms');
-
-        map.addSource('wms-openspace-source', {
-            type: 'raster',
-            tiles: [
-                'http://202.45.146.139:8080/geoserver/wms?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&width=256&height=256&layers=GIID:App_districts',
-            ],
-            tileSize: 256,
-        });
-        map.addLayer(
-            {
-                id: 'wms-openspace-layer',
-                type: 'raster',
-                source: 'wms-openspace-source',
-                paint: {},
-            },
-            'aeroway-line',
-        );
     };
 
     public render() {
-        const { opacityValue } = this.state;
         return (
             <>
-                {/* <OpenspaceLegends
-                    opacityValue={opacityValue}
-                    opacitySlideHandler={this.opacitySlideHandler}
-                    handleWmsCheck={this.handleWmsCheck}
-                /> */}
             </>
         );
     }

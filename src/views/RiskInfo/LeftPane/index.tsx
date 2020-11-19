@@ -38,7 +38,9 @@ interface OwnProps {
     className?: string;
     handleCarActive: Function;
     handleActiveLayerIndication: Function;
+    handleDroneImage: Function;
     setResourceId: Function;
+    droneImagePending: boolean;
 }
 
 interface Params {
@@ -129,7 +131,9 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
             requests,
             handleCarActive,
             handleActiveLayerIndication,
+            handleDroneImage,
             setResourceId,
+            droneImagePending,
         } = this.props;
 
         const { activeAttribute } = this.state;
@@ -182,7 +186,9 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
                             activeView={activeAttribute}
                             handleCarActive={handleCarActive}
                             handleActiveLayerIndication={handleActiveLayerIndication}
+                            handleDroneImage={handleDroneImage}
                             setResourceId={setResourceId}
+                            droneImagePending={droneImagePending}
                         />
                     )}
                     <Overview

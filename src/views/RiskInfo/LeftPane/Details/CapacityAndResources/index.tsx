@@ -177,7 +177,9 @@ interface ComponentProps {
     className?: string;
     handleCarActive: Function;
     handleActiveLayerIndication: Function;
+    handleDroneImage: Function;
     setResourceId: Function;
+    droneImagePending: boolean;
 }
 
 interface ResourceColletion {
@@ -549,12 +551,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleTooltipClose = () => {
-        const { setResourceId } = this.props;
-        setResourceId(undefined);
+        const { setResourceId, handleDroneImage } = this.props;
+        const { map } = this.context;
         this.setState({
             resourceLngLat: undefined,
             resourceInfo: undefined,
         });
+
+        // removing drone image after tooltip close
+        setResourceId(undefined);
+        handleDroneImage(false);
+        if (map.getLayer('wms-openspace-layer')) {
+            map.removeLayer('wms-openspace-layer');
+        }
+        if (map.getSource('wms-openspace-source')) {
+            map.removeSource('wms-openspace-source');
+        }
     }
 
     private handleLayerClick = (layerKey: ResourceTypeKeys) => {
@@ -779,6 +791,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             className,
             requests,
             resourceTypeList,
+            droneImagePending,
             requests: { openspaceDeleteRequest },
         } = this.props;
         const {
@@ -816,7 +829,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         const pending = resourceDetailPending
             || resourceGetPending
-            || polygonResourceGetPending;
+            || polygonResourceGetPending
+            || droneImagePending;
 
         // const geojson = this.getGeojson(resourceList);
         const educationGeoJson = this.getGeojson(resourceCollection.education);

@@ -2,16 +2,18 @@
 import React from 'react';
 import { Icon } from 'react-icons-kit';
 import { ic_menu } from 'react-icons-kit/md/ic_menu';
-import { ic_opacity } from 'react-icons-kit/md/ic_opacity';
-import droneIcon from '#resources/icons/drone-icon1.png';
+
 import { createRequestClient, ClientAttributes, methods } from '#request';
+import droneIcon from '#resources/icons/drone-icon1.png';
 import styles from './styles.scss';
+import OpacitySlider from './OpacitySlider';
 
 interface Props {
     appContext: any;
     requests: any;
     opacitySlideHandler: () => void;
     handleWmsCheck: () => void;
+    handleDroneImage: (loading: boolean) => void;
     opacityValue: number;
     legendTitle: string;
     resourceIdForLegend: number | null;
@@ -22,6 +24,7 @@ interface Props {
 interface State {
     map: any;
     opacityValue: number;
+    wmsLoading: boolean| null;
 }
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -54,7 +57,9 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
 
         this.state = {
             map: '',
+            opacityVal: 100,
             opacityValue: 100,
+            wmsLoading: false,
         };
     }
 
@@ -66,18 +71,36 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
 
     private handleWmsCheck = (e, geoserverUrl: string) => {
         const { map } = this.state;
+        const { handleDroneImage } = this.props;
         const { checked } = e.target;
-        if (checked) {
-            this.addWmsLayer(map, geoserverUrl);
-        } else {
+        if (map.getLayer('wms-openspace-layer')) {
             map.removeLayer('wms-openspace-layer');
+        }
+        if (map.getSource('wms-openspace-source')) {
             map.removeSource('wms-openspace-source');
+        }
+        if (checked) {
+            handleDroneImage(true);
+            // setTimeout(() => {
+            //     handleDroneImage(true);
+            // }, 5000);
+            this.addWmsLayer(geoserverUrl);
+        } else if (!checked) {
+            setTimeout(() => {
+                handleDroneImage(false);
+            }, 500);
+            if (map.getLayer('wms-openspace-layer')) {
+                map.removeLayer('wms-openspace-layer');
+            }
+            if (map.getSource('wms-openspace-source')) {
+                map.removeSource('wms-openspace-source');
+            }
         }
     };
 
-    private addWmsLayer = (map, geoserverUrl: string) => {
-        console.log('url', geoserverUrl);
-
+    private addWmsLayer = (geoserverUrl: string) => {
+        const { map } = this.state;
+        const { handleDroneImage } = this.props;
         map.addSource('wms-openspace-source', {
             type: 'raster',
             tiles: [
@@ -90,10 +113,18 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
                 id: 'wms-openspace-layer',
                 type: 'raster',
                 source: 'wms-openspace-source',
-                paint: {},
+                paint: {
+                    'raster-opacity': 0.8,
+                },
             },
             'aeroway-line',
         );
+
+        if (map.getLayer('wms-openspace-layer')) {
+            setTimeout(() => {
+                handleDroneImage(false);
+            }, 11000);
+        }
     };
 
     private opacitySlideHandler = (e) => {
@@ -103,6 +134,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
         this.setState({
             opacityValue: value,
         });
+
         if (map.getLayer('polygon-layer')) {
             map.setPaintProperty(
                 'polygon-layer',
@@ -144,90 +176,56 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
             // 'https://geoserver.yilab.org.np/geoserver/wms?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&width=256&height=256&layers=Bipad%3ADistrict'
             wmsUrl = `${geoserverUrl}?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&width=256&height=256&layers=${workspace}:${layerName}`;
         }
-        if (map.getLayer('wms-openspace-layer')) {
-            map.removeLayer('wms-openspace-layer');
-        }
-        if (map.getSource('wms-openspace-source')) {
-            map.removeSource('wms-openspace-source');
-        }
+
         return (
-            <div className={styles.mapLegendWrap}>
-                <h2>
+            <React.Fragment>
+                <div className={styles.mapLegendWrap}>
+                    <h2>
                     Layer Controls
-                    {/* <a href="#/" className={styles.opacityIcon} /> */}
-                </h2>
-                <div className={styles.legendWrap}>
-                    <div className={styles.legendTitle}>
-                        <span>
-                            <Icon
-                                icon={ic_menu}
-                                size={15}
-                            />
-                            {legendTitle}
-                        </span>
-                        {/* <a href="#/"><i className="material-icons">close</i></a> */}
-                    </div>
-
-                    <div className={styles.wrapList}>
-                        <div className={styles.listItem}>
-                            <Icon
-                                style={{
-                                    position: 'relative',
-                                    left: '5px',
-                                    bottom: '2px',
-                                }}
-                                icon={ic_opacity}
-                                size={16}
-                            />
-                            <span
-                                style={{ marginLeft: '10px' }}
-                            >
-                                Opacity:
+                    </h2>
+                    <div className={styles.legendWrap}>
+                        <div className={styles.legendTitle}>
+                            <span>
+                                <Icon
+                                    icon={ic_menu}
+                                    size={15}
+                                />
+                                {legendTitle}
                             </span>
-                            <div className={styles.rangeSliderWrap}>
-                                <div className={styles.rangeSlider}>
-                                    <span className={styles.bar}><span className={styles.fill} id="fill_1" /></span>
-                                    <input
-                                        className={styles.slider}
-                                        id="rangeSlider_1"
-                                        type="range"
-                                        min="1"
-                                        max="100"
-                                        value={opacityValue}
-                                        onChange={e => this.opacitySlideHandler(e)}
-
-                                    />
-                                    <span className={styles.index}>
-                                        {opacityValue}
-                                        {' '}
-                                        %
-                                    </span>
-                                </div>
-                            </div>
                         </div>
-                        {/* {geoserverUrl && ( */}
-                        <div className={styles.listItem}>
-                            <img
-                                alt="drone"
-                                src={droneIcon}
-                                className={styles.dImg}
-                            />
-                            <span>Drone Image :</span>
-                            <div className={styles.rangeSliderInputWrap}>
-                                <div className={styles.rangeSliderr}>
-                                    <input
-                                        type="checkbox"
-                                        onChange={e => this.handleWmsCheck(e, wmsUrl)}
-                                    />
 
-
-                                </div>
+                        <div className={styles.wrapList}>
+                            <div className={styles.listItem}>
+                                <OpacitySlider
+                                    opacitySlideHandler={this.opacitySlideHandler}
+                                    opacityValue={opacityValue}
+                                />
                             </div>
+                            {geoserverUrl && (
+                                <div className={styles.listItem}>
+                                    <img
+                                        alt="drone"
+                                        src={droneIcon}
+                                        className={styles.dImg}
+                                    />
+                                    <span>Drone Image :</span>
+                                    <div className={styles.rangeSliderInputWrap}>
+                                        <div className={styles.rangeSliderr}>
+                                            <input
+                                                type="checkbox"
+                                                onClick={(e) => {
+                                                    this.handleWmsCheck(e, wmsUrl);
+                                                }}
+                                            />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        {/* // )} */}
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

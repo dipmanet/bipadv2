@@ -165,7 +165,7 @@ const SwitchView = (props: Props) => {
                             handleToggleClick('openspace', value);
                         }}
                     />
-                    <div className={styles.listTitle}> Openspace </div>
+                    <div className={styles.listTitle}>Humanitarian Openspace </div>
                 </div>
 
                 <div className={styles.actionsIcon}>

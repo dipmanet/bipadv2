@@ -6,7 +6,6 @@ import LeftPane from './LeftPane';
 import RiskInfoMap from './Map';
 import ActiveLayers from './ActiveLayers';
 import CapacityAndResourcesLegend from './LeftPane/Details/CapacityAndResources/Legend';
-
 import styles from './styles.scss';
 
 interface Props {
@@ -16,6 +15,7 @@ class RiskInfo extends React.PureComponent<Props> {
     public state = {
         carActive: false,
         resourceIdForLegend: null,
+        droneImagePending: false,
         activeLayersIndication: {
             education: false,
             health: false,
@@ -42,8 +42,17 @@ class RiskInfo extends React.PureComponent<Props> {
         this.setState({ resourceIdForLegend: id });
     }
 
+    public handleDroneImage = (loading: boolean) => {
+        this.setState({ droneImagePending: loading });
+    }
+
     public render() {
-        const { carActive, activeLayersIndication, resourceIdForLegend } = this.state;
+        const {
+            carActive,
+            activeLayersIndication,
+            resourceIdForLegend,
+            droneImagePending,
+        } = this.state;
         return (
             <>
                 <RiskInfoMap />
@@ -56,7 +65,9 @@ class RiskInfo extends React.PureComponent<Props> {
                             className={styles.leftPane}
                             handleCarActive={this.handleCarActive}
                             handleActiveLayerIndication={this.handleActiveLayerIndication}
+                            handleDroneImage={this.handleDroneImage}
                             setResourceId={this.setResourceId}
+                            droneImagePending={droneImagePending}
                         />
                     )}
                     mainContentContainerClassName={styles.mainContent}
@@ -65,6 +76,7 @@ class RiskInfo extends React.PureComponent<Props> {
                     // )}
                     mainContent={carActive ? (
                         <CapacityAndResourcesLegend
+                            handleDroneImage={this.handleDroneImage}
                             activeLayersIndication={activeLayersIndication}
                             resourceIdForLegend={resourceIdForLegend}
                         />

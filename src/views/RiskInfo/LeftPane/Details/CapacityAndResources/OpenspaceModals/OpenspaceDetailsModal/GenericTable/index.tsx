@@ -73,13 +73,13 @@ const TableComponent: React.FC<Props> = (props) => {
         createData(1, 'Name of OpenSpace', allData.title),
         // createData(2, 'Province', allData.province),
         // createData(3, 'Municipality', allData.municipality),
-        createData(4, 'Capacity', (allData.usableArea / 3.5).toFixed(0)),
-        createData(5, 'Total Area', allData.totalArea),
-        createData(6, 'Usable Area', allData.usableArea),
-        createData(7, 'Ownership', allData.ownership),
-        createData(8, 'Special Features', allData.specialFeature),
-        createData(9, 'Access to Site', allData.accessToSite),
-        createData(10, 'Elevation', allData.elevation),
+        createData(2, 'Capacity', (allData.usableArea / 3.5).toFixed(0)),
+        createData(3, 'Total Area', allData.totalArea),
+        createData(4, 'Usable Area', allData.usableArea),
+        createData(5, 'Ownership', allData.ownership),
+        createData(6, 'Special Features', allData.specialFeature),
+        createData(7, 'Access to Site', allData.accessToSite),
+        createData(8, 'Elevation', allData.elevation),
     ];
     const classes = useStyles();
     return (

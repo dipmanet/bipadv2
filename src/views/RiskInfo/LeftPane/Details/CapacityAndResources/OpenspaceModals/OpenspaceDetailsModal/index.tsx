@@ -105,7 +105,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
             info: 'INFO',
             media: 'MEDIA',
             generic: 'GENERIC TABLE',
-            eia: 'EIA TABLE',
+            eia: 'ENVIRONMENT CHECKLIST',
         };
 
         // const rendererParams = () => ({ className: styles.view, details: this.props });

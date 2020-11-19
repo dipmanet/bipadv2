@@ -8,6 +8,7 @@ import OpenspaceLegends from '../OpenspaceModals/OpenspaceLegends/main';
 import styles from './styles.scss';
 
 interface Props {
+    handleDroneImage: (loading: boolean) => void;
     activeLayersIndication: {
         education: boolean;
         health: boolean;
@@ -81,11 +82,12 @@ const CapacityAndResourcesLegend = (props: Props) => {
         legendTitle = 'Communityspace Boundary';
     } else legendTitle = 'Openspace Boundary';
 
-    const { resourceIdForLegend } = props;
+    const { resourceIdForLegend, handleDroneImage } = props;
     return (
         <div className={_cs(styles.wrapper, 'map-legend-container')}>
             {showLayerControls && resourceIdForLegend && (
                 <OpenspaceLegends
+                    handleDroneImage={handleDroneImage}
                     resourceIdForLegend={resourceIdForLegend}
                     openspaceOn={openspaceOn}
                     communityspaceOn={communityspaceOn}

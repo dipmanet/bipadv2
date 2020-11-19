@@ -45,9 +45,6 @@ class EiaComponent extends React.PureComponent<Props> {
         } = requests;
 
         const data = response && response.results && response.results;
-
-        console.log('data data', data);
-
         return (
             <div className={styles.wrapper}>
                 {response && data
@@ -86,7 +83,7 @@ class EiaComponent extends React.PureComponent<Props> {
                 ))}
                 {!data
                 || (data.length === 0 && (
-                    <div className={styles.noData}>No data present</div>
+                    <div className={styles.noData}>No data present.</div>
                 ))}
             </div>
         );
