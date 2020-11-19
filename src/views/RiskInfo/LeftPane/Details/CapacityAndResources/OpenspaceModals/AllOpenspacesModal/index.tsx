@@ -70,8 +70,6 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
                 tempArray.push({ ...data, capacity });
             });
             this.setApiData(tempArray);
-
-            console.log('temparray openspace', tempArray);
         }
     }
 

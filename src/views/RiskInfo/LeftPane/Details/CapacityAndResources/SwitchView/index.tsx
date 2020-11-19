@@ -172,13 +172,13 @@ const SwitchView = (props: Props) => {
                     <Icon
                         title={'All Openspaces'}
                         className={_cs(styles.infoIcon)}
-                        name="list"
+                        name="table"
                         onClick={() => handleIconClick('showAllOpenspacesModal')}
                     />
                     <Icon
                         title={'Metadata'}
                         className={_cs(styles.infoIcon)}
-                        name="infoOutline"
+                        name="aboutUs"
                         onClick={() => handleIconClick('showOpenSpaceInfoModal')}
                     />
                 </div>
@@ -201,13 +201,13 @@ const SwitchView = (props: Props) => {
                     <Icon
                         title={'All Community Spaces'}
                         className={_cs(styles.infoIcon)}
-                        name="list"
+                        name="table"
                         onClick={() => handleIconClick('showAllCommunityModal')}
                     />
                     <Icon
                         title={'Metadata'}
                         className={_cs(styles.infoIcon)}
-                        name="infoOutline"
+                        name="aboutUs"
                         onClick={() => handleIconClick('communityMetaModal')}
                     />
                 </div>
