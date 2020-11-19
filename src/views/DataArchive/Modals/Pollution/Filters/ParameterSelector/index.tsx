@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { FaramInputElement } from '@togglecorp/faram';
+
 import SelectInput from '#rsci/SelectInput';
 
 import { Parameters } from '../../types';
 import styles from './styles.scss';
 
+interface Props {
+    onChange: Function;
+}
 const parameters: Parameters[] = [
     { parameterCode: 'PM1_I', parameterName: 'PM1 Instantenous' },
     { parameterCode: 'PM10_I', parameterName: 'PM10 Inst' },
@@ -18,12 +23,13 @@ const parameters: Parameters[] = [
 const parameterKeySelector = (r: Parameters) => r.parameterCode;
 const parameterLabelSelector = (r: Parameters) => r.parameterName;
 
-const ParameterSelector = () => {
+const ParameterSelector = (props: Props) => {
     const [selectedParameter, setSelectedParameter] = useState('');
-
+    const { onChange } = props;
     const handleParamterChange = (parameterCode: string) => {
         setSelectedParameter(parameterCode);
         const parameter = parameters.filter(p => p.parameterCode === parameterCode)[0];
+        onChange(parameter);
     };
     return (
         <div className={styles.parameterSelector}>
@@ -42,4 +48,4 @@ const ParameterSelector = () => {
     );
 };
 
-export default ParameterSelector;
+export default FaramInputElement(ParameterSelector);

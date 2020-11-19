@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
 
 import { Periods } from '../../types';
@@ -15,13 +16,16 @@ const periods: Periods[] = [
 const periodKeySelector = (r: Periods) => r.periodCode;
 const periodLabelSelector = (r: Periods) => r.periodName;
 
-const PeriodSelector = () => {
+interface Props {
+    onChange: Function;
+}
+const PeriodSelector = (props: Props) => {
     const [selectedperiod, setSelectedperiod] = useState('');
-
+    const { onChange } = props;
     const handlePeriodChange = (periodCode: string) => {
         setSelectedperiod(periodCode);
         const period = periods.filter(p => p.periodCode === periodCode)[0];
-        console.log('Period: ', period);
+        onChange(period);
     };
     return (
         <div className={styles.periodSelector}>
@@ -40,4 +44,4 @@ const PeriodSelector = () => {
     );
 };
 
-export default PeriodSelector;
+export default FaramInputElement(PeriodSelector);
