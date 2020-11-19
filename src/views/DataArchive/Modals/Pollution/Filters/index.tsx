@@ -2,6 +2,7 @@ import React from 'react';
 
 import DateSelector from './DateSelector';
 import ParameterSelector from './ParameterSelector';
+import PeriodSelector from './PeriodSelector';
 
 import styles from './styles.scss';
 
@@ -29,7 +30,7 @@ const Filters = () => (
                     Period Selector
                 </div>
                 <div className={styles.element}>
-                    Period Element
+                    <PeriodSelector />
                 </div>
             </div>
         </div>

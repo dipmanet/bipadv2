@@ -37,3 +37,8 @@ export interface Parameters {
     parameterCode: string;
     parameterName: string;
 }
+
+export interface Periods {
+    periodCode: string;
+    periodName: string;
+}
