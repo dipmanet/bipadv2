@@ -16,36 +16,52 @@ interface Props {
     onEdit: () => void;
     routeToOpenspace: (point: Point) => void;
     deleteOpenspace: () => void;
+    authenticated: boolean;
+    handleDeleteModal: any;
 }
 
 export default class SubHeader extends React.PureComponent<Props> {
     public render() {
-        const { title, location, point, onEdit, routeToOpenspace, handleDeleteModal } = this.props;
+        const {
+            title,
+            location,
+            point,
+            onEdit,
+            routeToOpenspace,
+            handleDeleteModal,
+            authenticated,
+        } = this.props;
         return (
             <div className={styles.subHeader}>
                 <div className={styles.topRow}>
                     <div className={styles.header}>{title}</div>
-                    <div
-                        className={styles.option}
-                        onClick={() => {
-                            onEdit();
-                        }}
-                        onKeyDown={() => {
-                            onEdit();
-                        }}
-                    >
-                        <Icon icon={Edit} size={15} />
+                    {authenticated && (
+                        <div
+                            className={styles.option}
+                            onClick={() => {
+                                onEdit();
+                            }}
+                            onKeyDown={() => {
+                                onEdit();
+                            }}
+                        >
+                            <Icon icon={Edit} size={15} />
                         Edit
-                    </div>
-                    <div
-                        className={styles.option}
-                        onClick={() => handleDeleteModal()}
-                        onKeyDown={() => handleDeleteModal()}
-                    >
-                        {' '}
-                        <Icon icon={Delete} size={15} />
+                        </div>
+                    )}
+                    {authenticated && (
+                        <div
+                            className={styles.option}
+                            onClick={() => handleDeleteModal()}
+                            onKeyDown={() => handleDeleteModal()}
+                        >
+                            {' '}
+                            <Icon icon={Delete} size={15} />
                         Delete
-                    </div>
+                        </div>
+                    )}
+
+
                     <div
                         className={styles.direction}
                         onClick={() => routeToOpenspace(point)}

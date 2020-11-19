@@ -1,8 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import TextInput from '#rsci/TextInput';
 import NumberInput from '#rsci/NumberInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import { createConnectedRequestCoordinator } from '#request';
+import { AppState } from '#store/types';
+import { authStateSelector } from '#selectors';
+import { AuthState } from '#store/atom/auth/types';
+
+interface PropsFromState {
+    authState: AuthState;
+}
+
+type ReduxProps = PropsFromState ;
 
 interface Props {
     postBasicInfo: () => void;
@@ -11,7 +22,7 @@ interface Props {
 }
 
 
-function BasicInfo({ postBasicInfo, openspacePostError, resourceId }: Props) {
+function BasicInfo({ postBasicInfo, openspacePostError, resourceId, authState }: Props) {
     return (
         <React.Fragment>
             <br />
@@ -28,13 +39,25 @@ function BasicInfo({ postBasicInfo, openspacePostError, resourceId }: Props) {
             {resourceId === undefined
 
                 && <span>Please make sure to complete all the steps while filling the form.</span>}
-            <PrimaryButton
-                onClick={() => postBasicInfo()}
-            >
-                Save and Continue
-            </PrimaryButton>
+
+            {authState.authenticated
+                 && (
+                     <PrimaryButton
+                         onClick={() => postBasicInfo()}
+                     >
+                 Save and Continue
+                     </PrimaryButton>
+                 )}
+
         </React.Fragment>
     );
 }
 
-export default BasicInfo;
+
+const mapStateToProps = (state: AppState) => ({
+    authState: authStateSelector(state),
+});
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(BasicInfo),
+);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { Tabs } from '@material-ui/core';
 import styles from './styles.scss';
@@ -11,7 +12,13 @@ import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import SubHeader from './SubHeader';
-import { createRequestClient, ClientAttributes, methods } from '#request';
+import { createRequestClient,
+    ClientAttributes,
+    methods,
+    createConnectedRequestCoordinator } from '#request';
+import { AppState } from '#store/types';
+import { authStateSelector } from '#selectors';
+import { AuthState } from '#store/atom/auth/types';
 
 interface State {
     currentView: string;
@@ -29,12 +36,18 @@ interface Props {
     onEdit: () => void;
     openspaceDeleteRequest: (point: {}) => void;
     type: any;
+    authState: any;
 }
 
 interface Params {
     openspaceId?: number;
 }
 
+interface PropsFromState {
+    authState: AuthState;
+}
+
+type ReduxProps = PropsFromState ;
 interface Tabs {
     info: string;
     media: string;
@@ -128,6 +141,7 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
             type,
             routeToOpenspace,
             requests,
+            authState: { authenticated },
         } = this.props;
         const { currentView, deleteModal } = this.state;
         const { handleDeleteModal, confirmDelete } = this;
@@ -162,6 +176,7 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         onEdit={this.props.onEdit}
                         routeToOpenspace={routeToOpenspace}
                         handleDeleteModal={handleDeleteModal}
+                        authenticated={authenticated}
                     />
                     <img
                         src={imageUrl}
@@ -215,4 +230,15 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
     }
 }
 
-export default createRequestClient(requestOptions)(CommunityOpenspaceDetails);
+// export default createRequestClient(requestOptions)(CommunityOpenspaceDetails);
+
+
+const mapStateToProps = (state: AppState) => ({
+    authState: authStateSelector(state),
+});
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requestOptions)(CommunityOpenspaceDetails),
+    ),
+);
