@@ -87,7 +87,7 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
                 <ModalHeader
                     title={
                         currentView === 'OpenSpaces'
-                            ? 'Open Spaces'
+                            ? 'Humanitarian Open Spaces'
                             : 'Community Spaces'
                     }
                     rightComponent={(
