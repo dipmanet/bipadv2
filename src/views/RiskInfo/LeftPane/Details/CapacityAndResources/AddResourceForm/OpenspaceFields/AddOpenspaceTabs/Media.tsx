@@ -1,4 +1,5 @@
 import React from 'react';
+import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import styles from './styles.scss';
 
@@ -10,6 +11,7 @@ interface Props {
 
 interface State {
     pristine: boolean | undefined;
+    mediaPostError: boolean;
     files: [];
 }
 
@@ -19,13 +21,14 @@ class Media extends React.PureComponent<Props, State> {
 
         this.state = {
             pristine: true,
+            mediaPostError: false,
             files: [],
         };
     }
 
     private fileSelectedHandler = (e) => {
         // eslint-disable-next-line react/no-access-state-in-setstate
-        this.setState({ files: [...this.state.files, ...e.target.files] });
+        this.setState({ files: [...e.target.files], mediaPostError: false });
     }
 
 
@@ -34,22 +37,14 @@ class Media extends React.PureComponent<Props, State> {
         if (files.length !== 0) {
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < files.length; i++) {
-                this.postOpenspaceImage(files[i]);
-                if (i === files.length - 1) {
-                    this.setState({
-                        pristine: false,
-                    });
-                    setTimeout(() => {
-                        this.props.handleTabClick('closeModal');
-                    }, 2000);
-                }
+                this.postOpenspaceImage(files[i], i, files.length);
             }
         } else {
             this.props.handleTabClick('closeModal');
         }
     }
 
-    private postOpenspaceImage = (image) => {
+    private postOpenspaceImage = (image, count: number, totalCount: number) => {
         const { openspaceId, resourceId } = this.props;
         const formdata = new FormData();
         formdata.append('image', image);
@@ -61,14 +56,31 @@ class Media extends React.PureComponent<Props, State> {
             // credentials: 'same origin'
         };
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-media/`, requestOptions)
-            .then(response => response.json())
             .then((data) => {
-                console.log('upload success', data);
+                if (data.status === 201) {
+                    if (count === totalCount - 1) {
+                        this.setState({
+                            pristine: false,
+                        });
+                        setTimeout(() => {
+                            this.props.handleTabClick('closeModal');
+                        }, 2500);
+                    }
+                } else {
+                    this.setState({
+                        mediaPostError: true,
+                    });
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    mediaPostError: true,
+                });
             });
     }
 
     public render() {
-        const { pristine, files } = this.state;
+        const { pristine, files, mediaPostError } = this.state;
         const { handleTabClick } = this.props;
         return (
             <React.Fragment>
@@ -108,6 +120,14 @@ class Media extends React.PureComponent<Props, State> {
 
                             </div>
                         </div>
+                    )
+                }
+                {
+                    mediaPostError && (
+                        <NonFieldErrors
+                            faramElement
+                            errors={['Some error occured!']}
+                        />
                     )
                 }
 

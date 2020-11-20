@@ -717,14 +717,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceLngLat: undefined,
                 resourceInfo: undefined,
             });
-            const { map } = this.context;
-            const nepalBounds = [
-                80.05858661752784,
-                26.347836996368667,
-                88.20166918432409,
-                30.44702867091792,
-            ];
-            map.fitBounds(nepalBounds);
+            // const { map } = this.context;
+            // const nepalBounds = [
+            //     80.05858661752784,
+            //     26.347836996368667,
+            //     88.20166918432409,
+            //     30.44702867091792,
+            // ];
+            // map.fitBounds(nepalBounds);
         }
     };
 
@@ -878,21 +878,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            <Cloak hiddenIf={p => !p.add_resource}>
-                                <AccentModalButton
-                                    iconName="add"
-                                    title="Add New Resource"
-                                    transparent
-                                    modal={(
-                                        <AddResourceForm
-                                            onAddSuccess={this.handleResourceAdd}
-                                            onEditSuccess={this.handleResourceEdit}
-                                        />
-                                    )}
-                                >
+                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
+                            <AccentModalButton
+                                iconName="add"
+                                title="Add New Resource"
+                                transparent
+                                modal={(
+                                    <AddResourceForm
+                                        onAddSuccess={this.handleResourceAdd}
+                                        onEditSuccess={this.handleResourceEdit}
+                                    />
+                                )}
+                            >
                                     Add Resource
-                                </AccentModalButton>
-                            </Cloak>
+                            </AccentModalButton>
+                            {/* </Cloak> */}
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)
