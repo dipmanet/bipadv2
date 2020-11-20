@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 
 import SelectInput from '#rsci/SelectInput';
+import ErrorMessage from '../ErrorMessage';
 
-import { Parameters } from '../../types';
+import { Parameters, Errors } from '../../types';
 import styles from './styles.scss';
 
 interface Props {
     onChange: Function;
+    errors: Errors[];
 }
 const parameters: Parameters[] = [
     { parameterCode: 'PM1_I', parameterName: 'PM1 Instantenous' },
@@ -25,12 +27,26 @@ const parameterLabelSelector = (r: Parameters) => r.parameterName;
 
 const ParameterSelector = (props: Props) => {
     const [selectedParameter, setSelectedParameter] = useState('');
-    const { onChange } = props;
+    const [error, setError] = useState('');
+    const { onChange, errors } = props;
     const handleParamterChange = (parameterCode: string) => {
         setSelectedParameter(parameterCode);
         const parameter = parameters.filter(p => p.parameterCode === parameterCode)[0];
         onChange(parameter);
     };
+
+    useEffect(() => {
+        if (errors) {
+            const err = errors.filter(e => e.type === 'Parameter')[0];
+            if (err) {
+                const { message } = err;
+                setError(message || '');
+            } else {
+                setError('');
+            }
+        }
+    }, [errors]);
+
     return (
         <div className={styles.parameterSelector}>
             <SelectInput
@@ -44,6 +60,7 @@ const ParameterSelector = (props: Props) => {
                 placeholder="Select Parameter"
                 // autoFocus
             />
+            {error && <ErrorMessage message={error} /> }
         </div>
     );
 };

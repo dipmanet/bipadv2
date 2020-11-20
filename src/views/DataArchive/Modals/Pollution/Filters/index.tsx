@@ -5,6 +5,8 @@ import DateSelector from './DateSelector';
 import ParameterSelector from './ParameterSelector';
 import PeriodSelector from './PeriodSelector';
 
+import { getErrors } from './utils';
+import { FaramValues, Errors } from '../types';
 import styles from './styles.scss';
 
 const pollutionFilterSchema = {
@@ -26,12 +28,19 @@ const initialFaramValue = {
 
 const Filters = () => {
     const [faramValue, setFaramValue] = useState(initialFaramValue);
+    const [errors, setErrors] = useState<Errors[]>([]);
 
     const handleSubmitClick = () => {
-        console.log('Submit clicked: ', faramValue);
+        const faramErrors = getErrors(faramValue);
+        setErrors(faramErrors);
+        if (faramErrors.length === 0) {
+            console.log('Submit clicked: ', faramValue);
+        } else {
+            console.log('Errors: ', faramErrors);
+        }
     };
 
-    const handleFaramChange = (fv: any) => {
+    const handleFaramChange = (fv: FaramValues) => {
         setFaramValue(fv);
     };
 
@@ -52,6 +61,7 @@ const Filters = () => {
                         <div className={styles.element}>
                             <DateSelector
                                 faramElementName="dataDateRange"
+                                errors={errors}
                             />
                         </div>
                     </div>
@@ -62,6 +72,7 @@ const Filters = () => {
                         <div className={styles.element}>
                             <ParameterSelector
                                 faramElementName="parameter"
+                                errors={errors}
                             />
                         </div>
                     </div>
@@ -72,6 +83,7 @@ const Filters = () => {
                         <div className={styles.element}>
                             <PeriodSelector
                                 faramElementName="period"
+                                errors={errors}
                             />
                         </div>
                     </div>

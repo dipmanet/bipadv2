@@ -42,3 +42,18 @@ export interface Periods {
     periodCode: string;
     periodName: string;
 }
+
+export interface FaramValues {
+    dataDateRange: {
+        startDate: string;
+        endDate: string;
+    };
+    parameter: Parameters;
+    period: Periods;
+}
+
+export interface Errors {
+    type?: string;
+    err?: string;
+    message?: string;
+}
