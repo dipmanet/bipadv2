@@ -36,18 +36,15 @@ function BasicInfo({ postBasicInfo, openspacePostError, resourceId, authState }:
                     errors={['Some error occured!']}
                 />
             )}
-            {resourceId === undefined
-
-                && <span>Please make sure to complete all the steps while filling the form.</span>}
-
+            {/*
             {authState.authenticated
-                 && (
-                     <PrimaryButton
-                         onClick={() => postBasicInfo()}
-                     >
+                 && ( */}
+            <PrimaryButton
+                onClick={() => postBasicInfo()}
+            >
                  Save and Continue
-                     </PrimaryButton>
-                 )}
+            </PrimaryButton>
+            {/* )} */}
 
         </React.Fragment>
     );
