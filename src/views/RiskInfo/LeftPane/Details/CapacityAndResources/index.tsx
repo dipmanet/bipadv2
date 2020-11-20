@@ -878,21 +878,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
-                            <AccentModalButton
-                                iconName="add"
-                                title="Add New Resource"
-                                transparent
-                                modal={(
-                                    <AddResourceForm
-                                        onAddSuccess={this.handleResourceAdd}
-                                        onEditSuccess={this.handleResourceEdit}
-                                    />
-                                )}
-                            >
+                            <Cloak hiddenIf={p => !p.add_resource}>
+                                <AccentModalButton
+                                    iconName="add"
+                                    title="Add New Resource"
+                                    transparent
+                                    modal={(
+                                        <AddResourceForm
+                                            onAddSuccess={this.handleResourceAdd}
+                                            onEditSuccess={this.handleResourceEdit}
+                                        />
+                                    )}
+                                >
                                     Add Resource
-                            </AccentModalButton>
-                            {/* </Cloak> */}
+                                </AccentModalButton>
+                            </Cloak>
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)
