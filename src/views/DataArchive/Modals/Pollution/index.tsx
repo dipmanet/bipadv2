@@ -64,6 +64,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
 type Props = NewProps<OwnProps, Params>;
 
 const emptyArray: any[] = [];
+const emptyObject: any = {};
 
 const getSortedPollutionData = memoize((pollutionDetails: ArchivePollution[]) => {
     const sortedData = [...pollutionDetails].sort((a, b) => compareDate(b.createdOn, a.createdOn));
@@ -81,6 +82,29 @@ const getTodaysPollutionDetails = memoize((pollutionDetails: ArchivePollution[])
 const mapStateToProps = (state: AppState) => ({
     mapStyle: mapStyleSelector(state),
 });
+
+const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: pollutionList
+            .filter(pollution => pollution.point)
+            .map(pollution => ({
+                id: pollution.id,
+                type: 'Feature',
+                geometry: {
+                    ...pollution.point,
+                },
+                properties: {
+                    ...pollution,
+                    aqi: Math.round(pollution.aqi),
+                    date: Date.parse(pollution.createdOn) || 1,
+                },
+            })),
+    };
+    return geojson;
+};
+
+const getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
 const PollutionModal = (props: Props) => {
     const { stationName = 'Pollution Modal',
@@ -104,10 +128,15 @@ const PollutionModal = (props: Props) => {
     const sortedPollutionDetails = getSortedPollutionData(pollutionDetails);
     const todaysPollutionDetails = getTodaysPollutionDetails(sortedPollutionDetails);
     const latestPollutionDetail = sortedPollutionDetails[0];
-
+    const { municipality } = latestPollutionDetail || emptyObject;
+    const { id: geoarea } = municipality || emptyObject;
     // get map center
     const { coordinates } = geometry;
 
+    const pollutionFeatureCollection = getPollutionFeatureCollection(
+        sortedPollutionDetails || [],
+    );
+    console.log('pollutionFeatureCollection: ', pollutionFeatureCollection);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
@@ -126,6 +155,8 @@ const PollutionModal = (props: Props) => {
                         <MiniMap
                             mapStyle={mapStyle}
                             coordinates={coordinates}
+                            geoarea={geoarea}
+                            pollutionFeatureCollection={pollutionFeatureCollection}
                         />
                     </div>
                     <div className={styles.modalDetails}>

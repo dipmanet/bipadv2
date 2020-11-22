@@ -22,11 +22,14 @@ export interface Federal {
 export interface District extends Federal {
     province: number;
 }
-
+export interface Municipality extends Federal {
+    district: number;
+}
 export interface ArchivePollution extends PageType.DataArchivePollution {
     createdOn: string;
     province: Federal;
     district: District;
+    municipality: Municipality;
     point: {
         type: string;
         coordinates: [number, number];
