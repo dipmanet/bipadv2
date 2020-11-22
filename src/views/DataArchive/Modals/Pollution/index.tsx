@@ -134,9 +134,8 @@ const PollutionModal = (props: Props) => {
     const { coordinates } = geometry;
 
     const pollutionFeatureCollection = getPollutionFeatureCollection(
-        sortedPollutionDetails || [],
+        [latestPollutionDetail || {}],
     );
-    console.log('pollutionFeatureCollection: ', pollutionFeatureCollection);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
