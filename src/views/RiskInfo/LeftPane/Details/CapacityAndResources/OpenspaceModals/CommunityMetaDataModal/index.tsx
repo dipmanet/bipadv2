@@ -35,7 +35,7 @@ class OpenspaceMetadataModal extends React.PureComponent<any, State> {
 
         this.state = {
             pristine: true,
-            activeView: 'metadata',
+            activeView: 'details',
         };
     }
 

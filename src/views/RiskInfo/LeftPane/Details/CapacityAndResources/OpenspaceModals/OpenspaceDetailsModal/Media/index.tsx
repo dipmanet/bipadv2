@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import ReactPanZoom from 'react-image-pan-zoom-rotate';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import { cross } from 'react-icons-kit/icomoon/cross';
 import { Icon } from 'react-icons-kit';
 import { createRequestClient, ClientAttributes, methods } from '#request';
@@ -93,13 +94,21 @@ class MediaComponent extends React.PureComponent<Props, State> {
                                                     );
                                                 }}
                                             >
-                                                <img
+                                                {/* <img
                                                     src={item.image}
                                                     alt="cat"
                                                     style={{
                                                         width: '100%',
                                                         height: '25vh',
                                                     }}
+                                                /> */}
+
+                                                <LazyLoadImage
+                                                    alt="cover"
+                                                    height="225"
+                                                    src={item.image}
+                                                    width="100%"
+                                                    effect="blur"
                                                 />
                                             </div>
                                         );

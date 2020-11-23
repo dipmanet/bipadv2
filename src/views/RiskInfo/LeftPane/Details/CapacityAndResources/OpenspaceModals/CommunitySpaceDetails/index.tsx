@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import { _cs } from '@togglecorp/fujs';
 import { Tabs } from '@material-ui/core';
 import styles from './styles.scss';
@@ -13,10 +14,12 @@ import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import SubHeader from './SubHeader';
-import { createRequestClient,
+import {
+    createRequestClient,
     ClientAttributes,
     methods,
-    createConnectedRequestCoordinator } from '#request';
+    createConnectedRequestCoordinator,
+} from '#request';
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
@@ -48,7 +51,7 @@ interface PropsFromState {
     authState: AuthState;
 }
 
-type ReduxProps = PropsFromState ;
+type ReduxProps = PropsFromState;
 interface Tabs {
     info: string;
     media: string;
@@ -194,6 +197,7 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         height="225"
                         src={imageUrl}
                         width="100%"
+                        effect="blur"
                     />
                     <ModalBody className={styles.content}>
                         <MultiViewContainer
