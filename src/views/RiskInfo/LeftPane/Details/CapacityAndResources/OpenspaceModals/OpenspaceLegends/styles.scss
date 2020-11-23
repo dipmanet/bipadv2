@@ -169,3 +169,12 @@ position: absolute;
     // border: 3px solid #f1f1f1;
     // box-shadow: #CCCCCD -5px -3px 15px -1px
 }
+
+span.droneWarning {
+    text-transform: none !important;
+    color: #e35163 !important;
+    position: absolute !important;
+    margin-top: 36px !important;
+    margin-left: 8px !important;
+    font-size: 11px !important;
+}

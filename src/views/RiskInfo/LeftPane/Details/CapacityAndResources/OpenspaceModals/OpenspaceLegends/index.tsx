@@ -201,27 +201,34 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
                                     opacityValue={opacityValue}
                                 />
                             </div>
-                            {geoserverUrl && (
-                                <div className={styles.listItem}>
-                                    <img
-                                        alt="drone"
-                                        src={droneIcon}
-                                        className={styles.dImg}
-                                    />
-                                    <span>Drone Image :</span>
-                                    <div className={styles.rangeSliderInputWrap}>
-                                        <div className={styles.rangeSliderr}>
-                                            <input
-                                                type="checkbox"
-                                                onClick={(e) => {
-                                                    this.handleWmsCheck(e, wmsUrl);
-                                                }}
-                                            />
+                            <div className={styles.listItem}>
+                                <img
+                                    alt="drone"
+                                    src={droneIcon}
+                                    className={styles.dImg}
+                                />
+                                <span>Drone Image :</span>
+                                <div className={styles.rangeSliderInputWrap}>
+                                    <div className={styles.rangeSliderr}>
+                                        <input
+                                            type="checkbox"
+                                            onClick={(e) => {
+                                                this.handleWmsCheck(e, wmsUrl);
+                                            }}
+                                        />
 
-                                        </div>
                                     </div>
                                 </div>
-                            )}
+                                {!geoserverUrl && (
+                                    <span
+                                        className={styles.droneWarning}
+                                    >
+                                        Drone image not available!
+
+                                    </span>
+                                )}
+                            </div>
+
                         </div>
                     </div>
                 </div>
