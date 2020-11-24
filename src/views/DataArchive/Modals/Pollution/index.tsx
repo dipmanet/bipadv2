@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
@@ -106,7 +106,9 @@ const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
 
 const getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
+const isEmpty = (obj: any) => Object.keys(obj).length === 0 && obj.constructor === Object;
 const PollutionModal = (props: Props) => {
+    const [filterValues, setFilterValues] = useState({});
     const { stationName = 'Pollution Modal',
         requests: {
             detailRequest: {
@@ -136,6 +138,14 @@ const PollutionModal = (props: Props) => {
     const pollutionFeatureCollection = getPollutionFeatureCollection(
         [latestPollutionDetail || {}],
     );
+
+    const handleFilterValues = (fv) => {
+        setFilterValues(fv);
+    };
+
+    if (!isEmpty(filterValues)) {
+        console.log('filterValues: ', filterValues);
+    }
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
@@ -162,7 +172,7 @@ const PollutionModal = (props: Props) => {
                         <Details
                             latestPollutionDetail={latestPollutionDetail}
                         />
-                        <Filters />
+                        <Filters handleFilterValues={handleFilterValues} />
                     </div>
                 </div>
                 <div className={styles.modalRow}>

@@ -26,15 +26,19 @@ const initialFaramValue = {
     period: {},
 };
 
-const Filters = () => {
+interface Props {
+    handleFilterValues: Function;
+}
+const Filters = (props: Props) => {
     const [faramValue, setFaramValue] = useState(initialFaramValue);
     const [errors, setErrors] = useState<Errors[]>([]);
-
+    const { handleFilterValues } = props;
     const handleSubmitClick = () => {
         const faramErrors = getErrors(faramValue);
         setErrors(faramErrors);
         if (faramErrors.length === 0) {
             console.log('Submit clicked: ', faramValue);
+            handleFilterValues(faramValue);
         } else {
             console.log('Errors: ', faramErrors);
         }
