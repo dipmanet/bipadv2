@@ -54,7 +54,9 @@ const MiniMap = (props: Props) => {
                         layerOptions={{
                             type: 'circle',
                             property: 'pollutionId',
-                            paint: mapStyles.pollutionPoint.fill,
+                            paint: { ...mapStyles.pollutionPoint.fill,
+                                'circle-stroke-color': '#000000',
+                                'circle-stroke-width': 2 },
                         }}
                     />
                     <MapLayer
