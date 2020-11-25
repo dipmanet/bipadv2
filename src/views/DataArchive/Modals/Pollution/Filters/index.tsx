@@ -88,12 +88,9 @@ const Filters = (props: Props) => {
         const faramErrors = getErrors(faramValue);
         setErrors(faramErrors);
         if (faramErrors.length === 0) {
-            console.log('Submit clicked: ', faramValue);
             handleFilterValues(faramValue);
             const { dataDateRange } = faramValue;
             stationRequest.do({ dataDateRange });
-        } else {
-            console.log('Errors: ', faramErrors);
         }
     };
 

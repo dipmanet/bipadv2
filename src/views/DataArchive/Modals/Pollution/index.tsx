@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
-import {
-    _cs,
-    compareDate,
-    compareNumber,
-    getDifferenceInDays,
-    getDate,
-    listToGroupList,
-    isDefined,
-    mapToList,
-} from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -23,7 +14,7 @@ import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
 import { Geometry, ArchivePollution } from './types';
-
+import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails } from './utils';
 import styles from './styles.scss';
 
 import {
@@ -37,7 +28,6 @@ import { AppState } from '#store/types';
 import { mapStyleSelector } from '#selectors';
 
 interface Params {}
-
 
 interface OwnProps {
     handleModalClose: () => void;
@@ -66,43 +56,9 @@ type Props = NewProps<OwnProps, Params>;
 const emptyArray: any[] = [];
 const emptyObject: any = {};
 
-const getSortedPollutionData = memoize((pollutionDetails: ArchivePollution[]) => {
-    const sortedData = [...pollutionDetails].sort((a, b) => compareDate(b.createdOn, a.createdOn));
-    return sortedData;
-});
-
-const getTodaysPollutionDetails = memoize((pollutionDetails: ArchivePollution[]) => {
-    const today = getDate(new Date().getTime());
-    const todaysData = pollutionDetails.filter(
-        pollutionDetail => getDate(pollutionDetail.createdOn) === today,
-    );
-    return todaysData;
-});
-
 const mapStateToProps = (state: AppState) => ({
     mapStyle: mapStyleSelector(state),
 });
-
-const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
-    const geojson = {
-        type: 'FeatureCollection',
-        features: pollutionList
-            .filter(pollution => pollution.point)
-            .map(pollution => ({
-                id: pollution.id,
-                type: 'Feature',
-                geometry: {
-                    ...pollution.point,
-                },
-                properties: {
-                    ...pollution,
-                    aqi: Math.round(pollution.aqi),
-                    date: Date.parse(pollution.createdOn) || 1,
-                },
-            })),
-    };
-    return geojson;
-};
 
 const getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
