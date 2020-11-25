@@ -1,0 +1,9 @@
+.no-data {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: var(--color-text-disabled);
+    font-size: var(--font-size-large-alt);
+}

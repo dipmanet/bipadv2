@@ -13,6 +13,7 @@ import { MultiResponse } from '#store/atom/response/types';
 import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
+import Graph from './Graph';
 import { Geometry, ArchivePollution } from './types';
 import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails } from './utils';
 import styles from './styles.scss';
@@ -138,7 +139,11 @@ const PollutionModal = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.modalRow}>
-                    <div className={styles.modalOneMonth}>Modal One Month Graph</div>
+                    <div className={styles.modalOneMonth}>
+                        <Graph
+                            stationData={stationData}
+                        />
+                    </div>
                     <div className={styles.modalTwelveMonth}>Modal Tweleve Month Graph</div>
                 </div>
             </ModalBody>
