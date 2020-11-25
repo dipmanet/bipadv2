@@ -25,6 +25,19 @@ export interface District extends Federal {
 export interface Municipality extends Federal {
     district: number;
 }
+
+export interface Observation {
+    data: {
+        aqi?: number;
+        value: number;
+        datatime: string;
+    };
+    unit: string;
+    seriesId: number;
+    seriesName: string;
+    parameterCode: string;
+    parameterName: string;
+}
 export interface ArchivePollution extends PageType.DataArchivePollution {
     createdOn: string;
     province: Federal;
@@ -34,6 +47,7 @@ export interface ArchivePollution extends PageType.DataArchivePollution {
         type: string;
         coordinates: [number, number];
     };
+    observation: Observation[];
 }
 
 export interface Parameters {
