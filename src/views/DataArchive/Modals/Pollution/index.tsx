@@ -106,9 +106,9 @@ const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
 
 const getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
-const isEmpty = (obj: any) => Object.keys(obj).length === 0 && obj.constructor === Object;
 const PollutionModal = (props: Props) => {
     const [filterValues, setFilterValues] = useState({});
+    const [stationData, setStationData] = useState<ArchivePollution[]>([]);
     const { stationName = 'Pollution Modal',
         requests: {
             detailRequest: {
@@ -118,6 +118,7 @@ const PollutionModal = (props: Props) => {
         },
         mapStyle,
         geometry,
+        stationId,
         handleModalClose } = props;
     let pollutionDetails: ArchivePollution[] = emptyArray;
     if (!pending && response) {
@@ -143,9 +144,10 @@ const PollutionModal = (props: Props) => {
         setFilterValues(fv);
     };
 
-    if (!isEmpty(filterValues)) {
-        console.log('filterValues: ', filterValues);
-    }
+    const handleStationData = (data: ArchivePollution[]) => {
+        setStationData(data);
+    };
+
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
@@ -172,7 +174,11 @@ const PollutionModal = (props: Props) => {
                         <Details
                             latestPollutionDetail={latestPollutionDetail}
                         />
-                        <Filters handleFilterValues={handleFilterValues} />
+                        <Filters
+                            handleFilterValues={handleFilterValues}
+                            stationId={stationId}
+                            handleStationData={handleStationData}
+                        />
                     </div>
                 </div>
                 <div className={styles.modalRow}>
