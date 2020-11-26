@@ -45,3 +45,16 @@ export const getTodaysPollutionDetails = memoize((pollutionDetails: ArchivePollu
     );
     return todaysData;
 });
+
+export const parseParameter = memoize((pollutionDetails: ArchivePollution[]) => {
+    const temp = [...pollutionDetails];
+    const withParameter = temp.map((detail) => {
+        const { observation } = detail;
+        observation.forEach((obs) => {
+            const { data: { value = undefined }, parameterCode } = obs;
+            Object.assign(detail, { [parameterCode]: value });
+        });
+        return detail;
+    });
+    return withParameter;
+});
