@@ -14,6 +14,8 @@ import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
 import Graph from './Graph';
+import TableView from './TableView';
+
 import { Geometry, ArchivePollution } from './types';
 import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter } from './utils';
 import styles from './styles.scss';
@@ -104,7 +106,8 @@ const PollutionModal = (props: Props) => {
     const handleStationData = (data: ArchivePollution[]) => {
         setStationData(data);
     };
-    const pollutionDataWithParameter = parseParameter([...stationData]);
+    const pollutionDataWithParameter = parseParameter(stationData);
+    console.log('pollutionDataWithParameter: ', pollutionDataWithParameter);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
@@ -144,7 +147,11 @@ const PollutionModal = (props: Props) => {
                             stationData={stationData}
                         />
                     </div>
-                    <div className={styles.modalTwelveMonth}>Modal Tweleve Month Graph</div>
+                    <div className={styles.modalTwelveMonth}>
+                        <TableView
+                            pollutionDataWithParameter={pollutionDataWithParameter}
+                        />
+                    </div>
                 </div>
             </ModalBody>
         </Modal>

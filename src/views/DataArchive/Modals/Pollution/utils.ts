@@ -51,10 +51,20 @@ export const parseParameter = memoize((pollutionDetails: ArchivePollution[]) => 
     const withParameter = temp.map((detail) => {
         const { observation } = detail;
         observation.forEach((obs) => {
-            const { data: { value = undefined }, parameterCode } = obs;
-            Object.assign(detail, { [parameterCode]: value });
+            const { data, parameterCode } = obs;
+            const { value } = data || {};
+            const paramCode = parameterCode.replace('.', '');
+            Object.assign(detail, { [paramCode]: value });
         });
         return detail;
     });
     return withParameter;
 });
+
+export const dateParser = (date: string) => {
+    const [datePart, timePart] = date.split('T');
+    const [hour, minutes] = timePart.split(':');
+    const indicator = Number(hour) >= 12 ? 'PM' : 'AM';
+
+    return `${datePart} ${hour}:${minutes} ${indicator}`;
+};
