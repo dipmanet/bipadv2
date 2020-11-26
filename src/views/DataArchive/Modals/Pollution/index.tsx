@@ -15,7 +15,7 @@ import Details from './Details';
 import Filters from './Filters';
 import Graph from './Graph';
 import { Geometry, ArchivePollution } from './types';
-import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails } from './utils';
+import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter } from './utils';
 import styles from './styles.scss';
 
 import {
@@ -104,7 +104,7 @@ const PollutionModal = (props: Props) => {
     const handleStationData = (data: ArchivePollution[]) => {
         setStationData(data);
     };
-
+    const pollutionDataWithParameter = parseParameter([...stationData]);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader

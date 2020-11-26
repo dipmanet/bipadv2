@@ -1,3 +1,4 @@
+import { number } from 'prop-types';
 import * as PageType from '#store/atom/page/types';
 
 export interface Geometry {
