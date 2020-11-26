@@ -16,7 +16,7 @@ import Filters from './Filters';
 import Graph from './Graph';
 import TableView from './TableView';
 
-import { Geometry, ArchivePollution } from './types';
+import { Geometry, ArchivePollution, FaramValues } from './types';
 import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter } from './utils';
 import styles from './styles.scss';
 
@@ -65,8 +65,16 @@ const mapStateToProps = (state: AppState) => ({
 
 const getPollutionFeatureCollection = memoize(pollutionToGeojson);
 
+const initialFaramValue = {
+    dataDateRange: {
+        startDate: '',
+        endDate: '',
+    },
+    parameter: {},
+    period: {},
+};
 const PollutionModal = (props: Props) => {
-    const [filterValues, setFilterValues] = useState({});
+    const [filterValues, setFilterValues] = useState<FaramValues>(initialFaramValue);
     const [stationData, setStationData] = useState<ArchivePollution[]>([]);
     const { stationName = 'Pollution Modal',
         requests: {
@@ -150,6 +158,7 @@ const PollutionModal = (props: Props) => {
                     <div className={styles.modalTwelveMonth}>
                         <TableView
                             pollutionDataWithParameter={pollutionDataWithParameter}
+                            filterValues={filterValues}
                         />
                     </div>
                 </div>

@@ -3,18 +3,20 @@ import {
     compareString,
     compareNumber,
 } from '@togglecorp/fujs';
-import { ArchivePollution } from '../types';
+import { ArchivePollution, FaramValues } from '../types';
 import { dateParser } from '../utils';
 import {
     convertNormalTableToCsv,
 } from '#utils/table';
 import Table from '#rscv/Table';
+import DownloadButton from '#components/DownloadButton';
 
 import NoData from '../NoData';
 import styles from './styles.scss';
 
 interface Props {
     pollutionDataWithParameter: ArchivePollution[];
+    filterValues: FaramValues;
 }
 
 const pollutionSelector = (pollution: ArchivePollution) => pollution.id;
@@ -25,7 +27,10 @@ const defaultSort = {
 };
 
 const TableView = (props: Props) => {
-    const { pollutionDataWithParameter: data } = props;
+    const {
+        pollutionDataWithParameter: data,
+        filterValues: { dataDateRange: { startDate, endDate } },
+    } = props;
     const pollutionHeader = [
         {
             key: 'createdOn',
@@ -116,7 +121,17 @@ const TableView = (props: Props) => {
         pollutionHeader);
     return (
         <div className={styles.tableView}>
-            <p> TableView </p>
+            <div className={styles.header}>
+                <div className={styles.dateRange}>
+                    {`Time Period: ${startDate} to ${endDate}`}
+                </div>
+                <DownloadButton
+                    value={formattedTableData}
+                    name="PollutionArchive.csv"
+                >
+                    Download
+                </DownloadButton>
+            </div>
             <Table
                 // rowClassNameSelector={getClassName}
                 className={styles.pollutionTable}

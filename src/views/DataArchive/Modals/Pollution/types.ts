@@ -52,13 +52,13 @@ export interface ArchivePollution extends PageType.DataArchivePollution {
 }
 
 export interface Parameters {
-    parameterCode: string;
-    parameterName: string;
+    parameterCode?: string;
+    parameterName?: string;
 }
 
 export interface Periods {
-    periodCode: string;
-    periodName: string;
+    periodCode?: string;
+    periodName?: string;
 }
 
 export interface FaramValues {
