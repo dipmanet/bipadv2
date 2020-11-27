@@ -23,7 +23,7 @@ const pollutionSelector = (pollution: ArchivePollution) => pollution.id;
 
 const defaultSort = {
     key: 'createdOn',
-    order: 'asc',
+    order: 'dsc',
 };
 
 const TableView = (props: Props) => {
@@ -123,7 +123,8 @@ const TableView = (props: Props) => {
         <div className={styles.tableView}>
             <div className={styles.header}>
                 <div className={styles.dateRange}>
-                    {`Time Period: ${startDate} to ${endDate}`}
+                    <b>Time Period: </b>
+                    {`${startDate} to ${endDate}`}
                 </div>
                 <DownloadButton
                     value={formattedTableData}
