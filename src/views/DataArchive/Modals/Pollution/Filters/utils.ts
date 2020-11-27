@@ -9,6 +9,14 @@ export const isValidDate = (dateString: string = '') => {
     return d.toISOString().slice(0, 10) === dateString;
 };
 
+export const getDateDiff = (startDate: string = '', endDate: string = '') => {
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(Number(date2) - Number(date1));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+};
+
 export const getErrors = (fv: any) => {
     const { dataDateRange, parameter = {}, period = {} } = fv;
     const { startDate, endDate } = dataDateRange;
@@ -37,6 +45,15 @@ export const getErrors = (fv: any) => {
             type: 'Date',
             err: 'StartDate is greater than EndDate',
             message: 'StartDate cannot be greater than EndDate',
+        };
+        errors.push(error);
+    }
+
+    if (getDateDiff(startDate, endDate) > 365) {
+        error = {
+            type: 'Date',
+            err: 'More than 1 year time period selected',
+            message: 'Time period cannot be greater than one year',
         };
         errors.push(error);
     }
