@@ -31,8 +31,9 @@ class ProjectsProfileLeftPane extends React.PureComponent {
     static defaultProps = defaultProps;
 
     handleSaveClick = () => {
-        saveChart('drrCycleData', 'drrCycle');
-        saveChart('categoryData', 'category');
+        // saveChart('drrCycleData', 'drrCycle');
+        // saveChart('categoryData', 'category');
+        saveChart('projectOrganizationData', 'projectOrganization');
     }
 
     handleExpand = () => {
@@ -72,8 +73,8 @@ class ProjectsProfileLeftPane extends React.PureComponent {
             categoryData,
             projectMap,
             className,
+            projectOrganizationPieData,
         } = this.props;
-
         return (
             <div className={_cs(className, styles.leftPane)}>
                 <div className={styles.visualizations}>
@@ -91,19 +92,24 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                             >
                                 <div
                                     className={styles.chart}
-                                    id="drrCycleData"
+                                    // id="drrCycleData"
+                                    id="projectOrganizationData"
                                 >
                                     <ResponsiveContainer>
                                         <PieChart>
                                             <Pie
-                                                data={drrCycleData}
+                                                // data={drrCycleData}
+                                                data={projectOrganizationPieData}
                                                 dataKey="value"
                                                 nameKey="label"
                                                 innerRadius="60%"
                                                 outerRadius="70%"
                                                 label
                                             >
-                                                { drrCycleData.map(d => (
+                                                {/* { drrCycleData.map(d => (
+                                                    <Cell key={d.label} fill={d.color} />
+                                                ))} */}
+                                                { projectOrganizationPieData.map(d => (
                                                     <Cell key={d.label} fill={d.color} />
                                                 ))}
                                             </Pie>
@@ -115,7 +121,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-                                <div
+                                {/* <div
                                     className={styles.chart}
                                     id="categoryData"
                                 >
@@ -140,7 +146,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                             />
                                         </PieChart>
                                     </ResponsiveContainer>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}

@@ -8,6 +8,7 @@ import {
     getHexFromString,
     _cs,
 } from '@togglecorp/fujs';
+import { groupList } from '#utils/common';
 
 import {
     regionsSelector,
@@ -283,6 +284,21 @@ const requestOptions = {
     },
 };
 
+const combineEntities = (projects, organizations) => {
+    const tempProjects = [...projects];
+    const tempOrganizations = [...organizations];
+
+    const combined = tempProjects.map((tempProject) => {
+        tempOrganizations.forEach((tempOrganization) => {
+            const { oname } = tempOrganization;
+            if (tempProject.oid === tempOrganization.oid) {
+                Object.assign(tempProject, { oname });
+            }
+        });
+        return tempProject;
+    });
+    return combined;
+};
 class ProjectsProfile extends React.PureComponent {
     render() {
         const {
@@ -298,9 +314,12 @@ class ProjectsProfile extends React.PureComponent {
         const category = getResults(requests, 'categoryRequest');
         const organization = getResults(requests, 'organizationRequest');
         const projects = getResults(requests, 'projectRequest');
-
         const pending = isAnyRequestPending(requests);
-
+        const projectsWithOrganizationName = combineEntities(projects, organization);
+        const projectOrganizationGrouped = groupList(
+            projectsWithOrganizationName.filter(e => e.oname),
+            project => project.oname,
+        );
         // NDRRSAP
 
         const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
@@ -324,7 +343,8 @@ class ProjectsProfile extends React.PureComponent {
 
         // PROJECTS
 
-        const realProjects = sanitize(projects, regions, ndrrsapMap);
+        // const realProjects = sanitize(projects, regions, ndrrsapMap);
+        const realProjects = sanitize(projectsWithOrganizationName, regions, ndrrsapMap);
         const filteredProjects = filter(realProjects, faramValues);
 
         const drrPieData = drrcycle.map(item => ({
@@ -340,6 +360,13 @@ class ProjectsProfile extends React.PureComponent {
             value: filteredProjects.filter(p => p.category[categoryKeySelector(item)]).length,
             color: getHexFromString(categoryLabelSelector(item)),
         }));
+
+        const projectOrganizationPieData = projectOrganizationGrouped.map(item => ({
+            key: item.key,
+            label: item.key,
+            value: filteredProjects.filter(p => p.oname === item.key).length,
+            color: getHexFromString(item.key),
+        })).filter(data => data.value !== 0);
 
         // AGGREGATIONS
 
@@ -378,6 +405,7 @@ class ProjectsProfile extends React.PureComponent {
                                 categoryMap={categoryMap}
                                 organizationMap={organizationMap}
                                 projectMap={projectMap}
+                                projectOrganizationPieData={projectOrganizationPieData}
                             />
                             <ProjectsProfileFilter
                                 drrCycleOptions={drrcycle}
