@@ -17,7 +17,7 @@ import Graph from './Graph';
 import TableView from './TableView';
 
 import { Geometry, ArchivePollution, FaramValues } from './types';
-import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter } from './utils';
+import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter, parsePeriod } from './utils';
 import styles from './styles.scss';
 
 import {
@@ -115,7 +115,8 @@ const PollutionModal = (props: Props) => {
         setStationData(data);
     };
     const pollutionDataWithParameter = parseParameter(stationData);
-    console.log('pollutionDataWithParameter: ', pollutionDataWithParameter);
+    const pollutionDateWithPeriod = parsePeriod(pollutionDataWithParameter);
+    console.log('pollutionDateWithPeriod: ', pollutionDateWithPeriod);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader

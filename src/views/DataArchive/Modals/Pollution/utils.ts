@@ -68,3 +68,72 @@ export const dateParser = (date: string) => {
 
     return `${datePart} ${hour}:${minutes} ${indicator}`;
 };
+
+// for period parsing
+
+const getHourlyValues = (createdOn: string) => {
+    const dateWithHour = createdOn.substr(0, createdOn.indexOf(':'));
+    const hour = new Date(createdOn).getHours();
+    const hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
+    return [dateWithHour, hourName];
+};
+
+const getDailyValues = (createdOn: string) => {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const dateOnly = createdOn.substr(0, createdOn.indexOf('T'));
+    const month = new Date(createdOn).getMonth();
+    const date = new Date(createdOn).getDate();
+    const dateName = `${monthNames[month]} ${date}`;
+
+    return [dateOnly, dateName];
+};
+
+const getWeekNumber = (createdOn: string) => {
+    const date = new Date(createdOn);
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+};
+
+const getWeeklyValues = (createdOn: string) => {
+    const year = new Date(createdOn).getFullYear();
+    const weekNumber = getWeekNumber(createdOn);
+    const weekName = `Week ${weekNumber}`;
+    const dateWithWeek = `${year} ${weekName}`;
+    return [dateWithWeek, weekName];
+};
+
+const getMonthlyValues = (createdOn: string) => {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const date = new Date(createdOn);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const monthName = monthNames[month];
+    const dateWithMonth = `${year} ${monthName}`;
+    return [dateWithMonth, monthName];
+};
+
+export const parsePeriod = memoize((pollutionDetails: ArchivePollution[]) => {
+    const temp = [...pollutionDetails];
+    const withPeriod = temp.map((detail) => {
+        const { createdOn } = detail;
+        const [dateWithHour, hourName] = getHourlyValues(createdOn);
+        const [dateOnly, dateName] = getDailyValues(createdOn);
+        const [dateWithWeek, weekName] = getWeeklyValues(createdOn);
+        const [dateWithMonth, monthName] = getMonthlyValues(createdOn);
+        return { ...detail,
+            dateWithHour,
+            hourName,
+            dateOnly,
+            dateName,
+            dateWithWeek,
+            weekName,
+            dateWithMonth,
+            monthName };
+    });
+    return withPeriod;
+});
