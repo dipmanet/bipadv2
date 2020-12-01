@@ -79,6 +79,8 @@ type Props = NewProps<OwnProps, Params>;
 
 const Filters = (props: Props) => {
     const [faramValue, setFaramValue] = useState(initialFaramValue);
+    const [submittedStartDate, setSubmittedStartDate] = useState('');
+    const [submittedEndDate, setSubmittedEndDate] = useState('');
     const [errors, setErrors] = useState<Errors[]>([]);
     const { handleFilterValues,
         requests: {
@@ -90,7 +92,12 @@ const Filters = (props: Props) => {
         if (faramErrors.length === 0) {
             handleFilterValues(faramValue);
             const { dataDateRange } = faramValue;
-            stationRequest.do({ dataDateRange });
+            const { startDate, endDate } = dataDateRange;
+            if (submittedStartDate !== startDate || submittedEndDate !== endDate) {
+                stationRequest.do({ dataDateRange });
+                setSubmittedStartDate(startDate);
+                setSubmittedEndDate(endDate);
+            }
         }
     };
 
