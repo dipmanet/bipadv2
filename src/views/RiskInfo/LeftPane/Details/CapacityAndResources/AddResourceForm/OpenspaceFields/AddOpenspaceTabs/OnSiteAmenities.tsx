@@ -156,62 +156,37 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
 
     private handleNoteChange = (e, id) => {
         const { value } = e.target;
+  
         const AmenitiesToPost = this.state.allAmenitiesToPost;
-
         AmenitiesToPost.forEach((element: Amenity, index) => {
-            if (element.amenities === id) {
+            if (element.amenities == id) {
                 element.description = value;
             }
         });
-
-
         this.setState({
             allAmenitiesToPost: AmenitiesToPost,
         });
     }
 
     private handleChange = (e, id: number) => {
-        // const {
-        //     requests: {
-        //         addAmenitiesRequest,
-        //     }, openspaceId
-        // } = this.props;
         const { checked } = e.target;
         const { openspaceId } = this.props;
-        const obj = {
-            openSpace: openspaceId,
-            amenities: id,
-            description: '',
-            isAvailable: checked,
-        };
 
         const AmenitiesToPost: Amenity[] = this.state.allAmenitiesToPost;
         AmenitiesToPost.forEach((element, index) => {
-            if (element.amenities === obj.amenities) {
+            if (element.amenities === id) {
+                const obj = {
+                    openSpace: openspaceId,
+                    amenities: id,
+                    description: AmenitiesToPost[index].description ?  AmenitiesToPost[index].description: '',
+                    isAvailable: checked,
+                };
                 AmenitiesToPost[index] = obj;
             }
         });
         this.setState({
             allAmenitiesToPost: AmenitiesToPost,
         });
-        // if (checked) {
-        //     addAmenitiesRequest.do({
-        //         body: {
-        //             openSpace: openspaceId,
-        //             amenities: id,
-        //             isAvailable: true
-        //         },
-        //     });
-        // } else {
-        //     addAmenitiesRequest.do({
-        //         openspaceId: openspaceId,
-        //         body: {
-        //             openSpace: openspaceId,
-        //             amenities: id,
-        //             isAvailable: false
-        //         },
-        //     })
-        // }
     };
 
     private setAllAmenitiesList = (allAmenities: Amenity[]) => {
@@ -318,6 +293,8 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
         } = this.props;
         const { allAmenities, singleAmenitiesList } = this.state;
         const { handleTabClick } = this.props;
+        console.log('am', this.state.allAmenitiesToPost);
+        
         return (
             <React.Fragment>
                 {
