@@ -69,6 +69,7 @@ export const dateParser = (date: string) => {
     return `${datePart} ${hour}:${minutes} ${indicator}`;
 };
 
+
 // for period parsing
 
 const getHourlyValues = (createdOn: string) => {
@@ -137,3 +138,47 @@ export const parsePeriod = memoize((pollutionDetails: ArchivePollution[]) => {
     });
     return withPeriod;
 });
+
+export const getAverage = (arr: number[]) => {
+    const average = arr.reduce((p, c) => p + c, 0) / arr.length;
+    return average.toFixed(2);
+};
+
+export const getItemAverage = (dataArray: any[], field: string) => {
+    const array = dataArray.map(data => data[field] || 0);
+    return getAverage(array);
+};
+
+export const getChartData = (
+    data: {key: string | number; value: any[]}[],
+    labelKey: string,
+) => {
+    const chartData = data.map((singleItem) => {
+        const { key, value: dataArray } = singleItem;
+        const label = dataArray[0][labelKey];
+        const { createdOn } = dataArray[0];
+        const PM1_I = getItemAverage(dataArray, 'PM1_I');
+        const PM10_I = getItemAverage(dataArray, 'PM10_I');
+        const PM25_I = getItemAverage(dataArray, 'PM25_I');
+        const RH_I = getItemAverage(dataArray, 'RH_I');
+        const T = getItemAverage(dataArray, 'T');
+        const TSP_I = getItemAverage(dataArray, 'TSP_I');
+        const WD_I = getItemAverage(dataArray, 'WD_I');
+        const WS_I = getItemAverage(dataArray, 'WS_I');
+
+        return {
+            key,
+            label,
+            createdOn,
+            PM1_I,
+            PM10_I,
+            PM25_I,
+            RH_I,
+            T,
+            TSP_I,
+            WD_I,
+            WS_I,
+        };
+    });
+    return chartData;
+};

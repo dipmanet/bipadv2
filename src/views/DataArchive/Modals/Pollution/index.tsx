@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+import { groupList } from '#utils/common';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -17,7 +18,14 @@ import Graph from './Graph';
 import TableView from './TableView';
 
 import { Geometry, ArchivePollution, FaramValues } from './types';
-import { pollutionToGeojson, getSortedPollutionData, getTodaysPollutionDetails, parseParameter, parsePeriod } from './utils';
+import {
+    pollutionToGeojson,
+    getSortedPollutionData,
+    getTodaysPollutionDetails,
+    parseParameter,
+    parsePeriod,
+    getChartData,
+} from './utils';
 import styles from './styles.scss';
 
 import {
@@ -115,8 +123,34 @@ const PollutionModal = (props: Props) => {
         setStationData(data);
     };
     const pollutionDataWithParameter = parseParameter(stationData);
-    const pollutionDateWithPeriod = parsePeriod(pollutionDataWithParameter);
-    console.log('pollutionDateWithPeriod: ', pollutionDateWithPeriod);
+    const pollutionDataWithPeriod = parsePeriod(pollutionDataWithParameter);
+
+    const hourWiseGroup = groupList(
+        pollutionDataWithPeriod.filter(p => p.dateWithHour),
+        pollution => pollution.dateWithHour,
+    );
+    const dailyWiseGroup = groupList(
+        pollutionDataWithPeriod.filter(p => p.dateOnly),
+        pollution => pollution.dateOnly,
+    );
+    const weekWiseGroup = groupList(
+        pollutionDataWithPeriod.filter(p => p.dateWithWeek),
+        pollution => pollution.dateWithWeek,
+    );
+    const monthWiseGroup = groupList(
+        pollutionDataWithPeriod.filter(p => p.dateWithMonth),
+        pollution => pollution.dateWithMonth,
+    );
+    console.log('hourWiseGroup: ', hourWiseGroup);
+    const hourlyChartData = getChartData(hourWiseGroup, 'hourName');
+    const dailyChartData = getChartData(dailyWiseGroup, 'dateName');
+    const weeklyChartData = getChartData(weekWiseGroup, 'weekName');
+    const monthlyChartData = getChartData(monthWiseGroup, 'monthName');
+
+    console.log('hourlyChartData: ', hourlyChartData);
+    console.log('dailyChartData: ', dailyChartData);
+    console.log('weeklyChartData: ', weeklyChartData);
+    console.log('monthlyChartData: ', monthlyChartData);
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
