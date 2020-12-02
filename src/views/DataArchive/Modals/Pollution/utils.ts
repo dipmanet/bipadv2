@@ -170,14 +170,14 @@ export const getChartData = (
             key,
             label: String(label || ''),
             createdOn: String(createdOn || ''),
-            PM1_I,
-            PM10_I,
-            PM25_I,
-            RH_I,
-            T,
-            TSP_I,
-            WD_I,
-            WS_I,
+            PM1_I: Number(PM1_I) || 0,
+            PM10_I: Number(PM10_I) || 0,
+            PM25_I: Number(PM25_I) || 0,
+            RH_I: Number(RH_I) || 0,
+            T: Number(T) || 0,
+            TSP_I: Number(TSP_I) || 0,
+            WD_I: Number(WD_I) || 0,
+            WS_I: Number(WS_I) || 0,
         };
     });
     return chartData;

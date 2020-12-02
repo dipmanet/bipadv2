@@ -18,35 +18,32 @@ import styles from './styles.scss';
 interface Props {
     stationData: ArchivePollution[];
     filterWiseChartData?: ChartData[];
+    parameterCode?: string;
 }
 const Graph = (props: Props) => {
-    const { stationData, filterWiseChartData } = props;
+    const { stationData, filterWiseChartData, parameterCode } = props;
+    const code = parameterCode ? parameterCode.replace('.', '') : '';
     if (stationData.length === 0) {
         return (
             <NoData />
         );
     }
-
     return (
         <div
             className={styles.chart}
         // id={downloadId}
-            style={{
-                height: `${stationData.length * 50}px`,
-                minHeight: '320px',
-            }}
         >
             <ResponsiveContainer className={styles.container}>
                 <BarChart
                     data={filterWiseChartData}
-                    margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
+                    margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <YAxis />
                     <XAxis dataKey="label" />
+                    <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="PM1_I" fill="#8884d8" />
+                    <Bar dataKey={code} fill="#8884d8" />
                 </BarChart>
             </ResponsiveContainer>
         </div>

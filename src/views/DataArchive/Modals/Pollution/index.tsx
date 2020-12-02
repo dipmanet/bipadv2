@@ -142,7 +142,10 @@ const PollutionModal = (props: Props) => {
         pollution => pollution.dateWithMonth,
     );
     let filterWiseChartData;
-    const { period: { periodCode } } = filterValues;
+    const {
+        period: { periodCode },
+        parameter: { parameterCode },
+    } = filterValues;
     if (periodCode === 'hourly') {
         filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
     }
@@ -196,6 +199,7 @@ const PollutionModal = (props: Props) => {
                         <Graph
                             stationData={stationData}
                             filterWiseChartData={filterWiseChartData}
+                            parameterCode={parameterCode}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
