@@ -188,6 +188,7 @@ const PollutionModal = (props: Props) => {
                     <div className={styles.modalOneMonth}>
                         <Graph
                             stationData={stationData}
+                            hourlyChartData={hourlyChartData}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>

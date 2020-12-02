@@ -168,8 +168,8 @@ export const getChartData = (
 
         return {
             key,
-            label,
-            createdOn,
+            label: String(label || ''),
+            createdOn: String(createdOn || ''),
             PM1_I,
             PM10_I,
             PM25_I,

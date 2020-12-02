@@ -75,3 +75,17 @@ export interface Errors {
     err?: string;
     message?: string;
 }
+
+export interface ChartData {
+    key: string | number;
+    label: string;
+    createdOn: string;
+    PM1_I: string;
+    PM10_I: string;
+    PM25_I: string;
+    RH_I: string;
+    T: string;
+    TSP_I: string;
+    WD_I: string;
+    WS_I: string;
+}
