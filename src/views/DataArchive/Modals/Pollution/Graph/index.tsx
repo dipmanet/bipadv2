@@ -17,10 +17,10 @@ import styles from './styles.scss';
 
 interface Props {
     stationData: ArchivePollution[];
-    hourlyChartData: ChartData[];
+    filterWiseChartData?: ChartData[];
 }
 const Graph = (props: Props) => {
-    const { stationData, hourlyChartData } = props;
+    const { stationData, filterWiseChartData } = props;
     if (stationData.length === 0) {
         return (
             <NoData />
@@ -38,7 +38,7 @@ const Graph = (props: Props) => {
         >
             <ResponsiveContainer className={styles.container}>
                 <BarChart
-                    data={hourlyChartData}
+                    data={filterWiseChartData}
                     margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />

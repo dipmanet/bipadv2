@@ -141,16 +141,23 @@ const PollutionModal = (props: Props) => {
         pollutionDataWithPeriod.filter(p => p.dateWithMonth),
         pollution => pollution.dateWithMonth,
     );
-    console.log('hourWiseGroup: ', hourWiseGroup);
-    const hourlyChartData = getChartData(hourWiseGroup, 'hourName');
-    const dailyChartData = getChartData(dailyWiseGroup, 'dateName');
-    const weeklyChartData = getChartData(weekWiseGroup, 'weekName');
-    const monthlyChartData = getChartData(monthWiseGroup, 'monthName');
+    let filterWiseChartData;
+    const { period: { periodCode } } = filterValues;
+    if (periodCode === 'hourly') {
+        filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+    }
+    if (periodCode === 'daily') {
+        filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+    }
+    if (periodCode === 'weekly') {
+        filterWiseChartData = getChartData(weekWiseGroup, 'weekName');
+    }
+    if (periodCode === 'monthly') {
+        filterWiseChartData = getChartData(monthWiseGroup, 'monthName');
+    }
 
-    console.log('hourlyChartData: ', hourlyChartData);
-    console.log('dailyChartData: ', dailyChartData);
-    console.log('weeklyChartData: ', weeklyChartData);
-    console.log('monthlyChartData: ', monthlyChartData);
+    console.log('filterValues: ', filterValues);
+
     return (
         <Modal className={styles.pollutionModal}>
             <ModalHeader
@@ -188,7 +195,7 @@ const PollutionModal = (props: Props) => {
                     <div className={styles.modalOneMonth}>
                         <Graph
                             stationData={stationData}
-                            hourlyChartData={hourlyChartData}
+                            filterWiseChartData={filterWiseChartData}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
