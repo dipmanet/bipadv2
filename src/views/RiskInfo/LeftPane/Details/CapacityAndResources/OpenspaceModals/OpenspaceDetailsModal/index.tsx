@@ -219,7 +219,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                         onEdit={this.props.onEdit}
                         authenticated={authenticated}
                     />
-                    {/* <img
+                    <img
                         src={imageUrl}
                         style={{
                             width: '100%',
@@ -228,15 +228,22 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                             objectFit: 'cover',
                         }}
                         alt="cover"
-                    /> */}
-
-                    <LazyLoadImage
-                        alt="cover"
-                        height="225"
-                        src={imageUrl}
-                        width="100%"
-                        effect="blur"
                     />
+                    {/* <div style={{ padding: '0 10px',
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover' }}
+                    >
+                        <LazyLoadImage
+                            alt="cover"
+                            src={imageUrl}
+                            // effect="blur"
+                            width="100%"
+                            height="200"
+                            delayTime="50"
+                        />
+                    </div> */}
+
                     <ModalBody className={styles.content}>
                         {type !== 'communityspace' && (
                             <ScrollTabs

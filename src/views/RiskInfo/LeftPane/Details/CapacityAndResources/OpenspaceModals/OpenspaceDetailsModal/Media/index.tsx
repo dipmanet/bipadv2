@@ -109,6 +109,7 @@ class MediaComponent extends React.PureComponent<Props, State> {
                                                     src={item.image}
                                                     width="100%"
                                                     effect="blur"
+                                                    delayTime="5"
                                                 />
                                             </div>
                                         );

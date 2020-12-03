@@ -115,12 +115,11 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
     const { id, point, title, ...resource } = resourceDetails;
 
+
     const data = mapToList(
         resource,
         (value, key) => ({ label: key, value }),
     );
-
-    const resourceKeySelector = (d: typeof data) => d.label;
 
     const rendererParams = (_: string, item: PageType.Resource) => ({
         className: styles.item,
@@ -134,18 +133,26 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
     if (resourceDetails.resourceType === 'openspace') {
         filtered = data.filter(el => el.label !== 'description'
-            && el.label !== 'ward' && el.label !== 'issue' && el.label !== 'currentLandUse'
+            && el.label !== 'ward' && el.label !== 'issue'
             && el.label !== 'catchmentArea' && el.label !== 'ownership'
             && el.label !== 'elevetion' && el.label !== 'accessToSite'
             && el.label !== 'specialFeature' && el.label !== 'elevation');
 
-        const capacity = parseInt((filtered[2].value / 5).toFixed(0), 10);
+        console.log('filtered data', filtered);
+
+        const capacity = filtered && filtered[3] && filtered[3].value
+            && parseInt((filtered[3].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
     } else if (resourceDetails.resourceType === 'communityspace') {
         filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward');
-        const capacity = parseInt((filtered[2].value / 5).toFixed(0), 10);
+        const capacity = filtered && filtered[2] && filtered[2].value
+        && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
     }
+
+    const resourceKeySelector = (d: typeof filtered) => d.label;
+
+
     const resourceTypeCheck = resourceDetails.resourceType === 'communityspace' || resourceDetails.resourceType === 'openspace';
     const authCheck = resourceTypeCheck && authenticated;
 
