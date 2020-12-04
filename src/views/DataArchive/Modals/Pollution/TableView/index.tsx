@@ -10,6 +10,7 @@ import {
 } from '#utils/table';
 import Table from '#rscv/Table';
 import DownloadButton from '#components/DownloadButton';
+import Button from '#rsca/Button';
 
 import NoData from '../NoData';
 import styles from './styles.scss';
@@ -129,8 +130,14 @@ const TableView = (props: Props) => {
                 <DownloadButton
                     value={formattedTableData}
                     name="PollutionArchive.csv"
+                    className={styles.downloadButton}
                 >
-                    Download
+                    <h4>Download</h4>
+                    <Button
+                        className={styles.chartDownload}
+                        transparent
+                        iconName="download"
+                    />
                 </DownloadButton>
             </div>
             <Table

@@ -1,3 +1,5 @@
+@import '~base-scss/base';
+
 .table-view {
     :global {
         .table {
@@ -27,6 +29,25 @@
         padding: var(--spacing-medium) 0;
         margin-bottom: var(--spacing-medium);
         
+        .download-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 $spacing-medium;
+            border-radius: 10px;
+            background-color:rgba($color: grey, $alpha: 0.3) !important;
+            font-size: medium;
+            color:rgba($color: black, $alpha: 0.45) !important;
+            border: none !important;
+            margin: $spacing-medium 0;
+            filter: none;
+            text-transform: capitalize;
+            cursor: pointer;
+            .chart-download {
+                font-size: medium;
+                color:rgba($color: black, $alpha: 0.45);
+            }
+        }
         .date-range {
             // font-weight: bold;
             font-size: var(--font-size-medium-alt);
