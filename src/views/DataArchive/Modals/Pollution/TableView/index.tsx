@@ -10,7 +10,7 @@ import {
 } from '#utils/table';
 import Table from '#rscv/Table';
 import DownloadButton from '#components/DownloadButton';
-import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 
 import NoData from '../NoData';
 import styles from './styles.scss';
@@ -29,7 +29,7 @@ const defaultSort = {
 
 const TableView = (props: Props) => {
     const {
-        pollutionDataWithParameter: data,
+        pollutionDataWithParameter: data = [],
         filterValues: { dataDateRange: { startDate, endDate } },
     } = props;
     const pollutionHeader = [
@@ -113,7 +113,7 @@ const TableView = (props: Props) => {
             comparator: (a, b) => compareNumber(a.WS_I, b.WS_I),
         },
     ];
-    if (data.length === 0) {
+    if (data && data.length === 0) {
         return (
             <NoData />
         );
@@ -133,10 +133,9 @@ const TableView = (props: Props) => {
                     className={styles.downloadButton}
                 >
                     <h4>Download</h4>
-                    <Button
+                    <Icon
                         className={styles.chartDownload}
-                        transparent
-                        iconName="download"
+                        name="download"
                     />
                 </DownloadButton>
             </div>

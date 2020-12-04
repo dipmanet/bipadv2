@@ -46,6 +46,8 @@
             .chart-download {
                 font-size: medium;
                 color:rgba($color: black, $alpha: 0.45);
+                padding: 0 $spacing-small;
+                margin: $spacing-small-alt 0;
             }
         }
         .date-range {
