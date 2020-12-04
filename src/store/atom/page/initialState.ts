@@ -42,7 +42,7 @@ const state: PageState = {
     daPollutionFilter: {
         station: {},
         dataDateRange: {
-            rangeInDays: 183,
+            rangeInDays: 7,
             startDate: undefined,
             endDate: undefined,
         },
