@@ -61,11 +61,23 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             return {
                 station: stationId,
                 historical: 'true',
-                expand: ['province', 'district', 'municipality', 'ward'],
+                // expand: ['province', 'district', 'municipality', 'ward'],
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 created_on__gt: `${startDate}T00:00:00+05:45`,
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 created_on__lt: `${endDate}T23:59:59+05:45`,
+                fields: [
+                    'id',
+                    'created_on',
+                    'title',
+                    'aqi_color',
+                    'aqi',
+                    'observation',
+                    'point',
+                    'station',
+                    'description',
+                ],
+                limit: -1,
             };
         },
         onSuccess: ({ props: { handleStationData }, response }) => {

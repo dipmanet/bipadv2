@@ -54,7 +54,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
         method: methods.GET,
         query: ({ props: { stationId } }) => ({
             station: stationId,
-            historical: 'true',
+            // historical: 'true',
             expand: ['province', 'district', 'municipality', 'ward'],
         }),
         onMount: true,

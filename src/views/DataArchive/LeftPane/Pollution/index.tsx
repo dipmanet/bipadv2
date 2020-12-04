@@ -82,6 +82,18 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { pollutionFilters } }) => ({
             ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
             historical: true,
+            fields: [
+                'id',
+                'created_on',
+                'title',
+                'aqi_color',
+                'aqi',
+                'observation',
+                'point',
+                'station',
+                'description',
+            ],
+            limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchivePollutionList } }) => {
             interface Response { results: PageType.DataArchivePollution[] }
