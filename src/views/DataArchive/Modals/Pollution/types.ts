@@ -88,4 +88,5 @@ export interface ChartData {
     TSP_I: number;
     WD_I: number;
     WS_I: number;
+    aqi: number;
 }

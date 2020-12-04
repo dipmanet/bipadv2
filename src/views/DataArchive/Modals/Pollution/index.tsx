@@ -201,7 +201,7 @@ const PollutionModal = (props: Props) => {
                     </div>
                     <div className={styles.modalTwelveMonth}>
                         <TableView
-                            pollutionDataWithParameter={pollutionDataWithParameter}
+                            filterWiseChartData={filterWiseChartData}
                             filterValues={filterValues}
                         />
                     </div>

@@ -3,7 +3,7 @@ import {
     compareString,
     compareNumber,
 } from '@togglecorp/fujs';
-import { ArchivePollution, FaramValues } from '../types';
+import { FaramValues, ChartData } from '../types';
 import { dateParser } from '../utils';
 import {
     convertNormalTableToCsv,
@@ -16,33 +16,52 @@ import NoData from '../NoData';
 import styles from './styles.scss';
 
 interface Props {
-    pollutionDataWithParameter: ArchivePollution[];
+    filterWiseChartData?: ChartData[];
     filterValues: FaramValues;
 }
 
-const pollutionSelector = (pollution: ArchivePollution) => pollution.id;
+const pollutionSelector = (pollution: ChartData) => pollution.createdOn;
 
 const defaultSort = {
     key: 'createdOn',
     order: 'dsc',
 };
 
+const getPeriodWiseDate = (label: string | number, createdOn: string, periodCode?: string) => {
+    if (periodCode === 'hourly') {
+        return (createdOn) ? dateParser(createdOn) : undefined;
+    }
+    return `${label}`;
+};
+
 const TableView = (props: Props) => {
     const {
-        pollutionDataWithParameter: data = [],
-        filterValues: { dataDateRange: { startDate, endDate } },
+        filterValues: { dataDateRange: { startDate, endDate }, period: { periodCode } },
+        filterWiseChartData: data = [],
     } = props;
     const pollutionHeader = [
+        {
+            key: 'year',
+            label: 'Year',
+            order: 1,
+            sortable: true,
+            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+            modifier: (row: ChartData) => {
+                const { createdOn } = row;
+
+                return createdOn ? createdOn.split('-')[0] : undefined;
+            },
+        },
         {
             key: 'createdOn',
             label: 'Date',
             order: 1,
             sortable: true,
             comparator: (a, b) => compareString(a.createdOn, b.createdOn),
-            modifier: (row: ArchivePollution) => {
-                const { createdOn } = row;
+            modifier: (row: ChartData) => {
+                const { label, createdOn } = row;
                 // parsing date to appropiate format
-                return (createdOn) ? dateParser(createdOn) : undefined;
+                return getPeriodWiseDate(label, createdOn, periodCode);
             },
         },
         {
@@ -51,7 +70,7 @@ const TableView = (props: Props) => {
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.aqi, b.aqi),
-            modifier: (row: ArchivePollution) => {
+            modifier: (row: ChartData) => {
                 const { aqi } = row;
                 return (aqi) ? `${aqi.toFixed(2)}` : undefined;
             },
@@ -118,8 +137,16 @@ const TableView = (props: Props) => {
             <NoData />
         );
     }
+    // removing year column for hourly period
+    let header;
+    if (periodCode === 'hourly') {
+        header = pollutionHeader.filter(item => item.key !== 'year');
+    } else {
+        header = pollutionHeader;
+    }
+
     const formattedTableData = convertNormalTableToCsv(data,
-        pollutionHeader);
+        header);
     return (
         <div className={styles.tableView}>
             <div className={styles.header}>
@@ -143,7 +170,7 @@ const TableView = (props: Props) => {
                 // rowClassNameSelector={getClassName}
                 className={styles.pollutionTable}
                 data={data}
-                headers={pollutionHeader}
+                headers={header}
                 keySelector={pollutionSelector}
                 defaultSort={defaultSort}
             />

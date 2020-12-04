@@ -165,6 +165,7 @@ export const getChartData = (
         const TSP_I = getItemAverage(dataArray, 'TSP_I');
         const WD_I = getItemAverage(dataArray, 'WD_I');
         const WS_I = getItemAverage(dataArray, 'WS_I');
+        const aqi = getItemAverage(dataArray, 'aqi');
 
         return {
             key,
@@ -178,6 +179,7 @@ export const getChartData = (
             TSP_I: Number(TSP_I) || 0,
             WD_I: Number(WD_I) || 0,
             WS_I: Number(WS_I) || 0,
+            aqi: Number(aqi) || 0,
         };
     });
     return chartData;
