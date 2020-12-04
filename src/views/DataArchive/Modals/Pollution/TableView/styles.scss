@@ -4,7 +4,7 @@
     :global {
         .table {
             white-space: nowrap;
-            height: 300px;
+            max-height: 300px;
             .header {
                 border: 1px solid black;
                 background-color: var(--color-foreground-alt);
