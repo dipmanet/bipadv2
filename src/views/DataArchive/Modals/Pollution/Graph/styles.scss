@@ -1,5 +1,43 @@
-.chart {
-    height: 320px;
-    background-color: #fff;
-    overflow: visible !important;
+@import '~base-scss/base';
+
+.visualizations {
+    padding: calc(var(--spacing-large) - var(--spacing-medium)) 0;
+    .period-parameter-chart {
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: medium;
+            color:rgba($color: black, $alpha: 0.45);
+            margin: $spacing-medium 0;
+            .heading {
+                padding: 0 $spacing-medium;
+                color: $color-accent;
+            }
+            .download-group {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 $spacing-medium;
+                border-radius: 10px;
+                background-color:rgba($color: grey, $alpha: 0.3);
+                cursor: pointer;
+                .chart-download {
+                    font-size: medium;
+                    color:rgba($color: black, $alpha: 0.45);
+                }
+            }
+
+        }
+
+        .chart {
+            height: 320px;
+            background-color: #fff;
+            overflow: visible !important;
+        }
+    }
+
+    .container {
+
+    }
 }
