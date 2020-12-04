@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
-import { _cs } from '@togglecorp/fujs';
 import { groupList } from '#utils/common';
 
 import Modal from '#rscv/Modal';
@@ -21,7 +20,7 @@ import { Geometry, ArchivePollution, FaramValues } from './types';
 import {
     pollutionToGeojson,
     getSortedPollutionData,
-    getTodaysPollutionDetails,
+    // getTodaysPollutionDetails,
     parseParameter,
     parsePeriod,
     getChartData,
@@ -104,7 +103,7 @@ const PollutionModal = (props: Props) => {
     }
 
     const sortedPollutionDetails = getSortedPollutionData(pollutionDetails);
-    const todaysPollutionDetails = getTodaysPollutionDetails(sortedPollutionDetails);
+    // const todaysPollutionDetails = getTodaysPollutionDetails(sortedPollutionDetails);
     const latestPollutionDetail = sortedPollutionDetails[0];
     const { municipality } = latestPollutionDetail || emptyObject;
     const { id: geoarea } = municipality || emptyObject;
@@ -158,8 +157,6 @@ const PollutionModal = (props: Props) => {
     if (periodCode === 'monthly') {
         filterWiseChartData = getChartData(monthWiseGroup, 'monthName');
     }
-
-    console.log('filterValues: ', filterValues);
 
     return (
         <Modal className={styles.pollutionModal}>

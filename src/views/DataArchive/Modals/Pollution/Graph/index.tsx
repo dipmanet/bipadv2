@@ -23,7 +23,7 @@ interface Props {
     stationData: ArchivePollution[];
     filterWiseChartData?: ChartData[];
     parameterCode?: string;
-    downloadId: string;
+    downloadId?: string;
     chartTitle?: string;
 }
 
