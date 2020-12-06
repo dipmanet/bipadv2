@@ -24,6 +24,7 @@ import {
     parseParameter,
     parsePeriod,
     getChartData,
+    arraySorter,
 } from './utils';
 import styles from './styles.scss';
 
@@ -156,6 +157,11 @@ const PollutionModal = (props: Props) => {
     }
     if (periodCode === 'monthly') {
         filterWiseChartData = getChartData(monthWiseGroup, 'monthName');
+    }
+
+    // sorting filteredData by createdOn asc
+    if (filterWiseChartData) {
+        filterWiseChartData.sort(arraySorter);
     }
 
     return (

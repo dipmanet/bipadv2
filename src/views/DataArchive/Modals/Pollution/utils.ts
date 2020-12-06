@@ -69,6 +69,14 @@ export const dateParser = (date: string) => {
     return `${datePart} ${hour}:${minutes} ${indicator}`;
 };
 
+export const arraySorter = (a: {createdOn: string}, b: {createdOn: string}) => {
+    const keyA = new Date(a.createdOn);
+    const keyB = new Date(b.createdOn);
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+};
+
 
 // for period parsing
 
