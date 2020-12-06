@@ -12,14 +12,15 @@ interface Props {
     errors: Errors[];
 }
 const parameters: Parameters[] = [
-    { parameterCode: 'PM1_I', parameterName: 'PM1 Instantenous' },
-    { parameterCode: 'PM10_I', parameterName: 'PM10 Inst' },
-    { parameterCode: 'PM2.5_I', parameterName: 'PM2.5 Inst' },
-    { parameterCode: 'T', parameterName: 'Air Temperature Inst' },
-    { parameterCode: 'TSP_I', parameterName: 'Total Suspended Particulate Inst' },
-    { parameterCode: 'RH_I', parameterName: 'Relative Humidity Inst' },
-    { parameterCode: 'WS_I', parameterName: 'Wind Speed Inst' },
-    { parameterCode: 'WD_I', parameterName: 'Wind direction Inst' },
+    { parameterCode: 'aqi', parameterName: 'AQI' },
+    { parameterCode: 'PM1_I', parameterName: 'PM1' },
+    { parameterCode: 'PM10_I', parameterName: 'PM10' },
+    { parameterCode: 'PM2.5_I', parameterName: 'PM2.5' },
+    { parameterCode: 'T', parameterName: 'Air Temperature' },
+    { parameterCode: 'TSP_I', parameterName: 'Total Suspended Particulates' },
+    { parameterCode: 'RH_I', parameterName: 'Relative Humidity' },
+    { parameterCode: 'WS_I', parameterName: 'Wind Speed' },
+    { parameterCode: 'WD_I', parameterName: 'Wind direction' },
 ];
 
 const parameterKeySelector = (r: Parameters) => r.parameterCode;

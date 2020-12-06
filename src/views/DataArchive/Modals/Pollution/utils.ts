@@ -79,14 +79,14 @@ export const arraySorter = (a: {createdOn: string}, b: {createdOn: string}) => {
 
 export const renderLegendName = (code: string) => {
     const names: {[key: string]: string} = {
-        PM1_I: 'PM1 Instantenous',
-        PM10_I: 'PM10 Instantenous',
-        PM25_I: 'PM2.5 Instantenous',
+        PM1_I: 'PM1',
+        PM10_I: 'PM10',
+        PM25_I: 'PM2.5',
         RH_I: 'Relative Humidity',
-        T: 'Air Temparature Instantenous',
-        TSP_I: 'Total Suspended Partical Instantenous',
-        WD_I: 'Wind Direction Instantenous',
-        WS_I: 'Wind Speed Instantenous',
+        T: 'Air Temparature',
+        TSP_I: 'Total Suspended Partical',
+        WD_I: 'Wind Direction',
+        WS_I: 'Wind Speed',
         aqi: 'AQI',
     };
     return names[code];

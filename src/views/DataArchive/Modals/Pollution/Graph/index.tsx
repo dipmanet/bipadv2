@@ -30,7 +30,7 @@ interface Props {
 const DEFAULT_CHART_TITLE = 'Period Parameter Graph';
 const DEFAULT_DOWNLOAD_ID = 'pollutionPopUpChart';
 
-const handleSaveClick = (downloadId: string) => {
+const handleSaveClick = (downloadId?: string) => {
     saveChart(downloadId || DEFAULT_DOWNLOAD_ID, downloadId || DEFAULT_DOWNLOAD_ID);
 };
 
