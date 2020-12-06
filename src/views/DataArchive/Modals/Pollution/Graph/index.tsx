@@ -15,7 +15,7 @@ import {
     saveChart,
 } from '#utils/common';
 import { ArchivePollution, ChartData } from '../types';
-
+import { renderLegendName } from '../utils';
 import NoData from '../NoData';
 import styles from './styles.scss';
 
@@ -80,7 +80,7 @@ const Graph = (props: Props) => {
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey={code} fill="#8884d8" />
+                            <Bar name={renderLegendName(code)} dataKey={code} fill="#8884d8" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

@@ -77,6 +77,20 @@ export const arraySorter = (a: {createdOn: string}, b: {createdOn: string}) => {
     return 0;
 };
 
+export const renderLegendName = (code: string) => {
+    const names: {[key: string]: string} = {
+        PM1_I: 'PM1 Instantenous',
+        PM10_I: 'PM10 Instantenous',
+        PM25_I: 'PM2.5 Instantenous',
+        RH_I: 'Relative Humidity',
+        T: 'Air Temparature Instantenous',
+        TSP_I: 'Total Suspended Partical Instantenous',
+        WD_I: 'Wind Direction Instantenous',
+        WS_I: 'Wind Speed Instantenous',
+        aqi: 'AQI',
+    };
+    return names[code];
+};
 
 // for period parsing
 
