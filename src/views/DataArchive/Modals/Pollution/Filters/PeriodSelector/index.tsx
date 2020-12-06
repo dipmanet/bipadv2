@@ -10,7 +10,6 @@ const periods: Periods[] = [
     { periodCode: 'daily', periodName: 'Daily' },
     { periodCode: 'weekly', periodName: 'Weekly' },
     { periodCode: 'monthly', periodName: 'Monthly' },
-    { periodCode: 'yearly', periodName: 'Yearly' },
 ];
 
 const periodKeySelector = (r: Periods) => r.periodCode;
