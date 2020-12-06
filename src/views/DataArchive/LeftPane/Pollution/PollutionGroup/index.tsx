@@ -25,7 +25,7 @@ const getCount = (data: PageType.DataArchivePollution[]) => {
     const count = data.length;
     const LIMIT = 99;
 
-    return count > LIMIT ? `${LIMIT} +` : `${count}`;
+    return count > LIMIT ? `${LIMIT}+` : `${count}`;
 };
 
 const PollutionGroup = (props: Props) => {
