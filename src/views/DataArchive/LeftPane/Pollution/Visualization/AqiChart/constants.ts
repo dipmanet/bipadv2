@@ -12,6 +12,7 @@ export const stackedBars = [
     { dataKey: 'unhealthy', stackId: 'pollution', fill: UNHEALTHY_COLOR },
     { dataKey: 'veryUnhealthy', stackId: 'pollution', fill: VERY_UNHEALTHY_COLOR },
     { dataKey: 'hazardous', stackId: 'pollution', fill: HAZARDOUS_COLOR },
+    { dataKey: 'veryHazardous', stackId: 'pollution', fill: HAZARDOUS_COLOR },
 ];
 
 export const legendData = [

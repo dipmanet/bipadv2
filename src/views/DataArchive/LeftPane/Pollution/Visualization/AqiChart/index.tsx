@@ -6,13 +6,14 @@ import {
     BarChart,
     Bar,
     LabelList,
-    // Tooltip,
+    Tooltip,
 } from 'recharts';
 
 import { saveChart } from '#utils/common';
 import Button from '#rsca/Button';
 import { stackedBars, legendData } from './constants';
 import PollutionLegend from './Legend';
+import CustomTooltip from './Tooltip';
 
 import styles from './styles.scss';
 
@@ -25,6 +26,7 @@ interface ChartData {
     unhealthy: number;
     veryUnhealthy: number;
     hazardous: number;
+    veryHazardous: number;
 }
 
 interface LegendData {
@@ -54,6 +56,7 @@ const removeZero = (staionWiseData: ChartData[]) => {
             'unhealthy',
             'veryUnhealthy',
             'hazardous',
+            'veryHazardous',
         ];
         keys.forEach((key) => {
             if (data[key] === 0) {
@@ -114,7 +117,10 @@ const AqiChart = (props: Props) => {
                                     value: 'No. of events', position: 'insideBottom', dy: 10,
                                 }}
                             />
-                            {/* <Tooltip cursor={false} /> */}
+                            <Tooltip
+                                cursor={false}
+                                content={<CustomTooltip />}
+                            />
                             { stackedBars.map((bar) => {
                                 const { dataKey, stackId, fill } = bar;
                                 return (

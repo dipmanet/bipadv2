@@ -19,6 +19,8 @@ interface ChartData {
     unhealthy: number;
     veryUnhealthy: number;
     hazardous: number;
+    veryHazardous: number;
+
 }
 const getAqiCount = (stationWise: {
     key: string | number;
@@ -32,6 +34,7 @@ const getAqiCount = (stationWise: {
         let unhealthy = 0;
         let veryUnhealthy = 0;
         let hazardous = 0;
+        let veryHazardous = 0;
         stationWiseDate.forEach((data) => {
             const { aqi } = data;
             if (aqi <= 50) {
@@ -54,8 +57,11 @@ const getAqiCount = (stationWise: {
                 veryUnhealthy += 1;
                 return;
             }
-            if (aqi > 300) {
+            if (aqi <= 400) {
                 hazardous += 1;
+            }
+            if (aqi > 400) {
+                veryHazardous += 1;
             }
         });
         const { createdOn } = stationWiseDate[0];
@@ -69,6 +75,7 @@ const getAqiCount = (stationWise: {
             unhealthy,
             veryUnhealthy,
             hazardous,
+            veryHazardous,
             createdOn,
         };
     });
