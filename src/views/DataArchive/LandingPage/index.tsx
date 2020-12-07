@@ -40,7 +40,6 @@ const LandingPage = (props: Props) => {
         RiverIcon,
         EarthquakeIcon,
         PollutionIcon,
-        FireIcon,
     } = icons;
 
     useEffect(() => {
@@ -52,8 +51,6 @@ const LandingPage = (props: Props) => {
         { id: 'river', title: 'River', alt: 'river', icon: RiverIcon, count: getCount(counts, 'river') },
         { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon, count: getCount(counts, 'earthquake') },
         { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon, count: getCount(counts, 'pollution') },
-        { id: 'fire', title: 'Fire', alt: 'fire', icon: FireIcon, count: getCount(counts, 'fire') },
-        { id: 'landslide', title: 'Landslide', alt: 'landslide', icon: RainIcon, count: getCount(counts, 'landslide') },
     ];
     const pending = Object.keys(counts).length === 0;
     return (
@@ -63,19 +60,22 @@ const LandingPage = (props: Props) => {
                 <div className={styles.mainTitle}>
                 Data Archive
                 </div>
-                {views.map((view) => {
-                    const { id, title, alt, icon, count } = view;
-                    return (
-                        <Option
-                            key={id}
-                            handleOptionClick={handleOptionClick}
-                            title={title}
-                            alt={alt}
-                            icon={icon}
-                            count={count}
-                        />
-                    );
-                })}
+                <div className={styles.options}>
+                    {views.map((view) => {
+                        const { id, title, alt, icon, count } = view;
+                        return (
+                            <Option
+                                key={id}
+                                handleOptionClick={handleOptionClick}
+                                title={title}
+                                alt={alt}
+                                icon={icon}
+                                count={count}
+                            />
+                        );
+                    })}
+                </div>
+
             </div>
         </div>
     );
