@@ -81,6 +81,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         query: ({ props: { pollutionFilters } }) => ({
             ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
+            station: pollutionFilters.station.id,
             historical: true,
             fields: [
                 'id',
@@ -164,7 +165,7 @@ const Pollution = (props: Props) => {
             <div
                 className={styles.message}
             >
-                <Loading pending />
+                <Loading pending={isAnyRequestPending(requests)} />
                 <Message>
                     No data available in the database.
                 </Message>
@@ -185,7 +186,6 @@ const Pollution = (props: Props) => {
         filteredPollutionList.filter(e => e.title),
         pollution => pollution.title || 'N/A',
     ).sort(compare);
-
     return (
         <div className={styles.pollution}>
             <Loading pending={pending} />
