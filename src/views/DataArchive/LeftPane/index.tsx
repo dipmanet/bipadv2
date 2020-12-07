@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import Header from './Header';
 import Pollution from './Pollution';
 import Earthquake from './Earthquake';
 import MiniOption from './MiniOption';
@@ -8,14 +7,13 @@ import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArc
 
 import styles from './styles.scss';
 
-type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
+type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 
 interface Props {}
 
 const LeftPane = () => {
     const {
         handleOptionClick,
-        data,
         chosenOption: chosenOptionContext,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
     const [activeView, setActiveView] = useState('');
@@ -28,14 +26,6 @@ const LeftPane = () => {
         }
     }, [chosenOptionContext]);
 
-    const handleDataButtonClick = () => {
-        setActiveView('data');
-    };
-
-    const handleVisualizationsButtonClick = () => {
-        setActiveView('visualizations');
-    };
-
     const handleMiniOptionsClick = (miniOption: Options) => {
         setChosenOption(miniOption);
         setActiveView('data');
@@ -43,13 +33,6 @@ const LeftPane = () => {
 
     return (
         <div className={styles.leftPane}>
-            {/* <Header
-                handleDataButtonClick={handleDataButtonClick}
-                handleVisualizationsButtonClick={handleVisualizationsButtonClick}
-                dataCount={data ? data.length : 0}
-                activeView={activeView}
-                chosenOption={chosenOption}
-            /> */}
             <div className={styles.content}>
                 { chosenOption === 'Pollution' && activeView === 'data' && <Pollution /> }
                 { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake /> }

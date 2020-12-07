@@ -1,6 +1,6 @@
 import React from 'react';
 
-type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
+type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 
 export interface DataArchiveContextProps {
     chosenOption?: Options;

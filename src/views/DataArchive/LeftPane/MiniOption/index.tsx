@@ -10,9 +10,8 @@ import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
 import EarthquakeIcon from '#resources/icons/Earthquake.svg';
 import PollutionIcon from '#resources/icons/AirQuality.svg';
-import FireIcon from '#resources/icons/Forest-fire.svg';
 
-type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | 'Fire' | undefined;
+type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 
 interface Props {
     handleMiniOptionsClick: Function;
@@ -25,8 +24,6 @@ const miniOptions = [
     { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
     { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
     { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
-    { id: 'fire', option: 'Fire', alt: 'Fire', icon: FireIcon },
-    // { id: 'landslide', option: 'Landslide', alt: 'Landslide', icon: RainIcon },
 ];
 
 const MiniOption = (props: Props) => {
@@ -56,22 +53,6 @@ const MiniOption = (props: Props) => {
                     </div>
                 );
             })}
-            {/*
-                Add Landslide to minioptions once data is available
-                Handle Onclicks as well
-            */}
-            <div
-                role="presentation"
-                // onClick={() => handleMiniOptionsClick('Rain')}
-                className={styles.option}
-            >
-                <ScalableVectorGraphics
-                    className={styles.optionIcon}
-                    src={EarthquakeIcon}
-                    alt="Landslide"
-                />
-                Landslide
-            </div>
         </div>
     );
 };
