@@ -27,8 +27,8 @@ const compare = (a: PollutionStation, b: PollutionStation) => {
 };
 
 const StationSelector = (props: Props) => {
-    const { onChange: onChangeFromProps, stations: stationsFromProps } = props;
-    const [selectedStation, setSelectedStation] = useState(0);
+    const { onChange: onChangeFromProps, stations: stationsFromProps, value: { id } } = props;
+    const [selectedStation, setSelectedStation] = useState(id);
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
         const station = stationsFromProps.filter(s => s.id === stationId)[0];
@@ -44,7 +44,6 @@ const StationSelector = (props: Props) => {
             </div>
         );
     }
-
     return (
         <div className={styles.stationSelector}>
             <SelectInput
