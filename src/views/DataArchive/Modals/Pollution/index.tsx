@@ -9,6 +9,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import { MultiResponse } from '#store/atom/response/types';
+import Loading from '#components/Loading';
 
 import MiniMap from './MiniMap';
 import Details from './Details';
@@ -162,6 +163,7 @@ const PollutionModal = (props: Props) => {
 
     return (
         <Modal className={styles.pollutionModal}>
+            <Loading pending={pending} />
             <ModalHeader
                 title={stationName}
                 rightComponent={(
