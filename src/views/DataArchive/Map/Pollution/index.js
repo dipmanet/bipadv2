@@ -228,7 +228,7 @@ class PollutionMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { station: { point } } = pollutionFilters;
+        const { station: { point, municipality } } = pollutionFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -236,22 +236,25 @@ class PollutionMap extends React.PureComponent {
         };
 
         const { showModal } = this.state;
-        const { map } = this.context;
-        if (point && map) {
-            const { coordinates: stationCords } = point;
-            map.flyTo({
-                center: stationCords,
-                zoom: 10,
-            });
-        } else {
-            map.fitBounds(nepalBounds);
-        }
+        /* uncomment this if we need to zoom to station coordinate */
+        // const { map } = this.context;
+        // if (point && map) {
+        //     const { coordinates: stationCords } = point;
+        //     map.flyTo({
+        //         center: stationCords,
+        //         zoom: 10,
+        //     });
+        // } else {
+        //     map.fitBounds(nepalBounds);
+        // }
         const { title: stationName, stationId, geometry } = tooltipParams || {};
+        const region = { adminLevel: 3, geoarea: municipality || undefined };
         return (
             <div className={styles.dataArchivePollutionMap}>
                 <CommonMap
                     sourceKey="dataArchivePollution"
                     boundsPadding={boundsPadding}
+                    region={municipality ? region : undefined}
                 />
                 {coordinates && (
                     <MapTooltip
