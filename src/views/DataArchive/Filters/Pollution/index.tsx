@@ -182,7 +182,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
         this.setState({ activeView: undefined,
             faramValues: {
                 dataDateRange: {
-                    rangeInDays: 183,
+                    rangeInDays: 7,
                     startDate: undefined,
                     endDate: undefined,
                 },
