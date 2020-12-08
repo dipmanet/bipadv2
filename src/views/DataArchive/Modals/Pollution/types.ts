@@ -44,6 +44,7 @@ export interface ArchivePollution extends PageType.DataArchivePollution {
     province: Federal;
     district: District;
     municipality: Municipality;
+    name?: string;
     point: {
         type: string;
         coordinates: [number, number];

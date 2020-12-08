@@ -12,7 +12,7 @@ const emptyObject = {};
 const Details = (props: Props) => {
     const { latestPollutionDetail } = props;
     const {
-        title,
+        name,
         point,
         description,
         province,
@@ -24,7 +24,7 @@ const Details = (props: Props) => {
     const { title: districtTitle } = district || emptyObject;
 
     const details = [
-        { title: 'Station Name', value: title || 'N/A' },
+        { title: 'Station Name', value: name || 'N/A' },
         { title: 'Province', value: provinceTitle || 'N/A' },
         { title: 'Longitude', value: longitude || 'N/A' },
         { title: 'District', value: districtTitle || 'N/A' },

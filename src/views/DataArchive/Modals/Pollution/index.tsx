@@ -19,8 +19,6 @@ import TableView from './TableView';
 import { Geometry, ArchivePollution, FaramValues } from './types';
 import {
     pollutionToGeojson,
-    getSortedPollutionData,
-    // getTodaysPollutionDetails,
     parseParameter,
     parsePeriod,
     getChartData,
@@ -50,11 +48,10 @@ interface OwnProps {
 
 const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
-        url: '/pollution/',
+        url: '/pollution-stations/',
         method: methods.GET,
         query: ({ props: { stationId } }) => ({
-            station: stationId,
-            // historical: 'true',
+            id: stationId,
             expand: ['province', 'district', 'municipality', 'ward'],
         }),
         onMount: true,
@@ -103,9 +100,8 @@ const PollutionModal = (props: Props) => {
         pollutionDetails = results;
     }
 
-    const sortedPollutionDetails = getSortedPollutionData(pollutionDetails);
-    // const todaysPollutionDetails = getTodaysPollutionDetails(sortedPollutionDetails);
-    const latestPollutionDetail = sortedPollutionDetails[0];
+    const latestPollutionDetail = pollutionDetails
+        .filter(pollution => pollution.id === stationId)[0];
     const { municipality } = latestPollutionDetail || emptyObject;
     const { id: geoarea } = municipality || emptyObject;
     // get map center
