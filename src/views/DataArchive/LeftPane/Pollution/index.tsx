@@ -160,7 +160,7 @@ const Pollution = (props: Props) => {
         }
     }, [pollutionFilters, pollutionList, setData]);
 
-    if (filteredPollutionList.length < 1) {
+    if (!pending && filteredPollutionList.length < 1) {
         return (
             <div
                 className={styles.message}
