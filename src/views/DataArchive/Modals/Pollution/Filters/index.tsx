@@ -13,6 +13,7 @@ import { MultiResponse } from '#store/atom/response/types';
 import DateSelector from './DateSelector';
 import ParameterSelector from './ParameterSelector';
 import PeriodSelector from './PeriodSelector';
+import Loading from '#components/Loading';
 
 import { getErrors } from './utils';
 import { FaramValues, Errors, ArchivePollution } from '../types';
@@ -97,6 +98,7 @@ const Filters = (props: Props) => {
     const { handleFilterValues,
         requests: {
             stationRequest,
+            stationRequest: { pending },
         } } = props;
     const handleSubmitClick = () => {
         const faramErrors = getErrors(faramValue);
@@ -119,6 +121,7 @@ const Filters = (props: Props) => {
 
     return (
         <div className={styles.filters}>
+            <Loading pending={pending} />
             <div className={styles.header}>
                 Filters
             </div>
