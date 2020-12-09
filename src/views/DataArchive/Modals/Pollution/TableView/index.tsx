@@ -134,7 +134,7 @@ const TableView = (props: Props) => {
     ];
     if (data && data.length === 0) {
         return (
-            <NoData />
+            <NoData title="Table View" />
         );
     }
     // removing year column for hourly period

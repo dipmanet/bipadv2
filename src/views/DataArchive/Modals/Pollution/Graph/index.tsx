@@ -39,7 +39,7 @@ const Graph = (props: Props) => {
     const code = parameterCode ? parameterCode.replace('.', '') : '';
     if (stationData.length === 0) {
         return (
-            <NoData />
+            <NoData title="Graph View" />
         );
     }
     return (
