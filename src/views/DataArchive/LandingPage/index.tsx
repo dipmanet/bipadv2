@@ -71,6 +71,7 @@ const LandingPage = (props: Props) => {
                                 alt={alt}
                                 icon={icon}
                                 count={count}
+                                pending={pending}
                             />
                         );
                     })}

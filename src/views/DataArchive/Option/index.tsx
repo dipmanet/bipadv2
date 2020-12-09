@@ -9,11 +9,12 @@ interface Props {
     count: number | string;
     icon: string;
     alt: string;
+    pending: boolean;
     handleOptionClick: Function;
 }
 
-const Option = ({ title, count, icon, alt, handleOptionClick }: Props) => (
-    <div role="presentation" onClick={() => handleOptionClick(title)} className={styles.option}>
+const Option = ({ title, count, icon, alt, handleOptionClick, pending }: Props) => (
+    <div role="presentation" onClick={() => !pending && handleOptionClick(title)} className={styles.option}>
         <div className={styles.left}>
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>
