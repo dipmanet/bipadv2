@@ -92,6 +92,11 @@ export const renderLegendName = (code: string) => {
     return names[code];
 };
 
+export const isEqualObject = (obj1: any, obj2: any) => {
+    const isEqual = JSON.stringify(obj1) === JSON.stringify(obj2);
+    return isEqual;
+};
+
 // for period parsing
 
 const getHourlyValues = (createdOn: string) => {

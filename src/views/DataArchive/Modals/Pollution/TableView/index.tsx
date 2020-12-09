@@ -18,6 +18,7 @@ import styles from './styles.scss';
 interface Props {
     filterWiseChartData?: ChartData[];
     filterValues: FaramValues;
+    isInitial?: boolean;
 }
 
 const pollutionSelector = (pollution: ChartData) => pollution.createdOn;
@@ -38,6 +39,7 @@ const TableView = (props: Props) => {
     const {
         filterValues: { dataDateRange: { startDate, endDate }, period: { periodCode } },
         filterWiseChartData: data = [],
+        isInitial,
     } = props;
     const pollutionHeader = [
         {
@@ -134,7 +136,10 @@ const TableView = (props: Props) => {
     ];
     if (data && data.length === 0) {
         return (
-            <NoData title="Table View" />
+            <NoData
+                title="Table View"
+                message={isInitial ? 'Please select filter to view data' : undefined}
+            />
         );
     }
     // removing year column for hourly period

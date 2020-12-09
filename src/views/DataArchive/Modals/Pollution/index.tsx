@@ -24,6 +24,7 @@ import {
     parsePeriod,
     getChartData,
     arraySorter,
+    isEqualObject,
 } from './utils';
 import styles from './styles.scss';
 
@@ -160,7 +161,7 @@ const PollutionModal = (props: Props) => {
     if (filterWiseChartData) {
         filterWiseChartData.sort(arraySorter);
     }
-
+    const isInitial = isEqualObject(initialFaramValue, filterValues);
     return (
         <Modal className={styles.pollutionModal}>
             <Loading pending={pending} />
@@ -201,12 +202,14 @@ const PollutionModal = (props: Props) => {
                             stationData={stationData}
                             filterWiseChartData={filterWiseChartData}
                             parameterCode={parameterCode}
+                            isInitial={isInitial}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
                         <TableView
                             filterWiseChartData={filterWiseChartData}
                             filterValues={filterValues}
+                            isInitial={isInitial}
                         />
                     </div>
                 </div>

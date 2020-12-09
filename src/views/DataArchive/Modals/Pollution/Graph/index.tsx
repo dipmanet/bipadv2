@@ -25,6 +25,7 @@ interface Props {
     parameterCode?: string;
     downloadId?: string;
     chartTitle?: string;
+    isInitial?: boolean;
 }
 
 const DEFAULT_CHART_TITLE = 'Period Parameter Graph';
@@ -35,11 +36,21 @@ const handleSaveClick = (downloadId?: string) => {
 };
 
 const Graph = (props: Props) => {
-    const { stationData, filterWiseChartData, parameterCode, chartTitle, downloadId } = props;
+    const {
+        stationData,
+        filterWiseChartData,
+        parameterCode,
+        chartTitle,
+        downloadId,
+        isInitial,
+    } = props;
     const code = parameterCode ? parameterCode.replace('.', '') : '';
     if (stationData.length === 0) {
         return (
-            <NoData title="Graph View" />
+            <NoData
+                title="Graph View"
+                message={isInitial ? 'Please select filter to view data' : undefined}
+            />
         );
     }
     return (
