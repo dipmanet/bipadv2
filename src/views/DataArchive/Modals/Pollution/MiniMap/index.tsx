@@ -39,7 +39,7 @@ const MiniMap = (props: Props) => {
             <MapContainer className={styles.map1} />
             <CommonMap
                 sourceKey="comparative-first"
-                region={region}
+                region={geoarea ? region : undefined}
                 debug
             />
             <MapSource
