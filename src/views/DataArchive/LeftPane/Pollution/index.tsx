@@ -137,7 +137,7 @@ const filterByStationName = (
 };
 
 const Pollution = (props: Props) => {
-    const [sortKey, setSortKey] = useState('createdOn');
+    const [sortKey, setSortKey] = useState('key');
     const [activeView, setActiveView] = useState('data');
     const { pollutionList, requests, pollutionFilters } = props;
     const pending = isAnyRequestPending(requests);
@@ -174,10 +174,10 @@ const Pollution = (props: Props) => {
     }
     const compare = (a: any, b: any) => {
         if (a[sortKey] < b[sortKey]) {
-            return 1;
+            return -1;
         }
         if (a[sortKey] > b[sortKey]) {
-            return -1;
+            return 1;
         }
         return 0;
     };
