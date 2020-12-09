@@ -22,7 +22,7 @@ import {
     isAnyRequestPending,
 } from '#utils/request';
 
-import { transformDataRangeLocaleToFilter } from '#utils/transformations';
+import { transformDataRangeLocaleToFilter, pastDaysToDateRange } from '#utils/transformations';
 
 import {
     setDataArchivePollutionListAction,
@@ -41,6 +41,7 @@ import {
     pollutionFiltersSelector,
     pollutionStationsSelector,
 } from '#selectors';
+import { TitleContext, DataArchive } from '#components/TitleContext';
 
 import styles from './styles.scss';
 
@@ -136,11 +137,33 @@ const filterByStationName = (
     return filteredList;
 };
 
+const getYYYYMMDD = (date: Date) => {
+    const d = new Date(date);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
+};
+
+const getDates = (eqFilters: DAPollutionFiltersElement) => {
+    const { dataDateRange } = eqFilters;
+    const { rangeInDays } = dataDateRange;
+    let startDate;
+    let endDate;
+    if (rangeInDays !== 'custom') {
+        const { startDate: sDate, endDate: eDate } = pastDaysToDateRange(rangeInDays);
+        startDate = getYYYYMMDD(sDate);
+        endDate = getYYYYMMDD(eDate);
+    } else {
+        ({ startDate, endDate } = dataDateRange);
+    }
+    return [startDate, endDate];
+};
+
 const Pollution = (props: Props) => {
     const [sortKey, setSortKey] = useState('key');
     const [activeView, setActiveView] = useState('data');
     const { pollutionList, requests, pollutionFilters } = props;
     const pending = isAnyRequestPending(requests);
+    const { setDataArchive } = useContext(TitleContext);
+
     const {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
@@ -159,6 +182,20 @@ const Pollution = (props: Props) => {
             setData(filtered);
         }
     }, [pollutionFilters, pollutionList, setData]);
+    const { station: { name: location } } = pollutionFilters;
+    const [startDate, endDate] = getDates(pollutionFilters);
+
+    if (setDataArchive) {
+        setDataArchive((prevState: DataArchive) => {
+            if (prevState.mainModule !== 'Pollution'
+            || prevState.location !== location
+            || prevState.startDate !== startDate
+            || prevState.endDate !== endDate) {
+                return { ...prevState, mainModule: 'Pollution', location, startDate, endDate };
+            }
+            return prevState;
+        });
+    }
 
     if (!pending && filteredPollutionList.length < 1) {
         return (

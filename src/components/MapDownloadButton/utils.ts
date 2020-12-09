@@ -463,7 +463,6 @@ const setRiskInfoClimateChangeTitle = (
 // DataArchive
 /**
  * @param titleContext Context for Titles
- * @param regionName Location Name
  */
 const setDataArchiveTitle = (
     titleContext: TitleContextProps,
@@ -475,7 +474,12 @@ const setDataArchiveTitle = (
         // Earthquake
         if (mainModule === 'Earthquake') {
             defineSource('Department of Mines and Geology', setSource);
-            return `Historial Earthquake Data (${startDate} to ${endDate}), ${location}`;
+            return `Historical Earthquake Data (${startDate} to ${endDate}), ${location}`;
+        }
+        // Pollution
+        if (mainModule === 'Pollution') {
+            defineSource('Ministry of Forests and Environment', setSource);
+            return `Historical Pollution Data (${startDate} to ${endDate}), ${location || 'Nepal'}`;
         }
     }
     return '';
