@@ -1,9 +1,18 @@
 .no-data {
-    height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
+    flex-direction: column;
+    height: 100%;
     color: var(--color-text-disabled);
     font-size: var(--font-size-large-alt);
+    padding: var(--spacing-medium);
+    font-weight: bold;
+    .title {
+        
+    }
+    .message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    }
 }
