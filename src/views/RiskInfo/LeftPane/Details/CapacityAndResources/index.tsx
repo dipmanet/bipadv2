@@ -138,8 +138,6 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             && el.label !== 'elevetion' && el.label !== 'accessToSite'
             && el.label !== 'specialFeature' && el.label !== 'elevation');
 
-        console.log('filtered data', filtered);
-
         const capacity = filtered && filtered[3] && filtered[3].value
             && parseInt((filtered[3].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
