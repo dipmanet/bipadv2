@@ -9,4 +9,18 @@
         font-size: var(--font-size-medium-alt);
         padding: var(--spacing-small) 0;
     }
+
+    .remark {
+        display: flex;
+        align-items: center;
+        font-size: var(--font-size-medium-alt);
+        & > * {
+            margin-right: var(--spacing-extra-small-alt);
+        }
+        .box {
+            height: 12px;
+            width: 12px;
+            border-radius: 3px;
+        }
+    }
 }
