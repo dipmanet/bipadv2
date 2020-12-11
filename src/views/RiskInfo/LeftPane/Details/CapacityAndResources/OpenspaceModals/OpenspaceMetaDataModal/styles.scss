@@ -10,3 +10,14 @@
 .details {
     padding-top: 20px;
 }
+
+.ListWithImage{
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+
+    img{
+        max-width: 300px;
+        margin: 3px;
+    }
+}
