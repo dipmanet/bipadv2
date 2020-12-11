@@ -17,6 +17,7 @@ import {
 import { ArchivePollution, ChartData } from '../types';
 import { renderLegendName } from '../utils';
 import NoData from '../NoData';
+import CustomTooltip from './Tooltip';
 import styles from './styles.scss';
 
 interface Props {
@@ -89,7 +90,9 @@ const Graph = (props: Props) => {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="label" />
                             <YAxis />
-                            <Tooltip />
+                            <Tooltip
+                                content={<CustomTooltip />}
+                            />
                             <Legend />
                             <Bar name={renderLegendName(code)} dataKey={code} fill="#8884d8" />
                         </BarChart>
