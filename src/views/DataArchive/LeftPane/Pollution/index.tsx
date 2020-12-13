@@ -204,7 +204,7 @@ const Pollution = (props: Props) => {
             >
                 <Loading pending={isAnyRequestPending(requests)} />
                 <Message>
-                    No data available in the database.
+                    No data available for the applied filter.
                 </Message>
             </div>
         );
