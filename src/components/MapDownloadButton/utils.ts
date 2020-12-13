@@ -479,7 +479,7 @@ const setDataArchiveTitle = (
         // Pollution
         if (mainModule === 'Pollution') {
             defineSource('Ministry of Forests and Environment', setSource);
-            return `Historical Pollution Data (${startDate} to ${endDate}), ${location || 'Nepal'}`;
+            return `Air Quality Index (AQI), ${location || 'Nepal'}`;
         }
     }
     return '';
