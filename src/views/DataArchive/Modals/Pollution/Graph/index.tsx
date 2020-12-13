@@ -9,6 +9,7 @@ import {
     Legend,
     Tooltip,
     CartesianGrid,
+    ReferenceLine,
 } from 'recharts';
 import Button from '#rsca/Button';
 import {
@@ -95,6 +96,19 @@ const Graph = (props: Props) => {
                             />
                             <Legend />
                             <Bar name={renderLegendName(code)} dataKey={code} fill="#8884d8" />
+                            {
+                                code === 'aqi'
+                                && (
+                                    <ReferenceLine
+                                        y={150}
+                                        // label="Threshold"
+                                        stroke="#89023E"
+                                        strokeWidth={2}
+                                        isFront
+                                        strokeDasharray="3 2"
+                                    />
+                                )
+                            }
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
