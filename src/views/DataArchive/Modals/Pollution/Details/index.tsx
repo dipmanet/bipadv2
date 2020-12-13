@@ -24,12 +24,12 @@ const Details = (props: Props) => {
     const { title: districtTitle } = district || emptyObject;
 
     const details = [
-        { title: 'Station Name', value: name || 'N/A' },
-        { title: 'Province', value: provinceTitle || 'N/A' },
-        { title: 'Longitude', value: longitude || 'N/A' },
-        { title: 'District', value: districtTitle || 'N/A' },
+        { title: 'Station Name', value: name || 'N/A', style: styles.full },
+        { title: 'Province', value: provinceTitle || 'N/A', style: styles.full },
+        { title: 'District', value: districtTitle || 'N/A', style: styles.full },
+        { title: 'Longitude', value: longitude || 'N/A', style: styles.full },
         { title: 'Latitude', value: latitude || 'N/A', style: styles.full },
-        { title: 'Description', value: description || 'N/A', style: styles.full },
+        // { title: 'Description', value: description || 'N/A', style: styles.full },
     ];
     return (
         <div className={styles.details}>
