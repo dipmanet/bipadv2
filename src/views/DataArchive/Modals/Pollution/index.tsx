@@ -202,6 +202,7 @@ const PollutionModal = (props: Props) => {
                             stationData={stationData}
                             filterWiseChartData={filterWiseChartData}
                             parameterCode={parameterCode}
+                            periodCode={periodCode}
                             isInitial={isInitial}
                         />
                     </div>

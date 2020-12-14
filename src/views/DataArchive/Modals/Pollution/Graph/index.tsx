@@ -26,6 +26,7 @@ interface Props {
     stationData: ArchivePollution[];
     filterWiseChartData?: ChartData[];
     parameterCode?: string;
+    periodCode?: string;
     downloadId?: string;
     chartTitle?: string;
     isInitial?: boolean;
@@ -38,16 +39,29 @@ const handleSaveClick = (downloadId?: string) => {
     saveChart(downloadId || DEFAULT_DOWNLOAD_ID, downloadId || DEFAULT_DOWNLOAD_ID);
 };
 
+const shouldDisplayNote = (periodCode: string) => {
+    const status: {[key: string]: boolean} = {
+        hourly: false,
+        daily: true,
+        weekly: true,
+        monthly: true,
+    };
+    return status[periodCode];
+};
+
 const Graph = (props: Props) => {
     const {
         stationData,
         filterWiseChartData,
         parameterCode,
+        periodCode,
         chartTitle,
         downloadId,
         isInitial,
     } = props;
     const code = parameterCode ? parameterCode.replace('.', '') : '';
+    const displayNote = shouldDisplayNote(periodCode || '');
+
     if (stationData.length === 0) {
         return (
             <NoData
@@ -58,7 +72,7 @@ const Graph = (props: Props) => {
     }
     return (
         <div className={styles.visualizations}>
-            <Note />
+            {displayNote && <Note />}
             <div
                 className={styles.periodParameterChart}
             >
