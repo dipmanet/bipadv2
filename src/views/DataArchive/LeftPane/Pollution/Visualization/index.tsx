@@ -3,7 +3,7 @@ import memoize from 'memoize-one';
 import * as PageType from '#store/atom/page/types';
 import AqiChart from './AqiChart';
 import { groupList } from '#utils/common';
-
+import { getPollutionAverage } from './utils';
 import styles from './styles.scss';
 
 interface Props {
@@ -22,6 +22,7 @@ interface ChartData {
     veryHazardous: number;
 
 }
+
 const getAqiCount = (stationWise: {
     key: string | number;
     value: PageType.DataArchivePollution[];
@@ -98,17 +99,20 @@ const getPollutionSummary = memoize(
     },
 );
 
-
 const PollutionViz = (props: Props) => {
     const { pollutionList } = props;
     const pollutionSummary = getPollutionSummary(pollutionList);
+    const pollutionAverage = getPollutionAverage(pollutionList);
+
     return (
         <div className={styles.pollutionViz}>
             {pollutionSummary && (
                 <div className={styles.aqiChart}>
                     <AqiChart
                         downloadId="pollutionSummary"
-                        stationWiseData={pollutionSummary}
+                        /* uncomment to display no. of events instead of daily average */
+                        // stationWiseData={pollutionSummary}
+                        stationWiseData={pollutionAverage}
                     />
                 </div>
             )}
