@@ -19,6 +19,7 @@ import { ArchivePollution, ChartData } from '../types';
 import { renderLegendName } from '../utils';
 import NoData from '../NoData';
 import CustomTooltip from './Tooltip';
+import Note from './Note';
 import styles from './styles.scss';
 
 interface Props {
@@ -57,6 +58,7 @@ const Graph = (props: Props) => {
     }
     return (
         <div className={styles.visualizations}>
+            <Note />
             <div
                 className={styles.periodParameterChart}
             >
