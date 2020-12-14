@@ -12,7 +12,7 @@ export default class Details extends React.PureComponent {
             <div className={styles.details}>
                 <div>
                     <h3>About Community Space</h3>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         During the earthquakes in 2015, the local people in
                         many locations across the country used private and
                         public lands, and other open areas near their houses
@@ -32,7 +32,7 @@ export default class Details extends React.PureComponent {
                         open public land) and periphery of hospitals, schools, public
                         institutions and other public places.
                     </p>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         As the humanitarian open spaces may not be easily accessible
                         for all scattered communities in the rural areas during a
                         disaster, the school compounds, the periphery of the ward
@@ -45,7 +45,7 @@ export default class Details extends React.PureComponent {
                 </div>
                 <div>
                     <h3>Disclaimer</h3>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         The datasets of community spaces under this module contains only those
                         locations that have been surveyed by International Organization for
                         Migration (IOM) Nepal till date. It includes community spaces of the

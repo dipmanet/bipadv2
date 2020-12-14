@@ -136,17 +136,25 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             && el.label !== 'ward' && el.label !== 'issue'
             && el.label !== 'catchmentArea' && el.label !== 'ownership'
             && el.label !== 'elevetion' && el.label !== 'accessToSite'
-            && el.label !== 'specialFeature' && el.label !== 'elevation');
-
+            && el.label !== 'specialFeature' && el.label !== 'elevation'
+            && el.label !== 'perimeter');
         const capacity = filtered && filtered[3] && filtered[3].value
             && parseInt((filtered[3].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
+
+        // moving address field to 2nd position
+        if (filtered[2]) {
+            const element = filtered[2];
+            filtered.splice(2, 1);
+            filtered.splice(1, 0, element);
+        }
     } else if (resourceDetails.resourceType === 'communityspace') {
         filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward');
         const capacity = filtered && filtered[2] && filtered[2].value
         && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
     }
+
     const resourceKeySelector = (d: typeof filtered) => d.label;
     return (
         <div className={styles.resourceTooltip}>

@@ -7,7 +7,7 @@ export default class MetaData extends React.PureComponent {
         return (
             <div className={styles.template}>
                 <h3>
-                    Environment Checklist.(Each open space has a EIA table. )
+                Environment Checklist Template
                 </h3>
                 <div className={styles.templateTable}>
                     <Table fixed collapsing>
@@ -64,9 +64,8 @@ export default class MetaData extends React.PureComponent {
                                 <Table.Cell>8</Table.Cell>
 
                                 <Table.Cell>
-                                    Will the project cause increase in peak and
-                                    flows? (Including from temporary or
-                                    permanent water)
+                                Will the project cause an increase in peak and flood
+                                flows(including from temporary or permanent waste waters)?
                                 </Table.Cell>
                                 <Table.Cell>No</Table.Cell>
                             </Table.Row>
@@ -108,16 +107,16 @@ export default class MetaData extends React.PureComponent {
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>13</Table.Cell>
-
-                                <Table.Cell>Municipality</Table.Cell>
+                                <Table.Cell>
+                                    Will the project cause soil erosion and siltation?
+                                </Table.Cell>
                                 <Table.Cell>No</Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>14</Table.Cell>
 
                                 <Table.Cell>
-                                    Will project cause increased waste
-                                    production?
+                                Will the project cause an increase in waste accumulation?
                                 </Table.Cell>
                                 <Table.Cell>No</Table.Cell>
                             </Table.Row>
@@ -125,8 +124,7 @@ export default class MetaData extends React.PureComponent {
                                 <Table.Cell>15</Table.Cell>
 
                                 <Table.Cell>
-                                    Will project cause hazardous waste
-                                    production?
+                                Will the project cause hazardous waste accumulation?
                                 </Table.Cell>
                                 <Table.Cell>No</Table.Cell>
                             </Table.Row>

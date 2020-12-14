@@ -11,17 +11,16 @@ export default class Details extends React.PureComponent {
             <div className={styles.details}>
                 <div>
                     <h3>About Humanitarian Open Space</h3>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         Humanitarian open spaces are identified and mapped with the aim to
-                        strengthen emergency preparedness and to provide the initial
-                        response planning framework for the local governments and
-                        partner agencies to be able to have a starting point from
-                        which to provide life-saving assistance to those in immediate need
-                        including the displaced population. One of the lessons learned
-                        from past disasters is the vital role of pre-identified open
-                        spaces that can be utilized for safe and secure refuge and
-                        relief distribution during and after disasters. Other core
-                        services that can be provided and utilized in open spaces include:
+                        strengthen emergency preparedness and to provide the initial response
+                        planning framework for the local governments and partner agencies to be
+                        able to have a starting point from which to provide life-saving assistance
+                        to those in immediate need including the displaced population. One of the
+                        lessons learned from past disasters is the vital role of pre-identified
+                        open spaces that can be utilized for safe and secure refuge and relief
+                        distribution during and after disasters. Other core services that
+                        can be provided and utilized in open spaces include:
                     </p>
                     <ul>
                         <li>Safe refuge for the most vulnerable displaced populations</li>
@@ -37,7 +36,7 @@ export default class Details extends React.PureComponent {
                 </div>
                 <div>
                     <h3>Criterias</h3>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         Open spaces for humanitarian purposes are selected in consultation
                         with a multitude of stakeholders including local communities,
                         humanitarian agencies, local disaster risk management committees,
@@ -49,16 +48,16 @@ export default class Details extends React.PureComponent {
                         spaces for humanitarian purposes and providing refuge to displaced
                         population.
                     </p>
-                    <p>
-                        <b>1. Accessibility:</b>
+                    <p className={styles.justifiedContent}>
+                        <b>1. Accessibility: </b>
                         It is critical in the selection phase that
                         the open spaces are accessible in all seasons. The accessibility
                         criterion also entails the mobility of displaced populations,
                         supply of goods and services, access to critical services
                         such as hospitals and schools, as well as access to livelihoods.
                     </p>
-                    <p>
-                        <b>  2. Security:</b>
+                    <p className={styles.justifiedContent}>
+                        <b>  2. Security: </b>
                        In high density camps security is likely to become
                         a key issue. Existing security features in the open space is
                         therefore considered in the selection phase. Exposure to natural
@@ -70,8 +69,8 @@ export default class Details extends React.PureComponent {
                          from the open space.
                     </p>
 
-                    <p>
-                        <b>  3. Access to resources and water:</b>
+                    <p className={styles.justifiedContent}>
+                        <b>  3. Access to resources and water: </b>
                          This criterion ensures that
                         the open space has access to resources and water. Water needs
                         to be available in enough quantities in all seasons, taking into
@@ -80,8 +79,8 @@ export default class Details extends React.PureComponent {
                         to 7.5-15 litres per person per day.
                     </p>
 
-                    <p>
-                        <b>4. Land availability and topography:</b>
+                    <p className={styles.justifiedContent}>
+                        <b>4. Land availability and topography: </b>
                         As per the Sphere Standard,
                         the minimum surface area per person is 35-45 square metres. This
                         criterion considers the possibility to expand the area, and open
@@ -92,8 +91,8 @@ export default class Details extends React.PureComponent {
                         hampering toilet or camp construction.
                     </p>
 
-                    <p>
-                        <b>5. Environmental concerns:</b>
+                    <p className={styles.justifiedContent}>
+                        <b>5. Environmental concerns: </b>
                         This criterion considers open spaces
                         with enough ground cover as suitable for setting up camps as the
                         vegetation provides shade, protects from soil erosion and reduces
@@ -102,8 +101,8 @@ export default class Details extends React.PureComponent {
                         environmental checklist is filled out during the selection process.
                     </p>
 
-                    <p>
-                        <b> 6. Size:</b>
+                    <p className={styles.justifiedContent}>
+                        <b> 6. Size: </b>
                         The size criterion considers the size and area per capita
                         of the open space as important factors when planning for camps. The
                         minimum standards in disaster response as per the Sphere Standards
@@ -120,7 +119,7 @@ export default class Details extends React.PureComponent {
                 </div>
                 <div>
                     <h3>Disclaimer</h3>
-                    <p>
+                    <p className={styles.justifiedContent}>
                         The datasets of Humanitarian Open Space under this module contains
                         only those locations that have been surveyed by International
                         Organization for Migration (IOM) Nepal till date. It includes

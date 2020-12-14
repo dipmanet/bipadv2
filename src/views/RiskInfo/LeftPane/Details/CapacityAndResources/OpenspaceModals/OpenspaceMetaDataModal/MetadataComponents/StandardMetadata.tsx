@@ -32,9 +32,14 @@ export default class StandardMetadata extends React.PureComponent {
                             Abstract
                         </Table.HeaderCell>
                         <Table.Cell>
-                            Nepal is prone to a multitude of disasters that cause loss of lives, property and infrastructure. Considering Nepal&apos;s high vulnerability to various natural disasters, International Organization for Migration (IOM) Nepal prioritized strenthening emergency preparedness and response at federal, provincial and local levels of governments. The Nepal earthquakes in 2015 also brought a realization of the need for open spaces for displaced populations to use in the event of a disaster. Disaster preparedness at a community level is crucial and identifiying critical resources such as open spaces can be one of the first initiatives to accommodate displaced and the affected ones during emergencies. In this context, identification of humanitarian open spaces is one of the disaster response initiatives carried out by IOM Nepal at local level. The data on humanitarian open spaces identified and surveyed by the IOM in different parts of Nepal are integrated to the Building Information Platform Against Disaster (BIPAD) for dissemination to wider group of audiences including federal, provincial and local governments, humanitarian agencies, local community and other relevant stakeholders. The data on open spaces for humanitarian assistance include high-resolution orthophoto maps, location data, accomodation capacity and details on the availability of critical facilities and infrastructures such as WASH, road access, schools, hospitals and security in the vicinity of each identified open space.
-
-                            Open spaces for humanitarian purposes are identified with the aim to strengthen emergency preparedness and to provide initial respone planning framework for local governments and humanitarian agencies to provide life saving assistance to the displaced populations before, during and in the aftermath of a disaster and also to those in immediate need of support in times of crisis.
+                            <p className={styles.justifiedContent}>
+                                {' '}
+Nepal is prone to a multitude of disasters that cause loss of lives, property and infrastructure. Considering Nepal&apos;s high vulnerability to various natural disasters, International Organization for Migration (IOM) Nepal prioritized strenthening emergency preparedness and response at federal, provincial and local levels of governments. The Nepal earthquakes in 2015 also brought a realization of the need for open spaces for displaced populations to use in the event of a disaster. Disaster preparedness at a community level is crucial and identifiying critical resources such as open spaces can be one of the first initiatives to accommodate displaced and the affected ones during emergencies. In this context, identification of humanitarian open spaces is one of the disaster response initiatives carried out by IOM Nepal at local level. The data on humanitarian open spaces identified and surveyed by the IOM in different parts of Nepal are integrated to the Building Information Platform Against Disaster (BIPAD) for dissemination to wider group of audiences including federal, provincial and local governments, humanitarian agencies, local community and other relevant stakeholders. The data on open spaces for humanitarian assistance include high-resolution orthophoto maps, location data, accomodation capacity and details on the availability of critical facilities and infrastructures such as WASH, road access, schools, hospitals and security in the vicinity of each identified open space.
+                            </p>
+                            {' '}
+                            <p className={styles.justifiedContent}>
+                                Open spaces for humanitarian purposes are identified with the aim to strengthen emergency preparedness and to provide initial respone planning framework for local governments and humanitarian agencies to provide life saving assistance to the displaced populations before, during and in the aftermath of a disaster and also to those in immediate need of support in times of crisis.
+                            </p>
                         </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -42,7 +47,10 @@ export default class StandardMetadata extends React.PureComponent {
                             Purpose
                         </Table.HeaderCell>
                         <Table.Cell>
-                            The purpose of open space data integration to BIPAD is to document all the details of identified and surveyed open spaces comprehensively. The open space data documented and stored in such a digital platform is for dissemination of open space information for evidence-based decision support to government agencies, humanitarian agencies, relevant stakeholders and the community during a disaster or in an emergency.
+                            <p className={styles.justifiedContent}>
+                                {' '}
+The purpose of open space data integration to BIPAD is to document all the details of identified and surveyed open spaces comprehensively. The open space data documented and stored in such a digital platform is for dissemination of open space information for evidence-based decision support to government agencies, humanitarian agencies, relevant stakeholders and the community during a disaster or in an emergency.
+                            </p>
                         </Table.Cell>
                     </Table.Row>
                     <Table.Row>
