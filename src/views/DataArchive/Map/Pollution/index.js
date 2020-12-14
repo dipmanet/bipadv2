@@ -284,7 +284,8 @@ class PollutionMap extends React.PureComponent {
                                 paint: mapStyles.pollutionPoint.fill,
                             }}
                         />
-                        <MapLayer
+                        {/* uncomment the following to show latest aqi value on map */}
+                        {/* <MapLayer
                             layerKey="real-time-pollution-text"
                             layerOptions={{
                                 type: 'symbol',
@@ -292,7 +293,7 @@ class PollutionMap extends React.PureComponent {
                                 layout: mapStyles.archivePollutionText.layout,
                                 paint: mapStyles.archivePollutionText.paint,
                             }}
-                        />
+                        /> */}
                     </React.Fragment>
                 </MapSource>
                 {showModal
