@@ -1,22 +1,16 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import ModalFooter from '#rscv/Modal/Footer';
-import SelectInput from '#rsci/SelectInput';
-import TextArea from '#rsci/TextArea';
-import NumberInput from '#rsci/NumberInput';
 import DangerButton from '#rsca/Button/DangerButton';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-import * as PageType from '#store/atom/page/types';
 import styles from './styles.scss';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import MetaData from './MetaData';
 import Details from './Details';
-import FixedTabs from '#rscv/FixedTabs';
 import ScrollTabs from '#rscv/ScrollTabs';
+import HowToUse from './MetadataComponents/HowToUse';
+import StandardMetadata from './MetadataComponents/StandardMetadata';
 
 interface Params {
     body: object;
@@ -41,15 +35,23 @@ class OpenspaceMetadataModal extends React.PureComponent<any, State> {
 
     private tabs = {
         details: 'Details',
+        atrributes: 'Atrributes',
         metadata: 'Metadata',
+        howToUSe: 'How to Use',
     };
 
     private views = {
         details: {
             component: Details,
         },
-        metadata: {
+        atrributes: {
             component: MetaData,
+        },
+        metadata: {
+            component: StandardMetadata,
+        },
+        howToUSe: {
+            component: HowToUse,
         },
     };
 

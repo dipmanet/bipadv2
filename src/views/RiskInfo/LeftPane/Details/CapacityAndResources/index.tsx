@@ -111,7 +111,7 @@ const initialActiveLayersIndication = {
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
-    const { onEditClick, onShowInventoryClick, authenticated, ...resourceDetails } = props;
+    const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
 
     const { id, point, title, ...resource } = resourceDetails;
 
@@ -147,14 +147,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
     }
-
     const resourceKeySelector = (d: typeof filtered) => d.label;
-
-
-    const resourceTypeCheck = resourceDetails.resourceType === 'communityspace' || resourceDetails.resourceType === 'openspace';
-    const authCheck = resourceTypeCheck && authenticated;
-
-
     return (
         <div className={styles.resourceTooltip}>
             <h3 className={styles.heading}>
@@ -168,22 +161,18 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 rendererParams={rendererParams}
             />
             <div className={styles.actions}>
-                {authCheck
-                    && (
-                        <AccentButton
-                            title="Edit"
-                            onClick={onEditClick}
-                            transparent
-                            className={styles.editButton}
-                        >
+                <AccentButton
+                    title="Edit"
+                    onClick={onEditClick}
+                    transparent
+                    className={styles.editButton}
+                >
                             Edit data
-                        </AccentButton>
-                    )}
-
+                </AccentButton>
                 <AccentButton
                     title={
-                        resourceDetails.resourceType === 'openspace'
-                            || 'communityspace'
+                        resourceDetails.resourceType === ('openspace'
+                            || 'communityspace')
                             ? 'View Details'
                             : 'Show Inventory'
                     }
@@ -191,8 +180,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                     transparent
                     className={styles.editButton}
                 >
-                    {resourceDetails.resourceType === 'openspace'
-                        || 'communityspace'
+                    {resourceDetails.resourceType === ('openspace'
+                        || 'communityspace')
                         ? 'View Details'
                         : 'Show Inventory'}
                 </AccentButton>
@@ -1052,7 +1041,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         onHide={this.handleTooltipClose}
                                     >
                                         <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                        // FIXME: hide tooltip edit if there is no permission
                                             {...resourceInfo}
                                             {...resourceDetails}
                                             onEditClick={this.handleEditClick}
@@ -1121,6 +1110,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1189,6 +1179,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1257,6 +1248,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1325,6 +1317,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1393,6 +1386,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1461,6 +1455,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1529,6 +1524,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1597,6 +1593,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1680,6 +1677,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
+                                                // FIXME:hide tooltip edit if there is no permission
                                                     {...resourceInfo}
                                                     {...resourceDetails}
                                                     onEditClick={
@@ -1774,6 +1772,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
+                                                // FIXME:hide tooltip edit if there is no permission
                                                     {...resourceInfo}
                                                     {...resourceDetails}
                                                     onEditClick={

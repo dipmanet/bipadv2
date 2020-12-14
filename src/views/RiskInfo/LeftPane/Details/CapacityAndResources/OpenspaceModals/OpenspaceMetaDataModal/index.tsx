@@ -10,6 +10,7 @@ import MetaData from './MetaData';
 import Details from './Details';
 import ScrollTabs from '#rscv/ScrollTabs';
 import HowToUse from './HowToUse';
+import StandardMetadata from './MetadataComponents/StandardMetadata';
 
 interface Params {
     body: object;
@@ -34,6 +35,7 @@ class OpenspaceMetadataModal extends React.PureComponent<any, State> {
 
     private tabs = {
         details: 'Details',
+        attributes: 'Attributes',
         metadata: 'Metadata',
         howToUSe: 'How to Use',
     };
@@ -42,8 +44,11 @@ class OpenspaceMetadataModal extends React.PureComponent<any, State> {
         details: {
             component: Details,
         },
-        metadata: {
+        attributes: {
             component: MetaData,
+        },
+        metadata: {
+            component: StandardMetadata,
         },
         howToUSe: {
             component: HowToUse,

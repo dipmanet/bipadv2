@@ -9,3 +9,27 @@
 .templateTable {
     margin-top: 10px;
 }
+
+.standardTable {
+    margin-top: 20px;
+
+    th{
+        width: 25%;
+    }
+
+    .headerTitle {
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+    }
+
+    .headerTitleGroup{
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+    }
+
+    .endItem{
+        border-bottom: 1px solid lightgray;
+    }
+} 
+
