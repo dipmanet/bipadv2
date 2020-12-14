@@ -4,7 +4,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { Tabs } from '@material-ui/core';
 import styles from './styles.scss';
@@ -30,6 +29,8 @@ import {
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
+
+import defaultImage from '#resources/images/openspace-images/default_image.png';
 
 interface State {
     currentView: string;
@@ -220,7 +221,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                         authenticated={authenticated}
                     />
                     <img
-                        src={imageUrl}
+                        src={imageUrl || defaultImage}
                         style={{
                             width: '100%',
                             height: '25vh',

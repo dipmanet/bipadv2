@@ -228,7 +228,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
     private postBasicInfo = () => {
         this.setState({ openspacePostError: false });
         const { faramValues, resourceId } = this.props;
-        const { location, resourceType, ...others } = faramValues;
+        const { location, ...others } = faramValues;
         let values = others;
         // let formdata = new FormData();
         if (location) {
@@ -238,7 +238,6 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
 
             values = {
                 ...values,
-                resourceType,
                 point,
                 ward,
             };
