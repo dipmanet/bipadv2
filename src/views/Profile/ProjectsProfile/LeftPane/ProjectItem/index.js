@@ -14,8 +14,8 @@ import { iconNames } from '#constants';
 import styles from './styles.scss';
 
 const Output = ({
-    category,
-    drrCycle,
+    // category,
+    // drrCycle,
     budget,
     budgetUsd,
     description,
@@ -25,7 +25,7 @@ const Output = ({
             {description}
         </h3>
         <div className={styles.table}>
-            <TextOutput
+            {/* <TextOutput
                 type="table"
                 label="Category"
                 value={category}
@@ -34,7 +34,7 @@ const Output = ({
                 type="table"
                 label="DRR cycle"
                 value={drrCycle}
-            />
+            /> */}
             <TextOutput
                 type="table"
                 label="Budget USD"

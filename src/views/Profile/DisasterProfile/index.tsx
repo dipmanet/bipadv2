@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
 import MultiViewContainer from '#rscv/MultiViewContainer';
@@ -17,6 +19,14 @@ import {
     isAnyRequestPending,
     getPending,
 } from '#utils/request';
+import {
+    transformRegionToFilter,
+} from '#utils/transformations';
+import {
+    filtersSelector,
+} from '#selectors';
+import { AppState } from '#store/types';
+import { FiltersElement } from '#types';
 
 import { TitleContext, Profile } from '#components/TitleContext';
 
@@ -31,18 +41,46 @@ interface ComponentProps {
 
 interface Params {
 }
+type ReduxProps = ComponentProps & PropsFromAppState;
+type Props = NewProps<ReduxProps, Params>;
 
-type Props = NewProps<ComponentProps, Params>;
+const transformFilters = ({
+    region,
+}: FiltersElement) => ({
+    ...transformRegionToFilter(region),
+});
 
-const requestOptions: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
+const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentProfileGetRequest: {
         url: '/incident-profile/',
         method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformFilters(filters),
+        }),
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
+        },
         onMount: true,
     },
     resourceProfileGetRequest: {
         url: '/resource-profile/',
         method: methods.GET,
+        query: ({ props: { filters } }) => ({
+            ...transformFilters(filters),
+        }),
+        onPropsChanged: {
+            filters: ({
+                props: { filters: { region } },
+                prevProps: { filters: {
+                    region: prevRegion,
+                } },
+            }) => region !== prevRegion,
+        },
         onMount: true,
     },
     demographicsGetRequest: {
@@ -56,6 +94,11 @@ interface Tab {
     key: string;
     label: string;
 }
+
+interface PropsFromAppState {
+    filters: FiltersElement;
+}
+
 const tabList: Tab[] = [
     { key: 'resources', label: 'Resources' },
     { key: 'disasters', label: 'Losses' },
@@ -65,13 +108,18 @@ const tabList: Tab[] = [
 const keySelector = (d: Tab) => d.key;
 const labelSelector = (d: Tab) => d.label;
 
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    filters: filtersSelector(state),
+});
+
 class DisasterProfile extends React.PureComponent<Props> {
+    public static contextType = TitleContext;
+
     public state = {
         activeView: 'resources',
         // activeView: 'demographics',
     }
 
-    public static contextType = TitleContext;
 
     private views = {
         resources: {
@@ -166,8 +214,8 @@ class DisasterProfile extends React.PureComponent<Props> {
     }
 }
 
-export default createConnectedRequestCoordinator<ComponentProps>()(
-    createRequestClient(requestOptions)(
-        DisasterProfile,
-    ),
-);
+export default compose(
+    connect(mapStateToProps),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requestOptions),
+)(DisasterProfile);
