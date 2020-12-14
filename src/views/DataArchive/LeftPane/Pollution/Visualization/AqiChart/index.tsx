@@ -14,7 +14,7 @@ import Button from '#rsca/Button';
 import { stackedBars, legendData } from './constants';
 import PollutionLegend from './Legend';
 import CustomTooltip from './Tooltip';
-
+import Note from './Note';
 import styles from './styles.scss';
 
 interface ChartData {
@@ -41,7 +41,7 @@ interface Props {
     legendData?: LegendData[];
 }
 
-const DEFAULT_CHART_TITLE = 'Occurence Statictics';
+const DEFAULT_CHART_TITLE = 'Occurence Statistics';
 
 const handleSaveClick = (downloadId: string) => {
     saveChart(downloadId || 'chartIdBipad', downloadId || 'chartIdBipad');
@@ -79,6 +79,7 @@ const AqiChart = (props: Props) => {
     const cleanData = removeZero(stationWiseData);
     return (
         <div className={styles.visualizations}>
+            <Note />
             <div
                 className={styles.hazardStatisticsChart}
             >
