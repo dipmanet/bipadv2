@@ -165,11 +165,12 @@ class PollutionMap extends React.PureComponent {
             <div className={styles.tooltip}>
                 <div className={_cs(this.aqiClassSelector(aqi), styles.header)}>
                     <h3>{title}</h3>
-                    <span>
+                    {/* uncomment to display aqi value in map tooltip */}
+                    {/* <span>
                         AQI
                         {' '}
                         {aqi}
-                    </span>
+                    </span> */}
                 </div>
 
                 <div className={styles.description}>
