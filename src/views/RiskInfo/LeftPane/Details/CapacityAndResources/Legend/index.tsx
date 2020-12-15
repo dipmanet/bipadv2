@@ -6,6 +6,7 @@ import legendItems from './legendItems';
 import { TitleContext, Profile } from '#components/TitleContext';
 import OpenspaceLegends from '../OpenspaceModals/OpenspaceLegends/main';
 import styles from './styles.scss';
+import OpenspaceSummary from '../OpenspaceModals/OpenspaceLegends/OpenspaceSummary';
 
 interface Props {
     handleDroneImage: (loading: boolean) => void;
@@ -84,7 +85,12 @@ const CapacityAndResourcesLegend = (props: Props) => {
 
     const { resourceIdForLegend, handleDroneImage } = props;
     return (
-        <div className={_cs(styles.wrapper, 'map-legend-container')}>
+        <React.Fragment>
+            {(openspaceOn || communityspaceOn) && (
+                <div className={_cs(styles.summary)}>
+                    <OpenspaceSummary />
+                </div>
+            )}
             {showLayerControls && resourceIdForLegend && (
                 <OpenspaceLegends
                     handleDroneImage={handleDroneImage}
@@ -94,22 +100,25 @@ const CapacityAndResourcesLegend = (props: Props) => {
                     legendTitle={legendTitle}
                 />
             )}
-            <div className={styles.capacityWrapper}>
-                <div className={styles.title}>Capacity and Resources Legends</div>
-                <Legend
-                    className={styles.legend}
+            <div className={_cs(styles.wrapper, 'map-legend-container')}>
+
+                <div className={styles.capacityWrapper}>
+                    <div className={styles.title}>Capacity and Resources Legends</div>
+                    <Legend
+                        className={styles.legend}
                 // data={capacityAndResourcesLegendItems}
-                    data={activeLegends}
-                    itemClassName={styles.legendItem}
-                    keySelector={itemSelector}
+                        data={activeLegends}
+                        itemClassName={styles.legendItem}
+                        keySelector={itemSelector}
             // iconSelector={iconSelector}
-                    labelSelector={legendLabelSelector}
-                    symbolClassNameSelector={classNameSelector}
-                    colorSelector={legendColorSelector}
-                    emptyComponent={null}
-                />
+                        labelSelector={legendLabelSelector}
+                        symbolClassNameSelector={classNameSelector}
+                        colorSelector={legendColorSelector}
+                        emptyComponent={null}
+                    />
+                </div>
             </div>
-        </div>
+        </React.Fragment>
     );
 };
 

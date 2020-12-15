@@ -8,6 +8,7 @@ import { createConnectedRequestCoordinator } from '#request';
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
+import RegionSelectInput from './RegionSelectInput';
 
 interface PropsFromState {
     authState: AuthState;
@@ -18,16 +19,18 @@ type ReduxProps = PropsFromState ;
 
 interface Props {
     postBasicInfo: () => void;
+    setAdministrativeParameters: (name: string, value: string) => void;
     handleTabClick: (tab: string) => void;
     openspacePostError: boolean;
     resourceId: number | undefined;
     authState: any;
 }
 // eslint-disable-next-line max-len
-const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError, resourceId, authState }: Props) => (
+const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePostError, resourceId, setAdministrativeParameters }: Props) => (
 
     <React.Fragment>
         <br />
+        <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} />
         <TextInput
             faramElementName="issue"
             label="Issue"

@@ -107,3 +107,26 @@
 // }
 
 
+// for select input
+
+.stepwise-region-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .province-input {
+        // margin: var(--spacing-small);
+    }
+
+    .district-input {
+        margin: var(--spacing-small);
+    }
+
+    .municipality-input {
+        margin: var(--spacing-small);
+    }
+
+    .ward-input {
+        margin: var(--spacing-small);
+    }
+}

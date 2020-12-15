@@ -63,7 +63,7 @@ import CommunityOpenspaceDetails from './OpenspaceModals/CommunitySpaceDetails';
 import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/main';
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
-import '#resources/openspace-css/humanitarian-fonts.css';
+import '#resources/openspace-resources/humanitarian-fonts.css';
 
 
 const TableModalButton = modalize(Button);

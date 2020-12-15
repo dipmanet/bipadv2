@@ -1,0 +1,144 @@
+/* eslint-disable @typescript-eslint/camelcase */
+import React from 'react';
+import { connect } from 'react-redux';
+import { createRequestClient, ClientAttributes, methods } from '#request';
+import { filtersSelector } from '#selectors';
+import { FiltersElement } from '#types';
+import { AppState } from '#store/types';
+import styles from './styles.scss';
+
+
+interface State {
+    allOpenspaces: unknown;
+    allOpenspacesBackup: unknown;
+}
+
+interface PropsFromAppState {
+    filters: FiltersElement;
+}
+
+interface ComponentProps {
+    requests: any;
+}
+
+type Props = PropsFromAppState &ComponentProps;
+
+const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
+    allOpenspacesGetRequest: {
+        url: '/open-table/',
+        method: methods.GET,
+        onMount: false,
+    },
+};
+
+const mapStateToProps = (state: AppState) => ({
+    filters: filtersSelector(state),
+});
+
+class OpenspaceSummary extends React.PureComponent<Props, State> {
+    public constructor(props: any) {
+        super(props);
+        this.state = {
+            allOpenspaces: [],
+            allOpenspacesBackup: [],
+        };
+
+        const {
+            requests: { allOpenspacesGetRequest },
+        } = this.props;
+
+        allOpenspacesGetRequest.do({
+            openspaceId: 1,
+        });
+    }
+
+
+    public componentDidUpdate(prevProps) {
+        const {
+            requests: {
+                allOpenspacesGetRequest: { response },
+            },
+            filters,
+        } = this.props;
+
+        if (filters !== prevProps.filters) {
+            this.handleFilter();
+        }
+
+        if (response !== prevProps.requests.allOpenspacesGetRequest.response) {
+            const { results } = response;
+
+            this.setDataOnState(results);
+        }
+    }
+
+    private setDataOnState = (data: SetStateMethod) => {
+        this.setState({
+            allOpenspaces: data,
+            allOpenspacesBackup: data,
+        });
+    }
+
+    private handleFilter = () => {
+        const { allOpenspaces } = this.state;
+        const { filters } = this.props;
+        const { region } = filters;
+        if (region.adminLevel) {
+            const filteredData = allOpenspaces.filter(
+                openspace => openspace.province === region.adminLevel,
+            );
+            this.setState({
+                allOpenspaces: filteredData,
+            });
+        } else {
+            const { allOpenspacesBackup } = this.state;
+            this.setState({
+                allOpenspaces: allOpenspacesBackup,
+            });
+        }
+    }
+
+
+    public render() {
+        const { allOpenspaces } = this.state;
+
+        const totalArea = allOpenspaces.reduce(
+            (accumulator: number, openspace: any[]) => accumulator + openspace.totalArea, 0,
+        );
+        const totalUsableArea = allOpenspaces.reduce(
+            (accumulator: number, openspace: any[]) => accumulator + openspace.usableArea, 0,
+        );
+        const totalOpenspaces = allOpenspaces.length;
+        return (
+            <React.Fragment>
+                <div className={styles.communitySpaceCard}>
+                    <h2 className={styles.title}>Open Space Summary</h2>
+                    <ul className={styles.dataWrap}>
+                        <li className={styles.data}>
+                            <span className={styles.dataCount}>{totalOpenspaces || '0'}</span>
+                            <span className={styles.dataLabel}>Total Open spaces</span>
+                        </li>
+                        <li className={styles.data}>
+                            <span className={styles.dataCount}>
+                                {totalArea || '0'}
+                                {' '}
+sq. m
+                            </span>
+                            <span className={styles.dataLabel}>Total Area</span>
+                        </li>
+
+                        <li className={styles.data}>
+                            <span className={styles.dataCount}>{totalUsableArea || '0'}</span>
+                            <span className={styles.dataLabel}>Total usuable area</span>
+                        </li>
+                    </ul>
+                </div>
+            </React.Fragment>
+        );
+    }
+}
+export default connect(mapStateToProps)(
+    createRequestClient(requestOptions)(
+        OpenspaceSummary,
+    ),
+);

@@ -142,6 +142,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
             rendererParams: () => ({
                 className: styles.views,
                 resourceId: this.props.resourceId,
+                setAdministrativeParameters: this.setAdministrativeParameters,
                 openspacePostError: this.state.openspacePostError,
                 handleTabClick: this.procceedTabClick,
                 postBasicInfo: this.postBasicInfo,
@@ -225,9 +226,21 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         });
     }
 
+    private setAdministrativeParameters = (name, value) => {
+        this.setState({
+            [name]: value,
+        });
+    }
+
     private postBasicInfo = () => {
         this.setState({ openspacePostError: false });
         const { faramValues, resourceId } = this.props;
+        const {
+            province, district, municipality,
+        } = this.state;
+        console.log('yayy', province, district, municipality);
+
+
         const { location, ...others } = faramValues;
         let values = others;
         // let formdata = new FormData();
@@ -240,6 +253,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 ...values,
                 point,
                 ward,
+                province,
+                district,
+                municipality,
             };
         }
 
