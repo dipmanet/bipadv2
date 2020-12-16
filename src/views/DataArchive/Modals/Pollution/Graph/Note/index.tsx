@@ -7,7 +7,7 @@ interface Props {
     note?: string;
 }
 
-const DEFAULT_NOTE = 'Note: The daily, weekly and monthly values are based on the average of our readings taken every 24 minutes.';
+const DEFAULT_NOTE = 'Note: The calculated values are based on the average of our readings taken every 24 minutes.';
 
 const Note = (props: Props) => {
     const { note } = props;

@@ -7,7 +7,7 @@ interface Props {
     note?: string;
 }
 
-const DEFAULT_NOTE = 'Note: The AQI values are based on the 24 hours average of our readings taken every 24 minutes.';
+const DEFAULT_NOTE = 'Note: The calculated AQI values are based on the 24 hours average of our readings taken every 24 minutes.';
 
 const Note = (props: Props) => {
     const { note } = props;
