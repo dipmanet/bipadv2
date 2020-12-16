@@ -98,7 +98,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 props.closeModal();
             }
 
-            window.location.reload();
+            // window.location.reload();
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {

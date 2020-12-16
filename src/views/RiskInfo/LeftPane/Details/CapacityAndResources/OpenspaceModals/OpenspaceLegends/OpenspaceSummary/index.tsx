@@ -61,14 +61,14 @@ class OpenspaceSummary extends React.PureComponent<Props, State> {
             filters,
         } = this.props;
 
-        if (filters !== prevProps.filters) {
-            this.handleFilter();
-        }
-
         if (response !== prevProps.requests.allOpenspacesGetRequest.response) {
             const { results } = response;
 
             this.setDataOnState(results);
+        }
+
+        if (filters !== prevProps.filters) {
+            this.handleFilter();
         }
     }
 
@@ -80,22 +80,27 @@ class OpenspaceSummary extends React.PureComponent<Props, State> {
     }
 
     private handleFilter = () => {
-        const { allOpenspaces } = this.state;
+        const { allOpenspacesBackup } = this.state;
         const { filters } = this.props;
         const { region } = filters;
-        if (region.adminLevel) {
-            const filteredData = allOpenspaces.filter(
-                openspace => openspace.province === region.adminLevel,
-            );
-            this.setState({
-                allOpenspaces: filteredData,
-            });
-        } else {
-            const { allOpenspacesBackup } = this.state;
-            this.setState({
-                allOpenspaces: allOpenspacesBackup,
-            });
-        }
+        this.setState({
+            allOpenspaces: allOpenspacesBackup,
+        }, () => {
+            const { allOpenspaces } = this.state;
+            if (region.adminLevel) {
+                const filteredData = allOpenspaces.filter(
+                    openspace => openspace.province === region.geoarea,
+                );
+
+                this.setState({
+                    allOpenspaces: filteredData,
+                });
+            } else {
+                this.setState({
+                    allOpenspaces: allOpenspacesBackup,
+                });
+            }
+        });
     }
 
 
@@ -128,7 +133,11 @@ sq. m
                         </li>
 
                         <li className={styles.data}>
-                            <span className={styles.dataCount}>{totalUsableArea || '0'}</span>
+                            <span className={styles.dataCount}>
+                                {totalUsableArea || '0'}
+                                {' '}
+sq. m
+                            </span>
                             <span className={styles.dataLabel}>Total usuable area</span>
                         </li>
                     </ul>

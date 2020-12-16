@@ -85,6 +85,7 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
             }
         }
 
+
         if (response !== prevProps.requests.mediaGetRequest.response) {
             const { results } = response;
             const tempArray = [];
@@ -111,9 +112,9 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
         const { filters } = this.props;
         const { region } = filters;
 
-        if (region.adminLevel) {
+        if (region.geoarea) {
             const filteredData = apiData.filter(
-                openspace => openspace.province === region.adminLevel,
+                openspace => openspace.province === region.geoarea,
             );
             this.setState({
                 apiData: filteredData,
