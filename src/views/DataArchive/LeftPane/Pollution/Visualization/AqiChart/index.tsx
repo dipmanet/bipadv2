@@ -115,7 +115,7 @@ const AqiChart = (props: Props) => {
                                 type="number"
                                 allowDecimals={false}
                                 label={{
-                                    value: 'No. of events', position: 'insideBottom', dy: 10,
+                                    value: 'No. of days', position: 'insideBottom', dy: 5,
                                 }}
                             />
                             <Tooltip

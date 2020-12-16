@@ -109,7 +109,7 @@ const Tooltip = (props: TooltipProps) => {
                     );
                 })}
                 <div className={styles.totalCount}>
-                    {`Total Count: ${payload && getTotalCount(payload)}`}
+                    {`Total Days: ${payload && getTotalCount(payload)}`}
                 </div>
             </div>
         );
