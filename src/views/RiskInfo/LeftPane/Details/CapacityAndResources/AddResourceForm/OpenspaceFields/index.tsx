@@ -238,9 +238,6 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         const {
             province, district, municipality,
         } = this.state;
-        console.log('yayy', province, district, municipality);
-
-
         const { location, ...others } = faramValues;
         let values = others;
         // let formdata = new FormData();

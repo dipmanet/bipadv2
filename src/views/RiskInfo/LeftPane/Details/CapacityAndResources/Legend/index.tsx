@@ -77,6 +77,13 @@ const CapacityAndResourcesLegend = (props: Props) => {
     const openspaceOn = activeLegends.some(legend => legend.key === 'openspace');
     const communityspaceOn = activeLegends.some(legend => legend.key === 'communityspace');
     let legendTitle;
+    // let showOpenspaceSummary;
+    // if (openspaceOn || communityspaceOn) {
+    //     if (resourceIdForLegend) {
+
+    //     }
+    // }
+
     if (openspaceOn && communityspaceOn) {
         legendTitle = 'Layer Boundary';
     } else if (activeLegends.filter(e => String(e.key) !== 'openspace' && String(e.key) === 'communityspace').length > 0) {
@@ -86,7 +93,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
     const { resourceIdForLegend, handleDroneImage } = props;
     return (
         <React.Fragment>
-            {(openspaceOn || communityspaceOn) && (
+            {!resourceIdForLegend && (
                 <div className={_cs(styles.summary)}>
                     <OpenspaceSummary />
                 </div>
