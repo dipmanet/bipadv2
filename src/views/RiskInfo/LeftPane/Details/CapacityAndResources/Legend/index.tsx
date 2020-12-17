@@ -70,7 +70,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
 
     return (
         <div className={_cs(styles.wrapper, 'map-legend-container')}>
-            <div className={styles.title}>Capacity and Resources Legends</div>
+            <div className={styles.title}>Capacity and Resources</div>
             <Legend
                 className={styles.legend}
                 // data={capacityAndResourcesLegendItems}
