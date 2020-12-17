@@ -93,7 +93,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
     const { resourceIdForLegend, handleDroneImage } = props;
     return (
         <React.Fragment>
-            {!resourceIdForLegend && (
+            {!resourceIdForLegend && openspaceOn && (
                 <div className={_cs(styles.summary)}>
                     <OpenspaceSummary />
                 </div>

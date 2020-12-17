@@ -125,7 +125,7 @@ class OpenspaceSummary extends React.PureComponent<Props, State> {
                         </li>
                         <li className={styles.data}>
                             <span className={styles.dataCount}>
-                                {totalArea || '0'}
+                                {totalArea.toFixed(2) || '0'}
                                 {' '}
 sq. m
                             </span>
@@ -134,7 +134,7 @@ sq. m
 
                         <li className={styles.data}>
                             <span className={styles.dataCount}>
-                                {totalUsableArea || '0'}
+                                {totalUsableArea.toFixed(2) || '0'}
                                 {' '}
 sq. m
                             </span>
