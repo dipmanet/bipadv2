@@ -8,9 +8,9 @@ export default class MetaData extends React.PureComponent {
     public render() {
         return (
             <div>
-                <MainTable />
+                {/* <MainTable />
                 <br />
-                <hr />
+                <hr /> */}
                 <Template />
                 <br />
                 <hr />

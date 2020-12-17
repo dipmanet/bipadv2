@@ -9,6 +9,7 @@ import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 import RegionSelectInput from './RegionSelectInput';
+import NumberInput from '#rsci/NumberInput';
 
 interface PropsFromState {
     authState: AuthState;
@@ -31,6 +32,15 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
     <React.Fragment>
         <br />
         <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} />
+        <TextInput
+            faramElementName="oid"
+            label="OID"
+        />
+        <TextInput
+            faramElementName="hlcitMunicipalty"
+            label="HLCIT-MUN"
+        />
+
         <TextInput
             faramElementName="issue"
             label="Issue"
@@ -66,6 +76,25 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
                 label="Usable Area"
             />
         </div>
+        <TextInput
+            faramElementName="usable2013"
+            label="Usable-2013"
+        />
+        <div className={styles.inputGroup}>
+            <NumberInput
+                faramElementName="areaChange"
+                label="Area Changed"
+            />
+            <TextInput
+                faramElementName="Perimeter"
+                label="Perimeter"
+            />
+        </div>
+        <TextInput
+            faramElementName="changeRemarks"
+            label="Change Remarks"
+        />
+
         {
             openspacePostError && (
                 <NonFieldErrors

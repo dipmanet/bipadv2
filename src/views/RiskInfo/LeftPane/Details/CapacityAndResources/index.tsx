@@ -131,17 +131,26 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
     let filtered = data;
 
+
     if (resourceDetails.resourceType === 'openspace') {
         filtered = data.filter(el => el.label !== 'description'
             && el.label !== 'ward' && el.label !== 'issue'
             && el.label !== 'catchmentArea' && el.label !== 'ownership'
-            && el.label !== 'elevetion' && el.label !== 'accessToSite'
+            && el.label !== 'elevation' && el.label !== 'accessToSite'
             && el.label !== 'specialFeature' && el.label !== 'elevation'
-            && el.label !== 'perimeter');
+            && el.label !== 'Perimeter'
+            && el.label !== 'province'
+            && el.label !== 'district'
+            && el.label !== 'municipality'
+            && el.label !== 'changeRemarks'
+            && el.label !== 'hlcitMunicipalty'
+            && el.label !== 'oid'
+            && el.label !== 'areaChange'
+            && el.label !== 'usable2013');
+
         const capacity = filtered && filtered[3] && filtered[3].value
             && parseInt((filtered[3].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
-
         // moving address field to 2nd position
         if (filtered[2]) {
             const element = filtered[2];

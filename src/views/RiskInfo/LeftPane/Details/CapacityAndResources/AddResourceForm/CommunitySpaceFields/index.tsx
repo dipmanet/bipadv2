@@ -159,11 +159,10 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
         const { faramValues, resourceId } = this.props;
         const { location, resourceType, ...others } = faramValues;
         let values = others;
-        // const formdata = new FormData();
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
-            // const ward = 1;
+            // const ward = 2;
 
             values = {
                 ...values,
@@ -172,33 +171,16 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
                 ward,
             };
         }
-        // formdata.append('point', JSON.stringify(extractedPoint))
-        // formdata.append('ward', ward)
-        // formdata.append('image', image)
-        // Object.keys(values).forEach(key => {
-        //     key !== 'location' && formdata.append(key, values[key])
-        // })
-
-
-        // formdata.append('resourceType', 'openspace');
-        // formdata.append('title', title);
-
-        // // formdata.append('point', p);
         const {
             requests: { addResourcePostRequest, editResourcePostRequest },
         } = this.props;
-        // const {
-        //     addResourcePostRequest, editResourcePostRequest,
-        // } = this.props;
         if (isNotDefined(resourceId)) {
-            // this.postByFetch(formdata);
             addResourcePostRequest.do({
                 body: values,
                 onSuccess: this.handleOpenspacePostSuccess,
                 setFaramErrors: this.handleFaramValidationFailure,
             });
         } else {
-            // this.editByFetch(formdata, resourceId);
             editResourcePostRequest.do({
                 resourceId,
                 body: values,
@@ -209,7 +191,7 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
     }
 
 
-    private handleFaramValidationFailure = (faramErrors: FaramErrors) => {
+    private handleFaramValidationFailure = () => {
         this.setState({
             openspacePostError: true,
         });

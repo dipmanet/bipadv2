@@ -42,7 +42,7 @@ interface ReduxProps {
 }
 interface Params {
     resourceId: number;
-    setSingleDetails: (arr) => void;
+    setSingleDetails: (array: any[]) => void;
 }
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -114,24 +114,32 @@ class Details extends React.PureComponent<Props, State> {
         const {
             openspaceId,
         } = this.props;
+        // const formdata = new FormData();
+        // formdata.append('category', 'openspace');
+        // if (shapeFile)
+        // formdata.append('shape', shapeFile);
+        // console.log(...formdata);
+
+
         const formdata = new FormData();
         formdata.append('category', 'openspace');
-        // formdata.append('open_space_id', JSON.stringify(openspaceId));
-        if (shapeFile) formdata.append('shape', shapeFile);
-
+        formdata.append('shape', shapeFile);
 
         const requestOptions = {
             method: 'POST',
             body: formdata,
-            // credentials: 'same origin'
+            // redirect: 'follow',
         };
-        fetch(`${process.env.REACT_APP_API_SERVER_URL}/shape/`, requestOptions)
+
+        const url = process.env.REACT_APP_API_SERVER_URL;
+        const splittedUrl = url.split('/api');
+
+        fetch(`${splittedUrl[0]}/en/api/v1/shape/`, requestOptions)
             .then(response => response.json())
             .then((data) => {
                 this.setState({
                     objectId: data.object_id,
                 });
-                // this.props.handleTabClick('suggestedUses');
             })
             .catch(() => {
                 this.setState({
@@ -163,7 +171,6 @@ class Details extends React.PureComponent<Props, State> {
         };
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/openspace-detail/${objectId}/`, requestOptions)
             .then((res) => {
-                console.log('resss', res);
                 if (res.status === 200) {
                     this.props.handleTabClick('suggestedUses');
                 } else {

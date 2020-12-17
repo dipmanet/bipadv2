@@ -113,7 +113,10 @@ class Details extends React.PureComponent<Props, State> {
             body: formdata,
             // credentials: 'same origin'
         };
-        fetch(`${process.env.REACT_APP_API_SERVER_URL}/shape/`, requestOptions)
+        const url = process.env.REACT_APP_API_SERVER_URL;
+        const splittedUrl = url.split('/api');
+
+        fetch(`${splittedUrl[0]}/en/api/v1/shape/`, requestOptions)
             .then(response => response.json())
             .then((data) => {
                 this.setState({

@@ -15,7 +15,60 @@ export default class HowToUse extends React.PureComponent {
         return (
             <div className={styles.details}>
                 <div>
-                    <h3>Privileged User</h3>
+                    <div>
+                        <h3>Website Visitor</h3>
+                    </div>
+                    <div>
+                        <div>
+                            <h4>How to view Community Spaces on table?</h4>
+                            <ul>
+                                <li className={styles.ListWithImage}>
+                        1. On the Capacity and Resource Page, Click on the table icon on the side of Community Space.
+                                    <img src={ToggleCommunitySpace} alt="toggle" />
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>How to generate a route to Community Space?</h4>
+                            <ul>
+                                <li className={styles.ListWithImage}>
+                            1. On the Capacity and Resource Page, Toggle on the Community Space.
+                                    <img src={ToggleCommunitySpace} alt="toggle" />
+                                </li>
+                                <li className={styles.ListWithImage}>
+                            2. Click on the Community Spaces displayed over the map.
+                                    <img src={MapCommunitySpace} alt="toggle" />
+                                </li>
+                                <li className={styles.ListWithImage}>
+                            3. Click on the View Detail button on Popup.
+                                    <img src={ViewDetailCommunitySpace} alt="toggle" />
+                                </li>
+                                <li className={styles.ListWithImage}>
+                            4. Click on the Route icon on the top right corner of the Community Space modal.
+                                    <img src={RouteIconCommunitySpace} alt="toggle" />
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4>How to view Abstract and Metadata</h4>
+                            <ul>
+                                <li className={styles.ListWithImage}>
+                            1. On the capacity and Resource page, click on the Info icon on the side of the Community Space toggle, then you will land on the Abstract page.
+                                    <img src={AbstractCommunitySpace} alt="toggle" />
+                                </li>
+                                <li className={styles.ListWithImage}>
+                            2. Click on the Metadata tab to get all the metadata information.
+                                    <img src={MetadataTabCommunitySpace} alt="toggle" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h3>System Admin</h3>
                 </div>
                 <div>
                     <h4>How to add Community Spaces?</h4>
@@ -46,55 +99,8 @@ export default class HowToUse extends React.PureComponent {
                         </li>
                     </ol>
                 </div>
-                <div>
-                    <h3>General Public</h3>
-                </div>
-                <div>
-                    <div>
-                        <h4>How to view Community Spaces on table?</h4>
-                        <ul>
-                            <li className={styles.ListWithImage}>
-                        1. On the Capacity and Resource Page, Click on the table icon on the side of Community Space.
-                                <img src={ToggleCommunitySpace} alt="toggle" />
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>How to generate a route to Community Space?</h4>
-                        <ul>
-                            <li className={styles.ListWithImage}>
-                            1. On the Capacity and Resource Page, Toggle on the Community Space.
-                                <img src={ToggleCommunitySpace} alt="toggle" />
-                            </li>
-                            <li className={styles.ListWithImage}>
-                            2. Click on the Community Spaces displayed over the map.
-                                <img src={MapCommunitySpace} alt="toggle" />
-                            </li>
-                            <li className={styles.ListWithImage}>
-                            3. Click on the View Detail button on Popup.
-                                <img src={ViewDetailCommunitySpace} alt="toggle" />
-                            </li>
-                            <li className={styles.ListWithImage}>
-                            4. Click on the Route icon on the top right corner of the Community Space modal.
-                                <img src={RouteIconCommunitySpace} alt="toggle" />
-                            </li>
-                        </ul>
-                    </div>
 
-                    <div>
-                        <h4>How to view Abstract and Metadata</h4>
-                        <ul>
-                            <li className={styles.ListWithImage}>
-                            1. On the capacity and Resource page, click on the Info icon on the side of the Community Space toggle, then you will land on the Abstract page.
-                                <img src={AbstractCommunitySpace} alt="toggle" />
-                            </li>
-                            <li className={styles.ListWithImage}>
-                            2. Click on the Metadata tab to get all the metadata information.
-                                <img src={MetadataTabCommunitySpace} alt="toggle" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+
             </div>
 
 

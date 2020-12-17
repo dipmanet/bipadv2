@@ -117,7 +117,7 @@ class MediaComponent extends React.PureComponent<Props, State> {
                                 )}
                         </div>
                     )}
-                    {!pending && !dataPresent && <div>No file presnet.</div>}
+                    {!pending && !dataPresent && <div>No file present.</div>}
                 </div>
                 {zoomModal && (
                     <Modal>

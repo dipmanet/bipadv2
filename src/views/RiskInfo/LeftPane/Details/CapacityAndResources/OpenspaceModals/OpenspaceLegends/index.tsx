@@ -24,7 +24,7 @@ interface Props {
 interface State {
     map: any;
     opacityValue: number;
-    wmsLoading: boolean| null;
+    geoserverUrlNotFound: boolean;
 }
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -59,7 +59,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
             map: '',
             opacityVal: 100,
             opacityValue: 100,
-            wmsLoading: false,
+            geoserverUrlNotFound: false,
         };
     }
 
@@ -69,7 +69,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
         this.setState({ map });
     }
 
-    private handleWmsCheck = (e, geoserverUrl: string) => {
+    private handleWmsCheck = (e, geoserverUrl: string, urlAvailable: string) => {
         const { map } = this.state;
         const { handleDroneImage } = this.props;
         const { checked } = e.target;
@@ -81,11 +81,18 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
         }
         if (checked) {
             handleDroneImage(true);
-            // setTimeout(() => {
-            //     handleDroneImage(true);
-            // }, 5000);
+            console.log('url', geoserverUrl);
+
+            if (!urlAvailable) {
+                this.setState({
+                    geoserverUrlNotFound: true,
+                });
+            }
             this.addWmsLayer(geoserverUrl);
         } else if (!checked) {
+            this.setState({
+                geoserverUrlNotFound: false,
+            });
             setTimeout(() => {
                 handleDroneImage(false);
             }, 500);
@@ -153,7 +160,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
 
 
     public render() {
-        const { opacityValue } = this.state;
+        const { opacityValue, geoserverUrlNotFound } = this.state;
         const { appContext: { map }, requests, legendTitle } = this.props;
         const {
             getDetailsRequest: { response },
@@ -213,13 +220,13 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
                                         <input
                                             type="checkbox"
                                             onClick={(e) => {
-                                                this.handleWmsCheck(e, wmsUrl);
+                                                this.handleWmsCheck(e, wmsUrl, geoserverUrl);
                                             }}
                                         />
 
                                     </div>
                                 </div>
-                                {!geoserverUrl && (
+                                {geoserverUrlNotFound && (
                                     <span
                                         className={styles.droneWarning}
                                     >
