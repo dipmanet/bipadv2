@@ -94,14 +94,6 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             faramElementName="changeRemarks"
             label="Change Remarks"
         />
-        {/* <TextInput
-            faramElementName="market"
-            label="Market"
-        />
-        <TextInput
-            faramElementName="helipad"
-            label="Helipad"
-        /> */}
 
         {
             openspacePostError && (

@@ -206,9 +206,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
 
     private handleTabClick = (tab: string) => {
         const { resourceId } = this.props;
-        // if (isDefined(resourceId)) {
-        this.setState({ currentView: tab });
-        // }
+        if (isDefined(resourceId)) {
+            this.setState({ currentView: tab });
+        }
     }
 
     private procceedTabClick = (tabToProceed: string) => {
@@ -240,11 +240,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         } = this.state;
         const { location, ...others } = faramValues;
         let values = others;
-        // let formdata = new FormData();
         if (location) {
             const point = location.geoJson.features[0].geometry;
-            // const { ward } = location.region;
-            const ward = 2;
+            const { ward } = location.region;
             values = {
                 ...values,
                 point,
