@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'react-icons-kit';
 import { ic_check_circle as Check } from 'react-icons-kit/md/ic_check_circle';
 import { ic_cancel as Cancel } from 'react-icons-kit/md/ic_cancel';
+import Spinner from '#rsu/../v2/View/Spinner';
 import styles from './styles.scss';
 import { createRequestClient, ClientAttributes, methods } from '#request';
 
@@ -47,40 +48,49 @@ class EiaComponent extends React.PureComponent<Props> {
         const data = response && response.results && response.results;
         return (
             <div className={styles.wrapper}>
-                {response && data
-                && data.map((eia: any) => (
-                    <div className={styles.assesment}>
-                        <div>
-                            {eia.eiaName}
-                        </div>
-                        <div className={styles.icons}>
-                            {eia.isAvailable && (
-                                <span
-                                    style={{
-                                        color: '#5ACE52',
-                                        paddingLeft: '5px',
-                                    }}
-                                >
-                                    <Icon
-                                        size={15}
-                                        icon={Check}
-                                    />
-                                </span>
-                            )}
-                            {!eia.isAvailable && (
-                                <span
-                                    style={{
-                                        color: '#F32F30',
-                                        paddingLeft: '5px',
-                                    }}
-                                >
-                                    {' '}
-                                    <Icon size={15} icon={Cancel} />
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                ))}
+                {
+                    pending ? (
+                        <Spinner
+                            size="large"
+                            className={styles.spinner}
+                        />
+                    ) : (
+                        data && data.map((eia: any) => (
+                            <div className={styles.assesment}>
+                                <div>
+                                    {eia.eiaName}
+                                </div>
+                                <div className={styles.icons}>
+                                    {eia.isAvailable && (
+                                        <span
+                                            style={{
+                                                color: '#5ACE52',
+                                                paddingLeft: '5px',
+                                            }}
+                                        >
+                                            <Icon
+                                                size={15}
+                                                icon={Check}
+                                            />
+                                        </span>
+                                    )}
+                                    {!eia.isAvailable && (
+                                        <span
+                                            style={{
+                                                color: '#F32F30',
+                                                paddingLeft: '5px',
+                                            }}
+                                        >
+                                            {' '}
+                                            <Icon size={15} icon={Cancel} />
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    )
+                }
+
                 {!data
                 || (data.length === 0 && (
                     <div className={styles.noData}>No data present.</div>

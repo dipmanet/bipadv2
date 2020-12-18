@@ -203,6 +203,7 @@ class Filters extends React.PureComponent<Props, State> {
                 region: {},
             } });
 
+
         const { setFilters } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
@@ -223,6 +224,7 @@ class Filters extends React.PureComponent<Props, State> {
     private handleSubmitClick = () => {
         const { setFilters } = this.props;
         const { faramValues } = this.state;
+        console.log('faramva', faramValues);
         if (faramValues) {
             setFilters({ filters: faramValues });
         }

@@ -2,7 +2,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createRequestClient, ClientAttributes, methods } from '#request';
-import { filtersSelector } from '#selectors';
+import {
+    filtersSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    provincesSelector,
+} from '#selectors';
+import {
+    District,
+    Province,
+    Municipality,
+    // HazardType,
+} from '#store/atom/page/types';
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import styles from './styles.scss';
@@ -15,6 +26,9 @@ interface State {
 
 interface PropsFromAppState {
     filters: FiltersElement;
+    districts: District[];
+    provinces: Province[];
+    municipalities: Municipality[];
 }
 
 interface ComponentProps {
@@ -33,6 +47,9 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 
 const mapStateToProps = (state: AppState) => ({
     filters: filtersSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
 });
 
 class OpenspaceSummary extends React.PureComponent<Props, State> {
@@ -81,8 +98,10 @@ class OpenspaceSummary extends React.PureComponent<Props, State> {
 
     private handleFilter = () => {
         const { allOpenspacesBackup } = this.state;
-        const { filters } = this.props;
+        const { filters, districts, municipalities, provinces } = this.props;
         const { region } = filters;
+        console.log('filters', this.props);
+
         this.setState({
             allOpenspaces: allOpenspacesBackup,
         }, () => {
@@ -134,7 +153,7 @@ sq. m
 
                         <li className={styles.data}>
                             <span className={styles.dataCount}>
-                                {totalUsableArea.toFixed(2) || '0'}
+                                {totalUsableArea ? totalUsableArea.toFixed(2) : '0'}
                                 {' '}
 sq. m
                             </span>

@@ -9,6 +9,7 @@ import { createRequestClient, ClientAttributes, methods } from '#request';
 import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
+import Spinner from '#rsu/../v2/View/Spinner';
 
 interface Props {
     openspaceId: any;
@@ -73,9 +74,16 @@ class MediaComponent extends React.PureComponent<Props, State> {
         return (
             <>
                 <div>
-                    {dataPresent && (
-                        <div className={styles.container}>
-                            {response
+                    {
+                        pending ? (
+                            <Spinner
+                                size="large"
+                                className={styles.spinner}
+                            />
+                        )
+                            : (
+                                <div className={styles.container}>
+                                    {response
                                 && data
                                 && data.map(
                                     // eslint-disable-next-line arrow-body-style
@@ -94,29 +102,24 @@ class MediaComponent extends React.PureComponent<Props, State> {
                                                     );
                                                 }}
                                             >
-                                                {/* <img
+                                                <img
                                                     src={item.image}
-                                                    alt="cat"
+                                                    alt="openspace"
                                                     style={{
                                                         width: '100%',
-                                                        height: '25vh',
                                                     }}
-                                                /> */}
-
-                                                <LazyLoadImage
-                                                    alt="cover"
-                                                    height="225"
-                                                    src={item.image}
-                                                    width="100%"
-                                                    effect="blur"
-                                                    delayTime="5"
                                                 />
+
+
                                             </div>
                                         );
                                     },
                                 )}
-                        </div>
-                    )}
+
+                                </div>
+                            )
+                    }
+
                     {!pending && !dataPresent && <div>No file present.</div>}
                 </div>
                 {zoomModal && (

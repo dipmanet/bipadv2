@@ -146,7 +146,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             && el.label !== 'hlcitMunicipalty'
             && el.label !== 'oid'
             && el.label !== 'areaChange'
-            && el.label !== 'usable2013');
+            && el.label !== 'usable2013'
+            && el.label !== 'Authenticated');
 
         const capacity = filtered && filtered[3] && filtered[3].value
             && parseInt((filtered[3].value / 5).toFixed(0), 10);
@@ -738,14 +739,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceLngLat: undefined,
                 resourceInfo: undefined,
             });
-            // const { map } = this.context;
-            // const nepalBounds = [
-            //     80.05858661752784,
-            //     26.347836996368667,
-            //     88.20166918432409,
-            //     30.44702867091792,
-            // ];
-            // map.fitBounds(nepalBounds);
         }
     };
 
@@ -760,14 +753,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceLngLat: undefined,
                 resourceInfo: undefined,
             });
-            const { map } = this.context;
-            const nepalBounds = [
-                80.05858661752784,
-                26.347836996368667,
-                88.20166918432409,
-                30.44702867091792,
-            ];
-            map.fitBounds(nepalBounds);
         }
     };
 
@@ -899,21 +884,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            <Cloak hiddenIf={p => !p.add_resource}>
-                                <AccentModalButton
-                                    iconName="add"
-                                    title="Add New Resource"
-                                    transparent
-                                    modal={(
-                                        <AddResourceForm
-                                            onAddSuccess={this.handleResourceAdd}
-                                            onEditSuccess={this.handleResourceEdit}
-                                        />
-                                    )}
-                                >
+                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
+                            <AccentModalButton
+                                iconName="add"
+                                title="Add New Resource"
+                                transparent
+                                modal={(
+                                    <AddResourceForm
+                                        onAddSuccess={this.handleResourceAdd}
+                                        onEditSuccess={this.handleResourceEdit}
+                                    />
+                                )}
+                            >
                                     Add Resource
-                                </AccentModalButton>
-                            </Cloak>
+                            </AccentModalButton>
+                            {/* </Cloak> */}
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)

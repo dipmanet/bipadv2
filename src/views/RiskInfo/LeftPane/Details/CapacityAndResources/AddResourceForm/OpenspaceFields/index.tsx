@@ -132,7 +132,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         details: 'Details',
         suggestedUses: 'Suggested Uses',
         onSiteAmenties: 'Amenities',
-        environmentChecklist: 'EIA Checklist',
+        environmentChecklist: 'Environment Checklist',
         media: 'Media',
     };
 
@@ -206,9 +206,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
 
     private handleTabClick = (tab: string) => {
         const { resourceId } = this.props;
-        if (isDefined(resourceId)) {
-            this.setState({ currentView: tab });
-        }
+        // if (isDefined(resourceId)) {
+        this.setState({ currentView: tab });
+        // }
     }
 
     private procceedTabClick = (tabToProceed: string) => {
@@ -243,7 +243,8 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         // let formdata = new FormData();
         if (location) {
             const point = location.geoJson.features[0].geometry;
-            const { ward } = location.region;
+            // const { ward } = location.region;
+            const ward = 2;
             values = {
                 ...values,
                 point,

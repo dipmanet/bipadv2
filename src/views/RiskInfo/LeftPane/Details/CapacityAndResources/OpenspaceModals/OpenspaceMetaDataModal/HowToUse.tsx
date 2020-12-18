@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+import { authStateSelector } from '#selectors';
 import styles from './styles.scss';
 
 import CapacityResourcesImg from '#resources/images/openspace-images/capacity-and-resources.png';
@@ -16,8 +17,18 @@ import LegendOpenspace from '#resources/images/openspace-images/image11.png';
 import DroneImageOpenspace from '#resources/images/openspace-images/image12.png';
 import TooltipOpenspace from '#resources/images/openspace-images/image14.png';
 
-export default class HowToUse extends React.PureComponent {
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    authState: authStateSelector(state),
+});
+
+interface Props {
+    authState: {authenticated: boolean};
+}
+class HowToUse extends React.PureComponent<Props> {
     public render() {
+        const {
+            authState: { authenticated },
+        } = this.props;
         return (
             <div className={styles.details}>
 
@@ -135,54 +146,59 @@ export default class HowToUse extends React.PureComponent {
                     </ul>
                 </div>
 
-                <div>
-                    <h3>System Admin</h3>
-                    <h4>How to add Open Spaces?</h4>
-                    <span style={{ fontSize: '12px' }}>
+                {authenticated && (
+                    <div>
+                        <h3>System Admin</h3>
+                        <h4>How to add Open Spaces?</h4>
+                        <span style={{ fontSize: '12px' }}>
                         Note: To add Open Spaces data, first you need to be logged into the system.
-                    </span>
-                    <ol>
-                        <li>
+                        </span>
+                        <ol>
+                            <li>
                             On the Capacity and Resource Page,
                             Click on the “ADD RESOURCE” button on the left sidebar.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             On the Resource Type field, select Open Spaces.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             Enter the title of Open Spaces and description on
                             the title and description field respectively.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             Type the Region of Open Spaces on the region
                             field or choose the location from the map.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             Scroll down and fill in all the necessary
                             fields of the Basic Info tab, then click on the Save and Continue button.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             Similarly, fill in the necessary field of the Details tab and click on the Save and Continue button.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             On the Suggested Use Tab, choose the item by clicking on
                             the checkbox.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             On the Amenities tab, choose the amenities with
                              the help of a switch and you can also add the amenities description on the note field below each amenities.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             Environment Checklist selection is similar to that of amenities.
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             On the Media tab, you can upload the images or photos
                             of Open Spaces by clicking on choose files. Clicking on the save button will successfully add the Open Spaces.
-                        </li>
-                    </ol>
-                </div>
+                            </li>
+                        </ol>
+                    </div>
+                )}
             </div>
 
         );
     }
 }
+
+
+export default connect(mapStateToProps)(HowToUse);

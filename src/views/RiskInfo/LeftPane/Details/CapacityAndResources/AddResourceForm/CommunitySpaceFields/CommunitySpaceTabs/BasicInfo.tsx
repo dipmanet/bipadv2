@@ -22,7 +22,7 @@ interface Props {
 }
 
 
-function BasicInfo({ postBasicInfo, openspacePostError, resourceId, authState }: Props) {
+function BasicInfo({ postBasicInfo, openspacePostError }: Props) {
     return (
         <React.Fragment>
             <br />

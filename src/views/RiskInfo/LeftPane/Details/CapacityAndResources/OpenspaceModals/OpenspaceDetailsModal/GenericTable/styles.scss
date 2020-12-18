@@ -1,0 +1,11 @@
+.table-content th, tr{
+    color: var(--color-text-label);
+    th{
+        color: var(--color-text-label);
+    }
+}
+
+
+.table-head {
+    color: var(--color-text-label) !important;
+}

@@ -23,6 +23,7 @@ import {
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
+import defaultImage from '#resources/images/openspace-images/default_image.png';
 
 interface State {
     currentView: string;
@@ -182,23 +183,23 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         handleDeleteModal={handleDeleteModal}
                         authenticated={authenticated}
                     />
-                    {/* <img
-                        src={imageUrl}
+                    <img
+                        src={imageUrl || defaultImage}
                         style={{
                             width: '100%',
-                            height: '25vh',
+                            height: '35vh',
                             padding: '0 10px',
                             objectFit: 'cover',
                         }}
                         alt="cover"
-                    /> */}
-                    <LazyLoadImage
+                    />
+                    {/* <LazyLoadImage
                         alt="cover"
                         height="225"
                         src={imageUrl}
                         width="100%"
                         effect="blur"
-                    />
+                    /> */}
                     <ModalBody className={styles.content}>
                         <MultiViewContainer
                             views={this.views}

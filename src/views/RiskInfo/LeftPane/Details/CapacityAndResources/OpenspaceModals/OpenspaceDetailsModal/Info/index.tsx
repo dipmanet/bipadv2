@@ -196,7 +196,7 @@ class Info extends Component {
                             ))
                         ) : (
                             <span style={{ paddingBottom: '10px' }}>
-                                No suggested uses to display
+                                No suggested uses to display.
                             </span>
                         )}
                     </div>
