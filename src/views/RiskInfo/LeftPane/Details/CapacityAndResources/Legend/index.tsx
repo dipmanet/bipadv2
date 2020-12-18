@@ -77,12 +77,6 @@ const CapacityAndResourcesLegend = (props: Props) => {
     const openspaceOn = activeLegends.some(legend => legend.key === 'openspace');
     const communityspaceOn = activeLegends.some(legend => legend.key === 'communityspace');
     let legendTitle;
-    // let showOpenspaceSummary;
-    // if (openspaceOn || communityspaceOn) {
-    //     if (resourceIdForLegend) {
-
-    //     }
-    // }
 
     if (openspaceOn && communityspaceOn) {
         legendTitle = 'Layer Boundary';
@@ -108,22 +102,19 @@ const CapacityAndResourcesLegend = (props: Props) => {
                 />
             )}
             <div className={_cs(styles.wrapper, 'map-legend-container')}>
-
-                <div className={styles.capacityWrapper}>
-                    <div className={styles.title}>Capacity and Resources Legends</div>
-                    <Legend
-                        className={styles.legend}
+                <div className={styles.title}>Capacity and Resources</div>
+                <Legend
+                    className={styles.legend}
                 // data={capacityAndResourcesLegendItems}
-                        data={activeLegends}
-                        itemClassName={styles.legendItem}
-                        keySelector={itemSelector}
+                    data={activeLegends}
+                    itemClassName={styles.legendItem}
+                    keySelector={itemSelector}
             // iconSelector={iconSelector}
-                        labelSelector={legendLabelSelector}
-                        symbolClassNameSelector={classNameSelector}
-                        colorSelector={legendColorSelector}
-                        emptyComponent={null}
-                    />
-                </div>
+                    labelSelector={legendLabelSelector}
+                    symbolClassNameSelector={classNameSelector}
+                    colorSelector={legendColorSelector}
+                    emptyComponent={null}
+                />
             </div>
         </React.Fragment>
     );

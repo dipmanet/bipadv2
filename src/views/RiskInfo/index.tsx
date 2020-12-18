@@ -75,11 +75,14 @@ class RiskInfo extends React.PureComponent<Props> {
                     //     <ActiveLayers className={styles.activeLayerList} />
                     // )}
                     mainContent={carActive ? (
-                        <CapacityAndResourcesLegend
-                            handleDroneImage={this.handleDroneImage}
-                            activeLayersIndication={activeLayersIndication}
-                            resourceIdForLegend={resourceIdForLegend}
-                        />
+                        <div>
+                            <ActiveLayers className={styles.activeLayerList} />
+                            <CapacityAndResourcesLegend
+                                handleDroneImage={this.handleDroneImage}
+                                activeLayersIndication={activeLayersIndication}
+                                resourceIdForLegend={resourceIdForLegend}
+                            />
+                        </div>
                     )
                         : (<ActiveLayers className={styles.activeLayerList} />)}
                 />
