@@ -134,18 +134,39 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
     if (resourceDetails.resourceType === 'openspace') {
         filtered = data.filter(x => x.label === 'resourceType'
             || x.label === 'address'
-            || x.label === 'totalArea'
-            || x.label === 'usableArea');
+            || x.label === 'currentLandUse'
+            || x.label === 'usableArea'
+            || x.label === 'totalArea');
 
+        // appending units of area
         const totalAreaInfo = filtered && filtered.find(el => el.label === 'totalArea');
         const capacity = totalAreaInfo && totalAreaInfo.value
-            && parseInt((totalAreaInfo.value / 5).toFixed(0), 10);
+            && `${parseInt((totalAreaInfo.value / 5).toFixed(0), 10)} persons`;
         filtered.push({ label: 'capacity', value: capacity });
+
+        const totalAreaKey = filtered && filtered.find(el => el.label === 'totalArea');
+        if (totalAreaKey) { totalAreaKey.value = totalAreaKey && totalAreaKey.value && `${totalAreaKey.value} sq.m`; }
+
+        const usableAreaKey = filtered && filtered.find(el => el.label === 'usableArea');
+        if (usableAreaKey) { usableAreaKey.value = usableAreaKey && usableAreaKey.value && `${usableAreaKey.value} sq.m`; }
+
+        // shuffling array positions
+        if (filtered) {
+            const element = filtered[1];
+            filtered.splice(1, 1);
+            filtered.splice(2, 0, element);
+        }
     } else if (resourceDetails.resourceType === 'communityspace') {
-        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward' && el.label !== 'authenticated');
+        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward' && el.label !== 'authenticated'
+            && el.label !== 'remarks');
         const capacity = filtered && filtered[2] && filtered[2].value
             && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
+        if (filtered) {
+            const element = filtered[1];
+            filtered.splice(1, 1);
+            filtered.splice(4, 0, element);
+        }
     }
 
     const resourceKeySelector = (d: typeof filtered) => d.label;

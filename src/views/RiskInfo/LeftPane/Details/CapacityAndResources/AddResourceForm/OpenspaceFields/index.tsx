@@ -288,6 +288,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
 
     public render() {
         const { currentView } = this.state;
+        console.log('faram', this.props.faramValues);
 
         return (
             <>
