@@ -77,7 +77,7 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             />
         </div>
         <TextInput
-            faramElementName="usable2013"
+            faramElementName="usableAreaSecond"
             label="Usable-2013"
         />
         <div className={styles.inputGroup}>
@@ -86,7 +86,7 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
                 label="Area Changed"
             />
             <TextInput
-                faramElementName="Perimeter"
+                faramElementName="perimeter"
                 label="Perimeter"
             />
         </div>

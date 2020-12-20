@@ -225,7 +225,6 @@ class RegionSelectInput extends React.PureComponent<Props, State> {
     private handleProvinceChange = (selectedProvinceId: number) => {
         const { provinceList, setAdministrativeParameters } = this.props;
         const selectedProvince = provinceList.find(province => province.id === selectedProvinceId);
-        console.log('selcted', selectedProvince, this.props.provinceList);
 
         this.setState({
             selectedProvinceId,
@@ -285,19 +284,9 @@ class RegionSelectInput extends React.PureComponent<Props, State> {
         }
     }
 
-    private handleWardChange = (selectedWardId: number) => {
-        this.setState({ selectedWardId });
-        const { selectedMunicipalityId } = this.state;
-
-        this.handleRegionChange({
-            adminLevel: selectedWardId ? 4 : 3,
-            geoarea: selectedWardId || selectedMunicipalityId,
-        });
-    }
 
     public render() {
         const {
-            className,
             provinceList,
             districtList,
             municipalityList,
@@ -307,9 +296,6 @@ class RegionSelectInput extends React.PureComponent<Props, State> {
             provinceInputClassName,
             districtInputClassName,
             municipalityInputClassName,
-            wardInputClassName,
-
-            wardsHidden,
             autoFocus,
             showHintAndError,
         } = this.props;
@@ -318,17 +304,12 @@ class RegionSelectInput extends React.PureComponent<Props, State> {
             selectedProvinceId,
             selectedDistrictId,
             selectedMunicipalityId,
-            selectedWardId,
         } = this.state;
-        console.log('selcted', selectedProvinceId,
-            selectedDistrictId,
-            selectedMunicipalityId);
 
         const {
             provinceOptions,
             districtOptions,
             municipalityOptions,
-            wardOptions,
         } = this.getRegionOptions(
             provinceList,
             districtList,
@@ -342,7 +323,6 @@ class RegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableProvinceInput = disabled;
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
-        const shouldDisableWardInput = disabled || !selectedMunicipalityId;
 
         return (
             <div className={_cs(styles.stepwiseRegionSelect)}>
