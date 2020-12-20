@@ -30,6 +30,8 @@ function BasicInfo({ postBasicInfo, openspacePostError }: Props) {
             <TextInput faramElementName="elevation" label="Elevation" />
             {/* <NumberInput faramElementName="ward" label="Ward" /> */}
             <TextInput faramElementName="totalArea" label="Total Area" />
+            <TextInput faramElementName="currentLandUse" label="Current Land Use" />
+            <TextInput faramElementName="remarks" label="remarks" />
             {openspacePostError && (
                 <NonFieldErrors
                     faramElement

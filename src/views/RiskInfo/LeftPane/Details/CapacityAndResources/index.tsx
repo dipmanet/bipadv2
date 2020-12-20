@@ -131,37 +131,20 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
     let filtered = data;
 
-
     if (resourceDetails.resourceType === 'openspace') {
-        filtered = data.filter(el => el.label !== 'description'
-            && el.label !== 'ward' && el.label !== 'issue'
-            && el.label !== 'catchmentArea' && el.label !== 'ownership'
-            && el.label !== 'elevation' && el.label !== 'accessToSite'
-            && el.label !== 'specialFeature' && el.label !== 'elevation'
-            && el.label !== 'Perimeter'
-            && el.label !== 'province'
-            && el.label !== 'district'
-            && el.label !== 'municipality'
-            && el.label !== 'changeRemarks'
-            && el.label !== 'hlcitMunicipalty'
-            && el.label !== 'oid'
-            && el.label !== 'areaChange'
-            && el.label !== 'usable2013'
-            && el.label !== 'Authenticated');
+        filtered = data.filter(x => x.label === 'resourceType'
+            || x.label === 'address'
+            || x.label === 'totalArea'
+            || x.label === 'usableArea');
 
-        const capacity = filtered && filtered[3] && filtered[3].value
-            && parseInt((filtered[3].value / 5).toFixed(0), 10);
+        const totalAreaInfo = filtered && filtered.find(el => el.label === 'totalArea');
+        const capacity = totalAreaInfo && totalAreaInfo.value
+            && parseInt((totalAreaInfo.value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
-        // moving address field to 2nd position
-        if (filtered[2]) {
-            const element = filtered[2];
-            filtered.splice(2, 1);
-            filtered.splice(1, 0, element);
-        }
     } else if (resourceDetails.resourceType === 'communityspace') {
-        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward');
+        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward' && el.label !== 'authenticated');
         const capacity = filtered && filtered[2] && filtered[2].value
-        && parseInt((filtered[2].value / 5).toFixed(0), 10);
+            && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
     }
 
@@ -185,7 +168,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                     transparent
                     className={styles.editButton}
                 >
-                            Edit data
+                    Edit data
                 </AccentButton>
                 <AccentButton
                     title={
