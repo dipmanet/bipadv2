@@ -471,7 +471,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Earthquake"
                             />
                             <h4 className={styles.heading}>
-                                Earthquake (Richter Scale)
+                                Earthquake (Richter Scale (ML))
                             </h4>
                         </header>
                         <Legend
