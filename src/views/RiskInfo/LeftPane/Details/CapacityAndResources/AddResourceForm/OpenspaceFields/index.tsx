@@ -243,6 +243,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
+            // const ward = 2;
             values = {
                 ...values,
                 point,

@@ -43,6 +43,7 @@ interface AllData {
     changeRemarks: string;
     issue: string;
     description: string;
+    perimeter: string;
 }
 
 interface Rows {
@@ -94,7 +95,7 @@ const TableComponent: React.FC<Props> = (props: Props) => {
     const rows = [
         createData(1, 'Name of OpenSpace', allData.title),
         createData(2, 'Province', provinceName ? provinceName.title : 'N/A'),
-        createData(6, 'OID', allData.oid),
+        createData(6, 'OID', allData.oid || 'N/A'),
         createData(3, 'District', districtName ? districtName.title : 'N/A'),
         createData(4, 'Municipality', municipalityName ? municipalityName.title : 'N/A'),
         createData(6, 'HlCIT-MUN', allData.hlcitMunicipalty),
@@ -105,26 +106,24 @@ const TableComponent: React.FC<Props> = (props: Props) => {
         createData(6, 'Latitude', coordinatesString && coordinatesString[1]),
         createData(11, 'Elevation', allData.elevation),
         createData(6, 'Total Area', allData.totalArea),
-        createData(7, 'Usable-2013', allData.usable2013),
+        createData(7, 'Usable-2013', allData.usableAreaSecond),
         createData(7, 'Usable Open Space Area', allData.usableArea),
         createData(7, ' Area Change', allData.areaChange),
         createData(7, 'Usable Area', allData.usableArea),
         createData(5, 'Capacity', (allData.usableArea / 3.5).toFixed(0)),
-        createData(7, 'Suggested Use', allData.usableArea),
+        createData(7, 'Suggested Use', allData.suggestedUse),
         createData(7, 'Current Land Use', allData.currentLandUse),
         createData(7, 'Catchment Area', allData.catchmentArea),
         createData(10, 'Access to Site', allData.accessToSite),
         createData(8, 'Ownership', allData.ownership),
         createData(9, 'Special Features', allData.specialFeature),
-        createData(7, 'Issues', allData.usableArea),
+        createData(7, 'Issues', allData.issue),
         createData(7, 'Description', allData.description),
         createData(7, 'Change_Remarks', allData.changeRemarks),
-        createData(7, 'Issues', allData.issue),
+        createData(7, 'Perimeter', allData.perimeter),
 
 
     ];
-    console.log('tdata', rows);
-
     return (
 
         <div className={styles.tableContent}>
