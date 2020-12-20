@@ -129,7 +129,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             // FIXME: obsolete
             // ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
             latest: true,
         }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {
@@ -239,7 +239,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: ({ props: { filters, globalFilters } }) => ({
             // ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
             latest: true,
         }),
         onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
