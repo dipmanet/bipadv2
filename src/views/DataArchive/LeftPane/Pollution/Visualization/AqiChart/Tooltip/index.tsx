@@ -46,7 +46,7 @@ const farmatLabels = (name: string, value: string | number, color: string) => {
             };
         case 'unhealthy':
             return {
-                name: 'Unhealth (151 - 200)',
+                name: 'Unhealthy (151 - 200)',
                 color,
                 value,
             };
