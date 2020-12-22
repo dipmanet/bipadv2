@@ -61,7 +61,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             const { startDate, endDate } = params.dataDateRange;
             return {
                 station: stationId,
-                historical: 'true',
+                // historical: 'true',
                 // expand: ['province', 'district', 'municipality', 'ward'],
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 created_on__gt: `${startDate}T00:00:00+05:45`,
