@@ -1,0 +1,1209 @@
+@font-face {
+    font-family: 'Humanitarian-Icons-v02';
+    src: url('../fonts/Humanitarian-Icons-v02.eot?134lo3');
+    src: url('../fonts/Humanitarian-Icons-v02.eot?134lo3#iefix')
+            format('embedded-opentype'),
+        url('../fonts/Humanitarian-Icons-v02.ttf?134lo3') format('truetype'),
+        url('../fonts/Humanitarian-Icons-v02.woff?134lo3') format('woff'),
+        url('../fonts/Humanitarian-Icons-v02.svg?134lo3#Humanitarian-Icons-v02')
+            format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^='humanitarian-icon-'],
+[class*=' humanitarian-icon-'] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'Humanitarian-Icons-v02' !important;
+    /* speak: none; */
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.humanitarian-icon-Abduction-kidnapping:before {
+    content: '\e900';
+    color: #00000099;
+}
+.humanitarian-icon-About:before {
+    content: '\e901';
+    color: #00000099;
+}
+.humanitarian-icon-Add-document:before {
+    content: '\e902';
+    color: #00000099;
+}
+.humanitarian-icon-Add:before {
+    content: '\e903';
+    color: #00000099;
+}
+.humanitarian-icon-Advocacy:before {
+    content: '\e904';
+    color: #00000099;
+}
+.humanitarian-icon-Affected-population:before {
+    content: '\e905';
+    color: #00000099;
+}
+.humanitarian-icon-Agriculture:before {
+    content: '\e906';
+    color: #00000099;
+}
+.humanitarian-icon-Airport-affected:before {
+    content: '\e907';
+    color: #00000099;
+}
+.humanitarian-icon-Airport-destroyed:before {
+    content: '\e908';
+    color: #00000099;
+}
+.humanitarian-icon-Airport-military:before {
+    content: '\e909';
+    color: #00000099;
+}
+.humanitarian-icon-Airport-not-affected:before {
+    content: '\e90a';
+    color: #00000099;
+}
+.humanitarian-icon-Airport:before {
+    content: '\e90b';
+    color: #00000099;
+}
+.humanitarian-icon-Alert:before {
+    content: '\e90c';
+    color: #00000099;
+}
+.humanitarian-icon-Analysis:before {
+    content: '\e90d';
+    color: #00000099;
+}
+.humanitarian-icon-Arrest-detention:before {
+    content: '\e90e';
+    color: #00000099;
+}
+.humanitarian-icon-Assault:before {
+    content: '\e90f';
+    color: #00000099;
+}
+.humanitarian-icon-Assembly-point:before {
+    content: '\e910';
+    color: #00000099;
+}
+.humanitarian-icon-Assessment:before {
+    content: '\e911';
+    color: #00000099;
+}
+.humanitarian-icon-Attack:before {
+    content: '\e912';
+    color: #00000099;
+}
+.humanitarian-icon-Blanket:before {
+    content: '\e913';
+    color: #00000099;
+}
+.humanitarian-icon-Blog:before {
+    content: '\e914';
+    color: #00000099;
+}
+.humanitarian-icon-Boat:before {
+    content: '\e915';
+    color: #00000099;
+}
+.humanitarian-icon-Bookmark:before {
+    content: '\e916';
+    color: #00000099;
+}
+.humanitarian-icon-Border-crossing:before {
+    content: '\e917';
+    color: #00000099;
+}
+.humanitarian-icon-Borehole:before {
+    content: '\e918';
+    color: #00000099;
+}
+.humanitarian-icon-Bottled-water:before {
+    content: '\e919';
+    color: #00000099;
+}
+.humanitarian-icon-Bridge-affected:before {
+    content: '\e91a';
+    color: #00000099;
+}
+.humanitarian-icon-Bridge-destroyed:before {
+    content: '\e91b';
+    color: #00000099;
+}
+.humanitarian-icon-Bridge-not-affected:before {
+    content: '\e91c';
+    color: #00000099;
+}
+.humanitarian-icon-Bridge:before {
+    content: '\e91d';
+    color: #00000099;
+}
+.humanitarian-icon-Bucket:before {
+    content: '\e91e';
+    color: #00000099;
+}
+.humanitarian-icon-Buddhist-temple:before {
+    content: '\e91f';
+    color: #00000099;
+}
+.humanitarian-icon-Building-facility-affected:before {
+    content: '\e920';
+    color: #00000099;
+}
+.humanitarian-icon-Building-facility-destroyed:before {
+    content: '\e921';
+    color: #00000099;
+}
+.humanitarian-icon-Building-facility-not-affected:before {
+    content: '\e922';
+    color: #00000099;
+}
+.humanitarian-icon-Building:before {
+    content: '\e923';
+    color: #00000099;
+}
+.humanitarian-icon-Bus:before {
+    content: '\e924';
+    color: #00000099;
+}
+.humanitarian-icon-Calendar:before {
+    content: '\e925';
+    color: #00000099;
+}
+.humanitarian-icon-Camp-Coordination-and-Camp-Management:before {
+    content: '\e926';
+    color: #00000099;
+}
+.humanitarian-icon-Car:before {
+    content: '\e927';
+    color: #00000099;
+}
+.humanitarian-icon-Carjacking:before {
+    content: '\e928';
+    color: #00000099;
+}
+.humanitarian-icon-Cash-transfer:before {
+    content: '\e929';
+    color: #00000099;
+}
+.humanitarian-icon-Cell-tower:before {
+    content: '\e92a';
+    color: #00000099;
+}
+.humanitarian-icon-Chart:before {
+    content: '\e92b';
+    color: #00000099;
+}
+.humanitarian-icon-Chat:before {
+    content: '\e92c';
+    color: #00000099;
+}
+.humanitarian-icon-Checkpoint:before {
+    content: '\e92d';
+    color: #00000099;
+}
+.humanitarian-icon-Child-combatant:before {
+    content: '\e92e';
+    color: #00000099;
+}
+.humanitarian-icon-Children:before {
+    content: '\e92f';
+    color: #00000099;
+}
+.humanitarian-icon-Church:before {
+    content: '\e930';
+    color: #00000099;
+}
+.humanitarian-icon-Civil-military-coordination:before {
+    content: '\e931';
+    color: #00000099;
+}
+.humanitarian-icon-Clinic:before {
+    content: '\e932';
+    color: #00000099;
+}
+.humanitarian-icon-Clothing:before {
+    content: '\e933';
+    color: #00000099;
+}
+.humanitarian-icon-Cold-wave:before {
+    content: '\e934';
+    color: #00000099;
+}
+.humanitarian-icon-Communal-latrine:before {
+    content: '\e935';
+    color: #00000099;
+}
+.humanitarian-icon-Community-building:before {
+    content: '\e936';
+    color: #00000099;
+}
+.humanitarian-icon-Community-engagement:before {
+    content: '\e937';
+    color: #00000099;
+}
+.humanitarian-icon-Computer:before {
+    content: '\e938';
+    color: #00000099;
+}
+.humanitarian-icon-Conflict:before {
+    content: '\e939';
+    color: #00000099;
+}
+.humanitarian-icon-Coordinated-assessement:before {
+    content: '\e93a';
+    color: #00000099;
+}
+.humanitarian-icon-Coordination:before {
+    content: '\e93b';
+    color: #00000099;
+}
+.humanitarian-icon-Copy:before {
+    content: '\e93c';
+    color: #00000099;
+}
+.humanitarian-icon-Cyclone:before {
+    content: '\e93d';
+    color: #00000099;
+}
+.humanitarian-icon-Damaged-Affected:before {
+    content: '\e93e';
+    color: #00000099;
+}
+.humanitarian-icon-Dangerous-area:before {
+    content: '\e93f';
+    color: #00000099;
+}
+.humanitarian-icon-Data:before {
+    content: '\e940';
+    color: #00000099;
+}
+.humanitarian-icon-Dead:before {
+    content: '\e941';
+    color: #00000099;
+}
+.humanitarian-icon-Debris-management:before {
+    content: '\e942';
+    color: #00000099;
+}
+.humanitarian-icon-Deployment:before {
+    content: '\e943';
+    color: #00000099;
+}
+.humanitarian-icon-Destroyed:before {
+    content: '\e944';
+    color: #00000099;
+}
+.humanitarian-icon-Detergent:before {
+    content: '\e945';
+    color: #00000099;
+}
+.humanitarian-icon-Diplomatic-mission:before {
+    content: '\e946';
+    color: #00000099;
+}
+.humanitarian-icon-Distribution-site:before {
+    content: '\e947';
+    color: #00000099;
+}
+.humanitarian-icon-Document:before {
+    content: '\e948';
+    color: #00000099;
+}
+.humanitarian-icon-Download:before {
+    content: '\e949';
+    color: #00000099;
+}
+.humanitarian-icon-Drought:before {
+    content: '\e94a';
+    color: #00000099;
+}
+.humanitarian-icon-Drowned:before {
+    content: '\e94b';
+    color: #00000099;
+}
+.humanitarian-icon-E-mail:before {
+    content: '\e94c';
+    color: #00000099;
+}
+.humanitarian-icon-Early-Recovery:before {
+    content: '\e94d';
+    color: #00000099;
+}
+.humanitarian-icon-Earthmound:before {
+    content: '\e94e';
+    color: #00000099;
+}
+.humanitarian-icon-Earthquake:before {
+    content: '\e94f';
+    color: #00000099;
+}
+.humanitarian-icon-Education:before {
+    content: '\e950';
+    color: #00000099;
+}
+.humanitarian-icon-Elderly:before {
+    content: '\e951';
+    color: #00000099;
+}
+.humanitarian-icon-Emergency-Telecommunications:before {
+    content: '\e952';
+    color: #00000099;
+}
+.humanitarian-icon-Environment:before {
+    content: '\e953';
+    color: #00000099;
+}
+.humanitarian-icon-Epidemic:before {
+    content: '\e954';
+    color: #00000099;
+}
+.humanitarian-icon-Exit-Cancel:before {
+    content: '\e955';
+    color: #00000099;
+}
+.humanitarian-icon-Favourite:before {
+    content: '\e956';
+    color: #00000099;
+}
+.humanitarian-icon-Fax:before {
+    content: '\e957';
+    color: #00000099;
+}
+.humanitarian-icon-Ferry:before {
+    content: '\e958';
+    color: #00000099;
+}
+.humanitarian-icon-Film:before {
+    content: '\e959';
+    color: #00000099;
+}
+.humanitarian-icon-Financing:before {
+    content: '\e95a';
+    color: #00000099;
+}
+.humanitarian-icon-Fire:before {
+    content: '\e95b';
+    color: #00000099;
+}
+.humanitarian-icon-Fishery:before {
+    content: '\e95c';
+    color: #00000099;
+}
+.humanitarian-icon-Flash-flood:before {
+    content: '\e95d';
+    color: #00000099;
+}
+.humanitarian-icon-Flood:before {
+    content: '\e95e';
+    color: #00000099;
+}
+.humanitarian-icon-Flour:before {
+    content: '\e95f';
+    color: #00000099;
+}
+.humanitarian-icon-Folder:before {
+    content: '\e960';
+    color: #00000099;
+}
+.humanitarian-icon-Food-Security:before {
+    content: '\e961';
+    color: #00000099;
+}
+.humanitarian-icon-Food-warehouse:before {
+    content: '\e962';
+    color: #00000099;
+}
+.humanitarian-icon-Food:before {
+    content: '\e963';
+    color: #00000099;
+}
+.humanitarian-icon-Forced-entry:before {
+    content: '\e964';
+    color: #00000099;
+}
+.humanitarian-icon-Forced-recruitment:before {
+    content: '\e965';
+    color: #00000099;
+}
+.humanitarian-icon-Fund:before {
+    content: '\e966';
+    color: #00000099;
+}
+.humanitarian-icon-Gap-analysis:before {
+    content: '\e967';
+    color: #00000099;
+}
+.humanitarian-icon-Gas-station:before {
+    content: '\e968';
+    color: #00000099;
+}
+.humanitarian-icon-Go:before {
+    content: '\e969';
+    color: #00000099;
+}
+.humanitarian-icon-Government-office:before {
+    content: '\e96a';
+    color: #00000099;
+}
+.humanitarian-icon-Group:before {
+    content: '\e96b';
+    color: #00000099;
+}
+.humanitarian-icon-Harassment-intimidation:before {
+    content: '\e96c';
+    color: #00000099;
+}
+.humanitarian-icon-Health-facility:before {
+    content: '\e96d';
+    color: #00000099;
+}
+.humanitarian-icon-Health-post:before {
+    content: '\e96e';
+    color: #00000099;
+}
+.humanitarian-icon-Health:before {
+    content: '\e96f';
+    color: #5091cd;
+}
+.humanitarian-icon-Heatwave:before {
+    content: '\e970';
+    color: #00000099;
+}
+.humanitarian-icon-Heavy-rain:before {
+    content: '\e971';
+    color: #00000099;
+}
+.humanitarian-icon-Helicopter:before {
+    content: '\e972';
+    color: #00000099;
+}
+.humanitarian-icon-Helipad:before {
+    content: '\e973';
+    color: #00000099;
+}
+.humanitarian-icon-Help:before {
+    content: '\e974';
+    color: #00000099;
+}
+.humanitarian-icon-Hidden:before {
+    content: '\e975';
+    color: #00000099;
+}
+.humanitarian-icon-Hindu-temple:before {
+    content: '\e976';
+    color: #00000099;
+}
+.humanitarian-icon-Hospital:before {
+    content: '\e977';
+    color: #00000099;
+}
+.humanitarian-icon-Hotel:before {
+    content: '\e978';
+    color: #00000099;
+}
+.humanitarian-icon-House-affected:before {
+    content: '\e979';
+    color: #00000099;
+}
+.humanitarian-icon-House-burned:before {
+    content: '\e97a';
+    color: #00000099;
+}
+.humanitarian-icon-House-destroyed:before {
+    content: '\e97b';
+    color: #00000099;
+}
+.humanitarian-icon-House-not-affected:before {
+    content: '\e97c';
+    color: #00000099;
+}
+.humanitarian-icon-House:before {
+    content: '\e97d';
+    color: #00000099;
+}
+.humanitarian-icon-Humanitarian-access:before {
+    content: '\e97e';
+    color: #00000099;
+}
+.humanitarian-icon-Humanitarian-programme-cycle:before {
+    content: '\e97f';
+    color: #00000099;
+}
+.humanitarian-icon-IDP-refugee-camp:before {
+    content: '\e980';
+    color: #00000099;
+}
+.humanitarian-icon-Infant-formula:before {
+    content: '\e981';
+    color: #00000099;
+}
+.humanitarian-icon-Infant:before {
+    content: '\e982';
+    color: #00000099;
+}
+.humanitarian-icon-Information-management:before {
+    content: '\e983';
+    color: #00000099;
+}
+.humanitarian-icon-Information-technology:before {
+    content: '\e984';
+    color: #00000099;
+}
+.humanitarian-icon-Infrastructure:before {
+    content: '\e985';
+    color: #00000099;
+}
+.humanitarian-icon-Injured:before {
+    content: '\e986';
+    color: #00000099;
+}
+.humanitarian-icon-Innovation:before {
+    content: '\e987';
+    color: #00000099;
+}
+.humanitarian-icon-Insect-infestation:before {
+    content: '\e988';
+    color: #00000099;
+}
+.humanitarian-icon-Internally-displaced:before {
+    content: '\e989';
+    color: #00000099;
+}
+.humanitarian-icon-Internet:before {
+    content: '\e98a';
+    color: #00000099;
+}
+.humanitarian-icon-Kitchen-set:before {
+    content: '\e98b';
+    color: #00000099;
+}
+.humanitarian-icon-Landslide-mudslide:before {
+    content: '\e98c';
+    color: #00000099;
+}
+.humanitarian-icon-Laptop:before {
+    content: '\e98d';
+    color: #00000099;
+}
+.humanitarian-icon-Latrine-cabin:before {
+    content: '\e98e';
+    color: #00000099;
+}
+.humanitarian-icon-Leadership:before {
+    content: '\e98f';
+    color: #00000099;
+}
+.humanitarian-icon-Learning:before {
+    content: '\e990';
+    color: #00000099;
+}
+.humanitarian-icon-Livelihood:before {
+    content: '\e991';
+    color: #00000099;
+}
+.humanitarian-icon-Livestock:before {
+    content: '\e992';
+    color: #00000099;
+}
+.humanitarian-icon-Location:before {
+    content: '\e993';
+    color: #00000099;
+}
+.humanitarian-icon-Locust-infestation:before {
+    content: '\e994';
+    color: #00000099;
+}
+.humanitarian-icon-Logistics:before {
+    content: '\e995';
+    color: #00000099;
+}
+.humanitarian-icon-Map:before {
+    content: '\e996';
+    color: #00000099;
+}
+.humanitarian-icon-Mattress:before {
+    content: '\e997';
+    color: #00000099;
+}
+.humanitarian-icon-Medical-supply:before {
+    content: '\e998';
+    color: #00000099;
+}
+.humanitarian-icon-Medicine:before {
+    content: '\e999';
+    color: #00000099;
+}
+.humanitarian-icon-Meeting:before {
+    content: '\e99a';
+    color: #00000099;
+}
+.humanitarian-icon-Menu:before {
+    content: '\e99b';
+    color: #00000099;
+}
+.humanitarian-icon-Military-gate:before {
+    content: '\e99c';
+    color: #00000099;
+}
+.humanitarian-icon-Mine:before {
+    content: '\e99d';
+    color: #00000099;
+}
+.humanitarian-icon-Missing:before {
+    content: '\e99e';
+    color: #00000099;
+}
+.humanitarian-icon-Mobile-clinic:before {
+    content: '\e99f';
+    color: #00000099;
+}
+.humanitarian-icon-Mobile-phone:before {
+    content: '\e9a0';
+    color: #00000099;
+}
+.humanitarian-icon-Monitor:before {
+    content: '\e9a1';
+    color: #00000099;
+}
+.humanitarian-icon-Monitoring:before {
+    content: '\e9a2';
+    color: #00000099;
+}
+.humanitarian-icon-More-options:before {
+    content: '\e9a3';
+    color: #00000099;
+}
+.humanitarian-icon-Mosque:before {
+    content: '\e9a4';
+    color: #00000099;
+}
+.humanitarian-icon-Mosquito-net:before {
+    content: '\e9a5';
+    color: #00000099;
+}
+.humanitarian-icon-Multi-cluster-sector:before {
+    content: '\e9a6';
+    color: #00000099;
+}
+.humanitarian-icon-Murder:before {
+    content: '\e9a7';
+    color: #00000099;
+}
+.humanitarian-icon-National-army:before {
+    content: '\e9a8';
+    color: #00000099;
+}
+.humanitarian-icon-Needs-assessment:before {
+    content: '\e9a9';
+    color: #00000099;
+}
+.humanitarian-icon-Next-item:before {
+    content: '\e9aa';
+    color: #00000099;
+}
+.humanitarian-icon-NGO-office:before {
+    content: '\e9ab';
+    color: #00000099;
+}
+.humanitarian-icon-Non-food-items:before {
+    content: '\e9ac';
+    color: #00000099;
+}
+.humanitarian-icon-Not-affected:before {
+    content: '\e9ad';
+    color: #00000099;
+}
+.humanitarian-icon-Notification:before {
+    content: '\e9ae';
+    color: #00000099;
+}
+.humanitarian-icon-Nutrition:before {
+    content: '\e9af';
+    color: #00000099;
+}
+.humanitarian-icon-Observation-tower:before {
+    content: '\e9b0';
+    color: #00000099;
+}
+.humanitarian-icon-Oil:before {
+    content: '\e9b1';
+    color: #00000099;
+}
+.humanitarian-icon-Out-of-platform:before {
+    content: '\e9b2';
+    color: #00000099;
+}
+.humanitarian-icon-Partnership:before {
+    content: '\e9b3';
+    color: #00000099;
+}
+.humanitarian-icon-Pause:before {
+    content: '\e9b4';
+    color: #00000099;
+}
+.humanitarian-icon-Peacekeeping-force:before {
+    content: '\e9b5';
+    color: #00000099;
+}
+.humanitarian-icon-People-with-physical-impairments:before {
+    content: '\e9b6';
+    color: #00000099;
+}
+.humanitarian-icon-Permanent-camp:before {
+    content: '\e9b7';
+    color: #00000099;
+}
+.humanitarian-icon-Person-1:before {
+    content: '\e9b8';
+    color: #5091cd;
+}
+.humanitarian-icon-Person-2:before {
+    content: '\e9b9';
+    color: #00000099;
+}
+.humanitarian-icon-Photo:before {
+    content: '\e9ba';
+    color: #00000099;
+}
+.humanitarian-icon-Physical-closure:before {
+    content: '\e9bb';
+    color: #00000099;
+}
+.humanitarian-icon-Plastic-sheeting:before {
+    content: '\e9bc';
+    color: #00000099;
+}
+.humanitarian-icon-Police-station:before {
+    content: '\e9bd';
+    color: #00000099;
+}
+.humanitarian-icon-Policy:before {
+    content: '\e9be';
+    color: #00000099;
+}
+.humanitarian-icon-Population-growth:before {
+    content: '\e9bf';
+    color: #00000099;
+}
+.humanitarian-icon-Population-return:before {
+    content: '\e9c0';
+    color: #00000099;
+}
+.humanitarian-icon-Port-affected:before {
+    content: '\e9c1';
+    color: #00000099;
+}
+.humanitarian-icon-Port-destroyed:before {
+    content: '\e9c2';
+    color: #00000099;
+}
+.humanitarian-icon-Port-not-affected:before {
+    content: '\e9c3';
+    color: #00000099;
+}
+.humanitarian-icon-Port:before {
+    content: '\e9c4';
+    color: #00000099;
+}
+.humanitarian-icon-Potable-water-source:before {
+    content: '\e9c5';
+    color: #00000099;
+}
+.humanitarian-icon-Potable-water:before {
+    content: '\e9c6';
+    color: #00000099;
+}
+.humanitarian-icon-Pregnant:before {
+    content: '\e9c7';
+    color: #00000099;
+}
+.humanitarian-icon-Preparedness:before {
+    content: '\e9c8';
+    color: #00000099;
+}
+.humanitarian-icon-Previous-item:before {
+    content: '\e9c9';
+    color: #00000099;
+}
+.humanitarian-icon-Print:before {
+    content: '\e9ca';
+    color: #00000099;
+}
+.humanitarian-icon-Protection:before {
+    content: '\e9cb';
+    color: #00000099;
+}
+.humanitarian-icon-Public-information:before {
+    content: '\e9cc';
+    color: #00000099;
+}
+.humanitarian-icon-Radio:before {
+    content: '\e9cd';
+    color: #00000099;
+}
+.humanitarian-icon-Rebel:before {
+    content: '\e9ce';
+    color: #00000099;
+}
+.humanitarian-icon-Reconstruction:before {
+    content: '\e9cf';
+    color: #00000099;
+}
+.humanitarian-icon-Refugee:before {
+    content: '\e9d0';
+    color: #00000099;
+}
+.humanitarian-icon-Registration:before {
+    content: '\e9d1';
+    color: #00000099;
+}
+.humanitarian-icon-Relief-goods:before {
+    content: '\e9d2';
+    color: #00000099;
+}
+.humanitarian-icon-Remove-document:before {
+    content: '\e9d3';
+    color: #00000099;
+}
+.humanitarian-icon-Remove:before {
+    content: '\e9d4';
+    color: #00000099;
+}
+.humanitarian-icon-Report:before {
+    content: '\e9d5';
+    color: #00000099;
+}
+.humanitarian-icon-Reporting:before {
+    content: '\e9d6';
+    color: #00000099;
+}
+.humanitarian-icon-Response:before {
+    content: '\e9d7';
+    color: #00000099;
+}
+.humanitarian-icon-Return:before {
+    content: '\e9d8';
+    color: #00000099;
+}
+.humanitarian-icon-Rice:before {
+    content: '\e9d9';
+    color: #00000099;
+}
+.humanitarian-icon-Road-affected:before {
+    content: '\e9da';
+    color: #00000099;
+}
+.humanitarian-icon-Road-barrier:before {
+    content: '\e9db';
+    color: #00000099;
+}
+.humanitarian-icon-Road-destroyed:before {
+    content: '\e9dc';
+    color: #00000099;
+}
+.humanitarian-icon-Road-not-affected:before {
+    content: '\e9dd';
+    color: #00000099;
+}
+.humanitarian-icon-Road:before {
+    content: '\e9de';
+    color: #00000099;
+}
+.humanitarian-icon-Roadblock:before {
+    content: '\e9df';
+    color: #00000099;
+}
+.humanitarian-icon-Robbery:before {
+    content: '\e9e0';
+    color: #00000099;
+}
+.humanitarian-icon-Rule-of-law-and-justice:before {
+    content: '\e9e1';
+    color: #00000099;
+}
+.humanitarian-icon-Rural-exodus:before {
+    content: '\e9e2';
+    color: #00000099;
+}
+.humanitarian-icon-Rural:before {
+    content: '\e9e3';
+    color: #00000099;
+}
+.humanitarian-icon-Safety-and-security:before {
+    content: '\e9e4';
+    color: #00000099;
+}
+.humanitarian-icon-Salt:before {
+    content: '\e9e5';
+    color: #00000099;
+}
+.humanitarian-icon-Sanitation:before {
+    content: '\e9e6';
+    color: #00000099;
+}
+.humanitarian-icon-Satellite-dish:before {
+    content: '\e9e7';
+    color: #00000099;
+}
+.humanitarian-icon-Save:before {
+    content: '\e9e8';
+    color: #00000099;
+}
+.humanitarian-icon-Scale-down-operation:before {
+    content: '\e9e9';
+    color: #00000099;
+}
+.humanitarian-icon-Scale-up-operation:before {
+    content: '\e9ea';
+    color: #00000099;
+}
+.humanitarian-icon-School-affected:before {
+    content: '\e9eb';
+    color: #00000099;
+}
+.humanitarian-icon-School-destroyed:before {
+    content: '\e9ec';
+    color: #00000099;
+}
+.humanitarian-icon-School-not-affected:before {
+    content: '\e9ed';
+    color: #00000099;
+}
+.humanitarian-icon-School:before {
+    content: '\e9ee';
+    color: #00000099;
+}
+.humanitarian-icon-Search:before {
+    content: '\e9ef';
+    color: #00000099;
+}
+.humanitarian-icon-See:before {
+    content: '\e9f0';
+    color: #00000099;
+}
+.humanitarian-icon-Selected:before {
+    content: '\e9f1';
+    color: #00000099;
+}
+.humanitarian-icon-Services-and-tools:before {
+    content: '\e9f2';
+    color: #00000099;
+}
+.humanitarian-icon-Settings:before {
+    content: '\e9f3';
+    color: #00000099;
+}
+.humanitarian-icon-Sexual-violence:before {
+    content: '\e9f4';
+    color: #00000099;
+}
+.humanitarian-icon-Share:before {
+    content: '\e9f5';
+    color: #00000099;
+}
+.humanitarian-icon-Shelter:before {
+    content: '\e9f6';
+    color: #00000099;
+}
+.humanitarian-icon-Ship:before {
+    content: '\e9f7';
+    color: #00000099;
+}
+.humanitarian-icon-Shower:before {
+    content: '\e9f8';
+    color: #00000099;
+}
+.humanitarian-icon-Smartphone:before {
+    content: '\e9f9';
+    color: #00000099;
+}
+.humanitarian-icon-Snow-avalanche:before {
+    content: '\e9fa';
+    color: #00000099;
+}
+.humanitarian-icon-Snowfall:before {
+    content: '\e9fb';
+    color: #00000099;
+}
+.humanitarian-icon-Soap:before {
+    content: '\e9fc';
+    color: #00000099;
+}
+.humanitarian-icon-Solid-waste:before {
+    content: '\e9fd';
+    color: #00000099;
+}
+.humanitarian-icon-Spontaneous-site:before {
+    content: '\e9fe';
+    color: #00000099;
+}
+.humanitarian-icon-Spring-water:before {
+    content: '\e9ff';
+    color: #00000099;
+}
+.humanitarian-icon-Staff-management:before {
+    content: '\ea00';
+    color: #00000099;
+}
+.humanitarian-icon-Stop:before {
+    content: '\ea01';
+    color: #00000099;
+}
+.humanitarian-icon-Storm-surge:before {
+    content: '\ea02';
+    color: #00000099;
+}
+.humanitarian-icon-Storm:before {
+    content: '\ea03';
+    color: #00000099;
+}
+.humanitarian-icon-Stove:before {
+    content: '\ea04';
+    color: #00000099;
+}
+.humanitarian-icon-Submersible-pump:before {
+    content: '\ea05';
+    color: #00000099;
+}
+.humanitarian-icon-Sugar:before {
+    content: '\ea06';
+    color: #00000099;
+}
+.humanitarian-icon-Table:before {
+    content: '\ea07';
+    color: #00000099;
+}
+.humanitarian-icon-Tarpaulin:before {
+    content: '\ea08';
+    color: #00000099;
+}
+.humanitarian-icon-Technological-disaster:before {
+    content: '\ea09';
+    color: #00000099;
+}
+.humanitarian-icon-Temporary-camp:before {
+    content: '\ea0a';
+    color: #00000099;
+}
+.humanitarian-icon-Tent:before {
+    content: '\ea0b';
+    color: #00000099;
+}
+.humanitarian-icon-Toilet:before {
+    content: '\ea0c';
+    color: #00000099;
+}
+.humanitarian-icon-Tornado:before {
+    content: '\ea0d';
+    color: #00000099;
+}
+.humanitarian-icon-Trade-and-market:before {
+    content: '\ea0e';
+    color: #00000099;
+}
+.humanitarian-icon-Train:before {
+    content: '\ea0f';
+    color: #00000099;
+}
+.humanitarian-icon-Transition-site:before {
+    content: '\ea10';
+    color: #00000099;
+}
+.humanitarian-icon-Trending:before {
+    content: '\ea11';
+    color: #00000099;
+}
+.humanitarian-icon-Truck:before {
+    content: '\ea12';
+    color: #00000099;
+}
+.humanitarian-icon-Tsunami:before {
+    content: '\ea13';
+    color: #00000099;
+}
+.humanitarian-icon-Tunnel:before {
+    content: '\ea14';
+    color: #00000099;
+}
+.humanitarian-icon-UN-compound-office:before {
+    content: '\ea15';
+    color: #00000099;
+}
+.humanitarian-icon-UN-vehicle:before {
+    content: '\ea16';
+    color: #00000099;
+}
+.humanitarian-icon-University:before {
+    content: '\ea17';
+    color: #00000099;
+}
+.humanitarian-icon-Upload:before {
+    content: '\ea18';
+    color: #00000099;
+}
+.humanitarian-icon-Urban-rural:before {
+    content: '\ea19';
+    color: #00000099;
+}
+.humanitarian-icon-Urban:before {
+    content: '\ea1a';
+    color: #00000099;
+}
+.humanitarian-icon-User:before {
+    content: '\ea1b';
+    color: #00000099;
+}
+.humanitarian-icon-Users:before {
+    content: '\ea1c';
+    color: #00000099;
+}
+.humanitarian-icon-Vaccine:before {
+    content: '\ea1d';
+    color: #00000099;
+}
+.humanitarian-icon-Video:before {
+    content: '\ea1e';
+    color: #00000099;
+}
+.humanitarian-icon-Violent-wind:before {
+    content: '\ea1f';
+    color: #00000099;
+}
+.humanitarian-icon-Volcano:before {
+    content: '\ea20';
+    color: #00000099;
+}
+.humanitarian-icon-Walkie-talkie:before {
+    content: '\ea21';
+    color: #00000099;
+}
+.humanitarian-icon-Warning-Error:before {
+    content: '\ea22';
+    color: #00000099;
+}
+.humanitarian-icon-Water-Sanitation-and-Hygiene:before {
+    content: '\ea23';
+    color: #00000099;
+}
+.humanitarian-icon-Water-source:before {
+    content: '\ea24';
+    color: #00000099;
+}
+.humanitarian-icon-Water-trucking:before {
+    content: '\ea25';
+    color: #00000099;
+}
+.humanitarian-icon-ZIP-compressed:before {
+    content: '\ea26';
+    color: #00000099;
+}

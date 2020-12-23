@@ -203,6 +203,7 @@ class Filters extends React.PureComponent<Props, State> {
                 region: {},
             } });
 
+
         const { setFilters } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {

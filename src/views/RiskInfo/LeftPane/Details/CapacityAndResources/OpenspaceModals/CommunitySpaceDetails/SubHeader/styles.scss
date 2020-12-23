@@ -1,0 +1,45 @@
+.subHeader {
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+
+    .topRow {
+        flex: 1;
+        display: flex;
+        padding: 0 10px;
+        .header {
+            flex: 4.5;
+            font-weight: bold;
+            font-size: 20px;
+            // display: flex;
+            // align-items: flex-start;
+            // justify-content: flex-start;
+        }
+
+        .option {
+            flex: 1.1;
+            cursor: pointer;
+        }
+
+        .optionF {
+            flex: 1.5;
+            cursor: pointer;
+        }
+
+        .direction {
+            flex: 0.5;
+            color: blue;
+            cursor: pointer;
+        }
+    }
+
+    .icon {
+        padding-right: 5px;
+    }
+
+    .bottomRow {
+        flex: 1;
+        padding: 0 10px;
+    }
+}

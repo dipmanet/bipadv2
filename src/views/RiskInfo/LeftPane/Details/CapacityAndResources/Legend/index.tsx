@@ -4,10 +4,12 @@ import Legend from '#rscz/Legend';
 import legendItems from './legendItems';
 
 import { TitleContext, Profile } from '#components/TitleContext';
-
+import OpenspaceLegends from '../OpenspaceModals/OpenspaceLegends/main';
 import styles from './styles.scss';
+import OpenspaceSummary from '../OpenspaceModals/OpenspaceLegends/OpenspaceSummary';
 
 interface Props {
+    handleDroneImage: (loading: boolean) => void;
     activeLayersIndication: {
         education: boolean;
         health: boolean;
@@ -17,7 +19,10 @@ interface Props {
         cultural: boolean;
         industry: boolean;
         communication: boolean;
+        openspace: boolean;
+        communityspace: boolean;
     };
+    resourceIdForLegend: number | null;
 }
 
 const itemSelector = (d: { label: string }) => d.label;
@@ -68,22 +73,50 @@ const CapacityAndResourcesLegend = (props: Props) => {
         }
     }
 
+    const showLayerControls = activeLegends.some(legend => legend.key === 'openspace' || legend.key === 'communityspace');
+    const openspaceOn = activeLegends.some(legend => legend.key === 'openspace');
+    const communityspaceOn = activeLegends.some(legend => legend.key === 'communityspace');
+    let legendTitle;
+
+    if (openspaceOn && communityspaceOn) {
+        legendTitle = 'Layer Boundary';
+    } else if (activeLegends.filter(e => String(e.key) !== 'openspace' && String(e.key) === 'communityspace').length > 0) {
+        legendTitle = 'Communityspace Boundary';
+    } else legendTitle = 'Openspace Boundary';
+
+    const { resourceIdForLegend, handleDroneImage } = props;
     return (
-        <div className={_cs(styles.wrapper, 'map-legend-container')}>
-            <div className={styles.title}>Capacity and Resources Legends</div>
-            <Legend
-                className={styles.legend}
+        <React.Fragment>
+            {!resourceIdForLegend && openspaceOn && (
+                <div className={_cs(styles.summary)}>
+                    <OpenspaceSummary />
+                </div>
+            )}
+            {showLayerControls && resourceIdForLegend && (
+                <OpenspaceLegends
+                    handleDroneImage={handleDroneImage}
+                    resourceIdForLegend={resourceIdForLegend}
+                    openspaceOn={openspaceOn}
+                    communityspaceOn={communityspaceOn}
+                    legendTitle={legendTitle}
+                />
+            )}
+            <div className={_cs(styles.wrapper, 'map-legend-container')}>
+                <div className={styles.title}>Capacity and Resources</div>
+                <Legend
+                    className={styles.legend}
                 // data={capacityAndResourcesLegendItems}
-                data={activeLegends}
-                itemClassName={styles.legendItem}
-                keySelector={itemSelector}
+                    data={activeLegends}
+                    itemClassName={styles.legendItem}
+                    keySelector={itemSelector}
             // iconSelector={iconSelector}
-                labelSelector={legendLabelSelector}
-                symbolClassNameSelector={classNameSelector}
-                colorSelector={legendColorSelector}
-                emptyComponent={null}
-            />
-        </div>
+                    labelSelector={legendLabelSelector}
+                    symbolClassNameSelector={classNameSelector}
+                    colorSelector={legendColorSelector}
+                    emptyComponent={null}
+                />
+            </div>
+        </React.Fragment>
     );
 };
 

@@ -22,6 +22,7 @@ interface Props {
     activeView: string;
     handleCarActive: Function;
     handleActiveLayerIndication: Function;
+    setResourceId: Function;
 }
 
 interface State {
@@ -72,6 +73,9 @@ export default class Details extends React.PureComponent<Props, State> {
                 layerGroupList: this.props.layerGroupList.filter(group => group.category === 'capacity_resource'),
                 handleCarActive: this.props.handleCarActive,
                 handleActiveLayerIndication: this.props.handleActiveLayerIndication,
+                handleDroneImage: this.props.handleDroneImage,
+                setResourceId: this.props.setResourceId,
+                droneImagePending: this.props.droneImagePending,
             }),
         },
         'climate-change': {

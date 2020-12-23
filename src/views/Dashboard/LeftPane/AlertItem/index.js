@@ -126,8 +126,8 @@ export default class AlertItem extends React.PureComponent {
         const {
             title,
             hazard,
-            // startedOn,
-            createdOn,
+            startedOn: createdOn,
+            // createdOn,
             referenceData,
         } = alert;
 

@@ -8,6 +8,8 @@
 }
 
 .main-content {
+    background: transparent !important;
+    border: 0 !important;
     position: absolute;
     bottom: var(--spacing-medium);
     left: calc(var(--width-left-panel) + var(--spacing-medium));

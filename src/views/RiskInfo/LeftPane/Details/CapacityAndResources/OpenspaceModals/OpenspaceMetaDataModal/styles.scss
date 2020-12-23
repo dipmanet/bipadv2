@@ -1,0 +1,27 @@
+.metaDAtaModal {
+    // display: flex;
+    background-color: var(--color-foreground);
+    width: 100%;
+    max-width: 70vw;
+    // height: 100%;
+    padding: 10px 0 !important;
+}
+
+.details {
+    padding-top: 8px;
+}
+
+.ListWithImage{
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+
+    img{
+        max-width: 290px;
+        margin: 3px;
+    }
+}
+
+.justifiedContent{
+    text-align: justify;
+}

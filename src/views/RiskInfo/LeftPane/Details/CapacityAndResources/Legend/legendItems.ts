@@ -1,7 +1,8 @@
 import styles from './styles.scss';
 
-type ToggleValues = 'education' | 'health' | 'finance' | 'governance' |
-'tourism' | 'cultural' | 'industry' | 'communication';
+type ToggleValues = 'education' | 'health' | 'finance' | 'governance'
+| 'tourism' | 'cultural' | 'industry' | 'communication' | 'openspace' |
+'communityspace';
 
 interface LegendItems {
     color: string;
@@ -18,6 +19,8 @@ const capacityAndResourcesLegendItems: LegendItems[] = [
     { color: '#c4b2bc', key: 'cultural', label: 'Cultural', style: styles.symbol },
     { color: '#a6a867', key: 'industry', label: 'Industry', style: styles.symbol },
     { color: '#efa8b8', key: 'communication', label: 'Communication', style: styles.symbol },
+    { color: '#297eff', key: 'openspace', label: 'Humanitarian Open Spaces', style: styles.symbol },
+    { color: '#FEE94E', key: 'communityspace', label: 'Community Spaces', style: styles.symbol },
 ];
 
 export default capacityAndResourcesLegendItems;

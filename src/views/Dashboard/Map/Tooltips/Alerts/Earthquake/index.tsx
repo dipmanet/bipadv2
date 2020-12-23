@@ -38,13 +38,16 @@ const EarthquakeToolTip = (
             magnitude,
             created_on: measuredOn,
             description: referenceDescription } } = referenceData || nullData;
+    const date = createdDate.split('T')[0];
+    const time = createdDate.split('T')[1].split('+')[0];
+    const timeOnly = time.split(':').slice(0, 2).join(':');
     return (
         <div className={styles.earthquakeTooltip}>
             <div className={styles.header}>
                 <div className={styles.title}>{epicenter ? `Earthquake at ${epicenter}` : title || 'N/A'}</div>
                 <div className={styles.date}>
                     { createdDate
-                        ? `${createdDate.split('T')[0]} | ${createdDate.split('T')[1].split('.')[0]} (NPT)`
+                        ? `${date} | ${timeOnly} (NPT)`
                         : 'N/A' }
                 </div>
             </div>

@@ -44,6 +44,8 @@ import CulturalFields from './CulturalFields';
 import TourismFields from './TourismFields';
 import CommunicationFields from './CommunicationFields';
 import IndustryFields from './IndustryFields';
+import OpenspaceFields from './OpenspaceFields';
+import CommunitySpaceFields from './CommunitySpaceFields';
 import schemaMap, { defaultSchema } from './schema';
 
 import styles from './styles.scss';
@@ -184,9 +186,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 interface ExtraFieldProps {
     title: string;
     resourceEnums: EnumItem[];
+    faramValues: FaramValues;
+    resourceId: number | undefined;
+    closeModal: () => void;
 }
 
-const ExtraFields = ({ title, resourceEnums }: ExtraFieldProps) => {
+const ExtraFields = ({
+    title,
+    resourceEnums,
+    faramValues,
+    resourceId,
+    closeModal,
+}: ExtraFieldProps) => {
     switch (title) {
         case 'education':
             return (
@@ -235,6 +246,24 @@ const ExtraFields = ({ title, resourceEnums }: ExtraFieldProps) => {
         case 'industry':
             return (
                 <IndustryFields />
+            );
+        case 'openspace':
+            return (
+                <OpenspaceFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    resourceId={resourceId}
+                    closeModal={closeModal}
+                />
+            );
+        case 'communityspace':
+            return (
+                <CommunitySpaceFields
+                    resourceEnums={resourceEnums}
+                    faramValues={faramValues}
+                    resourceId={resourceId}
+                    closeModal={closeModal}
+                />
             );
         default:
             return null;
@@ -378,7 +407,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 },
                 addResourcePostRequest: {
                     pending: addResourcePending,
-                },
+                }, addResourcePostRequest,
             },
         } = this.props;
 
@@ -397,6 +426,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             resourceEnums = this.filterEnumItem(enumOptions, resourceType);
         }
 
+        const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
@@ -450,22 +480,29 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 <ExtraFields
                                     title={resourceType}
                                     resourceEnums={resourceEnums}
+                                    resourceId={resourceId}
+                                    faramValues={faramValues}
+                                    closeModal={closeModal}
+                                    addResourcePostRequest={addResourcePostRequest}
                                 />
                             )
                         }
                     </ModalBody>
-                    <ModalFooter className={styles.footer}>
-                        <DangerButton onClick={closeModal}>
+                    {
+                        !hideButtons && (
+                            <ModalFooter className={styles.footer}>
+                                <DangerButton onClick={closeModal}>
                             Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={addResourcePending || editResourcePending}
-                        >
+                                </DangerButton>
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={pristine}
+                                    pending={addResourcePending || editResourcePending}
+                                >
                             Save
-                        </PrimaryButton>
-                    </ModalFooter>
+                                </PrimaryButton>
+                            </ModalFooter>
+                        )}
                 </Faram>
             </Modal>
         );

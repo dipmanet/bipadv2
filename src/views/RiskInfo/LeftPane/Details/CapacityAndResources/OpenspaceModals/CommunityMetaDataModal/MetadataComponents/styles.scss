@@ -1,0 +1,26 @@
+.mainTAble {
+    margin-top: 20px;
+}
+
+.template {
+    margin-top: 20px;
+}
+
+.templateTable {
+    margin-top: 10px;
+}
+
+.details {
+    padding-top: 10px;
+}
+
+.ListWithImage{
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+
+    img{
+        max-width: 290px;
+        margin: 3px;
+    }
+}

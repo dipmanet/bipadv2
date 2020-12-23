@@ -22,6 +22,7 @@ import styles from './styles.scss';
 // original interface does not have all the properties so extended
 interface RealTimePollutionExtended extends RealTimePollution {
     title?: string;
+    name?: string;
     createdOn?: string;
     aqiColor?: string;
 }
@@ -45,16 +46,16 @@ class MiniPollution extends React.PureComponent<Props> {
         super(props);
         this.pollutionHeader = [
             {
-                key: 'title',
+                key: 'name',
                 label: 'Location',
                 order: 1,
                 sortable: true,
-                comparator: (a, b) => compareString(a.title, b.title),
+                comparator: (a, b) => compareString(a.name, b.name),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { title } = row;
+                    const { name } = row;
 
-                    return (title) ? (
-                        <div>{title}</div>) : undefined;
+                    return (name) ? (
+                        <div>{name}</div>) : undefined;
                 },
             },
             {

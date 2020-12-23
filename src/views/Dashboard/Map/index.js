@@ -220,6 +220,7 @@ class AlertEventMap extends React.PureComponent {
                 description,
                 referenceType,
                 referenceData,
+                startedOn,
                 createdDate } } = feature;
         const data = referenceData ? JSON.parse(referenceData) : undefined;
 
@@ -229,7 +230,7 @@ class AlertEventMap extends React.PureComponent {
             alertClickLngLat: lngLat,
             alertReferenceType: referenceType,
             alertReferenceData: data,
-            alertCreatedDate: createdDate,
+            alertCreatedDate: startedOn,
         });
     }
 
@@ -363,7 +364,6 @@ class AlertEventMap extends React.PureComponent {
             ],
             icon => icon,
         );
-
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
