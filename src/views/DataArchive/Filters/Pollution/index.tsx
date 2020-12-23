@@ -16,7 +16,7 @@ import { AppState } from '#store/types';
 import { DAPollutionFiltersElement, PollutionStation } from '#types';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StationSelector from './Station';
-
+import { getDateDiff, isValidDate } from './utils';
 import styles from './styles.scss';
 
 interface ComponentProps {
@@ -30,6 +30,7 @@ interface ComponentProps {
 interface State {
     activeView: TabKey | undefined;
     faramValues: DAPollutionFiltersElement;
+    error: string;
 }
 interface PropsFromAppState {
     pollutionFilters: DAPollutionFiltersElement;
@@ -122,6 +123,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
             },
             station: {},
         },
+        error: '',
     };
 
     public componentDidMount() {
@@ -146,6 +148,7 @@ class PollutionFilters extends React.PureComponent<Props, State> {
                 <div className={styles.activeView}>
                     <PastDateRangeInput
                         faramElementName="dataDateRange"
+                        error={this.state.error}
                         // autoFocus
                     />
                 </div>
@@ -209,7 +212,26 @@ class PollutionFilters extends React.PureComponent<Props, State> {
     private handleSubmitClick = () => {
         const { setDataArchivePollutionFilter } = this.props;
         const { faramValues } = this.state;
-        if (faramValues) {
+        const { dataDateRange } = faramValues || {};
+        const { rangeInDays, startDate = '', endDate = '' } = dataDateRange || {};
+        let faramError = '';
+        if (rangeInDays === 'custom') {
+            if (!startDate || !endDate) {
+                faramError = 'Date values are empty';
+                this.setState({ error: faramError });
+            } else if (!isValidDate(startDate) || !isValidDate(endDate)) {
+                faramError = 'Invalid Date Values';
+                this.setState({ error: faramError });
+            } else if (startDate > endDate) {
+                faramError = 'Start date cannot be greater than End date';
+                this.setState({ error: faramError });
+            } else if (getDateDiff(startDate, endDate) > 365) {
+                faramError = 'Date range cannot be greater than one year';
+                this.setState({ error: faramError });
+            }
+        }
+        if (faramValues && !faramError) {
+            this.setState({ error: '' });
             setDataArchivePollutionFilter({ dataArchivePollutionFilters: faramValues });
         }
     }
