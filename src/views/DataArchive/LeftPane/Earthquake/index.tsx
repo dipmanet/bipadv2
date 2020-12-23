@@ -99,6 +99,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             ...transformRegion(eqFilters.region),
             ...transformMagnitude(eqFilters.magnitude),
             expand: ['province', 'district', 'municipality'],
+            limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchiveEarthquakeList } }) => {
             interface Response { results: PageType.DataArchiveEarthquake[] }
