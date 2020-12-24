@@ -14,21 +14,26 @@ interface Props {
 const PollutionLegend = (props: Props) => {
     const { legendData } = props;
     return (
-        <div className={styles.pollutionLegend}>
-            {
-                legendData.map((legendItem) => {
-                    const { id, label, fill } = legendItem;
-                    return (
-                        <div key={id} className={styles.legendItem}>
-                            <span className={styles.text}>{label}</span>
-                            <div
-                                className={styles.icon}
-                                style={{ backgroundColor: fill }}
-                            />
-                        </div>
-                    );
-                })
-            }
+        <div className={styles.wrapper}>
+            <div className={styles.headerText}>
+                No. of days when AQI level was
+            </div>
+            <div className={styles.pollutionLegend}>
+                {
+                    legendData.map((legendItem) => {
+                        const { id, label, fill } = legendItem;
+                        return (
+                            <div key={id} className={styles.legendItem}>
+                                <span className={styles.text}>{label}</span>
+                                <div
+                                    className={styles.icon}
+                                    style={{ backgroundColor: fill }}
+                                />
+                            </div>
+                        );
+                    })
+                }
+            </div>
         </div>
     );
 };
