@@ -49,6 +49,37 @@ const shouldDisplayNote = (periodCode: string) => {
     return status[periodCode];
 };
 
+const getParameter = (parameterCode: string) => {
+    const parameters: {[key: string]: string} = {
+        aqi: 'AQI',
+        PM1_I: 'PM 1',
+        PM10_I: 'PM 10',
+        PM25_I: 'PM 2.5',
+        T: 'Air Temparature',
+        TSP_I: 'Total Suspended Particulates',
+        RH_I: 'Relative Humidity',
+        WS_I: 'Wind Speed',
+        WD_I: 'Wind Direction',
+    };
+    return parameters[parameterCode];
+};
+
+const getPeriod = (periodCode: string) => {
+    const periods: {[key: string]: string} = {
+        hourly: 'Hourly',
+        daily: 'Daily average',
+        weekly: 'Weekly average',
+        monthly: 'Monthly average',
+    };
+    return periods[periodCode];
+};
+
+const getChartTitle = (parameterCode: string, periodCode: string) => {
+    const parameter = getParameter(parameterCode);
+    const period = getPeriod(periodCode);
+    return `${period} ${parameter} readings`;
+};
+
 const Graph = (props: Props) => {
     const {
         stationData,
@@ -61,7 +92,7 @@ const Graph = (props: Props) => {
     } = props;
     const code = parameterCode ? parameterCode.replace('.', '') : '';
     const displayNote = shouldDisplayNote(periodCode || '');
-
+    const calculatedTitle = getChartTitle(code || '', periodCode || '');
     if (stationData.length === 0) {
         return (
             <NoData
@@ -78,7 +109,7 @@ const Graph = (props: Props) => {
             >
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        {chartTitle || DEFAULT_CHART_TITLE}
+                        {chartTitle || calculatedTitle || DEFAULT_CHART_TITLE}
                     </h4>
                     <div
                         className={styles.downloadGroup}
