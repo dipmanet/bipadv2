@@ -41,7 +41,7 @@ interface Props {
     legendData?: LegendData[];
 }
 
-const DEFAULT_CHART_TITLE = 'Occurence Statistics';
+const DEFAULT_CHART_TITLE = 'Occurence Statistics (Station Wise)';
 
 const handleSaveClick = (downloadId: string) => {
     saveChart(downloadId || 'chartIdBipad', downloadId || 'chartIdBipad');

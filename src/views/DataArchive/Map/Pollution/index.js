@@ -174,7 +174,7 @@ class PollutionMap extends React.PureComponent {
                 </div>
 
                 <div className={styles.description}>
-                    <div className={styles.key}>PH 2.5:</div>
+                    <div className={styles.key}>PM 2.5:</div>
                     <div className={styles.value}>{aqi}</div>
                 </div>
 
