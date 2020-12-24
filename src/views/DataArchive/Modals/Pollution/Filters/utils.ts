@@ -1,5 +1,7 @@
 import { Errors } from '../types';
 
+const MINIMUM_DATA_ARCHIVE_POLLUTION_DATE = '2020-10-15';
+
 export const isValidDate = (dateString: string = '') => {
     const regEx = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateString.match(regEx)) return false; // Invalid format
@@ -54,6 +56,15 @@ export const getErrors = (fv: any) => {
             type: 'Date',
             err: 'More than 1 year time period selected',
             message: 'Time period cannot be greater than one year',
+        };
+        errors.push(error);
+    }
+
+    if (endDate < MINIMUM_DATA_ARCHIVE_POLLUTION_DATE) {
+        error = {
+            type: 'Date',
+            err: 'No data archive pollution data before 2020-10-15',
+            message: 'Data is available from 2020-10-15 onwards only',
         };
         errors.push(error);
     }
