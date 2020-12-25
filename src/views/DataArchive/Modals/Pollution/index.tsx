@@ -204,6 +204,8 @@ const PollutionModal = (props: Props) => {
                             parameterCode={parameterCode}
                             periodCode={periodCode}
                             isInitial={isInitial}
+                            stationName={stationName}
+                            filterValues={filterValues}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>

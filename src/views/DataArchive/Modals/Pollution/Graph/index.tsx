@@ -15,7 +15,7 @@ import Button from '#rsca/Button';
 import {
     saveChart,
 } from '#utils/common';
-import { ArchivePollution, ChartData } from '../types';
+import { ArchivePollution, ChartData, FaramValues } from '../types';
 import { renderLegendName } from '../utils';
 import NoData from '../NoData';
 import CustomTooltip from './Tooltip';
@@ -30,6 +30,8 @@ interface Props {
     downloadId?: string;
     chartTitle?: string;
     isInitial?: boolean;
+    stationName: string;
+    filterValues: FaramValues;
 }
 
 const DEFAULT_CHART_TITLE = 'Period Parameter Graph';
@@ -74,10 +76,15 @@ const getPeriod = (periodCode: string) => {
     return periods[periodCode];
 };
 
-const getChartTitle = (parameterCode: string, periodCode: string) => {
+const getChartTitle = (
+    parameterCode: string,
+    periodCode: string,
+    stationName: string,
+    date: string,
+) => {
     const parameter = getParameter(parameterCode);
     const period = getPeriod(periodCode);
-    return `${period} ${parameter} readings`;
+    return `${period} ${parameter} readings, ${stationName}, ${date}`;
 };
 
 const Graph = (props: Props) => {
@@ -89,10 +96,18 @@ const Graph = (props: Props) => {
         chartTitle,
         downloadId,
         isInitial,
+        stationName,
+        filterValues: { dataDateRange: { startDate, endDate } },
     } = props;
     const code = parameterCode ? parameterCode.replace('.', '') : '';
     const displayNote = shouldDisplayNote(periodCode || '');
-    const calculatedTitle = getChartTitle(code || '', periodCode || '');
+    const date = `${startDate} to ${endDate}`;
+    const calculatedTitle = getChartTitle(
+        code || '',
+        periodCode || '',
+        stationName,
+        date,
+    );
     if (stationData.length === 0) {
         return (
             <NoData
