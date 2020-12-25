@@ -103,14 +103,11 @@ const Graph = (props: Props) => {
     }
     return (
         <div className={styles.visualizations}>
-            {displayNote && <Note />}
             <div
                 className={styles.periodParameterChart}
             >
                 <header className={styles.header}>
-                    <h4 className={styles.heading}>
-                        {chartTitle || calculatedTitle || DEFAULT_CHART_TITLE}
-                    </h4>
+                    {displayNote && <Note />}
                     <div
                         className={styles.downloadGroup}
                         title="Download Chart"
@@ -126,38 +123,43 @@ const Graph = (props: Props) => {
                     </div>
 
                 </header>
-                <div
-                    className={styles.chart}
-                    id={downloadId || DEFAULT_DOWNLOAD_ID}
-                >
-                    <ResponsiveContainer className={styles.container}>
-                        <BarChart
-                            data={filterWiseChartData}
-                            margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="label" />
-                            <YAxis />
-                            <Tooltip
-                                content={<CustomTooltip />}
-                            />
-                            <Legend />
-                            <Bar name={renderLegendName(code)} dataKey={code} fill="#8884d8" />
-                            {
-                                code === 'aqi'
-                                && (
-                                    <ReferenceLine
-                                        y={150}
-                                        // label="Threshold"
-                                        stroke="#89023E"
-                                        strokeWidth={2}
-                                        isFront
-                                        strokeDasharray="3 2"
-                                    />
-                                )
-                            }
-                        </BarChart>
-                    </ResponsiveContainer>
+                <div className={styles.chartWrapper} id={downloadId || DEFAULT_DOWNLOAD_ID}>
+                    <h4 className={styles.heading}>
+                        {chartTitle || calculatedTitle || DEFAULT_CHART_TITLE}
+                    </h4>
+                    <div
+                        className={styles.chart}
+                        // id={downloadId || DEFAULT_DOWNLOAD_ID}
+                    >
+                        <ResponsiveContainer className={styles.container}>
+                            <BarChart
+                                data={filterWiseChartData}
+                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="label" />
+                                <YAxis />
+                                <Tooltip
+                                    content={<CustomTooltip />}
+                                />
+                                <Legend verticalAlign="bottom" height={36} />
+                                <Bar name={renderLegendName(code)} dataKey={code} fill="#8884d8" />
+                                {
+                                    code === 'aqi'
+                                    && (
+                                        <ReferenceLine
+                                            y={150}
+                                            // label="Threshold"
+                                            stroke="#89023E"
+                                            strokeWidth={2}
+                                            isFront
+                                            strokeDasharray="3 2"
+                                        />
+                                    )
+                                }
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
             </div>
         </div>
