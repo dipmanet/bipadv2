@@ -133,14 +133,14 @@ class ProjectItem extends React.PureComponent {
                     <h4 className={styles.heading}>
                         {title}
                     </h4>
-                    <TextOutput
+                    {/* <TextOutput
                         className={styles.budget}
                         label="Budget"
                         value={budget}
                         isNumericValue
                         alwaysVisible
                         prefix="Rs. "
-                    />
+                    /> */}
                     <div className={styles.dateContainer}>
                         <TextOutput
                             className={styles.startDate}
