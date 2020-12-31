@@ -41,15 +41,15 @@ const handleSaveClick = (downloadId?: string) => {
     saveChart(downloadId || DEFAULT_DOWNLOAD_ID, downloadId || DEFAULT_DOWNLOAD_ID);
 };
 
-const shouldDisplayNote = (periodCode: string) => {
-    const status: {[key: string]: boolean} = {
-        hourly: false,
-        daily: true,
-        weekly: true,
-        monthly: true,
-    };
-    return status[periodCode];
-};
+// const shouldDisplayNote = (periodCode: string) => {
+//     const status: {[key: string]: boolean} = {
+//         hourly: false,
+//         daily: true,
+//         weekly: true,
+//         monthly: true,
+//     };
+//     return status[periodCode];
+// };
 
 const getParameter = (parameterCode: string) => {
     const parameters: {[key: string]: string} = {
@@ -100,7 +100,7 @@ const Graph = (props: Props) => {
         filterValues: { dataDateRange: { startDate, endDate } },
     } = props;
     const code = parameterCode ? parameterCode.replace('.', '') : '';
-    const displayNote = shouldDisplayNote(periodCode || '');
+    // const displayNote = shouldDisplayNote(periodCode || '');
     const date = `${startDate} to ${endDate}`;
     const calculatedTitle = getChartTitle(
         code || '',
@@ -122,7 +122,8 @@ const Graph = (props: Props) => {
                 className={styles.periodParameterChart}
             >
                 <header className={styles.header}>
-                    {displayNote && <Note />}
+                    {/* {displayNote && <Note />} */}
+                    <Note />
                     <div
                         className={styles.downloadGroup}
                         title="Download Chart"
