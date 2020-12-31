@@ -6,23 +6,23 @@ import styles from './styles.scss';
 
 interface Props {
     title: string;
-    count: number | string;
+    // count: number | string;
     icon: string;
     alt: string;
-    pending: boolean;
+    // pending: boolean;
     handleOptionClick: Function;
 }
 
-const Option = ({ title, count, icon, alt, handleOptionClick, pending }: Props) => (
-    <div role="presentation" onClick={() => !pending && handleOptionClick(title)} className={styles.option}>
+const Option = ({ title, icon, alt, handleOptionClick }: Props) => (
+    <div role="presentation" onClick={() => handleOptionClick(title)} className={styles.option}>
         <div className={styles.left}>
             <div className={styles.title}>{title}</div>
-            <div className={styles.subtitle}>
+            {/* <div className={styles.subtitle}>
                 Total count:
                 {' '}
                 {' '}
                 {count}
-            </div>
+            </div> */}
         </div>
         <div className={styles.spacer} />
         <div className={styles.right}>
@@ -37,17 +37,17 @@ const Option = ({ title, count, icon, alt, handleOptionClick, pending }: Props) 
 
 Option.defaultProps = {
     title: 'Not Available',
-    count: 0,
+    // count: 0,
     alt: 'No Image',
     icon: 'No Icon',
 };
 
 Option.propTypes = {
     title: PropTypes.string,
-    count: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
+    // count: PropTypes.oneOfType([
+    //     PropTypes.string,
+    //     PropTypes.number,
+    // ]),
     alt: PropTypes.string,
     icon: PropTypes.string,
 };
