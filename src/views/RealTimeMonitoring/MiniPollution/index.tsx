@@ -84,11 +84,12 @@ class MiniPollution extends React.PureComponent<Props> {
                 modifier: (row: RealTimePollutionExtended) => {
                     const { modifiedOn } = row;
                     if (modifiedOn) {
-                        const date = new Date(modifiedOn);
+                        // const date = new Date(modifiedOn);
                         return (
                             <div>
                                 {/* parsing date to time format */}
-                                {date.toISOString().split('T')[1].split('.')[0]}
+                                {/* {date.toISOString().split('T')[1].split('.')[0]} */}
+                                {modifiedOn.split('T')[1].split('.')[0]}
                             </div>
                         );
                     } return undefined;

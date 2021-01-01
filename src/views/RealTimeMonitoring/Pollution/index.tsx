@@ -78,9 +78,10 @@ class Pollution extends React.PureComponent<Props> {
                 modifier: (row: RealTimePollutionExtended) => {
                     const { modifiedOn } = row;
                     if (modifiedOn) {
-                        const date = new Date(modifiedOn);
+                        // const date = new Date(modifiedOn);
                         // parsing date to time format
-                        return date.toISOString().split('T')[1].split('.')[0];
+                        // return date.toISOString().split('T')[1].split('.')[0];
+                        return modifiedOn.split('T')[1].split('.')[0];
                     } return undefined;
                 },
             },
