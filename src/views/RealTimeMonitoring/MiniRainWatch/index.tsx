@@ -148,18 +148,18 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             ),
         },
         {
-            key: 'createdOn',
+            key: 'modifiedOn',
             label: 'Date',
             order: 3,
             sortable: true,
-            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+            comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
             modifier: (row: RealTimeRain) => {
-                const { createdOn } = row;
+                const { modifiedOn } = row;
 
-                return (createdOn) ? (
+                return (modifiedOn) ? (
                     <div style={{ width: '60px' }}>
                         {/* parsing date to appropiate format */}
-                        {createdOn.substring(0, createdOn.indexOf('T'))}
+                        {modifiedOn.substring(0, modifiedOn.indexOf('T'))}
                     </div>
                 ) : undefined;
             },
@@ -170,9 +170,9 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             order: 4,
             sortable: false,
             modifier: (row: RealTimeRain) => {
-                const { createdOn } = row;
-                if (createdOn) {
-                    const date = new Date(createdOn);
+                const { modifiedOn } = row;
+                if (modifiedOn) {
+                    const date = new Date(modifiedOn);
                     return (
                         <div>
                             {/* parsing date to time format */}

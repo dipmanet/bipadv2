@@ -160,17 +160,6 @@ class HazardSelectionInput extends React.PureComponent {
                 )
 
                 }
-                <MultiListSelection
-                    className={styles.naturalHazardSelectionInput}
-                    titleSelector={hazardTypeTitleSelector}
-                    keySelector={hazardTypeKeySelector}
-                    labelSelector={hazardTypeLabelSelector}
-                    iconSelector={hazardTypeIconSelector}
-                    label="Natural"
-                    options={withoutFire}
-                    value={groupedValues.natural}
-                    onChange={this.handleNaturalInputChange}
-                />
 
                 <MultiListSelection
                     className={styles.artificialHazardSelectionInput}
