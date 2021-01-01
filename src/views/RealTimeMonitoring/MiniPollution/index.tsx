@@ -25,6 +25,7 @@ interface RealTimePollutionExtended extends RealTimePollution {
     name?: string;
     createdOn?: string;
     aqiColor?: string;
+    modifiedOn?: string;
 }
 
 interface Props {
@@ -59,18 +60,18 @@ class MiniPollution extends React.PureComponent<Props> {
                 },
             },
             {
-                key: 'createdOn',
+                key: 'modifiedOn',
                 label: 'Date',
                 order: 2,
                 sortable: true,
-                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
+                    const { modifiedOn } = row;
 
-                    return (createdOn) ? (
+                    return (modifiedOn) ? (
                         <div>
                             {/* parsing date to appropiate format */}
-                            {createdOn.substring(0, createdOn.indexOf('T'))}
+                            {modifiedOn.substring(0, modifiedOn.indexOf('T'))}
                         </div>
                     ) : undefined;
                 },
@@ -81,9 +82,9 @@ class MiniPollution extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
-                    if (createdOn) {
-                        const date = new Date(createdOn);
+                    const { modifiedOn } = row;
+                    if (modifiedOn) {
+                        const date = new Date(modifiedOn);
                         return (
                             <div>
                                 {/* parsing date to time format */}
