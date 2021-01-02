@@ -9,6 +9,9 @@ import CommonMap from '#components/CommonMap';
 import * as PageTypes from '#store/atom/page/types';
 import { AppState } from '#store/types';
 
+import LayerSwitch from '#components/LayerSwitch';
+import LayerToggle from '#components/LayerToggle';
+
 import {
     MapStateElement,
     AlertElement,
@@ -16,6 +19,7 @@ import {
     FiltersElement,
     DataDateRangeValueElement,
 } from '#types';
+import MapDownloadButton from '#components/MapDownloadButton';
 
 import {
     mapStyleSelector,
@@ -27,6 +31,7 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 
+import styles from './styles.scss';
 
 interface State {
     hoveredAlertId: AlertElement['id'] | undefined;
@@ -45,13 +50,6 @@ interface PropsFromAppState {
     hazardTypes: Obj<PageTypes.HazardType>;
     filters: FiltersElement;
 }
-interface PropsFromDispatch {
-    setEventList: typeof setEventListAction;
-    setAlertList: typeof setAlertListActionDP;
-    setDashboardHazardTypes: typeof setDashboardHazardTypesAction;
-    setHazardTypes: typeof setHazardTypesAction;
-    setFilters: typeof setFiltersAction;
-}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -67,11 +65,14 @@ const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-class VizRisk extends PureComponent<Props, State> {
+class VizRisk extends React.PureComponent<Props, State> {
     public render() {
+        const {
+            mapStyle,
+        } = this.props;
+        console.log('mapstyle', mapStyle);
         return (
-            <div className="vrMainContainer">
-                <h1>Viz Risk module</h1>
+            <React.Fragment>
                 <Map
                     mapStyle={mapStyle}
                     mapOptions={{
@@ -88,16 +89,24 @@ class VizRisk extends PureComponent<Props, State> {
                 >
                     <MapContainer className={styles.map2} />
                     <CommonMap
-                        sourceKey="comparative-second"
-                        region={faramValues.region2}
-                        debug
+                        sourceKey="viz-risk-test"
+                        region={{ adminLevel: 1, geoarea: 3 }}
                     />
+                    <LayerSwitch
+                        className={styles.layerSwitch}
+                    />
+                    <LayerToggle />
                 </Map>
+
                 <Page
                     hideMap
                     hideFilter
                 />
-            </div>
+                <div className={styles.vrSideBar}>
+                    <h1> Sidebar Title </h1>
+                    <p> Descriptions go here</p>
+                </div>
+            </React.Fragment>
         );
     }
 }

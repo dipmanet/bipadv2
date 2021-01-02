@@ -1,0 +1,29 @@
+.map2{
+    flex-basis: calc(50% - var(--spacing-small) * 2);
+    margin: 0 var(--spacing-small);
+    height: 500px;
+    width: 700px;
+    position: absolute;
+    top: 100px;
+    left: 200px;
+}
+
+.layer-switch {
+    text-align: center;
+
+    :global {
+        .dropdown-button {
+            padding: var(--spacing-small) var(--spacing-medium);
+            font-size: var(--font-size-large);
+        }
+    }
+}
+
+.vrSideBar{
+    border: 1px solid gray;
+    position: absolute;
+    left:910px;
+    height:500px;
+    top:100px;
+    padding: 20px;
+}
