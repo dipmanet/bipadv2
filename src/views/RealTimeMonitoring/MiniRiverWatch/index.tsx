@@ -67,7 +67,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         status,
                         waterLevel,
                     } = row;
-
+                    console.log(Math.round(waterLevel));
                     const className = _cs(
                         styles.waterLevel,
                         status === 'BELOW WARNING LEVEL' && styles.below,
@@ -77,7 +77,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
 
                     return (waterLevel) ? (
                         <div className={className}>
-                            {waterLevel}
+                            {waterLevel.toFixed(3)}
                             m
                         </div>
                     ) : undefined;
