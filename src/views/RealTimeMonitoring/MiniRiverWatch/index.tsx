@@ -67,7 +67,6 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         status,
                         waterLevel,
                     } = row;
-                    console.log(Math.round(waterLevel));
                     const className = _cs(
                         styles.waterLevel,
                         status === 'BELOW WARNING LEVEL' && styles.below,
@@ -91,7 +90,6 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.waterLevelOn, b.waterLevelOn),
                 modifier: (row: RealTimeRiver) => {
                     const { waterLevelOn } = row;
-
                     return (waterLevelOn) ? (
                         <div style={{ width: '60px' }}>
                             {/* parsing date to appropiate format */}
