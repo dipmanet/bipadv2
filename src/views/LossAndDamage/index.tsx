@@ -453,7 +453,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <ModalButton
                                     disabled={pending}
                                     className={styles.compareButton}
-                                    modal={<Comparative lossAndDamageList={filteredData} />}
+                                    modal={<Comparative lossAndDamageList={incidentList} />}
                                 >
                                     Compare regions
                                 </ModalButton>
