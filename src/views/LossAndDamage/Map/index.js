@@ -80,11 +80,10 @@ export default class LossAndDamageMap extends React.PureComponent {
             metricKey,
             onMetricChange,
         } = this.props;
-
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         const mapState = this.generateMapState(geoareas, mapping, metric);
-
+        console.log('mapstate here:', mapState);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
 

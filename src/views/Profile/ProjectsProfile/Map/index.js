@@ -75,12 +75,13 @@ export default class ProjectsProfileMap extends React.PureComponent {
             regions,
             regionLevel,
         } = this.props;
-
         const mapState = this.generateMapState(projects, regionLevel, regions);
         const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(maxValue, 0, colorGrade);
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         const colorPaint = this.generatePaint(color);
+        console.log('map state here: ', mapState);
+        console.log('color paint here: ', colorPaint);
 
         return (
             <React.Fragment>

@@ -93,7 +93,7 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/VizRisk'),
         navbar: true,
         disabled: false,
-        iconName: 'play',
+        iconName: 'eye',
     },
     {
         name: 'fourHundredThree',
