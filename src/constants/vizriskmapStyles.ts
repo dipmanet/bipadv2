@@ -132,15 +132,16 @@ export default {
     },
     municipalityLabel: {
         paint: {
-            'text-color': '#00695c',
-            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            // 'text-color': '#00695c',
+            'text-color': '#333333',
+            // 'text-halo-color': 'rgba(255, 255, 255, 0.7)',
             'text-halo-width': 2,
         },
         layout: {
             visibility: 'visible',
             'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
-            'text-size': 10,
+            'text-size': 9,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
