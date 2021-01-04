@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { _cs, mapToList, isNotDefined } from '@togglecorp/fujs';
+import { mapToList, isNotDefined } from '@togglecorp/fujs';
 import Page from '#components/Page';
 
 
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 
-import CommonMap from '#components/CommonMap';
 import * as PageTypes from '#store/atom/page/types';
-import ChoroplethMap from '#components/ChoroplethMap';
+import VizriskMap from '#components/VizriskMap';
 
 import LayerSwitch from '#components/LayerSwitch';
 import LayerToggle from '#components/LayerToggle';
@@ -89,6 +88,7 @@ class VizRisk extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
+        'fill-opacity': 0.85,
     }))
 
     public generateMapState1 = memoize((regionLevel, regions) => {
@@ -133,7 +133,6 @@ class VizRisk extends React.PureComponent<Props, State> {
         const regionLevel = 3;
 
         const mapping = [];
-        // Object.keys(municipalities).forEach(municipality => console.log(municipality));
         if (municipalities) {
             municipalities.map((item) => {
                 const { id } = item;
@@ -143,13 +142,13 @@ class VizRisk extends React.PureComponent<Props, State> {
                 return null;
             });
         }
-        console.log('mapping: ', mapping);
-
         // const mapState = this.generateMapState(regionLevel, regions);
         // const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-
+        const layout = {
+            'line-color': '#fff',
+        };
         const {
             mapStyle,
         } = this.props;
@@ -174,7 +173,7 @@ class VizRisk extends React.PureComponent<Props, State> {
                         sourceKey="viz-risk-test"
                         region={{ adminLevel: 2, geoarea: 65 }}
                     /> */}
-                    <ChoroplethMap
+                    <VizriskMap
                         paint={colorPaint}
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 2, geoarea: 65 }}
