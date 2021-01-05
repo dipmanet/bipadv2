@@ -1,49 +1,57 @@
-.vizrisknmenupagecontainer{
+.mainVzContainer{
     position: relative;
     width: 100vw;
-    background: rgba(0,68,107,1);
+    background: #003e5f;
     height:100vh;
     margin-top: -12px;
-
-    .hamburgerBtnContainer{
+    z-index: 2;
+    .vizrisknmenupagecontainer{
+        .vizrisknmenupage{
+            position: absolute;
+            padding: 50px 0 50px 200px;
+            // border: 1px solid white;
+            
+    
+            .menuTitle{
+                color: rgb(175, 220, 241);
+            }
+    
+            .menuItems{
+                color: rgb(175, 220, 241);
+    
+            }
+        }
+    }
+    
+    .navBtnsContainer{
         display: flex;
-        position: absolute;
-        width: 150px;
-        justify-content: flex-start;
-        top: 50px;
-        left: 100px;
-        .cropper{
+        position: relative;
+        height: 85px;
+        top: 10px;
+        left: 0px;
+        z-index: 2;
+        justify-content: space-between;
+        align-items: center;
+    
+        .hamburgerBtn{
             position: relative;
+            top: 0px;
+            left: 30px;
+            width: 80px;
+            height: 8 0px;
+            color: rgb(175, 220, 241);
+            font-size: 50px;    
+    
+        }
+        .cropper{
+            position: absolute;
             width: 15px;
             height:10px;
-            top: 30px;
-            left: -20px;
-            background-color: rgba(0,68,107,1);
+            top: 27px;
+            left: 62px;
+            background-color: #003e5f;
+            border: 1 px solid white;
         }
     }
-
-    .vizrisknmenupage{
-        position: absolute;
-        padding: 150px 0 50px 200px;
-
-
-        .menuTitle{
-            color: rgb(175, 220, 241);
-        }
-
-        .menuItems{
-            color: rgb(175, 220, 241);
-
-        }
-    }
-
-    .hamburgerBtn{
-        position: relative;
-        // top: 30px;
-        // left: 60px;
-        // width: 50px;
-        // height: 40px;
-        color: rgb(175, 220, 241);
-        font-size: 50px;    
-    }
+    
 }

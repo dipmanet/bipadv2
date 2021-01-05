@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { mapToList, isNotDefined } from '@togglecorp/fujs';
-import Page from '#components/Page';
+import Button from '#rsca/Button';
+import Icon from '#rscg/Icon';
 
 
 import Map from '#re-map';
@@ -65,7 +66,7 @@ const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-class VizRisk extends React.PureComponent<Props, State> {
+class SlideOne extends React.PureComponent<Props, State> {
     public generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -139,21 +140,19 @@ class VizRisk extends React.PureComponent<Props, State> {
         // const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-        const layout = {
-            'line-color': '#fff',
-        };
+
         const {
             mapStyle,
         } = this.props;
         return (
             <div className={styles.vzMainContainer}>
+
                 <Map
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
                         minZoom: 5,
                     }}
-                                        // debug
 
                     scaleControlShown
                     scaleControlPosition="bottom-right"
@@ -170,12 +169,26 @@ class VizRisk extends React.PureComponent<Props, State> {
                         mapState={mapping}
                     />
                 </Map>
-
-                <Page
-                    hideMap
-                    hideFilter
-                />
                 <div className={styles.vrSideBar}>
+                    <div className={styles.nextPrevBtnContainer}>
+                        <Button
+                            transparent
+                        >
+                            <Icon
+                                name="chevronLeft"
+                                className={styles.nextPrevBtn}
+                            />
+                        </Button>
+                        <Button
+                            transparent
+                        >
+                            <Icon
+                                name="chevronRight"
+                                className={styles.nextPrevBtn}
+                            />
+                        </Button>
+                    </div>
+
                     <h1> Rajpur Municipality </h1>
                     <p>
                         {' '}
@@ -205,4 +218,4 @@ class VizRisk extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps)(VizRisk);
+export default connect(mapStateToProps)(SlideOne);
