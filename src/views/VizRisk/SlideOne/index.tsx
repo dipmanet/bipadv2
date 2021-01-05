@@ -4,8 +4,7 @@ import memoize from 'memoize-one';
 import { mapToList, isNotDefined } from '@togglecorp/fujs';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
-
-
+import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 
@@ -67,6 +66,8 @@ const mapStateToProps = state => ({
 });
 
 class SlideOne extends React.PureComponent<Props, State> {
+    public static contextType = VizRiskContext;
+
     public generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -119,6 +120,9 @@ class SlideOne extends React.PureComponent<Props, State> {
     });
 
     public render() {
+        const { currentPage } = this.context;
+        console.log(currentPage);
+
         const {
             regions,
             municipalities,
@@ -146,7 +150,6 @@ class SlideOne extends React.PureComponent<Props, State> {
         } = this.props;
         return (
             <div className={styles.vzMainContainer}>
-
                 <Map
                     mapStyle={mapStyle}
                     mapOptions={{
@@ -170,46 +173,27 @@ class SlideOne extends React.PureComponent<Props, State> {
                     />
                 </Map>
                 <div className={styles.vrSideBar}>
-                    <div className={styles.nextPrevBtnContainer}>
-                        <Button
-                            transparent
-                        >
-                            <Icon
-                                name="chevronLeft"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                        <Button
-                            transparent
-                        >
-                            <Icon
-                                name="chevronRight"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                    </div>
-
                     <h1> Rajpur Municipality </h1>
                     <p>
                         {' '}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud
-                        exercitation
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud
+        exercitation
 
                     </p>
                     <h2>Climate</h2>
                     <p>
                         {' '}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit
-                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna
+        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+        ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit
+        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia
+        deserunt mollit anim id est laborum
 
                     </p>
                 </div>

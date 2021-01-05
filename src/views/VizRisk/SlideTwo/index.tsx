@@ -179,24 +179,6 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     hideFilter
                 />
                 <div className={styles.vrSideBar}>
-                    <div className={styles.nextPrevBtnContainer}>
-                        <Button
-                            transparent
-                        >
-                            <Icon
-                                name="chevronLeft"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                        <Button
-                            transparent
-                        >
-                            <Icon
-                                name="chevronRight"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                    </div>
 
                     <h1>This is Slide two</h1>
 
