@@ -1,0 +1,15 @@
+.vrLegendContainer{
+    display: flex;
+    flex-basis: fit-content;
+    flex-direction: column;
+    background-color: white;
+    position: relative;
+    top:550px;
+    left:100px;
+    z-index: 3;
+    width: 110px;
+    padding: 12px 0px;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.9;
+}

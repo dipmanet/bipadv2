@@ -90,35 +90,6 @@ class SlideOne extends React.PureComponent<Props, State> {
         'fill-opacity': 0.85,
     }))
 
-    public generateMapState1 = memoize((regionLevel, regions) => {
-        const accessor = (
-            (isNotDefined(regionLevel) && 'province')
-            || (regionLevel === 1 && 'district')
-            || (regionLevel === 2 && 'municipality')
-            || (regionLevel === 3 && 'ward')
-        );
-        const projects = [];
-        const mapping = {};
-        projects.forEach((project) => {
-            const values = project[accessor];
-            Object.keys(values).forEach((id) => {
-                mapping[id] = (mapping[id] || 0) + 1;
-            });
-        });
-
-        const selectedRegion = (
-            (isNotDefined(regionLevel) && regions.provinces)
-            || (regionLevel === 1 && regions.districts)
-            || (regionLevel === 2 && regions.municipalities)
-            || (regionLevel === 3 && regions.wards)
-        );
-
-        return mapToList(
-            selectedRegion,
-            (_, key) => ({ id: key, value: mapping[key] || 0 }),
-        );
-    });
-
     public render() {
         const { currentPage } = this.context;
         console.log(currentPage);

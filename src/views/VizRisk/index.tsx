@@ -6,10 +6,7 @@ import Button from '#rsca/Button';
 import SlideOne from './SlideOne';
 import SlideTwo from './SlideTwo';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
-
-interface Props {
-    handleOptionClick: Function;
-}
+import VRSetting from './Setting';
 
 const slides = [<SlideOne />, <SlideTwo />];
 
@@ -27,9 +24,16 @@ const VizRiskMainPage = (props: Props) => {
     };
 
     const handleChevronRightClick = () => {
-        if (currentPage < 2) { setCurrentPage(currentPage + 1); } else { setCurrentPage(0); }
+        if (currentPage < (slides.length - 1)) { setCurrentPage(currentPage + 1); }
     };
 
+    const handleSettingsIconClick = () => {
+        console.log('settings cliekd');
+    };
+
+    const handleChevronLeftClick = () => {
+        if (currentPage > 0) { setCurrentPage(currentPage - 1); }
+    };
     const renderPage = (page: number) => slides[page];
     const vrcontextProps: VizRiskContextProps = {
         currentPage,
@@ -44,26 +48,33 @@ const VizRiskMainPage = (props: Props) => {
                     hideFilter
                 />
                 <div className={styles.navBtnsContainer}>
-                    <div className={styles.nextPrevBtnContainer}>
-                        <Button
-                            transparent
-                        >
-                            <Icon
-                                name="chevronLeft"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                        <Button
-                            transparent
-                            onClick={handleChevronRightClick}
+                    {!showMenu && (
+                        <div className={styles.nextPrevBtnContainer}>
+                            <Button
+                                transparent
+                                onClick={handleChevronLeftClick}
+                                disabled={currentPage === 0}
+                            >
+                                <Icon
+                                    name="chevronLeft"
+                                    className={currentPage === 0
+                                        ? styles.prevBtnDisable : styles.nextPrevBtn}
+                                />
+                            </Button>
+                            <Button
+                                transparent
+                                onClick={handleChevronRightClick}
+                                disabled={currentPage === (slides.length - 1)}
+                            >
+                                <Icon
+                                    name="chevronRight"
+                                    className={currentPage === (slides.length - 1)
+                                        ? styles.prevBtnDisable : styles.nextPrevBtn}
+                                />
+                            </Button>
+                        </div>
+                    )}
 
-                        >
-                            <Icon
-                                name="chevronRight"
-                                className={styles.nextPrevBtn}
-                            />
-                        </Button>
-                    </div>
                     <div className={styles.hamburgerBtn}>
                         <Button
                             transparent
@@ -77,6 +88,7 @@ const VizRiskMainPage = (props: Props) => {
 
                         <div className={styles.cropper} />
                     </div>
+                    <VRSetting />
 
                 </div>
 

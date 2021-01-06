@@ -89,6 +89,7 @@ const iconNames = {
     document: 'ion-android-document',
     textDocument: 'ion-document-text',
     cart: 'ion-ios-cart-outline',
+    cog: 'ion-ios-cog',
 };
 
 export default iconNames;

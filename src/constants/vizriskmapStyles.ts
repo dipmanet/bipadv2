@@ -69,7 +69,7 @@ export default {
     municipality: {
         outline: {
             // 'line-color': '#72b6ac',
-            'line-color': '#444444',
+            'line-color': '#777777',
             'line-width': 0.4,
         },
         choroplethOutline: {
@@ -85,8 +85,8 @@ export default {
     ward: {
         outline: {
             // 'line-color': '#d0e8e4',
-            'line-color': '#9883E5',
-            'line-width': 1,
+            'line-color': '#bbbbbb',
+            'line-width': 0.4,
         },
         choroplethOutline: {
             'line-color': '#000000',
@@ -139,7 +139,7 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Bold'],
+            'text-font': ['Source Sans Pro Bold'],
             'text-field': ['get', 'title'],
             'text-size': 9,
             'text-justify': 'center',

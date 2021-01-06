@@ -41,7 +41,11 @@
             display: flex;
             // border: 1px solid white;
             .nextPrevBtn{
-                color:  rgb(175, 220, 241);
+                color: white;
+                font-size: 15px;
+            }
+            .prevBtnDisable{
+                color:  rgb(88, 193, 241);
                 font-size: 15px;
             }
         }
@@ -55,6 +59,7 @@
             font-size: 50px;    
     
         }
+
         .cropper{
             position: absolute;
             width: 15px;

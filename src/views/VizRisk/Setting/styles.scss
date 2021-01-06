@@ -1,0 +1,23 @@
+.settingsButtonContainer{
+    position: relative;
+    right: 80px;
+    width: 120px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    // border: 1px solid white;
+    justify-content: center;
+    align-items: center;
+    p{
+        font-size: 12px;
+        color: rgb(175, 220, 241);
+        position: relative;
+    }
+    .settingsBtn{
+        position: relative;
+        font-size: 35px;
+        color: rgb(175, 220, 241);
+        // border: 1px solid red;
+    }
+}
+
