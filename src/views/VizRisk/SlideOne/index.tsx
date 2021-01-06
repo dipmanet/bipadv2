@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import { mapToList, isNotDefined } from '@togglecorp/fujs';
-import Button from '#rsca/Button';
-import Icon from '#rscg/Icon';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
@@ -87,7 +84,7 @@ class SlideOne extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.85,
+        'fill-opacity': 0.70,
     }))
 
     public render() {
@@ -116,9 +113,12 @@ class SlideOne extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const {
-            mapStyle,
-        } = this.props;
+        // const {
+        //     mapStyle,
+        // } = this.props;
+        const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        console.log('mapStyle', mapStyle);
+
         return (
             <div className={styles.vzMainContainer}>
                 <Map

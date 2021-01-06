@@ -16,6 +16,8 @@ const VizRiskMainPage = (props: Props) => {
     console.log(props);
 
     const handleMenuIconClick = () => {
+        console.log('Menu clicked');
+        console.log(showMenu);
         setShowMenu(true);
     };
 
@@ -38,7 +40,6 @@ const VizRiskMainPage = (props: Props) => {
     const vrcontextProps: VizRiskContextProps = {
         currentPage,
     };
-    console.log('current page', currentPage);
 
     return (
         <VizRiskContext.Provider value={vrcontextProps}>
@@ -88,7 +89,7 @@ const VizRiskMainPage = (props: Props) => {
 
                         <div className={styles.cropper} />
                     </div>
-                    <VRSetting />
+                    {showMenu && <VRSetting /> }
 
                 </div>
 

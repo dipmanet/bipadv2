@@ -1,7 +1,7 @@
 .mainVzContainer{
     position: relative;
     width: 100vw;
-    background: #003e5f;
+    background: #333231;
     height:100vh;
     margin-top: -12px;
     z-index: 2;
@@ -56,7 +56,7 @@
             width: 80px;
             height: 8 0px;
             color: rgb(175, 220, 241);
-            font-size: 50px;    
+            font-size: 40px;    
     
         }
 
@@ -64,9 +64,9 @@
             position: absolute;
             width: 15px;
             height:10px;
-            top: 27px;
-            left: 62px;
-            background-color: #003e5f;
+            top: 24px;
+            left: 60px;
+            background-color: #333231;
             border: 1 px solid white;
         }
     }
