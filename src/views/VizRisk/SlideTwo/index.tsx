@@ -115,12 +115,11 @@ class SlideTwo extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const {
-            mapStyle,
-        } = this.props;
+        const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+
         return (
             <div className={styles.vzMainContainer}>
-                <VrLegend title={'Spatial Data'}>
+                {/* <VrLegend title={'Spatial Data'}>
                     <Legend
                         className={styles.legend}
                         data={vrLegendItems}
@@ -132,7 +131,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         colorSelector={legendColorSelector}
                         emptyComponent={null}
                     />
-                </VrLegend>
+                </VrLegend> */}
                 <Map
                     mapStyle={mapStyle}
                     mapOptions={{

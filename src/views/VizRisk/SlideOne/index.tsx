@@ -84,7 +84,7 @@ class SlideOne extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.70,
+        'fill-opacity': 0.90,
     }))
 
     public render() {
@@ -92,11 +92,8 @@ class SlideOne extends React.PureComponent<Props, State> {
         console.log(currentPage);
 
         const {
-            regions,
             municipalities,
         } = this.props;
-        const projects = [];
-        const regionLevel = 3;
 
         const mapping = [];
         if (municipalities) {
@@ -108,16 +105,10 @@ class SlideOne extends React.PureComponent<Props, State> {
                 return null;
             });
         }
-        // const mapState = this.generateMapState(regionLevel, regions);
-        // const maxValue = Math.max(1, ...mapState.map(item => item.value));
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        // const {
-        //     mapStyle,
-        // } = this.props;
         const mapStyle = 'mapbox://styles/mapbox/dark-v10';
-        console.log('mapStyle', mapStyle);
 
         return (
             <div className={styles.vzMainContainer}>
@@ -127,7 +118,6 @@ class SlideOne extends React.PureComponent<Props, State> {
                         logoPosition: 'top-left',
                         minZoom: 5,
                     }}
-
                     scaleControlShown
                     scaleControlPosition="bottom-right"
 
@@ -147,24 +137,24 @@ class SlideOne extends React.PureComponent<Props, State> {
                     <h1> Rajpur Municipality </h1>
                     <p>
                         {' '}
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor
-        incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud
-        exercitation
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud
+                    exercitation
 
                     </p>
                     <h2>Climate</h2>
                     <p>
                         {' '}
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna
-        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-        ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit
-        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum
 
                     </p>
                 </div>
