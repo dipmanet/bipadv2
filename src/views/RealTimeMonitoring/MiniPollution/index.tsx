@@ -66,12 +66,12 @@ class MiniPollution extends React.PureComponent<Props> {
                 sortable: true,
                 comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { modifiedOn } = row;
+                    const { dateTime } = row;
 
-                    return (modifiedOn) ? (
+                    return (dateTime) ? (
                         <div>
                             {/* parsing date to appropiate format */}
-                            {modifiedOn.substring(0, modifiedOn.indexOf('T'))}
+                            {dateTime.substring(0, dateTime.indexOf('T'))}
                         </div>
                     ) : undefined;
                 },
@@ -82,14 +82,17 @@ class MiniPollution extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { modifiedOn } = row;
-                    if (modifiedOn) {
+                    const { dateTime } = row;
+                    console.log(dateTime);
+                    // const { modifiedOn, observation: observationItem } = row;
+                    // const { data: { datetime } } = observationItem[0];
+                    if (dateTime) {
                         // const date = new Date(modifiedOn);
                         return (
                             <div>
                                 {/* parsing date to time format */}
                                 {/* {date.toISOString().split('T')[1].split('.')[0]} */}
-                                {modifiedOn.split('T')[1].split('.')[0]}
+                                {dateTime.split('T')[1].split('.')[0].split('+')[0]}
                             </div>
                         );
                     } return undefined;
