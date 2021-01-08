@@ -9,8 +9,9 @@ import MapState from '#re-map/MapSource/MapState';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapTooltip from '#re-map/MapTooltip';
-
+import Button from '#rsca/Button';
 import { mapSources, vizriskmapStyles } from '#constants';
+import TextOutput from '#components/TextOutput';
 
 import {
     getWardFilter,
@@ -97,6 +98,7 @@ class VizriskMap extends React.PureComponent {
         this.state = {
             feature: undefined,
             hoverLngLat: undefined,
+            id: 0,
         };
     }
 
@@ -112,10 +114,26 @@ class VizriskMap extends React.PureComponent {
 
     getProvinceFilter = memoize(getProvinceFilter);
 
-    handleMouseEnter = (feature, lngLat) => {
+    // handleMouseEnter = (feature, lngLat, id) => {
+    //     this.setState({
+    //         feature,
+    //         hoverLngLat: lngLat,
+    //         id,
+    //     });
+    // }
+
+    handleMouseEnter = (e) => {
+        const { id } = e;
+        const hoverLngLat = e.properties.centroid;
+        // const coordinates = [parseFloat(hoverLngLat.substr(31, 16)),
+        // parseFloat(hoverLngLat.substr(48, 16))];
+
+        // eslint-disable-next-line no-useless-escape
+        const coordinates = Number(hoverLngLat.replace(/[^0-9\.]+/g, ''));
+        console.log('coordinate', coordinates);
         this.setState({
-            feature,
-            hoverLngLat: lngLat,
+            id,
+            hoverLngLat: coordinates,
         });
     }
 
@@ -123,6 +141,12 @@ class VizriskMap extends React.PureComponent {
         this.setState({
             feature: undefined,
             hoverLngLat: undefined,
+        });
+    }
+
+    handleLayerClick = (e) => {
+        this.setState({
+            id: e.id,
         });
     }
 
@@ -146,7 +170,6 @@ class VizriskMap extends React.PureComponent {
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
         } = this.props;
-
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
         const showDistrict = [1, 2].includes(regionLevel);
         const showMunicipality = [2, 3].includes(regionLevel);
@@ -190,6 +213,7 @@ class VizriskMap extends React.PureComponent {
         const {
             hoverLngLat,
             feature,
+            id,
         } = this.state;
 
         const tooltipOptions = {
@@ -202,7 +226,6 @@ class VizriskMap extends React.PureComponent {
         if (tooltipParams) {
             extraParams = tooltipParams();
         }
-
         return (
             <Fragment>
                 <MapBounds
@@ -218,7 +241,8 @@ class VizriskMap extends React.PureComponent {
                 >
                     <MapLayer
                         layerKey="ward-fill"
-
+                        onClick={this.handleMouseEnter}
+                        // onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.ward,
@@ -227,6 +251,20 @@ class VizriskMap extends React.PureComponent {
                             filter: wardFilter,
                         }}
                     />
+                    <MapTooltip
+                        coordinates={hoverLngLat}
+                        tooltipOptions={tooltipOptions}
+                    >
+                        <Button>
+                            <TextOutput
+                                label="vzmap"
+                                value={id}
+                                isNumericValue
+                            />
+                        </Button>
+
+                        {/* {this.state.hoverLngLat} */}
+                    </MapTooltip>
                     <MapLayer
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
@@ -271,8 +309,11 @@ class VizriskMap extends React.PureComponent {
                             filter: wardFilter,
                         }}
                     />
+
                     <MapLayer
                         layerKey="municipality-outline"
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             'source-layer': mapSources.nepal.layers.municipality,
                             type: 'line',

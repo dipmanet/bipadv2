@@ -5,15 +5,16 @@ import styles from './styles.scss';
 import Button from '#rsca/Button';
 import SlideOne from './SlideOne';
 import SlideTwo from './SlideTwo';
+import SlideThree from './SlideThree';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import VRSetting from './Setting';
 
-const slides = [<SlideOne />, <SlideTwo />];
+const slides = [<SlideOne />, <SlideTwo />, <SlideThree />];
 
-const VizRiskMainPage = (props: Props) => {
+const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
-    console.log(props);
+    // console.log(props);
 
     const handleMenuIconClick = () => {
         console.log('Menu clicked');

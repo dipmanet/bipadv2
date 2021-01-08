@@ -1,0 +1,164 @@
+.legend-item {
+    margin: var(--spacing-small) 0;
+    >:nth-child(2) {
+        padding: 0 var(--spacing-medium);
+        font-size: var(--font-size-small);
+    }
+
+            flex-grow: 1;
+            padding: var(--spacing-small) var(--spacing-medium);
+            max-height: 15vh;
+            overflow: auto;
+            .size-legend-item {
+                margin: var(--spacing-small) 0;
+                height: var(--font-size-medium);
+                overflow: hidden;
+
+                >:nth-child(2) {
+                    padding: 0 var(--spacing-medium);
+                    font-size: var(--font-size-small);
+                }
+            }
+
+            .legend-item {
+                margin: var(--spacing-small) 0;
+
+                >:nth-child(2) {
+                    padding: 0 var(--spacing-medium);
+                    font-size: var(--font-size-small);
+                }
+            }
+
+            .symbol {
+                border-radius: 50%;
+                border: 1px solid black;
+            }
+
+            .no-symbol {
+                display: none;
+            }
+
+            .magnitude {
+                border-radius: 50%;
+            }
+
+            .box {
+                width: 10px !important;
+                height: 10px !important;
+                margin-right: 8px;
+                margin-left: 2px;
+            }
+
+            .triangle-rising {
+                width: 0; 
+                height: 0; 
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 7px solid #ACACAB;
+              }
+
+            .triangle-rising-below-warning {
+                @extend .triangle-rising;
+                border-bottom: 7px solid #7CB342;
+            }
+
+            .triangle-rising-above-warning {
+                @extend .triangle-rising;
+                border-bottom: 7px solid #FDD835;
+            }
+
+            .triangle-rising-above-danger {
+                @extend .triangle-rising;
+                border-bottom: 7px solid #e53935;
+            }
+
+            .triangle-falling {
+                width: 0; 
+                height: 0; 
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-top: 7px solid #ACACAB;
+              }
+
+            .triangle-falling-below-warning {
+                @extend .triangle-falling;
+                border-top: 7px solid #7CB342;
+            }
+
+            .triangle-falling-above-warning {
+                @extend .triangle-falling;
+                border-top: 7px solid #FDD835;
+            }
+
+            .triangle-falling-above-danger {
+                @extend .triangle-falling;
+                border-top: 7px solid #e53935;
+            }
+        }
+
+.vzMainContainer{
+    position: relative;
+    background-color: #333231;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    // border: 1px solid white;
+    padding-right: 75px;
+
+    .nextPrevBtnContainer{
+        position: relative;
+        left: 300px;
+        top: -150px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        // border: 1px solid white;
+        .nextPrevBtn{
+            color:  rgb(175, 220, 241);
+            font-size: 15px;
+        }
+    }
+    .map2{
+        margin: 0 var(--spacing-small);
+        height: 600px;
+        width: 700px;
+        position: relative;
+        flex:3
+    }
+    .vrSideBar{
+        position: relative;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: #333231;
+        color:#b6d6e4;
+        padding: 5px 15px;
+
+        h1,h2{
+        font-family: 'Playfair Display';
+        }
+        p{
+            color:#b6d6e4;
+            font-size: 13px;
+            font-family: 'Source Sans Pro';
+            text-align: justify;
+        }
+}
+}
+
+
+// .layer-switch {
+//     text-align: center;
+
+//     :global {
+//         .dropdown-button {
+//             padding: var(--spacing-small) var(--spacing-medium);
+//             font-size: var(--font-size-large);
+//         }
+//     }
+// }
+// .symbol {
+//     border-radius: 50%;
+//     border: 1px solid black;
+// }
+
