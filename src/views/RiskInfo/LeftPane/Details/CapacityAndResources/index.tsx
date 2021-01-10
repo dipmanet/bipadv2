@@ -272,7 +272,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
-                limit: 99999,
+                limit: -1,
             };
         },
         onSuccess: ({ params, response }) => {
