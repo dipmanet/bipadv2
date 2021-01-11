@@ -18,7 +18,14 @@ import {
     methods,
 } from '#request';
 
-import { resourceTypeListSelector, authStateSelector } from '#selectors';
+import {
+    resourceTypeListSelector,
+    authStateSelector,
+    filtersSelectorDP,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+} from '#selectors';
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -257,6 +264,10 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     authState: authStateSelector(state),
+    filters: filtersSelectorDP(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -269,14 +280,19 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 return undefined;
             }
 
+            const carRegion = params.getRegionDetails(params.region);
+            // const carRegion = { province: 2 };
+            console.log('our params', params);
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
                 limit: -1,
+                ...carRegion,
             };
         },
         onSuccess: ({ params, response }) => {
             const resources = response as MultiResponse<PageType.Resource>;
+            console.log('params', params);
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
                 if (params.resourceType) {
@@ -343,11 +359,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             requests: {
                 resourceGetRequest,
             },
+            filters,
         } = this.props;
+        const { faramValues: { region } } = filters;
+
         resourceGetRequest.setDefaultParams(
             {
                 setResourceList: this.setResourceList,
                 setIndividualResourceList: this.setIndividualResourceList,
+                getRegionDetails: this.getRegionDetails,
+                region,
             },
         );
 
@@ -379,7 +400,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        const { handleCarActive } = this.props;
+        const {
+            handleCarActive,
+            filters: { faramValues: { region } },
+        } = this.props;
         handleCarActive(true);
     }
 
@@ -387,6 +411,31 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { handleCarActive, handleActiveLayerIndication } = this.props;
         handleCarActive(false);
         handleActiveLayerIndication(initialActiveLayersIndication);
+    }
+
+    public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
+        const {
+            provinces,
+            districts,
+            municipalities,
+            filters: { faramValues: { region } },
+        } = this.props;
+
+        if (Object.keys(region).length === 0) {
+            return '';
+        }
+        if (adminLevel === 1) {
+            return { province: provinces.find(p => p.id === geoarea).id };
+        }
+
+        if (adminLevel === 2) {
+            return { district: districts.find(p => p.id === geoarea).id };
+        }
+
+        if (adminLevel === 3) {
+            return { municipality: municipalities.find(p => p.id === geoarea).id };
+        }
+        return '';
     }
 
     private handleToggleClick = (key: toggleValues, value: boolean) => {
