@@ -11,7 +11,12 @@ import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
 
 import { setFiltersAction } from '#actionCreators';
-import { filtersSelector } from '#selectors';
+import {
+    filtersSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+} from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
@@ -19,6 +24,7 @@ import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
 import styles from './styles.scss';
+import { colorScheme } from '#constants';
 
 interface ComponentProps {
     className?: string;
@@ -46,6 +52,9 @@ type Props = ComponentProps & PropsFromAppState & PropsFromDispatch;
 
 const mapStateToProps = (state: AppState) => ({
     filters: filtersSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -134,16 +143,74 @@ class Filters extends React.PureComponent<Props, State> {
         this.setState({ faramValues });
     }
 
+    public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
+        const {
+            provinces,
+            districts,
+            municipalities,
+            // filters: { region },
+        } = this.props;
+
+        // if (Object.keys(region).length === 0) {
+        //     return '';
+        // }
+        if (adminLevel === 1) {
+            return {
+                province: provinces.find(p => p.id === geoarea).id,
+                district: undefined,
+                municipality: undefined,
+            };
+        }
+
+        if (adminLevel === 2) {
+            const districtObj = districts.find(p => p.id === geoarea);
+            const district = districtObj.id;
+            const { province } = district;
+            return {
+                province,
+                district,
+                municipality: undefined,
+            };
+        }
+
+        if (adminLevel === 3) {
+            const municipalityObj = municipalities.find(p => p.id === geoarea);
+            const municipality = municipalityObj.id;
+            const { district } = municipalityObj;
+            const { province } = districts.find(d => d.id === district);
+            return {
+                province,
+                district,
+                municipality,
+            };
+        }
+        return '';
+    }
+
     private views = {
         location: {
-            component: () => (
-                <StepwiseRegionSelectInput
-                    className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                    faramElementName="region"
-                    wardsHidden
-                    // autoFocus
-                />
-            ),
+            component: () => {
+                if (Object.keys(this.props.filters.region).length === 0) {
+                    console.log('no props', this.props.filters.region);
+                    return (
+                        <StepwiseRegionSelectInput
+                            className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                            faramElementName="region"
+                            wardsHidden
+                            initialLoc={undefined}
+                        />
+                    );
+                }
+                console.log('got all props', this.props);
+                return (
+                    <StepwiseRegionSelectInput
+                        className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                        faramElementName="region"
+                        wardsHidden
+                        initialLoc={this.getRegionDetails(this.props.filters.region)}
+                    />
+                );
+            },
         },
         hazard: {
             component: () => (
@@ -224,6 +291,7 @@ class Filters extends React.PureComponent<Props, State> {
     private handleSubmitClick = () => {
         const { setFilters } = this.props;
         const { faramValues } = this.state;
+        // console.log('faram values: ', faramValues);
         if (faramValues) {
             setFilters({ filters: faramValues });
         }

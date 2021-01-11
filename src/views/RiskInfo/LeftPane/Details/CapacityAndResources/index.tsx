@@ -17,6 +17,14 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import {
+    // setRegionAction,
+    setFiltersAction,
+} from '#actionCreators';
+import {
+    // pastDaysToDateRange,
+    transformRegionToFilter,
+} from '#utils/transformations';
 
 import {
     resourceTypeListSelector,
@@ -270,19 +278,34 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalities: municipalitiesSelector(state),
 });
 
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setFilters: params => dispatch(setFiltersAction(params)),
+});
+
+const transformFilters = ({
+    // dataDateRange,
+    region,
+    // ...otherFilters
+}: FiltersElement) => ({
+    // ...otherFilters,
+    // ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    // ...transformDataRangeToLocaleFilter(dataDateRange, dateFilterParamName),
+    ...transformRegionToFilter(region),
+});
+
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     resourceGetRequest: {
         url: '/resource/',
         method: methods.GET,
         onMount: false,
         query: ({ params }) => {
+            // transformFilters(filters);
+
             if (!params || !params.resourceType) {
                 return undefined;
             }
-
             const carRegion = params.getRegionDetails(params.region);
-            // const carRegion = { province: 2 };
-            console.log('our params', params);
+
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
@@ -361,18 +384,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             filters,
         } = this.props;
-        const { faramValues: { region } } = filters;
-
-        resourceGetRequest.setDefaultParams(
-            {
-                setResourceList: this.setResourceList,
-                setIndividualResourceList: this.setIndividualResourceList,
-                getRegionDetails: this.getRegionDetails,
-                region,
-            },
-        );
 
         this.state = {
+            faramValues: undefined,
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
@@ -397,14 +411,34 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
         };
+
+        const { faramValues: { region } } = filters;
+        // this.setState(region);
+        // const carRegion = this.state.region;
+        resourceGetRequest.setDefaultParams(
+            {
+                setResourceList: this.setResourceList,
+                setIndividualResourceList: this.setIndividualResourceList,
+                getRegionDetails: this.getRegionDetails,
+                region,
+            },
+        );
     }
 
     public componentDidMount() {
         const {
             handleCarActive,
-            filters: { faramValues: { region } },
+            filters,
+            setFilters,
         } = this.props;
+        // const { faramValues } = filters;
+        // const { region } = faramValues;
+        // console.log('faramvalues', faramValues);
+        // this.setState(region);
+        // setFilters({ filters: faramValues });
         handleCarActive(true);
+        const { filters: faramValues } = this.props;
+        this.setState({ faramValues });
     }
 
     public componentWillUnmount() {
@@ -1892,6 +1926,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
 CapacityAndResources.contextType = MapChildContext;
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requestOptions),
 )(CapacityAndResources);
