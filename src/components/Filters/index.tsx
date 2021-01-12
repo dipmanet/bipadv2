@@ -163,7 +163,7 @@ class Filters extends React.PureComponent<Props, State> {
         }
 
         if (adminLevel === 2) {
-            const districtObj = districts.find(p => p.id === geoarea);
+            const districtObj = districts.find(d => d.id === geoarea);
             const district = districtObj.id;
             const { province } = district;
             return {
@@ -174,7 +174,7 @@ class Filters extends React.PureComponent<Props, State> {
         }
 
         if (adminLevel === 3) {
-            const municipalityObj = municipalities.find(p => p.id === geoarea);
+            const municipalityObj = municipalities.find(m => m.id === geoarea);
             const municipality = municipalityObj.id;
             const { district } = municipalityObj;
             const { province } = districts.find(d => d.id === district);
@@ -190,26 +190,45 @@ class Filters extends React.PureComponent<Props, State> {
     private views = {
         location: {
             component: () => {
-                if (Object.keys(this.props.filters.region).length === 0) {
-                    console.log('no props', this.props.filters.region);
-                    return (
-                        <StepwiseRegionSelectInput
-                            className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                            faramElementName="region"
-                            wardsHidden
-                            initialLoc={undefined}
-                        />
-                    );
-                }
-                console.log('got all props', this.props);
+                // if (Object.keys(this.props.filters.region).length === 0) {
+                //     console.log('no props', this.props.filters.region);
+                //     return (
+                //         <StepwiseRegionSelectInput
+                //             className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                //             faramElementName="region"
+                //             wardsHidden
+                //             initialLoc={undefined}
+                //         />
+                //     );
+                // }
+                // console.log('got all props', this.props);
+                // return (
+                //     <StepwiseRegionSelectInput
+                //         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                //         faramElementName="region"
+                //         wardsHidden
+                //         initialLoc={this.getRegionDetails(this.props.filters.region)}
+                //     />
+                // );
+                const regionLength = Object.keys(this.props.filters.region).length;
+                const { filters: { region } } = this.props;
+                const carRegion = this.getRegionDetails(region);
                 return (
                     <StepwiseRegionSelectInput
                         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                         faramElementName="region"
                         wardsHidden
-                        initialLoc={this.getRegionDetails(this.props.filters.region)}
+                        initialLoc={regionLength === 0 ? undefined : carRegion}
                     />
                 );
+                // return (
+                //     <StepwiseRegionSelectInput
+                //         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                //         faramElementName="region"
+                //         wardsHidden
+                //         initialLoc={this.getRegionDetails(this.props.filters.region)}
+                //     />
+                // );
             },
         },
         hazard: {
