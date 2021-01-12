@@ -315,7 +315,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         },
         onSuccess: ({ params, response }) => {
             const resources = response as MultiResponse<PageType.Resource>;
-            console.log('params', params);
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
                 if (params.resourceType) {

@@ -190,45 +190,17 @@ class Filters extends React.PureComponent<Props, State> {
     private views = {
         location: {
             component: () => {
-                // if (Object.keys(this.props.filters.region).length === 0) {
-                //     console.log('no props', this.props.filters.region);
-                //     return (
-                //         <StepwiseRegionSelectInput
-                //             className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                //             faramElementName="region"
-                //             wardsHidden
-                //             initialLoc={undefined}
-                //         />
-                //     );
-                // }
-                // console.log('got all props', this.props);
-                // return (
-                //     <StepwiseRegionSelectInput
-                //         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                //         faramElementName="region"
-                //         wardsHidden
-                //         initialLoc={this.getRegionDetails(this.props.filters.region)}
-                //     />
-                // );
                 const regionLength = Object.keys(this.props.filters.region).length;
                 const { filters: { region } } = this.props;
-                const carRegion = this.getRegionDetails(region);
+                const parsedRegion = this.getRegionDetails(region);
                 return (
                     <StepwiseRegionSelectInput
                         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                         faramElementName="region"
                         wardsHidden
-                        initialLoc={regionLength === 0 ? undefined : carRegion}
+                        initialLoc={regionLength === 0 ? undefined : parsedRegion}
                     />
                 );
-                // return (
-                //     <StepwiseRegionSelectInput
-                //         className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                //         faramElementName="region"
-                //         wardsHidden
-                //         initialLoc={this.getRegionDetails(this.props.filters.region)}
-                //     />
-                // );
             },
         },
         hazard: {
@@ -302,15 +274,12 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: FiltersElement) => {
-        // const { setFilters } = this.props;
-        // setFilters({ filters: faramValues });
         this.setState({ faramValues });
     }
 
     private handleSubmitClick = () => {
         const { setFilters } = this.props;
         const { faramValues } = this.state;
-        // console.log('faram values: ', faramValues);
         if (faramValues) {
             setFilters({ filters: faramValues });
         }
