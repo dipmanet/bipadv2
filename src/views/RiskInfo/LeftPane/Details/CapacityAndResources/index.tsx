@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import { compose } from 'redux';
@@ -20,6 +21,7 @@ import {
 import {
     // setRegionAction,
     setFiltersAction,
+    setCarKeysAction,
 } from '#actionCreators';
 import {
     // pastDaysToDateRange,
@@ -33,6 +35,7 @@ import {
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
+    carKeysSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -276,10 +279,13 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    carKeys: carKeysSelector(state),
+
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
+    setCarKeys: params => dispatch(setCarKeysAction(params)),
 });
 
 const transformFilters = ({
@@ -305,7 +311,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 return undefined;
             }
             const carRegion = params.getRegionDetails(params.region);
-
+            console.log('our params:', params.region);
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
@@ -317,7 +323,10 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const resources = response as MultiResponse<PageType.Resource>;
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
+                console.log('setting resource list', resources.results);
                 if (params.resourceType) {
+                    console.log('setting individual resource list', params.resourceType);
+
                     params.setIndividualResourceList(params.resourceType, resources.results);
                 }
             }
@@ -440,6 +449,23 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({ faramValues });
     }
 
+    public componentDidUpdate(prevProps, prevState, snapshot) {
+        const { faramValues: { region } } = this.props.filters;
+        console.log(region);
+        if (prevProps.filters !== this.props.filters) {
+            console.log('filter has changed');
+            this.props.requests.resourceGetRequest.do(
+                {
+                    setResourceList: this.setResourceList,
+                    setIndividualResourceList: this.setIndividualResourceList,
+                    getRegionDetails: this.getRegionDetails,
+                    region,
+                    resourceType: 'education',
+                },
+            );
+        }
+    }
+
     public componentWillUnmount() {
         const { handleCarActive, handleActiveLayerIndication } = this.props;
         handleCarActive(false);
@@ -474,13 +500,17 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleToggleClick = (key: toggleValues, value: boolean) => {
         const { activeLayersIndication, resourceCollection } = this.state;
         const temp = { ...activeLayersIndication };
+        const { setCarKeys } = this.props;
         temp[key] = value;
+        const trueKeys = Object.keys(temp).filter(id => temp[id]);
+        setCarKeys(trueKeys);
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
         handleActiveLayerIndication(temp);
         if (temp[key] && resourceCollection[key].length === 0) {
             this.props.requests.resourceGetRequest.do({
                 resourceType: key,
+                region: this.props.filters,
             });
         }
     }

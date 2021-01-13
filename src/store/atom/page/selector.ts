@@ -546,6 +546,9 @@ export const profileContactListSelector = createSelector(
     ({ contactList }) => contactList,
 );
 
+// risk info page
+export const carKeysSelector = ({ page }: AppState) => page.carKeys;
+
 // bounds
 export const selectedProvinceIdSelector = createSelector(
     regionByPropSelector,

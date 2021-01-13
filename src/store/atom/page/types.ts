@@ -454,7 +454,7 @@ export interface PageState {
     hidePopup: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
-
+    carKeys: [];
     region: Region;
     filters: FiltersElement;
 
@@ -520,6 +520,7 @@ export enum PageType {
     SET_SHOW_WARD = 'page/SET_SHOW_WARD',
 
     SET_FILTERS = 'page/SET_FILTERS',
+    SET_CAR_KEYS = 'page/SET_CAr_KEYS',
     SET_ENUM_OPTIONS = 'page/SET_ENUM_OPTIONS',
 
     // dashboard
@@ -561,6 +562,9 @@ export enum PageType {
     // Profile contact page
     PCP__SET_CONTACT_LIST = 'page/PROFILE_CONTACT/SET_CONTACT_LIST',
     PCP__SET_FILTERS = 'page/PROFILE_CONTACT/SET_FILTERS',
+
+    // Risk info capacity and resource page
+    RIC__SET_CAR_KEYS = 'page/RISKINFO_CAR/SET_CAR_KEYS',
 }
 
 // ACTION CREATOR INTERFACE
@@ -568,6 +572,11 @@ export enum PageType {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetCarKeys {
+    type: typeof PageType.SET_CAR_KEYS;
+    filters: [];
 }
 
 export interface SetRegion {

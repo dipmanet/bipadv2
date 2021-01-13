@@ -1,14 +1,22 @@
 import React from 'react';
-import Redux from 'redux';
+import Redux, { compose } from 'redux';
 import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
 import memoize from 'memoize-one';
+import PageContext from '#components/PageContext';
 
 import Button from '#rsca/Button';
 import ScrollTabs from '#rscv/ScrollTabs';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import Icon from '#rscg/Icon';
+
+import {
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 import { setFiltersAction } from '#actionCreators';
 import {
@@ -16,6 +24,7 @@ import {
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
+    carKeysSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -55,6 +64,7 @@ const mapStateToProps = (state: AppState) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    carKeys: carKeysSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -124,7 +134,97 @@ const getIsFiltered = (key: TabKey | undefined, filters: FiltersElement) => {
     return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
 };
 
+const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
+    resourceGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => {
+            // transformFilters(filters);
+
+            if (!params || !params.resourceType) {
+                return undefined;
+            }
+            const carRegion = params.getRegionDetails(params.region.region);
+            const destParamName = 'resource_type';
+
+            const outputFilters = {
+                [`${destParamName}`]: params.resource_type,
+                [`${destParamName}`]: 'health',
+            };
+            console.log('car region', params.region.region);
+            return {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                // resource_type: {params.resource_type ? params.resource_type : ''},
+                ...outputFilters,
+                limit: -1,
+                ...carRegion,
+            };
+        },
+        onSuccess: ({ params, response }) => {
+            const resources = response as MultiResponse<PageType.Resource>;
+            if (params && params.setResourceList && params.setIndividualResourceList) {
+                params.setResourceList(resources.results);
+                if (params.resourceType) {
+                    params.setIndividualResourceList(params.resourceType, resources.results);
+                }
+            }
+        },
+    },
+    resourceDetailGetRequest: {
+        url: ({ params }) => {
+            if (!params || !params.resourceId) {
+                return '';
+            }
+            return `/resource/${params.resourceId}/`;
+        },
+        method: methods.GET,
+        onMount: false,
+    },
+    polygonResourceDetailGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => {
+            if (!params || !params.coordinates || !params.resourceType) {
+                return undefined;
+            }
+
+            return {
+                format: 'json',
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                resource_type: params.resourceType,
+                meta: true,
+                boundary: JSON.stringify({
+                    type: 'Polygon',
+                    coordinates: params.coordinates,
+                }),
+            };
+        },
+    },
+    openspaceDeleteRequest: {
+        url: ({ params }) => `/resource/${params.id}/`,
+        method: methods.DELETE,
+        onSuccess: ({ params }) => {
+            if (params && params.closeModal) {
+                params.closeModal(true);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+    },
+};
+
 class Filters extends React.PureComponent<Props, State> {
+    public static contextType = PageContext;
+
     public state = {
         activeView: undefined,
         faramValues: {
@@ -278,10 +378,22 @@ class Filters extends React.PureComponent<Props, State> {
     }
 
     private handleSubmitClick = () => {
-        const { setFilters } = this.props;
+        const { setFilters, carKeys } = this.props;
+        // console.log('from filter!!: ', this.props);
         const { faramValues } = this.state;
         if (faramValues) {
             setFilters({ filters: faramValues });
+        }
+        const { activeRouteDetails, carKeysDetails } = this.context;
+        if (Object.keys(activeRouteDetails).length !== 0) {
+            const { name: activePage } = activeRouteDetails;
+            if (activePage === 'riskInfo') {
+                this.props.requests.resourceGetRequest.do({
+                    resourceType: 'health',
+                    getRegionDetails: this.getRegionDetails,
+                    region: this.state.faramValues,
+                });
+            }
         }
     }
 
@@ -412,5 +524,7 @@ class Filters extends React.PureComponent<Props, State> {
         );
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filters);
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createRequestClient(requestOptions),
+)(Filters);
