@@ -311,7 +311,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 return undefined;
             }
             const carRegion = params.getRegionDetails(params.region);
-            console.log('our params:', params.region);
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
@@ -451,14 +450,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { faramValues: { region } } = this.props.filters;
-        console.log(region);
+        // const { key } = this.props.carKeys;
+
+        console.log('key from update', this.props.carKeys);
         if (prevProps.filters !== this.props.filters) {
             console.log('filter has changed');
             this.props.requests.resourceGetRequest.do(
                 {
-                    setResourceList: this.setResourceList,
-                    setIndividualResourceList: this.setIndividualResourceList,
-                    getRegionDetails: this.getRegionDetails,
                     region,
                     resourceType: 'education',
                 },
@@ -503,14 +501,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { setCarKeys } = this.props;
         temp[key] = value;
         const trueKeys = Object.keys(temp).filter(id => temp[id]);
-        setCarKeys(trueKeys);
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
         handleActiveLayerIndication(temp);
         if (temp[key] && resourceCollection[key].length === 0) {
+            setCarKeys(key);
+            console.log('region from toggle', this.props.filters);
             this.props.requests.resourceGetRequest.do({
                 resourceType: key,
-                region: this.props.filters,
+                region: this.props.filters.faramValues.region,
             });
         }
     }
