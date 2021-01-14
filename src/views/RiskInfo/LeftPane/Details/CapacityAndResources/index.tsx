@@ -305,9 +305,9 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             }
             const result1 = a.join('&');
 
-            const result2 = resource_type.map(item => `resource_type=${item}&`);
+            const result2 = resource_type.map(item => `resource_type=${item}`);
 
-            return `/resource/?${result1}${`${result2.join('&')}&`}limit=-1`;
+            return `/resource/?${result1}&${`${result2.join('&')}`}&limit=-1`;
         },
         method: methods.GET,
         onMount: false,
