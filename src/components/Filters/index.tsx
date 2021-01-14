@@ -379,17 +379,23 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleSubmitClick = () => {
         const { setFilters, carKeys } = this.props;
-        // console.log('from filter!!: ', this.props);
         const { faramValues } = this.state;
+        const { filters: propFilters } = this.props;
+        const { region } = propFilters;
         if (faramValues) {
             setFilters({ filters: faramValues });
+        } else {
+            setFilters({ filters: propFilters });
         }
+        console.log('filter state value', faramValues.region);
+        console.log('filter prop value', this.props);
+
         const { activeRouteDetails, carKeysDetails } = this.context;
         if (Object.keys(activeRouteDetails).length !== 0) {
             const { name: activePage } = activeRouteDetails;
             if (activePage === 'riskInfo') {
                 this.props.requests.resourceGetRequest.do({
-                    resourceType: 'health',
+                    resourceType: carKeys,
                     getRegionDetails: this.getRegionDetails,
                     region: this.state.faramValues,
                 });
