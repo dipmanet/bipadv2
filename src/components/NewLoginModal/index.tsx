@@ -35,6 +35,7 @@ import {
 import { getAuthState } from '#utils/session';
 
 import styles from './styles.scss';
+// import style from '#mapStyles/rasterStyle';
 
 interface FaramValues {
     username?: string;
@@ -183,7 +184,7 @@ class Login extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.loginModal, className)}
+                className={_cs(styles.newloginModal, className)}
                 // onClose={closeModal}
             >
                 <Faram
@@ -195,46 +196,68 @@ class Login extends React.PureComponent<Props, State> {
                     error={faramErrors}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Login"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody className={styles.body}>
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="username"
-                            label="Username"
-                            placeholder="Username"
-                            autoFocus
-                        />
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="password"
-                            label="Password"
-                            placeholder="Password"
-                            type="password"
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            pending={pending}
-                        >
-                            Login
-                        </PrimaryButton>
-                    </ModalFooter>
+                    <div className={styles.mainLoginContainer}>
+                        <div className={styles.signIn}>
+                            <div className={styles.signinTitles}>
+                                <h1>Welcome to BIPAD Portal</h1>
+                                <p>
+                                    An integrated and comprehensie DIMS platform to support
+                                    disaster risk management throug informed decision making.
+                                </p>
+                                <hr />
+
+                            </div>
+
+                            <div className={styles.formElements}>
+                                <div className={styles.newLoginForm}>
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        className={styles.newinput}
+                                        faramElementName="username"
+                                        label="Username"
+                                        placeholder="Username"
+                                        autoFocus
+                                        showLabel={false}
+
+                                    />
+                                    <TextInput
+                                        className={styles.newinput}
+                                        faramElementName="password"
+                                        label="Password"
+                                        placeholder="Password"
+                                        type="password"
+                                        showLabel={false}
+                                    />
+                                    <h2>FORGOT YOUR PASSWORD?</h2>
+                                    <hr className={styles.horLine} />
+                                </div>
+                                <PrimaryButton
+                                    type="submit"
+                                    pending={pending}
+                                    className={styles.newsignIn}
+                                >
+                                    Login
+                                </PrimaryButton>
+                            </div>
+
+                        </div>
+                        <div className={styles.pwdRequestContainer}>
+                            <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    x
+                                </DangerButton>
+                            </div>
+                            <div className={styles.pwdRequest}>
+                                <h1>Dont have an account?</h1>
+                                <p>Click to request BIPAD login credential</p>
+                            </div>
+                            <div className={styles.feedbackandtechsupport}>
+                                <span>TECH SUPPORT</span>
+                                <span>FEEDBACK </span>
+                            </div>
+                        </div>
+                    </div>
+
                 </Faram>
             </Modal>
         );

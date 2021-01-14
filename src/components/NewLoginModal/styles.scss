@@ -1,0 +1,107 @@
+.newloginModal{
+    width: 50vw !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+}
+.mainLoginContainer{
+    display: flex;
+    // border: 1px solid red;
+}
+.signIn{
+    flex: 3; 
+    padding: 60px 20px;
+    flex-direction: column;
+    .signinTitles{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+            h1 {
+                font-size: 16px;  
+                color: rgb(0,105,222);  
+            }
+            p{
+                font-size: 9px;
+                color: #999;
+                padding: 0 40px;
+            }
+    }
+    .formElements{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        // border: 1px solid blue;
+        .newLoginForm{
+            h2{
+                font-size: 10px;
+                color:#777;
+                text-align: center;
+                margin-top: 30px;
+            }
+            .horLine{
+                background-color:#e5e5e5;
+                border: none;
+                width: 130px;
+                height: 1px;
+                margin-bottom: 20px;
+            }
+            
+        }  
+        .newsignIn{
+            width: 80px;
+            border: 1px solid rgb(0,105,222);
+            border-radius: 30px;
+            color: white; 
+            input{
+                background-color: red !important;
+            }
+        }
+     
+    }
+}
+
+
+.pwdRequestContainer{
+    width:40%;
+    border-radius: 0 10px 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to top left, rgb(0,68,138), rgb(39,124,217));
+    // border: 1px solid blue;
+    .closeBtn{
+        height: 20px;
+        display: flex;
+        justify-content: flex-end;
+        .dangerbtn{
+            border: none !important;
+            background-color: transparent !important;
+            color: rgb(42, 143, 243) !important;
+        }
+    }
+    .pwdRequest{
+        // border: 1px solid gray;
+        flex:1;
+        justify-content: center;
+        align-items: center;
+        h1{
+            font-size:16px;
+            text-align: center;
+            padding-top: 30%;
+            color: white;
+        }
+        p{
+            text-align: center;
+            color: white;
+            font-size: 12px;
+        }
+
+    }
+    .feedbackandtechsupport{
+        height:20px;
+        // border: 1px solid gray;
+        display: none;
+
+    }
+}
+
