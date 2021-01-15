@@ -47,16 +47,22 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
-const DetailsPage = (props: Props) => {
+const DetailsSecondPage = (props: Props) => {
     const [errMsg, setErrMsg] = useState(false);
     const [checkedTnc, setCheckedTnc] = useState(false);
+    const [intitutions, setInstitutions] = useState('');
     const { pending,
         closeModal,
         updatePage } = props;
 
     const handleDetails = () => updatePage('tncPage');
-    const handleAgreeBtn = value => updatePage(value);
+    const handleAgreeBtn = () => console.log('handling agree btn press');
     const handleCancelBtn = () => updatePage('loginPage');
+
+    const handleInstitutionChange = (event) => {
+        setInstitutions(event.target.value);
+        console.log(intitutions);
+    };
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -93,40 +99,20 @@ const DetailsPage = (props: Props) => {
                             <input
                                 type="text"
                                 className={styles.inputElement}
-                                placeholder="Full Name"
+                                placeholder="Select your institution"
+                                onChange={handleInstitutionChange}
+                                value={intitutions}
+                                required
                             />
                         </div>
                         <div className={styles.inputContainer}>
+                            <span>Attach the official letter</span>
                             <input
                                 type="text"
                                 className={styles.inputElement}
-                                placeholder="Desingation (eg. IT Officer)"
+                                placeholder="Attach the official letter"
+                                required
                             />
-                        </div>
-                        <div className={styles.multinputContainer}>
-                            <div className={styles.smallElements}>
-                                <input
-                                    type="text"
-                                    className={styles.smallElement}
-                                    placeholder="+977"
-                                />
-                            </div>
-
-                            <div className={styles.biggerElements}>
-                                <input
-                                    type="text"
-                                    className={styles.biggerElement}
-                                    placeholder="Phone No."
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Official Email"
-                            />
-
                         </div>
                         <p className={styles.moreInfo}>
                             The official email will be registered in the
@@ -155,7 +141,7 @@ const DetailsPage = (props: Props) => {
                         type="button"
                         pending={pending}
                         className={styles.agreeBtn}
-                        onClick={() => handleAgreeBtn('submitFirstPage')}
+                        onClick={handleAgreeBtn}
                     >
                         Next
                     </PrimaryButton>
@@ -168,4 +154,4 @@ const DetailsPage = (props: Props) => {
     );
 };
 
-export default DetailsPage;
+export default DetailsSecondPage;

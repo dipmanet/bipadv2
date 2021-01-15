@@ -10,6 +10,7 @@ import Icon from '#rscg/Icon';
 import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
 import DetailsPage from './DetailsPage';
+import SubmitFirstPage from './DetailsSecondPage';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -310,6 +311,15 @@ class Login extends React.PureComponent<Props, State> {
         if (pageAction === 'detailsPage') {
             displayElement = (
                 <DetailsPage
+                    updatePage={this.updatePage}
+                    closeModal={closeModal}
+                    pending={pending}
+                />
+            );
+        }
+        if (pageAction === 'detailsFirstPage') {
+            displayElement = (
+                <SubmitFirstPage
                     updatePage={this.updatePage}
                     closeModal={closeModal}
                     pending={pending}
