@@ -130,14 +130,14 @@ const PasswordReq = (props: Props) => {
                     </div>
 
                 </div>
-                <div className={styles.cancelAgreeBtns}>
-                    {errMsg
+                {errMsg
                         && (
                             <span className={styles.errMsg}>
                             Please agree to the terms and
                             conditions before continuing
                             </span>
                         )}
+                <div className={styles.cancelAgreeBtns}>
                     <div>
                         <PrimaryButton
                             type="button"

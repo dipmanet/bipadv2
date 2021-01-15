@@ -93,12 +93,14 @@ const DetailsPage = (props: Props) => {
                             <input
                                 type="text"
                                 className={styles.inputElement}
+                                placeholder="Full Name"
                             />
                         </div>
                         <div className={styles.inputContainer}>
                             <input
                                 type="text"
                                 className={styles.inputElement}
+                                placeholder="Desingation (eg. designer)"
                             />
                         </div>
                         <div className={styles.multinputContainer}>
@@ -106,6 +108,7 @@ const DetailsPage = (props: Props) => {
                                 <input
                                     type="text"
                                     className={styles.smallElement}
+                                    placeholder="+977"
                                 />
                             </div>
 
@@ -113,6 +116,7 @@ const DetailsPage = (props: Props) => {
                                 <input
                                     type="text"
                                     className={styles.biggerElement}
+                                    placeholder="Phone No."
                                 />
                             </div>
                         </div>
@@ -120,6 +124,7 @@ const DetailsPage = (props: Props) => {
                             <input
                                 type="text"
                                 className={styles.inputElement}
+                                placeholder="Email"
                             />
 
                         </div>
@@ -137,25 +142,23 @@ const DetailsPage = (props: Props) => {
                            Something went wrong!!
                             </span>
                         )}
-                    <div>
-                        <PrimaryButton
-                            type="button"
-                            pending={pending}
-                            className={styles.cancelBtn}
-                            onClick={handleDetails}
-                        >
-                        Cancel
-                        </PrimaryButton>
+                    <PrimaryButton
+                        type="button"
+                        pending={pending}
+                        className={styles.cancelBtn}
+                        onClick={handleDetails}
+                    >
+                        Back
+                    </PrimaryButton>
 
-                        <PrimaryButton
-                            type="button"
-                            pending={pending}
-                            className={styles.agreeBtn}
-                            onClick={handleAgreeBtn}
-                        >
+                    <PrimaryButton
+                        type="button"
+                        pending={pending}
+                        className={styles.agreeBtn}
+                        onClick={handleAgreeBtn}
+                    >
                         Next
-                        </PrimaryButton>
-                    </div>
+                    </PrimaryButton>
 
                 </div>
 
