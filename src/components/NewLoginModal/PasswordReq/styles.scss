@@ -1,0 +1,90 @@
+.mainPwdReqContainer{
+    .errMsg{
+        font-size: 9px;
+        color: red;
+        position: relative;
+        bottom: 10px;
+        padding-right: 15px;
+    }
+    display: flex;
+    .welcomeBack{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 10px 0 0 10px;
+    background: linear-gradient(to top left, rgb(0,68,138), rgb(39,124,217));
+    padding-top: 30px;
+    flex: 1;
+        h1{
+            color: white;
+            font-size: 16px;
+            padding-top: 10%;
+            text-align: center;
+        }
+        p{
+            color: white;
+            padding: 0 20%;
+            text-align: center;
+            font-size: 11px;
+        }
+        .loginBtn{
+            .newsignIn{
+                background-color: transparent !important;
+                color: white !important;
+                font-size: 10px;
+                border: 2px solid white !important;
+                filter:saturate(100%) !important;
+                border-radius: 20px;
+                opacity: 0.87 !important;
+                padding: 7px 20px;
+                margin-top: 20px;
+                box-shadow: 0 3px rgba(23,23,23, 0.1);
+            }
+        }
+    }
+    .pwdRequestContainer{
+        flex: 1.4;
+
+        .closeBtn{
+            display: flex;
+            justify-content: flex-end;
+            margin: 5px 10px;
+            .dangerbtn{
+            border: none;
+                .closeIcon{
+                    font-size: 16px;
+                }
+            }
+        }
+        .termsandconditions{
+            border: 1px solid #ddd;
+            margin: 0 30px 15px 30px;
+            .description{
+                font-size: 10px;
+                padding: 10px 30px 10px 20px;
+                line-height: 1.5em;
+                color: #777;
+            }
+            .iAgreeCheckBox{
+                margin: 0 10px 10px 20px;
+                .chkboxLbl{
+                    color: #777;
+                    font-size: 10px;
+                    margin-left: 5px;
+                }
+            }
+        }
+        .cancelAgreeBtns{
+            display: flex;
+            justify-content: flex-end;
+            margin: 0 30px 15px 10px;
+            .cancelBtn{
+
+            }
+            .agreeBtn{
+
+            }
+        }
+    }
+}

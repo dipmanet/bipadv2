@@ -2,14 +2,15 @@ import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-
 import Faram, {
     requiredCondition,
     lengthGreaterThanCondition,
 } from '@togglecorp/faram';
+import Icon from '#rscg/Icon';
+import PasswordReq from './PasswordReq';
 
 import DangerButton from '#rsca/Button/DangerButton';
-import Icon from '#rscg/Icon';
+
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -45,6 +46,7 @@ interface FaramValues {
 interface State {
     faramErrors: object;
     faramValues: FaramValues;
+    loginPage: boolean;
 }
 
 interface Params {
@@ -106,7 +108,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 // TODO: handle error
                 console.warn('failure', error);
                 params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
+                    $internal: ['Incorrect Username or Password'],
                 });
             }
         },
@@ -121,12 +123,25 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 };
 
 class Login extends React.PureComponent<Props, State> {
+    private static schema = {
+        fields: {
+            username: [
+                requiredCondition,
+            ],
+            password: [
+                requiredCondition,
+                lengthGreaterThanCondition(4),
+            ],
+        },
+    };
+
     public constructor(props: Props) {
         super(props);
 
         this.state = {
             faramErrors: {},
             faramValues: {},
+            loginPage: true,
         };
     }
 
@@ -155,22 +170,19 @@ class Login extends React.PureComponent<Props, State> {
         });
     };
 
-    private static schema = {
-        fields: {
-            username: [
-                requiredCondition,
-            ],
-            password: [
-                requiredCondition,
-                lengthGreaterThanCondition(4),
-            ],
-        },
+    private handlePwdResetBtn = () => {
+        this.setState({ loginPage: false });
+    };
+
+    private handleCancelBtn = (value: boolean) => {
+        this.setState({ loginPage: value });
     };
 
     public render() {
         const {
             faramErrors,
             faramValues,
+            loginPage,
         } = this.state;
         const {
             className,
@@ -181,12 +193,9 @@ class Login extends React.PureComponent<Props, State> {
                 },
             },
         } = this.props;
-
-        return (
-            <Modal
-                className={_cs(styles.newloginModal, className)}
-                // onClose={closeModal}
-            >
+        let displayElement;
+        if (loginPage) {
+            displayElement = (
                 <Faram
                     onChange={this.handleFaramChange}
                     onValidationFailure={this.handleFaramValidationFailure}
@@ -201,8 +210,8 @@ class Login extends React.PureComponent<Props, State> {
                             <div className={styles.signinTitles}>
                                 <h1>Welcome to BIPAD Portal</h1>
                                 <p>
-                                    An integrated and comprehensie DIMS platform to support
-                                    disaster risk management throug informed decision making.
+                            An integrated and comprehensie DIMS platform to support
+                            disaster risk management throug informed decision making.
                                 </p>
                                 <hr />
 
@@ -210,46 +219,72 @@ class Login extends React.PureComponent<Props, State> {
 
                             <div className={styles.formElements}>
                                 <div className={styles.newLoginForm}>
-                                    <NonFieldErrors faramElement />
-                                    <TextInput
-                                        className={styles.newinput}
-                                        faramElementName="username"
-                                        label="Username"
-                                        placeholder="Username"
-                                        autoFocus
-                                        showLabel={false}
+                                    <div className={styles.inputContainer}>
+                                        <Icon
+                                            name="user"
+                                            className={styles.inputIcon}
+                                        />
+                                        <TextInput
+                                            className={styles.newinput}
+                                            faramElementName="username"
+                                            label="Username"
+                                            placeholder="Username"
+                                            autoFocus
+                                            showLabel={false}
 
-                                    />
-                                    <TextInput
-                                        className={styles.newinput}
-                                        faramElementName="password"
-                                        label="Password"
-                                        placeholder="Password"
-                                        type="password"
-                                        showLabel={false}
-                                    />
+                                        />
+                                    </div>
+                                    <div className={styles.inputContainer}>
+                                        <Icon
+                                            name="lock"
+                                            className={styles.inputIcon}
+                                        />
+                                        <TextInput
+                                            className={styles.newinput}
+                                            faramElementName="password"
+                                            label="Password"
+                                            placeholder="Password"
+                                            type="password"
+                                            showLabel={false}
+                                        />
+                                    </div>
+                                    <NonFieldErrors faramElement className={styles.errorField} />
+
                                     <h2>FORGOT YOUR PASSWORD?</h2>
                                     <hr className={styles.horLine} />
                                 </div>
-                                <PrimaryButton
-                                    type="submit"
-                                    pending={pending}
-                                    className={styles.newsignIn}
-                                >
-                                    Login
-                                </PrimaryButton>
+                                <div className={styles.loginBtn}>
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={pending}
+                                        className={styles.newsignIn}
+                                    >
+                            Login
+                                    </PrimaryButton>
+                                </div>
+
                             </div>
 
                         </div>
                         <div className={styles.pwdRequestContainer}>
                             <div className={styles.closeBtn}>
                                 <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                                    x
+                                    <Icon
+                                        name="times"
+                                        className={styles.settingsBtn}
+                                    />
                                 </DangerButton>
                             </div>
                             <div className={styles.pwdRequest}>
                                 <h1>Dont have an account?</h1>
                                 <p>Click to request BIPAD login credential</p>
+                                <DangerButton
+                                    type="button"
+                                    className={styles.pwdResetBtn}
+                                    onClick={this.handlePwdResetBtn}
+                                >
+                                    PASSWORD REQUEST
+                                </DangerButton>
                             </div>
                             <div className={styles.feedbackandtechsupport}>
                                 <span>TECH SUPPORT</span>
@@ -259,6 +294,22 @@ class Login extends React.PureComponent<Props, State> {
                     </div>
 
                 </Faram>
+            );
+        } else {
+            displayElement = (
+                <PasswordReq
+                    handleCancel={this.handleCancelBtn}
+                    closeModal={closeModal}
+                    pending={pending}
+                />
+            );
+        }
+
+        return (
+            <Modal
+                className={_cs(styles.newloginModal, className)}
+            >
+                {displayElement}
             </Modal>
         );
     }

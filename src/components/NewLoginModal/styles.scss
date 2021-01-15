@@ -1,3 +1,4 @@
+
 .newloginModal{
     width: 50vw !important;
     padding: 0 !important;
@@ -8,9 +9,9 @@
     // border: 1px solid red;
 }
 .signIn{
-    flex: 3; 
     padding: 60px 20px;
     flex-direction: column;
+    // border: 1px solid red;
     .signinTitles{
         display: flex;
         flex-direction: column;
@@ -20,7 +21,7 @@
                 color: rgb(0,105,222);  
             }
             p{
-                font-size: 9px;
+                font-size: 10px;
                 color: #999;
                 padding: 0 40px;
             }
@@ -28,15 +29,56 @@
     .formElements{
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        // border: 1px solid blue;
+        //this is causing squeeze 
+        // align-items: center;
+        .loginBtn{
+            display: flex;
+            justify-content: center;
+            .newsignIn{
+                width: 80px;
+                filter: saturate(100%);
+                background-color: rgb(0,105,222) !important;
+                border-radius: 30px;
+                color: white; 
+            }
+        }
+        padding: 0 20%;
         .newLoginForm{
+            margin-top: 15px;
+            .errorField{
+                position: relative;
+                bottom: 10px;
+            }
+            .inputContainer{
+                display: flex;
+                border-radius: 4px;
+                background-color: rgb(232,232,232);
+                justify-content: flex-start;
+                align-items: center;
+                // border: 1px solid gray;
+                margin-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 30px;
+                input::-webkit-input-placeholder{
+                    font-size: 10px;
+                    vertical-align:middle !important;
+                    line-height: 25px !important;
+                }
+                input{
+                    border: none;
+                    padding-top: 12px;
+                    margin-left: 10px;
+                    width:300px;
+                }
+                .inputIcon{
+                    color: rgb(152,152,152);
+                }
+
+            }
             h2{
                 font-size: 10px;
                 color:#777;
                 text-align: center;
-                margin-top: 30px;
             }
             .horLine{
                 background-color:#e5e5e5;
@@ -45,24 +87,15 @@
                 height: 1px;
                 margin-bottom: 20px;
             }
+       
             
         }  
-        .newsignIn{
-            width: 80px;
-            border: 1px solid rgb(0,105,222);
-            border-radius: 30px;
-            color: white; 
-            input{
-                background-color: red !important;
-            }
-        }
-     
     }
 }
 
 
 .pwdRequestContainer{
-    width:40%;
+    width:70%;
     border-radius: 0 10px 10px 0;
     display: flex;
     flex-direction: column;
@@ -70,37 +103,55 @@
     background: linear-gradient(to top left, rgb(0,68,138), rgb(39,124,217));
     // border: 1px solid blue;
     .closeBtn{
-        height: 20px;
         display: flex;
         justify-content: flex-end;
         .dangerbtn{
             border: none !important;
             background-color: transparent !important;
             color: rgb(42, 143, 243) !important;
+            filter: saturate(100%);
+        }
+        .settingsBtn{
+            font-size: 16px;
+            padding: 8px;
         }
     }
     .pwdRequest{
-        // border: 1px solid gray;
-        flex:1;
+        display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
+        margin-bottom: 60%;       
         h1{
-            font-size:16px;
+            font-size:15px;
             text-align: center;
-            padding-top: 30%;
             color: white;
+            opacity: 0.87;
+
         }
         p{
             text-align: center;
             color: white;
-            font-size: 12px;
+            font-size: 10px;
+            padding-bottom: 25px;
+            opacity: 0.87;
+
+        }
+        .pwdResetBtn{
+            background-color: transparent !important;
+            color: white !important;
+            font-size: 10px;
+            border: 1px solid white !important;
+            filter:saturate(100%) !important;
+            border-radius: 20px;
+            opacity: 0.87 !important;
         }
 
     }
     .feedbackandtechsupport{
         height:20px;
         // border: 1px solid gray;
-        display: none;
+        visibility: hidden;
 
     }
 }

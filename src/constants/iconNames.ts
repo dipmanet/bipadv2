@@ -89,6 +89,8 @@ const iconNames = {
     document: 'ion-android-document',
     textDocument: 'ion-document-text',
     cart: 'ion-ios-cart-outline',
+    lock: 'fa fa-unlock-alt',
+    times: 'fa fa-times',
 };
 
 export default iconNames;
