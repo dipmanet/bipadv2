@@ -47,35 +47,19 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
-const PasswordReq = (props: Props) => {
-    console.log(props);
-    const [loginpage, setloginpage] = useState(false);
-    const [chkBox, setChkBox] = useState(false);
+const DetailsPage = (props: Props) => {
     const [errMsg, setErrMsg] = useState(false);
     const [checkedTnc, setCheckedTnc] = useState(false);
     const { pending,
         closeModal,
-        handleCancel,
-        handleAgree } = props;
+        updatePage } = props;
 
-    const handleCancelBtn = () => handleCancel('loginPage');
-
-    const handleChkBox = (event) => {
-        setCheckedTnc(event.target.checked);
-        setErrMsg(false);
-    };
-
-    const handleAgreeBtn = () => {
-        if (checkedTnc) {
-            setErrMsg(false);
-            handleAgree('detailsPage');
-        } else {
-            setErrMsg(true);
-        }
-    };
+    const handleDetails = () => updatePage('tncPage');
+    const handleAgreeBtn = () => console.log('handling agree btn press');
+    const handleCancelBtn = () => updatePage('loginPage');
 
     return (
-        <div className={styles.mainPwdReqContainer}>
+        <div className={styles.mainPageDetailsContainer}>
             <div className={styles.welcomeBack}>
                 <h1>Welcome Back</h1>
                 <p>
@@ -93,7 +77,7 @@ const PasswordReq = (props: Props) => {
 
             </div>
 
-            <div className={styles.pwdRequestContainer}>
+            <div className={styles.detailsFormContainer}>
                 <div className={styles.closeBtn}>
                     <DangerButton className={styles.dangerbtn} onClick={closeModal}>
                         <Icon
@@ -102,40 +86,55 @@ const PasswordReq = (props: Props) => {
                         />
                     </DangerButton>
                 </div>
-                <div className={styles.termsandconditions}>
-                    <p className={styles.description}>
-                        BIPAD portal is a Government owned integrated and
-                        comprehensive Disaster Information Management System.
-                        It aims to bring together all credible digital and spatial
-                        data into a single platform to strengthen the preparedness,
-                        mitigation, and response activities of all related
-                        stakeholders working in this sector. This one stop platform
-                        has been developed with the concept of creating a
-                        national portal embedded with independent platforms for
-                        national, provincial, and municipal government with a
-                        bottom-up approach of disaster data partnership.
+                <div className={styles.formContainer}>
+                    <h2>Provide the following details</h2>
+                    <div className={styles.newSignupForm}>
+                        <div className={styles.inputContainer}>
+                            <input
+                                type="text"
+                                className={styles.inputElement}
+                            />
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <input
+                                type="text"
+                                className={styles.inputElement}
+                            />
+                        </div>
+                        <div className={styles.multinputContainer}>
+                            <div className={styles.smallElements}>
+                                <input
+                                    type="text"
+                                    className={styles.smallElement}
+                                />
+                            </div>
 
-                    </p>
-                    <p className={styles.description}>
-                        Authorized government body from each province, district,
-                        and municipality will receive a single login credential. You
-                        can request for the username and password once.
-                    </p>
-                    <div className={styles.iAgreeCheckBox}>
-                        <input type="checkbox" onClick={handleChkBox} className={styles.tncCheckbox} />
-                        <span className={styles.chkboxLbl}>
-                            I hereby confirm that I am a government employee
-                            requesting for the login credential for the first time
-                        </span>
+                            <div className={styles.biggerElements}>
+                                <input
+                                    type="text"
+                                    className={styles.biggerElement}
+                                />
+                            </div>
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <input
+                                type="text"
+                                className={styles.inputElement}
+                            />
+
+                        </div>
+                        <p className={styles.moreInfo}>
+                            The official email will be registered in the
+                            system and will be used as the
+                            primary email for any official correspondence
+                        </p>
                     </div>
-
                 </div>
                 <div className={styles.cancelAgreeBtns}>
                     {errMsg
                         && (
                             <span className={styles.errMsg}>
-                            Please agree to the terms and
-                            conditions before continuing
+                           Something went wrong!!
                             </span>
                         )}
                     <div>
@@ -143,9 +142,9 @@ const PasswordReq = (props: Props) => {
                             type="button"
                             pending={pending}
                             className={styles.cancelBtn}
-                            onClick={handleCancelBtn}
+                            onClick={handleDetails}
                         >
-                        Back
+                        Cancel
                         </PrimaryButton>
 
                         <PrimaryButton
@@ -154,7 +153,7 @@ const PasswordReq = (props: Props) => {
                             className={styles.agreeBtn}
                             onClick={handleAgreeBtn}
                         >
-                        I Agree
+                        Next
                         </PrimaryButton>
                     </div>
 
@@ -166,4 +165,4 @@ const PasswordReq = (props: Props) => {
     );
 };
 
-export default PasswordReq;
+export default DetailsPage;

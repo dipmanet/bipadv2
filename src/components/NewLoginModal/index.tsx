@@ -8,13 +8,10 @@ import Faram, {
 } from '@togglecorp/faram';
 import Icon from '#rscg/Icon';
 import PasswordReq from './PasswordReq';
-
 import DangerButton from '#rsca/Button/DangerButton';
+import DetailsPage from './DetailsPage';
 
 import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalBody from '#rscv/Modal/Body';
-import ModalFooter from '#rscv/Modal/Footer';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import TextInput from '#rsci/TextInput';
@@ -47,6 +44,10 @@ interface State {
     faramErrors: object;
     faramValues: FaramValues;
     loginPage: boolean;
+    tncPage: boolean;
+    detailsPage: boolean;
+    tqPage: boolean;
+    pageAction: string;
 }
 
 interface Params {
@@ -141,7 +142,7 @@ class Login extends React.PureComponent<Props, State> {
         this.state = {
             faramErrors: {},
             faramValues: {},
-            loginPage: true,
+            pageAction: 'loginPage',
         };
     }
 
@@ -170,19 +171,19 @@ class Login extends React.PureComponent<Props, State> {
         });
     };
 
-    private handlePwdResetBtn = () => {
-        this.setState({ loginPage: false });
+    private updatePage = (value: string) => {
+        this.setState({ pageAction: value });
     };
 
-    private handleCancelBtn = (value: boolean) => {
-        this.setState({ loginPage: value });
+    private handleDetailsCancel = (value: string) => {
+        this.setState({ pageAction: value });
     };
 
     public render() {
         const {
             faramErrors,
             faramValues,
-            loginPage,
+            pageAction,
         } = this.state;
         const {
             className,
@@ -194,7 +195,7 @@ class Login extends React.PureComponent<Props, State> {
             },
         } = this.props;
         let displayElement;
-        if (loginPage) {
+        if (pageAction === 'loginPage') {
             displayElement = (
                 <Faram
                     onChange={this.handleFaramChange}
@@ -210,8 +211,8 @@ class Login extends React.PureComponent<Props, State> {
                             <div className={styles.signinTitles}>
                                 <h1>Welcome to BIPAD Portal</h1>
                                 <p>
-                            An integrated and comprehensie DIMS platform to support
-                            disaster risk management throug informed decision making.
+                                    An integrated and comprehensie DIMS platform to support
+                                    disaster risk management throug informed decision making.
                                 </p>
                                 <hr />
 
@@ -281,7 +282,7 @@ class Login extends React.PureComponent<Props, State> {
                                 <DangerButton
                                     type="button"
                                     className={styles.pwdResetBtn}
-                                    onClick={this.handlePwdResetBtn}
+                                    onClick={() => this.updatePage('tncPage')}
                                 >
                                     PASSWORD REQUEST
                                 </DangerButton>
@@ -295,10 +296,21 @@ class Login extends React.PureComponent<Props, State> {
 
                 </Faram>
             );
-        } else {
+        }
+        if (pageAction === 'tncPage') {
             displayElement = (
                 <PasswordReq
-                    handleCancel={this.handleCancelBtn}
+                    handleCancel={this.updatePage}
+                    handleAgree={this.updatePage}
+                    closeModal={closeModal}
+                    pending={pending}
+                />
+            );
+        }
+        if (pageAction === 'detailsPage') {
+            displayElement = (
+                <DetailsPage
+                    updatePage={this.updatePage}
                     closeModal={closeModal}
                     pending={pending}
                 />
