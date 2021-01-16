@@ -10,7 +10,7 @@ import Icon from '#rscg/Icon';
 import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
 import DetailsPage from './DetailsPage';
-import SubmitFirstPage from './DetailsSecondPage';
+import DetailsFirstPage from './DetailsFirstPage';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -34,6 +34,7 @@ import {
 import { getAuthState } from '#utils/session';
 
 import styles from './styles.scss';
+import DetailsSecondPage from './DetailsSecondPage';
 // import style from '#mapStyles/rasterStyle';
 
 interface FaramValues {
@@ -44,17 +45,38 @@ interface FaramValues {
 interface State {
     faramErrors: object;
     faramValues: FaramValues;
-    loginPage: boolean;
-    tncPage: boolean;
-    detailsPage: boolean;
-    tqPage: boolean;
     pageAction: string;
+    fullName: string;
+    designation: string;
+    intCode: string;
+    phone: number;
+    email: string;
+    municipalityId: number;
+    districtId: number;
+    provinceId: number;
+    signupregion: SignupRegion;
+    institution: string;
+}
+
+interface SignupRegion {
+    provinceId?: number;
+    districtId?: number;
+    municipalityId?: number;
+    wardId?: number;
 }
 
 interface Params {
     username?: string;
     password?: string;
     setFaramErrors?: (error: object) => void;
+    fullName?: string;
+    position?: string;
+    phoneNumber?: number;
+    officialEmail?: string;
+    officialLetter?: File;
+    province?: number;
+    district?: number;
+    municipality?: number;
 }
 
 interface OwnProps {
@@ -122,6 +144,46 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             }
         },
     },
+    signUpRequest: {
+        url: '/password-request/',
+        method: methods.POST,
+        body: ({ params }) => {
+            if (!params) {
+                return {};
+            }
+            return {
+                fullName: params.fullName,
+                position: params.position,
+                phoneNumber: params.phoneNumber,
+                officialEmail: params.officialEmail,
+                officialLetter: params.officialLetter,
+                province: params.province,
+                district: params.district,
+                municipality: params.municipality,
+            };
+        },
+        onSuccess: ({ response, props }) => {
+            console.log(response, props);
+        },
+        onFailure: ({ error, params }) => {
+            console.log(error);
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Incorrect Username or Password'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        extras: { hasFile: true },
+    },
 };
 
 class Login extends React.PureComponent<Props, State> {
@@ -144,6 +206,17 @@ class Login extends React.PureComponent<Props, State> {
             faramErrors: {},
             faramValues: {},
             pageAction: 'loginPage',
+            fullName: '',
+            designation: '',
+            intCode: '',
+            phone: 0,
+            email: '',
+            municipalityId: undefined,
+            districtId: undefined,
+            provinceId: undefined,
+            signupregion: {},
+            file: undefined,
+            institution: '',
         };
     }
 
@@ -172,19 +245,119 @@ class Login extends React.PureComponent<Props, State> {
         });
     };
 
-    private updatePage = (value: string) => {
-        this.setState({ pageAction: value });
+    private updatePage = (pageAction: string) => {
+        console.log(pageAction);
+        this.setState({ pageAction });
     };
 
-    private handleDetailsCancel = (value: string) => {
-        this.setState({ pageAction: value });
+    private handleFullName = (fullName: string) => {
+        console.log(fullName);
+        this.setState({ fullName });
     };
+
+    private handleDesignation = (designation: string) => {
+        console.log(designation);
+        this.setState({ designation });
+    };
+
+    private handleIntCode = (intCode: string) => {
+        console.log(intCode);
+        this.setState({ intCode });
+    };
+
+    private handlePhone = (phone: number) => {
+        console.log(phone);
+        this.setState({ phone });
+    };
+
+    private handleInstitution = (institution: string) => {
+        console.log(institution);
+        this.setState({ institution });
+    };
+
+    private handleEmail = (value: string) => {
+        console.log(value);
+        this.setState({ email: value });
+    };
+
+    private signupRegion = (value: SignupRegion) => {
+        console.log(value.municipalityId, value.districtId, value.provinceId);
+        this.setState({ municipalityId: value.municipalityId,
+            districtId: value.districtId,
+            provinceId: value.provinceId });
+    };
+
+    private uploadedLetter = (file: File) => {
+        console.log(file);
+        this.setState({ file });
+    };
+
+    private submit = () => {
+        console.log('submitting...');
+        const {
+            fullName,
+            designation,
+            phone,
+            email,
+            municipalityId,
+            districtId,
+            provinceId,
+            file,
+        } = this.state;
+        const { requests: { signUpRequest } } = this.props;
+        console.log(fullName,
+            designation,
+            phone,
+            email,
+            municipalityId,
+            districtId,
+            provinceId,
+            file);
+        const data = {
+            fullName,
+            position: designation,
+            phoneNumber: phone,
+            officialEmail: email,
+            officialLetter: file,
+            province: provinceId,
+            district: districtId,
+            municipality: municipalityId,
+        };
+        // fetch('https://bipaddev.yilab.org.np/api/v1/password-request/', {
+        //     mode: 'no-cors',
+        //     method: 'post',
+        //     headers: {
+        //         Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        //         'Content-Type': 'multipart/form-data',
+        //     },
+        //     body: data,
+        // }).then((response) => {
+        //     console.log(response.status);
+        //     console.log('response');
+        //     console.log(response);
+        // }).catch(err => console.log(err));
+        signUpRequest.do({
+            fullName,
+            position: designation,
+            phoneNumber: phone,
+            officialEmail: email,
+            officialLetter: file,
+            province: provinceId,
+            district: districtId,
+            municipality: municipalityId,
+        });
+    }
 
     public render() {
         const {
             faramErrors,
             faramValues,
             pageAction,
+            fullName,
+            designation,
+            intCode,
+            phone,
+            email,
         } = this.state;
         const {
             className,
@@ -314,18 +487,38 @@ class Login extends React.PureComponent<Props, State> {
                     updatePage={this.updatePage}
                     closeModal={closeModal}
                     pending={pending}
+                    handleFullName={this.handleFullName}
+                    handleDesignation={this.handleDesignation}
+                    handleIntCode={this.handleIntCode}
+                    handlePhone={this.handlePhone}
+                    handleEmail={this.handleEmail}
+
                 />
             );
         }
         if (pageAction === 'detailsFirstPage') {
             displayElement = (
-                <SubmitFirstPage
+                <DetailsFirstPage
                     updatePage={this.updatePage}
                     closeModal={closeModal}
+                    signupRegion={this.signupRegion}
+                    uploadedLetter={this.uploadedLetter}
                     pending={pending}
                 />
             );
         }
+        if (pageAction === 'detailsSecondPage') {
+            displayElement = (
+                <DetailsSecondPage
+                    updatePage={this.updatePage}
+                    closeModal={closeModal}
+                    pending={pending}
+                    submit={this.submit}
+                    institution={this.handleInstitution}
+                />
+            );
+        }
+
 
         return (
             <Modal

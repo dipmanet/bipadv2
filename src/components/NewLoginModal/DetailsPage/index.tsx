@@ -52,11 +52,22 @@ const DetailsPage = (props: Props) => {
     const [checkedTnc, setCheckedTnc] = useState(false);
     const { pending,
         closeModal,
-        updatePage } = props;
+        updatePage,
+        handleFullName,
+        handleDesignation,
+        handleIntCode,
+        handlePhone,
+        handleEmail } = props;
 
     const handleDetails = () => updatePage('tncPage');
     const handleAgreeBtn = value => updatePage(value);
     const handleCancelBtn = () => updatePage('loginPage');
+
+    const handleFullnameChange = e => handleFullName(e.target.value);
+    const handleDesignationChange = e => handleDesignation(e.target.value);
+    const handleIntCodeChange = e => handleIntCode(e.target.value);
+    const handlePhoneChange = e => handlePhone(e.target.value);
+    const handleEmailChange = e => handleEmail(e.target.value);
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -94,6 +105,7 @@ const DetailsPage = (props: Props) => {
                                 type="text"
                                 className={styles.inputElement}
                                 placeholder="Full Name"
+                                onChange={handleFullnameChange}
                             />
                         </div>
                         <div className={styles.inputContainer}>
@@ -101,6 +113,7 @@ const DetailsPage = (props: Props) => {
                                 type="text"
                                 className={styles.inputElement}
                                 placeholder="Desingation (eg. IT Officer)"
+                                onChange={handleDesignationChange}
                             />
                         </div>
                         <div className={styles.multinputContainer}>
@@ -109,6 +122,7 @@ const DetailsPage = (props: Props) => {
                                     type="text"
                                     className={styles.smallElement}
                                     placeholder="+977"
+                                    onChange={handleIntCodeChange}
                                 />
                             </div>
 
@@ -117,6 +131,7 @@ const DetailsPage = (props: Props) => {
                                     type="text"
                                     className={styles.biggerElement}
                                     placeholder="Phone No."
+                                    onChange={handlePhoneChange}
                                 />
                             </div>
                         </div>
@@ -125,6 +140,7 @@ const DetailsPage = (props: Props) => {
                                 type="text"
                                 className={styles.inputElement}
                                 placeholder="Official Email"
+                                onChange={handleEmailChange}
                             />
 
                         </div>
@@ -155,7 +171,7 @@ const DetailsPage = (props: Props) => {
                         type="button"
                         pending={pending}
                         className={styles.agreeBtn}
-                        onClick={() => handleAgreeBtn('submitFirstPage')}
+                        onClick={() => handleAgreeBtn('detailsFirstPage')}
                     >
                         Next
                     </PrimaryButton>

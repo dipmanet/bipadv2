@@ -144,7 +144,7 @@ const routes = routeSettings.map(({ load, ...settings }) => {
 
 // MULTIPLEXER
 
-const domain = process.env.REACT_APP_DOMAIN;
+const domain = process.env.REACT_APP_DOMAINTES;
 
 interface State {
     leftContent?: React.ReactNode;

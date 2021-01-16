@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { _cs, isDefined } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
-
+import FileUploader from '../FileUploader';
 
 import DangerButton from '#rsca/Button/DangerButton';
-
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import Checkbox from '#rsci/Checkbox';
-
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import {
     setAuthAction,
     setUserDetailAction,
@@ -47,22 +46,20 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
-const DetailsSecondPage = (props: Props) => {
+const DetailsFirstPage = (props: Props) => {
     const [errMsg, setErrMsg] = useState(false);
-    const [checkedTnc, setCheckedTnc] = useState(false);
-    const [intitutions, setInstitutions] = useState('');
+    const [uploaderr, setUploadError] = useState('');
     const { pending,
         closeModal,
         updatePage,
-        institution,
-        submit } = props;
+        signupRegion,
+        uploadedLetter } = props;
 
-    const handleDetails = () => updatePage('detailsFirstPage');
-    const handleAgreeBtn = () => console.log('handling agree btn press');
+    const handleDetails = () => updatePage('detailsPage');
+    const handleAgreeBtn = () => updatePage('detailsSecondPage');
     const handleCancelBtn = () => updatePage('loginPage');
-
-    const handleInstitutionChange = event => institution(event.target.value);
-    const handleSubmit = () => submit(true);
+    const handleFormRegion = (newValue, newRegionValues) => signupRegion(newRegionValues);
+    const setSelectedFile = file => uploadedLetter(file);
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -96,19 +93,22 @@ const DetailsSecondPage = (props: Props) => {
                     <h2>Please provide the following details</h2>
                     <div className={styles.newSignupForm}>
                         <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Enter your institution"
-                                onChange={handleInstitutionChange}
-                                required
+                            <StepwiseRegionSelectInput
+                                className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                faramElementName="region"
+                                wardsHidden
+                                onChange={handleFormRegion}
+                                initialLoc={{ municipality: undefined,
+                                    district: undefined,
+                                    province: undefined }}
                             />
                         </div>
-                        <p className={styles.moreInfo}>
-                            The official email will be registered in the
-                            system and will be used as the
-                            primary email for any official correspondence
-                        </p>
+                        <div className={styles.inputContainer}>
+                            <FileUploader
+                                onFileSelectSuccess={setSelectedFile}
+                                onFileSelectError={({ error }) => setUploadError(error)}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
@@ -121,10 +121,19 @@ const DetailsSecondPage = (props: Props) => {
                     <PrimaryButton
                         type="button"
                         pending={pending}
-                        className={styles.agreeBtn}
-                        onClick={handleSubmit}
+                        className={styles.cancelBtn}
+                        onClick={handleDetails}
                     >
-                        Submit
+                        Back
+                    </PrimaryButton>
+
+                    <PrimaryButton
+                        type="button"
+                        pending={pending}
+                        className={styles.agreeBtn}
+                        onClick={handleAgreeBtn}
+                    >
+                        Next
                     </PrimaryButton>
 
                 </div>
@@ -135,4 +144,4 @@ const DetailsSecondPage = (props: Props) => {
     );
 };
 
-export default DetailsSecondPage;
+export default DetailsFirstPage;
