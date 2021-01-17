@@ -47,19 +47,31 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const DetailsFirstPage = (props: Props) => {
-    const [errMsg, setErrMsg] = useState(false);
-    const [uploaderr, setUploadError] = useState('');
+    const [errMsg, setErrMsg] = useState(true);
+    const [showErr, setShowErr] = useState(false);
     const { pending,
         closeModal,
         updatePage,
-        signupRegion,
-        uploadedLetter } = props;
+        signupRegion } = props;
 
     const handleDetails = () => updatePage('detailsPage');
-    const handleAgreeBtn = () => updatePage('detailsSecondPage');
+    const handleAgreeBtn = () => {
+        if (!errMsg) {
+            updatePage('detailsSecondPage');
+        } else {
+            setShowErr(true);
+        }
+    };
     const handleCancelBtn = () => updatePage('loginPage');
-    const handleFormRegion = (newValue, newRegionValues) => signupRegion(newRegionValues);
-    const setSelectedFile = file => uploadedLetter(file);
+    const handleFormRegion = (newValue, newRegionValues) => {
+        signupRegion(newRegionValues);
+        console.log(newRegionValues);
+        if (newRegionValues) {
+            setErrMsg(false);
+        } else {
+            setErrMsg(true);
+        }
+    };
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -90,34 +102,27 @@ const DetailsFirstPage = (props: Props) => {
                     </DangerButton>
                 </div>
                 <div className={styles.formContainer}>
-                    <h2>Please provide the following details</h2>
+                    <h2>You are representing: </h2>
                     <div className={styles.newSignupForm}>
                         <div className={styles.inputContainer}>
                             <StepwiseRegionSelectInput
-                                className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                className={
+                                    _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                                 faramElementName="region"
                                 wardsHidden
                                 onChange={handleFormRegion}
                                 initialLoc={{ municipality: undefined,
                                     district: undefined,
                                     province: undefined }}
+                                provinceInputClassName={styles.snprovinceinput}
+                                districtInputClassName={styles.sndistinput}
+                                municipalityInputClassName={styles.snmuniinput}
                             />
                         </div>
-                        <div className={styles.inputContainer}>
-                            <FileUploader
-                                onFileSelectSuccess={setSelectedFile}
-                                onFileSelectError={({ error }) => setUploadError(error)}
-                            />
-                        </div>
+                        {errMsg && showErr ? <span className={styles.errMsg}>Please select at least one field</span> : ''}
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
-                    {errMsg
-                        && (
-                            <span className={styles.errMsg}>
-                           Something went wrong!!
-                            </span>
-                        )}
                     <PrimaryButton
                         type="button"
                         pending={pending}

@@ -73,6 +73,12 @@
             .newSignupForm{
                 display:flex;
                 flex-direction: column;
+                .errMsg{
+                    font-size: 9px;
+                    color: red;
+                    display: relative;
+                    top: 4px;
+                }
                 .multinputContainer{
                     display: flex;
                     border-radius: 4px;
@@ -116,15 +122,14 @@
 
                 }
                 }
-
                 .inputContainer{
                 display: flex;
                 border-radius: 4px;
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
-                margin: 10px 0 10px 0;
-
+                margin: 4px 0 10px 0;
+          
                 input::-webkit-input-placeholder{
                     font-size: 10px;
                     vertical-align:middle !important;

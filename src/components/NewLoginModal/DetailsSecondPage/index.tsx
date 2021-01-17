@@ -3,8 +3,10 @@ import Icon from '#rscg/Icon';
 
 
 import DangerButton from '#rsca/Button/DangerButton';
+import FileUploader from '../FileUploader';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import ReCaptcha from '#rsci/ReCaptcha';
 
 import {
     setAuthAction,
@@ -46,18 +48,33 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
+const domain = process.env.REACT_APP_DOMAIN;
+
 const DetailsSecondPage = (props: Props) => {
-    const [errMsg, setErrMsg] = useState(false);
+    const [fileErr, setFileErr] = useState(true);
+    const [uploaderr, setUploadError] = useState('');
+    const [showErr, setShowErr] = useState(false);
+
     const { pending,
         closeModal,
         updatePage,
         institution,
-        submit } = props;
+        submit, uploadedLetter } = props;
 
     const handleCancelBtn = () => updatePage('loginPage');
 
-    const handleInstitutionChange = event => institution(event.target.value);
-    const handleSubmit = () => submit(true);
+    const handleSubmit = () => {
+        if (!fileErr) {
+            submit(true);
+        } else {
+            setShowErr(true);
+        }
+    };
+    const setSelectedFile = (file) => {
+        setFileErr(false);
+        uploadedLetter(file);
+    };
+    const handleDetails = () => updatePage('detailsFirstPage');
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -88,31 +105,38 @@ const DetailsSecondPage = (props: Props) => {
                     </DangerButton>
                 </div>
                 <div className={styles.formContainer}>
-                    <h2>Please provide the following details</h2>
+                    <h2>Please attach the official letter</h2>
                     <div className={styles.newSignupForm}>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Enter your institution"
-                                onChange={handleInstitutionChange}
-                                required
+                        {showErr && fileErr ? (
+                            <span className={styles.fileError}>
+                                Please choose a valid letter file
+                                (.jpg, .jpeg, .pdf, .doc, .docx, .png)
+                            </span>
+                        ) : ''}
+                        <div className={styles.inputfileContainer}>
+                            <FileUploader
+                                onFileSelectSuccess={setSelectedFile}
+                                onFileSelectError={({ error }) => setUploadError(error)}
                             />
                         </div>
-                        <p className={styles.moreInfo}>
-                            The official email will be registered in the
-                            system and will be used as the
-                            primary email for any official correspondence
-                        </p>
+                        <div className={styles.officialLetterLink}>
+                            <a href={domain}>Download a sample letter</a>
+                        </div>
+                        <ReCaptcha
+                            faramElementName="recaptcha"
+                            siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                        />
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
-                    {errMsg
-                        && (
-                            <span className={styles.errMsg}>
-                           Something went wrong!!
-                            </span>
-                        )}
+                    <PrimaryButton
+                        type="button"
+                        pending={pending}
+                        className={styles.cancelBtn}
+                        onClick={handleDetails}
+                    >
+                        Back
+                    </PrimaryButton>
                     <PrimaryButton
                         type="button"
                         pending={pending}

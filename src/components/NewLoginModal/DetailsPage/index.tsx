@@ -3,9 +3,7 @@ import Icon from '#rscg/Icon';
 
 
 import DangerButton from '#rsca/Button/DangerButton';
-
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import Checkbox from '#rsci/Checkbox';
 
 import {
     setAuthAction,
@@ -48,26 +46,85 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const DetailsPage = (props: Props) => {
-    const [errMsg, setErrMsg] = useState(false);
-    const [checkedTnc, setCheckedTnc] = useState(false);
+    const [errFullName, setErrFullName] = useState(true);
+    const [errDesignation, setErrDesignation] = useState(true);
+    const [errPhone, setErrPhone] = useState(true);
+    const [errEmail, setErrEmail] = useState(true);
+    const [showErr, setShowErr] = useState(false);
+
+    const [fullName, setFullName] = useState('');
+    const [designation, setDesignation] = useState('');
+    const [phone, setPhone] = useState(0);
+    const [email, setEmail] = useState('');
+
     const { pending,
         closeModal,
         updatePage,
         handleFullName,
         handleDesignation,
-        handleIntCode,
         handlePhone,
         handleEmail } = props;
 
     const handleDetails = () => updatePage('tncPage');
-    const handleAgreeBtn = value => updatePage(value);
+    const handleAgreeBtn = (value) => {
+        console.log(errFullName, errDesignation, errPhone, errEmail);
+        if (!errFullName && !errDesignation && !errPhone && !errEmail) {
+            updatePage(value);
+        } else {
+            setShowErr(true);
+            if (!fullName) {
+                setErrFullName(true);
+            }
+            if (!designation) {
+                setErrDesignation(true);
+            }
+            if (!phone) {
+                setErrPhone(true);
+            }
+            if (!email) {
+                setErrEmail(true);
+            }
+        }
+    };
     const handleCancelBtn = () => updatePage('loginPage');
 
-    const handleFullnameChange = e => handleFullName(e.target.value);
-    const handleDesignationChange = e => handleDesignation(e.target.value);
-    const handleIntCodeChange = e => handleIntCode(e.target.value);
-    const handlePhoneChange = e => handlePhone(e.target.value);
-    const handleEmailChange = e => handleEmail(e.target.value);
+    const handleFullnameChange = (e) => {
+        const fullname = e.target.value;
+        setErrFullName(false);
+        setFullName(fullname);
+        handleFullName(fullname);
+    };
+    const handleDesignationChange = (e) => {
+        const desig = e.target.value;
+        setErrDesignation(false);
+        setDesignation(desig);
+        handleDesignation(desig);
+    };
+
+    const handlePhoneChange = (e) => {
+        const ph = e.target.value;
+        const pattern = new RegExp(/^[0-9\b]+$/);
+        if (!pattern.test(ph)) {
+            setErrPhone(true);
+        } else {
+            setErrPhone(false);
+        }
+        handlePhone(ph);
+        setPhone(ph);
+    };
+
+    const handleEmailChange = (e) => {
+        const mail = e.target.value;
+        const pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        if (!pattern.test(mail)) {
+            setErrEmail(true);
+        } else {
+            setErrEmail(false);
+        }
+        handleEmail(mail);
+        setEmail(mail);
+    };
+
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -85,7 +142,6 @@ const DetailsPage = (props: Props) => {
                         Sign in
                     </PrimaryButton>
                 </div>
-
             </div>
 
             <div className={styles.detailsFormContainer}>
@@ -100,6 +156,7 @@ const DetailsPage = (props: Props) => {
                 <div className={styles.formContainer}>
                     <h2>Please provide the following details</h2>
                     <div className={styles.newSignupForm}>
+                        {showErr && errFullName ? <span className={styles.errMsg}>Full Name is required</span> : ''}
                         <div className={styles.inputContainer}>
                             <input
                                 type="text"
@@ -108,6 +165,7 @@ const DetailsPage = (props: Props) => {
                                 onChange={handleFullnameChange}
                             />
                         </div>
+                        {showErr && errDesignation ? <span className={styles.errMsg}>Desingation is required</span> : ''}
                         <div className={styles.inputContainer}>
                             <input
                                 type="text"
@@ -116,25 +174,26 @@ const DetailsPage = (props: Props) => {
                                 onChange={handleDesignationChange}
                             />
                         </div>
+                        {showErr && errPhone ? <span className={styles.errMsg}>Valid Phone no. is required</span> : ''}
                         <div className={styles.multinputContainer}>
                             <div className={styles.smallElements}>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     className={styles.smallElement}
                                     placeholder="+977"
-                                    onChange={handleIntCodeChange}
+                                    disabled
                                 />
                             </div>
-
                             <div className={styles.biggerElements}>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     className={styles.biggerElement}
                                     placeholder="Phone No."
                                     onChange={handlePhoneChange}
                                 />
                             </div>
                         </div>
+                        {showErr && errEmail ? <span className={styles.errMsg}>Valid Official Email is required</span> : ''}
                         <div className={styles.inputContainer}>
                             <input
                                 type="text"
@@ -142,7 +201,6 @@ const DetailsPage = (props: Props) => {
                                 placeholder="Official Email"
                                 onChange={handleEmailChange}
                             />
-
                         </div>
                         <p className={styles.moreInfo}>
                             The official email will be registered in the
@@ -152,12 +210,6 @@ const DetailsPage = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
-                    {errMsg
-                        && (
-                            <span className={styles.errMsg}>
-                           Something went wrong!!
-                            </span>
-                        )}
                     <PrimaryButton
                         type="button"
                         pending={pending}

@@ -79,6 +79,8 @@ interface Params {
     district?: number;
     municipality?: number;
     file?: File;
+    pending?: boolean;
+    handlePending?: (value: boolean) => void;
 }
 
 interface OwnProps {
@@ -167,6 +169,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         onSuccess: ({ response, props, params }) => {
             console.log(response, props);
             params.handleThankYouPage('thankyouPage');
+            params.handlePending({ pending: false });
         },
         onFailure: ({ error, params }) => {
             console.log(error);
@@ -208,7 +211,7 @@ class Login extends React.PureComponent<Props, State> {
         this.state = {
             faramErrors: {},
             faramValues: {},
-            pageAction: 'loginPage',
+            pageAction: 'detailsSecondPage',
             fullName: '',
             designation: '',
             intCode: '',
@@ -219,6 +222,7 @@ class Login extends React.PureComponent<Props, State> {
             provinceId: 0,
             file: undefined,
             institution: '',
+            pending: false,
         };
     }
 
@@ -289,6 +293,10 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ pageAction: value });
     };
 
+    private handlePending = (pending: boolean) => {
+        this.setState({ pending });
+    };
+
     private submit = () => {
         const {
             fullName,
@@ -299,6 +307,7 @@ class Login extends React.PureComponent<Props, State> {
             districtId,
             provinceId,
             file,
+            pending,
         } = this.state;
         const { requests: { signUpRequest } } = this.props;
         console.log(fullName,
@@ -310,6 +319,7 @@ class Login extends React.PureComponent<Props, State> {
             provinceId,
             file);
         signUpRequest.do({
+            pending,
             fullName,
             position: designation,
             phoneNumber: phone,
@@ -318,6 +328,7 @@ class Login extends React.PureComponent<Props, State> {
             province: provinceId,
             district: districtId,
             municipality: municipalityId,
+            handlePending: this.handlePending,
             handleThankYouPage: this.handleThankYouPage,
         });
     }
@@ -471,7 +482,6 @@ class Login extends React.PureComponent<Props, State> {
                     updatePage={this.updatePage}
                     closeModal={closeModal}
                     signupRegion={this.signupRegion}
-                    uploadedLetter={this.uploadedLetter}
                     pending={pending}
                 />
             );
@@ -484,6 +494,8 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     submit={this.submit}
                     institution={this.handleInstitution}
+                    uploadedLetter={this.uploadedLetter}
+
                 />
             );
         }
