@@ -11,6 +11,7 @@ import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
 import DetailsPage from './DetailsPage';
 import DetailsFirstPage from './DetailsFirstPage';
+import ThankYouPage from './ThankYouPage';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -77,6 +78,7 @@ interface Params {
     province?: number;
     district?: number;
     municipality?: number;
+    file?: File;
 }
 
 interface OwnProps {
@@ -162,8 +164,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 municipality: params.municipality,
             };
         },
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             console.log(response, props);
+            params.handleThankYouPage('thankyouPage');
         },
         onFailure: ({ error, params }) => {
             console.log(error);
@@ -211,10 +214,9 @@ class Login extends React.PureComponent<Props, State> {
             intCode: '',
             phone: 0,
             email: '',
-            municipalityId: undefined,
-            districtId: undefined,
-            provinceId: undefined,
-            signupregion: {},
+            municipalityId: 0,
+            districtId: 0,
+            provinceId: 0,
             file: undefined,
             institution: '',
         };
@@ -246,54 +248,48 @@ class Login extends React.PureComponent<Props, State> {
     };
 
     private updatePage = (pageAction: string) => {
-        console.log(pageAction);
         this.setState({ pageAction });
     };
 
     private handleFullName = (fullName: string) => {
-        console.log(fullName);
         this.setState({ fullName });
     };
 
     private handleDesignation = (designation: string) => {
-        console.log(designation);
         this.setState({ designation });
     };
 
     private handleIntCode = (intCode: string) => {
-        console.log(intCode);
         this.setState({ intCode });
     };
 
     private handlePhone = (phone: number) => {
-        console.log(phone);
         this.setState({ phone });
     };
 
     private handleInstitution = (institution: string) => {
-        console.log(institution);
         this.setState({ institution });
     };
 
     private handleEmail = (value: string) => {
-        console.log(value);
         this.setState({ email: value });
     };
 
     private signupRegion = (value: SignupRegion) => {
-        console.log(value.municipalityId, value.districtId, value.provinceId);
         this.setState({ municipalityId: value.municipalityId,
             districtId: value.districtId,
             provinceId: value.provinceId });
     };
 
     private uploadedLetter = (file: File) => {
-        console.log(file);
         this.setState({ file });
     };
 
+    private handleThankYouPage = (value: string) => {
+        this.setState({ pageAction: value });
+    };
+
     private submit = () => {
-        console.log('submitting...');
         const {
             fullName,
             designation,
@@ -313,29 +309,6 @@ class Login extends React.PureComponent<Props, State> {
             districtId,
             provinceId,
             file);
-        const data = {
-            fullName,
-            position: designation,
-            phoneNumber: phone,
-            officialEmail: email,
-            officialLetter: file,
-            province: provinceId,
-            district: districtId,
-            municipality: municipalityId,
-        };
-        // fetch('https://bipaddev.yilab.org.np/api/v1/password-request/', {
-        //     mode: 'no-cors',
-        //     method: 'post',
-        //     headers: {
-        //         Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-        //         'Content-Type': 'multipart/form-data',
-        //     },
-        //     body: data,
-        // }).then((response) => {
-        //     console.log(response.status);
-        //     console.log('response');
-        //     console.log(response);
-        // }).catch(err => console.log(err));
         signUpRequest.do({
             fullName,
             position: designation,
@@ -345,6 +318,7 @@ class Login extends React.PureComponent<Props, State> {
             province: provinceId,
             district: districtId,
             municipality: municipalityId,
+            handleThankYouPage: this.handleThankYouPage,
         });
     }
 
@@ -353,11 +327,6 @@ class Login extends React.PureComponent<Props, State> {
             faramErrors,
             faramValues,
             pageAction,
-            fullName,
-            designation,
-            intCode,
-            phone,
-            email,
         } = this.state;
         const {
             className,
@@ -518,7 +487,14 @@ class Login extends React.PureComponent<Props, State> {
                 />
             );
         }
-
+        if (pageAction === 'thankyouPage') {
+            displayElement = (
+                <ThankYouPage
+                    closeModal={closeModal}
+                    pending={pending}
+                />
+            );
+        }
 
         return (
             <Modal

@@ -18,7 +18,6 @@ import { sanitizeResponse } from '#utils/common';
 import { getAuthState } from '#utils/session';
 
 const wsEndpoint = process.env.REACT_APP_API_SERVER_URL;
-// const wsEndpoint = 'https://bipaddev.yilab.org.np/api/v1';
 const domain = process.env.REACT_APP_DOMAIN;
 
 const isFile = (input: any): input is File => (

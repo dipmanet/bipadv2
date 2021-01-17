@@ -5,7 +5,6 @@ import Icon from '#rscg/Icon';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import Checkbox from '#rsci/Checkbox';
 
 import {
     setAuthAction,
@@ -49,16 +48,12 @@ type Props = NewProps<ReduxProps, Params>;
 
 const DetailsSecondPage = (props: Props) => {
     const [errMsg, setErrMsg] = useState(false);
-    const [checkedTnc, setCheckedTnc] = useState(false);
-    const [intitutions, setInstitutions] = useState('');
     const { pending,
         closeModal,
         updatePage,
         institution,
         submit } = props;
 
-    const handleDetails = () => updatePage('detailsFirstPage');
-    const handleAgreeBtn = () => console.log('handling agree btn press');
     const handleCancelBtn = () => updatePage('loginPage');
 
     const handleInstitutionChange = event => institution(event.target.value);
