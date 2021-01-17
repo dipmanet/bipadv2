@@ -73,6 +73,13 @@
                     position: relative;
                     top:10px;
                 }
+                .captchaErr{
+                    font-size: 10px;
+                    color: red;
+                    position: relative;
+                    bottom:15px;
+                }
+                
                 .inputfileContainer{
                     border: 1px solid rgb(232,232,232);
                     padding: 12px 7px;

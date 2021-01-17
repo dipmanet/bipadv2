@@ -52,8 +52,10 @@ const domain = process.env.REACT_APP_DOMAIN;
 
 const DetailsSecondPage = (props: Props) => {
     const [fileErr, setFileErr] = useState(true);
-    const [uploaderr, setUploadError] = useState('');
+    const [uploaderr, setUploadError] = useState(true);
     const [showErr, setShowErr] = useState(false);
+    const [token, setToken] = useState('');
+    // const [submitPending, setPending] = useState(false);
 
     const { pending,
         closeModal,
@@ -62,12 +64,14 @@ const DetailsSecondPage = (props: Props) => {
         submit, uploadedLetter } = props;
 
     const handleCancelBtn = () => updatePage('loginPage');
-
+    const handleCaptchaChange = value => setToken(value);
     const handleSubmit = () => {
-        if (!fileErr) {
+        if (!fileErr && token) {
+            // setPending(true);
             submit(true);
         } else {
             setShowErr(true);
+            setUploadError(true);
         }
     };
     const setSelectedFile = (file) => {
@@ -125,13 +129,21 @@ const DetailsSecondPage = (props: Props) => {
                         <ReCaptcha
                             faramElementName="recaptcha"
                             siteKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                            onChange={handleCaptchaChange}
+
                         />
+                        {uploaderr && showErr
+                            ? (
+                                <span className={styles.captchaErr}>
+                                    Please select the checkbox to submit
+                                </span>
+                            ) : ''
+                        }
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
                     <PrimaryButton
                         type="button"
-                        pending={pending}
                         className={styles.cancelBtn}
                         onClick={handleDetails}
                     >

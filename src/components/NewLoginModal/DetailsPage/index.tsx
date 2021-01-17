@@ -205,7 +205,7 @@ const DetailsPage = (props: Props) => {
                         <p className={styles.moreInfo}>
                             The official email will be registered in the
                             system and will be used as the
-                            primary email for any official correspondence
+                            primary email for any official correspondence.
                         </p>
                     </div>
                 </div>

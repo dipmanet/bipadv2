@@ -211,7 +211,7 @@ class Login extends React.PureComponent<Props, State> {
         this.state = {
             faramErrors: {},
             faramValues: {},
-            pageAction: 'detailsSecondPage',
+            pageAction: 'loginPage',
             fullName: '',
             designation: '',
             intCode: '',
@@ -298,6 +298,7 @@ class Login extends React.PureComponent<Props, State> {
     };
 
     private submit = () => {
+        this.setState({ pending: true });
         const {
             fullName,
             designation,
@@ -307,19 +308,9 @@ class Login extends React.PureComponent<Props, State> {
             districtId,
             provinceId,
             file,
-            pending,
         } = this.state;
         const { requests: { signUpRequest } } = this.props;
-        console.log(fullName,
-            designation,
-            phone,
-            email,
-            municipalityId,
-            districtId,
-            provinceId,
-            file);
         signUpRequest.do({
-            pending,
             fullName,
             position: designation,
             phoneNumber: phone,
@@ -338,13 +329,14 @@ class Login extends React.PureComponent<Props, State> {
             faramErrors,
             faramValues,
             pageAction,
+            pending,
         } = this.state;
         const {
             className,
             closeModal,
             requests: {
                 loginRequest: {
-                    pending,
+                    pending: pendingProp,
                 },
             },
         } = this.props;
@@ -365,8 +357,8 @@ class Login extends React.PureComponent<Props, State> {
                             <div className={styles.signinTitles}>
                                 <h1>Welcome to BIPAD Portal</h1>
                                 <p>
-                                    An integrated and comprehensie DIMS platform to support
-                                    disaster risk management throug informed decision making.
+                                    An integrated and comprehensive DIMS platform to support
+                                    disaster risk management through informed decision making.
                                 </p>
                                 <hr />
 

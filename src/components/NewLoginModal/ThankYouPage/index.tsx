@@ -72,7 +72,6 @@ const DetailsSecondPage = (props: Props) => {
                 <div className={styles.cancelAgreeBtns}>
                     <PrimaryButton
                         type="button"
-                        pending={pending}
                         className={styles.agreeBtn}
                         onClick={closeModal}
                     >
