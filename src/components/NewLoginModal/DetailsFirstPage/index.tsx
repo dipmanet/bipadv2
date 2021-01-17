@@ -65,8 +65,9 @@ const DetailsFirstPage = (props: Props) => {
     const handleCancelBtn = () => updatePage('loginPage');
     const handleFormRegion = (newValue, newRegionValues) => {
         signupRegion(newRegionValues);
-        console.log(newRegionValues);
-        if (newRegionValues) {
+        if (newRegionValues.provinceId
+            || newRegionValues.municipalityId
+            || newRegionValues.districtId) {
             setErrMsg(false);
         } else {
             setErrMsg(true);
@@ -78,7 +79,7 @@ const DetailsFirstPage = (props: Props) => {
             <div className={styles.welcomeBack}>
                 <h1>Welcome Back</h1>
                 <p>
-                        To keep connected with us please login with your personal info
+                    To login to BIPAD Portal, please use your credentials.
                 </p>
                 <div className={styles.loginBtn}>
                     <PrimaryButton

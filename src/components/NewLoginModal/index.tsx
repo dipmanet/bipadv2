@@ -496,6 +496,7 @@ class Login extends React.PureComponent<Props, State> {
                 <ThankYouPage
                     closeModal={closeModal}
                     pending={pending}
+                    updatePage={this.updatePage}
                 />
             );
         }

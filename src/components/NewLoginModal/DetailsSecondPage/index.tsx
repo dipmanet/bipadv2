@@ -49,6 +49,7 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const domain = process.env.REACT_APP_DOMAIN;
+const sampleLetterURL = '/media/password_request_document_sample.docx';
 
 const DetailsSecondPage = (props: Props) => {
     const [fileErr, setFileErr] = useState(true);
@@ -64,7 +65,10 @@ const DetailsSecondPage = (props: Props) => {
         submit, uploadedLetter } = props;
 
     const handleCancelBtn = () => updatePage('loginPage');
-    const handleCaptchaChange = value => setToken(value);
+    const handleCaptchaChange = (value) => {
+        setToken(value);
+        setUploadError(false);
+    };
     const handleSubmit = () => {
         if (!fileErr && token) {
             // setPending(true);
@@ -85,7 +89,7 @@ const DetailsSecondPage = (props: Props) => {
             <div className={styles.welcomeBack}>
                 <h1>Welcome Back</h1>
                 <p>
-                        To keep connected with us please login with your personal info
+                    To login to BIPAD Portal, please use your credentials.
                 </p>
                 <div className={styles.loginBtn}>
                     <PrimaryButton
@@ -124,7 +128,7 @@ const DetailsSecondPage = (props: Props) => {
                             />
                         </div>
                         <div className={styles.officialLetterLink}>
-                            <a href={domain}>Download a sample letter</a>
+                            <a href={domain + sampleLetterURL}>Download a sample letter</a>
                         </div>
                         <ReCaptcha
                             faramElementName="recaptcha"
