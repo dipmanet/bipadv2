@@ -423,7 +423,7 @@ class Login extends React.PureComponent<Props, State> {
                                 </DangerButton>
                             </div>
                             <div className={styles.pwdRequest}>
-                                <h1>Dont have an account?</h1>
+                                <h1>Do not have an account?</h1>
                                 <p>Click to request BIPAD login credential</p>
                                 <DangerButton
                                     type="button"
