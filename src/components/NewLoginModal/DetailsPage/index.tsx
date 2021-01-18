@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '#rscg/Icon';
 
 
@@ -46,10 +46,10 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const DetailsPage = (props: Props) => {
-    const [errFullName, setErrFullName] = useState(true);
-    const [errDesignation, setErrDesignation] = useState(true);
-    const [errPhone, setErrPhone] = useState(true);
-    const [errEmail, setErrEmail] = useState(true);
+    const [errFullName, setErrFullName] = useState(false);
+    const [errDesignation, setErrDesignation] = useState(false);
+    const [errPhone, setErrPhone] = useState(false);
+    const [errEmail, setErrEmail] = useState(false);
     const [showErr, setShowErr] = useState(false);
 
     const { pending,
@@ -66,23 +66,27 @@ const DetailsPage = (props: Props) => {
 
     const handleDetails = () => updatePage('tncPage');
 
+    useEffect(() => {
+        if (!phoneprop) {
+            setErrPhone(true);
+        }
+        if (!nameprop) {
+            setErrFullName(true);
+        }
+        if (!designationprop) {
+            setErrDesignation(true);
+        }
+        if (!emailprop) {
+            setErrEmail(true);
+        }
+    }, [designationprop, emailprop, nameprop, phoneprop]);
+
     const handleAgreeBtn = (value) => {
-        if (phoneprop && nameprop && designationprop && emailprop) {
+        if (!errFullName && !errDesignation && !errPhone && !errEmail) {
             updatePage(value);
+            // console.log('page updated');
         } else {
             setShowErr(true);
-            if (!nameprop) {
-                setErrFullName(true);
-            }
-            if (!designationprop) {
-                setErrDesignation(true);
-            }
-            if (!phoneprop) {
-                setErrPhone(true);
-            }
-            if (!emailprop) {
-                setErrEmail(true);
-            }
         }
     };
 
@@ -90,13 +94,21 @@ const DetailsPage = (props: Props) => {
 
     const handleFullnameChange = (e) => {
         const fullname = e.target.value;
-        setErrFullName(false);
+        if (fullname === '') {
+            setErrFullName(true);
+        } else {
+            setErrFullName(false);
+        }
         handleFullName(fullname);
     };
 
     const handleDesignationChange = (e) => {
         const desig = e.target.value;
-        setErrDesignation(false);
+        if (desig === '') {
+            setErrDesignation(true);
+        } else {
+            setErrDesignation(false);
+        }
         handleDesignation(desig);
     };
 
