@@ -61,8 +61,8 @@ const DetailsSecondPage = (props: Props) => {
     const { pending,
         closeModal,
         updatePage,
-        institution,
-        submit, uploadedLetter } = props;
+        submit,
+        uploadedLetter } = props;
 
     const handleCancelBtn = () => updatePage('loginPage');
     const handleCaptchaChange = (value) => {
@@ -71,7 +71,6 @@ const DetailsSecondPage = (props: Props) => {
     };
     const handleSubmit = () => {
         if (!fileErr && token) {
-            // setPending(true);
             submit(true);
         } else {
             setShowErr(true);

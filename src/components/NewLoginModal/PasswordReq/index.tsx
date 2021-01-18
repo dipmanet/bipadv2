@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import Icon from '#rscg/Icon';
-
 
 import DangerButton from '#rsca/Button/DangerButton';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import Checkbox from '#rsci/Checkbox';
 
 import {
     setAuthAction,
@@ -16,6 +15,7 @@ import {
     NewProps,
 } from '#request';
 import styles from './styles.scss';
+import { colorScheme } from '#constants';
 
 interface FaramValues {
     username?: string;
@@ -48,11 +48,11 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const PasswordReq = (props: Props) => {
-    console.log(props);
     const [loginpage, setloginpage] = useState(false);
     const [chkBox, setChkBox] = useState(false);
     const [errMsg, setErrMsg] = useState(false);
     const [checkedTnc, setCheckedTnc] = useState(false);
+    const [disabled, setDisabled] = useState(true);
     const { pending,
         closeModal,
         handleCancel,
@@ -61,6 +61,11 @@ const PasswordReq = (props: Props) => {
     const handleCancelBtn = () => handleCancel('loginPage');
 
     const handleChkBox = (event) => {
+        if (event.target.checked) {
+            setDisabled(false);
+        } else {
+            setDisabled(true);
+        }
         setCheckedTnc(event.target.checked);
         setErrMsg(false);
     };
@@ -131,36 +136,40 @@ const PasswordReq = (props: Props) => {
                     </div>
 
                 </div>
-                {errMsg
+                <div className={styles.BtnsandErr}>
+                    {errMsg
                         && (
                             <span className={styles.errMsg}>
                             Please agree to the terms and
                             conditions before continuing
                             </span>
                         )}
-                <div className={styles.cancelAgreeBtns}>
-                    <div>
-                        <PrimaryButton
-                            type="button"
-                            pending={pending}
-                            className={styles.cancelBtn}
-                            onClick={handleCancelBtn}
-                        >
+                    <div className={styles.cancelAgreeBtns}>
+                        <div>
+                            <PrimaryButton
+                                type="button"
+                                pending={pending}
+                                className={styles.cancelBtn}
+                                onClick={handleCancelBtn}
+                            >
                         Back
-                        </PrimaryButton>
+                            </PrimaryButton>
 
-                        <PrimaryButton
-                            type="button"
-                            pending={pending}
-                            className={styles.agreeBtn}
-                            onClick={handleAgreeBtn}
-                        >
+                            <PrimaryButton
+                                type="button"
+                                pending={pending}
+                                className={styles.agreeBtn}
+                                onClick={handleAgreeBtn}
+                                disabled={disabled}
+                            >
                         I Agree
-                        </PrimaryButton>
+                            </PrimaryButton>
+                        </div>
+
                     </div>
 
-                </div>
 
+                </div>
 
             </div>
         </div>

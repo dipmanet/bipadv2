@@ -215,11 +215,11 @@ class Login extends React.PureComponent<Props, State> {
             fullName: '',
             designation: '',
             intCode: '',
-            phone: 0,
+            phone: undefined,
             email: '',
-            municipalityId: 0,
-            districtId: 0,
-            provinceId: 0,
+            municipalityId: undefined,
+            districtId: undefined,
+            provinceId: undefined,
             file: undefined,
             institution: '',
             pending: false,
@@ -330,6 +330,11 @@ class Login extends React.PureComponent<Props, State> {
             faramValues,
             pageAction,
             pending,
+            phone,
+            fullName,
+            designation,
+            intCode,
+            email,
         } = this.state;
         const {
             className,
@@ -464,6 +469,10 @@ class Login extends React.PureComponent<Props, State> {
                     handleIntCode={this.handleIntCode}
                     handlePhone={this.handlePhone}
                     handleEmail={this.handleEmail}
+                    phoneprop={phone}
+                    nameprop={fullName}
+                    designationprop={designation}
+                    emailprop={email}
 
                 />
             );

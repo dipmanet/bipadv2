@@ -52,52 +52,51 @@ const DetailsPage = (props: Props) => {
     const [errEmail, setErrEmail] = useState(true);
     const [showErr, setShowErr] = useState(false);
 
-    const [fullName, setFullName] = useState('');
-    const [designation, setDesignation] = useState('');
-    const [phone, setPhone] = useState(0);
-    const [email, setEmail] = useState('');
-
     const { pending,
         closeModal,
         updatePage,
         handleFullName,
         handleDesignation,
         handlePhone,
-        handleEmail } = props;
+        handleEmail,
+        phoneprop,
+        nameprop,
+        designationprop,
+        emailprop } = props;
 
     const handleDetails = () => updatePage('tncPage');
+
     const handleAgreeBtn = (value) => {
-        console.log(errFullName, errDesignation, errPhone, errEmail);
-        if (!errFullName && !errDesignation && !errPhone && !errEmail) {
+        if (phoneprop && nameprop && designationprop && emailprop) {
             updatePage(value);
         } else {
             setShowErr(true);
-            if (!fullName) {
+            if (!nameprop) {
                 setErrFullName(true);
             }
-            if (!designation) {
+            if (!designationprop) {
                 setErrDesignation(true);
             }
-            if (!phone) {
+            if (!phoneprop) {
                 setErrPhone(true);
             }
-            if (!email) {
+            if (!emailprop) {
                 setErrEmail(true);
             }
         }
     };
+
     const handleCancelBtn = () => updatePage('loginPage');
 
     const handleFullnameChange = (e) => {
         const fullname = e.target.value;
         setErrFullName(false);
-        setFullName(fullname);
         handleFullName(fullname);
     };
+
     const handleDesignationChange = (e) => {
         const desig = e.target.value;
         setErrDesignation(false);
-        setDesignation(desig);
         handleDesignation(desig);
     };
 
@@ -110,7 +109,6 @@ const DetailsPage = (props: Props) => {
             setErrPhone(false);
         }
         handlePhone(ph);
-        setPhone(ph);
     };
 
     const handleEmailChange = (e) => {
@@ -122,7 +120,6 @@ const DetailsPage = (props: Props) => {
             setErrEmail(false);
         }
         handleEmail(mail);
-        setEmail(mail);
     };
 
 
@@ -163,6 +160,7 @@ const DetailsPage = (props: Props) => {
                                 className={styles.inputElement}
                                 placeholder="Full Name"
                                 onChange={handleFullnameChange}
+                                value={nameprop || ''}
                             />
                         </div>
                         {showErr && errDesignation ? <span className={styles.errMsg}>Desingation is required</span> : ''}
@@ -172,6 +170,7 @@ const DetailsPage = (props: Props) => {
                                 className={styles.inputElement}
                                 placeholder="Desingation (eg. IT Officer)"
                                 onChange={handleDesignationChange}
+                                value={designationprop || ''}
                             />
                         </div>
                         {showErr && errPhone ? <span className={styles.errMsg}>Valid Phone no. is required</span> : ''}
@@ -190,6 +189,7 @@ const DetailsPage = (props: Props) => {
                                     className={styles.biggerElement}
                                     placeholder="Phone No."
                                     onChange={handlePhoneChange}
+                                    value={phoneprop || ''}
                                 />
                             </div>
                         </div>
@@ -200,6 +200,7 @@ const DetailsPage = (props: Props) => {
                                 className={styles.inputElement}
                                 placeholder="Official Email"
                                 onChange={handleEmailChange}
+                                value={emailprop || ''}
                             />
                         </div>
                         <p className={styles.moreInfo}>
