@@ -52,7 +52,10 @@ const DetailsFirstPage = (props: Props) => {
     const { pending,
         closeModal,
         updatePage,
-        signupRegion } = props;
+        signupRegion,
+        municipality,
+        district,
+        province } = props;
 
     const handleDetails = () => updatePage('detailsPage');
     const handleAgreeBtn = () => {
@@ -112,9 +115,9 @@ const DetailsFirstPage = (props: Props) => {
                                 faramElementName="region"
                                 wardsHidden
                                 onChange={handleFormRegion}
-                                initialLoc={{ municipality: undefined,
-                                    district: undefined,
-                                    province: undefined }}
+                                initialLoc={{ municipality,
+                                    district,
+                                    province }}
                                 provinceInputClassName={styles.snprovinceinput}
                                 districtInputClassName={styles.sndistinput}
                                 municipalityInputClassName={styles.snmuniinput}

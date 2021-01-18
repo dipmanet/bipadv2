@@ -333,8 +333,10 @@ class Login extends React.PureComponent<Props, State> {
             phone,
             fullName,
             designation,
-            intCode,
             email,
+            municipalityId,
+            districtId,
+            provinceId,
         } = this.state;
         const {
             className,
@@ -484,6 +486,9 @@ class Login extends React.PureComponent<Props, State> {
                     closeModal={closeModal}
                     signupRegion={this.signupRegion}
                     pending={pending}
+                    municipality={municipalityId}
+                    district={districtId}
+                    province={provinceId}
                 />
             );
         }
