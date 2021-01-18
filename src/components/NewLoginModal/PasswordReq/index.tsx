@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState } from 'react';
 import Icon from '#rscg/Icon';
 
 import DangerButton from '#rsca/Button/DangerButton';
@@ -15,7 +14,6 @@ import {
     NewProps,
 } from '#request';
 import styles from './styles.scss';
-import { colorScheme } from '#constants';
 
 interface FaramValues {
     username?: string;
@@ -36,6 +34,9 @@ interface Params {
 interface OwnProps {
     className?: string;
     closeModal?: () => void;
+    pending?: boolean;
+    handleCancel: (loginPage: string) => void;
+    handleAgree: (detailsPage: string) => void;
 }
 
 interface PropsFromDispatch {
@@ -48,8 +49,6 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const PasswordReq = (props: Props) => {
-    const [loginpage, setloginpage] = useState(false);
-    const [chkBox, setChkBox] = useState(false);
     const [errMsg, setErrMsg] = useState(false);
     const [checkedTnc, setCheckedTnc] = useState(false);
     const [disabled, setDisabled] = useState(true);
@@ -60,13 +59,13 @@ const PasswordReq = (props: Props) => {
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
-    const handleChkBox = (event) => {
-        if (event.target.checked) {
+    const handleChkBox = (e) => {
+        if (e.target.checked) {
             setDisabled(false);
         } else {
             setDisabled(true);
         }
-        setCheckedTnc(event.target.checked);
+        setCheckedTnc(e.target.checked);
         setErrMsg(false);
     };
 
