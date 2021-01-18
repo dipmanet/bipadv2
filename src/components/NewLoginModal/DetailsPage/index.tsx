@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '#rscg/Icon';
 
-
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -216,6 +215,10 @@ const DetailsPage = (props: Props) => {
                             />
                         </div>
                         <p className={styles.moreInfo}>
+                            <Icon
+                                name="info"
+                                className={styles.infoIcon}
+                            />
                             The official email will be registered in the
                             system and will be used as the
                             primary email for any official correspondence.
@@ -242,8 +245,6 @@ const DetailsPage = (props: Props) => {
                     </PrimaryButton>
 
                 </div>
-
-
             </div>
         </div>
     );

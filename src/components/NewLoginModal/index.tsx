@@ -102,6 +102,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setUserDetail: params => dispatch(setUserDetailAction(params)),
 });
 
+
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     loginRequest: {
         url: '/auth/login/',
@@ -169,7 +170,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         onSuccess: ({ response, props, params }) => {
             console.log(response, props);
             params.handleThankYouPage('thankyouPage');
-            params.handlePending({ pending: false });
+            params.handlePending(false);
         },
         onFailure: ({ error, params }) => {
             console.log(error);
@@ -214,7 +215,6 @@ class Login extends React.PureComponent<Props, State> {
             pageAction: 'loginPage',
             fullName: '',
             designation: '',
-            intCode: '',
             phone: undefined,
             email: '',
             municipalityId: undefined,
@@ -368,7 +368,6 @@ class Login extends React.PureComponent<Props, State> {
                                     disaster risk management through informed decision making.
                                 </p>
                                 <hr />
-
                             </div>
 
                             <div className={styles.formElements}>
@@ -413,8 +412,25 @@ class Login extends React.PureComponent<Props, State> {
                                         pending={pending}
                                         className={styles.newsignIn}
                                     >
-                            Login
+                                        Login
                                     </PrimaryButton>
+                                </div>
+                                <div className={styles.externalLink}>
+                                    Other logins:
+                                    <a
+                                        className={styles.extlink}
+                                        href={`${process.env.REACT_APP_PROJECT_SERVER_URL}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <div className={styles.linktexts}>
+                                            <Icon
+                                                className={styles.icon}
+                                                name="externalLink"
+                                            />
+                                         MDSA
+                                        </div>
+                                    </a>
                                 </div>
 
                             </div>
@@ -499,7 +515,6 @@ class Login extends React.PureComponent<Props, State> {
                     closeModal={closeModal}
                     pending={pending}
                     submit={this.submit}
-                    institution={this.handleInstitution}
                     uploadedLetter={this.uploadedLetter}
 
                 />

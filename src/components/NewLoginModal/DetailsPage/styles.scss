@@ -49,7 +49,10 @@
     }
     .detailsFormContainer{
         flex: 1.4;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding-bottom: 2%;
         .closeBtn{
             display: flex;
             justify-content: flex-end;
@@ -64,8 +67,7 @@
         .formContainer{
             display: flex;
             flex-direction: column;
-            margin: 5% 10% 15% 15%;
-
+            margin: 0 10% 3% 15%;
             h2{
                 font-size: 12px;
             }
@@ -84,7 +86,7 @@
                     border-radius: 4px;
                     justify-content: flex-start;
                     align-items: center;
-                    margin: 10px 0 10px 0;
+                    margin: 4px 0 7px 0;
                 input::-webkit-input-placeholder{
                     font-size: 10px;
                     vertical-align:middle !important;
@@ -128,7 +130,7 @@
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
-                margin: 4px 0 10px 0;
+                margin: 4px 0 7px 0;
           
                 input::-webkit-input-placeholder{
                     font-size: 10px;
@@ -160,6 +162,11 @@
             .moreInfo{
                 font-size: 10px;
                 color: #777;
+                .infoIcon{
+                    color: #444;
+                    padding-right: 4px;
+                    font-size: 12px;
+                }
             }
             }
         }
@@ -167,8 +174,29 @@
             display: flex;
             justify-content: flex-end;
             position: relative;
-            bottom: 10%;
-            padding-right: 40px;
+            padding: 0 7% 3% 0;
+            .agreeBtn{
+                width: 80px;
+                filter: saturate(100%);
+                background-color: rgb(0,105,222) !important;
+                border-radius: 30px;
+                color: white; 
+            }
+            .cancelBtn{
+                width: 60px;
+                filter: saturate(100%);
+                background-color: rgb(255,255,255) !important;
+                border-radius: 30px;
+                color: rgb(0,105,222); 
+                border:none;
+            }
+            .disabled{
+                width: 80px;
+                filter: saturate(100%);
+                background-color: rgb(115, 152, 189) !important;
+                border-radius: 30px;
+                color: rgb(255, 255, 255); 
+            }
         }
     }
 }

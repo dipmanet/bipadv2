@@ -75,11 +75,15 @@
                 color: #777;
             }
             .iAgreeCheckBox{
-                margin: 0 10px 10px 20px;
+                margin: 0 10px 10px 5px;
+                display: flex;
+                .tncCheckbox{
+                    margin-right: 4px;
+                }
                 .chkboxLbl{
                     color: #777;
-                    font-size: 10px;
-                    margin-left: 5px;
+                    font-size: 12px;
+                    line-height: 1.7em;
                 }
             }
         }
@@ -91,6 +95,30 @@
             .cancelAgreeBtns{
                 display: flex;
                 justify-content: flex-end;
+                // border: 1px solid gray;
+                width: 100%;
+                .agreeBtn{
+                    width: 80px;
+                    filter: saturate(100%);
+                    background-color: rgb(0,105,222) !important;
+                    border-radius: 30px;
+                    color: white; 
+                }
+                .cancelBtn{
+                    width: 60px;
+                    filter: saturate(100%);
+                    background-color: rgb(255,255,255) !important;
+                    border-radius: 30px;
+                    color: rgb(0,105,222); 
+                    border:none;
+                }
+                .disabled{
+                    width: 80px;
+                    filter: saturate(100%);
+                    background-color: rgb(115, 152, 189) !important;
+                    border-radius: 30px;
+                    color: rgb(255, 255, 255); 
+                }
 
             }
         }

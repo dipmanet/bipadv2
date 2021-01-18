@@ -1,7 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import Icon from '#rscg/Icon';
-import FileUploader from '../FileUploader';
 
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -68,14 +67,15 @@ const DetailsFirstPage = (props: Props) => {
     const handleCancelBtn = () => updatePage('loginPage');
     const handleFormRegion = (newValue, newRegionValues) => {
         signupRegion(newRegionValues);
-        if (newRegionValues.provinceId
-            || newRegionValues.municipalityId
-            || newRegionValues.districtId) {
+    };
+
+    useEffect(() => {
+        if (municipality || province || district) {
             setErrMsg(false);
         } else {
             setErrMsg(true);
         }
-    };
+    }, [district, municipality, province]);
 
     return (
         <div className={styles.mainPageDetailsContainer}>

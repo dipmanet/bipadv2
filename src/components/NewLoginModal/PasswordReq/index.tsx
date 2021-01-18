@@ -96,7 +96,6 @@ const PasswordReq = (props: Props) => {
                         Sign in
                     </PrimaryButton>
                 </div>
-
             </div>
 
             <div className={styles.pwdRequestContainer}>
@@ -120,7 +119,6 @@ const PasswordReq = (props: Props) => {
                         national portal embedded with independent platforms for
                         national, provincial, and municipal government with a
                         bottom-up approach of disaster data partnership.
-
                     </p>
                     <p className={styles.description}>
                         Authorized government body from each province, district,
@@ -128,13 +126,16 @@ const PasswordReq = (props: Props) => {
                         can request for the username and password once.
                     </p>
                     <div className={styles.iAgreeCheckBox}>
-                        <input type="checkbox" onClick={handleChkBox} className={styles.tncCheckbox} />
-                        <span className={styles.chkboxLbl}>
-                            I hereby confirm that I am a government employee
-                            requesting for the login credential for the first time
-                        </span>
+                        <div>
+                            <input type="checkbox" onClick={handleChkBox} className={styles.tncCheckbox} />
+                        </div>
+                        <div>
+                            <span className={styles.chkboxLbl}>
+                                I hereby confirm that I am a government employee
+                                requesting for the login credential for the first time
+                            </span>
+                        </div>
                     </div>
-
                 </div>
                 <div className={styles.BtnsandErr}>
                     {errMsg
@@ -152,25 +153,21 @@ const PasswordReq = (props: Props) => {
                                 className={styles.cancelBtn}
                                 onClick={handleCancelBtn}
                             >
-                        Back
+                                Back
                             </PrimaryButton>
 
                             <PrimaryButton
                                 type="button"
                                 pending={pending}
-                                className={styles.agreeBtn}
+                                className={disabled ? styles.disabled : styles.agreeBtn}
                                 onClick={handleAgreeBtn}
                                 disabled={disabled}
                             >
-                        I Agree
+                                I Agree
                             </PrimaryButton>
                         </div>
-
                     </div>
-
-
                 </div>
-
             </div>
         </div>
     );

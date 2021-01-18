@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '#rscg/Icon';
 
 
@@ -56,8 +56,7 @@ const DetailsSecondPage = (props: Props) => {
     const [uploaderr, setUploadError] = useState(true);
     const [showErr, setShowErr] = useState(false);
     const [token, setToken] = useState('');
-    // const [submitPending, setPending] = useState(false);
-
+    const [disabled, setDisabled] = useState(true);
     const { pending,
         closeModal,
         updatePage,
@@ -66,11 +65,25 @@ const DetailsSecondPage = (props: Props) => {
 
     const handleCancelBtn = () => updatePage('loginPage');
     const handleCaptchaChange = (value) => {
-        setToken(value);
-        setUploadError(false);
+        console.log(value);
+        if (value === '') {
+            setDisabled(true);
+        } else {
+            setToken(value);
+            setUploadError(false);
+            setDisabled(false);
+        }
     };
+    useEffect(() => {
+        if (!uploaderr && !fileErr) {
+            setDisabled(false);
+        } else {
+            setDisabled(true);
+        }
+    }, [fileErr, uploaderr]);
+
     const handleSubmit = () => {
-        if (!fileErr && token) {
+        if (!fileErr && !uploaderr) {
             submit(true);
         } else {
             setShowErr(true);
@@ -155,8 +168,9 @@ const DetailsSecondPage = (props: Props) => {
                     <PrimaryButton
                         type="button"
                         pending={pending}
-                        className={styles.agreeBtn}
+                        className={disabled ? styles.disabled : styles.agreeBtn}
                         onClick={handleSubmit}
+                        disabled={disabled}
                     >
                         Submit
                     </PrimaryButton>

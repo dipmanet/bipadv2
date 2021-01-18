@@ -9,7 +9,7 @@
     // border: 1px solid red;
 }
 .signIn{
-    padding: 60px 20px;
+    padding: 40px 20px;
     flex-direction: column;
     // border: 1px solid red;
     .signinTitles{
@@ -29,8 +29,14 @@
     .formElements{
         display: flex;
         flex-direction: column;
-        //this is causing squeeze 
-        // align-items: center;
+        .externalLink{
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            .linktexts{
+                padding-left: 10px;
+            }
+        }
         .loginBtn{
             display: flex;
             justify-content: center;
