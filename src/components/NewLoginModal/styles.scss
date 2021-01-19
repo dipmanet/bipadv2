@@ -33,6 +33,11 @@
             display: flex;
             justify-content: center;
             margin-top: 10px;
+            .extlink{
+                .icon{
+                    padding-right:4px;
+                }
+            }
             .linktexts{
                 padding-left: 10px;
             }

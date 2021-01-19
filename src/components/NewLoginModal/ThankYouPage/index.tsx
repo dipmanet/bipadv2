@@ -66,9 +66,16 @@ const DetailsSecondPage = (props: Props) => {
 
                 <h1>Thank you</h1>
                 <p>
-                    Thank you for requesting the login credential. We look forward
-                    to addressing your request in a timely manner.
+                    For requesting the login credential. Following the submission,
+                    you will receive a confirmation email with a confirmation code.
+                    Our technical team will review your details and provide you a username and
+                    password.
                 </p>
+                {/* <p>
+                    Please check your email for submission confirmation.
+                    Our technical team will review your details and provide
+                    you with a username and password.
+                </p> */}
                 <div className={styles.cancelAgreeBtns}>
                     <PrimaryButton
                         type="button"
