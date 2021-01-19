@@ -32,13 +32,16 @@ const RiverTooltip = (
             basin,
             water_level: waterLevel,
             status } } = referenceData || nullData;
+    const date = createdDate.split('T')[0];
+    const time = createdDate.split('T')[1].split('+')[0];
+    const timeOnly = time.split(':').slice(0, 2).join(':');
     return (
         <div className={styles.riverTooltip}>
             <div className={styles.header}>
                 <div className={styles.title}>{headerTitle || 'N/A'}</div>
                 <div className={styles.date}>
                     { createdDate
-                        ? `${createdDate.split('T')[0]} | ${createdDate.split('T')[1].split('.')[0]} (NPT)`
+                        ? `${date} | ${timeOnly} (NPT)`
                         : 'N/A' }
                 </div>
             </div>

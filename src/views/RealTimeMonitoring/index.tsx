@@ -123,13 +123,14 @@ const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimeRainRequest: {
-        url: '/rain/',
+        url: '/rain-stations/',
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
             // FIXME: obsolete
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            // ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            latest: true,
         }),
         onSuccess: ({ response, props: { setRealTimeRainList } }) => {
             interface Response { results: PageType.RealTimeRain[] }
@@ -233,12 +234,13 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
     },
     realTimePollutionRequest: {
-        url: '/pollution/',
+        url: '/pollution-stations/',
         method: methods.GET,
         query: ({ props: { filters, globalFilters } }) => ({
-            ...transformDateRangeFilterParam(filters, 'incident_on'),
+            // ...transformDateRangeFilterParam(filters, 'incident_on'),
             // ...transformDataRangeToFilter(globalFilters.dataDateRange, 'created_on'),
-            ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            // ...transformDataRangeLocaleToFilter(globalFilters.dataDateRange, 'created_on'),
+            latest: true,
         }),
         onSuccess: ({ response, props: { setRealTimePollutionList } }) => {
             interface Response { results: PageType.RealTimePollution[] }
@@ -469,7 +471,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Earthquake"
                             />
                             <h4 className={styles.heading}>
-                                Earthquake (Richter Scale)
+                                Earthquake (Richter Scale (ML))
                             </h4>
                         </header>
                         <Legend
@@ -697,7 +699,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         validateActiveView(activeView === 'fire', !showFire);
         validateActiveView(activeView === undefined,
             (showRain || showRiver || showPollution || showEarthquake || showFire));
-
 
         return (
             <>

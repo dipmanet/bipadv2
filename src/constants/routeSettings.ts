@@ -93,7 +93,6 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/FourHundredThree'),
         navbar: false,
     },
-
     {
         name: 'fourHundredFour',
         title: '404',

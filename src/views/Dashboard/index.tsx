@@ -196,9 +196,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/alert/',
         method: methods.GET,
         query: ({ props: { filters } }) => ({
-            ...transformFilters(filters, { start: 'expire_on__gt', end: 'expire_on__lt' }),
+            ...transformFilters(filters, { start: 'started_on__gt', end: 'started_on__lt' }),
             expand: ['event'],
-            ordering: '-created_on',
+            ordering: '-started_on',
         }),
         onSuccess: ({ response, props: { setAlertList }, params }) => {
             interface Response { results: PageTypes.Alert[] }

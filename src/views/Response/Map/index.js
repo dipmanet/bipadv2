@@ -23,8 +23,8 @@ import {
     resourceToGeojson,
 } from '#utils/domain';
 
-import healthFacilityIcon from '#resources/icons/health-facility.svg';
-import groupIcon from '#resources/icons/group.svg';
+import healthFacilityIcon from '#resources/icons/health-facility1.svg';
+import groupIcon from '#resources/icons/group1.svg';
 import financeIcon from '#resources/icons/University.svg';
 import educationIcon from '#resources/icons/Education.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
