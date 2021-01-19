@@ -161,8 +161,8 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
         let values = others;
         if (location) {
             const point = location.geoJson.features[0].geometry;
-            const { ward } = location.region;
-            // const ward = 2;
+            // const { ward } = location.region;
+            const ward = 2;
 
             values = {
                 ...values,

@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TextInput from '#rsci/TextInput';
-import NumberInput from '#rsci/NumberInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import { createConnectedRequestCoordinator } from '#request';
 import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
+import styles from './styles.scss';
 
 interface PropsFromState {
     authState: AuthState;
@@ -28,8 +28,11 @@ function BasicInfo({ postBasicInfo, openspacePostError }: Props) {
             <br />
 
             <TextInput faramElementName="elevation" label="Elevation" />
-            {/* <NumberInput faramElementName="ward" label="Ward" /> */}
-            <TextInput faramElementName="totalArea" label="Total Area" />
+            <div className={styles.inputGroup}>
+                <TextInput faramElementName="totalArea" label="Total Area" />
+                <TextInput faramElementName="usableArea" label="Usable Area" />
+            </div>
+            <TextInput faramElementName="adress" label="Address" />
             <TextInput faramElementName="currentLandUse" label="Current Land Use" />
             <TextInput faramElementName="remarks" label="remarks" />
             {openspacePostError && (

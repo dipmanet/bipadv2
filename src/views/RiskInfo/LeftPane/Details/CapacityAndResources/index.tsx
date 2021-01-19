@@ -130,7 +130,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
     });
 
     let filtered = data;
-
+    // showing only some specific fields on openspace popup
     if (resourceDetails.resourceType === 'openspace') {
         filtered = data.filter(x => x.label === 'resourceType'
             || x.label === 'address'
@@ -158,7 +158,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         }
     } else if (resourceDetails.resourceType === 'communityspace') {
         filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward' && el.label !== 'authenticated'
-            && el.label !== 'remarks');
+            && el.label !== 'remarks' && el.label !== 'lastModifiedDate');
         const capacity = filtered && filtered[2] && filtered[2].value
             && parseInt((filtered[2].value / 5).toFixed(0), 10);
         filtered.push({ label: 'capacity', value: capacity });
@@ -193,8 +193,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 </AccentButton>
                 <AccentButton
                     title={
-                        resourceDetails.resourceType === ('openspace'
-                            || 'communityspace')
+                        resourceDetails.resourceType === 'openspace'
+                       || resourceDetails.resourceType === 'communityspace'
                             ? 'View Details'
                             : 'Show Inventory'
                     }
@@ -202,8 +202,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                     transparent
                     className={styles.editButton}
                 >
-                    {resourceDetails.resourceType === ('openspace'
-                        || 'communityspace')
+                    { resourceDetails.resourceType === 'openspace'
+                     || resourceDetails.resourceType === 'communityspace'
                         ? 'View Details'
                         : 'Show Inventory'}
                 </AccentButton>
@@ -888,21 +888,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            <Cloak hiddenIf={p => !p.add_resource}>
-                                <AccentModalButton
-                                    iconName="add"
-                                    title="Add New Resource"
-                                    transparent
-                                    modal={(
-                                        <AddResourceForm
-                                            onAddSuccess={this.handleResourceAdd}
-                                            onEditSuccess={this.handleResourceEdit}
-                                        />
-                                    )}
-                                >
+                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
+                            <AccentModalButton
+                                iconName="add"
+                                title="Add New Resource"
+                                transparent
+                                modal={(
+                                    <AddResourceForm
+                                        onAddSuccess={this.handleResourceAdd}
+                                        onEditSuccess={this.handleResourceEdit}
+                                    />
+                                )}
+                            >
                                     Add Resource
-                                </AccentModalButton>
-                            </Cloak>
+                            </AccentModalButton>
+                            {/* </Cloak> */}
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)

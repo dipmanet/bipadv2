@@ -170,13 +170,13 @@ const SwitchView = (props: Props) => {
 
                 <div className={styles.actionsIcon}>
                     <Icon
-                        title={'Open spaces in tabular format'}
+                        title={'Humanitarian Open Spaces in tabular format'}
                         className={_cs(styles.infoIcon)}
                         name="table"
                         onClick={() => handleIconClick('showAllOpenspacesModal')}
                     />
                     <Icon
-                        title={'Openspace Metadata'}
+                        title={'Humanitarian Open Spaces Metadata'}
                         className={_cs(styles.infoIcon)}
                         name="aboutUs"
                         onClick={() => handleIconClick('showOpenSpaceInfoModal')}
@@ -194,7 +194,7 @@ const SwitchView = (props: Props) => {
                             handleToggleClick('communityspace', value);
                         }}
                     />
-                    <div className={styles.listTitle}> Community Space </div>
+                    <div className={styles.listTitle}> Community Spaces </div>
                 </div>
 
                 <div className={styles.actionsIcon}>
@@ -205,7 +205,7 @@ const SwitchView = (props: Props) => {
                         onClick={() => handleIconClick('showAllCommunityModal')}
                     />
                     <Icon
-                        title={'Community space Metadata'}
+                        title={'Community Spaces Metadata'}
                         className={_cs(styles.infoIcon)}
                         name="aboutUs"
                         onClick={() => handleIconClick('communityMetaModal')}
