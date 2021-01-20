@@ -49,34 +49,21 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const ForgotPassword = (props: Props) => {
-    const [errMsg, setErrMsg] = useState(false);
-    const [checkedTnc, setCheckedTnc] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState('');
     const [disabled, setDisabled] = useState(true);
     const { pending,
         closeModal,
         handleCancel,
-        handleAgree } = props;
+        handleAgree,
+        submitForgot } = props;
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
-    const handleChkBox = (e) => {
-        if (e.target.checked) {
-            setDisabled(false);
-        } else {
-            setDisabled(true);
-        }
-        setCheckedTnc(e.target.checked);
-        setErrMsg(false);
+    const handleForgotEmailChange = (e) => {
+        setForgotEmail(e);
     };
 
-    const handleAgreeBtn = () => {
-        if (checkedTnc) {
-            setErrMsg(false);
-            handleAgree('detailsPage');
-        } else {
-            setErrMsg(true);
-        }
-    };
+    const handleAgreeBtn = () => submitForgot(forgotEmail);
 
     return (
         <div className={styles.mainPwdReqContainer}>
@@ -90,29 +77,38 @@ const ForgotPassword = (props: Props) => {
                         />
                     </DangerButton>
                 </div>
-                <div className={styles.termsandconditions}>
-                    Password Request section
-                </div>
-            </div>
 
-            <div className={styles.welcomeBack}>
-                <h1>Welcome Back</h1>
-                <p>
-                        To login to BIPAD Portal,
-                        please use your credentials.
-                </p>
+                <h1>Please enter your official email registered with BIPAD </h1>
+                <div className={styles.inputContainer}>
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        placeholder="Official Email"
+                        onChange={handleForgotEmailChange}
+                    // value={nameprop || ''}
+                    />
+                </div>
                 <div className={styles.loginBtn}>
                     <PrimaryButton
                         type="button"
-                        className={styles.newsignIn}
-                        onClick={handleCancelBtn}
-                        disabled
+                        pending={pending}
+                        className={styles.agreeBtn}
+                        onClick={handleAgreeBtn}
                     >
-                        Sign in
+                        Submit
                     </PrimaryButton>
                 </div>
+                <div className={styles.infoForgot}>
+                    <p>
+                        <Icon
+                            name="info"
+                            className={styles.infoIcon}
+                        />
+                    After submission please check the official email for the password
+                    request link
+                    </p>
+                </div>
             </div>
-
         </div>
     );
 };

@@ -52,24 +52,20 @@ const ChangePassword = (props: Props) => {
     const [errMsg, setErrMsg] = useState(false);
     const [showErr, setShowErr] = useState(true);
     const [newPassword, setNewPassword] = useState('');
-    const [newConfirm, setNewConfirm] = useState('');
+    const [newConfm, setNewConfirm] = useState('');
 
     const { pending,
         closeModal,
         handleCancel,
-        handleAgree } = props;
+        handleAgree,
+        submitNewPassword } = props;
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
-    const handleAgreeBtn = () => {
-        // when submited :
-        // send user: userId
-        // password: password
+    const handleAgreeBtn = () => submitNewPassword(newPassword);
 
-    };
-
-    const handlePasswordChange = (newPassword: string) => {
-        setNewPassword(newPassword);
+    const handlePasswordChange = (password: string) => {
+        setNewPassword(password);
     };
 
 
@@ -96,7 +92,7 @@ const ChangePassword = (props: Props) => {
                         className={styles.inputElement}
                         placeholder="Confirm New Password"
                         onChange={handleConfirmPasswordChange}
-                        value={newConfirm}
+                        // value={newConfirm}
                     />
                 </div>
                 {errMsg && showErr ? <span className={styles.errMsg}>There is an error</span> : ''}

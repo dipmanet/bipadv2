@@ -14,6 +14,7 @@ import DetailsPage from './DetailsPage';
 import DetailsFirstPage from './DetailsFirstPage';
 import ThankYouPage from './ThankYouPage';
 import ChangePassword from './ChangePassword';
+import ForgotPassword from './ForgotPassword';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -38,13 +39,13 @@ import { getAuthState } from '#utils/session';
 
 import styles from './styles.scss';
 import DetailsSecondPage from './DetailsSecondPage';
-import ForgotPassword from './ForgotPassword';
 // import style from '#mapStyles/rasterStyle';
 
 interface FaramValues {
     username?: string;
     password?: string;
 }
+
 
 interface State {
     faramErrors: object;
@@ -87,6 +88,7 @@ interface Params {
     userEmail?: string;
     updatePage?: (value: string) => void;
     newpassword: string;
+
 }
 
 interface OwnProps {
@@ -127,22 +129,22 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 setAuth,
                 setUserDetail,
             } = props;
-            // const { profile: { otpMode } } = response;
+            const { profile: { otpMode } } = response;
 
-            // if (otpMode) {
-            //     params.handlePending(false);
-            //     params.updatePage('changePassword');
-            // } else {
-            const authState = getAuthState();
-            setAuth(authState);
-            setUserDetail(response as User);
+            if (otpMode) {
+                params.handlePending(false);
+                params.updatePage('changePassword');
+            } else {
+                const authState = getAuthState();
+                setAuth(authState);
+                setUserDetail(response as User);
 
-            if (props.closeModal) {
-                props.closeModal();
+                if (props.closeModal) {
+                    props.closeModal();
+                }
+
+                window.location.reload();
             }
-
-            window.location.reload();
-            // }
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
@@ -245,30 +247,22 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         extras: { hasFile: true },
     },
-    newPasswordSetRequest: {
-        url: '/password-reset/',
+    forgotPassword: {
+        url: '/auth/forgot-password/',
         method: methods.POST,
         body: ({ params }) => {
             if (!params) {
                 return {};
             }
             return {
-                newPassword: params.newpassword,
+                email: params.emailForgot,
             };
         },
-        onSuccess: ({ response, props }) => {
-            const {
-                setAuth,
-                setUserDetail,
-            } = props;
-            const authState = getAuthState();
-            setAuth(authState);
-            setUserDetail(response as User);
-
+        onSuccess: ({ response, props, params }) => {
             if (props.closeModal) {
                 props.closeModal();
             }
-
+            params.handlePending(false);
             window.location.reload();
         },
         onFailure: ({ error, params }) => {
@@ -288,6 +282,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             }
         },
     },
+
 };
 
 class Login extends React.PureComponent<Props, State> {
@@ -320,6 +315,7 @@ class Login extends React.PureComponent<Props, State> {
             file: undefined,
             pending: false,
             userEmail: '',
+
         };
     }
 
@@ -340,10 +336,13 @@ class Login extends React.PureComponent<Props, State> {
                 loginRequest,
             },
         } = this.props;
+        const {
+            token,
+        } = this.state;
         this.handlePending(true);
         loginRequest.do({
-            username: faramValues.username,
             password: faramValues.password,
+            token,
             setFaramErrors: this.handleFaramValidationFailure,
             updatePage: this.updatePage,
             handlePending: this.handlePending,
@@ -392,6 +391,10 @@ class Login extends React.PureComponent<Props, State> {
         this.setState(userEmail);
     };
 
+    private handleForgotPassword = () => {
+        this.setState({ pageAction: 'forgotPasswordPage' });
+    }
+
     private submit = () => {
         this.setState({ pending: true });
         const {
@@ -425,6 +428,15 @@ class Login extends React.PureComponent<Props, State> {
         newPasswordSetRequest.do({
             handlePending: this.handlePending,
             newpassword,
+        });
+    };
+
+    private submitForgot = (emailForgot: string) => {
+        this.handlePending(true);
+        const { requests: { forgotPassword } } = this.props;
+        forgotPassword.do({
+            handlePending: this.handlePending,
+            emailForgot,
         });
     };
 
@@ -488,7 +500,6 @@ class Login extends React.PureComponent<Props, State> {
                                             placeholder="Username"
                                             autoFocus
                                             showLabel={false}
-                                            autocomplete="off"
 
                                         />
                                     </div>
@@ -504,12 +515,16 @@ class Login extends React.PureComponent<Props, State> {
                                             placeholder="Password"
                                             type="password"
                                             showLabel={false}
-                                            autocomplete="off"
 
                                         />
                                     </div>
                                     <NonFieldErrors faramElement className={styles.errorField} />
-
+                                    <button
+                                        type="button"
+                                        onClick={this.handleForgotPassword}
+                                    >
+                                    Forgot Password
+                                    </button>
                                 </div>
                                 <div className={styles.loginBtn}>
                                     <PrimaryButton
@@ -641,6 +656,16 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     updatePage={this.updatePage}
                     submitNewPassword={this.submitNewPassword}
+                />
+            );
+        }
+        if (pageAction === 'forgotPasswordPage') {
+            displayElement = (
+                <ForgotPassword
+                    closeModal={closeModal}
+                    pending={pending}
+                    updatePage={this.updatePage}
+                    submitForgot={this.submitForgot}
                 />
             );
         }

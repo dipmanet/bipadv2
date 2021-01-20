@@ -1,0 +1,89 @@
+.formElements{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    .externalLink{
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        .extlink{
+            .icon{
+                padding-right:4px;
+            }
+        }
+        .linktexts{
+            padding-left: 10px;
+        }
+    }
+    .loginBtn{
+        display: flex;
+        justify-content: center;
+        .newsignIn{
+            width: 80px;
+            filter: saturate(100%);
+            background-color: rgb(0,105,222) !important;
+            border-radius: 30px;
+            color: white !important; 
+        }
+    }
+    padding: 0 20%;
+    .newLoginForm{
+        margin-top: 15px;
+        .errorField{
+            position: relative;
+            bottom: 10px;
+        }
+        .inputContainer{
+            display: flex;
+            border-radius: 4px;
+            background-color: rgb(232,232,232);
+            justify-content: flex-start;
+            align-items: center;
+            // border: 1px solid gray;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 30px;
+            width: 300px;
+            input::-webkit-input-placeholder{
+                font-size: 10px;
+                vertical-align:middle !important;
+                line-height: 25px !important;
+            }
+            input{
+                border: none;
+                margin-top: 12px;
+                margin-left: 10px;
+                width:100%;
+                top:10px;
+            }
+            input::placeholder{
+                font-size: 12px;
+                color: #666;
+
+            }
+            .inputIcon{
+                color: rgb(152,152,152);
+            }
+
+        }
+        h2{
+            font-size: 10px;
+            color:#777;
+            text-align: center;
+        }
+        .horLine{
+            background-color:#e5e5e5;
+            border: none;
+            width: 130px;
+            height: 1px;
+            margin-bottom: 20px;
+        }
+   
+        
+    }  
+}
