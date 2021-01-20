@@ -6,12 +6,14 @@ import Faram, {
     requiredCondition,
     lengthGreaterThanCondition,
 } from '@togglecorp/faram';
+import { parseAsync } from '@babel/core';
 import Icon from '#rscg/Icon';
 import PasswordReq from './PasswordReq';
 import DangerButton from '#rsca/Button/DangerButton';
 import DetailsPage from './DetailsPage';
 import DetailsFirstPage from './DetailsFirstPage';
 import ThankYouPage from './ThankYouPage';
+import ChangePassword from './ChangePassword';
 
 import Modal from '#rscv/Modal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -83,6 +85,8 @@ interface Params {
     pending?: boolean;
     handlePending?: (value: boolean) => void;
     userEmail?: string;
+    updatePage?: (value: string) => void;
+    newpassword: string;
 }
 
 interface OwnProps {
@@ -118,12 +122,17 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 password: params.password,
             };
         },
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             const {
                 setAuth,
                 setUserDetail,
             } = props;
+            // const { profile: { otpMode } } = response;
 
+            // if (otpMode) {
+            //     params.handlePending(false);
+            //     params.updatePage('changePassword');
+            // } else {
             const authState = getAuthState();
             setAuth(authState);
             setUserDetail(response as User);
@@ -133,6 +142,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             }
 
             window.location.reload();
+            // }
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
@@ -235,6 +245,49 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         extras: { hasFile: true },
     },
+    newPasswordSetRequest: {
+        url: '/password-reset/',
+        method: methods.POST,
+        body: ({ params }) => {
+            if (!params) {
+                return {};
+            }
+            return {
+                newPassword: params.newpassword,
+            };
+        },
+        onSuccess: ({ response, props }) => {
+            const {
+                setAuth,
+                setUserDetail,
+            } = props;
+            const authState = getAuthState();
+            setAuth(authState);
+            setUserDetail(response as User);
+
+            if (props.closeModal) {
+                props.closeModal();
+            }
+
+            window.location.reload();
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Some problem occured'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+    },
 };
 
 class Login extends React.PureComponent<Props, State> {
@@ -287,11 +340,13 @@ class Login extends React.PureComponent<Props, State> {
                 loginRequest,
             },
         } = this.props;
-
+        this.handlePending(true);
         loginRequest.do({
             username: faramValues.username,
             password: faramValues.password,
             setFaramErrors: this.handleFaramValidationFailure,
+            updatePage: this.updatePage,
+            handlePending: this.handlePending,
         });
     };
 
@@ -365,12 +420,11 @@ class Login extends React.PureComponent<Props, State> {
         });
     }
 
-    private submitForgotPassword = () => {
-        const { requests: { forgotPasswordRequest } } = this.props;
-        const { userEmail } = this.state;
-        forgotPasswordRequest.do({
-            email: userEmail,
+    private submitNewPassword = (newpassword: string) => {
+        const { requests: { newPasswordSetRequest } } = this.props;
+        newPasswordSetRequest.do({
             handlePending: this.handlePending,
+            newpassword,
         });
     };
 
@@ -434,6 +488,7 @@ class Login extends React.PureComponent<Props, State> {
                                             placeholder="Username"
                                             autoFocus
                                             showLabel={false}
+                                            autocomplete="off"
 
                                         />
                                     </div>
@@ -449,12 +504,12 @@ class Login extends React.PureComponent<Props, State> {
                                             placeholder="Password"
                                             type="password"
                                             showLabel={false}
+                                            autocomplete="off"
+
                                         />
                                     </div>
                                     <NonFieldErrors faramElement className={styles.errorField} />
 
-                                    <h2>FORGOT YOUR PASSWORD?</h2>
-                                    <hr className={styles.horLine} />
                                 </div>
                                 <div className={styles.loginBtn}>
                                     <PrimaryButton
@@ -579,13 +634,13 @@ class Login extends React.PureComponent<Props, State> {
                 />
             );
         }
-        if (pageAction === 'forgotPassword') {
+        if (pageAction === 'changePassword') {
             displayElement = (
-                <ForgotPassword
+                <ChangePassword
+                    closeModal={closeModal}
                     pending={pending}
                     updatePage={this.updatePage}
-                    closeModal={closeModal}
-                    submit={this.submitForgotPassword}
+                    submitNewPassword={this.submitNewPassword}
                 />
             );
         }

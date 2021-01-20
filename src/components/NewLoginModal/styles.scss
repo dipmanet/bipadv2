@@ -7,6 +7,7 @@
 .mainLoginContainer{
     display: flex;
     // border: 1px solid red;
+  
 }
 .signIn{
     padding: 40px 20px;
@@ -77,9 +78,10 @@
                 }
                 input{
                     border: none;
-                    padding-top: 12px;
+                    margin-top: 12px;
                     margin-left: 10px;
-                    width:300px;
+                    width:100%;
+                    top:10px;
                 }
                 .inputIcon{
                     color: rgb(152,152,152);

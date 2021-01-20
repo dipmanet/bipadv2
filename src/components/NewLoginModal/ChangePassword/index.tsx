@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import Icon from '#rscg/Icon';
+
+import DangerButton from '#rsca/Button/DangerButton';
+
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+
+import {
+    setAuthAction,
+    setUserDetailAction,
+} from '#actionCreators';
+
+import {
+    NewProps,
+} from '#request';
+import styles from './styles.scss';
+
+interface FaramValues {
+    username?: string;
+    password?: string;
+}
+
+interface State {
+    faramErrors: object;
+    faramValues: FaramValues;
+}
+
+interface Params {
+    username?: string;
+    password?: string;
+    setFaramErrors?: (error: object) => void;
+}
+
+interface OwnProps {
+    className?: string;
+    closeModal?: () => void;
+    pending?: boolean;
+    handleCancel: (loginPage: string) => void;
+    handleAgree: (detailsPage: string) => void;
+}
+
+interface PropsFromDispatch {
+    setAuth: typeof setAuthAction;
+    setUserDetail: typeof setUserDetailAction;
+}
+
+type ReduxProps = OwnProps & PropsFromDispatch;
+
+type Props = NewProps<ReduxProps, Params>;
+
+const ChangePassword = (props: Props) => {
+    const [errMsg, setErrMsg] = useState(false);
+    const [showErr, setShowErr] = useState(true);
+    const [newPassword, setNewPassword] = useState('');
+    const [newConfirm, setNewConfirm] = useState('');
+
+    const { pending,
+        closeModal,
+        handleCancel,
+        handleAgree } = props;
+
+    const handleCancelBtn = () => handleCancel('loginPage');
+
+    const handleAgreeBtn = () => {
+        // when submited :
+        // send user: userId
+        // password: password
+
+    };
+
+    const handlePasswordChange = (newPassword: string) => {
+        setNewPassword(newPassword);
+    };
+
+
+    const handleConfirmPasswordChange = (confirmedPassword: string) => {
+        setNewConfirm(confirmedPassword);
+    };
+
+    return (
+        <div className={styles.mainPwdReqContainer}>
+            <div className={styles.passwordConfirmForm}>
+                <h2>Please choose a new password</h2>
+                <div className={styles.inputContainer}>
+                    <input
+                        type="password"
+                        className={styles.inputElement}
+                        placeholder="New Password"
+                        onChange={handlePasswordChange}
+                        value={newPassword}
+                    />
+                </div>
+                <div className={styles.inputContainer}>
+                    <input
+                        type="password"
+                        className={styles.inputElement}
+                        placeholder="Confirm New Password"
+                        onChange={handleConfirmPasswordChange}
+                        value={newConfirm}
+                    />
+                </div>
+                {errMsg && showErr ? <span className={styles.errMsg}>There is an error</span> : ''}
+            </div>
+
+            <div className={styles.cancelAgreeBtns}>
+                <PrimaryButton
+                    type="button"
+                    pending={pending}
+                    className={styles.agreeBtn}
+                    onClick={handleAgreeBtn}
+                >
+                                Submit
+                </PrimaryButton>
+            </div>
+        </div>
+    );
+};
+
+export default ChangePassword;
