@@ -522,9 +522,11 @@ class Login extends React.PureComponent<Props, State> {
                                     <button
                                         type="button"
                                         onClick={this.handleForgotPassword}
+                                        className={styles.forgotPasswordRequestBtn}
                                     >
                                     Forgot Password
                                     </button>
+                                    <hr className={styles.horzLine} />
                                 </div>
                                 <div className={styles.loginBtn}>
                                     <PrimaryButton

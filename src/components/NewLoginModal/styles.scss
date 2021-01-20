@@ -57,6 +57,21 @@
         padding: 0 20%;
         .newLoginForm{
             margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            .horzLine{
+                border: none;
+                height: 1px;
+                color: #aaa;
+                width: 10%;
+            }
+            .forgotPasswordRequestBtn{
+                background-color: transparent;
+                color: #999;
+                border: none;
+                margin-bottom: 5px;
+                cursor: pointer;
+            }
             .errorField{
                 position: relative;
                 bottom: 10px;
