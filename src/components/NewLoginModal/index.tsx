@@ -36,6 +36,7 @@ import { getAuthState } from '#utils/session';
 
 import styles from './styles.scss';
 import DetailsSecondPage from './DetailsSecondPage';
+import ForgotPassword from './ForgotPassword';
 // import style from '#mapStyles/rasterStyle';
 
 interface FaramValues {
@@ -81,6 +82,7 @@ interface Params {
     file?: File;
     pending?: boolean;
     handlePending?: (value: boolean) => void;
+    userEmail?: string;
 }
 
 interface OwnProps {
@@ -191,6 +193,48 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         extras: { hasFile: true },
     },
+    forgotPasswordRequest: {
+        url: '/password-request/',
+        method: methods.POST,
+        body: ({ params }) => {
+            if (!params) {
+                return {};
+            }
+            return {
+                fullName: params.fullName,
+                position: params.position,
+                phoneNumber: params.phoneNumber,
+                officialEmail: params.officialEmail,
+                officialLetter: params.officialLetter,
+                province: params.province,
+                district: params.district,
+                municipality: params.municipality,
+            };
+        },
+        onSuccess: ({ response, props, params }) => {
+            console.log(response, props);
+            params.handleThankYouPage('thankyouPage');
+            params.handlePending(false);
+        },
+        onFailure: ({ error, params }) => {
+            console.log(error);
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setFaramErrors({
+                    $internal: ['Incorrect Username or Password'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+        extras: { hasFile: true },
+    },
 };
 
 class Login extends React.PureComponent<Props, State> {
@@ -221,8 +265,8 @@ class Login extends React.PureComponent<Props, State> {
             districtId: undefined,
             provinceId: undefined,
             file: undefined,
-            institution: '',
             pending: false,
+            userEmail: '',
         };
     }
 
@@ -263,16 +307,8 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ designation });
     };
 
-    private handleIntCode = (intCode: string) => {
-        this.setState({ intCode });
-    };
-
     private handlePhone = (phone: number) => {
         this.setState({ phone });
-    };
-
-    private handleInstitution = (institution: string) => {
-        this.setState({ institution });
     };
 
     private handleEmail = (value: string) => {
@@ -297,6 +333,10 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ pending });
     };
 
+    private handleUserEmail = (userEmail: string) => {
+        this.setState(userEmail);
+    };
+
     private submit = () => {
         this.setState({ pending: true });
         const {
@@ -308,6 +348,7 @@ class Login extends React.PureComponent<Props, State> {
             districtId,
             provinceId,
             file,
+            userEmail,
         } = this.state;
         const { requests: { signUpRequest } } = this.props;
         signUpRequest.do({
@@ -323,6 +364,15 @@ class Login extends React.PureComponent<Props, State> {
             handleThankYouPage: this.handleThankYouPage,
         });
     }
+
+    private submitForgotPassword = () => {
+        const { requests: { forgotPasswordRequest } } = this.props;
+        const { userEmail } = this.state;
+        forgotPasswordRequest.do({
+            email: userEmail,
+            handlePending: this.handlePending,
+        });
+    };
 
     public render() {
         const {
@@ -526,6 +576,16 @@ class Login extends React.PureComponent<Props, State> {
                     closeModal={closeModal}
                     pending={pending}
                     updatePage={this.updatePage}
+                />
+            );
+        }
+        if (pageAction === 'forgotPassword') {
+            displayElement = (
+                <ForgotPassword
+                    pending={pending}
+                    updatePage={this.updatePage}
+                    closeModal={closeModal}
+                    submit={this.submitForgotPassword}
                 />
             );
         }
