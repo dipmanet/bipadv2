@@ -6,6 +6,7 @@ import Page from '#components/Page';
 import LeftPane from '../LeftPane';
 import EarthquakeMap from '../Map/Earthquake';
 import PollutionMap from '../Map/Pollution';
+import RainMap from '../Map/Rainwatch';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
 import PollutionFilters from '../Filters/Pollution';
@@ -117,6 +118,12 @@ class RegularPage extends React.PureComponent <Props, State> {
         return (
             <DataArchiveContext.Provider value={contextProps}>
                 <div className="regularPage">
+                    {chosenOption === 'Rain' && (
+                        <RainMap
+                            data={data}
+                            chosenOption={chosenOption}
+                        />
+                    )}
                     {chosenOption === 'Earthquake' && (
                         <EarthquakeMap
                             data={data}
