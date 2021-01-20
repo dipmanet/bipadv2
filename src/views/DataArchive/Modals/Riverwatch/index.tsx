@@ -6,12 +6,12 @@ import DangerButton from '#rsca/Button/DangerButton';
 
 import styles from './styles.scss';
 
-const RainModal = (props) => {
-    console.log('RainModal');
-    const { stationName = 'Rain Modal',
+const RiverModal = (props) => {
+    console.log('RiverModal');
+    const { stationName = 'River Modal',
         handleModalClose } = props;
     return (
-        <Modal className={styles.rainModal}>
+        <Modal className={styles.riverModal}>
             <ModalHeader
                 title={stationName}
                 rightComponent={(
@@ -43,4 +43,4 @@ const RainModal = (props) => {
         </Modal>
     );
 };
-export default RainModal;
+export default RiverModal;
