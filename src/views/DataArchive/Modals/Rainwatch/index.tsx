@@ -8,10 +8,10 @@ import styles from './styles.scss';
 
 const RainModal = (props) => {
     console.log('RainModal');
-    const { stationName = 'Pollution Modal',
+    const { stationName = 'Rain Modal',
         handleModalClose } = props;
     return (
-        <Modal className={styles.pollutionModal}>
+        <Modal className={styles.rainModal}>
             <ModalHeader
                 title="{stationName}"
                 rightComponent={(

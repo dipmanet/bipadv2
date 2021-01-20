@@ -178,7 +178,7 @@ class RainMap extends React.PureComponent {
         const { title: stationName, stationId, geometry } = tooltipParams || {};
         const region = { adminLevel: 3, geoarea: municipality || undefined };
         return (
-            <div className={styles.dataArchivePollutionMap}>
+            <div className={styles.dataArchiveRainMap}>
                 <CommonMap
                     sourceKey="dataArchiveRain"
                     boundsPadding={boundsPadding}
