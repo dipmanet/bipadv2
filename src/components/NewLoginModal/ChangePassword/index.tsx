@@ -49,10 +49,10 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const ChangePassword = (props: Props) => {
-    const [errMsg, setErrMsg] = useState(false);
-    const [showErr, setShowErr] = useState(true);
     const [newPassword, setNewPassword] = useState('');
-    const [newConfm, setNewConfirm] = useState('');
+    const [newConfirm, setNewConfirm] = useState('');
+    const [regexError, setRegexError] = useState(false);
+    const [matchError, setMatchError] = useState(false);
 
     const { pending,
         closeModal,
@@ -62,15 +62,34 @@ const ChangePassword = (props: Props) => {
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
-    const handleAgreeBtn = () => submitNewPassword(newPassword);
+    const handleAgreeBtn = () => {
+        const passwordPattern = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
+        const test = passwordPattern.test(newPassword);
+        if (test) {
+            setRegexError(false);
+        } else {
+            setRegexError(true);
+        }
+        if (newPassword === newConfirm) {
+            setMatchError(false);
+            if (test) {
+                setRegexError(false);
+                submitNewPassword(newPassword);
+            } else {
+                setRegexError(true);
+            }
+        } else {
+            setMatchError(true);
+        }
+    };
 
     const handlePasswordChange = (password: string) => {
-        setNewPassword(password);
+        setNewPassword(password.target.value);
     };
 
 
     const handleConfirmPasswordChange = (confirmedPassword: string) => {
-        setNewConfirm(confirmedPassword);
+        setNewConfirm(confirmedPassword.target.value);
     };
 
     return (
@@ -83,7 +102,7 @@ const ChangePassword = (props: Props) => {
                         className={styles.inputElement}
                         placeholder="New Password"
                         onChange={handlePasswordChange}
-                        value={newPassword}
+                        // value={newPassword}
                     />
                 </div>
                 <div className={styles.inputContainer}>
@@ -95,7 +114,32 @@ const ChangePassword = (props: Props) => {
                         // value={newConfirm}
                     />
                 </div>
-                {errMsg && showErr ? <span className={styles.errMsg}>There is an error</span> : ''}
+                {regexError ? (
+                    <ul className={styles.matchError}>
+                        Please make sure you include
+                        atleast one of the following:
+                        <li>
+                            Minimum 8 characters
+                        </li>
+                        <li>
+                            Atleast one of: !@#$%^&*
+                        </li>
+                        <li>
+                            Atleast one Capital Letter [A-Z]
+                        </li>
+                        <li>
+                            Atleast one number [0-9]
+                        </li>
+
+                    </ul>
+
+                ) : ''
+                }
+                {matchError ? (
+                    <p className={styles.matchError}>
+                        Passwords do not match
+                    </p>
+                ) : ''}
             </div>
 
             <div className={styles.cancelAgreeBtns}>
@@ -103,7 +147,7 @@ const ChangePassword = (props: Props) => {
                     type="button"
                     pending={pending}
                     className={styles.agreeBtn}
-                    onClick={handleAgreeBtn}
+                    onClick={() => handleAgreeBtn()}
                 >
                                 Submit
                 </PrimaryButton>

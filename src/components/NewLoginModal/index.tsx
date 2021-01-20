@@ -87,7 +87,8 @@ interface Params {
     handlePending?: (value: boolean) => void;
     userEmail?: string;
     updatePage?: (value: string) => void;
-    newpassword: string;
+    newpassword?: string;
+    token?: string;
 
 }
 
@@ -205,48 +206,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         extras: { hasFile: true },
     },
-    forgotPasswordRequest: {
-        url: '/password-request/',
-        method: methods.POST,
-        body: ({ params }) => {
-            if (!params) {
-                return {};
-            }
-            return {
-                fullName: params.fullName,
-                position: params.position,
-                phoneNumber: params.phoneNumber,
-                officialEmail: params.officialEmail,
-                officialLetter: params.officialLetter,
-                province: params.province,
-                district: params.district,
-                municipality: params.municipality,
-            };
-        },
-        onSuccess: ({ response, props, params }) => {
-            console.log(response, props);
-            params.handleThankYouPage('thankyouPage');
-            params.handlePending(false);
-        },
-        onFailure: ({ error, params }) => {
-            console.log(error);
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Incorrect Username or Password'],
-                });
-            }
-        },
-        onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
-            }
-        },
-        extras: { hasFile: true },
-    },
     forgotPassword: {
         url: '/auth/forgot-password/',
         method: methods.POST,
@@ -285,6 +244,61 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             }
         },
     },
+    newPasswordSetRequest: {
+        url: '/auth/change-password/',
+        method: methods.POST,
+        body: ({ params }) => {
+            if (!params) {
+                return {};
+            }
+            if (params.token) {
+                return {
+                    password: params.newpassword,
+                    token: params.token,
+                };
+            }
+            return {
+                password: params.newpassword,
+                // token: '',
+            };
+        },
+        onSuccess: ({ response, props, params }) => {
+            const {
+                setAuth,
+                setUserDetail,
+            } = props;
+            const authState = getAuthState();
+            setAuth(authState);
+            setUserDetail(response as User);
+            params.handlePending(false);
+
+            if (props.closeModal) {
+                props.closeModal();
+            }
+            alert('Your password has been reset sucessfully.');
+            window.location.reload();
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.handlePending(false);
+                alert('There was a problem, please try again or contact support. ');
+                params.setFaramErrors({
+                    $internal: ['Some problem occured'],
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setFaramErrors) {
+                params.handlePending(false);
+                alert('There was a problem, please try again or contact support. ');
+                params.setFaramErrors({
+                    $internal: ['Some problem occurred'],
+                });
+            }
+        },
+    },
 
 };
 
@@ -307,7 +321,7 @@ class Login extends React.PureComponent<Props, State> {
         this.state = {
             faramErrors: {},
             faramValues: {},
-            pageAction: 'loginPage',
+            pageAction: 'changePassword',
             fullName: '',
             designation: '',
             phone: undefined,
@@ -424,6 +438,7 @@ class Login extends React.PureComponent<Props, State> {
     }
 
     private submitNewPassword = (newpassword: string) => {
+        this.handlePending(true);
         const { requests: { newPasswordSetRequest } } = this.props;
         newPasswordSetRequest.do({
             handlePending: this.handlePending,
