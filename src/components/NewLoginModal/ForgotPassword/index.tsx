@@ -60,7 +60,7 @@ const ForgotPassword = (props: Props) => {
     const handleCancelBtn = () => handleCancel('loginPage');
 
     const handleForgotEmailChange = (e) => {
-        setForgotEmail(e);
+        setForgotEmail(e.target.value);
     };
 
     const handleAgreeBtn = () => submitForgot(forgotEmail);

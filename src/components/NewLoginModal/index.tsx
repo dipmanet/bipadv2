@@ -254,6 +254,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             if (!params) {
                 return {};
             }
+            console.log('email recieved', params.emailForgot);
             return {
                 email: params.emailForgot,
             };
@@ -269,6 +270,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             if (params && params.setFaramErrors) {
                 // TODO: handle error
                 console.warn('failure', error);
+                params.handlePending(false);
+
                 params.setFaramErrors({
                     $internal: ['Some problem occured'],
                 });
@@ -309,9 +312,9 @@ class Login extends React.PureComponent<Props, State> {
             designation: '',
             phone: undefined,
             email: '',
-            municipalityId: undefined,
-            districtId: undefined,
-            provinceId: undefined,
+            municipalityId: null,
+            districtId: null,
+            provinceId: null,
             file: undefined,
             pending: false,
             userEmail: '',

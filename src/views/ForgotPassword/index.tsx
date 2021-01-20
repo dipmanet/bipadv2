@@ -36,6 +36,7 @@ import { getAuthState } from '#utils/session';
 
 
 import styles from './styles.scss';
+import Alert from '#rscv/Modal/Alert';
 
 interface FaramValues {
     username?: string;
@@ -91,6 +92,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/auth/change-password/',
         method: methods.POST,
         body: ({ params }) => {
+            console.log('token is: ', params.token);
             if (!params) {
                 return {};
             }
@@ -99,7 +101,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 token: params.token,
             };
         },
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             const {
                 setAuth,
                 setUserDetail,
@@ -107,17 +109,19 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const authState = getAuthState();
             setAuth(authState);
             setUserDetail(response as User);
+            params.handlePending(false);
+            alert('Your password has been reset sucessfully.');
 
-            if (props.closeModal) {
-                props.closeModal();
-            }
-
-            window.location.reload();
+            const query = window.location.href;
+            const href = query.split('/set')[0];
+            window.location.href = href;
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
                 console.warn('failure', error);
+                params.handlePending(false);
+                alert('There was a problem, please try again or contact support. ');
                 params.setFaramErrors({
                     $internal: ['Some problem occured'],
                 });
@@ -125,6 +129,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         onFatal: ({ params }) => {
             if (params && params.setFaramErrors) {
+                params.handlePending(false);
+                alert('There was a problem, please try again or contact support. ');
                 params.setFaramErrors({
                     $internal: ['Some problem occurred'],
                 });
@@ -133,26 +139,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-const confirmsameasoriginal = n => (value) => {
-    const ok = isFalsy(value) || value === n;
-    return {
-        ok,
-        message: 'Passwords do not match',
-    };
-};
-
 class SetNewPassword extends React.PureComponent {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            faramErrors: {},
-            faramValues: {},
-            token: '',
-            pending: false,
-        };
-    }
-
     private static schema = {
         fields: {
             password: [
@@ -166,8 +153,21 @@ class SetNewPassword extends React.PureComponent {
         },
     };
 
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            faramErrors: {},
+            faramValues: {},
+            token: '',
+            pending: false,
+            matchError: false,
+            regexError: false,
+        };
+    }
+
     public componentDidMount() {
-        const query = window.location.pathname;
+        const query = window.location.href;
         const token = query.split('=')[1];
         this.setState({ token });
     }
@@ -189,6 +189,9 @@ class SetNewPassword extends React.PureComponent {
     };
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
+        // check if passwords match
+        // if yes then proceed else no
+
         const {
             requests: {
                 newPasswordSetRequest,
@@ -196,15 +199,29 @@ class SetNewPassword extends React.PureComponent {
         } = this.props;
         const {
             token,
+            faramValues: { password, newpassword },
+            matchError,
         } = this.state;
-        this.handlePending(true);
-        newPasswordSetRequest.do({
-            password: faramValues.password,
-            token,
-            setFaramErrors: this.handleFaramValidationFailure,
-            handlePending: this.handlePending,
+        const passwordPattern = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
+        const test = passwordPattern.test(password);
+        if (password === newpassword) {
+            this.setState({ matchError: false });
+            if (test) {
+                this.setState({ regexError: false });
+                this.handlePending(true);
+                newPasswordSetRequest.do({
+                    password: faramValues.password,
+                    token,
+                    setFaramErrors: this.handleFaramValidationFailure,
+                    handlePending: this.handlePending,
 
-        });
+                });
+            } else {
+                this.setState({ regexError: true });
+            }
+        } else {
+            this.setState({ matchError: true });
+        }
     };
 
     public render() {
@@ -212,6 +229,8 @@ class SetNewPassword extends React.PureComponent {
             faramErrors,
             faramValues,
             pending,
+            matchError,
+            regexError,
 
         } = this.state;
         return (
@@ -250,6 +269,7 @@ class SetNewPassword extends React.PureComponent {
                                                         type="password"
 
                                                     />
+
                                                 </div>
                                                 <div className={styles.inputContainer}>
                                                     <Icon
@@ -265,7 +285,34 @@ class SetNewPassword extends React.PureComponent {
                                                         showLabel={false}
 
                                                     />
+
                                                 </div>
+                                                {regexError ? (
+                                                    <ul className={styles.matchError}>
+                                                    Please make sure you include
+                                                    atleast one of the following:
+                                                        <li>
+                                                            Minimum 8 characters
+                                                        </li>
+                                                        <li>
+                                                            Atleast one of: !@#$%^&*
+                                                        </li>
+                                                        <li>
+                                                            Atleast one Capital Letter [A-Z]
+                                                        </li>
+                                                        <li>
+                                                            Atleast one number [0-9]
+                                                        </li>
+
+                                                    </ul>
+
+                                                ) : ''
+                                                }
+                                                {matchError ? (
+                                                    <p className={styles.matchError}>
+                                                    Passwords do not match
+                                                    </p>
+                                                ) : ''}
                                                 <NonFieldErrors
                                                     faramElement
                                                     className={styles.errorField}
@@ -275,7 +322,7 @@ class SetNewPassword extends React.PureComponent {
                                             <div className={styles.loginBtn}>
                                                 <PrimaryButton
                                                     type="submit"
-                                                    // pending={pending}
+                                                    pending={pending}
                                                     className={styles.newsignIn}
                                                 >
                                         Login
