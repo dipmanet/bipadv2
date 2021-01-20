@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     newPasswordSetRequest: {
-        url: '/password-reset/',
+        url: '/auth/change-password/',
         method: methods.POST,
         body: ({ params }) => {
             if (!params) {

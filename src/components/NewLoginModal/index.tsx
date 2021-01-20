@@ -336,13 +336,10 @@ class Login extends React.PureComponent<Props, State> {
                 loginRequest,
             },
         } = this.props;
-        const {
-            token,
-        } = this.state;
         this.handlePending(true);
         loginRequest.do({
             password: faramValues.password,
-            token,
+            username: faramValues.username,
             setFaramErrors: this.handleFaramValidationFailure,
             updatePage: this.updatePage,
             handlePending: this.handlePending,
