@@ -102,16 +102,15 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             };
         },
         onSuccess: ({ response, props, params }) => {
-            const {
-                setAuth,
-                setUserDetail,
-            } = props;
-            const authState = getAuthState();
-            setAuth(authState);
-            setUserDetail(response as User);
-            params.handlePending(false);
-            alert('Your password has been reset sucessfully.');
-
+            // const {
+            //     setAuth,
+            //     setUserDetail,
+            // } = props;
+            // const authState = getAuthState();
+            // setAuth(authState);
+            // setUserDetail(response as User);
+            // params.handlePending(false);
+            // alert('Your password has been reset sucessfully.');
             const query = window.location.href;
             const href = query.split('/set')[0];
             window.location.href = href;
