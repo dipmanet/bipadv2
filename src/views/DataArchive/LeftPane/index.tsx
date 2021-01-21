@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
+import Rain from './Rain';
+import River from './River';
 import Pollution from './Pollution';
 import Earthquake from './Earthquake';
 import MiniOption from './MiniOption';
@@ -34,6 +36,8 @@ const LeftPane = () => {
     return (
         <div className={styles.leftPane}>
             <div className={styles.content}>
+                { chosenOption === 'Rain' && activeView === 'data' && <Rain /> }
+                { chosenOption === 'River' && activeView === 'data' && <River /> }
                 { chosenOption === 'Pollution' && activeView === 'data' && <Pollution /> }
                 { chosenOption === 'Earthquake' && activeView === 'data' && <Earthquake /> }
             </div>

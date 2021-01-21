@@ -466,6 +466,16 @@ export const realTimeFiltersValuesSelector = createSelector(
 );
 
 // data archive
+export const dataArchiveRainListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRainList }) => dataArchiveRainList,
+);
+
+export const dataArchiveRiverListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRiverList }) => dataArchiveRiverList,
+);
+
 export const dataArchivePollutionListSelector = createSelector(
     dataArchivePageSelector,
     ({ dataArchivePollutionList }) => dataArchivePollutionList,

@@ -276,6 +276,20 @@ export const setRealTimeFiltersAction = (
 
 // data archive action creator
 
+export const setDataArchiveRainListAction = (
+    { dataArchiveRainList }:
+    { dataArchiveRainList: Type.DataArchiveRain[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST,
+    dataArchiveRainList,
+});
+
+export const setDataArchiveRiverListAction = (
+    { dataArchiveRiverList }:
+    { dataArchiveRiverList: Type.DataArchiveRiver[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST,
+    dataArchiveRiverList,
+});
+
 export const setDataArchivePollutionListAction = (
     { dataArchivePollutionList }:
     { dataArchivePollutionList: Type.DataArchivePollution[]}) => ({
@@ -1019,6 +1033,40 @@ export const setRealTimeFilters = (
 };
 
 // data archive
+export const setDataArchiveRainList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainList,
+) => {
+    const {
+        dataArchiveRainList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRainList = dataArchiveRainList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverList,
+) => {
+    const {
+        dataArchiveRiverList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRiverList = dataArchiveRiverList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 export const setDataArchivePollutionList = (
     state: Type.PageState,
     action: Type.SetDataArchivePollutionList,
@@ -1343,6 +1391,10 @@ export default function routeReducer(
             return setRealTimeFireList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST:
             return setRealTimePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST:
+            return setDataArchiveRainList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST:
+            return setDataArchiveRiverList(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST:
             return setDataArchivePollutionList(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST:

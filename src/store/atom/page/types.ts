@@ -254,8 +254,8 @@ export interface RealTimeRiver {
     modifiedOn: string;
     title: string;
     basin: string;
-    stationId?: number; // TODO: remove ? when station id is sent by api
-    district?: string; // TODO: remove ? when district is sent by a
+    // stationId?: number; // TODO: remove ? when station id is sent by api
+    // district?: string; // TODO: remove ? when district is sent by a
     waterLevel: number;
     point: Point;
     image: string;
@@ -441,8 +441,8 @@ export interface RealTimeMonitoringPage {
 }
 
 export interface DataArchivePage {
-    // dataArchiveRainList: DataArchiveRain[];
-    // dataArchiveRiverList: DataArchiveRiver[];
+    dataArchiveRainList: DataArchiveRain[];
+    dataArchiveRiverList: DataArchiveRiver[];
     dataArchiveEarthquakeList: DataArchiveEarthquake[];
     // dataArchiveFireList: DataArchiveFire[];
     dataArchivePollutionList: DataArchivePollution[];
@@ -555,6 +555,24 @@ export interface DataArchivePollution extends RealTimePollution{
     createdOn?: string;
 }
 
+export interface DataArchiveRain extends RealTimeRain {
+    station: number;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
+export interface DataArchiveRiver extends RealTimeRiver {
+    station: number;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
 export interface DataArchiveEarthquakeFilters {
     dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
 }
@@ -613,6 +631,8 @@ export enum PageType {
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
 
     // data archive
+    DA__SET_DATA_ARCHIVE_RAIN_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN/',
+    DA__SET_DATA_ARCHIVE_RIVER_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER/',
     DA__SET_DATA_ARCHIVE_POLLUTION_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
@@ -830,6 +850,15 @@ export interface SetRealTimeFilters extends FiltersWithRegion {
 }
 
 // data archive
+export interface SetDataArchiveRainList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST;
+    dataArchiveRainList: DataArchiveRain[];
+}
+
+export interface SetDataArchiveRiverList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST;
+    dataArchiveRiverList: DataArchiveRiver[];
+}
 
 export interface SetDataArchivePollutionList {
     type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST;
@@ -942,5 +971,5 @@ export type PageActionTypes = (
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
-    SetDataArchivePollutionStations
+    SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList
 );

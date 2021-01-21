@@ -178,8 +178,8 @@ const state: PageState = {
     },
 
     dataArchivePage: {
-        // dataArchiveRainList: [],
-        // dataArchiveRiverList: [],
+        dataArchiveRainList: [],
+        dataArchiveRiverList: [],
         dataArchiveEarthquakeList: [],
         // dataArchiveFireList: [],
         dataArchivePollutionList: [],
