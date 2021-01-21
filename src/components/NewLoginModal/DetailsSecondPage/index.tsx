@@ -61,11 +61,11 @@ const DetailsSecondPage = (props: Props) => {
         closeModal,
         updatePage,
         submit,
-        uploadedLetter } = props;
+        uploadedLetter,
+        serverErrorMsg } = props;
 
     const handleCancelBtn = () => updatePage('loginPage');
     const handleCaptchaChange = (value) => {
-        console.log(value);
         if (value === '') {
             setDisabled(true);
         } else {
@@ -112,7 +112,6 @@ const DetailsSecondPage = (props: Props) => {
                         Sign in
                     </PrimaryButton>
                 </div>
-
             </div>
 
             <div className={styles.detailsFormContainer}>
@@ -155,6 +154,13 @@ const DetailsSecondPage = (props: Props) => {
                                 </span>
                             ) : ''
                         }
+                        {serverErrorMsg && showErr
+                            ? (
+                                <span className={styles.captchaErr}>
+                                    {serverErrorMsg}
+                                </span>
+                            ) : ''
+                        }
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>
@@ -174,10 +180,7 @@ const DetailsSecondPage = (props: Props) => {
                     >
                         Submit
                     </PrimaryButton>
-
                 </div>
-
-
             </div>
         </div>
     );

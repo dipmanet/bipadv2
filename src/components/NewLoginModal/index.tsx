@@ -61,6 +61,7 @@ interface State {
     provinceId: number;
     signupregion: SignupRegion;
     institution: string;
+    serverErrorMsg: string;
 }
 
 interface SignupRegion {
@@ -87,10 +88,11 @@ interface Params {
     handlePending?: (value: boolean) => void;
     userEmail?: string;
     updatePage?: (value: string) => void;
-    storeUser?: (value: string) => void;
+    storeUserName?: (value: string) => void;
     newpassword?: string;
     token?: string;
-
+    handleResponseErrorMessage?: (value: string) => void;
+    newPassword?: string;
 }
 
 interface OwnProps {
@@ -155,7 +157,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             if (params && params.setFaramErrors) {
                 // TODO: handle error
                 params.handlePending(false);
-                console.log('error: ', error);
                 console.warn('failure', error);
                 params.setFaramErrors({
                     $internal: ['Incorrect Username or Password'],
@@ -190,27 +191,24 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             };
         },
         onSuccess: ({ response, props, params }) => {
-            console.log(response, props);
             params.handleThankYouPage('thankyouPage');
             params.handlePending(false);
         },
         onFailure: ({ error, params }) => {
             params.handlePending(false);
-            // params.handleGenericError(true);
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Incorrect Username or Password'],
-                });
+            if (Object.keys(error).length > 0) {
+                const errorDesc = error[Object.keys(error)[0]];
+                params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
+            } else {
+                params.handleResponseErrorMessage('Some problem occured, please try again.');
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
-            }
+            params.handlePending(false);
+            console.log('No reply, server error');
+            alert('Some problem occured, please contact IT support.');
+
+            window.location.reload();
         },
         extras: { hasFile: true },
     },
@@ -226,7 +224,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 email: params.emailForgot,
             };
         },
-        onSuccess: ({ response, props, params }) => {
+        onSuccess: ({ props, params }) => {
             if (props.closeModal) {
                 props.closeModal();
             }
@@ -235,21 +233,20 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                console.log('error', error);
                 params.handlePending(false);
-                params.setFaramErrors({
-                    $internal: ['Some problem occured'],
-                });
+                if (Object.keys(error).length > 0) {
+                    const errorDesc = error[Object.keys(error)[0]];
+                    params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
+                } else {
+                    params.handleResponseErrorMessage('Some problem occured, please try again.');
+                }
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
-            }
+            params.handlePending(false);
+            alert('Some problem occured, please contact IT support.');
+
+            window.location.reload();
         },
     },
     newPasswordSetRequest: {
@@ -270,29 +267,24 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 token: '',
             };
         },
-        onSuccess: ({ response, props, params }) => {
-            console.log(params);
+        onSuccess: ({ params }) => {
             params.handleLoginAgain(params.username, params.newpassword);
         },
         onFailure: ({ error, params }) => {
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
+            if (params) {
                 params.handlePending(false);
-                alert('There was a problem, please try again or contact support. ');
-                params.setFaramErrors({
-                    $internal: ['Some problem occured'],
-                });
+                if (Object.keys(error).length > 0) {
+                    const errorDesc = error[Object.keys(error)[0]];
+                    params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
+                } else {
+                    params.handleResponseErrorMessage('Some problem occured, please try again.');
+                }
             }
         },
         onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.handlePending(false);
-                alert('There was a problem, please try again or contact support. ');
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
-            }
+            params.handlePending(false);
+            alert('Some problem occured, please contact IT support.');
+            window.location.reload();
         },
     },
 
@@ -328,9 +320,8 @@ class Login extends React.PureComponent<Props, State> {
             file: undefined,
             pending: false,
             userEmail: '',
-            genericError: false,
             userName: '',
-
+            serverErrorMsg: '',
         };
     }
 
@@ -352,6 +343,8 @@ class Login extends React.PureComponent<Props, State> {
             },
         } = this.props;
         this.handlePending(true);
+        this.setState({ serverErrorMsg: '' });
+
         loginRequest.do({
             password: faramValues.password,
             username: faramValues.username,
@@ -414,11 +407,6 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ pageAction: 'forgotPasswordPage' });
     };
 
-    private handleGenericError = (value: boolean) => {
-        this.setState({ genericError: true });
-    };
-
-
     private handleLoginAgain = (username: string, password: string) => {
         const {
             requests: {
@@ -457,11 +445,14 @@ class Login extends React.PureComponent<Props, State> {
             municipality: municipalityId,
             handlePending: this.handlePending,
             handleThankYouPage: this.handleThankYouPage,
+            handleResponseErrorMessage: this.handleResponseErrorMessage,
         });
     }
 
     private submitNewPassword = (newpassword: string) => {
         this.handlePending(true);
+        this.setState({ serverErrorMsg: '' });
+
         const { requests: { newPasswordSetRequest } } = this.props;
         newPasswordSetRequest.do({
             handlePending: this.handlePending,
@@ -473,11 +464,16 @@ class Login extends React.PureComponent<Props, State> {
 
     private submitForgot = (emailForgot: string) => {
         this.handlePending(true);
+        this.setState({ serverErrorMsg: '' });
         const { requests: { forgotPassword } } = this.props;
         forgotPassword.do({
             handlePending: this.handlePending,
             emailForgot,
         });
+    };
+
+    private handleResponseErrorMessage = (serverErrorMsg: string) => {
+        this.setState({ serverErrorMsg });
     };
 
     public render() {
@@ -493,6 +489,7 @@ class Login extends React.PureComponent<Props, State> {
             municipalityId,
             districtId,
             provinceId,
+            serverErrorMsg,
         } = this.state;
         const {
             className,
@@ -678,7 +675,7 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     submit={this.submit}
                     uploadedLetter={this.uploadedLetter}
-                    genericError={this.handleGenericError}
+                    serverErrorMsg={serverErrorMsg}
                 />
             );
         }
@@ -698,6 +695,7 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     updatePage={this.updatePage}
                     submitNewPassword={this.submitNewPassword}
+                    serverErrorMsg={serverErrorMsg}
                 />
             );
         }
@@ -708,6 +706,7 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     updatePage={this.updatePage}
                     submitForgot={this.submitForgot}
+                    serverErrorMsg={serverErrorMsg}
                 />
             );
         }
