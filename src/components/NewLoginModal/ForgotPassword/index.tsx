@@ -51,6 +51,7 @@ type Props = NewProps<ReduxProps, Params>;
 const ForgotPassword = (props: Props) => {
     const [forgotEmail, setForgotEmail] = useState('');
     const [disabled, setDisabled] = useState(true);
+
     const { pending,
         closeModal,
         handleCancel,

@@ -150,6 +150,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
+                params.handlePending(false);
+                console.log('error: ', error);
                 console.warn('failure', error);
                 params.setFaramErrors({
                     $internal: ['Incorrect Username or Password'],
@@ -158,6 +160,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         onFatal: ({ params }) => {
             if (params && params.setFaramErrors) {
+                params.handlePending(false);
                 params.setFaramErrors({
                     $internal: ['Some problem occurred'],
                 });
@@ -191,6 +194,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             console.log(error);
             if (params && params.setFaramErrors) {
                 // TODO: handle error
+                params.handlePending(false);
                 console.warn('failure', error);
                 params.setFaramErrors({
                     $internal: ['Incorrect Username or Password'],
@@ -229,8 +233,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             if (params && params.setFaramErrors) {
                 // TODO: handle error
                 console.warn('failure', error);
+                console.log('error', error);
                 params.handlePending(false);
-
                 params.setFaramErrors({
                     $internal: ['Some problem occured'],
                 });
@@ -270,13 +274,16 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const authState = getAuthState();
             setAuth(authState);
             setUserDetail(response as User);
+
+            // alert('Your password has been reset sucessfully.');
             params.handlePending(false);
 
             if (props.closeModal) {
                 props.closeModal();
             }
-            alert('Your password has been reset sucessfully.');
             window.location.reload();
+            // console.log('response', response);
+            // params.handleLoginAgain(params.username, params.password);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
@@ -407,7 +414,19 @@ class Login extends React.PureComponent<Props, State> {
 
     private handleForgotPassword = () => {
         this.setState({ pageAction: 'forgotPasswordPage' });
-    }
+    };
+
+    private handleLoginAgain = (username: string, password: string) => {
+        const {
+            requests: {
+                loginRequest,
+            },
+        } = this.props;
+        loginRequest.do({
+            password,
+            username,
+        });
+    };
 
     private submit = () => {
         this.setState({ pending: true });
