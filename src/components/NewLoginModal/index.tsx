@@ -259,7 +259,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             }
             return {
                 password: params.newpassword,
-                // token: '',
+                token: '',
             };
         },
         onSuccess: ({ response, props, params }) => {
