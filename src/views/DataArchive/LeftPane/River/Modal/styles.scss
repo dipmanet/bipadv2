@@ -1,0 +1,49 @@
+.river-watch-modal {
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+
+    :global {
+        .table {
+            .header {
+                border: .1px solid grey;
+                background-color: var(--color-foreground-alt);
+                font-weight: bold;
+            }
+      
+            .body {
+                .row {
+                    .cell {
+                        border-bottom: .1px solid grey;
+                        border-right: .1px solid grey;
+                    }
+                }
+            }
+        }
+      }
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .river-watch-table {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+
+            .below {
+                background-color: #78e08f;
+            }
+
+            .above {
+                background-color: #FDD835;
+            }
+
+            .danger {
+                background-color: #eb2f06;
+            }
+        }
+    }
+}

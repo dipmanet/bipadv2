@@ -3,7 +3,7 @@ import React from 'react';
 import DateRangeInfo from '#components/DateRangeInfo';
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
-// import PollutionModal from '../Modal';
+import RiverModal from '../Modal';
 
 import * as PageType from '#store/atom/page/types';
 
@@ -33,10 +33,9 @@ const TopBar = (props: Props) => {
                 iconName="table"
                 title="Show all data"
                 modal={(
-                    // <PollutionModal
-                    //     dataArchivePollution={pollutionList}
-                    // />
-                    <div>River Modal</div>
+                    <RiverModal
+                        dataArchiveRiver={riverList}
+                    />
                 )}
             />
         </div>
