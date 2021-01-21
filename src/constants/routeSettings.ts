@@ -101,6 +101,13 @@ const routeSettings: SomeRoute[] = [
         path: undefined,
         navbar: false,
     },
+    {
+        name: 'forgotPassword',
+        title: 'New Password',
+        load: () => import('../views/ForgotPassword'),
+        path: '/set-new-password/',
+        navbar: false,
+    },
 ];
 
 export default routeSettings;

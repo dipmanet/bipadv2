@@ -1,8 +1,10 @@
 import React from 'react';
 
+import FocusTrap from 'react-focus-trap';
 import Page from '#components/Page';
 
 import styles from './styles.scss';
+
 
 export default class FourHundredThree extends React.PureComponent {
     public render() {
