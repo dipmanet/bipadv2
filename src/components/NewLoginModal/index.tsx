@@ -321,7 +321,7 @@ class Login extends React.PureComponent<Props, State> {
         this.state = {
             faramErrors: {},
             faramValues: {},
-            pageAction: 'changePassword',
+            pageAction: 'loginPage',
             fullName: '',
             designation: '',
             phone: undefined,
