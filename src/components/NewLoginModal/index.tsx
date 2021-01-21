@@ -87,6 +87,7 @@ interface Params {
     handlePending?: (value: boolean) => void;
     userEmail?: string;
     updatePage?: (value: string) => void;
+    storeUser?: (value: string) => void;
     newpassword?: string;
     token?: string;
 
@@ -131,6 +132,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 setUserDetail,
             } = props;
             const { profile: { otpMode } } = response;
+            if (params.newPassword) {
+                params.storeUserName(response.username);
+            }
 
             if (otpMode) {
                 params.handlePending(false);
@@ -191,10 +195,10 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             params.handlePending(false);
         },
         onFailure: ({ error, params }) => {
-            console.log(error);
+            params.handlePending(false);
+            // params.handleGenericError(true);
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                params.handlePending(false);
                 console.warn('failure', error);
                 params.setFaramErrors({
                     $internal: ['Incorrect Username or Password'],
@@ -267,23 +271,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             };
         },
         onSuccess: ({ response, props, params }) => {
-            const {
-                setAuth,
-                setUserDetail,
-            } = props;
-            const authState = getAuthState();
-            setAuth(authState);
-            setUserDetail(response as User);
-
-            // alert('Your password has been reset sucessfully.');
-            params.handlePending(false);
-
-            if (props.closeModal) {
-                props.closeModal();
-            }
-            window.location.reload();
-            // console.log('response', response);
-            // params.handleLoginAgain(params.username, params.password);
+            console.log(params);
+            params.handleLoginAgain(params.username, params.newpassword);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
@@ -339,6 +328,8 @@ class Login extends React.PureComponent<Props, State> {
             file: undefined,
             pending: false,
             userEmail: '',
+            genericError: false,
+            userName: '',
 
         };
     }
@@ -367,7 +358,13 @@ class Login extends React.PureComponent<Props, State> {
             setFaramErrors: this.handleFaramValidationFailure,
             updatePage: this.updatePage,
             handlePending: this.handlePending,
+            storeUserName: this.storeUser,
+            newPassword: true,
         });
+    };
+
+    private storeUser = (value: string) => {
+        this.setState({ userName: value });
     };
 
     private updatePage = (pageAction: string) => {
@@ -396,6 +393,7 @@ class Login extends React.PureComponent<Props, State> {
             provinceId: value.provinceId });
     };
 
+
     private uploadedLetter = (file: File) => {
         this.setState({ file });
     };
@@ -416,6 +414,11 @@ class Login extends React.PureComponent<Props, State> {
         this.setState({ pageAction: 'forgotPasswordPage' });
     };
 
+    private handleGenericError = (value: boolean) => {
+        this.setState({ genericError: true });
+    };
+
+
     private handleLoginAgain = (username: string, password: string) => {
         const {
             requests: {
@@ -425,6 +428,7 @@ class Login extends React.PureComponent<Props, State> {
         loginRequest.do({
             password,
             username,
+            // newPassword: false,
         });
     };
 
@@ -462,6 +466,8 @@ class Login extends React.PureComponent<Props, State> {
         newPasswordSetRequest.do({
             handlePending: this.handlePending,
             newpassword,
+            username: this.state.userName,
+            handleLoginAgain: this.handleLoginAgain,
         });
     };
 
@@ -672,7 +678,7 @@ class Login extends React.PureComponent<Props, State> {
                     pending={pending}
                     submit={this.submit}
                     uploadedLetter={this.uploadedLetter}
-
+                    genericError={this.handleGenericError}
                 />
             );
         }
