@@ -8,6 +8,7 @@ import { TitleContext, DataArchive } from '#components/TitleContext';
 
 import TopBar from './TopBar';
 import Header from './Header';
+import Note from './Note';
 
 import Message from '#rscv/Message';
 
@@ -149,6 +150,7 @@ const Rain = (props: Props) => {
                     dataCount={rainList.length || 0}
                 />
             </div>
+            <Note />
           Rain
         </div>
     );
