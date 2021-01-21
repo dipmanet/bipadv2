@@ -6,6 +6,8 @@ import * as PageType from '#store/atom/page/types';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import { TitleContext, DataArchive } from '#components/TitleContext';
 
+import Message from '#rscv/Message';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -119,8 +121,21 @@ const River = (props: Props) => {
         }
     }, [riverList, setData]);
 
+    if (!pending && riverList.length < 1) {
+        return (
+            <div
+                className={styles.message}
+            >
+                <Loading pending={isAnyRequestPending(requests)} />
+                <Message>
+                    No data available for the applied filter.
+                </Message>
+            </div>
+        );
+    }
+
     return (
-        <div>
+        <div className={styles.river}>
             <Loading pending={pending} />
           River
         </div>
