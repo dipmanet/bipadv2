@@ -126,15 +126,14 @@ export default class AlertItem extends React.PureComponent {
         const {
             title,
             hazard,
-            startedOn: createdOn,
+            startedOn,
             // createdOn,
             referenceData,
         } = alert;
-
         const alertReferenceData = referenceData ? JSON.parse(referenceData) : emptyReferenceData;
 
         const parsedTitle = this.parseTitle(title, alertReferenceData);
-        const time = createdOn ? createdOn.split('T')[1] : 'NA';
+        const time = startedOn ? startedOn.split('T')[1] : 'NA';
         const hour = time.split(':')[0];
         const minutes = time.split(':')[1];
         let timeIndicator;
@@ -147,7 +146,7 @@ export default class AlertItem extends React.PureComponent {
         }
         const parsedTime = `${hour}:${minutes} ${timeIndicator}`;
         // const isNew = isRecent(startedOn, recentDay);
-        const isNew = isRecent(createdOn, recentDay);
+        const isNew = isRecent(startedOn, recentDay);
         return (
             <div
                 className={_cs(
@@ -197,7 +196,7 @@ export default class AlertItem extends React.PureComponent {
                             className={styles.startedOn}
                             value={startedOn}
                         /> */}
-                        {/* Added date time from createdOn not startedOn */}
+
                         <div className={styles.time}>
                             <div className={styles.date}>
                                 <div className={styles.dateIcon}>
@@ -208,7 +207,7 @@ export default class AlertItem extends React.PureComponent {
                                 </div>
 
                                 <div className={styles.dateValue}>
-                                    {createdOn.split('T')[0]}
+                                    {startedOn.split('T')[0]}
                                 </div>
                             </div>
 

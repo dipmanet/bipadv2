@@ -65,9 +65,9 @@ class Pollution extends React.PureComponent<Props> {
                 sortable: true,
                 comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { modifiedOn } = row;
+                    const { dateTime } = row;
                     // parsing date to appropiate format
-                    return (modifiedOn) ? modifiedOn.substring(0, modifiedOn.indexOf('T')) : undefined;
+                    return (dateTime) ? dateTime.substring(0, dateTime.indexOf('T')) : undefined;
                 },
             },
             {
@@ -76,12 +76,12 @@ class Pollution extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { modifiedOn } = row;
-                    if (modifiedOn) {
+                    const { dateTime } = row;
+                    if (dateTime) {
                         // const date = new Date(modifiedOn);
                         // parsing date to time format
                         // return date.toISOString().split('T')[1].split('.')[0];
-                        return modifiedOn.split('T')[1].split('.')[0];
+                        return dateTime.split('T')[1].split('.')[0].split('+')[0];
                     } return undefined;
                 },
             },

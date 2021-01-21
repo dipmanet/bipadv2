@@ -11,6 +11,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
+    selectedProvinceIdSelector,
     wardsSelector,
 } from '#selectors';
 
@@ -101,6 +102,18 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedMunicipalityId: municipalityId,
             selectedWardId: wardId,
         };
+    }
+
+    public componentDidMount() {
+        const { initialLoc } = this.props;
+        if (initialLoc !== undefined) {
+            const { municipality, province, district } = initialLoc;
+            this.setState({
+                selectedProvinceId: province,
+                selectedDistrictId: district,
+                selectedMunicipalityId: municipality,
+            });
+        }
     }
 
     private getRegionsFromValue = memoize((
@@ -274,6 +287,13 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleSignupRegion = () => ({
+        province: this.state.selectedProvinceId,
+        district: this.state.selectedDistrictId,
+        municipality: this.state.selectedMunicipalityId,
+
+    });
+
     public render() {
         const {
             className,
@@ -292,7 +312,6 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             autoFocus,
             showHintAndError,
         } = this.props;
-
         const {
             selectedProvinceId,
             selectedDistrictId,
