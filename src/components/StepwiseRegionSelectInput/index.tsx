@@ -103,6 +103,18 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         };
     }
 
+    public componentDidMount() {
+        const { initialLoc } = this.props;
+        if (initialLoc !== undefined) {
+            const { municipality, province, district } = initialLoc;
+            this.setState({
+                selectedProvinceId: province,
+                selectedDistrictId: district,
+                selectedMunicipalityId: municipality,
+            });
+        }
+    }
+
     private getRegionsFromValue = memoize((
         value: Region | undefined,
         districtList: DistrictElement[],
@@ -292,7 +304,6 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             autoFocus,
             showHintAndError,
         } = this.props;
-
         const {
             selectedProvinceId,
             selectedDistrictId,

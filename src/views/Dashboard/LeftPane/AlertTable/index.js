@@ -85,7 +85,7 @@ export default class AlertTable extends React.PureComponent {
             },
             {
                 key: 'createdOn',
-                value: { title: 'Created on' },
+                value: { title: 'Started on' },
                 comparator: (a, b, d) => compareDate(a.createdOn, b.createdOn, d),
 
                 cellRenderer: TableDateCell,

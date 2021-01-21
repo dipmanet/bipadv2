@@ -3,10 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { FaramInputElement } from '@togglecorp/faram';
-import { _cs, compareString, compareNumber } from '@togglecorp/fujs';
+import { _cs, compareNumber } from '@togglecorp/fujs';
 
 import { hazardIcons } from '#resources/data';
 import MultiListSelection from '#components/MultiListSelection';
+import PageContext from '#components/PageContext';
 
 import {
     hazardTypeListSelector,
@@ -41,6 +42,8 @@ const compareHazard = (a, b) => compareNumber(
 );
 
 class HazardSelectionInput extends React.PureComponent {
+    static contextType = PageContext;
+
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -50,6 +53,7 @@ class HazardSelectionInput extends React.PureComponent {
 
         this.artificialInputValue = [];
         this.naturalInputValue = [];
+        console.log(props);
     }
 
     getGroupedHazardTypeValues = (hazardTypeValues = []) => {
@@ -62,6 +66,7 @@ class HazardSelectionInput extends React.PureComponent {
 
         hazardTypeValues.forEach((hazardKey) => {
             const hazardType = hazardTypes[hazardKey];
+
             if (hazardType) {
                 if (!groupedHazardTypes[hazardType.type]) {
                     console.warn('Unknown hazard type', hazardType.type);
@@ -70,7 +75,6 @@ class HazardSelectionInput extends React.PureComponent {
                 }
             }
         });
-
 
         return groupedHazardTypes;
     }
@@ -115,6 +119,7 @@ class HazardSelectionInput extends React.PureComponent {
     }
 
     render() {
+        const { activeRouteDetails: { name: activePage } } = this.context;
         const {
             className,
             hazardTypeList,
@@ -123,19 +128,39 @@ class HazardSelectionInput extends React.PureComponent {
 
         const groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
         const groupedValues = this.getGroupedHazardTypeValues(value);
+
+        const withoutFire = [...groupedHazardTypes.natural].filter(item => item.title !== 'Fire');
+
         return (
             <div className={_cs(className, styles.hazardSelectionInput)}>
-                <MultiListSelection
-                    className={styles.naturalHazardSelectionInput}
-                    titleSelector={hazardTypeTitleSelector}
-                    keySelector={hazardTypeKeySelector}
-                    labelSelector={hazardTypeLabelSelector}
-                    iconSelector={hazardTypeIconSelector}
-                    label="Natural"
-                    options={groupedHazardTypes.natural}
-                    value={groupedValues.natural}
-                    onChange={this.handleNaturalInputChange}
-                />
+                {activePage === 'dashboard' ? (
+                    <MultiListSelection
+                        className={styles.naturalHazardSelectionInput}
+                        titleSelector={hazardTypeTitleSelector}
+                        keySelector={hazardTypeKeySelector}
+                        labelSelector={hazardTypeLabelSelector}
+                        iconSelector={hazardTypeIconSelector}
+                        label="Natural"
+                        options={withoutFire}
+                        value={groupedValues.natural}
+                        onChange={this.handleNaturalInputChange}
+                    />
+                ) : (
+                    <MultiListSelection
+                        className={styles.naturalHazardSelectionInput}
+                        titleSelector={hazardTypeTitleSelector}
+                        keySelector={hazardTypeKeySelector}
+                        labelSelector={hazardTypeLabelSelector}
+                        iconSelector={hazardTypeIconSelector}
+                        label="Natural"
+                        options={groupedHazardTypes.natural}
+                        value={groupedValues.natural}
+                        onChange={this.handleNaturalInputChange}
+                    />
+                )
+
+                }
+
                 <MultiListSelection
                     className={styles.artificialHazardSelectionInput}
                     keySelector={hazardTypeKeySelector}

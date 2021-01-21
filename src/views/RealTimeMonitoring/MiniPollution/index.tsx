@@ -25,6 +25,7 @@ interface RealTimePollutionExtended extends RealTimePollution {
     name?: string;
     createdOn?: string;
     aqiColor?: string;
+    modifiedOn?: string;
 }
 
 interface Props {
@@ -59,18 +60,18 @@ class MiniPollution extends React.PureComponent<Props> {
                 },
             },
             {
-                key: 'createdOn',
+                key: 'modifiedOn',
                 label: 'Date',
                 order: 2,
                 sortable: true,
-                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
+                    const { dateTime } = row;
 
-                    return (createdOn) ? (
+                    return (dateTime) ? (
                         <div>
                             {/* parsing date to appropiate format */}
-                            {createdOn.substring(0, createdOn.indexOf('T'))}
+                            {dateTime.substring(0, dateTime.indexOf('T'))}
                         </div>
                     ) : undefined;
                 },
@@ -81,13 +82,17 @@ class MiniPollution extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
-                    if (createdOn) {
-                        const date = new Date(createdOn);
+                    const { dateTime } = row;
+                    console.log(dateTime);
+                    // const { modifiedOn, observation: observationItem } = row;
+                    // const { data: { datetime } } = observationItem[0];
+                    if (dateTime) {
+                        // const date = new Date(modifiedOn);
                         return (
                             <div>
                                 {/* parsing date to time format */}
-                                {date.toISOString().split('T')[1].split('.')[0]}
+                                {/* {date.toISOString().split('T')[1].split('.')[0]} */}
+                                {dateTime.split('T')[1].split('.')[0].split('+')[0]}
                             </div>
                         );
                     } return undefined;
