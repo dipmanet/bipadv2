@@ -7,6 +7,7 @@ import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArc
 import { TitleContext, DataArchive } from '#components/TitleContext';
 
 import TopBar from './TopBar';
+import Header from './Header';
 
 import Message from '#rscv/Message';
 
@@ -144,6 +145,11 @@ const River = (props: Props) => {
                 startDate="2020-01-12"
                 endDate="2020-01-21"
             />
+            <div className={styles.header}>
+                <Header
+                    dataCount={riverList.length || 0}
+                />
+            </div>
           River
         </div>
     );
