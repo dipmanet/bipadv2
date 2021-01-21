@@ -6,6 +6,8 @@ import * as PageType from '#store/atom/page/types';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import { TitleContext, DataArchive } from '#components/TitleContext';
 
+import TopBar from './TopBar';
+
 import Message from '#rscv/Message';
 
 import {
@@ -136,6 +138,11 @@ const Rain = (props: Props) => {
     return (
         <div className={styles.rain}>
             <Loading pending={pending} />
+            <TopBar
+                rainList={rainList}
+                startDate="2020-01-12"
+                endDate="2020-01-21"
+            />
           Rain
         </div>
     );
