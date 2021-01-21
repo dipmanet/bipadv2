@@ -121,6 +121,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 console.warn('failure', error);
                 params.handlePending(false);
                 alert('There was a problem, please try again or contact support. ');
+                const query = window.location.href;
+                const href = query.split('/set')[0];
+                window.location.href = href;
                 params.setFaramErrors({
                     $internal: ['Some problem occured'],
                 });
