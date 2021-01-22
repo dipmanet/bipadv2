@@ -157,7 +157,7 @@ const PollutionModal = (props: Props) => {
         filterWiseChartData = getChartData(monthWiseGroup, 'monthName');
     }
 
-    // sorting filteredData by createdOn asc
+    // sorting filteredData by dateTime asc
     if (filterWiseChartData) {
         filterWiseChartData.sort(arraySorter);
     }

@@ -26,7 +26,7 @@ export const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
                 properties: {
                     ...pollution,
                     aqi: Math.round(pollution.aqi),
-                    date: Date.parse(pollution.createdOn) || 1,
+                    date: Date.parse(pollution.dateTime || '') || 1,
                 },
             })),
     };
@@ -34,14 +34,14 @@ export const pollutionToGeojson = (pollutionList: ArchivePollution[]) => {
 };
 
 export const getSortedPollutionData = memoize((pollutionDetails: ArchivePollution[]) => {
-    const sortedData = [...pollutionDetails].sort((a, b) => compareDate(b.createdOn, a.createdOn));
+    const sortedData = [...pollutionDetails].sort((a, b) => compareDate(b.dateTime, a.dateTime));
     return sortedData;
 });
 
 export const getTodaysPollutionDetails = memoize((pollutionDetails: ArchivePollution[]) => {
     const today = getDate(new Date().getTime());
     const todaysData = pollutionDetails.filter(
-        pollutionDetail => getDate(pollutionDetail.createdOn) === today,
+        pollutionDetail => getDate(pollutionDetail.dateTime) === today,
     );
     return todaysData;
 });
@@ -69,9 +69,9 @@ export const dateParser = (date: string) => {
     return `${datePart} ${hour}:${minutes} ${indicator}`;
 };
 
-export const arraySorter = (a: {createdOn: string}, b: {createdOn: string}) => {
-    const keyA = new Date(a.createdOn);
-    const keyB = new Date(b.createdOn);
+export const arraySorter = (a: {dateTime: string}, b: {dateTime: string}) => {
+    const keyA = new Date(a.dateTime);
+    const keyB = new Date(b.dateTime);
     if (keyA < keyB) return -1;
     if (keyA > keyB) return 1;
     return 0;
@@ -99,45 +99,45 @@ export const isEqualObject = (obj1: any, obj2: any) => {
 
 // for period parsing
 
-const getHourlyValues = (createdOn: string) => {
-    const dateWithHour = createdOn.substr(0, createdOn.indexOf(':'));
-    const hour = new Date(createdOn).getHours();
+const getHourlyValues = (dateTime: string) => {
+    const dateWithHour = dateTime.substr(0, dateTime.indexOf(':'));
+    const hour = new Date(dateTime).getHours();
     const hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
     return [dateWithHour, hourName];
 };
 
-const getDailyValues = (createdOn: string) => {
+const getDailyValues = (dateTime: string) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    const dateOnly = createdOn.substr(0, createdOn.indexOf('T'));
-    const month = new Date(createdOn).getMonth();
-    const date = new Date(createdOn).getDate();
+    const dateOnly = dateTime.substr(0, dateTime.indexOf('T'));
+    const month = new Date(dateTime).getMonth();
+    const date = new Date(dateTime).getDate();
     const dateName = `${monthNames[month]} ${date}`;
 
     return [dateOnly, dateName];
 };
 
-const getWeekNumber = (createdOn: string) => {
-    const date = new Date(createdOn);
+const getWeekNumber = (dateTime: string) => {
+    const date = new Date(dateTime);
     const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear = (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
 
-const getWeeklyValues = (createdOn: string) => {
-    const year = new Date(createdOn).getFullYear();
-    const weekNumber = getWeekNumber(createdOn);
+const getWeeklyValues = (dateTime: string) => {
+    const year = new Date(dateTime).getFullYear();
+    const weekNumber = getWeekNumber(dateTime);
     const weekName = `Week ${weekNumber}`;
     const dateWithWeek = `${year} ${weekName}`;
     return [dateWithWeek, weekName];
 };
 
-const getMonthlyValues = (createdOn: string) => {
+const getMonthlyValues = (dateTime: string) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    const date = new Date(createdOn);
+    const date = new Date(dateTime);
     const year = date.getFullYear();
     const month = date.getMonth();
     const monthName = monthNames[month];
@@ -148,11 +148,11 @@ const getMonthlyValues = (createdOn: string) => {
 export const parsePeriod = memoize((pollutionDetails: ArchivePollution[]) => {
     const temp = [...pollutionDetails];
     const withPeriod = temp.map((detail) => {
-        const { createdOn } = detail;
-        const [dateWithHour, hourName] = getHourlyValues(createdOn);
-        const [dateOnly, dateName] = getDailyValues(createdOn);
-        const [dateWithWeek, weekName] = getWeeklyValues(createdOn);
-        const [dateWithMonth, monthName] = getMonthlyValues(createdOn);
+        const { dateTime } = detail;
+        const [dateWithHour, hourName] = getHourlyValues(dateTime);
+        const [dateOnly, dateName] = getDailyValues(dateTime);
+        const [dateWithWeek, weekName] = getWeeklyValues(dateTime);
+        const [dateWithMonth, monthName] = getMonthlyValues(dateTime);
         return { ...detail,
             dateWithHour,
             hourName,
@@ -183,7 +183,7 @@ export const getChartData = (
     const chartData = data.map((singleItem) => {
         const { key, value: dataArray } = singleItem;
         const label = dataArray[0][labelKey];
-        const { createdOn } = dataArray[0];
+        const { createdOn, dateTime } = dataArray[0];
         const PM1_I = getItemAverage(dataArray, 'PM1_I');
         const PM10_I = getItemAverage(dataArray, 'PM10_I');
         const PM25_I = getItemAverage(dataArray, 'PM25_I');
@@ -198,6 +198,7 @@ export const getChartData = (
             key,
             label: String(label || ''),
             createdOn: String(createdOn || ''),
+            dateTime: String(dateTime || ''),
             PM1_I: Number(PM1_I) || 0,
             PM10_I: Number(PM10_I) || 0,
             PM25_I: Number(PM25_I) || 0,

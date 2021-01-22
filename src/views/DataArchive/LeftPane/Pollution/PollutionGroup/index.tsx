@@ -9,7 +9,7 @@ interface Props {
     title: ReactText;
     data: PageType.DataArchivePollution[];
 }
-const SORT_KEY = 'createdOn';
+const SORT_KEY = 'dateTime';
 
 const compare = (a: any, b: any) => {
     if (a[SORT_KEY] < b[SORT_KEY]) {

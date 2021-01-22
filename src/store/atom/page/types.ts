@@ -553,6 +553,7 @@ export interface DataArchivePollution extends RealTimePollution{
     description?: string;
     elevation?: number | null;
     createdOn?: string;
+    dateTime?: string;
 }
 
 export interface DataArchiveRain extends RealTimeRain {

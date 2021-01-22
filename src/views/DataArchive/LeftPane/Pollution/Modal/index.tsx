@@ -26,6 +26,7 @@ interface DataArchivePollutionExtended extends DataArchivePollution {
     title?: string;
     createdOn?: string;
     aqiColor?: string;
+    dateTime?: string;
 }
 interface Props {
     dataArchivePollution: DataArchivePollutionExtended[];
@@ -57,15 +58,15 @@ class PollutionModal extends React.PureComponent<Props> {
                 },
             },
             {
-                key: 'createdOn',
+                key: 'dateTime',
                 label: 'Date',
                 order: 2,
                 sortable: true,
-                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                comparator: (a, b) => compareString(a.dateTime, b.dateTime),
                 modifier: (row: DataArchivePollutionExtended) => {
-                    const { createdOn } = row;
+                    const { dateTime } = row;
                     // parsing date to appropiate format
-                    return (createdOn) ? createdOn.substring(0, createdOn.indexOf('T')) : undefined;
+                    return (dateTime) ? dateTime.substring(0, dateTime.indexOf('T')) : undefined;
                 },
             },
             {
@@ -74,9 +75,9 @@ class PollutionModal extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: DataArchivePollutionExtended) => {
-                    const { createdOn } = row;
-                    if (createdOn) {
-                        const date = new Date(createdOn);
+                    const { dateTime } = row;
+                    if (dateTime) {
+                        const date = new Date(dateTime);
                         // parsing date to time format
                         return date.toISOString().split('T')[1].split('.')[0];
                     } return undefined;

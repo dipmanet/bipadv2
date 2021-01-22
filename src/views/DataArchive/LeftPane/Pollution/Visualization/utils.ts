@@ -19,50 +19,50 @@ interface Data {
     label: string;
     dailyKey: string | number;
     aqi: number;
-    createdOn: string;
+    dateTime: string;
 }
 
 // for period parsing
 
-const getHourlyValues = (createdOn: string) => {
-    const dateWithHour = createdOn.substr(0, createdOn.indexOf(':'));
-    const hour = new Date(createdOn).getHours();
+const getHourlyValues = (dateTime: string) => {
+    const dateWithHour = dateTime.substr(0, dateTime.indexOf(':'));
+    const hour = new Date(dateTime).getHours();
     const hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
     return [dateWithHour, hourName];
 };
 
-const getDailyValues = (createdOn: string) => {
+const getDailyValues = (dateTime: string) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    const dateOnly = createdOn.substr(0, createdOn.indexOf('T'));
-    const month = new Date(createdOn).getMonth();
-    const date = new Date(createdOn).getDate();
+    const dateOnly = dateTime.substr(0, dateTime.indexOf('T'));
+    const month = new Date(dateTime).getMonth();
+    const date = new Date(dateTime).getDate();
     const dateName = `${monthNames[month]} ${date}`;
 
     return [dateOnly, dateName];
 };
 
-const getWeekNumber = (createdOn: string) => {
-    const date = new Date(createdOn);
+const getWeekNumber = (dateTime: string) => {
+    const date = new Date(dateTime);
     const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear = (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
 
-const getWeeklyValues = (createdOn: string) => {
-    const year = new Date(createdOn).getFullYear();
-    const weekNumber = getWeekNumber(createdOn);
+const getWeeklyValues = (dateTime: string) => {
+    const year = new Date(dateTime).getFullYear();
+    const weekNumber = getWeekNumber(dateTime);
     const weekName = `Week ${weekNumber}`;
     const dateWithWeek = `${year} ${weekName}`;
     return [dateWithWeek, weekName];
 };
 
-const getMonthlyValues = (createdOn: string) => {
+const getMonthlyValues = (dateTime: string) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    const date = new Date(createdOn);
+    const date = new Date(dateTime);
     const year = date.getFullYear();
     const month = date.getMonth();
     const monthName = monthNames[month];
@@ -73,11 +73,11 @@ const getMonthlyValues = (createdOn: string) => {
 export const parsePeriod = memoize((pollutionDetails: PageType.DataArchivePollution[]) => {
     const temp = [...pollutionDetails];
     const withPeriod = temp.map((detail) => {
-        const { createdOn } = detail;
-        const [dateWithHour, hourName] = getHourlyValues(createdOn || '');
-        const [dateOnly, dateName] = getDailyValues(createdOn || '');
-        const [dateWithWeek, weekName] = getWeeklyValues(createdOn || '');
-        const [dateWithMonth, monthName] = getMonthlyValues(createdOn || '');
+        const { dateTime } = detail;
+        const [dateWithHour, hourName] = getHourlyValues(dateTime || '');
+        const [dateOnly, dateName] = getDailyValues(dateTime || '');
+        const [dateWithWeek, weekName] = getWeeklyValues(dateTime || '');
+        const [dateWithMonth, monthName] = getMonthlyValues(dateTime || '');
         return { ...detail,
             dateWithHour,
             hourName,
@@ -110,13 +110,13 @@ export const getChartData = (
     const chartData = data.map((singleItem) => {
         const { key, value: dataArray } = singleItem;
         const label = dataArray[0][labelKey];
-        const { createdOn } = dataArray[0];
+        const { dateTime } = dataArray[0];
         const aqi = getItemAverage(dataArray, 'aqi');
 
         return {
             key,
             label: String(label || ''),
-            createdOn: String(createdOn || ''),
+            dateTime: String(dateTime || ''),
             aqi: Number(aqi) || 0,
         };
     });
@@ -182,7 +182,7 @@ export const withAqiCount = (data: Data[]) => {
         veryHazardous,
     } = getAqiCategoryCount(data);
 
-    const { createdOn, key } = data[0];
+    const { dateTime, key } = data[0];
     return {
         key,
         label: key,
@@ -194,7 +194,7 @@ export const withAqiCount = (data: Data[]) => {
         veryUnhealthy,
         hazardous,
         veryHazardous,
-        createdOn,
+        dateTime,
     };
 };
 
@@ -213,13 +213,13 @@ export const getPollutionAverage = memoize(
             );
             const averageWiseChartData = getChartData(dailyWiseGroup, 'dateName')
                 .map((data) => {
-                    const { key: dailyKey, label, aqi, createdOn } = data;
+                    const { key: dailyKey, label, aqi, dateTime } = data;
                     return {
                         key,
                         dailyKey,
                         label,
                         aqi,
-                        createdOn,
+                        dateTime,
                     };
                 });
             return withAqiCount(averageWiseChartData);

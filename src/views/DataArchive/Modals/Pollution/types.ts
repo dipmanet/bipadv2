@@ -41,6 +41,7 @@ export interface Observation {
 }
 export interface ArchivePollution extends PageType.DataArchivePollution {
     createdOn: string;
+    dateTime: string;
     province: Federal;
     district: District;
     municipality: Municipality;
@@ -81,6 +82,7 @@ export interface ChartData {
     key: string | number;
     label: string;
     createdOn: string;
+    dateTime: string;
     PM1_I: number;
     PM10_I: number;
     PM25_I: number;

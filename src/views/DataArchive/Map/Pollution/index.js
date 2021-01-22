@@ -40,7 +40,7 @@ const pollutionToGeojson = (pollutionList) => {
                 properties: {
                     ...pollution,
                     aqi: Math.round(pollution.aqi),
-                    date: Date.parse(pollution.createdOn) || 1,
+                    date: Date.parse(pollution.dateTime) || 1,
                 },
             })),
     };
@@ -96,7 +96,7 @@ class PollutionMap extends React.PureComponent {
                 title,
                 aqi,
                 description,
-                createdOn: measuredOn,
+                dateTime: measuredOn,
                 station: stationId,
             },
             geometry,

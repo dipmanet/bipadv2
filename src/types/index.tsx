@@ -95,6 +95,7 @@ export interface PollutionStation {
     };
     createdOn?: string;
     modifiedOn?: string;
+    dateTime?: string;
     nepaliName?: string;
     identifier?: string;
     dataSource?: string;

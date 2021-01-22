@@ -21,16 +21,16 @@ interface Props {
     isInitial?: boolean;
 }
 
-const pollutionSelector = (pollution: ChartData) => pollution.createdOn;
+const pollutionSelector = (pollution: ChartData) => pollution.dateTime;
 
 const defaultSort = {
-    key: 'createdOn',
+    key: 'dateTime',
     order: 'dsc',
 };
 
-const getPeriodWiseDate = (label: string | number, createdOn: string, periodCode?: string) => {
+const getPeriodWiseDate = (label: string | number, dateTime: string, periodCode?: string) => {
     if (periodCode === 'hourly') {
-        return (createdOn) ? dateParser(createdOn) : undefined;
+        return (dateTime) ? dateParser(dateTime) : undefined;
     }
     return `${label}`;
 };
@@ -47,23 +47,23 @@ const TableView = (props: Props) => {
             label: 'Year',
             order: 1,
             sortable: true,
-            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+            comparator: (a, b) => compareString(a.dateTime, b.dateTime),
             modifier: (row: ChartData) => {
-                const { createdOn } = row;
+                const { dateTime } = row;
 
-                return createdOn ? createdOn.split('-')[0] : undefined;
+                return dateTime ? dateTime.split('-')[0] : undefined;
             },
         },
         {
-            key: 'createdOn',
+            key: 'dateTime',
             label: 'Date',
             order: 1,
             sortable: true,
-            comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+            comparator: (a, b) => compareString(a.dateTime, b.dateTime),
             modifier: (row: ChartData) => {
-                const { label, createdOn } = row;
+                const { label, dateTime } = row;
                 // parsing date to appropiate format
-                return getPeriodWiseDate(label, createdOn, periodCode);
+                return getPeriodWiseDate(label, dateTime, periodCode);
             },
         },
         {

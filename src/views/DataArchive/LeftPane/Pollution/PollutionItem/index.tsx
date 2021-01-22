@@ -15,7 +15,7 @@ const parseTime = (date: string): string => date.split('T')[1].split('.')[0];
 
 const PollutionItem = (props: Props) => {
     const { data } = props;
-    const { title, aqi, createdOn } = data;
+    const { title, aqi, dateTime: createdOn } = data;
     return (
         <div className={styles.pollution}>
             <div className={styles.left}>

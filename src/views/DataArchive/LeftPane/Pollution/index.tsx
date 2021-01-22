@@ -81,12 +81,13 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/pollution/',
         method: methods.GET,
         query: ({ props: { pollutionFilters } }) => ({
-            ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'date_time'),
             station: pollutionFilters.station.id,
             // historical: true,
             fields: [
                 'id',
                 'created_on',
+                'date_time',
                 'title',
                 'aqi_color',
                 'aqi',

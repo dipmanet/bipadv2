@@ -20,7 +20,6 @@ interface ChartData {
     veryUnhealthy: number;
     hazardous: number;
     veryHazardous: number;
-
 }
 
 const getAqiCount = (stationWise: {
@@ -65,7 +64,7 @@ const getAqiCount = (stationWise: {
                 veryHazardous += 1;
             }
         });
-        const { createdOn } = stationWiseDate[0];
+        const { dateTime } = stationWiseDate[0];
         return {
             ...s,
             label: key,
@@ -77,7 +76,7 @@ const getAqiCount = (stationWise: {
             veryUnhealthy,
             hazardous,
             veryHazardous,
-            createdOn,
+            dateTime,
         };
     });
     const sortedData = visualData.sort(
@@ -101,12 +100,12 @@ const getPollutionSummary = memoize(
 
 const PollutionViz = (props: Props) => {
     const { pollutionList } = props;
-    const pollutionSummary = getPollutionSummary(pollutionList);
+    // const pollutionSummary = getPollutionSummary(pollutionList);
     const pollutionAverage = getPollutionAverage(pollutionList);
 
     return (
         <div className={styles.pollutionViz}>
-            {pollutionSummary && (
+            {pollutionAverage && (
                 <div className={styles.aqiChart}>
                     <AqiChart
                         downloadId="pollutionSummary"
