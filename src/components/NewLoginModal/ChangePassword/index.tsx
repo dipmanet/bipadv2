@@ -141,7 +141,7 @@ const ChangePassword = (props: Props) => {
                         Passwords do not match
                     </p>
                 ) : ''}
-                {serverErrorMsg || ''}
+                {serverErrorMsg ? <span className={styles.matchError}>{serverErrorMsg}</span> : ''}
             </div>
 
             <div className={styles.cancelAgreeBtns}>

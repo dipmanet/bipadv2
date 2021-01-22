@@ -161,6 +161,12 @@ const DetailsSecondPage = (props: Props) => {
                                 </span>
                             ) : ''
                         }
+                        {serverErrorMsg ? (
+                            <span className={styles.captchaErr}>
+                                {serverErrorMsg}
+                            </span>
+                        ) : ''}
+
                     </div>
                 </div>
                 <div className={styles.cancelAgreeBtns}>

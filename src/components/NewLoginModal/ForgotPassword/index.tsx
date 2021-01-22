@@ -99,7 +99,7 @@ const ForgotPassword = (props: Props) => {
                         Submit
                     </PrimaryButton>
                 </div>
-                {serverErrorMsg || ''}
+                {serverErrorMsg ? <span className={styles.errMsg}>{serverErrorMsg}</span> : ''}
                 <div className={styles.infoForgot}>
                     <p>
                         <Icon
