@@ -41,3 +41,15 @@ export const groupByRegion = (data: [], key: GroupKey) => {
     removeUndefined(groupedData);
     return groupedData;
 };
+
+export const getDate = (dateValue: string) => {
+    const date = dateValue.split('T')[0];
+    return date;
+};
+
+export const getTime = (dateValue: string) => {
+    const timeWithSeconds = dateValue.split('T')[1].split('.')[0];
+    const [hour, minutes, seconds] = timeWithSeconds.split(':');
+    const time = `${hour}:${minutes}`;
+    return time;
+};

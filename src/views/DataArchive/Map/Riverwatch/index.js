@@ -14,6 +14,8 @@ import {
     getMapPaddings,
 } from '#constants';
 import { pollutionFiltersSelector } from '#selectors';
+import { getDate, getTime } from '#views/DataArchive/utils';
+
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
@@ -131,11 +133,11 @@ class RiverMap extends React.PureComponent {
 
                 <div className={styles.description}>
                     <div className={styles.key}>MEASURED ON:</div>
-                    <div className={styles.value}>{measuredOn}</div>
+                    <div className={styles.value}>{`${getDate(measuredOn)} ${getTime(measuredOn)}`}</div>
                 </div>
                 <div className={styles.description}>
                     <div className={styles.key}>WATER LEVEL:</div>
-                    <div className={styles.value}>{waterLevel}</div>
+                    <div className={styles.value}>{waterLevel.toFixed(2)}</div>
                 </div>
             </div>
             <div className={styles.line} />
