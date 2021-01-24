@@ -9,7 +9,7 @@ interface Props {
     title: ReactText;
     data: PageType.DataArchiveRiver[];
 }
-const SORT_KEY = 'createdOn';
+const SORT_KEY = 'waterLevelOn';
 
 const compare = (a: any, b: any) => {
     if (a[SORT_KEY] < b[SORT_KEY]) {

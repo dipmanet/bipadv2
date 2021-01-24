@@ -96,7 +96,7 @@ class RiverMap extends React.PureComponent {
                 description,
                 basin,
                 status,
-                createdOn: measuredOn,
+                waterLevelOn: measuredOn,
                 waterLevel,
                 station: stationId,
             },
