@@ -1,7 +1,7 @@
 import React, { ReactText, useState } from 'react';
 import * as PageType from '#store/atom/page/types';
 import Button from '#rsca/Button';
-// import RainItem from '../RainItem';
+import RainItem from '../RainItem';
 
 import styles from './styles.scss';
 
@@ -49,7 +49,7 @@ const RainGroup = (props: Props) => {
                 </div>
             </div>
 
-            {/* <div className={styles.child}>
+            <div className={styles.child}>
                 { isExpanded
                 && data
                     .sort(compare)
@@ -58,12 +58,12 @@ const RainGroup = (props: Props) => {
                             className={styles.wrapper}
                             key={datum.id}
                         >
-                            <Raintem
+                            <RainItem
                                 data={datum}
                             />
                         </div>
                     )) }
-            </div> */}
+            </div>
 
         </div>
     );

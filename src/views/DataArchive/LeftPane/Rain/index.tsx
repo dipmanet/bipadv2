@@ -11,6 +11,7 @@ import TopBar from './TopBar';
 import Header from './Header';
 import Note from './Note';
 import RainGroup from './RainGroup';
+import RainItem from './RainItem';
 
 import Message from '#rscv/Message';
 
@@ -179,8 +180,7 @@ const Rain = (props: Props) => {
                         />
                     );
                 }
-                // return <RainItem key={key} data={value[0]} />;
-                return <div key={key}>{key}</div>;
+                return <RainItem key={key} data={value[0]} />;
             })}
           Rain
         </div>

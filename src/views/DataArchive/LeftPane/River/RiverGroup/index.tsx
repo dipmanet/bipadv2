@@ -1,7 +1,7 @@
 import React, { ReactText, useState } from 'react';
 import * as PageType from '#store/atom/page/types';
 import Button from '#rsca/Button';
-// import RiverItem from '../RiverItem';
+import RiverItem from '../RiverItem';
 
 import styles from './styles.scss';
 
@@ -49,7 +49,7 @@ const RiverGroup = (props: Props) => {
                 </div>
             </div>
 
-            {/* <div className={styles.child}>
+            <div className={styles.child}>
                 { isExpanded
                 && data
                     .sort(compare)
@@ -63,7 +63,7 @@ const RiverGroup = (props: Props) => {
                             />
                         </div>
                     )) }
-            </div> */}
+            </div>
 
         </div>
     );

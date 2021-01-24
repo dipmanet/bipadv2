@@ -11,6 +11,8 @@ import TopBar from './TopBar';
 import Header from './Header';
 import Note from './Note';
 import RiverGroup from './RiverGroup';
+import RiverItem from './RiverItem';
+
 import Message from '#rscv/Message';
 
 import {
@@ -180,8 +182,7 @@ const River = (props: Props) => {
                         />
                     );
                 }
-                // return <RiverItem key={key} data={value[0]} />;
-                return <div key={key}>{key}</div>;
+                return <RiverItem key={key} data={value[0]} />;
             })}
           River
         </div>
