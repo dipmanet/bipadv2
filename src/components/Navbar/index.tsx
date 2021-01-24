@@ -23,7 +23,8 @@ import {
 } from '#request';
 import CitizenReportFormModal from '#components/CitizenReportFormModal';
 import CitizenReportsModal from '#components/CitizenReportsModal';
-import LoginModal from '#components/LoginModal';
+// import LoginModal from '#components/LoginModal';
+import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
@@ -188,7 +189,7 @@ class Navbar extends React.PureComponent<Props, State> {
                             className={styles.menuItem}
                             title="Login"
                             iconName="login"
-                            modal={<LoginModal />}
+                            modal={<NewLoginModal />}
                         />
                     )}
                     <ModalButton
