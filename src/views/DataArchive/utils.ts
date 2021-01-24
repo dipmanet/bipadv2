@@ -1,4 +1,5 @@
 import * as PageType from '#store/atom/page/types';
+import { DatePeriod } from './types';
 
 type GroupKey = 'pTitle' | 'dTitle' | 'mTitle';
 
@@ -88,4 +89,24 @@ export const getIndividualAverages = (averages: PageType.WaterLevelAverage[]) =>
         twentyFourHour,
     };
     return individualAverages;
+};
+
+export const getMonthName = (date: string) => {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+
+    const d = new Date(date);
+    return monthNames[d.getMonth()];
+};
+
+export const getSpecificDate = (date: string, datePeriod: DatePeriod) => {
+    const dateOnly = date.split('T')[0];
+    const [year, month, day] = dateOnly.split('-');
+    const dateObject = {
+        year,
+        month,
+        day,
+    };
+    return dateObject[datePeriod];
 };
