@@ -21,27 +21,32 @@
         background-color: #333231;
         color:#b6d6e4;
         padding: 5px 15px;
-
-        h1,h2{
-        font-family: 'Playfair Display';
+        .chartsContainer{
+            height: 100%;
+            // width:100%;
         }
+
+        h1{
+        font-family: 'Playfair Display';
+        font-size: 32px;
+        color: white;
+        opacity: 0.87;
+        }
+        h2{
+            font-family: 'Playfair Display';
+            font-size: 22px;
+            color: white;
+            opacity: 0.87;
+            }
         p{
-            color:#b6d6e4;
-            font-size: 13px;
+            color:white;
+            font-size: 12px;
             font-family: 'Source Sans Pro';
             text-align: justify;
+            opacity: 0.87;
+            line-height: 1.7em;
         }
     }
-    // .layer-switch {
-    //     text-align: center;
-    
-    //     :global {
-    //         .dropdown-button {
-    //             padding: var(--spacing-small) var(--spacing-medium);
-    //             font-size: var(--font-size-large);
-    //         }
-    //     }
-    // }
 }
 
 

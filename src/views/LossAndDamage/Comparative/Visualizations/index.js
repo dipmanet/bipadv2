@@ -140,6 +140,7 @@ class Visualizations extends React.PureComponent {
         const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
         const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
         const lossSummary = this.getLossSummary(lossAndDamageList);
+        console.log('loss summary: ', lossSummary);
         // height: `${60 + lossSummary.length * 40}px`,
 
         return (
