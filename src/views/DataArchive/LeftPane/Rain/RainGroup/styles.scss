@@ -6,8 +6,6 @@
     border-bottom: 1px solid rgba($color: grey, $alpha: 0.5);
     min-height: 72px;
     
-    // cursor: pointer;
-    
     &:hover {
         background-color: #f6f6f6;
     }
@@ -23,13 +21,10 @@
         align-items: center;
         justify-content: center;
         .count {
-            background-color: rgba($color: grey, $alpha: 0.5);
-            color: black;
-            border-radius: 50%;
+            color: rgba($color: grey, $alpha: 0.8);
             text-align: center;
-            height: 25px;
-            min-width: 25px;
-            line-height: 25px;
+            font-weight: bold;
+            font-size: var(--font-size-medium-alt); 
         }
 
         .chevron {

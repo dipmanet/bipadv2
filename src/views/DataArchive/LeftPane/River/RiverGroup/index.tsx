@@ -21,13 +21,6 @@ const compare = (a: any, b: any) => {
     return 0;
 };
 
-const getCount = (data: PageType.DataArchiveRiver[]) => {
-    const count = data.length;
-    const LIMIT = 99;
-
-    return count > LIMIT ? `${LIMIT}+` : `${count}`;
-};
-
 const RiverGroup = (props: Props) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { title, data } = props;
@@ -42,7 +35,11 @@ const RiverGroup = (props: Props) => {
                 </div>
                 <div className={styles.right}>
                     <div className={styles.count}>
-                        <span>{getCount(data)}</span>
+                        <span>
+                            TOTAL
+                            {' '}
+                            {data.length}
+                        </span>
                     </div>
                     <Button
                         className={styles.chevron}
