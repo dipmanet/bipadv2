@@ -1,0 +1,19 @@
+.average-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-extra-small-alt);
+    margin: var(--spacing-extra-small-alt);
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 55px;
+    height: 50px;
+    .value {
+        font-weight: var(--font-weight-bold);
+    }
+    .interval {
+        font-weight: var(--font-weight-light);
+    }
+}

@@ -1,18 +1,50 @@
 import React from 'react';
 import * as PageType from '#store/atom/page/types';
 
+import AverageBlock from '../AverageBlock';
+import Icon from '#rscg/Icon';
+
+import { getDate, getIndividualAverages } from '#views/DataArchive/utils';
 import styles from './styles.scss';
 
 interface Props {
     data: PageType.DataArchiveRain;
 }
+
 const RainItem = (props: Props) => {
     const { data } = props;
     const { basin, createdOn, averages } = data;
-    console.log('RainItem');
+    const {
+        oneHour,
+        threeHour,
+        sixHour,
+        twelveHour,
+        twentyFourHour,
+    } = getIndividualAverages(averages);
     return (
         <div className={styles.rainItem}>
-            {`${basin} Basin`}
+            <div className={styles.left}>
+                <div className={styles.basin}>
+                    {basin ? `${basin} Basin` : 'N/A'}
+                </div>
+                <div className={styles.date}>
+                    <Icon
+                        className={styles.icon}
+                        name="calendar"
+                    />
+                    <div className={styles.dateValue}>
+                        {
+                            createdOn && getDate(createdOn.toString())}
+                    </div>
+                </div>
+            </div>
+            <div className={styles.right}>
+                <AverageBlock average={oneHour} />
+                <AverageBlock average={threeHour} />
+                <AverageBlock average={sixHour} />
+                <AverageBlock average={twelveHour} />
+                <AverageBlock average={twentyFourHour} />
+            </div>
         </div>
     );
 };

@@ -1,3 +1,5 @@
+import * as PageType from '#store/atom/page/types';
+
 type GroupKey = 'pTitle' | 'dTitle' | 'mTitle';
 
 const groupBy = (data: [], key: GroupKey) => data.reduce((storage, item) => {
@@ -52,4 +54,38 @@ export const getTime = (dateValue: string) => {
     const [hour, minutes, seconds] = timeWithSeconds.split(':');
     const time = `${hour}:${minutes}`;
     return time;
+};
+
+
+export const getIndividualAverages = (averages: PageType.WaterLevelAverage[]) => {
+    let oneHour;
+    let threeHour;
+    let sixHour;
+    let twelveHour;
+    let twentyFourHour;
+    averages.forEach((average) => {
+        if (average.interval === 1) {
+            oneHour = average;
+        }
+        if (average.interval === 3) {
+            threeHour = average;
+        }
+        if (average.interval === 6) {
+            sixHour = average;
+        }
+        if (average.interval === 12) {
+            twelveHour = average;
+        }
+        if (average.interval === 24) {
+            twentyFourHour = average;
+        }
+    });
+    const individualAverages = {
+        oneHour,
+        threeHour,
+        sixHour,
+        twelveHour,
+        twentyFourHour,
+    };
+    return individualAverages;
 };
