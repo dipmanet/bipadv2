@@ -116,17 +116,17 @@ class RainMap extends React.PureComponent {
         <div className={styles.mainWrapper}>
             <div className={styles.tooltip}>
                 <div className={styles.header}>
-                    <h3>{`Heavy Rainfall at ${title}`}</h3>
+                    <h3>{`Heavy Rainfall at ${title || 'N/A'}`}</h3>
                 </div>
 
                 <div className={styles.description}>
                     <div className={styles.key}>BASIN:</div>
-                    <div className={styles.value}>{basin}</div>
+                    <div className={styles.value}>{basin || 'N/A'}</div>
                 </div>
 
                 <div className={styles.description}>
                     <div className={styles.key}>STATION NAME:</div>
-                    <div className={styles.value}>{title}</div>
+                    <div className={styles.value}>{title || 'N/A'}</div>
                 </div>
             </div>
             <div className={styles.line} />

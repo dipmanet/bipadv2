@@ -123,12 +123,12 @@ class RiverMap extends React.PureComponent {
         <div className={styles.mainWrapper}>
             <div className={styles.tooltip}>
                 <div className={styles.header}>
-                    <h3>{`${title} at ${basin}`}</h3>
+                    <h3>{`${title} at ${basin || 'N/A'}`}</h3>
                 </div>
 
                 <div className={styles.description}>
                     <div className={styles.key}>BASIN:</div>
-                    <div className={styles.value}>{basin}</div>
+                    <div className={styles.value}>{basin || 'N/A'}</div>
                 </div>
 
                 <div className={styles.description}>
@@ -137,7 +137,7 @@ class RiverMap extends React.PureComponent {
                 </div>
                 <div className={styles.description}>
                     <div className={styles.key}>WATER LEVEL:</div>
-                    <div className={styles.value}>{waterLevel.toFixed(2)}</div>
+                    <div className={styles.value}>{waterLevel.toFixed(2) || 'N/A'}</div>
                 </div>
             </div>
             <div className={styles.line} />
