@@ -4,15 +4,19 @@
     align-items: center;
     .pwdRequestContainer{
         border: 1px solid gray;
+        height: 400px;
         width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         align-items: center;
         flex-direction: column;
         .closeBtn{
             display: flex;
             justify-content: flex-end;
             width: 100%;
+            position: relative;
+            bottom: 10px;
+            right: 15px;
         }
         .infoIcon{
             padding-right: 4px;
@@ -70,6 +74,10 @@
             }
 
             }
+        .errMsg{
+            font-size: 10px;
+            color: red;
+        }
         .closeBtn{
             display: flex;
             justify-content: flex-end;

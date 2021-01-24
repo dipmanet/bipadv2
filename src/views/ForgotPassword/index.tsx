@@ -92,7 +92,6 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/auth/change-password/',
         method: methods.POST,
         body: ({ params }) => {
-            console.log('token is: ', params.token);
             if (!params) {
                 return {};
             }
@@ -101,43 +100,28 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 token: params.token,
             };
         },
-        onSuccess: ({ response, props, params }) => {
-            // const {
-            //     setAuth,
-            //     setUserDetail,
-            // } = props;
-            // const authState = getAuthState();
-            // setAuth(authState);
-            // setUserDetail(response as User);
-            // params.handlePending(false);
-            // alert('Your password has been reset sucessfully.');
+        onSuccess: () => {
             const query = window.location.href;
             const href = query.split('/set')[0];
             window.location.href = href;
         },
         onFailure: ({ error, params }) => {
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.handlePending(false);
-                alert('There was a problem, please try again or contact support. ');
-                const query = window.location.href;
-                const href = query.split('/set')[0];
-                window.location.href = href;
-                params.setFaramErrors({
-                    $internal: ['Some problem occured'],
-                });
-            }
+            params.handlePending(false);
+            console.log(error);
+            alert('There was a problem, please try again or contact support. ');
+            const query = window.location.href;
+            const href = query.split('/set')[0];
+            window.location.href = href;
         },
-        onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.handlePending(false);
-                alert('There was a problem, please try again or contact support. ');
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
-            }
-        },
+    },
+    onFatal: ({ params }) => {
+        if (params) {
+            params.handlePending(false);
+            alert('There was a problem, please try again or contact support. ');
+            const query = window.location.href;
+            const href = query.split('/set')[0];
+            window.location.href = href;
+        }
     },
 };
 
@@ -165,6 +149,8 @@ class SetNewPassword extends React.PureComponent {
             pending: false,
             matchError: false,
             regexError: false,
+            serverErrorMsg: '',
+
         };
     }
 
@@ -191,9 +177,6 @@ class SetNewPassword extends React.PureComponent {
     };
 
     private handleFaramValidationSuccess = (faramValues: FaramValues) => {
-        // check if passwords match
-        // if yes then proceed else no
-
         const {
             requests: {
                 newPasswordSetRequest,
@@ -202,7 +185,6 @@ class SetNewPassword extends React.PureComponent {
         const {
             token,
             faramValues: { password, newpassword },
-            matchError,
         } = this.state;
         const passwordPattern = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
         const test = passwordPattern.test(password);
@@ -233,6 +215,7 @@ class SetNewPassword extends React.PureComponent {
             pending,
             matchError,
             regexError,
+            serverErrorMsg,
 
         } = this.state;
         return (
@@ -315,6 +298,13 @@ class SetNewPassword extends React.PureComponent {
                                                     Passwords do not match
                                                     </p>
                                                 ) : ''}
+                                                {serverErrorMsg
+                                                    ? (
+                                                        <span className={styles.matchErr}>
+                                                            {serverErrorMsg}
+                                                        </span>
+                                                    ) : ''
+                                                }
                                                 <NonFieldErrors
                                                     faramElement
                                                     className={styles.errorField}

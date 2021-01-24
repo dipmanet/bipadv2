@@ -58,7 +58,8 @@ const ChangePassword = (props: Props) => {
         closeModal,
         handleCancel,
         handleAgree,
-        submitNewPassword } = props;
+        submitNewPassword,
+        serverErrorMsg } = props;
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
@@ -140,6 +141,7 @@ const ChangePassword = (props: Props) => {
                         Passwords do not match
                     </p>
                 ) : ''}
+                {serverErrorMsg ? <span className={styles.matchError}>{serverErrorMsg}</span> : ''}
             </div>
 
             <div className={styles.cancelAgreeBtns}>
