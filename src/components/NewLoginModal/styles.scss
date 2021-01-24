@@ -1,8 +1,9 @@
-
 .newloginModal{
     width: 50vw !important;
+    min-height: 400px !important;
     padding: 0 !important;
     border-radius: 10px !important;
+    min-width: 400px !important;
 }
 .mainLoginContainer{
     display: flex;
@@ -34,13 +35,17 @@
             display: flex;
             justify-content: center;
             margin-top: 10px;
+            color: #999;
             .extlink{
                 .icon{
                     padding-right:4px;
+                    color: #999;
                 }
             }
             .linktexts{
                 padding-left: 10px;
+                color: #999;
+
             }
         }
         .loginBtn{
@@ -67,10 +72,12 @@
             }
             .forgotPasswordRequestBtn{
                 background-color: transparent;
-                color: #999;
                 border: none;
-                margin-bottom: 5px;
+                position: relative;
+                bottom: 15px;
                 cursor: pointer;
+                color: #444;
+
             }
             .errorField{
                 position: relative;
@@ -126,6 +133,7 @@
     width:70%;
     border-radius: 0 10px 10px 0;
     display: flex;
+    min-height: 400px !important;
     flex-direction: column;
     justify-content: space-between;
     background: linear-gradient(to top left, rgb(0,68,138), rgb(39,124,217));
