@@ -1,15 +1,16 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import { TitleContext, DataArchive } from '#components/TitleContext';
+import { groupList } from '#utils/common';
 
 import TopBar from './TopBar';
 import Header from './Header';
 import Note from './Note';
-
+import RiverGroup from './RiverGroup';
 import Message from '#rscv/Message';
 
 import {
@@ -109,6 +110,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 };
 
 const River = (props: Props) => {
+    const [sortKey, setSortKey] = useState('key');
     const { riverList, requests } = props;
     const pending = isAnyRequestPending(requests);
 
@@ -138,6 +140,21 @@ const River = (props: Props) => {
         );
     }
 
+    const compare = (a: any, b: any) => {
+        if (a[sortKey] < b[sortKey]) {
+            return -1;
+        }
+        if (a[sortKey] > b[sortKey]) {
+            return 1;
+        }
+        return 0;
+    };
+
+    const groupedRiverList = groupList(
+        riverList.filter(e => e.title),
+        river => river.title || 'N/A',
+    ).sort(compare);
+
     return (
         <div className={styles.river}>
             <Loading pending={pending} />
@@ -152,6 +169,20 @@ const River = (props: Props) => {
                 />
             </div>
             <Note />
+            { groupedRiverList.map((group) => {
+                const { key, value } = group;
+                if (value.length > 1) {
+                    return (
+                        <RiverGroup
+                            title={key}
+                            data={value}
+                            key={key}
+                        />
+                    );
+                }
+                // return <RiverItem key={key} data={value[0]} />;
+                return <div key={key}>{key}</div>;
+            })}
           River
         </div>
     );

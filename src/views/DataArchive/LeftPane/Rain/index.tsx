@@ -1,14 +1,16 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import { TitleContext, DataArchive } from '#components/TitleContext';
+import { groupList } from '#utils/common';
 
 import TopBar from './TopBar';
 import Header from './Header';
 import Note from './Note';
+import RainGroup from './RainGroup';
 
 import Message from '#rscv/Message';
 
@@ -109,6 +111,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 };
 
 const Rain = (props: Props) => {
+    const [sortKey, setSortKey] = useState('key');
     const { rainList, requests } = props;
     const pending = isAnyRequestPending(requests);
     const { setDataArchive } = useContext(TitleContext);
@@ -137,6 +140,20 @@ const Rain = (props: Props) => {
         );
     }
 
+    const compare = (a: any, b: any) => {
+        if (a[sortKey] < b[sortKey]) {
+            return -1;
+        }
+        if (a[sortKey] > b[sortKey]) {
+            return 1;
+        }
+        return 0;
+    };
+
+    const groupedRainList = groupList(
+        rainList.filter(e => e.title),
+        rain => rain.title || 'N/A',
+    ).sort(compare);
     return (
         <div className={styles.rain}>
             <Loading pending={pending} />
@@ -151,6 +168,20 @@ const Rain = (props: Props) => {
                 />
             </div>
             <Note />
+            { groupedRainList.map((group) => {
+                const { key, value } = group;
+                if (value.length > 1) {
+                    return (
+                        <RainGroup
+                            title={key}
+                            data={value}
+                            key={key}
+                        />
+                    );
+                }
+                // return <RainItem key={key} data={value[0]} />;
+                return <div key={key}>{key}</div>;
+            })}
           Rain
         </div>
     );
