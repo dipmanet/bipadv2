@@ -17,8 +17,23 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import {
+    // setRegionAction,
+    setFiltersAction,
+} from '#actionCreators';
+import {
+    // pastDaysToDateRange,
+    transformRegionToFilter,
+} from '#utils/transformations';
 
-import { resourceTypeListSelector, authStateSelector } from '#selectors';
+import {
+    resourceTypeListSelector,
+    authStateSelector,
+    filtersSelectorDP,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+} from '#selectors';
 
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
@@ -276,6 +291,25 @@ type Props = NewProps<ComponentProps & PropsFromState, Params>
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     authState: authStateSelector(state),
+    filters: filtersSelectorDP(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setFilters: params => dispatch(setFiltersAction(params)),
+});
+
+const transformFilters = ({
+    // dataDateRange,
+    region,
+    // ...otherFilters
+}: FiltersElement) => ({
+    // ...otherFilters,
+    // ...transformDataRangeToFilter(dataDateRange, dateFilterParamName),
+    // ...transformDataRangeToLocaleFilter(dataDateRange, dateFilterParamName),
+    ...transformRegionToFilter(region),
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -284,14 +318,18 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         method: methods.GET,
         onMount: false,
         query: ({ params }) => {
+            // transformFilters(filters);
+
             if (!params || !params.resourceType) {
                 return undefined;
             }
+            const carRegion = params.getRegionDetails(params.region);
 
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 resource_type: params.resourceType,
-                limit: 99999,
+                limit: -1,
+                ...carRegion,
             };
         },
         onSuccess: ({ params, response }) => {
@@ -362,15 +400,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             requests: {
                 resourceGetRequest,
             },
+            filters,
         } = this.props;
-        resourceGetRequest.setDefaultParams(
-            {
-                setResourceList: this.setResourceList,
-                setIndividualResourceList: this.setIndividualResourceList,
-            },
-        );
 
         this.state = {
+            faramValues: undefined,
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
@@ -395,17 +429,65 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
         };
+
+        const { faramValues: { region } } = filters;
+        // this.setState(region);
+        // const carRegion = this.state.region;
+        resourceGetRequest.setDefaultParams(
+            {
+                setResourceList: this.setResourceList,
+                setIndividualResourceList: this.setIndividualResourceList,
+                getRegionDetails: this.getRegionDetails,
+                region,
+            },
+        );
     }
 
     public componentDidMount() {
-        const { handleCarActive } = this.props;
+        const {
+            handleCarActive,
+            filters,
+            setFilters,
+        } = this.props;
+        // const { faramValues } = filters;
+        // const { region } = faramValues;
+        // console.log('faramvalues', faramValues);
+        // this.setState(region);
+        // setFilters({ filters: faramValues });
         handleCarActive(true);
+        const { filters: faramValues } = this.props;
+        this.setState({ faramValues });
     }
 
     public componentWillUnmount() {
         const { handleCarActive, handleActiveLayerIndication } = this.props;
         handleCarActive(false);
         handleActiveLayerIndication(initialActiveLayersIndication);
+    }
+
+    public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
+        const {
+            provinces,
+            districts,
+            municipalities,
+            filters: { faramValues: { region } },
+        } = this.props;
+
+        if (Object.keys(region).length === 0) {
+            return '';
+        }
+        if (adminLevel === 1) {
+            return { province: provinces.find(p => p.id === geoarea).id };
+        }
+
+        if (adminLevel === 2) {
+            return { district: districts.find(p => p.id === geoarea).id };
+        }
+
+        if (adminLevel === 3) {
+            return { municipality: municipalities.find(p => p.id === geoarea).id };
+        }
+        return '';
     }
 
     private handleToggleClick = (key: toggleValues, value: boolean) => {
@@ -1862,6 +1944,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
 CapacityAndResources.contextType = MapChildContext;
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requestOptions),
 )(CapacityAndResources);
