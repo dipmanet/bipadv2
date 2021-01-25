@@ -121,6 +121,24 @@ class VizriskMap extends React.PureComponent {
     //         id,
     //     });
     // }
+    componentDidMount() {
+        const colors = [
+            '#ffffcc',
+            '#a1dab4',
+            '#41b6c4',
+            '#2c7fb8',
+            '#253494',
+            '#fed976',
+            '#feb24c',
+            '#fd8d3c',
+            '#f03b20',
+            '#bd0026',
+        ];
+        // map.setPaintProperty(layer.value, 'fill-color', color);
+        // const swatches = document.getElementById('swatches');
+        const layer = document.getElementById('layer');
+        console.log('ourLayer', mapSources);
+    }
 
     handleMouseEnter = (e) => {
         const { id } = e;
@@ -265,7 +283,7 @@ class VizriskMap extends React.PureComponent {
 
                         {/* {this.state.hoverLngLat} */}
                     </MapTooltip>
-                    <MapLayer
+                    {/* <MapLayer
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseLeave}
@@ -298,7 +316,7 @@ class VizriskMap extends React.PureComponent {
                             layout: showProvinceFill ? visibleLayout : noneLayout,
                             filter: provinceFilter,
                         }}
-                    />
+                    /> */}
                     <MapLayer
                         layerKey="ward-outline"
                         layerOptions={{
@@ -340,6 +358,19 @@ class VizriskMap extends React.PureComponent {
                             paint: vizriskmapStyles.province.outline,
                             layout: showProvince ? visibleLayout : noneLayout,
                             filter: provinceFilter,
+                        }}
+                    />
+                    <MapLayer
+                        layerKey="water-colour"
+                        layerOptions={{
+                            type: 'line',
+                            'source-layer': 'water',
+                            paint: {
+                                'line-color': '#ffffff',
+                                'line-width': 1,
+                            },
+                            // layout: showProvince ? visibleLayout : noneLayout,
+                            // filter: provinceFilter,
                         }}
                     />
                     {TooltipRenderer && hoverLngLat && (

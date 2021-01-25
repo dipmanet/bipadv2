@@ -115,7 +115,8 @@ class SlideTwo extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
+        // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
 
         return (
             <div className={styles.vzMainContainer}>

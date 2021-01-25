@@ -16,6 +16,7 @@ import {
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
+import Icon from '#rscg/Icon';
 
 import * as PageTypes from '#store/atom/page/types';
 import VizriskMap from '#components/VizriskMap';
@@ -43,6 +44,7 @@ interface State {
     hoveredAlertId: AlertElement['id'] | undefined;
     hoveredEventId: EventElement['id'] | undefined;
     hazardTypes: PageTypes.HazardType[] | undefined;
+    showInfo: boolean;
 }
 
 interface Params {
@@ -117,6 +119,14 @@ const lineData = [
 class SlideOne extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
+    public constructor(props) {
+        super(props);
+
+        this.state = {
+            showInfo: false,
+        };
+    }
+
     public generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -139,13 +149,26 @@ class SlideOne extends React.PureComponent<Props, State> {
         'fill-opacity': 0.90,
     }))
 
+    public handleInfoClick = () => {
+        console.log(this.state.showInfo);
+        const { showInfo } = this.state;
+        if (showInfo) {
+            this.setState({ showInfo: false });
+        } else {
+            this.setState({ showInfo: true });
+        }
+    };
+
     public render() {
         const { currentPage } = this.context;
-        console.log(currentPage);
 
         const {
             municipalities,
         } = this.props;
+
+        const {
+            showInfo,
+        } = this.state;
 
         const mapping = [];
         if (municipalities) {
@@ -160,7 +183,10 @@ class SlideOne extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        // const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
+        const mapStyle = 'mapbox://styles/ankur20/ckkcdfgkg26jp18qvi3i4ynrf';
+
 
         return (
             <div className={styles.vzMainContainer}>
@@ -168,7 +194,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        minZoom: 5,
+                        minZoom: 7,
                     }}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
@@ -206,10 +232,9 @@ class SlideOne extends React.PureComponent<Props, State> {
 
                     </p>
                     <div className={styles.chartsContainer}>
-                        <ResponsiveContainer>
+                        <ResponsiveContainer className={styles.respContainer}>
                             <LineChart
-                                width={200}
-                                height={100}
+                                margin={{ top: 5, right: 50, left: 0, bottom: 5 }}
                                 data={lineData}
                             >
                                 <CartesianGrid
@@ -226,7 +251,20 @@ class SlideOne extends React.PureComponent<Props, State> {
 
                         </ResponsiveContainer>
                     </div>
-                    <span />
+                    <div className={styles.iconContainer}>
+                        <div
+                            className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
+                        >
+                            Source: Rajapur Municipality Profile
+                        </div>
+                        <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
+                            <Icon
+                                name="info"
+                                className={styles.closeIcon}
+                            />
+                        </button>
+                    </div>
+
                 </div>
 
             </div>

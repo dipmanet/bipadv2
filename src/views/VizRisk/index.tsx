@@ -17,8 +17,6 @@ const VizRiskMainPage = () => {
     // console.log(props);
 
     const handleMenuIconClick = () => {
-        console.log('Menu clicked');
-        console.log(showMenu);
         setShowMenu(true);
     };
 
