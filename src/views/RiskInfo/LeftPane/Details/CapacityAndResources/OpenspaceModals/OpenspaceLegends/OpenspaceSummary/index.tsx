@@ -100,8 +100,6 @@ class OpenspaceSummary extends React.PureComponent<Props, State> {
         const { allOpenspacesBackup } = this.state;
         const { filters, districts, municipalities, provinces } = this.props;
         const { region } = filters;
-        console.log('filters', this.props);
-
         this.setState({
             allOpenspaces: allOpenspacesBackup,
         }, () => {

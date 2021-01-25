@@ -8,6 +8,7 @@ import { AppState } from '#store/types';
 import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 import styles from './styles.scss';
+import RegionSelectInput from '../../OpenspaceFields/AddOpenspaceTabs/RegionSelectInput';
 
 interface PropsFromState {
     authState: AuthState;
@@ -17,22 +18,23 @@ type ReduxProps = PropsFromState ;
 
 interface Props {
     postBasicInfo: () => void;
+    setAdministrativeParameters: (name: string, value: string) => void;
     openspacePostError: boolean;
     resourceId: number | undefined;
 }
 
 
-function BasicInfo({ postBasicInfo, openspacePostError }: Props) {
+function BasicInfo({ postBasicInfo, openspacePostError, setAdministrativeParameters }: Props) {
     return (
         <React.Fragment>
             <br />
-
+            <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} />
             <TextInput faramElementName="elevation" label="Elevation" />
             <div className={styles.inputGroup}>
                 <TextInput faramElementName="totalArea" label="Total Area" />
                 <TextInput faramElementName="usableArea" label="Usable Area" />
             </div>
-            <TextInput faramElementName="adress" label="Address" />
+            <TextInput faramElementName="address" label="Address" />
             <TextInput faramElementName="currentLandUse" label="Current Land Use" />
             <TextInput faramElementName="remarks" label="remarks" />
             {openspacePostError && (

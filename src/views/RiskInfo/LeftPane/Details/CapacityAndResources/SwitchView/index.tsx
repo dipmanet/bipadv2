@@ -199,7 +199,7 @@ const SwitchView = (props: Props) => {
 
                 <div className={styles.actionsIcon}>
                     <Icon
-                        title={'Community spaces in tabular format'}
+                        title={'Community Spaces in tabular format'}
                         className={_cs(styles.infoIcon)}
                         name="table"
                         onClick={() => handleIconClick('showAllCommunityModal')}

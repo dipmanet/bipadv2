@@ -130,8 +130,9 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
     });
 
     let filtered = data;
+
     // showing only some specific fields on openspace popup
-    if (resourceDetails.resourceType === 'openspace') {
+    if (resourceDetails.resourceType === 'openspace' || resourceDetails.resourceType === 'communityspace') {
         filtered = data.filter(x => x.label === 'resourceType'
             || x.label === 'address'
             || x.label === 'currentLandUse'
@@ -150,22 +151,19 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         const usableAreaKey = filtered && filtered.find(el => el.label === 'usableArea');
         if (usableAreaKey) { usableAreaKey.value = usableAreaKey && usableAreaKey.value && `${usableAreaKey.value} sq.m`; }
 
+        // adding elevation to list if communityspace
+        if (resourceDetails.resourceType === 'communityspace') {
+            const elevantionInfo = data.find(el => el.label === 'elevation');
+            if (elevantionInfo) {
+                filtered.push(elevantionInfo);
+            }
+        }
+
         // shuffling array positions
         if (filtered) {
             const element = filtered[1];
             filtered.splice(1, 1);
             filtered.splice(2, 0, element);
-        }
-    } else if (resourceDetails.resourceType === 'communityspace') {
-        filtered = data.filter(el => el.label !== 'description' && el.label !== 'ward' && el.label !== 'authenticated'
-            && el.label !== 'remarks' && el.label !== 'lastModifiedDate');
-        const capacity = filtered && filtered[2] && filtered[2].value
-            && parseInt((filtered[2].value / 5).toFixed(0), 10);
-        filtered.push({ label: 'capacity', value: capacity });
-        if (filtered) {
-            const element = filtered[1];
-            filtered.splice(1, 1);
-            filtered.splice(4, 0, element);
         }
     }
 
@@ -888,21 +886,21 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
-                            {/* <Cloak hiddenIf={p => !p.add_resource}> */}
-                            <AccentModalButton
-                                iconName="add"
-                                title="Add New Resource"
-                                transparent
-                                modal={(
-                                    <AddResourceForm
-                                        onAddSuccess={this.handleResourceAdd}
-                                        onEditSuccess={this.handleResourceEdit}
-                                    />
-                                )}
-                            >
+                            <Cloak hiddenIf={p => !p.add_resource}>
+                                <AccentModalButton
+                                    iconName="add"
+                                    title="Add New Resource"
+                                    transparent
+                                    modal={(
+                                        <AddResourceForm
+                                            onAddSuccess={this.handleResourceAdd}
+                                            onEditSuccess={this.handleResourceEdit}
+                                        />
+                                    )}
+                                >
                                     Add Resource
-                            </AccentModalButton>
-                            {/* </Cloak> */}
+                                </AccentModalButton>
+                            </Cloak>
                             <DangerButton
                                 // disabled={!activeLayerKey}
                                 disabled={!Object.values(activeLayersIndication).some(Boolean)
