@@ -13,6 +13,7 @@ import {
     Cell,
     CartesianGrid,
 } from 'recharts';
+import { GeoJSON } from '../GeoJSON';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
@@ -146,7 +147,7 @@ class SlideOne extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.90,
+        'fill-opacity': 0,
     }))
 
     public handleInfoClick = () => {
@@ -187,7 +188,6 @@ class SlideOne extends React.PureComponent<Props, State> {
         // const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
         const mapStyle = 'mapbox://styles/ankur20/ckkcdfgkg26jp18qvi3i4ynrf';
 
-
         return (
             <div className={styles.vzMainContainer}>
                 <Map
@@ -211,6 +211,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                         mapState={mapping}
                     />
                 </Map>
+
                 <div className={styles.vrSideBar}>
                     <h1> Rajpur Municipality </h1>
                     <p>

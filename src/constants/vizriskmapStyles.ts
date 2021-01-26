@@ -130,6 +130,28 @@ export default {
             'text-anchor': 'center',
         },
     },
+    settlementPoints: {
+        circle: {
+            'circle-color': '#00b400',
+            'circle-radius': 2,
+            'circle-stroke-color': '#444444',
+            'circle-stroke-width': ['case',
+                ['boolean', ['feature-state', 'hover'], false],
+                3,
+                1,
+            ],
+            'circle-opacity': 0.9,
+        },
+    },
+    settlementHexagons: {
+        layout: {
+            'icon-image': 'hexagon',
+            'icon-size': 0.2,
+        },
+        symbol: {
+            'icon-color': '#00b400',
+        },
+    },
     municipalityLabel: {
         paint: {
             // 'text-color': '#00695c',
@@ -201,6 +223,7 @@ export default {
             'circle-stroke-color': ['get', 'hazardColor'],
             'circle-stroke-width': 1,
         },
+
     },
     alertConvex: {
         outline: {

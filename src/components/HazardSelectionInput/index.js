@@ -53,7 +53,6 @@ class HazardSelectionInput extends React.PureComponent {
 
         this.artificialInputValue = [];
         this.naturalInputValue = [];
-        console.log(props);
     }
 
     getGroupedHazardTypeValues = (hazardTypeValues = []) => {

@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { isNotDefined } from '@togglecorp/fujs';
+import { MapChildContext as MapContext } from '#re-map/context';
 
 import MapBounds from '#re-map/MapBounds';
 import MapState from '#re-map/MapSource/MapState';
@@ -92,6 +93,8 @@ const noneLayout = {
 };
 
 class VizriskMap extends React.PureComponent {
+    static contextType = MapContext;
+
     constructor(props) {
         super(props);
 
@@ -122,22 +125,7 @@ class VizriskMap extends React.PureComponent {
     //     });
     // }
     componentDidMount() {
-        const colors = [
-            '#ffffcc',
-            '#a1dab4',
-            '#41b6c4',
-            '#2c7fb8',
-            '#253494',
-            '#fed976',
-            '#feb24c',
-            '#fd8d3c',
-            '#f03b20',
-            '#bd0026',
-        ];
-        // map.setPaintProperty(layer.value, 'fill-color', color);
-        // const swatches = document.getElementById('swatches');
-        const layer = document.getElementById('layer');
-        console.log('ourLayer', mapSources);
+        console.log('ourcontext', this.context);
     }
 
     handleMouseEnter = (e) => {
@@ -168,6 +156,10 @@ class VizriskMap extends React.PureComponent {
         });
     }
 
+    handlesettlementClick = (e) => {
+        console.log('settlement clicked');
+    }
+
     render() {
         const {
             bounds,
@@ -187,7 +179,9 @@ class VizriskMap extends React.PureComponent {
             regionLevel = regionLevelFromAppState,
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
+            settlementData,
         } = this.props;
+        console.log('settlement data', settlementData);
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
         const showDistrict = [1, 2].includes(regionLevel);
         const showMunicipality = [2, 3].includes(regionLevel);
@@ -283,7 +277,7 @@ class VizriskMap extends React.PureComponent {
 
                         {/* {this.state.hoverLngLat} */}
                     </MapTooltip>
-                    {/* <MapLayer
+                    <MapLayer
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseLeave}
@@ -316,7 +310,7 @@ class VizriskMap extends React.PureComponent {
                             layout: showProvinceFill ? visibleLayout : noneLayout,
                             filter: provinceFilter,
                         }}
-                    /> */}
+                    />
                     <MapLayer
                         layerKey="ward-outline"
                         layerOptions={{
@@ -360,19 +354,7 @@ class VizriskMap extends React.PureComponent {
                             filter: provinceFilter,
                         }}
                     />
-                    <MapLayer
-                        layerKey="water-colour"
-                        layerOptions={{
-                            type: 'line',
-                            'source-layer': 'water',
-                            paint: {
-                                'line-color': '#ffffff',
-                                'line-width': 1,
-                            },
-                            // layout: showProvince ? visibleLayout : noneLayout,
-                            // filter: provinceFilter,
-                        }}
-                    />
+
                     {TooltipRenderer && hoverLngLat && (
                         <MapTooltip
                             coordinates={hoverLngLat}
@@ -463,6 +445,28 @@ class VizriskMap extends React.PureComponent {
                             layout: showWardLabel ? vizriskmapStyles.wardLabel.layout : noneLayout,
                             filter: wardFilter,
                         }}
+                    />
+                </MapSource>
+                <MapSource
+                    sourceKey="settlement-source"
+                    sourceOptions={{
+                        type: 'geojson',
+                    }}
+                    geoJson={settlementData}
+                >
+                    <MapLayer
+                        layerKey="settlement-layer"
+                        onClick={this.handlesettlementClick}
+                            // NOTE: to set this layer as hoverable
+                        layerOptions={{
+                            type: 'circle',
+                            paint: vizriskmapStyles.settlementPoints.circle,
+                            // paint: isHovered
+                            //     ? mapStyles.firePoint.circleDim
+                            //     : mapStyles.firePoint.circle,
+                        }}
+                        // onMouseEnter={this.handleHazardEnter}
+                        // onMouseLeave={this.handleHazardLeave}
                     />
                 </MapSource>
             </Fragment>

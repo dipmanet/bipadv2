@@ -1,9 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
+import {
+    ResponsiveContainer,
+    PieChart,
+    XAxis,
+    YAxis,
+    Legend,
+    Tooltip,
+    Line,
+    Pie,
+    Cell,
+    CartesianGrid,
+} from 'recharts';
 import Page from '#components/Page';
-import VrLegend from '../VRLegend';
-import Legend from '#rscz/Legend';
 
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
@@ -26,8 +36,18 @@ import {
     wardsSelector,
     hazardTypesSelector,
 } from '#selectors';
+import GeoJSON from '../GeoJSON';
 
 import styles from './styles.scss';
+
+const data = [
+    { name: 'Built up areas', value: 9.73 },
+    { name: 'Agricultural land', value: 103.24 },
+    { name: 'Forest', value: 6.03 },
+    { name: 'Sandy area', value: 3.90 },
+    { name: 'Water bodies', value: 3.29 },
+];
+const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b'];
 
 
 interface State {
@@ -54,6 +74,8 @@ type Props = NewProps<ReduxProps, Params>;
 const colorGrade = [
     '#ffedb8',
 ];
+
+
 const itemSelector = (d: { label: string }) => d.label;
 const legendLabelSelector = (d: { label: string }) => d.label;
 const legendColorSelector = (d: { color: string }) => d.color;
@@ -94,14 +116,13 @@ class SlideTwo extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.85,
+        'fill-opacity': 0,
     }))
 
     public render() {
         const {
             wards,
         } = this.props;
-
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -115,7 +136,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
+        const mapStyle = 'mapbox://styles/ankur20/ckkcdfgkg26jp18qvi3i4ynrf';
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
 
         return (
@@ -133,7 +154,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         emptyComponent={null}
                     />
                 </VrLegend> */}
-                <Map
+                {/* <Map
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
@@ -154,8 +175,33 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
+                        settlementData={GeoJSON.rajapurSettlement}
+                    />
+                </Map> */}
+
+                <Map
+                    mapStyle={mapStyle}
+                    mapOptions={{
+                        logoPosition: 'top-left',
+                        minZoom: 7,
+                    }}
+                    scaleControlShown
+                    scaleControlPosition="bottom-right"
+
+                    navControlShown
+                    navControlPosition="bottom-right"
+                >
+                    <MapContainer className={styles.map2} />
+
+                    <VizriskMap
+                        paint={colorPaint}
+                        sourceKey={'vizrisk'}
+                        region={{ adminLevel: 3, geoarea: 58007 }}
+                        mapState={mapping}
+                        settlementData={GeoJSON.rajapurSettlement}
                     />
                 </Map>
+
 
                 <Page
                     hideMap
@@ -163,21 +209,36 @@ class SlideTwo extends React.PureComponent<Props, State> {
                 />
                 <div className={styles.vrSideBar}>
 
-                    <h1>This is Slide two</h1>
+                    <h1>Rajapur through Spatial Lens</h1>
 
-                    <h2>Climate</h2>
                     <p>
                         {' '}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit
-                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum
+                        Located in the Terai region nd lying close to water bodies,
+                        Rajapur has fertile and arable land. Out of total area of
+                        127.08 square km, 81.24% of land is used for agriculture.
+                        Built-in area covers 7.66% of land while water bodies occupies
+                        3.29% of total land in Rajapur.
 
                     </p>
+                    <ResponsiveContainer>
+                        <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
+                            <Pie
+                                data={data}
+                                cx={150}
+                                cy={140}
+                                innerRadius={80}
+                                outerRadius={100}
+                                fill="#8884d8"
+                                paddingAngle={5}
+                                dataKey="value"
+                            >
+                                {
+                                    data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />)
+                                }
+                            </Pie>
+                            <Legend verticalAlign="top" />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </div>
             </div>
         );

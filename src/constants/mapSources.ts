@@ -6,6 +6,7 @@ export default {
             district: 'districtgeo',
             municipality: 'municipalitygeo',
             ward: 'wardgeo',
+            water: 'water copy',
         },
     },
 
