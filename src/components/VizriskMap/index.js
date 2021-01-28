@@ -156,10 +156,6 @@ class VizriskMap extends React.PureComponent {
         });
     }
 
-    handlesettlementClick = (e) => {
-        console.log('settlement clicked');
-    }
-
     render() {
         const {
             bounds,
@@ -447,7 +443,7 @@ class VizriskMap extends React.PureComponent {
                         }}
                     />
                 </MapSource>
-                <MapSource
+                {/* <MapSource
                     sourceKey="settlement-source"
                     sourceOptions={{
                         type: 'geojson',
@@ -468,7 +464,7 @@ class VizriskMap extends React.PureComponent {
                         // onMouseEnter={this.handleHazardEnter}
                         // onMouseLeave={this.handleHazardLeave}
                     />
-                </MapSource>
+                </MapSource> */}
             </Fragment>
         );
     }

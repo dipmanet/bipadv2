@@ -8,7 +8,7 @@
     .vizrisknmenupagecontainer{
         .vizrisknmenupage{
             position: absolute;
-            padding: 50px 0 50px 200px;
+            padding: 90px 0 50px 200px;
             // border: 1px solid white;
             
     
@@ -46,11 +46,11 @@
             
             .nextPrevBtn{
                 color: white;
-                font-size: 15px;
+                font-size: 12px;
             }
             .prevBtnDisable{
                 color:  rgb(88, 193, 241);
-                font-size: 15px;
+                font-size: 12px;
             }
         }
         .hamburgerBtn{
@@ -70,7 +70,7 @@
             height:10px;
             top: 24px;
             left: 60px;
-            background-color: rgb(46, 46, 46);;
+            background-color: rgba(46, 46, 46, 0);;
             border: 1 px solid white;
         }
     }

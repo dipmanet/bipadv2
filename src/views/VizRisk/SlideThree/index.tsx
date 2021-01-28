@@ -122,7 +122,6 @@ class SlideThree extends React.PureComponent<Props, State> {
                 return null;
             });
         }
-        console.log('our wards: ', mapping);
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
@@ -167,10 +166,6 @@ class SlideThree extends React.PureComponent<Props, State> {
                     />
                 </Map>
 
-                <Page
-                    hideMap
-                    hideFilter
-                />
                 <div className={styles.vrSideBar}>
 
                     <h1>This is Slide Three</h1>

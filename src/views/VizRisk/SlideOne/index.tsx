@@ -22,13 +22,6 @@ import Icon from '#rscg/Icon';
 import * as PageTypes from '#store/atom/page/types';
 import VizriskMap from '#components/VizriskMap';
 
-
-import {
-    AlertElement,
-    EventElement,
-    FiltersElement,
-} from '#types';
-
 import {
     mapStyleSelector,
     regionsSelector,
@@ -48,17 +41,7 @@ interface State {
     showInfo: boolean;
 }
 
-interface Params {
-    triggerAlertRequest: (timeout: number) => void;
-    triggerEventRequest: (timeout: number) => void;
-}
 interface ComponentProps {}
-interface PropsFromAppState {
-    alertList: PageTypes.Alert[];
-    eventList: PageTypes.Event[];
-    hazardTypes: Obj<PageTypes.HazardType>;
-    filters: FiltersElement;
-}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -120,7 +103,7 @@ const lineData = [
 class SlideOne extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
-    public constructor(props) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -139,6 +122,10 @@ class SlideOne extends React.PureComponent<Props, State> {
         });
         return newColor;
     });
+
+    public componentDidUpdate() {
+        this.setMapEvents(this.context.map);
+    }
 
     public generatePaint = memoize(color => ({
         'fill-color': [
@@ -159,6 +146,20 @@ class SlideOne extends React.PureComponent<Props, State> {
             this.setState({ showInfo: true });
         }
     };
+
+    private setMapEvents = memoize((map: unknown) => {
+        if (!map) {
+            return;
+        }
+
+        map.flyTo({
+            center: [
+                -74.5 + (Math.random() - 0.5) * 10,
+                40 + (Math.random() - 0.5) * 10,
+            ],
+            essential: true,
+        });
+    });
 
     public render() {
         const { currentPage } = this.context;
@@ -186,7 +187,7 @@ class SlideOne extends React.PureComponent<Props, State> {
 
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
         // const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
-        const mapStyle = 'mapbox://styles/ankur20/ckkcdfgkg26jp18qvi3i4ynrf';
+        const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
 
         return (
             <div className={styles.vzMainContainer}>
@@ -194,8 +195,9 @@ class SlideOne extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        minZoom: 7,
+                        minZoom: 5,
                     }}
+                    flyTo
                     scaleControlShown
                     scaleControlPosition="bottom-right"
 
@@ -207,7 +209,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     <VizriskMap
                         paint={colorPaint}
                         sourceKey={'vizrisk'}
-                        region={{ adminLevel: 2, geoarea: 65 }}
+                        region={{ adminLevel: 0, geoarea: 0 }}
                         mapState={mapping}
                     />
                 </Map>

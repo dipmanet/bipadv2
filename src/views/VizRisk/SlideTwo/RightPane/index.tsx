@@ -1,0 +1,246 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
+import {
+    ResponsiveContainer,
+    PieChart,
+    Legend,
+    Tooltip,
+    Pie,
+    Cell,
+    Sector,
+} from 'recharts';
+import Page from '#components/Page';
+import CustomChartLegend from '../../CustomChartLegend';
+import Icon from '#rscg/Icon';
+
+import Map from '#re-map';
+import MapContainer from '#re-map/MapContainer';
+
+import VizriskMap from '#components/VizriskMap';
+
+import {
+    mapStyleSelector,
+    regionsSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector,
+    hazardTypesSelector,
+} from '#selectors';
+import GeoJSON from '../../GeoJSON';
+
+import styles from './styles.scss';
+
+const data = [
+    { name: 'Built up areas', value: 9.73 },
+    { name: 'Agricultural land', value: 103.24 },
+    { name: 'Forest', value: 6.03 },
+    { name: 'Sandy area', value: 3.90 },
+    { name: 'Water bodies', value: 3.29 },
+];
+const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b'];
+
+
+interface State {
+    activeIndex: number;
+    selected: number;
+    showInfo: boolean;
+}
+
+interface ComponentProps {}
+
+type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
+type Props = NewProps<ReduxProps, Params>;
+
+const colorGrade = [
+    '#ffedb8',
+];
+
+
+const itemSelector = (d: { label: string }) => d.label;
+const legendLabelSelector = (d: { label: string }) => d.label;
+const legendColorSelector = (d: { color: string }) => d.color;
+const classNameSelector = (d: { style: string }) => d.style;
+
+const vrLegendItems = [
+    { color: '#2373a9', label: 'Settlement', style: styles.symbol },
+    { color: '#FDD835', label: 'River', style: styles.symbol },
+];
+
+const mapStateToProps = state => ({
+    mapStyle: mapStyleSelector(state),
+    regions: regionsSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    hazardTypes: hazardTypesSelector(state),
+});
+
+class RightPane extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            activeIndex: 0,
+            selected: 0,
+            showInfo: false,
+        };
+    }
+
+    public generateColor = memoize((maxValue, minValue, colorMapping) => {
+        const newColor = [];
+        const { length } = colorMapping;
+        const range = maxValue - minValue;
+        colorMapping.forEach((color, i) => {
+            const val = minValue + ((i * range) / (length - 1));
+            newColor.push(val);
+            newColor.push(color);
+        });
+        return newColor;
+    });
+
+    public generatePaint = memoize(color => ({
+        'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['feature-state', 'value'],
+            ...color,
+        ],
+        'fill-opacity': 0,
+    }))
+
+    public onPieEnter = (piedata, index) => {
+        this.setState({
+            activeIndex: index,
+        });
+    };
+
+    public renderActiveShape = (props) => {
+        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
+            fill, payload, percent, value } = props;
+
+        return (
+            <g>
+                <Sector
+                    cx={cx}
+                    cy={cy}
+                    innerRadius={innerRadius - 3}
+                    outerRadius={outerRadius + 3}
+                    startAngle={startAngle}
+                    endAngle={endAngle}
+                    paddingAngle={3}
+                    fill={fill}
+                />
+            </g>
+        );
+    };
+
+    public handleInfoClick = () => {
+        const { showInfo } = this.state;
+        if (showInfo) {
+            this.setState({ showInfo: false });
+        } else {
+            this.setState({ showInfo: true });
+        }
+    };
+
+    public render() {
+        const { activeIndex, showInfo } = this.state;
+
+        return (
+            <div className={styles.vrSideBar}>
+
+                <h1>Rajapur through Spatial Lens</h1>
+
+                <p>
+                    {' '}
+                        Located in the Terai region nd lying close to water bodies,
+                        Rajapur has fertile and arable land. Out of total area of
+                        127.08 square km, 81.24% of land is used for agriculture.
+                        Built-in area covers 7.66% of land while water bodies occupies
+                        3.29% of total land in Rajapur.
+
+                </p>
+                <ResponsiveContainer height={200}>
+                    <PieChart
+                        width={200}
+                        height={150}
+                        margin={{ top: 5, bottom: 5, left: 5, right: 5 }}
+                    >
+                        <Pie
+                            activeIndex={activeIndex}
+                            activeShape={this.renderActiveShape}
+                            data={data}
+                                // cx={150}
+                            // cy={50}
+                            innerRadius={70}
+                            outerRadius={90}
+                            fill="#8884d8"
+                            paddingAngle={0}
+                            dataKey="value"
+                            onClick={this.onPieEnter}
+                        >
+                            {
+                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />)
+                            }
+                        </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
+                <div className={styles.customChartLegend}>
+                    <CustomChartLegend
+                        text={data[0].name}
+                        barColor={COLORS[0]}
+                        background={'rgb(167,225,248)'}
+                        data={7.7}
+                        selected={activeIndex === 0}
+                    />
+                    <CustomChartLegend
+                        text={data[1].name}
+                        barColor={COLORS[1]}
+                        background={'rgb(149,198,229)'}
+                        data={81.8}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
+                        text={data[2].name}
+                        barColor={COLORS[2]}
+                        background={'rgb(0,101,119)'}
+                        data={4.77}
+                        selected={activeIndex === 2}
+                    />
+                    <CustomChartLegend
+                        text={data[3].name}
+                        barColor={COLORS[3]}
+                        background={'rgb(245, 175, 212)'}
+                        data={3.9}
+                        selected={activeIndex === 3}
+                    />
+                    <CustomChartLegend
+                        text={data[4].name}
+                        barColor={COLORS[4]}
+                        background={'rgb(247, 197, 181)'}
+                        data={2.6}
+                        selected={activeIndex === 4}
+                    />
+                </div>
+                <div className={styles.iconContainer}>
+                    <div
+                        className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
+                    >
+                            Source: Rajapur Municipality Profile
+                    </div>
+                    <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
+                        <Icon
+                            name="info"
+                            className={styles.closeIcon}
+                        />
+                    </button>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default connect(mapStateToProps)(RightPane);

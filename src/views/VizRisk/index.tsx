@@ -29,7 +29,7 @@ const VizRiskMainPage = () => {
     };
 
     const handleSettingsIconClick = () => {
-        console.log('settings cliekd');
+        console.log('settings clicked');
     };
 
     const handleChevronLeftClick = () => {
