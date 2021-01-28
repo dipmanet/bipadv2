@@ -170,7 +170,7 @@ const River = (props: Props) => {
                     dataCount={riverList.length || 0}
                 />
             </div>
-            <Note />
+            {!pending && <Note />}
             { groupedRiverList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {

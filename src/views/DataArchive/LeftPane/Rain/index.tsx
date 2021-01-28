@@ -168,7 +168,7 @@ const Rain = (props: Props) => {
                     dataCount={rainList.length || 0}
                 />
             </div>
-            <Note />
+            {!pending && <Note />}
             { groupedRainList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {
