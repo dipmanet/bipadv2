@@ -184,7 +184,6 @@ const River = (props: Props) => {
                 }
                 return <RiverItem key={key} data={value[0]} />;
             })}
-          River
         </div>
     );
 };

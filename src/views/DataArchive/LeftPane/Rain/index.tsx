@@ -182,7 +182,6 @@ const Rain = (props: Props) => {
                 }
                 return <RainItem key={key} data={value[0]} />;
             })}
-          Rain
         </div>
     );
 };
