@@ -1,17 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import Page from '#components/Page';
 
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 
 import * as PageTypes from '#store/atom/page/types';
 import VizriskMap from '#components/VizriskMap';
-
+import RightPane from './RightPane';
 import {
-    AlertElement,
-    EventElement,
     FiltersElement,
 } from '#types';
 
@@ -27,17 +24,6 @@ import {
 
 import styles from './styles.scss';
 
-
-interface State {
-    hoveredAlertId: AlertElement['id'] | undefined;
-    hoveredEventId: EventElement['id'] | undefined;
-    hazardTypes: PageTypes.HazardType[] | undefined;
-}
-
-interface Params {
-    triggerAlertRequest: (timeout: number) => void;
-    triggerEventRequest: (timeout: number) => void;
-}
 interface ComponentProps {}
 interface PropsFromAppState {
     alertList: PageTypes.Alert[];
@@ -50,25 +36,40 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#ff6f00',
-    '#fab056',
-    '#ffa643',
-    '#ff8900',
-    '#f5b875',
-    '#ff9a22',
-    '#e2ab6d',
-    '#ffcf93',
-    '#ffdfaf',
-    '#ffecc8',
+    '#fc4e2a',
+    '#fed976',
+    '#bd0026',
+    '#e31a1c',
+    '#feb24c',
+    '#fdfdd4',
+    '#fd8d3c',
+    '#ffeda0',
+    '#ffffcc',
+    '#800026',
 ];
-const itemSelector = (d: { label: string }) => d.label;
-const legendLabelSelector = (d: { label: string }) => d.label;
-const legendColorSelector = (d: { color: string }) => d.color;
-const classNameSelector = (d: { style: string }) => d.style;
 
-const vrLegendItems = [
-    { color: '#2373a9', label: 'Settlement', style: styles.symbol },
-    { color: '#FDD835', label: 'River', style: styles.symbol },
+const demographicData = [
+    {
+        name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
+    },
+    {
+        name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
+    },
+    {
+        name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
+    },
+    {
+        name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
+    },
+    {
+        name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
+    },
+    {
+        name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
+    },
+    {
+        name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
+    },
 ];
 
 const mapStateToProps = state => ({
@@ -101,7 +102,7 @@ class SlideThree extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.85,
+        'fill-opacity': 0.87,
     }))
 
     public render() {
@@ -125,23 +126,11 @@ class SlideThree extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
-        const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
+        const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
 
         return (
             <div className={styles.vzMainContainer}>
-                {/* <VrLegend title={'Spatial Data'}>
-                    <Legend
-                        className={styles.legend}
-                        data={vrLegendItems}
-                        itemClassName={styles.legendItem}
-                        keySelector={itemSelector}
-                            // iconSelector={iconSelector}
-                        labelSelector={legendLabelSelector}
-                        symbolClassNameSelector={classNameSelector}
-                        colorSelector={legendColorSelector}
-                        emptyComponent={null}
-                    />
-                </VrLegend> */}
                 <Map
                     mapStyle={mapStyle}
                     mapOptions={{
@@ -165,25 +154,7 @@ class SlideThree extends React.PureComponent<Props, State> {
                         mapState={mapping}
                     />
                 </Map>
-
-                <div className={styles.vrSideBar}>
-
-                    <h1>This is Slide Three</h1>
-
-                    <h2>Climate</h2>
-                    <p>
-                        {' '}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit
-                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum
-
-                    </p>
-                </div>
+                <RightPane />
             </div>
         );
     }

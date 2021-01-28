@@ -35,13 +35,13 @@ const CustomChartLegend = (props: Props) => {
 
     const title = {
         fontSize: '12px',
-        color: '#ddd',
+        color: '#fff',
     };
 
     const textContainer = {
         display: 'flex',
         justifyContent: 'space-between',
-        color: '#ddd',
+        color: '#fff',
     };
 
     const mainContainer = {
@@ -49,16 +49,20 @@ const CustomChartLegend = (props: Props) => {
         flexDirection: 'column',
         justifyContent: 'center',
         height: '55px',
-        padding: '0 10px',
+        padding: '0 20px',
     };
 
     const mainContainerSelected = {
-        backgroundColor: '#444',
+        backgroundColor: '#304153',
+        // opacity: '0.27',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         height: '55px',
-        padding: '0 10px',
+        padding: '0 20px',
+        color: '#fff',
+        width: '100%',
+        // borderRadius: '40px',
     };
 
     return (
