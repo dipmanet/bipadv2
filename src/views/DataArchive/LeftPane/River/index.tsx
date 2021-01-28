@@ -169,8 +169,10 @@ const River = (props: Props) => {
                 <Header
                     dataCount={riverList.length || 0}
                 />
+                <div className={styles.note}>
+                    {!pending && <Note />}
+                </div>
             </div>
-            {!pending && <Note />}
             { groupedRiverList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {

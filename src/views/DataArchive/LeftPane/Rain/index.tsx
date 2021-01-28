@@ -167,8 +167,10 @@ const Rain = (props: Props) => {
                 <Header
                     dataCount={rainList.length || 0}
                 />
+                <div className={styles.note}>
+                    {!pending && <Note />}
+                </div>
             </div>
-            {!pending && <Note />}
             { groupedRainList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {

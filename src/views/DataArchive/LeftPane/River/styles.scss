@@ -5,6 +5,10 @@
         left: 0;
         z-index: 1;
     }
+    .note {
+        padding: var(--spacing-medium);
+        background-color: var(--color-foreground);
+    }
 }
 
 .message {
