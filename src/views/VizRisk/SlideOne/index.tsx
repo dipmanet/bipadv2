@@ -134,7 +134,7 @@ class SlideOne extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0,
+        'fill-opacity': 1,
     }))
 
     public handleInfoClick = () => {
@@ -197,7 +197,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                         logoPosition: 'top-left',
                         minZoom: 5,
                     }}
-                    flyTo
+                    flyTo={[81.123711, 28.436586, 11]}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
 
@@ -209,7 +209,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     <VizriskMap
                         paint={colorPaint}
                         sourceKey={'vizrisk'}
-                        region={{ adminLevel: 0, geoarea: 0 }}
+                        region={{ adminLevel: 2, geoarea: 65 }}
                         mapState={mapping}
                     />
                 </Map>

@@ -111,6 +111,7 @@ class SlideThree extends React.PureComponent<Props, State> {
         } = this.props;
 
         const mapping = [];
+        const selectWards = [];
         let hilightValue = 0;
 
         if (wards) {
@@ -119,6 +120,7 @@ class SlideThree extends React.PureComponent<Props, State> {
                 if (item.municipality === 58007) {
                     mapping.push({ id, value: parseFloat(hilightValue.toFixed(2)) });
                     hilightValue += 0.1;
+                    selectWards.push(item);
                 }
                 return null;
             });
@@ -152,6 +154,8 @@ class SlideThree extends React.PureComponent<Props, State> {
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
+                        selectWards={selectWards}
+
                     />
                 </Map>
                 <RightPane />

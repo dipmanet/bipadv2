@@ -124,19 +124,19 @@ class VizriskMap extends React.PureComponent {
     //         id,
     //     });
     // }
-    componentDidMount() {
-        console.log('ourcontext', this.context);
-    }
 
     handleMouseEnter = (e) => {
         const { id } = e;
+        const { selectWards } = this.props;
         const hoverLngLat = e.properties.centroid;
         // const coordinates = [parseFloat(hoverLngLat.substr(31, 16)),
         // parseFloat(hoverLngLat.substr(48, 16))];
 
         // eslint-disable-next-line no-useless-escape
-        const coordinates = Number(hoverLngLat.replace(/[^0-9\.]+/g, ''));
-        console.log('coordinate', coordinates);
+        // const coordinates = Number(hoverLngLat.replace(/[^0-9\.]+/g, ''));
+        // const wardObj = wards
+        const hoveredWard = selectWards.filter(item => item.id === e.id);
+        const { coordinates } = hoveredWard[0].centroid;
         this.setState({
             id,
             hoverLngLat: coordinates,
@@ -250,6 +250,8 @@ class VizriskMap extends React.PureComponent {
                     <MapLayer
                         layerKey="ward-fill"
                         onClick={this.handleMouseEnter}
+                        beneath="water"
+
                         // onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
@@ -263,13 +265,17 @@ class VizriskMap extends React.PureComponent {
                         coordinates={hoverLngLat}
                         tooltipOptions={tooltipOptions}
                     >
-                        <Button>
-                            <TextOutput
-                                label="vzmap"
-                                value={id}
-                                isNumericValue
-                            />
-                        </Button>
+
+                        <TextOutput
+                            label="vzmap"
+                            value={id}
+                            isNumericValue
+                        />
+                        <TextOutput
+                            label="vzmap"
+                            value={id}
+                            isNumericValue
+                        />
 
                         {/* {this.state.hoverLngLat} */}
                     </MapTooltip>
@@ -277,24 +283,30 @@ class VizriskMap extends React.PureComponent {
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseLeave}
+                        beneath="water"
+
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.municipality,
                             paint,
                             layout: showMunicipalityFill ? visibleLayout : noneLayout,
                             filter: municipalityFilter,
+                            beneath: 'water',
                         }}
                     />
                     <MapLayer
                         layerKey="district-fill"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseLeave}
+                        beneath="water"
+
                         layerOptions={{
                             type: 'fill',
                             'source-layer': mapSources.nepal.layers.district,
                             paint,
                             layout: showDistrictFill ? visibleLayout : noneLayout,
                             filter: districtFilter,
+                            beneath: 'water',
                         }}
                     />
                     <MapLayer

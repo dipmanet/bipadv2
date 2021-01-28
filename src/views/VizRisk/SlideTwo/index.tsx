@@ -88,7 +88,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0,
+        'fill-opacity': 1,
     }))
 
 
@@ -118,11 +118,13 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        minZoom: 5,
+                        zoom: 13,
+                        maxZoom: 17,
+
                     }}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
-                    flyTo={false}
+                    flyTo={[81.123711, 28.436586, 13]}
                     navControlShown
                     navControlPosition="bottom-right"
                 >
@@ -133,7 +135,6 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
-                        // settlementData={GeoJSON.rajapurSettlement}
                     />
                 </Map>
                 <RightPane />
