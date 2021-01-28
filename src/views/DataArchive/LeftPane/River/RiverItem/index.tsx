@@ -12,7 +12,7 @@ interface Props {
 }
 const RiverItem = (props: Props) => {
     const { data } = props;
-    const { basin, waterLevelOn, waterLevel, status } = data;
+    const { title: stationName, waterLevelOn, waterLevel, status } = data;
     const day = getSpecificDate(`${waterLevelOn}`, 'day');
     const year = getSpecificDate(`${waterLevelOn}`, 'year');
     const monthName = getMonthName(`${waterLevelOn}`);
@@ -24,8 +24,8 @@ const RiverItem = (props: Props) => {
                 year={year}
             />
             <div className={styles.details}>
-                <div className={styles.basin}>
-                    {basin ? `${basin} Basin` : 'N/A'}
+                <div className={styles.name}>
+                    {stationName || 'N/A'}
                 </div>
                 <div className={styles.status}>
                     {`Status: ${status}`}

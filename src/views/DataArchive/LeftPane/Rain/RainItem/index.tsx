@@ -13,7 +13,7 @@ interface Props {
 
 const RainItem = (props: Props) => {
     const { data } = props;
-    const { basin, createdOn, averages } = data;
+    const { title: stationName, createdOn, averages } = data;
     const {
         oneHour,
         threeHour,
@@ -24,8 +24,8 @@ const RainItem = (props: Props) => {
     return (
         <div className={styles.rainItem}>
             <div className={styles.left}>
-                <div className={styles.basin}>
-                    {basin ? `${basin} Basin` : 'N/A'}
+                <div className={styles.name}>
+                    {stationName || 'N/A'}
                 </div>
                 <div className={styles.date}>
                     <Icon
