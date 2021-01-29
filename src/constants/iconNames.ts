@@ -90,6 +90,7 @@ const iconNames = {
     textDocument: 'ion-document-text',
     cart: 'ion-ios-cart-outline',
     cog: 'ion-ios-cog',
+    circle: 'fa fa-circle',
 };
 
 export default iconNames;

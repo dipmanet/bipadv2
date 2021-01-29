@@ -16,7 +16,7 @@ import Icon from '#rscg/Icon';
 import RightPane from './RightPane';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
-
+import VRLegend from '../VRLegend';
 import VizriskMap from '#components/VizriskMap';
 
 import {
@@ -137,6 +137,25 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         mapState={mapping}
                     />
                 </Map>
+                <VRLegend>
+                    <h2>SPATIAL DATA</h2>
+                    <p className={styles.settlementIconContainer}>
+                        <span>
+                            <Icon
+                                name="circle"
+                                className={styles.settlementIcon}
+                            />
+                        </span>
+                            Settlement
+
+                    </p>
+                    <p className={styles.riverIconContainer}>
+                        <span className={styles.riverIcon}>
+                                ___
+                        </span>
+                            River
+                    </p>
+                </VRLegend>
                 <RightPane />
             </div>
         );

@@ -11,6 +11,7 @@ import RightPane from './RightPane';
 import {
     FiltersElement,
 } from '#types';
+import VRLegend from '../VRLegend';
 
 import {
     mapStyleSelector,
@@ -21,6 +22,7 @@ import {
     wardsSelector,
     hazardTypesSelector,
 } from '#selectors';
+import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
 import demographicsData from '../demographicsData';
@@ -135,6 +137,17 @@ class SlideThree extends React.PureComponent<Props, State> {
 
                     />
                 </Map>
+                <VRLegend>
+                    <h2>POPULATION</h2>
+                    <div className={styles.legendContainer}>
+                        <div className={styles.populationLegend} />
+                        <div className={styles.populationText}>
+                            <p>High</p>
+                            <p>Low</p>
+                        </div>
+                    </div>
+
+                </VRLegend>
                 <RightPane />
             </div>
         );
