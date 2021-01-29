@@ -13,6 +13,7 @@ import MapTooltip from '#re-map/MapTooltip';
 import Button from '#rsca/Button';
 import { mapSources, vizriskmapStyles } from '#constants';
 import TextOutput from '#components/TextOutput';
+import styles from './styles.scss';
 
 import {
     getWardFilter,
@@ -102,6 +103,9 @@ class VizriskMap extends React.PureComponent {
             feature: undefined,
             hoverLngLat: undefined,
             id: 0,
+            selectedWardNo: 0,
+            populationMale: 0,
+            household: 0,
         };
     }
 
@@ -127,19 +131,20 @@ class VizriskMap extends React.PureComponent {
 
     handleMouseEnter = (e) => {
         const { id } = e;
-        const { selectWards } = this.props;
-        const hoverLngLat = e.properties.centroid;
-        // const coordinates = [parseFloat(hoverLngLat.substr(31, 16)),
-        // parseFloat(hoverLngLat.substr(48, 16))];
-
-        // eslint-disable-next-line no-useless-escape
-        // const coordinates = Number(hoverLngLat.replace(/[^0-9\.]+/g, ''));
-        // const wardObj = wards
+        const { selectWards, demographicsData } = this.props;
         const hoveredWard = selectWards.filter(item => item.id === e.id);
         const { coordinates } = hoveredWard[0].centroid;
+        const wardTitle = parseInt(hoveredWard[0].title, 10);
+        const selectedwardName = demographicsData
+            .filter(item => parseInt(item.name.split(' ')[1], 10) === wardTitle);
+        // get title from hoveredWard and extract name from demographics data
         this.setState({
             id,
             hoverLngLat: coordinates,
+            selectedWardNo: hoveredWard[0].title,
+            populationMale: selectedwardName[0].MalePopulation,
+            populationFemale: selectedwardName[0].FemalePopulation,
+            household: selectedwardName[0].TotalHousehold,
         });
     }
 
@@ -168,16 +173,15 @@ class VizriskMap extends React.PureComponent {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
             sourceKey,
-
+            showTooltip,
             paint,
             mapState,
             regionLevelFromAppState,
             regionLevel = regionLevelFromAppState,
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
-            settlementData,
+            demographicsData,
         } = this.props;
-        console.log('settlement data', settlementData);
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
         const showDistrict = [1, 2].includes(regionLevel);
         const showMunicipality = [2, 3].includes(regionLevel);
@@ -222,6 +226,10 @@ class VizriskMap extends React.PureComponent {
             hoverLngLat,
             feature,
             id,
+            selectedWardNo,
+            populationMale,
+            populationFemale,
+            household,
         } = this.state;
 
         const tooltipOptions = {
@@ -251,7 +259,6 @@ class VizriskMap extends React.PureComponent {
                         layerKey="ward-fill"
                         onClick={this.handleMouseEnter}
                         beneath="water"
-
                         // onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',
@@ -261,24 +268,43 @@ class VizriskMap extends React.PureComponent {
                             filter: wardFilter,
                         }}
                     />
-                    <MapTooltip
-                        coordinates={hoverLngLat}
-                        tooltipOptions={tooltipOptions}
-                    >
+                    {showTooltip
+                        && (
+                            <MapTooltip
+                                coordinates={hoverLngLat}
+                                tooltipOptions={tooltipOptions}
+                            >
+                                <div className={styles.tooltipContainer}>
+                                    <h1>
+                                        <span className={styles.field}>Ward No.</span>
+                                        {selectedWardNo}
+                                    </h1>
+                                    <p>
+                                        <span className={styles.field}>Population: </span>
+                                        {populationFemale + populationMale}
+                                    </p>
+                                    <p>
+                                        <span className={styles.field}>Household: </span>
+                                        {household}
+                                    </p>
+                                </div>
+                                {/* <TextOutput
+                                    label="Male Population"
+                                    value={populationMale}
+                                />
+                                <TextOutput
+                                    label="Female Population"
+                                    value={populationFemale}
+                                />
+                                <TextOutput
+                                    label="Ward No"
+                                    value={selectedWardNo}
+                                /> */}
 
-                        <TextOutput
-                            label="vzmap"
-                            value={id}
-                            isNumericValue
-                        />
-                        <TextOutput
-                            label="vzmap"
-                            value={id}
-                            isNumericValue
-                        />
+                            </MapTooltip>
+                        )
+                    }
 
-                        {/* {this.state.hoverLngLat} */}
-                    </MapTooltip>
                     <MapLayer
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
