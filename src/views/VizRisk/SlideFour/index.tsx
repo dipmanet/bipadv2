@@ -1,23 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import {
-    ResponsiveContainer,
-    PieChart,
-    Legend,
-    Tooltip,
-    Pie,
-    Cell,
-    Sector,
-} from 'recharts';
-import Page from '#components/Page';
-import CustomChartLegend from '../CustomChartLegend';
-import Icon from '#rscg/Icon';
-import RightPane from './RightPane';
+
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
-import VRLegend from '../VRLegend';
+
+import * as PageTypes from '#store/atom/page/types';
 import VizriskMap from '#components/VizriskMap';
+import RightPane from './RightPane';
+import {
+    FiltersElement,
+} from '#types';
+import VRLegend from '../VRLegend';
 
 import {
     mapStyleSelector,
@@ -28,35 +22,34 @@ import {
     wardsSelector,
     hazardTypesSelector,
 } from '#selectors';
-import GeoJSON from '../GeoJSON';
+import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
-
-const data = [
-    { name: 'Built up areas', value: 9.73 },
-    { name: 'Agricultural land', value: 103.24 },
-    { name: 'Forest', value: 6.03 },
-    { name: 'Sandy area', value: 3.90 },
-    { name: 'Water bodies', value: 3.29 },
-];
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b'];
-
+import demographicsData from '../demographicsData';
 
 interface ComponentProps {}
+interface PropsFromAppState {
+    alertList: PageTypes.Alert[];
+    eventList: PageTypes.Event[];
+    hazardTypes: Obj<PageTypes.HazardType>;
+    filters: FiltersElement;
+}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#ffedb8',
+    '#fc4e2a',
+    '#fed976',
+    '#bd0026',
+    '#e31a1c',
+    '#feb24c',
+    '#fdfdd4',
+    '#fd8d3c',
+    '#ffeda0',
+    '#ffffcc',
+    '#800026',
 ];
-
-
-const itemSelector = (d: { label: string }) => d.label;
-const legendLabelSelector = (d: { label: string }) => d.label;
-const legendColorSelector = (d: { color: string }) => d.color;
-const classNameSelector = (d: { style: string }) => d.style;
-
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
@@ -68,7 +61,7 @@ const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-class SlideTwo extends React.PureComponent<Props, State> {
+class SlideFour extends React.PureComponent<Props, State> {
     public generateColor = memoize((maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -88,9 +81,8 @@ class SlideTwo extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 1,
-    }));
-
+        'fill-opacity': 0,
+    }))
 
     public render() {
         const {
@@ -98,11 +90,16 @@ class SlideTwo extends React.PureComponent<Props, State> {
         } = this.props;
 
         const mapping = [];
+        const selectWards = [];
+        let hilightValue = 0;
+
         if (wards) {
             wards.map((item) => {
                 const { id } = item;
                 if (item.municipality === 58007) {
-                    mapping.push({ id, value: 1 });
+                    mapping.push({ id, value: parseFloat(hilightValue.toFixed(2)) });
+                    hilightValue += 0.1;
+                    selectWards.push(item);
                 }
                 return null;
             });
@@ -110,6 +107,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
 
+        // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
         const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
 
         return (
@@ -118,13 +116,11 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        zoom: 13,
-                        maxZoom: 17,
-
+                        minZoom: 5,
                     }}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
-                    flyTo={[81.123711, 28.436586, 13]}
+
                     navControlShown
                     navControlPosition="bottom-right"
                 >
@@ -135,26 +131,23 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
+                        selectWards={selectWards}
+                        demographicsData={demographicsData.demographicsData}
+                        showTooltip
+                        showRaster
+
                     />
                 </Map>
                 <VRLegend>
-                    <h2>SPATIAL DATA</h2>
-                    <p className={styles.settlementIconContainer}>
-                        <span>
-                            <Icon
-                                name="circle"
-                                className={styles.settlementIcon}
-                            />
-                        </span>
-                            Settlement
+                    <h2>POPULATION</h2>
+                    <div className={styles.legendContainer}>
+                        <div className={styles.populationLegend} />
+                        <div className={styles.populationText}>
+                            <p>High</p>
+                            <p>Low</p>
+                        </div>
+                    </div>
 
-                    </p>
-                    <p className={styles.riverIconContainer}>
-                        <span className={styles.riverIcon}>
-                                ___
-                        </span>
-                            River
-                    </p>
                 </VRLegend>
                 <RightPane />
             </div>
@@ -162,4 +155,4 @@ class SlideTwo extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps)(SlideTwo);
+export default connect(mapStateToProps)(SlideFour);

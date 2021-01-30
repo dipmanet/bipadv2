@@ -8,8 +8,9 @@ import SlideTwo from './SlideTwo';
 import SlideThree from './SlideThree';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import VRSetting from './Setting';
+import SlideFour from './SlideFour';
 
-const slides = [<SlideOne />, <SlideTwo />, <SlideThree />];
+const slides = [<SlideOne />, <SlideTwo />, <SlideThree />, <SlideFour />];
 
 const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);

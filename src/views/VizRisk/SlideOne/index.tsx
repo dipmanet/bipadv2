@@ -123,10 +123,6 @@ class SlideOne extends React.PureComponent<Props, State> {
         return newColor;
     });
 
-    public componentDidUpdate() {
-        this.setMapEvents(this.context.map);
-    }
-
     public generatePaint = memoize(color => ({
         'fill-color': [
             'interpolate',
@@ -146,20 +142,6 @@ class SlideOne extends React.PureComponent<Props, State> {
             this.setState({ showInfo: true });
         }
     };
-
-    private setMapEvents = memoize((map: unknown) => {
-        if (!map) {
-            return;
-        }
-
-        map.flyTo({
-            center: [
-                -74.5 + (Math.random() - 0.5) * 10,
-                40 + (Math.random() - 0.5) * 10,
-            ],
-            essential: true,
-        });
-    });
 
     public render() {
         const { currentPage } = this.context;
@@ -188,7 +170,8 @@ class SlideOne extends React.PureComponent<Props, State> {
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
         // const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
         const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
-
+        console.log(mapping);
+        console.log(colorPaint);
         return (
             <div className={styles.vzMainContainer}>
                 <Map

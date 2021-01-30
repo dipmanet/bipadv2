@@ -174,6 +174,7 @@ class VizriskMap extends React.PureComponent {
             selectedMunicipalityId: municipalityId,
             sourceKey,
             showTooltip,
+            showRaster,
             paint,
             mapState,
             regionLevelFromAppState,
@@ -238,6 +239,20 @@ class VizriskMap extends React.PureComponent {
             offset: 8,
         };
 
+        const tileUrl = [
+            `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+            '&version=1.1.1',
+            '&service=WMS',
+            '&request=GetMap',
+            '&layers=Bipad:fluvial_defended_1in5',
+            '&tiled=true',
+            '&width=256',
+            '&height=256',
+            '&srs=EPSG:3857',
+            '&bbox={bbox-epsg-3857}',
+            '&transparent=true',
+            '&format=image/png',
+        ].join('');
         let extraParams = {};
         if (tooltipParams) {
             extraParams = tooltipParams();
@@ -248,6 +263,29 @@ class VizriskMap extends React.PureComponent {
                     bounds={bounds}
                     padding={20}
                 />
+                {showRaster
+                && (
+                    <MapSource
+                        key={1}
+                        sourceKey={'fluvial_defended_1in5'}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [tileUrl],
+                            tileSize: 256,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 1,
+                                },
+                            }}
+                        />
+                    </MapSource>
+                )
+                }
                 <MapSource
                     sourceKey={`${sourceKey}-fills`}
                     sourceOptions={{
