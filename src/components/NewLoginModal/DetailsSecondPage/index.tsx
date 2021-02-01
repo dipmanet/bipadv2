@@ -48,7 +48,7 @@ type ReduxProps = OwnProps & PropsFromDispatch;
 
 type Props = NewProps<ReduxProps, Params>;
 
-const domain = process.env.REACT_APP_DOMAIN;
+// const domain = process.env.REACT_APP_DOMAIN;
 const sampleLetterURL = '/media/password_request_document_sample.docx';
 
 const DetailsSecondPage = (props: Props) => {
@@ -139,7 +139,7 @@ const DetailsSecondPage = (props: Props) => {
                             />
                         </div>
                         <div className={styles.officialLetterLink}>
-                            <a href={domain + sampleLetterURL}>Download a sample letter</a>
+                            <a href={sampleLetterURL}>Download a sample letter</a>
                         </div>
                         <ReCaptcha
                             faramElementName="recaptcha"
