@@ -35,24 +35,15 @@
                 }
         }
     }
-    // .map2{
-    //     margin: 0 var(--spacing-small);
-    //     height: 100vh;
-    //     width: 100vw;
-    //     position: relative;
-    // }
+    .map2{
+        margin: 0 var(--spacing-small);
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+        flex:3;
+    }
 }
 
-.map2{
-    margin: 0 var(--spacing-small);
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    top:0;
-    left:0;
-    border: 1px solid red;
-    z-index: 3;
-}
 
 
 

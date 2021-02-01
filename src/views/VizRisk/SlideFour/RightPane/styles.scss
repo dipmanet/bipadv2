@@ -1,12 +1,14 @@
 
     .vrSideBar{
-        position: relative;
+        position: absolute;
         display: flex;
         flex-direction: column;
         background-color: #262834;
         color:#b6d6e4;
         padding: 90px 15px;
         width: 25%;
+        height: 100vh;
+        right: 0;
         // visibility: hidden;
         .profileList{
          list-style: none;

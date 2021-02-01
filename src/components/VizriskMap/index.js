@@ -161,6 +161,65 @@ class VizriskMap extends React.PureComponent {
         });
     }
 
+    // getRasterTile = (layer) => {
+    //     console.log('in function layername: ', layer.layerName);
+    //     console.log('infunction: layer ', layer);
+    //     const url = [
+    //         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    //         '&version=1.1.1',
+    //         '&service=WMS',
+    //         '&request=GetMap',
+    //         `&layers=Bipad%3${layer.layerName}`,
+    //         '&tiled=true',
+    //         '&width=256',
+    //         '&height=256',
+    //         '&srs=EPSG:3857',
+    //         '&bbox={bbox-epsg-3857}',
+    //         '&transparent=true',
+    //         '&format=image/png',
+    //     ].join('');
+    //     console.log(url);
+    //     return encodeURI(url);
+    // }
+
+    getRasterTile = (layer) => {
+        console.log('infunction: layer ', layer);
+        const url = [
+            `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+            '&version=1.1.1',
+            '&service=WMS',
+            '&request=GetMap',
+            `&layers=Bipad%3${layer}`,
+            '&tiled=true',
+            '&width=256',
+            '&height=256',
+            '&srs=EPSG:3857',
+            '&bbox={bbox-epsg-3857}',
+            '&transparent=true',
+            '&format=image/png',
+        ].join('');
+        console.log(url);
+        return encodeURI(url);
+    }
+    // getRasterTile = (layer.layername) => {
+    //     return [
+    //         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    //         '&version=1.1.1',
+    //         '&service=WMS',
+    //         '&request=GetMap',
+    //         `&layers=Bipad:${layer.layername}`,
+    //         '&tiled=true',
+    //         '&width=256',
+    //         '&height=256',
+    //         '&srs=EPSG:3857',
+    //         '&bbox={bbox-epsg-3857}',
+    //         '&transparent=true',
+    //         '&format=image/png',
+    //     ].join('');
+
+    //     // return tileUrl;
+    // };
+
     render() {
         const {
             bounds,
@@ -182,6 +241,7 @@ class VizriskMap extends React.PureComponent {
             tooltipRenderer: TooltipRenderer,
             tooltipParams,
             demographicsData,
+            showFirstLayer,
         } = this.props;
         const showProvince = isNotDefined(regionLevel) || regionLevel === 1;
         const showDistrict = [1, 2].includes(regionLevel);
@@ -238,13 +298,51 @@ class VizriskMap extends React.PureComponent {
             closeButton: false,
             offset: 8,
         };
+        const rasterLayers = [
+            { layerName: 'fluvial_defended_1in5',
+                id: 1,
+                opacity: 0.7 },
+            { layerName: 'fluvial_defended_1in10',
+                id: 2,
+                opacity: 0.7 },
+        ];
 
-        const tileUrl = [
+        // const tileUrl = [
+        //     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        //     '&version=1.1.1',
+        //     '&service=WMS',
+        //     '&request=GetMap',
+        //     '&layers=Bipad:fluvial_defended_1in5',
+        //     '&tiled=true',
+        //     '&width=256',
+        //     '&height=256',
+        //     '&srs=EPSG:3857',
+        //     '&bbox={bbox-epsg-3857}',
+        //     '&transparent=true',
+        //     '&format=image/png',
+        // ].join('');
+
+        // const tileUrl1 = [
+        //     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        //     '&version=1.1.1',
+        //     '&service=WMS',
+        //     '&request=GetMap',
+        //     '&layers=Bipad:fluvial_defended_1in10',
+        //     '&tiled=true',
+        //     '&width=256',
+        //     '&height=256',
+        //     '&srs=EPSG:3857',
+        //     '&bbox={bbox-epsg-3857}',
+        //     '&transparent=true',
+        //     '&format=image/png',
+        // ].join('');
+
+        const tileUrl2 = [
             `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
             '&version=1.1.1',
             '&service=WMS',
             '&request=GetMap',
-            '&layers=Bipad:fluvial_defended_1in5',
+            '&layers=Bipad:fluvial_defended_1in10',
             '&tiled=true',
             '&width=256',
             '&height=256',
@@ -263,29 +361,53 @@ class VizriskMap extends React.PureComponent {
                     bounds={bounds}
                     padding={20}
                 />
-                {showRaster
-                && (
-                    <MapSource
-                        key={1}
-                        sourceKey={'fluvial_defended_1in5'}
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: [tileUrl],
-                            tileSize: 256,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey="raster-layer"
-                            layerOptions={{
+                {showFirstLayer
+                    && (
+                        <MapSource
+                            key={1}
+                            sourceKey={'fluvial_defended_1in10'}
+                            sourceOptions={{
                                 type: 'raster',
-                                paint: {
-                                    'raster-opacity': 1,
-                                },
+                                tiles: [tileUrl2],
+                                tileSize: 256,
                             }}
-                        />
-                    </MapSource>
-                )
+                        >
+                            <MapLayer
+                                layerKey="raster-layer"
+                                layerOptions={{
+                                    type: 'raster',
+                                    paint: {
+                                        'raster-opacity': 0.8,
+                                    },
+                                }}
+                            />
+                        </MapSource>
+                    )
                 }
+                {/* { rasterLayers.map((layer) => {
+                    console.log('inMap:', layer.id, layer.layerName, layer);
+                    return (
+                        <MapSource
+                            key={layer.id}
+                            sourceKey={layer.layername}
+                            sourceOptions={{
+                                type: 'raster',
+                                tiles: [this.getRasterTile(layer)],
+                                tileSize: 256,
+                            }}
+                        >
+                            <MapLayer
+                                layerKey="raster-layer"
+                                layerOptions={{
+                                    type: 'raster',
+                                    paint: {
+                                        'raster-opacity': 0.8,
+                                    },
+                                }}
+                            />
+                        </MapSource>
+                    );
+                })} */}
                 <MapSource
                     sourceKey={`${sourceKey}-fills`}
                     sourceOptions={{

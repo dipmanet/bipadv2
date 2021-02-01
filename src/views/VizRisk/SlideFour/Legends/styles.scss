@@ -23,38 +23,39 @@
                 border: none;
                 color: white;
 
-                .yearsIcon{
-                    padding-right: 5px;
-                    color: white;
-                }
+                // .yearsIcon{
+                //     padding-right: 5px;
+                //     color: white;
+                //     font-size: 14px;
+                // }
+                // .yearsIconClicked{
+                //     padding-right: 5px;
+                //     color: yellow;
+                // }
             }
         
-                .yearsIconClicked{
-                    padding-right: 5px;
-                    color: yellow;
-                }
+                
         }
     }
-    // .map2{
-    //     margin: 0 var(--spacing-small);
-    //     height: 100vh;
-    //     width: 100vw;
-    //     position: relative;
-    // }
-}
-
-.map2{
-    margin: 0 var(--spacing-small);
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    top:0;
-    left:0;
-    border: 1px solid red;
-    z-index: 3;
+    .map2{
+        margin: 0 var(--spacing-small);
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+        flex:3;
+    }
 }
 
 
 
+.yearsIcon{
+    padding-right: 5px;
+    color: white;
+    font-size: 14px;
+}
+.yearsIconClicked{
+    padding-right: 5px;
+    color: #444;
+}
 
 

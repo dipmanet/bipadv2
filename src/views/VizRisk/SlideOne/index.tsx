@@ -170,8 +170,6 @@ class SlideOne extends React.PureComponent<Props, State> {
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
         // const mapStyle = 'mapbox://styles/ankur20/ckkbbar9b0qtz17ruot7qt9nj';
         const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
-        console.log(mapping);
-        console.log(colorPaint);
         return (
             <div className={styles.vzMainContainer}>
                 <Map
