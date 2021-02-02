@@ -1,11 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import mapboxgl from 'mapbox-gl';
-import memoize from 'memoize-one';
 import { connect } from 'react-redux';
-import Legend from '../../Legend';
-import MapTooltip from '../../MapTooltip';
 import { mapSources, vizriskmapStyles } from '#constants';
 
 import {
@@ -86,7 +81,6 @@ class FloodHistoryMap extends React.Component {
             });
         }
 
-        console.log('ids', provinceId, districtId, municipalityId, wards);
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         // Container to put React generated content in.
@@ -132,7 +126,7 @@ class FloodHistoryMap extends React.Component {
 
             this.map.addLayer(
                 {
-                    id: 'raster-layer',
+                    id: 'raster-layer-0',
                     type: 'raster',
                     source: 'rasterlayer',
                     layout: {},
@@ -631,114 +625,16 @@ class FloodHistoryMap extends React.Component {
 
     public componentWillReceiveProps(nextProps) {
         const {
-            chapterName, amenity, buildingType, layer,
-            floodYear, minutes, suitabilityYear, showRaster,
+            showRaster,
+            rasterLayer,
         } = this.props;
 
         if (this.map.isStyleLoaded()) {
-            if (nextProps.showRaster !== showRaster) {
-                console.log('changed!! map object: ', this.map);
+            if (nextProps.rasterLayer !== rasterLayer || nextProps.showRaster !== showRaster) {
                 if (showRaster) {
-                    this.map.setPaintProperty('raster-layer', 'raster-opacity', 0);
+                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 1);
                 } else {
-                    this.map.setPaintProperty('raster-layer', 'raster-opacity', 1);
-                }
-            }
-
-            if (nextProps.chapterName !== chapterName) {
-        const { paint, layout, position } = chapters[nextProps.chapterName]; // eslint-disable-line
-
-                paint.forEach((data) => {
-                    const currentLayer = this.map.getLayer(data.id);
-
-                    if (currentLayer !== undefined) {
-                        const layerType = currentLayer.type;
-                        this.map.setPaintProperty(data.id, `${layerType}-opacity`, data.opacity);
-                    }
-                });
-
-                layout.forEach((data) => {
-                    this.map.setLayoutProperty(data.id, 'visibility', data.visibility);
-                });
-
-                this.map.easeTo(position);
-
-                // Try filter buildings based on chapterName
-                if (nextProps.chapterName === 'typhoon') {
-                    this.map.setFilter('buildings', ['<=', 'fhm005yrs', 2]);
-                } else {
-                    this.map.setFilter('buildings', undefined);
-                }
-            }
-
-            if (nextProps.amenity) {
-                if (nextProps.amenity !== amenity) {
-                    if (nextProps.amenity !== 'all') {
-                        this.map.setFilter('evacuation', ['==', 'amenity', nextProps.amenity]);
-                        this.map.setFilter('capacity', ['==', 'amenity', nextProps.amenity]);
-                        this.map.setFilter('radius', ['==', 'amenity', nextProps.amenity]);
-                        this.map.setFilter('walking', ['all', ['==', 'amenity', nextProps.amenity], ['==', 'AA_MINS', minutes]]);
-                    } else {
-                        this.map.setFilter('evacuation', undefined);
-                        this.map.setFilter('capacity', undefined);
-                        this.map.setFilter('radius', undefined);
-                        this.map.setFilter('walking', ['==', 'AA_MINS', minutes]);
-                    }
-                }
-            }
-
-            if (nextProps.buildingType) {
-                if (nextProps.buildingType !== buildingType) {
-                    if (nextProps.buildingType !== 'all') {
-                        this.map.setFilter('buildings', ['==', 'category', nextProps.buildingType]);
-                    } else {
-                        this.map.setFilter('buildings', undefined);
-                    }
-                }
-            }
-
-            if (nextProps.layer) {
-                if (nextProps.layer !== layer) {
-                    const current = this.map.getLayer(layer);
-                    const newlayer = this.map.getLayer(nextProps.layer);
-
-                    if (current !== undefined) {
-                        const layerType = current.type;
-                        this.map.setPaintProperty(layer, `${layerType}-opacity`, 0);
-                    }
-
-                    if (current !== undefined) {
-                        const layerType = newlayer.type;
-                        this.map.setPaintProperty(nextProps.layer, `${layerType}-opacity`, 0.7);
-                    }
-                }
-            }
-
-            if (nextProps.floodYear) {
-                if (nextProps.floodYear !== floodYear) {
-                    this.map.setPaintProperty('flood', 'fill-color', {
-                        property: nextProps.floodYear,
-                        stops: floodStops,
-                    });
-                }
-            }
-
-            if (nextProps.minutes) {
-                if (nextProps.minutes !== minutes) {
-                    if (amenity !== 'all') {
-                        this.map.setFilter('walking', ['all', ['==', 'AA_MINS', nextProps.minutes], ['==', 'amenity', amenity]]);
-                    } else {
-                        this.map.setFilter('walking', ['==', 'AA_MINS', nextProps.minutes]);
-                    }
-                }
-            }
-
-            if (nextProps.suitabilityYear) {
-                if (nextProps.suitabilityYear !== suitabilityYear) {
-                    this.map.setPaintProperty('suitability', 'fill-color', {
-                        property: nextProps.suitabilityYear,
-                        stops: suitabilityStops,
-                    });
+                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 0);
                 }
             }
         }
@@ -770,28 +666,6 @@ class FloodHistoryMap extends React.Component {
         return newColor;
     };
 
-    /**
-   * Creates the tooltip element for the hovered tile
-   * @param {object} features - queried features from the map
-   * @public
-   */
-    public setTooltip(features, tooltipOptions) {
-        if (features.length) {
-            ReactDOM.render(
-                React.createElement(
-                    MapTooltip, {
-                        features, tooltipOptions,
-                    },
-                ),
-                this.tooltipContainer,
-            );
-        } else {
-            ReactDOM.unmountComponentAtNode(this.tooltipContainer);
-        }
-    }
-
-    public tooltipContainer;
-
     public render() {
         const mapStyle = {
             position: 'absolute',
@@ -801,16 +675,9 @@ class FloodHistoryMap extends React.Component {
             bottom: 0,
         };
 
-        const { chapterName, layer } = this.props;
-
         return (
             <div>
-                <Page
-                    hideMap
-                    hideFilter
-                />
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <Legend chapterName={chapterName} layer={layer} />
                 <RightPane />
             </div>
         );

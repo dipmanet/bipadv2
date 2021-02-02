@@ -14,16 +14,34 @@ type Props = NewProps<ReduxProps, Params>;
 const FloodHistoryLegends = (props: Props) => {
     const { showFirstSlide } = useContext(VizRiskContext);
     const [showFirstLayer, setShowFirstLayer] = useState(false);
+    const [showSecondLayer, setShowSecondLayer] = useState(false);
+    const [showThirdLayer, setShowThirdLayer] = useState(false);
+    const [showFourthLayer, setShowFourthLayer] = useState(false);
+    const [showFifthLayer, setShowFifthLayer] = useState(false);
     const {
         handleLegendsClick,
     } = props;
-    const handleLegendBtnClick = () => {
-        if (showFirstLayer === false) {
-            setShowFirstLayer(true);
-            handleLegendsClick(false);
-        } else {
-            setShowFirstLayer(false);
-            handleLegendsClick(true);
+    const handleLegendBtnClick = (layer) => {
+        handleLegendsClick(layer);
+
+        if (layer === 0) {
+            setShowFirstLayer(!showFirstLayer);
+        }
+
+        if (layer === 1) {
+            setShowSecondLayer(!showSecondLayer);
+        }
+
+        if (layer === 2) {
+            setShowThirdLayer(!showThirdLayer);
+        }
+
+        if (layer === 3) {
+            setShowFourthLayer(!showFourthLayer);
+        }
+
+        if (layer === 4) {
+            setShowFourthLayer(!showFifthLayer);
         }
     };
 
@@ -35,15 +53,79 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={handleLegendBtnClick}
+                        onClick={() => handleLegendBtnClick(0)}
                     >
                         <Icon
                             name="circle"
-                            className={showFirstLayer === false
+                            className={showFirstLayer
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
                             5 Years
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(1)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showSecondLayer === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            10 Years
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(2)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showThirdLayer === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            25 Years
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(3)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showFourthLayer === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            100 Years
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(4)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showFifthLayer === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            1000 Years
                     </button>
                 </div>
 
