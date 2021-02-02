@@ -129,7 +129,6 @@ const DetailsFirstPage = (props: Props) => {
                 <div className={styles.cancelAgreeBtns}>
                     <PrimaryButton
                         type="button"
-                        pending={pending}
                         className={styles.cancelBtn}
                         onClick={handleDetails}
                     >
@@ -138,7 +137,6 @@ const DetailsFirstPage = (props: Props) => {
 
                     <PrimaryButton
                         type="button"
-                        pending={pending}
                         className={styles.agreeBtn}
                         onClick={handleAgreeBtn}
                     >

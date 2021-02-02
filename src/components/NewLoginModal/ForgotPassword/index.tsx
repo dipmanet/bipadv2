@@ -56,7 +56,8 @@ const ForgotPassword = (props: Props) => {
         closeModal,
         handleCancel,
         handleAgree,
-        submitForgot } = props;
+        submitForgot,
+        serverErrorMsg } = props;
 
     const handleCancelBtn = () => handleCancel('loginPage');
 
@@ -86,7 +87,6 @@ const ForgotPassword = (props: Props) => {
                         className={styles.inputElement}
                         placeholder="Official Email"
                         onChange={handleForgotEmailChange}
-                    // value={nameprop || ''}
                     />
                 </div>
                 <div className={styles.loginBtn}>
@@ -99,6 +99,7 @@ const ForgotPassword = (props: Props) => {
                         Submit
                     </PrimaryButton>
                 </div>
+                {serverErrorMsg ? <span className={styles.errMsg}>{serverErrorMsg}</span> : ''}
                 <div className={styles.infoForgot}>
                     <p>
                         <Icon

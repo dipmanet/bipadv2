@@ -1,6 +1,7 @@
 .mainPwdReqContainer{
     // height: 55vh;
     display: flex;
+    min-height: 400px !important;
     .errMsg{
         font-size: 9px;
         color: red;
@@ -53,7 +54,8 @@
             display: flex;
             flex:1;
             justify-content: flex-end;
-            margin: 5px 10px;
+            margin: 5px -12px ;
+
             .dangerbtn{
             border: none;
                 .closeIcon{
@@ -64,7 +66,7 @@
         .termsandconditions{
             border: 1px solid #ddd;
             overflow: scroll;
-            max-height: 250px;
+            max-height: 270px;
             flex:5;
             padding: 5px 20px;
             margin: 15px 20px;

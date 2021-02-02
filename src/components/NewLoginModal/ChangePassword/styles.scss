@@ -4,6 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 400px;
     .closeBtn{
         display: flex;
         flex:1;
@@ -20,6 +21,10 @@
 
     .passwordConfirmForm{
         margin: 40px 0;
+        .matchError{
+            font-size: 12px;
+            color: red;
+        }
         h2{
             margin-bottom: 30px;
         }
