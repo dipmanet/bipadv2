@@ -1,97 +1,51 @@
+// .map2{
+//     margin: 0 var(--spacing-small);
+//     height: 100vh;
+//     width: 75%;
+//     position: absolute;
+//     left: 0;
+// }
 .vzMainContainer{
     position: relative;
-    background-color: rgb(46, 46, 46);;
+    background-color: #262834;
     justify-content: center;
     display: flex;
     flex-direction: row;
     // border: 1px solid white;
     padding-right: 75px;
+    .settlementIconContainer{
+        padding: 0;
+        margin: 4px;
+        color: white;
+        opacity: 0.87;
+        .settlementIcon{
+            color: rgb(176,201,0);
+            padding-right: 12px;
+
+        }
+    }  
+    .riverIconContainer{
+        margin: 4px;
+        padding: 0;
+        position: relative;
+        bottom: 5px;
+        color: white;
+        opacity: 0.87;
+        .riverIcon{
+            color: rgb(132,198,231);
+            padding-right: 5px;
+            position: relative;
+            bottom: 5px;
+        }
+    }
     .map2{
         margin: 0 var(--spacing-small);
         height: 100vh;
-        width: 100vw;
-        position: relative;
-        flex:3;
+        width: 70%;
+        position: absolute;
+        left: 0;
     }
-    .vrSideBar{
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        background-color: rgb(46, 46, 46);
-        color:#b6d6e4;
-        padding: 90px 15px;
-        width: 25%;
-        // visibility: hidden;
-        .iconContainer{
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            position: relative;
-            margin-top: 15px;
-            // bottom: 20px;
-            .bottomInfo{
-                font-size: 9px;
-                color: white;
-                opacity: 0.5;
-                padding-right: 10px;
-                max-height: 0;
-                transform: scaleY(1);   
-                transition: transform 0.26s ease-out;
-                margin-top: 2px;
-            }
-            .bottomInfoHide{
-                transform: scaleY(0);
-                transition: transform 0.26s ease-in;
-                font-size: 9px;
-                color: white;
-                opacity: 0.5;
-                padding-right: 10px;
-                max-height: 0;
-                margin-top: 2px;
-
-
-            }
-            .infoContainerBtn{
-                background-color: transparent;
-                border: none;
-
-                .closeIcon{
-                    color: white;
-                    opacity: 0.87;
-                }
-            }
-        }
-        .chartsContainer{
-            height: 250px;
-            margin-top: 20px;
-            // width:100%;
-            .respContainer{
-                height: 250px;
-            }
-        }
-
-        h1{
-        font-family: 'Playfair Display';
-        font-size: 32px;
-        color: white;
-        opacity: 0.87;
-        }
-        h2{
-            font-family: 'Playfair Display';
-            font-size: 22px;
-            color: white;
-            opacity: 0.87;
-            margin-top: 20px;
-            }
-        p{
-            color:white;
-            font-size: 12px;
-            font-family: 'Source Sans Pro';
-            text-align: justify;
-            opacity: 0.87;
-            line-height: 1.7em;
-        }
-    }
+    
 }
 
 

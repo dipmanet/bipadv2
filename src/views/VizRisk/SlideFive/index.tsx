@@ -2,7 +2,7 @@ import React from 'react';
 import Map from './Map';
 import Legends from './Legends';
 
-export default class SlideFour extends React.Component {
+export default class SlideFive extends React.Component {
     public constructor(props) {
         super(props);
 

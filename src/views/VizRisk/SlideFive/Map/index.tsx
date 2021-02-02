@@ -19,7 +19,6 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
-
 import RightPane from '../RightPane';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';

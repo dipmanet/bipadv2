@@ -1,17 +1,18 @@
 
     .vrSideBar{
-        position: relative;
+        position: absolute;
         display: flex;
         flex-direction: column;
-        background-color: #262834;
+        background-color:#262834;
         color:#b6d6e4;
-        padding: 90px 15px;
-        width: 25%;
+        padding: 70px 75px 70px 15px;
+        width: 30%;
+        height: 100vh;
+        right: 0;
         // visibility: hidden;
-        .profileList{
-         list-style: none;
-         color: white;
-         padding-left: 0;
+        .chartsContainer{
+            height: 250px;
+            padding-top: 10px;
         }
         .iconContainer{
             width: 100%;
@@ -52,18 +53,14 @@
                 }
             }
         }
-        .chartsContainer{
-            height: 250px;
-            margin-top: 20px;
-            // width:100%;
-            .respContainer{
-                height: 250px;
-            }
+        .customChartLegend{
+            position: relative;
+            padding: 0;
         }
 
         h1{
         font-family: 'Playfair Display';
-        font-size: 32px;
+        font-size: 22px;
         color: white;
         opacity: 0.87;
         }
@@ -82,6 +79,7 @@
             line-height: 1.7em;
         }
     }
+
 
 
 
