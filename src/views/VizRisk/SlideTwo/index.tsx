@@ -119,13 +119,14 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        zoom: 13,
+                        zoom: 14,
+                        minZoom: 13,
                         maxZoom: 17,
 
                     }}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
-                    flyTo={[81.123711, 28.436586, 13]}
+                    // flyTo={[81.123711, 28.436586, 13]}
                     navControlShown
                     navControlPosition="bottom-right"
                 >
