@@ -318,6 +318,20 @@ export const setDataArchivePollutionFilterAction = (
     dataArchivePollutionFilters,
 });
 
+export const setDataArchiveRainFilterAction = (
+    { dataArchiveRainFilters }:
+    { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS,
+    dataArchiveRainFilters,
+});
+
+export const setDataArchiveRiverFilterAction = (
+    { dataArchiveRiverFilters }:
+    { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS,
+    dataArchiveRiverFilters,
+});
+
 export const setDataArchivePollutionStationAction = (
     { dataArchivePollutionStations }:
     { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']}) => ({
@@ -1134,6 +1148,40 @@ export const setDataArchivePollutionFilters = (
     return newState;
 };
 
+export const setDataArchiveRainFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainFilters,
+) => {
+    const {
+        dataArchiveRainFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRainFilter = dataArchiveRainFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverFilters,
+) => {
+    const {
+        dataArchiveRiverFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRiverFilter = dataArchiveRiverFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 export const setDataArchivePollutionStations = (
     state: Type.PageState,
     action: Type.SetDataArchivePollutionStations,
@@ -1403,6 +1451,10 @@ export default function routeReducer(
             return setDataArchiveEarthquakeFilters(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS:
             return setDataArchivePollutionFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS:
+            return setDataArchiveRainFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS:
+            return setDataArchiveRiverFilters(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS:
             return setDataArchivePollutionStations(state, action);
         case Type.PageType.LD__SET_FILTERS:

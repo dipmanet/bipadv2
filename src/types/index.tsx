@@ -64,6 +64,16 @@ export interface DAPollutionFiltersElement {
     dataDateRange: DataDateRangeValueElement;
 }
 
+export interface DARainFiltersElement {
+    station: RainStation;
+    dataDateRange: DataDateRangeValueElement;
+}
+
+export interface DARiverFiltersElement {
+    station: RiverStation;
+    dataDateRange: DataDateRangeValueElement;
+}
+
 export interface PollutionObservation {
     data: {
         aqi: number;
@@ -106,6 +116,64 @@ export interface PollutionStation {
     images?: string[];
     elevation?: string | number;
     description?: string;
+}
+
+export interface RainStationAverage {
+    value?: number;
+    status?: {
+        danger: boolean;
+        warning: boolean;
+    };
+    interval?: number;
+}
+export interface RainStation {
+    id: number;
+    createdOn?: string;
+    modifiedOn?: string;
+    title: string;
+    basin: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    elevation?: number;
+    image?: string;
+    averages: RainStationAverage[];
+    status?: string;
+    description?: string;
+    stationSeriesId?: string;
+    dataSource?: string;
+    dataSourceId?: number;
+    ward: number;
+    municipality: number;
+    district: number;
+    province: number;
+}
+
+export interface RiverStation {
+    id: number;
+    createdOn?: string;
+    modifiedOn?: string;
+    title: string;
+    basin: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    waterLevel?: number;
+    image?: string;
+    dangerLevel?: number;
+    warningLevel?: number;
+    waterLevelOn?: string;
+    status?: string;
+    elevation?: number;
+    steady?: string;
+    description?: string;
+    stationSeriesId?: string;
+    ward: number;
+    municipality: number;
+    district: number;
+    province: number;
 }
 
 export interface AlertElement extends Alert {}

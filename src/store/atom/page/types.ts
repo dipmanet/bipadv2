@@ -6,6 +6,8 @@ import {
     KeyValue,
     DAEarthquakeFiltersElement,
     DAPollutionFiltersElement,
+    DARainFiltersElement,
+    DARiverFiltersElement,
     PollutionStation,
 } from '#types';
 
@@ -477,6 +479,9 @@ export interface PageState {
 
     daEarthquakeFilter: DAEarthquakeFiltersElement;
     daPollutionFilter: DAPollutionFiltersElement;
+    daRainFilter: DARainFiltersElement;
+    daRiverFilter: DARiverFiltersElement;
+
     adminLevelList: AdminLevel[];
 
     documentCategoryList: DocumentCategory[];
@@ -638,6 +643,8 @@ export enum PageType {
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
     DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
     DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RAIN_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RIVER_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_FILTERS/',
     DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
 
     // loss and damage page
@@ -881,6 +888,16 @@ export interface SetDataArchivePollutionFilters {
     dataArchivePollutionFilters: DAPollutionFiltersElement;
 }
 
+export interface SetDataArchiveRainFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS;
+    dataArchiveRainFilters: DARainFiltersElement;
+}
+
+export interface SetDataArchiveRiverFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS;
+    dataArchiveRiverFilters: DARiverFiltersElement;
+}
+
 export interface SetDataArchivePollutionStations {
     type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS;
     dataArchivePollutionStations: PollutionStation[];
@@ -972,5 +989,6 @@ export type PageActionTypes = (
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
-    SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList
+    SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |
+    SetDataArchiveRainFilters | SetDataArchiveRiverFilters
 );

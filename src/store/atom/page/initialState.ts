@@ -48,6 +48,24 @@ const state: PageState = {
         },
     },
 
+    daRainFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRiverFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,
