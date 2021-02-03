@@ -11,6 +11,9 @@ import RiverMap from '../Map/Riverwatch';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 import EarthquakeFilters from '../Filters/Earthquake';
 import PollutionFilters from '../Filters/Pollution';
+import RainFilters from '../Filters/Rain';
+import RiverFilters from '../Filters/River';
+
 import EarthquakeLegend from '../Legends/Earthquake';
 import PollutionLegend from '../Legends/Pollution';
 
@@ -65,6 +68,12 @@ const getFilter = (chosenOption: Options) => {
     }
     if (chosenOption === 'Pollution') {
         return <PollutionFilters />;
+    }
+    if (chosenOption === 'Rain') {
+        return <RainFilters />;
+    }
+    if (chosenOption === 'River') {
+        return <RiverFilters />;
     }
     return null;
 };
