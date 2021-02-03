@@ -4,7 +4,6 @@ import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
-import { TitleContext, DataArchive } from '#components/TitleContext';
 import { groupList } from '#utils/common';
 
 import TopBar from './TopBar';
@@ -22,16 +21,26 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+
+import { transformDataRangeLocaleToFilter } from '#utils/transformations';
+
 import {
     isAnyRequestPending,
 } from '#utils/request';
 import {
     setDataArchiveRainListAction,
+    setDataArchiveRainStationAction,
 } from '#actionCreators';
+
+import { DARainFiltersElement, RainStation } from '#types';
 
 import {
     dataArchiveRainListSelector,
+    rainFiltersSelector,
+    rainStationsSelector,
 } from '#selectors';
+import { TitleContext, DataArchive } from '#components/TitleContext';
+
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
@@ -40,18 +49,27 @@ import styles from './styles.scss';
 
 interface PropsFromDispatch {
     setDataArchiveRainList: typeof setDataArchiveRainListAction;
+    setDataArchiveRainStations: typeof setDataArchiveRainStationAction;
 }
 
 interface PropsFromState {
     rainList: PageType.DataArchiveRain[];
+    rainFilters: DARainFiltersElement;
+    rainStations: RainStation[];
+
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     rainList: dataArchiveRainListSelector(state),
+    rainFilters: rainFiltersSelector(state),
+    rainStations: rainStationsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setDataArchiveRainList: params => dispatch(setDataArchiveRainListAction(params)),
+    setDataArchiveRainStations: params => dispatch(
+        setDataArchiveRainStationAction(params),
+    ),
 });
 
 interface Params {}
@@ -66,21 +84,20 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     dataArchiveRainRequest: {
         url: '/rain/',
         method: methods.GET,
-        query: () => ({
-            // ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
-            // station: pollutionFilters.station.id,
-            // // historical: true,
-            // fields: [
-            //     'id',
-            //     'created_on',
-            //     'title',
-            //     'aqi_color',
-            //     'aqi',
-            //     'observation',
-            //     'point',
-            //     'station',
-            //     'description',
-            // ],
+        query: ({ props: { rainFilters } }) => ({
+            ...transformDataRangeLocaleToFilter(rainFilters.dataDateRange, 'created_on'),
+            station: rainFilters.station.id,
+            // historical: true,
+            fields: [
+                'id',
+                'created_on',
+                'title',
+                'basin',
+                'point',
+                'averages',
+                'status',
+                'station',
+            ],
             limit: 99,
         }),
         onSuccess: ({ response, props: { setDataArchiveRainList } }) => {
@@ -88,27 +105,27 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const { results: dataArchiveRainList = [] } = response as Response;
             setDataArchiveRainList({ dataArchiveRainList });
         },
-        // onPropsChanged: {
-        //     pollutionFilters: true,
-        // },
+        onPropsChanged: {
+            rainFilters: true,
+        },
         onMount: true,
         extras: {
             schemaName: 'rainResponse',
         },
     },
-    // rainStationRequest: {
-    //     url: '/rain-stations/',
-    //     method: methods.GET,
-    //     query: () => ({
-    //         fields: ['id', 'province', 'district', 'municipality', 'ward', 'name', 'point'],
-    //     }),
-    //     onSuccess: ({ response, props: { setDataArchivePollutionStations } }) => {
-    //         interface Response { results: PollutionStation[] }
-    //         const { results: dataArchivePollutionStations = [] } = response as Response;
-    //         setDataArchivePollutionStations({ dataArchivePollutionStations });
-    //     },
-    //     onMount: true,
-    // },
+    rainStationRequest: {
+        url: '/rain-stations/',
+        method: methods.GET,
+        query: () => ({
+            fields: ['id', 'province', 'district', 'municipality', 'ward', 'title', 'point'],
+        }),
+        onSuccess: ({ response, props: { setDataArchiveRainStations } }) => {
+            interface Response { results: RainStation[] }
+            const { results: dataArchiveRainStations = [] } = response as Response;
+            setDataArchiveRainStations({ dataArchiveRainStations });
+        },
+        onMount: true,
+    },
 };
 
 const Rain = (props: Props) => {

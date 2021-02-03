@@ -4,7 +4,7 @@ import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
 
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
-import { TitleContext, DataArchive } from '#components/TitleContext';
+
 import { groupList } from '#utils/common';
 
 import TopBar from './TopBar';
@@ -22,16 +22,27 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+
+import { transformDataRangeLocaleToFilter } from '#utils/transformations';
+
 import {
     isAnyRequestPending,
 } from '#utils/request';
 import {
     setDataArchiveRiverListAction,
+    setDataArchiveRiverStationAction,
 } from '#actionCreators';
+
+import { DARiverFiltersElement, RiverStation } from '#types';
 
 import {
     dataArchiveRiverListSelector,
+    riverFiltersSelector,
+    riverStationsSelector,
 } from '#selectors';
+
+import { TitleContext, DataArchive } from '#components/TitleContext';
+
 import { AppState } from '#store/types';
 
 import Loading from '#components/Loading';
@@ -40,18 +51,28 @@ import styles from './styles.scss';
 
 interface PropsFromDispatch {
     setDataArchiveRiverList: typeof setDataArchiveRiverListAction;
+    setDataArchiveRiverStations: typeof setDataArchiveRiverStationAction;
 }
 
 interface PropsFromState {
     riverList: PageType.DataArchiveRiver[];
+    riverFilters: DARiverFiltersElement;
+    riverStations: RiverStation[];
+
 }
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     riverList: dataArchiveRiverListSelector(state),
+    riverFilters: riverFiltersSelector(state),
+    riverStations: riverStationsSelector(state),
+
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
     setDataArchiveRiverList: params => dispatch(setDataArchiveRiverListAction(params)),
+    setDataArchiveRiverStations: params => dispatch(
+        setDataArchiveRiverStationAction(params),
+    ),
 });
 
 interface Params {}
@@ -66,21 +87,25 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     dataArchiveRiverRequest: {
         url: '/river/',
         method: methods.GET,
-        query: () => ({
-            // ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'created_on'),
-            // station: pollutionFilters.station.id,
-            // // historical: true,
-            // fields: [
-            //     'id',
-            //     'created_on',
-            //     'title',
-            //     'aqi_color',
-            //     'aqi',
-            //     'observation',
-            //     'point',
-            //     'station',
-            //     'description',
-            // ],
+        query: ({ props: { riverFilters } }) => ({
+            ...transformDataRangeLocaleToFilter(riverFilters.dataDateRange, 'water_level_on'),
+            station: riverFilters.station.id,
+            // historical: true,
+            fields: [
+                'id',
+                'created_on',
+                'title',
+                'basin',
+                'point',
+                'water_level',
+                'danger_level',
+                'warning_level',
+                'water_level_on',
+                'status',
+                'steady',
+                'description',
+                'station',
+            ],
             limit: 99,
         }),
         onSuccess: ({ response, props: { setDataArchiveRiverList } }) => {
@@ -88,27 +113,27 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             const { results: dataArchiveRiverList = [] } = response as Response;
             setDataArchiveRiverList({ dataArchiveRiverList });
         },
-        // onPropsChanged: {
-        //     pollutionFilters: true,
-        // },
+        onPropsChanged: {
+            riverFilters: true,
+        },
         onMount: true,
         extras: {
             schemaName: 'riverResponse',
         },
     },
-    // riverStationRequest: {
-    //     url: '/river-stations/',
-    //     method: methods.GET,
-    //     query: () => ({
-    //         fields: ['id', 'province', 'district', 'municipality', 'ward', 'name', 'point'],
-    //     }),
-    //     onSuccess: ({ response, props: { setDataArchivePollutionStations } }) => {
-    //         interface Response { results: PollutionStation[] }
-    //         const { results: dataArchivePollutionStations = [] } = response as Response;
-    //         setDataArchivePollutionStations({ dataArchivePollutionStations });
-    //     },
-    //     onMount: true,
-    // },
+    riverStationRequest: {
+        url: '/river-stations/',
+        method: methods.GET,
+        query: () => ({
+            fields: ['id', 'province', 'district', 'municipality', 'ward', 'title', 'point'],
+        }),
+        onSuccess: ({ response, props: { setDataArchiveRiverStations } }) => {
+            interface Response { results: RiverStation[] }
+            const { results: dataArchiveRiverStations = [] } = response as Response;
+            setDataArchiveRiverStations({ dataArchiveRiverStations });
+        },
+        onMount: true,
+    },
 };
 
 const River = (props: Props) => {
