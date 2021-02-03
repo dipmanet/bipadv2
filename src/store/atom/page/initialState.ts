@@ -90,6 +90,8 @@ const state: PageState = {
     municipalities: [],
     wards: [],
     pollutionStations: [],
+    rainStations: [],
+    riverStations: [],
     documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',

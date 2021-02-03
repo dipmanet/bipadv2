@@ -42,6 +42,9 @@ export const rainFiltersSelector = ({ page }: AppState) => page.daRainFilter;
 export const riverFiltersSelector = ({ page }: AppState) => page.daRiverFilter;
 
 export const pollutionStationsSelector = ({ page }: AppState) => page.pollutionStations;
+export const rainStationsSelector = ({ page }: AppState) => page.rainStations;
+export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
+
 
 // Popup
 

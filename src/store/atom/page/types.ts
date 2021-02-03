@@ -9,6 +9,8 @@ import {
     DARainFiltersElement,
     DARiverFiltersElement,
     PollutionStation,
+    RainStation,
+    RiverStation,
 } from '#types';
 
 export interface Field {
@@ -496,6 +498,8 @@ export interface PageState {
     municipalities: Municipality[];
     wards: Ward[];
     pollutionStations: PollutionStation[];
+    rainStations: RainStation[];
+    riverStations: RiverStation[];
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
@@ -646,6 +650,8 @@ export enum PageType {
     DA__SET_DATA_ARCHIVE_RAIN_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_FILTERS/',
     DA__SET_DATA_ARCHIVE_RIVER_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_FILTERS/',
     DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RAIN_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RIVER_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_STATIONS/',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -903,6 +909,16 @@ export interface SetDataArchivePollutionStations {
     dataArchivePollutionStations: PollutionStation[];
 }
 
+export interface SetDataArchiveRainStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS;
+    dataArchiveRainStations: RainStation[];
+}
+
+export interface SetDataArchiveRiverStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS;
+    dataArchiveRiverStations: RiverStation[];
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -990,5 +1006,6 @@ export type PageActionTypes = (
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
     SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |
-    SetDataArchiveRainFilters | SetDataArchiveRiverFilters
+    SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
+    SetDataArchiveRainStations | SetDataArchiveRiverStations
 );

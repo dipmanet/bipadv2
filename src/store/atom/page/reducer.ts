@@ -339,6 +339,20 @@ export const setDataArchivePollutionStationAction = (
     dataArchivePollutionStations,
 });
 
+export const setDataArchiveRainStationAction = (
+    { dataArchiveRainStations }:
+    { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS,
+    dataArchiveRainStations,
+});
+
+export const setDataArchiveRiverStationAction = (
+    { dataArchiveRiverStations }:
+    { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS,
+    dataArchiveRiverStations,
+});
+
 // loss and damage action creator
 export const setLossAndDamageFiltersAction = (
     { faramValues, faramErrors, pristine }: Type.FiltersWithRegion,
@@ -1199,6 +1213,40 @@ export const setDataArchivePollutionStations = (
     return newState;
 };
 
+export const setDataArchiveRainStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainStations,
+) => {
+    const {
+        dataArchiveRainStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.rainStations = dataArchiveRainStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverStations,
+) => {
+    const {
+        dataArchiveRiverStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.riverStations = dataArchiveRiverStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 // loss and damage page
 export const setLossAndDamageFilters = (
@@ -1457,6 +1505,10 @@ export default function routeReducer(
             return setDataArchiveRiverFilters(state, action);
         case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS:
             return setDataArchivePollutionStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS:
+            return setDataArchiveRainStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS:
+            return setDataArchiveRiverStations(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:
