@@ -49,7 +49,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
     '#e6facb',
-    '#5aa8a3',
+    // '#5aa8a3',
 ];
 
 const mapStateToProps = state => ({
@@ -100,15 +100,25 @@ class SlideOne extends React.PureComponent<Props, State> {
 
         const {
             municipalities,
+            wards,
         } = this.props;
 
         const mapping = [];
-        if (municipalities) {
-            municipalities.map((item) => {
+        // if (municipalities) {
+        //     municipalities.map((item) => {
+        //         const { id } = item;
+        //         if (id !== 58007) {
+        //             mapping.push({ id, value: 1 });
+        //         } else { mapping.push({ id, value: 0 }); }
+        //         return null;
+        //     });
+        // }
+        if (wards) {
+            wards.map((item) => {
                 const { id } = item;
-                if (id !== 58007) {
+                if (item.municipality === 58007) {
                     mapping.push({ id, value: 1 });
-                } else { mapping.push({ id, value: 0 }); }
+                }
                 return null;
             });
         }
@@ -136,7 +146,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     <VizriskMap
                         paint={colorPaint}
                         sourceKey={'vizrisk'}
-                        region={{ adminLevel: 2, geoarea: 65 }}
+                        region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
                     />
                 </Map>

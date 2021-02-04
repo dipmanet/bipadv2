@@ -13,35 +13,57 @@ type Props = NewProps<ReduxProps, Params>;
 
 const FloodHistoryLegends = (props: Props) => {
     const { showFirstSlide } = useContext(VizRiskContext);
-    const [showFirstLayer, setShowFirstLayer] = useState(false);
+    const [showFirstLayer, setShowFirstLayer] = useState(true);
     const [showSecondLayer, setShowSecondLayer] = useState(false);
     const [showThirdLayer, setShowThirdLayer] = useState(false);
     const [showFourthLayer, setShowFourthLayer] = useState(false);
     const [showFifthLayer, setShowFifthLayer] = useState(false);
+    const [showExposedAll, setShowExposedAll] = useState(false);
+    const [showExposedSchool, setShowExposedSchool] = useState(false);
+    const [showExposedBuilding, setShowExposedBuilding] = useState(false);
     const {
         handleLegendsClick,
     } = props;
-    const handleLegendBtnClick = (layer) => {
-        handleLegendsClick(layer);
-
-        if (layer === 0) {
-            setShowFirstLayer(!showFirstLayer);
-        }
-
+    const handleExposedClick = (layer) => {
         if (layer === 1) {
-            setShowSecondLayer(!showSecondLayer);
+            const newVal = !showExposedAll;
+            setShowExposedAll(newVal);
         }
-
         if (layer === 2) {
-            setShowThirdLayer(!showThirdLayer);
+            const newVal = !showExposedSchool;
+            setShowExposedSchool(newVal);
         }
 
         if (layer === 3) {
-            setShowFourthLayer(!showFourthLayer);
+            const newVal = !showExposedBuilding;
+            setShowExposedBuilding(newVal);
+        }
+    };
+    const handleLegendBtnClick = (layer) => {
+        if (layer === 0) {
+            const newVal = !showFirstLayer;
+            handleLegendsClick(layer, newVal);
+            setShowFirstLayer(newVal);
+        }
+
+        if (layer === 1) {
+            const newVal = !showSecondLayer;
+            setShowSecondLayer(newVal);
+        }
+
+        if (layer === 2) {
+            const newVal = !showThirdLayer;
+            setShowThirdLayer(newVal);
+        }
+
+        if (layer === 3) {
+            const newVal = !showFourthLayer;
+            setShowThirdLayer(newVal);
         }
 
         if (layer === 4) {
-            setShowFourthLayer(!showFifthLayer);
+            const newVal = !showFourthLayer;
+            setShowThirdLayer(newVal);
         }
     };
 
@@ -57,7 +79,7 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={showFirstLayer
+                            className={showFirstLayer === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
@@ -126,6 +148,84 @@ const FloodHistoryLegends = (props: Props) => {
                                 : styles.yearsIconClicked}
                         />
                             1000 Years
+                    </button>
+                </div>
+                <h2>Flood Hazards</h2>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(4)}
+                    >
+                        <Icon
+                            name="circle"
+                            className={styles.yearsIconClicked}
+                        />
+                            High
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick(4)}
+                    >
+                        <Icon
+                            name="circle"
+                            className={styles.yearsIcon}
+                        />
+                            Low
+                    </button>
+                </div>
+
+
+                <h2>Exposed Elements</h2>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleExposedClick(1)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showExposedAll === false
+                                ? styles.exposedIcons
+                                : styles.exposedIconsClicked}
+                        />
+                           All
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleExposedClick(2)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showExposedSchool === false
+                                ? styles.exposedIcons
+                                : styles.exposedIconsClicked}
+                        />
+                           School
+                    </button>
+                </div>
+                <div className={styles.legendItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleExposedClick(3)}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showExposedBuilding === false
+                                ? styles.exposedIcons
+                                : styles.exposedIconsClicked}
+                        />
+                           Building
                     </button>
                 </div>
 

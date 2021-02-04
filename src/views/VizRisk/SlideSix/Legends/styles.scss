@@ -1,0 +1,33 @@
+    .legendContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 4px 0 4px 5px;
+        h1{
+            color: white;
+        }
+        width: 200px;
+        .legendItemContainer{
+            display: flex;
+            width: 150px;
+            .legendBtn{
+                background-color: transparent;
+                border: none;
+                color: white;
+                .yearsIcon{
+                    padding-right: 10px;
+                    color: rgb(70, 70, 70);
+                    font-size: 14px;
+                }
+                .yearsIconClicked{
+                    color: rgb(196, 193, 193);
+                    padding-right: 10px;
+                }
+            }
+        
+                
+        }
+}
+
+
+

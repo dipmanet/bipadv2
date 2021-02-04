@@ -7,16 +7,14 @@ export default class SlideFour extends React.Component {
         super(props);
 
         this.state = {
-            showRaster: false,
+            showRaster: true,
             rasterLayer: 0,
         };
     }
 
-    public handleLegendsClick = (val) => {
-        this.setState(prevState => ({
-            rasterLayer: val,
-            showRaster: !prevState.showRaster,
-        }));
+    public handleLegendsClick = (rasterLayer: number, showRasterRec: boolean) => {
+        this.setState({ rasterLayer,
+            showRaster: showRasterRec });
     }
 
     public render() {

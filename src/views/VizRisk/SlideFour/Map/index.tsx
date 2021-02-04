@@ -1,7 +1,11 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
+import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
+import SchoolGeoJSON from '../../SchoolGeoJSON';
+import BuildingGeoJSON from '../../BuildingGeoJSON';
+
 
 import {
     // provincesSelector,
@@ -21,6 +25,44 @@ import {
 } from '#utils/domain';
 
 import RightPane from '../RightPane';
+
+const mask = turf.polygon([
+    [
+        [28.503026471909497, 81.14499645750975,
+        ],
+        [28.46382798887636, 81.05165455953558,
+        ],
+        [28.37443758619946, 81.14879927557537,
+        ],
+        [28.426135117282264, 81.23142414081917,
+        ],
+        [28.503026471909497, 81.14499645750975,
+        ],
+    ],
+]);
+
+// const mask = turf.polygon([
+//     [
+//         [-122.43764877319336,
+//             37.78645343442073,
+//         ],
+//         [-122.40056991577148,
+//             37.78930232286027,
+//         ],
+//         [-122.39172935485838,
+//             37.76630458915842,
+//         ],
+//         [-122.43550300598145,
+//             37.75646561597495,
+//         ],
+//         [-122.45378494262697,
+//             37.7781096293495,
+//         ],
+//         [-122.43764877319336,
+//             37.78645343442073,
+//         ],
+//     ],
+// ]);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
 const colorGrade = [
@@ -57,7 +99,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
         const {
-            bounds,
+            // bounds,
             // provinces,
             districts,
             municipalities,
@@ -67,6 +109,8 @@ class FloodHistoryMap extends React.Component {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
         } = this.props;
+
+        const schoolgeo = SchoolGeoJSON.schools;
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -80,18 +124,23 @@ class FloodHistoryMap extends React.Component {
 
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-        // Container to put React generated content in.
-    this.tooltipContainer = document.createElement('div'); // eslint-disable-line
-
+        // const bounds = [-122.5336, 37.7049, -122.3122, 37.8398]; // wsen
+        const bounds = [28.624024, 80.81311, 28.237317, 81.34827]; // wsen
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
+            // style: 'mapbox://styles/mapbox/light-v9',
             style: 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb',
+
+            // center: [-122.42116928100586, 37.77532815168286],
+            // maxBounds: bounds,
             center: [lng, lat],
             zoom,
             minZoom: 9,
             maxZoom: 15,
-            bearing: 0,
+            // maxBounds: bounds,
+            // bearing: 0,
         });
+
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
@@ -99,6 +148,20 @@ class FloodHistoryMap extends React.Component {
             const visibleLayout = {
                 visibility: 'visible',
             };
+            const tileUrl1 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:fluvial_defended_1in5',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=false',
+                '&format=image/png',
+            ].join('');
             const tileUrl2 = [
                 `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
                 '&version=1.1.1',
@@ -110,33 +173,71 @@ class FloodHistoryMap extends React.Component {
                 '&height=256',
                 '&srs=EPSG:3857',
                 '&bbox={bbox-epsg-3857}',
-                '&transparent=true',
+                '&transparent=false',
                 '&format=image/png',
             ].join('');
 
-            this.map.addSource('rasterlayer', {
+            this.map.addSource('rasterlayer1', {
+                type: 'raster',
+                tiles: [tileUrl1],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterlayer2', {
                 type: 'raster',
                 tiles: [tileUrl2],
                 tileSize: 256,
 
             });
-
-            this.map.addLayer(
-                {
-                    id: 'raster-layer-0',
-                    type: 'raster',
-                    source: 'rasterlayer',
-                    layout: {},
-                    paint: {
-                        'raster-opacity': 0.87,
-                    },
-                },
-            );
-
+            this.map.addSource('schoolsRajapur', {
+                type: 'geojson',
+                data: schoolgeo,
+            });
             this.map.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
+            this.map.addSource('rajapurmask', {
+                type: 'geojson',
+                data: this.polyMask(mask, bounds),
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-layer-0',
+                    type: 'raster',
+                    source: 'rasterlayer1',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'school-rajapur',
+                    type: 'circle',
+                    source: 'schoolsRajapur',
+                    layout: {},
+                    paint: {
+                        'circle-color': '#ff4811',
+                        'circle-radius': 4,
+                    },
+                },
+            );
+
+            this.map.addLayer(
+                {
+                    id: 'raster-layer-1',
+                    type: 'raster',
+                    source: 'rasterlayer2',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                },
+            );
+
+
             this.map.addLayer({
                 id: 'ward-fill',
                 type: 'fill',
@@ -147,6 +248,19 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(5, 65, 58007, wards),
             }, 'water');
 
+            this.map.addLayer({
+                id: 'zmaskjlkjl',
+                source: 'rajapurmask',
+                type: 'fill',
+                layout: visibleLayout,
+                paint: {
+                    'fill-color': '#ffffff',
+                    'fill-opacity': 1,
+                },
+            });
+            console.log(this.polyMask(mask, bounds));
+            // this.map.setPaintProperty('raster-layer-0', 'raster-opacity', 0);
+            this.map.setPaintProperty('raster-layer-1', 'raster-opacity', 0);
             // this.map.addLayer({
             //     id: 'landelevation',
             //     type: 'fill',
@@ -575,10 +689,9 @@ class FloodHistoryMap extends React.Component {
             showRaster,
             rasterLayer,
         } = this.props;
-
         if (this.map.isStyleLoaded()) {
-            if (nextProps.rasterLayer !== rasterLayer || nextProps.showRaster !== showRaster) {
-                if (showRaster) {
+            if (nextProps.showRaster !== showRaster || nextProps.rasterLayer !== rasterLayer) {
+                if (nextProps.showRaster) {
                     this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 1);
                 } else {
                     this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 0);
@@ -600,6 +713,11 @@ class FloodHistoryMap extends React.Component {
         ],
         'fill-opacity': 0.87,
     });
+
+    public polyMask = (maskVal, boundsVal) => {
+        const bboxPoly = turf.bboxPolygon(boundsVal);
+        return turf.difference(bboxPoly, maskVal);
+    };
 
     public generateColor = (maxValue, minValue, colorMapping) => {
         const newColor = [];

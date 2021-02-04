@@ -426,6 +426,7 @@ class VizriskMap extends React.PureComponent {
                             paint,
                             layout: showWardFill ? visibleLayout : noneLayout,
                             filter: wardFilter,
+
                         }}
                     />
                     {showTooltip
@@ -469,7 +470,7 @@ class VizriskMap extends React.PureComponent {
                         layerKey="municipality-fill"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseLeave}
-                        beneath="water"
+                        beneath="landuse copy"
 
                         layerOptions={{
                             type: 'fill',
@@ -477,7 +478,6 @@ class VizriskMap extends React.PureComponent {
                             paint,
                             layout: showMunicipalityFill ? visibleLayout : noneLayout,
                             filter: municipalityFilter,
-                            beneath: 'water',
                         }}
                     />
                     <MapLayer

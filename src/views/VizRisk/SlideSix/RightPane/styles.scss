@@ -1,0 +1,93 @@
+
+    .vrSideBar{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color: #262834;
+        color:#b6d6e4;
+        padding: 90px 15px;
+        width: 30%;
+        height: 100vh;
+        right: 0;
+        padding-right: 80px;
+        // visibility: hidden;
+        .profileList{
+         list-style: none;
+         color: white;
+         padding-left: 0;
+        }
+        .iconContainer{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            margin-top: 15px;
+            // bottom: 20px;
+            .bottomInfo{
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                transform: scaleY(1);   
+                transition: transform 0.26s ease-out;
+                margin-top: 2px;
+            }
+            .bottomInfoHide{
+                transform: scaleY(0);
+                transition: transform 0.26s ease-in;
+                font-size: 9px;
+                color: white;
+                opacity: 0.5;
+                padding-right: 10px;
+                max-height: 0;
+                margin-top: 2px;
+
+
+            }
+            .infoContainerBtn{
+                background-color: transparent;
+                border: none;
+
+                .closeIcon{
+                    color: white;
+                    opacity: 0.87;
+                }
+            }
+        }
+        .chartsContainer{
+            height: 250px;
+            margin-top: 20px;
+            // width:100%;
+            .respContainer{
+                height: 250px;
+            }
+        }
+
+        h1{
+        font-family: 'Playfair Display';
+        font-size: 32px;
+        color: white;
+        opacity: 0.87;
+        }
+        h2{
+            font-family: 'Playfair Display';
+            font-size: 22px;
+            color: white;
+            opacity: 0.87;
+            margin-top: 20px;
+            }
+        p{
+            color:white;
+            font-size: 12px;
+            font-family: 'Source Sans Pro';
+            opacity: 0.87;
+            line-height: 1.7em;
+        }
+    }
+
+
+
+
+
+

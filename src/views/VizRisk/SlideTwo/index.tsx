@@ -119,8 +119,8 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        zoom: 14,
-                        minZoom: 13,
+                        zoom: 11,
+                        minZoom: 9,
                         maxZoom: 17,
 
                     }}
