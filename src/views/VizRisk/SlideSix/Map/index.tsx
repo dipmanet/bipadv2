@@ -50,7 +50,6 @@ class FloodHistoryMap extends React.Component {
         };
     }
 
-
     public componentDidMount() {
         const {
             lng, lat, zoom,
@@ -80,7 +79,6 @@ class FloodHistoryMap extends React.Component {
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         // Container to put React generated content in.
-    this.tooltipContainer = document.createElement('div'); // eslint-disable-line
 
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -145,6 +143,9 @@ class FloodHistoryMap extends React.Component {
                 paint: colorPaint,
                 filter: getWardFilter(5, 65, 58007, wards),
             }, 'water');
+            console.log(this.map);
+            // this.map.setPaintProperty(`density-b7o1uo`, '', 1);
+            this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
 
             // this.map.addLayer({
             //     id: 'landelevation',
