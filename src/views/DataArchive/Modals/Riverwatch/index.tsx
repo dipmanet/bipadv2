@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import MiniMap from './MiniMap';
+import Details from './Details';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRiver } from './types';
@@ -70,7 +71,6 @@ const RiverModal = (props: Props) => {
         mapStyle,
         geometry,
         handleModalClose } = props;
-    console.log('🚀 ~ file: index.tsx ~ line 73 ~ RiverModal ~ props', props);
     let riverDetails: ArchiveRiver = emptyObject;
     if (!pending && response) {
         const results = response as ArchiveRiver;
@@ -109,7 +109,9 @@ const RiverModal = (props: Props) => {
                         />
                     </div>
                     <div className={styles.modalDetails}>
-                        Details and Filters
+                        <Details
+                            riverDetails={riverDetails}
+                        />
                     </div>
                 </div>
                 <div className={styles.modalRow}>
