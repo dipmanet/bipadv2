@@ -17,6 +17,7 @@ import RiverFilters from '../Filters/River';
 import EarthquakeLegend from '../Legends/Earthquake';
 import PollutionLegend from '../Legends/Pollution';
 import RainLegend from '../Legends/Rain';
+import RiverLegend from '../Legends/River';
 
 import {
     NewProps,
@@ -88,6 +89,9 @@ const getLegend = (chosenOption: Options) => {
     }
     if (chosenOption === 'Rain') {
         return <RainLegend />;
+    }
+    if (chosenOption === 'River') {
+        return <RiverLegend />;
     }
     return null;
 };
