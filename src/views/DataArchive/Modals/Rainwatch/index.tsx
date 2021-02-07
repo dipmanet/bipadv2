@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import MiniMap from './MiniMap';
+import Details from './Details';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRain } from './types';
@@ -108,7 +109,9 @@ const RainModal = (props: Props) => {
                         />
                     </div>
                     <div className={styles.modalDetails}>
-                        Details and Filters
+                        <Details
+                            rainDetails={rainDetails}
+                        />
                     </div>
                 </div>
                 <div className={styles.modalRow}>
