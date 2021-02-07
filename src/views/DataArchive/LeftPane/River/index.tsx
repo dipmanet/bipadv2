@@ -6,6 +6,7 @@ import * as PageType from '#store/atom/page/types';
 import DataArchiveContext, { DataArchiveContextProps } from '#components/DataArchiveContext';
 
 import { groupList } from '#utils/common';
+import { getDatesFromFilters } from '#views/DataArchive/utils';
 
 import TopBar from './TopBar';
 import Header from './Header';
@@ -138,7 +139,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const River = (props: Props) => {
     const [sortKey, setSortKey] = useState('key');
-    const { riverList, requests } = props;
+    const { riverList, requests, riverFilters } = props;
     const pending = isAnyRequestPending(requests);
 
     const { setDataArchive } = useContext(TitleContext);
@@ -153,6 +154,8 @@ const River = (props: Props) => {
             setData(riverList);
         }
     }, [riverList, setData]);
+
+    const [startDate, endDate] = getDatesFromFilters(riverFilters);
 
     if (!pending && riverList.length < 1) {
         return (
@@ -187,8 +190,8 @@ const River = (props: Props) => {
             <Loading pending={pending} />
             <TopBar
                 riverList={riverList}
-                startDate="2020-01-12"
-                endDate="2020-01-21"
+                startDate={startDate}
+                endDate={endDate}
             />
             <div className={styles.header}>
                 <Header

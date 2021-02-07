@@ -1,8 +1,10 @@
 import * as PageType from '#store/atom/page/types';
 import { DatePeriod } from './types';
+import { DARainFiltersElement, DARiverFiltersElement } from '#types';
+import { pastDaysToDateRange } from '#utils/transformations';
 
 type GroupKey = 'pTitle' | 'dTitle' | 'mTitle';
-
+type Filters = DARainFiltersElement | DARiverFiltersElement;
 const groupBy = (data: [], key: GroupKey) => data.reduce((storage, item) => {
     const group = item[key];
     // eslint-disable-next-line no-param-reassign
@@ -126,4 +128,24 @@ export const getDateDiff = (startDate: string = '', endDate: string = '') => {
     const diffTime = Math.abs(Number(date2) - Number(date1));
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+};
+
+export const getYYYYMMDD = (date: Date) => {
+    const d = new Date(date);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
+};
+
+export const getDatesFromFilters = (filters: Filters) => {
+    const { dataDateRange } = filters;
+    const { rangeInDays } = dataDateRange;
+    let startDate;
+    let endDate;
+    if (rangeInDays !== 'custom') {
+        const { startDate: sDate, endDate: eDate } = pastDaysToDateRange(rangeInDays);
+        startDate = getYYYYMMDD(sDate);
+        endDate = getYYYYMMDD(eDate);
+    } else {
+        ({ startDate, endDate } = dataDateRange);
+    }
+    return [startDate, endDate];
 };
