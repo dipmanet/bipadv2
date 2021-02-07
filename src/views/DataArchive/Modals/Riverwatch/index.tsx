@@ -4,10 +4,19 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
+import { Geometry } from '#views/DataArchive/types';
+
 import styles from './styles.scss';
 
-const RiverModal = (props) => {
-    console.log('RiverModal');
+interface OwnProps {
+    handleModalClose: () => void;
+    stationName: string;
+    stationId: number;
+    geometry: Geometry;
+    mapStyle: string;
+}
+
+const RiverModal = (props: OwnProps) => {
     const { stationName = 'River Modal',
         handleModalClose } = props;
     return (
