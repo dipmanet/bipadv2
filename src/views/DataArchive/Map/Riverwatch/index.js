@@ -132,6 +132,11 @@ class RiverMap extends React.PureComponent {
                 </div>
 
                 <div className={styles.description}>
+                    <div className={styles.key}>STATION NAME:</div>
+                    <div className={styles.value}>{title || 'N/A'}</div>
+                </div>
+
+                <div className={styles.description}>
                     <div className={styles.key}>MEASURED ON:</div>
                     <div className={styles.value}>{`${getDate(measuredOn)} ${getTime(measuredOn)}`}</div>
                 </div>
