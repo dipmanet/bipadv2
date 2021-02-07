@@ -24,6 +24,32 @@
 
         }
     }  
+    .sandyIconContainer{
+        padding: 0;
+        margin: 4px;
+        color: white;
+        opacity: 0.87;
+        .sandIcon{
+            color: rgb(197,143,73);
+            padding-right: 12px;
+        }
+    }
+
+    .agroIconContainer{
+        padding: 0;
+        margin: 4px;
+        color: white;
+        opacity: 0.87;
+        .agricultureIcon{
+            color: rgb(235, 183, 116);
+            padding-right: 12px;
+        }
+        .forestIcon{
+            color: rgb(15, 189, 87);
+            padding-right: 12px;
+        }
+    }
+
     .riverIconContainer{
         margin: 4px;
         padding: 0;

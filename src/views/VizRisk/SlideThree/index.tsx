@@ -81,7 +81,7 @@ class SlideThree extends React.PureComponent<Props, State> {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.87,
+        'fill-opacity': 1,
     }))
 
     public render() {

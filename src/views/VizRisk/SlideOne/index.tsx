@@ -132,7 +132,8 @@ class SlideOne extends React.PureComponent<Props, State> {
                     mapStyle={mapStyle}
                     mapOptions={{
                         logoPosition: 'top-left',
-                        minZoom: 5,
+                        minZoom: 3,
+                        maxZoom: 17,
                     }}
                     flyTo={[81.123711, 28.436586, 11]}
                     scaleControlShown

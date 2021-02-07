@@ -2,6 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources, vizriskmapStyles } from '#constants';
+import SchoolGeoJSON from '../../SchoolGeoJSON';
 
 import {
     // provincesSelector,
@@ -76,7 +77,7 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
         }
-
+        const schoolgeo = SchoolGeoJSON.schools;
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
         // Container to put React generated content in.
@@ -145,6 +146,22 @@ class FloodHistoryMap extends React.Component {
                 paint: colorPaint,
                 filter: getWardFilter(5, 65, 58007, wards),
             }, 'water');
+            this.map.addSource('schoolsRajapur', {
+                type: 'geojson',
+                data: schoolgeo,
+            });
+            this.map.addLayer(
+                {
+                    id: 'school-rajapur',
+                    type: 'circle',
+                    source: 'schoolsRajapur',
+                    layout: {},
+                    paint: {
+                        'circle-color': '#ff4811',
+                        'circle-radius': 4,
+                    },
+                },
+            );
 
             // this.map.addLayer({
             //     id: 'landelevation',
@@ -597,7 +614,7 @@ class FloodHistoryMap extends React.Component {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.87,
+        'fill-opacity': 1,
     });
 
     public generateColor = (maxValue, minValue, colorMapping) => {

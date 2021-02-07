@@ -128,6 +128,43 @@ const FloodHistoryLegends = (props: Props) => {
                             1000 Years
                     </button>
                 </div>
+                <h2>Flood depth in meters</h2>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator1} />
+                    <span className={styles.hazardIndicatorText}>
+                        0
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator2} />
+                    <span className={styles.hazardIndicatorText}>
+                        1
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator3} />
+                    <span className={styles.hazardIndicatorText}>
+                        2
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator4} />
+                    <span className={styles.hazardIndicatorText}>
+                        3
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator5} />
+                    <span className={styles.hazardIndicatorText}>
+                        4
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator6} />
+                    <span className={styles.hazardIndicatorText}>
+                        5
+                    </span>
+                </div>
 
             </div>
 

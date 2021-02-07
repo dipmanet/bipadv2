@@ -7,6 +7,63 @@
             color: white;
         }
         width: 200px;
+        h2{
+            margin-top: 20px;
+        }
+        .hazardItemContainer{
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+            .hazardIndicator1 {
+                // border: 1px solid gray;
+
+                height: 15px;
+                width: 15px;
+                background-color: rgb(220, 235, 249);
+                margin-left: 10px; 
+
+            }
+            .hazardIndicator2 {
+                // border: 1px solid gray;
+                height: 15px;
+                width: 15px;
+                background-color: rgb(149,202,228);   
+                margin-left: 10px; 
+            }
+            .hazardIndicator3 {
+                // border: 1px solid gray;
+                height: 15px;
+                width: 15px;
+                background-color: rgb(39,144,203);   
+                margin-left: 10px; 
+            }
+            .hazardIndicator4 {
+                // border: 1px solid gray;
+                height: 15px;
+                width: 15px;
+                background-color: rgb(0,108,187);         
+                margin-left: 10px; 
+            }
+            .hazardIndicator5 {
+                // border: 1px solid gray;
+                height: 15px;
+                width: 15px;
+                background-color: rgb(0,74,162); 
+                margin-left: 10px; 
+            }
+            .hazardIndicator6 {
+                // border: 1px solid gray;
+                height: 15px;
+                width: 15px;
+                background-color: rgb(6,41,111);  
+                margin-left: 10px; 
+            }
+            .hazardIndicatorText{
+                color: white;
+                opacity: 0.87;
+                padding-left:7px;
+            }
         .legendItemContainer{
             display: flex;
             width: 150px;
@@ -35,8 +92,8 @@
                     font-size: 14px;
                 }
             }
-        
-                
+       
+          
         }
 }
 

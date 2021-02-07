@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
-import BuildingGeoJSON from '../../BuildingGeoJSON';
-
 
 import {
     // provincesSelector,
@@ -246,21 +244,25 @@ class FloodHistoryMap extends React.Component {
                 layout: visibleLayout,
                 paint: colorPaint,
                 filter: getWardFilter(5, 65, 58007, wards),
-            }, 'water');
+            }, 'rajapurbuildingfootprint');
 
-            this.map.addLayer({
-                id: 'zmaskjlkjl',
-                source: 'rajapurmask',
-                type: 'fill',
-                layout: visibleLayout,
-                paint: {
-                    'fill-color': '#ffffff',
-                    'fill-opacity': 1,
-                },
-            });
-            console.log(this.polyMask(mask, bounds));
+            // this.map.addLayer({
+            //     id: 'zmaskjlkjl',
+            //     source: 'rajapurmask',
+            //     type: 'fill',
+            //     layout: visibleLayout,
+            //     paint: {
+            //         'fill-color': '#ffffff',
+            //         'fill-opacity': 1,
+            //     },
+            // });
             // this.map.setPaintProperty('raster-layer-0', 'raster-opacity', 0);
             this.map.setPaintProperty('raster-layer-1', 'raster-opacity', 0);
+            this.map.setLayoutProperty('farmland-6zygfm', 'visibility', 'none');
+            console.log(this.map);
+            // this.map.moveLayer('rajapurbuildingfootprint', 'ward-fill');
+            // this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+
             // this.map.addLayer({
             //     id: 'landelevation',
             //     type: 'fill',
@@ -711,7 +713,7 @@ class FloodHistoryMap extends React.Component {
             ['feature-state', 'value'],
             ...color,
         ],
-        'fill-opacity': 0.87,
+        'fill-opacity': 1,
     });
 
     public polyMask = (maskVal, boundsVal) => {

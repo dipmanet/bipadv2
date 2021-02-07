@@ -71,7 +71,7 @@ const FloodHistoryLegends = (props: Props) => {
         <VRLegend>
             <h2>Flood Hazard Return Period</h2>
             <div className={styles.legendContainer}>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -86,7 +86,7 @@ const FloodHistoryLegends = (props: Props) => {
                             5 Years
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -102,7 +102,7 @@ const FloodHistoryLegends = (props: Props) => {
                             10 Years
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -118,7 +118,7 @@ const FloodHistoryLegends = (props: Props) => {
                             25 Years
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -134,7 +134,7 @@ const FloodHistoryLegends = (props: Props) => {
                             100 Years
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -150,37 +150,45 @@ const FloodHistoryLegends = (props: Props) => {
                             1000 Years
                     </button>
                 </div>
-                <h2>Flood Hazards</h2>
-                <div className={styles.legendItemContainer}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(4)}
-                    >
-                        <Icon
-                            name="circle"
-                            className={styles.yearsIconClicked}
-                        />
-                            High
-                    </button>
+                <h2>Flood depth in meters</h2>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator1} />
+                    <span className={styles.hazardIndicatorText}>
+                        0
+                    </span>
                 </div>
-                <div className={styles.legendItemContainer}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(4)}
-                    >
-                        <Icon
-                            name="circle"
-                            className={styles.yearsIcon}
-                        />
-                            Low
-                    </button>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator2} />
+                    <span className={styles.hazardIndicatorText}>
+                        1
+                    </span>
                 </div>
-
-
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator3} />
+                    <span className={styles.hazardIndicatorText}>
+                        2
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator4} />
+                    <span className={styles.hazardIndicatorText}>
+                        3
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator5} />
+                    <span className={styles.hazardIndicatorText}>
+                        4
+                    </span>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <div className={styles.hazardIndicator6} />
+                    <span className={styles.hazardIndicatorText}>
+                        5
+                    </span>
+                </div>
                 <h2>Exposed Elements</h2>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -196,7 +204,7 @@ const FloodHistoryLegends = (props: Props) => {
                            All
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
@@ -212,7 +220,7 @@ const FloodHistoryLegends = (props: Props) => {
                            School
                     </button>
                 </div>
-                <div className={styles.legendItemContainer}>
+                <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}

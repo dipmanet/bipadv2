@@ -51,13 +51,6 @@ const colorGrade = [
     '#ffedb8',
 ];
 
-
-const itemSelector = (d: { label: string }) => d.label;
-const legendLabelSelector = (d: { label: string }) => d.label;
-const legendColorSelector = (d: { color: string }) => d.color;
-const classNameSelector = (d: { style: string }) => d.style;
-
-
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
     regions: regionsSelector(state),
@@ -111,8 +104,6 @@ class SlideTwo extends React.PureComponent<Props, State> {
         const colorPaint = this.generatePaint(color);
 
         const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
-        console.log(colorPaint);
-        console.log(mapping);
         return (
             <div className={styles.vzMainContainer}>
                 <Map
@@ -126,7 +117,6 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     }}
                     scaleControlShown
                     scaleControlPosition="bottom-right"
-                    // flyTo={[81.123711, 28.436586, 13]}
                     navControlShown
                     navControlPosition="bottom-right"
                 >
@@ -137,6 +127,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         sourceKey={'vizrisk'}
                         region={{ adminLevel: 3, geoarea: 58007 }}
                         mapState={mapping}
+                        beneath={'rajapurbuildingfootprint'}
                     />
                 </Map>
                 <VRLegend>
@@ -157,6 +148,35 @@ class SlideTwo extends React.PureComponent<Props, State> {
                         </span>
                             River
                     </p>
+
+                    <p className={styles.sandyIconContainer}>
+                        <span>
+                            <Icon
+                                name="circle"
+                                className={styles.sandIcon}
+                            />
+                        </span>
+                            Sandy Area
+                    </p>
+                    <p className={styles.agroIconContainer}>
+                        <span>
+                            <Icon
+                                name="circle"
+                                className={styles.agricultureIcon}
+                            />
+                        </span>
+                            Agricultural Land
+                    </p>
+                    <p className={styles.agroIconContainer}>
+                        <span>
+                            <Icon
+                                name="circle"
+                                className={styles.forestIcon}
+                            />
+                        </span>
+                            Forest
+                    </p>
+
                 </VRLegend>
                 <RightPane />
             </div>

@@ -227,7 +227,7 @@ class VizriskMap extends React.PureComponent {
             districts,
             municipalities,
             wards,
-
+            beneath,
             selectedProvinceId: provinceId,
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
@@ -418,7 +418,7 @@ class VizriskMap extends React.PureComponent {
                     <MapLayer
                         layerKey="ward-fill"
                         onClick={this.handleMouseEnter}
-                        beneath="water"
+                        beneath={beneath || 'water'}
                         // onMouseLeave={this.handleMouseLeave}
                         layerOptions={{
                             type: 'fill',

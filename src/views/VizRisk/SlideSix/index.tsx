@@ -9,6 +9,7 @@ export default class SlideSix extends React.Component {
         this.state = {
             showRaster: false,
             rasterLayer: 0,
+            showSlide: '',
         };
     }
 
@@ -19,10 +20,17 @@ export default class SlideSix extends React.Component {
         }));
     }
 
+    public handleSlideChange = (showSlide) => {
+        this.setState({
+            showSlide,
+        });
+    }
+
     public render() {
         const {
             showRaster,
             rasterLayer,
+            showSlide,
         } = this.state;
 
         return (
@@ -30,9 +38,11 @@ export default class SlideSix extends React.Component {
                 <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
+                    showSlide={showSlide}
                 />
                 <Legends
                     handleLegendsClick={this.handleLegendsClick}
+                    handleSlideChange={this.handleSlideChange}
                 />
             </div>
         );
