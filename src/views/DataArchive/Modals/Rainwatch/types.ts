@@ -29,3 +29,27 @@ export interface ArchiveRain extends PageType.RealTimeRain {
     district: District;
     municipality: Municipality;
 }
+
+export interface Intervals {
+    intervalCode?: string;
+    intervalName?: string;
+}
+
+export interface Periods {
+    periodCode?: string;
+    periodName?: string;
+}
+
+export interface Errors {
+    type?: string;
+    err?: string;
+    message?: string;
+}
+export interface FaramValues {
+    dataDateRange: {
+        startDate: string;
+        endDate: string;
+    };
+    period: Periods;
+    interval: Intervals;
+}
