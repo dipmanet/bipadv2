@@ -29,3 +29,21 @@ export interface ArchiveRiver extends PageType.RealTimeRiver {
     district: District;
     municipality: Municipality;
 }
+
+export interface Periods {
+    periodCode?: string;
+    periodName?: string;
+}
+
+export interface Errors {
+    type?: string;
+    err?: string;
+    message?: string;
+}
+export interface FaramValues {
+    dataDateRange: {
+        startDate: string;
+        endDate: string;
+    };
+    period: Periods;
+}
