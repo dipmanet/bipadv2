@@ -58,9 +58,9 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             return {
                 station: stationId,
                 // eslint-disable-next-line @typescript-eslint/camelcase
-                date_time__gt: `${startDate}T00:00:00+05:45`,
+                created_on__gt: `${startDate}T00:00:00+05:45`,
                 // eslint-disable-next-line @typescript-eslint/camelcase
-                date_time__lt: `${endDate}T23:59:59+05:45`,
+                created_on__lt: `${endDate}T23:59:59+05:45`,
                 fields: [
                     'id',
                     'created_on',

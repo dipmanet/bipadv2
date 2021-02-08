@@ -71,7 +71,7 @@ export const getErrors = (fv: any) => {
     if (endDate < MINIMUM_DATA_ARCHIVE_RAIN_DATE) {
         error = {
             type: 'Date',
-            err: `No data archive pollution data before ${MINIMUM_DATA_ARCHIVE_RAIN_DATE}`,
+            err: `No data archive rain data before ${MINIMUM_DATA_ARCHIVE_RAIN_DATE}`,
             message: `Data is available from ${MINIMUM_DATA_ARCHIVE_RAIN_DATE} onwards only`,
         };
         errors.push(error);
