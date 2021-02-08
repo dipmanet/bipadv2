@@ -130,7 +130,6 @@ const Filters = (props: Props) => {
                 <Faram
                     schema={riverFilterSchema}
                     onChange={handleFaramChange}
-                    // value={faramValues}
                     value={faramValue}
                     className={styles.filterViewContainer}
                 >
@@ -142,18 +141,18 @@ const Filters = (props: Props) => {
                             />
                         </div>
                     </div>
+                    <div className={styles.period}>
+                        <div className={styles.title}>
+                            Period Selector
+                        </div>
+                        <div className={styles.element}>
+                            <PeriodSelector
+                                faramElementName="period"
+                                errors={errors}
+                            />
+                        </div>
+                    </div>
                 </Faram>
-            </div>
-            <div className={styles.period}>
-                <div className={styles.title}>
-                Period Selector
-                </div>
-                <div className={styles.element}>
-                    <PeriodSelector
-                        faramElementName="period"
-                        errors={errors}
-                    />
-                </div>
             </div>
             <div
                 onClick={handleSubmitClick}
