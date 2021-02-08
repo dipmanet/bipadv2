@@ -11,8 +11,8 @@ import {
 import { MultiResponse } from '#store/atom/response/types';
 
 import DateSelector from './DateSelector';
+import PeriodSelector from './PeriodSelector';
 import Loading from '#components/Loading';
-
 
 import { getErrors } from '../utils';
 import { ArchiveRiver, Errors, FaramValues } from '../types';
@@ -143,6 +143,17 @@ const Filters = (props: Props) => {
                         </div>
                     </div>
                 </Faram>
+            </div>
+            <div className={styles.period}>
+                <div className={styles.title}>
+                Period Selector
+                </div>
+                <div className={styles.element}>
+                    <PeriodSelector
+                        faramElementName="period"
+                        errors={errors}
+                    />
+                </div>
             </div>
             <div
                 onClick={handleSubmitClick}
