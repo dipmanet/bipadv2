@@ -140,29 +140,29 @@ const Filters = (props: Props) => {
                             />
                         </div>
                     </div>
+                    <div className={styles.period}>
+                        <div className={styles.title}>
+                            Period
+                        </div>
+                        <div className={styles.element}>
+                            <PeriodSelector
+                                faramElementName="period"
+                                errors={errors}
+                            />
+                        </div>
+                    </div>
+                    <div className={styles.intervals}>
+                        <div className={styles.title}>
+                            Interval
+                        </div>
+                        <div className={styles.element}>
+                            <IntervalSelector
+                                faramElementName="interval"
+                                errors={errors}
+                            />
+                        </div>
+                    </div>
                 </Faram>
-            </div>
-            <div className={styles.period}>
-                <div className={styles.title}>
-                Period
-                </div>
-                <div className={styles.element}>
-                    <PeriodSelector
-                        faramElementName="period"
-                        errors={errors}
-                    />
-                </div>
-            </div>
-            <div className={styles.intervals}>
-                <div className={styles.title}>
-                    Interval
-                </div>
-                <div className={styles.element}>
-                    <IntervalSelector
-                        faramElementName="parameter"
-                        errors={errors}
-                    />
-                </div>
             </div>
             <div
                 onClick={handleSubmitClick}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
@@ -10,9 +10,10 @@ import DangerButton from '#rsca/Button/DangerButton';
 
 import MiniMap from './MiniMap';
 import Details from './Details';
+import Filters from './Filters';
 
 import { Geometry } from '#views/DataArchive/types';
-import { ArchiveRain } from './types';
+import { ArchiveRain, FaramValues } from './types';
 import { rainToGeojson } from './utils';
 
 import styles from './styles.scss';
@@ -60,7 +61,18 @@ const mapStateToProps = (state: AppState) => ({
 
 const getRainFeatureCollection = memoize(rainToGeojson);
 
+const initialFaramValue = {
+    dataDateRange: {
+        startDate: '',
+        endDate: '',
+    },
+    period: {},
+    interval: {},
+};
+
 const RainModal = (props: Props) => {
+    const [filterValues, setFilterValues] = useState<FaramValues>(initialFaramValue);
+    const [stationData, setStationData] = useState<ArchiveRain[]>([]);
     const { stationName = 'Rain Modal',
         requests: {
             detailRequest: {
@@ -70,6 +82,7 @@ const RainModal = (props: Props) => {
         },
         mapStyle,
         geometry,
+        stationId,
         handleModalClose } = props;
     let rainDetails: ArchiveRain = emptyObject;
     if (!pending && response) {
@@ -85,6 +98,14 @@ const RainModal = (props: Props) => {
     const rainFeatureCollection = getRainFeatureCollection(
         [rainDetails || {}],
     );
+
+    const handleFilterValues = (fv) => {
+        setFilterValues(fv);
+    };
+
+    const handleStationData = (data: ArchiveRain[]) => {
+        setStationData(data);
+    };
 
     return (
         <Modal className={styles.rainModal}>
@@ -111,6 +132,11 @@ const RainModal = (props: Props) => {
                     <div className={styles.modalDetails}>
                         <Details
                             rainDetails={rainDetails}
+                        />
+                        <Filters
+                            handleFilterValues={handleFilterValues}
+                            stationId={stationId}
+                            handleStationData={handleStationData}
                         />
                     </div>
                 </div>
