@@ -10,6 +10,9 @@ import {
 } from '#request';
 import { MultiResponse } from '#store/atom/response/types';
 
+import DateSelector from './DateSelector';
+import Loading from '#components/Loading';
+
 import { getErrors } from '../utils';
 import { ArchiveRain, Errors, FaramValues } from '../types';
 
@@ -114,8 +117,36 @@ const Filters = (props: Props) => {
         setFaramValue(fv);
     };
     return (
-        <div>
-          Filters
+        <div className={styles.filters}>
+            <Loading pending={pending} />
+            <div className={styles.header}>
+                Filters
+            </div>
+            <div className={styles.selectors}>
+                <Faram
+                    schema={rainFilterSchema}
+                    onChange={handleFaramChange}
+                    // value={faramValues}
+                    value={faramValue}
+                    className={styles.filterViewContainer}
+                >
+                    <div className={styles.date}>
+                        <div className={styles.element}>
+                            <DateSelector
+                                faramElementName="dataDateRange"
+                                errors={errors}
+                            />
+                        </div>
+                    </div>
+                </Faram>
+            </div>
+            <div
+                onClick={handleSubmitClick}
+                className={styles.submitButton}
+                role="presentation"
+            >
+                Submit
+            </div>
         </div>
     );
 };
