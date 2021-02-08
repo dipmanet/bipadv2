@@ -1,8 +1,10 @@
 .filters{
-    padding: var(--spacing-large);
+    padding: var(--spacing-super-large);
     .header {
         font-weight: var(--font-weight-bold);
         font-size: var(--font-size-large);
+        margin-bottom: calc(2 * var(--spacing-large) - var(--spacing-small));
+        color: #666;
     }
     .submit-button {
         padding: var(--spacing-small) var(--spacing-medium);
@@ -22,8 +24,10 @@
         .title {
             font-weight: bold;
             font-size: var(--font-size-medium-alt);
+            color: #666;
         }
         .date {
+
         }
 
         .intervals {
