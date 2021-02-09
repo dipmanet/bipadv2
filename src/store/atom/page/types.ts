@@ -91,6 +91,7 @@ export interface Alert extends Field {
     polygon?: unknown;
     point?: unknown;
     createdOn: string;
+    startedOn: string;
 }
 export interface Source {
     id: string;

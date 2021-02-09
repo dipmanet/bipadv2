@@ -24,8 +24,10 @@ import styles from './styles.scss';
 // original interface does not have all the properties so extended
 interface RealTimePollutionExtended extends RealTimePollution {
     title?: string;
+    name?: string;
     createdOn?: string;
     aqiColor?: string;
+    modifiedOn?: string;
 }
 interface Props {
     realTimePollution: RealTimePollutionExtended[];
@@ -46,26 +48,26 @@ class Pollution extends React.PureComponent<Props> {
         // TODO: add OandM by to riverWatch
         this.pollutionHeader = [
             {
-                key: 'title',
+                key: 'name',
                 label: 'Location',
                 order: 1,
                 sortable: true,
-                comparator: (a, b) => compareString(a.title, b.title),
+                comparator: (a, b) => compareString(a.name, b.name),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { title } = row;
-                    return (title) || undefined;
+                    const { name } = row;
+                    return (name) || undefined;
                 },
             },
             {
-                key: 'createdOn',
+                key: 'modifiedOn',
                 label: 'Date',
                 order: 2,
                 sortable: true,
-                comparator: (a, b) => compareString(a.createdOn, b.createdOn),
+                comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
+                    const { dateTime } = row;
                     // parsing date to appropiate format
-                    return (createdOn) ? createdOn.substring(0, createdOn.indexOf('T')) : undefined;
+                    return (dateTime) ? dateTime.substring(0, dateTime.indexOf('T')) : undefined;
                 },
             },
             {
@@ -74,11 +76,12 @@ class Pollution extends React.PureComponent<Props> {
                 order: 3,
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
-                    const { createdOn } = row;
-                    if (createdOn) {
-                        const date = new Date(createdOn);
+                    const { dateTime } = row;
+                    if (dateTime) {
+                        // const date = new Date(modifiedOn);
                         // parsing date to time format
-                        return date.toISOString().split('T')[1].split('.')[0];
+                        // return date.toISOString().split('T')[1].split('.')[0];
+                        return dateTime.split('T')[1].split('.')[0].split('+')[0];
                     } return undefined;
                 },
             },
@@ -129,7 +132,7 @@ class Pollution extends React.PureComponent<Props> {
             realTimePollution,
             closeModal,
         } = this.props;
-
+        console.log('real time pollution: ', realTimePollution);
         const formattedTableData = convertNormalTableToCsv(realTimePollution,
             this.pollutionHeader);
         return (

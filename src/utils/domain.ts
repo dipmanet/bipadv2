@@ -230,6 +230,7 @@ export const alertToPointGeojson = (alertList: AlertsWithReference[], hazards: O
                     createdOn,
                     referenceType,
                     referenceData,
+                    startedOn,
                 } = alert;
 
                 const geometry = polygon
@@ -253,6 +254,7 @@ export const alertToPointGeojson = (alertList: AlertsWithReference[], hazards: O
                             referenceType,
                             referenceData,
                             createdDate: createdOn,
+                            startedOn,
                         },
                     };
                 }

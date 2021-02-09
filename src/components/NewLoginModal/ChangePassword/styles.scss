@@ -1,0 +1,89 @@
+.mainPwdReqContainer{
+    // height: 55vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    .closeBtn{
+        display: flex;
+        flex:1;
+        justify-content: flex-end;
+        width: 100%;
+        .dangerbtn{
+        margin: 5px 10px;
+        border: none;
+            .closeIcon{
+                font-size: 16px;
+            }
+        }
+    }
+
+    .passwordConfirmForm{
+        margin: 40px 0;
+        .matchError{
+            font-size: 12px;
+            color: red;
+        }
+        h2{
+            margin-bottom: 30px;
+        }
+        .inputContainer{
+            display: flex;
+            border-radius: 4px;
+            background-color: rgb(232,232,232);
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 30px;
+            input::-webkit-input-placeholder{
+                font-size: 10px;
+                vertical-align:middle !important;
+                line-height: 25px !important;
+            }
+            input:focus{
+                outline: none !important;
+                border: none !important;
+                background-color: transparent !important;
+            }
+            input{
+                border: none !important;
+                margin-top: 12px;
+                margin-left: 10px;
+                width:100%;
+                top:10px;
+                background-color: transparent;
+                margin-bottom: 12px;
+            }
+            .inputIcon{
+                color: rgb(152,152,152);
+            }
+
+        }
+    }
+
+    .cancelAgreeBtns{
+        margin-bottom: 30px;
+        .agreeBtn{
+            width: 80px;
+            filter: saturate(100%);
+            background-color: rgb(0,105,222) !important;
+            border-radius: 30px;
+            color: white !important; 
+        }
+        .disabled{
+            width: 80px;
+            filter: saturate(100%);
+            background-color: rgb(115, 152, 189) !important;
+            border-radius: 30px;
+            color: rgb(255, 255, 255); 
+        }
+
+    }
+  
+
+
+       
+    
+}

@@ -14,11 +14,11 @@ import NumberInput from '#rsci/NumberInput';
 import SelectInput from '#rsci/SelectInput';
 import TextInput from '#rsci/TextInput';
 
-import healthFacilityIcon from '#resources/icons/health-facility.svg';
+import healthFacilityIcon from '#resources/icons/health-facility1.svg';
 import educationIcon from '#resources/icons/Education.svg';
 import financeIcon from '#resources/icons/University.svg';
 import governanceIcon from '#resources/icons/Government-office.svg';
-import groupIcon from '#resources/icons/group.svg';
+import groupIcon from '#resources/icons/group1.svg';
 import openSpaceIcon from '#resources/icons/Soap.svg';
 
 import IncidentInfo from '#components/IncidentInfo';

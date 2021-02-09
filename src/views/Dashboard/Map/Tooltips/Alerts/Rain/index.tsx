@@ -55,12 +55,18 @@ const RainTooltip = (
     } else {
         renderedTitle = title;
     }
-
+    const date = createdDate.split('T')[0];
+    const time = createdDate.split('T')[1].split('+')[0];
+    const timeOnly = time.split(':').slice(0, 2).join(':');
     return (
         <div className={styles.rainfallTooltip}>
             <div className={styles.header}>
                 <div className={styles.title}>{renderedTitle}</div>
-                <div className={styles.date}>{createdDate ? createdDate.split('T')[0] : 'N/A'}</div>
+                <div className={styles.date}>
+                    { createdDate
+                        ? `${date} | ${timeOnly} (NPT)`
+                        : 'N/A' }
+                </div>
             </div>
             <div className={styles.content}>
                 <div className={styles.basin}>

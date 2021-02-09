@@ -208,26 +208,6 @@ class Login extends React.PureComponent<Props, State> {
                         )}
                     />
                     <ModalBody className={styles.body}>
-                        <div className={styles.externalLink}>
-                            <h4 className={styles.header}>
-                                To get access to Monitor for Disaster Strategic Action Plans (MDSA),
-                                please go to following link
-                            </h4>
-                            <a
-                                className={styles.link}
-                                href={`${process.env.REACT_APP_PROJECT_SERVER_URL}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Icon
-                                    className={styles.icon}
-                                    name="externalLink"
-                                />
-                                <div className={styles.text}>
-                                    MDSA
-                                </div>
-                            </a>
-                        </div>
                         <NonFieldErrors faramElement />
                         <TextInput
                             className={styles.input}
