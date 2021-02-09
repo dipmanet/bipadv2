@@ -108,7 +108,7 @@ class SlideThree extends React.PureComponent<Props, State> {
         const colorPaint = this.generatePaint(color);
 
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
-        const mapStyle = 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb';
+        const mapStyle = 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra';
 
         return (
             <div className={styles.vzMainContainer}>
@@ -146,7 +146,14 @@ class SlideThree extends React.PureComponent<Props, State> {
                             <p>Low</p>
                         </div>
                     </div>
-
+                    <div className={styles.legendContainer}>
+                        <p className={styles.riverIconContainer}>
+                            <span className={styles.riverIcon}>
+                                ___
+                            </span>
+                            River
+                        </p>
+                    </div>
                 </VRLegend>
                 <RightPane />
             </div>

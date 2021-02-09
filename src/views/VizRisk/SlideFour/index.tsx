@@ -8,19 +8,29 @@ export default class SlideFour extends React.Component {
 
         this.state = {
             showRaster: true,
-            rasterLayer: 0,
+            rasterLayer: '5',
+            exposedElement: 'all',
         };
     }
 
-    public handleLegendsClick = (rasterLayer: number, showRasterRec: boolean) => {
-        this.setState({ rasterLayer,
-            showRaster: showRasterRec });
+    public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
+        this.setState({
+            rasterLayer,
+            showRaster: showRasterRec,
+        });
+    }
+
+    public handleExposedElementChange = (exposed: string) => {
+        this.setState({
+            exposedElement: exposed,
+        });
     }
 
     public render() {
         const {
             showRaster,
             rasterLayer,
+            exposedElement,
         } = this.state;
 
         return (
@@ -28,9 +38,11 @@ export default class SlideFour extends React.Component {
                 <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
+                    exposedElement={exposedElement}
                 />
                 <Legends
-                    handleLegendsClick={this.handleLegendsClick}
+                    handleFloodChange={this.handleLegendsClick}
+                    handleExposedElementChange={this.handleExposedElementChange}
                 />
             </div>
         );

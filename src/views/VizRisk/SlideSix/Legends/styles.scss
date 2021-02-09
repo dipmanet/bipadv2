@@ -4,7 +4,6 @@
         justify-content: flex-start;
         background-color: rgb(37,38,50);
         padding: 20px 10px;
-
         h2{
             margin-top: 15px;
             font-size: 14px;
@@ -12,8 +11,6 @@
         .switchSlides{
             margin-bottom: 10px;
             .legendBtn{
-            // background-color: transparent;
-            // border: none;
             text-align: left;
             }
             .legendBtn{
@@ -105,6 +102,26 @@
                 opacity: 0.87;
                 .riverIcon{
                     color: rgb(132,198,231);
+                    padding-right: 5px;
+                    position: relative;
+                    bottom: 5px;
+                }
+            }
+            .kmIconContainer{
+                margin: 15px 4px 15px 4px;
+                padding: 0;
+                position: relative;
+                bottom: 5px;
+                color: white;
+                opacity: 0.87;
+                .fiveKm{
+                    color: #fa972e;
+                    padding-right: 5px;
+                    position: relative;
+                    bottom: 5px;
+                }
+                .twoKm{
+                    color: #4336f7;
                     padding-right: 5px;
                     position: relative;
                     bottom: 5px;

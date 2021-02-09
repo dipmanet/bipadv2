@@ -7,22 +7,30 @@ export default class SlideFive extends React.Component {
         super(props);
 
         this.state = {
-            showRaster: false,
-            rasterLayer: 0,
+            showRaster: true,
+            rasterLayer: '5',
+            exposedElement: 'all',
         };
     }
 
-    public handleLegendsClick = (val) => {
-        this.setState(prevState => ({
-            rasterLayer: val,
-            showRaster: !prevState.showRaster,
-        }));
+    public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
+        this.setState({
+            rasterLayer,
+            showRaster: showRasterRec,
+        });
+    }
+
+    public handleExposedElementChange = (exposed: string) => {
+        this.setState({
+            exposedElement: exposed,
+        });
     }
 
     public render() {
         const {
             showRaster,
             rasterLayer,
+            exposedElement,
         } = this.state;
 
         return (
@@ -30,9 +38,11 @@ export default class SlideFive extends React.Component {
                 <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
+                    exposedElement={exposedElement}
                 />
                 <Legends
-                    handleLegendsClick={this.handleLegendsClick}
+                    handleFloodChange={this.handleLegendsClick}
+                    handleExposedElementChange={this.handleExposedElementChange}
                 />
             </div>
         );

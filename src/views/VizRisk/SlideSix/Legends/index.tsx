@@ -19,8 +19,8 @@ const FloodHistoryLegends = (props: Props) => {
     const [showFourthLayer, setShowFourthLayer] = useState(false);
     const [showFifthLayer, setShowFifthLayer] = useState(false);
     const [showSlide, setShowSlide] = useState('hazard');
-    const [showPopulation, setShowPopulationDensity] = useState(false);
-    const [showHazard, setShowHazard] = useState(true);
+    const [showPopulation, setShowPopulationDensity] = useState(true);
+    const [showHazard, setShowHazard] = useState(false);
     const [showBothLayer, setShowBothLayer] = useState(false);
     const {
         handleLegendsClick,
@@ -149,6 +149,18 @@ const FloodHistoryLegends = (props: Props) => {
                                 ___
                     </span>
                             River
+                </p>
+                <p className={styles.kmIconContainer}>
+                    <span className={styles.fiveKm}>
+                                ___
+                    </span>
+                            5 km from River
+                </p>
+                <p className={styles.kmIconContainer}>
+                    <span className={styles.twoKm}>
+                                ___
+                    </span>
+                            2 km from River
                 </p>
                 <div className={styles.switchSlides}>
                     <button

@@ -2,14 +2,15 @@
     display: flex;
     flex-basis: fit-content;
     flex-direction: column;
-    background-color: rgba(0,0,0,0);
+    background-color: rgb(37,38,50);
     position: fixed;
     bottom:50px;
-    left:50px;
+    left:20px;
     z-index: 3;
     justify-content: center;
     padding: 8px;
     // align-items: center;
+    width: 200px;
     border-radius: 12px;
     h2{
         font-size: 12px;

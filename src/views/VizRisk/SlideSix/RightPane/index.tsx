@@ -14,7 +14,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Early Warning System and Safe Shelters</h1>
+                <h1>Populaton Density </h1>
 
                 <p>
                     {' '}

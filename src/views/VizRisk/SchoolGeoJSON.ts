@@ -11,5 +11,13 @@ export default {
             { type: 'Feature', properties: { OBJECTID: 5, Name: 'Shree Kalika Secondary School', FolderPath: 'overpass-turbo.eu export', SymbolID: 0, AltMode: -1, Base: 0.0, Snippet: null, PopupInfo: null, HasLabel: -1, LabelID: 0 }, geometry: { type: 'Point', coordinates: [81.148065200000076, 28.477312, 0.0] } },
         ],
     },
+    chisapani: {
+        type: 'FeatureCollection',
+        name: 'chisapanistation',
+        crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+        features: [
+            { type: 'Feature', properties: { OBJECTID: 1, Name: 'Chisapani Station', FolderPath: 'overpass-turbo.eu export', SymbolID: 0, AltMode: -1, Base: 0.0, Snippet: null, PopupInfo: null, HasLabel: -1, LabelID: 0 }, geometry: { type: 'Point', coordinates: [28.634510273953616, 81.27990005270838, 0.0] } },
+        ],
+    },
 
 };

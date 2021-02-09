@@ -1,6 +1,7 @@
 import React from 'react';
 import Map from './Map';
 import Legends from './Legends';
+import RightPane from './RightPane';
 
 export default class SlideSix extends React.Component {
     public constructor(props) {
@@ -40,6 +41,7 @@ export default class SlideSix extends React.Component {
                     rasterLayer={rasterLayer}
                     showSlide={showSlide}
                 />
+                <RightPane />
                 <Legends
                     handleLegendsClick={this.handleLegendsClick}
                     handleSlideChange={this.handleSlideChange}

@@ -13,73 +13,114 @@ type Props = NewProps<ReduxProps, Params>;
 
 const FloodHistoryLegends = (props: Props) => {
     const { showFirstSlide } = useContext(VizRiskContext);
-    const [showFirstLayer, setShowFirstLayer] = useState(true);
-    const [showSecondLayer, setShowSecondLayer] = useState(false);
-    const [showThirdLayer, setShowThirdLayer] = useState(false);
-    const [showFourthLayer, setShowFourthLayer] = useState(false);
-    const [showFifthLayer, setShowFifthLayer] = useState(false);
-    const [showExposedAll, setShowExposedAll] = useState(false);
+    const [showFiveYears, setShowFiveYears] = useState(true);
+    const [showTenYears, setShowTenYears] = useState(false);
+    const [showTwentyYears, setShowTwentyYears] = useState(false);
+    const [showFiftyYears, setShowFiftyYears] = useState(false);
+    const [showSeventyFiveYears, setShowSeventyFiveYears] = useState(false);
+    const [showHundredYears, setShowHundredYears] = useState(false);
+    const [showTwoHundredYears, setShowTwoHundredYears] = useState(false);
+    const [showTwoFiftyYears, setShowTwoFiftyYears] = useState(false);
+    const [showFiveHundredYears, setShowFiveHundredYears] = useState(false);
+    const [showThousandYears, setShowThousandYears] = useState(false);
+
+    const [showExposedAll, setShowExposedAll] = useState(true);
     const [showExposedSchool, setShowExposedSchool] = useState(false);
     const [showExposedBuilding, setShowExposedBuilding] = useState(false);
     const {
-        handleLegendsClick,
+        handleFloodChange,
+        handleExposedElementChange,
     } = props;
     const handleExposedClick = (layer) => {
-        if (layer === 1) {
+        if (layer === 'all') {
             const newVal = !showExposedAll;
-            setShowExposedAll(newVal);
+            handleExposedElementChange(layer);
+            setShowExposedAll(true);
+            setShowExposedSchool(false);
+            setShowExposedBuilding(false);
         }
-        if (layer === 2) {
+        if (layer === 'school') {
             const newVal = !showExposedSchool;
-            setShowExposedSchool(newVal);
+            handleExposedElementChange(layer);
+            setShowExposedAll(false);
+            setShowExposedSchool(true);
+            setShowExposedBuilding(false);
         }
 
-        if (layer === 3) {
+        if (layer === 'building') {
             const newVal = !showExposedBuilding;
-            setShowExposedBuilding(newVal);
+            handleExposedElementChange(layer);
+            setShowExposedAll(false);
+            setShowExposedSchool(false);
+            setShowExposedBuilding(true);
         }
     };
     const handleLegendBtnClick = (layer) => {
-        if (layer === 0) {
-            const newVal = !showFirstLayer;
-            handleLegendsClick(layer, newVal);
-            setShowFirstLayer(newVal);
+        if (layer === '5') {
+            const newVal = !showFiveYears;
+            handleFloodChange(layer, newVal);
+            setShowFiveYears(newVal);
         }
-
-        if (layer === 1) {
-            const newVal = !showSecondLayer;
-            setShowSecondLayer(newVal);
+        if (layer === '10') {
+            const newVal = !showTenYears;
+            handleFloodChange(layer, newVal);
+            setShowTenYears(newVal);
         }
-
-        if (layer === 2) {
-            const newVal = !showThirdLayer;
-            setShowThirdLayer(newVal);
+        if (layer === '20') {
+            const newVal = !showTwentyYears;
+            handleFloodChange(layer, newVal);
+            setShowTwentyYears(newVal);
         }
-
-        if (layer === 3) {
-            const newVal = !showFourthLayer;
-            setShowThirdLayer(newVal);
+        if (layer === '50') {
+            const newVal = !showFiftyYears;
+            handleFloodChange(layer, newVal);
+            setShowFiftyYears(newVal);
         }
-
-        if (layer === 4) {
-            const newVal = !showFourthLayer;
-            setShowThirdLayer(newVal);
+        if (layer === '75') {
+            const newVal = !showSeventyFiveYears;
+            handleFloodChange(layer, newVal);
+            setShowSeventyFiveYears(newVal);
+        }
+        if (layer === '100') {
+            const newVal = !showHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowHundredYears(newVal);
+        }
+        if (layer === '200') {
+            const newVal = !showTwoHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowTwoHundredYears(newVal);
+        }
+        if (layer === '250') {
+            const newVal = !showTwoFiftyYears;
+            handleFloodChange(layer, newVal);
+            setShowTwoFiftyYears(newVal);
+        }
+        if (layer === '500') {
+            const newVal = !showFiveHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowFiveHundredYears(newVal);
+        }
+        if (layer === '1000') {
+            const newVal = !showThousandYears;
+            handleFloodChange(layer, newVal);
+            setShowThousandYears(newVal);
         }
     };
 
     return (
         <VRLegend>
-            <h2>Flood Hazard Return Period</h2>
             <div className={styles.legendContainer}>
+                <h2>Flood Hazard Return Period</h2>
                 <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(0)}
+                        onClick={() => handleLegendBtnClick('5')}
                     >
                         <Icon
                             name="circle"
-                            className={showFirstLayer === false
+                            className={showFiveYears === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
@@ -90,12 +131,12 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(1)}
+                        onClick={() => handleLegendBtnClick('10')}
 
                     >
                         <Icon
                             name="circle"
-                            className={showSecondLayer === false
+                            className={showTenYears === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
@@ -106,28 +147,60 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(2)}
+                        onClick={() => handleLegendBtnClick('20')}
 
                     >
                         <Icon
                             name="circle"
-                            className={showThirdLayer === false
+                            className={showTwentyYears === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
-                            25 Years
+                            20 Years
                     </button>
                 </div>
                 <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(3)}
+                        onClick={() => handleLegendBtnClick('50')}
 
                     >
                         <Icon
                             name="circle"
-                            className={showFourthLayer === false
+                            className={showFiftyYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            50 Years
+                    </button>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick('75')}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showSeventyFiveYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            75 Years
+                    </button>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick('100')}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showHundredYears === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
@@ -138,12 +211,60 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleLegendBtnClick(4)}
+                        onClick={() => handleLegendBtnClick('200')}
 
                     >
                         <Icon
                             name="circle"
-                            className={showFifthLayer === false
+                            className={showTwoHundredYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            200 Years
+                    </button>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick('250')}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showTwoFiftyYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            250 Years
+                    </button>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick('500')}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showFiveHundredYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
+                        />
+                            500 Years
+                    </button>
+                </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleLegendBtnClick('1000')}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showThousandYears === false
                                 ? styles.yearsIcon
                                 : styles.yearsIconClicked}
                         />
@@ -192,7 +313,7 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleExposedClick(1)}
+                        onClick={() => handleExposedClick('all')}
 
                     >
                         <Icon
@@ -208,7 +329,7 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleExposedClick(2)}
+                        onClick={() => handleExposedClick('school')}
 
                     >
                         <Icon
@@ -224,7 +345,7 @@ const FloodHistoryLegends = (props: Props) => {
                     <button
                         type="button"
                         className={styles.legendBtn}
-                        onClick={() => handleExposedClick(3)}
+                        onClick={() => handleExposedClick('building')}
 
                     >
                         <Icon
@@ -234,6 +355,23 @@ const FloodHistoryLegends = (props: Props) => {
                                 : styles.exposedIconsClicked}
                         />
                            Building
+                    </button>
+                </div>
+                <h2>Others</h2>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => {}}
+
+                    >
+                        <Icon
+                            name="circle"
+                            className={showExposedBuilding === false
+                                ? styles.exposedIcons
+                                : styles.exposedIconsClicked}
+                        />
+                           Chisapani Station
                     </button>
                 </div>
 

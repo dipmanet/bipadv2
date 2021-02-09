@@ -1,8 +1,12 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
+import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
+import SafeshelterGeoJSON from '../../safeShelter';
+import ManualIcon from '#resources/images/homeicon.png';
+
 
 import {
     // provincesSelector,
@@ -20,7 +24,23 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+
 import RightPane from '../RightPane';
+
+const mask = turf.polygon([
+    [
+        [28.503026471909497, 81.14499645750975,
+        ],
+        [28.46382798887636, 81.05165455953558,
+        ],
+        [28.37443758619946, 81.14879927557537,
+        ],
+        [28.426135117282264, 81.23142414081917,
+        ],
+        [28.503026471909497, 81.14499645750975,
+        ],
+    ],
+]);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
 const colorGrade = [
@@ -57,7 +77,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
         const {
-            bounds,
+            // bounds,
             // provinces,
             districts,
             municipalities,
@@ -67,6 +87,10 @@ class FloodHistoryMap extends React.Component {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
         } = this.props;
+
+        const { schools: schoolgeo } = SchoolGeoJSON;
+        const { chisapani } = SchoolGeoJSON;
+        // const { safeshelter } = SafeshelterGeoJSON;
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -77,34 +101,164 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
         }
-        const schoolgeo = SchoolGeoJSON.schools;
+
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-        // Container to put React generated content in.
-    this.tooltipContainer = document.createElement('div'); // eslint-disable-line
-
+        // const bounds = [-122.5336, 37.7049, -122.3122, 37.8398]; // wsen
+        const bounds = [28.624024, 80.81311, 28.237317, 81.34827]; // wsen
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb',
+            // style: 'mapbox://styles/mapbox/light-v9',
+            style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
+            // center: [-122.42116928100586, 37.77532815168286],
+            // maxBounds: bounds,
             center: [lng, lat],
             zoom,
             minZoom: 9,
             maxZoom: 15,
-            bearing: 0,
+            // maxBounds: bounds,
+            // bearing: 0,
         });
 
-        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        this.map.setZoom(10);
+        this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
         this.map.on('style.load', () => {
             const visibleLayout = {
                 visibility: 'visible',
             };
+            const tileUrl1 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in5',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
             const tileUrl2 = [
                 `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
                 '&version=1.1.1',
                 '&service=WMS',
                 '&request=GetMap',
-                '&layers=Bipad:fluvial_defended_1in10',
+                '&layers=Bipad:rajapur-meteor-flood-10',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl3 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in20',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl4 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in50',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl5 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in75',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl6 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in100',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl7 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in200',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl8 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in250',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl9 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in500',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
+            const tileUrl10 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in1000',
                 '&tiled=true',
                 '&width=256',
                 '&height=256',
@@ -114,42 +268,223 @@ class FloodHistoryMap extends React.Component {
                 '&format=image/png',
             ].join('');
 
-            this.map.addSource('rasterlayer', {
+            this.map.loadImage(
+                'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
+                (error, image) => {
+                    if (error) throw error;
+                    this.map.addImage('cat', image);
+                    this.map.addSource('point', {
+                        type: 'geojson',
+                        data: {
+                            type: 'FeatureCollection',
+                            features: [
+                                {
+                                    type: 'Feature',
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: [28.638615848729966, 81.28247497323619],
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                    this.map.addLayer({
+                        id: 'points',
+                        type: 'symbol',
+                        source: 'point',
+                        layout: {
+                            'icon-image': 'cat',
+                            'icon-size': 0.25,
+                        },
+                    });
+                },
+            );
+
+            this.map.addSource('rasterrajapur5', {
+                type: 'raster',
+                tiles: [tileUrl1],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur10', {
                 type: 'raster',
                 tiles: [tileUrl2],
                 tileSize: 256,
 
             });
+            this.map.addSource('rasterrajapur20', {
+                type: 'raster',
+                tiles: [tileUrl3],
+                tileSize: 256,
 
-            this.map.addLayer(
-                {
-                    id: 'raster-layer-0',
-                    type: 'raster',
-                    source: 'rasterlayer',
-                    layout: {},
-                    paint: {
-                        'raster-opacity': 0.87,
-                    },
-                },
-            );
-
-            this.map.addSource('vizrisk-fills', {
-                type: 'vector',
-                url: mapSources.nepal.url,
             });
-            this.map.addLayer({
-                id: 'ward-fill',
-                type: 'fill',
-                source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
-                layout: visibleLayout,
-                paint: colorPaint,
-                filter: getWardFilter(5, 65, 58007, wards),
-            }, 'water');
+            this.map.addSource('rasterrajapur50', {
+                type: 'raster',
+                tiles: [tileUrl4],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur75', {
+                type: 'raster',
+                tiles: [tileUrl5],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur100', {
+                type: 'raster',
+                tiles: [tileUrl6],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur200', {
+                type: 'raster',
+                tiles: [tileUrl7],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur250', {
+                type: 'raster',
+                tiles: [tileUrl8],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur500', {
+                type: 'raster',
+                tiles: [tileUrl9],
+                tileSize: 256,
+
+            });
+            this.map.addSource('rasterrajapur1000', {
+                type: 'raster',
+                tiles: [tileUrl10],
+                tileSize: 256,
+
+            });
             this.map.addSource('schoolsRajapur', {
                 type: 'geojson',
                 data: schoolgeo,
             });
+            this.map.addSource('chisapani', {
+                type: 'geojson',
+                data: chisapani,
+            });
+            this.map.addSource('vizrisk-fills', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-5',
+                    type: 'raster',
+                    source: 'rasterrajapur5',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-10',
+                    type: 'raster',
+                    source: 'rasterrajapur10',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-20',
+                    type: 'raster',
+                    source: 'rasterrajapur20',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-50',
+                    type: 'raster',
+                    source: 'rasterrajapur50',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-75',
+                    type: 'raster',
+                    source: 'rasterrajapur75',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-100',
+                    type: 'raster',
+                    source: 'rasterrajapur100',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-200',
+                    type: 'raster',
+                    source: 'rasterrajapur200',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-250',
+                    type: 'raster',
+                    source: 'rasterrajapur250',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-500',
+                    type: 'raster',
+                    source: 'rasterrajapur500',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-1000',
+                    type: 'raster',
+                    source: 'rasterrajapur1000',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.5,
+                    },
+                },
+            );
+
             this.map.addLayer(
                 {
                     id: 'school-rajapur',
@@ -162,427 +497,49 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
+            this.map.addLayer(
+                {
+                    id: 'chisapani-bardiya',
+                    type: 'circle',
+                    source: 'chisapani',
+                    layout: {},
+                    paint: {
+                        'circle-color': '#ffff00',
+                        'circle-radius': 6,
+                    },
+                },
+            );
+            this.map.addLayer({
+                id: 'ward-fill',
+                type: 'fill',
+                source: 'vizrisk-fills',
+                'source-layer': mapSources.nepal.layers.ward,
+                layout: visibleLayout,
+                paint: colorPaint,
+                filter: getWardFilter(5, 65, 58007, wards),
+            }, 'rajapurbuildingfootprint');
 
-            // this.map.addLayer({
-            //     id: 'landelevation',
-            //     type: 'fill',
-            //     source: 'landelevation',
-            //     'source-layer': 'landelevation_100x100',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'value',
-            //             stops: [
-            //                 [2, '#ffffcc'],
-            //                 [17, '#c7e9b4'],
-            //                 [35, '#7fcdbb'],
-            //                 [52, '#41b6c4'],
-            //                 [70, '#1d91c0'],
-            //             ],
-            //         },
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
+            this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-75', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-200', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-250', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'none');
+            this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'none');
+            this.map.setLayoutProperty('safeshelter', 'visibility', 'visible');
+            this.map.setLayoutProperty('chisapani-bardiya', 'visibility', 'visible');
+            this.map.moveLayer('chisapani-bardiya');
+            this.map.setLayoutProperty('2km-buffer-4xvqe1', 'visibility', 'none');
+            this.map.setLayoutProperty('5km-buffer-d4g08s', 'visibility', 'none');
 
-
-            // this.map.addSource('riesgo', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.8kcfu1fc',
-            // });
-
-            // this.map.addSource('evacuation', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.4r8fc81u',
-            // });
-
-            // this.map.addSource('landelevation', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.54ft2aw9',
-            // });
-
-            // this.map.addSource('radius', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.78x6pdi0',
-            // });
-
-            // this.map.addSource('buildings', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.bnoseblw',
-            // });
-
-            // this.map.addSource('boundary', {
-            //     type: 'geojson',
-            //     data: 'data/marikina_boundary.geojson',
-            // });
-
-            // this.map.addSource('population', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.djetk3sb',
-            // });
-
-            // this.map.addSource('isochrones', {
-            //     type: 'vector',
-            //     url: 'mapbox://unissechua.166d592u',
-            // });
-
-            // this.map.addSource('areas', {
-            //     type: 'geojson',
-            //     data: 'data/areas_of_interest.geojson',
-            // });
-
-            // this.map.addLayer({
-            //     id: 'boundary',
-            //     type: 'line',
-            //     source: 'boundary',
-            //     paint: {
-            //         'line-color': '#090909',
-            //         'line-opacity': 0,
-            //         'line-width': 2,
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'landelevation3d',
-            //     type: 'fill-extrusion',
-            //     source: 'landelevation',
-            //     'source-layer': 'landelevation_100x100',
-            //     paint: {
-            //         'fill-extrusion-color': {
-            //             property: 'value',
-            //             stops: [
-            //                 [2, '#ffffcc'],
-            //                 [17, '#c7e9b4'],
-            //                 [35, '#7fcdbb'],
-            //                 [52, '#41b6c4'],
-            //                 [70, '#1d91c0'],
-            //             ],
-            //         },
-            //         'fill-extrusion-height': ['*', 10, ['number', ['get', 'value'], 1]],
-            //         'fill-extrusion-opacity': 0.5,
-            //         'fill-extrusion-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'landelevation',
-            //     type: 'fill',
-            //     source: 'landelevation',
-            //     'source-layer': 'landelevation_100x100',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'value',
-            //             stops: [
-            //                 [2, '#ffffcc'],
-            //                 [17, '#c7e9b4'],
-            //                 [35, '#7fcdbb'],
-            //                 [52, '#41b6c4'],
-            //                 [70, '#1d91c0'],
-            //             ],
-            //         },
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'flood',
-            //     type: 'fill',
-            //     source: 'riesgo',
-            //     'source-layer': 'riesgo',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'fhm005yrs',
-            //             stops: [
-            //                 [1, '#e31a1c'],
-            //                 [2, '#fd8d3c'],
-            //                 [3, '#fecc5c'],
-            //                 [4, '#ffffb2'],
-            //             ],
-            //         },
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'radius',
-            //     type: 'fill',
-            //     source: 'radius',
-            //     'source-layer': 'radius_coverage',
-            //     paint: {
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //         'fill-outline-color': '#49006a',
-            //         'fill-color': {
-            //             property: 'pop_coverage',
-            //             stops: [
-            //                 [5700, '#feebe2'],
-            //                 [9200, '#fbb4b9'],
-            //                 [10500, '#f768a1'],
-            //                 [11800, '#c51b8a'],
-            //                 [13900, '#7a0177'],
-            //             ],
-            //         },
-            //     },
-            // });
-
-            // this.map.addLayer({
-            //     id: 'suitability',
-            //     type: 'fill',
-            //     source: 'riesgo',
-            //     'source-layer': 'riesgo',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'mcda005yrs',
-            //             stops: [
-            //                 [1, '#000000'],
-            //                 [2, '#b2182b'],
-            //                 [3, '#ef8a62'],
-            //                 [4, '#67a9cf'],
-            //                 [5, '#2166ac'],
-            //             ],
-            //         },
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'evacuation',
-            //     type: 'symbol',
-            //     source: 'evacuation',
-            //     'source-layer': 'marikina_evac_centers',
-            //     layout: {
-            //         visibility: 'none',
-            //         'icon-image': '{icon}-15',
-            //         'icon-allow-overlap': true,
-            //         // 'text-field': '{amenity}',
-            //         // 'text-font': ['Open Sans Bold'],
-            //         // 'text-size': 10,
-            //         // 'text-transform': 'lowercase',
-            //         // 'text-letter-spacing': 0.05,
-            //         // 'text-offset': [0, 1.5],
-            //     },
-            //     // paint: {
-            //     //   'text-color': '#202',
-            //     //   'text-halo-color': '#fff',
-            //     //   'text-halo-width': 2,
-            //     // },
-            // });
-
-            // this.map.addLayer({
-            //     id: 'population',
-            //     type: 'fill',
-            //     source: 'population',
-            //     'source-layer': 'marikina_pop',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'value',
-            //             stops: [
-            //                 [0, '#feebe2'],
-            //                 [13, '#fbb4b9'],
-            //                 [16, '#f768a1'],
-            //                 [21, '#c51b8a'],
-            //                 [24, '#7a0177'],
-            //             ],
-            //         },
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'capacity',
-            //     type: 'circle',
-            //     source: 'evacuation',
-            //     'source-layer': 'marikina_evac_centers',
-            //     paint: {
-            //         'circle-color': {
-            //             property: 'capacity',
-            //             stops: [
-            //                 [120, '#feebe2'],
-            //                 [150, '#fbb4b9'],
-            //                 [820, '#f768a1'],
-            //                 [1890, '#c51b8a'],
-            //                 [2750, '#7a0177'],
-            //             ],
-            //         },
-            //         'circle-radius': {
-            //             property: 'capacity',
-            //             stops: [
-            //                 [{ zoom: 12, value: 120 }, 10],
-            //                 [{ zoom: 12, value: 150 }, 15],
-            //                 [{ zoom: 12, value: 820 }, 20],
-            //                 [{ zoom: 12, value: 1890 }, 25],
-            //                 [{ zoom: 12, value: 2750 }, 30],
-            //                 [{ zoom: 15, value: 120 }, 20],
-            //                 [{ zoom: 15, value: 150 }, 40],
-            //                 [{ zoom: 15, value: 820 }, 60],
-            //                 [{ zoom: 15, value: 1890 }, 80],
-            //                 [{ zoom: 15, value: 2750 }, 100],
-            //             ],
-            //         },
-            //         'circle-opacity': 0,
-            //         'circle-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'walking',
-            //     type: 'fill',
-            //     source: 'isochrones',
-            //     'source-layer': 'walkingiso',
-            //     paint: {
-            //         'fill-color': {
-            //             property: 'AA_MINS',
-            //             stops: [
-            //                 [5, '#feb24c'],
-            //                 [10, '#feb24c'],
-            //                 [15, '#feb24c'],
-            //                 [20, '#fd8d3c'],
-            //                 [25, '#f03b20'],
-            //                 [30, '#bd0026'],
-            //             ],
-            //         },
-            //         'fill-outline-color': '#090909',
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //     },
-            //     filter: ['==', 'AA_MINS', 5],
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'buildings',
-            //     type: 'fill',
-            //     source: 'buildings',
-            //     'source-layer': 'marikina_buildings_features',
-            //     paint: {
-            //         'fill-color': '#38316e',
-            //         // 'fill-color': [
-            //         //   'match',
-            //         //   ['get', 'building'],
-            //         //   'school', '#1b9e77',
-            //         //   'house', '#d95f02',
-            //         //   'residential', '#7570b3',
-            //         //   'commercial', '#e7298a',
-            //         //   'retail', '#66a61e',
-            //         //   'college', '#e6ab02',
-            //         //   'mall', '#a6761d',
-            //         //   'hospital', '#666666',
-            //         //   '#38316e',
-            //         // ],
-            //         'fill-opacity': 0,
-            //         'fill-opacity-transition': {
-            //             duration: 800,
-            //             delay: 0,
-            //         },
-            //         'fill-outline-color': '#38316e',
-            //     },
-            // }, 'waterway');
-
-            // this.map.addLayer({
-            //     id: 'labels',
-            //     type: 'symbol',
-            //     source: {
-            //         type: 'geojson',
-            //         data: {
-            //             type: 'FeatureCollection',
-            //             features: [{
-            //                 type: 'Feature',
-            //                 properties: {
-            //                     name: 'Marikina River',
-            //                     size: 12,
-            //                 },
-            //                 geometry: {
-            //                     type: 'Point',
-            //                     coordinates: [121.08634085311045, 14.634044503866145],
-            //                 },
-            //             },
-            //             {
-            //                 type: 'Feature',
-            //                 properties: {
-            //                     name: 'Marikina City',
-            //                     size: 20,
-            //                 },
-            //                 geometry: {
-            //                     type: 'Point',
-            //                     coordinates: [121.10887595008319, 14.652422188794105],
-            //                 },
-            //             }],
-            //         },
-            //     },
-            //     layout: {
-            //         'text-field': '{name}',
-            //         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-            //         'text-size': ['get', 'size'],
-            //         'text-transform': 'uppercase',
-            //         'text-letter-spacing': 0.05,
-            //         'text-offset': [0, 1.5],
-            //     },
-            //     paint: {
-            //         'text-color': '#303',
-            //         'text-halo-color': '#f9f6e7',
-            //         'text-halo-width': 2,
-            //     },
-            // });
-
-            // this.map.addLayer({
-            //     id: 'aoe',
-            //     type: 'line',
-            //     source: 'areas',
-            //     paint: {
-            //         'line-color': '#303',
-            //         'line-width': 3,
-            //         'line-opacity': 0,
-            //     },
-            // });
-
-            // this.map.addLayer({
-            //     id: 'aoe_labels',
-            //     type: 'symbol',
-            //     source: 'areas',
-            //     layout: {
-            //         'text-field': '{name}',
-            //         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-            //         'text-size': 10,
-            //         'text-transform': 'uppercase',
-            //         'text-letter-spacing': 0.05,
-            //         'text-offset': [0, 1.5],
-            //         visibility: 'none',
-            //     },
-            //     paint: {
-            //         'text-color': '#303',
-            //         'text-halo-color': '#f9f6e7',
-            //         'text-halo-width': 2,
-            //     },
-            // });
+            this.map.setLayoutProperty('farmland-6zygfm', 'visibility', 'none');
+            this.map.setLayoutProperty('farmfields-1l9fpy', 'visibility', 'none');
+            this.map.setLayoutProperty('sandrajapur-44t4e0', 'visibility', 'none');
+            console.log(this.map);
+            // this.map.moveLayer('rajapurbuildingfootprint', 'ward-fill');
+            // this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
         });
     }
 
@@ -590,14 +547,84 @@ class FloodHistoryMap extends React.Component {
         const {
             showRaster,
             rasterLayer,
+            exposedElement,
         } = this.props;
 
         if (this.map.isStyleLoaded()) {
-            if (nextProps.rasterLayer !== rasterLayer || nextProps.showRaster !== showRaster) {
-                if (showRaster) {
-                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 1);
-                } else {
-                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 0);
+            if (nextProps.showRaster !== showRaster || nextProps.rasterLayer !== rasterLayer) {
+                if (nextProps.showRaster && nextProps.rasterLayer === '5') {
+                    this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '5') {
+                    this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '10') {
+                    this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '10') {
+                    this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '20') {
+                    this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '20') {
+                    this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '50') {
+                    this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '50') {
+                    this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '75') {
+                    this.map.setLayoutProperty('raster-rajapur-75', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '75') {
+                    this.map.setLayoutProperty('raster-rajapur-75', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '100') {
+                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '100') {
+                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '200') {
+                    this.map.setLayoutProperty('raster-rajapur-200', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '200') {
+                    this.map.setLayoutProperty('raster-rajapur-200', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '250') {
+                    this.map.setLayoutProperty('raster-rajapur-250', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '250') {
+                    this.map.setLayoutProperty('raster-rajapur-250', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '500') {
+                    this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '500') {
+                    this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'none');
+                }
+                if (nextProps.showRaster && nextProps.rasterLayer === '1000') {
+                    this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
+                }
+                if (!nextProps.showRaster && nextProps.rasterLayer === '1000') {
+                    this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'none');
+                }
+            }
+            if (nextProps.exposedElement !== exposedElement) {
+                if (nextProps.exposedElement === 'all') {
+                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+                    this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
+                }
+                if (nextProps.exposedElement === 'school') {
+                    this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
+                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'none');
+                }
+                if (nextProps.exposedElement === 'building') {
+                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+                    this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                 }
             }
         }
@@ -616,6 +643,11 @@ class FloodHistoryMap extends React.Component {
         ],
         'fill-opacity': 1,
     });
+
+    public polyMask = (maskVal, boundsVal) => {
+        const bboxPoly = turf.bboxPolygon(boundsVal);
+        return turf.difference(bboxPoly, maskVal);
+    };
 
     public generateColor = (maxValue, minValue, colorMapping) => {
         const newColor = [];

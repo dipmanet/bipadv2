@@ -83,7 +83,7 @@ class FloodHistoryMap extends React.Component {
 
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: 'mapbox://styles/ankur20/ckkfa1ai212pf17ru8g36j1nb',
+            style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
             center: [lng, lat],
             zoom,
             minZoom: 9,
@@ -142,11 +142,41 @@ class FloodHistoryMap extends React.Component {
             const hiddenLayout = {
                 visibility: 'none',
             };
+            const tileUrl6 = [
+                `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                '&version=1.1.1',
+                '&service=WMS',
+                '&request=GetMap',
+                '&layers=Bipad:Rajapur_FD_1in100',
+                '&tiled=true',
+                '&width=256',
+                '&height=256',
+                '&srs=EPSG:3857',
+                '&bbox={bbox-epsg-3857}',
+                '&transparent=true',
+                '&format=image/png',
+            ].join('');
             this.map.addSource('route', {
                 type: 'geojson',
                 data: route,
             });
+            this.map.addSource('rasterrajapur100', {
+                type: 'raster',
+                tiles: [tileUrl6],
+                tileSize: 256,
 
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-rajapur-100',
+                    type: 'raster',
+                    source: 'rasterrajapur100',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.7,
+                    },
+                },
+            );
             this.map.addLayer({
                 id: 'route',
                 source: 'route',
@@ -193,8 +223,11 @@ class FloodHistoryMap extends React.Component {
             });
 
             this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
+            this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
             this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'none');
             this.map.moveLayer('density-b7o1uo', 'ward-fill');
+            this.map.setLayoutProperty('farmfields-1l9fpy', 'visibility', 'none');
+            this.map.setLayoutProperty('sandrajapur-44t4e0', 'visibility', 'none');
         });
     }
 
@@ -209,6 +242,7 @@ class FloodHistoryMap extends React.Component {
             if (nextProps.showSlide !== showSlide) {
                 if (nextProps.showSlide === 'population') {
                     this.map.moveLayer('density-b7o1uo', 'ward-fill');
+                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
                     this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
                     this.map.setPaintProperty('density-b7o1uo', 'fill-opacity', 1);
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'none');
@@ -216,22 +250,17 @@ class FloodHistoryMap extends React.Component {
                 if (nextProps.showSlide === 'hazard') {
                     this.map.moveLayer('ward-fill', 'density-b7o1uo');
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
+                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
                     this.map.setPaintProperty('ward-fill', 'fill-opacity', 1);
                     this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'none');
                 }
 
                 if (nextProps.showSlide === 'all') {
                     this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
+                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
                     this.map.moveLayer('density-b7o1uo', 'ward-fill');
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
                     this.map.setPaintProperty('ward-fill', 'fill-opacity', 0.5);
-                }
-            }
-            if (nextProps.rasterLayer !== rasterLayer || nextProps.showRaster !== showRaster) {
-                if (showRaster) {
-                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 1);
-                } else {
-                    this.map.setPaintProperty(`raster-layer-${rasterLayer}`, 'raster-opacity', 0);
                 }
             }
         }
@@ -266,10 +295,11 @@ class FloodHistoryMap extends React.Component {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '100%',
+            width: '70%',
             right: '65px',
             top: 0,
             bottom: 0,
+            left: 0,
         };
 
         return (

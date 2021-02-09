@@ -11,6 +11,21 @@
         display: flex;
         justify-content: flex-start;
         padding: 4px 0 4px 5px;
+
+    .riverIconContainer{
+        margin: 4px;
+        padding: 0;
+        position: relative;
+        bottom: 5px;
+        color: white;
+        opacity: 0.87;
+        .riverIcon{
+            color: rgb(132,198,231);
+            padding-right: 5px;
+            position: relative;
+            bottom: 5px;
+        }
+    }
         .populationLegend{
             height: 60px;
             width: 8px;

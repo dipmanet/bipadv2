@@ -1,11 +1,9 @@
-
 .vzMainContainer{
     position: relative;
     background-color: #262834;
     justify-content: center;
     display: flex;
     flex-direction: row;
-    // border: 1px solid white;
     padding-right: 75px;
     .legendContainer{
         display: flex;
@@ -17,7 +15,7 @@
         .legendItemContainer{
             display: flex;
             width: 80px;
-            border: 1px solid red;
+            // border: 1px solid red;
             .legendBtn{
                 background-color: transparent;
                 border: none;
@@ -35,24 +33,9 @@
                 }
         }
     }
-    // .map2{
-    //     margin: 0 var(--spacing-small);
-    //     height: 100vh;
-    //     width: 100vw;
-    //     position: relative;
-    // }
 }
 
-.map2{
-    margin: 0 var(--spacing-small);
-    height: 100vh;
-    width: 70%;
-    position: absolute;
-    top:0;
-    left:0;
-    border: 1px solid red;
-    z-index: 3;
-}
+
 
 
 
