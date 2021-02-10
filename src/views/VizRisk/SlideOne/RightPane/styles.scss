@@ -4,16 +4,22 @@
         display: flex;
         flex-direction: column;
         background-color:#182539;
-        
         color:#b6d6e4;
-        padding: 70px 75px 70px 15px;
-        width: 30%;
+        padding: 70px 0 0 0;
+        margin-right: 60px;
+        width: calc(30% - 60px);
         height: 100vh;
         right: 0;
+        overflow-y: scroll;
         // visibility: hidden;
-        .chartsContainer{
-            height: 250px;
-            padding-top: 10px;
+        .lastPara{
+            margin-bottom: 20px;
+        }
+        .resp{
+            border: 1px solid red;
+            // display: flex;
+            // padding-right: 0px;
+            // height: 300px !important;
         }
         .iconContainer{
             width: 100%;
@@ -64,6 +70,7 @@
         font-size: 22px;
         color: white;
         opacity: 0.87;
+        padding: 0 30px;
         }
         h2{
             font-family: 'Playfair Display';
@@ -71,13 +78,15 @@
             color: white;
             opacity: 0.87;
             margin-top: 20px;
+            padding: 0 30px;
             }
         p{
             color:white;
-            font-size: 12px;
+            font-size: 14px;
             font-family: 'Source Sans Pro';
             opacity: 0.87;
-            line-height: 1.7em;
+            line-height: 1.4em;
+            padding: 0 30px;
         }
     }
 

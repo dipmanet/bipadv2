@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
-import SafeshelterGeoJSON from '../../safeShelter';
-import ManualIcon from '#resources/images/homeicon.png';
+// import SafeshelterGeoJSON from '../../safeShelter-new';
+import ManualIcon from '#resources/images/chisapanistation.png';
 
 
 import {
@@ -90,7 +90,7 @@ class FloodHistoryMap extends React.Component {
 
         const { schools: schoolgeo } = SchoolGeoJSON;
         const { chisapani } = SchoolGeoJSON;
-        // const { safeshelter } = SafeshelterGeoJSON;
+        // const { safeshelter-new } = Safeshelter-newGeoJSON;
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -269,11 +269,11 @@ class FloodHistoryMap extends React.Component {
             ].join('');
 
             this.map.loadImage(
-                'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
+                ManualIcon,
                 (error, image) => {
                     if (error) throw error;
                     this.map.addImage('cat', image);
-                    this.map.addSource('point', {
+                    this.map.addSource('catpoint', {
                         type: 'geojson',
                         data: {
                             type: 'FeatureCollection',
@@ -282,7 +282,7 @@ class FloodHistoryMap extends React.Component {
                                     type: 'Feature',
                                     geometry: {
                                         type: 'Point',
-                                        coordinates: [28.638615848729966, 81.28247497323619],
+                                        coordinates: [81.28247497323619, 28.638615848729966],
                                     },
                                 },
                             ],
@@ -291,10 +291,10 @@ class FloodHistoryMap extends React.Component {
                     this.map.addLayer({
                         id: 'points',
                         type: 'symbol',
-                        source: 'point',
+                        source: 'catpoint',
                         layout: {
                             'icon-image': 'cat',
-                            'icon-size': 0.25,
+                            'icon-size': 1.5,
                         },
                     });
                 },
@@ -517,7 +517,7 @@ class FloodHistoryMap extends React.Component {
                 layout: visibleLayout,
                 paint: colorPaint,
                 filter: getWardFilter(5, 65, 58007, wards),
-            }, 'rajapurbuildingfootprint');
+            }, 'rajapurbuildingfootprint-feb10');
 
             this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'none');
             this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'none');
@@ -528,8 +528,8 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('raster-rajapur-250', 'visibility', 'none');
             this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'none');
             this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'none');
-            this.map.setLayoutProperty('safeshelter', 'visibility', 'visible');
-            this.map.setLayoutProperty('chisapani-bardiya', 'visibility', 'visible');
+            this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'visible');
+            this.map.setLayoutProperty('chisapani-bardiya', 'visibility', 'none');
             this.map.moveLayer('chisapani-bardiya');
             this.map.setLayoutProperty('2km-buffer-4xvqe1', 'visibility', 'none');
             this.map.setLayoutProperty('5km-buffer-d4g08s', 'visibility', 'none');
@@ -538,8 +538,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('farmfields-1l9fpy', 'visibility', 'none');
             this.map.setLayoutProperty('sandrajapur-44t4e0', 'visibility', 'none');
             console.log(this.map);
-            // this.map.moveLayer('rajapurbuildingfootprint', 'ward-fill');
-            // this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+            // this.map.moveLayer('rajapurbuildingfootprint-feb10', 'ward-fill');
         });
     }
 
@@ -615,15 +614,15 @@ class FloodHistoryMap extends React.Component {
             }
             if (nextProps.exposedElement !== exposedElement) {
                 if (nextProps.exposedElement === 'all') {
-                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
                 }
                 if (nextProps.exposedElement === 'school') {
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
-                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'none');
+                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
                 }
                 if (nextProps.exposedElement === 'building') {
-                    this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'visible');
+                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                 }
             }
@@ -664,7 +663,7 @@ class FloodHistoryMap extends React.Component {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '75%',
+            width: '70%',
             left: '0%',
             top: 0,
             bottom: 0,

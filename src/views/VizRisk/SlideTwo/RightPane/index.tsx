@@ -57,12 +57,6 @@ const colorGrade = [
     '#ffedb8',
 ];
 
-
-const itemSelector = (d: { label: string }) => d.label;
-const legendLabelSelector = (d: { label: string }) => d.label;
-const legendColorSelector = (d: { color: string }) => d.color;
-const classNameSelector = (d: { style: string }) => d.style;
-
 const vrLegendItems = [
     { color: '#2373a9', label: 'Settlement', style: styles.symbol },
     { color: '#FDD835', label: 'River', style: styles.symbol },
@@ -126,8 +120,8 @@ class RightPane extends React.PureComponent<Props, State> {
                 <Sector
                     cx={cx}
                     cy={cy}
-                    innerRadius={innerRadius - 3}
-                    outerRadius={outerRadius + 3}
+                    innerRadius={innerRadius - 4}
+                    outerRadius={outerRadius + 4}
                     startAngle={startAngle}
                     endAngle={endAngle}
                     paddingAngle={3}
@@ -156,7 +150,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <p>
                     {' '}
-                        Located in the Terai region nd lying close to water bodies,
+                        Located in the Terai region and lying close to water bodies,
                         Rajapur has fertile and arable land. Out of total area of
                         127.08 square km, 81.24% of land is used for agriculture.
                         Built-in area covers 7.66% of land while water bodies occupies
@@ -169,6 +163,10 @@ class RightPane extends React.PureComponent<Props, State> {
                         height={150}
                         margin={{ top: 5, bottom: 5, left: 5, right: 5 }}
                     >
+                        {/* <text className={styles.pieTotal} x={180} y={100}
+                        textAnchor="middle" dominantBaseline="middle">
+                         127.08 sq km
+                        </text> */}
                         <Pie
                             activeIndex={activeIndex}
                             activeShape={this.renderActiveShape}
@@ -181,6 +179,7 @@ class RightPane extends React.PureComponent<Props, State> {
                             paddingAngle={0}
                             dataKey="value"
                             onClick={this.onPieEnter}
+                            stroke="none"
                         >
                             {
                                 data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />)
@@ -193,35 +192,35 @@ class RightPane extends React.PureComponent<Props, State> {
                         text={data[0].name}
                         barColor={COLORS[0]}
                         background={'rgb(167,225,248)'}
-                        data={7.7}
+                        data={'9.73 sq km / 7.66'}
                         selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
                         barColor={COLORS[1]}
                         background={'rgb(149,198,229)'}
-                        data={81.8}
+                        data={'103.24 sq km / 81.24'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS[2]}
                         background={'rgb(0,101,119)'}
-                        data={4.77}
+                        data={'6.03 sq km / 4.74'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS[3]}
                         background={'rgb(245, 175, 212)'}
-                        data={3.9}
+                        data={'3.90 sq km / 3.07'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS[4]}
                         background={'rgb(247, 197, 181)'}
-                        data={2.6}
+                        data={'4.19 sq km / 3.29'}
                         selected={activeIndex === 4}
                     />
                 </div>

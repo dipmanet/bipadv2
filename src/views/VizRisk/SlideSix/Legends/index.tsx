@@ -120,7 +120,13 @@ const FloodHistoryLegends = (props: Props) => {
                     ? styles.populationLegends
                     : styles.legendsHidden}
                 >
-                    <h2>Population Density (population/area)</h2>
+                    <h2>
+                    Population Density
+                        {' '}
+                        <br />
+                        {' '}
+                    (population/area)
+                    </h2>
                     <p className={styles.subHeading}>Area = 0.25 sq. km</p>
 
                     <div className={styles.legendItemContainer}>

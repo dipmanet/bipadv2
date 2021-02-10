@@ -1,13 +1,20 @@
 
     .vrSideBar{
-        position: relative;
+        position: absolute;
         display: flex;
         flex-direction: column;
-        background-color:#262834;
+        background-color:#182539;
         color:#b6d6e4;
-        padding: 70px 15px;
-        width: 25%;
-        // visibility: hidden;
+        padding: 70px 0 0 0;
+        margin-right: 60px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        right: 0;
+        overflow-y: scroll;
+        .pieTotal{
+            color: white;
+            opacity: 0.87;
+        }
         .iconContainer{
             width: 100%;
             display: flex;
@@ -51,28 +58,23 @@
             position: relative;
             padding: 0;
         }
-
         h1{
         font-family: 'Playfair Display';
         font-size: 22px;
         color: white;
         opacity: 0.87;
+        padding: 0 30px;
         }
-        h2{
-            font-family: 'Playfair Display';
-            font-size: 22px;
-            color: white;
-            opacity: 0.87;
-            margin-top: 20px;
-            }
         p{
-            color:white;
-            font-size: 12px;
-            font-family: 'Source Sans Pro';
-            opacity: 0.87;
-            line-height: 1.7em;
+        color:white;
+        font-size: 14px;
+        font-family: 'Source Sans Pro';
+        opacity: 0.87;
+        line-height: 1.4em;
+        padding: 0 30px;
         }
     }
+   
 
 
 

@@ -224,7 +224,7 @@ class FloodHistoryMap extends React.Component {
 
             this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
-            this.map.setLayoutProperty('rajapurbuildingfootprint', 'visibility', 'none');
+            this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
             this.map.moveLayer('density-b7o1uo', 'ward-fill');
             this.map.setLayoutProperty('farmfields-1l9fpy', 'visibility', 'none');
             this.map.setLayoutProperty('sandrajapur-44t4e0', 'visibility', 'none');
@@ -246,6 +246,8 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
                     this.map.setPaintProperty('density-b7o1uo', 'fill-opacity', 1);
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'none');
+                    this.map.moveLayer('5km-buffer-d4g08s');
+                    this.map.moveLayer('2km-buffer-4xvqe1');
                 }
                 if (nextProps.showSlide === 'hazard') {
                     this.map.moveLayer('ward-fill', 'density-b7o1uo');
@@ -253,6 +255,8 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
                     this.map.setPaintProperty('ward-fill', 'fill-opacity', 1);
                     this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'none');
+                    this.map.moveLayer('5km-buffer-d4g08s');
+                    this.map.moveLayer('2km-buffer-4xvqe1');
                 }
 
                 if (nextProps.showSlide === 'all') {
@@ -261,6 +265,8 @@ class FloodHistoryMap extends React.Component {
                     this.map.moveLayer('density-b7o1uo', 'ward-fill');
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
                     this.map.setPaintProperty('ward-fill', 'fill-opacity', 0.5);
+                    this.map.moveLayer('5km-buffer-d4g08s');
+                    this.map.moveLayer('2km-buffer-4xvqe1');
                 }
             }
         }

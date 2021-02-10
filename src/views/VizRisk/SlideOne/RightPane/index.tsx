@@ -94,61 +94,57 @@ class SlideOne extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <div className={styles.vzMainContainer}>
-                <div className={styles.vrSideBar}>
-                    <h1> Rajpur Municipality </h1>
-                    <p>
-                        {' '}
+            <div className={styles.vrSideBar}>
+                <h1> Rajpur Municipality </h1>
+                <p>
+                    {' '}
                         Rajapur municipality lies in the Terai region of Bardiya
                         district in Province five. It covers a total area of 127.08
                         square km, and runs an elevation of 142mto 154m from sea level.
 
-                    </p>
-                    <h2>Climate</h2>
-                    <p>
-                        {' '}
+                </p>
+                <h2>Climate</h2>
+                <p className={styles.lastPara}>
+                    {' '}
                         Rajapur experiences a lower tropical climate with an average
                         maximum temperature of 41 degree celcius in winter. Summer lasts from
                         Chaitra while there is extreme winter in Mangshir, Poush and Magh.
-                        Monsoon starts here a bit early from the last week of Jesth till Ashwin
+                        Monsoon starts here a bit early from the last week of Jestha till Ashwin
                         bringing the heavy downpours. Overall in a year, Rajapur experiences
                         average annual rainfall of 1900mm.
 
-                    </p>
-                    <div className={styles.chartsContainer}>
-                        <ResponsiveContainer className={styles.respContainer}>
-                            <LineChart
-                                margin={{ top: 5, right: 50, left: 0, bottom: 5 }}
-                                data={lineData}
-                            >
-                                <CartesianGrid
-                                    vertical={false}
-                                    strokeDasharray="3 3"
-                                />
-                                <XAxis dataKey="name" />
-                                <YAxis dataKey="AvgMax" domain={[0, 45]} />
-                                <Legend iconType="square" iconSize={10} />
-                                <Line type="monotone" dataKey="AvgMax" stroke="#0069a5" />
-                                <Line type="monotone" dataKey="DailyAvg" stroke="#00a1e1" />
-                                <Line type="monotone" dataKey="AvgMin" stroke="#00a69b" />
-                            </LineChart>
-
-                        </ResponsiveContainer>
-                    </div>
-                    <div className={styles.iconContainer}>
-                        <div
-                            className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
-                        >
+                </p>
+                {/* <div className={styles.chartsContainer}> */}
+                <ResponsiveContainer height={250}>
+                    <LineChart
+                        margin={{ top: 0, right: 25, left: 0, bottom: 0 }}
+                        data={lineData}
+                    >
+                        <CartesianGrid
+                            vertical={false}
+                            strokeDasharray="3 3"
+                        />
+                        <XAxis dataKey="name" />
+                        <YAxis dataKey="AvgMax" domain={[0, 45]} />
+                        <Legend iconType="square" iconSize={10} />
+                        <Line type="monotone" dataKey="AvgMax" stroke="#0069a5" />
+                        <Line type="monotone" dataKey="DailyAvg" stroke="#00a1e1" />
+                        <Line type="monotone" dataKey="AvgMin" stroke="#00a69b" />
+                    </LineChart>
+                </ResponsiveContainer>
+                {/* </div> */}
+                <div className={styles.iconContainer}>
+                    <div
+                        className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
+                    >
                             Source: Rajapur Municipality Profile
-                        </div>
-                        <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
-                            <Icon
-                                name="info"
-                                className={styles.closeIcon}
-                            />
-                        </button>
                     </div>
-
+                    <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
+                        <Icon
+                            name="info"
+                            className={styles.closeIcon}
+                        />
+                    </button>
                 </div>
 
             </div>

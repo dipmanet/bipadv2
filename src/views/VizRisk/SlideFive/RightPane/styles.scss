@@ -3,13 +3,14 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        background-color: #262834;
+        background-color: #182539;
         color:#b6d6e4;
-        padding: 90px 15px;
-        width: 30%;
+        padding: 90px 30px;
+        width: calc(30% - 60px);
         height: 100vh;
+        margin-right: 60px;
         right: 0;
-        padding-right: 80px;
+        overflow-y: scroll;
         // visibility: hidden;
         .profileList{
          list-style: none;
@@ -79,10 +80,10 @@
             }
         p{
             color:white;
-            font-size: 12px;
+            font-size: 14px;
             font-family: 'Source Sans Pro';
             opacity: 0.87;
-            line-height: 1.7em;
+            line-height: 1.4em;
         }
     }
 

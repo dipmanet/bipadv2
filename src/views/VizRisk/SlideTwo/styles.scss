@@ -1,9 +1,8 @@
 .map2{
     margin: 0 var(--spacing-small);
     height: 100vh;
-    width: 100vw;
+    width: 70%;
     position: relative;
-    flex:3;
 }
 .vzMainContainer{
     position: relative;
@@ -19,7 +18,7 @@
         color: white;
         opacity: 0.87;
         .settlementIcon{
-            color: rgb(176,201,0);
+            color:#254601;
             padding-right: 12px;
         }
     }  
@@ -29,7 +28,7 @@
         color: white;
         opacity: 0.87;
         .sandIcon{
-            color: rgb(197,143,73);
+            color: rgb(120,120,120);
             padding-right: 12px;
         }
     }
@@ -40,35 +39,32 @@
         color: white;
         opacity: 0.87;
         .agricultureIcon{
-            color: rgb(235, 183, 116);
+            color: rgb(158,188,59);
             padding-right: 12px;
         }
         .forestIcon{
-            color: rgb(15, 189, 87);
+            color:rgb(123,173,85);
             padding-right: 12px;
         }
     }
 
     .riverIconContainer{
-        margin: 4px;
         padding: 0;
-        position: relative;
-        bottom: 5px;
+        margin: 4px;
         color: white;
         opacity: 0.87;
         .riverIcon{
             color: rgb(132,198,231);
-            padding-right: 5px;
-            position: relative;
-            bottom: 5px;
+            padding-right: 12px;
+
         }
     }
     .map2{
         margin: 0 var(--spacing-small);
         height: 100vh;
-        width: 100vw;
-        position: relative;
-        flex:3;
+        width: 70%;
+        position: absolute;
+        left: 0;
     }
 }
 

@@ -4,6 +4,7 @@ import VRLegend from '../../VRLegend';
 import Icon from '#rscg/Icon';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import styles from './styles.scss';
+import ManualIcon from '#resources/images/chisapanistation.png';
 
 interface ComponentProps {}
 
@@ -359,20 +360,15 @@ const FloodHistoryLegends = (props: Props) => {
                 </div>
                 <h2>Others</h2>
                 <div className={styles.hazardItemContainer}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => {}}
 
-                    >
-                        <Icon
+                    {/* <Icon
                             name="circle"
                             className={showExposedBuilding === false
                                 ? styles.exposedIcons
                                 : styles.exposedIconsClicked}
-                        />
-                           Chisapani Station
-                    </button>
+                        /> */}
+                    <img src={ManualIcon} alt="" height="20" />
+                    <span className={styles.chisapaniText}>Chisapani Station</span>
                 </div>
 
             </div>

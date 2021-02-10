@@ -137,24 +137,27 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     <p className={styles.settlementIconContainer}>
                         <span>
                             <Icon
-                                name="circle"
+                                name="square"
                                 className={styles.settlementIcon}
                             />
                         </span>
-                            Settlement
+                            Builtup Areas
 
                     </p>
                     <p className={styles.riverIconContainer}>
-                        <span className={styles.riverIcon}>
-                                ___
+                        <span>
+                            <Icon
+                                name="square"
+                                className={styles.riverIcon}
+                            />
                         </span>
-                            River
+                            Water Bodies
                     </p>
 
                     <p className={styles.sandyIconContainer}>
                         <span>
                             <Icon
-                                name="circle"
+                                name="square"
                                 className={styles.sandIcon}
                             />
                         </span>
@@ -163,7 +166,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     <p className={styles.agroIconContainer}>
                         <span>
                             <Icon
-                                name="circle"
+                                name="square"
                                 className={styles.agricultureIcon}
                             />
                         </span>
@@ -172,7 +175,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                     <p className={styles.agroIconContainer}>
                         <span>
                             <Icon
-                                name="circle"
+                                name="square"
                                 className={styles.forestIcon}
                             />
                         </span>

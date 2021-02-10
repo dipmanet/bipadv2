@@ -1,17 +1,17 @@
 
     .vrSideBar{
-        position: relative;
+        position: absolute;
         display: flex;
         flex-direction: column;
         background-color: #182539;
         color:#b6d6e4;
-        padding: 90px 15px;
-        width: 30%;
+        padding: 90px 30px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        right: 0;
+        margin-right: 60px;
+        overflow-y: scroll;
         // visibility: hidden;
-        .customChartLegend{
-            position: relative;
-            padding: 0;
-        }
         .profileList{
          list-style: none;
          color: white;

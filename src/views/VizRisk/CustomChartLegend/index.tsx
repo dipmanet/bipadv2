@@ -13,8 +13,15 @@ const CustomChartLegend = (props: Props) => {
         background,
         selected,
     } = props;
-
-    const innerbarLength = parseInt(data, 10);
+    let innerbarLength;
+    if (typeof data === 'string') {
+        innerbarLength = parseInt(data.split('/')[1], 10);
+    } else {
+        innerbarLength = data;
+        if (innerbarLength < 1) {
+            innerbarLength *= 100;
+        }
+    }
 
     const containerStyle = {
         backgroundColor: background,
@@ -49,7 +56,8 @@ const CustomChartLegend = (props: Props) => {
         flexDirection: 'column',
         justifyContent: 'center',
         height: '55px',
-        padding: '0 20px',
+        padding: '0 10px',
+        marginBottom: '10px',
     };
 
     const mainContainerSelected = {
@@ -59,9 +67,11 @@ const CustomChartLegend = (props: Props) => {
         flexDirection: 'column',
         justifyContent: 'center',
         height: '55px',
-        padding: '0 20px',
+        padding: '0 10px',
         color: '#fff',
         width: '100%',
+        marginBottom: '10px',
+
         // borderRadius: '40px',
     };
 
@@ -73,7 +83,7 @@ const CustomChartLegend = (props: Props) => {
                 </p>
                 <p style={title}>
                     {data}
-                    %
+                    {typeof data === 'string' ? '%' : ''}
                 </p>
             </div>
             <div style={containerStyle}>

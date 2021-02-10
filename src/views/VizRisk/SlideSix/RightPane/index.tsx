@@ -14,7 +14,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Populaton Density </h1>
+                <h1>Population Density </h1>
 
                 <p>
                     {' '}

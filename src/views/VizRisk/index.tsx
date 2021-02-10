@@ -34,10 +34,6 @@ const VizRiskMainPage = () => {
         if (currentPage < (slides.length - 1)) { setCurrentPage(currentPage + 1); }
     };
 
-    const handleSettingsIconClick = () => {
-        console.log('settings clicked');
-    };
-
     const handleChevronLeftClick = () => {
         if (currentPage > 0) { setCurrentPage(currentPage - 1); }
     };

@@ -140,7 +140,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     scaleControlPosition="bottom-right"
 
                     navControlShown
-                    navControlPosition="bottom-right"
+                    navControlPosition="top-left"
                 >
                     <MapContainer className={styles.map2} />
 
