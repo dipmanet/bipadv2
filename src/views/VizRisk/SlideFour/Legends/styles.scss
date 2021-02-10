@@ -15,6 +15,9 @@
         display: flex;
         padding: 0;
         margin: 0;
+        .safeshelter{
+            color: rgb(236,254,0);
+        }
         .chisapaniText{
             color: white;
             opacity: 0.87;
@@ -88,6 +91,7 @@
             width: 15px;
             background-color: rgb(6,41,111);  
             margin-left: 10px; 
+            margin-bottom: 20px;
         }
         .hazardIndicatorText{
             color: white;

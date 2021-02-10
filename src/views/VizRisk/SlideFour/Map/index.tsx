@@ -294,7 +294,7 @@ class FloodHistoryMap extends React.Component {
                         source: 'catpoint',
                         layout: {
                             'icon-image': 'cat',
-                            'icon-size': 1.5,
+                            'icon-size': 1,
                         },
                     });
                 },

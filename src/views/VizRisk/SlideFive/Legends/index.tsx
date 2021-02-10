@@ -309,6 +309,15 @@ const FloodHistoryLegends = (props: Props) => {
                         5
                     </span>
                 </div>
+                <div className={styles.hazardItemContainer}>
+                    <Icon
+                        name="circle"
+                        className={styles.safeshelter}
+                    />
+                    <span className={styles.hazardIndicatorText}>
+                        Safe Shelters
+                    </span>
+                </div>
                 <h2>Exposed Elements</h2>
                 <div className={styles.hazardItemContainer}>
                     <button
@@ -360,13 +369,6 @@ const FloodHistoryLegends = (props: Props) => {
                 </div>
                 <h2>Others</h2>
                 <div className={styles.hazardItemContainer}>
-
-                    {/* <Icon
-                            name="circle"
-                            className={showExposedBuilding === false
-                                ? styles.exposedIcons
-                                : styles.exposedIconsClicked}
-                        /> */}
                     <img src={ManualIcon} alt="" height="20" />
                     <span className={styles.chisapaniText}>Chisapani Station</span>
                 </div>
