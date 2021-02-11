@@ -96,3 +96,82 @@ export const getErrors = (fv: any) => {
     }
     return errors;
 };
+
+// for interval parsing
+export const getIntervalCode = (interval: number) => {
+    const intervals: {[key in number]: string} = {
+        1: 'oneHour',
+        3: 'threeHour',
+        6: 'sixHour',
+        12: 'twelveHour',
+        24: 'twentyFourHour',
+    };
+    return intervals[interval];
+};
+
+export const parseInterval = (rainDetails: ArchiveRain[]) => {
+    const temp = [...rainDetails];
+    const withInterval = temp.map((detail) => {
+        const { averages } = detail;
+        averages.forEach((avg) => {
+            const { value = 0, interval } = avg;
+            const intervalCode = getIntervalCode(interval);
+            Object.assign(detail, { [intervalCode]: value });
+        });
+        return detail;
+    });
+    return withInterval;
+};
+
+// for period parsing
+const getDateWithMinute = (dateTime: string) => {
+    const [dateWithHour, minutes] = dateTime.split(':');
+    const dateWithMinutes = `${dateWithHour}:${minutes}`;
+    return dateWithMinutes;
+};
+
+const getMinuteValues = (dateTime: string) => {
+    const dateWithMinute = getDateWithMinute(dateTime);
+    const hour = new Date(dateTime).getHours();
+    const rawMinutes = new Date(dateTime).getMinutes();
+    const minutes = (rawMinutes < 10 ? '0' : '') + rawMinutes;
+    const minuteName = hour < 12 ? `${hour}:${minutes} AM` : `${hour}:${minutes} PM`;
+    return [dateWithMinute, minuteName];
+};
+
+const getHourlyValues = (dateTime: string) => {
+    const dateWithHour = dateTime.substr(0, dateTime.indexOf(':'));
+    const hour = new Date(dateTime).getHours();
+    const hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
+    return [dateWithHour, hourName];
+};
+
+const getDailyValues = (dateTime: string) => {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const dateOnly = dateTime.substr(0, dateTime.indexOf('T'));
+    const month = new Date(dateTime).getMonth();
+    const date = new Date(dateTime).getDate();
+    const dateName = `${monthNames[month]} ${date}`;
+
+    return [dateOnly, dateName];
+};
+
+export const parsePeriod = (rainDetails: ArchiveRain[]) => {
+    const temp = [...rainDetails];
+    const withPeriod = temp.map((detail) => {
+        const { measuredOn } = detail;
+        const [dateWithMinute, minuteName] = getMinuteValues(measuredOn);
+        const [dateWithHour, hourName] = getHourlyValues(measuredOn);
+        const [dateOnly, dateName] = getDailyValues(measuredOn);
+        return { ...detail,
+            dateWithMinute,
+            minuteName,
+            dateWithHour,
+            hourName,
+            dateOnly,
+            dateName };
+    });
+    return withPeriod;
+};

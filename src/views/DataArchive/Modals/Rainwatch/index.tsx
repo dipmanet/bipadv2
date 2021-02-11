@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
+import { groupList } from '#utils/common';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -14,7 +15,7 @@ import Filters from './Filters';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRain, FaramValues } from './types';
-import { rainToGeojson } from './utils';
+import { rainToGeojson, parseInterval, parsePeriod } from './utils';
 
 import styles from './styles.scss';
 
@@ -107,6 +108,21 @@ const RainModal = (props: Props) => {
         setStationData(data);
     };
 
+    const rainDataWithParameter = parseInterval(stationData);
+    const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
+
+    const minuteWiseGroup = groupList(
+        rainDataWithPeriod.filter(r => r.dateWithMinute),
+        rain => rain.dateWithMinute,
+    );
+    const hourWiseGroup = groupList(
+        rainDataWithPeriod.filter(r => r.dateWithHour),
+        rain => rain.dateWithHour,
+    );
+    const dailyWiseGroup = groupList(
+        rainDataWithPeriod.filter(r => r.dateOnly),
+        rain => rain.dateOnly,
+    );
     return (
         <Modal className={styles.rainModal}>
             <ModalHeader

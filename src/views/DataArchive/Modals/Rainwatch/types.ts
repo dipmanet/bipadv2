@@ -23,6 +23,7 @@ export interface Municipality extends Federal {
 
 export interface ArchiveRain extends PageType.RealTimeRain {
     station: number;
+    measuredOn: string;
     stationSeriesId: number;
     ward: number;
     province: Federal;
