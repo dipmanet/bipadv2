@@ -89,6 +89,11 @@ export const getErrors = (fv: any) => {
     return errors;
 };
 
+export const isEqualObject = (obj1: any, obj2: any) => {
+    const isEqual = JSON.stringify(obj1) === JSON.stringify(obj2);
+    return isEqual;
+};
+
 // for period parsing
 const getDateWithMinute = (dateTime: string) => {
     const [dateWithHour, minutes] = dateTime.split(':');
@@ -140,4 +145,46 @@ export const parsePeriod = (riverDetails: ArchiveRiver[]) => {
             dateName };
     });
     return withPeriod;
+};
+
+// for chart data
+export const arraySorter = (a: {waterLevelOn: string}, b: {waterLevelOn: string}) => {
+    const keyA = new Date(a.waterLevelOn);
+    const keyB = new Date(b.waterLevelOn);
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+};
+
+export const getAverage = (arr: number[]) => {
+    const average = arr.reduce((p, c) => p + c, 0) / arr.length;
+    return average.toFixed(2);
+};
+
+export const getItemAverage = (dataArray: any[], field: string) => {
+    const array = dataArray.map(data => data[field] || 0);
+    return getAverage(array);
+};
+
+export const getChartData = (
+    data: {key: string | number; value: any[]}[],
+    labelKey: string,
+) => {
+    const chartData = data.map((singleItem) => {
+        const { key, value: dataArray } = singleItem;
+        const label = dataArray[0][labelKey];
+        const { createdOn, waterLevelOn, dangerLevel, warningLevel } = dataArray[0];
+        const waterLevel = getItemAverage(dataArray, 'waterLevel');
+
+        return {
+            key,
+            label: String(label || ''),
+            createdOn: String(createdOn || ''),
+            waterLevelOn: String(waterLevelOn || ''),
+            dangerLevel: Number(dangerLevel) || 0,
+            warningLevel: Number(warningLevel) || 0,
+            waterLevel: Number(waterLevel) || 0,
+        };
+    });
+    return chartData;
 };

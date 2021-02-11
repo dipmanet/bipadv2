@@ -15,7 +15,13 @@ import Filters from './Filters';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRiver, FaramValues } from './types';
-import { riverToGeojson, parsePeriod } from './utils';
+import {
+    riverToGeojson,
+    parsePeriod,
+    getChartData,
+    arraySorter,
+    isEqualObject,
+} from './utils';
 
 import styles from './styles.scss';
 
@@ -121,6 +127,27 @@ const RiverModal = (props: Props) => {
         riverDataWithPeriod.filter(r => r.dateOnly),
         river => river.dateOnly,
     );
+
+    let filterWiseChartData;
+    const {
+        period: { periodCode },
+    } = filterValues;
+
+    if (periodCode === 'minute') {
+        filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+    }
+    if (periodCode === 'hourly') {
+        filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+    }
+    if (periodCode === 'daily') {
+        filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+    }
+
+    // sorting filteredData by dateTime asc
+    if (filterWiseChartData) {
+        filterWiseChartData.sort(arraySorter);
+    }
+    const isInitial = isEqualObject(initialFaramValue, filterValues);
 
     return (
         <Modal className={styles.riverModal}>
