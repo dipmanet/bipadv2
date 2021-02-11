@@ -15,7 +15,14 @@ import Filters from './Filters';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRain, FaramValues } from './types';
-import { rainToGeojson, parseInterval, parsePeriod } from './utils';
+import {
+    rainToGeojson,
+    parseInterval,
+    parsePeriod,
+    getChartData,
+    arraySorter,
+    isEqualObject,
+} from './utils';
 
 import styles from './styles.scss';
 
@@ -123,6 +130,28 @@ const RainModal = (props: Props) => {
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
     );
+    let filterWiseChartData;
+    const {
+        period: { periodCode },
+        interval: { intervalCode },
+    } = filterValues;
+    if (periodCode === 'minute') {
+        filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+    }
+    if (periodCode === 'hourly') {
+        filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+    }
+    if (periodCode === 'daily') {
+        filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+    }
+
+    // sorting filteredData by measuredOn asc
+    if (filterWiseChartData) {
+        filterWiseChartData.sort(arraySorter);
+    }
+
+    const isInitial = isEqualObject(initialFaramValue, filterValues);
+
     return (
         <Modal className={styles.rainModal}>
             <ModalHeader

@@ -97,6 +97,11 @@ export const getErrors = (fv: any) => {
     return errors;
 };
 
+export const isEqualObject = (obj1: any, obj2: any) => {
+    const isEqual = JSON.stringify(obj1) === JSON.stringify(obj2);
+    return isEqual;
+};
+
 // for interval parsing
 export const getIntervalCode = (interval: number) => {
     const intervals: {[key in number]: string} = {
@@ -174,4 +179,75 @@ export const parsePeriod = (rainDetails: ArchiveRain[]) => {
             dateName };
     });
     return withPeriod;
+};
+
+// for chart data
+export const arraySorter = (a: {measuredOn: string}, b: {measuredOn: string}) => {
+    const keyA = new Date(a.measuredOn);
+    const keyB = new Date(b.measuredOn);
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+};
+
+export const getMinimum = (arr: number[]) => {
+    const minimum = Math.min(...arr);
+    return minimum;
+};
+
+export const getMaximum = (arr: number[]) => {
+    const maximum = Math.max(...arr);
+    return maximum;
+};
+
+export const getAverage = (arr: number[]) => {
+    const average = arr.reduce((p, c) => p + c, 0) / arr.length;
+    return average.toFixed(2);
+};
+
+export const getItemParts = (dataArray: any[], field: string) => {
+    const array = dataArray.map(data => data[field] || 0);
+    const minimum = getMinimum(array);
+    const average = getAverage(array);
+    const maximum = getMaximum(array);
+    return [minimum, average, maximum];
+};
+
+export const getChartData = (
+    data: {key: string | number; value: any[]}[],
+    labelKey: string,
+) => {
+    const chartData = data.map((singleItem) => {
+        const { key, value: dataArray } = singleItem;
+        const label = dataArray[0][labelKey];
+        const { createdOn, measuredOn } = dataArray[0];
+        const [oneHourMin, oneHourAvg, oneHourMax] = getItemParts(dataArray, 'oneHour');
+        const [threeHourMin, threeHourAvg, threeHourMax] = getItemParts(dataArray, 'threeHour');
+        const [sixHourMin, sixHourAvg, sixHourMax] = getItemParts(dataArray, 'sixHour');
+        const [twelveHourMin, twelveHourAvg, twelveHourMax] = getItemParts(dataArray, 'twelveHour');
+        const [twentyFourHourMin, twentyFourHourAvg, twentyFourHourMax] = getItemParts(dataArray, 'twentyFourHour');
+
+        return {
+            key,
+            label: String(label || ''),
+            createdOn: String(createdOn || ''),
+            measuredOn: String(measuredOn || ''),
+            oneHourMin: Number(oneHourMin) || 0,
+            oneHourAvg: Number(oneHourAvg) || 0,
+            oneHourMax: Number(oneHourMax) || 0,
+            threeHourMin: Number(threeHourMin) || 0,
+            threeHourAvg: Number(threeHourAvg) || 0,
+            threeHourMax: Number(threeHourMax) || 0,
+            sixHourMin: Number(sixHourMin) || 0,
+            sixHourAvg: Number(sixHourAvg) || 0,
+            sixHourMax: Number(sixHourMax) || 0,
+            twelveHourMin: Number(twelveHourMin) || 0,
+            twelveHourAvg: Number(twelveHourAvg) || 0,
+            twelveHourMax: Number(twelveHourMax) || 0,
+            twentyFourHourMin: Number(twentyFourHourMin) || 0,
+            twentyFourHourAvg: Number(twentyFourHourAvg) || 0,
+            twentyFourHourMax: Number(twentyFourHourMax) || 0,
+        };
+    });
+    return chartData;
 };
