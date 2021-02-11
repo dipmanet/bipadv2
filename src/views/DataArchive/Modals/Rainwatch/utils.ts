@@ -25,7 +25,7 @@ export const rainToGeojson = (rainList: ArchiveRain[]) => {
     return geojson;
 };
 
-const MINIMUM_DATA_ARCHIVE_RAIN_DATE = '2020-10-15';
+const MINIMUM_DATA_ARCHIVE_RAIN_DATE = '2020-07-14';
 
 export const getErrors = (fv: any) => {
     const { dataDateRange, interval = {}, period = {} } = fv;
@@ -68,7 +68,7 @@ export const getErrors = (fv: any) => {
         errors.push(error);
     }
 
-    if (endDate < MINIMUM_DATA_ARCHIVE_RAIN_DATE) {
+    if (startDate < MINIMUM_DATA_ARCHIVE_RAIN_DATE) {
         error = {
             type: 'Date',
             err: `No data archive rain data before ${MINIMUM_DATA_ARCHIVE_RAIN_DATE}`,

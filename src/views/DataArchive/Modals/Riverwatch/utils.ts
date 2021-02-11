@@ -26,7 +26,7 @@ export const riverToGeojson = (riverList: ArchiveRiver[]) => {
     return geojson;
 };
 
-const MINIMUM_DATA_ARCHIVE_RIVER_DATE = '2020-10-15';
+const MINIMUM_DATA_ARCHIVE_RIVER_DATE = '2020-07-14';
 
 export const getErrors = (fv: any) => {
     const { dataDateRange, period = {} } = fv;
@@ -69,7 +69,7 @@ export const getErrors = (fv: any) => {
         errors.push(error);
     }
 
-    if (endDate < MINIMUM_DATA_ARCHIVE_RIVER_DATE) {
+    if (startDate < MINIMUM_DATA_ARCHIVE_RIVER_DATE) {
         error = {
             type: 'Date',
             err: `No data archive river data before ${MINIMUM_DATA_ARCHIVE_RIVER_DATE}`,

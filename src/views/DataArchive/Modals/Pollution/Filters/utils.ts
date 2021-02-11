@@ -60,11 +60,11 @@ export const getErrors = (fv: any) => {
         errors.push(error);
     }
 
-    if (endDate < MINIMUM_DATA_ARCHIVE_POLLUTION_DATE) {
+    if (startDate < MINIMUM_DATA_ARCHIVE_POLLUTION_DATE) {
         error = {
             type: 'Date',
-            err: 'No data archive pollution data before 2020-10-15',
-            message: 'Data is available from 2020-10-15 onwards only',
+            err: `No data archive pollution data before ${MINIMUM_DATA_ARCHIVE_POLLUTION_DATE}`,
+            message: `Data is available from ${MINIMUM_DATA_ARCHIVE_POLLUTION_DATE} onwards only`,
         };
         errors.push(error);
     }
