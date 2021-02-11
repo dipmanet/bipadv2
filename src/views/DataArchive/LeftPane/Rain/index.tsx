@@ -86,12 +86,13 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/rain/',
         method: methods.GET,
         query: ({ props: { rainFilters } }) => ({
-            ...transformDataRangeLocaleToFilter(rainFilters.dataDateRange, 'created_on'),
+            ...transformDataRangeLocaleToFilter(rainFilters.dataDateRange, 'measured_on'),
             station: rainFilters.station.id,
             // historical: true,
             fields: [
                 'id',
                 'created_on',
+                'measured_on',
                 'title',
                 'basin',
                 'point',

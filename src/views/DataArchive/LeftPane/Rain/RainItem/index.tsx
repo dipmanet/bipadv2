@@ -13,7 +13,7 @@ interface Props {
 
 const RainItem = (props: Props) => {
     const { data } = props;
-    const { title: stationName, createdOn, averages } = data;
+    const { title: stationName, measuredOn, averages } = data;
     const {
         oneHour,
         threeHour,
@@ -34,7 +34,7 @@ const RainItem = (props: Props) => {
                     />
                     <div className={styles.dateValue}>
                         {
-                            createdOn && getDate(createdOn.toString())}
+                            measuredOn && getDate(measuredOn.toString())}
                     </div>
                 </div>
             </div>

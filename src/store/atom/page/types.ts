@@ -567,6 +567,7 @@ export interface DataArchivePollution extends RealTimePollution{
 
 export interface DataArchiveRain extends RealTimeRain {
     station: number;
+    measuredOn?: string;
     stationSeriesId: number;
     province: number;
     district: number;
