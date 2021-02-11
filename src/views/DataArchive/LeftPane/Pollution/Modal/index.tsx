@@ -76,11 +76,7 @@ class PollutionModal extends React.PureComponent<Props> {
                 sortable: false,
                 modifier: (row: DataArchivePollutionExtended) => {
                     const { dateTime } = row;
-                    if (dateTime) {
-                        const date = new Date(dateTime);
-                        // parsing date to time format
-                        return date.toISOString().split('T')[1].split('.')[0];
-                    } return undefined;
+                    return (dateTime) ? dateTime.split('T')[1].split('.')[0] : undefined;
                 },
             },
             {
