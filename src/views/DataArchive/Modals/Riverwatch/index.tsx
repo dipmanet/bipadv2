@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import memoize from 'memoize-one';
+import { groupList } from '#utils/common';
 
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
@@ -14,7 +15,7 @@ import Filters from './Filters';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRiver, FaramValues } from './types';
-import { riverToGeojson } from './utils';
+import { riverToGeojson, parsePeriod } from './utils';
 
 import styles from './styles.scss';
 
@@ -105,6 +106,21 @@ const RiverModal = (props: Props) => {
     const handleStationData = (data: ArchiveRiver[]) => {
         setStationData(data);
     };
+
+    const riverDataWithPeriod = parsePeriod(stationData);
+
+    const minuteWiseGroup = groupList(
+        riverDataWithPeriod.filter(r => r.dateWithMinute),
+        river => river.dateWithMinute,
+    );
+    const hourWiseGroup = groupList(
+        riverDataWithPeriod.filter(r => r.dateWithHour),
+        river => river.dateWithHour,
+    );
+    const dailyWiseGroup = groupList(
+        riverDataWithPeriod.filter(r => r.dateOnly),
+        river => river.dateOnly,
+    );
 
     return (
         <Modal className={styles.riverModal}>

@@ -23,6 +23,7 @@ export interface Municipality extends Federal {
 
 export interface ArchiveRiver extends PageType.RealTimeRiver {
     station: number;
+    waterLevelOn: string;
     stationSeriesId: number;
     ward: number;
     province: Federal;
