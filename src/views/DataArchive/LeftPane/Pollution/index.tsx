@@ -78,7 +78,7 @@ interface State {}
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     realTimePollutionRequest: {
-        url: '/pollution/',
+        url: '/pollution-trimed/',
         method: methods.GET,
         query: ({ props: { pollutionFilters } }) => ({
             ...transformDataRangeLocaleToFilter(pollutionFilters.dataDateRange, 'date_time'),
@@ -96,6 +96,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 'station',
                 'description',
             ],
+            trimBy: 'avg',
+            trimType: 'daily',
             limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchivePollutionList } }) => {
