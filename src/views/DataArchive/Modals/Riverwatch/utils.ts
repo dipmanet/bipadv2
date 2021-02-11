@@ -124,8 +124,8 @@ const getDailyValues = (dateTime: string) => {
     return [dateOnly, dateName];
 };
 
-export const parsePeriod = (rainDetails: ArchiveRiver[]) => {
-    const temp = [...rainDetails];
+export const parsePeriod = (riverDetails: ArchiveRiver[]) => {
+    const temp = [...riverDetails];
     const withPeriod = temp.map((detail) => {
         const { waterLevelOn } = detail;
         const [dateWithMinute, minuteName] = getMinuteValues(waterLevelOn);
