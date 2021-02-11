@@ -21,7 +21,7 @@ const AverageBlock = (props: Props) => {
             <div className={styles.value}>
                 {value === DEFAULT_VALUE
                     ? value
-                    : `${value} mm`}
+                    : `${Number(value).toFixed(1)} mm`}
             </div>
             <div className={styles.interval}>
                 {`${interval} HR`}

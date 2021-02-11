@@ -86,7 +86,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     dataArchiveRiverRequest: {
-        url: '/river/',
+        url: '/river-trimed/',
         method: methods.GET,
         query: ({ props: { riverFilters } }) => ({
             ...transformDataRangeLocaleToFilter(riverFilters.dataDateRange, 'water_level_on'),
@@ -107,7 +107,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 'description',
                 'station',
             ],
-            limit: 99,
+            trimBy: 'avg',
+            trimType: 'daily',
+            limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchiveRiverList } }) => {
             interface Response { results: PageType.DataArchiveRiver[] }

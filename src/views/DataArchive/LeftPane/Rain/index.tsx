@@ -83,7 +83,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     dataArchiveRainRequest: {
-        url: '/rain/',
+        url: '/rain-trimed/',
         method: methods.GET,
         query: ({ props: { rainFilters } }) => ({
             ...transformDataRangeLocaleToFilter(rainFilters.dataDateRange, 'measured_on'),
@@ -100,7 +100,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 'status',
                 'station',
             ],
-            limit: 99,
+            trimBy: 'avg',
+            trimType: 'daily',
+            limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchiveRainList } }) => {
             interface Response { results: PageType.DataArchiveRain[] }
