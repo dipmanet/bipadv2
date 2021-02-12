@@ -95,6 +95,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         query: {
             expand: ['trainings', 'organization'],
+            limit: -1,
         },
     },
 };
