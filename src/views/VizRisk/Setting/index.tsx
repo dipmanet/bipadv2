@@ -11,6 +11,7 @@ const VRSetting = (props: Props) => {
             <p>Light Mode</p>
             <Button
                 transparent
+                disabled
             >
                 <Icon
                     name="cog"
