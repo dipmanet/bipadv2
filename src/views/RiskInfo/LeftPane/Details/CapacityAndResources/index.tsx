@@ -311,20 +311,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         },
         method: methods.GET,
         onMount: false,
-        // query: ({ params }) => {
-        //     // transformFilters(filters);
-
-        //     if (!params || !params.resourceType) {
-        //         return undefined;
-        //     }
-        //     const carRegion = params.getRegionDetails(params.region);
-        //     return {
-        //         // eslint-disable-next-line @typescript-eslint/camelcase
-        //         resource_type: params.resourceType,
-        //         limit: -1,
-        //         ...carRegion,
-        //     };
-        // },
         onSuccess: ({ params, response }) => {
             const resources = response as MultiResponse<PageType.Resource>;
             if (params && params.setResourceList && params.setIndividualResourceList) {
@@ -428,8 +414,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         };
 
         const { faramValues: { region } } = filters;
-        // this.setState(region);
-        // const carRegion = this.state.region;
         resourceGetRequest.setDefaultParams(
             {
                 setResourceList: this.setResourceList,
@@ -446,11 +430,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             filters,
             setFilters,
         } = this.props;
-        // const { faramValues } = filters;
-        // const { region } = faramValues;
-        // console.log('faramvalues', faramValues);
-        // this.setState(region);
-        // setFilters({ filters: faramValues });
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
