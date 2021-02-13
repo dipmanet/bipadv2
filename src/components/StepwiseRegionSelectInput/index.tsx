@@ -11,6 +11,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
+    selectedProvinceIdSelector,
     wardsSelector,
 } from '#selectors';
 
@@ -285,6 +286,13 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             geoarea: selectedWardId || selectedMunicipalityId,
         });
     }
+
+    private handleSignupRegion = () => ({
+        province: this.state.selectedProvinceId,
+        district: this.state.selectedDistrictId,
+        municipality: this.state.selectedMunicipalityId,
+
+    });
 
     public render() {
         const {
