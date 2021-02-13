@@ -25,6 +25,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     carKeysSelector,
+    userSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -65,6 +66,7 @@ const mapStateToProps = (state: AppState) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     carKeys: carKeysSelector(state),
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -240,6 +242,12 @@ class Filters extends React.PureComponent<Props, State> {
 
     public componentDidMount() {
         const { filters: faramValues } = this.props;
+        console.log('in comp did mount: ', this.props);
+        this.setState({ faramValues });
+    }
+
+    public UNSAFE_componentWillReceiveProps(nextProps) {
+        const { filters: faramValues } = this.props;
         this.setState({ faramValues });
     }
 
@@ -387,9 +395,6 @@ class Filters extends React.PureComponent<Props, State> {
         } else {
             setFilters({ filters: propFilters });
         }
-        console.log('filter state value', faramValues.region);
-        console.log('filter prop value', this.props);
-
         const { activeRouteDetails, carKeysDetails } = this.context;
         if (Object.keys(activeRouteDetails).length !== 0) {
             const { name: activePage } = activeRouteDetails;
@@ -447,6 +452,7 @@ class Filters extends React.PureComponent<Props, State> {
             hideDataRangeFilter,
             hideHazardFilter,
             hideLocationFilter,
+            user,
         } = this.props;
 
         const { faramValues: fv } = this.state;
@@ -457,13 +463,31 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideDataRangeFilter,
         );
+        // if (user && Object.keys(user.profile).length > 0) {
+        //     if (user.profile.municipality > 0) {
+        //         const newFaramValues = {
+        //             dataDateRange: {
+        //                 rangeInDays: 7,
+        //                 startDate: undefined,
+        //                 endDate: undefined,
+        //             },
+        //             hazard: [],
+        //             region: { adminLevel: 3,
+        //                 municipality: user.profile.municipality },
 
+        //         };
+
+        //         this.setState({ faramValues: newFaramValues });
+        //         console.log('region set: ', newFaramValues);
+        //     }
+        // }
         const { activeView } = this.state;
 
 
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
+
 
         return (
             <div className={_cs(styles.filters, className)}>
