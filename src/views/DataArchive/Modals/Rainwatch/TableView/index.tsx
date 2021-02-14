@@ -149,7 +149,7 @@ const TableView = (props: Props) => {
                 </div>
                 <DownloadButton
                     value={formattedTableData}
-                    name="PollutionArchive.csv"
+                    name="RainArchive.csv"
                     className={styles.downloadButton}
                 >
                     <h4>Download</h4>
