@@ -12,6 +12,7 @@ import DangerButton from '#rsca/Button/DangerButton';
 import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
+import Graph from './Graph';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRain, FaramValues } from './types';
@@ -187,7 +188,15 @@ const RainModal = (props: Props) => {
                 </div>
                 <div className={styles.modalRow}>
                     <div className={styles.modalOneMonth}>
-                        Graph
+                        <Graph
+                            stationData={stationData}
+                            filterWiseChartData={filterWiseChartData}
+                            intervalCode={intervalCode}
+                            periodCode={periodCode}
+                            isInitial={isInitial}
+                            stationName={stationName}
+                            filterValues={filterValues}
+                        />
                     </div>
                     <div className={styles.modalTwelveMonth}>
                         TableView

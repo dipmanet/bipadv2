@@ -54,3 +54,25 @@ export interface FaramValues {
     period: Periods;
     interval: Intervals;
 }
+
+export interface ChartData {
+    key: string | number;
+    label: string;
+    createdOn: string;
+    measuredOn: string;
+    oneHourMin: number;
+    oneHourAvg: number;
+    oneHourMax: number;
+    threeHourMin: number;
+    threeHourAvg: number;
+    threeHourMax: number;
+    sixHourMin: number;
+    sixHourAvg: number;
+    sixHourMax: number;
+    twelveHourMin: number;
+    twelveHourAvg: number;
+    twelveHourMax: number;
+    twentyFourHourMin: number;
+    twentyFourHourAvg: number;
+    twentyFourHourMax: number;
+}
