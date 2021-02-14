@@ -145,7 +145,7 @@ const Graph = (props: Props) => {
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="label" />
-                                <YAxis />
+                                <YAxis domain={['dataMin', 'auto']} />
                                 <Tooltip />
                                 <Legend />
                                 <Line type="monotone" name="Min Water Level" dataKey={`${intervalCode}Min`} stroke="blue" />

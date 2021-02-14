@@ -8,6 +8,8 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
+    ReferenceLine,
+    Label,
 } from 'recharts';
 import Button from '#rsca/Button';
 import {
@@ -92,6 +94,7 @@ const Graph = (props: Props) => {
             />
         );
     }
+    const { warningLevel, dangerLevel } = stationData[0];
     return (
         <div className={styles.visualizations}>
             <div
@@ -129,12 +132,35 @@ const Graph = (props: Props) => {
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="label" />
-                                <YAxis />
+                                <YAxis domain={
+                                    ['dataMin',
+                                        dataMax => (dataMax
+                                            > (dangerLevel || 0) ? dataMax : dangerLevel),
+                                    ]}
+                                />
                                 <Tooltip />
                                 <Legend />
                                 <Line type="monotone" name="Min Water Level" dataKey="waterLevelMin" stroke="blue" />
                                 <Line type="monotone" name="Max Water Level" dataKey="waterLevelAvg" stroke="red" />
                                 <Line type="monotone" name="Average Water Level" dataKey="waterLevelMax" stroke="green" />
+                                <ReferenceLine
+                                    y={warningLevel}
+                                    stroke="yellow"
+                                    strokeWidth={2}
+                                    isFront
+                                    strokeDasharray="3 2"
+                                >
+                                    <Label value="Warning Level" position="insideTopLeft" />
+                                </ReferenceLine>
+                                <ReferenceLine
+                                    y={dangerLevel}
+                                    stroke="red"
+                                    strokeWidth={2}
+                                    isFront
+                                    strokeDasharray="3 2"
+                                >
+                                    <Label value="Danger Level" position="insideTopLeft" />
+                                </ReferenceLine>
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
