@@ -95,6 +95,7 @@ const Graph = (props: Props) => {
         );
     }
     const { warningLevel, dangerLevel } = stationData[0];
+    const isMinuteSelected = periodCode === 'minute';
     return (
         <div className={styles.visualizations}>
             <div
@@ -140,9 +141,14 @@ const Graph = (props: Props) => {
                                 />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" name="Min Water Level" dataKey="waterLevelMin" stroke="blue" />
-                                <Line type="monotone" name="Max Water Level" dataKey="waterLevelAvg" stroke="red" />
-                                <Line type="monotone" name="Average Water Level" dataKey="waterLevelMax" stroke="green" />
+                                {isMinuteSelected
+                                && <Line type="monotone" name="Water Level" dataKey="waterLevelAvg" stroke="green" />}
+                                {!isMinuteSelected
+                                && <Line type="monotone" name="Min Water Level" dataKey="waterLevelMin" stroke="blue" />}
+                                {!isMinuteSelected
+                                && <Line type="monotone" name="Max Water Level" dataKey="waterLevelMax" stroke="red" />}
+                                {!isMinuteSelected
+                                && <Line type="monotone" name="Average Water Level" dataKey="waterLevelAvg" stroke="green" />}
                                 <ReferenceLine
                                     y={warningLevel}
                                     stroke="yellow"
