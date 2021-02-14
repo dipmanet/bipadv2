@@ -13,6 +13,7 @@ import MiniMap from './MiniMap';
 import Details from './Details';
 import Filters from './Filters';
 import Graph from './Graph';
+import TableView from './TableView';
 
 import { Geometry } from '#views/DataArchive/types';
 import { ArchiveRiver, FaramValues } from './types';
@@ -195,7 +196,11 @@ const RiverModal = (props: Props) => {
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
-                        TableView
+                        <TableView
+                            filterWiseChartData={filterWiseChartData}
+                            filterValues={filterValues}
+                            isInitial={isInitial}
+                        />
                     </div>
                 </div>
             </ModalBody>
