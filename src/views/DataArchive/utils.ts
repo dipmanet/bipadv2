@@ -59,6 +59,14 @@ export const getTime = (dateValue: string) => {
     return time;
 };
 
+export const getTimeWithIndictor = (dateValue: string) => {
+    const timeWithSeconds = dateValue.split('T')[1].split('.')[0];
+    const [hour, minutes, seconds] = timeWithSeconds.split(':');
+    const indicator = Number(hour) < 12 ? 'AM' : 'PM';
+    const timeWithIndicator = `${hour}:${minutes} ${indicator}`;
+    return timeWithIndicator;
+};
+
 
 export const getIndividualAverages = (averages: PageType.WaterLevelAverage[]) => {
     let oneHour;
@@ -148,4 +156,24 @@ export const getDatesFromFilters = (filters: Filters) => {
         ({ startDate, endDate } = dataDateRange);
     }
     return [startDate, endDate];
+};
+
+// for Table View
+export const getPostHour = (initialHour: string) => {
+    const hour = Number(initialHour);
+    if (hour === 23) {
+        return '23:59';
+    }
+    const immaturePostHour = hour + 1;
+    const postHour = immaturePostHour < 10 ? `0${immaturePostHour}` : immaturePostHour;
+    return `${postHour}:00`;
+};
+
+export const getDateWithRange = (measuredOn: string) => {
+    const [year, fullTime] = measuredOn.split('T');
+    const [initialHour] = fullTime.split(':');
+    const indicator = Number(initialHour) < 12 ? 'AM' : 'PM';
+    const postHour = getPostHour(initialHour);
+    const dateWithRange = `${year} ${initialHour}:00-${postHour} ${indicator}`;
+    return dateWithRange;
 };
