@@ -148,8 +148,8 @@ const Graph = (props: Props) => {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" name="Min Water Level" dataKey={`${intervalCode}Min`} stroke="red" />
-                                <Line type="monotone" name="Max Water Level" dataKey={`${intervalCode}Max`} stroke="blue" />
+                                <Line type="monotone" name="Min Water Level" dataKey={`${intervalCode}Min`} stroke="blue" />
+                                <Line type="monotone" name="Max Water Level" dataKey={`${intervalCode}Max`} stroke="red" />
                                 <Line type="monotone" name="Average Water Level" dataKey={`${intervalCode}Avg`} stroke="green" />
                             </LineChart>
                         </ResponsiveContainer>
