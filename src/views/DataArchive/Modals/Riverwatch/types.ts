@@ -48,3 +48,16 @@ export interface FaramValues {
     };
     period: Periods;
 }
+
+export interface ChartData {
+    key: string | number;
+    label: string;
+    createdOn: string;
+    waterLevelOn: string;
+    dangerLevel: number;
+    warningLevel: number;
+    waterLevel: number;
+    waterLevelMin: number;
+    waterLevelAvg: number;
+    waterLevelMax: number;
+}

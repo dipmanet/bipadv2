@@ -156,9 +156,27 @@ export const arraySorter = (a: {waterLevelOn: string}, b: {waterLevelOn: string}
     return 0;
 };
 
+export const getMinimum = (arr: number[]) => {
+    const minimum = Math.min(...arr);
+    return minimum;
+};
+
+export const getMaximum = (arr: number[]) => {
+    const maximum = Math.max(...arr);
+    return maximum;
+};
+
 export const getAverage = (arr: number[]) => {
     const average = arr.reduce((p, c) => p + c, 0) / arr.length;
     return average.toFixed(2);
+};
+
+export const getItemParts = (dataArray: any[], field: string) => {
+    const array = dataArray.map(data => data[field] || 0);
+    const minimum = getMinimum(array);
+    const average = getAverage(array);
+    const maximum = getMaximum(array);
+    return [minimum, average, maximum];
 };
 
 export const getItemAverage = (dataArray: any[], field: string) => {
@@ -174,6 +192,7 @@ export const getChartData = (
         const { key, value: dataArray } = singleItem;
         const label = dataArray[0][labelKey];
         const { createdOn, waterLevelOn, dangerLevel, warningLevel } = dataArray[0];
+        const [waterLevelMin, waterLevelAvg, waterLevelMax] = getItemParts(dataArray, 'waterLevel');
         const waterLevel = getItemAverage(dataArray, 'waterLevel');
 
         return {
@@ -184,6 +203,9 @@ export const getChartData = (
             dangerLevel: Number(dangerLevel) || 0,
             warningLevel: Number(warningLevel) || 0,
             waterLevel: Number(waterLevel) || 0,
+            waterLevelMin: Number(waterLevelMin) || 0,
+            waterLevelAvg: Number(waterLevelAvg) || 0,
+            waterLevelMax: Number(waterLevelMax) || 0,
         };
     });
     return chartData;
