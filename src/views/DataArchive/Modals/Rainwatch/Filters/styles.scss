@@ -1,9 +1,8 @@
 .filters{
-    padding: var(--spacing-super-large);
+    padding: var(--spacing-large);
     .header {
         font-weight: var(--font-weight-bold);
         font-size: var(--font-size-large);
-        margin-bottom: calc(2 * var(--spacing-large) - var(--spacing-small));
         color: #666;
     }
     .submit-button {
