@@ -48,6 +48,16 @@ const rainToGeojson = (rainList) => {
     return geojson;
 };
 
+const compare = (a, b) => {
+    if (a.measuredOn < b.measuredOn) {
+        return 1;
+    }
+    if (a.measuredOn > b.measuredOn) {
+        return -1;
+    }
+    return 0;
+};
+
 class RainMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -161,6 +171,11 @@ class RainMap extends React.PureComponent {
             tooltipParams,
             coordinates,
         } = this.state;
+
+        // sorting to get latest value on map
+        if (data) {
+            data.sort(compare);
+        }
 
         const rainFeatureCollection = this.getRainFeatureCollection(
             data,

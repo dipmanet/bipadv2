@@ -51,6 +51,15 @@ const riverToGeojson = (riverList) => {
     return geojson;
 };
 
+const compare = (a, b) => {
+    if (a.waterLevelOn < b.waterLevelOn) {
+        return 1;
+    }
+    if (a.waterLevelOn > b.waterLevelOn) {
+        return -1;
+    }
+    return 0;
+};
 class RiverMap extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -178,6 +187,11 @@ class RiverMap extends React.PureComponent {
             coordinates,
         } = this.state;
 
+        // sorting to get latest value on map
+        if (data) {
+            data.sort(compare);
+        }
+
         const riverFeatureCollection = this.getRiverFeatureCollection(
             data,
         );
@@ -188,7 +202,6 @@ class RiverMap extends React.PureComponent {
             closeButton: false,
             offset: 8,
         };
-
         const { showModal } = this.state;
 
         const { title: stationName, stationId, geometry } = tooltipParams || {};
