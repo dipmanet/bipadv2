@@ -172,7 +172,7 @@ export default class RealTimeMap extends React.PureComponent {
     handlePollutionClick = (feature, lngLat) => {
         const {
             properties: {
-                modifiedOn,
+                dateTime,
                 title,
                 aqi,
                 aqiColor,
@@ -181,11 +181,11 @@ export default class RealTimeMap extends React.PureComponent {
                 description,
             },
         } = feature;
-
+        console.log(feature);
         this.setState({
             tooltipRenderer: this.pollutionTooltipRenderer,
             tooltipParams: {
-                modifiedOn,
+                dateTime,
                 title,
                 aqi,
                 aqiColor,
@@ -272,7 +272,7 @@ export default class RealTimeMap extends React.PureComponent {
         </div>
     )
 
-    pollutionTooltipRenderer = ({ modifiedOn, title, aqi, aqiColor, description }) => (
+    pollutionTooltipRenderer = ({ dateTime, title, aqi, aqiColor, description }) => (
         <div className={styles.tooltip}>
             <h3>
                 {title}
@@ -293,7 +293,7 @@ export default class RealTimeMap extends React.PureComponent {
                 label="Measured On"
                 value={(
                     <FormattedDate
-                        value={modifiedOn}
+                        value={dateTime}
                         mode="yyyy-MM-dd hh:mm"
                     />
                 )}

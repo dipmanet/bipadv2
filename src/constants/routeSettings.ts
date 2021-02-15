@@ -102,13 +102,19 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/FourHundredThree'),
         navbar: false,
     },
-
     {
         name: 'fourHundredFour',
         title: '404',
         load: () => import('../views/FourHundredFour'),
         default: true,
         path: undefined,
+        navbar: false,
+    },
+    {
+        name: 'forgotPassword',
+        title: 'New Password',
+        load: () => import('../views/ForgotPassword'),
+        path: '/set-new-password/',
         navbar: false,
     },
 ];
