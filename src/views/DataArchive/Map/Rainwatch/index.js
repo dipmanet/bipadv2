@@ -13,11 +13,11 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { pollutionFiltersSelector } from '#selectors';
+import { rainFiltersSelector } from '#selectors';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
-    pollutionFilters: pollutionFiltersSelector(state),
+    rainFilters: rainFiltersSelector(state),
 });
 
 const RainToolTip = ({ renderer: Renderer, params }) => (
@@ -153,7 +153,7 @@ class RainMap extends React.PureComponent {
 
     render() {
         const { data,
-            pollutionFilters,
+            rainFilters,
             rightPaneExpanded,
             leftPaneExpanded } = this.props;
         const {
@@ -166,7 +166,7 @@ class RainMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { station: { point, municipality } } = pollutionFilters;
+        const { station: { point, municipality } } = rainFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,

@@ -13,13 +13,13 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { pollutionFiltersSelector } from '#selectors';
+import { riverFiltersSelector } from '#selectors';
 import { getDate, getTime } from '#views/DataArchive/utils';
 
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
-    pollutionFilters: pollutionFiltersSelector(state),
+    riverFilters: riverFiltersSelector(state),
 });
 
 const RiverToolTip = ({ renderer: Renderer, params }) => (
@@ -169,7 +169,7 @@ class RiverMap extends React.PureComponent {
 
     render() {
         const { data,
-            pollutionFilters,
+            riverFilters,
             rightPaneExpanded,
             leftPaneExpanded } = this.props;
         const {
@@ -182,7 +182,7 @@ class RiverMap extends React.PureComponent {
             data,
         );
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
-        const { station: { point, municipality } } = pollutionFilters;
+        const { station: { point, municipality } } = riverFilters;
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
