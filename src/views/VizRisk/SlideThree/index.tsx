@@ -138,22 +138,17 @@ class SlideThree extends React.PureComponent<Props, State> {
                     />
                 </Map>
                 <VRLegend>
-                    <h2>POPULATION</h2>
-                    <div className={styles.legendContainer}>
-                        <div className={styles.populationLegend} />
-                        <div className={styles.populationText}>
-                            <p>High</p>
-                            <p>Low</p>
+                    <div className={styles.lagendMainContainer}>
+                        <h2>POPULATION</h2>
+                        <div className={styles.legendContainer}>
+                            <div className={styles.populationLegend} />
+                            <div className={styles.populationText}>
+                                <p>High</p>
+                                <p>Low</p>
+                            </div>
                         </div>
                     </div>
-                    <div className={styles.legendContainer}>
-                        <p className={styles.riverIconContainer}>
-                            <span className={styles.riverIcon}>
-                                ___
-                            </span>
-                            River
-                        </p>
-                    </div>
+
                 </VRLegend>
                 <RightPane />
             </div>

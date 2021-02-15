@@ -12,53 +12,73 @@
     flex-direction: row;
     // border: 1px solid white;
     padding-right: 75px;
-    .settlementIconContainer{
-        padding: 0;
-        margin: 4px;
-        color: white;
-        opacity: 0.87;
-        .settlementIcon{
-            color:#254601;
-            padding-right: 12px;
+
+    .lagendMainContainer{
+
+        background: rgba( 19, 32, 55, 0.35 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 12.0px );
+        -webkit-backdrop-filter: blur( 12.0px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+        padding: 10px;
+        .settlementIconContainer{
+            padding: 0;
+            margin: 4px;
+            color: white;
+            opacity: 0.87;
+            .settlementIcon{
+                color:#254601;
+                padding-right: 12px;
+            }
+        }  
+        .sandyIconContainer{
+            padding: 0;
+            margin: 4px;
+            color: white;
+            opacity: 0.87;
+            .sandIcon{
+                color: rgb(120,120,120);
+                padding-right: 12px;
+            }
         }
-    }  
-    .sandyIconContainer{
-        padding: 0;
-        margin: 4px;
-        color: white;
-        opacity: 0.87;
-        .sandIcon{
-            color: rgb(120,120,120);
-            padding-right: 12px;
+    
+        .agroIconContainer{
+            padding: 0;
+            margin: 4px;
+            color: white;
+            opacity: 0.87;
+            .agricultureIcon{
+                color: rgb(158,188,59);
+                padding-right: 12px;
+            }
+            .forestIcon{
+                color:rgb(123,173,85);
+                padding-right: 12px;
+            }
+            .roadIcon{
+                color:rgb(82,100,121);
+                padding-right: 12px;
+            }
+            .canalIcon{
+                color:rgb(169,140,0);
+                padding-right: 12px;
+            }
+        }
+    
+        .riverIconContainer{
+            padding: 0;
+            margin: 4px;
+            color: white;
+            opacity: 0.87;
+            .riverIcon{
+                color: rgb(132,198,231);
+                padding-right: 12px;
+    
+            }
         }
     }
 
-    .agroIconContainer{
-        padding: 0;
-        margin: 4px;
-        color: white;
-        opacity: 0.87;
-        .agricultureIcon{
-            color: rgb(158,188,59);
-            padding-right: 12px;
-        }
-        .forestIcon{
-            color:rgb(123,173,85);
-            padding-right: 12px;
-        }
-    }
-
-    .riverIconContainer{
-        padding: 0;
-        margin: 4px;
-        color: white;
-        opacity: 0.87;
-        .riverIcon{
-            color: rgb(132,198,231);
-            padding-right: 12px;
-
-        }
-    }
     .map2{
         margin: 0 var(--spacing-small);
         height: 100vh;

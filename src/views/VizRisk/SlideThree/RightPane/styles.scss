@@ -7,7 +7,168 @@
         color:#b6d6e4;
         padding: 90px 15px;
         width: 30%;
+        overflow-y: scroll;
+        height: 100vh;
         // visibility: hidden;
+
+        .customBarContainer{
+            width: 90%;
+            background: transparent;
+            // border: 1px solid gray;
+            display: flex;
+            flex-direction: column;
+            padding-left: 5%;
+            position: relative;
+            bottom: 10px;
+            .indicatorBar{
+                .avgbar{
+                    left: 70%;
+                    position: relative;
+                    font-size: 8px;
+                    // border: 1px solid gray;
+                }
+                .avgbarLE{
+                    left: 73%;
+                    position: relative;
+                    font-size: 8px;
+                    // border: 1px solid gray;
+                }
+                .rajapurbar{
+                    left: 43%;
+                    bottom: 28px;
+                    position: absolute;
+                    font-size: 8px;
+
+                    // border: 1px solid gray;
+                    
+                }
+            }
+            .upperLabels{
+                .avg{
+                    // left: 48.5%;
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 11px;
+                    .avgHDI{
+                        position: relative;
+                        left: 20%;
+                        font-size: 11px;
+
+                    }
+                    .rajapurHDI{
+                        position: absolute;
+                        left: 40%;
+                    font-size: 11px;
+
+                    }
+                    .avgLE{
+                        position: relative;
+                        left: 28%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurLE{
+                        position: absolute;
+                        left: 58%;
+                    font-size: 11px;
+
+                    }
+                    .avgHPI{
+                        position: relative;
+                        left: 20%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurHPI{
+                        position: absolute;
+                        left: 29%;
+                    font-size: 11px;
+
+                    }
+                    .avgPCI{
+                        position: relative;
+                        left: 20%;
+                    font-size: 11px;
+
+                    }
+                    .rajapurPCI{
+                        position: absolute;
+                        left: 38%;
+                    font-size: 11px;
+
+                    }
+                }
+            }
+            .customBarHDI{
+            //    border: 1px solid green;
+               height: 7px;
+               background: rgb(154,226,252);
+               border-radius: 5px;
+               .innerBarHDI{
+                height: 7px;
+                background: rgb(0,174,240);
+                border-radius: 5px 0 0 5px ;
+                width: 44%;
+               }
+            }
+            .customBarLE{
+                //    border: 1px solid green;
+                   height: 7px;
+                   background: rgb(0,102,122);
+                   border-radius: 5px;
+                   .innerBarLE{
+                    height: 7px;
+                    background: rgb(0,177,163);
+                    border-radius: 5px 0 0 5px ;
+                    width: 67.2%;
+                   }
+                }
+            .customBarHPI{
+            //    border: 1px solid green;
+                height: 7px;
+                background: rgb(255,167,212);
+                border-radius: 5px;
+                .innerBarHPI{
+                height: 7px;
+                background: rgb(255,57,163);
+                border-radius: 5px 0 0 5px ;
+                width: 32%;
+            }
+            }
+            .customBarPCI{
+            //    border: 1px solid green;
+                height: 7px;
+                background: rgb(255,195,175);
+                border-radius: 5px;
+                .innerBarPCI{
+                height: 7px;
+                background: rgb(255,95,48);
+                border-radius: 5px 0 0 5px ;
+                width: 44%;
+            }
+                        }
+            .minMaxLabel{
+            //    border: 1px solid red;
+                display: flex;
+                justify-content: space-between;    
+                font-size: 11px;            
+                .min{
+                    
+                }
+                .max{
+
+                }
+                .nationalAvg{
+                    position: absolute;
+                    left: 55%;
+                }
+                .nationalAvgLE{
+                    position: absolute;
+                    left: 66%;
+                }
+            }
+        }
         .customChartLegend{
             position: relative;
             padding: 0;
@@ -84,6 +245,7 @@
             font-family: 'Source Sans Pro';
             opacity: 0.87;
             line-height: 1.4em;
+            margin-top: 20px;
         }
     }
 

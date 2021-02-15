@@ -200,28 +200,7 @@ class FloodHistoryMap extends React.Component {
                 paint: colorPaint,
                 filter: getWardFilter(5, 65, 58007, wards),
             }, 'water');
-
-            this.map.addSource('contours', {
-                type: 'vector',
-                url: 'mapbox://mapbox.mapbox-terrain-v2',
-            });
-            this.map.addLayer({
-                id: 'contours',
-                type: 'line',
-                source: 'contours',
-                'source-layer': 'contour',
-                layout: {
-                    // make layer visible by default
-                    visibility: 'visible',
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                },
-                paint: {
-                    'line-color': '#ffffff',
-                    'line-width': 1,
-                },
-            });
-
+            this.map.setZoom(11.4);
             this.map.setLayoutProperty('density-b7o1uo', 'visibility', 'visible');
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
             this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');

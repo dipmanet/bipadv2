@@ -3,6 +3,13 @@
         flex-direction: column;
         justify-content: flex-start;
         padding: 20px 10px;
+
+        background: rgba( 19, 32, 55, 0.35 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 12.0px );
+        -webkit-backdrop-filter: blur( 12.0px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
         h2{
             margin-top: 15px;
             font-size: 14px;

@@ -13,58 +13,100 @@ type Props = NewProps<ReduxProps, Params>;
 
 
 const FloodHistoryLegends = (props: Props) => {
-    const [activeRasterLayer, setActiveRasterLayer] = useState('5');
+    const { showFirstSlide } = useContext(VizRiskContext);
+    const [showFiveYears, setShowFiveYears] = useState(true);
+    const [showTenYears, setShowTenYears] = useState(false);
+    const [showTwentyYears, setShowTwentyYears] = useState(false);
+    const [showFiftyYears, setShowFiftyYears] = useState(false);
+    const [showSeventyFiveYears, setShowSeventyFiveYears] = useState(false);
+    const [showHundredYears, setShowHundredYears] = useState(false);
+    const [showTwoHundredYears, setShowTwoHundredYears] = useState(false);
+    const [showTwoFiftyYears, setShowTwoFiftyYears] = useState(false);
+    const [showFiveHundredYears, setShowFiveHundredYears] = useState(false);
+    const [showThousandYears, setShowThousandYears] = useState(false);
 
     const [showExposedAll, setShowExposedAll] = useState(true);
     const [showExposedSchool, setShowExposedSchool] = useState(false);
     const [showExposedBuilding, setShowExposedBuilding] = useState(false);
-    const [showRoads, setShowExposedRoads] = useState(false);
-    const [showCanals, setShowExposedCanals] = useState(false);
     const {
         handleFloodChange,
         handleExposedElementChange,
     } = props;
-
-    const resetExposedLayers = () => {
-        setShowExposedAll(false);
-        setShowExposedSchool(false);
-        setShowExposedBuilding(false);
-        setShowExposedRoads(false);
-        setShowExposedCanals(false);
-    };
     const handleExposedClick = (layer) => {
-        handleExposedElementChange(layer);
-
         if (layer === 'all') {
             const newVal = !showExposedAll;
-            resetExposedLayers();
+            handleExposedElementChange(layer);
             setShowExposedAll(true);
+            setShowExposedSchool(false);
+            setShowExposedBuilding(false);
         }
         if (layer === 'school') {
             const newVal = !showExposedSchool;
-            resetExposedLayers();
+            handleExposedElementChange(layer);
+            setShowExposedAll(false);
             setShowExposedSchool(true);
+            setShowExposedBuilding(false);
         }
 
-        if (layer === 'roads') {
-            const newVal = !showRoads;
-            resetExposedLayers();
-            setShowExposedRoads(true);
-        }
         if (layer === 'building') {
             const newVal = !showExposedBuilding;
-            resetExposedLayers();
+            handleExposedElementChange(layer);
+            setShowExposedAll(false);
+            setShowExposedSchool(false);
             setShowExposedBuilding(true);
-        }
-        if (layer === 'canals') {
-            const newVal = !showCanals;
-            resetExposedLayers();
-            setShowExposedCanals(true);
         }
     };
     const handleLegendBtnClick = (layer) => {
-        handleFloodChange(layer);
-        setActiveRasterLayer(layer);
+        if (layer === '5') {
+            const newVal = !showFiveYears;
+            handleFloodChange(layer, newVal);
+            setShowFiveYears(newVal);
+        }
+        if (layer === '10') {
+            const newVal = !showTenYears;
+            handleFloodChange(layer, newVal);
+            setShowTenYears(newVal);
+        }
+        if (layer === '20') {
+            const newVal = !showTwentyYears;
+            handleFloodChange(layer, newVal);
+            setShowTwentyYears(newVal);
+        }
+        if (layer === '50') {
+            const newVal = !showFiftyYears;
+            handleFloodChange(layer, newVal);
+            setShowFiftyYears(newVal);
+        }
+        if (layer === '75') {
+            const newVal = !showSeventyFiveYears;
+            handleFloodChange(layer, newVal);
+            setShowSeventyFiveYears(newVal);
+        }
+        if (layer === '100') {
+            const newVal = !showHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowHundredYears(newVal);
+        }
+        if (layer === '200') {
+            const newVal = !showTwoHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowTwoHundredYears(newVal);
+        }
+        if (layer === '250') {
+            const newVal = !showTwoFiftyYears;
+            handleFloodChange(layer, newVal);
+            setShowTwoFiftyYears(newVal);
+        }
+        if (layer === '500') {
+            const newVal = !showFiveHundredYears;
+            handleFloodChange(layer, newVal);
+            setShowFiveHundredYears(newVal);
+        }
+        if (layer === '1000') {
+            const newVal = !showThousandYears;
+            handleFloodChange(layer, newVal);
+            setShowThousandYears(newVal);
+        }
     };
 
     return (
@@ -79,9 +121,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '5'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showFiveYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             5 Years
                     </button>
@@ -95,9 +137,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '10'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showTenYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             10 Years
                     </button>
@@ -111,9 +153,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '20'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showTwentyYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             20 Years
                     </button>
@@ -127,9 +169,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '50'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showFiftyYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             50 Years
                     </button>
@@ -143,9 +185,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '75'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showSeventyFiveYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             75 Years
                     </button>
@@ -159,9 +201,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '100'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showHundredYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             100 Years
                     </button>
@@ -175,9 +217,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '200'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showTwoHundredYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             200 Years
                     </button>
@@ -191,9 +233,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '250'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showTwoFiftyYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             250 Years
                     </button>
@@ -207,9 +249,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '500'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showFiveHundredYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             500 Years
                     </button>
@@ -223,9 +265,9 @@ const FloodHistoryLegends = (props: Props) => {
                     >
                         <Icon
                             name="circle"
-                            className={activeRasterLayer === '1000'
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
+                            className={showThousandYears === false
+                                ? styles.yearsIcon
+                                : styles.yearsIconClicked}
                         />
                             1000 Years
                     </button>
@@ -323,38 +365,6 @@ const FloodHistoryLegends = (props: Props) => {
                                 : styles.exposedIconsClicked}
                         />
                            Building
-                    </button>
-                </div>
-                <div className={styles.hazardItemContainer}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleExposedClick('roads')}
-
-                    >
-                        <Icon
-                            name="circle"
-                            className={showRoads === false
-                                ? styles.exposedIcons
-                                : styles.exposedIconsClicked}
-                        />
-                           Roads
-                    </button>
-                </div>
-                <div className={styles.hazardItemContainer}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleExposedClick('canals')}
-
-                    >
-                        <Icon
-                            name="circle"
-                            className={showCanals === false
-                                ? styles.exposedIcons
-                                : styles.exposedIconsClicked}
-                        />
-                           Canals
                     </button>
                 </div>
                 <h2>Others</h2>

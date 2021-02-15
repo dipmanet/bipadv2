@@ -11,10 +11,13 @@ import VRSetting from './Setting';
 import SlideFour from './SlideFour';
 import SlideFive from './SlideFive';
 import SlideSix from './SlideSix';
+import SlideSeven from './SlideSeven';
 
 const slides = [
-    <SlideOne />, <SlideTwo />, <SlideThree />,
-    <SlideFour />, <SlideFive />, <SlideSix />];
+    <SlideSeven />, <SlideTwo />, <SlideThree />,
+    <SlideFour />, <SlideFive />, <SlideSix />,
+
+];
 
 const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);

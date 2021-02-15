@@ -26,9 +26,38 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Municipality Profile</h1>
+                <h1>Demography</h1>
+                <p>
+                    {' '}
+                        Rajapur has the total population of 55,584 with the
+                        male and female population eing 25,519 and 30,065
+                        respectively. Total household number counts to 12,138.
+                        Ward number 4 has the largest household number that equals to 1639
+                        while ward number 7 has the least comprising of only
+                        766 number of household.
+
+                </p>
+                <ResponsiveContainer height={200}>
+                    <BarChart
+                        width={300}
+                        height={200}
+                        data={chartData}
+                        margin={{
+                            top: 5, right: 30, left: 20, bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <XAxis />
+                        <Tooltip />
+                        <Legend layout="horizontal" verticalAlign="top" />
+                        <Bar dataKey="MalePopulation" fill="rgb(245,87,149)" />
+                        <Bar dataKey="FemalePopulation" fill="rgb(0,163,223)" />
+                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
+                    </BarChart>
+                </ResponsiveContainer>
                 <div className={styles.customChartLegend}>
-                    <CustomChartLegend
+                    {/* <CustomChartLegend
                         text={data[0].name}
                         barColor={COLORS[0]}
                         background={'rgb(167,225,248)'}
@@ -51,8 +80,84 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         barColor={COLORS[3]}
                         background={'rgb(245, 175, 212)'}
                         data={1086}
-                    />
-                    <CustomChartLegend
+                    /> */}
+                    <h1>Municipality Profile</h1>
+                    <p>Human Development Index</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>0.00</div>
+                                <div className={styles.rajapurHDI}>0.446</div>
+                                <div>1.00</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarHDI}>
+                            <div className={styles.innerBarHDI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    <p>Life Expectancy</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>0</div>
+                                <div className={styles.rajapurLE}>67.26</div>
+                                <div>100</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarLE}>
+                            <div className={styles.innerBarLE} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    <p>Human Poverty Index</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>0</div>
+                                <div className={styles.rajapurHPI}>32.3</div>
+                                <div>100</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarHPI}>
+                            <div className={styles.innerBarHPI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+                    <p>PCI</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>0</div>
+                                <div className={styles.rajapurPCI}>1086</div>
+                                <div>?</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarPCI}>
+                            <div className={styles.innerBarPCI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    {/* <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS[4]}
                         background={'rgb(247, 197, 181)'}
@@ -63,7 +168,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         barColor={COLORS[5]}
                         background={'rgb(149,198,229)'}
                         data={5860}
-                    />
+                    /> */}
                 </div>
                 {/* <ul className={styles.profileList}>
                     <li>
@@ -98,36 +203,6 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </li>
                 </ul> */}
 
-                <h1>Demography</h1>
-                <p>
-                    {' '}
-                        Rajapur has the total population of 55,584 with the
-                        male and female population eing 25,519 and 30,065
-                        respectively. Total household number counts to 12,138.
-                        Ward number 4 has the largest household number that equals to 1639
-                        while ward number 7 has the least comprising of only
-                        766 number of household.
-
-                </p>
-                <ResponsiveContainer>
-                    <BarChart
-                        width={500}
-                        height={300}
-                        data={chartData}
-                        margin={{
-                            top: 5, right: 30, left: 20, bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <XAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="MalePopulation" fill="rgb(245,87,149)" />
-                        <Bar dataKey="FemalePopulation" fill="rgb(0,163,223)" />
-                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
-                    </BarChart>
-                </ResponsiveContainer>
 
             </div>
         );

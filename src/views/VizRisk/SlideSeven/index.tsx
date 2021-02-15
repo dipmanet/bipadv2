@@ -1,20 +1,22 @@
 import React from 'react';
 import Map from './Map';
-import Legends from './Legends';
+// import Legends from './Legends';
 
 export default class SlideFour extends React.Component {
     public constructor(props) {
         super(props);
 
         this.state = {
+            showRaster: true,
             rasterLayer: '5',
             exposedElement: 'all',
         };
     }
 
-    public handleFloodChange = (rasterLayer: string) => {
+    public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
         this.setState({
             rasterLayer,
+            showRaster: showRasterRec,
         });
     }
 
@@ -38,10 +40,10 @@ export default class SlideFour extends React.Component {
                     rasterLayer={rasterLayer}
                     exposedElement={exposedElement}
                 />
-                <Legends
-                    handleFloodChange={this.handleFloodChange}
+                {/* <Legends
+                    handleFloodChange={this.handleLegendsClick}
                     handleExposedElementChange={this.handleExposedElementChange}
-                />
+                /> */}
             </div>
         );
     }
