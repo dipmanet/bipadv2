@@ -16,7 +16,7 @@ import {
     saveChart,
 } from '#utils/common';
 import { ArchiveRiver, ChartData, FaramValues } from '../types';
-// import { renderLegendName } from '../utils';
+// import { arraySorter } from '../utils';
 import NoData from '../NoData';
 // import CustomTooltip from './Tooltip';
 import Note from './Note';
@@ -96,6 +96,7 @@ const Graph = (props: Props) => {
     }
     const { warningLevel, dangerLevel } = stationData[0];
     const isMinuteSelected = periodCode === 'minute';
+
     return (
         <div className={styles.visualizations}>
             <div
@@ -136,7 +137,8 @@ const Graph = (props: Props) => {
                                 <YAxis domain={
                                     ['dataMin',
                                         dataMax => (dataMax
-                                            > (dangerLevel || 0) ? dataMax : dangerLevel),
+                                            > (dangerLevel || warningLevel || 0)
+                                            ? dataMax : dangerLevel || warningLevel),
                                     ]}
                                 />
                                 <Tooltip />
