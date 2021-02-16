@@ -52,202 +52,194 @@ const FloodHistoryLegends = (props: Props) => {
                     ? styles.hazardLegends
                     : styles.legendsHidden}
                 >
-                    <h2>Flood Hazard Return Period</h2>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('5')}
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '5'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            5 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('10')}
+                    <h2>Flood Hazard</h2>
+                    <p className={styles.subHeading}>Return Period (years)</p>
+                    <div className={styles.floodMainContainer}>
+                        <div className={styles.floodSubGroup}>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('5')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '5'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            5
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('10')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '10'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            10 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('20')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '10'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            10
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('20')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '20'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            20 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('50')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '20'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            20
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('50')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '50'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            50 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('75')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '50'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            50
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('75')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '75'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            75 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('100')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '75'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            75
+                                </button>
+                            </div>
+                        </div>
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '100'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            100 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('200')}
+                        <div className={styles.floodSubGroup}>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('100')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '200'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            200 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('250')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '100'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            100
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('200')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '250'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            250 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('500')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '200'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            200
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('250')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '500'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            500 Years
-                        </button>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('1000')}
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '250'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            250
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('500')}
 
-                        >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '1000'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
-                            />
-                            1000 Years
-                        </button>
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '500'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            500
+                                </button>
+                            </div>
+                            <div className={styles.hazardItemContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.legendBtn}
+                                    onClick={() => handleLegendBtnClick('1000')}
+
+                                >
+                                    <Icon
+                                        name="circle"
+                                        className={activeRasterLayer === '1000'
+                                            ? styles.yearsIconClicked
+                                            : styles.yearsIcon}
+                                    />
+                            1000
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
-                    <h2>Flood depth in meters</h2>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator1} />
-                        <span className={styles.hazardIndicatorText}>
-                        0
-                        </span>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator2} />
-                        <span className={styles.hazardIndicatorText}>
-                        1
-                        </span>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator3} />
-                        <span className={styles.hazardIndicatorText}>
-                        2
-                        </span>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator4} />
-                        <span className={styles.hazardIndicatorText}>
-                        3
-                        </span>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator5} />
-                        <span className={styles.hazardIndicatorText}>
-                        4
-                        </span>
-                    </div>
-                    <div className={styles.hazardItemContainer}>
-                        <div className={styles.hazardIndicator6} />
-                        <span className={styles.hazardIndicatorText}>
-                        5
-                        </span>
+
+                    <h2>Flood depth (meters)</h2>
+                    <div className={styles.floodDepthContainer}>
+                        <div className={styles.floodDepth}>
+                            <div className={styles.floodIndicator1} />
+                            <div className={styles.floodIndicator2} />
+                            <div className={styles.floodIndicator3} />
+                            <div className={styles.floodIndicator4} />
+                            <div className={styles.floodIndicator5} />
+                            <div className={styles.floodIndicator6} />
+                        </div>
+                        <div className={styles.floodDepthText}>
+                            <div className={styles.floodText}>0</div>
+                            <div className={styles.floodText}>1</div>
+                            <div className={styles.floodText}>2</div>
+                            <div className={styles.floodText}>3</div>
+                            <div className={styles.floodText}>4</div>
+                            <div className={styles.floodText}>5</div>
+                        </div>
                     </div>
                 </div>
 
@@ -260,9 +252,11 @@ const FloodHistoryLegends = (props: Props) => {
                         {' '}
                         <br />
                         {' '}
-                    (population/area)
                     </h2>
-                    <p className={styles.subHeading}>Area = 0.25 sq. km</p>
+                    <p className={styles.subHeading}>
+                    (population/0.25 sq. km)
+                    </p>
+                    {/* <p className={styles.subHeading}>Area = 0.25 sq. km</p> */}
 
                     <div className={styles.legendItemContainer}>
                         <div className={styles.exposureLegendFirst} />
@@ -298,50 +292,53 @@ const FloodHistoryLegends = (props: Props) => {
                     </span>
                             2 km from River
                 </p>
-                <div className={styles.switchSlides}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleHazardBtnClick('hazard')}
-                    >
-                        <Icon
-                            name="circle"
-                            className={showHazard
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
-                        />
+                <div className={styles.switchMainContainer}>
+                    <div className={styles.switchSlides}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleHazardBtnClick('hazard')}
+                        >
+                            <Icon
+                                name="circle"
+                                className={showHazard
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                            Show Flood Hazard
-                    </button>
-                </div>
-                <div className={styles.switchSlides}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleHazardBtnClick('population')}
-                    >
-                        <Icon
-                            name="circle"
-                            className={showPopulation
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
-                        />
+                        </button>
+                    </div>
+                    <div className={styles.switchSlides}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleHazardBtnClick('population')}
+                        >
+                            <Icon
+                                name="circle"
+                                className={showPopulation
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                            Show Population Density
-                    </button>
-                </div>
-                <div className={styles.switchSlides}>
-                    <button
-                        type="button"
-                        className={styles.legendBtn}
-                        onClick={() => handleHazardBtnClick('all')}
-                    >
-                        <Icon
-                            name="circle"
-                            className={showBothLayer
-                                ? styles.yearsIconClicked
-                                : styles.yearsIcon}
-                        />
+                        </button>
+                    </div>
+                    <div className={styles.switchSlides}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleHazardBtnClick('all')}
+                        >
+                            <Icon
+                                name="circle"
+                                className={showBothLayer
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                            Show Both
-                    </button>
+                        </button>
+                    </div>
+
                 </div>
 
             </div>

@@ -2,7 +2,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding: 20px 10px;
+        padding: 10px;
 
         background: rgba( 19, 32, 55, 0.35 );
         box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
@@ -13,206 +13,238 @@
 
         // font-size: 10px;
         h2{
-            margin-top: 15px;
-            font-size: 14px;
+            margin: 10px 0;
+            font-size: 12px;
+            line-height: 0;
+
         }
-        .switchSlides{
-            margin-bottom: 10px;
-            .legendBtn{
-            text-align: left;
-            }
-            .legendBtn{
-                background-color: transparent;
-                border: none;
-                color: white;
-                .yearsIcon{
-                    padding-right: 10px;
-                    color: rgb(70, 70, 70);
-                    font-size: 14px;
+        .switchMainContainer{
+            margin: 15px 0;
+            .switchSlides{
+                margin-top: 3px;
+                .legendBtn{
+                text-align: left;
                 }
-                .yearsIconClicked{
-                    color: rgb(196, 193, 193);
-                    padding-right: 10px;
-                }
-            }
-        }
-        .subHeading{
-            color: white;
-            opacity: 0.87;
-            line-height: 1em;
-        }
-        .hazardLegends{
-            .hazardItemContainer{
-                display: flex;
-                padding: 0;
-                margin: 0;
                 .legendBtn{
                     background-color: transparent;
                     border: none;
                     color: white;
+                    font-size: 11px;
+                    text-transform:uppercase;
                     .yearsIcon{
-                        padding-right: 10px;
+                        margin-right: 10px;
                         color: rgb(70, 70, 70);
-                        font-size: 14px;
+                        font-size: 12px;
                     }
                     .yearsIconClicked{
-                        padding-right: 10px;
                         color: rgb(196, 193, 193);
-                        font-size: 14px;
-                    }
-                    .exposedIcons{
-                        padding-right: 10px;
-                        color: rgb(70, 70, 70);
-                        font-size: 14px;
-                    }
-                    .exposedIconsClicked{
-                        padding-right: 10px;
-                        color: rgb(255, 72, 17);
-                        font-size: 14px;
+                        margin-right: 10px;
+                        font-size: 12px;
+
                     }
                 }
-           
             }
-                .hazardIndicator1 {
-                    // border: 1px solid gray;
-    
-                    height: 15px;
-                    width: 15px;
+        }
+       
+        .subHeading{
+            color: white;
+            opacity: 0.87;
+            line-height: 0;
+            padding-left: 5px;
+            font-size: 10px;
+        }
+        .hazardLegends{
+            // 
+            .floodMainContainer{
+                display:flex;
+                padding: 7px 0 15px 0;
+                .floodSubGroup{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    margin-right: 20px;
+                    .hazardItemContainer{
+                        display: flex;
+                        .legendBtn{
+                            background-color: transparent;
+                            border: none;
+                            color: white;
+                            .yearsIcon{
+                                margin-right: 10px;
+                                color: rgb(70, 70, 70);
+                                font-size: 12px;
+                            }
+                            .yearsIconClicked{
+                                margin-right: 10px;
+                                color: rgb(196, 193, 193);
+                                font-size: 12px;
+                            }
+                            .exposedIcons{
+                                margin-right: 10px;
+                                color: rgb(70, 70, 70);
+                                font-size: 12px;
+                            }
+                            .exposedIconsClicked{
+                                margin-right: 10px;
+                                color: rgb(255, 72, 17);
+                                font-size: 12px;
+                            }
+                        }
+                   
+                    }
+                }
+            }
+        }
+        .floodDepthContainer{
+            display: flex;
+            flex-direction: column;
+            // 
+            margin-bottom: 20px;
+            .floodDepth{
+                display: flex;
+                // width:60px;
+                .floodIndicator1{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
                     background-color: rgb(220, 235, 249);
-                    margin-left: 10px; 
-    
+                    border-radius: 5px 0 0 5px;
+
                 }
-                .hazardIndicator2 {
-                    // border: 1px solid gray;
-                    height: 15px;
-                    width: 15px;
-                    background-color: rgb(149,202,228);   
-                    margin-left: 10px; 
+                .floodIndicator2{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
+                    background-color:rgb(149,202,228); 
+                    // margin-right: 10px;
                 }
-                .hazardIndicator3 {
-                    // border: 1px solid gray;
-                    height: 15px;
-                    width: 15px;
-                    background-color: rgb(39,144,203);   
-                    margin-left: 10px; 
+                .floodIndicator3{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
+                    background-color:rgb(39,144,203);
                 }
-                .hazardIndicator4 {
-                    // border: 1px solid gray;
-                    height: 15px;
-                    width: 15px;
-                    background-color: rgb(0,108,187);         
-                    margin-left: 10px; 
+                .floodIndicator4{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
+                    background-color:rgb(0,108,187); 
                 }
-                .hazardIndicator5 {
-                    // border: 1px solid gray;
-                    height: 15px;
-                    width: 15px;
-                    background-color: rgb(0,74,162); 
-                    margin-left: 10px; 
+                .floodIndicator5{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
+                    background-color:rgb(0,74,162);
                 }
-                .hazardIndicator6 {
-                    // border: 1px solid gray;
-                    height: 15px;
-                    width: 15px;
-                    background-color: rgb(6,41,111);  
-                    margin-left: 10px; 
+                .floodIndicator6{
+                    width: 16.6%;
+                    height: 10px;
+                    // 
+                    background-color:rgb(6,41,111); 
+                    border-radius: 0 5px 5px 0;
                 }
-                .hazardIndicatorText{
+            }
+            .floodDepthText{
+                display:flex;
+                // width:60px;
+                justify-content: space-between;
+                // 
+                .floodText{
+                    width:10px;
+                    color: white;
+                    opacity:0.87;
+                }
+            }
+        }
+        .legendsHidden{
+            display:none;
+        }
+      
+        .kmIconContainer{
+            position: relative;
+            color: white;
+            opacity: 0.87;
+            margin-bottom: 0;
+            .fiveKm{
+                color: #fa972e;
+                padding-right: 15px;
+                position: relative;
+                bottom: 5px;
+                margin-left: 5px;
+            }
+            .twoKm{
+                color: #4336f7;
+                padding-right: 15px;
+                position: relative;
+                bottom: 5px;
+                margin-left: 5px;
+            }
+        }
+
+        .populationLegends{
+            // 
+            display: flex;
+            flex-direction: column;
+            // padding-bottom: 10px;
+            h2{
+                // margin: 10px 0;
+                font-size: 12px;
+                line-height: 0;
+            }
+            .subHeading{
+                line-height: 0;
+                bottom: 6px;
+                position: relative;
+            }
+            .legendItemContainer{
+                display: flex;
+                align-items: center;
+                width: 150px;
+                padding-left: 4px;
+                padding-top: 2px;
+                .exposureLegendText{
+                    font-size: 12px;
                     color: white;
                     opacity: 0.87;
-                    padding-left:7px;
+                    // padding-left: 4px;
                 }
+                .exposureLegendFirst{
+                    width: 25px;
+                    height:13px;
+                    margin-right: 10px;
+                    background-color: rgb(239,241,158);
+                }
+                .exposureLegendSecond{
+                    width: 25px;
+                    height:13px;
+                    margin-right: 10px;
+                    
+                    background-color: rgb(202,191,126);
+                    margin-right: 10px;
+                }
+                .exposureLegendThird{
+                    width: 25px;
+                    height:13px;
+                    margin-right: 10px;
+                    
+                    background-color: rgb(166,148,90);
+                }
+                .exposureLegendFourth{
+                    width: 25px;
+                    height:13px;
+                    margin-right: 10px;
+                    
+                    background-color: rgb(137,108,67);
+                    
+                }
+                .exposureLegendFifth{
+                    width: 25px;
+                    height:13px;
+                    margin-right: 10px;
+                    background-color: rgb(102,76,43);
+                }  
         }
         
-            .legendsHidden{
-                display:none;
-            }
-            .riverIconContainer{
-                margin: 4px 4px 7px 4px;
-                padding: 0;
-                position: relative;
-                bottom: 5px;
-                color: white;
-                opacity: 0.87;
-                .riverIcon{
-                    color: rgb(132,198,231);
-                    padding-right: 5px;
-                    position: relative;
-                    bottom: 5px;
-                }
-            }
-            .kmIconContainer{
-                margin: 4px 4px 7px 4px;
-                padding: 0;
-                position: relative;
-                bottom: 5px;
-                color: white;
-                opacity: 0.87;
-                .fiveKm{
-                    color: #fa972e;
-                    padding-right: 5px;
-                    position: relative;
-                    bottom: 5px;
-                }
-                .twoKm{
-                    color: #4336f7;
-                    padding-right: 5px;
-                    position: relative;
-                    bottom: 5px;
-                }
-            }
-            .populationLegends{
-                // border: 1px solid gray;
-                display: flex;
-                flex-direction: column;
-                padding-bottom: 10px;
-                .legendItemContainer{
-                    display: flex;
-                    align-items: center;
-                    width: 150px;
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    padding:0;
-                   
-                    .exposureLegendText{
-                        font-size: 12px;
-                        color: white;
-                        opacity: 0.87;
-                        padding-left: 4px;
-                    }
-                    .exposureLegendFirst{
-                        width: 20px;
-                        height:13px;
-                        border: 1px solid gray;
-                        background-color: rgb(239,241,158);
-                    }
-                    .exposureLegendSecond{
-                        width: 20px;
-                        height:13px;
-                        border: 1px solid gray;
-                        background-color: rgb(202,191,126);
-                    }
-                    .exposureLegendThird{
-                        width: 20px;
-                        height:13px;
-                        border: 1px solid gray;
-                        background-color: rgb(166,148,90);
-                    }
-                    .exposureLegendFourth{
-                        width: 20px;
-                        height:13px;
-                        border: 1px solid gray;
-                        background-color: rgb(137,108,67);
-                        
-                    }
-                    .exposureLegendFifth{
-                        width: 20px;
-                        height:13px;
-                        border: 1px solid gray;
-                        background-color: rgb(102,76,43);
-                    }  
-            }
-          
         }
 }
 
