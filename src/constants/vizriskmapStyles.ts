@@ -85,7 +85,7 @@ export default {
     ward: {
         outline: {
             // 'line-color': '#d0e8e4',
-            'line-color': '#bbbbbb',
+            'line-color': '#255269',
             'line-width': 0.4,
         },
         choroplethOutline: {

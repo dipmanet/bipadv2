@@ -51,8 +51,8 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <XAxis />
                         <Tooltip />
                         <Legend layout="horizontal" verticalAlign="top" />
-                        <Bar dataKey="MalePopulation" fill="rgb(245,87,149)" />
-                        <Bar dataKey="FemalePopulation" fill="rgb(0,163,223)" />
+                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
+                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
                         <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
                     </BarChart>
                 </ResponsiveContainer>
@@ -86,9 +86,9 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     <div className={styles.customBarContainer}>
                         <div className={styles.upperLabels}>
                             <div className={styles.avg}>
-                                <div>0.00</div>
+                                <div>0.4</div>
                                 <div className={styles.rajapurHDI}>0.446</div>
-                                <div>1.00</div>
+                                <div>0.6</div>
                             </div>
                         </div>
 
@@ -101,13 +101,13 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         </div>
                     </div>
 
-                    <p>Life Expectancy</p>
+                    <p>Life Expectancy (years)</p>
                     <div className={styles.customBarContainer}>
                         <div className={styles.upperLabels}>
                             <div className={styles.avg}>
-                                <div>0</div>
+                                <div>61.2</div>
                                 <div className={styles.rajapurLE}>67.26</div>
-                                <div>100</div>
+                                <div>72.9</div>
                             </div>
                         </div>
 
@@ -124,9 +124,9 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     <div className={styles.customBarContainer}>
                         <div className={styles.upperLabels}>
                             <div className={styles.avg}>
-                                <div>0</div>
+                                <div>16.5</div>
                                 <div className={styles.rajapurHPI}>32.3</div>
-                                <div>100</div>
+                                <div>49.3</div>
                             </div>
                         </div>
 
@@ -138,13 +138,13 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             <div className={styles.max}>Max</div>
                         </div>
                     </div>
-                    <p>PCI</p>
+                    <p>Per Capita Income ($)</p>
                     <div className={styles.customBarContainer}>
                         <div className={styles.upperLabels}>
                             <div className={styles.avg}>
-                                <div>0</div>
+                                <div>487</div>
                                 <div className={styles.rajapurPCI}>1086</div>
-                                <div>?</div>
+                                <div>3166</div>
                             </div>
                         </div>
 

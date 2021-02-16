@@ -1,14 +1,23 @@
 
     .vrSideBar{
-        position: relative;
+        position: absolute;
         display: flex;
         flex-direction: column;
-        background-color: #182539;
+        background-color: #193341;
         color:#b6d6e4;
         padding: 90px 15px;
-        width: 30%;
+        width: 25%;
+        right: 60px;
         overflow-y: scroll;
         height: 100vh;
+
+        // color:#800064;
+        padding: 70px 30px 30px 30px;
+        margin-right: 60px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        right: 0;
+        overflow-y: scroll;
         // visibility: hidden;
 
         .customBarContainer{
@@ -58,7 +67,7 @@
                     }
                     .rajapurHDI{
                         position: absolute;
-                        left: 40%;
+                        left: 20%;
                     font-size: 11px;
 
                     }
@@ -70,7 +79,7 @@
                     }
                     .rajapurLE{
                         position: absolute;
-                        left: 58%;
+                        left: 62%;
                     font-size: 11px;
 
                     }
@@ -82,7 +91,7 @@
                     }
                     .rajapurHPI{
                         position: absolute;
-                        left: 29%;
+                        left: 43%;
                     font-size: 11px;
 
                     }
@@ -94,7 +103,7 @@
                     }
                     .rajapurPCI{
                         position: absolute;
-                        left: 38%;
+                        left: 35%;
                     font-size: 11px;
 
                     }
@@ -109,7 +118,7 @@
                 height: 7px;
                 background: rgb(0,174,240);
                 border-radius: 5px 0 0 5px ;
-                width: 44%;
+                width: 24%;
                }
             }
             .customBarLE{
@@ -133,7 +142,7 @@
                 height: 7px;
                 background: rgb(255,57,163);
                 border-radius: 5px 0 0 5px ;
-                width: 32%;
+                width: 46%;
             }
             }
             .customBarPCI{
@@ -145,7 +154,7 @@
                 height: 7px;
                 background: rgb(255,95,48);
                 border-radius: 5px 0 0 5px ;
-                width: 44%;
+                width: 40%;
             }
                         }
             .minMaxLabel{

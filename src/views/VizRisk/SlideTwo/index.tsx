@@ -48,8 +48,10 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#ffedb8',
+    '#918b61',
+    // '#5aa8a3',
 ];
+
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
@@ -134,7 +136,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                 </Map>
                 <VRLegend>
                     <div className={styles.lagendMainContainer}>
-                        <h2>SPATIAL DATA</h2>
+                        <h2>Land Cover</h2>
                         <p className={styles.settlementIconContainer}>
                             <span>
                                 <Icon
@@ -154,7 +156,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                             </span>
                             Water Bodies
                         </p>
-                        <p className={styles.sandyIconContainer}>
+                        {/* <p className={styles.sandyIconContainer}>
                             <span>
                                 <Icon
                                     name="square"
@@ -162,7 +164,7 @@ class SlideTwo extends React.PureComponent<Props, State> {
                                 />
                             </span>
                             Sandy Area
-                        </p>
+                        </p> */}
                         <p className={styles.agroIconContainer}>
                             <span>
                                 <Icon

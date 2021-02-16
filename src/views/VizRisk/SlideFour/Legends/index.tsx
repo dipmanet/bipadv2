@@ -70,7 +70,8 @@ const FloodHistoryLegends = (props: Props) => {
     return (
         <VRLegend>
             <div className={styles.legendContainer}>
-                <h2>Flood Hazard Return Period</h2>
+                <h2>Flood Hazard</h2>
+                <p>Return Period</p>
                 <div className={styles.hazardItemContainer}>
                     <button
                         type="button"

@@ -9,7 +9,7 @@ export default class SlideSix extends React.Component {
 
         this.state = {
             showRaster: false,
-            rasterLayer: 0,
+            rasterLayer: '5',
             showSlide: '',
         };
     }
@@ -20,6 +20,13 @@ export default class SlideSix extends React.Component {
             showRaster: !prevState.showRaster,
         }));
     }
+
+    public handleFloodChange = (rasterLayer: string) => {
+        this.setState({
+            rasterLayer,
+        });
+    }
+
 
     public handleSlideChange = (showSlide) => {
         this.setState({
@@ -44,6 +51,7 @@ export default class SlideSix extends React.Component {
                 <RightPane />
                 <Legends
                     handleLegendsClick={this.handleLegendsClick}
+                    handleFloodChange={this.handleFloodChange}
                     handleSlideChange={this.handleSlideChange}
                 />
             </div>

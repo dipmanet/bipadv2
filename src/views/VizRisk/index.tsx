@@ -12,10 +12,11 @@ import SlideFour from './SlideFour';
 import SlideFive from './SlideFive';
 import SlideSix from './SlideSix';
 import SlideSeven from './SlideSeven';
+import SlideEight from './SlideEight';
 
 const slides = [
     <SlideSeven />, <SlideTwo />, <SlideThree />,
-    <SlideFour />, <SlideFive />, <SlideSix />,
+    <SlideFour />, <SlideSix />, <SlideEight />,
 
 ];
 

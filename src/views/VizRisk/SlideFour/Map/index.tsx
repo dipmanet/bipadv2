@@ -27,26 +27,12 @@ import {
 
 import RightPane from '../RightPane';
 
-const mask = turf.polygon([
-    [
-        [28.503026471909497, 81.14499645750975,
-        ],
-        [28.46382798887636, 81.05165455953558,
-        ],
-        [28.37443758619946, 81.14879927557537,
-        ],
-        [28.426135117282264, 81.23142414081917,
-        ],
-        [28.503026471909497, 81.14499645750975,
-        ],
-    ],
-]);
-
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
 const colorGrade = [
-    '#e6facb',
+    '#918b61',
     // '#5aa8a3',
 ];
+
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -78,8 +64,6 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
         const {
-            // bounds,
-            // provinces,
             districts,
             municipalities,
             wards,
@@ -105,20 +89,13 @@ class FloodHistoryMap extends React.Component {
 
         const color = this.generateColor(1, 0, colorGrade);
         const colorPaint = this.generatePaint(color);
-        // const bounds = [-122.5336, 37.7049, -122.3122, 37.8398]; // wsen
-        const bounds = [28.624024, 80.81311, 28.237317, 81.34827]; // wsen
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            // style: 'mapbox://styles/mapbox/light-v9',
             style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
-            // center: [-122.42116928100586, 37.77532815168286],
-            // maxBounds: bounds,
             center: [lng, lat],
             zoom,
             minZoom: 9,
             maxZoom: 15,
-            // maxBounds: bounds,
-            // bearing: 0,
         });
 
         this.map.setZoom(10);

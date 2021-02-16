@@ -39,17 +39,22 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#fc4e2a',
-    '#fed976',
-    '#bd0026',
-    '#e31a1c',
-    '#feb24c',
-    '#fdfdd4',
-    '#fd8d3c',
-    '#ffeda0',
-    '#ffffcc',
-    '#800026',
+    '#777', // 1
+    '#333', // 5
+    '#666', // 6
+    '#888', // 8
+    '#444', // 2
+    '#aaa', // 7
+    '#999', // 9
+    '#555', // 3
+    '#222', // 10
+    '#111', // 4
 ];
+
+// selecetedwardapping: 1,5,6,8,2,7,9,3,10,4
+// ward by population (assending): 4,   10,  5,  2,  3,  6,  1,  8,  9,  7
+//                                  111,222,333,444,555,666,777,888,999,aaa
+
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),

@@ -58,9 +58,9 @@
     .map2{
         margin: 0 var(--spacing-small);
         height: 100vh;
-        width: 100vw;
-        position: relative;
-        flex:3;
+        width: 70%;
+        position: absolute;
+        left: 0;
     }
 }
 

@@ -100,15 +100,15 @@ class SlideOne extends React.PureComponent<Props, State> {
                     {' '}
                         Rajapur municipality lies in the Terai region of Bardiya
                         district in Province five. It covers a total area of 127.08
-                        square km, and runs an elevation of 142mto 154m from sea level.
+                        square km, and is situated at an elevation of 142mto 154m from sea level.
 
                 </p>
                 <h2>Climate</h2>
                 <p className={styles.lastPara}>
                     {' '}
                         Rajapur experiences a lower tropical climate with an average
-                        maximum temperature of 41 degree celcius in winter. Summer lasts from
-                        Chaitra while there is extreme winter in Mangshir, Poush and Magh.
+                        maximum temperature of 41 degree celcius in winter. Summer starts from
+                        Chaitra till Jestha while there is extreme winter in Mangshir, Poush and Magh.
                         Monsoon starts here a bit early from the last week of Jestha till Ashwin
                         bringing the heavy downpours. Overall in a year, Rajapur experiences
                         average annual rainfall of 1900mm.

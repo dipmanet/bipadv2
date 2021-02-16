@@ -44,7 +44,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const colorGrade = [
-    '#e6facb',
+    '#918b61',
     // '#5aa8a3',
 ];
 

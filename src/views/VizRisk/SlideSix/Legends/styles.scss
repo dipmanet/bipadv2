@@ -9,7 +9,9 @@
         backdrop-filter: blur( 12.0px );
         -webkit-backdrop-filter: blur( 12.0px );
         border-radius: 10px;
-        border: 1px solid rgba( 255, 255, 255, 0.18 );
+        // border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+        // font-size: 10px;
         h2{
             margin-top: 15px;
             font-size: 14px;
@@ -44,6 +46,32 @@
                 display: flex;
                 padding: 0;
                 margin: 0;
+                .legendBtn{
+                    background-color: transparent;
+                    border: none;
+                    color: white;
+                    .yearsIcon{
+                        padding-right: 10px;
+                        color: rgb(70, 70, 70);
+                        font-size: 14px;
+                    }
+                    .yearsIconClicked{
+                        padding-right: 10px;
+                        color: rgb(196, 193, 193);
+                        font-size: 14px;
+                    }
+                    .exposedIcons{
+                        padding-right: 10px;
+                        color: rgb(70, 70, 70);
+                        font-size: 14px;
+                    }
+                    .exposedIconsClicked{
+                        padding-right: 10px;
+                        color: rgb(255, 72, 17);
+                        font-size: 14px;
+                    }
+                }
+           
             }
                 .hazardIndicator1 {
                     // border: 1px solid gray;
@@ -100,7 +128,7 @@
                 display:none;
             }
             .riverIconContainer{
-                margin: 15px 4px 15px 4px;
+                margin: 4px 4px 7px 4px;
                 padding: 0;
                 position: relative;
                 bottom: 5px;
@@ -114,7 +142,7 @@
                 }
             }
             .kmIconContainer{
-                margin: 15px 4px 15px 4px;
+                margin: 4px 4px 7px 4px;
                 padding: 0;
                 position: relative;
                 bottom: 5px;
@@ -134,11 +162,17 @@
                 }
             }
             .populationLegends{
+                // border: 1px solid gray;
+                display: flex;
+                flex-direction: column;
+                padding-bottom: 10px;
                 .legendItemContainer{
                     display: flex;
                     align-items: center;
                     width: 150px;
-                    margin-top: 5px;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    padding:0;
                    
                     .exposureLegendText{
                         font-size: 12px;
@@ -147,33 +181,33 @@
                         padding-left: 4px;
                     }
                     .exposureLegendFirst{
-                        width: 30px;
-                        height:20px;
+                        width: 20px;
+                        height:13px;
                         border: 1px solid gray;
                         background-color: rgb(239,241,158);
                     }
                     .exposureLegendSecond{
-                        width: 30px;
-                        height:20px;
+                        width: 20px;
+                        height:13px;
                         border: 1px solid gray;
                         background-color: rgb(202,191,126);
                     }
                     .exposureLegendThird{
-                        width: 30px;
-                        height:20px;
+                        width: 20px;
+                        height:13px;
                         border: 1px solid gray;
                         background-color: rgb(166,148,90);
                     }
                     .exposureLegendFourth{
-                        width: 30px;
-                        height:20px;
+                        width: 20px;
+                        height:13px;
                         border: 1px solid gray;
                         background-color: rgb(137,108,67);
                         
                     }
                     .exposureLegendFifth{
-                        width: 30px;
-                        height:20px;
+                        width: 20px;
+                        height:13px;
                         border: 1px solid gray;
                         background-color: rgb(102,76,43);
                     }  

@@ -3,7 +3,7 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        background-color: #182539;
+        background-color: #193341;
         color:#b6d6e4;
         padding: 90px 30px;
         width: calc(30% - 60px);
@@ -77,20 +77,16 @@
         font-size: 22px;
         color: white;
         opacity: 0.87;
+        margin-bottom: 10px;
         }
-        h2{
-            font-family: 'Playfair Display';
-            font-size: 18px;
-            color: white;
-            opacity: 0.87;
-            margin-top: 20px;
-            }
+
         p{
             color:white;
             font-size: 14px;
             font-family: 'Source Sans Pro';
             opacity: 0.87;
             line-height: 1.4em;
+            margin-top: 0px;
         }
     }
 

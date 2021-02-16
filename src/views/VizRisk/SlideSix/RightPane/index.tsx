@@ -14,53 +14,23 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Population Density </h1>
-
+                <h1>
+                    Population Exposure to Flooding
+                </h1>
                 <p>
-                    {' '}
-                    Rajapur has faced significant flooding in 2009, 2013,
-                    2014 and 2017. The most comparable earlier flooding was
-                    the flood of 1983.
-
+                    Exposure is one of the critical drivers of long term
+                    flood damages and loss in Rajapur area. To understand
+                    the exposure of assets and people, this visualization
+                    allows the super imposition of the flood hazard maps for
+                    different return period of flood with population density.
+                    This viz-risk helps understand the population, elements and
+                    assets that are exposed to modeled flood hazard in the region.
+                    Important implication from this viz-risk is that the impact from
+                    the flood can be greatly reduced through flood-sensitive
+                    land use planning. Here, the dense settlement areas that
+                    are at proximity to Karnali river lying in flood hazard zone
+                    might face major human loss and economic damage in future floods.
                 </p>
-
-                <p>
-                    {' '}
-                    Originating from the Himalayas, the Karnali River flows to
-                    the Terai plains from a narrow gorge at Chisapani, where it
-                    bifurcates into Geruwa and Karnali river.
-                </p>
-
-                <p>
-                    {' '}
-                    The Karnali flood
-                    forecasting station is at Chisapani with predefined thresholds
-                    for warning and danger levels at 10 and 10.8 meters respectively.
-                    The Chisapani gauge was incorporated into Early Warning System
-                    (EWS) in 2010.
-                </p>
-                <p>
-                    {' '}
-                    The water level data at the station is used to provide
-                    flood warnings to the communities in Rajapur through mobile alerts
-                    and sirens. The community based early warning system in Rajapur
-                    and safe shelters have been instrumental in saving lives and livelihood.
-                </p>
-                <p>
-                    {' '}
-                    Currently, there are nine safe shelters located in Rajapur in
-                    number of locations. Once the communities at Rajapur receive warnings
-                    on approaching flood, they move to the nearest safe shelter. Apart from
-                    safe shelters constructed specifically for evacuation during flooding,
-                    schools are also used as evacuation centers.
-
-                </p>
-                <p>
-                    {' '}
-                    There are still many communities
-                    in Rajapur, who do not have safe places to evacuate to during flooding.
-                </p>
-
             </div>
         );
     }

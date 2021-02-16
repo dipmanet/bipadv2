@@ -33,13 +33,14 @@ import GeoJSON from '../../GeoJSON';
 import styles from './styles.scss';
 
 const data = [
-    { name: 'Built up areas', value: 9.73 },
-    { name: 'Agricultural land', value: 103.24 },
-    { name: 'Forest', value: 6.03 },
-    { name: 'Sandy area', value: 3.90 },
-    { name: 'Water bodies', value: 3.29 },
+    { name: 'Built up areas', value: 0.959 },
+    { name: 'Agricultural land', value: 94.07 },
+    { name: 'Forest', value: 5.99 },
+    { name: 'Roads', value: 1 },
+    { name: 'Water bodies', value: 1 },
+    { name: 'Irrigation Canals', value: 1 },
 ];
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b'];
+const COLORS = ['#29768a', '#a9c282', '#57673b', '#29768a', '#1a6074', '#52b3cb'];
 
 
 interface State {
@@ -146,7 +147,7 @@ class RightPane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Rajapur through Spatial Lens</h1>
+                <h1>Land Cover</h1>
 
                 <p>
                     {' '}
@@ -191,37 +192,44 @@ class RightPane extends React.PureComponent<Props, State> {
                     <CustomChartLegend
                         text={data[0].name}
                         barColor={COLORS[0]}
-                        background={'rgb(167,225,248)'}
+                        background={'#509fb3'}
                         data={'9.73 sq km / 7.66'}
                         selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
                         barColor={COLORS[1]}
-                        background={'rgb(149,198,229)'}
+                        background={'#667a46'}
                         data={'103.24 sq km / 81.24'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS[2]}
-                        background={'rgb(0,101,119)'}
+                        background={'#8fa36c'}
                         data={'6.03 sq km / 4.74'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS[3]}
-                        background={'rgb(245, 175, 212)'}
+                        background={'#4ea5bb'}
                         data={'3.90 sq km / 3.07'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS[4]}
-                        background={'rgb(247, 197, 181)'}
+                        background={'#3488a0'}
                         data={'4.19 sq km / 3.29'}
                         selected={activeIndex === 4}
+                    />
+                    <CustomChartLegend
+                        text={data[5].name}
+                        barColor={COLORS[5]}
+                        background={'#2f7e92'}
+                        data={'4.19 sq km / 3.29'}
+                        selected={activeIndex === 5}
                     />
                 </div>
                 <div className={styles.iconContainer}>

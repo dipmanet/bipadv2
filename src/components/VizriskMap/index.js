@@ -142,8 +142,8 @@ class VizriskMap extends React.PureComponent {
             id,
             hoverLngLat: coordinates,
             selectedWardNo: hoveredWard[0].title,
-            populationMale: selectedwardName[0].MalePopulation,
-            populationFemale: selectedwardName[0].FemalePopulation,
+            populationMale: selectedwardName[0].MalePop,
+            populationFemale: selectedwardName[0].FemalePop,
             household: selectedwardName[0].TotalHousehold,
         });
     }

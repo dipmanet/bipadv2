@@ -48,9 +48,10 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#e6facb',
+    '#918b61',
     // '#5aa8a3',
 ];
+
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
