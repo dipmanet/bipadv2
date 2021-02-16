@@ -91,11 +91,19 @@ const VizRiskMainPage = () => {
                                 name="menu"
                                 className={styles.hamburgerBtn}
                             />
+                            {/* <span>
+                                {' '}
+                                <strong>Visualising Flood</strong>
+                                {' '}
+                            Exposure
+
+                            </span> */}
+
                         </Button>
 
                         <div className={styles.cropper} />
                     </div>
-                    {showMenu && <VRSetting /> }
+                    {/* {showMenu && <VRSetting /> } */}
 
                 </div>
 

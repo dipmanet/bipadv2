@@ -539,6 +539,11 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'visible');
             this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'visible');
             this.map.moveLayer('roadsrajapur-45d9c4', 'water');
+            this.map.moveLayer('safeshelter-clipped');
+            this.map.moveLayer('school-rajapur');
+            this.map.moveLayer('rajapurbuildingfootprint-feb10');
+            this.map.moveLayer('canalrajapur-8o865s');
+
 
             // this.map.moveLayer('rajapurbuildingfootprint-feb10', 'ward-fill');
         });
@@ -548,6 +553,7 @@ class FloodHistoryMap extends React.Component {
         const {
             rasterLayer,
             exposedElement,
+            chisapaniClicked,
         } = this.props;
         const resetRasterLayers = () => {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'none');
@@ -562,7 +568,22 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'none');
         };
 
+
         if (this.map.isStyleLoaded()) {
+            if (nextProps.chisapaniClicked !== chisapaniClicked) {
+                this.map.flyTo({
+                    center: [
+                        81.28247497323619,
+                        28.638615848729966,
+                    ],
+                    zoom: 11.4,
+                    bearing: 0,
+                    speed: 0.5,
+                    curve: 2,
+                    essential: true,
+                });
+            }
+
             if (nextProps.rasterLayer !== rasterLayer) {
                 if (nextProps.rasterLayer === '5') {
                     resetRasterLayers();
@@ -602,35 +623,48 @@ class FloodHistoryMap extends React.Component {
                 }
             }
             if (nextProps.exposedElement !== exposedElement) {
+                console.log('exposed element changed1');
                 if (nextProps.exposedElement === 'all') {
                     this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
                     this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'visible');
                     this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'visible');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'visible');
                 }
                 if (nextProps.exposedElement === 'school') {
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
                     this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
                     this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'none');
                     this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'none');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'none');
                 }
                 if (nextProps.exposedElement === 'building') {
                     this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                     this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'none');
                     this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'none');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'none');
                 }
                 if (nextProps.exposedElement === 'roads') {
                     this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                     this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'none');
                     this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'none');
                 }
                 if (nextProps.exposedElement === 'canals') {
                     this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'visible');
                     this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'none');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                     this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'none');
+                }
+                if (nextProps.exposedElement === 'safeshelters') {
+                    this.map.setLayoutProperty('canalrajapur-8o865s', 'visibility', 'none');
+                    this.map.setLayoutProperty('roadsrajapur-45d9c4', 'visibility', 'none');
+                    this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
+                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
+                    this.map.setLayoutProperty('safeshelter-clipped', 'visibility', 'visible');
                 }
             }
         }

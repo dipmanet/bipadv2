@@ -9,6 +9,7 @@ export default class SlideFour extends React.Component {
         this.state = {
             rasterLayer: '5',
             exposedElement: 'all',
+            chisapaniClicked: false,
         };
     }
 
@@ -16,6 +17,12 @@ export default class SlideFour extends React.Component {
         this.setState({
             rasterLayer,
         });
+    }
+
+    public handleChisapani = () => {
+        this.setState(prevState => ({
+            chisapaniClicked: !prevState.chisapaniClicked,
+        }));
     }
 
     public handleExposedElementChange = (exposed: string) => {
@@ -29,6 +36,7 @@ export default class SlideFour extends React.Component {
             showRaster,
             rasterLayer,
             exposedElement,
+            chisapaniClicked,
         } = this.state;
 
         return (
@@ -37,10 +45,12 @@ export default class SlideFour extends React.Component {
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
                     exposedElement={exposedElement}
+                    chisapaniClicked={chisapaniClicked}
                 />
                 <Legends
                     handleFloodChange={this.handleFloodChange}
                     handleExposedElementChange={this.handleExposedElementChange}
+                    handleChisapani={this.handleChisapani}
                 />
             </div>
         );

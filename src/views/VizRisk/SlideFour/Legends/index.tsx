@@ -20,9 +20,11 @@ const FloodHistoryLegends = (props: Props) => {
     const [showExposedBuilding, setShowExposedBuilding] = useState(false);
     const [showRoads, setShowExposedRoads] = useState(false);
     const [showCanals, setShowExposedCanals] = useState(false);
+    const [showSafeShelter, setShowSafeShelter] = useState(false);
     const {
         handleFloodChange,
         handleExposedElementChange,
+        handleChisapani,
     } = props;
 
     const resetExposedLayers = () => {
@@ -31,6 +33,10 @@ const FloodHistoryLegends = (props: Props) => {
         setShowExposedBuilding(false);
         setShowExposedRoads(false);
         setShowExposedCanals(false);
+        setShowSafeShelter(false);
+    };
+    const handleChisapaniBtn = () => {
+        handleChisapani();
     };
     const handleExposedClick = (layer) => {
         handleExposedElementChange(layer);
@@ -60,6 +66,11 @@ const FloodHistoryLegends = (props: Props) => {
             const newVal = !showCanals;
             resetExposedLayers();
             setShowExposedCanals(true);
+        }
+        if (layer === 'safeshelters') {
+            const newVal = !showSafeShelter;
+            resetExposedLayers();
+            setShowSafeShelter(true);
         }
     };
     const handleLegendBtnClick = (layer) => {
@@ -258,15 +269,6 @@ const FloodHistoryLegends = (props: Props) => {
                         <div className={styles.floodText}>5</div>
                     </div>
                 </div>
-                <div className={styles.hazardItemContainer}>
-                    <Icon
-                        name="circle"
-                        className={styles.safeshelter}
-                    />
-                    <span className={styles.hazardIndicatorText}>
-                        Safe Shelters
-                    </span>
-                </div>
                 <h2>Exposed Elements</h2>
                 <div className={styles.hazardItemContainer}>
                     <button
@@ -348,10 +350,31 @@ const FloodHistoryLegends = (props: Props) => {
                            Canals
                     </button>
                 </div>
+                <div className={styles.hazardItemContainer}>
+                    <button
+                        type="button"
+                        className={styles.legendBtn}
+                        onClick={() => handleExposedClick('safeshelters')}
+                    >
+                        <Icon
+                            name="circle"
+                            className={showSafeShelter === false
+                                ? styles.exposedIcons
+                                : styles.exposedIconsClicked}
+                        />
+                           Safe Shelters
+                    </button>
+                </div>
                 <h2>Others</h2>
                 <div className={styles.hazardItemContainer}>
                     <img src={ManualIcon} alt="" height="20" />
-                    <span className={styles.chisapaniText}>Chisapani Station</span>
+                    <button
+                        type="button"
+                        className={styles.chisapaniText}
+                        onClick={handleChisapaniBtn}
+                    >
+                        Chisapani Station
+                    </button>
                 </div>
 
             </div>
