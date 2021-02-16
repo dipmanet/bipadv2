@@ -16,7 +16,7 @@ import SlideEight from './SlideEight';
 
 const slides = [
     <SlideSeven />, <SlideTwo />, <SlideThree />,
-    <SlideFour />, <SlideSix />, <SlideEight />,
+    <SlideFour />, <SlideSix />,
 
 ];
 

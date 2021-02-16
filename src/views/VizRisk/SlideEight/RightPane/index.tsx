@@ -95,8 +95,8 @@ class SlideOne extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1> References</h1>
-                <ol>
+                {/* <h1 > References</h1> */}
+                <ol className={styles.referencesTitle}>
                     <li>
                         Modeling Exposure Through Earth Observations Routines (METEOR)
                         ,UK Space Agency, https://meteor-project.org/

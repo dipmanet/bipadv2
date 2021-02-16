@@ -37,23 +37,23 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         766 number of household.
 
                 </p>
-                <ResponsiveContainer height={200}>
+                <ResponsiveContainer height={200} className={styles.graphContainer}>
                     <BarChart
                         width={300}
                         height={200}
                         data={chartData}
                         margin={{
-                            top: 5, right: 30, left: 20, bottom: 5,
+                            top: 5, right: 30, left: 20, bottom: 15,
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <XAxis />
                         <Tooltip />
-                        <Legend layout="horizontal" verticalAlign="top" />
-                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
-                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
-                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
+                        <Legend layout="horizontal" verticalAlign="bottom" />
+                        <Bar dataKey="Male Pop" fill="rgb(245,87,149)" />
+                        <Bar dataKey="Female Pop" fill="rgb(0,163,223)" />
+                        <Bar dataKey="Total HHs" fill="rgb(0,172,163)" />
                     </BarChart>
                 </ResponsiveContainer>
                 <div className={styles.customChartLegend}>

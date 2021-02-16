@@ -24,7 +24,7 @@
             padding: 0;
             position: relative;
             bottom: 5px;
-            color: white;
+            color: white ;
             opacity: 0.87;
             .riverIcon{
                 color: rgb(132,198,231);
@@ -38,7 +38,7 @@
                 width: 8px;
                 // border: 1px solid gray;
                 border-radius: 8px;
-                background: linear-gradient(to top, rgba(216,206,165,0.9) ,rgba(229,194,122,0.9), rgba(207,0,0,0.9));
+                background: linear-gradient(to top, #fff7f3, #f768a1, #49006a );
             }   
             .populationText{
                 height: 60px;

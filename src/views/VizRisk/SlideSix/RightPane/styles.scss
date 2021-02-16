@@ -13,47 +13,54 @@
         overflow-y: scroll;
         margin-right: 60px;
         // visibility: hidden;
+        .referencesTitle{
+            margin-top: 50px;
+        }
         .profileList{
          list-style: none;
          color: white;
          padding-left: 0;
         }
+        .bottomInfo{
+            font-size: 12px;
+            color: white;
+            opacity: 0.87;
+            padding-right: 10px;
+            max-height: 0;
+            transform: scaleY(1);   
+            transition: transform 0.26s ease-out;
+            margin-top: 2px;
+        }
+        .bottomInfoHide{
+            transform: scaleY(0);
+            transition: transform 0.26s ease-in;
+            font-size: 12px;
+            color: white;
+            opacity: 0.87;
+            padding-right: 10px;
+            max-height: 0;
+            margin-top: 2px;
+
+
+        }
         .iconContainer{
             width: 100%;
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             position: relative;
             margin-top: 15px;
+            margin-bottom: 25px;
             // bottom: 20px;
-            .bottomInfo{
-                font-size: 9px;
-                color: white;
-                opacity: 0.5;
-                padding-right: 10px;
-                max-height: 0;
-                transform: scaleY(1);   
-                transition: transform 0.26s ease-out;
-                margin-top: 2px;
-            }
-            .bottomInfoHide{
-                transform: scaleY(0);
-                transition: transform 0.26s ease-in;
-                font-size: 9px;
-                color: white;
-                opacity: 0.5;
-                padding-right: 10px;
-                max-height: 0;
-                margin-top: 2px;
-
-
-            }
+      
             .infoContainerBtn{
                 background-color: transparent;
                 border: none;
-
+                color: white;
                 .closeIcon{
                     color: white;
                     opacity: 0.87;
+                padding-right: 5px;
+
                 }
             }
         }
@@ -72,6 +79,7 @@
         color: white;
         opacity: 0.87;
         margin-bottom: 10px;
+        // margin-top: 25px;
         }
 
         p{

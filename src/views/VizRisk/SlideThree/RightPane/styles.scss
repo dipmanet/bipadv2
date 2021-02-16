@@ -19,7 +19,9 @@
         right: 0;
         overflow-y: scroll;
         // visibility: hidden;
-
+        .graphContainer{
+            margin: 15px 0;
+        }
         .customBarContainer{
             width: 90%;
             background: transparent;

@@ -36,18 +36,29 @@ const data = [
     { name: 'Built up areas', value: 0.959 },
     { name: 'Agricultural land', value: 94.07 },
     { name: 'Forest', value: 5.99 },
-    { name: 'River Bank', value: 5.18 },
+    { name: 'Water bodies', value: 5.18 },
     { name: 'Other', value: 21.5 },
     // { name: 'Water bodies', value: 1 },
     // { name: 'Irrigation Canals', value: 1 },
 ];
 const COLORS = [
-    '#29768a',
-    '#a9c282',
-    '#57673b',
-    '#29768a',
-    '#1a6074',
-    '#52b3cb',
+    '#f7fcf5',
+    '#e5f5e0',
+    '#c7e9c0',
+    '#a1d99b',
+    '#74c476',
+    '#41ab5d',
+    '#238b45',
+    '#006d2c',
+    '#00441b',
+];
+
+const COLORS_CHART = [
+    '#fff7bc',
+    '#238b45',
+    '#00441b',
+    '#2c5f71',
+    '#666',
 ];
 
 
@@ -161,9 +172,10 @@ class RightPane extends React.PureComponent<Props, State> {
                     {' '}
                         Located in the Terai region and lying close to water bodies,
                         Rajapur has fertile and arable land. Out of total area of
-                        127.08 square km, 81.24% of land is used for agriculture.
-                        Built-in area covers 7.66% of land while water bodies occupies
-                        3.29% of total land in Rajapur.
+                        127.08 square km, 74.19% of land is used for agriculture.
+                        Built-in area covers 0.75% of land, water bodies cover
+                        4.09% of land while forest area occupies 4.72% of total
+                        land in Rajapur.
 
                 </p>
                 <ResponsiveContainer height={200}>
@@ -191,7 +203,7 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />)
+                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS.length]} />)
                             }
                         </Pie>
                     </PieChart>
@@ -200,39 +212,40 @@ class RightPane extends React.PureComponent<Props, State> {
                 <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={data[0].name}
-                        barColor={COLORS[0]}
-                        background={'#509fb3'}
+                        barColor={'#a74811'}
+                        background={'#cc4c02'}
                         data={'0.959 sq km / 0.75'}
                         selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
-                        barColor={COLORS[1]}
-                        background={'#667a46'}
+                        barColor={COLORS[6]}
+                        background={COLORS[2]}
                         data={'94.07 sq km / 74.19'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[2].name}
-                        barColor={COLORS[2]}
-                        background={'#8fa36c'}
+                        barColor={COLORS[8]}
+                        background={COLORS[4]}
                         data={'5.99 sq km / 4.72'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
-                        barColor={COLORS[3]}
-                        background={'#4ea5bb'}
+                        barColor={'#2c5f71'}
+                        background={'#66a8c0'}
                         data={'5.18 sq km / 4.09'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
-                        barColor={COLORS[4]}
-                        background={'#3488a0'}
+                        barColor={'#666'}
+                        background={'#aaa'}
                         data={'21.5 sq km / 16.25'}
                         selected={activeIndex === 4}
                     />
+
                     {/* <CustomChartLegend
                         text={data[5].name}
                         barColor={COLORS[5]}

@@ -486,6 +486,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('ward-fill', 'visibility', 'none');
                     this.map.moveLayer('5km-buffer-d4g08s');
                     this.map.moveLayer('2km-buffer-4xvqe1');
+                    this.map.moveLayer('water');
                 }
                 if (nextProps.showSlide === 'hazard') {
                     this.map.moveLayer('ward-fill', 'density-b7o1uo');

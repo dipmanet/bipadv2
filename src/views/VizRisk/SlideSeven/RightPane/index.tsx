@@ -125,7 +125,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                             strokeDasharray="3 3"
                         />
                         <XAxis dataKey="name" />
-                        <YAxis unit={'mm'} dataKey="AvgMax" domain={[0, 45]} />
+                        <YAxis unit={'℃'} dataKey="AvgMax" domain={[0, 45]} />
                         <Legend iconType="square" iconSize={10} align="center" />
                         <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
                         <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
