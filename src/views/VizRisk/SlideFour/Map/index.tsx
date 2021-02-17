@@ -601,6 +601,10 @@ class FloodHistoryMap extends React.Component {
                     resetRasterLayers();
                     this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
                 }
+                if (nextProps.rasterLayer === '75') {
+                    resetRasterLayers();
+                    this.map.setLayoutProperty('raster-rajapur-75', 'visibility', 'visible');
+                }
                 if (nextProps.rasterLayer === '100') {
                     resetRasterLayers();
                     this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');

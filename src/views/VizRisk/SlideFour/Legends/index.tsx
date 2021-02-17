@@ -81,6 +81,7 @@ const FloodHistoryLegends = (props: Props) => {
     return (
         <VRLegend>
             <div className={styles.legendContainer}>
+
                 <h2>Flood Hazard</h2>
                 <p className={styles.subHeading}>Return Period (years)</p>
                 <div className={styles.floodMainContainer}>
@@ -250,25 +251,22 @@ const FloodHistoryLegends = (props: Props) => {
                     </div>
 
                 </div>
+
                 <h2>Flood depth (meters)</h2>
                 <div className={styles.floodDepthContainer}>
                     <div className={styles.floodDepth}>
                         <div className={styles.floodIndicator1} />
                         <div className={styles.floodIndicator2} />
                         <div className={styles.floodIndicator3} />
-                        <div className={styles.floodIndicator4} />
-                        <div className={styles.floodIndicator5} />
-                        <div className={styles.floodIndicator6} />
+
                     </div>
                     <div className={styles.floodDepthText}>
-                        <div className={styles.floodText}>0</div>
-                        <div className={styles.floodText}>1</div>
-                        <div className={styles.floodText}>2</div>
-                        <div className={styles.floodText}>3</div>
-                        <div className={styles.floodText}>4</div>
-                        <div className={styles.floodText}>5</div>
+                        <div className={styles.floodText}>Low</div>
+                        <div className={styles.floodText}>Medium</div>
+                        <div className={styles.floodText}>High</div>
                     </div>
                 </div>
+
                 <h2>Exposed Elements</h2>
                 <div className={styles.hazardItemContainer}>
                     <button
@@ -365,6 +363,7 @@ const FloodHistoryLegends = (props: Props) => {
                            Safe Shelters
                     </button>
                 </div>
+
                 <h2>Others</h2>
                 <div className={styles.hazardItemContainer}>
                     <img src={ManualIcon} alt="" height="20" />
