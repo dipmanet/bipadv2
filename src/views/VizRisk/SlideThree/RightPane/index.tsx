@@ -30,11 +30,12 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <p>
                     {' '}
                         Rajapur has the total population of 55,584 with the
-                        male and female population eing 25,519 and 30,065
+                        male and female population being 25,519 and 30,065
                         respectively. Total household number counts to 12,138.
                         Ward number 4 has the largest household number that equals to 1639
                         while ward number 7 has the least comprising of only
-                        766 number of household.
+                        766 number of household. However, the population is highest in
+                        ward number 4 and lowest in ward number 7.
 
                 </p>
                 <ResponsiveContainer height={200} className={styles.graphContainer}>
@@ -51,9 +52,9 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <XAxis />
                         <Tooltip />
                         <Legend layout="horizontal" verticalAlign="bottom" />
-                        <Bar dataKey="Male Pop" fill="rgb(245,87,149)" />
-                        <Bar dataKey="Female Pop" fill="rgb(0,163,223)" />
-                        <Bar dataKey="Total HHs" fill="rgb(0,172,163)" />
+                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
+                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
+                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
                     </BarChart>
                 </ResponsiveContainer>
                 <div className={styles.customChartLegend}>

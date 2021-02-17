@@ -54,7 +54,7 @@ const COLORS = [
 ];
 
 const COLORS_CHART = [
-    '#fff7bc',
+    '#a74811',
     '#238b45',
     '#00441b',
     '#2c5f71',
@@ -213,7 +213,7 @@ class RightPane extends React.PureComponent<Props, State> {
                     <CustomChartLegend
                         text={data[0].name}
                         barColor={'#a74811'}
-                        background={'#cc4c02'}
+                        background={'#a74811'}
                         data={'0.959 sq km / 0.75'}
                         selected={activeIndex === 0}
                     />

@@ -39,18 +39,18 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 const colorGrade = [
-    '#fcc5c0', // 1
-    '#ae017e', // 5
-    '#fa9fb5', // 6
-    '#fde0dd', // 8
-    '#dd3497', // 2
-    '#fff', // 7
-    '#fff7f3', // 9
-    '#f768a1', // 3
-    '#7a0177', // 10
-    '#49006a', // 4
+    '#fff', // 1
+    // '#fff', // 5
+    // '#fff', // 6
+    // '#fff', // 8
+    // '#fff', // 2
+    // '#fff', // 7 actually 9 ma gako cha
+    // '#fff', // 9
+    // '#fff', // 3
+    '#49006a', // 10 5 ma gako cha
+    // '#fff', // 4 4 mai gako cha
 ];
-
+// 9: fff
 // #fff7f3 //lightest
 // #fde0dd
 // #fcc5c0
@@ -120,6 +120,7 @@ class SlideThree extends React.PureComponent<Props, State> {
             });
         }
         const color = this.generateColor(1, 0, colorGrade);
+        console.log(color);
         const colorPaint = this.generatePaint(color);
 
         // const mapStyle = 'mapbox://styles/mapbox/dark-v10';
