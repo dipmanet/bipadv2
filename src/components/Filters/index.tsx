@@ -35,6 +35,8 @@ import PastDateRangeInput from '#components/PastDateRangeInput';
 
 import styles from './styles.scss';
 import { colorScheme } from '#constants';
+import { getAuthState } from '#utils/session';
+
 
 interface ComponentProps {
     className?: string;
@@ -238,17 +240,60 @@ class Filters extends React.PureComponent<Props, State> {
             hazard: [],
             region: {},
         },
+        subdomainLoc: {},
+        locRecv: false,
     };
 
     public componentDidMount() {
-        const { filters: faramValues } = this.props;
-        console.log('in comp did mount: ', this.props);
+        const {
+            filters: faramValues,
+            municipalities,
+            districts,
+            provinces,
+        } = this.props;
+
         this.setState({ faramValues });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps) {
-        const { filters: faramValues } = this.props;
+        const {
+            filters: faramValues,
+            municipalities,
+            districts,
+            provinces,
+        } = this.props;
+        const {
+            locRecv,
+        } = this.state;
         this.setState({ faramValues });
+
+        if (
+            (Object.keys(municipalities).length > 0
+            || Object.keys(districts).length > 0
+            || Object.keys(provinces).length > 0) && !locRecv
+        ) {
+            const subDomain = window.location.href.split('//')[1].split('.')[0];
+            const municipalityMatch = municipalities.filter(
+                item => item.code === subDomain,
+            );
+            const districtMatch = districts.filter(
+                item => item.code === subDomain,
+            );
+            const provinceMatch = provinces.filter(
+                item => item.code === subDomain,
+            );
+
+            if (municipalityMatch[0]) {
+                const subd = { adminLevel: 3, geoarea: municipalityMatch[0].id };
+                this.setState({ subdomainLoc: subd, locRecv: true });
+            } else if (districtMatch[0]) {
+                const subd = { adminLevel: 2, geoarea: districtMatch[0].id };
+                this.setState({ subdomainLoc: subd, locRecv: true });
+            } else if (provinceMatch[0]) {
+                const subd = { adminLevel: 1, geoarea: provinceMatch[0].id };
+                this.setState({ subdomainLoc: subd, locRecv: true });
+            }
+        }
     }
 
     public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
@@ -357,23 +402,96 @@ class Filters extends React.PureComponent<Props, State> {
         isFiltered: getIsFiltered(key, this.state.faramValues),
     })
 
+    // private hasSubdomain  = (subDomain: string) => {
+
+    // }
+
     private handleResetFiltersButtonClick = () => {
-        this.setState({ activeView: undefined,
-            faramValues: {
+        const authState = getAuthState();
+        const { setFilters, user } = this.props;
+        const { subdomainLoc } = this.state;
+        if (authState.authenticated) {
+            if (user.profile.municipality) {
+                const region = { adminLevel: 3, geoarea: user.profile.municipality };
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+
+                setFilters({ filters: tempF });
+                this.setState({ faramValues: tempF, activeView: undefined });
+            } else if (user.profile.district) {
+                const region = { adminLevel: 2, geoarea: user.profile.disctict };
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+
+                setFilters({ filters: tempF });
+                this.setState({ faramValues: tempF, activeView: undefined });
+            } else if (user.profile.province) {
+                const region = { adminLevel: 1, geoarea: user.profile.province };
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+
+                setFilters({ filters: tempF });
+                this.setState({ faramValues: tempF, activeView: undefined });
+            } else {
+                this.setState({ activeView: undefined,
+                    faramValues: {
+                        dataDateRange: {
+                            rangeInDays: 7,
+                            startDate: undefined,
+                            endDate: undefined,
+                        },
+                        hazard: [],
+                        region: {},
+                    } });
+
+                setFilters({ filters: this.state.faramValues });
+            }
+        } else if (Object.keys(subdomainLoc).length > 0) {
+            const tempF = {
                 dataDateRange: {
                     rangeInDays: 7,
                     startDate: undefined,
                     endDate: undefined,
                 },
                 hazard: [],
-                region: {},
-            } });
+                region: subdomainLoc,
+            };
+            setFilters({ filters: tempF });
+            this.setState({ faramValues: tempF, activeView: undefined });
+        } else {
+            this.setState({ activeView: undefined,
+                faramValues: {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region: {},
+                } });
 
-
-        const { setFilters } = this.props;
-        const { faramValues } = this.state;
-        if (faramValues) {
-            setFilters({ filters: faramValues });
+            setFilters({ filters: this.state.faramValues });
         }
     }
 
@@ -389,13 +507,12 @@ class Filters extends React.PureComponent<Props, State> {
         const { setFilters, carKeys } = this.props;
         const { faramValues } = this.state;
         const { filters: propFilters } = this.props;
-        const { region } = propFilters;
         if (faramValues) {
             setFilters({ filters: faramValues });
         } else {
             setFilters({ filters: propFilters });
         }
-        const { activeRouteDetails, carKeysDetails } = this.context;
+        const { activeRouteDetails } = this.context;
         if (Object.keys(activeRouteDetails).length !== 0) {
             const { name: activePage } = activeRouteDetails;
             if (activePage === 'riskInfo') {
@@ -456,7 +573,6 @@ class Filters extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { faramValues: fv } = this.state;
-
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
