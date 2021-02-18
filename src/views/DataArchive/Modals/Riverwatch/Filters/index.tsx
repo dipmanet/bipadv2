@@ -78,7 +78,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                     'description',
                     'station',
                 ],
-                limit: 99,
+                limit: -1,
             };
         },
         onSuccess: ({ props: { handleStationData }, response }) => {
