@@ -135,7 +135,7 @@ const Graph = (props: Props) => {
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="label" />
                                 <YAxis domain={
-                                    ['dataMin',
+                                    [0,
                                         dataMax => (dataMax
                                             > (dangerLevel || warningLevel || 0)
                                             ? dataMax : dangerLevel || warningLevel),
