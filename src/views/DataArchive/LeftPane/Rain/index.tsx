@@ -144,12 +144,23 @@ const Rain = (props: Props) => {
 
     useEffect(() => {
         if (setData) {
-            // const filtered = filterByStationName(pollutionFilters, pollutionList);
             setData(rainList);
         }
     }, [rainList, setData]);
-
+    const { station: { title: location } } = rainFilters;
     const [startDate, endDate] = getDatesFromFilters(rainFilters);
+
+    if (setDataArchive) {
+        setDataArchive((prevState: DataArchive) => {
+            if (prevState.mainModule !== 'Rain'
+            || prevState.location !== location
+            || prevState.startDate !== startDate
+            || prevState.endDate !== endDate) {
+                return { ...prevState, mainModule: 'Rain', location, startDate, endDate };
+            }
+            return prevState;
+        });
+    }
 
     if (!pending && rainList.length < 1) {
         return (

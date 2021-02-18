@@ -481,6 +481,16 @@ const setDataArchiveTitle = (
             defineSource('Ministry of Forests and Environment', setSource);
             return `Air Quality Index (AQI), ${location || 'Nepal'}`;
         }
+        // Rain
+        if (mainModule === 'Rain') {
+            defineSource('Department of Hydrology and Meteorology', setSource);
+            return `Rain Watch, ${location || 'Nepal'}`;
+        }
+        // River
+        if (mainModule === 'River') {
+            defineSource('Department of Hydrology and Meteorology', setSource);
+            return `River Watch, ${location || 'Nepal'}`;
+        }
     }
     return '';
 };

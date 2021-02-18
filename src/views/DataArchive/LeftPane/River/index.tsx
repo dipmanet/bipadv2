@@ -152,12 +152,24 @@ const River = (props: Props) => {
 
     useEffect(() => {
         if (setData) {
-            // const filtered = filterByStationName(pollutionFilters, pollutionList);
             setData(riverList);
         }
     }, [riverList, setData]);
 
+    const { station: { title: location } } = riverFilters;
     const [startDate, endDate] = getDatesFromFilters(riverFilters);
+
+    if (setDataArchive) {
+        setDataArchive((prevState: DataArchive) => {
+            if (prevState.mainModule !== 'River'
+            || prevState.location !== location
+            || prevState.startDate !== startDate
+            || prevState.endDate !== endDate) {
+                return { ...prevState, mainModule: 'River', location, startDate, endDate };
+            }
+            return prevState;
+        });
+    }
 
     if (!pending && riverList.length < 1) {
         return (
