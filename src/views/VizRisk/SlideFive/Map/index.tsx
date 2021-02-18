@@ -1,7 +1,7 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import turf from 'turf';
+import turf from '#views/VizRisk/SlideOne/Map/node_modules/turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
 // import SafeshelterGeoJSON from '../../safeShelter-new';

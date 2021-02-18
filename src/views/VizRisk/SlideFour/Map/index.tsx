@@ -1,10 +1,8 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
-import SafeshelterGeoJSON from '../../safeShelter';
 import ManualIcon from '#resources/images/chisapanistation.png';
 
 
@@ -543,9 +541,6 @@ class FloodHistoryMap extends React.Component {
             this.map.moveLayer('school-rajapur');
             this.map.moveLayer('rajapurbuildingfootprint-feb10');
             this.map.moveLayer('canalrajapur-8o865s');
-
-
-            // this.map.moveLayer('rajapurbuildingfootprint-feb10', 'ward-fill');
         });
     }
 
@@ -688,10 +683,6 @@ class FloodHistoryMap extends React.Component {
         'fill-opacity': 1,
     });
 
-    public polyMask = (maskVal, boundsVal) => {
-        const bboxPoly = turf.bboxPolygon(boundsVal);
-        return turf.difference(bboxPoly, maskVal);
-    };
 
     public generateColor = (maxValue, minValue, colorMapping) => {
         const newColor = [];

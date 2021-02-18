@@ -7,6 +7,7 @@ import {
     Legend,
     Line,
     CartesianGrid,
+    Tooltip,
 } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import Icon from '#rscg/Icon';
@@ -98,9 +99,9 @@ class SlideOne extends React.PureComponent<Props, State> {
                 <h1> Rajpur Municipality </h1>
                 <p>
                     {' '}
-                        Rajapur municipality lies in the Terai region of Bardiya
+                         Rajapur municipality lies in the Terai region of Bardiya
                         district in Province five. It covers a total area of 127.08
-                        square km, and is situated at an elevation of 142mto 154m from sea level.
+                        square km, and is situated at an elevation of 142 m to 154 m from sea level.
 
                 </p>
                 <h2>Climate</h2>
@@ -108,11 +109,11 @@ class SlideOne extends React.PureComponent<Props, State> {
                     {' '}
                         Rajapur experiences a lower tropical climate with an average
                         maximum temperature of 41 degree celcius in winter. Summer starts from
-                        Chaitra till Jestha while there is extreme winter in Mangshir, Poush and Magh.
+                        Chaitra till Jestha while there is an
+                        extreme winter in Mangshir, Poush and Magh.
                         Monsoon starts here a bit early from the last week of Jestha till Ashwin
                         bringing the heavy downpours. Overall in a year, Rajapur experiences
-                        average annual rainfall of 1900mm.
-
+                        average annual rainfall of 1900 mm.
                 </p>
                 {/* <div className={styles.chartsContainer}> */}
                 <ResponsiveContainer height={250}>
@@ -125,11 +126,12 @@ class SlideOne extends React.PureComponent<Props, State> {
                             strokeDasharray="3 3"
                         />
                         <XAxis dataKey="name" />
-                        <YAxis dataKey="AvgMax" domain={[0, 45]} />
-                        <Legend iconType="square" iconSize={10} />
-                        <Line type="monotone" dataKey="AvgMax" stroke="#0069a5" />
-                        <Line type="monotone" dataKey="DailyAvg" stroke="#00a1e1" />
-                        <Line type="monotone" dataKey="AvgMin" stroke="#00a69b" />
+                        <YAxis unit={'℃'} dataKey="AvgMax" domain={[0, 45]} />
+                        <Legend iconType="square" iconSize={10} align="center" />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
+                        <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
+                        <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
                     </LineChart>
                 </ResponsiveContainer>
                 {/* </div> */}

@@ -206,6 +206,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                 data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS.length]} />)
                             }
                         </Pie>
+                        <Tooltip />
                     </PieChart>
                 </ResponsiveContainer>
 
