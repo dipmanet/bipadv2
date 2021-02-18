@@ -150,13 +150,13 @@ const Graph = (props: Props) => {
                                 <Tooltip />
                                 <Legend />
                                 {isMinuteSelected
-                                && <Line type="monotone" name="Rainfall amount" dataKey={`${intervalCode}Avg`} stroke="green" />}
+                                && <Line type="monotone" dot={false} name="Rainfall amount" dataKey={`${intervalCode}Avg`} stroke="green" />}
                                 {!isMinuteSelected
-                                && <Line type="monotone" name="Min Water Level" dataKey={`${intervalCode}Min`} stroke="blue" />}
+                                && <Line type="monotone" dot={false} name="Min Water Level" dataKey={`${intervalCode}Min`} stroke="blue" />}
                                 {!isMinuteSelected
-                                && <Line type="monotone" name="Max Water Level" dataKey={`${intervalCode}Max`} stroke="red" />}
+                                && <Line type="monotone" dot={false} name="Max Water Level" dataKey={`${intervalCode}Max`} stroke="red" />}
                                 {!isMinuteSelected
-                                && <Line type="monotone" name="Average Water Level" dataKey={`${intervalCode}Avg`} stroke="green" />}
+                                && <Line type="monotone" dot={false} name="Average Water Level" dataKey={`${intervalCode}Avg`} stroke="green" />}
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
