@@ -158,12 +158,12 @@ export const arraySorter = (a: {waterLevelOn: string}, b: {waterLevelOn: string}
 
 export const getMinimum = (arr: number[]) => {
     const minimum = Math.min(...arr);
-    return minimum;
+    return minimum.toFixed(2);
 };
 
 export const getMaximum = (arr: number[]) => {
     const maximum = Math.max(...arr);
-    return maximum;
+    return maximum.toFixed(2);
 };
 
 export const getAverage = (arr: number[]) => {
