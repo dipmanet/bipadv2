@@ -16,7 +16,7 @@ import {
 import { ArchiveRain, ChartData, FaramValues } from '../types';
 // import { renderLegendName } from '../utils';
 import NoData from '../NoData';
-// import CustomTooltip from './Tooltip';
+import CustomTooltip from './Tooltip';
 import Note from './Note';
 import styles from './styles.scss';
 
@@ -147,7 +147,14 @@ const Graph = (props: Props) => {
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="label" />
                                 <YAxis domain={['dataMin', 'auto']} />
-                                <Tooltip />
+                                <Tooltip
+                                    content={(
+                                        <CustomTooltip
+                                            periodCode={periodCode}
+                                            intervalCode={intervalCode}
+                                        />
+                                    )}
+                                />
                                 <Legend />
                                 {isMinuteSelected
                                 && <Line type="monotone" dot={false} name="Rainfall amount" dataKey={`${intervalCode}Avg`} stroke="green" />}
