@@ -18,7 +18,7 @@ import {
 import { ArchiveRiver, ChartData, FaramValues } from '../types';
 // import { arraySorter } from '../utils';
 import NoData from '../NoData';
-// import CustomTooltip from './Tooltip';
+import CustomTooltip from './Tooltip';
 import Note from './Note';
 import styles from './styles.scss';
 
@@ -141,7 +141,9 @@ const Graph = (props: Props) => {
                                             ? dataMax : dangerLevel || warningLevel),
                                     ]}
                                 />
-                                <Tooltip />
+                                <Tooltip
+                                    content={<CustomTooltip periodCode={periodCode} />}
+                                />
                                 <Legend />
                                 {isMinuteSelected
                                 && <Line type="monotone" dot={false} name="Water Level" dataKey="waterLevelAvg" stroke="green" />}
