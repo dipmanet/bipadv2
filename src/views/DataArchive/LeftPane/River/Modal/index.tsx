@@ -72,6 +72,18 @@ class RiverModal extends React.PureComponent<Props> {
                 comparator: (a, b) => compareString(a.district, b.district),
             },
             {
+                key: 'waterLevelOn',
+                label: 'WATER LEVEL ON',
+                order: 5,
+                sortable: true,
+                comparator: (a, b) => compareString(a.waterLevelOn, b.waterLevelOn),
+                modifier: (row: DataArchiveRiver) => {
+                    const { waterLevelOn } = row;
+
+                    return waterLevelOn ? waterLevelOn.split('T')[0] : null;
+                },
+            },
+            {
                 key: 'waterLevel',
                 label: 'Water Level (m)',
                 order: 5,

@@ -75,6 +75,18 @@ class RainModal extends React.PureComponent<Props> {
                 order: 3,
             },
             {
+                key: 'measuredOn',
+                label: 'MEASURED ON',
+                order: 3,
+                sortable: true,
+                comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
+                modifier: (row: DataArchiveRain) => {
+                    const { measuredOn } = row;
+
+                    return measuredOn ? measuredOn.split('T')[0] : null;
+                },
+            },
+            {
                 key: 'lastHour',
                 label: 'Accumulated rainfall within last 1 hours',
                 order: 4,
