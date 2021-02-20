@@ -3,8 +3,9 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        background-color:#112330;
-        min-width: 300px;
+        background-color:#182539;
+        background-color:#193341;
+        
         color:#b6d6e4;
         padding: 70px 0 0 0;
         margin-right: 60px;
@@ -12,35 +13,11 @@
         height: 100vh;
         right: 0;
         overflow-y: scroll;
-        .iconRow{
-            display: flex;
-            flex-direction: column;
-            // padding: 15px 15px 15px 30px;
-            padding-left: 30px;
-            .infoIconsContainer{
-                display: flex;
-                margin: 15px 15px 15px 0;
-                .infoIcon{
-                    margin: 0px 15px 0 5px;
-                }
-                .descriptionCotainer{
-                    display: flex;
-                    flex-direction: column;
-                    .iconTitle{
-                    font-size: 20px;
-                    color: #A7B3BB;
-                    font-family: 'Source Sans Pro';
-    
-                    }
-                    .iconText{
-                        font-size: 12px;
-                        color: #A7B3BB;
-                        // color: rgb(156, 156, 87);
-                    }
-                }
-            }
+        .pieTotal{
+            color: white;
+            opacity: 0.87;
         }
-       
+        
         .iconContainer{
             width: 100%;
             display: flex;
@@ -67,6 +44,8 @@
                 padding-right: 10px;
                 max-height: 0;
                 margin-top: 2px;
+
+
             }
             .infoContainerBtn{
                 background-color: transparent;
@@ -86,19 +65,19 @@
         font-family: 'Playfair Display';
         font-size: 22px;
         color: white;
-        opacity: 0.67;
+        opacity: 0.87;
         padding: 0 30px;
-        margin-top: 20px;
         }
         p{
-            color:white;
-            font-size: 16px;
-            font-family: 'Source Sans Pro';
-            opacity: 0.67;
-            line-height: 1.4em;
-            padding: 0 30px;
+        color:white;
+        font-size: 14px;
+        font-family: 'Source Sans Pro';
+        opacity: 0.87;
+        line-height: 1.4em;
+        padding: 0 30px;
         }
     }
+   
 
 
 

@@ -25,7 +25,7 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
-import RightPane from '../RightPane';
+import RightPane from '../RightPane1';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
 
@@ -44,7 +44,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const colorGrade = [
-    '#918b61',
+    '#ffedb8',
     // '#5aa8a3',
 ];
 
@@ -140,13 +140,14 @@ class FloodHistoryMap extends React.Component {
             });
 
 
-            this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
-            this.map.setLayoutProperty('2km-buffer-4xvqe1', 'visibility', 'none');
-            this.map.setLayoutProperty('5km-buffer-d4g08s', 'visibility', 'none');
-            this.map.setLayoutProperty('farmland-6zygfm', 'visibility', 'none');
-            this.map.setLayoutProperty('farmfields-1l9fpy', 'visibility', 'none');
-            this.map.setLayoutProperty('sandrajapur-44t4e0', 'visibility', 'none');
-            // this.map.moveLayer('rajapurbuildingfootprint-feb10', 'ward-fill');
+            this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+            this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+            this.map.moveLayer('ward-fill', 'country-label');
+            this.map.moveLayer('waterway');
+            // this.map.moveLayer('rajapurbuildings', 'ward-fill');
             this.map.setZoom(1);
 
             setTimeout(() => {
@@ -159,7 +160,7 @@ class FloodHistoryMap extends React.Component {
                     bearing: 0,
                     speed: 0.5,
                     curve: 2,
-                    essential: true,
+                    essential: false,
                 });
             }, 3000);
         });
@@ -170,9 +171,56 @@ class FloodHistoryMap extends React.Component {
             showRaster,
             rasterLayer,
             exposedElement,
+            rightElement,
         } = this.props;
 
         if (this.map.isStyleLoaded()) {
+            if (nextProps.rightElement === 2) {
+                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
+                this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
+                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
+                this.map.setLayoutProperty('sandRajapur', 'visibility', 'visible');
+                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+                this.map.moveLayer('ward-fill', 'country-label');
+                // this.map.moveLayer('water');
+                this.map.moveLayer('forestRajapur');
+                this.map.moveLayer('agriculturelandRajapur');
+                this.map.moveLayer('rajapurbuildings');
+                this.map.moveLayer('popnDensityRajapur');
+                this.map.setPitch(0);
+                this.map.setBearing(0);
+                // this.map.setPitch(50);
+                // this.map.setBearing(50);
+            }
+            if (nextProps.rightElement < 2) {
+                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+                this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
+                this.map.setPitch(0);
+                this.map.setBearing(0);
+
+                // this.map.moveLayer('forestRajapur');
+                // this.map.moveLayer('agriculturelandRajapur');
+                // this.map.moveLayer('rajapurbuildings');
+                this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+            }
+            if (nextProps.rightElement > 2) {
+                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+                this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'visible');
+                this.map.setPitch(50);
+                // this.map.setBearing(50);
+                this.map.moveLayer('popnDensityRajapur');
+                this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
+
+                // this.map.moveLayer('agriculturelandRajapur');
+                // this.map.moveLayer('rajapurbuildings');
+            }
             if (nextProps.showRaster !== showRaster || nextProps.rasterLayer !== rasterLayer) {
                 if (nextProps.showRaster && nextProps.rasterLayer === '5') {
                     this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
@@ -237,15 +285,15 @@ class FloodHistoryMap extends React.Component {
             }
             if (nextProps.exposedElement !== exposedElement) {
                 if (nextProps.exposedElement === 'all') {
-                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
+                    this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
                 }
                 if (nextProps.exposedElement === 'school') {
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'visible');
-                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'none');
+                    this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 }
                 if (nextProps.exposedElement === 'building') {
-                    this.map.setLayoutProperty('rajapurbuildingfootprint-feb10', 'visibility', 'visible');
+                    this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                 }
             }

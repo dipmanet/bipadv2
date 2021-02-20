@@ -69,7 +69,7 @@ export default {
     municipality: {
         outline: {
             // 'line-color': '#72b6ac',
-            'line-color': '#777777',
+            'line-color': '#000000',
             'line-width': 0.4,
         },
         choroplethOutline: {
@@ -85,7 +85,7 @@ export default {
     ward: {
         outline: {
             // 'line-color': '#d0e8e4',
-            'line-color': '#255269',
+            'line-color': 'rgb(140,133,106)',
             'line-width': 0.4,
         },
         choroplethOutline: {

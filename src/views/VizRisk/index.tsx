@@ -54,7 +54,7 @@ const VizRiskMainPage = () => {
                     hideFilter
                 />
                 <div className={styles.navBtnsContainer}>
-                    {!showMenu && (
+                    {/* {!showMenu && (
                         <div className={styles.nextPrevBtnContainer}>
                             <Button
                                 transparent
@@ -79,7 +79,7 @@ const VizRiskMainPage = () => {
                                 />
                             </Button>
                         </div>
-                    )}
+                    )} */}
 
                     <div className={styles.hamburgerBtn}>
                         <Button
