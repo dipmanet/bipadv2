@@ -77,7 +77,7 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Rainfall Amount: </b>
-                        {average}
+                        {`${average} mm`}
                     </div>
                 </div>
             );
@@ -90,15 +90,15 @@ const Tooltip = (props: TooltipProps) => {
                 </div>
                 <div className={styles.value}>
                     <b>Min Water Level: </b>
-                    {min}
+                    {`${min} mm`}
                 </div>
                 <div className={styles.value}>
                     <b>Average Water Level: </b>
-                    {average}
+                    {`${average} mm`}
                 </div>
                 <div className={styles.value}>
                     <b>Max Water Level: </b>
-                    {max}
+                    {`${max} mm`}
                 </div>
             </div>
         );

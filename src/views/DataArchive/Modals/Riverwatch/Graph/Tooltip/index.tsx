@@ -51,7 +51,7 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Water Level: </b>
-                        {waterLevelAvg}
+                        {`${waterLevelAvg} m`}
                     </div>
                 </div>
             );
@@ -64,15 +64,15 @@ const Tooltip = (props: TooltipProps) => {
                 </div>
                 <div className={styles.value}>
                     <b>Min Water Level: </b>
-                    {waterLevelMin}
+                    {`${waterLevelMin} m`}
                 </div>
                 <div className={styles.value}>
                     <b>Average Water Level: </b>
-                    {waterLevelAvg}
+                    {`${waterLevelAvg} m`}
                 </div>
                 <div className={styles.value}>
                     <b>Max Water Level: </b>
-                    {waterLevelMax}
+                    {`${waterLevelMax} m`}
                 </div>
             </div>
         );

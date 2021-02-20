@@ -53,7 +53,7 @@ const TableView = (props: Props) => {
     const riverHeader = [
         {
             key: 'year',
-            label: 'Date',
+            label: 'DATE ',
             order: 1,
             sortable: true,
             comparator: (a, b) => compareString(a.waterLevelOn, b.waterLevelOn),
@@ -65,7 +65,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'min',
-            label: 'Min',
+            label: 'MINIMUM WATER LEVEL (m)',
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.waterLevelMin, b.waterLevelMin),
@@ -76,7 +76,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'avg',
-            label: 'Avg',
+            label: 'AVERAGE WATER LEVEL (m)',
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.waterLevelAvg, b.waterLevelAvg),
@@ -87,7 +87,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'max',
-            label: 'Max',
+            label: 'MAXIMUM WATER LEVEL (m)',
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.waterLevelMax, b.waterLevelMax),
@@ -111,7 +111,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'avg',
-            label: 'WATER LEVEL',
+            label: 'WATER LEVEL (m)',
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.waterLevelAvg, b.waterLevelAvg),

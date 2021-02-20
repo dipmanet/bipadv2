@@ -151,7 +151,7 @@ class RiverMap extends React.PureComponent {
                 </div>
                 <div className={styles.description}>
                     <div className={styles.key}>WATER LEVEL:</div>
-                    <div className={styles.value}>{waterLevel.toFixed(2) || 'N/A'}</div>
+                    <div className={styles.value}>{waterLevel ? `${waterLevel.toFixed(2)} m` : 'N/A'}</div>
                 </div>
             </div>
             <div className={styles.line} />

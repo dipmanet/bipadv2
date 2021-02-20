@@ -54,7 +54,7 @@ const TableView = (props: Props) => {
     const rainHeader = [
         {
             key: 'year',
-            label: 'Date',
+            label: 'DATE',
             order: 1,
             sortable: true,
             comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
@@ -66,7 +66,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'min',
-            label: 'Min',
+            label: 'MINIMUM RAINFALL (mm)',
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
@@ -77,7 +77,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'avg',
-            label: 'Avg',
+            label: 'AVERAGE RAINFALL (mm)',
             order: 3,
             sortable: true,
             comparator: (a, b) => compareNumber(a[`${intervalCode}Avg`], b[`${intervalCode}Avg`]),
@@ -88,7 +88,7 @@ const TableView = (props: Props) => {
         },
         {
             key: 'max',
-            label: 'Max',
+            label: 'MAXIMUM RAINFALL (mm)',
             order: 4,
             sortable: true,
             comparator: (a, b) => compareNumber(a[`${intervalCode}Max`], b[`${intervalCode}Max`]),
@@ -101,7 +101,7 @@ const TableView = (props: Props) => {
     const rainMinuteHeader = [
         {
             key: 'year',
-            label: 'Date',
+            label: 'DATE',
             order: 1,
             sortable: true,
             comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
