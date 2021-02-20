@@ -69,8 +69,8 @@ export default {
     municipality: {
         outline: {
             // 'line-color': '#72b6ac',
-            'line-color': '#000000',
-            'line-width': 0.4,
+            'line-color': '#rgb(140,133,106)',
+            'line-width': 1,
         },
         choroplethOutline: {
             'line-color': '#000000',
@@ -86,7 +86,7 @@ export default {
         outline: {
             // 'line-color': '#d0e8e4',
             'line-color': 'rgb(140,133,106)',
-            'line-width': 0.4,
+            'line-width': 0.5,
         },
         choroplethOutline: {
             'line-color': '#000000',

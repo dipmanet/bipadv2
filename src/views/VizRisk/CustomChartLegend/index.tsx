@@ -12,6 +12,7 @@ const CustomChartLegend = (props: Props) => {
         data,
         background,
         selected,
+        builtupArea,
     } = props;
     let innerbarLength;
     if (typeof data === 'string') {
@@ -40,6 +41,13 @@ const CustomChartLegend = (props: Props) => {
         borderRadius: '4px',
     };
 
+    const builtup = {
+        width: '1%',
+        backgroundColor: barColor,
+        height: '8px',
+        borderRadius: '4px',
+    };
+
     const title = {
         fontSize: '12px',
         color: '#fff',
@@ -61,7 +69,7 @@ const CustomChartLegend = (props: Props) => {
     };
 
     const mainContainerSelected = {
-        backgroundColor: '#304153',
+        backgroundColor: '#475563',
         // opacity: '0.27',
         display: 'flex',
         flexDirection: 'column',
@@ -87,7 +95,7 @@ const CustomChartLegend = (props: Props) => {
                 </p>
             </div>
             <div style={containerStyle}>
-                <div style={innerBar} />
+                <div style={builtupArea ? builtup : innerBar} />
             </div>
         </div>
     );

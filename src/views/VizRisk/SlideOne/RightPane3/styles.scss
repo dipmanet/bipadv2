@@ -3,9 +3,8 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        background-color:#182539;
-        background-color:#193341;
-        
+        background-color:#112330;
+        min-width: 300px;
         color:#b6d6e4;
         padding: 70px 0 0 0;
         margin-right: 60px;
@@ -14,10 +13,12 @@
         right: 0;
         overflow-y: scroll;
         .pieTotal{
-            color: white;
+            color: white !important;
             opacity: 0.87;
         }
-        
+        .respContainer{
+            margin-bottom:25px;
+        }
         .iconContainer{
             width: 100%;
             display: flex;

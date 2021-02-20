@@ -87,7 +87,7 @@ const lineData = [
         name: 'Shrawan', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
     },
     {
-        name: 'Bhadau', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
+        name: 'Bhadra', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
     },
     {
         name: 'Ashwin', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,

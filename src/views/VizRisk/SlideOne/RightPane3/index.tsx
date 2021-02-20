@@ -5,6 +5,7 @@ import {
     ResponsiveContainer,
     PieChart,
     Legend,
+    Label,
     Tooltip,
     Pie,
     Cell,
@@ -29,36 +30,24 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 import GeoJSON from '../../GeoJSON';
+import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
 
 const data = [
-    { name: 'Built up areas', value: 0.959 },
     { name: 'Agricultural land', value: 94.07 },
     { name: 'Forest', value: 5.99 },
     { name: 'Water bodies', value: 5.18 },
     { name: 'Other', value: 21.5 },
-    // { name: 'Water bodies', value: 1 },
-    // { name: 'Irrigation Canals', value: 1 },
-];
-const COLORS = [
-    '#f7fcf5',
-    '#e5f5e0',
-    '#c7e9c0',
-    '#a1d99b',
-    '#74c476',
-    '#41ab5d',
-    '#238b45',
-    '#006d2c',
-    '#00441b',
-];
+    { name: 'Built up areas', value: 0.959 },
+].sort(({ value: a }, { value: b }) => b - a);
 
 const COLORS_CHART = [
-    '#a74811',
-    '#238b45',
-    '#00441b',
-    '#2c5f71',
-    '#666',
+    '#d3e378',
+    '#b4b4b4',
+    '#00a811',
+    '#2b4253',
+    '#e00000',
 ];
 
 
@@ -72,15 +61,6 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-
-const colorGrade = [
-    '#ffedb8',
-];
-
-const vrLegendItems = [
-    { color: '#2373a9', label: 'Settlement', style: styles.symbol },
-    { color: '#FDD835', label: 'River', style: styles.symbol },
-];
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
@@ -160,34 +140,32 @@ class RightPane extends React.PureComponent<Props, State> {
         }
     };
 
+
     public render() {
         const { activeIndex, showInfo } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Land Cover</h1>
+                <h1>Land Cover Breakdown</h1>
 
                 <p>
                     {' '}
-                        Located in the Terai region and lying close to water bodies,
+                    {/* Located in the Terai region and lying close to water bodies,
                         Rajapur has fertile and arable land. Out of total area of
                         127.08 square km, 74.19% of land is used for agriculture.
                         Built-in area covers 0.75% of land, water bodies cover
                         4.09% of land while forest area occupies 4.72% of total
-                        land in Rajapur.
+                        land in Rajapur. */}
+
 
                 </p>
-                <ResponsiveContainer height={200}>
+                <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
                         width={200}
                         height={150}
-                        margin={{ top: 5, bottom: 5, left: 5, right: 5 }}
+                        margin={{ top: 15, bottom: 15, left: 5, right: 5 }}
                     >
-                        {/* <text className={styles.pieTotal} x={180} y={100}
-                        textAnchor="middle" dominantBaseline="middle">
-                         127.08 sq km
-                        </text> */}
                         <Pie
                             activeIndex={activeIndex}
                             activeShape={this.renderActiveShape}
@@ -203,9 +181,21 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS.length]} />)
+                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
                             }
+                            <Label
+                                width={30}
+                                position="center"
+                                content={(
+                                    <CustomLabel
+                                        value1={`${data[activeIndex].value} sq km`}
+                                        value2={` / ${((data[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
+                                    />
+                                )}
+                            />
                         </Pie>
+
+
                         <Tooltip />
                     </PieChart>
                 </ResponsiveContainer>
@@ -213,47 +203,42 @@ class RightPane extends React.PureComponent<Props, State> {
                 <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={data[0].name}
-                        barColor={'#a74811'}
-                        background={'#a74811'}
-                        data={'0.959 sq km / 0.75'}
+                        barColor={COLORS_CHART[0]}
+                        background={'#eee'}
+                        data={'94.07 sq km / 74.06'}
                         selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
-                        barColor={COLORS[6]}
-                        background={COLORS[2]}
-                        data={'94.07 sq km / 74.19'}
+                        barColor={COLORS_CHART[1]}
+                        background={'#eee'}
+                        data={'21.5 sq km / 16.93'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[2].name}
-                        barColor={COLORS[8]}
-                        background={COLORS[4]}
+                        barColor={COLORS_CHART[2]}
+                        background={'#eee'}
                         data={'5.99 sq km / 4.72'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
-                        barColor={'#2c5f71'}
-                        background={'#66a8c0'}
-                        data={'5.18 sq km / 4.09'}
+                        barColor={COLORS_CHART[3]}
+                        background={'#eee'}
+                        data={'5.18 sq km / 4.08'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
-                        barColor={'#666'}
-                        background={'#aaa'}
-                        data={'21.5 sq km / 16.25'}
+                        barColor={COLORS_CHART[4]}
+                        background={'#eee'}
+                        data={'0.959 sq km / 0.75'}
                         selected={activeIndex === 4}
+                        builtupArea
                     />
 
-                    {/* <CustomChartLegend
-                        text={data[5].name}
-                        barColor={COLORS[5]}
-                        background={'#2f7e92'}
-                        data={'4.19 sq km / 3.29'}
-                        selected={activeIndex === 5}
-                    /> */}
+
                 </div>
                 <div className={styles.iconContainer}>
                     <div
