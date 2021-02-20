@@ -42,7 +42,11 @@ const PollutionGroup = (props: Props) => {
                 </div>
                 <div className={styles.right}>
                     <div className={styles.count}>
-                        <span>{getCount(data)}</span>
+                        <span>
+                            TOTAL
+                            {' '}
+                            {data.length}
+                        </span>
                     </div>
                     <Button
                         className={styles.chevron}

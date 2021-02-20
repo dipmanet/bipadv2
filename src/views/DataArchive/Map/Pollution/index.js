@@ -183,7 +183,8 @@ class PollutionMap extends React.PureComponent {
                     <div className={styles.value}>
                         <FormattedDate
                             value={measuredOn}
-                            mode="yyyy-MM-dd hh:mm"
+                            // mode="yyyy-MM-dd hh:mm"
+                            mode="yyyy-MM-dd"
                         />
                     </div>
                 </div>

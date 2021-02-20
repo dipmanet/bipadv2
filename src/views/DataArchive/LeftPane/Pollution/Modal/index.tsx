@@ -69,16 +69,16 @@ class PollutionModal extends React.PureComponent<Props> {
                     return (dateTime) ? dateTime.substring(0, dateTime.indexOf('T')) : undefined;
                 },
             },
-            {
-                key: 'time',
-                label: 'Time',
-                order: 3,
-                sortable: false,
-                modifier: (row: DataArchivePollutionExtended) => {
-                    const { dateTime } = row;
-                    return (dateTime) ? dateTime.split('T')[1].split('.')[0] : undefined;
-                },
-            },
+            // {
+            //     key: 'time',
+            //     label: 'Time',
+            //     order: 3,
+            //     sortable: false,
+            //     modifier: (row: DataArchivePollutionExtended) => {
+            //         const { dateTime } = row;
+            //         return (dateTime) ? dateTime.split('T')[1].split('.')[0] : undefined;
+            //     },
+            // },
             {
                 key: 'aqi',
                 label: 'AQI',

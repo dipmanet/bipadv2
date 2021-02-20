@@ -33,7 +33,7 @@ const PollutionItem = (props: Props) => {
                                 createdOn && parseDate(createdOn)}
                         </div>
                     </div>
-                    <div className={styles.time}>
+                    {/* <div className={styles.time}>
                         <Icon
                             className={styles.icon}
                             name="dataRange"
@@ -42,7 +42,7 @@ const PollutionItem = (props: Props) => {
                             {
                                 createdOn && parseTime(createdOn)}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="right">
