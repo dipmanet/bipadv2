@@ -6,9 +6,11 @@ import RightElement1 from './RightPane1';
 import RightElement2 from './RightPane2';
 import RightElement3 from './RightPane3';
 import RightElement4 from './RightPane4';
+import LandcoverLegends from './LandCoverLegends';
 import Icon from '#rscg/Icon';
 
 const rightelements = [<RightElement1 />, <RightElement2 />, <RightElement3 />, <RightElement4 />];
+const legends = [<LandcoverLegends />];
 
 export default class SlideFour extends React.Component {
     public constructor(props) {
@@ -19,6 +21,9 @@ export default class SlideFour extends React.Component {
             rasterLayer: '5',
             exposedElement: 'all',
             rightElement: 0,
+            legendElement: 0,
+            showLegend: false,
+            disableNavBtns: true,
         };
     }
 
@@ -47,61 +52,67 @@ export default class SlideFour extends React.Component {
         }
     }
 
+    public handleMoveEnd = (value) => {
+        this.setState({ disableNavBtns: false });
+        console.log('moveend: ', value);
+    }
+
     public render() {
         const {
             showRaster,
             rasterLayer,
             exposedElement,
             rightElement,
+            legendElement,
+            disableNavBtns,
         } = this.state;
 
         return (
             <div>
-                <div className={styles.navBtnCont}>
-                    <button
-                        type="button"
-                        onClick={this.handlePrev}
-                        className={styles.navbutton}
-                        disabled={rightElement === 0}
-                    >
-                        <Icon
-                            name="chevronLeft"
-                            className={rightElement === 0
-                                ? styles.btnDisable
-                                : styles.nextPrevBtn
-                            }
-                        />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={this.handleNext}
-                        className={styles.navbutton}
-                        disabled={rightElement === (rightelements.length) - 1}
-                    >
-                        <Icon
-                            name="chevronRight"
-                            className={rightElement === rightelements.length - 1
-                                ? styles.btnDisable
-                                : styles.nextPrevBtn
-                            }
-                        />
-                    </button>
+                {!disableNavBtns && (
+                    <div className={styles.navBtnCont}>
+                        <button
+                            type="button"
+                            onClick={this.handlePrev}
+                            className={styles.navbutton}
+                            disabled={rightElement === 0}
+                        >
+                            <Icon
+                                name="chevronLeft"
+                                className={rightElement === 0
+                                    ? styles.btnDisable
+                                    : styles.nextPrevBtn
+                                }
+                            />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={this.handleNext}
+                            className={styles.navbutton}
+                            disabled={(rightElement === (rightelements.length) - 1)}
+                        >
+                            <Icon
+                                name="chevronRight"
+                                className={(rightElement === rightelements.length - 1)
+                                    ? styles.btnDisable
+                                    : styles.nextPrevBtn
+                                }
+                            />
+                        </button>
 
-                </div>
+                    </div>
+                )}
+
 
                 <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
                     exposedElement={exposedElement}
                     rightElement={rightElement}
+                    handleMoveEnd={this.handleMoveEnd}
                 />
-                {/* <Legends
-                    handleFloodChange={this.handleLegendsClick}
-                    handleExposedElementChange={this.handleExposedElementChange}
-                /> */}
-                {/* {this.state.rightElement === 1 && <RightElement1 /> }
-                {this.state.rightElement === 2 && <RightElement2 /> } */}
                 {rightelements[rightElement]}
+                {rightElement > 1 ? legends[legendElement] : ''}
             </div>
         );
     }

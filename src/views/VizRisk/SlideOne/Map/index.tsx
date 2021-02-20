@@ -56,6 +56,7 @@ class FloodHistoryMap extends React.Component {
             lat: 28.42722351741294,
             lng: 81.12424608127894,
             zoom: 11,
+            disableNavBtns: true,
         };
     }
 
@@ -138,7 +139,7 @@ class FloodHistoryMap extends React.Component {
                 layout: vizriskmapStyles.wardLabel.layout,
                 filter: getWardFilter(5, 65, 58007, wards),
             });
-
+            this.map.on('moveend', this.handleFlyEnd);
 
             this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
             this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
@@ -147,7 +148,6 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
             this.map.moveLayer('ward-fill', 'country-label');
             this.map.moveLayer('waterway');
-            // this.map.moveLayer('rajapurbuildings', 'ward-fill');
             this.map.setZoom(1);
 
             setTimeout(() => {
@@ -159,10 +159,10 @@ class FloodHistoryMap extends React.Component {
                     zoom: 11.4,
                     bearing: 0,
                     speed: 0.5,
-                    curve: 2,
+                    curve: 1,
                     essential: false,
                 });
-            }, 3000);
+            }, 2000);
         });
     }
 
@@ -183,11 +183,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
-                // this.map.moveLayer('ward-fill', 'country-label');
-                // this.map.moveLayer('forestRajapur');
-                // this.map.moveLayer('agriculturelandRajapur');
-                // this.map.moveLayer('rajapurbuildings');
-                // this.map.moveLayer('popnDensityRajapur');
                 this.map.setPitch(0);
                 this.map.setBearing(0);
             }
@@ -318,6 +313,10 @@ class FloodHistoryMap extends React.Component {
         });
         return newColor;
     };
+
+    public handleFlyEnd = () => {
+        this.props.handleMoveEnd(true);
+    }
 
     public render() {
         const mapStyle = {

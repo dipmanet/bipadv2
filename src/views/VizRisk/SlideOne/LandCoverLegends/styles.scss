@@ -1,5 +1,5 @@
     .lagendMainContainer{
-        background: rgba( 19, 32, 55, 0.35 );
+        background: rgba( 19, 32, 55, 0.75 );
         box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
         backdrop-filter: blur( 12.0px );
         -webkit-backdrop-filter: blur( 12.0px );
@@ -12,8 +12,9 @@
             color: white;
             opacity: 0.87;
             .settlementIcon{
-                color:#a74811;
+                color:#e00000;
                 padding-right: 12px;
+                font-size: 18px;
             }
         }  
         .sandyIconContainer{
@@ -24,6 +25,8 @@
             .sandIcon{
                 color: rgb(120,120,120);
                 padding-right: 12px;
+                font-size: 18px;
+
             }
         }
     
@@ -33,20 +36,28 @@
             color: white;
             opacity: 0.87;
             .agricultureIcon{
-                color: #238b45;
+                color: #d3e378;
                 padding-right: 12px;
+                font-size: 18px;
+
             }
             .forestIcon{
-                color:#00441b;
+                color:#00a811;
                 padding-right: 12px;
+                font-size: 18px;
+
             }
-            .roadIcon{
-                color:#444;
+            .otherIcon{
+                color:#b4b4b4;
                 padding-right: 12px;
+                font-size: 18px;
+
             }
             .canalIcon{
                 color:#52b3cb;
                 padding-right: 12px;
+                font-size: 18px;
+
             }
         }
     
@@ -56,8 +67,9 @@
             color: white;
             opacity: 0.87;
             .riverIcon{
-                color: #1a6074;
+                color: #2b4253;
                 padding-right: 12px;
+                font-size: 18px;
     
             }
         }
