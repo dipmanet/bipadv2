@@ -2,8 +2,6 @@ import React from 'react';
 
 const CustomTooltip = () => ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-        console.log('payload', payload);
-        // console.log('payload', payload);
         return (
             <div className="custom-tooltip">
                 <h2>{payload[0].payload.name}</h2>

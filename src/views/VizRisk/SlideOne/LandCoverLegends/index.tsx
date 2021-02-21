@@ -62,14 +62,30 @@ const LandCoverLegends = () => (
                 </span>
                             Other
             </p>
+
             <p className={styles.agroIconContainer}>
-                <span>
+                {/* <span>
                     <Icon
                         name="square"
                         className={styles.canalIcon}
                     />
+                </span> */}
+                <span className={styles.canalIcon}>
+                        ___
                 </span>
                             Canals
+            </p>
+            <p className={styles.agroIconContainer}>
+                {/* <span>
+                    <Icon
+                        name="square"
+                        className={styles.canalIcon}
+                    />
+                </span> */}
+                <span className={styles.bridgeIcon}>
+                        ===
+                </span>
+                            Bridges
             </p>
 
         </div>

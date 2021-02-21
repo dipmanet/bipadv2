@@ -122,28 +122,18 @@ class SlideOne extends React.PureComponent<Props, State> {
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            console.log('payload', payload);
-            // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
                     <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
                     <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
                     <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
-                    {/* <p className="label">{`${label} : ${payload[0].value}℃`}</p> */}
-                    {/* <p className="intro">{getIntroOfPage(label)}</p> */}
-                    {/* <p className="desc">Anything you want can be displayed here.</p> */}
                 </div>
             );
         }
 
         return null;
     };
-
-    // public tickFormatter = (tickItem) => {
-    //     console.log(tickItem);
-    //     return tickItem;
-    // }
 
     public renderLegend = (props) => {
         const { payload } = props;
@@ -220,9 +210,6 @@ class SlideOne extends React.PureComponent<Props, State> {
                         />
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
                         <Tooltip
-                            // wrapperStyle={{ backgroundColor: 'red' }}
-                            // labelStyle={{ color: 'green' }}
-                            // itemStyle={{ color: 'cyan' }}
                             content={this.CustomTooltip}
                         />
                         <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />

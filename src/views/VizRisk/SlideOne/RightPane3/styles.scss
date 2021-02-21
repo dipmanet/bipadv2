@@ -12,6 +12,14 @@
         height: 100vh;
         right: 0;
         overflow-y: scroll;
+        .customTooltip{
+            background-color: white;
+            // opacity: 0.87;
+            padding: 10px 0;
+            p{
+                color:#444;
+            }
+        }
         .pieTotal{
             color: white !important;
             opacity: 0.87;

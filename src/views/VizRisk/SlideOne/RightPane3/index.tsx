@@ -111,6 +111,19 @@ class RightPane extends React.PureComponent<Props, State> {
         });
     };
 
+    public CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            console.log('payload', payload);
+            // console.log('payload', payload);
+            return (
+                <div className={styles.customTooltip}>
+                    <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>
+                </div>
+            );
+        }
+        return null;
+    };
+
     public renderActiveShape = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
             fill, payload, percent, value } = props;
@@ -194,9 +207,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                 )}
                             />
                         </Pie>
-
-
-                        <Tooltip />
+                        <Tooltip content={this.CustomTooltip} />
                     </PieChart>
                 </ResponsiveContainer>
 
