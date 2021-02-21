@@ -5,12 +5,12 @@ import styles from './styles.scss';
 import RightElement1 from './RightPane1';
 import RightElement2 from './RightPane2';
 import RightElement3 from './RightPane3';
-import RightElement4 from './RightPane4';
 import LandcoverLegends from './LandCoverLegends';
+import DemographicsLegends from './DemographicsLegends';
 import Icon from '#rscg/Icon';
 
-const rightelements = [<RightElement1 />, <RightElement2 />, <RightElement3 />, <RightElement4 />];
-const legends = [<LandcoverLegends />];
+const rightelements = [<RightElement1 />, <RightElement2 />, <RightElement3 />];
+const legends = [<LandcoverLegends />, <DemographicsLegends />];
 
 export default class SlideFour extends React.Component {
     public constructor(props) {
@@ -112,7 +112,7 @@ export default class SlideFour extends React.Component {
                     handleMoveEnd={this.handleMoveEnd}
                 />
                 {rightelements[rightElement]}
-                {rightElement > 1 ? legends[legendElement] : ''}
+                {rightElement === 1 ? legends[0] : ''}
             </div>
         );
     }

@@ -175,7 +175,7 @@ class FloodHistoryMap extends React.Component {
         } = this.props;
 
         if (this.map.isStyleLoaded()) {
-            if (nextProps.rightElement === 2) {
+            if (nextProps.rightElement === 1) {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
@@ -186,7 +186,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setPitch(0);
                 this.map.setBearing(0);
             }
-            if (nextProps.rightElement < 2) {
+            if (nextProps.rightElement < 1) {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
@@ -199,7 +199,7 @@ class FloodHistoryMap extends React.Component {
 
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
             }
-            if (nextProps.rightElement > 2) {
+            if (nextProps.rightElement > 1) {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
@@ -330,7 +330,6 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <RightPane />
             </div>
         );
     }

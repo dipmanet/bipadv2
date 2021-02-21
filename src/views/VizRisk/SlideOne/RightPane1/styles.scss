@@ -39,7 +39,14 @@
                 }
             }
         }
-       
+          
+        .lastPara{
+            margin-bottom: 20px;
+            z-index: 2;
+            background-color:#112330;
+            opacity: 1;
+            padding-bottom: 30px;
+        }
         .iconContainer{
             width: 100%;
             display: flex;
@@ -83,12 +90,22 @@
         }
         h1{
         font-family: 'Playfair Display';
-        font-size: 22px;
+        font-size: 46px;
         color: white;
-        opacity: 0.67;
+        opacity: 0.87;
         padding: 0 30px;
         margin-top: 20px;
+        line-height: 1.2em;
         }
+        h2{
+            font-family: 'Playfair Display';
+            font-size: 30px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            margin-top: 20px;
+            line-height: 1.2em;
+            }
         p{
             color:white;
             font-size: 16px;
@@ -97,10 +114,79 @@
             line-height: 1.4em;
             padding: 0 30px;
         }
+        .climateLegendContainer{
+            display:flex;
+            justify-content: flex-start;
+            margin-left: 55px;
+            min-width: 200px;
+         
+            .climatelegend{
+            display:flex;
+            padding-right: 20px;
+                .legendMax{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffbf00;
+                    padding-right: 4px;
+                    margin-right: 3px;
+                }
+                .legendMin{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #347eff;
+                    // border: 1px solid #1f59be;
+                    margin-right: 3px;
+
+                }
+                .legendDaily{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #00d725;
+                    // border: 1px solid #047a18;
+                    margin-right: 3px;
+                
+                }
+                .legendText{
+                    color: #6490a4;
+                    // opacity: 0.45;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                }
+            }
+        }
     }
 
 
+    .customTooltip{
+        background-color: rgb(190, 190, 190) !important;
+        color: #444;
+        padding-bottom: 5px;
+        border-radius: 4px;
+        h2{
+            color: rgb(41, 40, 40) !important;
+            font-size: 12px !important;
+            line-height: 1em;
+            padding: 10px 0 0 10px;
+            display: flex;
+            justify-content: center;
 
+        }
+        p{
+            color: rgb(41, 40, 40) !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            justify-content: center;
+        }
+    }
+    .recharts-tooltip-wrapper{
+        background-color: white !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
 
 
 

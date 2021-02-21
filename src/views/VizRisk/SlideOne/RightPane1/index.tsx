@@ -1,4 +1,5 @@
 import React from 'react';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -17,7 +18,44 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-
+const lineData = [
+    {
+        name: 'Poush', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
+    },
+    {
+        name: 'Magh', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+    },
+    {
+        name: 'Falgun', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
+    },
+    {
+        name: 'Chaitra', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
+    },
+    {
+        name: 'Baisakh', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
+    },
+    {
+        name: 'Jestha', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
+    },
+    {
+        name: 'Ashar', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
+    },
+    {
+        name: 'Shrawan', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
+    },
+    {
+        name: 'Bhadra', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
+    },
+    {
+        name: 'Ashwin', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
+    },
+    {
+        name: 'Kartik', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
+    },
+    {
+        name: 'Mangshir', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
+    },
+];
 class SlideOne extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
@@ -37,6 +75,48 @@ class SlideOne extends React.PureComponent<Props, State> {
         } else {
             this.setState({ showInfo: true });
         }
+    };
+
+
+    public renderLegend = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                       Avg Max
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMin} />
+                    <div className={styles.legendText}>
+                       Avg Min
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendDaily} />
+                    <div className={styles.legendText}>
+                       Daily Avg
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    public CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
+                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
+                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                </div>
+            );
+        }
+
+        return null;
     };
 
     public render() {
@@ -59,8 +139,20 @@ class SlideOne extends React.PureComponent<Props, State> {
                         square km, and is situated at an elevation of 142 m to 154 m from sea level.
                 </p> */}
                 <p>
-                         Rajapur municipality lies in the Terai region of Bardiya
-                        district in Province five.
+                Rajapur municipality lies in the Terai region
+                of Bardiya district in Lumbini Province.
+                It covers a  total area of 127.08 square km, and
+                runs an elevation of 142 m to 154m from sea level.
+                </p>
+                <h2>Climate</h2>
+                <p className={styles.lastPara}>
+                    {' '}
+                        Rajapur experiences a lower tropical climate with an average
+                        maximum temperature of 41 degree celcius in winter. Summer starts from
+                        Chaitra till Jestha while there is an
+                        extreme winter in Mangshir, Poush and Magh.
+                        Monsoon starts here a bit early from the last week of Jestha till Ashwin
+                        bringing the heavy downpours.
                 </p>
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>
@@ -140,6 +232,40 @@ class SlideOne extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
+
+                <ResponsiveContainer className={styles.chartContainer} height={300}>
+                    <LineChart
+                        margin={{ top: 0, right: 35, left: 0, bottom: 10 }}
+                        data={lineData}
+                    >
+                        <CartesianGrid
+                            vertical={false}
+                            strokeDasharray="3 3"
+                        />
+                        <XAxis
+                            dataKey="name"
+                            interval="preserveStart"
+                            tick={{ fill: '#6490a4' }}
+                        />
+                        <XAxis
+                            unit={'℃'}
+                            axisLine={false}
+                            domain={[0, 40]}
+                            padding={{ top: 20 }}
+                            tick={{ fill: '#6490a4' }}
+                            tickCount={10}
+                            interval="preserveEnd"
+                            allowDataOverflow
+                        />
+                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
+                        <Tooltip
+                            content={this.CustomTooltip}
+                        />
+                        <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
+                        <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
+                        <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
+                    </LineChart>
+                </ResponsiveContainer>
                 <div className={styles.iconContainer}>
                     <div
                         className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}

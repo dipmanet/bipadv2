@@ -1,272 +1,213 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import memoize from 'memoize-one';
-import {
-    ResponsiveContainer,
-    PieChart,
-    Legend,
-    Label,
-    Tooltip,
-    Pie,
-    Cell,
-    Sector,
-} from 'recharts';
-import Page from '#components/Page';
-import CustomChartLegend from '../../CustomChartLegend';
-import Icon from '#rscg/Icon';
 
-import Map from '#re-map';
-import MapContainer from '#re-map/MapContainer';
-
-import VizriskMap from '#components/VizriskMap';
-
-import {
-    mapStyleSelector,
-    regionsSelector,
-    provincesSelector,
-    districtsSelector,
-    municipalitiesSelector,
-    wardsSelector,
-    hazardTypesSelector,
-} from '#selectors';
-import GeoJSON from '../../GeoJSON';
-import CustomLabel from './CustomLabel';
-
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import styles from './styles.scss';
-
-const data = [
-    { name: 'Agricultural land', value: 94.07 },
-    { name: 'Forest', value: 5.99 },
-    { name: 'Water bodies', value: 5.18 },
-    { name: 'Other', value: 21.5 },
-    { name: 'Built up areas', value: 0.959 },
-].sort(({ value: a }, { value: b }) => b - a);
-
-const COLORS_CHART = [
-    '#d3e378',
-    '#b4b4b4',
-    '#00a811',
-    '#2b4253',
-    '#e00000',
-];
-
-
-interface State {
-    activeIndex: number;
-    selected: number;
-    showInfo: boolean;
-}
+import demographicsData from '../../demographicsData';
+import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
+const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
+const data = [
+    { name: 'HDI', value: 0.446 },
+    { name: 'Life Expectancy', value: 67.26 },
+    { name: 'HPI', value: 32.3 },
+    { name: 'PCI', value: 1086 },
+    { name: 'Households with mobile phone', value: 6794 },
+    { name: 'Households with television', value: 5860 },
+];
 
-const mapStateToProps = state => ({
-    mapStyle: mapStyleSelector(state),
-    regions: regionsSelector(state),
-    provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
-    wards: wardsSelector(state),
-    hazardTypes: hazardTypesSelector(state),
-});
-
-class RightPane extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            activeIndex: 0,
-            selected: 0,
-            showInfo: false,
-        };
-    }
-
-    public generateColor = memoize((maxValue, minValue, colorMapping) => {
-        const newColor = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    });
-
-    public generatePaint = memoize(color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-        'fill-opacity': 0,
-    }))
-
-    public onPieEnter = (piedata, index) => {
-        this.setState({
-            activeIndex: index,
-        });
-    };
-
-    public CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            console.log('payload', payload);
-            // console.log('payload', payload);
-            return (
-                <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>
-                </div>
-            );
-        }
-        return null;
-    };
-
-    public renderActiveShape = (props) => {
-        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-            fill, payload, percent, value } = props;
-
-        return (
-            <g>
-                <Sector
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={innerRadius - 4}
-                    outerRadius={outerRadius + 4}
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    paddingAngle={3}
-                    fill={fill}
-                />
-            </g>
-        );
-    };
-
-    public handleInfoClick = () => {
-        const { showInfo } = this.state;
-        if (showInfo) {
-            this.setState({ showInfo: false });
-        } else {
-            this.setState({ showInfo: true });
-        }
-    };
-
-
+class SlideThreePane extends React.PureComponent<Props, State> {
     public render() {
-        const { activeIndex, showInfo } = this.state;
-
+        const chartData = demographicsData.demographicsData;
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Land Cover Breakdown</h1>
-
+                <h1>Demography</h1>
                 <p>
                     {' '}
-                    {/* Located in the Terai region and lying close to water bodies,
-                        Rajapur has fertile and arable land. Out of total area of
-                        127.08 square km, 74.19% of land is used for agriculture.
-                        Built-in area covers 0.75% of land, water bodies cover
-                        4.09% of land while forest area occupies 4.72% of total
-                        land in Rajapur. */}
-
+                        Rajapur has the total population of 55,584 with the
+                        male and female population being 25,519 and 30,065
+                        respectively. Total household number counts to 12,138.
+                        Ward number 4 has the largest household number that equals to 1639
+                        while ward number 7 has the least comprising of only
+                        766 number of household. However, the population is highest in
+                        ward number 4 and lowest in ward number 7.
 
                 </p>
-                <ResponsiveContainer className={styles.respContainer} height={200}>
-                    <PieChart
-                        width={200}
-                        height={150}
-                        margin={{ top: 15, bottom: 15, left: 5, right: 5 }}
+                <ResponsiveContainer height={200} className={styles.graphContainer}>
+                    <BarChart
+                        width={300}
+                        height={200}
+                        data={chartData}
+                        margin={{
+                            top: 5, right: 30, left: 20, bottom: 15,
+                        }}
                     >
-                        <Pie
-                            activeIndex={activeIndex}
-                            activeShape={this.renderActiveShape}
-                            data={data}
-                                // cx={150}
-                            // cy={50}
-                            innerRadius={70}
-                            outerRadius={90}
-                            fill="#8884d8"
-                            paddingAngle={0}
-                            dataKey="value"
-                            onClick={this.onPieEnter}
-                            stroke="none"
-                        >
-                            {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
-                            }
-                            <Label
-                                width={30}
-                                position="center"
-                                content={(
-                                    <CustomLabel
-                                        value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${((data[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
-                                    />
-                                )}
-                            />
-                        </Pie>
-                        <Tooltip content={this.CustomTooltip} />
-                    </PieChart>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <XAxis />
+                        <Tooltip />
+                        <Legend layout="horizontal" verticalAlign="bottom" />
+                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
+                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
+                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
+                    </BarChart>
                 </ResponsiveContainer>
-
                 <div className={styles.customChartLegend}>
-                    <CustomChartLegend
+                    {/* <CustomChartLegend
                         text={data[0].name}
-                        barColor={COLORS_CHART[0]}
-                        background={'#eee'}
-                        data={'94.07 sq km / 74.06'}
-                        selected={activeIndex === 0}
+                        barColor={COLORS[0]}
+                        background={'rgb(167,225,248)'}
+                        data={0.446}
                     />
                     <CustomChartLegend
                         text={data[1].name}
-                        barColor={COLORS_CHART[1]}
-                        background={'#eee'}
-                        data={'21.5 sq km / 16.93'}
-                        selected={activeIndex === 1}
+                        barColor={COLORS[1]}
+                        background={'rgb(149,198,229)'}
+                        data={67.26}
                     />
                     <CustomChartLegend
                         text={data[2].name}
-                        barColor={COLORS_CHART[2]}
-                        background={'#eee'}
-                        data={'5.99 sq km / 4.72'}
-                        selected={activeIndex === 2}
+                        barColor={COLORS[2]}
+                        background={'rgb(0,101,119)'}
+                        data={32.3}
                     />
                     <CustomChartLegend
                         text={data[3].name}
-                        barColor={COLORS_CHART[3]}
-                        background={'#eee'}
-                        data={'5.18 sq km / 4.08'}
-                        selected={activeIndex === 3}
+                        barColor={COLORS[3]}
+                        background={'rgb(245, 175, 212)'}
+                        data={1086}
+                    /> */}
+                    <h1>Municipality Profile</h1>
+                    <p>Human Development Index</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>0.4</div>
+                                <div className={styles.rajapurHDI}>0.446</div>
+                                <div>0.6</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarHDI}>
+                            <div className={styles.innerBarHDI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    <p>Life Expectancy (years)</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>61.2</div>
+                                <div className={styles.rajapurLE}>67.26</div>
+                                <div>72.9</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarLE}>
+                            <div className={styles.innerBarLE} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    <p>Human Poverty Index</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>16.5</div>
+                                <div className={styles.rajapurHPI}>32.3</div>
+                                <div>49.3</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarHPI}>
+                            <div className={styles.innerBarHPI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+                    <p>Per Capita Income ($)</p>
+                    <div className={styles.customBarContainer}>
+                        <div className={styles.upperLabels}>
+                            <div className={styles.avg}>
+                                <div>487</div>
+                                <div className={styles.rajapurPCI}>1086</div>
+                                <div>3166</div>
+                            </div>
+                        </div>
+
+                        <div className={styles.customBarPCI}>
+                            <div className={styles.innerBarPCI} />
+                        </div>
+                        <div className={styles.minMaxLabel}>
+                            <div className={styles.min}>Min</div>
+                            <div className={styles.max}>Max</div>
+                        </div>
+                    </div>
+
+                    {/* <CustomChartLegend
+                        text={data[4].name}
+                        barColor={COLORS[4]}
+                        background={'rgb(247, 197, 181)'}
+                        data={6794}
                     />
                     <CustomChartLegend
-                        text={data[4].name}
-                        barColor={COLORS_CHART[4]}
-                        background={'#eee'}
-                        data={'0.959 sq km / 0.75'}
-                        selected={activeIndex === 4}
-                        builtupArea
-                    />
+                        text={data[5].name}
+                        barColor={COLORS[5]}
+                        background={'rgb(149,198,229)'}
+                        data={5860}
+                    /> */}
+                </div>
+                {/* <ul className={styles.profileList}>
+                    <li>
+                            HDI
+                        <sup>1</sup>
+                            : 0.446
+                    </li>
+                    <li>
+                            Life Expectancy
+                        <sup>1</sup>
+                            : 67.26
+                    </li>
+                    <li>
+                            HPI
+                        <sup>1</sup>
+                            : 32.3
+                    </li>
+                    <li>
+                            PCI
+                        <sup>1</sup>
+                            : 1086
+                    </li>
+                    <li>
+                            Household with mobile phone
+                        <sup>2</sup>
+                            : 6794
+                    </li>
+                    <li>
+                        Household with television
+                        <sup>2</sup>
+                            : 5860
+                    </li>
+                </ul> */}
 
 
-                </div>
-                <div className={styles.iconContainer}>
-                    <div
-                        className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
-                    >
-                            Source: Rajapur Municipality Profile
-                    </div>
-                    <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
-                        <Icon
-                            name="info"
-                            className={styles.closeIcon}
-                        />
-                    </button>
-                </div>
             </div>
         );
     }
 }
 
-export default connect(mapStateToProps)(RightPane);
+export default SlideThreePane;
