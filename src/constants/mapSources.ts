@@ -27,7 +27,6 @@ export default {
             district: 'districtgeo',
             municipality: 'municipalitygeo',
             ward: 'wardgeo',
-            water: 'water copy',
         },
     },
 
@@ -38,6 +37,13 @@ export default {
             district: 'districtcentroidgeo',
             municipality: 'municipalitycentroidgeo',
             ward: 'wardcentroidgeo',
+        },
+    },
+
+    populationDensity: {
+        url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_DENSITY_POPULATION}`,
+        layers: {
+            density: 'density-b7o1uo',
         },
     },
 };

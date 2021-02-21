@@ -23,7 +23,7 @@ export default class SlideFour extends React.Component {
             rightElement: 0,
             legendElement: 0,
             showLegend: false,
-            disableNavBtns: true,
+            disableNavBtns: false,
         };
     }
 
