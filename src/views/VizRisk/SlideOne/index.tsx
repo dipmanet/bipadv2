@@ -113,6 +113,7 @@ export default class SlideFour extends React.Component {
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1 ? legends[0] : ''}
+                {rightElement === 2 ? legends[1] : ''}
             </div>
         );
     }

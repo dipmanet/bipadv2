@@ -14,12 +14,14 @@
         overflow-y: scroll;
         .iconRow{
             display: flex;
-            flex-direction: column;
-            // padding: 15px 15px 15px 30px;
             padding-left: 30px;
+            .infoIconsContainerHidden{
+                visibility: hidden;
+            }
             .infoIconsContainer{
                 display: flex;
                 margin: 15px 15px 15px 0;
+                flex: 1;
                 .infoIcon{
                     margin: 0px 15px 0 5px;
                 }
@@ -153,6 +155,9 @@
                     text-transform: uppercase;
                 }
             }
+        }
+        .chartContainer{
+            margin-top: 30px;
         }
     }
 

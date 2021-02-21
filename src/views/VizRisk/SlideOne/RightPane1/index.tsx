@@ -1,5 +1,10 @@
 import React from 'react';
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -20,40 +25,40 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const lineData = [
     {
-        name: 'Poush', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
+        name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
     },
     {
-        name: 'Magh', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
     },
     {
-        name: 'Falgun', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
+        name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
     },
     {
-        name: 'Chaitra', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
+        name: 'Apr', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
     },
     {
-        name: 'Baisakh', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
+        name: 'May', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
     },
     {
-        name: 'Jestha', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
+        name: 'Jun', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
     },
     {
-        name: 'Ashar', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
+        name: 'Jul', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
     },
     {
-        name: 'Shrawan', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
+        name: 'Aug', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
     },
     {
-        name: 'Bhadra', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
+        name: 'Sep', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
     },
     {
-        name: 'Ashwin', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
+        name: 'Oct', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
     },
     {
-        name: 'Kartik', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
+        name: 'Nov', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
     },
     {
-        name: 'Mangshir', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
+        name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
     },
 ];
 class SlideOne extends React.PureComponent<Props, State> {
@@ -145,7 +150,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                 runs an elevation of 142 m to 154m from sea level.
                 </p>
                 <h2>Climate</h2>
-                <p className={styles.lastPara}>
+                <p>
                     {' '}
                         Rajapur experiences a lower tropical climate with an average
                         maximum temperature of 41 degree celcius in winter. Summer starts from
@@ -201,7 +206,7 @@ class SlideOne extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                    <div className={styles.infoIconsContainer}>
+                    <div className={styles.infoIconsContainerHidden}>
                         <ScalableVectorGraphics
                             className={styles.infoIcon}
                             src={ElevationIcon}
@@ -214,28 +219,11 @@ class SlideOne extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={AreaIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>
-                                127.08 km
-                                {' '}
-                                <sup>2</sup>
-                            </div>
-                            <div className={styles.iconText}>
-                            Total Area
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
 
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
-                        margin={{ top: 0, right: 35, left: 0, bottom: 10 }}
+                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
                         data={lineData}
                     >
                         <CartesianGrid
@@ -247,7 +235,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                             interval="preserveStart"
                             tick={{ fill: '#6490a4' }}
                         />
-                        <XAxis
+                        <YAxis
                             unit={'℃'}
                             axisLine={false}
                             domain={[0, 40]}

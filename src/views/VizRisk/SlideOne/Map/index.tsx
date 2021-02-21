@@ -13,7 +13,6 @@ import {
     municipalitiesSelector,
     districtsSelector,
     wardsSelector,
-
     regionLevelSelector,
     boundsSelector,
     selectedProvinceIdSelector,
@@ -35,7 +34,6 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-
     regionLevelFromAppState: regionLevelSelector(state, props),
     bounds: boundsSelector(state, props),
     selectedProvinceId: selectedProvinceIdSelector(state, props),
@@ -45,7 +43,6 @@ const mapStateToProps = (state, props) => ({
 
 const colorGrade = [
     '#ffedb8',
-    // '#5aa8a3',
 ];
 
 class FloodHistoryMap extends React.Component {
@@ -106,30 +103,20 @@ class FloodHistoryMap extends React.Component {
             };
             this.map.setZoom(1);
 
-            this.map.addSource('vizrisk-fills', {
-                type: 'vector',
-                url: mapSources.nepal.url,
-            });
+            // this.map.addSource('vizrisk-fills', {
+            //     type: 'vector',
+            //     url: mapSources.nepal.url,
+            // });
 
-            this.map.addLayer({
-                id: 'ward-fill',
-                type: 'fill',
-                source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
-                layout: visibleLayout,
-                paint: colorPaint,
-                filter: getWardFilter(5, 65, 58007, wards),
-            }, 'water');
-
-            this.map.addLayer({
-                id: 'ward-outline',
-                source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
-                type: 'line',
-                paint: vizriskmapStyles.ward.outline,
-                layout: visibleLayout,
-                filter: getWardFilter(5, 65, 58007, wards),
-            });
+            // this.map.addLayer({
+            //     id: 'ward-outline',
+            //     source: 'vizrisk-fills',
+            //     'source-layer': mapSources.nepal.layers.ward,
+            //     type: 'line',
+            //     paint: vizriskmapStyles.ward.outline,
+            //     layout: visibleLayout,
+            //     filter: getWardFilter(5, 65, 58007, wards),
+            // });
 
             this.map.addLayer({
                 id: 'ward-label',
@@ -183,7 +170,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
-                this.map.setPitch(0);
+                this.map.setPitch(40);
                 this.map.setBearing(0);
             }
             if (nextProps.rightElement < 1) {
@@ -204,8 +191,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
-                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'visible');
-                this.map.setPitch(50);
+                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
+                this.map.setPitch(35);
                 this.map.moveLayer('popnDensityRajapur');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
             }
