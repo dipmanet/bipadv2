@@ -43,6 +43,7 @@ const mapStateToProps = (state, props) => ({
 
 const colorGrade = [
     '#ffedb8',
+    '#ffffff',
 ];
 
 let hoveredWardId = null;
@@ -80,13 +81,43 @@ class FloodHistoryMap extends React.Component {
             wards.map((item) => {
                 const { id } = item;
                 if (item.municipality === 58007) {
-                    mapping.push({ id, value: 1 });
+                    if (item.title === '1') {
+                        mapping.push({ id, value: 1 });
+                    }
+                    if (item.title === '2') {
+                        mapping.push({ id, value: 2 });
+                    }
+                    if (item.title === '3') {
+                        mapping.push({ id, value: 3 });
+                    }
+                    if (item.title === '4') {
+                        mapping.push({ id, value: 4 });
+                    }
+                    if (item.title === '5') {
+                        mapping.push({ id, value: 5 });
+                    }
+                    if (item.title === '6') {
+                        mapping.push({ id, value: 6 });
+                    }
+                    if (item.title === '7') {
+                        mapping.push({ id, value: 7 });
+                    }
+                    if (item.title === '8') {
+                        mapping.push({ id, value: 8 });
+                    }
+                    if (item.title === '9') {
+                        mapping.push({ id, value: 9 });
+                    }
+                    if (item.title === '10') {
+                        mapping.push({ id, value: 10 });
+                    }
                 }
                 return null;
             });
         }
 
         const color = this.generateColor(1, 0, colorGrade);
+        console.log('color: ', color);
         const colorPaint = this.generatePaint(color);
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -113,22 +144,7 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
             });
-            // this.map.addLayer({
-            //     id: 'density-population',
-            //     source: 'density',
-            //     'source-layer': 'density-b7o1uo',
-            //     type: 'fill',
-            //     paint: {
-            //         'fill-color': '#627BC1',
-            //         'fill-opacity': [
-            //             'case',
-            //             ['boolean', ['feature-state', 'hover'], false],
-            //             0.5,
-            //             1,
-            //         ],
-            //     },
-            //     layout: {},
-            // });
+
 
             this.map.addLayer({
                 id: 'ward-fill-local',
@@ -136,7 +152,19 @@ class FloodHistoryMap extends React.Component {
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': '#dee1b8',
+                    // 'fill-color': '#dee1b8',
+                    // 'fill-color': ['step', ['get', 'id'], '#ffeda0', 4828],
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['feature-state', 'value'],
+                        1, '#fee391', 2, '#ec7014',
+                        3, '#fe9929', 4, '#662506',
+                        5, '#cc4c02', 6, '#fec44f',
+                        7, '#ffffff', 8, '#fff7bc',
+                        9, '#ffffe5', 10, '#993404',
+                    ],
+
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -144,10 +172,18 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                layout: {},
                 filter: getWardFilter(5, 65, 58007, wards),
             });
-
+            mapping.forEach((attribute) => {
+                this.map.setFeatureState(
+                    {
+                        id: attribute.id,
+                        source: 'vizrisk-fills',
+                        sourceLayer: mapSources.nepal.layers.ward,
+                    },
+                    { value: attribute.value },
+                );
+            });
             this.map.addLayer({
                 id: 'ward-outline',
                 source: 'vizrisk-fills',
@@ -219,31 +255,6 @@ class FloodHistoryMap extends React.Component {
                     );
                 }
             });
-            // this.map.on('mousemove', 'density-population', (e) => {
-            //     if (e.features.length > 0) {
-            //         if (hoveredWardId) {
-            //             this.map.setFeatureState(
-            //                 {
-            //                     id: hoveredWardId,
-            //                     source: 'density',
-            //                     sourceLayer: mapSources.populationDensity.url,
-            //                 },
-            //                 { hover: false },
-            //             );
-            //         }
-            //         console.log(e.features[0].id);
-            //         hoveredWardId = e.features[0].id;
-            //         this.map.setFeatureState(
-            //             {
-            //                 id: hoveredWardId,
-            //                 source: 'density',
-            //                 sourceLayer: mapSources.populationDensity.layers.density,
-
-            //             },
-            //             { hover: true },
-            //         );
-            //     }
-            // });
         });
     }
 
@@ -292,6 +303,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.moveLayer('popnDensityRajapur');
                 this.map.moveLayer('ward-outline');
                 this.map.moveLayer('water');
+                this.map.setLayoutProperty('waterway', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
             }
             if (nextProps.showRaster !== showRaster || nextProps.rasterLayer !== rasterLayer) {
