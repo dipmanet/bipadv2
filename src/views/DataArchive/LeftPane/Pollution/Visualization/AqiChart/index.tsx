@@ -14,7 +14,6 @@ import Button from '#rsca/Button';
 import { stackedBars, legendData } from './constants';
 import PollutionLegend from './Legend';
 import CustomTooltip from './Tooltip';
-import Note from './Note';
 import styles from './styles.scss';
 
 interface ChartData {
@@ -79,7 +78,6 @@ const AqiChart = (props: Props) => {
     const cleanData = removeZero(stationWiseData);
     return (
         <div className={styles.visualizations}>
-            <Note />
             <div
                 className={styles.hazardStatisticsChart}
             >

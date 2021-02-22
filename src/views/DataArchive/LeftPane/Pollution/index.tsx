@@ -10,6 +10,8 @@ import Message from '#rscv/Message';
 import { groupList } from '#utils/common';
 import PollutionGroup from './PollutionGroup';
 import TopBar from './TopBar';
+import Note from './Note';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -241,6 +243,9 @@ const Pollution = (props: Props) => {
                     handleDataButtonClick={handleDataButtonClick}
                     handleVisualizationsButtonClick={handleVisualizationsButtonClick}
                 />
+                <div className={styles.note}>
+                    {!pending && <Note />}
+                </div>
             </div>
             {/* {
                 activeView === 'data' && filteredPollutionList.map(
