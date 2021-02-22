@@ -3,22 +3,15 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        background-color: #193341;
+        background-color:#112330;
+        min-width: 300px;
         color:#b6d6e4;
-        padding: 90px 15px;
-        width: 25%;
-        right: 60px;
-        overflow-y: scroll;
-        height: 100vh;
-
-        // color:#800064;
-        padding: 70px 30px 30px 30px;
+        padding: 70px 0 0 0;
         margin-right: 60px;
         width: calc(30% - 60px);
         height: 100vh;
         right: 0;
         overflow-y: scroll;
-        // visibility: hidden;
         .graphContainer{
             margin: 15px 0;
         }

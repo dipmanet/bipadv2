@@ -47,6 +47,17 @@ const colorGrade = [
 ];
 
 let hoveredWardId = null;
+const fillThis = [
+    'interpolate',
+    ['linear'],
+    ['feature-state', 'value'],
+    1, '#EC8F04', 2, '#EC8F04',
+    3, '#F69504', 4, '#A66403',
+    5, '#C97A03', 6, '#DD8603',
+    7, '#FDCC81', 8, '#F19204',
+    9, '#FCA522', 10, '#B56E03',
+];
+
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -57,6 +68,7 @@ class FloodHistoryMap extends React.Component {
             lng: 81.12424608127894,
             zoom: 11,
             disableNavBtns: true,
+            wardNumber: 'Hover to see ward number',
         };
     }
 
@@ -147,24 +159,63 @@ class FloodHistoryMap extends React.Component {
 
 
             this.map.addLayer({
+                id: 'ward-outline',
+                source: 'vizrisk-fills',
+                'source-layer': mapSources.nepal.layers.ward,
+                type: 'line',
+                paint: vizriskmapStyles.ward.outline,
+                layout: visibleLayout,
+                filter: getWardFilter(5, 65, 58007, wards),
+            });
+            this.map.addLayer({
+                id: 'ward-label',
+                'source-layer': mapSources.nepalCentroid.layers.ward,
+                type: 'symbol',
+                paint: vizriskmapStyles.wardLabel.paint,
+                layout: vizriskmapStyles.wardLabel.layout,
+                filter: getWardFilter(5, 65, 58007, wards),
+            });
+
+            this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+            this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
+            this.map.moveLayer('ward-fill', 'country-label');
+            this.map.moveLayer('waterway');
+            this.map.setZoom(1);
+
+            setTimeout(() => {
+                this.map.flyTo({
+                    center: [
+                        81.123711,
+                        28.436586,
+                    ],
+                    zoom: 11.4,
+                    bearing: 0,
+                    speed: 1,
+                    curve: 1,
+                    essential: false,
+                });
+            }, 2000);
+
+            this.map.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    // 'fill-color': '#dee1b8',
-                    // 'fill-color': ['step', ['get', 'id'], '#ffeda0', 4828],
                     'fill-color': [
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, '#fee391', 2, '#ec7014',
-                        3, '#fe9929', 4, '#662506',
-                        5, '#cc4c02', 6, '#fec44f',
-                        7, '#ffffff', 8, '#fff7bc',
-                        9, '#ffffe5', 10, '#993404',
+                        1, '#EC8F04', 2, '#EC8F04',
+                        3, '#F69504', 4, '#A66403',
+                        5, '#C97A03', 6, '#DD8603',
+                        7, '#FDCC81', 8, '#F19204',
+                        9, '#FCA522', 10, '#B56E03',
                     ],
-
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -184,54 +235,10 @@ class FloodHistoryMap extends React.Component {
                     { value: attribute.value },
                 );
             });
-            this.map.addLayer({
-                id: 'ward-outline',
-                source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
-                type: 'line',
-                paint: vizriskmapStyles.ward.outline,
-                layout: visibleLayout,
-                filter: getWardFilter(5, 65, 58007, wards),
-            });
-            this.map.addLayer({
-                id: 'ward-label',
-                'source-layer': mapSources.nepalCentroid.layers.ward,
-                type: 'symbol',
-                paint: vizriskmapStyles.wardLabel.paint,
-                layout: vizriskmapStyles.wardLabel.layout,
-                filter: getWardFilter(5, 65, 58007, wards),
-            });
-            // this.map.on('moveend', this.handleFlyEnd);
-
-            this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
-            this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
-            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
-            this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            this.map.moveLayer('ward-fill', 'country-label');
-            // this.map.moveLayer('ward-fill-local');
-            this.map.moveLayer('waterway');
-            this.map.setZoom(1);
-
-            setTimeout(() => {
-                this.map.flyTo({
-                    center: [
-                        81.123711,
-                        28.436586,
-                    ],
-                    zoom: 11.4,
-                    bearing: 0,
-                    speed: 1,
-                    curve: 1,
-                    essential: false,
-                });
-            }, 2000);
-            // console.log('this map', this.map);
             this.map.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
                     if (hoveredWardId) {
+                        this.setState({ wardNumber: hoveredWardId });
                         this.map.setFeatureState(
                             {
                                 id: hoveredWardId,
@@ -241,6 +248,8 @@ class FloodHistoryMap extends React.Component {
                             },
                             { hover: false },
                         );
+                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#ddd');
+                        // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
                     }
                     hoveredWardId = e.features[0].id;
                     this.map.setFeatureState(
@@ -255,6 +264,24 @@ class FloodHistoryMap extends React.Component {
                     );
                 }
             });
+
+            this.map.on('mouseleave', 'ward-fill-local', () => {
+                if (hoveredWardId) {
+                    this.map.setFeatureState(
+                        {
+                            source: 'vizrisk-fills',
+                            id: hoveredWardId,
+                            sourceLayer: mapSources.nepal.layers.ward,
+                        },
+                        { hover: false },
+
+                    );
+                    this.map.setPaintProperty('ward-fill-local', 'fill-color', fillThis);
+                    // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 1);
+                }
+                hoveredWardId = null;
+            });
+            this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
         });
     }
 
@@ -275,6 +302,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+
                 this.map.setPitch(40);
                 this.map.setBearing(0);
             }
@@ -285,6 +314,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
 
                 this.map.setPitch(0);
                 this.map.setBearing(0);
@@ -299,6 +329,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                 this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
+
                 this.map.setPitch(45);
                 this.map.moveLayer('popnDensityRajapur');
                 this.map.moveLayer('ward-outline');
@@ -389,6 +420,7 @@ class FloodHistoryMap extends React.Component {
         this.map.remove();
     }
 
+
     public generatePaint = color => ({
         'fill-color': [
             'interpolate',
@@ -423,10 +455,20 @@ class FloodHistoryMap extends React.Component {
             top: 0,
             bottom: 0,
         };
-
+        const wardStyle = {
+            position: 'absolute',
+            width: '100px',
+            height: '100px',
+            backgroundColor: '#fff',
+            top: '100px',
+            left: '50px',
+            zIndex: '2',
+        };
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
+                <div style={wardStyle}>{this.state.wardNumber}</div>
+
             </div>
         );
     }

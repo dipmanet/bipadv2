@@ -9,8 +9,15 @@ import LandcoverLegends from './LandCoverLegends';
 import DemographicsLegends from './DemographicsLegends';
 import Icon from '#rscg/Icon';
 
-const rightelements = [<RightElement1 />, <RightElement2 />, <RightElement3 />];
-const legends = [<LandcoverLegends />, <DemographicsLegends />];
+const rightelements = [
+    <RightElement1 />,
+    <RightElement2 />,
+    <RightElement3 />,
+];
+const legends = [
+    <LandcoverLegends />,
+    <DemographicsLegends />,
+];
 
 export default class SlideFour extends React.Component {
     public constructor(props) {
@@ -24,6 +31,7 @@ export default class SlideFour extends React.Component {
             legendElement: 0,
             showLegend: false,
             disableNavBtns: false,
+            hoveredWard: '',
         };
     }
 
@@ -65,6 +73,7 @@ export default class SlideFour extends React.Component {
             rightElement,
             legendElement,
             disableNavBtns,
+            hoveredWard,
         } = this.state;
 
         return (
@@ -110,6 +119,7 @@ export default class SlideFour extends React.Component {
                     exposedElement={exposedElement}
                     rightElement={rightElement}
                     handleMoveEnd={this.handleMoveEnd}
+                    handleWardHover={this.handleWardHover}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1 ? legends[0] : ''}
