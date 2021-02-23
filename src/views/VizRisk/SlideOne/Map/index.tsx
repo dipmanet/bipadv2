@@ -5,7 +5,16 @@ import turf from 'turf';
 import { mapSources, vizriskmapStyles } from '#constants';
 import SchoolGeoJSON from '../../SchoolGeoJSON';
 import SafeshelterGeoJSON from '../../safeShelter';
+import Education from '../Icons/Education.svg';
 import ManualIcon from '#resources/images/chisapanistation.png';
+import Bank from '../Icons/rupees.svg';
+import Culture from '../Icons/Area.svg';
+import Governance from '../Icons/bridge.svg';
+import Health from '../Icons/hospital.svg';
+import Industry from '../Icons/industry.svg';
+import Tourism from '../Icons/tourism.svg';
+import Communication from '../Icons/TempMin.svg';
+import Transportation from '../Icons/TempMax.svg';
 
 
 import {
@@ -51,11 +60,11 @@ const fillThis = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#EC8F04', 2, '#EC8F04',
-    3, '#F69504', 4, '#A66403',
-    5, '#C97A03', 6, '#DD8603',
-    7, '#FDCC81', 8, '#F19204',
-    9, '#FCA522', 10, '#B56E03',
+    1, '#fe9b2a', 2, '#fe9b2a',
+    3, '#fe9b2a', 4, '#9a3404',
+    5, '#d95f0e', 6, '#fe9b2a',
+    7, '#ffffd6', 8, '#fe9b2a',
+    9, '#fed990', 10, '#d95f0e',
 ];
 
 
@@ -87,7 +96,7 @@ class FloodHistoryMap extends React.Component {
         } = this.props;
 
         const { schools: schoolgeo } = SchoolGeoJSON;
-        const { chisapani } = SchoolGeoJSON;
+        const { criticalinfrastructures } = SchoolGeoJSON;
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -129,7 +138,6 @@ class FloodHistoryMap extends React.Component {
         }
 
         const color = this.generateColor(1, 0, colorGrade);
-        console.log('color: ', color);
         const colorPaint = this.generatePaint(color);
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -139,7 +147,6 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 15,
         });
-
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
         this.map.on('style.load', () => {
@@ -176,10 +183,12 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(5, 65, 58007, wards),
             });
 
+            // console.log('map: ', this.map);
+
             this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
             this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
             this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+            // this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
             this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
             this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
             this.map.moveLayer('ward-fill', 'country-label');
@@ -210,11 +219,11 @@ class FloodHistoryMap extends React.Component {
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, '#EC8F04', 2, '#EC8F04',
-                        3, '#F69504', 4, '#A66403',
-                        5, '#C97A03', 6, '#DD8603',
-                        7, '#FDCC81', 8, '#F19204',
-                        9, '#FCA522', 10, '#B56E03',
+                        1, '#fe9b2a', 2, '#fe9b2a',
+                        3, '#fe9b2a', 4, '#9a3404',
+                        5, '#d95f0e', 6, '#fe9b2a',
+                        7, '#ffffd6', 8, '#fe9b2a',
+                        9, '#fed990', 10, '#d95f0e',
                     ],
                     'fill-opacity': [
                         'case',
@@ -225,6 +234,141 @@ class FloodHistoryMap extends React.Component {
                 },
                 filter: getWardFilter(5, 65, 58007, wards),
             });
+
+            this.map.addSource('criticalinfra', {
+                type: 'geojson',
+                data: criticalinfrastructures,
+                cluster: true,
+                clusterMaxZoom: 14,
+                clusterRadius: 50,
+            });
+
+            this.map.addLayer({
+                id: 'clusters',
+                type: 'circle',
+                source: 'criticalinfra',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#51bbd6',
+                        100,
+                        '#f1f075',
+                        750,
+                        '#f28cb1',
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+            });
+
+            this.map.addLayer({
+                id: 'cluster-count',
+                type: 'symbol',
+                source: 'criticalinfra',
+                filter: ['has', 'point_count'],
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+            this.map.addLayer({
+                id: 'unclustered-point',
+                type: 'circle',
+                source: 'criticalinfra',
+                filter: ['!', ['has', 'point_count']],
+                paint: {
+                    'circle-color': '#11b4da',
+                    'circle-radius': 4,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff',
+                },
+            });
+
+            // this.map.addLayer({
+            //     id: 'criticalclusters',
+            //     type: 'circle',
+            //     source: 'criticalinfra',
+            //     // 'source-layer': mapSources.criticalInfrastructures.layers.infrastructures,
+            //     // filter: ['type', 'Governance'],
+            //     filter: ['==', 'Type', 'Culture'],
+            //     paint: {
+            //         // 'circle-color': [
+            //         //     'step',
+            //         //     ['get', 'point_count'],
+            //         //     '#51bbd6',
+            //         //     100,
+            //         //     '#f1f075',
+            //         //     750,
+            //         //     '#f28cb1',
+            //         // ],
+            //         'circle-color': '#ff0000',
+            //         // 'circle-color': '#111111',
+            //         'circle-radius': [
+            //             'step',
+            //             ['get', 'point_count'],
+            //             20,
+            //             100,
+            //             30,
+            //             750,
+            //             40,
+            //         ],
+            //         // 'circle-radius': 10,
+
+            //     },
+            // });
+
+            // const symbolIcon = ['Education',
+            //     'rupees', 'religion', 'government',
+            //     'hospital', 'industry', 'Tourism',
+            //     'Communication', 'Transportation',
+            // ];
+            // criticalinfrastructures.features.forEach((feature) => {
+            //     const symbol = feature.properties.Type;
+            //     const layerID = `criticalinfra-${symbol}`;
+
+            //     // Add a layer for this symbol type if it hasn't been added already.
+            //     if (!this.map.getLayer(layerID)) {
+            //         this.map.addLayer({
+            //             id: layerID,
+            //             type: 'symbol',
+            //             source: 'criticalinfra',
+            //             layout: {
+            //                 'icon-image': 'government',
+            //                 // 'icon-allow-overlap': true,
+            //                 // 'text-field': symbol,
+            //                 // 'text-font': [
+            //                 //     'Open Sans Bold',
+            //                 //     'Arial Unicode MS Bold',
+            //                 // ],
+            //                 // 'text-size': 11,
+            //                 // 'text-transform': 'uppercase',
+            //                 // 'text-letter-spacing': 0.05,
+            //                 // 'text-offset': [0, 1.5],
+            //             },
+            //             // paint: {
+            //             //     'text-color': '#202',
+            //             //     'text-halo-color': '#fff',
+            //             //     'text-halo-width': 2,
+            //             // },
+            //             filter: ['==', 'Type', symbol],
+            //         });
+
+            //         // layerIDs.push(layerID);
+            //     }
+            // });
+
+
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(
                     {
@@ -235,7 +379,7 @@ class FloodHistoryMap extends React.Component {
                     { value: attribute.value },
                 );
             });
-            this.map.on('mousemove', 'ward-fill-local', (e) => {
+            this.map.on('click', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
                     if (hoveredWardId) {
                         this.setState({ wardNumber: hoveredWardId });
@@ -248,7 +392,8 @@ class FloodHistoryMap extends React.Component {
                             },
                             { hover: false },
                         );
-                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#ddd');
+                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
+                        // this.map.setZoom(14);
                         // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
                     }
                     hoveredWardId = e.features[0].id;
@@ -264,6 +409,37 @@ class FloodHistoryMap extends React.Component {
                     );
                 }
             });
+            this.map.on('mousemove', 'ward-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    if (hoveredWardId) {
+                        this.setState({ wardNumber: hoveredWardId });
+                        this.map.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: 'vizrisk-fills',
+                                // paint: { 'fill-color': '#eee' },
+                                sourceLayer: mapSources.nepal.layers.ward,
+                            },
+                            { hover: false },
+                        );
+                        // this.map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
+                        // this.map.setZoom(14);
+                        // this.map.setPaintProperty('ward-fill-local', 'fill-opacity', 0.8);
+                    }
+                    hoveredWardId = e.features[0].id;
+                    this.map.setFeatureState(
+                        {
+                            id: hoveredWardId,
+                            source: 'vizrisk-fills',
+                            // paint: { 'fill-color': '#eee' },
+                            sourceLayer: mapSources.nepal.layers.ward,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+
 
             this.map.on('mouseleave', 'ward-fill-local', () => {
                 if (hoveredWardId) {
@@ -291,6 +467,7 @@ class FloodHistoryMap extends React.Component {
             rasterLayer,
             exposedElement,
             rightElement,
+            showPopulation,
         } = this.props;
 
         if (this.map.isStyleLoaded()) {
@@ -298,11 +475,13 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
-                this.map.setLayoutProperty('sandRajapur', 'visibility', 'visible');
+                // this.map.setLayoutProperty('sandRajapur', 'visibility', 'visible');
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                this.map.setLayoutProperty('criticalclusters', 'visibility', 'visible');
+                this.map.moveLayer('criticalclusters');
 
                 this.map.setPitch(40);
                 this.map.setBearing(0);
@@ -311,7 +490,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
-                this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+                // this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
@@ -325,9 +504,9 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
-                this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+                // this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
-                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
                 this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
 
                 this.map.setPitch(45);
@@ -413,6 +592,18 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('school-rajapur', 'visibility', 'none');
                 }
             }
+            if (nextProps.showPopulation !== showPopulation) {
+                if (showPopulation === 'ward') {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                    this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
+                    this.map.moveLayer('ward-fill-local', 'population-extruded');
+                }
+                if (showPopulation === 'popdensity') {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                    this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
+                    this.map.moveLayer('population-extruded', 'ward-fill-local');
+                }
+            }
         }
     }
 
@@ -455,19 +646,19 @@ class FloodHistoryMap extends React.Component {
             top: 0,
             bottom: 0,
         };
-        const wardStyle = {
-            position: 'absolute',
-            width: '100px',
-            height: '100px',
-            backgroundColor: '#fff',
-            top: '100px',
-            left: '50px',
-            zIndex: '2',
-        };
+        // const wardStyle = {
+        //     position: 'absolute',
+        //     width: '100px',
+        //     height: '100px',
+        //     backgroundColor: '#fff',
+        //     top: '100px',
+        //     left: '50px',
+        //     zIndex: '2',
+        // };
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <div style={wardStyle}>{this.state.wardNumber}</div>
+                {/* <div style={wardStyle}>{this.state.wardNumber}</div> */}
 
             </div>
         );

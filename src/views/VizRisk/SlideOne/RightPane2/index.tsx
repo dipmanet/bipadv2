@@ -164,14 +164,13 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <p>
                     {' '}
-                    {/* Located in the Terai region and lying close to water bodies,
-                        Rajapur has fertile and arable land. Out of total area of
-                        127.08 square km, 74.19% of land is used for agriculture.
-                        Built-in area covers 0.75% of land, water bodies cover
-                        4.09% of land while forest area occupies 4.72% of total
-                        land in Rajapur. */}
+                    Located in the Terai region and lying close to water bodies,
+                        Rajapur has fertile and arable land.
+                    <br />
 
-
+                    Out of total area of 127.08 square km, 81.24% of land is
+                    used for agriculture. Built-in area covers 7.66% of land while
+                    water bodies occupies 3.29% of total land in Rajapur.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart

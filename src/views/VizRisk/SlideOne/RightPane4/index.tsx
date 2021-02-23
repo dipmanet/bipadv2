@@ -22,12 +22,12 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
-class SlideThreePane extends React.PureComponent<Props, State> {
+class SlideFourPane extends React.PureComponent<Props, State> {
     public render() {
         const chartData = demographicsData.demographicsData;
         return (
             <div className={styles.vrSideBar}>
-                <h1>Demography</h1>
+                <h1>Ciritical Infrastrcutures in Rajapur </h1>
                 {/* <p>
                     {' '}
                         Rajapur has the total population of 55,584 with the
@@ -40,14 +40,15 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                    In the map, the wards with a higher population have darker
-                    colors while the wards with a lower population have lighter
-                    colors. While hovering over each ward, the population density
-                    per 0.25 km * 0.25 km area is shown. The areas with higher population
-                    density have darker colors while the areas with lower population
-                    density have lighter shades.
+                    Rajapur is an island surrounded by two branches of the Karnali River,
+                    one of the largest rivers of Nepal. The Karnali River enters the
+                    Terai plains from a narrow gorge at Chisapani. About 1 km downstream,
+                    the river splits into the westernmost Karnali branches and an eastern Geruwa branch.
+
+                    Many of Rajapur’s residential and commercial buildings, critical health and
+                    education facilities have been built near and between the two river branches.
                 </p>
-                <div className={styles.iconRow}>
+                {/* <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>
                         <ScalableVectorGraphics
                             className={styles.infoIcon}
@@ -103,7 +104,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         </div>
                     </div>
 
-                </div>
+                </div> */}
 
                 {/* <ResponsiveContainer height={200} className={styles.graphContainer}>
                     <BarChart
@@ -148,4 +149,4 @@ class SlideThreePane extends React.PureComponent<Props, State> {
     }
 }
 
-export default SlideThreePane;
+export default SlideFourPane;

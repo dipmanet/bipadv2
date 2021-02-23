@@ -32,6 +32,7 @@ export default class SlideFour extends React.Component {
             showLegend: false,
             disableNavBtns: false,
             hoveredWard: '',
+            showPopulation: 'popdensity',
         };
     }
 
@@ -65,6 +66,10 @@ export default class SlideFour extends React.Component {
         console.log('moveend: ', value);
     }
 
+    public handlePopulationChange =(showPopulation) => {
+        this.setState({ showPopulation });
+    }
+
     public render() {
         const {
             showRaster,
@@ -74,6 +79,7 @@ export default class SlideFour extends React.Component {
             legendElement,
             disableNavBtns,
             hoveredWard,
+            showPopulation,
         } = this.state;
 
         return (
@@ -119,11 +125,18 @@ export default class SlideFour extends React.Component {
                     exposedElement={exposedElement}
                     rightElement={rightElement}
                     handleMoveEnd={this.handleMoveEnd}
-                    handleWardHover={this.handleWardHover}
+                    showPopulation={showPopulation}
                 />
                 {rightelements[rightElement]}
-                {rightElement === 1 ? legends[0] : ''}
-                {rightElement === 2 ? legends[1] : ''}
+                {rightElement === 1 ? <LandcoverLegends /> : ''}
+                {rightElement === 2
+                    ? (
+                        <DemographicsLegends
+                            handlePopulationChange={this.handlePopulationChange}
+                        />
+                    )
+                    : ''
+                }
             </div>
         );
     }

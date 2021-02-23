@@ -46,4 +46,11 @@ export default {
             density: 'density-b7o1uo',
         },
     },
+
+    criticalInfrastructures: {
+        url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_CRITICAL_INFRASTRUCTURES}`,
+        layers: {
+            infrastructures: 'criticalInfrastructures-3a49md',
+        },
+    },
 };
