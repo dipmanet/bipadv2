@@ -160,7 +160,7 @@ class RightPane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Land Cover Breakdown</h1>
+                <h1>Land Cover</h1>
 
                 <p>
                     {' '}

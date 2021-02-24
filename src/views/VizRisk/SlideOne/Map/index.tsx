@@ -185,15 +185,6 @@ class FloodHistoryMap extends React.Component {
 
             // console.log('map: ', this.map);
 
-            this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
-            this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
-            // this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
-            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
-            this.map.moveLayer('ward-fill', 'country-label');
-            this.map.moveLayer('waterway');
-            this.map.setZoom(1);
 
             setTimeout(() => {
                 this.map.flyTo({
@@ -295,80 +286,6 @@ class FloodHistoryMap extends React.Component {
                 },
             });
 
-            // this.map.addLayer({
-            //     id: 'criticalclusters',
-            //     type: 'circle',
-            //     source: 'criticalinfra',
-            //     // 'source-layer': mapSources.criticalInfrastructures.layers.infrastructures,
-            //     // filter: ['type', 'Governance'],
-            //     filter: ['==', 'Type', 'Culture'],
-            //     paint: {
-            //         // 'circle-color': [
-            //         //     'step',
-            //         //     ['get', 'point_count'],
-            //         //     '#51bbd6',
-            //         //     100,
-            //         //     '#f1f075',
-            //         //     750,
-            //         //     '#f28cb1',
-            //         // ],
-            //         'circle-color': '#ff0000',
-            //         // 'circle-color': '#111111',
-            //         'circle-radius': [
-            //             'step',
-            //             ['get', 'point_count'],
-            //             20,
-            //             100,
-            //             30,
-            //             750,
-            //             40,
-            //         ],
-            //         // 'circle-radius': 10,
-
-            //     },
-            // });
-
-            // const symbolIcon = ['Education',
-            //     'rupees', 'religion', 'government',
-            //     'hospital', 'industry', 'Tourism',
-            //     'Communication', 'Transportation',
-            // ];
-            // criticalinfrastructures.features.forEach((feature) => {
-            //     const symbol = feature.properties.Type;
-            //     const layerID = `criticalinfra-${symbol}`;
-
-            //     // Add a layer for this symbol type if it hasn't been added already.
-            //     if (!this.map.getLayer(layerID)) {
-            //         this.map.addLayer({
-            //             id: layerID,
-            //             type: 'symbol',
-            //             source: 'criticalinfra',
-            //             layout: {
-            //                 'icon-image': 'government',
-            //                 // 'icon-allow-overlap': true,
-            //                 // 'text-field': symbol,
-            //                 // 'text-font': [
-            //                 //     'Open Sans Bold',
-            //                 //     'Arial Unicode MS Bold',
-            //                 // ],
-            //                 // 'text-size': 11,
-            //                 // 'text-transform': 'uppercase',
-            //                 // 'text-letter-spacing': 0.05,
-            //                 // 'text-offset': [0, 1.5],
-            //             },
-            //             // paint: {
-            //             //     'text-color': '#202',
-            //             //     'text-halo-color': '#fff',
-            //             //     'text-halo-width': 2,
-            //             // },
-            //             filter: ['==', 'Type', symbol],
-            //         });
-
-            //         // layerIDs.push(layerID);
-            //     }
-            // });
-
-
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(
                     {
@@ -439,8 +356,6 @@ class FloodHistoryMap extends React.Component {
                     );
                 }
             });
-
-
             this.map.on('mouseleave', 'ward-fill-local', () => {
                 if (hoveredWardId) {
                     this.map.setFeatureState(
@@ -457,7 +372,20 @@ class FloodHistoryMap extends React.Component {
                 }
                 hoveredWardId = null;
             });
+
+
             this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+            this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+            this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
+            this.map.moveLayer('ward-fill', 'country-label');
+            this.map.moveLayer('waterway');
+            this.map.setLayoutProperty('unclustered-point', 'visibility', 'none');
+            this.map.setLayoutProperty('cluster-count', 'visibility', 'none');
+            this.map.setLayoutProperty('clusters', 'visibility', 'none');
+            this.map.setZoom(1);
         });
     }
 
@@ -480,11 +408,13 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                this.map.setLayoutProperty('criticalclusters', 'visibility', 'visible');
-                this.map.moveLayer('criticalclusters');
 
                 this.map.setPitch(40);
                 this.map.setBearing(0);
+
+                this.map.setLayoutProperty('unclustered-point', 'visibility', 'none');
+                this.map.setLayoutProperty('cluster-count', 'visibility', 'none');
+                this.map.setLayoutProperty('clusters', 'visibility', 'none');
             }
             if (nextProps.rightElement < 1) {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
@@ -499,8 +429,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setBearing(0);
 
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+                this.map.setLayoutProperty('unclustered-point', 'visibility', 'none');
+                this.map.setLayoutProperty('cluster-count', 'visibility', 'none');
+                this.map.setLayoutProperty('clusters', 'visibility', 'none');
             }
-            if (nextProps.rightElement > 1) {
+            if (nextProps.rightElement === 2) {
                 this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
@@ -515,6 +448,29 @@ class FloodHistoryMap extends React.Component {
                 this.map.moveLayer('water');
                 this.map.setLayoutProperty('waterway', 'visibility', 'none');
                 this.map.setLayoutProperty('population-extruded', 'visibility', 'visible');
+                this.map.setLayoutProperty('unclustered-point', 'visibility', 'none');
+                this.map.setLayoutProperty('cluster-count', 'visibility', 'none');
+                this.map.setLayoutProperty('clusters', 'visibility', 'none');
+            }
+
+            if (nextProps.rightElement === 3) {
+                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+                this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
+                // this.map.setLayoutProperty('sandRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('popnDensityRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
+
+                this.map.setPitch(45);
+                this.map.moveLayer('ward-outline');
+                this.map.moveLayer('water');
+                this.map.setLayoutProperty('population-extruded', 'visibility', 'none');
+                this.map.setLayoutProperty('unclustered-point', 'visibility', 'visible');
+                this.map.setLayoutProperty('cluster-count', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters', 'visibility', 'visible');
+                this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
+                this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
             }
             if (nextProps.showRaster !== showRaster || nextProps.rasterLayer !== rasterLayer) {
                 if (nextProps.showRaster && nextProps.rasterLayer === '5') {

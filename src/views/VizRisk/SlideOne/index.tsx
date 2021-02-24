@@ -5,14 +5,17 @@ import styles from './styles.scss';
 import RightElement1 from './RightPane1';
 import RightElement2 from './RightPane2';
 import RightElement3 from './RightPane3';
+import RightElement4 from './RightPane4';
 import LandcoverLegends from './LandCoverLegends';
 import DemographicsLegends from './DemographicsLegends';
+import CriticalInfraLegends from './CriticalInfraLegends';
 import Icon from '#rscg/Icon';
 
 const rightelements = [
     <RightElement1 />,
     <RightElement2 />,
     <RightElement3 />,
+    <RightElement4 />,
 ];
 const legends = [
     <LandcoverLegends />,
@@ -134,6 +137,12 @@ export default class SlideFour extends React.Component {
                         <DemographicsLegends
                             handlePopulationChange={this.handlePopulationChange}
                         />
+                    )
+                    : ''
+                }
+                {rightElement === 3
+                    ? (
+                        <CriticalInfraLegends />
                     )
                     : ''
                 }
