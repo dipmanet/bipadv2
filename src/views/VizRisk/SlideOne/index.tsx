@@ -6,6 +6,8 @@ import RightElement1 from './RightPane1';
 import RightElement2 from './RightPane2';
 import RightElement3 from './RightPane3';
 import RightElement4 from './RightPane4';
+import RightElement5 from './RightPane5';
+import RightElement6 from './RightPane6';
 import LandcoverLegends from './LandCoverLegends';
 import DemographicsLegends from './DemographicsLegends';
 import CriticalInfraLegends from './CriticalInfraLegends';
@@ -16,6 +18,8 @@ const rightelements = [
     <RightElement2 />,
     <RightElement3 />,
     <RightElement4 />,
+    <RightElement5 />,
+    <RightElement6 />,
 ];
 const legends = [
     <LandcoverLegends />,
@@ -140,7 +144,7 @@ export default class SlideFour extends React.Component {
                     )
                     : ''
                 }
-                {rightElement === 3
+                {rightElement >= 3
                     ? (
                         <CriticalInfraLegends />
                     )

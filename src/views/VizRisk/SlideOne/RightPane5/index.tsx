@@ -27,104 +27,31 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         const chartData = demographicsData.demographicsData;
         return (
             <div className={styles.vrSideBar}>
-                <h1>Ciritical Infrastrcutures in Rajapur </h1>
-                {/* <p>
-                    {' '}
-                        Rajapur has the total population of 55,584 with the
-                        male and female population being 25,519 and 30,065
-                        respectively. Total household number counts to 12,138.
-                        Ward number 4 has the largest household number that equals to 1639
-                        while ward number 7 has the least comprising of only
-                        766 number of household. However, the population is highest in
-                        ward number 4 and lowest in ward number 7.
+                <h1>Flood Exposure </h1>
 
-                </p> */}
                 <p>
-                    Rajapur is an island surrounded by two branches of the Karnali River,
-                    one of the largest rivers of Nepal. The Karnali River enters the
-                    Terai plains from a narrow gorge at Chisapani. About 1 km downstream,
-                    the river splits into the westernmost Karnali branches and an eastern Geruwa branch.
-
-                    Many of Rajapur’s residential and commercial buildings, critical health and
-                    education facilities have been built near and between the two river branches.
+                Rajapur usually experiences frequent floods often with high intensity.
+                    <br />
+                The map shows the exposure data together with the flood hazard maps.
+                    <br />
+                The exposure layer shows the critical infrastructures in Rajapur.
+                    <br />
+                The flood hazard map of either 5 years, 10 years,
+                20 years, 50 years, 100 years, or 1000 years return
+                period can be overlayed over the exposure layer.
+                The data represents the water depth for floods of a
+                certain year return period or recurrence interval.
+                    <br />
+                Return period indicates the average interval of time
+                within which the flood of that magnitude will occur.
+                Another way of expressing this is to say that the data
+                show the probability of experiencing a given water depth
+                within a single year; i.e. depths shown by the ‘1-in-100
+                year’ layer have a 1-in-100 (or 1%) chance of occurrence in any given year.
+                    <br />
+                An understanding of the critical infrastructures exposed
+                to floods can be developed with the help of the map.
                 </p>
-                {/* <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>55,584</div>
-                            <div className={styles.iconText}>
-                                Total Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>25,519</div>
-                            <div className={styles.iconText}>
-                             Male Population
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>30,065</div>
-                            <div className={styles.iconText}>
-                             Female Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ElevationIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>12,138</div>
-                            <div className={styles.iconText}>
-                            Total Household Number
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div> */}
-
-                {/* <ResponsiveContainer height={200} className={styles.graphContainer}>
-                    <BarChart
-                        width={300}
-                        height={200}
-                        data={chartData}
-                        margin={{
-                            top: 5, right: 30, left: 20, bottom: 15,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend layout="horizontal" verticalAlign="bottom" />
-                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
-                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
-                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
-                    </BarChart>
-                </ResponsiveContainer> */}
 
                 <ResponsiveContainer width="100%" height={'50%'}>
                     <BarChart
