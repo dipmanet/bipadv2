@@ -144,7 +144,7 @@ class FloodHistoryMap extends React.Component {
             style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
             center: [lng, lat],
             zoom,
-            minZoom: 2,
+            minZoom: 11,
             maxZoom: 15,
         });
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -183,19 +183,19 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(5, 65, 58007, wards),
             });
 
-            setTimeout(() => {
-                this.map.flyTo({
-                    center: [
-                        81.123711,
-                        28.436586,
-                    ],
-                    zoom: 11.4,
-                    bearing: 0,
-                    speed: 1,
-                    curve: 1,
-                    essential: false,
-                });
-            }, 2000);
+            // setTimeout(() => {
+            //     this.map.flyTo({
+            //         center: [
+            //             81.123711,
+            //             28.436586,
+            //         ],
+            //         zoom: 11.4,
+            //         bearing: 0,
+            //         speed: 1,
+            //         curve: 1,
+            //         essential: false,
+            //     });
+            // }, 2000);
 
             this.map.addLayer({
                 id: 'ward-fill-local',
@@ -223,12 +223,36 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(5, 65, 58007, wards),
             });
 
+            const typeGovernance = ['match', ['get', 'Type'], 'Governance'];
+            const typeBank = ['match', ['get', 'Type'], 'Bank'];
+            const typeTourism = ['match', ['get', 'Type'], 'Tourism'];
+            const typeCommunication = ['match', ['get', 'Type'], 'Communication'];
+            const typeEducation = ['match', ['get', 'Type'], 'Education'];
+            const typeCulture = ['match', ['get', 'Type'], 'Culture'];
+            const typeHealth = ['match', ['get', 'Type'], 'Health'];
+            const typeElectricity = ['match', ['get', 'Type'], 'Electricity'];
+            const typeIndustry = ['match', ['get', 'Type'], 'Industry'];
+
+
             this.map.addSource('criticalinfra', {
                 type: 'geojson',
                 data: criticalinfrastructures,
                 cluster: true,
                 clusterMaxZoom: 14,
                 clusterRadius: 50,
+                // clusterProperties: {
+                //     // keep separate counts for each magnitude category in a cluster
+                //     typeGovernance: ['+', ['case', typeGovernance, 1, 0]],
+                //     typeBank: ['+', ['case', typeBank, 1, 0]],
+                //     typeCommunication: ['+', ['case', typeCommunication, 1, 0]],
+                //     typeEducation: ['+', ['case', typeEducation, 1, 0]],
+                //     typeTourism: ['+', ['case', typeTourism, 1, 0]],
+                //     typeCulture: ['+', ['case', typeCulture, 1, 0]],
+                //     typeHealth: ['+', ['case', typeHealth, 1, 0]],
+                //     typeElectricity: ['+', ['case', typeElectricity, 1, 0]],
+                //     typeIndustry: ['+', ['case', typeIndustry, 1, 0]],
+                // },
+
             });
 
             // this.map.addLayer({
@@ -241,10 +265,13 @@ class FloodHistoryMap extends React.Component {
             //             'step',
             //             ['get', 'point_count'],
             //             '#51bbd6',
-            //             100,
+            //             10,
             //             '#f1f075',
-            //             750,
+            //             20,
+            //             '#f255b1',
+            //             50,
             //             '#f28cb1',
+
             //         ],
             //         'circle-radius': [
             //             'step',
@@ -258,9 +285,44 @@ class FloodHistoryMap extends React.Component {
             //     },
             // });
 
+            // this.map.addLayer({
+            //     id: 'clusters',
+            //     // type: 'circle',
+            //     type: 'symbol',
+            //     source: 'criticalinfra',
+            //     filter: ['has', 'point_count'],
+            //     // paint: {
+            //     //     'circle-color': [
+            //     //         'step',
+            //     //         ['get', 'point_count'],
+            //     //         '#51bbd6',
+            //     //         10,
+            //     //         '#f1f075',
+            //     //         20,
+            //     //         '#f255b1',
+            //     //         50,
+            //     //         '#f28cb1',
+
+            //     //     ],
+            //     //     'circle-radius': [
+            //     //         'step',
+            //     //         ['get', 'point_count'],
+            //     //         20,
+            //     //         100,
+            //     //         30,
+            //     //         750,
+            //     //         40,
+            //     //     ],
+            //     // },
+            //     layout: {
+            //         'icon-image': ['get', 'icon'],
+            //     },
+            // });
+
             this.map.addLayer({
-                id: 'clusters',
+                id: 'clusters1',
                 type: 'circle',
+                // type: 'symbol',
                 source: 'criticalinfra',
                 filter: ['has', 'point_count'],
                 paint: {
@@ -270,8 +332,11 @@ class FloodHistoryMap extends React.Component {
                         '#51bbd6',
                         100,
                         '#f1f075',
-                        750,
-                        '#f28cb1',
+                        // 20,
+                        // '#f255b1',
+                        // 50,
+                        // '#f28cb1',
+
                     ],
                     'circle-radius': [
                         'step',
@@ -283,14 +348,14 @@ class FloodHistoryMap extends React.Component {
                         40,
                     ],
                 },
-            });
 
+            });
 
             this.map.addLayer({
                 id: 'cluster-count',
                 type: 'symbol',
                 source: 'criticalinfra',
-                filter: ['has', 'point_count'],
+                // filter: ['has', 'point_count'],
                 layout: {
                     'text-field': '{point_count_abbreviated}',
                     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
@@ -298,18 +363,47 @@ class FloodHistoryMap extends React.Component {
                 },
             });
 
+
+            // this.map.addLayer({
+            //     id: 'infra-icon2',
+            //     type: 'symbol',
+            //     source: 'criticalinfra',
+            //     filter: ['==', 'type', 'education'],
+            //     layout: {
+            //         'icon-image': 'health',
+            //     },
+            // });
+
+
             this.map.addLayer({
                 id: 'unclustered-point',
-                type: 'circle',
+                // type: 'circle',
+                type: 'symbol',
                 source: 'criticalinfra',
                 filter: ['!', ['has', 'point_count']],
-                paint: {
-                    'circle-color': '#11b4da',
-                    'circle-radius': 4,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#fff',
+                layout: {
+                    // 'circle-color': '#11b4da',
+                    // 'circle-radius': 4,
+                    // 'circle-stroke-width': 1,
+                    // 'circle-stroke-color': '#fff',
+                    'icon-image': ['get', 'icon'],
                 },
             });
+
+            // this.map.addLayer({
+            //     id: 'unclustered-point',
+            //     type: 'circle',
+            //     // type: 'symbol',
+            //     source: 'criticalinfra',
+            //     filter: ['!', ['has', 'point_count']],
+            //     paint: {
+            //         'circle-color': '#11b4da',
+            //         'circle-radius': 4,
+            //         'circle-stroke-width': 1,
+            //         'circle-stroke-color': '#fff',
+            //         // 'icon-image': ['get', 'icon'],
+            //     },
+            // });
 
 
             mapping.forEach((attribute) => {
