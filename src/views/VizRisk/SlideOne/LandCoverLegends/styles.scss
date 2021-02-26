@@ -1,5 +1,5 @@
     .lagendMainContainer{
-        background: rgba( 19, 32, 55, 0.75 );
+        background: rgba( 19, 32, 55, 0.9 );
         box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
         backdrop-filter: blur( 12.0px );
         -webkit-backdrop-filter: blur( 12.0px );
@@ -34,9 +34,11 @@
             padding: 0;
             margin: 4px;
             color: white;
-            opacity: 0.87;
+            // opacity: 0.87;
+            display: flex;
+            align-items: center;
             .agricultureIcon{
-                color: #d3e378;
+                color: #e6f2a1;
                 padding-right: 12px;
                 font-size: 18px;
 
@@ -55,15 +57,35 @@
             }
             .canalIcon{
                 color:#0670bc;
+                border-bottom: 2px solid #0670bc;
                 padding-right: 12px;
-                font-size: 22px;
+                position: relative;
+                // bottom: 7px;
+                width: 22px;
+               margin-right: 12px;
+
 
             }
-            .bridgeIcon{
-                color:#6a394e;
+            .roadIcon{
+                border-bottom: 2px solid #969696;
                 padding-right: 12px;
-                font-size: 22px;
+                font-size: 15px;
+                position: relative;
+                // bottom: 7px;
+                width: 22px;
+               margin-right: 12px;
+
+
             }
+            .bridgeLine{
+                // padding-right: 15px;
+                width: 22px;
+               border: 3px solid #556577;
+               margin-right: 12px;
+               border-radius: 2px;
+
+            }
+            
         }
     
         .riverIconContainer{
@@ -72,7 +94,7 @@
             color: white;
             opacity: 0.87;
             .riverIcon{
-                color: #2b4253;
+                color: #0670bc;
                 padding-right: 12px;
                 font-size: 18px;
     

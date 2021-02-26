@@ -11,6 +11,7 @@ import RightElement6 from './RightPane6';
 import LandcoverLegends from './LandCoverLegends';
 import DemographicsLegends from './DemographicsLegends';
 import CriticalInfraLegends from './CriticalInfraLegends';
+import FloodHazardLegends from './FloodHazardLegends';
 import Icon from '#rscg/Icon';
 
 const rightelements = [
@@ -24,6 +25,7 @@ const rightelements = [
 const legends = [
     <LandcoverLegends />,
     <DemographicsLegends />,
+    <FloodHazardLegends />,
 ];
 
 export default class SlideFour extends React.Component {
@@ -39,7 +41,7 @@ export default class SlideFour extends React.Component {
             showLegend: false,
             disableNavBtns: false,
             hoveredWard: '',
-            showPopulation: 'popdensity',
+            showPopulation: 'ward',
         };
     }
 
@@ -75,6 +77,24 @@ export default class SlideFour extends React.Component {
 
     public handlePopulationChange =(showPopulation) => {
         this.setState({ showPopulation });
+    }
+
+    public handleFloodChange = (rasterLayer: string) => {
+        this.setState({
+            rasterLayer,
+        });
+    }
+
+    public handleChisapani = () => {
+        this.setState(prevState => ({
+            chisapaniClicked: !prevState.chisapaniClicked,
+        }));
+    }
+
+    public handleExposedElementChange = (exposed: string) => {
+        this.setState({
+            exposedElement: exposed,
+        });
     }
 
     public render() {
@@ -144,9 +164,19 @@ export default class SlideFour extends React.Component {
                     )
                     : ''
                 }
-                {rightElement >= 3
+                {rightElement === 3
                     ? (
                         <CriticalInfraLegends />
+                    )
+                    : ''
+                }
+                {rightElement >= 4
+                    ? (
+                        <FloodHazardLegends
+                            handlePopulationChange={this.handleFloodChange}
+                            handleExposedElementChange={this.handleExposedElementChange}
+                            handleChisapani={this.handleChisapani}
+                        />
                     )
                     : ''
                 }

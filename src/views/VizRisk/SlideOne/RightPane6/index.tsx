@@ -13,8 +13,14 @@ import demographicsData from '../../demographicsData';
 import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
+import Education from '#views/VizRisk/SlideOne/Icons/education.svg';
+import Culture from '#views/VizRisk/SlideOne/Icons/culture.svg';
+import Home from '#views/VizRisk/SlideOne/Icons/home.svg';
+import criticalInfraData from '../../criticalInfraData';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
+
+const chartData = criticalInfraData.safeShelterData;
 
 interface ComponentProps {}
 
@@ -23,115 +29,36 @@ type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFivePane extends React.PureComponent<Props, State> {
+    public constructor(props) {
+        super();
+        this.state = {
+            showReferences: false,
+        };
+    }
+
+    public handleRefClick = () => {
+        this.setState(prevState => ({
+            showReferences: !prevState.showReferences,
+        }));
+    }
+
     public render() {
-        const chartData = demographicsData.demographicsData;
         return (
             <div className={styles.vrSideBar}>
-                <h1>Flood Hazard in Rajapur </h1>
-                {/* <p>
-                    {' '}
-                        Rajapur has the total population of 55,584 with the
-                        male and female population being 25,519 and 30,065
-                        respectively. Total household number counts to 12,138.
-                        Ward number 4 has the largest household number that equals to 1639
-                        while ward number 7 has the least comprising of only
-                        766 number of household. However, the population is highest in
-                        ward number 4 and lowest in ward number 7.
+                <h1>Evacuation Centers </h1>
 
-                </p> */}
                 <p>
 
-                Rajapur is an island surrounded by two branches of the
-                Karnali River, one of the largest rivers of Nepal.
-                The Karnali River enters the Terai plains from a
-                narrow gorge at Chisapani. About 1 km downstream,
-                the river splits into Karnali branch in the west
-                and Geruwa branch in the east.
-                    <br />
-                The geospatial data on the critical infrastructures
-                such as health, education, culture, communication,
-                industry, banking, and finance, etc.
-
+                In Rajapur, there are 54 schools and 16 temple/cultral
+                sites that can be converted into temporary shelter or
+                evcuation shelter during flood events. In addition,
+                there are 9 evacuation centers. During the times of
+                a disaster, these areas are crucial for the evacuation and
+                also these areas could be benefiical especially for the
+                evacuees who cannot easily return to their homes and would
+                require further recovery assitance.
                 </p>
-                {/* <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>55,584</div>
-                            <div className={styles.iconText}>
-                                Total Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>25,519</div>
-                            <div className={styles.iconText}>
-                             Male Population
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>30,065</div>
-                            <div className={styles.iconText}>
-                             Female Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ElevationIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>12,138</div>
-                            <div className={styles.iconText}>
-                            Total Household Number
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div> */}
-
-                {/* <ResponsiveContainer height={200} className={styles.graphContainer}>
-                    <BarChart
-                        width={300}
-                        height={200}
-                        data={chartData}
-                        margin={{
-                            top: 5, right: 30, left: 20, bottom: 15,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend layout="horizontal" verticalAlign="bottom" />
-                        <Bar dataKey="MalePop" fill="rgb(245,87,149)" />
-                        <Bar dataKey="FemalePop" fill="rgb(0,163,223)" />
-                        <Bar dataKey="TotalHousehold" fill="rgb(0,172,163)" />
-                    </BarChart>
-                </ResponsiveContainer> */}
-
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
                     <BarChart
                         width={350}
                         height={600}
@@ -140,15 +67,53 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" />
-                        <YAxis type="category" dataKey="name" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                        />
                         <Tooltip />
-                        <Legend />
-                        <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
-                        <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
-                        <Bar dataKey="TotalHousehold" fill="#347eff" />
-                        {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
+                        {/* <Legend /> */}
+                        <Bar
+                            dataKey="Total"
+                            fill="#ffbf00"
+                            // barCategoryGap={30}
+                            barCategoryGap={20}
+                            label={{ position: 'insideRight' }}
+                        />
+                        {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
+                        {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
+                        {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
+                <button
+                    className={styles.referencesBtn}
+                    type="button"
+                    onClick={this.handleRefClick}
+                >
+                References
+                </button>
+                {this.state.showReferences && (
+                    <ul className={styles.referencesText}>
+                        <li>
+                        Modeling Exposure Through Earth Observations Routines
+                        (METEOR) ,UK Space Agency, https://meteor-project.org/
+                        </li>
+                        <li>
+                        Risk Nexus, Urgent case for recovery. What we can
+                        learn from the August 2014 Karnali River floods in Nepal.
+                        Zurich Insurance Group Ltd and ISET-International, 2015
+                        </li>
+                        <li>
+                        Central Bureau of Statistics, 2011
+                        </li>
+                        <li>
+                        Rajapur Municipality Profile, 2075
+                        </li>
+                    </ul>
+                )
+                }
+
+
             </div>
         );
     }

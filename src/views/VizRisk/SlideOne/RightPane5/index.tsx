@@ -53,24 +53,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 to floods can be developed with the help of the map.
                 </p>
 
-                <ResponsiveContainer width="100%" height={'50%'}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={chartData}
-                        layout="vertical"
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis type="category" dataKey="name" />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
-                        <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
-                        <Bar dataKey="TotalHousehold" fill="#347eff" />
-                        {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
-                    </BarChart>
-                </ResponsiveContainer>
             </div>
         );
     }

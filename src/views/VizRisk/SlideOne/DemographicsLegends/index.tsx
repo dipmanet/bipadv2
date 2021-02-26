@@ -4,8 +4,8 @@ import VRLegend from '../../VRLegend';
 import styles from './styles.scss';
 
 const DemoGraphicsLegends = (props) => {
-    const [showPopulationWard, setShowPopulationWard] = useState(false);
-    const [showPopulationDensity, setShowPopulationDensity] = useState(true);
+    const [showPopulationWard, setShowPopulationWard] = useState(true);
+    const [showPopulationDensity, setShowPopulationDensity] = useState(false);
     const {
         handlePopulationChange,
     } = props;
@@ -16,7 +16,9 @@ const DemoGraphicsLegends = (props) => {
         if (val === 'ward') {
             setShowPopulationWard(true);
             setShowPopulationDensity(false);
-        } else {
+        }
+
+        if (val === 'popdensity') {
             setShowPopulationWard(false);
             setShowPopulationDensity(true);
         }
@@ -54,7 +56,7 @@ const DemoGraphicsLegends = (props) => {
                                 Population density
                                 {' '}
                                 <br />
-                                (per 0.25 km
+                                (per 0.0625 km
                                 <sup>2</sup>
                         )
                             </h2>

@@ -5,7 +5,7 @@
     padding: 10px;
     background: rgb(24,37,57);
 
-    background: rgba( 19, 32, 55, 0.9 );
+    background: rgba( 19, 32, 55, 0.35 );
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 12.0px );
     -webkit-backdrop-filter: blur( 12.0px );
@@ -28,12 +28,16 @@
             flex-direction: column;
             justify-content: flex-start;
             margin-right: 20px;
-            .hazardItemContainer{
-                display: flex;
+            .floodItemContainer{
+                // display: flex;
+                // border: 1px solid gray;
+                min-width: 80px;
                 .legendBtn{
                     background-color: transparent;
+                    font-size: 11px;
                     border: none;
                     color: white;
+                    display: flex;
                     .yearsIcon{
                         margin-right: 10px;
                         color: rgb(70, 70, 70);
@@ -59,68 +63,56 @@
             }
         }
     }
-    .populationContainer{
+    .floodDepthContainer{
         display: flex;
         // flex-direction: column;
-        // height: 60px;
+        // 
         margin-bottom: 20px;
-        margin-left: 10px;
-        .populationIndContainer{
+        .floodDepth{
             display: flex;
-            // width:60px;
             flex-direction: column;
+            // width:60px;
             // border: 1px solid gray;
-            padding-right: 4px;
-            .populationIndicator1{
-                width: 12px;
+
+            .floodIndicator1{
+                width: 30px;
                 height: 20px;
                 // 
-                background-color: #9a3404;
-                border-radius: 6px 6px 0 0;
+                background-color: rgb(255, 94, 24);
+                // border-radius: 5px 0 0 5px;
+                margin-right: 4px;
+
 
             }
-            .populationIndicator2{
-                width: 12px;
+            .floodIndicator2{
+                width: 30px;
                 height: 20px;
-                // 
-                background-color: #d95f0e; 
+                background-color:rgb(221,252,56); 
                 // margin-right: 10px;
+                margin-right: 4px;
             }
-            .populationIndicator3{
-                width: 12px;
+            .floodIndicator3{
+                width: 30px;
                 height: 20px;
-                // 
-                background-color:#fe9b2a;
+                background-color:rgb(16, 104, 169);
+                // border-radius: 0 5px 5px 0;
+                margin-right: 4px;
 
-            }
-            .populationIndicator4{
-                width: 12px;
-                height: 20px;
-                // 
-                background-color:#fed990;
-
-            }
-            .populationIndicator5{
-                width: 12px;
-                height: 20px;
-                // 
-                background-color:#ffffd6;
-                border-radius: 0 0 6px 6px;
 
             }
   
         }
-        .populationTextContainer{
-            display:flex;
-            // width:60px;
+        .floodDepthText{
+            display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            // border: 1px solid gray;
-            // 
-            .populationText{
+
+            .floodText{
+                // border: 1px solid gray;
                 // width:10px;
                 color: white;
                 opacity:0.87;
+                padding-top: 5px;
+                font-size: 11px;
             }
         }
     }
@@ -130,9 +122,8 @@
     width: 200px;
     h2{
         margin-top: 20px;
-        margin-bottom: 10px;
-        font-size: 16px;
     }
+    
     .hazardItemContainer{
         display: flex;
         padding: 0;
@@ -173,7 +164,6 @@
             border: none;
             color: white;
             opacity: 0.87;
-            margin-bottom: 15px;
         }
     }
         .hazardIndicator1 {

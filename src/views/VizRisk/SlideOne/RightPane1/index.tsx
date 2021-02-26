@@ -152,12 +152,11 @@ class SlideOne extends React.PureComponent<Props, State> {
                 <h2>Climate</h2>
                 <p>
                     {' '}
-                        Rajapur experiences a lower tropical climate with an average
-                        maximum temperature of 41 degree celcius in winter. Summer starts from
-                        Chaitra till Jestha while there is an
-                        extreme winter in Mangshir, Poush and Magh.
-                        Monsoon starts here a bit early from the last week of Jestha till Ashwin
-                        bringing the heavy downpours.
+                    Rajapur experiences a lower tropical climate. Summer
+                    lasts from March to June while there is extreme winter
+                    from November to February. Monsoon starts here a bit
+                    early from the June till October bringing the heavy downpours.
+
                 </p>
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>
@@ -170,7 +169,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                             <div className={styles.iconText}>
                             Average Maximum
                                 <br />
-                            Temeperature in Summer
+                            Temperature in Summer
                             </div>
 
                         </div>
@@ -254,6 +253,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                         <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
                     </LineChart>
                 </ResponsiveContainer>
+
                 <div className={styles.iconContainer}>
                     <div
                         className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}

@@ -13,6 +13,29 @@
         .graphContainer{
             margin: 15px 0;
         }
+        .referencesBtn{
+            background-color: transparent;
+            border: none;
+            color: white;
+            opacity: 0.87;
+            font-size: 18px;
+            margin-top: 20px;
+            color:white;
+            font-size: 26px;
+            font-family: 'Source Sans Pro';
+            // opacity: 0.67;
+            line-height: 1.4em;
+            padding: 0 30px;
+
+            .referencesText{
+                color:white;
+                font-size: 16px;
+                font-family: 'Source Sans Pro';
+                opacity: 0.67;
+                line-height: 1.4em;
+                padding: 0 30px;
+            }
+        }
         .iconRow{
             display: flex;
             padding-left: 30px;
@@ -279,7 +302,7 @@
             color:white;
             font-size: 16px;
             font-family: 'Source Sans Pro';
-            opacity: 0.67;
+            opacity: 0.87;
             line-height: 1.4em;
             padding: 0 30px;
         }

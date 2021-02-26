@@ -39,7 +39,7 @@ const data = [
     { name: 'Forest', value: 5.99 },
     { name: 'Water bodies', value: 5.18 },
     { name: 'Other', value: 21.5 },
-    { name: 'Built up areas', value: 0.959 },
+    { name: 'Buildings', value: 0.959 },
 ].sort(({ value: a }, { value: b }) => b - a);
 
 const COLORS_CHART = [
@@ -218,13 +218,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         data={'94.07 sq km / 74.06'}
                         selected={activeIndex === 0}
                     />
-                    <CustomChartLegend
-                        text={data[1].name}
-                        barColor={COLORS_CHART[1]}
-                        background={'#eee'}
-                        data={'21.5 sq km / 16.93'}
-                        selected={activeIndex === 1}
-                    />
+
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS_CHART[2]}
@@ -247,7 +241,13 @@ class RightPane extends React.PureComponent<Props, State> {
                         selected={activeIndex === 4}
                         builtupArea
                     />
-
+                    <CustomChartLegend
+                        text={data[1].name}
+                        barColor={COLORS_CHART[1]}
+                        background={'#eee'}
+                        data={'21.5 sq km / 16.93'}
+                        selected={activeIndex === 1}
+                    />
 
                 </div>
                 <div className={styles.iconContainer}>

@@ -2,6 +2,8 @@ import React from 'react';
 import VRLegend from '#views/VizRisk/VRLegend';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import BridgeIcon from '#views/VizRisk/SlideOne/Icons/bridge.svg';
 
 const LandCoverLegends = () => (
     <VRLegend>
@@ -14,7 +16,7 @@ const LandCoverLegends = () => (
                         className={styles.settlementIcon}
                     />
                 </span>
-                            Builtup Areas
+                            Buildings
 
             </p>
             <p className={styles.riverIconContainer}>
@@ -53,6 +55,33 @@ const LandCoverLegends = () => (
                 </span>
                             Forest
             </p>
+            {/* <p className={styles.agroIconContainer}>
+                <ScalableVectorGraphics
+                    className={styles.bridgeIcon}
+                    src={BridgeIcon}
+                    style={{ color: '#111111' }}
+                />
+                            Bridges
+            </p> */}
+
+
+            <div className={styles.agroIconContainer}>
+                <div className={styles.canalIcon} />
+
+                            Canals
+            </div>
+
+            <div className={styles.agroIconContainer}>
+                <div className={styles.roadIcon} />
+
+                            Roads
+            </div>
+            <div className={styles.agroIconContainer}>
+                <div className={styles.bridgeLine} />
+
+                            Bridges
+            </div>
+
             <p className={styles.agroIconContainer}>
                 <span>
                     <Icon
@@ -61,31 +90,6 @@ const LandCoverLegends = () => (
                     />
                 </span>
                             Other
-            </p>
-
-            <p className={styles.agroIconContainer}>
-                {/* <span>
-                    <Icon
-                        name="square"
-                        className={styles.canalIcon}
-                    />
-                </span> */}
-                <span className={styles.canalIcon}>
-                        ___
-                </span>
-                            Canals
-            </p>
-            <p className={styles.agroIconContainer}>
-                {/* <span>
-                    <Icon
-                        name="square"
-                        className={styles.canalIcon}
-                    />
-                </span> */}
-                <span className={styles.bridgeIcon}>
-                        ===
-                </span>
-                            Bridges
             </p>
 
         </div>
