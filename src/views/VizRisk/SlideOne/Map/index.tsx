@@ -1361,9 +1361,9 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('rajapurRoads', 'visibility', 'visible');
                 this.map.setLayoutProperty('bridgesRajapur', 'visibility', 'visible');
 
-                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
-                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
+                this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
+                this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
+                this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'none');
 
                 this.map.setLayoutProperty('clusters-evac', 'visibility', 'visible');
                 this.map.setLayoutProperty('cluster-count-evac', 'visibility', 'visible');

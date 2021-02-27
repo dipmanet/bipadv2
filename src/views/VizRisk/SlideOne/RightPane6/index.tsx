@@ -66,10 +66,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         layout="vertical"
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
+                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
                         <YAxis
                             type="category"
                             dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
                         />
                         <Tooltip />
                         {/* <Legend /> */}
