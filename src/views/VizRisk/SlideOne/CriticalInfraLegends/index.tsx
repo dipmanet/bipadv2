@@ -9,204 +9,243 @@ import Governance from '#views/VizRisk/SlideOne/Icons/governance.svg';
 import Culture from '#views/VizRisk/SlideOne/Icons/culture.svg';
 import Hospital from '#views/VizRisk/SlideOne/Icons/health.svg';
 import Industry from '#views/VizRisk/SlideOne/Icons/industry.svg';
-import Rupees from '#views/VizRisk/SlideOne/Icons/bank.svg';
+import Rupees from '../Icons/bank.svg';
 import Tourism from '#views/VizRisk/SlideOne/Icons/tourism.svg';
 
-const LandCoverLegends = () => {
+const LandCoverLegends = (props) => {
+    const { handleCritical } = props;
     const [showCriticalLegends, setCritical] = useState(false);
-    const handleCriticalclick = () => {
-        setCritical(!showCriticalLegends);
+    const [showEducation, setshowEducation] = useState(false);
+    const [showFinance, setshowFinance] = useState(false);
+    const [showIndustry, setshowIndustry] = useState(false);
+    const [showGovernemnt, setshowGovernemnt] = useState(false);
+    const [showCulture, setshowCulture] = useState(false);
+    const [showHospital, setshowHospital] = useState(false);
+    const [showTourism, setshowTourism] = useState(false);
+    const [showLegendText, setshowLT] = useState('All Infrastructures');
+    const [showAll, setshowAll] = useState(true);
+
+
+    const resetCriticalLayers = () => {
+        setshowEducation(false);
+        setshowFinance(false);
+        setshowIndustry(false);
+        setshowGovernemnt(false);
+        setshowCulture(false);
+        setshowHospital(false);
+        setshowTourism(false);
+    };
+
+    const handleLegendText = (layer) => {
+        setshowLT(layer);
+    };
+
+    const handleCriticalclick = (layer) => {
+        handleCritical(layer);
+
+
+        if (layer === 'education') {
+            const newVal = !showEducation;
+            resetCriticalLayers();
+            setshowEducation(true);
+            handleLegendText('Education Inst.');
+        }
+        if (layer === 'governance') {
+            const newVal = !showGovernemnt;
+            resetCriticalLayers();
+            setshowGovernemnt(true);
+            handleLegendText('Government Off.');
+        }
+
+        if (layer === 'culture') {
+            const newVal = !showCulture;
+            setshowCulture(true);
+            resetCriticalLayers();
+            handleLegendText('Cultural Centers');
+        }
+        if (layer === 'health') {
+            const newVal = !showHospital;
+            resetCriticalLayers();
+            setshowHospital(true);
+            handleLegendText('Health Centers');
+        }
+        if (layer === 'industry') {
+            const newVal = !showIndustry;
+            resetCriticalLayers();
+            setshowIndustry(true);
+            handleLegendText('Industries');
+        }
+        if (layer === 'bank') {
+            const newVal = !showFinance;
+            resetCriticalLayers();
+            setshowFinance(true);
+            handleLegendText('Financial Inst.');
+        }
+        if (layer === 'tourism') {
+            const newVal = !showTourism;
+            resetCriticalLayers();
+            setshowTourism(true);
+            handleLegendText('Tourism');
+        }
     };
     return (
-        <VRLegend>
-            <div className={styles.lagendMainContainer}>
+        <>
+            {/* <VRLegend> */}
+            <div className={styles.lagendMainContainerInfra}>
 
                 <div className={styles.criticalIcons}>
                     <div className={styles.toggleContainer}>
-                        <h2>Critical Infrastructures</h2>
-                        {/* <button
-                            type="button"
-                            className={
-                                styles.infoContainerBtn}
-                            onClick={handleCriticalclick
-                            }
-                        >
-                            {
-                                showCriticalLegends ? (
-                                    <Icon
-                                        name="chevronDown"
-                                        className={styles.chevrons}
-                                    />
-                                ) : (
-                                    <Icon
-                                        name="chevronRight"
-                                        className={styles.chevrons}
-                                    />
-                                )
-                            }
+                        <h1>Infrastructures</h1>
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('all')}
+                            >
 
-                        </button> */}
-                    </div>
+                                <h2>Show All</h2>
+                            </button>
 
-
-                    {/* {showCriticalLegends */}
-                    {/* && ( */}
-                    {/* <> */}
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Education}
-                            style={{ color: '#111111' }}
-                        />
-                            School
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Governance}
-                            style={{ color: '#111111' }}
-                        />
-                            Government Office
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Culture}
-                            style={{ color: '#111111' }}
-                        />
-                            Cultural Center
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Hospital}
-                            style={{ color: '#111111' }}
-                        />
-                           Hospital
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Industry}
-                            style={{ color: '#111111' }}
-                        />
-                            Industry
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Rupees}
-                            style={{ color: '#111111' }}
-                        />
-                            Financial Institutions
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.criticalIcon}
-                            src={Tourism}
-                            style={{ color: '#111111' }}
-                        />
-                           Tourism
-                    </p>
-                    {/* <h2>Land Cover</h2> */}
-                    <p className={styles.settlementIconContainer}>
-                        <span>
-                            <Icon
-                                name="circle"
-                                className={styles.clusterIcon}
-                            />
-                        </span>
-                            Cluster
-
-                    </p>
-                    <p className={styles.settlementIconContainer}>
-                        <span>
-                            <Icon
-                                name="square"
-                                className={styles.settlementIcon}
-                            />
-                        </span>
-                            Buildings
-
-                    </p>
-                    {/* <p className={styles.riverIconContainer}>
-                    <span>
-                        <Icon
-                            name="square"
-                            className={styles.riverIcon}
-                        />
-                    </span>
-                            Water Bodies
-                </p> */}
-                    {/* <p className={styles.sandyIconContainer}>
-                            <span>
-                                <Icon
-                                    name="square"
-                                    className={styles.sandIcon}
+                        </div>
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('education')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
                                 />
-                            </span>
-                            Sandy Area
-                        </p> */}
-                    {/* <p className={styles.agroIconContainer}>
-                    <span>
-                        <Icon
-                            name="square"
-                            className={styles.agricultureIcon}
-                        />
-                    </span>
-                            Agricultural Land
-                </p> */}
-                    {/* <p className={styles.agroIconContainer}>
-                    <span>
-                        <Icon
-                            name="square"
-                            className={styles.forestIcon}
-                        />
-                    </span>
-                            Forest
-                </p> */}
+                            School
+                            </button>
+                        </div>
+                        <div className={styles.infraIconContainer}>
 
-                    {/* <p className={styles.agroIconContainer}>
-                    <ScalableVectorGraphics
-                        className={styles.bridgeIcon}
-                        src={BridgeIcon}
-                        style={{ color: '#111111' }}
-                    />
-                            Bridge
-                </p> */}
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('governance')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                />
+                            Government Off.
+                            </button>
 
-                    <p className={styles.agroIconContainer}>
-                        <span className={styles.canalIcon}>
-                        ___
-                        </span>
-                            Canals
-                    </p>
-                    <p className={styles.agroIconContainer}>
-                        <span className={styles.roadIcon}>
-                        ___
-                        </span>
-                            Roads
-                    </p>
+                        </div>
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('culture')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                />
+                            Cultural Cen.
+                            </button>
 
-                    {/* <p className={styles.agroIconContainer}>
-                    <span>
-                        <Icon
-                            name="square"
-                            className={styles.otherIcon}
-                        />
-                    </span>
-                            Other
-                </p> */}
+                        </div>
+                        <div className={styles.infraIconContainer}>
 
-                    {/* </> */}
-                    {/* ) */}
-                    {/* } */}
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('health')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                />
+                            Hospital
+                            </button>
+
+                        </div>
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('industry')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                />
+                            Industry
+                            </button>
+
+                        </div>
+                        <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('tourism')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                    style={{ color: '#4666b0' }}
+                                />
+                                Tourism
+                            </button>
+
+                        </div>
+                        <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={styles.criticalButton}
+                                onClick={() => handleCriticalclick('bank')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.criticalIcon}
+                                    src={Tourism}
+                                    style={{ color: '#4666b0' }}
+                                />
+                             Financial Inst.
+                            </button>
+
+                        </div>
+                    </div>
                 </div>
-
-
             </div>
 
-        </VRLegend>
+            {/* </VRLegend> */}
+
+
+            {/* <VRLegend> */}
+            <div className={styles.lagendMainContainer}>
+                {/*
+                <div className={styles.clusterIconContainer}>
+                    <span>
+                        <Icon
+                            name="circle"
+                            className={styles.clusterIcon}
+                        />
+                    </span>
+                            Clusters of
+                    {' '}
+                    {showLegendText}
+
+                </div> */}
+
+                <div className={styles.infraIconContainer}>
+                    <div className={styles.canalIcon} />
+
+                            Canals
+                </div>
+                <div className={styles.infraIconContainer}>
+                    <div className={styles.roadIcon} />
+
+                            Roads
+                </div>
+            </div>
+            {/* </VRLegend> */}
+        </>
     );
 };
 

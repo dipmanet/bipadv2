@@ -71,12 +71,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                    In the map, the wards with a higher population have darker
-                    colors while the wards with a lower population have lighter
-                    colors. While hovering over each ward, the population density
-                    per 0.25 km * 0.25 km area is shown. The areas with higher population
-                    density have darker colors while the areas with lower population
-                    density have lighter shades.
+                    The chloropleth map represents the household distribution per ward.
+                    The wards with the highest household number have darker colors
+                    while the lowest household wards have lighter colors. Ward number
+                    4 has the largest household number that equals to 1693 while ward
+                    number 7 has the least comprising of only 766 number of household.
+                </p>
+                <p>
+                    Upon hovering over each ward, the population density per 0.25*0.25
+                    km area is shown. More darker the color, more dense the
+                    population in the area and viceversa.
                 </p>
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>

@@ -30,27 +30,26 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 <h1>Flood Exposure </h1>
 
                 <p>
-                Rajapur usually experiences frequent floods often with high intensity.
-                    <br />
-                The map shows the exposure data together with the flood hazard maps.
-                    <br />
-                The exposure layer shows the critical infrastructures in Rajapur.
-                    <br />
-                The flood hazard map of either 5 years, 10 years,
-                20 years, 50 years, 100 years, or 1000 years return
-                period can be overlayed over the exposure layer.
-                The data represents the water depth for floods of a
-                certain year return period or recurrence interval.
-                    <br />
-                Return period indicates the average interval of time
-                within which the flood of that magnitude will occur.
-                Another way of expressing this is to say that the data
-                show the probability of experiencing a given water depth
-                within a single year; i.e. depths shown by the ‘1-in-100
-                year’ layer have a 1-in-100 (or 1%) chance of occurrence in any given year.
-                    <br />
-                An understanding of the critical infrastructures exposed
-                to floods can be developed with the help of the map.
+                    Exposure is one of the critical drivers of long term
+                    flood damages and loss in Rajapur area. To understand
+                    the exposure of assets and people, this visualization
+                    allows the super imposition of the flood hazard maps for
+                    different return period of flood with critical infrastructures.
+                    Return period indicates the average interval of time within which
+                    the flood of that magnitude will occur. Simply, its a probability
+                    of experiencing a given water depth within a single year; i.e. depths
+                    shown by the ‘1-in-100 year’ layer have a 1-in-100
+                    (or 1%) chance of occurrence in any given year.
+                </p>
+                <p>
+                    This viz-risk helps understand the population, elements
+                    and assets that are exposed to modeled flood hazard in
+                    the region. Important implication from this viz-risk is
+                    that the impact from the flood can be greatly reduced
+                    through flood-sensitive land use planning.  Here, the dense
+                    settlement areas that are at proximity to Karnali river
+                    lying in flood hazard zone might face major human loss and
+                    economic damage in future floods.
                 </p>
 
             </div>
