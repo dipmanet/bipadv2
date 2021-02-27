@@ -307,6 +307,7 @@ class FloodHistoryMap extends React.Component {
             maxZoom: 22,
         });
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        this.map.addControl(new mapboxgl.ScaleControl({ position: 'bottom-right' }));
         this.map.on('style.load', () => {
             const visibleLayout = {
                 visibility: 'visible',
@@ -353,25 +354,6 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
             });
-
-            this.map.addLayer({
-                id: 'ward-outline',
-                source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
-                type: 'line',
-                paint: vizriskmapStyles.ward.outline,
-                layout: visibleLayout,
-                filter: getWardFilter(5, 65, 58007, wards),
-            });
-            this.map.addLayer({
-                id: 'ward-label',
-                'source-layer': mapSources.nepalCentroid.layers.ward,
-                type: 'symbol',
-                paint: vizriskmapStyles.wardLabel.paint,
-                layout: vizriskmapStyles.wardLabel.layout,
-                filter: getWardFilter(5, 65, 58007, wards),
-            });
-
 
             this.map.addLayer({
                 id: 'ward-fill-local',
@@ -479,6 +461,216 @@ class FloodHistoryMap extends React.Component {
 
             // critical infra cluster layers
 
+
+            this.map.addLayer({
+                id: 'clusters-health',
+                type: 'circle',
+                source: 'health',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#c8b09a',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-culture',
+                type: 'circle',
+                source: 'culture',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#c8b0b8',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-industry',
+                type: 'circle',
+                source: 'industry',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#a4ac5e',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-education',
+                type: 'circle',
+                source: 'education',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#ffdd00',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-tourism',
+                type: 'circle',
+                source: 'tourism',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#62d480',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-governance',
+                type: 'circle',
+                source: 'governance',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#66dff4',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-bank',
+                type: 'circle',
+                source: 'bank',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#c58dbf',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+            this.map.addLayer({
+                id: 'clusters-industry',
+                type: 'circle',
+                source: 'industry',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#a4ac5e',
+                        100,
+                        '#f1f075',
+
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40,
+                    ],
+                },
+
+            });
+
             // this.map.addLayer({
             //     id: 'clusters',
             //     type: 'circle',
@@ -505,215 +697,6 @@ class FloodHistoryMap extends React.Component {
             //     },
 
             // });
-
-            this.map.addLayer({
-                id: 'clusters-health',
-                type: 'circle',
-                source: 'health',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-culture',
-                type: 'circle',
-                source: 'culture',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-industry',
-                type: 'circle',
-                source: 'industry',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-education',
-                type: 'circle',
-                source: 'education',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-tourism',
-                type: 'circle',
-                source: 'tourism',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-governance',
-                type: 'circle',
-                source: 'governance',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-bank',
-                type: 'circle',
-                source: 'bank',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
-            this.map.addLayer({
-                id: 'clusters-industry',
-                type: 'circle',
-                source: 'industry',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
-                },
-
-            });
 
             // critical cluster count
             // this.map.addLayer({

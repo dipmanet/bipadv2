@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Hexagon from 'react-hexagon';
 import VRLegend from '#views/VizRisk/VRLegend';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
@@ -34,6 +35,7 @@ const LandCoverLegends = (props) => {
         setshowCulture(false);
         setshowHospital(false);
         setshowTourism(false);
+        setshowAll(false);
     };
 
     const handleLegendText = (layer) => {
@@ -42,7 +44,11 @@ const LandCoverLegends = (props) => {
 
     const handleCriticalclick = (layer) => {
         handleCritical(layer);
-
+        if (layer === 'all') {
+            resetCriticalLayers();
+            setshowAll(true);
+            handleLegendText('Education Inst.');
+        }
 
         if (layer === 'education') {
             const newVal = !showEducation;
@@ -59,8 +65,8 @@ const LandCoverLegends = (props) => {
 
         if (layer === 'culture') {
             const newVal = !showCulture;
-            setshowCulture(true);
             resetCriticalLayers();
+            setshowCulture(true);
             handleLegendText('Cultural Centers');
         }
         if (layer === 'health') {
@@ -92,18 +98,32 @@ const LandCoverLegends = (props) => {
         <>
             {/* <VRLegend> */}
             <div className={styles.lagendMainContainerInfra}>
+                <h1>Infrastructures</h1>
 
                 <div className={styles.criticalIcons}>
+
                     <div className={styles.toggleContainer}>
-                        <h1>Infrastructures</h1>
                         <div className={styles.infraIconContainer}>
+
                             <button
                                 type="button"
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('all')}
                             >
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showAll ? '#9bb4be' : '#9bb4bf',
+                                        strokeWidth: 50,
+                                        // fill: showAll ? '#ff0000' : '#456172',
+                                        // fill: '#ff0000',
+                                        fill: showAll ? '#ffffff' : '#456172',
 
-                                <h2>Show All</h2>
+                                    }}
+                                    className={styles.educationHexagon}
+                                />
+
+                                Show All
                             </button>
 
                         </div>
@@ -113,11 +133,21 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('education')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showEducation ? '#9bb4be' : '#9bb4bf',
+                                        strokeWidth: 50,
+                                        // fill: showEducation ? '#ffdd00' : '#456172' }}
+                                        // fill: '#ffdd00',
+                                        fill: showEducation ? '#ffdd00' : '#456172',
+
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
-                            School
+
+
+                            Education
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -127,11 +157,19 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('governance')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showGovernemnt ? '#9bb4be' : '#9bb4bf',
+                                        strokeWidth: 50,
+                                        // fill: showGovernemnt ? '#66dff4' : '#456172' }}
+                                        // fill: '#66dff4',
+                                        fill: showGovernemnt ? '#66dff4' : '#456172',
+
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
-                            Government Off.
+                            Government
                             </button>
 
                         </div>
@@ -141,11 +179,20 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('culture')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showCulture ? '#9bb4be' : '#9bb4bf',
+
+                                        strokeWidth: 50,
+                                        // fill: '#c8b0b8',
+                                        fill: showCulture ? '#c8b0b8' : '#456172',
+
+                                    }}
+                                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
+                                    className={styles.educationHexagon}
                                 />
-                            Cultural Cen.
+                            Culture
                             </button>
 
                         </div>
@@ -156,11 +203,20 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('health')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showHospital ? '#9bb4be' : '#9bb4bf',
+
+                                        strokeWidth: 50,
+                                        // fill: showHospital ? '#c8b09a' : '#456172' }}
+                                        // fill: '#c8b09a',
+                                        fill: showHospital ? '#c8b09a' : '#456172',
+
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
-                            Hospital
+                            Health
                             </button>
 
                         </div>
@@ -170,9 +226,19 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('industry')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showIndustry ? '#9bb4be' : '#9bb4bf',
+
+                                        strokeWidth: 50,
+                                        // fill: showIndustry ? '#a4ac5e' : '#456172'
+                                        // fill: '#a4ac5e',
+                                        fill: showIndustry ? '#a4ac5e' : '#456172',
+
+
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
                             Industry
                             </button>
@@ -185,10 +251,15 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('tourism')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
-                                    style={{ color: '#4666b0' }}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: '#9bb4be',
+                                        strokeWidth: 50,
+                                        // fill: showTourism ? '#62d480' : '#456172'
+                                        fill: showTourism ? '#62d480' : '#456172',
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
                                 Tourism
                             </button>
@@ -201,12 +272,18 @@ const LandCoverLegends = (props) => {
                                 className={styles.criticalButton}
                                 onClick={() => handleCriticalclick('bank')}
                             >
-                                <ScalableVectorGraphics
-                                    className={styles.criticalIcon}
-                                    src={Tourism}
-                                    style={{ color: '#4666b0' }}
+                                <Hexagon
+                                    style={{
+                                        // stroke: '#9bb4bf',
+                                        stroke: showFinance ? '#9bb4be' : '#9bb4bf',
+                                        strokeWidth: 50,
+                                        // fill: showFinance ? '#c58dbf' : '#456172'
+                                        // fill: '#c58dbf',
+                                        fill: showFinance ? '#c58dbf' : '#456172',
+                                    }}
+                                    className={styles.educationHexagon}
                                 />
-                             Financial Inst.
+                             Financial
                             </button>
 
                         </div>

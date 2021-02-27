@@ -13,7 +13,7 @@ export default {
             name: 'Industry', Total: 6,
         },
         {
-            name: 'Banks', Total: 33,
+            name: 'Banks', Total: 31,
         },
         {
             name: 'Tourism', Total: 16,

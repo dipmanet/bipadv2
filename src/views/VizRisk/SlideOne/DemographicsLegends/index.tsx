@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Hexagon from 'react-hexagon';
 import Icon from '#rscg/Icon';
 import VRLegend from '../../VRLegend';
 import styles from './styles.scss';
@@ -40,7 +41,11 @@ const DemoGraphicsLegends = (props) => {
                                     <div className={styles.populationIndicator5} />
                                 </div>
                                 <div className={styles.populationTextContainer}>
-                                    <div className={styles.populationText}>More than 7000</div>
+                                    <div className={styles.populationText}>
+                                        {'>'}
+                                        {' '}
+                                        7000
+                                    </div>
                                     <div className={styles.populationText}>6001 - 7000</div>
                                     <div className={styles.populationText}>5001 - 6000</div>
                                     <div className={styles.populationText}>4001 - 5000</div>
@@ -83,7 +88,7 @@ const DemoGraphicsLegends = (props) => {
                 }
 
 
-                <h2>Layers</h2>
+                <h2>Population</h2>
                 <div className={styles.hazardItemContainer}>
                     <button
                         type="button"
@@ -91,12 +96,16 @@ const DemoGraphicsLegends = (props) => {
                         onClick={() => handlePopulationClick('ward')}
 
                     >
-                        <Icon
-                            name="circle"
-                            className={showPopulationWard === false
-                                ? styles.exposedIcons
-                                : styles.exposedIconsClicked}
+                        <Hexagon
+                            style={{
+                                stroke: '#fff',
+                                strokeWidth: 50,
+                                fill: showPopulationWard ? '#ddd' : 'transparent',
+
+                            }}
+                            className={styles.educationHexagon}
                         />
+
                            Population by Ward
                     </button>
                 </div>
@@ -107,12 +116,16 @@ const DemoGraphicsLegends = (props) => {
                         onClick={() => handlePopulationClick('popdensity')}
 
                     >
-                        <Icon
-                            name="circle"
-                            className={showPopulationDensity === false
-                                ? styles.exposedIcons
-                                : styles.exposedIconsClicked}
+                        <Hexagon
+                            style={{
+                                stroke: '#fff',
+                                strokeWidth: 50,
+                                fill: showPopulationDensity ? '#ddd' : 'transparent',
+
+                            }}
+                            className={styles.educationHexagon}
                         />
+
                            Population Density
                     </button>
                 </div>

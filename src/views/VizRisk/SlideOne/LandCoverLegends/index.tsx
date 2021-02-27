@@ -1,4 +1,5 @@
 import React from 'react';
+import Hexagon from 'react-hexagon';
 import VRLegend from '#views/VizRisk/VRLegend';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
@@ -11,8 +12,14 @@ const LandCoverLegends = () => (
             <h2>Land Cover</h2>
             <p className={styles.settlementIconContainer}>
                 <span>
-                    <Icon
-                        name="square"
+
+                    <Hexagon
+                        style={{
+                            stroke: '#e3acac',
+                            strokeWidth: 50,
+                            fill: '#e00000',
+
+                        }}
                         className={styles.settlementIcon}
                     />
                 </span>
@@ -21,49 +28,50 @@ const LandCoverLegends = () => (
             </p>
             <p className={styles.riverIconContainer}>
                 <span>
-                    <Icon
-                        name="square"
+                    <Hexagon
+                        style={{
+                            stroke: '#a7ced6',
+                            strokeWidth: 50,
+                            fill: '#0670bc',
+
+                        }}
                         className={styles.riverIcon}
                     />
+
                 </span>
                             Water Bodies
             </p>
-            {/* <p className={styles.sandyIconContainer}>
-                            <span>
-                                <Icon
-                                    name="square"
-                                    className={styles.sandIcon}
-                                />
-                            </span>
-                            Sandy Area
-                        </p> */}
+
             <p className={styles.agroIconContainer}>
                 <span>
-                    <Icon
-                        name="square"
+                    <Hexagon
+                        style={{
+                            stroke: '#edf7d2',
+                            strokeWidth: 50,
+                            fill: '#e6f2a1',
+
+                        }}
                         className={styles.agricultureIcon}
                     />
+
                 </span>
                             Agricultural Land
             </p>
             <p className={styles.agroIconContainer}>
                 <span>
-                    <Icon
-                        name="square"
+                    <Hexagon
+                        style={{
+                            stroke: '#a6dea6',
+                            strokeWidth: 50,
+                            fill: '#00a811',
+
+                        }}
                         className={styles.forestIcon}
                     />
+
                 </span>
                             Forest
             </p>
-            {/* <p className={styles.agroIconContainer}>
-                <ScalableVectorGraphics
-                    className={styles.bridgeIcon}
-                    src={BridgeIcon}
-                    style={{ color: '#111111' }}
-                />
-                            Bridges
-            </p> */}
-
 
             <div className={styles.agroIconContainer}>
                 <div className={styles.canalIcon} />
@@ -84,8 +92,13 @@ const LandCoverLegends = () => (
 
             <p className={styles.agroIconContainer}>
                 <span>
-                    <Icon
-                        name="square"
+                    <Hexagon
+                        style={{
+                            stroke: '#fff',
+                            strokeWidth: 50,
+                            fill: '#b4b4b4',
+
+                        }}
                         className={styles.otherIcon}
                     />
                 </span>

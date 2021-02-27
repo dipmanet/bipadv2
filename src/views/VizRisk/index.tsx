@@ -4,18 +4,13 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import Button from '#rsca/Button';
 import SlideOne from './SlideOne';
-import SlideTwo from './SlideTwo';
-import SlideThree from './SlideThree';
+
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import VRSetting from './Setting';
-import SlideFour from './SlideFour';
-import SlideFive from './SlideFive';
-import SlideSix from './SlideSix';
 
 
 const slides = [
-    <SlideOne />, <SlideTwo />, <SlideThree />,
-    <SlideFour />, <SlideSix />,
+    <SlideOne />,
 
 ];
 

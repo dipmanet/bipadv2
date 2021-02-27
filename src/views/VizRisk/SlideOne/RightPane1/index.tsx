@@ -232,14 +232,14 @@ class SlideOne extends React.PureComponent<Props, State> {
                         <XAxis
                             dataKey="name"
                             interval="preserveStart"
-                            tick={{ fill: '#6490a4' }}
+                            tick={{ fill: '#94bdcf' }}
                         />
                         <YAxis
                             unit={'℃'}
                             axisLine={false}
                             domain={[0, 40]}
                             padding={{ top: 20 }}
-                            tick={{ fill: '#6490a4' }}
+                            tick={{ fill: '#94bdcf' }}
                             tickCount={10}
                             interval="preserveEnd"
                             allowDataOverflow

@@ -151,8 +151,8 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis type="category" dataKey="name" />
+                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
                         <Tooltip />
                         {/* <Legend /> */}
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />

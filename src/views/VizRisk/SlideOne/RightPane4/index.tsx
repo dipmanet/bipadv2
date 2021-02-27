@@ -10,11 +10,6 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import criticalInfraData from '../../criticalInfraData';
-import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
-
-import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
 
 interface ComponentProps {}
 
@@ -60,6 +55,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         <YAxis
                             type="category"
                             dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
                         />
                         <Tooltip />
                         {/* <Legend /> */}
@@ -69,6 +65,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             // barCategoryGap={30}
                             barCategoryGap={20}
                             label={{ position: 'insideRight' }}
+                            tick={{ fill: '#94bdcf' }}
                         />
                         {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
                         {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
