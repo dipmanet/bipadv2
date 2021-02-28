@@ -37,20 +37,19 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public render() {
+        const { showReferences } = this.state;
         return (
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
-
                 <p>
-
-                In Rajapur, there are 54 schools and 16 temple/cultral
-                sites that can be converted into temporary shelter or
-                evcuation shelter during flood events. In addition,
-                there are 9 evacuation centers. During the times of
-                a disaster, these areas are crucial for the evacuation and
-                also these areas could be benefiical especially for the
-                evacuees who cannot easily return to their homes and would
-                require further recovery assitance.
+                    In Rajapur, there are 54 schools and 16 temple/cultral
+                    sites that can be converted into temporary shelter or
+                    evcuation shelter during flood events. In addition,
+                    there are 9 evacuation centers. During the times of
+                    a disaster, these areas are crucial for the evacuation and
+                    also these areas could be benefiical especially for the
+                    evacuees who cannot easily return to their homes and would
+                    require further recovery assitance.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
                     <BarChart
@@ -58,6 +57,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         height={600}
                         data={chartData}
                         layout="vertical"
+                        margin={{ top: 10, bottom: 10, right: 10, left: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
@@ -67,17 +67,12 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             tick={{ fill: '#94bdcf' }}
                         />
                         <Tooltip />
-                        {/* <Legend /> */}
                         <Bar
                             dataKey="Total"
                             fill="#ffbf00"
-                            // barCategoryGap={30}
                             barCategoryGap={20}
                             label={{ position: 'insideRight' }}
                         />
-                        {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
-                        {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
-                        {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
                 <button
@@ -87,22 +82,22 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 >
                 References
                 </button>
-                {this.state.showReferences && (
+                {showReferences && (
                     <ul className={styles.referencesText}>
                         <li>
-                        Modeling Exposure Through Earth Observations Routines
-                        (METEOR) ,UK Space Agency, https://meteor-project.org/
+                            Modeling Exposure Through Earth Observations Routines
+                            (METEOR) ,UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                        Risk Nexus, Urgent case for recovery. What we can
-                        learn from the August 2014 Karnali River floods in Nepal.
-                        Zurich Insurance Group Ltd and ISET-International, 2015
+                            Risk Nexus, Urgent case for recovery. What we can
+                            learn from the August 2014 Karnali River floods in Nepal.
+                            Zurich Insurance Group Ltd and ISET-International, 2015
                         </li>
                         <li>
-                        Central Bureau of Statistics, 2011
+                             Central Bureau of Statistics, 2011
                         </li>
                         <li>
-                        Rajapur Municipality Profile, 2075
+                             Rajapur Municipality Profile, 2075
                         </li>
                     </ul>
                 )

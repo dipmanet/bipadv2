@@ -59,17 +59,6 @@ class SlideThreePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
-                {/* <p>
-                    {' '}
-                        Rajapur has the total population of 55,584 with the
-                        male and female population being 25,519 and 30,065
-                        respectively. Total household number counts to 12,138.
-                        Ward number 4 has the largest household number that equals to 1639
-                        while ward number 7 has the least comprising of only
-                        766 number of household. However, the population is highest in
-                        ward number 4 and lowest in ward number 7.
-
-                </p> */}
                 <p>
                     The chloropleth map represents the household distribution per ward.
                     The wards with the highest household number have darker colors

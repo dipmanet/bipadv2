@@ -81,7 +81,7 @@ const FloodHistoryLegends = (props: Props) => {
                 Flood Hazard
                 {' '}
                 <br />
-                in Return Periods
+                in Return Periods (years)
             </h3>
             <div className={styles.floodMainContainer}>
                 <div className={styles.floodSubGroup}>
@@ -215,14 +215,14 @@ const FloodHistoryLegends = (props: Props) => {
                     High (
                         {'>'}
                         {' '}
-                        2)
+                        2m)
                     </div>
-                    <div className={styles.floodText}>Medium (1-2)</div>
+                    <div className={styles.floodText}>Medium (1m - 2m)</div>
                     <div className={styles.floodText}>
                     Low (
                         {'<'}
                         {' '}
-                    1)
+                    1m)
                     </div>
                 </div>
             </div>

@@ -1073,9 +1073,9 @@ class FloodHistoryMap extends React.Component {
             this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
             this.map.moveLayer('ward-outline');
 
-            this.map.moveLayer('safeshelterRajapurIcon');
             this.map.moveLayer('safeshelterRajapur');
-            // this.map.moveLayer('ward-fill', 'country-label');
+            this.map.moveLayer('safeshelterRajapurIcon');
+
             this.map.moveLayer('waterway');
             setTimeout(() => {
                 this.map.flyTo({
@@ -1090,7 +1090,6 @@ class FloodHistoryMap extends React.Component {
                     essential: false,
                 });
             }, 2000);
-            console.log(this.map);
         });
     }
 
@@ -1351,22 +1350,27 @@ class FloodHistoryMap extends React.Component {
                 if (nextProps.rasterLayer === '5') {
                     this.resetFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
+                    this.map.moveLayer('raster-rajapur-5', 'clusters-health');
                 }
                 if (nextProps.rasterLayer === '10') {
                     this.resetFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+                    this.map.moveLayer('raster-rajapur-10', 'clusters-health');
                 }
                 if (nextProps.rasterLayer === '50') {
                     this.resetFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
+                    this.map.moveLayer('raster-rajapur-50', 'clusters-health');
                 }
                 if (nextProps.rasterLayer === '100') {
                     this.resetFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
+                    this.map.moveLayer('raster-rajapur-100', 'clusters-health');
                 }
                 if (nextProps.rasterLayer === '1000') {
                     this.resetFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
+                    this.map.moveLayer('raster-rajapur-1000', 'clusters-health');
                 }
             }
         }
