@@ -2,7 +2,9 @@
 
     
     h2{
-        margin-top: 20px;
+        margin-top: 10px;
+        opacity: 0.67;
+        
     }
     .floodMainContainer{
         display:flex;
@@ -11,26 +13,20 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            margin-right: 20px;
             .floodItemContainer{
-                // display: flex;
-                // border: 1px solid gray;
-                min-width: 80px;
                 .legendBtn{
+                    cursor: pointer;
                     background-color: transparent;
-                    font-size: 11px;
+                    font-size: 12px;
                     border: none;
                     color: white;
                     display: flex;
-                    .yearsIcon{
-                        margin-right: 10px;
-                        color: rgb(70, 70, 70);
-                        font-size: 12px;
-                    }
-                    .yearsIconClicked{
-                        margin-right: 10px;
-                        color: rgb(196, 193, 193);
-                        font-size: 12px;
+                    align-items: center;
+                    margin-bottom: 5px;
+                    .educationHexagon{
+                        width: 15px;
+                        margin: 0 4px 0 5px;
+
                     }
                     .exposedIcons{
                         margin-right: 10px;
@@ -55,6 +51,7 @@
         .floodDepth{
             display: flex;
             flex-direction: column;
+            margin-left: 7px;
             // width:60px;
             // border: 1px solid gray;
 

@@ -1,0 +1,59 @@
+
+h1{
+    font-size: 18px;
+    opacity: 0.87;
+    font-family: 'Playfair Display';
+    color: rgb(255, 255, 255);
+    padding: 10px;
+}
+h2{
+    font-size:14px;
+    padding: 10px;
+    opacity: 0.87;
+    font-family: 'Playfair Display';
+}
+.criticalIcons{
+    .toggleContainer{
+        .infraIconContainer{
+            text-transform: capitalize;
+            margin: 5px 0;
+            .canalIcon{
+                border-bottom:2px solid #0670bc;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 15px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .roadIcon{
+                border-bottom:2px solid #a7a5a5;
+                width: 25px;
+                margin-right: 12px;
+                font-size: 15px;
+                position: relative;
+                // bottom: 7px;
+            }
+            .criticalButton{
+                font-family: 'Source Sans Pro';
+                background: transparent;
+                color: white;
+                display: flex;
+                align-items: center;
+                border: none;
+                font-size: 14px;
+                opacity: 0.87;
+                width: 100%;
+                cursor: pointer;
+                filter: saturate(100%);
+                // border: 1px solid red;
+                .educationHexagon{
+                    width: 15px;
+                    margin: 0 7px 0 5px;
+                }
+        
+            }
+        }
+    }
+}
+
+

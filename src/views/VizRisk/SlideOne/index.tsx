@@ -12,6 +12,7 @@ import LandcoverLegends from './LandCoverLegends';
 import DemographicsLegends from './DemographicsLegends';
 import CriticalInfraLegends from './CriticalInfraLegends';
 import FloodHazardLegends from './FloodHazardLegends';
+import EvacLegends from './EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '../VRLegend';
 
@@ -190,6 +191,23 @@ export default class SlideFour extends React.Component {
 
                         <VRLegend>
                             <CriticalInfraLegends
+                                handleCritical={this.handleCritical}
+                            />
+                            <FloodHazardLegends
+                                handleFloodChange={this.handleFloodChange}
+                                handleExposedElementChange={this.handleExposedElementChange}
+                                handleChisapani={this.handleChisapani}
+                            />
+                        </VRLegend>
+                    )
+                    : ''
+                }
+                {rightElement === 5
+                    ? (
+
+
+                        <VRLegend>
+                            <EvacLegends
                                 handleCritical={this.handleCritical}
                             />
                             <FloodHazardLegends
