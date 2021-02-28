@@ -1073,7 +1073,8 @@ class FloodHistoryMap extends React.Component {
             this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
             this.map.moveLayer('ward-outline');
 
-
+            this.map.moveLayer('safeshelterRajapurIcon');
+            this.map.moveLayer('safeshelterRajapur');
             // this.map.moveLayer('ward-fill', 'country-label');
             this.map.moveLayer('waterway');
             setTimeout(() => {
@@ -1325,6 +1326,8 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
+                    this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
+                    this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
                 }
                 if (nextProps.criticalElement === 'education') {
                     this.resetClusters();

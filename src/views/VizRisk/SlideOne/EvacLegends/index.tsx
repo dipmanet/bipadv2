@@ -15,6 +15,7 @@ const EvacLegends = (props) => {
         setshowEducation(false);
         setshowCulture(false);
         setshowAll(false);
+        setshowSafe(false);
     };
 
     const handleCriticalclick = (layer) => {
@@ -24,6 +25,11 @@ const EvacLegends = (props) => {
             setshowAll(true);
         }
 
+        if (layer === 'education') {
+            resetCriticalLayers();
+            setshowEducation(true);
+        }
+
         if (layer === 'culture') {
             resetCriticalLayers();
             setshowCulture(true);
@@ -31,7 +37,7 @@ const EvacLegends = (props) => {
 
         if (layer === 'safe') {
             resetCriticalLayers();
-            setshowCulture(true);
+            setshowSafe(true);
         }
     };
     return (
@@ -53,7 +59,7 @@ const EvacLegends = (props) => {
                                 style={{
                                     stroke: '#9bb4be',
                                     // stroke: showAll ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showAll ? '#ff0000' : '#456172',
                                     // fill: '#ff0000',
                                     fill: showAll ? '#ffffff' : 'transparent',
@@ -76,7 +82,7 @@ const EvacLegends = (props) => {
                                 style={{
                                     stroke: '#ffdd00',
                                     // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showEducation ? '#ffdd00' : '#456172' }}
                                     // fill: '#ffdd00',
                                     fill: showEducation || showAll ? '#ffdd00' : 'transparent',
@@ -101,7 +107,7 @@ const EvacLegends = (props) => {
                                     stroke: '#c8b0b8',
                                     // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
 
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: '#c8b0b8',
                                     fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
 
@@ -123,9 +129,9 @@ const EvacLegends = (props) => {
                                     stroke: '#c8b0b8',
                                     // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
 
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: '#c8b0b8',
-                                    fill: showCulture || showAll ? '#159d50' : 'transparent',
+                                    fill: showSafe || showAll ? '#159d50' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}

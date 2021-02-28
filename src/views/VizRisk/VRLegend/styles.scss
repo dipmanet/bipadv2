@@ -16,10 +16,20 @@
 
 h2{
   font-size:16px;
-  padding: 14px 0 0 10px;
+  padding: 0 0 0 10px;
   opacity: 0.87;
+  line-height: 2em;
   font-family: 'Source Sans Pro';
   font-weight: 400;
+}
+h3{
+  font-size:14px;
+  padding: 15px 0 0 10px;
+  opacity: 0.87;
+  line-height: 1em;
+  font-family: 'Source Sans Pro';
+  font-weight: 400;
+
 }
 
 p,button,div{

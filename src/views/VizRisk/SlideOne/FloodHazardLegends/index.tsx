@@ -77,12 +77,12 @@ const FloodHistoryLegends = (props: Props) => {
 
     return (
         <>
-            <h2>
+            <h3>
                 Flood Hazard
                 {' '}
                 <br />
                 in Return Periods
-            </h2>
+            </h3>
             <div className={styles.floodMainContainer}>
                 <div className={styles.floodSubGroup}>
                     <div className={styles.floodItemContainer}>
