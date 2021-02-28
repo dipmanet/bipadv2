@@ -1,11 +1,7 @@
 import React, { useState, useContext } from 'react';
-import * as PageTypes from '#store/atom/page/types';
-import VRLegend from '../../VRLegend';
+import Hexagon from 'react-hexagon';
 import Icon from '#rscg/Icon';
-import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import styles from './styles.scss';
-import ManualIcon from '#resources/images/chisapanistation.png';
-import CriticalInfraLegends from '../CriticalInfraLegends';
 
 interface ComponentProps {}
 
@@ -85,7 +81,7 @@ const FloodHistoryLegends = (props: Props) => {
                 Flood Hazard
                 {' '}
                 <br />
-                in Return Periods (years)
+                in Return Periods
             </h2>
             <div className={styles.floodMainContainer}>
                 <div className={styles.floodSubGroup}>
@@ -95,13 +91,20 @@ const FloodHistoryLegends = (props: Props) => {
                             className={styles.legendBtn}
                             onClick={() => handleLegendBtnClick('5')}
                         >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '5'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
+                            <Hexagon
+                                style={{
+                                    stroke: '#ddd',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '5' ? 'rgba(255,255,255,0.67)' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
                             />
+
                             5
+                                 years
+                            {' '}
+
                         </button>
                     </div>
                     <div className={styles.floodItemContainer}>
@@ -111,13 +114,21 @@ const FloodHistoryLegends = (props: Props) => {
                             onClick={() => handleLegendBtnClick('10')}
 
                         >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '10'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
+                            <Hexagon
+                                style={{
+                                    stroke: '#ddd',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '10' ? 'rgba(255,255,255,0.67)' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
                             />
+
+
                             10
+                                 years
+                            {' '}
+
                         </button>
                     </div>
                     <div className={styles.floodItemContainer}>
@@ -127,13 +138,20 @@ const FloodHistoryLegends = (props: Props) => {
                             onClick={() => handleLegendBtnClick('50')}
 
                         >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '50'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
+                            <Hexagon
+                                style={{
+                                    stroke: '#ddd',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '50' ? 'rgba(255,255,255,0.67)' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
                             />
-                            50
+
+
+                            50years
+                            {' '}
+
                         </button>
                     </div>
                 </div>
@@ -145,13 +163,18 @@ const FloodHistoryLegends = (props: Props) => {
                             onClick={() => handleLegendBtnClick('100')}
 
                         >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '100'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
+                            <Hexagon
+                                style={{
+                                    stroke: '#ddd',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '100' ? 'rgba(255,255,255,0.67)' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
                             />
-                            100
+
+
+                            100 years
                         </button>
                     </div>
 
@@ -162,13 +185,18 @@ const FloodHistoryLegends = (props: Props) => {
                             onClick={() => handleLegendBtnClick('1000')}
 
                         >
-                            <Icon
-                                name="circle"
-                                className={activeRasterLayer === '1000'
-                                    ? styles.yearsIconClicked
-                                    : styles.yearsIcon}
+                            <Hexagon
+                                style={{
+                                    stroke: '#ddd',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '1000' ? 'rgba(255,255,255,0.67)' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
                             />
-                            1000
+
+
+                            1000 years
                         </button>
                     </div>
                 </div>

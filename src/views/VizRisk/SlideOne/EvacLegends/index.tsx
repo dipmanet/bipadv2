@@ -87,7 +87,7 @@ const EvacLegends = (props) => {
     return (
         <>
             {/* <VRLegend> */}
-            <h1>Infrastructures</h1>
+            <h2>Evacuation Centers</h2>
 
             <div className={styles.criticalIcons}>
 
@@ -129,7 +129,7 @@ const EvacLegends = (props) => {
                                     strokeWidth: 100,
                                     // fill: showEducation ? '#ffdd00' : '#456172' }}
                                     // fill: '#ffdd00',
-                                    fill: showEducation ? '#ffdd00' : 'transparent',
+                                    fill: showEducation || showAll ? '#ffdd00' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -153,13 +153,35 @@ const EvacLegends = (props) => {
 
                                     strokeWidth: 100,
                                     // fill: '#c8b0b8',
-                                    fill: showCulture ? '#c8b0b8' : 'transparent',
+                                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
                                 className={styles.educationHexagon}
                             />
                             Culture
+                        </button>
+                    </div>
+                    <div className={styles.infraIconContainer}>
+                        <button
+                            type="button"
+                            className={styles.criticalButton}
+                            onClick={() => handleCriticalclick('safe')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#c8b0b8',
+                                    // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
+
+                                    strokeWidth: 100,
+                                    // fill: '#c8b0b8',
+                                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
+
+                                }}
+                                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
+                                className={styles.educationHexagon}
+                            />
+                            Safe Shelter
                         </button>
                     </div>
                 </div>

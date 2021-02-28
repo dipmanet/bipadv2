@@ -87,7 +87,7 @@ const LandCoverLegends = (props) => {
     return (
         <>
             {/* <VRLegend> */}
-            <h1>Infrastructures</h1>
+            <h2>Infrastructures</h2>
 
             <div className={styles.criticalIcons}>
 
@@ -103,7 +103,7 @@ const LandCoverLegends = (props) => {
                                 style={{
                                     stroke: '#9bb4be',
                                     // stroke: showAll ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showAll ? '#ff0000' : '#456172',
                                     // fill: '#ff0000',
                                     fill: showAll ? '#ffffff' : 'transparent',
@@ -126,10 +126,10 @@ const LandCoverLegends = (props) => {
                                 style={{
                                     stroke: '#ffdd00',
                                     // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showEducation ? '#ffdd00' : '#456172' }}
                                     // fill: '#ffdd00',
-                                    fill: showEducation ? '#ffdd00' : 'transparent',
+                                    fill: showEducation || showAll ? '#ffdd00' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -150,10 +150,10 @@ const LandCoverLegends = (props) => {
                                 style={{
                                     stroke: '#66dff4',
                                     // stroke: showGovernemnt ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showGovernemnt ? '#66dff4' : '#456172' }}
                                     // fill: '#66dff4',
-                                    fill: showGovernemnt ? '#66dff4' : 'transparent',
+                                    fill: showGovernemnt || showAll ? '#66dff4' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -173,9 +173,9 @@ const LandCoverLegends = (props) => {
                                     stroke: '#c8b0b8',
                                     // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
 
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: '#c8b0b8',
-                                    fill: showCulture ? '#c8b0b8' : 'transparent',
+                                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
@@ -197,10 +197,10 @@ const LandCoverLegends = (props) => {
                                     stroke: '#c8b09a',
                                     // stroke: showHospital ? '#9bb4be' : '#9bb4bf',
 
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showHospital ? '#c8b09a' : '#456172' }}
                                     // fill: '#c8b09a',
-                                    fill: showHospital ? '#c8b09a' : 'transparent',
+                                    fill: showHospital || showAll ? '#c8b09a' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -220,10 +220,10 @@ const LandCoverLegends = (props) => {
                                     stroke: '#a4ac5e',
                                     // stroke: showIndustry ? '#9bb4be' : '#9bb4bf',
 
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showIndustry ? '#a4ac5e' : '#456172'
                                     // fill: '#a4ac5e',
-                                    fill: showIndustry ? '#a4ac5e' : 'transparent',
+                                    fill: showIndustry || showAll ? '#a4ac5e' : 'transparent',
 
 
                                 }}
@@ -244,9 +244,9 @@ const LandCoverLegends = (props) => {
                                 style={{
                                     stroke: '#62d480',
                                     // stroke: '#9bb4be',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showTourism ? '#62d480' : '#456172'
-                                    fill: showTourism ? '#62d480' : 'transparent',
+                                    fill: showTourism || showAll ? '#62d480' : 'transparent',
                                 }}
                                 className={styles.educationHexagon}
                             />
@@ -265,10 +265,10 @@ const LandCoverLegends = (props) => {
                                 style={{
                                     stroke: '#c58dbf',
                                     // stroke: showFinance ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 100,
+                                    strokeWidth: 50,
                                     // fill: showFinance ? '#c58dbf' : '#456172'
                                     // fill: '#c58dbf',
-                                    fill: showFinance ? '#c58dbf' : 'transparent',
+                                    fill: showFinance || showAll ? '#c58dbf' : 'transparent',
                                 }}
                                 className={styles.educationHexagon}
                             />

@@ -166,12 +166,20 @@ export default class SlideFour extends React.Component {
                     criticalElement={criticalElement}
                 />
                 {rightelements[rightElement]}
-                {rightElement === 1 ? <LandcoverLegends /> : ''}
+                {rightElement === 1
+                    ? (
+                        <VRLegend>
+                            <LandcoverLegends />
+                        </VRLegend>
+                    )
+                    : ''}
                 {rightElement === 2
                     ? (
-                        <DemographicsLegends
-                            handlePopulationChange={this.handlePopulationChange}
-                        />
+                        <VRLegend>
+                            <DemographicsLegends
+                                handlePopulationChange={this.handlePopulationChange}
+                            />
+                        </VRLegend>
                     )
                     : ''
                 }
@@ -204,8 +212,6 @@ export default class SlideFour extends React.Component {
                 }
                 {rightElement === 5
                     ? (
-
-
                         <VRLegend>
                             <EvacLegends
                                 handleCritical={this.handleCritical}
