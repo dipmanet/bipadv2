@@ -9,13 +9,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '../../demographicsData';
-import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
-import Education from '#views/VizRisk/SlideOne/Icons/education.svg';
-import Culture from '#views/VizRisk/SlideOne/Icons/culture.svg';
-import Home from '#views/VizRisk/SlideOne/Icons/home.svg';
+
 import criticalInfraData from '../../criticalInfraData';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';

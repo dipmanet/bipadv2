@@ -419,7 +419,7 @@ class FloodHistoryMap extends React.Component {
                 type: 'geojson',
                 data: education,
                 cluster: true,
-                clusterRadius: 40,
+                clusterRadius: 60,
                 // clusterMinPoints: 7,
                 tolerance: 0,
 
@@ -459,9 +459,7 @@ class FloodHistoryMap extends React.Component {
                 clusterRadius: 50,
             });
 
-            // critical infra cluster layers
-
-
+            // health
             this.map.addLayer({
                 id: 'clusters-health',
                 type: 'circle',
@@ -488,6 +486,30 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-health',
+                type: 'symbol',
+                source: 'health',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+            this.map.addLayer({
+                id: 'unclustered-point-health',
+                type: 'symbol',
+                source: 'health',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
+            // culture
             this.map.addLayer({
                 id: 'clusters-culture',
                 type: 'circle',
@@ -514,6 +536,30 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-culture',
+                type: 'symbol',
+                source: 'culture',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+            this.map.addLayer({
+                id: 'unclustered-point-culture',
+                type: 'symbol',
+                source: 'culture',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
+            // industry
             this.map.addLayer({
                 id: 'clusters-industry',
                 type: 'circle',
@@ -540,6 +586,31 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-industry',
+                type: 'symbol',
+                source: 'industry',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+
+            this.map.addLayer({
+                id: 'unclustered-point-industry',
+                type: 'symbol',
+                source: 'industry',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
+            // education
             this.map.addLayer({
                 id: 'clusters-education',
                 type: 'circle',
@@ -558,14 +629,39 @@ class FloodHistoryMap extends React.Component {
                         'step',
                         ['get', 'point_count'],
                         20,
-                        100,
+                        9,
                         30,
-                        750,
+                        50,
                         40,
                     ],
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-education',
+                type: 'symbol',
+                source: 'education',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 10,
+                    'text-padding': 0,
+                },
+            });
+
+            this.map.addLayer({
+                id: 'unclustered-point-education',
+                type: 'symbol',
+                source: 'education',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+                    'icon-image': ['get', 'icon'],
+                    'icon-size': 0.8,
+                },
+            });
+
+            // tourism
             this.map.addLayer({
                 id: 'clusters-tourism',
                 type: 'circle',
@@ -592,6 +688,30 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-tourism',
+                type: 'symbol',
+                source: 'tourism',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+            this.map.addLayer({
+                id: 'unclustered-point-tourism',
+                type: 'symbol',
+                source: 'tourism',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
+            // governance
             this.map.addLayer({
                 id: 'clusters-governance',
                 type: 'circle',
@@ -618,6 +738,31 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
+            this.map.addLayer({
+                id: 'cluster-count-governance',
+                type: 'symbol',
+                source: 'governance',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                },
+            });
+
+
+            this.map.addLayer({
+                id: 'unclustered-point-governance',
+                type: 'symbol',
+                source: 'governance',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
+            // bank
             this.map.addLayer({
                 id: 'clusters-bank',
                 type: 'circle',
@@ -644,32 +789,29 @@ class FloodHistoryMap extends React.Component {
                 },
 
             });
+
             this.map.addLayer({
-                id: 'clusters-industry',
-                type: 'circle',
-                source: 'industry',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#a4ac5e',
-                        100,
-                        '#f1f075',
-
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40,
-                    ],
+                id: 'cluster-count-bank',
+                type: 'symbol',
+                source: 'bank',
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
                 },
-
             });
+
+            this.map.addLayer({
+                id: 'unclustered-point-bank',
+                type: 'symbol',
+                source: 'bank',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+
+                    'icon-image': ['get', 'icon'],
+                },
+            });
+
 
             // this.map.addLayer({
             //     id: 'clusters',
@@ -720,165 +862,6 @@ class FloodHistoryMap extends React.Component {
             //         'icon-image': ['get', 'icon'],
             //     },
             // });
-
-            this.map.addLayer({
-                id: 'cluster-count-culture',
-                type: 'symbol',
-                source: 'culture',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-
-            this.map.addLayer({
-                id: 'cluster-count-governance',
-                type: 'symbol',
-                source: 'governance',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            this.map.addLayer({
-                id: 'cluster-count-tourism',
-                type: 'symbol',
-                source: 'tourism',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            this.map.addLayer({
-                id: 'cluster-count-bank',
-                type: 'symbol',
-                source: 'bank',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            this.map.addLayer({
-                id: 'cluster-count-education',
-                type: 'symbol',
-                source: 'education',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            this.map.addLayer({
-                id: 'cluster-count-industry',
-                type: 'symbol',
-                source: 'industry',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            this.map.addLayer({
-                id: 'cluster-count-health',
-                type: 'symbol',
-                source: 'health',
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                },
-            });
-
-            // unclustered point
-
-
-            this.map.addLayer({
-                id: 'unclustered-point-governance',
-                type: 'symbol',
-                source: 'governance',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-industry',
-                type: 'symbol',
-                source: 'industry',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-bank',
-                type: 'symbol',
-                source: 'bank',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-tourism',
-                type: 'symbol',
-                source: 'tourism',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-education',
-                type: 'symbol',
-                source: 'education',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-health',
-                type: 'symbol',
-                source: 'health',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
-            this.map.addLayer({
-                id: 'unclustered-point-culture',
-                type: 'symbol',
-                source: 'culture',
-                filter: ['!', ['has', 'point_count']],
-                layout: {
-
-                    'icon-image': ['get', 'icon'],
-                },
-            });
-
 
             this.map.addLayer({
                 id: 'clusters-evac',
@@ -1206,7 +1189,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-health', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-health', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-health', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('unclustered-point-health');
                 }
@@ -1216,7 +1199,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-bank', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-bank', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-bank', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('unclustered-point-bank');
                 }
@@ -1226,7 +1209,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-governance', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-governance', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-governance', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('unclustered-point-governance');
                 }
@@ -1237,7 +1220,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-industry', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-industry', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-industry', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('unclustered-point-industry');
                 }
@@ -1247,7 +1230,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-education', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('clusters-education');
                     // this.map.moveLayer('cluster-count-education');
@@ -1258,7 +1241,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
 
                     // this.map.moveLayer('clusters-culture');
                     // this.map.moveLayer('cluster-count-culture');
@@ -1269,7 +1252,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('unclustered-point-tourism', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-tourism', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-tourism', 'visibility', 'visible');
-                    this.moveCounts();
+                    // this.moveCounts();
                     // this.map.moveLayer('unclustered-point-tourism');
                 }
 
@@ -1280,8 +1263,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
                 this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
                 // this.map.setLayoutProperty('unclustered-point', 'visibility', 'visible');
-                this.map.setLayoutProperty('cluster-count', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters', 'visibility', 'visible');
+                // this.map.setLayoutProperty('cluster-count', 'visibility', 'visible');
+                // this.map.setLayoutProperty('clusters', 'visibility', 'visible');
             }
 
             if (nextProps.rightElement === 4) {
@@ -1341,13 +1324,11 @@ class FloodHistoryMap extends React.Component {
 
                 this.map.moveLayer('water');
                 this.map.moveLayer('waterway');
-                // this.map.moveLayer('clusters-evac');
-                // this.map.moveLayer('unclustered-point-evac');
-                // this.map.moveLayer('cluster-count-evac');
 
-                this.map.moveLayer('clusters');
+
+                // this.map.moveLayer('clusters');
                 // this.map.moveLayer('unclustered-point');
-                this.map.moveLayer('cluster-count');
+                // this.map.moveLayer('cluster-count');
             }
             if (nextProps.rightElement === 5) {
                 this.resetFloodRasters();

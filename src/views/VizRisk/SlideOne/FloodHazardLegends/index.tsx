@@ -5,6 +5,7 @@ import Icon from '#rscg/Icon';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import styles from './styles.scss';
 import ManualIcon from '#resources/images/chisapanistation.png';
+import CriticalInfraLegends from '../CriticalInfraLegends';
 
 interface ComponentProps {}
 
@@ -79,125 +80,126 @@ const FloodHistoryLegends = (props: Props) => {
     };
 
     return (
-        <VRLegend>
-            <div className={styles.legendContainer}>
-
-                <h2>Flood Hazard in Return Periods (years)</h2>
-                {/* <p className={styles.subHeading}>Return Period </p> */}
-                <div className={styles.floodMainContainer}>
-                    <div className={styles.floodSubGroup}>
-                        <div className={styles.floodItemContainer}>
-                            <button
-                                type="button"
-                                className={styles.legendBtn}
-                                onClick={() => handleLegendBtnClick('5')}
-                            >
-                                <Icon
-                                    name="circle"
-                                    className={activeRasterLayer === '5'
-                                        ? styles.yearsIconClicked
-                                        : styles.yearsIcon}
-                                />
+        <>
+            <h2>
+                Flood Hazard
+                {' '}
+                <br />
+                in Return Periods (years)
+            </h2>
+            <div className={styles.floodMainContainer}>
+                <div className={styles.floodSubGroup}>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('5')}
+                        >
+                            <Icon
+                                name="circle"
+                                className={activeRasterLayer === '5'
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                             5
-                            </button>
-                        </div>
-                        <div className={styles.floodItemContainer}>
-                            <button
-                                type="button"
-                                className={styles.legendBtn}
-                                onClick={() => handleLegendBtnClick('10')}
+                        </button>
+                    </div>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('10')}
 
-                            >
-                                <Icon
-                                    name="circle"
-                                    className={activeRasterLayer === '10'
-                                        ? styles.yearsIconClicked
-                                        : styles.yearsIcon}
-                                />
+                        >
+                            <Icon
+                                name="circle"
+                                className={activeRasterLayer === '10'
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                             10
-                            </button>
-                        </div>
-                        <div className={styles.floodItemContainer}>
-                            <button
-                                type="button"
-                                className={styles.legendBtn}
-                                onClick={() => handleLegendBtnClick('50')}
+                        </button>
+                    </div>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('50')}
 
-                            >
-                                <Icon
-                                    name="circle"
-                                    className={activeRasterLayer === '50'
-                                        ? styles.yearsIconClicked
-                                        : styles.yearsIcon}
-                                />
+                        >
+                            <Icon
+                                name="circle"
+                                className={activeRasterLayer === '50'
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                             50
-                            </button>
-                        </div>
+                        </button>
                     </div>
-                    <div className={styles.floodSubGroup}>
-                        <div className={styles.floodItemContainer}>
-                            <button
-                                type="button"
-                                className={styles.legendBtn}
-                                onClick={() => handleLegendBtnClick('100')}
+                </div>
+                <div className={styles.floodSubGroup}>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('100')}
 
-                            >
-                                <Icon
-                                    name="circle"
-                                    className={activeRasterLayer === '100'
-                                        ? styles.yearsIconClicked
-                                        : styles.yearsIcon}
-                                />
+                        >
+                            <Icon
+                                name="circle"
+                                className={activeRasterLayer === '100'
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                             100
-                            </button>
-                        </div>
+                        </button>
+                    </div>
 
-                        <div className={styles.floodItemContainer}>
-                            <button
-                                type="button"
-                                className={styles.legendBtn}
-                                onClick={() => handleLegendBtnClick('1000')}
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('1000')}
 
-                            >
-                                <Icon
-                                    name="circle"
-                                    className={activeRasterLayer === '1000'
-                                        ? styles.yearsIconClicked
-                                        : styles.yearsIcon}
-                                />
+                        >
+                            <Icon
+                                name="circle"
+                                className={activeRasterLayer === '1000'
+                                    ? styles.yearsIconClicked
+                                    : styles.yearsIcon}
+                            />
                             1000
-                            </button>
-                        </div>
+                        </button>
                     </div>
                 </div>
-
-                <h2>Flood depth (in meters)</h2>
-                <div className={styles.floodDepthContainer}>
-                    <div className={styles.floodDepth}>
-                        <div className={styles.floodIndicator1} />
-                        <div className={styles.floodIndicator2} />
-                        <div className={styles.floodIndicator3} />
-
-                    </div>
-                    <div className={styles.floodDepthText}>
-                        <div className={styles.floodText}>
-High (
-                            {'>'}
-                            {' '}
-2)
-                        </div>
-                        <div className={styles.floodText}>Medium (1-2)</div>
-                        <div className={styles.floodText}>
-Low (
-                            {'<'}
-                            {' '}
-1)
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </VRLegend>
+
+            <h2>Flood depth (in meters)</h2>
+            <div className={styles.floodDepthContainer}>
+                <div className={styles.floodDepth}>
+                    <div className={styles.floodIndicator1} />
+                    <div className={styles.floodIndicator2} />
+                    <div className={styles.floodIndicator3} />
+
+                </div>
+                <div className={styles.floodDepthText}>
+                    <div className={styles.floodText}>
+                    High (
+                        {'>'}
+                        {' '}
+                        2)
+                    </div>
+                    <div className={styles.floodText}>Medium (1-2)</div>
+                    <div className={styles.floodText}>
+                    Low (
+                        {'<'}
+                        {' '}
+                    1)
+                    </div>
+                </div>
+            </div>
+        </>
+
     );
 };
 

@@ -13,6 +13,7 @@ import DemographicsLegends from './DemographicsLegends';
 import CriticalInfraLegends from './CriticalInfraLegends';
 import FloodHazardLegends from './FloodHazardLegends';
 import Icon from '#rscg/Icon';
+import VRLegend from '../VRLegend';
 
 const rightelements = [
     <RightElement1 />,
@@ -175,19 +176,28 @@ export default class SlideFour extends React.Component {
                 }
                 {rightElement === 3
                     ? (
-                        <CriticalInfraLegends
-                            handleCritical={this.handleCritical}
-                        />
+                        <VRLegend>
+                            <CriticalInfraLegends
+                                handleCritical={this.handleCritical}
+                            />
+                        </VRLegend>
                     )
                     : ''
                 }
-                {rightElement >= 4
+                {rightElement === 4
                     ? (
-                        <FloodHazardLegends
-                            handleFloodChange={this.handleFloodChange}
-                            handleExposedElementChange={this.handleExposedElementChange}
-                            handleChisapani={this.handleChisapani}
-                        />
+
+
+                        <VRLegend>
+                            <CriticalInfraLegends
+                                handleCritical={this.handleCritical}
+                            />
+                            <FloodHazardLegends
+                                handleFloodChange={this.handleFloodChange}
+                                handleExposedElementChange={this.handleExposedElementChange}
+                                handleChisapani={this.handleChisapani}
+                            />
+                        </VRLegend>
                     )
                     : ''
                 }
