@@ -26,7 +26,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     public constructor(props) {
         super();
         this.state = {
-            showReferences: false,
+            showReferences: true,
         };
     }
 

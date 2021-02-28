@@ -5,31 +5,16 @@ import VRLegend from '#views/VizRisk/VRLegend';
 
 const EvacLegends = (props) => {
     const { handleCritical } = props;
-    const [showCriticalLegends, setCritical] = useState(false);
     const [showEducation, setshowEducation] = useState(false);
-    const [showFinance, setshowFinance] = useState(false);
-    const [showIndustry, setshowIndustry] = useState(false);
-    const [showGovernemnt, setshowGovernemnt] = useState(false);
     const [showCulture, setshowCulture] = useState(false);
-    const [showHospital, setshowHospital] = useState(false);
-    const [showTourism, setshowTourism] = useState(false);
-    const [showLegendText, setshowLT] = useState('All Infrastructures');
+    const [showSafe, setshowSafe] = useState(false);
     const [showAll, setshowAll] = useState(true);
 
 
     const resetCriticalLayers = () => {
         setshowEducation(false);
-        setshowFinance(false);
-        setshowIndustry(false);
-        setshowGovernemnt(false);
         setshowCulture(false);
-        setshowHospital(false);
-        setshowTourism(false);
         setshowAll(false);
-    };
-
-    const handleLegendText = (layer) => {
-        setshowLT(layer);
     };
 
     const handleCriticalclick = (layer) => {
@@ -37,51 +22,16 @@ const EvacLegends = (props) => {
         if (layer === 'all') {
             resetCriticalLayers();
             setshowAll(true);
-            handleLegendText('Education Inst.');
-        }
-
-        if (layer === 'education') {
-            const newVal = !showEducation;
-            resetCriticalLayers();
-            setshowEducation(true);
-            handleLegendText('Education Inst.');
-        }
-        if (layer === 'governance') {
-            const newVal = !showGovernemnt;
-            resetCriticalLayers();
-            setshowGovernemnt(true);
-            handleLegendText('Government Off.');
         }
 
         if (layer === 'culture') {
-            const newVal = !showCulture;
             resetCriticalLayers();
             setshowCulture(true);
-            handleLegendText('Cultural Centers');
         }
-        if (layer === 'health') {
-            const newVal = !showHospital;
+
+        if (layer === 'safe') {
             resetCriticalLayers();
-            setshowHospital(true);
-            handleLegendText('Health Centers');
-        }
-        if (layer === 'industry') {
-            const newVal = !showIndustry;
-            resetCriticalLayers();
-            setshowIndustry(true);
-            handleLegendText('Industries');
-        }
-        if (layer === 'bank') {
-            const newVal = !showFinance;
-            resetCriticalLayers();
-            setshowFinance(true);
-            handleLegendText('Financial Inst.');
-        }
-        if (layer === 'tourism') {
-            const newVal = !showTourism;
-            resetCriticalLayers();
-            setshowTourism(true);
-            handleLegendText('Tourism');
+            setshowCulture(true);
         }
     };
     return (
@@ -175,7 +125,7 @@ const EvacLegends = (props) => {
 
                                     strokeWidth: 100,
                                     // fill: '#c8b0b8',
-                                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
+                                    fill: showCulture || showAll ? '#159d50' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
