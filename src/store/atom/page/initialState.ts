@@ -99,6 +99,7 @@ const state: PageState = {
             title: 'communityspace',
         },
     ],
+    carKeys: [],
     lossList: [],
     countryList: [],
 
