@@ -83,7 +83,6 @@ class MiniPollution extends React.PureComponent<Props> {
                 sortable: false,
                 modifier: (row: RealTimePollutionExtended) => {
                     const { dateTime } = row;
-                    console.log(dateTime);
                     // const { modifiedOn, observation: observationItem } = row;
                     // const { data: { datetime } } = observationItem[0];
                     if (dateTime) {
