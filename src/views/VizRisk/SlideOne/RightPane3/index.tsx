@@ -60,16 +60,20 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                    The chloropleth map represents the household distribution per ward.
-                    The wards with the highest household number have darker colors
-                    while the lowest household wards have lighter colors. Ward number
-                    4 has the largest household number that equals to 1693 while ward
-                    number 7 has the least comprising of only 766 number of household.
+                    Population distribution in the region is largely
+                    uneven with some pockets of dense settlements.
                 </p>
                 <p>
-                    Upon hovering over each ward, the population density per 0.25*0.25
-                    km area is shown. More darker the color, more dense the
-                    population in the area and viceversa.
+                     Ward number 4 has the largest household number that
+                     equals 1693 and it is also the ward that is in high
+                     proximity to the river. Ward number 7 has the least
+                     number of households comprising of only 766 numbers.
+                </p>
+                <p>
+                    Upon hovering over each ward, the map allows to view
+                    the population distribution (density of population per
+                     0.0625 square kilometers) within each ward and to help
+                     locate the region of dense and sparse settlements.
                 </p>
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>

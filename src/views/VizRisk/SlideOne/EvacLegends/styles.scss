@@ -22,7 +22,7 @@
             }
             .allIconSelected{
                 font-size: 20px;
-                color: white;
+                color: #1664c1;
                 padding-right: 9px;
                 padding-left: 7px;
 
@@ -38,7 +38,7 @@
             .criticalButtonSelected{
                 font-family: 'Source Sans Pro';
                 background: transparent;
-                color: white;
+                color: #1664c1;
                 display: flex;
                 align-items: center;
                 border: none;
@@ -57,10 +57,10 @@
                     width: 32px;
                 }
                   path{
-                    fill: white;
+                    fill: #1664c1;
                 }
                 polygon{
-                    fill: white;
+                    fill: #1664c1;
                 }
             }
             .criticalButton{

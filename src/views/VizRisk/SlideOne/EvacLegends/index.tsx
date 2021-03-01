@@ -5,7 +5,7 @@ import VRLegend from '#views/VizRisk/VRLegend';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '../Icons/icon_set_school.svg';
 import Culture from '../Icons/icon_set_religion.svg';
-import SafeShelter from '../Icons/safeshelter.svg';
+import SafeShelter from '../Icons/safeshelternew.svg';
 import Icon from '#rscg/Icon';
 
 
@@ -14,7 +14,7 @@ const EvacLegends = (props) => {
     const [showEducation, setshowEducation] = useState(false);
     const [showCulture, setshowCulture] = useState(false);
     const [showSafe, setshowSafe] = useState(false);
-    const [showAll, setshowAll] = useState(false);
+    const [showAll, setshowAll] = useState(true);
     const resetCriticalLayers = () => {
         setshowEducation(false);
         setshowCulture(false);
@@ -140,7 +140,9 @@ const EvacLegends = (props) => {
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
-                            className={styles.criticalButton}
+                            className={showSafe
+                                ? styles.criticalButtonSelected
+                                : styles.criticalButton}
                             onClick={() => handleEvacclick('safe')}
                         >
                             <ScalableVectorGraphics
