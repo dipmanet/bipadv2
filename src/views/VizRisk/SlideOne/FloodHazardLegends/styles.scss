@@ -20,6 +20,33 @@
                     display: flex;
                     align-items: center;
                     margin-bottom: 5px;
+                    opacity: 0.37;
+                    .educationHexagon{
+                        width: 15px;
+                        margin: 0 4px 0 5px;
+
+                    }
+                    .exposedIcons{
+                        margin-right: 10px;
+                        color: rgb(70, 70, 70);
+                        font-size: 12px;
+                    }
+                    .exposedIconsClicked{
+                        margin-right: 10px;
+                        color: rgb(255, 72, 17);
+                        font-size: 12px;
+                    }
+                }
+                .legendBtnSelected{
+                    cursor: pointer;
+                    background-color: transparent;
+                    font-size: 12px;
+                    border: none;
+                    color: white;
+                    
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 5px;
                     .educationHexagon{
                         width: 15px;
                         margin: 0 4px 0 5px;

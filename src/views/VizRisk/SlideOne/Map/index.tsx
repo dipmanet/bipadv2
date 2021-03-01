@@ -470,9 +470,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#c8b09a',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -520,9 +520,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#c8b0b8',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -621,9 +621,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#ffdd00',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -672,9 +672,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#62d480',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -722,9 +722,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#66dff4',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -773,9 +773,9 @@ class FloodHistoryMap extends React.Component {
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#c58dbf',
+                        '#a4ac5e',
                         100,
-                        '#f1f075',
+                        '#a4ac5e',
 
                     ],
                     'circle-radius': [
@@ -1073,7 +1073,6 @@ class FloodHistoryMap extends React.Component {
             this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
             this.map.moveLayer('ward-outline');
 
-            this.map.moveLayer('safeshelterRajapur');
             this.map.moveLayer('safeshelterRajapurIcon');
 
             this.map.moveLayer('waterway');
@@ -1260,8 +1259,10 @@ class FloodHistoryMap extends React.Component {
 
                 if (nextProps.rightElement === 4) {
                     this.map.moveLayer('raster-rajapur-50', 'clusters-health');
+                    this.map.moveLayer('raster-rajapur-10', 'clusters-health');
+                    this.map.moveLayer('raster-rajapur-50', 'clusters-health');
                     this.map.moveLayer('raster-rajapur-100', 'clusters-health');
-                    this.map.moveLayer('raster-rajapur-100', 'clusters-health');
+                    this.map.moveLayer('raster-rajapur-1000', 'clusters-health');
                     if (nextProps.rasterLayer === '5') {
                         this.resetLayers();
                         this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
@@ -1291,6 +1292,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
                     this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
                     this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
+                    this.map.setLayoutProperty('waterway', 'visibility', 'visible');
                 }
 
                 this.map.setPitch(45);
@@ -1323,7 +1325,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.moveLayer('waterway');
                 console.log('evacelement', evacElement);
                 // if (nextProps.evacElement !== evacElement) {
-                if (nextProps.evacElement === 'all' || evacElement === 'all') {
+                if (nextProps.evacElement === 'all') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
@@ -1332,25 +1334,23 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
-                    this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
                 }
-                if (nextProps.evacElement === 'education' || evacElement === 'education') {
+                if (nextProps.evacElement === 'education') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-education', 'visibility', 'visible');
                 }
 
-                if (nextProps.evacElement === 'culture' || evacElement === 'culture') {
+                if (nextProps.evacElement === 'culture') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
                 }
-                if (nextProps.evacElement === 'safe' || evacElement === 'safe') {
+                if (nextProps.evacElement === 'safe') {
                     this.resetClusters();
                     this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
-                    this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
                 }
                 // }
 
@@ -1453,7 +1453,6 @@ class FloodHistoryMap extends React.Component {
         this.map.setLayoutProperty('clusters-education', 'visibility', 'none');
 
         this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
-        this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
     }
 
 

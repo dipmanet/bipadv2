@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 import VRLegend from '#views/VizRisk/VRLegend';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Education from '../Icons/icon_set_school.svg';
+import Culture from '../Icons/icon_set_religion.svg';
+import SafeShelter from '../Icons/safeshelter.svg';
+import Icon from '#rscg/Icon';
+
 
 const EvacLegends = (props) => {
     const { handleEvac, evacElement } = props;
@@ -71,20 +77,14 @@ const EvacLegends = (props) => {
 
                         <button
                             type="button"
-                            className={styles.criticalButton}
+                            className={showAll
+                                ? styles.criticalButtonSelected
+                                : styles.criticalButton}
                             onClick={() => handleEvacclick('all')}
                         >
-                            <Hexagon
-                                style={{
-                                    stroke: '#9bb4be',
-                                    // stroke: showAll ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 50,
-                                    // fill: showAll ? '#ff0000' : '#456172',
-                                    // fill: '#ff0000',
-                                    fill: showAll ? '#ffffff' : 'transparent',
-
-                                }}
-                                className={styles.educationHexagon}
+                            <Icon
+                                name="circle"
+                                className={showAll ? styles.allIconSelected : styles.allIcon}
                             />
 
                                 Show All
@@ -94,10 +94,12 @@ const EvacLegends = (props) => {
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
-                            className={styles.criticalButton}
+                            className={showEducation
+                                ? styles.criticalButtonSelected
+                                : styles.criticalButton}
                             onClick={() => handleEvacclick('education')}
                         >
-                            <Hexagon
+                            {/* <Hexagon
                                 style={{
                                     stroke: '#ffdd00',
                                     // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
@@ -110,8 +112,11 @@ const EvacLegends = (props) => {
 
                                 }}
                                 className={styles.educationHexagon}
+                            /> */}
+                            <ScalableVectorGraphics
+                                className={styles.svgIcon}
+                                src={Education}
                             />
-
 
                             Education
                         </button>
@@ -120,23 +125,14 @@ const EvacLegends = (props) => {
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
-                            className={styles.criticalButton}
+                            className={showCulture
+                                ? styles.criticalButtonSelected
+                                : styles.criticalButton}
                             onClick={() => handleEvacclick('culture')}
                         >
-                            <Hexagon
-                                style={{
-                                    stroke: '#c8b0b8',
-                                    // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
-
-                                    strokeWidth: 50,
-                                    // fill: '#c8b0b8',
-                                    fill: showCulture
-                                    || showAll
-                                        ? '#c8b0b8' : 'transparent',
-
-                                }}
-                                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
-                                className={styles.educationHexagon}
+                            <ScalableVectorGraphics
+                                className={styles.svgIcon}
+                                src={Culture}
                             />
                             Culture
                         </button>
@@ -147,20 +143,9 @@ const EvacLegends = (props) => {
                             className={styles.criticalButton}
                             onClick={() => handleEvacclick('safe')}
                         >
-                            <Hexagon
-                                style={{
-                                    stroke: '#c8b0b8',
-                                    // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
-
-                                    strokeWidth: 50,
-                                    // fill: '#c8b0b8',
-                                    fill: showSafe
-                                    || showAll
-                                        ? '#159d50' : 'transparent',
-
-                                }}
-                                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
-                                className={styles.educationHexagon}
+                            <ScalableVectorGraphics
+                                className={styles.svgIcon}
+                                src={SafeShelter}
                             />
                             Safe Shelter
                         </button>

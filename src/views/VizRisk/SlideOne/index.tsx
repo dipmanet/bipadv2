@@ -205,11 +205,10 @@ export default class SlideFour extends React.Component {
                 }
                 {rightElement === 4
                     ? (
-
-
                         <VRLegend>
                             <CriticalInfraLegends
                                 handleCritical={this.handleCritical}
+                                criticalElement={criticalElement}
                             />
                             <FloodHazardLegends
                                 handleFloodChange={this.handleFloodChange}

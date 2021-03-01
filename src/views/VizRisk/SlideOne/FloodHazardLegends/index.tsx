@@ -88,7 +88,9 @@ const FloodHistoryLegends = (props: Props) => {
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
-                            className={styles.legendBtn}
+                            className={activeRasterLayer === '5'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('5')}
                         >
                             <Hexagon
@@ -107,7 +109,7 @@ const FloodHistoryLegends = (props: Props) => {
 
                         </button>
                     </div>
-                    <div className={styles.floodItemContainer}>
+                    {/* <div className={styles.floodItemContainer}>
                         <button
                             type="button"
                             className={styles.legendBtn}
@@ -118,7 +120,8 @@ const FloodHistoryLegends = (props: Props) => {
                                 style={{
                                     stroke: '#ddd',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '10' ? 'rgba(255,255,255,0.67)' : 'transparent',
+                                    fill: activeRasterLayer === '10'
+                                    ? 'rgba(255,255,255,0.67)' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -130,11 +133,13 @@ const FloodHistoryLegends = (props: Props) => {
                             {' '}
 
                         </button>
-                    </div>
+                    </div> */}
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
-                            className={styles.legendBtn}
+                            className={activeRasterLayer === '50'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('50')}
 
                         >
@@ -159,7 +164,9 @@ const FloodHistoryLegends = (props: Props) => {
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
-                            className={styles.legendBtn}
+                            className={activeRasterLayer === '100'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('100')}
 
                         >
@@ -181,7 +188,9 @@ const FloodHistoryLegends = (props: Props) => {
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
-                            className={styles.legendBtn}
+                            className={activeRasterLayer === '1000'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('1000')}
 
                         >
