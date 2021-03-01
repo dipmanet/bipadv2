@@ -39,6 +39,9 @@ const VizRiskMainPage = () => {
     const vrcontextProps: VizRiskContextProps = {
         currentPage,
         showFirstSlide: false,
+        infraChosen: 'all',
+        floodInfraChosen: 'all',
+        evacChosen: 'all',
     };
 
     return (

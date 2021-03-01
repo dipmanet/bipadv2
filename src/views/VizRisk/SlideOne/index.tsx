@@ -45,6 +45,7 @@ export default class SlideFour extends React.Component {
             disableNavBtns: false,
             hoveredWard: '',
             showPopulation: 'ward',
+            evacElement: 'all',
         };
     }
 
@@ -53,6 +54,13 @@ export default class SlideFour extends React.Component {
             criticalElement,
         });
     }
+
+    public handleEvac = (evacElement: string) => {
+        this.setState({
+            evacElement,
+        });
+    }
+
 
     public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
         this.setState({
@@ -81,7 +89,7 @@ export default class SlideFour extends React.Component {
 
     public handleMoveEnd = (value) => {
         this.setState({ disableNavBtns: false });
-        console.log('moveend: ', value);
+        // console.log('moveend: ', value);
     }
 
     public handlePopulationChange =(showPopulation) => {
@@ -117,6 +125,7 @@ export default class SlideFour extends React.Component {
             hoveredWard,
             showPopulation,
             criticalElement,
+            evacElement,
         } = this.state;
 
         return (
@@ -164,6 +173,7 @@ export default class SlideFour extends React.Component {
                     handleMoveEnd={this.handleMoveEnd}
                     showPopulation={showPopulation}
                     criticalElement={criticalElement}
+                    evacElement={evacElement}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1
@@ -214,7 +224,9 @@ export default class SlideFour extends React.Component {
                     ? (
                         <VRLegend>
                             <EvacLegends
-                                handleCritical={this.handleCritical}
+                                handleEvac={this.handleEvac}
+                                evacElement={evacElement}
+
                             />
                             <FloodHazardLegends
                                 handleFloodChange={this.handleFloodChange}

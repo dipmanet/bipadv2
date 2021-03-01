@@ -13,10 +13,10 @@ export default {
             name: 'Ward 2', MalePop: 2729, FemalePop: 3012, TotalHousehold: 1251,
         },
         {
-            name: 'Ward 6', MalePop: 2583, FemalePop: 3034, TotalHousehold: 1185,
+            name: 'Ward 3', MalePop: 2499, FemalePop: 3195, TotalHousehold: 1255,
         },
         {
-            name: 'Ward 3', MalePop: 2499, FemalePop: 3195, TotalHousehold: 1255,
+            name: 'Ward 6', MalePop: 2583, FemalePop: 3034, TotalHousehold: 1185,
         },
         {
             name: 'Ward 1', MalePop: 2357, FemalePop: 3040, TotalHousehold: 1283,

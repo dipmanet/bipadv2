@@ -280,7 +280,7 @@ const LandCoverLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('canals')}
+                            // onClick={() => handleCriticalclick('canals')}
                         >
                             <div className={styles.canalIcon} />
                              Canals
@@ -290,7 +290,7 @@ const LandCoverLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('roads')}
+                            // onClick={() => handleCriticalclick('roads')}
                         >
                             <div className={styles.roadIcon} />
                              Roads

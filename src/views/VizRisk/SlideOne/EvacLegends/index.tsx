@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 import VRLegend from '#views/VizRisk/VRLegend';
 
 const EvacLegends = (props) => {
-    const { handleCritical } = props;
+    const { handleEvac, evacElement } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [showCulture, setshowCulture] = useState(false);
     const [showSafe, setshowSafe] = useState(false);
-    const [showAll, setshowAll] = useState(true);
-
-
+    const [showAll, setshowAll] = useState(false);
     const resetCriticalLayers = () => {
         setshowEducation(false);
         setshowCulture(false);
@@ -18,8 +16,29 @@ const EvacLegends = (props) => {
         setshowSafe(false);
     };
 
-    const handleCriticalclick = (layer) => {
-        handleCritical(layer);
+    useEffect(
+        () => {
+            console.log('evac element: ', evacElement);
+            if (evacElement === 'all') {
+                resetCriticalLayers();
+                setshowAll(true);
+            } else if (evacElement === 'education') {
+                resetCriticalLayers();
+                setshowEducation(true);
+            } else if (evacElement === 'safe') {
+                resetCriticalLayers();
+                setshowSafe(true);
+            } else if (evacElement === 'culture') {
+                resetCriticalLayers();
+                setshowCulture(true);
+            }
+        }, [evacElement],
+
+    );
+
+
+    const handleEvacclick = (layer) => {
+        handleEvac(layer);
         if (layer === 'all') {
             resetCriticalLayers();
             setshowAll(true);
@@ -53,7 +72,7 @@ const EvacLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('all')}
+                            onClick={() => handleEvacclick('all')}
                         >
                             <Hexagon
                                 style={{
@@ -76,7 +95,7 @@ const EvacLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('education')}
+                            onClick={() => handleEvacclick('education')}
                         >
                             <Hexagon
                                 style={{
@@ -85,7 +104,9 @@ const EvacLegends = (props) => {
                                     strokeWidth: 50,
                                     // fill: showEducation ? '#ffdd00' : '#456172' }}
                                     // fill: '#ffdd00',
-                                    fill: showEducation || showAll ? '#ffdd00' : 'transparent',
+                                    fill: showEducation
+                                    || showAll
+                                        ? '#ffdd00' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
@@ -100,7 +121,7 @@ const EvacLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('culture')}
+                            onClick={() => handleEvacclick('culture')}
                         >
                             <Hexagon
                                 style={{
@@ -109,7 +130,9 @@ const EvacLegends = (props) => {
 
                                     strokeWidth: 50,
                                     // fill: '#c8b0b8',
-                                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
+                                    fill: showCulture
+                                    || showAll
+                                        ? '#c8b0b8' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
@@ -122,7 +145,7 @@ const EvacLegends = (props) => {
                         <button
                             type="button"
                             className={styles.criticalButton}
-                            onClick={() => handleCriticalclick('safe')}
+                            onClick={() => handleEvacclick('safe')}
                         >
                             <Hexagon
                                 style={{
@@ -131,7 +154,9 @@ const EvacLegends = (props) => {
 
                                     strokeWidth: 50,
                                     // fill: '#c8b0b8',
-                                    fill: showSafe || showAll ? '#159d50' : 'transparent',
+                                    fill: showSafe
+                                    || showAll
+                                        ? '#159d50' : 'transparent',
 
                                 }}
                                         // fill: showCulture ? '#c8b0b8' : '#456172' }}

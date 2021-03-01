@@ -1102,6 +1102,7 @@ class FloodHistoryMap extends React.Component {
             rightElement,
             showPopulation,
             criticalElement,
+            evacElement,
         } = this.props;
 
 
@@ -1113,6 +1114,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
                 this.map.setLayoutProperty('wardNumbers', 'visibility', 'visible');
+                this.map.setLayoutProperty('waterway', 'visibility', 'visible');
+
 
                 this.map.moveLayer('ward-outline');
                 this.map.setPitch(0);
@@ -1126,6 +1129,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
                 this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
                 this.map.setLayoutProperty('water', 'visibility', 'visible');
+                this.map.setLayoutProperty('waterway', 'visibility', 'visible');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
                 this.map.setPitch(40);
                 this.map.setBearing(0);
@@ -1292,6 +1296,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setPitch(45);
                 this.map.moveLayer('ward-outline');
                 this.map.moveLayer('water');
+                this.map.moveLayer('waterway');
                 this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
                 this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
             }
@@ -1316,8 +1321,9 @@ class FloodHistoryMap extends React.Component {
 
                 this.map.moveLayer('water');
                 this.map.moveLayer('waterway');
-
-                if (nextProps.criticalElement === 'all') {
+                console.log('evacelement', evacElement);
+                // if (nextProps.evacElement !== evacElement) {
+                if (nextProps.evacElement === 'all' || evacElement === 'all') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
@@ -1328,49 +1334,52 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
                     this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
                 }
-                if (nextProps.criticalElement === 'education') {
+                if (nextProps.evacElement === 'education' || evacElement === 'education') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-education', 'visibility', 'visible');
                 }
 
-                if (nextProps.criticalElement === 'culture') {
+                if (nextProps.evacElement === 'culture' || evacElement === 'culture') {
                     this.resetClusters();
                     this.map.setLayoutProperty('unclustered-point-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
                 }
-                if (nextProps.criticalElement === 'safe') {
+                if (nextProps.evacElement === 'safe' || evacElement === 'safe') {
                     this.resetClusters();
                     this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
                     this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
                 }
+                // }
 
-                if (nextProps.rasterLayer === '5') {
-                    this.resetFloodRasters();
-                    this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-                    this.map.moveLayer('raster-rajapur-5', 'clusters-health');
-                }
-                if (nextProps.rasterLayer === '10') {
-                    this.resetFloodRasters();
-                    this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
-                    this.map.moveLayer('raster-rajapur-10', 'clusters-health');
-                }
-                if (nextProps.rasterLayer === '50') {
-                    this.resetFloodRasters();
-                    this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
-                    this.map.moveLayer('raster-rajapur-50', 'clusters-health');
-                }
-                if (nextProps.rasterLayer === '100') {
-                    this.resetFloodRasters();
-                    this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-                    this.map.moveLayer('raster-rajapur-100', 'clusters-health');
-                }
-                if (nextProps.rasterLayer === '1000') {
-                    this.resetFloodRasters();
-                    this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
-                    this.map.moveLayer('raster-rajapur-1000', 'clusters-health');
+                if (nextProps.rasterLayer !== rasterLayer) {
+                    if (nextProps.rasterLayer === '5') {
+                        this.resetFloodRasters();
+                        this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
+                        this.map.moveLayer('raster-rajapur-5', 'clusters-health');
+                    }
+                    if (nextProps.rasterLayer === '10') {
+                        this.resetFloodRasters();
+                        this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+                        this.map.moveLayer('raster-rajapur-10', 'clusters-health');
+                    }
+                    if (nextProps.rasterLayer === '50') {
+                        this.resetFloodRasters();
+                        this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
+                        this.map.moveLayer('raster-rajapur-50', 'clusters-health');
+                    }
+                    if (nextProps.rasterLayer === '100') {
+                        this.resetFloodRasters();
+                        this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
+                        this.map.moveLayer('raster-rajapur-100', 'clusters-health');
+                    }
+                    if (nextProps.rasterLayer === '1000') {
+                        this.resetFloodRasters();
+                        this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
+                        this.map.moveLayer('raster-rajapur-1000', 'clusters-health');
+                    }
                 }
             }
         }

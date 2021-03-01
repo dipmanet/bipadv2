@@ -144,18 +144,19 @@ class SlideOne extends React.PureComponent<Props, State> {
                         square km, and is situated at an elevation of 142 m to 154 m from sea level.
                 </p> */}
                 <p>
-                Rajapur municipality lies in the Terai region
-                of Bardiya district in Lumbini Province.
-                It covers a  total area of 127.08 square km, and
-                runs an elevation of 142 m to 154m from sea level.
+                    Rajapur municipality lies in the Terai region of Bardiya
+                    district in Lumbini Province. It covers a  total area of
+                    127.08 square km, and is situated at an elevation of
+                    142 m to 154 m from sea level.
+
                 </p>
                 <h2>Climate</h2>
                 <p>
                     {' '}
                     Rajapur experiences a lower tropical climate. Summer
-                    lasts from March to June while there is extreme winter
-                    from November to February. Monsoon starts here a bit
-                    early from the June till October bringing the heavy downpours.
+                    starts from March to June while there is extreme winter
+                    from November to February. Monsoon starts here a bit early
+                    from the June till October bringing the heavy downpours.
 
                 </p>
                 <div className={styles.iconRow}>
