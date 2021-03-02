@@ -1254,9 +1254,9 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
                     this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
 
-                    this.moveLayer('clusters-culture');
-                    this.moveLayer('cluster-count-culture');
-                    this.moveLayer('unclustered-point-culture');
+                    this.map.moveLayer('clusters-culture');
+                    this.map.moveLayer('cluster-count-culture');
+                    this.map.moveLayer('unclustered-point-culture');
 
                     // this.moveCounts();
 

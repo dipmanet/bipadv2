@@ -10,6 +10,31 @@
         height: 100vh;
         right: 0;
         overflow-y: scroll;
+        .infoBtn{
+            position: fixed;
+            top: 135px;
+            left: 220px;
+            background: transparent;
+            color: white;
+            border: none;
+        }
+        .landCoverLegend{
+            position: fixed;
+            background: rgba( 19, 32, 55, 0.9 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 12.0px );
+            -webkit-backdrop-filter: blur( 12.0px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            padding: 10px;
+            color: white;
+           top: 155px;
+           left: 220px;
+           display: flex;
+           flex-direction: column;
+           p{font-size: 14px;}
+        //    border: 1px solid red;
+        }
         .graphContainer{
             margin: 15px 0;
         }

@@ -105,7 +105,7 @@ const DemoGraphicsLegends = (props) => {
                         className={styles.educationHexagon}
                     />
 
-                           Population by Ward
+                            By Ward
                 </button>
             </div>
             <div className={styles.hazardItemContainer}>
@@ -125,7 +125,7 @@ const DemoGraphicsLegends = (props) => {
                         className={styles.educationHexagon}
                     />
 
-                           Population Density
+                           By Density
                 </button>
             </div>
         </>

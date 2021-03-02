@@ -42,7 +42,12 @@
                 }
             }
         }
-          
+        .landCoverLegend{
+            position: absolute;
+            left: 500px;
+            bottom: 50px;
+            border: none;
+        }
         .customBarContainer{
             width: 90%;
             background: transparent;

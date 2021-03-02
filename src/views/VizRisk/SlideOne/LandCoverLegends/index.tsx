@@ -8,7 +8,7 @@ import BridgeIcon from '#views/VizRisk/SlideOne/Icons/bridge.svg';
 
 const LandCoverLegends = () => (
     <>
-        <h2>Land Cover</h2>
+        {/* <h2>Land Cover</h2> */}
         <p className={styles.settlementIconContainer}>
             <span>
 

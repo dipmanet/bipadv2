@@ -37,101 +37,42 @@ const LandCoverLegends = (props) => {
         setshowAll(false);
     };
 
-    const handleLegendText = (layer) => {
-        setshowLT(layer);
-    };
-
-    // useEffect(
-    //     () => {
-    //         if (criticalElement === 'all') {
-    //             resetCriticalLayers();
-    //             setshowAll(true);
-    //         }
-
-    //         if (criticalElement === 'education') {
-    //             resetCriticalLayers();
-    //             setshowEducation(true);
-    //         }
-    //         if (criticalElement === 'governance') {
-    //             resetCriticalLayers();
-    //             setshowGovernemnt(true);
-    //         }
-
-    //         if (criticalElement === 'culture') {
-    //             resetCriticalLayers();
-    //             setshowCulture(true);
-    //         }
-    //         if (criticalElement === 'health') {
-    //             resetCriticalLayers();
-    //             setshowHospital(true);
-    //         }
-    //         if (criticalElement === 'industry') {
-    //             resetCriticalLayers();
-    //             setshowIndustry(true);
-    //         }
-    //         if (criticalElement === 'bank') {
-    //             resetCriticalLayers();
-    //             setshowFinance(true);
-    //         }
-    //         if (criticalElement === 'tourism') {
-    //             resetCriticalLayers();
-    //             setshowTourism(true);
-    //         }
-    //     }, [criticalElement],
-
-    // );
-
 
     const handleCriticalclick = (layer) => {
         handleCritical(layer);
         if (layer === 'all') {
             resetCriticalLayers();
             setshowAll(true);
-            handleLegendText('Education Inst.');
         }
 
         if (layer === 'education') {
-            const newVal = !showEducation;
             resetCriticalLayers();
             setshowEducation(true);
-            handleLegendText('Education Inst.');
         }
         if (layer === 'governance') {
-            const newVal = !showGovernemnt;
             resetCriticalLayers();
             setshowGovernemnt(true);
-            handleLegendText('Government Off.');
         }
 
         if (layer === 'culture') {
-            const newVal = !showCulture;
             resetCriticalLayers();
             setshowCulture(true);
-            handleLegendText('Cultural Centers');
         }
         if (layer === 'health') {
-            const newVal = !showHospital;
             resetCriticalLayers();
             setshowHospital(true);
-            handleLegendText('Health Centers');
         }
         if (layer === 'industry') {
-            const newVal = !showIndustry;
             resetCriticalLayers();
             setshowIndustry(true);
-            handleLegendText('Industries');
         }
         if (layer === 'bank') {
-            const newVal = !showFinance;
             resetCriticalLayers();
             setshowFinance(true);
-            handleLegendText('Financial Inst.');
         }
         if (layer === 'tourism') {
-            const newVal = !showTourism;
             resetCriticalLayers();
             setshowTourism(true);
-            handleLegendText('Tourism');
         }
     };
     return (
