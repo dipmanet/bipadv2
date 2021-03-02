@@ -1065,11 +1065,14 @@ class FloodHistoryMap extends React.Component {
             this.resetFloodRasters();
             this.resetLayers();
             this.resetClusters();
-            this.map.setZoom(1);
+            this.map.setZoom(11.4);
+            console.log(this.map);
             this.map.moveLayer('population-extruded', 'ward-fill-local');
             this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
             this.map.setLayoutProperty('wardNumbers', 'visibility', 'visible');
-            this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
+            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
+            // this.map.setPaintProperty('ward-fill', 'fill-color', '#cccccc');
+            // this.map.setLayoutProperty('ward-fill', 'fill-opacity', 0.7);
             this.map.moveLayer('ward-outline');
 
             this.map.moveLayer('safeshelterRajapurIcon');
@@ -1110,7 +1113,9 @@ class FloodHistoryMap extends React.Component {
                 this.resetLayers();
                 this.resetClusters();
                 this.map.setLayoutProperty('ward-outline', 'visibility', 'visible');
-                this.map.setPaintProperty('ward-fill', 'fill-color', '#ffedb8');
+                // this.map.setPaintProperty('ward-fill', 'fill-color', '#cccccc');
+                // this.map.setLayoutProperty('ward-fill', 'fill-opacity', '0.5');
+                this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
                 this.map.setLayoutProperty('wardNumbers', 'visibility', 'visible');
                 this.map.setLayoutProperty('waterway', 'visibility', 'visible');
 
@@ -1422,6 +1427,7 @@ class FloodHistoryMap extends React.Component {
         this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
         this.map.setLayoutProperty('waterway', 'visibility', 'none');
         this.map.setLayoutProperty('canalRajapur', 'visibility', 'none');
+        this.map.setLayoutProperty('ward-fill', 'visibility', 'none');
 
         this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'none');
         this.map.setLayoutProperty('forestRajapur', 'visibility', 'none');
