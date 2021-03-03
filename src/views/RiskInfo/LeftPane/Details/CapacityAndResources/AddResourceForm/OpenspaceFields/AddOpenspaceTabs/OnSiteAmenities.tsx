@@ -293,8 +293,6 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
         } = this.props;
         const { allAmenities, singleAmenitiesList } = this.state;
         const { handleTabClick } = this.props;
-        console.log('am', this.state.allAmenitiesToPost);
-        
         return (
             <React.Fragment>
                 {

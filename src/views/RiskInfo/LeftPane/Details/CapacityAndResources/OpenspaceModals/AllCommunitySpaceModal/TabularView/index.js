@@ -65,6 +65,11 @@ export default class TabularView extends React.PureComponent {
                 comparator: createComparator(compareString, 'title'),
             },
             {
+                key: 'address',
+                value: { title: 'Address' },
+                comparator: createComparator(compareString, 'address'),
+            },
+            {
                 key: 'elevation',
                 value: { title: 'Elevation(m)' },
                 comparator: createComparator(compareString, 'elevation'),
@@ -74,6 +79,11 @@ export default class TabularView extends React.PureComponent {
                 value: { title: 'Total Area(m²)' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'totalArea'),
+            },
+            {
+                key: 'usableArea',
+                value: { title: 'Usable Area(m²)' },
+                comparator: createComparator(compareNumber, 'usableArea'),
             },
             {
                 key: 'capacity',
