@@ -18,6 +18,7 @@ import styles from './styles.scss';
 interface Props {
     filterWiseChartData?: ChartData[];
     filterValues: FaramValues;
+    stationName: string;
     isInitial?: boolean;
 }
 
@@ -41,6 +42,17 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
     return null;
 };
 
+const generateFileName = (period: string, stationName: string) => {
+    const preText = 'DataArchiveRiver';
+    const postText = `${stationName}`;
+    const name: {[key: string]: string} = {
+        minute: `${preText}_MinutewiseReadings_${postText}`,
+        hourly: `${preText}_HourlyReadings_${postText}`,
+        daily: `${preText}_DailyReadings_${postText}`,
+    };
+    return name[period].replace(/ /g, '_');
+};
+
 const TableView = (props: Props) => {
     const {
         filterValues: {
@@ -49,7 +61,9 @@ const TableView = (props: Props) => {
         },
         filterWiseChartData: data = [],
         isInitial,
+        stationName,
     } = props;
+
     const riverHeader = [
         {
             key: 'year',
@@ -139,6 +153,7 @@ const TableView = (props: Props) => {
 
     const formattedTableData = convertNormalTableToCsv(data,
         header);
+    const fileName = generateFileName(periodCode || '', stationName);
     return (
         <div className={styles.tableView}>
             <div className={styles.header}>
@@ -148,7 +163,7 @@ const TableView = (props: Props) => {
                 </div>
                 <DownloadButton
                     value={formattedTableData}
-                    name="RiverArchive.csv"
+                    name={fileName}
                     className={styles.downloadButton}
                 >
                     <h4>Download</h4>

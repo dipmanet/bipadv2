@@ -200,6 +200,7 @@ const RiverModal = (props: Props) => {
                             filterWiseChartData={filterWiseChartData}
                             filterValues={filterValues}
                             isInitial={isInitial}
+                            stationName={stationName}
                         />
                     </div>
                 </div>

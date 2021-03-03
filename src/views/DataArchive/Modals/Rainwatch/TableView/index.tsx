@@ -19,6 +19,7 @@ interface Props {
     filterWiseChartData?: ChartData[];
     filterValues: FaramValues;
     isInitial?: boolean;
+    stationName: string;
 }
 
 const rainSelector = (rain: ChartData) => rain.measuredOn;
@@ -41,6 +42,37 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
     return null;
 };
 
+const getPeriod = (periodCode: string) => {
+    const periods: {[key: string]: string} = {
+        minute: 'Minutewise',
+        hourly: 'Hourly',
+        daily: 'Daily',
+    };
+    return periods[periodCode];
+};
+
+const getinterval = (intervalCode: string) => {
+    const intervals: {[key: string]: string} = {
+        oneHour: '1HR',
+        threeHour: '3HR',
+        sixHour: '6HR',
+        twelveHour: '12HR',
+        twentyFourHour: '24HR',
+    };
+    return intervals[intervalCode];
+};
+
+const generateFileName = (
+    intervalCode: string,
+    periodCode: string,
+    stationName: string,
+) => {
+    const interval = getinterval(intervalCode);
+    const period = getPeriod(periodCode);
+    const name = `DataArchiveRain_${period}_${interval}_Readings_${stationName}`;
+    return name.replace(/ /g, '_');
+};
+
 const TableView = (props: Props) => {
     const {
         filterValues: {
@@ -50,6 +82,7 @@ const TableView = (props: Props) => {
         },
         filterWiseChartData: data = [],
         isInitial,
+        stationName,
     } = props;
     const rainHeader = [
         {
@@ -140,6 +173,8 @@ const TableView = (props: Props) => {
 
     const formattedTableData = convertNormalTableToCsv(data,
         header);
+
+    const fileName = generateFileName(intervalCode || '', periodCode || '', stationName);
     return (
         <div className={styles.tableView}>
             <div className={styles.header}>
@@ -149,7 +184,7 @@ const TableView = (props: Props) => {
                 </div>
                 <DownloadButton
                     value={formattedTableData}
-                    name="RainArchive.csv"
+                    name={fileName}
                     className={styles.downloadButton}
                 >
                     <h4>Download</h4>
