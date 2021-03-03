@@ -82,10 +82,22 @@ const slideTwoLayers = [
 ];
 
 const slideThreeLayers = ['ward-outline', 'ward-fill-local', 'population-extruded'];
+const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
+
+const criticalInfraClusters = categoriesCritical.map(
+    layer => [`clusters-${layer}`, `unclustered-point-${layer}`, `clusters-count-${layer}`],
+);
+
 const slideFourLayers = [
     'ward-fill', 'bridgesRajapur',
     'canalRajapur', 'waterway',
-    'rajapurRoads',
+    'rajapurRoads', ...criticalInfraClusters,
+];
+
+const slideFiveLayers = [
+    'ward-fill', 'bridgesRajapur',
+    'canalRajapur', 'waterway',
+    'rajapurRoads', ...criticalInfraClusters, ...rasterLayers,
 ];
 
 class FloodHistoryMap extends React.Component {
@@ -637,27 +649,27 @@ class FloodHistoryMap extends React.Component {
                 }
 
                 if (nextProps.rasterLayer === '5') {
-                    this.resetFloodRasters();
+                    this.hideFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
                     this.map.moveLayer('raster-rajapur-5', 'clusters-Health');
                 }
                 if (nextProps.rasterLayer === '10') {
-                    this.resetFloodRasters();
+                    this.hideFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
                     this.map.moveLayer('raster-rajapur-10', 'clusters-Health');
                 }
                 if (nextProps.rasterLayer === '50') {
-                    this.resetFloodRasters();
+                    this.hideFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
                     this.map.moveLayer('raster-rajapur-50', 'clusters-Health');
                 }
                 if (nextProps.rasterLayer === '100') {
-                    this.resetFloodRasters();
+                    this.hideFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
                     this.map.moveLayer('raster-rajapur-100', 'clusters-Health');
                 }
-                if (nextProps.rasterLayer === '1000') {
-                    this.resetFloodRasters();
+                if (nextProps.rasterLayer === '500') {
+                    this.hideFloodRasters();
                     this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
                     this.map.moveLayer('raster-rajapur-1000', 'clusters-Health');
                 }
@@ -699,12 +711,11 @@ class FloodHistoryMap extends React.Component {
     }
 
 
-    public resetFloodRasters = () => {
-        this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'none');
-        this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'none');
-        this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'none');
-        this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'none');
-        this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'none');
+    public hideFloodRasters = () => {
+        rasterLayersYears.map((layer) => {
+            this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
+            return null;
+        });
     };
 
 
