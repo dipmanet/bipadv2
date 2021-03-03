@@ -106,9 +106,12 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 'steady',
                 'description',
                 'station',
+                'district',
+                'station_series_id',
             ],
             trimBy: 'avg',
             trimType: 'daily',
+            expand: ['district'],
             limit: -1,
         }),
         onSuccess: ({ response, props: { setDataArchiveRiverList } }) => {

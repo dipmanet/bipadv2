@@ -57,21 +57,21 @@ class RainModal extends React.PureComponent<Props> {
         this.rainWatchHeader = [
             {
                 key: 'basin',
-                label: 'Basin',
+                label: 'BASIN',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.basin, b.basin),
             },
             {
                 key: 'title',
-                label: 'Title',
+                label: 'TITLE',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
                 key: 'description',
-                label: 'Description',
+                label: 'DESCRIPTION',
                 order: 3,
             },
             {
@@ -88,77 +88,77 @@ class RainModal extends React.PureComponent<Props> {
             },
             {
                 key: 'lastHour',
-                label: 'Accumulated rainfall within last 1 hours',
+                label: 'ACCUMULATED RAINFALL WITHIN LAST 1 HOURS (mm)',
                 order: 4,
                 modifier: (row) => {
                     const {
                         averages = [],
                     } = row;
                     const average = averages.find(av => av.interval === 1);
-                    return average ? average.value : undefined;
+                    return average && average.value ? Number(average.value).toFixed(3) : undefined;
                 },
                 sortable: true,
                 comparator: (a, b) => compareIntervalValues(a.averages, b.averages, 1),
             },
             {
                 key: 'lastThreeHours',
-                label: 'Accumulated rainfall within last 3 hours',
+                label: 'ACCUMULATED RAINFALL WITHIN LAST 3 HOURS (mm)',
                 order: 5,
                 modifier: (row) => {
                     const {
                         averages = [],
                     } = row;
                     const average = averages.find(av => av.interval === 3);
-                    return average ? average.value : undefined;
+                    return average && average.value ? Number(average.value).toFixed(3) : undefined;
                 },
                 sortable: true,
                 comparator: (a, b) => compareIntervalValues(a.averages, b.averages, 3),
             },
             {
                 key: 'lastSixHours',
-                label: 'Accumulated rainfall within last 6 hours',
+                label: 'ACCUMULATED RAINFALL WITHIN LAST 6 HOURS (mm)',
                 order: 6,
                 modifier: (row) => {
                     const {
                         averages = [],
                     } = row;
                     const average = averages.find(av => av.interval === 6);
-                    return average ? average.value : undefined;
+                    return average && average.value ? Number(average.value).toFixed(3) : undefined;
                 },
                 sortable: true,
                 comparator: (a, b) => compareIntervalValues(a.averages, b.averages, 6),
             },
             {
                 key: 'lastTwelveHours',
-                label: 'Accumulated rainfall within last 12 hours',
+                label: 'ACCUMULATED RAINFALL WITHIN LAST 6 HOURS (mm)',
                 order: 7,
                 modifier: (row) => {
                     const {
                         averages = [],
                     } = row;
                     const average = averages.find(av => av.interval === 12);
-                    return average ? average.value : undefined;
+                    return average && average.value ? Number(average.value).toFixed(3) : undefined;
                 },
                 sortable: true,
                 comparator: (a, b) => compareIntervalValues(a.averages, b.averages, 12),
             },
             {
                 key: 'lastTwentyFourHours',
-                label: 'Accumulated rainfall within last 24 hours',
+                label: 'ACCUMULATED RAINFALL WITHIN LAST 24 HOURS (mm)',
                 order: 8,
                 modifier: (row) => {
                     const {
                         averages = [],
                     } = row;
                     const average = averages.find(av => av.interval === 24);
-                    return average ? average.value : undefined;
+                    return average && average.value ? Number(average.value).toFixed(3) : undefined;
                 },
                 sortable: true,
                 comparator: (a, b) => compareIntervalValues(a.averages, b.averages, 24),
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: 'STATUS',
                 order: 9,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),

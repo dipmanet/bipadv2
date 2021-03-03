@@ -99,6 +99,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
                 'averages',
                 'status',
                 'station',
+                'description',
             ],
             trimBy: 'avg',
             trimType: 'daily',

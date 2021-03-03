@@ -45,31 +45,36 @@ class RiverModal extends React.PureComponent<Props> {
         this.riverWatchHeader = [
             {
                 key: 'basin',
-                label: 'Basin',
+                label: 'BASIN',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.basin, b.basin),
             },
             {
                 key: 'title',
-                label: 'Station Name',
+                label: 'STATION NAME',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
                 key: 'stationSeriesId',
-                label: 'Station Id',
+                label: 'STATION ID',
                 order: 3,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.stationSeriesId, b.stationSeriesId),
             },
             {
                 key: 'district',
-                label: 'District',
+                label: 'DISTRICT',
                 order: 4,
                 sortable: true,
                 comparator: (a, b) => compareString(a.district, b.district),
+                modifier: (row: DataArchiveRiver) => {
+                    const { district } = row;
+
+                    return district ? district.title : null;
+                },
             },
             {
                 key: 'waterLevelOn',
@@ -85,37 +90,52 @@ class RiverModal extends React.PureComponent<Props> {
             },
             {
                 key: 'waterLevel',
-                label: 'Water Level (m)',
+                label: 'WATER LEVEL (m)',
                 order: 5,
                 sortable: true,
                 comparator: (a, b) => compareNumber(
                     a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
                 ),
+                modifier: (row: DataArchiveRiver) => {
+                    const { waterLevel } = row;
+
+                    return waterLevel ? Number(waterLevel).toFixed(3) : null;
+                },
             },
             {
                 key: 'warningLevel',
-                label: 'Warning Level',
+                label: 'WARNING LEVEL (m)',
                 order: 6,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.warningLevel, b.warningLevel),
+                modifier: (row: DataArchiveRiver) => {
+                    const { warningLevel } = row;
+
+                    return warningLevel ? Number(warningLevel).toFixed(3) : null;
+                },
             },
             {
                 key: 'dangerLevel',
-                label: 'Danger Level',
+                label: 'DANGER LEVEL (m)',
                 order: 7,
                 sortable: true,
                 comparator: (a, b) => compareNumber(a.dangerLevel, b.dangerLevel),
+                modifier: (row: DataArchiveRiver) => {
+                    const { dangerLevel } = row;
+
+                    return dangerLevel ? Number(dangerLevel).toFixed(3) : null;
+                },
             },
             {
                 key: 'steady',
-                label: 'Steady',
+                label: 'STEADY',
                 order: 8,
                 sortable: true,
                 comparator: (a, b) => compareString(a.steady, b.steady),
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: 'STATUS',
                 order: 9,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
