@@ -95,9 +95,9 @@ const slideFourLayers = [
 ];
 
 const slideFiveLayers = [
-    'ward-fill', 'bridgesRajapur',
-    'canalRajapur', 'waterway',
-    'rajapurRoads', ...criticalInfraClusters, ...rasterLayers,
+    ...criticalInfraClusters, ...rasterLayers,
+    'bridgesRajapur', 'canalRajapur', 'waterway',
+    'rajapurRoads', 'ward-fill',
 ];
 
 class FloodHistoryMap extends React.Component {
@@ -118,8 +118,6 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
         const {
-            districts,
-            municipalities,
             wards,
 
             selectedProvinceId: provinceId,
@@ -431,7 +429,7 @@ class FloodHistoryMap extends React.Component {
             });
             this.map.setPaintProperty('ward-fill', 'fill-color', '#ccc');
             this.map.setZoom(11.4);
-
+            console.log('ourmap', this.map);
             setTimeout(() => {
                 this.map.flyTo({
                     center: [
@@ -481,133 +479,176 @@ class FloodHistoryMap extends React.Component {
                 this.orderLayers(slideThreeLayers);
             }
 
-            if (nextProps.rightElement === 3 || nextProps.rightElement === 4) {
+            if (nextProps.rightElement === 3) {
                 this.toggleVisiblity(slideFourLayers, 'visible');
                 this.toggleVisiblity(slideThreeLayers, 'none');
                 this.orderLayers(slideFourLayers);
-                if (nextProps.criticalElement === 'ldskjflks') {
-                    if (nextProps.criticalElement !== criticalElement) {
-                        if (nextProps.criticalElement === 'all') {
-                            categoriesCritical.map((item) => {
-                                this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                                this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                                this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                if (nextProps.criticalElement !== criticalElement) {
+                    if (nextProps.criticalElement === 'all') {
+                        this.resetClusters();
 
-                                return null;
-                            });
-                        }
-                        if (nextProps.criticalElement === 'health') {
-                            this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-Health', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
-                            // this.moveCounts();
+                        categoriesCritical.map((item) => {
+                            this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                            this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                            this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
 
-                            // this.map.moveLayer('unclustered-point-Health');
-                            this.map.moveLayer('clusters-Health');
-                            this.map.moveLayer('cluster-count-Health');
-                            this.map.moveLayer('unclustered-point-Health');
-                        }
-                        if (nextProps.criticalElement === 'bank') {
-                            this.map.setLayoutProperty('unclustered-point-bank', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-bank', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-bank', 'visibility', 'visible');
-                            // this.moveCounts();
+                            return null;
+                        });
+                    }
+                    if (nextProps.criticalElement === 'health') {
+                        this.resetClusters();
 
-                            // this.map.moveLayer('unclustered-point-bank');
-                            this.map.moveLayer('clusters-bank');
-                            this.map.moveLayer('cluster-count-bank');
-                            this.map.moveLayer('unclustered-point-bank');
-                        }
-                        if (nextProps.criticalElement === 'governance') {
-                            this.map.setLayoutProperty('unclustered-point-governance', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-governance', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-governance', 'visibility', 'visible');
-                            // this.moveCounts();
+                        this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Health', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'bank') {
+                        this.resetClusters();
 
-                            // this.map.moveLayer('unclustered-point-governance');
-                            this.map.moveLayer('clusters-governance');
-                            this.map.moveLayer('cluster-count-governance');
-                            this.map.moveLayer('unclustered-point-governance');
-                        }
-                        if (nextProps.criticalElement === 'industry') {
-                            this.map.setLayoutProperty('unclustered-point-industry', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-industry', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-industry', 'visibility', 'visible');
-                            // this.moveCounts();
+                        this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Bank', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'governance') {
+                        this.resetClusters();
 
-                            // this.map.moveLayer('unclustered-point-industry');
-                            this.map.moveLayer('clusters-industry');
-                            this.map.moveLayer('cluster-count-industry');
-                            this.map.moveLayer('unclustered-point-industry');
-                        }
-                        if (nextProps.criticalElement === 'education') {
-                            this.map.setLayoutProperty('unclustered-point-education', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-education', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-education', 'visibility', 'visible');
-                            // this.moveCounts();
+                        this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Governance', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'industry') {
+                        this.resetClusters();
 
-                            this.map.moveLayer('clusters-education');
-                            this.map.moveLayer('cluster-count-education');
-                            this.map.moveLayer('unclustered-point-education');
-                        }
-                        if (nextProps.criticalElement === 'culture') {
-                            this.map.setLayoutProperty('unclustered-point-culture', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-culture', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-culture', 'visibility', 'visible');
+                        this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Industry', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'education') {
+                        this.resetClusters();
 
-                            this.map.moveLayer('clusters-culture');
-                            this.map.moveLayer('cluster-count-culture');
-                            this.map.moveLayer('unclustered-point-culture');
+                        this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Education', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'culture') {
+                        this.resetClusters();
 
-                            // this.moveCounts();
+                        this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Culture', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'tourism') {
+                        this.resetClusters();
 
-                            // this.map.moveLayer('clusters-culture');
-                            // this.map.moveLayer('cluster-count-culture');
-                            // this.map.moveLayer('unclustered-point-culture');
-                        }
-                        if (nextProps.criticalElement === 'tourism') {
-                            this.map.setLayoutProperty('unclustered-point-tourism', 'visibility', 'visible');
-                            this.map.setLayoutProperty('cluster-count-tourism', 'visibility', 'visible');
-                            this.map.setLayoutProperty('clusters-tourism', 'visibility', 'visible');
-                            // this.moveCounts();
-                            // this.map.moveLayer('unclustered-point-tourism');
-                        }
+                        this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Tourism', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
                     }
                 }
-
-
                 if (nextProps.rightElement === 4) {
-                    this.map.moveLayer('raster-rajapur-50', 'clusters-Health');
-                    this.map.moveLayer('raster-rajapur-10', 'clusters-Health');
-                    this.map.moveLayer('raster-rajapur-50', 'clusters-Health');
-                    this.map.moveLayer('raster-rajapur-100', 'clusters-Health');
-                    this.map.moveLayer('raster-rajapur-1000', 'clusters-Health');
                     if (nextProps.rasterLayer === '5') {
                         this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-                        this.map.moveLayer('raster-rajapur-5', 'clusters-Health');
                     }
                     if (nextProps.rasterLayer === '10') {
                         this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
-                        this.map.moveLayer('raster-rajapur-10', 'clusters-Health');
                     }
                     if (nextProps.rasterLayer === '50') {
                         this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
-                        this.map.moveLayer('raster-rajapur-50', 'clusters-Health');
                     }
                     if (nextProps.rasterLayer === '100') {
                         this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-                        this.map.moveLayer('raster-rajapur-100', 'clusters-Health');
                     }
-                    if (nextProps.rasterLayer === '1000') {
-                        this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
-                        this.map.moveLayer('raster-rajapur-1000', 'clusters-Health');
+                    if (nextProps.rasterLayer === '500') {
+                        this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
                     }
-
-                    this.map.setLayoutProperty('rajapurbuildings', 'visibility', 'visible');
-                    this.map.setLayoutProperty('forestRajapur', 'visibility', 'visible');
-                    this.map.setLayoutProperty('agriculturelandRajapur', 'visibility', 'visible');
-                    this.map.setLayoutProperty('waterway', 'visibility', 'visible');
                 }
+            }
+
+            if (nextProps.rightElement === 40) {
+                this.toggleVisiblity(slideFiveLayers, 'visible');
+                this.toggleVisiblity(slideFourLayers, 'none');
+                this.orderLayers(slideFiveLayers);
+                if (nextProps.criticalElement !== criticalElement) {
+                    if (nextProps.criticalElement === 'all') {
+                        this.resetClusters();
+
+                        categoriesCritical.map((item) => {
+                            this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                            this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                            this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+
+                            return null;
+                        });
+                    }
+                    if (nextProps.criticalElement === 'health') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Health', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'bank') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Bank', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'governance') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Governance', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'industry') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Industry', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'education') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Education', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'culture') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Culture', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
+                    }
+                    if (nextProps.criticalElement === 'tourism') {
+                        this.resetClusters();
+
+                        this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
+                        this.map.setLayoutProperty('cluster-count-Tourism', 'visibility', 'visible');
+                        this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
+                    }
+                }
+                // if (nextProps.rightElement === 4) {
+                //     if (nextProps.rasterLayer === '5') {
+                //         this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
+                //     }
+                //     if (nextProps.rasterLayer === '10') {
+                //         this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+                //     }
+                //     if (nextProps.rasterLayer === '50') {
+                //         this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
+                //     }
+                //     if (nextProps.rasterLayer === '100') {
+                //         this.map.setLayoutProperty
+                // ('raster-rajapur-100', 'visibility', 'visible');
+                //     }
+                //     if (nextProps.rasterLayer === '500') {
+                //         this.map.setLayoutProperty
+                // ('raster-rajapur-500', 'visibility', 'visible');
+                //     }
+                // }
             }
 
 
@@ -722,17 +763,19 @@ class FloodHistoryMap extends React.Component {
 
 
     public resetClusters = () => {
-        categoriesCritical.map((item) => {
-            this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'none');
+        categoriesCritical.map((layer) => {
+            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
 
             return null;
         });
-        evaccenters.map((item) => {
-            this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'none');
+        categoriesEvac.map((layer) => {
+            this.map.setLayoutProperty(
+                `evac-${layer}`, 'visibility', 'none',
+            );
+            // this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'none');
+            // this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'none');
 
             return null;
         });
