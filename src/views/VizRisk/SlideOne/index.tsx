@@ -34,6 +34,7 @@ export default class SlideFour extends React.Component {
             rasterLayer: '5',
             exposedElement: 'all',
             criticalElement: 'all',
+            criticalFlood: 'all',
             rightElement: 0,
             legendElement: 0,
             showLegend: false,
@@ -44,7 +45,13 @@ export default class SlideFour extends React.Component {
         };
     }
 
-    public handleCritical = (criticalElement: string) => {
+    public handleCriticalFlood = (criticalFlood: string) => {
+        this.setState({
+            criticalFlood,
+        });
+    }
+
+    public handleCriticalInfra = (criticalElement: string) => {
         this.setState({
             criticalElement,
         });
@@ -115,12 +122,11 @@ export default class SlideFour extends React.Component {
             rasterLayer,
             exposedElement,
             rightElement,
-            legendElement,
             disableNavBtns,
-            hoveredWard,
             showPopulation,
             criticalElement,
             evacElement,
+            criticalFlood,
         } = this.state;
 
         return (
@@ -168,6 +174,7 @@ export default class SlideFour extends React.Component {
                     handleMoveEnd={this.handleMoveEnd}
                     showPopulation={showPopulation}
                     criticalElement={criticalElement}
+                    criticalFlood={criticalFlood}
                     evacElement={evacElement}
                 />
                 {rightelements[rightElement]}
@@ -192,7 +199,7 @@ export default class SlideFour extends React.Component {
                     ? (
                         <VRLegend>
                             <CriticalInfraLegends
-                                handleCritical={this.handleCritical}
+                                handleCritical={this.handleCriticalInfra}
                             />
                         </VRLegend>
                     )
@@ -202,8 +209,7 @@ export default class SlideFour extends React.Component {
                     ? (
                         <VRLegend>
                             <CriticalInfraLegends
-                                handleCritical={this.handleCritical}
-                                criticalElement={criticalElement}
+                                handleCritical={this.handleCriticalFlood}
                             />
                             <FloodHazardLegends
                                 handleFloodChange={this.handleFloodChange}

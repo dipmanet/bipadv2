@@ -101,7 +101,7 @@ const slideFiveLayers = [
     'rajapurRoads', 'ward-fill',
 ];
 const slideSixLayers = [
-    'water', evacClusters, ...rasterLayers,
+    'water', ...evacClusters, ...rasterLayers,
     'bridgesRajapur', 'canalRajapur', 'waterway',
     'rajapurRoads', 'ward-fill',
 ];
@@ -172,7 +172,6 @@ class FloodHistoryMap extends React.Component {
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
             style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
-            // style: 'mapbox://styles/ankur20/cklf0bpke3ay017k7dlanuj5i',
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -472,6 +471,7 @@ class FloodHistoryMap extends React.Component {
             showPopulation,
             criticalElement,
             evacElement,
+            criticalFlood,
         } = this.props;
 
 
@@ -509,6 +509,8 @@ class FloodHistoryMap extends React.Component {
                 this.toggleVisiblity(slideFourLayers, 'visible');
                 this.toggleVisiblity(slideThreeLayers, 'none');
                 this.orderLayers(slideFourLayers);
+                this.handleInfraClusterSwitch('all');
+                console.log(nextProps.criticalElement);
                 if (nextProps.criticalElement !== criticalElement) {
                     this.handleInfraClusterSwitch(nextProps.criticalElement);
                 }
@@ -518,16 +520,15 @@ class FloodHistoryMap extends React.Component {
                 this.toggleVisiblity(slideFiveLayers, 'visible');
                 this.toggleVisiblity(slideFourLayers, 'none');
                 this.orderLayers(slideFiveLayers);
+                this.handleInfraClusterSwitch('all');
                 this.hideFloodRasters();
-                if (nextProps.criticalElement !== criticalElement) {
-                    this.handleInfraClusterSwitch(nextProps.criticalElement);
+                if (nextProps.criticalFlood !== criticalFlood) {
+                    this.handleInfraClusterSwitch(nextProps.criticalFlood);
                 }
                 if (nextProps.rasterLayer !== rasterLayer) {
                     this.handleFloodRasterSwitch(nextProps.rasterLayer);
                 }
             }
-
-
             if (nextProps.rightElement === 5) {
                 this.toggleVisiblity(slideSixLayers, 'visible');
                 this.toggleVisiblity(slideFiveLayers, 'none');

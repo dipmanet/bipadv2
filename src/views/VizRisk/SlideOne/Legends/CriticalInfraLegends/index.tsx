@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-import VRLegend from '#views/VizRisk/VRLegend';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '../../Icons/icon_set_school.svg';
 import Governance from '../../Icons/icon_set_government.svg';
@@ -13,8 +11,7 @@ import Bank from '../../Icons/icon_set_bank.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
-    const { handleCritical, criticalElement } = props;
-    const [showCriticalLegends, setCritical] = useState(false);
+    const { handleCritical } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [showFinance, setshowFinance] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
@@ -22,9 +19,7 @@ const LandCoverLegends = (props) => {
     const [showCulture, setshowCulture] = useState(false);
     const [showHospital, setshowHospital] = useState(false);
     const [showTourism, setshowTourism] = useState(false);
-    const [showLegendText, setshowLT] = useState('All Infrastructures');
     const [showAll, setshowAll] = useState(true);
-
 
     const resetCriticalLayers = () => {
         setshowEducation(false);
@@ -44,7 +39,6 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowAll(true);
         }
-
         if (layer === 'education') {
             resetCriticalLayers();
             setshowEducation(true);
@@ -53,7 +47,6 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-
         if (layer === 'culture') {
             resetCriticalLayers();
             setshowCulture(true);
@@ -75,6 +68,8 @@ const LandCoverLegends = (props) => {
             setshowTourism(true);
         }
     };
+
+
     return (
         <>
             {/* <VRLegend> */}
