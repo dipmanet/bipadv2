@@ -66,19 +66,6 @@ const categoriesEvac = [...new Set(evaccenters.features.map(
 ))];
 
 const rasterLayersYears = [5, 10, 50, 100, 500];
-
-const slideOneLayers = [
-    'wardNumbers', 'ward-outline',
-    'waterway', 'ward-fill'];
-
-const slideTwoLayers = [
-    'canalRajapur', 'waterway',
-    'rajapurbuildings', 'bridgesRajapur',
-    'rajapurRoads', 'forestRajapur',
-    'agriculturelandRajapur', 'ward-fill',
-];
-
-const slideThreeLayers = ['ward-outline', 'ward-fill-local', 'population-extruded'];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 const arrCritical = categoriesCritical.map(
     layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
@@ -89,21 +76,37 @@ const arrEvac = categoriesEvac.map(
 const criticalInfraClusters = [].concat(...arrCritical);
 const evacClusters = [].concat(...arrEvac);
 
-const slideFourLayers = [
-    'water', ...criticalInfraClusters, 'bridgesRajapur',
+
+const slideOneLayers = ['water',
+    'wardNumbers', 'ward-outline',
+    'waterway', 'ward-fill'];
+
+const slideTwoLayers = ['water',
     'canalRajapur', 'waterway',
-    'rajapurRoads', 'ward-fill',
+    'rajapurbuildings', 'bridgesRajapur',
+    'rajapurRoads', 'forestRajapur',
+    'agriculturelandRajapur', 'ward-outline',
+    'ward-fill',
+];
+
+const slideThreeLayers = ['water', 'wardNumbers', 'ward-outline',
+    'ward-fill-local', 'population-extruded'];
+
+const slideFourLayers = [
+    'water', ...criticalInfraClusters, 'ward-outline',
+    'bridgesRajapur', 'canalRajapur',
+    'waterway', 'rajapurRoads', 'ward-fill',
 ];
 
 const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers,
+    'water', ...criticalInfraClusters, ...rasterLayers,
     'bridgesRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'ward-fill',
+    'rajapurRoads', 'ward-outline', 'ward-fill',
 ];
 const slideSixLayers = [
     'water', ...evacClusters, ...rasterLayers,
     'bridgesRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'ward-fill',
+    'rajapurRoads', 'ward-outline', 'ward-fill',
 ];
 
 class FloodHistoryMap extends React.Component {
@@ -201,7 +204,6 @@ class FloodHistoryMap extends React.Component {
                             '#a4ac5e',
                             100,
                             '#a4ac5e',
-
                         ],
                         'circle-radius': [
                             'step',
@@ -221,7 +223,6 @@ class FloodHistoryMap extends React.Component {
                     source: layer,
                     filter: ['!', ['has', 'point_count']],
                     layout: {
-
                         'icon-image': ['get', 'icon'],
                     },
                 });
@@ -240,7 +241,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-
 
                 return null;
             });
@@ -264,7 +264,6 @@ class FloodHistoryMap extends React.Component {
                             '#a4ac5e',
                             100,
                             '#a4ac5e',
-
                         ],
                         'circle-radius': [
                             'step',
@@ -447,6 +446,7 @@ class FloodHistoryMap extends React.Component {
                 hoveredWardId = null;
             });
             this.map.setPaintProperty('ward-fill', 'fill-color', '#ccc');
+            this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
             this.map.setZoom(11.4);
             console.log('ourmap', this.map);
             setTimeout(() => {
@@ -480,19 +480,21 @@ class FloodHistoryMap extends React.Component {
                 this.map.setPitch(0);
                 this.map.setBearing(0);
                 this.resetClusters();
-                this.toggleVisiblity(slideOneLayers, 'visible');
                 this.orderLayers(slideOneLayers);
                 this.toggleVisiblity(slideTwoLayers, 'none');
+                this.toggleVisiblity(slideOneLayers, 'visible');
             }
             if (nextProps.rightElement === 1) {
                 this.map.setPitch(40);
-
+                this.toggleVisiblity(slideThreeLayers, 'none');
                 this.toggleVisiblity(slideTwoLayers, 'visible');
+
                 this.orderLayers(slideTwoLayers);
             }
 
             if (nextProps.rightElement === 2) {
                 this.toggleVisiblity(slideTwoLayers, 'none');
+                this.toggleVisiblity(slideFourLayers, 'none');
                 this.toggleVisiblity(slideThreeLayers, 'visible');
                 this.orderLayers(slideThreeLayers);
                 this.resetClusters();
@@ -506,22 +508,28 @@ class FloodHistoryMap extends React.Component {
             }
 
             if (nextProps.rightElement === 3) {
-                this.toggleVisiblity(slideFourLayers, 'visible');
                 this.toggleVisiblity(slideThreeLayers, 'none');
+                this.toggleVisiblity(slideFiveLayers, 'none');
+                this.toggleVisiblity(slideFourLayers, 'visible');
+
                 this.orderLayers(slideFourLayers);
                 this.handleInfraClusterSwitch('all');
-                console.log(nextProps.criticalElement);
+                this.hideFloodRasters();
+
                 if (nextProps.criticalElement !== criticalElement) {
                     this.handleInfraClusterSwitch(nextProps.criticalElement);
                 }
             }
 
             if (nextProps.rightElement === 4) {
-                this.toggleVisiblity(slideFiveLayers, 'visible');
                 this.toggleVisiblity(slideFourLayers, 'none');
+                this.toggleVisiblity(slideSixLayers, 'none');
+                this.toggleVisiblity(slideFiveLayers, 'visible');
+
                 this.orderLayers(slideFiveLayers);
                 this.handleInfraClusterSwitch('all');
-                this.hideFloodRasters();
+                this.handleFloodRasterSwitch('5');
+                console.log(this.map);
                 if (nextProps.criticalFlood !== criticalFlood) {
                     this.handleInfraClusterSwitch(nextProps.criticalFlood);
                 }
@@ -530,9 +538,10 @@ class FloodHistoryMap extends React.Component {
                 }
             }
             if (nextProps.rightElement === 5) {
-                this.toggleVisiblity(slideSixLayers, 'visible');
                 this.toggleVisiblity(slideFiveLayers, 'none');
+                this.toggleVisiblity(slideSixLayers, 'visible');
                 this.orderLayers(slideSixLayers);
+                this.handleFloodRasterSwitch('5');
                 if (nextProps.evacElement !== evacElement) {
                     this.handleInfraClusterSwitch(nextProps.evacElement);
                 }
@@ -709,7 +718,6 @@ class FloodHistoryMap extends React.Component {
 
     public handleFloodRasterSwitch = (layer) => {
         this.hideFloodRasters();
-
         if (layer === '5') {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
             this.map.moveLayer('raster-rajapur-5', 'clusters-Health');
@@ -723,8 +731,8 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
             this.map.moveLayer('raster-rajapur-100', 'clusters-Health');
         } else if (layer === '500') {
-            this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
-            this.map.moveLayer('raster-rajapur-1000', 'clusters-Health');
+            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
+            this.map.moveLayer('raster-rajapur-500', 'clusters-Health');
         }
     }
 
