@@ -1,10 +1,6 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
-import VRLegend from '#views/VizRisk/VRLegend';
-import Icon from '#rscg/Icon';
 import styles from './styles.scss';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import BridgeIcon from '#views/VizRisk/SlideOne/Icons/bridge.svg';
 
 const LandCoverLegends = () => (
     <>

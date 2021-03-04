@@ -2,17 +2,17 @@ import React from 'react';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
-import RightElement1 from './RightPane1';
-import RightElement2 from './RightPane2';
-import RightElement3 from './RightPane3';
-import RightElement4 from './RightPane4';
-import RightElement5 from './RightPane5';
-import RightElement6 from './RightPane6';
-import LandcoverLegends from './LandCoverLegends';
-import DemographicsLegends from './DemographicsLegends';
-import CriticalInfraLegends from './CriticalInfraLegends';
-import FloodHazardLegends from './FloodHazardLegends';
-import EvacLegends from './EvacLegends';
+import RightElement1 from './RightPaneContents/RightPane1';
+import RightElement2 from './RightPaneContents/RightPane2';
+import RightElement3 from './RightPaneContents/RightPane3';
+import RightElement4 from './RightPaneContents/RightPane4';
+import RightElement5 from './RightPaneContents/RightPane5';
+import RightElement6 from './RightPaneContents/RightPane6';
+import LandcoverLegends from './Legends/LandCoverLegends';
+import DemographicsLegends from './Legends/DemographicsLegends';
+import CriticalInfraLegends from './Legends/CriticalInfraLegends';
+import FloodHazardLegends from './Legends/FloodHazardLegends';
+import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '../VRLegend';
 
@@ -23,11 +23,6 @@ const rightelements = [
     <RightElement4 />,
     <RightElement5 />,
     <RightElement6 />,
-];
-const legends = [
-    <LandcoverLegends />,
-    <DemographicsLegends />,
-    <FloodHazardLegends />,
 ];
 
 export default class SlideFour extends React.Component {

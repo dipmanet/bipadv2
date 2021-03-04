@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
-import Icon from '#rscg/Icon';
-import VRLegend from '../../VRLegend';
 import styles from './styles.scss';
 
 const DemoGraphicsLegends = (props) => {

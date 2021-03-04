@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
-import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
 interface ComponentProps {}

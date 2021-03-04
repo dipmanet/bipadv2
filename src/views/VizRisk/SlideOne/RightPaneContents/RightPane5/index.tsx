@@ -1,22 +1,6 @@
 import React from 'react';
-import memoize from 'memoize-one';
-
-import {
-    Bar, BarChart,
-    CartesianGrid, Legend,
-    ReferenceLine,
-    ResponsiveContainer,
-    Tooltip, XAxis, YAxis,
-} from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '../../demographicsData';
-import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
-
-import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
-import LandCoverLegends from '../LandCoverLegends';
-import Icon from '#rscg/Icon';
+import demographicsData from '#views/VizRisk/demographicsData';
 
 interface ComponentProps {}
 
@@ -33,7 +17,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     }
 
     public handleShowLandCover= () => {
-        console.log('skjvhsd');
         this.setState(
             prevState => ({
                 showLandcover: !prevState.showLandcover,
@@ -74,20 +57,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     that the impact of flooding can be greatly reduced through
                     flood-sensitive spatial planning.
                 </p>
-                <button
-                    type="button"
-                    className={styles.infoBtn}
-                    onClick={this.handleShowLandCover}
-                >
-                    <Icon
-                        name="chevronRight"
-                    />
-                </button>
-                <div className={styles.landCoverLegend}>
-
-
-                    {showLandcover && <LandCoverLegends />}
-                </div>
             </div>
         );
     }

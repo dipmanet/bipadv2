@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-import VRLegend from '#views/VizRisk/VRLegend';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Education from '../Icons/icon_set_school.svg';
-import Culture from '../Icons/icon_set_religion.svg';
-import SafeShelter from '../Icons/safeshelternew.svg';
+import Education from '../../Icons/icon_set_school.svg';
+import Culture from '../../Icons/icon_set_religion.svg';
+import SafeShelter from '../../Icons/safeshelternew.svg';
 import Icon from '#rscg/Icon';
 
 

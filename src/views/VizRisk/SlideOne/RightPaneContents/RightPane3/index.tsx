@@ -4,13 +4,11 @@ import memoize from 'memoize-one';
 import {
     Bar, BarChart,
     CartesianGrid, Legend,
-    ReferenceLine,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '../../demographicsData';
-import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
+import demographicsData from '#views/VizRisk/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/SlideOne/Icons/male.svg';

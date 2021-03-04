@@ -4,21 +4,14 @@ import memoize from 'memoize-one';
 import {
     ResponsiveContainer,
     PieChart,
-    Legend,
     Label,
     Tooltip,
     Pie,
     Cell,
     Sector,
 } from 'recharts';
-import Page from '#components/Page';
-import CustomChartLegend from '../../CustomChartLegend';
+import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
 import Icon from '#rscg/Icon';
-
-import Map from '#re-map';
-import MapContainer from '#re-map/MapContainer';
-
-import VizriskMap from '#components/VizriskMap';
 
 import {
     mapStyleSelector,
@@ -29,7 +22,6 @@ import {
     wardsSelector,
     hazardTypesSelector,
 } from '#selectors';
-import GeoJSON from '../../GeoJSON';
 import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';

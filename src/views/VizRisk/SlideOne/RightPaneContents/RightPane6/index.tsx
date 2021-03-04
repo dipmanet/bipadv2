@@ -1,18 +1,14 @@
 import React from 'react';
-import memoize from 'memoize-one';
 
 import {
     Bar, BarChart,
-    CartesianGrid, Legend,
-    ReferenceLine,
+    CartesianGrid,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
 
-import criticalInfraData from '../../criticalInfraData';
-
-import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
+import criticalInfraData from '#views/VizRisk/criticalInfraData';
 
 const chartData = criticalInfraData.safeShelterData;
 
