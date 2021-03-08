@@ -17,10 +17,14 @@ const FloodHistoryLegends = (props: Props) => {
     const [showRoads, setShowExposedRoads] = useState(false);
     const [showCanals, setShowExposedCanals] = useState(false);
     const [showSafeShelter, setShowSafeShelter] = useState(false);
+    const [showFloodElements, setshowFloodElements] = useState(true);
+
+    const [showReturnPeriods, setshowReturnPeriods] = useState(false);
     const {
         handleFloodChange,
         handleExposedElementChange,
         handleChisapani,
+        showCriticalElements,
     } = props;
 
     const resetExposedLayers = () => {
@@ -38,33 +42,27 @@ const FloodHistoryLegends = (props: Props) => {
         handleExposedElementChange(layer);
 
         if (layer === 'all') {
-            const newVal = !showExposedAll;
             resetExposedLayers();
             setShowExposedAll(true);
         }
         if (layer === 'school') {
-            const newVal = !showExposedSchool;
             resetExposedLayers();
             setShowExposedSchool(true);
         }
 
         if (layer === 'roads') {
-            const newVal = !showRoads;
             resetExposedLayers();
             setShowExposedRoads(true);
         }
         if (layer === 'building') {
-            const newVal = !showExposedBuilding;
             resetExposedLayers();
             setShowExposedBuilding(true);
         }
         if (layer === 'canals') {
-            const newVal = !showCanals;
             resetExposedLayers();
             setShowExposedCanals(true);
         }
         if (layer === 'safeshelters') {
-            const newVal = !showSafeShelter;
             resetExposedLayers();
             setShowSafeShelter(true);
         }
@@ -74,14 +72,23 @@ const FloodHistoryLegends = (props: Props) => {
         setActiveRasterLayer(layer);
     };
 
+    const handleFloodtoggle = () => {
+        setshowFloodElements(!showCriticalElements);
+    };
+
     return (
         <>
-            <h3>
-                Flood Hazard
-                {' '}
-                <br />
-                in Return Periods (years)
-            </h3>
+            <button
+                type="button"
+                className={styles.toggleFlood}
+                onClick={handleFloodtoggle}
+            >
+                <h2>
+                    Flood Hazard
+                    in Return Periods
+                </h2>
+            </button>
+
             <div className={styles.floodMainContainer}>
                 <div className={styles.floodSubGroup}>
                     <div className={styles.floodItemContainer}>
@@ -94,45 +101,45 @@ const FloodHistoryLegends = (props: Props) => {
                         >
                             <Hexagon
                                 style={{
-                                    stroke: '#ddd',
+                                    stroke: '#9dc7fa',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '5' ? 'rgba(255,255,255,0.67)' : 'transparent',
+                                    fill: activeRasterLayer === '5' ? '#036ef0' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
                             />
 
-                            5
-                                 years
+                         5
+                              years
                             {' '}
 
                         </button>
                     </div>
                     {/* <div className={styles.floodItemContainer}>
-                        <button
-                            type="button"
-                            className={styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('10')}
+                     <button
+                         type="button"
+                         className={styles.legendBtn}
+                         onClick={() => handleLegendBtnClick('10')}
 
-                        >
-                            <Hexagon
-                                style={{
-                                    stroke: '#ddd',
-                                    strokeWidth: 50,
-                                    fill: activeRasterLayer === '10'
-                                    ? 'rgba(255,255,255,0.67)' : 'transparent',
+                     >
+                         <Hexagon
+                             style={{
+                                 stroke: '#9dc7fa',
+                                 strokeWidth: 50,
+                                 fill: activeRasterLayer === '10'
+                                 ? '#036ef0' : 'transparent',
 
-                                }}
-                                className={styles.educationHexagon}
-                            />
+                             }}
+                             className={styles.educationHexagon}
+                         />
 
 
-                            10
-                                 years
-                            {' '}
+                         10
+                              years
+                         {' '}
 
-                        </button>
-                    </div> */}
+                     </button>
+                 </div> */}
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
@@ -140,20 +147,19 @@ const FloodHistoryLegends = (props: Props) => {
                                 ? styles.legendBtnSelected
                                 : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('50')}
-
                         >
                             <Hexagon
                                 style={{
-                                    stroke: '#ddd',
+                                    stroke: '#9dc7fa',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '50' ? 'rgba(255,255,255,0.67)' : 'transparent',
+                                    fill: activeRasterLayer === '50' ? '#036ef0' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
                             />
 
 
-                            50years
+                         50years
                             {' '}
 
                         </button>
@@ -167,70 +173,43 @@ const FloodHistoryLegends = (props: Props) => {
                                 ? styles.legendBtnSelected
                                 : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('100')}
-
                         >
                             <Hexagon
                                 style={{
-                                    stroke: '#ddd',
+                                    stroke: '#9dc7fa',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '100' ? 'rgba(255,255,255,0.67)' : 'transparent',
+                                    fill: activeRasterLayer === '100' ? '#036ef0' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
                             />
 
 
-                            100 years
+                         100 years
                         </button>
                     </div>
 
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
-                            className={activeRasterLayer === '1000'
+                            className={activeRasterLayer === '500'
                                 ? styles.legendBtnSelected
                                 : styles.legendBtn}
-                            onClick={() => handleLegendBtnClick('1000')}
-
+                            onClick={() => handleLegendBtnClick('500')}
                         >
                             <Hexagon
                                 style={{
-                                    stroke: '#ddd',
+                                    stroke: '#9dc7fa',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '1000' ? 'rgba(255,255,255,0.67)' : 'transparent',
+                                    fill: activeRasterLayer === '500' ? '#036ef0' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
                             />
 
 
-                            1000 years
+                         500 years
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <h2>Flood depth (in meters)</h2>
-            <div className={styles.floodDepthContainer}>
-                <div className={styles.floodDepth}>
-                    <div className={styles.floodIndicator1} />
-                    <div className={styles.floodIndicator2} />
-                    <div className={styles.floodIndicator3} />
-
-                </div>
-                <div className={styles.floodDepthText}>
-                    <div className={styles.floodText}>
-                    High (
-                        {'>'}
-                        {' '}
-                        2m)
-                    </div>
-                    <div className={styles.floodText}>Medium (1m - 2m)</div>
-                    <div className={styles.floodText}>
-                    Low (
-                        {'<'}
-                        {' '}
-                    1m)
                     </div>
                 </div>
             </div>

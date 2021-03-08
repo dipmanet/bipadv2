@@ -65,7 +65,7 @@ const categoriesEvac = [...new Set(evaccenters.features.map(
     item => item.properties.Type,
 ))];
 
-const rasterLayersYears = [5, 10, 50, 100, 500];
+const rasterLayersYears = [5, 50, 100, 500];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 const arrCritical = categoriesCritical.map(
     layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],

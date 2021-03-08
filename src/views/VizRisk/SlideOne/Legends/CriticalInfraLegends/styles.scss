@@ -1,4 +1,19 @@
 
+.toggleCritical{
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    color: white;
+    opacity: 0.87;
+    text-transform: uppercase;
+
+    .chevrontoggle{
+        font-size: 10px;
+    padding-left: 5px;
+
+    }
+}
 .criticalIcons{
     .toggleContainer{
         .infraIconContainer{

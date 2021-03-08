@@ -12,6 +12,9 @@ import LandcoverLegends from './Legends/LandCoverLegends';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
+import FloodDepthLegend from './Legends/FloodDepthLegend';
+
+
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '../VRLegend';
@@ -42,7 +45,14 @@ export default class SlideFour extends React.Component {
             hoveredWard: '',
             showPopulation: 'ward',
             evacElement: 'all',
+            showCriticalElements: true,
         };
+    }
+
+    public handleCriticalShowToggle = (showCriticalElements: string) => {
+        this.setState({
+            showCriticalElements,
+        });
     }
 
     public handleCriticalFlood = (criticalFlood: string) => {
@@ -127,6 +137,7 @@ export default class SlideFour extends React.Component {
             criticalElement,
             evacElement,
             criticalFlood,
+            showCriticalElements,
         } = this.state;
 
         return (
@@ -180,60 +191,86 @@ export default class SlideFour extends React.Component {
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (
-                        <VRLegend>
-                            <LandcoverLegends />
-                        </VRLegend>
+                        <div className={styles.legends}>
+                            <VRLegend>
+                                <LandcoverLegends />
+                            </VRLegend>
+                        </div>
+
                     )
                     : ''}
                 {rightElement === 2
                     ? (
-                        <VRLegend>
-                            <DemographicsLegends
-                                handlePopulationChange={this.handlePopulationChange}
-                            />
-                        </VRLegend>
+                        <div className={styles.legends}>
+                            <VRLegend>
+                                <DemographicsLegends
+                                    handlePopulationChange={this.handlePopulationChange}
+                                />
+                            </VRLegend>
+                        </div>
                     )
                     : ''
                 }
                 {rightElement === 3
                     ? (
-                        <VRLegend>
-                            <CriticalInfraLegends
-                                handleCritical={this.handleCriticalInfra}
-                            />
-                        </VRLegend>
+                        <div className={styles.legends}>
+                            <VRLegend>
+                                <CriticalInfraLegends
+                                    handleCritical={this.handleCriticalInfra}
+                                    handleCriticalShowToggle={this.handleCriticalShowToggle}
+                                />
+                            </VRLegend>
+                        </div>
                     )
                     : ''
                 }
                 {rightElement === 4
                     ? (
-                        <VRLegend>
-                            <CriticalInfraLegends
-                                handleCritical={this.handleCriticalFlood}
-                            />
-                            <FloodHazardLegends
-                                handleFloodChange={this.handleFloodChange}
-                                handleExposedElementChange={this.handleExposedElementChange}
-                                handleChisapani={this.handleChisapani}
-                            />
-                        </VRLegend>
+                        <>
+                            <div className={styles.legends}>
+                                <VRLegend>
+                                    <CriticalInfraLegends
+                                        handleCritical={this.handleCriticalFlood}
+                                        showCriticalElements={showCriticalElements}
+                                        handleCriticalShowToggle={this.handleCriticalShowToggle}
+
+                                    />
+                                    <FloodHazardLegends
+                                        handleFloodChange={this.handleFloodChange}
+                                        handleExposedElementChange={this.handleExposedElementChange}
+                                        handleChisapani={this.handleChisapani}
+                                        showCriticalElements={showCriticalElements}
+                                    />
+                                </VRLegend>
+                                <VRLegend>
+                                    <FloodDepthLegend />
+                                </VRLegend>
+                            </div>
+                        </>
                     )
                     : ''
                 }
                 {rightElement === 5
                     ? (
-                        <VRLegend>
-                            <EvacLegends
-                                handleEvac={this.handleEvac}
-                                evacElement={evacElement}
+                        <div className={styles.legends}>
 
-                            />
-                            <FloodHazardLegends
-                                handleFloodChange={this.handleFloodChange}
-                                handleExposedElementChange={this.handleExposedElementChange}
-                                handleChisapani={this.handleChisapani}
-                            />
-                        </VRLegend>
+                            <VRLegend>
+                                <EvacLegends
+                                    handleEvac={this.handleEvac}
+                                    evacElement={evacElement}
+
+                                />
+                                <FloodHazardLegends
+                                    handleFloodChange={this.handleFloodChange}
+                                    handleExposedElementChange={this.handleExposedElementChange}
+                                    handleChisapani={this.handleChisapani}
+                                />
+                            </VRLegend>
+                            <VRLegend>
+                                <FloodDepthLegend />
+                            </VRLegend>
+                        </div>
+
                     )
                     : ''
                 }
