@@ -78,8 +78,8 @@ const evacClusters = [].concat(...arrEvac);
 
 
 const slideOneLayers = ['water',
-    'wardNumbers', 'ward-outline',
-    'waterway', 'ward-fill'];
+    'wardNumbers', 'waterway',
+    'ward-outline', 'ward-fill'];
 
 const slideTwoLayers = ['water',
     'canalRajapur', 'waterway',
@@ -446,23 +446,21 @@ class FloodHistoryMap extends React.Component {
                 }
                 hoveredWardId = null;
             });
-            this.map.setPaintProperty('ward-fill', 'fill-color', '#ccc');
             this.map.setLayoutProperty('ward-fill', 'visibility', 'visible');
-            this.map.setZoom(11.4);
+            this.map.setZoom(1);
             console.log('ourmap', this.map);
+            this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
+            this.map.setPaintProperty('ward-fill', 'fill-opacity', 0.5);
             setTimeout(() => {
-                this.map.flyTo({
-                    center: [
-                        81.123711,
-                        28.436586,
-                    ],
+                this.map.easeTo({
                     zoom: 11.4,
-                    bearing: 0,
-                    speed: 0.7,
-                    curve: 1,
-                    essential: false,
+                    duration: 7000,
                 });
-            }, 2000);
+            }, 4000);
+            this.map.easeTo({
+                pitch: 20,
+                duration: 2000,
+            });
         });
     }
 
@@ -478,15 +476,25 @@ class FloodHistoryMap extends React.Component {
 
         if (this.map.isStyleLoaded()) {
             if (nextProps.rightElement === 0) {
-                this.map.setPitch(0);
-                this.map.setBearing(0);
+                this.map.easeTo({
+                    pitch: 0,
+                    zoom: 11.4,
+                    duration: 1000,
+                });
                 this.resetClusters();
                 this.orderLayers(slideOneLayers);
                 this.toggleVisiblity(slideTwoLayers, 'none');
                 this.toggleVisiblity(slideOneLayers, 'visible');
+                this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
+                this.map.setPaintProperty('ward-fill', 'fill-opacity', 0.5);
             }
             if (nextProps.rightElement === 1) {
-                this.map.setPitch(40);
+                // this.map.setPitch(40);
+                this.map.easeTo({
+                    pitch: 40,
+                    zoom: 12,
+                    duration: 2000,
+                });
                 this.toggleVisiblity(slideThreeLayers, 'none');
                 this.toggleVisiblity(slideTwoLayers, 'visible');
 

@@ -24,6 +24,9 @@
                 flex: 1;
                 .infoIcon{
                     margin: 0px 15px 0 5px;
+                    path{
+                        fill: #FFEBBE;
+                    }
                 }
                 .descriptionCotainer{
                     display: flex;

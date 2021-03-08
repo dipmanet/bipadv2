@@ -235,6 +235,8 @@ export default class SlideFour extends React.Component {
                                         handleCriticalShowToggle={this.handleCriticalShowToggle}
 
                                     />
+                                </VRLegend>
+                                <VRLegend>
                                     <FloodHazardLegends
                                         handleFloodChange={this.handleFloodChange}
                                         handleExposedElementChange={this.handleExposedElementChange}
@@ -260,6 +262,8 @@ export default class SlideFour extends React.Component {
                                     evacElement={evacElement}
 
                                 />
+                            </VRLegend>
+                            <VRLegend>
                                 <FloodHazardLegends
                                     handleFloodChange={this.handleFloodChange}
                                     handleExposedElementChange={this.handleExposedElementChange}

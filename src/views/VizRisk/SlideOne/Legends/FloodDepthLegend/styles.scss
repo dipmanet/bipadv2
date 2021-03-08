@@ -80,7 +80,6 @@
     }
     .floodDepthContainer{
         display: flex;
-
         .floodDepth{
             display: flex;
             flex-direction: column;
@@ -93,7 +92,6 @@
                 align-items: center;
                 min-width: 30px;
                 padding: 2px;
-
             }
             .floodIndicator2{
                 background-color:rgb(221,252,56); 
@@ -104,7 +102,6 @@
                 align-items: center;
                 min-width: 50px;
                 padding: 2px;
-
             }
             .floodIndicator3{
                 background-color:rgb(16, 104, 169);
@@ -115,10 +112,7 @@
                 align-items: center;
                 min-width: 30px;
                 padding: 2px;
-
-
             }
-
             .floodText{
                 color: white;
                 opacity:0.87;
