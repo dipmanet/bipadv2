@@ -90,7 +90,8 @@ const slideTwoLayers = ['water',
 ];
 
 const slideThreeLayers = ['water', 'wardNumbers', 'ward-outline',
-    'ward-fill-local', 'population-extruded'];
+    'ward-fill-local', 'bufferRajapur',
+    'population-extruded'];
 
 const slideFourLayers = [
     ...criticalInfraClusters, 'water', 'ward-outline',
@@ -245,6 +246,7 @@ class FloodHistoryMap extends React.Component {
 
                 return null;
             });
+
 
             categoriesEvac.map((layer) => {
                 this.map.addSource(`evac${layer}`, {
@@ -451,6 +453,7 @@ class FloodHistoryMap extends React.Component {
             console.log('ourmap', this.map);
             this.map.setPaintProperty('ward-fill', 'fill-color', '#b4b4b4');
             this.map.setPaintProperty('ward-fill', 'fill-opacity', 0.5);
+
             setTimeout(() => {
                 this.map.easeTo({
                     zoom: 11.4,
@@ -510,6 +513,8 @@ class FloodHistoryMap extends React.Component {
                 if (nextProps.showPopulation !== showPopulation) {
                     if (nextProps.showPopulation === 'popdensity') {
                         this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                        this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                        this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
                     } else {
                         this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                     }

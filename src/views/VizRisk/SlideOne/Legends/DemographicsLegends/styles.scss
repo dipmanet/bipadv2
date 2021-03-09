@@ -1,35 +1,32 @@
 
+    
     .populationContainer{
         display: flex;
-        // flex-direction: column;
-        // height: 60px;
         margin-bottom: 20px;
         margin-left: 10px;
+        p{
+            line-height: 0;
+            position: relative;
+            bottom: 20px;
+        }
         .populationIndContainer{
             display: flex;
-            // width:60px;
             flex-direction: column;
-            // border: 1px solid gray;
             padding-right: 4px;
             .populationIndicator1{
                 width: 12px;
                 height: 20px;
-                // 
                 background-color: #9a3404;
                 border-radius: 6px 6px 0 0;
-
             }
             .populationIndicator2{
                 width: 12px;
                 height: 20px;
-                // 
                 background-color: #d95f0e; 
-                // margin-right: 10px;
             }
             .populationIndicator3{
                 width: 12px;
                 height: 20px;
-                // 
                 background-color:#fe9b2a;
 
             }
@@ -75,13 +72,13 @@
             border: none;
             color: white; 
             opacity: 0.87;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             align-items: center;
             font-family: 'Source Sans Pro';
             filter: saturate(100%);
             cursor: pointer;
             .educationHexagon{
-                width: 15px;
+                width: 12px;
                 margin: 0 7px 0 0;
             }
         }

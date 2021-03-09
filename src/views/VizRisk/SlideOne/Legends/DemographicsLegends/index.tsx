@@ -55,12 +55,11 @@ const DemoGraphicsLegends = (props) => {
                 ) : (
                     <div>
                         <h2>
-                                Population density
-                            {' '}
+                            Population density
                             <br />
-                                (per 0.0625 km
+                            (per 0.06 km
                             <sup>2</sup>
-                        )
+)
                         </h2>
 
                         <div className={styles.populationContainer}>
@@ -91,18 +90,15 @@ const DemoGraphicsLegends = (props) => {
                     type="button"
                     className={styles.legendBtn}
                     onClick={() => handlePopulationClick('ward')}
-
                 >
                     <Hexagon
                         style={{
                             stroke: '#fff',
                             strokeWidth: 50,
-                            fill: showPopulationWard ? '#ddd' : 'transparent',
-
+                            fill: showPopulationWard ? '#036ef0' : 'transparent',
                         }}
                         className={styles.educationHexagon}
                     />
-
                             By Ward
                 </button>
             </div>
@@ -117,7 +113,7 @@ const DemoGraphicsLegends = (props) => {
                         style={{
                             stroke: '#fff',
                             strokeWidth: 50,
-                            fill: showPopulationDensity ? '#ddd' : 'transparent',
+                            fill: showPopulationDensity ? '#036ef0' : 'transparent',
 
                         }}
                         className={styles.educationHexagon}
