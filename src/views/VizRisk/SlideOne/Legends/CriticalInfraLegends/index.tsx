@@ -162,7 +162,7 @@ const LandCoverLegends = (props) => {
             /> */}
 
 
-            Education
+            Educational Institution
                             </button>
                         </div>
                         <div className={styles.infraIconContainer}>
@@ -190,7 +190,7 @@ const LandCoverLegends = (props) => {
                 }}
                 className={styles.educationHexagon}
             /> */}
-            Government
+            Government Building
                             </button>
 
                         </div>
@@ -219,7 +219,7 @@ const LandCoverLegends = (props) => {
                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
                 className={styles.educationHexagon}
             /> */}
-            Culture
+            Cultural Site
                             </button>
 
                         </div>
@@ -250,7 +250,7 @@ const LandCoverLegends = (props) => {
                 }}
                 className={styles.educationHexagon}
             /> */}
-            Health
+            Hospital
                             </button>
 
                         </div>
@@ -307,7 +307,7 @@ const LandCoverLegends = (props) => {
                 }}
                 className={styles.educationHexagon}
             /> */}
-                Tourism
+                Hotel or Restaurant
                             </button>
 
                         </div>
@@ -335,7 +335,7 @@ const LandCoverLegends = (props) => {
                 }}
                 className={styles.educationHexagon}
             /> */}
-             Financial
+             Bank
                             </button>
 
                         </div>

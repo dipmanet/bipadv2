@@ -105,10 +105,10 @@ const slideFiveLayers = [
     'rajapurRoads', 'ward-outline', 'ward-fill',
 ];
 const slideSixLayers = [
-    'safeshelterRajapurIcon', 'safeshelterRajapur',
+    'rajapurRoads', 'safeshelterRajapurIcon', 'safeshelterRajapur',
     ...evacClusters, ...rasterLayers, 'water',
     'bridgesRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'ward-outline', 'ward-fill',
+    'ward-outline', 'ward-fill',
 ];
 
 class FloodHistoryMap extends React.Component {
