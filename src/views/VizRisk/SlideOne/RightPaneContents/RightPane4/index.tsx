@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import criticalInfraData from '#views/VizRisk/criticalInfraData';
+import SourceInfo from '../../SourceInfo';
 
 interface ComponentProps {}
 
@@ -68,6 +69,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
+                <SourceInfo />
 
 
             </div>

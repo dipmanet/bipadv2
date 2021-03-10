@@ -16,6 +16,7 @@ import Female from '#views/VizRisk/SlideOne/Icons/female.svg';
 import Home from '#views/VizRisk/SlideOne/Icons/home.svg';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
+import SourceInfo from '../../SourceInfo';
 
 interface ComponentProps {}
 
@@ -153,6 +154,8 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
+                <SourceInfo />
+
             </div>
         );
     }

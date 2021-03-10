@@ -6,14 +6,13 @@ import { CartesianGrid,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
-import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import MaxTempIcon from '#views/VizRisk/SlideOne/Icons/TempMax.svg';
 import MinTempIcon from '#views/VizRisk/SlideOne/Icons/TempMin.svg';
 import AvgRainFall from '#views/VizRisk/SlideOne/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
-import AreaIcon from '#views/VizRisk/SlideOne/Icons/Area.svg';
 import styles from './styles.scss';
+import SourceInfo from '../../SourceInfo';
 
 interface State {
     showInfo: boolean;
@@ -71,17 +70,6 @@ class SlideOne extends React.PureComponent<Props, State> {
             showInfo: false,
         };
     }
-
-    public handleInfoClick = () => {
-        console.log(this.state.showInfo);
-        const { showInfo } = this.state;
-        if (showInfo) {
-            this.setState({ showInfo: false });
-        } else {
-            this.setState({ showInfo: true });
-        }
-    };
-
 
     public renderLegend = (props) => {
         const { payload } = props;
@@ -255,19 +243,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     </LineChart>
                 </ResponsiveContainer>
 
-                <div className={styles.iconContainer}>
-                    <div
-                        className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
-                    >
-                            Source: Rajapur Municipality Profile
-                    </div>
-                    <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
-                        <Icon
-                            name="info"
-                            className={styles.closeIcon}
-                        />
-                    </button>
-                </div>
+                <SourceInfo />
 
 
             </div>

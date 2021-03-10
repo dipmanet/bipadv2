@@ -187,6 +187,7 @@ class FloodHistoryMap extends React.Component {
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
         this.map.on('style.load', () => {
+            this.map.panBy([0, -100]);
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -765,7 +766,7 @@ class FloodHistoryMap extends React.Component {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '70%',
+            width: '100%',
             left: '0%',
             top: 0,
             bottom: 0,

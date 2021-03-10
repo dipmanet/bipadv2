@@ -9,6 +9,7 @@ import {
 import styles from './styles.scss';
 
 import criticalInfraData from '#views/VizRisk/criticalInfraData';
+import SourceInfo from '../../SourceInfo';
 
 const chartData = criticalInfraData.safeShelterData;
 
@@ -99,7 +100,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 )
                 }
 
-
+                <SourceInfo />
             </div>
         );
     }

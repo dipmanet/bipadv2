@@ -25,6 +25,7 @@ import {
 import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
+import SourceInfo from '../../SourceInfo';
 
 const data = [
     { name: 'Agricultural land', value: 94.07 },
@@ -243,19 +244,7 @@ class RightPane extends React.PureComponent<Props, State> {
                     />
 
                 </div>
-                <div className={styles.iconContainer}>
-                    <div
-                        className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
-                    >
-                            Source: Rajapur Municipality Profile
-                    </div>
-                    <button type="button" className={styles.infoContainerBtn} onClick={this.handleInfoClick}>
-                        <Icon
-                            name="info"
-                            className={styles.closeIcon}
-                        />
-                    </button>
-                </div>
+                <SourceInfo />
             </div>
         );
     }

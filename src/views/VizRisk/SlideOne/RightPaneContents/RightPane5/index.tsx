@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/demographicsData';
+import SourceInfo from '../../SourceInfo';
 
 interface ComponentProps {}
 
@@ -57,6 +58,8 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     that the impact of flooding can be greatly reduced through
                     flood-sensitive spatial planning.
                 </p>
+                <SourceInfo />
+
             </div>
         );
     }
