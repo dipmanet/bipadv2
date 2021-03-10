@@ -137,7 +137,7 @@ const sanitize = (projectList, regions, ndrrsapMap) => {
             if (location && location.ward.length > 0) {
                 wards.add(...location.ward);
             }
-
+            // todo: 'category' data not available. check if this can be removed.
             if (category && category.length > 0) {
                 categories.add(...category);
             }
