@@ -37,6 +37,7 @@ class Hazard extends React.PureComponent<Props, State> {
             layerGroupList,
         );
 
+
         return (
             <LayerSelection
                 className={_cs(styles.hazard, className)}
