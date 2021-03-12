@@ -226,7 +226,7 @@ class Exposure extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.exposure, className)}>
-                <header className={styles.header}>
+                {/* <header className={styles.header}>
                     <h2 className={styles.heading}>
                         Layers
                     </h2>
@@ -245,7 +245,7 @@ class Exposure extends React.PureComponent<Props, State> {
                     keySelector={keySelector}
                     renderer={Option}
                     rendererParams={this.getRendererParams}
-                />
+                /> */}
                 <LayerSelection
                     className={_cs(styles.hazard, className)}
                     layerList={exposureLayer}
