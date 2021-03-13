@@ -6,7 +6,6 @@ import Button from '#rsca/Button';
 import SlideOne from './SlideOne';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
-import VRSetting from './Setting';
 
 
 const slides = [

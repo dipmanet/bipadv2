@@ -9,6 +9,7 @@ import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import MaxTempIcon from '#views/VizRisk/SlideOne/Icons/TempMax.svg';
 import MinTempIcon from '#views/VizRisk/SlideOne/Icons/TempMin.svg';
+import TempIcon from '#views/VizRisk/SlideOne/Icons/Temp.svg';
 import AvgRainFall from '#views/VizRisk/SlideOne/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
 import styles from './styles.scss';
@@ -151,7 +152,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     <div className={styles.infoIconsContainer}>
                         <ScalableVectorGraphics
                             className={styles.infoIcon}
-                            src={MaxTempIcon}
+                            src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>41℃</div>
@@ -164,10 +165,10 @@ class SlideOne extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                     <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIcon}
-                            src={MinTempIcon}
-                        />
+                            src={TempIcon}
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>7℃</div>
                             <div className={styles.iconText}>

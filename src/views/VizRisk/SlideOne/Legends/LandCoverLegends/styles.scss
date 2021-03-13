@@ -1,18 +1,5 @@
-        .settlementIconContainer{
-            padding: 0;
-            margin: 4px;
-            color: white;
-            opacity: 0.87;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            .settlementIcon{
-                color:#e00000;
-               width: 15px;
-               margin-right: 10px;
-            }
-        }  
-        .agroIconContainer{
+
+       .landcoverIconContainer{
             padding: 0;
             margin: 4px;
             color: white;
@@ -21,10 +8,18 @@
             align-items: center;
             font-size: 14px;
 
+            .buildingIcon{
+                // color:#d5d3d3;
+                color:#f3f2f2;
+               width: 15px;
+               margin-right: 10px;
+            }
+
             .agricultureIcon{
-                color: #e6f2a1;
                 width: 15px;
                margin-right: 10px;
+               margin-bottom: 5px;
+
             }
             .forestIcon{
                 color:#00a811;
@@ -48,7 +43,7 @@
                 margin-right: 12px;
             }
             .roadIcon{
-                border-bottom: 2px solid #969696;
+                border-bottom: 2px solid #817e7e;
                 padding-right: 12px;
                 font-size: 15px;
                 position: relative;
@@ -59,29 +54,25 @@
 
             }
             .bridgeLine{
-                // padding-right: 15px;
                 width: 22px;
-               border: 3px solid #556577;
+                height: 6px;
+               border: 1px solid white;
                margin-right: 12px;
-               border-radius: 2px;
+                background: transparent;
+                border-right-color: rgba(0,0,0,0);
+                border-left-color: rgba(0,0,0,0);
 
+            }
+            .riverIcon{
+                color: #0670bc;
+                opacity: 0.87;
+                width: 15px;
+                margin-right: 10px;
             }
             
         }
     
-        .riverIconContainer{
-            padding: 0;
-            margin: 4px;
-            color: white;
-            opacity: 0.87;
-            align-items: center;
-            display: flex;
-            .riverIcon{
-                color: #0670bc;
-                width: 15px;
-                margin-right: 10px;
-            }
-        }
+    
 
 
 

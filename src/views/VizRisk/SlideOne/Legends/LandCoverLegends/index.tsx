@@ -1,27 +1,28 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
+import AgriPattern from '../../Icons/agrihexagon.png';
 
 const LandCoverLegends = () => (
     <>
         {/* <h2>Land Cover</h2> */}
-        <p className={styles.settlementIconContainer}>
+        <p className={styles.landcoverIconContainer}>
             <span>
 
                 <Hexagon
                     style={{
-                        stroke: '#e3acac',
+                        stroke: '#f3f2f2',
                         strokeWidth: 50,
-                        fill: '#e00000',
+                        fill: '#d5d3d3',
 
                     }}
-                    className={styles.settlementIcon}
+                    className={styles.buildingIcon}
                 />
             </span>
                             Buildings
 
         </p>
-        <p className={styles.riverIconContainer}>
+        <p className={styles.landcoverIconContainer}>
             <span>
                 <Hexagon
                     style={{
@@ -37,22 +38,25 @@ const LandCoverLegends = () => (
                             Water Bodies
         </p>
 
-        <p className={styles.agroIconContainer}>
-            <span>
+        <p className={styles.landcoverIconContainer}>
+            {/* <span>
                 <Hexagon
                     style={{
                         stroke: '#edf7d2',
                         strokeWidth: 50,
-                        fill: '#e6f2a1',
+                        // fill: '#e6f2a1',
 
                     }}
                     className={styles.agricultureIcon}
+                    backgroundImage={AgriPattern}
+
                 />
 
-            </span>
+            </span> */}
+            <img src={AgriPattern} alt="agriculture legend" className={styles.agricultureIcon} />
                             Agricultural Land
         </p>
-        <p className={styles.agroIconContainer}>
+        <p className={styles.landcoverIconContainer}>
             <span>
                 <Hexagon
                     style={{
@@ -68,24 +72,24 @@ const LandCoverLegends = () => (
                             Forest
         </p>
 
-        <div className={styles.agroIconContainer}>
+        <div className={styles.landcoverIconContainer}>
             <div className={styles.canalIcon} />
 
                             Canals
         </div>
 
-        <div className={styles.agroIconContainer}>
+        <div className={styles.landcoverIconContainer}>
             <div className={styles.roadIcon} />
 
                             Roads
         </div>
-        <div className={styles.agroIconContainer}>
+        <div className={styles.landcoverIconContainer}>
             <div className={styles.bridgeLine} />
 
                             Bridges
         </div>
 
-        <p className={styles.agroIconContainer}>
+        <p className={styles.landcoverIconContainer}>
             <span>
                 <Hexagon
                     style={{

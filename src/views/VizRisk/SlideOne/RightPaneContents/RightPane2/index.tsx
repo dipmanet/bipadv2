@@ -37,10 +37,10 @@ const data = [
 
 const COLORS_CHART = [
     '#d3e378',
-    '#b4b4b4',
+    '#e0e0e0',
     '#00a811',
     '#2b4253',
-    '#e00000',
+    '#d5d3d3',
 ];
 
 
