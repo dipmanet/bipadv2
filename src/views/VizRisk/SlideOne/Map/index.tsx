@@ -593,7 +593,7 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideFourLayers, 'visible');
 
                     this.orderLayers(slideFourLayers);
-                    this.handleInfraClusterSwitch('all');
+                    this.handleInfraClusterSwitch(criticalElement);
                     this.hideFloodRasters();
                 } else if (nextProps.rightElement === 4) {
                     this.toggleVisiblity(slideFourLayers, 'none');
@@ -601,14 +601,14 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideFiveLayers, 'visible');
 
                     this.orderLayers(slideFiveLayers);
-                    this.handleInfraClusterSwitch('all');
+                    this.handleInfraClusterSwitch(criticalFlood);
                     this.handleFloodRasterSwitch('5');
                 } else if (nextProps.rightElement === 5) {
                     this.toggleVisiblity(slideFiveLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'visible');
                     this.orderLayers(slideSixLayers);
                     this.handleFloodRasterSwitch('5');
-                    this.handleEvacClusterSwitch('all');
+                    this.handleEvacClusterSwitch(evacElement);
                 }
             }
         }

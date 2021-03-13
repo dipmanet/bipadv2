@@ -217,7 +217,7 @@ export default class SlideFour extends React.Component {
                             <VRLegend>
                                 <CriticalInfraLegends
                                     handleCritical={this.handleCriticalInfra}
-                                    handleCriticalShowToggle={this.handleCriticalShowToggle}
+                                    criticalFlood={criticalElement}
                                 />
                             </VRLegend>
                         </div>
@@ -232,7 +232,7 @@ export default class SlideFour extends React.Component {
                                     <CriticalInfraLegends
                                         handleCritical={this.handleCriticalFlood}
                                         showCriticalElements={showCriticalElements}
-                                        handleCriticalShowToggle={this.handleCriticalShowToggle}
+                                        criticalFlood={criticalFlood}
 
                                     />
                                 </VRLegend>

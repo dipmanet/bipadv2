@@ -22,7 +22,6 @@ const EvacLegends = (props) => {
 
     useEffect(
         () => {
-            console.log('evac element: ', evacElement);
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);

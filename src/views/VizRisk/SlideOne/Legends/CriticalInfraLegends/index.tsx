@@ -11,7 +11,7 @@ import Bank from '../../Icons/icon_set_bank.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
-    const { handleCritical, handleCriticalShowToggle } = props;
+    const { handleCritical, criticalFlood } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [showFinance, setshowFinance] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
@@ -36,8 +36,38 @@ const LandCoverLegends = (props) => {
     const handleCriticalToggle = () => {
         const newVal = !showCriticalElements;
         setshowCriticalElements(newVal);
-        handleCriticalShowToggle(newVal);
     };
+
+    useEffect(
+        () => {
+            if (criticalFlood === 'all') {
+                resetCriticalLayers();
+                setshowAll(true);
+            } else if (criticalFlood === 'education') {
+                resetCriticalLayers();
+                setshowEducation(true);
+            } else if (criticalFlood === 'culture') {
+                resetCriticalLayers();
+                setshowCulture(true);
+            } else if (criticalFlood === 'governance') {
+                resetCriticalLayers();
+                setshowGovernemnt(true);
+            } else if (criticalFlood === 'health') {
+                resetCriticalLayers();
+                setshowHospital(true);
+            } else if (criticalFlood === 'industry') {
+                resetCriticalLayers();
+                setshowIndustry(true);
+            } else if (criticalFlood === 'bank') {
+                resetCriticalLayers();
+                setshowFinance(true);
+            } else if (criticalFlood === 'tourism') {
+                resetCriticalLayers();
+                setshowTourism(true);
+            }
+        }, [criticalFlood],
+
+    );
 
     const handleCriticalclick = (layer) => {
         handleCritical(layer);
