@@ -530,93 +530,85 @@ class FloodHistoryMap extends React.Component {
             criticalElement,
             evacElement,
             criticalFlood,
+            rightElement,
         } = this.props;
 
 
         if (this.map.isStyleLoaded()) {
-            if (nextProps.rightElement === 0) {
-                this.map.easeTo({
-                    pitch: 0,
-                    zoom: 11.4,
-                    duration: 1000,
-                });
-                this.resetClusters();
-                this.orderLayers(slideOneLayers);
-                this.toggleVisiblity(slideTwoLayers, 'none');
-                this.toggleVisiblity(slideOneLayers, 'visible');
+            if (nextProps.showPopulation !== showPopulation) {
+                if (nextProps.showPopulation === 'popdensity') {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+                } else {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                }
             }
-            if (nextProps.rightElement === 1) {
+            if (nextProps.criticalFlood !== criticalFlood) {
+                this.handleInfraClusterSwitch(nextProps.criticalFlood);
+            }
+            if (nextProps.rasterLayer !== rasterLayer) {
+                this.handleFloodRasterSwitch(nextProps.rasterLayer);
+            }
+            if (nextProps.evacElement !== evacElement) {
+                this.handleEvacClusterSwitch(nextProps.evacElement);
+            }
+            if (nextProps.criticalElement !== criticalElement) {
+                this.handleInfraClusterSwitch(nextProps.criticalElement);
+            }
+
+            if (nextProps.rightElement !== rightElement) {
+                if (nextProps.rightElement === 0) {
+                    this.map.easeTo({
+                        pitch: 0,
+                        zoom: 11.4,
+                        duration: 1000,
+                    });
+                    this.resetClusters();
+                    this.orderLayers(slideOneLayers);
+                    this.toggleVisiblity(slideTwoLayers, 'none');
+                    this.toggleVisiblity(slideOneLayers, 'visible');
+                } else if (nextProps.rightElement === 1) {
                 // this.map.setPitch(40);
-                this.map.easeTo({
-                    pitch: 40,
-                    zoom: 12,
-                    duration: 2000,
-                });
-                this.toggleVisiblity(slideThreeLayers, 'none');
-                this.toggleVisiblity(slideOneLayers, 'none');
-                this.toggleVisiblity(slideTwoLayers, 'visible');
+                    this.map.easeTo({
+                        pitch: 40,
+                        zoom: 12,
+                        duration: 2000,
+                    });
+                    this.toggleVisiblity(slideThreeLayers, 'none');
+                    this.toggleVisiblity(slideOneLayers, 'none');
+                    this.toggleVisiblity(slideTwoLayers, 'visible');
 
-                this.orderLayers(slideTwoLayers);
-            }
+                    this.orderLayers(slideTwoLayers);
+                } else if (nextProps.rightElement === 2) {
+                    this.toggleVisiblity(slideTwoLayers, 'none');
+                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(slideThreeLayers, 'visible');
+                    this.orderLayers(slideThreeLayers);
+                    this.resetClusters();
+                } else if (nextProps.rightElement === 3) {
+                    this.toggleVisiblity(slideThreeLayers, 'none');
+                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(slideFourLayers, 'visible');
 
-            if (nextProps.rightElement === 2) {
-                this.toggleVisiblity(slideTwoLayers, 'none');
-                this.toggleVisiblity(slideFourLayers, 'none');
-                this.toggleVisiblity(slideThreeLayers, 'visible');
-                this.orderLayers(slideThreeLayers);
-                this.resetClusters();
-                if (nextProps.showPopulation !== showPopulation) {
-                    if (nextProps.showPopulation === 'popdensity') {
-                        this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                        // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-                        // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
-                    } else {
-                        this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-                    }
-                }
-            }
+                    this.orderLayers(slideFourLayers);
+                    this.handleInfraClusterSwitch('all');
+                    this.hideFloodRasters();
+                } else if (nextProps.rightElement === 4) {
+                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(slideSixLayers, 'none');
+                    this.toggleVisiblity(slideFiveLayers, 'visible');
 
-            if (nextProps.rightElement === 3) {
-                this.toggleVisiblity(slideThreeLayers, 'none');
-                this.toggleVisiblity(slideFiveLayers, 'none');
-                this.toggleVisiblity(slideFourLayers, 'visible');
-
-                this.orderLayers(slideFourLayers);
-                this.handleInfraClusterSwitch('all');
-                this.hideFloodRasters();
-
-                if (nextProps.criticalElement !== criticalElement) {
-                    this.handleInfraClusterSwitch(nextProps.criticalElement);
-                }
-            }
-
-            if (nextProps.rightElement === 4) {
-                this.toggleVisiblity(slideFourLayers, 'none');
-                this.toggleVisiblity(slideSixLayers, 'none');
-                this.toggleVisiblity(slideFiveLayers, 'visible');
-
-                this.orderLayers(slideFiveLayers);
-                this.handleInfraClusterSwitch('all');
-                this.handleFloodRasterSwitch('5');
-                console.log(this.map);
-                if (nextProps.criticalFlood !== criticalFlood) {
-                    this.handleInfraClusterSwitch(nextProps.criticalFlood);
-                }
-                if (nextProps.rasterLayer !== rasterLayer) {
-                    this.handleFloodRasterSwitch(nextProps.rasterLayer);
-                }
-            }
-            if (nextProps.rightElement === 5) {
-                this.toggleVisiblity(slideFiveLayers, 'none');
-                this.toggleVisiblity(slideSixLayers, 'visible');
-                this.orderLayers(slideSixLayers);
-                this.handleFloodRasterSwitch('5');
-                this.handleEvacClusterSwitch('all');
-                if (nextProps.evacElement !== evacElement) {
-                    this.handleEvacClusterSwitch(nextProps.evacElement);
-                }
-                if (nextProps.rasterLayer !== rasterLayer) {
-                    this.handleFloodRasterSwitch(nextProps.rasterLayer);
+                    this.orderLayers(slideFiveLayers);
+                    this.handleInfraClusterSwitch('all');
+                    this.handleFloodRasterSwitch('5');
+                    console.log(this.map);
+                } else if (nextProps.rightElement === 5) {
+                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(slideSixLayers, 'visible');
+                    this.orderLayers(slideSixLayers);
+                    this.handleFloodRasterSwitch('5');
+                    this.handleEvacClusterSwitch('all');
                 }
             }
         }
@@ -766,7 +758,7 @@ class FloodHistoryMap extends React.Component {
     public handleEvacClusterSwitch = (layer) => {
         this.resetClusters();
         if (layer === 'all') {
-            categoriesCritical.map((item) => {
+            categoriesEvac.map((item) => {
                 this.map.setLayoutProperty(`evac-count-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`evac-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`evac-unclustered-${item}`, 'visibility', 'visible');
