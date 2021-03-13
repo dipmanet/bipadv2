@@ -520,6 +520,7 @@ class FloodHistoryMap extends React.Component {
                 pitch: 20,
                 duration: 2000,
             });
+            this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
         });
     }
 
@@ -578,7 +579,7 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
                     this.toggleVisiblity(slideTwoLayers, 'visible');
-
+                    this.map.setPaintProperty('wardFill', 'fill-color', '#b4b4b4');
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.toggleVisiblity(slideTwoLayers, 'none');
@@ -602,7 +603,6 @@ class FloodHistoryMap extends React.Component {
                     this.orderLayers(slideFiveLayers);
                     this.handleInfraClusterSwitch('all');
                     this.handleFloodRasterSwitch('5');
-                    console.log(this.map);
                 } else if (nextProps.rightElement === 5) {
                     this.toggleVisiblity(slideFiveLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'visible');

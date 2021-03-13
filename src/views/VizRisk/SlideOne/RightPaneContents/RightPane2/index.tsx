@@ -37,7 +37,7 @@ const data = [
 
 const COLORS_CHART = [
     '#d3e378',
-    '#e0e0e0',
+    '#b4b4b4',
     '#00a811',
     '#2b4253',
     '#d5d3d3',
@@ -230,7 +230,7 @@ class RightPane extends React.PureComponent<Props, State> {
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
-                        background={'#eee'}
+                        background={'#444'}
                         data={'0.959 sq km / 0.75'}
                         selected={activeIndex === 4}
                         builtupArea
@@ -238,7 +238,7 @@ class RightPane extends React.PureComponent<Props, State> {
                     <CustomChartLegend
                         text={data[1].name}
                         barColor={COLORS_CHART[1]}
-                        background={'#eee'}
+                        background={'#444'}
                         data={'21.5 sq km / 16.93'}
                         selected={activeIndex === 1}
                     />
