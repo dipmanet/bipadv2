@@ -17,6 +17,7 @@ import Home from '#views/VizRisk/SlideOne/Icons/home.svg';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
 import SourceInfo from '../../SourceInfo';
+import Disclaimer from '../../Disclaimer';
 
 interface ComponentProps {}
 
@@ -155,6 +156,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </BarChart>
                 </ResponsiveContainer>
                 <SourceInfo />
+                <Disclaimer />
 
             </div>
         );

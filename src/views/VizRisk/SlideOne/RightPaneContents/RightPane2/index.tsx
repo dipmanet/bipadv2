@@ -26,6 +26,7 @@ import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
 import SourceInfo from '../../SourceInfo';
+import Disclaimer from '../../Disclaimer';
 
 const data = [
     { name: 'Agricultural land', value: 94.07 },
@@ -245,6 +246,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div>
                 <SourceInfo />
+                <Disclaimer />
             </div>
         );
     }
