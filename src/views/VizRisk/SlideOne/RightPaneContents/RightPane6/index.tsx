@@ -47,7 +47,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 <p>
                     Currently, there are only nine evacuation shelters in Rajapur.
                     This visualization allows exploring the existing schools and
-                    cultural heritage sites for evacuation during high water.
+                    cultural heritage sites for evacuation during floods.
                     However, their functionality during floods are contingent
                     upon several factors including building types and their exposure,
                     whether they are located in flood prone or flood safe areas.
