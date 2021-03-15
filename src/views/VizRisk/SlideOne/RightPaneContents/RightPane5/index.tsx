@@ -31,34 +31,27 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Flood Exposure </h1>
-
                 <p>
-                Exposure is one of the critical drivers of long
-                term flood damages and loss in Rajapur area. To
-                understand the exposure of assets and people, this
-                visualization allows the super imposition of the flood
-                hazard maps for different return period of flood with
-                critical infrastructures. Return period indicates the
-                average interval of time within which the flood of that
-                magnitude will occur. Simply, its a probability of experiencing
-                a given water depth within a single year; i.e. depths shown by
-                the ‘1-in-100 year’ layer have a 1-in-100 (or 1%) chance of
-                occurrence in any given year.
+                    This visualization allows the super imposition of the flood hazard
+                    maps for different return period of flood with land use details.
+                    Return period is the probability of experiencing a given water
+                    depth within a single year; i.e. ‘1-in-100 year’ means 1 in 100 (1%)
+                    chance of occurrence in any given year.
                 </p>
                 <p>
-                This vizualization helps understand the population, elements,
-                and assets that are at threat to modeled flood hazard in the
-                region. For example, the dense settlement areas that are in proximity
-                to Karnali River, on either of the branches, lying in high flood
-                depth might face major human loss as well as economic damage
-                in future floods.
+                    This visualization helps understand the population, elements
+                    and assets that are at threat to modeled flood hazard in the
+                    region. For instance, the dense settlement areas that are in
+                    proximity to Karnali river, on either tributaries, and lying
+                    in the high flood depth might face major human and economic
+                    loss in future floods.
                 </p>
                 <p>
-                    Another important implication from this visualization is
-                    that the impact of flooding can be greatly reduced through
-                    flood-sensitive spatial planning.
+                    The impact of flooding can be greatly reduced through
+                    flood-sensitive land use planning and this visualization
+                    allows re-thinking long term spatial planning in the region.
                 </p>
-                <SourceInfo />
+                {/* <SourceInfo /> */}
 
             </div>
         );

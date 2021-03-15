@@ -56,7 +56,7 @@ const DemoGraphicsLegends = (props) => {
                 ) : (
                     <div>
                         <h2>
-                            Population density
+                            POPULATION DENSITY
                             <br />
                             (per 0.06 km
                             <sup>2</sup>
@@ -86,7 +86,7 @@ const DemoGraphicsLegends = (props) => {
             }
 
 
-            <h2>Population</h2>
+            <h2>POPULATION</h2>
             <div className={styles.hazardItemContainer}>
                 <button
                     type="button"

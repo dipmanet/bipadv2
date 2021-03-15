@@ -1,7 +1,7 @@
 export default {
     criticalInfraData: [
         {
-            name: 'Schools', Total: 54,
+            name: 'Educational Institutions', Total: 54,
         },
         {
             name: 'Banks', Total: 31,
@@ -10,19 +10,19 @@ export default {
             name: 'Hospitals', Total: 29,
         },
         {
-            name: 'Culture', Total: 16,
+            name: 'Cultural Sites', Total: 16,
         },
         {
             name: 'Bridges', Total: 16,
         },
         {
-            name: 'Tourism', Total: 16,
+            name: 'Hotels or Restaurants', Total: 16,
         },
         {
-            name: 'Govt', Total: 8,
+            name: 'Government Buildings', Total: 8,
         },
         {
-            name: 'Industry', Total: 6,
+            name: 'Industries', Total: 6,
         },
     ],
     safeShelterData: [

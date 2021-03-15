@@ -13,7 +13,7 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/SlideOne/Icons/male.svg';
 import Female from '#views/VizRisk/SlideOne/Icons/female.svg';
-import Home from '#views/VizRisk/SlideOne/Icons/home.svg';
+import Home from '#views/VizRisk/SlideOne/Icons/homeNew.svg';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
 import SourceInfo from '../../SourceInfo';
@@ -60,21 +60,18 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                    Population distribution in the region is largely
-                    uneven with some pockets of dense settlements.
+                Population distribution in the region is largely uneven
+                with some pockets of dense settlements. This map allows
+                viewing the population distribution within each ward and
+                helps to locate the region of dense and sparse settlements.
                 </p>
                 <p>
-                     Ward number 4 has the largest household number that
-                     equals 1693 and it is also the ward that is in high
-                     proximity to the river. Ward number 7 has the least
-                     number of households comprising of only 766 numbers.
+                Ward number 4 has the highest number of population with 1693
+                households. Notably, these high populations ward lies very close
+                to the western tributary of the Karnali river.  Ward number 7 has
+                the least number of households comprising of 766 numbers.
                 </p>
-                <p>
-                    Upon hovering over each ward, the map allows to view
-                    the population distribution (density of population per
-                     0.0625 square kilometers) within each ward and to help
-                     locate the region of dense and sparse settlements.
-                </p>
+
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>
                         <ScalableVectorGraphics
@@ -155,7 +152,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
-                <SourceInfo />
+                {/* <SourceInfo /> */}
                 <Disclaimer />
 
             </div>

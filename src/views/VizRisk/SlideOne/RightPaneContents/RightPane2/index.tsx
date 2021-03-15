@@ -156,12 +156,12 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
 
-                <p>
+                {/* <p>
                     {' '}
                     Located in the Terai region and lying close to water bodies,
                     Rajapur has fertile and arable land.
 
-                </p>
+                </p> */}
                 <p>
                     Out of total area of 127.08 square km, 74.06% of land is
                     used for agriculture. Building covers 0.75% of land while
@@ -245,7 +245,7 @@ class RightPane extends React.PureComponent<Props, State> {
                     />
 
                 </div>
-                <SourceInfo />
+                {/* <SourceInfo /> */}
                 <Disclaimer />
             </div>
         );

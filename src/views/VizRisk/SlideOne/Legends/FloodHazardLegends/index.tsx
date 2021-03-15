@@ -85,7 +85,7 @@ const FloodHistoryLegends = (props: Props) => {
             >
                 <h2>
                     Flood Hazard
-                    in Return Periods
+                    in Return Period
                 </h2>
             </button>
 

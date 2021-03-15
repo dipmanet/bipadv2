@@ -18,7 +18,8 @@ const Disclaimer = (props) => {
             <div
                 className={showInfo ? styles.bottomInfo : styles.bottomInfoHide}
             >
-                Disclaimer: Map data not consistent
+                Disclaimer: Temporarily there is an inconsistency in
+                the map layers due to different data sources
             </div>
 
         </div>

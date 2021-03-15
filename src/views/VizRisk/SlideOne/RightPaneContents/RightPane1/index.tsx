@@ -142,10 +142,10 @@ class SlideOne extends React.PureComponent<Props, State> {
                 <h2>Climate</h2>
                 <p>
                     {' '}
-                    Rajapur experiences a lower tropical climate. Summer
-                    starts from March to June while there is extreme winter
-                    from November to February. Monsoon starts here a bit early
-                    from the June till October bringing the heavy downpours.
+                    Rajapur experiences a lower tropical climate.  Summer
+                    starts from March and lasts till June. Winter begins
+                    in November and lasts till February. Rajapur faces heavy
+                    downpours during the monsoon, from June to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -174,7 +174,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                             <div className={styles.iconText}>
                             Average Minimum
                                 <br />
-                            Temeperature in Summer
+                            Temeperature in Winter
                             </div>
 
                         </div>
@@ -244,7 +244,7 @@ class SlideOne extends React.PureComponent<Props, State> {
                     </LineChart>
                 </ResponsiveContainer>
 
-                <SourceInfo />
+                {/* <SourceInfo /> */}
 
 
             </div>

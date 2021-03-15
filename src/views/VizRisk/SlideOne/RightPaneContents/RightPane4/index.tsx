@@ -25,27 +25,28 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-
-                    Rajapur is an island surrounded by two branches
-                    of the Karnali River, one of the largest rivers
-                    of Nepal. The Karnali River enters the Terai plains
-                    from a narrow gorge at Chisapani. About 1 km downstream,
-                    the river splits into the westernmost Karnali branches and
-                    an eastern Geruwa branch, thus creating an island.
+                    Rajapur lies in the inland delta surrounded by two tributaries
+                    of the Karnali River, one of the largest rivers of Nepal.
+                    The river splits into Karnali on the western
+                    side and Geruwa on the eastern side.
+                    These two tributaries flow past Nepal-India border and converge
+                    again as Ghangra river.
                 </p>
                 <p>
-                    Many of Rajapur’s residential and governmental buildings,
-                    critical health, banking and education facilities,  cultural
-                    and tourism sites have been built near and between the two
-                    river branches. These infrastructures are at constant threat of flooding.
+                    All of the residential and governmental buildings, religious and
+                    cultural sites, banking institutions, critical infrastructures such
+                    as hospitals, schools, bridges, etc. are built near or between the
+                    Karnali and the Geruwa river.  These infrastructures are at constant
+                    threat of flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>
                     <BarChart
-                        width={350}
+                        width={300}
                         height={600}
                         data={chartData}
                         layout="vertical"
+                        margin={{ left: 20, right: 20 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" />
@@ -54,7 +55,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             dataKey="name"
                             tick={{ fill: '#94bdcf' }}
                         />
-                        <Tooltip />
+                        {/* <Tooltip /> */}
                         {/* <Legend /> */}
                         <Bar
                             dataKey="Total"
@@ -69,7 +70,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
-                <SourceInfo />
+                {/* <SourceInfo /> */}
 
 
             </div>

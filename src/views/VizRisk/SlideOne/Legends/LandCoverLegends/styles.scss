@@ -7,38 +7,33 @@
             display: flex;
             align-items: center;
             font-size: 14px;
-
+            opacity: 0.67;
             .buildingIcon{
                 // color:#d5d3d3;
                 color:#f3f2f2;
                width: 15px;
                margin-right: 10px;
             }
-
             .agricultureIcon{
                 width: 15px;
                margin-right: 10px;
                margin-bottom: 5px;
-
             }
             .forestIcon{
                 color:#00a811;
                 width: 15px;
                margin-right: 10px;
-
             }
             .otherIcon{
                 color:#b4b4b4;
                 width: 15px;
                margin-right: 10px;
-
             }
             .canalIcon{
                 color:#0670bc;
                 border-bottom: 2px solid #0670bc;
                 padding-right: 12px;
                 position: relative;
-                // bottom: 7px;
                 width: 22px;
                 margin-right: 12px;
             }
@@ -50,8 +45,6 @@
                 // bottom: 7px;
                 width: 22px;
                margin-right: 12px;
-
-
             }
             .bridgeLine{
                 width: 22px;
@@ -61,7 +54,6 @@
                 background: transparent;
                 border-right-color: rgba(0,0,0,0);
                 border-left-color: rgba(0,0,0,0);
-
             }
             .riverIcon{
                 color: #0670bc;

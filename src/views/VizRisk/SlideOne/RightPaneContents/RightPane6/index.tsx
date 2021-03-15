@@ -39,14 +39,18 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
                 <p>
-                    In Rajapur, there are 54 schools and 16 temple/cultral
-                    sites that can be converted into temporary shelter or
-                    evcuation shelter during flood events. In addition,
-                    there are 9 evacuation centers. During the times of
-                    a disaster, these areas are crucial for the evacuation and
-                    also these areas could be benefiical especially for the
-                    evacuees who cannot easily return to their homes and would
-                    require further recovery assitance.
+                    Non-governmental Organizations have funded interventions in the
+                    regions for strengthening early warning system and building
+                    emergency flood shelters in strategic places across the municipality.
+
+                </p>
+                <p>
+                    Currently, there are only nine evacuation shelters in Rajapur.
+                    This visualization allows exploring the existing schools and
+                    cultural heritage sites for evacuation during high water.
+                    However, their functionality during floods are contingent
+                    upon several factors including building types and their exposure,
+                    whether they are located in flood prone or flood safe areas.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
                     <BarChart
@@ -100,7 +104,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 )
                 }
 
-                <SourceInfo />
+                {/* <SourceInfo /> */}
             </div>
         );
     }
