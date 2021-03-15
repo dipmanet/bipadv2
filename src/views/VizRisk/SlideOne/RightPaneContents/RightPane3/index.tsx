@@ -91,7 +91,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </div>
                     <div className={styles.infoIconsContainer}>
                         <ScalableVectorGraphics
-                            className={styles.infoIcon}
+                            className={styles.infoIconHH}
                             src={Home}
                         />
                         <div className={styles.descriptionCotainer}>
