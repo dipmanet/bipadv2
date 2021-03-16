@@ -9,7 +9,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import criticalInfraData from '#views/VizRisk/criticalInfraData';
+import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 import SourceInfo from '../../SourceInfo';
 
 interface ComponentProps {}

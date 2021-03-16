@@ -17,7 +17,7 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
-import VRLegend from '../VRLegend';
+import VRLegend from './VRLegend';
 
 const rightelements = [
     <RightElement1 />,
@@ -28,7 +28,7 @@ const rightelements = [
     <RightElement6 />,
 ];
 
-export default class SlideFour extends React.Component {
+export default class Rajapur extends React.Component {
     public constructor(props) {
         super(props);
 

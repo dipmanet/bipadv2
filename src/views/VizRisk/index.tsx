@@ -3,13 +3,16 @@ import Icon from '#rscg/Icon';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import Button from '#rsca/Button';
-import SlideOne from './SlideOne';
+import Rajapur from './Rajapur';
+
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
+import BarabiseLandslide from './BarabiseLandslide';
 
 
 const slides = [
-    <SlideOne />,
+    <Rajapur />,
+    <BarabiseLandslide />,
 
 ];
 
@@ -91,6 +94,15 @@ const VizRiskMainPage = () => {
                                 onClick={handleMenuTitleClick}
                             >
                                 <h1 className={styles.menuItems}>Rajapur Municipality</h1>
+
+                            </Button>
+
+                            <p className={styles.menuTitle}>Visualizing Landslide ?? </p>
+                            <Button
+                                transparent
+                                onClick={handleMenuTitleClick}
+                            >
+                                <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
                             </Button>
                         </div>

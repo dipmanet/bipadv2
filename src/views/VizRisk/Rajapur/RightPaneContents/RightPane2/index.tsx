@@ -10,7 +10,7 @@ import {
     Cell,
     Sector,
 } from 'recharts';
-import CustomChartLegend from '#views/VizRisk/CustomChartLegend';
+import CustomChartLegend from '#views/VizRisk/Rajapur/Components/CustomChartLegend';
 import Icon from '#rscg/Icon';
 
 import {
@@ -26,7 +26,7 @@ import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
 import SourceInfo from '../../SourceInfo';
-import Disclaimer from '../../Disclaimer';
+import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
     { name: 'Agricultural land', value: 94.07 },

@@ -1,0 +1,42 @@
+.legends{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    // border: 1px solid gray;
+    height: 100%;
+}
+.navBtnCont{
+    position: absolute;
+    top:40px;
+    right: 100px;
+    // width: 20px;
+    z-index: 2;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .navbutton{
+        // width: 50px;
+        background-color: transparent;
+        border: none;
+        color: white;
+        .btnDisable{
+            color: gray;
+            cursor:not-allowed;
+            padding:5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        .nextPrevBtn{
+            color: white;
+            cursor:pointer;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

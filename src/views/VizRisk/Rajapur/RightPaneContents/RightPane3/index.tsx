@@ -17,7 +17,7 @@ import Home from '#views/VizRisk/SlideOne/Icons/homeNew.svg';
 
 import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
 import SourceInfo from '../../SourceInfo';
-import Disclaimer from '../../Disclaimer';
+import Disclaimer from '../../Components/Disclaimer';
 
 interface ComponentProps {}
 
