@@ -37,6 +37,7 @@ import {
     setIncidentListActionIP,
     setEventListAction,
 } from '#actionCreators';
+import NavButtons from './Components/NavButtons';
 
 interface Params {
 }
@@ -131,6 +132,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const {
         incidentList,
         hazardTypes,
@@ -143,11 +145,21 @@ const BarabiseLandslide = (props) => {
         hazardTypes,
     );
 
+    const setPage = (val: number) => {
+        setCurrentPage(val);
+    };
+
     return (
-        <Map
-            incidentList={sanitizedIncidentList}
-            hazardTypes={hazardTypes}
-        />
+        <>
+            <Map
+                incidentList={sanitizedIncidentList}
+                hazardTypes={hazardTypes}
+            />
+            <NavButtons
+                getPage={setPage}
+                maxPage={2}
+            />
+        </>
     );
 };
 

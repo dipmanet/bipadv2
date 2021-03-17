@@ -44,6 +44,7 @@ const mapStateToProps = (state, props) => ({
 const LandSlideMap = (props) => {
     const [pending, setPending] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>(false);
+    const [count, setCount] = useState<number>(0);
 
     const {
         wards,
@@ -68,76 +69,71 @@ const LandSlideMap = (props) => {
         { ini: 1546280100000, fin: 1577816100000 },
     );
 
+    useEffect(() => {
+        const VRMap = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
+            center: {
+                lng: 85.300140,
+                lat: 27.700769,
+            },
+            zoom: 6.5,
+            minZoom: 2,
+            maxZoom: 22,
+
+        });
+        VRMap.panBy([-100, -100]);
+        mapRef.current = VRMap;
+
+
+        return () => mapRef.current.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
+        const getDateRange = ini => ({
+            ini: new Date(`01-01-${ini}`).getTime(),
+            fin: new Date(`01-01-${ini + 1}`).getTime(),
+        });
+        // mapRef.current.on('style.load', () => {
         if (pointFeatureCollection.features.length > 0) {
-            const getDateRange = ini => ({
-                ini: new Date(`01-01-${ini}`).getTime(),
-                fin: new Date(`01-01-${ini + 1}`).getTime(),
-            });
-            console.log('date range for 2011', getDateRange(2011));
+            console.log('loading');
+            YEARS.map((layer) => {
+                mapRef.current.addSource(`landslidePointss${layer}`, {
+                    type: 'geojson',
+                    data: getPointFeatureCollection(
+                        incidentList,
+                        hazardTypes,
+                        getDateRange(layer),
+                    ),
+                });
 
-            console.log(getPointFeatureCollection(
-                incidentList,
-                hazardTypes,
-                { ini: 1546280100000, fin: 1577816100000 },
-            ));
-
-            const VRMap = new mapboxgl.Map({
-                container: mapContainer.current,
-                style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
-                center: {
-                    lng: 85.300140,
-                    lat: 27.700769,
-                },
-                zoom: 6.5,
-                minZoom: 2,
-                maxZoom: 22,
-
-            });
-            VRMap.panBy([-100, -100]);
-            mapRef.current = VRMap;
-            VRMap.on('load', () => {
-                YEARS.map((layer) => {
-                    VRMap.addSource(`landslidePoints${layer}`, {
-                        type: 'geojson',
-                        data: getPointFeatureCollection(
-                            incidentList,
-                            hazardTypes,
-                            getDateRange(layer),
-                        ),
-                    });
-
-                    VRMap.addLayer({
-                        id: `landslide-layer-${layer}`,
-                        type: 'circle',
-                        source: `landslidePoints${layer}`,
-                        paint: {
-                            'circle-color': '#a4ac5e',
-                            'circle-radius': 7,
-                            'circle-opacity': 0,
-                            'circle-opacity-transition': {
-                                duration: 1000,
-                                delay: YEARS.indexOf(layer) * 1000,
-                            },
+                mapRef.current.addLayer({
+                    id: `landslide-layer-${layer}`,
+                    type: 'circle',
+                    source: `landslidePointss${layer}`,
+                    paint: {
+                        'circle-color': '#a4ac5e',
+                        'circle-radius': 7,
+                        'circle-opacity': 0,
+                        'circle-opacity-transition': {
+                            duration: 1000,
+                            delay: YEARS.indexOf(layer) * 1000,
                         },
-                    });
-
-                    return null;
+                    },
                 });
 
-                setPending(false);
-                YEARS.map((layer) => {
-                    VRMap.setPaintProperty(`landslide-layer-${layer}`, 'circle-opacity', 1);
-                    return null;
-                });
+                return null;
             });
-        } else {
-            setPending(true);
+
+            YEARS.map((layer) => {
+                mapRef.current.setPaintProperty(`landslide-layer-${layer}`, 'circle-opacity', 1);
+                return null;
+            });
         }
-    }, [YEARS, getPointFeatureCollection,
-        hazardTypes, incidentList,
-        pointFeatureCollection.features.length]);
+        // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pointFeatureCollection.features.length]);
 
 
     const mapStyle = {
