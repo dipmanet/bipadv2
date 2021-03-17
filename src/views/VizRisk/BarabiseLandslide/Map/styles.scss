@@ -1,28 +1,7 @@
-.popup div .mapboxgl-popup-content{
-    border: 1px solid red;
-    padding: 10px;
-    h2{
-        padding: 5px 10px;
-        font-family: 'Source Sans Pro';
-    }
-    
-    p{
-        color: red;
-        padding: 0 10px;
-        font-family: 'Source Sans Pro';
-    }
-}
-
-div {
-    h2{
-    padding: 5px;
-    // font-family: 'Source Sans Pro';
-}
-}
-p{
-    color: red;
-    padding: 0 10px;
-    // font-family: 'Source Sans Pro';
+.spinner{
+    position: absolute;
+    top: 100px;
+    left: 50%;
 }
 
 

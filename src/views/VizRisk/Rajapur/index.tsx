@@ -17,7 +17,7 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
-import VRLegend from './VRLegend';
+import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
 
 const rightelements = [
     <RightElement1 />,

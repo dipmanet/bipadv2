@@ -8,15 +8,13 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/demographicsData';
+import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/SlideOne/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/SlideOne/Icons/male.svg';
-import Female from '#views/VizRisk/SlideOne/Icons/female.svg';
-import Home from '#views/VizRisk/SlideOne/Icons/homeNew.svg';
+import ManWoman from '#views/VizRisk/Rajapur/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Rajapur/Icons/male.svg';
+import Female from '#views/VizRisk/Rajapur/Icons/female.svg';
+import Home from '#views/VizRisk/Rajapur/Icons/homeNew.svg';
 
-import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
-import SourceInfo from '../../SourceInfo';
 import Disclaimer from '../../Components/Disclaimer';
 
 interface ComponentProps {}

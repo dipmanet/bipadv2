@@ -7,13 +7,12 @@ import { CartesianGrid,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/SlideOne/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/SlideOne/Icons/TempMin.svg';
-import TempIcon from '#views/VizRisk/SlideOne/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/SlideOne/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/SlideOne/Icons/ElevationFromSea.svg';
+import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
+import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
+import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
+import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
+import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
 import styles from './styles.scss';
-import SourceInfo from '../../SourceInfo';
 
 interface State {
     showInfo: boolean;
@@ -61,7 +60,7 @@ const lineData = [
         name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
     },
 ];
-class SlideOne extends React.PureComponent<Props, State> {
+class Rajapur extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
     public constructor(props: Props) {
@@ -252,4 +251,4 @@ class SlideOne extends React.PureComponent<Props, State> {
     }
 }
 
-export default SlideOne;
+export default Rajapur;

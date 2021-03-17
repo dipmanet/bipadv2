@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/demographicsData';
-import SourceInfo from '../../SourceInfo';
+import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 
 interface ComponentProps {}
 

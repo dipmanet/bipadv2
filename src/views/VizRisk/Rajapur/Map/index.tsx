@@ -2,8 +2,8 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../../rajapurGEOJSON';
-import demographicsData from '../../demographicsData';
+import SchoolGeoJSON from '../Data/rajapurGEOJSON';
+import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
 import {
     // provincesSelector,

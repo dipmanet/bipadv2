@@ -19,24 +19,24 @@ const slides = [
 const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
-
+    const [title, setTitle] = useState('');
     // console.log(props);
 
     const handleMenuIconClick = () => {
         setShowMenu(true);
     };
 
-    const handleMenuTitleClick = () => {
+    const handleMenuTitleClick = (municipality) => {
         setShowMenu(false);
+        if (municipality === 'rajapur') {
+            setCurrentPage(0);
+            setTitle('Visualising Flood Exposure');
+        } else if (municipality === 'bharabise') {
+            setCurrentPage(1);
+            setTitle('Visualising Landslide Exposure');
+        }
     };
 
-    const handleChevronRightClick = () => {
-        if (currentPage < (slides.length - 1)) { setCurrentPage(currentPage + 1); }
-    };
-
-    const handleChevronLeftClick = () => {
-        if (currentPage > 0) { setCurrentPage(currentPage - 1); }
-    };
     const renderPage = (page: number) => slides[page];
     const vrcontextProps: VizRiskContextProps = {
         currentPage,
@@ -70,7 +70,7 @@ const VizRiskMainPage = () => {
                                 && (
                                     <>
                                         <span className={styles.strong}>
-                                        Visualising Flood Exposure
+                                            {title}
                                         </span>
                                     </>
                                 )
@@ -78,11 +78,7 @@ const VizRiskMainPage = () => {
 
 
                         </Button>
-
-                        <div className={styles.cropper} />
                     </div>
-                    {/* {showMenu && <VRSetting /> } */}
-
                 </div>
 
                 <div className={styles.vizrisknmenupagecontainer}>
@@ -91,16 +87,17 @@ const VizRiskMainPage = () => {
                             <p className={styles.menuTitle}>Visualizing Flood Exposure</p>
                             <Button
                                 transparent
-                                onClick={handleMenuTitleClick}
+                                onClick={() => handleMenuTitleClick('rajapur')}
                             >
                                 <h1 className={styles.menuItems}>Rajapur Municipality</h1>
 
                             </Button>
 
-                            <p className={styles.menuTitle}>Visualizing Landslide ?? </p>
+                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
                             <Button
                                 transparent
-                                onClick={handleMenuTitleClick}
+                                onClick={() => handleMenuTitleClick('bharabise')}
+
                             >
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 

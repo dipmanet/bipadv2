@@ -3,14 +3,12 @@ import memoize from 'memoize-one';
 
 import {
     Bar, BarChart,
-    CartesianGrid, Label, Legend,
-    ReferenceLine,
+    CartesianGrid,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis,
+    XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
 import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
-import SourceInfo from '../../SourceInfo';
 
 interface ComponentProps {}
 
