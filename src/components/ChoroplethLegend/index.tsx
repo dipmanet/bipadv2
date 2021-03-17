@@ -15,6 +15,7 @@ const ChoroplethLegend = ({ minValue, legend, className }) => (
                 precision={2}
             />
         )}
+
         { Object.keys(legend).map((color) => {
             const value = legend[color];
             return (
