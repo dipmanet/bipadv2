@@ -53,6 +53,7 @@ const LandSlideMap = (props) => {
         selectedMunicipalityId: municipalityId,
         incidentList,
         hazardTypes,
+        page,
     } = props;
     const YEARS = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
     const mapContainer = useRef<HTMLDivElement>(null);
@@ -134,6 +135,30 @@ const LandSlideMap = (props) => {
         // });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pointFeatureCollection.features.length]);
+
+    useEffect(() => {
+        if (page === 2) {
+            mapRef.current.easeTo({
+                zoom: 11.4,
+                center: {
+                    lng: 85.90010912899756,
+                    lat: 27.821772478807212,
+                },
+                duration: 4000,
+            });
+        }
+        if (page === 1) {
+            mapRef.current.easeTo({
+                zoom: 6.5,
+                center: {
+                    lng: 85.300140,
+                    lat: 27.700769,
+                },
+                duration: 4000,
+            });
+            mapRef.current.panBy([-100, -100]);
+        }
+    }, [page]);
 
 
     const mapStyle = {

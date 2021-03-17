@@ -154,6 +154,7 @@ const BarabiseLandslide = (props) => {
             <Map
                 incidentList={sanitizedIncidentList}
                 hazardTypes={hazardTypes}
+                page={currentPage}
             />
             <NavButtons
                 getPage={setPage}
