@@ -13,3 +13,25 @@ export interface LegendItem {
     radius?: number;
     order: number;
 }
+
+export interface OsmStyle {
+    version: number;
+    name: string;
+    sources: {
+        'raster-tiles': {
+            type: string;
+            tiles: string[];
+            tileSize: number;
+        };
+    };
+    sprite: string;
+    glyphs: string;
+    layers: {
+        id: string;
+        type: string;
+        source: string;
+        minzoom: number;
+        maxzoom: number;
+    }[];
+    id: string;
+}

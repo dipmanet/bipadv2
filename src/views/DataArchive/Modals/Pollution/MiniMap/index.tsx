@@ -8,11 +8,12 @@ import MapLayer from '#re-map/MapSource/MapLayer';
 import {
     mapStyles,
 } from '#constants';
+import { OsmStyle } from '#views/DataArchive/types';
 
 import styles from './styles.scss';
 
 interface Props {
-    mapStyle: string;
+    mapStyle: OsmStyle | string;
     coordinates: [number, number];
     geoarea: number;
     pollutionFeatureCollection: any;

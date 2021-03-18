@@ -24,6 +24,7 @@ import {
     arraySorter,
     isEqualObject,
 } from './utils';
+import osmStyle from '#mapStyles/rasterStyle';
 
 import styles from './styles.scss';
 
@@ -167,7 +168,7 @@ const RiverModal = (props: Props) => {
                 <div className={styles.modalRow}>
                     <div className={styles.modalMap}>
                         <MiniMap
-                            mapStyle={mapStyle}
+                            mapStyle={osmStyle || mapStyle}
                             coordinates={coordinates}
                             geoarea={geoarea}
                             riverFeatureCollection={riverFeatureCollection}
