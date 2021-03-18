@@ -21,8 +21,6 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -41,7 +39,7 @@ const colorGrade = [
     '#ffffff',
 ];
 
-const hoveredWardId = null;
+let hoveredWardId = null;
 const populationWardExpression = [
     'interpolate',
     ['linear'],
@@ -77,9 +75,9 @@ const criticalInfraClusters = [].concat(...arrCritical);
 const evacClusters = [].concat(...arrEvac);
 
 
-const slideOneLayers = [
-    'water', 'waterway', 'gulariyaWardNumber',
-    'gulariyaWardBoundary', 'gulariyaBoundary'];
+const slideOneLayers = ['wardNumbers',
+    'water', 'waterway', 'municipalitycentroidgeo',
+    'wardOutline', 'wardFill'];
 
 const slideTwoLayers = ['water',
     'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
@@ -123,6 +121,7 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidMount() {
+        console.log('Token>>', process.env.REACT_APP_MAPBOX_ACCESS_TOKEN);
         const {
             lng, lat, zoom,
         } = this.state;
@@ -172,11 +171,10 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
         }
-
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            // style: 'mapbox://styles/ankur20/ckmekywcl7ez817qipyrjqkfg',
-            style: 'mapbox://styles/yilab/ckmekcddk1h9r17mect0out7a',
+            style: process.env.REACT_APP_VIZRISK_GULARIYA_FLOOD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -187,6 +185,326 @@ class FloodHistoryMap extends React.Component {
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
         this.map.on('style.load', () => {
+            // this.map.panBy([0, -100]);
+
+            categoriesCritical.map((layer) => {
+                this.map.addSource(layer, {
+                    type: 'geojson',
+                    data: this.getGeoJSON(layer, criticalinfrastructures),
+                    cluster: true,
+                    clusterRadius: 50,
+                });
+                this.map.addLayer({
+                    id: `clusters-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#a4ac5e',
+                            100,
+                            '#a4ac5e',
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                });
+
+                this.map.addLayer({
+                    id: `unclustered-point-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': ['get', 'icon'],
+                    },
+                });
+
+                this.map.addLayer({
+                    id: `clusters-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                    },
+                });
+
+                this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+
+                return null;
+            });
+
+            categoriesEvac.map((layer) => {
+                this.map.addSource(`evac${layer}`, {
+                    type: 'geojson',
+                    data: this.getGeoJSON(layer, evaccenters),
+                    cluster: true,
+                    clusterRadius: 50,
+                });
+                this.map.addLayer({
+                    id: `evac-${layer}`,
+                    type: 'circle',
+                    source: `evac${layer}`,
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#a4ac5e',
+                            100,
+                            '#a4ac5e',
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                });
+                this.map.addLayer({
+                    id: `evac-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                    },
+                });
+                this.map.addLayer({
+                    id: `evac-unclustered-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': ['get', 'icon'],
+                    },
+                });
+
+                this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`evac-unclustered-${layer}`, 'visibility', 'none');
+
+                return null;
+            });
+
+            rasterLayersYears.map((layer) => {
+                this.map.addSource(`rasterrajapur${layer}`, {
+                    type: 'raster',
+                    tiles: [this.getRasterLayer(layer)],
+                    tileSize: 256,
+                });
+
+                this.map.addLayer(
+                    {
+                        id: `raster-rajapur-${layer}`,
+                        type: 'raster',
+                        source: `rasterrajapur${layer}`,
+                        layout: {},
+                        paint: {
+                            'raster-opacity': 0.7,
+                        },
+                    },
+                );
+                this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
+                return null;
+            });
+
+            this.map.addSource('vizrisk-fills', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
+
+            this.map.addSource('density', {
+                type: 'vector',
+                url: mapSources.populationDensity.url,
+            });
+
+            this.map.addLayer({
+                id: 'ward-fill-local',
+                source: 'vizrisk-fills',
+                'source-layer': mapSources.nepal.layers.ward,
+                type: 'fill',
+                paint: {
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['feature-state', 'value'],
+                        1, '#fe9b2a', 2, '#fe9b2a',
+                        3, '#fe9b2a', 4, '#9a3404',
+                        5, '#d95f0e', 6, '#fe9b2a',
+                        7, '#ffffd6', 8, '#fe9b2a',
+                        9, '#fed990', 10, '#d95f0e',
+                    ],
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0,
+                        1,
+                    ],
+                },
+                filter: getWardFilter(5, 65, 58007, wards),
+            });
+
+            this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+
+            mapping.forEach((attribute) => {
+                this.map.setFeatureState(
+                    {
+                        id: attribute.id,
+                        source: 'vizrisk-fills',
+                        sourceLayer: mapSources.nepal.layers.ward,
+                    },
+                    { value: attribute.value },
+                );
+            });
+
+            this.map.on('click', 'ward-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    if (hoveredWardId) {
+                        this.setState({ wardNumber: hoveredWardId });
+                        this.map.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: 'vizrisk-fills',
+                                // paint: { 'fill-color': '#eee' },
+                                sourceLayer: mapSources.nepal.layers.ward,
+                            },
+                            { hover: false },
+                        );
+                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
+                        // this.map.setZoom(14);
+                        // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
+                    }
+                    hoveredWardId = e.features[0].id;
+                    this.map.setFeatureState(
+                        {
+                            id: hoveredWardId,
+                            source: 'vizrisk-fills',
+                            // paint: { 'fill-color': '#eee' },
+                            sourceLayer: mapSources.nepal.layers.ward,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
+            this.map.on('mousemove', 'ward-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    this.map.getCanvas().style.cursor = 'pointer';
+
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const wardno = e.features[0].properties.title;
+                    const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
+                    const totalPop = details[0].MalePop + details[0].FemalePop;
+                    // const description = (
+                    //     `Ward No:
+                    //         ${wardno}
+                    //     Male Population: ${details[0].MalePop}
+                    //     Female Population: ${details[0].FemalePop}
+                    //     Total Household: ${details[0].TotalHousehold}
+                    //         `
+                    // );
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                            <p> Total Population: ${totalPop}</p>
+                        </div>
+                        `,
+                    ).addTo(this.map);
+                    if (hoveredWardId) {
+                        this.setState({ wardNumber: hoveredWardId });
+                        this.map.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: 'vizrisk-fills',
+                                sourceLayer: mapSources.nepal.layers.ward,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoveredWardId = e.features[0].id;
+                    this.map.setFeatureState(
+                        {
+                            id: hoveredWardId,
+                            source: 'vizrisk-fills',
+                            sourceLayer: mapSources.nepal.layers.ward,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+
+            this.map.on('mouseleave', 'ward-fill-local', () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+                if (hoveredWardId) {
+                    this.map.setFeatureState(
+                        {
+                            source: 'vizrisk-fills',
+                            id: hoveredWardId,
+                            sourceLayer: mapSources.nepal.layers.ward,
+                        },
+                        { hover: false },
+
+                    );
+                    this.map.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                }
+                hoveredWardId = null;
+            });
+
+
+            // this.map.on('mouseenter', 'ward-fill-local', (e) => {
+            //     // Change the cursor style as a UI indicator.
+            //     this.map.getCanvas().style.cursor = 'pointer';
+
+            //     const { lngLat } = e;
+            //     const coordinates = [lngLat.lng, lngLat.lat];
+            //     console.log('coordinates: ', coordinates);
+            //     console.log('e: ', e);
+            //     const description = e.features[0].properties.count;
+
+            //     // Ensure that if the map is zoomed out such that multiple
+            //     // copies of the feature are visible, the popup appears
+            //     // over the copy being pointed to.
+            //     // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            //     //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            //     // }
+
+            //     // Populate the popup and set its coordinates
+            //     // based on the feature found.
+            //     popup.setLngLat(coordinates).setHTML(description).addTo(this.map);
+            // });
+
+            // this.map.on('mouseleave', 'ward-fill-local', () => {
+            //     this.map.getCanvas().style.cursor = '';
+            //     popup.remove();
+            // });
+
             this.map.setZoom(1);
             setTimeout(() => {
                 this.map.easeTo({
@@ -198,99 +516,99 @@ class FloodHistoryMap extends React.Component {
                 pitch: 20,
                 duration: 2000,
             });
-            // this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
+            this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
         });
     }
 
-    // public componentWillReceiveProps(nextProps) {
-    //     const {
-    //         rasterLayer,
-    //         showPopulation,
-    //         criticalElement,
-    //         evacElement,
-    //         criticalFlood,
-    //         rightElement,
-    //     } = this.props;
+    public componentWillReceiveProps(nextProps) {
+        const {
+            rasterLayer,
+            showPopulation,
+            criticalElement,
+            evacElement,
+            criticalFlood,
+            rightElement,
+        } = this.props;
 
 
-    //     if (this.map.isStyleLoaded()) {
-    //         if (nextProps.showPopulation !== showPopulation) {
-    //             if (nextProps.showPopulation === 'popdensity') {
-    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-    //             // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-    //             // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
-    //             } else {
-    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-    //             }
-    //         }
-    //         if (nextProps.criticalFlood !== criticalFlood) {
-    //             this.handleInfraClusterSwitch(nextProps.criticalFlood);
-    //         }
-    //         if (nextProps.rasterLayer !== rasterLayer) {
-    //             this.handleFloodRasterSwitch(nextProps.rasterLayer);
-    //         }
-    //         if (nextProps.evacElement !== evacElement) {
-    //             this.handleEvacClusterSwitch(nextProps.evacElement);
-    //         }
-    //         if (nextProps.criticalElement !== criticalElement) {
-    //             this.handleInfraClusterSwitch(nextProps.criticalElement);
-    //         }
+        if (this.map.isStyleLoaded()) {
+            if (nextProps.showPopulation !== showPopulation) {
+                if (nextProps.showPopulation === 'popdensity') {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+                } else {
+                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                }
+            }
+            if (nextProps.criticalFlood !== criticalFlood) {
+                this.handleInfraClusterSwitch(nextProps.criticalFlood);
+            }
+            if (nextProps.rasterLayer !== rasterLayer) {
+                this.handleFloodRasterSwitch(nextProps.rasterLayer);
+            }
+            if (nextProps.evacElement !== evacElement) {
+                this.handleEvacClusterSwitch(nextProps.evacElement);
+            }
+            if (nextProps.criticalElement !== criticalElement) {
+                this.handleInfraClusterSwitch(nextProps.criticalElement);
+            }
 
-    //         if (nextProps.rightElement !== rightElement) {
-    //             if (nextProps.rightElement === 0) {
-    //                 this.map.easeTo({
-    //                     pitch: 0,
-    //                     zoom: 11.4,
-    //                     duration: 1000,
-    //                 });
-    //                 this.resetClusters();
-    //                 this.orderLayers(slideOneLayers);
-    //                 this.toggleVisiblity(slideTwoLayers, 'none');
-    //                 this.toggleVisiblity(slideOneLayers, 'visible');
-    //             } else if (nextProps.rightElement === 1) {
-    //             // this.map.setPitch(40);
-    //                 this.map.easeTo({
-    //                     pitch: 40,
-    //                     zoom: 12,
-    //                     duration: 2000,
-    //                 });
-    //                 this.toggleVisiblity(slideThreeLayers, 'none');
-    //                 this.toggleVisiblity(slideOneLayers, 'none');
-    //                 this.toggleVisiblity(slideTwoLayers, 'visible');
-    //                 this.map.setPaintProperty('wardFill', 'fill-color', '#b4b4b4');
-    //                 this.orderLayers(slideTwoLayers);
-    //             } else if (nextProps.rightElement === 2) {
-    //                 this.toggleVisiblity(slideTwoLayers, 'none');
-    //                 this.toggleVisiblity(slideFourLayers, 'none');
-    //                 this.toggleVisiblity(slideThreeLayers, 'visible');
-    //                 this.orderLayers(slideThreeLayers);
-    //                 this.resetClusters();
-    //             } else if (nextProps.rightElement === 3) {
-    //                 this.toggleVisiblity(slideThreeLayers, 'none');
-    //                 this.toggleVisiblity(slideFiveLayers, 'none');
-    //                 this.toggleVisiblity(slideFourLayers, 'visible');
+            if (nextProps.rightElement !== rightElement) {
+                if (nextProps.rightElement === 0) {
+                    this.map.easeTo({
+                        pitch: 0,
+                        zoom: 11.4,
+                        duration: 1000,
+                    });
+                    this.resetClusters();
+                    this.orderLayers(slideOneLayers);
+                    this.toggleVisiblity(slideTwoLayers, 'none');
+                    this.toggleVisiblity(slideOneLayers, 'visible');
+                } else if (nextProps.rightElement === 1) {
+                // this.map.setPitch(40);
+                    this.map.easeTo({
+                        pitch: 40,
+                        zoom: 12,
+                        duration: 2000,
+                    });
+                    this.toggleVisiblity(slideThreeLayers, 'none');
+                    this.toggleVisiblity(slideOneLayers, 'none');
+                    this.toggleVisiblity(slideTwoLayers, 'visible');
+                    this.map.setPaintProperty('wardFill', 'fill-color', '#b4b4b4');
+                    this.orderLayers(slideTwoLayers);
+                } else if (nextProps.rightElement === 2) {
+                    this.toggleVisiblity(slideTwoLayers, 'none');
+                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(slideThreeLayers, 'visible');
+                    this.orderLayers(slideThreeLayers);
+                    this.resetClusters();
+                } else if (nextProps.rightElement === 3) {
+                    this.toggleVisiblity(slideThreeLayers, 'none');
+                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(slideFourLayers, 'visible');
 
-    //                 this.orderLayers(slideFourLayers);
-    //                 this.handleInfraClusterSwitch(criticalElement);
-    //                 this.hideFloodRasters();
-    //             } else if (nextProps.rightElement === 4) {
-    //                 this.toggleVisiblity(slideFourLayers, 'none');
-    //                 this.toggleVisiblity(slideSixLayers, 'none');
-    //                 this.toggleVisiblity(slideFiveLayers, 'visible');
+                    this.orderLayers(slideFourLayers);
+                    this.handleInfraClusterSwitch(criticalElement);
+                    this.hideFloodRasters();
+                } else if (nextProps.rightElement === 4) {
+                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(slideSixLayers, 'none');
+                    this.toggleVisiblity(slideFiveLayers, 'visible');
 
-    //                 this.orderLayers(slideFiveLayers);
-    //                 this.handleInfraClusterSwitch(criticalFlood);
-    //                 this.handleFloodRasterSwitch('5');
-    //             } else if (nextProps.rightElement === 5) {
-    //                 this.toggleVisiblity(slideFiveLayers, 'none');
-    //                 this.toggleVisiblity(slideSixLayers, 'visible');
-    //                 this.orderLayers(slideSixLayers);
-    //                 this.handleFloodRasterSwitch('5');
-    //                 this.handleEvacClusterSwitch(evacElement);
-    //             }
-    //         }
-    //     }
-    // }
+                    this.orderLayers(slideFiveLayers);
+                    this.handleInfraClusterSwitch(criticalFlood);
+                    this.handleFloodRasterSwitch('5');
+                } else if (nextProps.rightElement === 5) {
+                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(slideSixLayers, 'visible');
+                    this.orderLayers(slideSixLayers);
+                    this.handleFloodRasterSwitch('5');
+                    this.handleEvacClusterSwitch(evacElement);
+                }
+            }
+        }
+    }
 
     public componentWillUnmount() {
         this.map.remove();

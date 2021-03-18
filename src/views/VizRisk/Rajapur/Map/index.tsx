@@ -21,8 +21,6 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
-
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -172,10 +170,10 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
         }
-
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
+            style: process.env.REACT_APP_VIZRISK_RAJAPUR_FLOOD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
