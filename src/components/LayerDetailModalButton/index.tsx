@@ -185,7 +185,7 @@ class LayerDetailModal extends React.PureComponent<ModalProps> {
         details: {
             component: () => {
                 const { layer } = this.props;
-
+                console.log('This layer>>>', layer);
                 if (!layer.longDescription) {
                     return (
                         <div className={styles.details}>
