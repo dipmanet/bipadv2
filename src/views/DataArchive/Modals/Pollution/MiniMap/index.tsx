@@ -60,7 +60,7 @@ const MiniMap = (props: Props) => {
                                 'circle-stroke-width': 2 },
                         }}
                     />
-                    <MapLayer
+                    {/* <MapLayer
                         layerKey="real-time-pollution-text"
                         layerOptions={{
                             type: 'symbol',
@@ -68,7 +68,7 @@ const MiniMap = (props: Props) => {
                             layout: mapStyles.archivePollutionText.layout,
                             paint: mapStyles.archivePollutionText.paint,
                         }}
-                    />
+                    /> */}
                 </React.Fragment>
             </MapSource>
         </Map>
