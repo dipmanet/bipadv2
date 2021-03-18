@@ -42,7 +42,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const LandSlideMap = (props) => {
-    const [pending, setPending] = useState<boolean>(false);
+    const [pending, setPending] = useState<boolean>(true);
     const [loaded, setLoaded] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
 
@@ -71,6 +71,8 @@ const LandSlideMap = (props) => {
     );
 
     useEffect(() => {
+        setPending(true);
+        console.log('mounting...');
         const VRMap = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
@@ -86,7 +88,6 @@ const LandSlideMap = (props) => {
         VRMap.panBy([-100, -100]);
         mapRef.current = VRMap;
 
-
         return () => mapRef.current.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -96,8 +97,19 @@ const LandSlideMap = (props) => {
             ini: new Date(`01-01-${ini}`).getTime(),
             fin: new Date(`01-01-${ini + 1}`).getTime(),
         });
-        // mapRef.current.on('style.load', () => {
-        if (pointFeatureCollection.features.length > 0) {
+        mapRef.current.on('load', () => setLoaded(true));
+    }, [YEARS, getPointFeatureCollection, hazardTypes,
+        incidentList, pointFeatureCollection.features.length]);
+
+
+    // eslint-disable-next-line consistent-return
+    useEffect(() => {
+        const getDateRange = ini => ({
+            ini: new Date(`01-01-${ini}`).getTime(),
+            fin: new Date(`01-01-${ini + 1}`).getTime(),
+        });
+
+        if (loaded && pointFeatureCollection.features.length > 0) {
             console.log('loading');
             YEARS.map((layer) => {
                 mapRef.current.addSource(`landslidePointss${layer}`, {
@@ -131,8 +143,30 @@ const LandSlideMap = (props) => {
                 mapRef.current.setPaintProperty(`landslide-layer-${layer}`, 'circle-opacity', 1);
                 return null;
             });
+
+            return () => {
+                YEARS.map((layer) => {
+                    console.log('mapreef in return: ', mapRef.current);
+                    if (mapRef.current.isStyleLoaded()) {
+                        const mapLayer = mapRef.current.getSource(`landslidePointss${layer}`);
+
+                        if (typeof mapLayer !== 'undefined') {
+                            mapRef.current.removeLayer(`landslide-layer-${layer}`).removeSource(`landslidePointss${layer}`);
+                        }
+                    }
+
+
+                    // if (mapRef.current.getLayer(`landslide-layer-${layer}`)) {
+                    //     mapRef.current.removeLayer(`landslide-layer-${layer}`);
+                    // }
+                    // if (mapRef.current.getSource(`landslidePointss${layer}`)) {
+                    //     mapRef.current.removeSource(`landslidePointss${layer}`);
+                    // }
+                    return null;
+                });
+            };
         }
-        // });
+        setPending(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pointFeatureCollection.features.length]);
 
@@ -168,7 +202,6 @@ const LandSlideMap = (props) => {
         top: 0,
         bottom: 0,
     };
-
     return (
         <div>
             {/* {Object.keys(incidentData).length > 0 */}
