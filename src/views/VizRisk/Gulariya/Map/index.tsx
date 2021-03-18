@@ -21,12 +21,6 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
-if (TOKEN) {
-    mapboxgl.accessToken = TOKEN;
-    console.log('assigned: ', mapboxgl.accessToken);
-    console.log('our token: ', TOKEN);
-}
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -119,14 +113,15 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.42722351741294,
-            lng: 81.12424608127894,
+            lat: 28.210927128836925,
+            lng: 81.34569465152305,
             zoom: 11,
             wardNumber: 'Hover to see ward number',
         };
     }
 
     public componentDidMount() {
+        console.log('Token>>', process.env.REACT_APP_MAPBOX_ACCESS_TOKEN);
         const {
             lng, lat, zoom,
         } = this.state;
@@ -179,14 +174,12 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_RAJAPUR_FLOOD,
+            style: process.env.REACT_APP_VIZRISK_GULARIYA_FLOOD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
             maxZoom: 22,
         });
-
-        console.log('ne map: ', this.map);
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -483,6 +476,34 @@ class FloodHistoryMap extends React.Component {
                 }
                 hoveredWardId = null;
             });
+
+
+            // this.map.on('mouseenter', 'ward-fill-local', (e) => {
+            //     // Change the cursor style as a UI indicator.
+            //     this.map.getCanvas().style.cursor = 'pointer';
+
+            //     const { lngLat } = e;
+            //     const coordinates = [lngLat.lng, lngLat.lat];
+            //     console.log('coordinates: ', coordinates);
+            //     console.log('e: ', e);
+            //     const description = e.features[0].properties.count;
+
+            //     // Ensure that if the map is zoomed out such that multiple
+            //     // copies of the feature are visible, the popup appears
+            //     // over the copy being pointed to.
+            //     // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            //     //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            //     // }
+
+            //     // Populate the popup and set its coordinates
+            //     // based on the feature found.
+            //     popup.setLngLat(coordinates).setHTML(description).addTo(this.map);
+            // });
+
+            // this.map.on('mouseleave', 'ward-fill-local', () => {
+            //     this.map.getCanvas().style.cursor = '';
+            //     popup.remove();
+            // });
 
             this.map.setZoom(1);
             setTimeout(() => {

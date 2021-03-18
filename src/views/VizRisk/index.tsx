@@ -4,7 +4,7 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
-
+import Gulariya from './Gulariya';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
@@ -13,6 +13,7 @@ import BarabiseLandslide from './BarabiseLandslide';
 const slides = [
     <Rajapur />,
     <BarabiseLandslide />,
+    <Gulariya />,
 
 ];
 
@@ -27,6 +28,7 @@ const VizRiskMainPage = () => {
     };
 
     const handleMenuTitleClick = (municipality) => {
+        console.log('This is final muni>>>', municipality);
         setShowMenu(false);
         if (municipality === 'rajapur') {
             setCurrentPage(0);
@@ -34,6 +36,9 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'bharabise') {
             setCurrentPage(1);
             setTitle('Visualising Landslide Exposure');
+        } else if (municipality === 'gulariya') {
+            setCurrentPage(2);
+            setTitle('Visualising Flood Exposure');
         }
     };
 
@@ -85,14 +90,22 @@ const VizRiskMainPage = () => {
                     {showMenu ? (
                         <div className={styles.vizrisknmenupage}>
                             <p className={styles.menuTitle}>Visualizing Flood Exposure</p>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick('rajapur')}
-                            >
-                                <h1 className={styles.menuItems}>Rajapur Municipality</h1>
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('rajapur')}
+                                >
+                                    <h1 className={styles.menuItems}>Rajapur Municipality</h1>
 
-                            </Button>
+                                </Button>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('gulariya')}
+                                >
+                                    <h1 className={styles.menuItems}>Gulariya Municipality</h1>
 
+                                </Button>
+                            </div>
                             <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
                             <Button
                                 transparent
@@ -102,6 +115,8 @@ const VizRiskMainPage = () => {
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
                             </Button>
+
+
                         </div>
                     ) : (
                         renderPage(currentPage)
