@@ -12,8 +12,8 @@ import BarabiseLandslide from './BarabiseLandslide';
 
 const slides = [
     <Rajapur />,
-    <BarabiseLandslide />,
-    <Gulariya />,
+    // <BarabiseLandslide />,
+    // <Gulariya />,
 
 ];
 
@@ -98,15 +98,15 @@ const VizRiskMainPage = () => {
                                     <h1 className={styles.menuItems}>Rajapur Municipality</h1>
 
                                 </Button>
-                                <Button
+                                {/* <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('gulariya')}
                                 >
                                     <h1 className={styles.menuItems}>Gulariya Municipality</h1>
 
-                                </Button>
+                                </Button> */}
                             </div>
-                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
+                            {/* <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
                             <Button
                                 transparent
                                 onClick={() => handleMenuTitleClick('bharabise')}
@@ -114,7 +114,7 @@ const VizRiskMainPage = () => {
                             >
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
-                            </Button>
+                            </Button> */}
 
 
                         </div>
