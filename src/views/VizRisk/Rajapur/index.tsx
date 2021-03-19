@@ -41,7 +41,8 @@ export default class Rajapur extends React.Component {
             rightElement: 0,
             legendElement: 0,
             showLegend: false,
-            disableNavBtns: false,
+            disableNavRightBtn: false,
+            disableNavLeftBtn: false,
             hoveredWard: '',
             showPopulation: 'ward',
             evacElement: 'all',
@@ -90,12 +91,14 @@ export default class Rajapur extends React.Component {
     public handleNext = () => {
         if (this.state.rightElement < rightelements.length) {
             this.setState(prevState => ({ rightElement: prevState.rightElement + 1 }));
+            this.disableNavBtns('both');
         }
     }
 
     public handlePrev = () => {
         if (this.state.rightElement > 0) {
             this.setState(prevState => ({ rightElement: prevState.rightElement - 1 }));
+            this.disableNavBtns('both');
         }
     }
 
@@ -126,13 +129,38 @@ export default class Rajapur extends React.Component {
         });
     }
 
+    public enableNavBtns = (val) => {
+        if (val === 'Right') {
+            this.setState({ disableNavRightBtn: false });
+        } else if (val === 'Left') {
+            this.setState({ disableNavLeftBtn: false });
+        } else {
+            this.setState({ disableNavLeftBtn: false });
+            this.setState({ disableNavRightBtn: false });
+        }
+    }
+
+
+    public disableNavBtns = (val) => {
+        if (val === 'Right') {
+            this.setState({ disableNavRightBtn: true });
+        } else if (val === 'Left') {
+            this.setState({ disableNavLeftBtn: true });
+        } else {
+            this.setState({ disableNavLeftBtn: true });
+            this.setState({ disableNavRightBtn: true });
+        }
+    }
+
+
     public render() {
         const {
             showRaster,
             rasterLayer,
             exposedElement,
             rightElement,
-            disableNavBtns,
+            disableNavLeftBtn,
+            disableNavRightBtn,
             showPopulation,
             criticalElement,
             evacElement,
@@ -142,17 +170,17 @@ export default class Rajapur extends React.Component {
 
         return (
             <div>
-                {!disableNavBtns && (
+                { (
                     <div className={styles.navBtnCont}>
                         <button
                             type="button"
                             onClick={this.handlePrev}
                             className={styles.navbutton}
-                            disabled={rightElement === 0}
+                            disabled={disableNavLeftBtn}
                         >
                             <Icon
                                 name="chevronLeft"
-                                className={rightElement === 0
+                                className={disableNavLeftBtn
                                     ? styles.btnDisable
                                     : styles.nextPrevBtn
                                 }
@@ -162,14 +190,13 @@ export default class Rajapur extends React.Component {
                             type="button"
                             onClick={this.handleNext}
                             className={styles.navbutton}
-                            disabled={(rightElement === (rightelements.length) - 1)}
+                            disabled={disableNavRightBtn}
                         >
                             <Icon
                                 name="chevronRight"
-                                className={(rightElement === rightelements.length - 1)
+                                className={disableNavRightBtn
                                     ? styles.btnDisable
-                                    : styles.nextPrevBtn
-                                }
+                                    : styles.nextPrevBtn}
                             />
                         </button>
 
@@ -187,6 +214,8 @@ export default class Rajapur extends React.Component {
                     criticalElement={criticalElement}
                     criticalFlood={criticalFlood}
                     evacElement={evacElement}
+                    disableNavBtns={this.disableNavBtns}
+                    enableNavBtns={this.enableNavBtns}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1

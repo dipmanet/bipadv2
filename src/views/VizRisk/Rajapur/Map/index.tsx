@@ -24,8 +24,6 @@ import {
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
-    console.log('assigned: ', mapboxgl.accessToken);
-    console.log('our token: ', TOKEN);
 }
 
 const mapStateToProps = (state, props) => ({
@@ -186,14 +184,21 @@ class FloodHistoryMap extends React.Component {
             maxZoom: 22,
         });
 
-        console.log('ne map: ', this.map);
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
+        this.map.on('idle', () => {
+            const { rightElement, enableNavBtns } = this.props;
+            if (rightElement === 0) {
+                enableNavBtns('Right');
+            } else if (rightElement === 5) {
+                enableNavBtns('Left');
+            } else {
+                enableNavBtns('both');
+            }
+        });
         this.map.on('style.load', () => {
-            // this.map.panBy([0, -100]);
-
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -233,6 +238,7 @@ class FloodHistoryMap extends React.Component {
                     filter: ['!', ['has', 'point_count']],
                     layout: {
                         'icon-image': ['get', 'icon'],
+                        'icon-size': 0.3,
                     },
                 });
 
@@ -302,6 +308,7 @@ class FloodHistoryMap extends React.Component {
                     filter: ['!', ['has', 'point_count']],
                     layout: {
                         'icon-image': ['get', 'icon'],
+                        'icon-size': 0.3,
                     },
                 });
 
@@ -485,16 +492,15 @@ class FloodHistoryMap extends React.Component {
             });
 
             this.map.setZoom(1);
+            this.props.disableNavBtns('both');
             setTimeout(() => {
+                this.props.disableNavBtns('both');
+
                 this.map.easeTo({
                     zoom: 11.4,
                     duration: 8000,
                 });
             }, 4000);
-            this.map.easeTo({
-                pitch: 20,
-                duration: 2000,
-            });
             this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
         });
     }
@@ -509,7 +515,7 @@ class FloodHistoryMap extends React.Component {
             rightElement,
         } = this.props;
 
-
+        // disable the button
         if (this.map.isStyleLoaded()) {
             if (nextProps.showPopulation !== showPopulation) {
                 if (nextProps.showPopulation === 'popdensity') {
