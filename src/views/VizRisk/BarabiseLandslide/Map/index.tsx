@@ -77,7 +77,7 @@ const LandSlideMap = (props) => {
         console.log('mounting...');
         const VRMap = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/ankur20/ckmelvhzk2ccm17t5qztdd1ru',
+            style: process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE,
             center: {
                 lng: 85.300140,
                 lat: 27.700769,
