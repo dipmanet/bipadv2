@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
+import DeckGL from '@deck.gl/react';
+import { LineLayer } from '@deck.gl/layers';
 import { hazardTypesList,
     incidentPointToGeojsonVR,
     getWardFilter } from '#utils/domain';
@@ -19,7 +21,6 @@ import {
 } from '#selectors';
 import SchoolGeoJSON from '../Data/rajapurGEOJSON';
 
-
 import Loading from '#components/Loading';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
@@ -30,7 +31,21 @@ const {
     criticalinfrastructures,
     evaccenters,
 } = SchoolGeoJSON;
+const INITIAL_VIEW_STATE = {
+    longitude: 85.300140,
+    latitude: 27.700769,
+    zoom: 13,
+    pitch: 0,
+    bearing: 0,
+};
 
+const data = [
+    { sourcePosition: [85.300140, 27.700769], targetPosition: [85.300140, 27.701769] },
+];
+
+const linelayers = [
+    new LineLayer({ id: 'line-layer', data }),
+];
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -77,7 +92,7 @@ const LandSlideMap = (props) => {
         console.log('mounting...');
         const VRMap = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/ankur20/ckmelvhzk2ccm17t5qztdd1ru',
+            style: process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE,
             center: {
                 lng: 85.300140,
                 lat: 27.700769,
@@ -89,6 +104,7 @@ const LandSlideMap = (props) => {
         });
         VRMap.panBy([-100, -100]);
         mapRef.current = VRMap;
+
 
         return () => mapRef.current.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -201,15 +217,19 @@ const LandSlideMap = (props) => {
         <div>
             {/* {Object.keys(incidentData).length > 0 */}
             {/* ?  */}
-            <div style={mapStyle} ref={mapContainer} />
+            <div style={mapStyle} ref={mapContainer}>
+                <DeckGL
+                    initialViewState={INITIAL_VIEW_STATE}
+                    controller
+                    layers={linelayers}
+                />
+            </div>
             {/* :  */}
             {/* ( */}
             <Loading
                 pending={pending}
             />
             {/* )} */}
-
-
         </div>
     );
 };
