@@ -53,6 +53,129 @@ export interface FiltersElement {
     dataDateRange: DataDateRangeValueElement;
 }
 
+export interface DAEarthquakeFiltersElement {
+    region: RegionValueElement;
+    dataDateRange: DataDateRangeValueElement;
+    magnitude: number[];
+}
+
+export interface DAPollutionFiltersElement {
+    station: PollutionStation;
+    dataDateRange: DataDateRangeValueElement;
+}
+
+export interface DARainFiltersElement {
+    station: RainStation;
+    dataDateRange: DataDateRangeValueElement;
+}
+
+export interface DARiverFiltersElement {
+    station: RiverStation;
+    dataDateRange: DataDateRangeValueElement;
+}
+
+export interface PollutionObservation {
+    data: {
+        aqi: number;
+        value: number;
+        datatime: string;
+    };
+    unit: string;
+    seriesId: number;
+    seriesName: string;
+    parameterCode: string;
+    parameterName: string;
+}
+
+export interface PollutionTags {
+    id: number;
+    name: string;
+    description: string;
+}
+export interface PollutionStation {
+    id: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+    name: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    createdOn?: string;
+    modifiedOn?: string;
+    dateTime?: string;
+    nepaliName?: string;
+    identifier?: string;
+    dataSource?: string;
+    aqiColor?: string;
+    aqi?: number;
+    observation?: PollutionObservation[];
+    tags?: PollutionTags[];
+    images?: string[];
+    elevation?: string | number;
+    description?: string;
+}
+
+export interface RainStationAverage {
+    value?: number;
+    status?: {
+        danger: boolean;
+        warning: boolean;
+    };
+    interval?: number;
+}
+export interface RainStation {
+    id: number;
+    createdOn?: string;
+    modifiedOn?: string;
+    title: string;
+    basin: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    elevation?: number;
+    image?: string;
+    averages: RainStationAverage[];
+    status?: string;
+    description?: string;
+    stationSeriesId?: string;
+    dataSource?: string;
+    dataSourceId?: number;
+    ward: number;
+    municipality: number;
+    district: number;
+    province: number;
+}
+
+export interface RiverStation {
+    id: number;
+    createdOn?: string;
+    modifiedOn?: string;
+    title: string;
+    basin: string;
+    point: {
+        type: string;
+        coordinates: [number, number];
+    };
+    waterLevel?: number;
+    image?: string;
+    dangerLevel?: number;
+    warningLevel?: number;
+    waterLevelOn?: string;
+    status?: string;
+    elevation?: number;
+    steady?: string;
+    description?: string;
+    stationSeriesId?: string;
+    ward: number;
+    municipality: number;
+    district: number;
+    province: number;
+}
+
 export interface AlertElement extends Alert {}
 export interface EventElement extends Event {}
 

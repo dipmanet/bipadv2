@@ -1,0 +1,40 @@
+
+.pollution-item {
+    min-width: 70px;
+    border-radius: 3rem;
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-extra-small-alt) ;
+    text-align: center;
+}
+
+.good {
+    background-color: #00fa2f;
+    color: black;
+}
+
+.moderate {
+    background-color: #f7ff00;
+    color: black;
+}
+
+.unhealthy-for-sensitive {
+    background-color: #ff7300;
+    color: white;
+}
+
+.unhealthy {
+    background-color: #ff0000;
+    color: white;
+}
+
+.very-unhealthy {
+    background-color: #9e0095;
+    color: white;
+}
+
+.hazardous {
+    background-color: #8a0014;
+    color: white;
+}
+
