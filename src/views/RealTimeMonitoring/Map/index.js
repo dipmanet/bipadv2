@@ -60,6 +60,8 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle: undefined,
             streamflowId: undefined,
             gis: undefined,
+            rainId: undefined,
+            riverId: undefined,
         };
     }
 
@@ -102,21 +104,25 @@ export default class RealTimeMap extends React.PureComponent {
     });
 
     handleRainClick = (feature) => {
-        const { properties: { title } } = feature;
+        console.log('This is feature>>>', feature);
+        const { properties: { title, rainId } } = feature;
         this.setState({
             rainTitle: title,
             riverTitle: undefined,
             streamflowId: undefined,
+            rainId,
+
         });
         return true;
     }
 
     handleRiverClick = (feature) => {
-        const { properties: { title } } = feature;
+        const { properties: { title, riverId } } = feature;
         this.setState({
             riverTitle: title,
             streamflowId: undefined,
             rainTitle: undefined,
+            riverId,
         });
         return true;
     }
@@ -361,7 +367,9 @@ export default class RealTimeMap extends React.PureComponent {
             riverTitle,
             rainTitle,
             streamflowId,
+            rainId,
             gis,
+            riverId,
         } = this.state;
 
         const tooltipOptions = {
@@ -702,12 +710,14 @@ export default class RealTimeMap extends React.PureComponent {
                 {riverTitle && (
                     <RiverDetails
                         title={riverTitle}
+                        id={riverId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}
                 {rainTitle && (
                     <RainDetails
                         title={rainTitle}
+                        id={rainId}
                         handleModalClose={this.handleModalClose}
                     />
                 )}

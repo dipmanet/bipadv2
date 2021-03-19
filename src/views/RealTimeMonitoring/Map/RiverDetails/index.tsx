@@ -70,10 +70,9 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     detailRequest: {
         url: '/river/',
         method: methods.GET,
-        query: ({ props: { title } }) => ({
-            historical: 'true',
+        query: ({ props: { id } }) => ({
             format: 'json',
-            title,
+            id,
         }),
         onMount: true,
         onPropsChanged: ['title'],
