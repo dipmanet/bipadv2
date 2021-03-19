@@ -80,20 +80,24 @@ const slideOneLayers = ['wardNumbers',
     'wardOutline', 'wardFill'];
 
 const slideTwoLayers = ['water',
-    'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
-    'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
-    'agriculturelandRajapur', 'wardOutline',
+    'canalGulariya', 'gulariyaBuildings', 'bridgeGulariya',
+    'GulariyaRoads', 'forestGulariya',
+    'agriculturallandGulariya', 'wardOutline',
     'wardFill',
 ];
 
-const slideThreeLayers = ['wardNumbers', 'water', 'wardOutline',
-    'ward-fill-local', 'bufferRajapur',
-    'population-extruded'];
+const slideThreeLayers = ['water',
+    'canalGulariya', 'gulariyaBuildings', 'bridgeGulariya',
+    'GulariyaRoads', 'forestGulariya',
+    'agriculturallandGulariya', 'wardOutline',
+    'wardFill',
+];
 
-const slideFourLayers = [
-    ...criticalInfraClusters, 'water', 'wardOutline',
-    'bridgeRajapur', 'canalRajapur',
-    'waterway', 'rajapurRoads', 'wardFill',
+const slideFourLayers = ['water',
+    'canalGulariya', 'gulariyaBuildings', 'bridgeGulariya',
+    'GulariyaRoads', 'forestGulariya',
+    'agriculturallandGulariya', 'wardOutline',
+    'wardFill',
 ];
 
 const slideFiveLayers = [
@@ -135,7 +139,7 @@ class FloodHistoryMap extends React.Component {
         if (wards) {
             wards.map((item) => {
                 const { id } = item;
-                if (item.municipality === 58007) {
+                if (item.municipality === 58005) {
                     if (item.title === '1') {
                         mapping.push({ id, value: 1 });
                     }
