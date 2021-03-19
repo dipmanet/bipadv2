@@ -22,8 +22,10 @@ import SchoolGeoJSON from '../Data/rajapurGEOJSON';
 
 import Loading from '#components/Loading';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5rdXIyMCIsImEiOiJja2tiOW4wNGIwNDh5MnBsY3EzeDNmcTV4In0.d4LelcSFDElA3BctgWvs1A';
-
+const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+if (TOKEN) {
+    mapboxgl.accessToken = TOKEN;
+}
 const {
     criticalinfrastructures,
     evaccenters,
@@ -75,7 +77,7 @@ const LandSlideMap = (props) => {
         console.log('mounting...');
         const VRMap = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/ankur20/ckkwdvg544to217orazo712ra',
+            style: process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE,
             center: {
                 lng: 85.300140,
                 lat: 27.700769,
@@ -130,8 +132,8 @@ const LandSlideMap = (props) => {
                         'circle-radius': 7,
                         'circle-opacity': 0,
                         'circle-opacity-transition': {
-                            duration: 1000,
-                            delay: YEARS.indexOf(layer) * 1000,
+                            duration: 100,
+                            delay: YEARS.indexOf(layer) * 100,
                         },
                     },
                 });
@@ -178,19 +180,12 @@ const LandSlideMap = (props) => {
                     lng: 85.90010912899756,
                     lat: 27.821772478807212,
                 },
-                duration: 4000,
+                duration: 1000,
             });
         }
         if (page === 1) {
-            mapRef.current.easeTo({
-                zoom: 6.5,
-                center: {
-                    lng: 85.300140,
-                    lat: 27.700769,
-                },
-                duration: 4000,
-            });
             mapRef.current.panBy([-100, -100]);
+            mapRef.current.setZoom(6.5);
         }
     }, [page]);
 
