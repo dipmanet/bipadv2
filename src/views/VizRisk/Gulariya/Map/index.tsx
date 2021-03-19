@@ -121,7 +121,6 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidMount() {
-        console.log('Token>>', process.env.REACT_APP_MAPBOX_ACCESS_TOKEN);
         const {
             lng, lat, zoom,
         } = this.state;
