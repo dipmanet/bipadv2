@@ -33,6 +33,7 @@ const iconNames = {
 
     calendar: 'ion-ios-calendar-outline',
     location: 'ion-ios-location-outline',
+    gps: 'ion-ios-location',
     distance: 'ion-android-locate',
 
     expand: 'ion-arrow-expand',

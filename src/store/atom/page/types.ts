@@ -1,5 +1,17 @@
 import { Obj } from '@togglecorp/fujs';
-import { FiltersElement, ResourceTypeKeys, ModelEnum, KeyValue } from '#types';
+import {
+    FiltersElement,
+    ResourceTypeKeys,
+    ModelEnum,
+    KeyValue,
+    DAEarthquakeFiltersElement,
+    DAPollutionFiltersElement,
+    DARainFiltersElement,
+    DARiverFiltersElement,
+    PollutionStation,
+    RainStation,
+    RiverStation,
+} from '#types';
 
 export interface Field {
     id: number;
@@ -246,8 +258,8 @@ export interface RealTimeRiver {
     modifiedOn: string;
     title: string;
     basin: string;
-    stationId?: number; // TODO: remove ? when station id is sent by api
-    district?: string; // TODO: remove ? when district is sent by a
+    // stationId?: number; // TODO: remove ? when station id is sent by api
+    // district?: string; // TODO: remove ? when district is sent by a
     waterLevel: number;
     point: Point;
     image: string;
@@ -432,6 +444,15 @@ export interface RealTimeMonitoringPage {
     filters: Filters;
 }
 
+export interface DataArchivePage {
+    dataArchiveRainList: DataArchiveRain[];
+    dataArchiveRiverList: DataArchiveRiver[];
+    dataArchiveEarthquakeList: DataArchiveEarthquake[];
+    // dataArchiveFireList: DataArchiveFire[];
+    dataArchivePollutionList: DataArchivePollution[];
+    filters: Filters;
+}
+
 export interface ProjectsProfileFilters {
     faramValues: {
         region?: Region;
@@ -454,9 +475,14 @@ export interface PageState {
     hidePopup: boolean;
     selectedMapStyle: string;
     mapStyles: MapStyle[];
-
+    carKeys: [];
     region: Region;
     filters: FiltersElement;
+
+    daEarthquakeFilter: DAEarthquakeFiltersElement;
+    daPollutionFilter: DAPollutionFiltersElement;
+    daRainFilter: DARainFiltersElement;
+    daRiverFilter: DARiverFiltersElement;
 
     adminLevelList: AdminLevel[];
 
@@ -471,6 +497,9 @@ export interface PageState {
     districts: District[];
     municipalities: Municipality[];
     wards: Ward[];
+    pollutionStations: PollutionStation[];
+    rainStations: RainStation[];
+    riverStations: RiverStation[];
     lossList: Loss[];
     sourceList: Source[];
     severityList: SeverityType[];
@@ -488,10 +517,75 @@ export interface PageState {
     incidentPage: IncidentPage;
     responsePage: ResponsePage;
     realTimeMonitoringPage: RealTimeMonitoringPage;
+    dataArchivePage: DataArchivePage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
+}
+
+// Data Archive
+export interface Federal {
+    id: number;
+    bbox: [number, number, number, number];
+    centroid: {
+        type: string;
+        coordinates: [number, number];
+    };
+    title: string;
+    titleEn: string;
+    titleNe: string;
+    code: string;
+    order: number;
+}
+
+export interface FederalLocation {
+    province?: Federal;
+    district?: Federal;
+    municipality?: Federal;
+}
+
+export interface DataArchiveEarthquake extends FederalLocation{
+    id?: number;
+    description?: string;
+    point?: {
+        type: string;
+        coordinates: [ number, number];
+    };
+    magnitude: number;
+    address: string;
+    eventOn: string;
+}
+
+export interface DataArchivePollution extends RealTimePollution{
+    title?: string;
+    description?: string;
+    elevation?: number | null;
+    createdOn?: string;
+    dateTime?: string;
+}
+
+export interface DataArchiveRain extends RealTimeRain {
+    station: number;
+    measuredOn?: string;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
+export interface DataArchiveRiver extends RealTimeRiver {
+    station: number;
+    stationSeriesId: number;
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
+export interface DataArchiveEarthquakeFilters {
+    dataArchiveEarthquakeFilter: DAEarthquakeFiltersElement;
 }
 
 // ACTION TYPES
@@ -520,6 +614,7 @@ export enum PageType {
     SET_SHOW_WARD = 'page/SET_SHOW_WARD',
 
     SET_FILTERS = 'page/SET_FILTERS',
+    SET_CAR_KEYS = 'page/SET_CAr_KEYS',
     SET_ENUM_OPTIONS = 'page/SET_ENUM_OPTIONS',
 
     // dashboard
@@ -547,6 +642,19 @@ export enum PageType {
     RTM__SET_REAL_TIME_POLLUTION_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_POLLUTION',
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
 
+    // data archive
+    DA__SET_DATA_ARCHIVE_RAIN_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN/',
+    DA__SET_DATA_ARCHIVE_RIVER_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RAIN_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RIVER_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_FILTERS/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RAIN_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RIVER_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_STATIONS/',
+
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
     LD__SET_LOSS_AND_DAMAGE_LIST = 'page/LOSS_AND_DAMAGE/SET_LOSS_AND_DAMAGE_LIST',
@@ -561,6 +669,9 @@ export enum PageType {
     // Profile contact page
     PCP__SET_CONTACT_LIST = 'page/PROFILE_CONTACT/SET_CONTACT_LIST',
     PCP__SET_FILTERS = 'page/PROFILE_CONTACT/SET_FILTERS',
+
+    // Risk info capacity and resource page
+    RIC__SET_CAR_KEYS = 'page/RISKINFO_CAR/SET_CAR_KEYS',
 }
 
 // ACTION CREATOR INTERFACE
@@ -568,6 +679,11 @@ export enum PageType {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetCarKeys {
+    type: typeof PageType.SET_CAR_KEYS;
+    filters: [];
 }
 
 export interface SetRegion {
@@ -757,6 +873,62 @@ export interface SetRealTimeFilters extends FiltersWithRegion {
     type: typeof PageType.RTM__SET_REAL_TIME_FILTERS;
 }
 
+// data archive
+export interface SetDataArchiveRainList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST;
+    dataArchiveRainList: DataArchiveRain[];
+}
+
+export interface SetDataArchiveRiverList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST;
+    dataArchiveRiverList: DataArchiveRiver[];
+}
+
+export interface SetDataArchivePollutionList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST;
+    dataArchivePollutionList: DataArchivePollution[];
+}
+
+export interface SetDataArchiveEarthquakeList {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST;
+    dataArchiveEarthquakeList: DataArchiveEarthquake[];
+}
+
+export interface SetDataArchiveEarthquakeFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS;
+    dataArchiveEarthquakeFilters: DAEarthquakeFiltersElement;
+}
+
+export interface SetDataArchivePollutionFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS;
+    dataArchivePollutionFilters: DAPollutionFiltersElement;
+}
+
+export interface SetDataArchiveRainFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS;
+    dataArchiveRainFilters: DARainFiltersElement;
+}
+
+export interface SetDataArchiveRiverFilters {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS;
+    dataArchiveRiverFilters: DARiverFiltersElement;
+}
+
+export interface SetDataArchivePollutionStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS;
+    dataArchivePollutionStations: PollutionStation[];
+}
+
+export interface SetDataArchiveRainStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS;
+    dataArchiveRainStations: RainStation[];
+}
+
+export interface SetDataArchiveRiverStations {
+    type: typeof PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS;
+    dataArchiveRiverStations: RiverStation[];
+}
+
 // loss and damage
 export interface SetLossAndDamageFilters extends FiltersWithRegion {
     type: typeof PageType.LD__SET_FILTERS;
@@ -841,5 +1013,9 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
-    SetDashboardHazardType
+    SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
+    SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
+    SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |
+    SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
+    SetDataArchiveRainStations | SetDataArchiveRiverStations
 );

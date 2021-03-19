@@ -21,6 +21,8 @@ const responsePageSelector = ({ page }: AppState) => page.responsePage;
 
 const realTimeMonitoringPageSelector = ({ page }: AppState) => page.realTimeMonitoringPage;
 
+const dataArchivePageSelector = ({ page }: AppState) => page.dataArchivePage;
+
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
@@ -30,6 +32,19 @@ export const resourceTypeListSelector = ({ page }: AppState) => (
 );
 
 export const filtersSelector = ({ page }: AppState) => page.filters;
+
+export const eqFiltersSelector = ({ page }: AppState) => page.daEarthquakeFilter;
+
+export const pollutionFiltersSelector = ({ page }: AppState) => page.daPollutionFilter;
+
+export const rainFiltersSelector = ({ page }: AppState) => page.daRainFilter;
+
+export const riverFiltersSelector = ({ page }: AppState) => page.daRiverFilter;
+
+export const pollutionStationsSelector = ({ page }: AppState) => page.pollutionStations;
+export const rainStationsSelector = ({ page }: AppState) => page.rainStations;
+export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
+
 
 // Popup
 
@@ -457,6 +472,27 @@ export const realTimeFiltersValuesSelector = createSelector(
     ({ faramValues }) => faramValues,
 );
 
+// data archive
+export const dataArchiveRainListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRainList }) => dataArchiveRainList,
+);
+
+export const dataArchiveRiverListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRiverList }) => dataArchiveRiverList,
+);
+
+export const dataArchivePollutionListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchivePollutionList }) => dataArchivePollutionList,
+);
+
+export const dataArchiveEarthquakeListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveEarthquakeList }) => dataArchiveEarthquakeList,
+);
+
 // loss and damage page
 export const lossAndDamagePageSelector = ({ page }: AppState) => page.lossAndDamagePage;
 
@@ -545,6 +581,9 @@ export const profileContactListSelector = createSelector(
     profileContactPageSelector,
     ({ contactList }) => contactList,
 );
+
+// risk info page
+export const carKeysSelector = ({ page }: AppState) => page.carKeys;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

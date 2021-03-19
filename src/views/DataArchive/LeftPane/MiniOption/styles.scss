@@ -1,0 +1,51 @@
+.mini-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #405b67;
+
+    .option {
+        text-align: center;
+        flex: 1;
+        padding: var(--spacing-small-alt);
+        transition: all 300ms ease-out;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+
+
+        &:hover {
+            background-color: var(--color-background-alt);
+            color: black;
+
+        }
+
+        &:hover .option-icon {
+        filter: invert(40%) sepia(100%) saturate(364%) hue-rotate(303deg) brightness(97%) contrast(99%);
+
+        }
+    }
+
+    .option-icon {
+        width: 28px;
+        height: 28px;
+        filter: brightness(0) invert(1);
+        margin-bottom: var(--spacing-extra-small-alt);
+      }
+
+      .option.active {
+        background-color: var(--color-background-alt);
+        color: black;
+
+        .option-icon {
+            width: 28px;
+            height: 28px;
+            filter: invert(40%) sepia(100%) saturate(364%) hue-rotate(303deg) brightness(97%) contrast(99%);
+            margin-bottom: var(--spacing-extra-small-alt);
+          }
+    }
+
+}

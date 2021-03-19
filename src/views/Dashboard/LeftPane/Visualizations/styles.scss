@@ -23,39 +23,6 @@
         }
     }
 
-    .alert-summary {
-        .header {
-            .heading {
-                padding: var(--spacing-medium) var(--spacing-large);
-            }
-        }
-
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-
-            .summary-item {
-                flex-basis: calc(100% / 3);
-                flex-grow: 1;
-                padding: var(--spacing-small) calc(var(--spacing-large) - var(--spacing-medium));
-
-                .label {
-                    padding: 0 var(--spacing-medium);
-                    color: var(--color-text-label);
-                    font-weight: var(--font-weight-bold);
-                }
-
-                .value {
-                    padding: 0 var(--spacing-medium);
-                    color: var(--color-accent);
-                    font-size: var(--font-size-super-large);
-                }
-            }
-        }
-
-        
-    }
-
     .container {
         // min-height: 100px;
     }

@@ -111,16 +111,6 @@ class Details extends React.PureComponent<Props, State> {
             shapeFile,
         } = this.state;
 
-        const {
-            openspaceId,
-        } = this.props;
-        // const formdata = new FormData();
-        // formdata.append('category', 'openspace');
-        // if (shapeFile)
-        // formdata.append('shape', shapeFile);
-        // console.log(...formdata);
-
-
         const formdata = new FormData();
         formdata.append('category', 'openspace');
         formdata.append('shape', shapeFile);

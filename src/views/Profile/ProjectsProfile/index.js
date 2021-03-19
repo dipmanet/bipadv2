@@ -125,26 +125,26 @@ const sanitize = (projectList, regions, ndrrsapMap) => {
                 drrcycle,
                 ndrrsap,
             } = item;
-            if (location.province.length > 0) {
+            if (location && location.province.length > 0) {
                 provinces.add(...location.province);
             }
-            if (location.district.length > 0) {
+            if (location && location.district.length > 0) {
                 districts.add(...location.district);
             }
-            if (location.municipality.length > 0) {
+            if (location && location.municipality.length > 0) {
                 municipalities.add(...location.municipality);
             }
-            if (location.ward.length > 0) {
+            if (location && location.ward.length > 0) {
                 wards.add(...location.ward);
             }
-
-            if (category.length > 0) {
+            // todo: 'category' data not available. check if this can be removed.
+            if (category && category.length > 0) {
                 categories.add(...category);
             }
-            if (drrcycle.length > 0) {
+            if (drrcycle && drrcycle.length > 0) {
                 drrcycles.add(...drrcycle);
             }
-            if (ndrrsap.length > 0) {
+            if (ndrrsap && ndrrsap.length > 0) {
                 // Add all parent to ndrrsaps
                 ndrrsap.forEach((id) => {
                     let child = id;

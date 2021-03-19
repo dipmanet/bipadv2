@@ -233,34 +233,39 @@ export const setInventoryItemListActionRP = (
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
-    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]}) => ({
+    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST,
     realTimeRainList,
 });
 
 export const setRealTimeRiverListAction = (
-    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]}) => ({
+    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
 });
 
 export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList }:
-    { realTimeEarthquakeList: Type.RealTimeEarthquake[]}) => ({
+    { realTimeEarthquakeList: Type.RealTimeEarthquake[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
     realTimeEarthquakeList,
 });
 
 export const setRealTimeFireListAction = (
     { realTimeFireList }:
-    { realTimeFireList: Type.RealTimeFire[]}) => ({
+    { realTimeFireList: Type.RealTimeFire[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST,
     realTimeFireList,
 });
 
 export const setRealTimePollutionListAction = (
     { realTimePollutionList }:
-    { realTimePollutionList: Type.RealTimePollution[]}) => ({
+    { realTimePollutionList: Type.RealTimePollution[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST,
     realTimePollutionList,
 });
@@ -272,6 +277,85 @@ export const setRealTimeFiltersAction = (
     faramValues,
     faramErrors,
     pristine,
+});
+
+// data archive action creator
+
+export const setDataArchiveRainListAction = (
+    { dataArchiveRainList }:
+    { dataArchiveRainList: Type.DataArchiveRain[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST,
+    dataArchiveRainList,
+});
+
+export const setDataArchiveRiverListAction = (
+    { dataArchiveRiverList }:
+    { dataArchiveRiverList: Type.DataArchiveRiver[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST,
+    dataArchiveRiverList,
+});
+
+export const setDataArchivePollutionListAction = (
+    { dataArchivePollutionList }:
+    { dataArchivePollutionList: Type.DataArchivePollution[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST,
+    dataArchivePollutionList,
+});
+
+export const setDataArchiveEarthquakeListAction = (
+    { dataArchiveEarthquakeList }:
+    { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[]}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST,
+    dataArchiveEarthquakeList,
+});
+
+export const setDataArchiveEarthquakeFilterAction = (
+    { dataArchiveEarthquakeFilters }:
+    { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
+    dataArchiveEarthquakeFilters,
+});
+
+export const setDataArchivePollutionFilterAction = (
+    { dataArchivePollutionFilters }:
+    { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS,
+    dataArchivePollutionFilters,
+});
+
+export const setDataArchiveRainFilterAction = (
+    { dataArchiveRainFilters }:
+    { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS,
+    dataArchiveRainFilters,
+});
+
+export const setDataArchiveRiverFilterAction = (
+    { dataArchiveRiverFilters }:
+    { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS,
+    dataArchiveRiverFilters,
+});
+
+export const setDataArchivePollutionStationAction = (
+    { dataArchivePollutionStations }:
+    { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS,
+    dataArchivePollutionStations,
+});
+
+export const setDataArchiveRainStationAction = (
+    { dataArchiveRainStations }:
+    { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS,
+    dataArchiveRainStations,
+});
+
+export const setDataArchiveRiverStationAction = (
+    { dataArchiveRiverStations }:
+    { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations']}) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS,
+    dataArchiveRiverStations,
 });
 
 // loss and damage action creator
@@ -304,7 +388,8 @@ export const setProjectsProfileFiltersAction = (
 
 // disaster profile action creator
 export const setRiskListAction = (
-    { riskList }: { riskList: Type.Risk[] }) => ({
+    { riskList }: { riskList: Type.Risk[] },
+) => ({
     type: Type.PageType.DPP__SET_RISK_LIST,
     riskList,
 });
@@ -333,7 +418,25 @@ export const setProfileContactFiltersAction = (
     pristine,
 });
 
+// risk info action creator
+export const setCarKeysAction = carKeys => ({
+    type: Type.PageType.RIC__SET_CAR_KEYS,
+    carKeys,
+});
+
 //  REDUCERS
+
+const setCarKeys = (state: Type.PageState, action: Type.SetCarKeys) => {
+    const { carKeys } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.carKeys = carKeys;
+    });
+
+    return newState;
+};
+
 
 const setFilters = (state: Type.PageState, action: Type.SetFilters) => {
     const { filters } = action;
@@ -981,6 +1084,194 @@ export const setRealTimeFilters = (
     return newState;
 };
 
+// data archive
+export const setDataArchiveRainList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainList,
+) => {
+    const {
+        dataArchiveRainList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRainList = dataArchiveRainList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverList,
+) => {
+    const {
+        dataArchiveRiverList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRiverList = dataArchiveRiverList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionList = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionList,
+) => {
+    const {
+        dataArchivePollutionList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchivePollutionList = dataArchivePollutionList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveEarthquakeList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeList,
+) => {
+    const {
+        dataArchiveEarthquakeList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveEarthquakeList = dataArchiveEarthquakeList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+export const setDataArchiveEarthquakeFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeFilters,
+) => {
+    const {
+        dataArchiveEarthquakeFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daEarthquakeFilter = dataArchiveEarthquakeFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionFilters,
+) => {
+    const {
+        dataArchivePollutionFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daPollutionFilter = dataArchivePollutionFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRainFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainFilters,
+) => {
+    const {
+        dataArchiveRainFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRainFilter = dataArchiveRainFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverFilters,
+) => {
+    const {
+        dataArchiveRiverFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRiverFilter = dataArchiveRiverFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionStations,
+) => {
+    const {
+        dataArchivePollutionStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.pollutionStations = dataArchivePollutionStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRainStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainStations,
+) => {
+    const {
+        dataArchiveRainStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.rainStations = dataArchiveRainStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverStations,
+) => {
+    const {
+        dataArchiveRiverStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.riverStations = dataArchiveRiverStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+
 // loss and damage page
 export const setLossAndDamageFilters = (
     state: Type.PageState,
@@ -1190,6 +1481,8 @@ export default function routeReducer(
             return setLossList(state, action);
         case Type.PageType.SET_FILTERS:
             return setFilters(state, action);
+        case Type.PageType.RIC__SET_CAR_KEYS:
+            return setCarKeys(state, action);
         case Type.PageType.DP__SET_ALERTS:
             return setAlertList(state, action);
         case Type.PageType.DP__SET_FILTERS:
@@ -1220,6 +1513,28 @@ export default function routeReducer(
             return setRealTimeFireList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST:
             return setRealTimePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST:
+            return setDataArchiveRainList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST:
+            return setDataArchiveRiverList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST:
+            return setDataArchivePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST:
+            return setDataArchiveEarthquakeList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS:
+            return setDataArchiveEarthquakeFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS:
+            return setDataArchivePollutionFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS:
+            return setDataArchiveRainFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS:
+            return setDataArchiveRiverFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS:
+            return setDataArchivePollutionStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS:
+            return setDataArchiveRainStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS:
+            return setDataArchiveRiverStations(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:

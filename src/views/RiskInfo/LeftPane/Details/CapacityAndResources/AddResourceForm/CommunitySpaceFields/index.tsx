@@ -71,8 +71,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params: { onSuccess } = { onSuccess: undefined },
             response,
         }) => {
-            console.log('sucess', response);
-
             if (onSuccess) {
                 onSuccess(response as PageType.Resource);
             }
@@ -126,6 +124,7 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
             component: BasicInfo,
             rendererParams: () => ({
                 className: styles.views,
+                setAdministrativeParameters: this.setAdministrativeParameters,
                 resourceId: this.props.resourceId,
                 // handleTabClick: this.handleTabClick,
                 postBasicInfo: this.postBasicInfo,
@@ -154,21 +153,33 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
         }
     };
 
+    private setAdministrativeParameters = (name, value) => {
+        this.setState({
+            [name]: value,
+        });
+    }
+
 
     private postBasicInfo = () => {
         const { faramValues, resourceId } = this.props;
         const { location, resourceType, ...others } = faramValues;
+        const {
+            province, district, municipality,
+        } = this.state;
         let values = others;
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
-            // const ward = 2;
+            // const ward = 1;
 
             values = {
                 ...values,
                 resourceType,
                 point,
                 ward,
+                province,
+                district,
+                municipality,
             };
         }
         const {

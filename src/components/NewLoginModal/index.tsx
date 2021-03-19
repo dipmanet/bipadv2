@@ -423,7 +423,6 @@ class Login extends React.PureComponent<Props, State> {
         this.updatePage('userFeedback');
         if (this.state.loginAgain) {
             this.handleLoginAgain(username, password);
-            console.log('logging with new password');
         }
     };
 
@@ -525,6 +524,7 @@ class Login extends React.PureComponent<Props, State> {
                 },
             },
         } = this.props;
+
         let displayElement;
         if (pageAction === 'loginPage') {
             displayElement = (

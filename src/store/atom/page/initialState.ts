@@ -29,6 +29,43 @@ const state: PageState = {
         },
     },
 
+    daEarthquakeFilter: {
+        region: {},
+        dataDateRange: {
+            rangeInDays: 183,
+            startDate: undefined,
+            endDate: undefined,
+        },
+        magnitude: [],
+    },
+
+    daPollutionFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRainFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRiverFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,
@@ -52,7 +89,9 @@ const state: PageState = {
     districts: [],
     municipalities: [],
     wards: [],
-
+    pollutionStations: [],
+    rainStations: [],
+    riverStations: [],
     documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
@@ -99,6 +138,7 @@ const state: PageState = {
             title: 'communityspace',
         },
     ],
+    carKeys: [],
     lossList: [],
     countryList: [],
 
@@ -149,6 +189,21 @@ const state: PageState = {
             { id: 4, title: 'Forest Fire' },
             { id: 6, title: 'Streamflow' },
         ],
+        filters: {
+            faramValues: {
+                realtimeSources: [3, 2],
+            },
+            faramErrors: {},
+            pristine: true,
+        },
+    },
+
+    dataArchivePage: {
+        dataArchiveRainList: [],
+        dataArchiveRiverList: [],
+        dataArchiveEarthquakeList: [],
+        // dataArchiveFireList: [],
+        dataArchivePollutionList: [],
         filters: {
             faramValues: {
                 realtimeSources: [3, 2],

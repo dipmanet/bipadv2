@@ -1,0 +1,12 @@
+.date-selector {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-small) 0;
+    .seperator {
+        margin: 0 var(--spacing-large);
+    }
+
+    .input {
+        flex: 1;
+    }
+}

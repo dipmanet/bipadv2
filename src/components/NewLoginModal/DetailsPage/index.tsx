@@ -83,7 +83,6 @@ const DetailsPage = (props: Props) => {
     const handleAgreeBtn = (value) => {
         if (!errFullName && !errDesignation && !errPhone && !errEmail) {
             updatePage(value);
-            // console.log('page updated');
         } else {
             setShowErr(true);
         }
