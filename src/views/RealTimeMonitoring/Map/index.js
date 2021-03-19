@@ -17,6 +17,7 @@ import {
     getMapPaddings,
 } from '#constants';
 import {
+    getRasterTile,
     earthquakeToGeojson,
     riverToGeojson,
     rainToGeojson,
@@ -43,12 +44,18 @@ RealTimeTooltip.propTypes = {
 };
 
 const GIS_URL = [
-    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
-    'service=WFS',
-    '&version=1.0.0',
-    '&request=GetFeature',
-    '&typeName=Bipad:watershed-area',
-    '&outputFormat=application/json',
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    '&version=1.1.1',
+    '&service=WMS',
+    '&request=GetMap',
+    '&layers=Bipad:watershed-area',
+    '&tiled=true',
+    '&width=256',
+    '&height=256',
+    '&srs=EPSG:3857',
+    '&bbox={bbox-epsg-3857}',
+    '&transparent=true',
+    '&format=image/png',
 ].join('');
 
 export default class RealTimeMap extends React.PureComponent {
@@ -65,15 +72,15 @@ export default class RealTimeMap extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
-        let result = '';
-        try {
-            result = JSON.parse(httpGet(GIS_URL));
-            this.setState({ gis: result });
-        } catch (error) {
-            this.setState({ gis: undefined });
-        }
-    }
+    // componentDidMount() {
+    //     let result = '';
+    //     try {
+    //         result = JSON.parse(httpGet(GIS_URL));
+    //         this.setState({ gis: result });
+    //     } catch (error) {
+    //         this.setState({ gis: undefined });
+    //     }
+    // }
 
     getEarthquakeFeatureCollection = memoize(earthquakeToGeojson)
 
@@ -457,8 +464,25 @@ export default class RealTimeMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
-                {gis && (showRain || showRiver) && (
+                {(showRain || showRiver) && (
                     <MapSource
+                        sourceKey="watershed-area"
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [getRasterTile({ layername: 'watershed-area' })],
+                            tileSize: 256,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 1,
+                                },
+                            }}
+                        />
+                        {/* <MapSource
                         sourceKey="gis-layer"
                         sourceOptions={{ type: 'geojson' }}
                         geoJson={gis}
@@ -473,8 +497,9 @@ export default class RealTimeMap extends React.PureComponent {
                                     'line-width': 1,
                                 },
                             }}
-                        />
+                        /> */}
                     </MapSource>
+
                 )}
                 <MapSource
                     sourceKey="real-time-rain-points"
