@@ -2,8 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
+
+import { StaticMap } from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
-import { LineLayer } from '@deck.gl/layers';
+
+import { ScatterplotLayer } from '@deck.gl/layers';
+
+
 import { hazardTypesList,
     incidentPointToGeojsonVR,
     getWardFilter } from '#utils/domain';
@@ -38,14 +43,8 @@ const INITIAL_VIEW_STATE = {
     pitch: 0,
     bearing: 0,
 };
-
-const data = [
-    { sourcePosition: [85.300140, 27.700769], targetPosition: [85.300140, 27.701769] },
-];
-
-const linelayers = [
-    new LineLayer({ id: 'line-layer', data }),
-];
+const MALE_COLOR = [0, 128, 255];
+const FEMALE_COLOR = [255, 0, 128];
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -75,6 +74,7 @@ const LandSlideMap = (props) => {
     const YEARS = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<mapboxgl.Map | undefined>(undefined);
+    const layerRef = useRef(undefined);
     const UNSUPPORTED_BROWSER = !mapboxgl.supported();
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -89,7 +89,6 @@ const LandSlideMap = (props) => {
 
     useEffect(() => {
         setPending(true);
-        console.log('mounting...');
         const VRMap = new mapboxgl.Map({
             container: mapContainer.current,
             style: process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE,
@@ -129,6 +128,22 @@ const LandSlideMap = (props) => {
 
         if (loaded && pointFeatureCollection.features.length > 0) {
             console.log('loading');
+            const cood = Object.values(pointFeatureCollection)[1]
+                .map(item => item.geometry.coordinates);
+            layerRef.current = [
+                new ScatterplotLayer({
+                    id: 'scatter-plot',
+                    data: cood,
+                    radiusScale: 30,
+                    radiusMinPixels: 0.25,
+                    getPosition: d => [d[0], d[1], 0],
+                    getFillColor: d => (d[2] === 1 ? MALE_COLOR : FEMALE_COLOR),
+                    getRadius: 1,
+                    updateTriggers: {
+                        getFillColor: [MALE_COLOR, FEMALE_COLOR],
+                    },
+                }),
+            ];
             YEARS.map((layer) => {
                 mapRef.current.addSource(`landslidePointss${layer}`, {
                     type: 'geojson',
@@ -184,7 +199,6 @@ const LandSlideMap = (props) => {
                 });
             };
         }
-        setPending(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pointFeatureCollection.features.length]);
 
@@ -217,13 +231,7 @@ const LandSlideMap = (props) => {
         <div>
             {/* {Object.keys(incidentData).length > 0 */}
             {/* ?  */}
-            <div style={mapStyle} ref={mapContainer}>
-                <DeckGL
-                    initialViewState={INITIAL_VIEW_STATE}
-                    controller
-                    layers={linelayers}
-                />
-            </div>
+            <div style={mapStyle} ref={mapContainer} />
             {/* :  */}
             {/* ( */}
             <Loading
