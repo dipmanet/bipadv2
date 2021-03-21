@@ -9,7 +9,12 @@ export default {
             water: 'water copy',
         },
     },
-
+    wardFillLocalGulariya: {
+        url: `${process.env.REACT_APP_MAP_SOURCE_GULARIYA}`,
+        layers: {
+            wards: 'gulariya_flood-9eexvs',
+        },
+    },
     nepalCentroid: {
         url: `${process.env.REACT_APP_MAP_SOURCE_NEPAL_CENTROID}`,
         layers: {

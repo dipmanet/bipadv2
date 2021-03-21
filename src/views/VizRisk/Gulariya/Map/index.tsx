@@ -44,11 +44,12 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
+    1, '#fe9b2a', 2, '#fed990',
+    3, '#fed990', 4, '#9a3404',
+    5, '#ffffd6', 6, '#ffffd6',
     7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990', 10, '#d95f0e',
+    9, '#d95f0e', 10, '#fe9b2a',
+    11, '#fe9b2a', 12, '#fe9b2a',
 ];
 const {
     criticalinfrastructures,
@@ -86,19 +87,14 @@ const slideTwoLayers = ['water',
     'wardFill',
 ];
 
-const slideThreeLayers = ['water',
-    'canalGulariya', 'gulariyaBuildings', 'bridgeGulariya',
-    'GulariyaRoads', 'forestGulariya',
-    'agriculturallandGulariya', 'wardOutline',
-    'wardFill',
+const slideThreeLayers = ['wardNumbers', 'water',
+    'canalGulariya', 'wardOutline',
+    'ward-fill-local',
 ];
 
 const slideFourLayers = ['water',
-    'canalGulariya', 'gulariyaBuildings', 'bridgeGulariya',
-    'GulariyaRoads', 'forestGulariya',
-    'agriculturallandGulariya', 'wardOutline',
-    'wardFill',
-];
+    'canalGulariya', 'wardOutline',
+    'ward-fill-local'];
 
 const slideFiveLayers = [
     ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
@@ -169,6 +165,12 @@ class FloodHistoryMap extends React.Component {
                     }
                     if (item.title === '10') {
                         mapping.push({ id, value: 10 });
+                    }
+                    if (item.title === '11') {
+                        mapping.push({ id, value: 11 });
+                    }
+                    if (item.title === '12') {
+                        mapping.push({ id, value: 12 });
                     }
                 }
                 return null;
@@ -339,7 +341,16 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
             });
-
+            // this.map.addLayer({
+            //     id: 'ward-fill-outline',
+            //     source: 'vizrisk-fills',
+            //     'source-layer': mapSources.nepal.layers.ward,
+            //     type: 'line',
+            //     filter: ['==', 'municipality', 58005],
+            //     paint: {
+            //         'line-color': '#878383',
+            //     },
+            // });
             this.map.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
@@ -350,11 +361,13 @@ class FloodHistoryMap extends React.Component {
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, '#fe9b2a', 2, '#fe9b2a',
-                        3, '#fe9b2a', 4, '#9a3404',
-                        5, '#d95f0e', 6, '#fe9b2a',
+                        1, '#fe9b2a', 2, '#fed990',
+                        3, '#fed990', 4, '#9a3404',
+                        5, '#ffffd6', 6, '#ffffd6',
                         7, '#ffffd6', 8, '#fe9b2a',
-                        9, '#fed990', 10, '#d95f0e',
+                        9, '#d95f0e', 10, '#fe9b2a',
+                        11, '#fe9b2a', 12, '#fe9b2a',
+
                     ],
                     'fill-opacity': [
                         'case',
@@ -363,7 +376,7 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                filter: getWardFilter(5, 65, 58007, wards),
+                filter: getWardFilter(5, 65, 58005, wards),
             });
 
             this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');

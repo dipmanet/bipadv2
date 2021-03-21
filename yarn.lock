@@ -808,7 +808,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.12.0":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.12.0", "@babel/runtime@^7.7.7":
   version "7.13.10"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
   integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
@@ -949,7 +949,7 @@
     d3-dsv "^1.0.8"
     expression-eval "^2.0.0"
 
-"@deck.gl/layers@8.4.10":
+"@deck.gl/layers@8.4.10", "@deck.gl/layers@^8.4.10":
   version "8.4.10"
   resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-8.4.10.tgz#82db12767a850b092a50904276f9879d243860e5"
   integrity sha512-sYAT8wMAiD/+Sz3Kk5nnW0nZOZkKu7G/yJG/7QWHsmI6DLGekzy50E8MZWe0cuUoJFLi2VkMW/W0hNAr5x06Yg==
@@ -973,7 +973,7 @@
     "@luma.gl/experimental" "^8.4.1"
     "@luma.gl/shadertools" "^8.4.1"
 
-"@deck.gl/react@8.4.10":
+"@deck.gl/react@8.4.10", "@deck.gl/react@^8.4.10":
   version "8.4.10"
   resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.4.10.tgz#ea5a8b5129c5f74888d469b33b14a32eae508c9d"
   integrity sha512-w21CzMAosa6gXCWGA61jV+G6mjTvFEpWLslIybvUYKr5eQIHi65lKNXEo7H7ri0Asr3M5yZ8OgH8+tdR68k/LQ==
@@ -1689,6 +1689,13 @@
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@togglecorp/fujs/-/fujs-1.8.1.tgz#5a2933a45b07fc2c9587111ef6e81e1bad3a1ac4"
   integrity sha512-Iy4+8QjhTfwz6p8lTAaA0dBEDRm6umW4EgeiMiRg/fKLfgwNdiJBGn4hp77sRBqxE9OZWusNDumLLo2DOlQGEQ==
+
+"@togglecorp/fujs@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@togglecorp/fujs/-/fujs-1.9.1.tgz#8e52cb2605b1b453e673a00f509438cb77c377f2"
+  integrity sha512-iUPfN0/2PdIY20lLl7dxSRi7dZgMMT5Q+7+fa7MdDVclFWda8jBuDDxMxQpGlUyMXm33Bf/mP2SHP3+/rF05fA==
+  dependencies:
+    "@babel/runtime" "^7.7.7"
 
 "@togglecorp/ravl@^1.2.3":
   version "1.2.3"
