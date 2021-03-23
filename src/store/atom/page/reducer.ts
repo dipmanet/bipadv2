@@ -233,34 +233,39 @@ export const setInventoryItemListActionRP = (
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
-    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]}) => ({
+    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST,
     realTimeRainList,
 });
 
 export const setRealTimeRiverListAction = (
-    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]}) => ({
+    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
 });
 
 export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList }:
-    { realTimeEarthquakeList: Type.RealTimeEarthquake[]}) => ({
+    { realTimeEarthquakeList: Type.RealTimeEarthquake[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
     realTimeEarthquakeList,
 });
 
 export const setRealTimeFireListAction = (
     { realTimeFireList }:
-    { realTimeFireList: Type.RealTimeFire[]}) => ({
+    { realTimeFireList: Type.RealTimeFire[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST,
     realTimeFireList,
 });
 
 export const setRealTimePollutionListAction = (
     { realTimePollutionList }:
-    { realTimePollutionList: Type.RealTimePollution[]}) => ({
+    { realTimePollutionList: Type.RealTimePollution[]},
+) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST,
     realTimePollutionList,
 });
@@ -304,7 +309,8 @@ export const setProjectsProfileFiltersAction = (
 
 // disaster profile action creator
 export const setRiskListAction = (
-    { riskList }: { riskList: Type.Risk[] }) => ({
+    { riskList }: { riskList: Type.Risk[] },
+) => ({
     type: Type.PageType.DPP__SET_RISK_LIST,
     riskList,
 });
@@ -333,7 +339,25 @@ export const setProfileContactFiltersAction = (
     pristine,
 });
 
+// risk info action creator
+export const setCarKeysAction = carKeys => ({
+    type: Type.PageType.RIC__SET_CAR_KEYS,
+    carKeys,
+});
+
 //  REDUCERS
+
+const setCarKeys = (state: Type.PageState, action: Type.SetCarKeys) => {
+    const { carKeys } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.carKeys = carKeys;
+    });
+
+    return newState;
+};
+
 
 const setFilters = (state: Type.PageState, action: Type.SetFilters) => {
     const { filters } = action;
@@ -1190,6 +1214,8 @@ export default function routeReducer(
             return setLossList(state, action);
         case Type.PageType.SET_FILTERS:
             return setFilters(state, action);
+        case Type.PageType.RIC__SET_CAR_KEYS:
+            return setCarKeys(state, action);
         case Type.PageType.DP__SET_ALERTS:
             return setAlertList(state, action);
         case Type.PageType.DP__SET_FILTERS:

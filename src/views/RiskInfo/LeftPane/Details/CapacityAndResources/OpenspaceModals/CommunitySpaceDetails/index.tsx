@@ -183,23 +183,18 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         handleDeleteModal={handleDeleteModal}
                         authenticated={authenticated}
                     />
-                    <img
-                        src={imageUrl || defaultImage}
-                        style={{
-                            width: '100%',
-                            height: '35vh',
-                            padding: '0 10px',
-                            objectFit: 'cover',
-                        }}
-                        alt="cover"
-                    />
-                    {/* <LazyLoadImage
-                        alt="cover"
-                        height="225"
-                        src={imageUrl}
-                        width="100%"
-                        effect="blur"
-                    /> */}
+                    {imageUrl && (
+                        <img
+                            src={imageUrl || defaultImage}
+                            style={{
+                                width: '100%',
+                                height: '35vh',
+                                padding: '0 10px',
+                                objectFit: 'cover',
+                            }}
+                            alt="cover"
+                        />
+                    )}
                     <ModalBody className={styles.content}>
                         <MultiViewContainer
                             views={this.views}

@@ -13,22 +13,32 @@ import {
     methods,
     createConnectedRequestCoordinator,
 } from '#request';
+import { filtersSelector } from '#selectors';
+import { FiltersElement } from '#types';
 
 interface State {
     currentView: string;
     tableData: any;
     allOpenspaces: unknown;
-    apiData: array;
+    apiData: any[];
+    apiDataBackup: any[];
 }
 
-interface Props {
-    closeModal: any;
-    handelListClick: any;
+
+interface PropsFromAppState {
+    filters: FiltersElement;
 }
+
+interface ComponentProps {
+    closeModal: () => void;
+    handelListClick: () => void;
+}
+
+type Props = ComponentProps & PropsFromAppState;
 
 interface SetStateMethod {
     data: array;
-    totalArea: any;
+    totalArea: number;
 }
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -39,6 +49,9 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     },
 };
 
+const mapStateToProps = (state: AppState) => ({
+    filters: filtersSelector(state),
+});
 
 class AllOpenspacesModal extends React.PureComponent<Props, State> {
     public constructor(props: any) {
@@ -48,6 +61,7 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
             allOpenspaces: [],
             tableData: '',
             apiData: [],
+            apiDataBackup: [],
         };
 
         const {
@@ -59,12 +73,26 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
         });
     }
 
+    public componentDidMount() {
+        const { filters } = this.props;
+        if (filters) {
+            this.handleFilter();
+        }
+    }
+
     public componentDidUpdate(prevProps) {
         const {
             requests: {
                 mediaGetRequest: { response },
             },
+            filters,
         } = this.props;
+
+        if (filters !== prevProps.filters) {
+            if (filters !== prevProps.filters) {
+                this.handleFilter();
+            }
+        }
 
         if (response !== prevProps.requests.mediaGetRequest.response) {
             const { results } = response;
@@ -80,7 +108,34 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
 
 
     public setApiData = (data: SetStateMethod) => {
-        this.setState({ apiData: data });
+        const { filters } = this.props;
+        this.setState({ apiData: data, apiDataBackup: data },
+            () => {
+                if (filters) {
+                    this.handleFilter();
+                }
+            });
+    }
+
+    private handleFilter = () => {
+        const { apiData } = this.state;
+        const { filters } = this.props;
+        const { region } = filters;
+        console.log('filters', filters);
+
+        if (region.geoarea) {
+            const filteredData = apiData.filter(
+                openspace => openspace.province === region.geoarea,
+            );
+            this.setState({
+                apiData: filteredData,
+            });
+        } else {
+            const { apiDataBackup } = this.state;
+            this.setState({
+                apiData: apiDataBackup,
+            });
+        }
     }
 
 
@@ -112,7 +167,8 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect()(
+
+export default connect(mapStateToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requestOptions)(AllOpenspacesModal),
     ),

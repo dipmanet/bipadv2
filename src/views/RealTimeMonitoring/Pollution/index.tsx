@@ -132,7 +132,6 @@ class Pollution extends React.PureComponent<Props> {
             realTimePollution,
             closeModal,
         } = this.props;
-        console.log('real time pollution: ', realTimePollution);
         const formattedTableData = convertNormalTableToCsv(realTimePollution,
             this.pollutionHeader);
         return (
