@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
@@ -6,7 +6,11 @@ import styles from './styles.scss';
 
 const NavButtons = (props) => {
     const [page, setPage] = useState(1);
-    const { getPage, maxPage } = props;
+    const {
+        getPage,
+        maxPage,
+        setDestination,
+    } = props;
 
     const handleNext = () => {
         if (page < maxPage) {
@@ -21,6 +25,14 @@ const NavButtons = (props) => {
             getPage(page - 1);
         }
     };
+
+    useEffect(() => {
+        if (page === 0) {
+            setDestination('nepal');
+        } else if (page === 1) {
+            setDestination('bahrabise');
+        }
+    }, [page, setDestination]);
 
     return (
         <div className={styles.navBtnCont}>

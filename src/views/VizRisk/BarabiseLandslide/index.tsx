@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -7,7 +8,9 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-import Map from './Map';
+import { FlyToInterpolator } from 'react-map-gl';
+import Deck from './Deck';
+// import Map from './MapOriginal';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -16,12 +19,15 @@ import {
     methods,
 } from '#request';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import { hazardTypesList,
+    incidentPointToGeojsonVR,
+    getWardFilter } from '#utils/domain';
 
 import { hazardTypesSelector,
     incidentListSelectorIP,
     filtersSelector,
     regionsSelector } from '#selectors';
-
+import Locations from './Deck/locations';
 import {
     transformDataRangeToFilter,
     transformRegionToFilter,
@@ -38,6 +44,8 @@ import {
     setEventListAction,
 } from '#actionCreators';
 import NavButtons from './Components/NavButtons';
+import styles from './styles.scss';
+import LandslideData from './Deck/librariesData';
 
 interface Params {
 }
@@ -88,84 +96,148 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    incidentsGetRequest: {
-        url: '/incident/',
-        method: methods.GET,
-        // We have to transform dateRange to incident_on__lt and incident_on__gt
-        query: () => {
-            const filters = {
-                region: {},
-                hazard: [17],
-                dataDateRange: {
-                    rangeInDays: 'custom',
-                    startDate: '2011-01-01',
-                    endDate: '2021-01-01',
-                },
-            };
-            return ({
-                ...transformFilters(filters),
-                expand: ['loss', 'event', 'wards'],
-                ordering: '-incident_on',
-                limit: -1,
-            });
-        },
-        onSuccess: ({ response, props: { setIncidentList } }) => {
-            interface Response { results: PageType.Incident[] }
-            const { results: incidentList = [] } = response as Response;
-            setIncidentList({ incidentList });
-        },
-        onMount: true,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
+// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+//     incidentsGetRequest: {
+//         url: '/incident/',
+//         method: methods.GET,
+//         // We have to transform dateRange to incident_on__lt and incident_on__gt
+//         query: () => {
+//             const filters = {
+//                 region: {},
+//                 hazard: [17],
+//                 dataDateRange: {
+//                     rangeInDays: 'custom',
+//                     startDate: '2011-01-01',
+//                     endDate: '2021-01-01',
+//                 },
+//             };
+//             return ({
+//                 ...transformFilters(filters),
+//                 expand: ['loss', 'event', 'wards'],
+//                 ordering: '-incident_on',
+//                 limit: -1,
+//             });
+//         },
+//         onSuccess: ({ response, props: { setIncidentList } }) => {
+//             interface Response { results: PageType.Incident[] }
+//             const { results: incidentList = [] } = response as Response;
+//             setIncidentList({ incidentList });
+//         },
+//         onMount: true,
+//         onPropsChanged: {
+//             filters: ({
+//                 props: { filters },
+//                 prevProps: { filters: prevFilters },
+//             }) => {
+//                 const shouldRequest = filters !== prevFilters;
 
-                return shouldRequest;
-            },
-        },
-        // extras: { schemaName: 'incidentResponse' },
-    },
-};
+//                 return shouldRequest;
+//             },
+//         },
+//         // extras: { schemaName: 'incidentResponse' },
+//     },
+// };
 
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [destination, setDestination] = useState(1);
+    const [location, setLocation] = useState(Locations.nepal);
+    const [viewState, setViewState] = useState(Locations.nepal);
+
+    const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
+
     const {
         incidentList,
         hazardTypes,
         regions,
     } = props;
     const getSanitizedIncident = memoize(getSanitizedIncidents);
+    // eslint-disable-next-line no-shadow
+    const setDestinationhandle = destination => setDestination(destination);
+
     const sanitizedIncidentList = getSanitizedIncident(
         incidentList,
         regions,
         hazardTypes,
     );
 
+    const getPointFeatureCollection = memoize(incidentPointToGeojsonVR);
+    const pointFeatureCollection = getPointFeatureCollection(
+        sanitizedIncidentList,
+        hazardTypes,
+        { ini: 1293819300000, fin: 1609438500000 },
+    );
+    const cood = Object.values(pointFeatureCollection)[1]
+        .map(item => item.geometry.coordinates);
+
+    console.log('coordinates array:', cood);
+
+    const librariesData = Object.values(cood).map(item => ({ position: item }));
+    console.log('coordinates array just values:', JSON.stringify(librariesData));
+
     const setPage = (val: number) => {
         setCurrentPage(val);
     };
 
+    const handleLocationClick = (destinations) => {
+        console.log(destinations);
+    };
+
+    const handleChangeViewState = ({ viewState }) => setViewState(viewState);
+    const handleFlyTo = (destination) => {
+        console.log(destination);
+        setViewState({
+            ...viewState,
+            ...destination,
+            transitionDuration: 2000,
+            transitionInterpolator: new FlyToInterpolator(),
+        });
+    };
     return (
         <>
-            <Map
+            {/* <Map
                 incidentList={sanitizedIncidentList}
                 hazardTypes={hazardTypes}
                 page={currentPage}
-            />
+            /> */}
+            {
+                <Deck
+                    librariesData={librariesData}
+                    location={location}
+                    viewState={viewState}
+                    onViewStateChange={handleChangeViewState}
+                    libraries={LandslideData.librariesData}
+                    currentPage={currentPage}
+                    // destination={destination}
+                />
+
+            }
+
             <NavButtons
                 getPage={setPage}
                 maxPage={2}
+                setDestination={setDestinationhandle}
             />
+
+            <div className={styles.tempButtons}>
+                {
+                    Object.keys(Locations)
+                        .map(item => (
+                            <button
+                                type="button"
+                                key={item}
+                                onClick={() => handleFlyTo(Locations[item])}
+                            >
+                                {item}
+                            </button>
+                        ))
+                }
+            </div>
         </>
     );
 };
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    createConnectedRequestCoordinator<ReduxProps>(),
-    createRequestClient(requests),
 )(BarabiseLandslide);
