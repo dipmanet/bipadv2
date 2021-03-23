@@ -181,7 +181,6 @@ export default class RealTimeMap extends React.PureComponent {
                 description,
             },
         } = feature;
-        console.log(feature);
         this.setState({
             tooltipRenderer: this.pollutionTooltipRenderer,
             tooltipParams: {
