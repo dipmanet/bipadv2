@@ -126,40 +126,18 @@ class Rajapur extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1> Gulariya Municipality  </h1>
-                {/* <p>
-                         Rajapur municipality lies in the Terai region of Bardiya
-                        district in Province five. It covers a total area of 127.08
-                        square km, and is situated at an elevation of 142 m to 154 m from sea level.
-                </p> */}
                 <p>
-                Gulariya municipality is located in the flat plain Terai region of Province 5,
-                 and is the administrative headquarters of Bardiya district. Culturally rich
-                 Gulariya municipality is a home to different faiths, castes, religions and
-                 ethnicities.
-                 The Madhesi, Tharu and Muslim comprise of largest communities in Gulariya
-                 Municipality,
-                 while the Hinduism and Islam are the major religion. Representing the total
-                  area of 118.21square km,
-                 it is situated at the elevation of 145 m from the sea level. Being composed
-                 of alluvial and fertile
-                 plain land, Gulariya is of substantial significance from the viewpoint of
-                 agricultural production.
-                 Connectivity with the East-West Highway makes it further attractive and
-                 the area has been growing
-                 at a rapid pace.
+                Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province.
+                It covers a total area of 118.21square km, and is situated at an elevation of 145m from
+                sea level.
 
                 </p>
                 <h2>Climate</h2>
                 <p>
-                    {' '}
-                    Gulariya experiences a sub tropical climate with an average maximum
-                    temperature of 42 oC in summer and
-                    average minimum temperature of 7.7 oC in winter. Summer lasts from
-                    Chaitra to Ashwin while there is extreme
-                    winter in Mangshir, Poush and Magh. Monsoon starts here a bit early
-                     from the last week of Jesth till Ashwin
-                    bringing the heavy downpours. Overall in a year, Gulariya experiences
-                     average annual rainfall of 1050 mm.
+                Gulariya experiences a sub tropical climate. Summer starts from March (Chaitra)
+                 and lasts till June (Jestha). Winter begins in November (Mangsir) and lasts till
+                 February(Magh). Gulariya faces heavy downpours during the monsoon, from June (Jestha)
+                 to October (Ashwin).
 
                 </p>
                 <div className={styles.iconRow}>

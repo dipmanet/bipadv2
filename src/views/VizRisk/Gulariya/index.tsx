@@ -46,6 +46,8 @@ export default class Gulariya extends React.Component {
             showPopulation: 'ward',
             evacElement: 'all',
             showCriticalElements: true,
+            disableNavRightBtn: false,
+            disableNavLeftBtn: false,
         };
     }
 
@@ -126,6 +128,29 @@ export default class Gulariya extends React.Component {
         });
     }
 
+    public enableNavBtns = (val) => {
+        if (val === 'Right') {
+            this.setState({ disableNavRightBtn: false });
+        } else if (val === 'Left') {
+            this.setState({ disableNavLeftBtn: false });
+        } else {
+            this.setState({ disableNavLeftBtn: false });
+            this.setState({ disableNavRightBtn: false });
+        }
+    }
+
+
+    public disableNavBtns = (val) => {
+        if (val === 'Right') {
+            this.setState({ disableNavRightBtn: true });
+        } else if (val === 'Left') {
+            this.setState({ disableNavLeftBtn: true });
+        } else {
+            this.setState({ disableNavLeftBtn: true });
+            this.setState({ disableNavRightBtn: true });
+        }
+    }
+
     public render() {
         const {
             showRaster,
@@ -138,6 +163,8 @@ export default class Gulariya extends React.Component {
             evacElement,
             criticalFlood,
             showCriticalElements,
+            disableNavLeftBtn,
+            disableNavRightBtn,
         } = this.state;
 
         return (
@@ -187,6 +214,8 @@ export default class Gulariya extends React.Component {
                     criticalElement={criticalElement}
                     criticalFlood={criticalFlood}
                     evacElement={evacElement}
+                    enableNavBtns={this.enableNavBtns}
+                    disableNavBtns={this.disableNavBtns}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1

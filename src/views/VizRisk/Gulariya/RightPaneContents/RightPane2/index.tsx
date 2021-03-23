@@ -161,16 +161,8 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Gulariya has total area of 118.21square km, out of which, 84.11% of
-                land is used for agriculture.
-                Major crops grown in this municipality are rice, maize, and wheat.
-                Forest area covers 5.98% of
-                land while built-in area and water bodies occupy 7.66% and 3.41% of
-                total land respectively.
-                Krishnasaar Conservation Area, a home to Blackbuck (Antelope Cervicapra)
-                 locally named as Krishnasaar,
-                along with different flora and fauna is also situated in Gulariya
-                 Municipality.
+                Most of the land is used for agriculture. Other areas are covered by forest,
+                 built-up area, waterbodies, conservation areas.
                 </p>
                 {/* <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
