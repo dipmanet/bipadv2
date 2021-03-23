@@ -1,34 +1,40 @@
 export default {
     demographicsData: [
         {
-            name: 'Ward 4', MalePop: 3300, FemalePop: 3779, TotalHousehold: 1693,
+            name: 'Ward 1', MalePop: 3253, FemalePop: 3135, TotalFamilyCount: 1244,
         },
         {
-            name: 'Ward 10', MalePop: 3213, FemalePop: 3343, TotalHousehold: 1268,
+            name: 'Ward 2', MalePop: 2883, FemalePop: 2767, TotalFamilyCount: 1147,
         },
         {
-            name: 'Ward 5', MalePop: 2938, FemalePop: 3373, TotalHousehold: 1360,
+            name: 'Ward 3', MalePop: 2826, FemalePop: 2592, TotalFamilyCount: 1027,
         },
         {
-            name: 'Ward 2', MalePop: 2729, FemalePop: 3012, TotalHousehold: 1251,
+            name: 'Ward 4', MalePop: 4633, FemalePop: 4444, TotalFamilyCount: 1786,
         },
         {
-            name: 'Ward 3', MalePop: 2499, FemalePop: 3195, TotalHousehold: 1255,
+            name: 'Ward 5', MalePop: 2158, FemalePop: 2177, TotalFamilyCount: 782,
         },
         {
-            name: 'Ward 6', MalePop: 2583, FemalePop: 3034, TotalHousehold: 1185,
+            name: 'Ward 6', MalePop: 2257, FemalePop: 2139, TotalFamilyCount: 916,
         },
         {
-            name: 'Ward 1', MalePop: 2357, FemalePop: 3040, TotalHousehold: 1283,
+            name: 'Ward 7', MalePop: 2295, FemalePop: 2105, TotalFamilyCount: 826,
         },
         {
-            name: 'Ward 8', MalePop: 2339, FemalePop: 2815, TotalHousehold: 1059,
+            name: 'Ward 8', MalePop: 3316, FemalePop: 3123, TotalFamilyCount: 1329,
         },
         {
-            name: 'Ward 9', MalePop: 2056, FemalePop: 2607, TotalHousehold: 1018,
+            name: 'Ward 9', MalePop: 3609, FemalePop: 3492, TotalFamilyCount: 1369,
         },
         {
-            name: 'Ward 7', MalePop: 1505, FemalePop: 1867, TotalHousehold: 766,
+            name: 'Ward 10', MalePop: 3147, FemalePop: 2865, TotalFamilyCount: 1139,
+        },
+        {
+            name: 'Ward 11', MalePop: 3472, FemalePop: 3139, TotalFamilyCount: 1179,
+        },
+        {
+            name: 'Ward 12', MalePop: 3123, FemalePop: 3041, TotalFamilyCount: 1087,
         },
 
     ],

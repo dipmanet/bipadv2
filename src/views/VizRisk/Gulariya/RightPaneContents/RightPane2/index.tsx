@@ -172,7 +172,7 @@ class RightPane extends React.PureComponent<Props, State> {
                 along with different flora and fauna is also situated in Gulariya
                  Municipality.
                 </p>
-                <ResponsiveContainer className={styles.respContainer} height={200}>
+                {/* <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
                         width={200}
                         height={150}
@@ -193,7 +193,8 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                data.map((entry, index) => <Cell key={`cell-${entry.name}`}
+                                 fill={COLORS_CHART[index % COLORS_CHART.length]} />)
                             }
                             <Label
                                 width={30}
@@ -201,16 +202,17 @@ class RightPane extends React.PureComponent<Props, State> {
                                 content={(
                                     <CustomLabel
                                         value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${((data[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
+                                        value2={` / ${((data[activeIndex].value / 127.02)
+                                             * 100).toFixed(2)}%`}
                                     />
                                 )}
                             />
                         </Pie>
                         <Tooltip content={this.CustomTooltip} />
                     </PieChart>
-                </ResponsiveContainer>
+                </ResponsiveContainer> */}
 
-                <div className={styles.customChartLegend}>
+                {/* <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={data[0].name}
                         barColor={COLORS_CHART[0]}
@@ -249,7 +251,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         selected={activeIndex === 1}
                     />
 
-                </div>
+                </div> */}
                 {/* <SourceInfo /> */}
                 <Disclaimer />
             </div>
