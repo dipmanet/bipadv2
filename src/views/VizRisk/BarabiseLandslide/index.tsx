@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import Anime from 'react-anime';
+
 import {
     _cs,
     Obj,
@@ -9,6 +11,7 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { FlyToInterpolator } from 'react-map-gl';
+import { Spring } from 'react-spring/renderprops';
 import Deck from './Deck';
 // import Map from './MapOriginal';
 import {
@@ -216,10 +219,22 @@ const BarabiseLandslide = (props) => {
                 maxPage={3}
                 setDestination={setDestinationhandle}
             />
+            <Anime
+                opacity={1}
+                duration={2000}
+                delay={4000}
+            >
+                <div className={styles.narrativesContainer}>
+                    {/* {Narratives.currentPage} */}
+                    <div className={styles.narrativeTitle}>
+                        {Narratives[currentPage].title}
+                    </div>
+                    <div className={styles.narrativeDescription}>
+                        {Narratives[currentPage].description}
+                    </div>
+                </div>
+            </Anime>
 
-            <div className={styles.narrativesContainer}>
-                {Narratives[currentPage]}
-            </div>
             {/* <div className={styles.tempButtons}>
                 {
                     Object.keys(Locations)
