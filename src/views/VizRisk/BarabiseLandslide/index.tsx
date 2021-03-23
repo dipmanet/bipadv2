@@ -47,7 +47,7 @@ import NavButtons from './Components/NavButtons';
 import styles from './styles.scss';
 import LandslideData from './Deck/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
-import Narratives from './Narratives/Narratives';
+import Narratives from './Narratives';
 
 interface Params {
 }
