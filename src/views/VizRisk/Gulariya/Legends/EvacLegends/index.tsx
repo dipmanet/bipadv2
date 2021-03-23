@@ -110,7 +110,7 @@ const EvacLegends = (props) => {
                             type="button"
                             className={showCulture
                                 ? styles.criticalButtonSelected
-                                : styles.criticalButton}
+                                : styles.criticalButtonSelected}
                             onClick={() => handleEvacclick('culture')}
                         >
                             <ScalableVectorGraphics

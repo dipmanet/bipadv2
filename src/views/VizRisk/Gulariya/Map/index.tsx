@@ -89,7 +89,7 @@ const slideTwoLayers = ['bridgeGulariya', 'water', 'waterway',
 
 const slideThreeLayers = ['wardNumbers', 'water', 'waterway',
     'canalGulariya', 'wardOutline',
-    'ward-fill-local',
+    'ward-fill-local', 'densityGulariya',
 ];
 
 const slideFourLayers = ['bridgeGulariya', 'water', 'waterway',
