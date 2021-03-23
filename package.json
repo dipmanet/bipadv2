@@ -140,6 +140,7 @@
         "@deck.gl/layers": "^8.4.10",
         "@deck.gl/mapbox": "^8.4.10",
         "@deck.gl/react": "^8.4.10",
+        "@luma.gl/constants": "^8.4.4",
         "@mapbox/mapbox-gl-draw": "^1.1.2",
         "@material-ui/core": "^4.11.0",
         "@reach/router": "^1.2.1",

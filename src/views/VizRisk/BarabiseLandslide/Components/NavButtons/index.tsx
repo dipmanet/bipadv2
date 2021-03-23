@@ -26,14 +26,6 @@ const NavButtons = (props) => {
         }
     };
 
-    useEffect(() => {
-        if (page === 0) {
-            setDestination('nepal');
-        } else if (page === 1) {
-            setDestination('bahrabise');
-        }
-    }, [page, setDestination]);
-
     return (
         <div className={styles.navBtnCont}>
             <button

@@ -9,8 +9,9 @@
     justify-content: center;
     align-items: center;
     .navText{
-        color: black;
-        opacity: 0.67;
+        color: white;
+        text-shadow: 2px 2px 2px #000000;
+        opacity: 0.87;
     }
     .navbutton{
         // width: 50px;
@@ -19,6 +20,8 @@
         color: white;
         .btnDisable{
             color: gray;
+            text-shadow: 2px 2px 2px #646464;
+            opacity: 0.87;
             cursor:not-allowed;
             padding:5px;
             display: flex;
@@ -27,7 +30,9 @@
 
         }
         .nextPrevBtn{
-            color: black;
+            color: white;
+            text-shadow: 2px 2px 2px #000000;
+            opacity: 0.87;
             cursor:pointer;
             padding: 5px;
             display: flex;

@@ -46,6 +46,8 @@ import {
 import NavButtons from './Components/NavButtons';
 import styles from './styles.scss';
 import LandslideData from './Deck/librariesData';
+import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
+import Narratives from './Narratives';
 
 interface Params {
 }
@@ -96,47 +98,47 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
-// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-//     incidentsGetRequest: {
-//         url: '/incident/',
-//         method: methods.GET,
-//         // We have to transform dateRange to incident_on__lt and incident_on__gt
-//         query: () => {
-//             const filters = {
-//                 region: {},
-//                 hazard: [17],
-//                 dataDateRange: {
-//                     rangeInDays: 'custom',
-//                     startDate: '2011-01-01',
-//                     endDate: '2021-01-01',
-//                 },
-//             };
-//             return ({
-//                 ...transformFilters(filters),
-//                 expand: ['loss', 'event', 'wards'],
-//                 ordering: '-incident_on',
-//                 limit: -1,
-//             });
-//         },
-//         onSuccess: ({ response, props: { setIncidentList } }) => {
-//             interface Response { results: PageType.Incident[] }
-//             const { results: incidentList = [] } = response as Response;
-//             setIncidentList({ incidentList });
-//         },
-//         onMount: true,
-//         onPropsChanged: {
-//             filters: ({
-//                 props: { filters },
-//                 prevProps: { filters: prevFilters },
-//             }) => {
-//                 const shouldRequest = filters !== prevFilters;
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    incidentsGetRequest: {
+        url: '/incident/',
+        method: methods.GET,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: () => {
+            const filters = {
+                region: {},
+                hazard: [17],
+                dataDateRange: {
+                    rangeInDays: 'custom',
+                    startDate: '2011-01-01',
+                    endDate: '2021-01-01',
+                },
+            };
+            return ({
+                ...transformFilters(filters),
+                expand: ['loss', 'event', 'wards'],
+                ordering: '-incident_on',
+                limit: -1,
+            });
+        },
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            interface Response { results: PageType.Incident[] }
+            const { results: incidentList = [] } = response as Response;
+            setIncidentList({ incidentList });
+        },
+        onMount: true,
+        onPropsChanged: {
+            filters: ({
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
 
-//                 return shouldRequest;
-//             },
-//         },
-//         // extras: { schemaName: 'incidentResponse' },
-//     },
-// };
+                return shouldRequest;
+            },
+        },
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
 
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
@@ -169,19 +171,13 @@ const BarabiseLandslide = (props) => {
         { ini: 1293819300000, fin: 1609438500000 },
     );
     const cood = Object.values(pointFeatureCollection)[1]
-        .map(item => item.geometry.coordinates);
-
-    console.log('coordinates array:', cood);
+        .map(item => ({ position: item.geometry.coordinates, date: item.properties.incidentOn }));
+    console.log('data:', pointFeatureCollection);
 
     const librariesData = Object.values(cood).map(item => ({ position: item }));
-    console.log('coordinates array just values:', JSON.stringify(librariesData));
 
     const setPage = (val: number) => {
         setCurrentPage(val);
-    };
-
-    const handleLocationClick = (destinations) => {
-        console.log(destinations);
     };
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
@@ -209,6 +205,7 @@ const BarabiseLandslide = (props) => {
                     onViewStateChange={handleChangeViewState}
                     libraries={LandslideData.librariesData}
                     currentPage={currentPage}
+                    handleFlyTo={handleFlyTo}
                     // destination={destination}
                 />
 
@@ -216,11 +213,12 @@ const BarabiseLandslide = (props) => {
 
             <NavButtons
                 getPage={setPage}
-                maxPage={2}
+                maxPage={3}
                 setDestination={setDestinationhandle}
             />
 
-            <div className={styles.tempButtons}>
+
+            {/* <div className={styles.tempButtons}>
                 {
                     Object.keys(Locations)
                         .map(item => (
@@ -233,11 +231,13 @@ const BarabiseLandslide = (props) => {
                             </button>
                         ))
                 }
-            </div>
+            </div> */}
         </>
     );
 };
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
+    // createConnectedRequestCoordinator<ReduxProps>(),
+    // createRequestClient(requests),
 )(BarabiseLandslide);
