@@ -1,17 +1,17 @@
 export default {
-    slideOne: {
+    1: {
         title: 'This is first title',
         description: 'this is first slide description',
     },
-    slideTwo: {
+    2: {
         title: 'This is second title',
         description: 'this is second slide description',
     },
-    slideThree: {
+    3: {
         title: 'This is three title',
         description: 'this is third slide description',
     },
-    slideFour: {
+    4: {
         title: 'This is four title',
         description: 'this is fourth slide description',
     },

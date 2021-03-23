@@ -47,7 +47,7 @@ import NavButtons from './Components/NavButtons';
 import styles from './styles.scss';
 import LandslideData from './Deck/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
-import Narratives from './Narratives';
+import Narratives from './Narratives/Narratives';
 
 interface Params {
 }
@@ -217,7 +217,9 @@ const BarabiseLandslide = (props) => {
                 setDestination={setDestinationhandle}
             />
 
-
+            <div className={styles.narrativesContainer}>
+                {Narratives[currentPage]}
+            </div>
             {/* <div className={styles.tempButtons}>
                 {
                     Object.keys(Locations)
