@@ -95,15 +95,18 @@ export default class Gulariya extends React.Component {
         }
     }
 
-    public handlePrev = () => {
-        if (this.state.rightElement > 0) {
-            this.setState(prevState => ({ rightElement: prevState.rightElement - 1 }));
+    public handleNext = () => {
+        if (this.state.rightElement < rightelements.length) {
+            this.setState(prevState => ({ rightElement: prevState.rightElement + 1 }));
+            this.disableNavBtns('both');
         }
     }
 
-    public handleMoveEnd = (value) => {
-        this.setState({ disableNavBtns: false });
-        // console.log('moveend: ', value);
+    public handlePrev = () => {
+        if (this.state.rightElement > 0) {
+            this.setState(prevState => ({ rightElement: prevState.rightElement - 1 }));
+            this.disableNavBtns('both');
+        }
     }
 
     public handlePopulationChange =(showPopulation) => {
@@ -151,6 +154,7 @@ export default class Gulariya extends React.Component {
         }
     }
 
+
     public render() {
         const {
             showRaster,
@@ -175,11 +179,12 @@ export default class Gulariya extends React.Component {
                             type="button"
                             onClick={this.handlePrev}
                             className={styles.navbutton}
-                            disabled={rightElement === 0}
+                            disabled={disableNavLeftBtn}
+
                         >
                             <Icon
                                 name="chevronLeft"
-                                className={rightElement === 0
+                                className={disableNavLeftBtn
                                     ? styles.btnDisable
                                     : styles.nextPrevBtn
                                 }
@@ -189,14 +194,13 @@ export default class Gulariya extends React.Component {
                             type="button"
                             onClick={this.handleNext}
                             className={styles.navbutton}
-                            disabled={(rightElement === (rightelements.length) - 1)}
+                            disabled={disableNavRightBtn}
                         >
                             <Icon
                                 name="chevronRight"
-                                className={(rightElement === rightelements.length - 1)
+                                className={disableNavRightBtn
                                     ? styles.btnDisable
-                                    : styles.nextPrevBtn
-                                }
+                                    : styles.nextPrevBtn}
                             />
                         </button>
 
