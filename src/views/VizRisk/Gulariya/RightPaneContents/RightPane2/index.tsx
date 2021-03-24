@@ -245,7 +245,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div> */}
                 {/* <SourceInfo /> */}
-                <Disclaimer />
+                {/* <Disclaimer /> */}
             </div>
         );
     }

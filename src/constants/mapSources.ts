@@ -12,7 +12,7 @@ export default {
     wardFillLocalGulariya: {
         url: `${process.env.REACT_APP_MAP_SOURCE_GULARIYA}`,
         layers: {
-            wards: 'gulariya_flood-9eexvs',
+            ward: 'mun_gulariya-5k57lz',
         },
     },
     nepalCentroid: {
@@ -25,13 +25,13 @@ export default {
         },
     },
 
-    populationDensity: {
-        // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_DENSITY_POPULATION}`,
-        url: 'mapbox://ankur20.92mbzrhu',
-        layers: {
-            density: 'density-b7o1uo',
-        },
-    },
+    // populationDensity: {
+    //     // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_DENSITY_POPULATION}`,
+    //     url: 'mapbox://ankur20.92mbzrhu',
+    //     layers: {
+    //         density: 'density-b7o1uo',
+    //     },
+    // },
 
     criticalInfrastructures: {
         // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_CRITICAL_INFRASTRUCTURES}`,

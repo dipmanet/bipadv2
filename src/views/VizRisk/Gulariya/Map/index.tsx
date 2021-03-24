@@ -349,10 +349,10 @@ class FloodHistoryMap extends React.Component {
                 url: mapSources.nepal.url,
             });
 
-            this.map.addSource('density', {
-                type: 'vector',
-                url: mapSources.populationDensity.url,
-            });
+            // this.map.addSource('density', {
+            //     type: 'vector',
+            //     url: mapSources.populationDensity.url,
+            // });
 
             this.map.addLayer({
                 id: 'ward-fill-local',
