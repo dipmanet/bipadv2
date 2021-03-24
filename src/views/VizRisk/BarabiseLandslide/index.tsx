@@ -12,6 +12,7 @@ import {
 import memoize from 'memoize-one';
 import { FlyToInterpolator } from 'react-map-gl';
 import { Spring } from 'react-spring/renderprops';
+// import Locations from './locations';
 import Deck from './Deck';
 // import Map from './MapOriginal';
 import Legends from './Components/Legends';
@@ -33,7 +34,6 @@ import { hazardTypesSelector,
     regionsSelector } from '#selectors';
 import Locations from './Deck/locations';
 import {
-    transformDataRangeToFilter,
     transformRegionToFilter,
     transformDataRangeLocaleToFilter,
 } from '#utils/transformations';
@@ -52,6 +52,7 @@ import styles from './styles.scss';
 import LandslideData from './Deck/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import Narratives from './Narratives';
+import legendList from './Components/Legends/legends';
 
 interface Params {
 }
@@ -143,7 +144,8 @@ const transformFilters = ({
 //         // extras: { schemaName: 'incidentResponse' },
 //     },
 // };
-
+console.log('just keys: ', Object.keys(legendList));
+console.log('object: ', legendList);
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -235,7 +237,11 @@ const BarabiseLandslide = (props) => {
                     </div>
                 </div>
             </Anime>
-            <Legends page={currentPage} />
+            {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
+                ? <Legends page={currentPage} />
+                : ''
+            }
+
         </>
     );
 };

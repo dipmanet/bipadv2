@@ -2,13 +2,13 @@ export default {
     3: {
         title: 'Landuse',
         legends: [
-            { color: '#444', label: 'Forest' },
-            { color: '#555', label: 'Farmland' },
-            { color: '#666', label: 'Bridge' },
-            { color: '#777', label: 'Road' },
-            { color: '#999', label: 'Water Bodies' },
-            { color: '#aaa', label: 'Buildings' },
-            { color: '#bbb', label: 'Other' },
+            { key: 1, color: '#444', label: 'Forest' },
+            { key: 2, color: '#555', label: 'Farmland' },
+            { key: 3, color: '#666', label: 'Bridge' },
+            { key: 4, color: '#777', label: 'Road' },
+            { key: 5, color: '#999', label: 'Water Bodies' },
+            { key: 6, color: '#aaa', label: 'Buildings' },
+            { key: 7, color: '#bbb', label: 'Other' },
         ],
     },
 };
