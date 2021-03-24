@@ -39,6 +39,9 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
+        } else if (municipality === 'tikapur') {
+            setCurrentPage(3);
+            setTitle('Visualising Flood Exposure');
         }
     };
 
@@ -103,6 +106,13 @@ const VizRiskMainPage = () => {
                                     onClick={() => handleMenuTitleClick('gulariya')}
                                 >
                                     <h1 className={styles.menuItems}>Gulariya Municipality</h1>
+
+                                </Button>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('tikapur')}
+                                >
+                                    <h1 className={styles.menuItems}>Tikapur Municipality</h1>
 
                                 </Button>
                             </div>
