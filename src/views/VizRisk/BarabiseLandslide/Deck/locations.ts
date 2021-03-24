@@ -5,6 +5,7 @@ export default {
         zoom: 11.4,
         pitch: 40,
         bearing: 0.7,
+        transitionDuration: 2000,
     },
 
     nepal: {

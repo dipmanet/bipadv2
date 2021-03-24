@@ -53,6 +53,7 @@ import LandslideData from './Deck/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import Narratives from './Narratives';
 import legendList from './Components/Legends/legends';
+import { flatVulnerabilityTypes } from '#views/RiskInfo/LeftPane/Details/Vulnerability/vulnerabilityTypes';
 
 interface Params {
 }
@@ -152,14 +153,16 @@ const BarabiseLandslide = (props) => {
     const [destination, setDestination] = useState(1);
     const [location, setLocation] = useState(Locations.nepal);
     const [viewState, setViewState] = useState(Locations.nepal);
-
+    const [transitionEnd, setTransitionEnd] = useState(false);
+    const [reAnimate, setReanimate] = useState(false);
+    const [delay, setDelay] = useState(10000);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
-
     const {
         incidentList,
         hazardTypes,
         regions,
     } = props;
+    const handleAnimationStart = () => setReanimate(false);
     const getSanitizedIncident = memoize(getSanitizedIncidents);
     // eslint-disable-next-line no-shadow
     const setDestinationhandle = destination => setDestination(destination);
@@ -183,15 +186,16 @@ const BarabiseLandslide = (props) => {
 
     const setPage = (val: number) => {
         setCurrentPage(val);
+        setReanimate(true);
+        setDelay(3000);
     };
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
     const handleFlyTo = (destination) => {
-        console.log(destination);
         setViewState({
             ...viewState,
             ...destination,
-            transitionDuration: 2000,
+            transitionDuration: 3000,
             transitionInterpolator: new FlyToInterpolator(),
         });
     };
@@ -222,21 +226,36 @@ const BarabiseLandslide = (props) => {
                 maxPage={3}
                 setDestination={setDestinationhandle}
             />
-            <Anime
-                opacity={1}
-                duration={2000}
-                delay={2000}
+            <Spring
+                from={{ opacity: 0 }}
+                to={{ opacity: 1 }}
+                config={
+                    { duration: 2000,
+                        delay }
+                }
+                onStart={handleAnimationStart}
+                reset={reAnimate}
             >
-                <div className={styles.narrativesContainer}>
-                    {/* {Narratives.currentPage} */}
-                    <div className={styles.narrativeTitle}>
-                        {Narratives[currentPage].title}
-                    </div>
-                    <div className={styles.narrativeDescription}>
-                        {Narratives[currentPage].description}
-                    </div>
-                </div>
-            </Anime>
+                {
+                    springProps => (
+                        <div
+                            style={{
+                                opacity: springProps.opacity,
+                            }}
+                            className={styles.narrativesContainer}
+                        >
+                            {/* {Narratives.currentPage} */}
+                            <div className={styles.narrativeTitle}>
+                                {Narratives[currentPage].title}
+                            </div>
+                            <div className={styles.narrativeDescription}>
+                                {Narratives[currentPage].description}
+                            </div>
+                        </div>
+                    )
+
+                }
+            </Spring>
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
                 ? <Legends page={currentPage} />
                 : ''

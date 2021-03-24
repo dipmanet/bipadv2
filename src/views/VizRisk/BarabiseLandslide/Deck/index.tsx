@@ -110,7 +110,6 @@ const Deck = (props) => {
                         radiusMinPixels: 3,
                         visible: allDataVisible,
                         animationProgress: springProps.enterProgress,
-
                         getDelayFactor: d => (delayProp === 'longitude'
                             ? longitudeDelayScale(d.date)
                             : targetDelayScale(d.distToTarget)),
