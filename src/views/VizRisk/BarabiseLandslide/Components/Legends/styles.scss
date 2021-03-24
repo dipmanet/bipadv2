@@ -1,3 +1,10 @@
 .legendsContainer{
     background-color: white;
+    .legendsItemsList{
+        display: flex;
+        flex-direction: column;
+        .legendsRow{
+            display: flex;
+        }
+    }
 }

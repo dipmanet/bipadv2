@@ -14,6 +14,7 @@ import { FlyToInterpolator } from 'react-map-gl';
 import { Spring } from 'react-spring/renderprops';
 import Deck from './Deck';
 // import Map from './MapOriginal';
+import Legends from './Components/Legends';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -234,7 +235,7 @@ const BarabiseLandslide = (props) => {
                     </div>
                 </div>
             </Anime>
-            <Legends page={pageNumber} />
+            <Legends page={currentPage} />
         </>
     );
 };
