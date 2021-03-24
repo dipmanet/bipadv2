@@ -52,6 +52,7 @@ const Deck = (props) => {
         const map = mapRef.current.getMap();
         const { deck } = deckRef.current;
         map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
+        map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
 
         map.addLayer(
             new MapboxLayer({ id: 'my-scatterplot', deck }),

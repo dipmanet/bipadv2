@@ -234,6 +234,7 @@ const BarabiseLandslide = (props) => {
                     </div>
                 </div>
             </Anime>
+            <Legends page={pageNumber} />
         </>
     );
 };
