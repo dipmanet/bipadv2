@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
 import GL from '@luma.gl/constants';
@@ -10,7 +11,7 @@ import Anime from 'react-anime';
 import { Spring } from 'react-spring/renderprops';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from './locations';
-
+import MapLayers from './mapLayers';
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
 const librariesAnimation = { enterProgress: 0, duration: 2000 };
@@ -25,6 +26,7 @@ const Deck = (props) => {
     const [deckLayers, setLayers] = useState([]);
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
+    const [landSlidePointsVisible, setLandslideVisible] = useState(false);
     const librariesMass = useMemo;
     // eslint-disable-next-line no-shadow
     const {
@@ -49,6 +51,7 @@ const Deck = (props) => {
     const onMapLoad = useCallback(() => {
         const map = mapRef.current.getMap();
         const { deck } = deckRef.current;
+        map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
 
         map.addLayer(
             new MapboxLayer({ id: 'my-scatterplot', deck }),
@@ -56,17 +59,36 @@ const Deck = (props) => {
             // 'water',
         );
     }, []);
+
     useEffect(() => {
+        if (!mapRef.current) {
+            return;
+        }
         if (currentPage === 2) {
+            const map = mapRef.current.getMap();
             handleFlyTo(Locations.bahrabise);
             setRadiusChange(true);
             setAllDataVisible(false);
-            console.log('map:', mapRef.current);
-        }
-        if (currentPage === 1) {
+            MapLayers.landuse.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            setLandslideVisible(true);
+        } else if (currentPage === 1) {
+            const map = mapRef.current.getMap();
             handleFlyTo(Locations.nepal);
             setAllDataVisible(true);
+            map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
+        } else if (currentPage === 3) {
+            const map = mapRef.current.getMap();
+            MapLayers.landuse.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+            setLandslideVisible(false);
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
     return (
@@ -101,7 +123,29 @@ const Deck = (props) => {
                         //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
                         // },
                     }),
+                    new DelayedPointLayer({
+                        id: 'my-scatterplot2',
+                        data: props.bahrabiseLandSlide,
+                        getPosition: d => d.position,
+                        getFillColor: [0, 255, 111],
+                        getRadius: 500,
+                        radiusMinPixels: 3,
+                        // visible: allDataVisible,
+                        animationProgress: 1,
+                        visible: landSlidePointsVisible,
+                        getDelayFactor: d => (delayProp === 'longitude'
+                            ? longitudeDelayScale(d.date)
+                            : targetDelayScale(d.distToTarget)),
+                        // parameters: {
+                        //     // prevent flicker from z-fighting
+                        //     // [GL.DEPTH_TEST]: false,
 
+                        //     [GL.BLEND]: true,
+                        //     [GL.BLEND_SRC_RGB]: GL.ONE,
+                        //     [GL.BLEND_DST_RGB]: GL.ONE,
+                        //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
+                        // },
+                    }),
                     ];
                     return (
                         <>

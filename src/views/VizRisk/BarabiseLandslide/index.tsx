@@ -101,47 +101,47 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    incidentsGetRequest: {
-        url: '/incident/',
-        method: methods.GET,
-        // We have to transform dateRange to incident_on__lt and incident_on__gt
-        query: () => {
-            const filters = {
-                region: {},
-                hazard: [17],
-                dataDateRange: {
-                    rangeInDays: 'custom',
-                    startDate: '2011-01-01',
-                    endDate: '2021-01-01',
-                },
-            };
-            return ({
-                ...transformFilters(filters),
-                expand: ['loss', 'event', 'wards'],
-                ordering: '-incident_on',
-                limit: -1,
-            });
-        },
-        onSuccess: ({ response, props: { setIncidentList } }) => {
-            interface Response { results: PageType.Incident[] }
-            const { results: incidentList = [] } = response as Response;
-            setIncidentList({ incidentList });
-        },
-        onMount: true,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
+// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+//     incidentsGetRequest: {
+//         url: '/incident/',
+//         method: methods.GET,
+//         // We have to transform dateRange to incident_on__lt and incident_on__gt
+//         query: () => {
+//             const filters = {
+//                 region: {},
+//                 hazard: [17],
+//                 dataDateRange: {
+//                     rangeInDays: 'custom',
+//                     startDate: '2011-01-01',
+//                     endDate: '2021-01-01',
+//                 },
+//             };
+//             return ({
+//                 ...transformFilters(filters),
+//                 expand: ['loss', 'event', 'wards'],
+//                 ordering: '-incident_on',
+//                 limit: -1,
+//             });
+//         },
+//         onSuccess: ({ response, props: { setIncidentList } }) => {
+//             interface Response { results: PageType.Incident[] }
+//             const { results: incidentList = [] } = response as Response;
+//             setIncidentList({ incidentList });
+//         },
+//         onMount: true,
+//         onPropsChanged: {
+//             filters: ({
+//                 props: { filters },
+//                 prevProps: { filters: prevFilters },
+//             }) => {
+//                 const shouldRequest = filters !== prevFilters;
 
-                return shouldRequest;
-            },
-        },
-        // extras: { schemaName: 'incidentResponse' },
-    },
-};
+//                 return shouldRequest;
+//             },
+//         },
+//         // extras: { schemaName: 'incidentResponse' },
+//     },
+// };
 
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
@@ -175,7 +175,6 @@ const BarabiseLandslide = (props) => {
     );
     const cood = Object.values(pointFeatureCollection)[1]
         .map(item => ({ position: item.geometry.coordinates, date: item.properties.incidentOn }));
-    console.log('data:', pointFeatureCollection);
 
     const librariesData = Object.values(cood).map(item => ({ position: item }));
 
@@ -207,6 +206,7 @@ const BarabiseLandslide = (props) => {
                     viewState={viewState}
                     onViewStateChange={handleChangeViewState}
                     libraries={LandslideData.librariesData}
+                    bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                     currentPage={currentPage}
                     handleFlyTo={handleFlyTo}
                     // destination={destination}
@@ -222,7 +222,7 @@ const BarabiseLandslide = (props) => {
             <Anime
                 opacity={1}
                 duration={2000}
-                delay={4000}
+                delay={2000}
             >
                 <div className={styles.narrativesContainer}>
                     {/* {Narratives.currentPage} */}
@@ -234,21 +234,6 @@ const BarabiseLandslide = (props) => {
                     </div>
                 </div>
             </Anime>
-
-            {/* <div className={styles.tempButtons}>
-                {
-                    Object.keys(Locations)
-                        .map(item => (
-                            <button
-                                type="button"
-                                key={item}
-                                onClick={() => handleFlyTo(Locations[item])}
-                            >
-                                {item}
-                            </button>
-                        ))
-                }
-            </div> */}
         </>
     );
 };
