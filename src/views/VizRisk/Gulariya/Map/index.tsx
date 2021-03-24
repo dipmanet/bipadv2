@@ -587,17 +587,25 @@ class FloodHistoryMap extends React.Component {
                         pitch: 0,
                         zoom: 11.4,
                         duration: 1000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.resetClusters();
                     this.orderLayers(slideOneLayers);
                     this.toggleVisiblity(slideTwoLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'visible');
                 } else if (nextProps.rightElement === 1) {
-                // this.map.setPitch(40);
+                    this.map.setPitch(40);
                     this.map.easeTo({
                         pitch: 40,
                         zoom: 11.8,
                         duration: 2000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
@@ -609,6 +617,10 @@ class FloodHistoryMap extends React.Component {
                         pitch: 40,
                         zoom: 11.8,
                         duration: 2000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.toggleVisiblity(slideTwoLayers, 'none');
                     this.toggleVisiblity(slideFourLayers, 'none');
@@ -620,6 +632,10 @@ class FloodHistoryMap extends React.Component {
                         pitch: 40,
                         zoom: 11.8,
                         duration: 2000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideFiveLayers, 'none');
@@ -633,6 +649,10 @@ class FloodHistoryMap extends React.Component {
                         pitch: 40,
                         zoom: 11.8,
                         duration: 2000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.toggleVisiblity(slideFourLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'none');
@@ -646,6 +666,10 @@ class FloodHistoryMap extends React.Component {
                         pitch: 40,
                         zoom: 11.8,
                         duration: 2000,
+                        center: [
+                            81.34569465152305,
+                            28.210927128836925,
+                        ],
                     });
                     this.toggleVisiblity(slideFiveLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'visible');
