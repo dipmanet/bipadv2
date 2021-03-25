@@ -41,7 +41,7 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationText}>
                                     {/* {'>'}
                                     {' '} */}
-                                        9077
+                                        48527
                                 </div>
                                 <div className={styles.populationText}>8000</div>
                                 <div className={styles.populationText}>7000</div>

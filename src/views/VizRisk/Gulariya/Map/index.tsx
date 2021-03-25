@@ -313,16 +313,18 @@ class FloodHistoryMap extends React.Component {
                         'icon-image': ['get', 'icon'],
                         'icon-size': 0.3,
                     },
+
                 });
-                this.map.addLayer({
-                    id: `evac-unclustered-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    paint: {
-                        'circle-color': '#ff0000',
-                    },
-                });
+                // this.map.addLayer({
+                //     id: `evac-unclustered-circle-${layer}`,
+                //     type: 'circle',
+                //     source: layer,
+                //     filter: ['!', ['has', 'point_count']],
+                //     paint: {
+                //         'circle-color': '#ff0000',
+                //     },
+
+                // });
 
                 this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'none');

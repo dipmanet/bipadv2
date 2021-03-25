@@ -2,7 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/gulariyaGEOJSON';
+import SchoolGeoJSON from '../Data/tikapurGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
 import {
@@ -44,13 +44,11 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fed990',
-    3, '#fed990', 4, '#9a3404',
-    5, '#ffffd6', 6, '#ffffd6',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#d95f0e', 10, '#fe9b2a',
-    11, '#fe9b2a', 12, '#fe9b2a',
-];
+    1, '#9a3404', 2, '#9a3404',
+    3, '#fed990', 4, '#fed990',
+    5, '#fed990', 6, '#fe9b2a',
+    7, '#d95f0e', 8, '#fe9b2a',
+    9, '#ffffd6'];
 const {
     criticalinfrastructures,
     evaccenters,
@@ -80,33 +78,33 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway', 'municipalitycentroidgeo',
     'wardOutline', 'municipalityFill'];
 
-const slideTwoLayers = ['bridgeGulariya', 'water', 'waterway',
-    'canalGulariya', 'gulariyaBuildings',
-    'GulariyaRoads', 'forestGulariya', 'WoodforestGulariya',
-    'agriculturallandGulariya', 'municipalityFill',
+const slideTwoLayers = ['bridgeTikapur', 'water', 'waterway',
+    'canalTikapur', 'TikapurBuildings',
+    'TikapurRoads', 'forestTikapur', 'WoodforestTikapur',
+    'agriculturallandTikapur', 'agriculturelandTikapurFarmyard', 'municipalityFill',
 
 ];
 
 const slideThreeLayers = ['wardNumbers', 'water', 'waterway',
-    'canalGulariya', 'wardOutline',
-    'ward-fill-local', 'densityGulariya',
+    'canalTikapur', 'wardOutline',
+    'ward-fill-local', 'densityTikapur',
 ];
 
-const slideFourLayers = ['bridgeGulariya', 'water', 'waterway',
-    'canalGulariya',
-    'GulariyaRoads',
+const slideFourLayers = ['bridgeTikapur', 'water', 'waterway',
+    'canalTikapur',
+    'TikapurRoads',
     'municipalityFill'];
 
 const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
-    'canalGulariya', 'gulariyaBuildings',
-    'GulariyaRoads', 'municipalityFill',
+    ...criticalInfraClusters, ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
+    'canalTikapur', 'TikapurBuildings',
+    'TikapurRoads', 'municipalityFill',
 
 ];
 const slideSixLayers = [
-    ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
-    'canalGulariya',
-    'GulariyaRoads',
+    ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
+    'canalTikapur',
+    'TikapurRoads',
     'municipalityFill',
 ];
 class FloodHistoryMap extends React.Component {
@@ -114,8 +112,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.210927128836925,
-            lng: 81.34569465152305,
+            lat: 28.485190958758647,
+            lng: 81.08659888293285,
             zoom: 11,
             wardNumber: 'Hover to see ward number',
         };
@@ -136,7 +134,7 @@ class FloodHistoryMap extends React.Component {
         if (wards) {
             wards.map((item) => {
                 const { id } = item;
-                if (item.municipality === 58005) {
+                if (item.municipality === 71013) {
                     if (item.title === '1') {
                         mapping.push({ id, value: 1 });
                     }
@@ -164,15 +162,6 @@ class FloodHistoryMap extends React.Component {
                     if (item.title === '9') {
                         mapping.push({ id, value: 9 });
                     }
-                    if (item.title === '10') {
-                        mapping.push({ id, value: 10 });
-                    }
-                    if (item.title === '11') {
-                        mapping.push({ id, value: 11 });
-                    }
-                    if (item.title === '12') {
-                        mapping.push({ id, value: 12 });
-                    }
                 }
                 return null;
             });
@@ -180,7 +169,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_GULARIYA_FLOOD,
+            style: process.env.REACT_APP_VIZRISK_TIKAPUR_FLOOD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -314,15 +303,15 @@ class FloodHistoryMap extends React.Component {
                         'icon-size': 0.3,
                     },
                 });
-                this.map.addLayer({
-                    id: `evac-unclustered-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    paint: {
-                        'circle-color': '#ff0000',
-                    },
-                });
+                // this.map.addLayer({
+                //     id: `evac-unclustered-circle-${layer}`,
+                //     type: 'circle',
+                //     source: layer,
+                //     filter: ['!', ['has', 'point_count']],
+                //     paint: {
+                //         'circle-color': '#ff0000',
+                //     },
+                // });
 
                 this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'none');
@@ -373,12 +362,11 @@ class FloodHistoryMap extends React.Component {
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, '#fe9b2a', 2, '#fed990',
-                        3, '#fed990', 4, '#9a3404',
-                        5, '#ffffd6', 6, '#ffffd6',
-                        7, '#ffffd6', 8, '#fe9b2a',
-                        9, '#d95f0e', 10, '#fe9b2a',
-                        11, '#fe9b2a', 12, '#fe9b2a',
+                        1, '#9a3404', 2, '#9a3404',
+                        3, '#fed990', 4, '#fed990',
+                        5, '#fed990', 6, '#fe9b2a',
+                        7, '#d95f0e', 8, '#fe9b2a',
+                        9, '#ffffd6',
                     ],
                     'fill-opacity': [
                         'case',
@@ -387,7 +375,7 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                filter: getWardFilter(5, 65, 58005, wards),
+                filter: getWardFilter(5, 65, 71013, wards),
             });
 
             this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
@@ -597,8 +585,8 @@ class FloodHistoryMap extends React.Component {
                         zoom: 11.4,
                         duration: 1000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
                     });
                     this.resetClusters();
@@ -606,14 +594,15 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideTwoLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'visible');
                 } else if (nextProps.rightElement === 1) {
-                    this.map.setPitch(40);
+                    // this.map.setPitch(40);
+
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.8,
+                        zoom: 11.4,
                         duration: 2000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
@@ -624,12 +613,13 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 2) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.8,
+                        zoom: 11.4,
                         duration: 2000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
+
                     });
                     this.toggleVisiblity(slideTwoLayers, 'none');
                     this.toggleVisiblity(slideFourLayers, 'none');
@@ -639,11 +629,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 3) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.8,
+                        zoom: 11.4,
                         duration: 2000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
@@ -656,11 +646,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 4) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.8,
+                        zoom: 11.4,
                         duration: 2000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
                     });
                     this.toggleVisiblity(slideFourLayers, 'none');
@@ -673,11 +663,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 5) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.8,
+                        zoom: 11.4,
                         duration: 2000,
                         center: [
-                            81.34569465152305,
-                            28.210927128836925,
+                            81.08659888293285,
+                            28.485190958758647,
                         ],
                     });
                     this.toggleVisiblity(slideFiveLayers, 'none');
@@ -699,7 +689,7 @@ class FloodHistoryMap extends React.Component {
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
-        `&layers=Bipad:Gulariya_FD_1in${years}`,
+        `&layers=Bipad:Tikapur_FD_1in${years}`,
         '&tiled=true',
         '&width=256',
         '&height=256',

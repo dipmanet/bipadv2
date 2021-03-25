@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Gulariya/Data/criticalInfraData';
+import criticalInfraData from '#views/VizRisk/Tikapur/Data/criticalInfraData';
 
 const chartData = criticalInfraData.safeShelterData;
 
@@ -56,7 +56,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         height={600}
                         data={chartData}
                         layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 10, left: 10 }}
+                        margin={{ top: 10, bottom: 10, right: 10, left: 30 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />

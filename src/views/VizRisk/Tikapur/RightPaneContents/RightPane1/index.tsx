@@ -125,18 +125,23 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1> Gulariya Municipality  </h1>
+                <h1> Tikapur Municipality  </h1>
                 <p>
-                Gulariya municipality lies in the Terai region of Bardiya district in Lumbini Province.
-                It covers a total area of 118.21square km, and is situated at an elevation of 145m from
+                Gulariya municipality lies in the Terai region
+                of Bardiya district in Lumbini Province.
+                It covers a total area of 118.21square km,
+                and is situated at an elevation of 145m from
                 sea level.
 
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Gulariya experiences a sub tropical climate. Summer starts from March (Chaitra)
-                 and lasts till June (Jestha). Winter begins in November (Mangsir) and lasts till
-                 February(Magh). Gulariya faces heavy downpours during the monsoon, from June (Jestha)
+                Gulariya experiences a sub tropical climate.
+                Summer starts from March (Chaitra)
+                 and lasts till June (Jestha). Winter begins
+                  in November (Mangsir) and lasts till
+                 February(Magh). Gulariya faces heavy downpours
+                  during the monsoon, from June (Jestha)
                  to October (Ashwin).
 
                 </p>

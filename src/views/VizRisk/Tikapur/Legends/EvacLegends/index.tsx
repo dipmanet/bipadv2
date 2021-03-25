@@ -70,7 +70,7 @@ const EvacLegends = (props) => {
             <div className={styles.criticalIcons}>
 
                 <div className={styles.toggleContainer}>
-                    {/* <div className={styles.infraIconContainer}>
+                    <div className={styles.infraIconContainer}>
 
                         <button
                             type="button"
@@ -87,8 +87,8 @@ const EvacLegends = (props) => {
                                 Show All
                         </button>
 
-                    </div> */}
-                    {/* <div className={styles.infraIconContainer}>
+                    </div>
+                    <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showEducation
@@ -103,14 +103,14 @@ const EvacLegends = (props) => {
 
                             Education
                         </button>
-                    </div> */}
+                    </div>
 
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showCulture
                                 ? styles.criticalButtonSelected
-                                : styles.criticalButtonSelected}
+                                : styles.criticalButton}
                             onClick={() => handleEvacclick('culture')}
                         >
                             <ScalableVectorGraphics

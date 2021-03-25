@@ -5,7 +5,7 @@ import styles from './styles.scss';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
-
+import Tikapur from './Tikapur';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
 
@@ -14,6 +14,7 @@ const slides = [
     <Rajapur />,
     <BarabiseLandslide />,
     <Gulariya />,
+    <Tikapur />,
 
 ];
 
@@ -28,7 +29,6 @@ const VizRiskMainPage = () => {
     };
 
     const handleMenuTitleClick = (municipality) => {
-        console.log('This is final muni>>>', municipality);
         setShowMenu(false);
         if (municipality === 'rajapur') {
             setCurrentPage(0);

@@ -8,12 +8,12 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Gulariya/Data/demographicsData';
+import demographicsData from '#views/VizRisk/Tikapur/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Gulariya/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Gulariya/Icons/male.svg';
-import Female from '#views/VizRisk/Gulariya/Icons/female.svg';
-import Home from '#views/VizRisk/Gulariya/Icons/home.svg';
+import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
+import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
+import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
 
 import Disclaimer from '../../Components/Disclaimer';
 
@@ -65,9 +65,9 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                  dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 4 has the highest number of population with
-                  1786 number of families. Ward number 5 has the least
-                   population (4335) with 782 families.
+                Ward number 1 has the highest number of population(48527) with
+                  9823 number of families. Ward number 9 has the least
+                   population (4183) with 743 families.
                 </p>
 
 
@@ -78,7 +78,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>71,991</div>
+                            <div className={styles.iconTitle}>98,651</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>
@@ -91,7 +91,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Home}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>13,831</div>
+                            <div className={styles.iconTitle}>18,620</div>
                             <div className={styles.iconText}>
                              Total Family Count
                             </div>
@@ -108,7 +108,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Male}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>36,972</div>
+                            <div className={styles.iconTitle}>50,405</div>
                             <div className={styles.iconText}>
                              Male Population
                             </div>
@@ -121,7 +121,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Female}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>35,019</div>
+                            <div className={styles.iconTitle}>48,246</div>
                             <div className={styles.iconText}>
                              Female Population
                             </div>

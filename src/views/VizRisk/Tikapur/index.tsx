@@ -28,7 +28,7 @@ const rightelements = [
     <RightElement6 />,
 ];
 
-export default class Gulariya extends React.Component {
+export default class Tikapur extends React.Component {
     public constructor(props) {
         super(props);
 

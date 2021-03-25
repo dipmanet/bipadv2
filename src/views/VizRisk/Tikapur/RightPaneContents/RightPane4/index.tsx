@@ -5,17 +5,28 @@ import {
     Bar, BarChart,
     CartesianGrid,
     ResponsiveContainer,
-    XAxis, YAxis,
+    XAxis, YAxis, LabelList,
 } from 'recharts';
 import styles from './styles.scss';
-import criticalInfraData from '#views/VizRisk/Gulariya/Data/criticalInfraData';
+import criticalInfraData from '#views/VizRisk/Tikapur/Data/criticalInfraData';
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
-
+const renderCustomizedLabel = (props) => {
+    const { x, y, width, height, value } = props;
+    const radius = 10;
+    console.log('this props>>>', props);
+    return (
+        <g>
+            <text x={x + width + 10} y={y + height / 2} fill="#fff" textAnchor="middle" dominantBaseline="middle">
+                {value}
+            </text>
+        </g>
+    );
+};
 class SlideFourPane extends React.PureComponent<Props, State> {
     public render() {
         const chartData = criticalInfraData.criticalInfraData;
@@ -58,9 +69,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             fill="#ffbf00"
                             // barCategoryGap={30}
                             barCategoryGap={20}
-                            label={{ position: 'insideRight' }}
+
                             tick={{ fill: '#94bdcf' }}
-                        />
+                        >
+                            <LabelList content={renderCustomizedLabel} />
+                        </Bar>
                         {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
                         {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
                         {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}

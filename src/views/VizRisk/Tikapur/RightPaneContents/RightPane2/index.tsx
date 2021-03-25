@@ -10,7 +10,7 @@ import {
     Cell,
     Sector,
 } from 'recharts';
-import CustomChartLegend from '#views/VizRisk/Rajapur/Components/CustomChartLegend';
+import CustomChartLegend from '#views/VizRisk/Tikapur/Components/CustomChartLegend';
 
 import {
     mapStyleSelector,
@@ -164,7 +164,7 @@ class RightPane extends React.PureComponent<Props, State> {
                 Most of the land is used for agriculture. Other areas are covered by forest,
                  built-up area, waterbodies, conservation areas.
                 </p>
-                {/* <ResponsiveContainer className={styles.respContainer} height={200}>
+                <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
                         width={200}
                         height={150}
@@ -185,8 +185,12 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`}
-                                 fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                data.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${entry.name}`}
+                                        fill={COLORS_CHART[index % COLORS_CHART.length]}
+                                    />
+                                ))
                             }
                             <Label
                                 width={30}
@@ -202,9 +206,9 @@ class RightPane extends React.PureComponent<Props, State> {
                         </Pie>
                         <Tooltip content={this.CustomTooltip} />
                     </PieChart>
-                </ResponsiveContainer> */}
+                </ResponsiveContainer>
 
-                {/* <div className={styles.customChartLegend}>
+                <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={data[0].name}
                         barColor={COLORS_CHART[0]}
@@ -243,7 +247,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         selected={activeIndex === 1}
                     />
 
-                </div> */}
+                </div>
                 {/* <SourceInfo /> */}
                 {/* <Disclaimer /> */}
             </div>
