@@ -13,6 +13,12 @@ import memoize from 'memoize-one';
 import { FlyToInterpolator } from 'react-map-gl';
 import { Spring } from 'react-spring/renderprops';
 // import Locations from './locations';
+import {
+    Bar, BarChart,
+    CartesianGrid, Legend,
+    ResponsiveContainer,
+    Tooltip, XAxis, YAxis,
+} from 'recharts';
 import Deck from './Deck';
 // import Map from './MapOriginal';
 import Legends from './Components/Legends';
@@ -53,7 +59,7 @@ import LandslideData from './Deck/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import Narratives from './Narratives';
 import legendList from './Components/Legends/legends';
-import { flatVulnerabilityTypes } from '#views/RiskInfo/LeftPane/Details/Vulnerability/vulnerabilityTypes';
+import chartData from './Data/demographicsData';
 
 interface Params {
 }
@@ -145,8 +151,6 @@ const transformFilters = ({
 //         // extras: { schemaName: 'incidentResponse' },
 //     },
 // };
-console.log('just keys: ', Object.keys(legendList));
-console.log('object: ', legendList);
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -156,6 +160,7 @@ const BarabiseLandslide = (props) => {
     const [transitionEnd, setTransitionEnd] = useState(false);
     const [reAnimate, setReanimate] = useState(false);
     const [delay, setDelay] = useState(10000);
+    const [showDemoChart, setShowDemoChart] = useState(true);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const {
         incidentList,
@@ -223,7 +228,7 @@ const BarabiseLandslide = (props) => {
 
             <NavButtons
                 getPage={setPage}
-                maxPage={3}
+                maxPage={Object.keys(Narratives).length}
                 setDestination={setDestinationhandle}
             />
             <Spring
@@ -256,6 +261,31 @@ const BarabiseLandslide = (props) => {
 
                 }
             </Spring>
+            {currentPage === 4
+                ? (
+                    <ResponsiveContainer width="100%" height={'50%'}>
+                        <BarChart
+                            width={350}
+                            height={600}
+                            data={chartData}
+                            layout="vertical"
+                            margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                            <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                            <Tooltip />
+                            {/* <Legend /> */}
+                            {/* <Legend iconType="square" iconSize={10}
+                            align="center" content={this.renderLegend} /> */}
+                            <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
+                            <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
+                            <Bar dataKey="TotalHousehold" fill="#347eff" />
+                            {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
+                        </BarChart>
+                    </ResponsiveContainer>
+                ) : ''
+            }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
                 ? <Legends page={currentPage} />
                 : ''

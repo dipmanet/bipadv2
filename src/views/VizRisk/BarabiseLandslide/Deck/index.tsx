@@ -14,32 +14,26 @@ import Locations from './locations';
 import MapLayers from './mapLayers';
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
-const librariesAnimation = { enterProgress: 0, duration: 2000 };
 
 
 const Deck = (props) => {
     const [glContext, setGLContext] = useState();
     const deckRef = useRef(null);
     const mapRef = useRef(null);
-    const [showLibraries, setshowLibraries] = useState(false);
-    const [showData, setShowData] = useState(false);
-    const [deckLayers, setLayers] = useState([]);
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
     const [landSlidePointsVisible, setLandslideVisible] = useState(false);
-    const librariesMass = useMemo;
+    const [animationDuration, setAnimateDuration] = useState(10000);
+    const [reAnimate, setReAnimate] = useState(false);
+    const [delay, setDelay] = useState(4000);
     // eslint-disable-next-line no-shadow
     const {
-        librariesData,
-        location,
         viewState,
         onViewStateChange,
         libraries,
         currentPage,
         handleFlyTo,
     } = props;
-
-    const [duration, setDuration] = useState(2000);
 
     const longitudeDelayScale = d3.scaleLinear()
         .domain(d3.extent(props.libraries, d => d.date))
@@ -51,14 +45,17 @@ const Deck = (props) => {
     const onMapLoad = useCallback(() => {
         const map = mapRef.current.getMap();
         const { deck } = deckRef.current;
-        // map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
-        // map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
 
         map.addLayer(
-            new MapboxLayer({ id: 'my-scatterplot', deck }),
+            new MapboxLayer({ id: 'landslide-scatterplot', deck }),
             // Optionally define id from Mapbox layer stack under which to add deck layer
             // 'water',
         );
+
+        MapLayers.landuse.map((layer) => {
+            map.setLayoutProperty(layer, 'visibility', 'none');
+            return null;
+        });
     }, []);
 
     useEffect(() => {
@@ -70,11 +67,17 @@ const Deck = (props) => {
             handleFlyTo(Locations.bahrabise);
             setRadiusChange(true);
             setAllDataVisible(false);
+
+            setReAnimate(true);
+            setAnimateDuration(3000);
+            setDelay(1000);
+
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
             map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             setLandslideVisible(true);
         } else if (currentPage === 1) {
             const map = mapRef.current.getMap();
@@ -87,6 +90,8 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
+            setReAnimate(true);
+            setAnimateDuration(1000);
             setLandslideVisible(false);
         }
 
@@ -96,13 +101,15 @@ const Deck = (props) => {
         <Spring
             from={{ enterProgress: 0 }}
             to={{ enterProgress: 1 }}
-            delay={4000}
-            config={{ duration: 10000 }}
+            delay={delay}
+            config={{ duration: animationDuration }}
+            reset={reAnimate}
+
         >
             {
                 (springProps) => {
                     const librariesLayer1 = [new DelayedPointLayer({
-                        id: 'my-scatterplot',
+                        id: 'landslide-scatterplot',
                         data: props.libraries,
                         getPosition: d => d.position,
                         getFillColor: [209, 203, 111],
@@ -124,14 +131,14 @@ const Deck = (props) => {
                         // },
                     }),
                     new DelayedPointLayer({
-                        id: 'my-scatterplot2',
+                        id: 'landslide-scatterplot2',
                         data: props.bahrabiseLandSlide,
                         getPosition: d => d.position,
-                        getFillColor: [0, 255, 111],
+                        getFillColor: [209, 203, 111],
                         getRadius: 500,
                         radiusMinPixels: 3,
                         // visible: allDataVisible,
-                        animationProgress: 1,
+                        animationProgress: springProps.enterProgress,
                         visible: landSlidePointsVisible,
                         getDelayFactor: d => (delayProp === 'longitude'
                             ? longitudeDelayScale(d.date)

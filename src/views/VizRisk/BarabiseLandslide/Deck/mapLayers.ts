@@ -1,15 +1,12 @@
 export default {
     landuse: [
-        'bridgeBahrabise',
         'bahrabiseTitle',
-        'bahrabiseRoads',
-        'bahrabiseBridge',
+        'bahrabiseWardOutline',
         'bahrabiseForest',
-        // 'buildingsBharabise',
-        // 'farmBharabise',
-        // 'forestBharabise',
-        // 'municipalitycentroidgeo',
-        // 'bahrabiseFill',
-        // 'bahrabiseWardOutline',
+        'bahrabiseBuildings',
+        'bahrabiseBridge',
+        'bahrabiseRoads',
+        'bahrabiseFarmland',
+        'bahrabiseFill',
     ],
 };

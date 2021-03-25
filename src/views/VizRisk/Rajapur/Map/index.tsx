@@ -183,6 +183,10 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
+        const testUrl = `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/gwc/service/wmts?REQUEST=GetTile&SERVICE=WMTS
+        &VERSION=1.0.0&LAYER=Bipad:NPL_buildings_exposure_replacement_cost&STYLE=&TILEMATRIX=EPSG:4326:{z}
+        &TILEMATRIXSET=EPSG:900913&FORMAT=application/vnd.mapbox-vector-tile
+        &TILECOL={x}&TILEROW={y}`;
 
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
 
@@ -345,6 +349,31 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
+
+            this.map.addSource('mapillary', {
+                type: 'vector',
+                tiles: [testUrl],
+                minzoom: 6,
+                maxzoom: 14,
+            });
+            this.map.addLayer(
+                {
+                    id: 'mapillary',
+                    type: 'line',
+                    source: 'mapillary',
+                    'source-layer': 'the_geom',
+                    layout: {
+                        'line-cap': 'round',
+                        'line-join': 'round',
+                    },
+                    paint: {
+                        'line-opacity': 0.6,
+                        'line-color': 'rgb(53, 175, 109)',
+                        'line-width': 2,
+                    },
+                },
+                'waterway',
+            );
 
             this.map.addSource('density', {
                 type: 'vector',
