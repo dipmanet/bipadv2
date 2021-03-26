@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="50" viewBox="0 0 50 50">
+  <defs>
+    <linearGradient id="Degradado_sin_nombre_31" data-name="Degradado sin nombre 31" x1="11.002" y1="27.115" x2="37.691" y2="7.814" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8defce"/>
+      <stop offset="1" stop-color="#3863a9"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_31-2" x1="10.093" y1="25.857" x2="36.782" y2="6.557" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-3" x1="11.911" y1="28.372" x2="38.6" y2="9.072" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-4" x1="9.463" y1="24.986" x2="36.152" y2="5.686" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-5" x1="12.55" y1="29.256" x2="39.239" y2="9.955" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-6" x1="15.245" y1="32.982" x2="41.934" y2="13.681" gradientTransform="translate(25.07 -11.085) rotate(44.453)" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-7" x1="14.497" y1="31.948" x2="41.186" y2="12.647" gradientTransform="translate(25.053 -9.544) rotate(45.454)" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-8" x1="15.147" y1="32.847" x2="41.837" y2="13.547" xlink:href="#Degradado_sin_nombre_31"/>
+    <linearGradient id="Degradado_sin_nombre_31-9" x1="13.417" y1="30.455" x2="40.106" y2="11.154" xlink:href="#Degradado_sin_nombre_31"/>
+    <filter id="luminosity-noclip" x="7.329" y="1.548" width="37" height="48" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <mask id="mask" x="7.329" y="1.548" width="37" height="48" maskUnits="userSpaceOnUse">
+      <g filter="url(#luminosity-noclip)">
+        <image width="37" height="48" transform="translate(7.329 1.548)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAwCAYAAACWhbMrAAAACXBIWXMAAAsSAAALEgHS3X78AAACDElEQVRYR+2Y7W7DIAxFr9O8/xsT9mO6qWMMGELXauqRULuNkIMxXxMAGR/G1qvwDvZehRYi4n7POV8+RxmW4stF5CweOeez8OcogmBO8eXbtl3Eemg5LdkiJCUip4w3TKzjPcd6LMdxdMWaw6eHaNuec6LXay2v22D9nlhVqhYdNtgbCt0ZLcjOtcSaUraXx3F0e0m0uI10T8zNKRHB4/GYFvKgmJartVksnnbYVggBcJPcpgZxpbRQdMZEsG3pd2kuUl6lVULETpBwpAA/3CuoRUtT3ZAj034WihErVgyffvAVQh6hSL0yShYKVSP1LkKRAsaOGqupSnlT9a+4SL0rOt1thtS2gNVQSIu5UrXlfxXcX8lwpF4hZtu2y08hpZd/fUBbhe2otx4WiV5YLxZrRYi4kWJhA6vEbFu1naM4DnOz1Mt/7/gaISoENPY+e7zgUXY0Yt6zlBk6owPlsVhELr1r9ZTP2wL0hYCGFPBs2LtqAWWi6u+1+vqKVqMpdVYyQxCVtHdEHux6eRn6B4fuoRby8ow3n5RSMVQ9GRKSAq6zJeeMfd+LyOkXU25mxoalSM4ZKaUi3/g3/p1lhmEpQjHv4ppSulwMRpmW0hEDfrcj/m5myDTTUgDOqACl1B1uSQE4BfTnnSgBwXWqh7de3WGJ1Go+4t5n+d9S3l44yzKplXwTPcpHSv0A7pdA/kyYBiYAAAAASUVORK5CYII="/>
+      </g>
+    </mask>
+    <linearGradient id="Degradado_sin_nombre_31-10" x1="3.046" y1="-16533.971" x2="40.572" y2="-16499.885" gradientTransform="matrix(1, 0, 0, -1, 0, -16491.668)" xlink:href="#Degradado_sin_nombre_31"/>
+  </defs>
+  <g id="OBJECTS">
+    <g>
+      <path d="M25,14.969a2.02,2.02,0,1,0,2.02,2.02A2.022,2.022,0,0,0,25,14.969Zm0,2.9a.877.877,0,1,1,.877-.876A.877.877,0,0,1,25,17.865Z" fill="url(#Degradado_sin_nombre_31)"/>
+      <path d="M22.76,14.745a.571.571,0,0,0-.808-.808,4.323,4.323,0,0,0,0,6.1.571.571,0,0,0,.808-.808A3.178,3.178,0,0,1,22.76,14.745Z" fill="url(#Degradado_sin_nombre_31-2)"/>
+      <path d="M28.056,13.937a.571.571,0,0,0-.808.808,3.164,3.164,0,0,1,0,4.487.572.572,0,0,0,.808.809,4.307,4.307,0,0,0,0-6.1Z" fill="url(#Degradado_sin_nombre_31-3)"/>
+      <path d="M19.209,17a5.765,5.765,0,0,1,1.7-4.1.571.571,0,0,0-.808-.808,6.929,6.929,0,0,0,0,9.818.571.571,0,0,0,.808-.808A5.764,5.764,0,0,1,19.209,17Z" fill="url(#Degradado_sin_nombre_31-4)"/>
+      <path d="M29.9,12.089a.571.571,0,0,0-.808.808,5.807,5.807,0,0,1,0,8.2.571.571,0,1,0,.808.808A6.95,6.95,0,0,0,29.9,12.089Z" fill="url(#Degradado_sin_nombre_31-5)"/>
+      <rect x="25.527" y="20.904" width="1.143" height="8.459" transform="translate(-10.133 25.47) rotate(-44.453)" fill="url(#Degradado_sin_nombre_31-6)"/>
+      <rect x="19.682" y="24.562" width="8.474" height="1.143" transform="translate(-10.772 24.55) rotate(-45.454)" fill="url(#Degradado_sin_nombre_31-7)"/>
+      <path d="M30.057,29.235,26.076,18.167A.572.572,0,1,0,25,18.554l3.981,11.067a.572.572,0,1,0,1.076-.386Z" fill="url(#Degradado_sin_nombre_31-8)"/>
+      <path d="M24.684,17.822a.572.572,0,0,0-.731.344l-4,11.068a.571.571,0,0,0,.343.731A.582.582,0,0,0,20.49,30a.572.572,0,0,0,.537-.378l4-11.068A.571.571,0,0,0,24.684,17.822Z" fill="url(#Degradado_sin_nombre_31-9)"/>
+    </g>
+    <g>
+      <g mask="url(#mask)">
+        <g>
+          <path d="M26.122,4.2A15.811,15.811,0,0,0,21.436,35.11l3.313,5.738a1.439,1.439,0,0,0,2.493,0L30.505,35.2a15.809,15.809,0,0,0-4.383-31Zm0,27.881A12.072,12.072,0,1,1,38.2,20.008,12.072,12.072,0,0,1,26.122,32.08Z" fill="#111010"/>
+          <path d="M26.122,43.721A1.581,1.581,0,1,0,27.7,45.3,1.58,1.58,0,0,0,26.122,43.721Z" fill="#111010"/>
+        </g>
+      </g>
+      <path d="M25.045,3.476a15.811,15.811,0,0,0-4.687,30.911l3.313,5.738a1.44,1.44,0,0,0,2.493,0l3.263-5.652a15.808,15.808,0,0,0-4.382-31Zm0,27.881A12.073,12.073,0,1,1,37.117,19.284,12.073,12.073,0,0,1,25.045,31.357Zm1.58,13.222A1.581,1.581,0,1,1,25.045,43,1.58,1.58,0,0,1,26.625,44.579Z" fill="url(#Degradado_sin_nombre_31-10)"/>
+    </g>
+  </g>
+</svg>

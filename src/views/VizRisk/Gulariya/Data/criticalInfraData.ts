@@ -8,10 +8,10 @@ export default {
             name: 'Hospitals', Total: 9,
         },
         {
-            name: 'Cultural Sites', Total: 3,
+            name: 'Bridges', Total: 9,
         },
         {
-            name: 'Bridges', Total: 9,
+            name: 'Cultural Sites', Total: 3,
         },
 
         {

@@ -13,6 +13,32 @@
         .graphContainer{
             margin: 15px 0;
         }
+        .referencesBtn{
+            background-color: transparent;
+            border: none;
+            color: white;
+            opacity: 0.87;
+            font-size: 18px;
+            margin-top: 20px;
+            color:white;
+            font-size: 26px;
+            font-family: 'Source Sans Pro';
+            // opacity: 0.67;
+            line-height: 1.4em;
+            padding: 0 30px;
+
+            .referencesText{
+                color:white;
+                font-size: 16px;
+                font-family: 'Source Sans Pro';
+                opacity: 0.67;
+                padding: 0 30px;
+                li{
+                padding: 5px 0;
+
+                }
+            }
+        }
         .iconRow{
             display: flex;
             padding-left: 30px;
@@ -25,22 +51,6 @@
                 flex: 1;
                 .infoIcon{
                     margin: 0px 15px 0 5px;
-                    width: 32px;
-                    path{
-                        fill: #FFEBBE;
-                    }
-                    
-                }
-                .infoIconHH{
-                    margin: 0 5px 0 0;
-                    width: 45px;
-                    path{
-                        fill: #FFEBBE;
-                    }
-                    circle{
-                        fill:#FFEBBE ;
-                    }
-                    
                 }
                 .descriptionCotainer{
                     display: flex;
@@ -58,41 +68,7 @@
                 }
             }
         }
-        .climateLegendContainer{
-            display:flex;
-            justify-content: flex-start;
-            margin-left: 55px;
-            min-width: 200px;
-         
-            .climatelegend{
-            display:flex;
-            padding-right: 20px;
-                .legendMax{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #ffbf00;
-                    padding-right: 4px;
-                    margin-right: 3px;
-                }
-                .legendMin{
-                    width: 15px;
-                    height: 15px;
-                    background-color:  #00d725;;
-                    margin-right: 3px;
-                }
-                .legendDaily{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #347eff ;
-                    margin-right: 3px;
-                
-                }
-                .legendText{
-                    color: #6490a4;
-                    font-size: 10px;
-                }
-            }
-        }
+          
         .customBarContainer{
             width: 90%;
             background: transparent;
@@ -329,7 +305,7 @@
             color:white;
             font-size: 16px;
             font-family: 'Source Sans Pro';
-            opacity: 0.67;
+            opacity: 0.87;
             line-height: 1.4em;
             padding: 0 30px;
         }

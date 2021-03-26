@@ -25,22 +25,6 @@
                 flex: 1;
                 .infoIcon{
                     margin: 0px 15px 0 5px;
-                    width: 32px;
-                    path{
-                        fill: #FFEBBE;
-                    }
-                    
-                }
-                .infoIconHH{
-                    margin: 0 5px 0 0;
-                    width: 45px;
-                    path{
-                        fill: #FFEBBE;
-                    }
-                    circle{
-                        fill:#FFEBBE ;
-                    }
-                    
                 }
                 .descriptionCotainer{
                     display: flex;
@@ -58,40 +42,11 @@
                 }
             }
         }
-        .climateLegendContainer{
-            display:flex;
-            justify-content: flex-start;
-            margin-left: 55px;
-            min-width: 200px;
-         
-            .climatelegend{
-            display:flex;
-            padding-right: 20px;
-                .legendMax{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #ffbf00;
-                    padding-right: 4px;
-                    margin-right: 3px;
-                }
-                .legendMin{
-                    width: 15px;
-                    height: 15px;
-                    background-color:  #00d725;;
-                    margin-right: 3px;
-                }
-                .legendDaily{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #347eff ;
-                    margin-right: 3px;
-                
-                }
-                .legendText{
-                    color: #6490a4;
-                    font-size: 10px;
-                }
-            }
+        .landCoverLegend{
+            position: absolute;
+            left: 500px;
+            bottom: 50px;
+            border: none;
         }
         .customBarContainer{
             width: 90%;
@@ -304,7 +259,7 @@
             margin-top: 20px;
             // width:100%;
             .respContainer{
-                height: 250px;
+                color: white !important;
             }
         }
         h1{

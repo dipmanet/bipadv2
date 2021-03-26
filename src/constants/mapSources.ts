@@ -9,6 +9,12 @@ export default {
             water: 'water copy',
         },
     },
+    wardFillLocalTikapur: {
+        url: `${process.env.REACT_APP_MAP_SOURCE_TIKAPUR}`,
+        layers: {
+            ward: 'tikapur_municipality-9jw65r',
+        },
+    },
     wardFillLocalGulariya: {
         url: `${process.env.REACT_APP_MAP_SOURCE_GULARIYA}`,
         layers: {

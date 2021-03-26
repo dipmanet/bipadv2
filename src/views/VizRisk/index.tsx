@@ -6,6 +6,7 @@ import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
 import Tikapur from './Tikapur';
+import Dhangadi from './Dhangadi';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
 
@@ -15,6 +16,7 @@ const slides = [
     <BarabiseLandslide />,
     <Gulariya />,
     <Tikapur />,
+    <Dhangadi />,
 
 ];
 
@@ -41,6 +43,9 @@ const VizRiskMainPage = () => {
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'tikapur') {
             setCurrentPage(3);
+            setTitle('Visualising Flood Exposure');
+        } else if (municipality === 'dhangadi') {
+            setCurrentPage(4);
             setTitle('Visualising Flood Exposure');
         }
     };
@@ -113,6 +118,13 @@ const VizRiskMainPage = () => {
                                     onClick={() => handleMenuTitleClick('tikapur')}
                                 >
                                     <h1 className={styles.menuItems}>Tikapur Municipality</h1>
+
+                                </Button>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('dhangadi')}
+                                >
+                                    <h1 className={styles.menuItems}>Dhangadi Municipality</h1>
 
                                 </Button>
                             </div>

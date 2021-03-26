@@ -78,16 +78,16 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway', 'municipalitycentroidgeo',
     'wardOutline', 'municipalityFill'];
 
-const slideTwoLayers = ['bridgeTikapur', 'water', 'waterway',
-    'canalTikapur', 'TikapurBuildings',
-    'TikapurRoads', 'forestTikapur', 'WoodforestTikapur',
-    'agriculturallandTikapur', 'agriculturelandTikapurFarmyard', 'municipalityFill',
+const slideTwoLayers = ['bridgeDhangadi', 'water', 'waterway',
+    'canalDhangadi', 'DhangadiBuildings',
+    'DhangadiRoads', 'forestDhangadi', 'WoodforestDhangadi',
+    'agriculturallandDhangadi', 'agriculturelandDhangadiFarmyard', 'municipalityFill',
 
 ];
 
 const slideThreeLayers = ['wardNumbers', 'water', 'waterway',
-    'canalTikapur', 'wardOutline',
-    'ward-fill-local', 'densityTikapur',
+    'canalDhangadi', 'wardOutline',
+    'ward-fill-local',
 ];
 
 const slideFourLayers = ['bridgeTikapur', 'water', 'waterway',
@@ -112,8 +112,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.485190958758647,
-            lng: 81.08659888293285,
+            lat: 28.693149812305652,
+            lng: 80.6547442950228,
             zoom: 11,
             wardNumber: 'Hover to see ward number',
         };
@@ -169,7 +169,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_TIKAPUR_FLOOD,
+            style: process.env.REACT_APP_VIZRISK_DHANGADI_FLOOD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -475,7 +475,6 @@ class FloodHistoryMap extends React.Component {
             });
             categoriesEvac.map(layer => this.map.on('mousemove', `evac-unclustered-${layer}`, (e) => {
                 if (e) {
-                    console.log('This is event,', e.features);
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
@@ -536,7 +535,7 @@ class FloodHistoryMap extends React.Component {
                 this.props.disableNavBtns('both');
 
                 this.map.easeTo({
-                    zoom: 11.4,
+                    zoom: 10.8,
                     duration: 8000,
                 });
             }, 2000);
@@ -582,11 +581,12 @@ class FloodHistoryMap extends React.Component {
                 if (nextProps.rightElement === 0) {
                     this.map.easeTo({
                         pitch: 0,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 1000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
                     });
                     this.resetClusters();
@@ -598,11 +598,11 @@ class FloodHistoryMap extends React.Component {
 
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 2000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
@@ -613,11 +613,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 2) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 2000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
 
                     });
@@ -629,11 +629,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 3) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 2000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
@@ -646,11 +646,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 4) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 2000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
                     });
                     this.toggleVisiblity(slideFourLayers, 'none');
@@ -663,11 +663,11 @@ class FloodHistoryMap extends React.Component {
                 } else if (nextProps.rightElement === 5) {
                     this.map.easeTo({
                         pitch: 40,
-                        zoom: 11.4,
+                        zoom: 11,
                         duration: 2000,
                         center: [
-                            81.08659888293285,
-                            28.485190958758647,
+                            80.6547442950228,
+                            28.693149812305652,
                         ],
                     });
                     this.toggleVisiblity(slideFiveLayers, 'none');
