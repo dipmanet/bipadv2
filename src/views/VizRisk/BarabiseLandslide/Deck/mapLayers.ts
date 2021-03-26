@@ -8,5 +8,8 @@ export default {
         'bahrabiseRoads',
         'bahrabiseFarmland',
         'bahrabiseFill',
+        // 'bahrabiseHillshade',
+        'bahrabiseContourVals',
+        'bahrabiseContourLines',
     ],
 };

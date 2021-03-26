@@ -35,6 +35,20 @@ const Deck = (props) => {
         handleFlyTo,
     } = props;
 
+    const getHillshadeLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Barhabise_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
     const longitudeDelayScale = d3.scaleLinear()
         .domain(d3.extent(props.libraries, d => d.date))
         .range([1, 0]);
@@ -51,9 +65,26 @@ const Deck = (props) => {
             // Optionally define id from Mapbox layer stack under which to add deck layer
             // 'water',
         );
+        map.addSource('hillshadeBahrabiseLocal', {
+            type: 'raster',
+            tiles: [getHillshadeLayer()],
+            tileSize: 256,
+        });
 
+        map.addLayer(
+            {
+                id: 'bahrabiseHillshadeLocal',
+                type: 'raster',
+                source: 'hillshadeBahrabise',
+                layout: {},
+                paint: {
+                    'raster-opacity': 0.35,
+                },
+            }, 'bahrabiseFarmland',
+        );
         MapLayers.landuse.map((layer) => {
             map.setLayoutProperty(layer, 'visibility', 'none');
+
             return null;
         });
     }, []);
@@ -90,6 +121,15 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
+            setReAnimate(true);
+            setAnimateDuration(1000);
+            setLandslideVisible(false);
+        } else if (currentPage === 4) {
+            // const map = mapRef.current.getMap();
+            // MapLayers.landuse.map((layer) => {
+            //     map.setLayoutProperty(layer, 'visibility', 'visible');
+            //     return null;
+            // });
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);

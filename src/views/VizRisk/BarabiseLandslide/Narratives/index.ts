@@ -15,5 +15,9 @@ export default {
         title: 'This is four title',
         description: 'this is fourth slide description',
     },
+    5: {
+        title: 'This is chart description',
+        description: 'this is chart description',
+    },
 
 };

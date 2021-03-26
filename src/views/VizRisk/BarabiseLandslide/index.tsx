@@ -263,27 +263,30 @@ const BarabiseLandslide = (props) => {
             </Spring>
             {currentPage === 4
                 ? (
-                    <ResponsiveContainer width="100%" height={'50%'}>
-                        <BarChart
-                            width={350}
-                            height={600}
-                            data={chartData}
-                            layout="vertical"
-                            margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                            <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
-                            <Tooltip />
-                            {/* <Legend /> */}
-                            {/* <Legend iconType="square" iconSize={10}
+                    <div className={styles.chartDiv}>
+                        <ResponsiveContainer width="70%" height={'80%'}>
+                            <BarChart
+                            // width={1000}
+                            // height={1000}
+                                data={chartData.demographicsData}
+                                layout="vertical"
+                                margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                                <Tooltip />
+                                {/* <Legend /> */}
+                                {/* <Legend iconType="square" iconSize={10}
                             align="center" content={this.renderLegend} /> */}
-                            <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
-                            <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
-                            <Bar dataKey="TotalHousehold" fill="#347eff" />
-                            {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
-                        </BarChart>
-                    </ResponsiveContainer>
+                                <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
+                                <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
+                                <Bar dataKey="TotalHousehold" fill="#347eff" />
+                                {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+
                 ) : ''
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
