@@ -24,7 +24,7 @@ import {
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
 } from '#selectors';
-import SchoolGeoJSON from '../Data/rajapurGEOJSON';
+import SchoolGeoJSON from '../Data/criticalInfraGeoJSON';
 
 import Loading from '#components/Loading';
 

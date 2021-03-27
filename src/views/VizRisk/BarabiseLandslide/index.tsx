@@ -38,7 +38,7 @@ import { hazardTypesSelector,
     incidentListSelectorIP,
     filtersSelector,
     regionsSelector } from '#selectors';
-import Locations from './Deck/locations';
+import Locations from './Data/locations';
 import {
     transformRegionToFilter,
     transformDataRangeLocaleToFilter,
@@ -47,7 +47,7 @@ import {
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-
+import CriticalData from './Data/criticalInfraData';
 
 import {
     setIncidentListActionIP,
@@ -55,7 +55,7 @@ import {
 } from '#actionCreators';
 import NavButtons from './Components/NavButtons';
 import styles from './styles.scss';
-import LandslideData from './Deck/librariesData';
+import LandslideData from './Data/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import Narratives from './Narratives';
 import legendList from './Components/Legends/legends';
@@ -68,11 +68,11 @@ interface ComponentProps {
 }
 
 interface PropsFromDispatch {
-    setIncidentList: typeof setIncidentListActionIP;
+    // setIncidentList: typeof setIncidentListActionIP;
     setEventList: typeof setEventListAction;
 }
 interface PropsFromAppState {
-    incidentList: PageType.Incident[];
+    // incidentList: PageType.Incident[];
     filters: FiltersElement;
     hazardTypes: Obj<PageType.HazardType>;
     regions: {
@@ -87,7 +87,7 @@ type ReduxProps = ComponentProps & PropsFromDispatch & PropsFromAppState;
 
 type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-    incidentList: incidentListSelectorIP(state),
+    // incidentList: incidentListSelectorIP(state),
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
@@ -163,7 +163,7 @@ const BarabiseLandslide = (props) => {
     const [showDemoChart, setShowDemoChart] = useState(true);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const {
-        incidentList,
+        // incidentList,
         hazardTypes,
         regions,
     } = props;
@@ -171,7 +171,7 @@ const BarabiseLandslide = (props) => {
     const getSanitizedIncident = memoize(getSanitizedIncidents);
     // eslint-disable-next-line no-shadow
     const setDestinationhandle = destination => setDestination(destination);
-
+    const incidentList = CriticalData.criticalInfraData;
     const sanitizedIncidentList = getSanitizedIncident(
         incidentList,
         regions,
@@ -235,7 +235,7 @@ const BarabiseLandslide = (props) => {
                 from={{ opacity: 0 }}
                 to={{ opacity: 1 }}
                 config={
-                    { duration: 2000,
+                    { duration: 1000,
                         delay }
                 }
                 onStart={handleAnimationStart}

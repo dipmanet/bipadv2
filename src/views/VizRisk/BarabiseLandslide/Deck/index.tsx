@@ -10,8 +10,9 @@ import { MapboxLayer } from '@deck.gl/mapbox';
 import Anime from 'react-anime';
 import { Spring } from 'react-spring/renderprops';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
-import Locations from './locations';
-import MapLayers from './mapLayers';
+import Locations from '../Data/locations';
+import MapLayers from '../Data/mapLayers';
+import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
 
@@ -34,6 +35,33 @@ const Deck = (props) => {
         currentPage,
         handleFlyTo,
     } = props;
+
+    const getGeoJSON = (data) => {
+        const dataObj = {};
+        const features = [];
+        dataObj.type = 'FeatureCollection';
+        data.forEach((item) => {
+            const featureItem = {};
+            const featureProperties = {};
+
+            featureItem.type = 'Feature';
+            featureProperties.resourceType = item.resourceType;
+            featureProperties.title = item.title;
+            featureProperties.description = item.description;
+            featureProperties.lastModifiedDate = item.lastModifiedDate;
+            featureProperties.ward = item.ward;
+            featureItem.geometry = {
+                type: item.type,
+                coordinates: [item.latitude, item.longitude],
+            };
+            featureItem.properties = featureProperties;
+            features.push(featureItem);
+        });
+
+        dataObj.features = [...features];
+        return dataObj;
+    };
+
 
     const getHillshadeLayer = () => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
@@ -65,17 +93,82 @@ const Deck = (props) => {
             // Optionally define id from Mapbox layer stack under which to add deck layer
             // 'water',
         );
+
         map.addSource('hillshadeBahrabiseLocal', {
             type: 'raster',
             tiles: [getHillshadeLayer()],
             tileSize: 256,
         });
 
+        const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
+        const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
+            item => item.properties.resourceType,
+        ))];
+        // categoriesCritical.map((layer) => {
+        map.addSource('cilayer', {
+            type: 'geojson',
+            data: criticalinfrastructures.criticalData,
+            cluster: true,
+            clusterRadius: 50,
+        });
+        map.addLayer({
+            id: 'clusters-ci',
+            type: 'circle',
+            source: 'cilayer',
+            filter: ['has', 'point_count'],
+            paint: {
+                'circle-color': [
+                    'step',
+                    ['get', 'point_count'],
+                    // '#a4ac5e',
+                    '#ff0000',
+                    100,
+                    '#a4ac5e',
+                ],
+                'circle-radius': [
+                    'step',
+                    ['get', 'point_count'],
+                    20,
+                    100,
+                    30,
+                    750,
+                    40,
+                ],
+            },
+        });
+
+        map.addLayer({
+            id: 'unclustered-point-ci',
+            type: 'symbol',
+            source: 'cilayer',
+            filter: ['!', ['has', 'point_count']],
+            layout: {
+                'icon-image': ['get', 'icon'],
+                'icon-size': 0.3,
+            },
+        });
+
+        map.addLayer({
+            id: 'clusters-count-ci',
+            type: 'symbol',
+            source: 'cilayer',
+            layout: {
+                'text-field': '{point_count_abbreviated}',
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12,
+            },
+        });
+
+        //     return null;
+        // });
+        console.log('our data:', map);
+        console.log('fsdfs', JSON.stringify(getGeoJSON(criticalinfrastructures.criticalData)));
+
         map.addLayer(
             {
                 id: 'bahrabiseHillshadeLocal',
                 type: 'raster',
-                source: 'hillshadeBahrabise',
+                source: 'hillshadeBahrabiseLocal',
                 layout: {},
                 paint: {
                     'raster-opacity': 0.35,

@@ -67,7 +67,7 @@ const categoriesEvac = [...new Set(evaccenters.features.map(
     item => item.properties.Type,
 ))];
 
-const rasterLayersYears = [5, 50, 100, 500];
+const rasterLayersYears = [5, 20, 50, 100];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 const arrCritical = categoriesCritical.map(
     layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
@@ -183,10 +183,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
-        const testUrl = `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/gwc/service/wmts?REQUEST=GetTile&SERVICE=WMTS
-        &VERSION=1.0.0&LAYER=Bipad:NPL_buildings_exposure_replacement_cost&STYLE=&TILEMATRIX=EPSG:4326:{z}
-        &TILEMATRIXSET=EPSG:900913&FORMAT=application/vnd.mapbox-vector-tile
-        &TILECOL={x}&TILEROW={y}`;
+
 
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
 
@@ -349,32 +346,6 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
-
-            this.map.addSource('mapillary', {
-                type: 'vector',
-                tiles: [testUrl],
-                minzoom: 6,
-                maxzoom: 14,
-            });
-            this.map.addLayer(
-                {
-                    id: 'mapillary',
-                    type: 'line',
-                    source: 'mapillary',
-                    'source-layer': 'the_geom',
-                    layout: {
-                        'line-cap': 'round',
-                        'line-join': 'round',
-                    },
-                    paint: {
-                        'line-opacity': 0.6,
-                        'line-color': 'rgb(53, 175, 109)',
-                        'line-width': 2,
-                    },
-                },
-                'waterway',
-            );
-
             this.map.addSource('density', {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
@@ -641,7 +612,7 @@ class FloodHistoryMap extends React.Component {
         '&bbox={bbox-epsg-3857}',
         '&transparent=true',
         '&format=image/png',
-    ].join('')
+    ].join('');
 
     public getGeoJSON = (filterBy: string, data: any) => {
         const temp = {};
@@ -792,14 +763,12 @@ class FloodHistoryMap extends React.Component {
         this.hideFloodRasters();
         if (layer === '5') {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-        } else if (layer === '10') {
-            this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+        } else if (layer === '20') {
+            this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
         } else if (layer === '50') {
             this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
         } else if (layer === '100') {
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-        } else if (layer === '500') {
-            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
         }
     }
 
