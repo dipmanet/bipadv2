@@ -615,17 +615,13 @@ class FloodHistoryMap extends React.Component {
     ].join('');
 
     public getGeoJSON = (filterBy: string, data: any) => {
-        const temp = {};
-        temp.type = 'FeatureCollection';
-        temp.name = filterBy;
-        temp.crs = {};
-        temp.crs.type = 'name';
-        temp.crs.properties = {};
-        temp.crs.properties.name = 'urn:ogc:def:crs:OGC:1.3:CRS84';
-        temp.features = [];
-        const ourD = data.features.filter(item => item.properties.Type === filterBy);
-        temp.features.push(...ourD);
-        return temp;
+        const geoObj = {};
+        geoObj.type = 'FeatureCollection';
+        geoObj.name = filterBy;
+        geoObj.features = [];
+        const d = data.features.filter(item => item.properties.Type === filterBy);
+        geoObj.features.push(...d);
+        return geoObj;
     }
 
 
@@ -698,41 +694,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'health') {
-            this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Health');
-        } else if (layer === 'bank') {
-            this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'governance') {
-            this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'industry') {
-            this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Industry');
-        } else if (layer === 'education') {
-            this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Education');
-        } else if (layer === 'culture') {
-            this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Culture');
-        } else if (layer === 'tourism') {
-            this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Tourism');
+        } else {
+            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+            this.map.moveLayer(`clusters-count-${layer}`);
         }
     };
 
@@ -745,31 +711,19 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`evac-unclustered-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'education') {
-            this.map.setLayoutProperty('evac-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-Education', 'visibility', 'visible');
-        } else if (layer === 'culture') {
-            this.map.setLayoutProperty('evac-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-Culture', 'visibility', 'visible');
-        } else if (layer === 'safe') {
+        } else if (layer === 'Safe') {
             this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
             this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
+        } else {
+            this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`evac-unclustered-${layer}`, 'visibility', 'visible');
         }
     };
 
     public handleFloodRasterSwitch = (layer) => {
         this.hideFloodRasters();
-        if (layer === '5') {
-            this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-        } else if (layer === '20') {
-            this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
-        } else if (layer === '50') {
-            this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
-        } else if (layer === '100') {
-            this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-        }
+        this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'visible');
     }
 
     public generateColor = (maxValue, minValue, colorMapping) => {

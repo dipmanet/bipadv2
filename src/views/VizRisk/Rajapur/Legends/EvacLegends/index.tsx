@@ -25,13 +25,13 @@ const EvacLegends = (props) => {
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (evacElement === 'education') {
+            } else if (evacElement === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (evacElement === 'safe') {
+            } else if (evacElement === 'Safe') {
                 resetCriticalLayers();
                 setshowSafe(true);
-            } else if (evacElement === 'culture') {
+            } else if (evacElement === 'Culture') {
                 resetCriticalLayers();
                 setshowCulture(true);
             }
@@ -47,17 +47,17 @@ const EvacLegends = (props) => {
             setshowAll(true);
         }
 
-        if (layer === 'education') {
+        if (layer === 'Education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
 
-        if (layer === 'culture') {
+        if (layer === 'Culture') {
             resetCriticalLayers();
             setshowCulture(true);
         }
 
-        if (layer === 'safe') {
+        if (layer === 'Safe') {
             resetCriticalLayers();
             setshowSafe(true);
         }
@@ -94,7 +94,7 @@ const EvacLegends = (props) => {
                             className={showEducation
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('education')}
+                            onClick={() => handleEvacclick('Education')}
                         >
                             {/* <Hexagon
                                 style={{
@@ -108,7 +108,7 @@ const EvacLegends = (props) => {
                                         ? '#ffdd00' : 'transparent',
 
                                 }}
-                                className={styles.educationHexagon}
+                                className={styles.EducationHexagon}
                             /> */}
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
@@ -125,7 +125,7 @@ const EvacLegends = (props) => {
                             className={showCulture
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('culture')}
+                            onClick={() => handleEvacclick('Culture')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
@@ -140,7 +140,7 @@ const EvacLegends = (props) => {
                             className={showSafe
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('safe')}
+                            onClick={() => handleEvacclick('Safe')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}

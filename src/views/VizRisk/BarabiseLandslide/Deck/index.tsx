@@ -100,10 +100,10 @@ const Deck = (props) => {
             tileSize: 256,
         });
 
-        const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
-        const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
-            item => item.properties.resourceType,
-        ))];
+        // const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
+        // const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
+        //     item => item.properties.resourceType,
+        // ))];
         // categoriesCritical.map((layer) => {
         map.addSource('cilayer', {
             type: 'geojson',
