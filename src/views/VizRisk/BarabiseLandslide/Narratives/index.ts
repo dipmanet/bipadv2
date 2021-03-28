@@ -4,19 +4,19 @@ export default {
         description: 'this is first slide description',
     },
     2: {
-        title: 'This is second title',
+        title: 'Landslide in Bahrabise',
         description: 'this is second slide description',
     },
     3: {
-        title: 'This is three title',
+        title: 'Landuse Bahrabise',
         description: 'this is third slide description',
     },
     4: {
-        title: 'This is four title',
+        title: 'Wardwise Population Distribution',
         description: 'this is fourth slide description',
     },
     5: {
-        title: 'This is chart description',
+        title: 'Critical Infrastructures',
         description: 'this is chart description',
     },
 

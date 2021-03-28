@@ -121,7 +121,7 @@ const Deck = (props) => {
                     'step',
                     ['get', 'point_count'],
                     // '#a4ac5e',
-                    '#ff0000',
+                    '#3b5bc2',
                     100,
                     '#a4ac5e',
                 ],
@@ -135,6 +135,9 @@ const Deck = (props) => {
                     40,
                 ],
             },
+            layout: {
+                visibility: 'none',
+            },
         });
 
         map.addLayer({
@@ -145,6 +148,7 @@ const Deck = (props) => {
             layout: {
                 'icon-image': ['get', 'icon'],
                 'icon-size': 0.3,
+                visibility: 'none',
             },
         });
 
@@ -156,14 +160,12 @@ const Deck = (props) => {
                 'text-field': '{point_count_abbreviated}',
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
                 'text-size': 12,
+                visibility: 'none',
             },
         });
 
         //     return null;
         // });
-        console.log('our data:', map);
-        console.log('fsdfs', JSON.stringify(getGeoJSON(criticalinfrastructures.criticalData)));
-
         map.addLayer(
             {
                 id: 'bahrabiseHillshadeLocal',
@@ -171,7 +173,7 @@ const Deck = (props) => {
                 source: 'hillshadeBahrabiseLocal',
                 layout: {},
                 paint: {
-                    'raster-opacity': 0.35,
+                    'raster-opacity': 0.50,
                 },
             }, 'bahrabiseFarmland',
         );
@@ -217,12 +219,15 @@ const Deck = (props) => {
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);
+            map.setLayoutProperty('clusters-ci', 'visibility', 'none');
+            map.setLayoutProperty('unclustered-point-ci', 'visibility', 'none');
+            map.setLayoutProperty('clusters-count-ci', 'visibility', 'none');
         } else if (currentPage === 4) {
-            // const map = mapRef.current.getMap();
-            // MapLayers.landuse.map((layer) => {
-            //     map.setLayoutProperty(layer, 'visibility', 'visible');
-            //     return null;
-            // });
+            const map = mapRef.current.getMap();
+            map.setLayoutProperty('clusters-ci', 'visibility', 'visible');
+            map.setLayoutProperty('unclustered-point-ci', 'visibility', 'visible');
+            map.setLayoutProperty('clusters-count-ci', 'visibility', 'visible');
+
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);
