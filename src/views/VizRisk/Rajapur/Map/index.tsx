@@ -391,6 +391,7 @@ class FloodHistoryMap extends React.Component {
             });
 
             this.map.on('click', 'ward-fill-local', (e) => {
+                console.log('hvfsl:', e);
                 if (e.features.length > 0) {
                     if (hoveredWardId) {
                         this.setState({ wardNumber: hoveredWardId });

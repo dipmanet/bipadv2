@@ -19,5 +19,13 @@ export default {
         title: 'Critical Infrastructures',
         description: 'this is chart description',
     },
+    6: {
+        title: 'Demography',
+        description: 'This is demography description',
+    },
+    7: {
+        title: 'Susptibility',
+        description: 'This is suspetibility description',
+    },
 
 };
