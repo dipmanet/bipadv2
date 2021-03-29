@@ -181,7 +181,7 @@ const LandCoverLegends = (props) => {
                                  Educational Institution
                             </button>
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -197,7 +197,7 @@ const LandCoverLegends = (props) => {
             Government Building
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"

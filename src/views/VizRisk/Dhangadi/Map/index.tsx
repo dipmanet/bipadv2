@@ -45,10 +45,15 @@ const populationWardExpression = [
     ['linear'],
     ['feature-state', 'value'],
     1, '#9a3404', 2, '#9a3404',
-    3, '#fed990', 4, '#fed990',
-    5, '#fed990', 6, '#fe9b2a',
-    7, '#d95f0e', 8, '#fe9b2a',
-    9, '#ffffd6'];
+    3, '#9a3404', 4, '#9a3404',
+    5, '#9a3404', 6, '#fe9b2a',
+    7, '#9a3404', 8, '#d95f0e',
+    9, '#ffffd6', 10, '#fed990',
+    11, '#fe9b2a', 12, '#9a3404',
+    13, '#9a3404', 14, '#9a3404',
+    15, '#fed990', 16, '#fe9b2a',
+    17, '#fed990', 18, '#fe9b2a',
+    19, '#d95f0e'];
 const {
     criticalinfrastructures,
     evaccenters,
@@ -87,24 +92,24 @@ const slideTwoLayers = ['bridgeDhangadi', 'water', 'waterway',
 
 const slideThreeLayers = ['wardNumbers', 'water', 'waterway',
     'canalDhangadi', 'wardOutline',
-    'ward-fill-local',
+    'ward-fill-local', 'densityDhangadi',
 ];
 
-const slideFourLayers = ['bridgeTikapur', 'water', 'waterway',
-    'canalTikapur',
-    'TikapurRoads',
+const slideFourLayers = ['bridgeDhangadi', 'water', 'waterway',
+    'canalDhangadi',
+    'DhangadiRoads',
     'municipalityFill'];
 
 const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
-    'canalTikapur', 'TikapurBuildings',
-    'TikapurRoads', 'municipalityFill',
+    ...criticalInfraClusters, 'DhangadiBuildings', ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
+    'canalDhangadi',
+    'DhangadiRoads', 'municipalityFill',
 
 ];
 const slideSixLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
-    'canalTikapur',
-    'TikapurRoads',
+    ...criticalInfraClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
+    'canalDhangadi',
+    'DhangadiRoads',
     'municipalityFill',
 ];
 class FloodHistoryMap extends React.Component {
@@ -134,7 +139,7 @@ class FloodHistoryMap extends React.Component {
         if (wards) {
             wards.map((item) => {
                 const { id } = item;
-                if (item.municipality === 71013) {
+                if (item.municipality === 71004) {
                     if (item.title === '1') {
                         mapping.push({ id, value: 1 });
                     }
@@ -161,6 +166,36 @@ class FloodHistoryMap extends React.Component {
                     }
                     if (item.title === '9') {
                         mapping.push({ id, value: 9 });
+                    }
+                    if (item.title === '10') {
+                        mapping.push({ id, value: 10 });
+                    }
+                    if (item.title === '11') {
+                        mapping.push({ id, value: 11 });
+                    }
+                    if (item.title === '12') {
+                        mapping.push({ id, value: 12 });
+                    }
+                    if (item.title === '13') {
+                        mapping.push({ id, value: 13 });
+                    }
+                    if (item.title === '14') {
+                        mapping.push({ id, value: 14 });
+                    }
+                    if (item.title === '15') {
+                        mapping.push({ id, value: 15 });
+                    }
+                    if (item.title === '16') {
+                        mapping.push({ id, value: 16 });
+                    }
+                    if (item.title === '17') {
+                        mapping.push({ id, value: 17 });
+                    }
+                    if (item.title === '18') {
+                        mapping.push({ id, value: 18 });
+                    }
+                    if (item.title === '19') {
+                        mapping.push({ id, value: 19 });
                     }
                 }
                 return null;
@@ -363,10 +398,15 @@ class FloodHistoryMap extends React.Component {
                         ['linear'],
                         ['feature-state', 'value'],
                         1, '#9a3404', 2, '#9a3404',
-                        3, '#fed990', 4, '#fed990',
-                        5, '#fed990', 6, '#fe9b2a',
-                        7, '#d95f0e', 8, '#fe9b2a',
-                        9, '#ffffd6',
+                        3, '#9a3404', 4, '#9a3404',
+                        5, '#9a3404', 6, '#fe9b2a',
+                        7, '#9a3404', 8, '#d95f0e',
+                        9, '#ffffd6', 10, '#fed990',
+                        11, '#fe9b2a', 12, '#9a3404',
+                        13, '#9a3404', 14, '#9a3404',
+                        15, '#fed990', 16, '#fe9b2a',
+                        17, '#fed990', 18, '#fe9b2a',
+                        19, '#d95f0e',
                     ],
                     'fill-opacity': [
                         'case',
@@ -375,7 +415,7 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                filter: getWardFilter(5, 65, 71013, wards),
+                filter: getWardFilter(5, 65, 71004, wards),
             });
 
             this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
@@ -689,7 +729,7 @@ class FloodHistoryMap extends React.Component {
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
-        `&layers=Bipad:Tikapur_FD_1in${years}`,
+        `&layers=Bipad:Dhangadhi_FD_1in${years}`,
         '&tiled=true',
         '&width=256',
         '&height=256',

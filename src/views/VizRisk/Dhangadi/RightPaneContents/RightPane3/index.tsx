@@ -8,12 +8,12 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Tikapur/Data/demographicsData';
+import demographicsData from '#views/VizRisk/Dhangadi/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
-import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
-import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
+import ManWoman from '#views/VizRisk/Dhangadi/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Dhangadi/Icons/male.svg';
+import Female from '#views/VizRisk/Dhangadi/Icons/female.svg';
+import Home from '#views/VizRisk/Dhangadi/Icons/home.svg';
 
 import Disclaimer from '../../Components/Disclaimer';
 
