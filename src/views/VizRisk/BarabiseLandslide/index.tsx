@@ -188,7 +188,7 @@ const BarabiseLandslide = (props) => {
         .map(item => ({ position: item.geometry.coordinates, date: item.properties.incidentOn }));
 
     const librariesData = Object.values(cood).map(item => ({ position: item }));
-    const setAnimationDelay = delayinMS => setDelay(delayinMS);
+    const setNarrationDelay = delayinMS => setDelay(delayinMS);
     const setPage = (val: number) => {
         setCurrentPage(val);
         setReanimate(true);
@@ -215,7 +215,7 @@ const BarabiseLandslide = (props) => {
                     bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                     currentPage={currentPage}
                     handleFlyTo={handleFlyTo}
-                    setAnimationDelay={setAnimationDelay}
+                    setNarrationDelay={setNarrationDelay}
                 />
             }
 

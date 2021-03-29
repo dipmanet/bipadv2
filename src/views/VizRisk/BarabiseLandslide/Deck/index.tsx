@@ -48,9 +48,9 @@ const Deck = (props) => {
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
     const [landSlidePointsVisible, setLandslideVisible] = useState(false);
-    const [animationDuration, setAnimateDuration] = useState(10000);
+    const [mapanimationDuration, setMapAnimateDuration] = useState(10000);
     const [reAnimate, setReAnimate] = useState(false);
-    const [delay, setDelay] = useState(4000);
+    const [delay, setMapDelay] = useState(4000);
     // eslint-disable-next-line no-shadow
     const {
         viewState,
@@ -60,7 +60,6 @@ const Deck = (props) => {
         handleFlyTo,
         wards,
     } = props;
-
     const getHillshadeLayer = () => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
@@ -292,7 +291,6 @@ const Deck = (props) => {
             });
         }
 
-        console.log(mapping);
         mapping.forEach((attribute) => {
             map.setFeatureState(
                 {
@@ -428,72 +426,98 @@ const Deck = (props) => {
         if (!mapRef.current) {
             return;
         }
-        if (currentPage === 2) {
+        if (currentPage === 1) {
             const map = mapRef.current.getMap();
-            props.setAnimationDelay(1000);
-            setDelay(1000);
+            handleFlyTo(Locations.nepal);
+            setAllDataVisible(true);
+            props.setNarrationDelay(2000);
+            setLandslideVisible(false);
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+        } else if (currentPage === 2) {
+            const map = mapRef.current.getMap();
+
+            props.setNarrationDelay(1000);
+            setMapDelay(1000);
+            setReAnimate(true);
+            setMapAnimateDuration(1000);
+
             handleFlyTo(Locations.bahrabise);
             setRadiusChange(true);
             setAllDataVisible(false);
-
-            setReAnimate(true);
-            setAnimateDuration(1000);
+            setLandslideVisible(true);
 
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
-            map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
-            setLandslideVisible(true);
-        } else if (currentPage === 1) {
-            const map = mapRef.current.getMap();
-            handleFlyTo(Locations.nepal);
-            setAllDataVisible(true);
-            map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
-            props.setAnimationDelay(4000);
+
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
         } else if (currentPage === 3) {
             const map = mapRef.current.getMap();
-            props.setAnimationDelay(1000);
+
+            setReAnimate(true);
+            MapLayers.demography.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-            setReAnimate(true);
-            setAnimateDuration(1000);
-            setLandslideVisible(false);
-            setDelay(1000);
-            map.setLayoutProperty('clusters-ci', 'visibility', 'none');
-            map.setLayoutProperty('unclustered-point-ci', 'visibility', 'none');
-            map.setLayoutProperty('clusters-count-ci', 'visibility', 'none');
         } else if (currentPage === 4) {
             const map = mapRef.current.getMap();
-            map.setLayoutProperty('clusters-ci', 'visibility', 'visible');
-            map.setLayoutProperty('unclustered-point-ci', 'visibility', 'visible');
-            map.setLayoutProperty('clusters-count-ci', 'visibility', 'visible');
-            map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
 
             setReAnimate(true);
-            setAnimateDuration(1000);
-            setLandslideVisible(false);
+
+            MapLayers.landuse.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.demography.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+            MapLayers.criticalinfra.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
         } else if (currentPage === 6) {
             const map = mapRef.current.getMap();
-            map.setLayoutProperty('clusters-ci', 'visibility', 'none');
-            map.setLayoutProperty('unclustered-point-ci', 'visibility', 'none');
-            map.setLayoutProperty('clusters-count-ci', 'visibility', 'none');
-            map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
             setReAnimate(true);
-            setAnimateDuration(1000);
-            setLandslideVisible(false);
-            props.setAnimationDelay(1000);
+            MapLayers.demography.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.suseptibility.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.criticalinfra.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
         } else if (currentPage === 7) {
             const map = mapRef.current.getMap();
-            map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             setReAnimate(true);
-            setAnimateDuration(1000);
-            setLandslideVisible(false);
-            props.setAnimationDelay(1000);
+
+            MapLayers.criticalinfra.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.suseptibility.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -503,7 +527,7 @@ const Deck = (props) => {
             from={{ enterProgress: 0 }}
             to={{ enterProgress: 1 }}
             delay={delay}
-            config={{ duration: animationDuration }}
+            config={{ duration: mapanimationDuration }}
             reset={reAnimate}
 
         >

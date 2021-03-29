@@ -1,6 +1,6 @@
 export default {
     1: {
-        title: 'This is first title',
+        title: 'Landslides in Nepal ',
         description: 'this is first slide description',
     },
     2: {
@@ -16,12 +16,12 @@ export default {
         description: 'this is fourth slide description',
     },
     5: {
-        title: 'Critical Infrastructures',
-        description: 'this is chart description',
-    },
-    6: {
         title: 'Demography',
         description: 'This is demography description',
+    },
+    6: {
+        title: 'Critical Infrastructures',
+        description: 'this is chart description',
     },
     7: {
         title: 'Susptibility',

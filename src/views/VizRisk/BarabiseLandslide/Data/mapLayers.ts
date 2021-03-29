@@ -1,4 +1,12 @@
 export default {
+    landslide: [
+        'bahrabiseTitle',
+        'bahrabiseWardOutline',
+        'bahrabiseFill',
+        'bahrabiseHillshadeLocal',
+        'bahrabiseContourVals',
+        'bahrabiseContourLines',
+    ],
     landuse: [
         'bahrabiseTitle',
         'bahrabiseWardOutline',
@@ -8,8 +16,26 @@ export default {
         'bahrabiseRoads',
         'bahrabiseFarmland',
         'bahrabiseFill',
-        // 'bahrabiseHillshade',
+        'bahrabiseHillshadeLocal',
         'bahrabiseContourVals',
         'bahrabiseContourLines',
+    ],
+    demography: [
+        'bahrabiseWardOutline',
+        'ward-fill-local',
+    ],
+    criticalinfra: [
+        'clusters-ci',
+        'unclustered-point-ci',
+        'clusters-count-ci',
+        'bahrabiseWardOutline',
+        'bahrabiseContourVals',
+        'bahrabiseContourLines',
+        'bahrabiseHillshadeLocal',
+        'bahrabiseFill',
+
+    ],
+    suseptibility: [
+        'suseptibility-bahrabise',
     ],
 };
