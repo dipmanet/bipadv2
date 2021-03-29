@@ -60,6 +60,7 @@ import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import Narratives from './Narratives';
 import legendList from './Components/Legends/legends';
 import chartData from './Data/demographicsData';
+import CriticalInfraLegends from './Components/CriticalInfraLegends';
 
 interface Params {
 }
@@ -279,6 +280,11 @@ const BarabiseLandslide = (props) => {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
+                ) : ''
+            }
+            {currentPage === 6
+                ? (
+                    <CriticalInfraLegends />
                 ) : ''
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1

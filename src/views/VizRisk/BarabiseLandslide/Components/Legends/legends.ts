@@ -1,4 +1,18 @@
 export default {
+    1: {
+        title: 'Landslides in Nepal',
+        type: 'hexagon',
+        legends: [
+            { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
+        ],
+    },
+    2: {
+        title: 'Landslides in Bahrabise',
+        type: 'hexagon',
+        legends: [
+            { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
+        ],
+    },
     3: {
         title: 'Landuse',
         type: 'hexagon',
@@ -10,6 +24,17 @@ export default {
             { key: 5, color: '#0670bc', label: 'Water Bodies' },
             { key: 6, color: '#aaa', label: 'Buildings' },
             { key: 7, color: 'rgb(247,246,241)', label: 'Other' },
+        ],
+    },
+    5: {
+        title: 'Demography',
+        type: 'square',
+        legends: [
+            { key: 1, color: '#9a3404', label: '5000' },
+            { key: 2, color: '#d94f0e', label: '4000' },
+            { key: 3, color: '#fe9b2a', label: '3000' },
+            { key: 4, color: '#fed990', label: '2000' },
+            { key: 5, color: '#ffffd6', label: '1000' },
         ],
     },
     7: {
@@ -37,6 +62,22 @@ export default {
             { key: 19, color: 'rgb(231,84,55)', label: '0.90' },
             { key: 20, color: 'rgb(223,55,47)', label: '0.95' },
             { key: 21, color: 'rgb(215,50,45)', label: '1' },
+
+        ],
+    },
+    8: {
+        title: 'LandSlide Risk',
+        type: 'square',
+        legends: [
+            { key: 1, color: 'rgb(66,136,189)', label: '0' },
+            { key: 2, color: 'rgb(102,146,181)', label: '0.1' },
+            { key: 5, color: 'rgb(171,221,196)', label: '0.2' },
+            { key: 7, color: 'rgb(230,245,152)', label: '0.3' },
+            { key: 9, color: 'rgb(254,251,191)', label: '0.40' },
+            { key: 11, color: 'rgb(252,224,139)', label: '0.50' },
+            { key: 13, color: 'rgb(245,173,96)', label: '0.60' },
+            { key: 15, color: 'rgb(239,109,66)', label: '0.70' },
+            { key: 17, color: 'rgb(213,62,79)', label: '0.80' },
 
         ],
     },

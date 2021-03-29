@@ -33,9 +33,12 @@ export default {
         'bahrabiseContourLines',
         'bahrabiseHillshadeLocal',
         'bahrabiseFill',
-
+        'bahrabiseBuildings',
     ],
     suseptibility: [
         'suseptibility-bahrabise',
+    ],
+    landsliderisk: [
+        'ward-fill-risk',
     ],
 };

@@ -248,6 +248,35 @@ const Deck = (props) => {
             },
             filter: getWardFilter(3, 24, 23002, wards),
         });
+        map.addLayer({
+            id: 'ward-fill-risk',
+            source: 'vizrisk-fills',
+            'source-layer': mapSources.nepal.layers.ward,
+            // 'source-layer': 'bipadWardBarabise-85z7ha',
+            type: 'fill',
+            paint: {
+                'fill-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['feature-state', 'value'],
+                    1, 'rgb(230,245,152)', 2, 'rgb(230,245,152)',
+                    3, 'rgb(245,173,96)', 4, 'rgb(213,62,79)',
+                    5, 'rgb(254,251,191)', 6, 'rgb(230,245,152)',
+                    7, 'rgb(171,221,196)', 8, 'rgb(254,251,191)',
+                    9, 'rgb(252,224,139)',
+                ],
+                'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0,
+                    1,
+                ],
+            },
+            layout: {
+                visibility: 'none',
+            },
+            filter: getWardFilter(3, 24, 23002, wards),
+        });
         // const wards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         // const mapping = wards.map(item => ({
         //     id: item,
@@ -514,7 +543,23 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
+            MapLayers.landsliderisk.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
             MapLayers.suseptibility.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+        } else if (currentPage === 8) {
+            const map = mapRef.current.getMap();
+            setReAnimate(true);
+
+            MapLayers.suseptibility.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.landsliderisk.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });

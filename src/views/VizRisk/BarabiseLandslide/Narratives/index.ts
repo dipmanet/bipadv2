@@ -24,8 +24,16 @@ export default {
         description: 'this is chart description',
     },
     7: {
-        title: 'Susptibility',
+        title: 'Suseptibility',
         description: 'This is suspetibility description',
+    },
+    8: {
+        title: 'Landslide Risk',
+        description: 'This is landslide risk description',
+    },
+    9: {
+        title: 'Some positive message',
+        description: 'This is some positive message',
     },
 
 };
