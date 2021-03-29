@@ -430,13 +430,14 @@ const Deck = (props) => {
         }
         if (currentPage === 2) {
             const map = mapRef.current.getMap();
+            props.setAnimationDelay(1000);
+            setDelay(1000);
             handleFlyTo(Locations.bahrabise);
             setRadiusChange(true);
             setAllDataVisible(false);
 
             setReAnimate(true);
-            setAnimateDuration(3000);
-            setDelay(1000);
+            setAnimateDuration(1000);
 
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
@@ -450,8 +451,10 @@ const Deck = (props) => {
             handleFlyTo(Locations.nepal);
             setAllDataVisible(true);
             map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
+            props.setAnimationDelay(4000);
         } else if (currentPage === 3) {
             const map = mapRef.current.getMap();
+            props.setAnimationDelay(1000);
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
@@ -459,6 +462,7 @@ const Deck = (props) => {
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);
+            setDelay(1000);
             map.setLayoutProperty('clusters-ci', 'visibility', 'none');
             map.setLayoutProperty('unclustered-point-ci', 'visibility', 'none');
             map.setLayoutProperty('clusters-count-ci', 'visibility', 'none');
@@ -467,6 +471,7 @@ const Deck = (props) => {
             map.setLayoutProperty('clusters-ci', 'visibility', 'visible');
             map.setLayoutProperty('unclustered-point-ci', 'visibility', 'visible');
             map.setLayoutProperty('clusters-count-ci', 'visibility', 'visible');
+            map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
 
             setReAnimate(true);
             setAnimateDuration(1000);
@@ -480,6 +485,7 @@ const Deck = (props) => {
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);
+            props.setAnimationDelay(1000);
         } else if (currentPage === 7) {
             const map = mapRef.current.getMap();
             map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
@@ -487,6 +493,7 @@ const Deck = (props) => {
             setReAnimate(true);
             setAnimateDuration(1000);
             setLandslideVisible(false);
+            props.setAnimationDelay(1000);
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

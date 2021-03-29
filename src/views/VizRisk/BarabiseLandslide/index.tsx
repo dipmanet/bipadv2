@@ -188,11 +188,10 @@ const BarabiseLandslide = (props) => {
         .map(item => ({ position: item.geometry.coordinates, date: item.properties.incidentOn }));
 
     const librariesData = Object.values(cood).map(item => ({ position: item }));
-
+    const setAnimationDelay = delayinMS => setDelay(delayinMS);
     const setPage = (val: number) => {
         setCurrentPage(val);
         setReanimate(true);
-        setDelay(3000);
     };
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
@@ -206,11 +205,6 @@ const BarabiseLandslide = (props) => {
     };
     return (
         <>
-            {/* <Map
-                incidentList={sanitizedIncidentList}
-                hazardTypes={hazardTypes}
-                page={currentPage}
-            /> */}
             {
                 <Deck
                     librariesData={librariesData}
@@ -221,9 +215,8 @@ const BarabiseLandslide = (props) => {
                     bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                     currentPage={currentPage}
                     handleFlyTo={handleFlyTo}
-                    // destination={destination}
+                    setAnimationDelay={setAnimationDelay}
                 />
-
             }
 
             <NavButtons
@@ -286,7 +279,6 @@ const BarabiseLandslide = (props) => {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-
                 ) : ''
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1

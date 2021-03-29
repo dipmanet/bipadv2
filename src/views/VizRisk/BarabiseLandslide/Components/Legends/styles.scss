@@ -19,9 +19,14 @@
         .legendsRow{
             display: flex;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 0px;
             .legendsHexagon{
                 width: 20px;
+                margin-right: 4px;
+            }
+            .legendsSquare{
+                width: 16px;
+                height: 16px;
                 margin-right: 4px;
             }
         }
