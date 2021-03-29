@@ -2,7 +2,7 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
 import mapboxgl from 'mapbox-gl';
-import { GeoJsonLayer } from '@deck.gl/layers';
+import { PolygonLayer } from '@deck.gl/layers';
 import MapGL, { StaticMap, FlyToInterpolator } from 'react-map-gl';
 import { easeBackInOut } from 'd3-ease';
 import * as d3 from 'd3';
@@ -28,6 +28,7 @@ const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
     wards: wardsSelector(state),
 });
+
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
 const populationWardExpression = [
@@ -60,6 +61,15 @@ const Deck = (props) => {
         handleFlyTo,
         wards,
     } = props;
+    const getToolTip = ({ object }) => (
+        object && currentPage === 5 && {
+            html: `\
+          <div><b>Ward ${object.title}</b></div>
+          <div>Family Count: ${object.familycount}</div>
+          <div>Total Population: ${object.femalepopulation + object.malepopulation}</div>
+          `,
+        }
+    );
     const getHillshadeLayer = () => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
@@ -459,6 +469,7 @@ const Deck = (props) => {
             const map = mapRef.current.getMap();
             handleFlyTo(Locations.nepal);
             setAllDataVisible(true);
+            setRadiusChange(false);
             props.setNarrationDelay(2000);
             setLandslideVisible(false);
             MapLayers.landslide.map((layer) => {
@@ -512,12 +523,12 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            MapLayers.demography.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
             MapLayers.criticalinfra.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.demography.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
         } else if (currentPage === 6) {
@@ -543,12 +554,12 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            MapLayers.landsliderisk.map((layer) => {
+            MapLayers.suseptibility.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-            MapLayers.suseptibility.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
+            MapLayers.landsliderisk.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
         } else if (currentPage === 8) {
@@ -592,16 +603,16 @@ const Deck = (props) => {
                             getDelayFactor: d => (delayProp === 'longitude'
                                 ? longitudeDelayScale(d.date)
                                 : targetDelayScale(d.distToTarget)),
-                            parameters: {
-                            // prevent flicker from z-fighting
-                                [GL.DEPTH_TEST]: true,
+                            // parameters: {
+                            // // prevent flicker from z-fighting
+                            //     [GL.DEPTH_TEST]: true,
 
-                                [GL.BLEND]: true,
-                                [GL.BLEND_COLOR]: [255, 0, 0, 0],
-                                [GL.BLEND_SRC_RGB]: GL.ONE,
-                                [GL.BLEND_DST_RGB]: GL.ONE,
-                                [GL.BLEND_EQUATION]: GL.FUNC_ADD,
-                            },
+                            //     [GL.BLEND]: true,
+                            //     [GL.BLEND_COLOR]: [255, 0, 0, 0],
+                            //     [GL.BLEND_SRC_RGB]: GL.ONE,
+                            //     [GL.BLEND_DST_RGB]: GL.ONE,
+                            //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
+                            // },
                         }),
                         new DelayedPointLayer({
                             id: 'landslide-scatterplot2',
@@ -626,21 +637,20 @@ const Deck = (props) => {
                         //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
                         // },
                         }),
-                        // new GeoJsonLayer({
-                        //     id: 'geojson-layer',
-                        //     data: wardfill.wards,
-                        //     pickable: true,
-                        //     stroked: true,
-                        //     filled: true,
-                        //     extruded: false,
-                        //     lineWidthScale: 20,
-                        //     lineWidthMinPixels: 2,
-                        //     getFillColor: [160, 160, 180, 200],
-                        //     // getLineColor: d => colorToRGBArray(d.properties.color),
-                        //     getRadius: 100,
-                        //     getLineWidth: 1,
-                        //     getElevation: 30,
-                        // }),
+                        new PolygonLayer({
+                            id: 'population-polygons',
+                            data: wardfill.wards,
+                            pickable: true,
+                            stroked: true,
+                            filled: true,
+                            wireframe: true,
+                            lineWidthMinPixels: 1,
+                            getPolygon: d => d.coordinates,
+                            getElevation: d => (d.femalepopulation + d.malepopulation) / 10,
+                            getFillColor: d => [60, 140, 0],
+                            getLineColor: [80, 80, 80],
+                            getLineWidth: 1,
+                        }),
                     ];
                     return (
                         <>
@@ -652,6 +662,7 @@ const Deck = (props) => {
                                 onWebGLInitialized={setGLContext}
                                 viewState={viewState}
                                 onViewStateChange={onViewStateChange}
+                                getTooltip={getToolTip}
                                 glOptions={{
                                     /* To render vector tile polygons correctly */
                                     stencil: true,
