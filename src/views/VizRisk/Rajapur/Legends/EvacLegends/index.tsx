@@ -115,7 +115,7 @@ const EvacLegends = (props) => {
                                 src={Education}
                             />
 
-                            Education
+                            Educational Institution
                         </button>
                     </div>
 
@@ -131,7 +131,7 @@ const EvacLegends = (props) => {
                                 className={styles.svgIcon}
                                 src={Culture}
                             />
-                            Culture
+                            Cultural Site
                         </button>
                     </div>
                     <div className={styles.infraIconContainer}>
