@@ -93,6 +93,11 @@ const iconNames = {
     cog: 'ion-ios-cog',
     circle: 'fa fa-circle',
     square: 'fa fa-square',
+
+    lock: 'fa fa-unlock-alt',
+    times: 'fa fa-times',
+    info: 'fa  fa-info-circle',
+
 };
 
 export default iconNames;

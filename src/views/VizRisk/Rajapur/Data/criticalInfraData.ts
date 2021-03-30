@@ -27,10 +27,10 @@ export default {
     ],
     safeShelterData: [
         {
-            name: 'Schools', Total: 54,
+            name: 'Educational Institutions', Total: 54,
         },
         {
-            name: 'Culture', Total: 16,
+            name: 'Cultural Sites', Total: 16,
         },
 
         {

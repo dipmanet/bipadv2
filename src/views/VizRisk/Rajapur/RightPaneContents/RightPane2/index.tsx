@@ -161,7 +161,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                    Out of total area of 127.08 square km, 74.06% of land is
+                    Out of total area of 127.08 sq km, 74.06% of land is
                     used for agriculture. Building covers 0.75% of land while
                     water bodies occupies 4.08% of total land in Rajapur.
                 </p>

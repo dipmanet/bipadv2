@@ -37,27 +37,27 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
-                <p>
+                {/* <p>
                     Non-governmental Organizations have funded interventions in the
                     regions for strengthening early warning system and building
                     emergency flood shelters in strategic places across the municipality.
 
-                </p>
+                </p> */}
                 <p>
-                    Currently, there are only nine evacuation shelters in Rajapur.
+                    Currently, there are only nine safe shelters in Rajapur.
                     This visualization allows exploring the existing schools and
                     cultural heritage sites for evacuation during floods.
                     However, their functionality during floods are contingent
                     upon several factors including building types and their exposure,
                     whether they are located in flood prone or flood safe areas.
                 </p>
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={'30%'}>
                     <BarChart
                         width={350}
                         height={600}
                         data={chartData}
                         layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 10, left: 10 }}
+                        margin={{ top: 10, bottom: 10, right: 10, left: 20 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
@@ -66,7 +66,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             dataKey="name"
                             tick={{ fill: '#94bdcf' }}
                         />
-                        <Tooltip />
+                        {/* <Tooltip /> */}
                         <Bar
                             dataKey="Total"
                             fill="#ffbf00"

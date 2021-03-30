@@ -134,8 +134,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <p>
                     Rajapur municipality lies in the Terai region of Bardiya
                     district in Lumbini Province. It covers a  total area of
-                    127.08 square km, and is situated at an elevation of
-                    142 m to 154 m from AMSL.
+                    127.08 sq km, and is situated at an elevation of
+                    142 m to 154 m AMSL.
 
                 </p>
                 <h2>Climate</h2>

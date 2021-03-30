@@ -435,6 +435,7 @@ class FloodHistoryMap extends React.Component {
                     const wardno = e.features[0].properties.title;
                     const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
                     const totalPop = details[0].MalePop + details[0].FemalePop;
+                    const totalHH = details[0].TotalHousehold;
                     // const description = (
                     //     `Ward No:
                     //         ${wardno}
@@ -446,6 +447,7 @@ class FloodHistoryMap extends React.Component {
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p> Total Population: ${totalPop}</p>
+                            <p> Total Household: ${totalHH}</p>
                         </div>
                         `,
                     ).addTo(this.map);

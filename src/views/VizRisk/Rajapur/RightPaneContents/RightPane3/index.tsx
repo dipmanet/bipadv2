@@ -63,12 +63,12 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 viewing the population distribution within each ward and
                 helps to locate the region of dense and sparse settlements.
                 </p>
-                <p>
+                {/* <p>
                 Ward number 4 has the highest number of population with 1693
                 households. Notably, these high populations ward lies very close
                 to the western tributary of the Karnali river.  Ward number 7 has
                 the least number of households comprising of 766 numbers.
-                </p>
+                </p> */}
 
                 <div className={styles.iconRow}>
                     <div className={styles.infoIconsContainer}>
@@ -92,7 +92,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>12,138</div>
                             <div className={styles.iconText}>
-                             Total Household Number
+                             Total Household
                             </div>
 
                         </div>
