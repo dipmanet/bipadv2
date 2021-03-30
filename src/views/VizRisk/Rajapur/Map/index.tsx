@@ -496,7 +496,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    const titleName = e.features[0].properties.Name;
+                    const titleName = e.features[0].properties.Title;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p>${titleName}</p>
@@ -513,10 +513,11 @@ class FloodHistoryMap extends React.Component {
 
             categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
                 if (e) {
+                    console.log('e features: ', e.features[0]);
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    const titleName = e.features[0].properties.Name;
+                    const titleName = e.features[0].properties.Title;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p>${titleName}</p>
