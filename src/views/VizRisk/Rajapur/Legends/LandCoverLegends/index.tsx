@@ -1,7 +1,7 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-import AgriPattern from '../../Icons/agrihexagon.png';
+import AgriPattern from '../../Icons/agrihexagon.svg';
 
 const LandCoverLegends = () => (
     <>
@@ -19,7 +19,7 @@ const LandCoverLegends = () => (
                     className={styles.buildingIcon}
                 />
             </span>
-                            Buildings
+            <span className={styles.legendText}>Buildings</span>
 
         </p>
         <p className={styles.landcoverIconContainer}>
@@ -35,7 +35,8 @@ const LandCoverLegends = () => (
                 />
 
             </span>
-                            Water Bodies
+            <span className={styles.legendText}>Water Bodies</span>
+
         </p>
 
         <p className={styles.landcoverIconContainer}>
@@ -54,7 +55,8 @@ const LandCoverLegends = () => (
 
             </span> */}
             <img src={AgriPattern} alt="agriculture legend" className={styles.agricultureIcon} />
-                            Agricultural Land
+            <span className={styles.legendText}>Agricultural Land</span>
+
         </p>
         <p className={styles.landcoverIconContainer}>
             <span>
@@ -69,24 +71,28 @@ const LandCoverLegends = () => (
                 />
 
             </span>
-                            Forest
+            <span className={styles.legendText}>Forest</span>
+
         </p>
 
         <div className={styles.landcoverIconContainer}>
             <div className={styles.canalIcon} />
 
-                            Canals
+            <span className={styles.legendText}>Canals</span>
+
         </div>
 
         <div className={styles.landcoverIconContainer}>
             <div className={styles.roadIcon} />
 
-                            Roads
+            <span className={styles.legendText}>Roads</span>
+
         </div>
         <div className={styles.landcoverIconContainer}>
             <div className={styles.bridgeLine} />
 
-                            Bridges
+            <span className={styles.legendText}>Bridges</span>
+
         </div>
 
         <p className={styles.landcoverIconContainer}>
@@ -101,7 +107,8 @@ const LandCoverLegends = () => (
                     className={styles.otherIcon}
                 />
             </span>
-                            Other
+            <span className={styles.legendText}>Other</span>
+
         </p>
 
     </>

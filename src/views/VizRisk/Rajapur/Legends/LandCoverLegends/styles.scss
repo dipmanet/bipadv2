@@ -7,12 +7,15 @@
             display: flex;
             align-items: center;
             font-size: 14px;
-            opacity: 0.67;
+            .legendText{
+                opacity: 0.67;
+            }
             .buildingIcon{
                 // color:#d5d3d3;
                 color:#f3f2f2;
                width: 15px;
                margin-right: 10px;
+               opacity: 1  !important;
             }
             .agricultureIcon{
                 width: 15px;
