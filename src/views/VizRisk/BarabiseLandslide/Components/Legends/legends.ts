@@ -30,11 +30,10 @@ export default {
         title: 'Demography',
         type: 'square',
         legends: [
-            { key: 1, color: '#9a3404', label: '5000' },
-            { key: 2, color: '#d94f0e', label: '4000' },
-            { key: 3, color: '#fe9b2a', label: '3000' },
-            { key: 4, color: '#fed990', label: '2000' },
-            { key: 5, color: '#ffffd6', label: '1000' },
+            { key: 1, color: 'rgb(217,72,1)', label: '4288' },
+            { key: 2, color: 'rgb(241,105,19)', label: '3000-4000' },
+            { key: 3, color: 'rgb(253,174,107)', label: '2000-3000' },
+            { key: 4, color: 'rgb(254, 230, 206)', label: '1000-2000' },
         ],
     },
     7: {

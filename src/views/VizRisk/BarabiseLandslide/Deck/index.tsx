@@ -11,6 +11,7 @@ import Anime from 'react-anime';
 import { Spring } from 'react-spring/renderprops';
 import GL from '@luma.gl/constants';
 import { connect } from 'react-redux';
+import { scaleThreshold } from 'd3-scale';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from '../Data/locations';
 import MapLayers from '../Data/mapLayers';
@@ -644,10 +645,12 @@ const Deck = (props) => {
                             stroked: true,
                             filled: true,
                             wireframe: true,
+                            extruded: true,
                             lineWidthMinPixels: 1,
+                            visible: currentPage === 5,
                             getPolygon: d => d.coordinates,
-                            getElevation: d => (d.femalepopulation + d.malepopulation) / 10,
-                            getFillColor: d => [60, 140, 0],
+                            getElevation: d => (d.femalepopulation + d.malepopulation) / 5,
+                            getFillColor: d => d.color,
                             getLineColor: [80, 80, 80],
                             getLineWidth: 1,
                         }),

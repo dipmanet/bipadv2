@@ -204,17 +204,6 @@ const BarabiseLandslide = (props) => {
             transitionInterpolator: new FlyToInterpolator(),
         });
     };
-    const getToolTip = ({ object }) => (
-        object && {
-            html: `\
-          <div><b>Average Property Value</b></div>
-        //   <div>${object.properties.valuePerParcel} / parcel</div>
-        //   <div>${object.properties.valuePerSqm} / m<sup>2</sup></div>
-          <div><b>Growth</b></div>
-        //   <div>${Math.round(object.properties.growth * 100)}%</div>
-          `,
-        }
-    );
 
     return (
         <>

@@ -101,7 +101,7 @@ const slideFourLayers = [
 ];
 
 const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
+    ...criticalInfraClusters, 'rajapurbuildings', ...rasterLayers, 'water',
     'bridgeRajapur', 'canalRajapur', 'waterway',
     'rajapurRoads', 'wardOutline', 'wardFill',
 ];
