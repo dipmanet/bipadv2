@@ -2,7 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/tikapurGEOJSON';
+import SchoolGeoJSON from '../Data/dhangadiGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
 import {
@@ -107,7 +107,7 @@ const slideFiveLayers = [
 
 ];
 const slideSixLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
+    'safeshelterDhangadiIcon', 'safeshelterDhangadiimage', ...criticalInfraClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
     'canalDhangadi',
     'DhangadiRoads',
     'municipalityFill',

@@ -120,7 +120,7 @@ const EvacLegends = (props) => {
                             Culture
                         </button>
                     </div>
-                    {/* <div className={styles.infraIconContainer}>
+                    <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showSafe
@@ -134,7 +134,7 @@ const EvacLegends = (props) => {
                             />
                             Safe Shelter
                         </button>
-                    </div> */}
+                    </div>
                 </div>
 
 

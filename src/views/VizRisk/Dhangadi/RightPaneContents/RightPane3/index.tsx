@@ -65,9 +65,9 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                  dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 1 has the highest number of population(48527) with
-                  9823 number of families. Ward number 9 has the least
-                   population (4183) with 743 families.
+                Ward number 1 has the highest number of population(14333) with
+                  1181 number of families. Ward number 9 has the least
+                   population (3280) with 3105 families.
                 </p>
 
 
@@ -78,7 +78,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>98,651</div>
+                            <div className={styles.iconTitle}>1,47741</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>
@@ -91,7 +91,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Home}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>18,620</div>
+                            <div className={styles.iconTitle}>29,143</div>
                             <div className={styles.iconText}>
                              Total Family Count
                             </div>
@@ -108,7 +108,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Male}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>50,405</div>
+                            <div className={styles.iconTitle}>73,462</div>
                             <div className={styles.iconText}>
                              Male Population
                             </div>
@@ -121,7 +121,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Female}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>48,246</div>
+                            <div className={styles.iconTitle}>74,279</div>
                             <div className={styles.iconText}>
                              Female Population
                             </div>
@@ -131,7 +131,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 </div>
 
 
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer width="100%">
                     <BarChart
                         width={350}
                         height={600}

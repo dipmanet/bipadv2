@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Tikapur/Data/criticalInfraData';
+import criticalInfraData from '#views/VizRisk/Dhangadi/Data/criticalInfraData';
 
 const chartData = criticalInfraData.safeShelterData;
 
@@ -65,7 +65,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             dataKey="name"
                             tick={{ fill: '#94bdcf' }}
                         />
-                        <Tooltip />
+                        {/* <Tooltip /> */}
                         <Bar
                             dataKey="Total"
                             fill="#ffbf00"
