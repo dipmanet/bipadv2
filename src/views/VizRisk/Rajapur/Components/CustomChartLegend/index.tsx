@@ -31,6 +31,7 @@ const CustomChartLegend = (props: Props) => {
         borderRadius: '4px',
         display: 'flex',
         justifyContent: 'flex-start',
+        alignItems: 'center',
         marginBottom: '20px',
     };
 
