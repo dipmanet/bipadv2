@@ -12,7 +12,7 @@ export default {
     wardFillLocalTikapur: {
         url: `${process.env.REACT_APP_MAP_SOURCE_TIKAPUR}`,
         layers: {
-            ward: 'tikapur_municipality-9jw65r',
+            ward: 'tikapur_ward_boundary-4i0qv2',
         },
     },
     wardFillLocalGulariya: {

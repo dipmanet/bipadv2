@@ -80,7 +80,7 @@ const evacClusters = [].concat(...arrEvac);
 
 
 const slideOneLayers = ['wardNumbers',
-    'water', 'waterway', 'municipalitycentroidgeo',
+    'water', 'waterway',
     'wardOutline', 'municipalityFill'];
 
 const slideTwoLayers = ['bridgeDhangadi', 'water', 'waterway',
@@ -107,7 +107,7 @@ const slideFiveLayers = [
 
 ];
 const slideSixLayers = [
-    'safeshelterDhangadiIcon', 'safeshelterDhangadiimage', ...criticalInfraClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
+    'safeshelterDhangadiimage', 'safeshelterDhangadiIcon', ...criticalInfraClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
     'canalDhangadi',
     'DhangadiRoads',
     'municipalityFill',
@@ -781,8 +781,8 @@ class FloodHistoryMap extends React.Component {
                 `evac-unclustered-${layer}`, 'visibility', 'none',
             );
 
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
+            this.map.setLayoutProperty('safeshelterDhangadiimage', 'visibility', 'none');
+            this.map.setLayoutProperty('safeshelterDhangadiIcon', 'visibility', 'none');
             return null;
         });
     }
@@ -823,41 +823,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'health') {
-            this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
+        } else {
+            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
             this.map.moveLayer('clusters-count-Health');
-        } else if (layer === 'bank') {
-            this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'governance') {
-            this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'industry') {
-            this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Industry');
-        } else if (layer === 'education') {
-            this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Education');
-        } else if (layer === 'culture') {
-            this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Culture');
-        } else if (layer === 'tourism') {
-            this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Tourism');
         }
     };
 
@@ -870,6 +840,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`evac-unclustered-${item}`, 'visibility', 'visible');
                 return null;
             });
+            this.map.setLayoutProperty('safeshelterDhangadiimage', 'visibility', 'visible');
+            this.map.setLayoutProperty('safeshelterDhangadiIcon', 'visibility', 'visible');
         } else if (layer === 'education') {
             this.map.setLayoutProperty('evac-Education', 'visibility', 'visible');
             this.map.setLayoutProperty('evac-count-Education', 'visibility', 'visible');
@@ -879,8 +851,8 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('evac-count-Culture', 'visibility', 'visible');
             this.map.setLayoutProperty('evac-unclustered-Culture', 'visibility', 'visible');
         } else if (layer === 'safe') {
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
+            this.map.setLayoutProperty('safeshelterDhangadiimage', 'visibility', 'visible');
+            this.map.setLayoutProperty('safeshelterDhangadiIcon', 'visibility', 'visible');
         }
     };
 
