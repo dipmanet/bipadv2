@@ -41,6 +41,7 @@ const NavButtons = (props) => {
                         : styles.nextPrevBtn
                     }
                 />
+                Prev
             </button>
             <div className={styles.navText}>
                 {`page ${page} of ${maxPage}`}
@@ -58,6 +59,7 @@ const NavButtons = (props) => {
                         : styles.nextPrevBtn
                     }
                 />
+                Next
             </button>
         </div>
     );

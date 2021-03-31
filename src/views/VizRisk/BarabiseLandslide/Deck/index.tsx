@@ -50,7 +50,7 @@ const Deck = (props) => {
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
     const [landSlidePointsVisible, setLandslideVisible] = useState(false);
-    const [mapanimationDuration, setMapAnimateDuration] = useState(10000);
+    const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
     const [delay, setMapDelay] = useState(4000);
     // eslint-disable-next-line no-shadow
