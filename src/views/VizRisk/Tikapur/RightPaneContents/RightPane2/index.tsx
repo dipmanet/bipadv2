@@ -162,8 +162,10 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Most of the land is used for agriculture. Other areas are covered by forest,
-                 built-up area, waterbodies, conservation areas.
+                Out of a total area of 118 square km, 36.34% of the land is used
+                for agriculture.Forests cover 12.94%, water bodies cover 7.71%
+                and buildings cover 0.94% of the land.However, 47.6% of land in
+                Tikapur is uncategorized or still unmapped in OpenStreetMap.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart

@@ -34,17 +34,14 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-                Flood exposure in Gulariya is due to its proximity to the Babai River,
-                which is locally called Sarju Nadi. The Babai River originates from the
-                 low mountains in the Mahabharat Hills and flows in the northwest, enclosed
-                 by these hills on either side, and then exits onto the Terai plain and flows
-                  southwards into India. As the river enters the Terai, its straight path changes
-                  to numerous ox-bow formations leading downstream.
+                Karnali river borders the Tikapur municipality in the east.
+                The Karnali river flows to the Terai plains from a narrow gorge at Chisapani,
+                where it bifurcates into Geruwa and Karnali river.
                 </p>
                 <p>
                 All of the residential and governmental buildings, religious and cultural sites,
-                banking institutions, critical infrastructures such as hospitals, schools, bridges
-                 in Gulariya are at constant threat of flooding every monsoon.
+                banking institutions, critical infrastructures such as hospitals, schools,
+                bridges in Tikapur are at constant threat of flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>

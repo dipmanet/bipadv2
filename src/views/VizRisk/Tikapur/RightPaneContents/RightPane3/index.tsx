@@ -58,17 +58,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely
-                 uneven with some pockets of dense settlements.
-                 This map allows viewing the population distribution
-                 within each ward and helps to locate the region of
-                 dense and sparse settlements.
+                Population distribution in the region is largely uneven with some
+                pockets of dense settlements. This map allows viewing the population
+                distribution within each ward and helps to locate the region of dense
+                and sparse settlements.
                 </p>
-                <p>
+                {/* <p>
                 Ward number 1 has the highest number of population(48527) with
                   9823 number of families. Ward number 9 has the least
                    population (4183) with 743 families.
-                </p>
+                </p> */}
 
 
                 <div className={styles.iconRow}>
