@@ -1,0 +1,103 @@
+.situation-report {
+    position: relative;
+    padding: var(--spacing-medium);
+    overflow-y: auto;
+
+    .download-button-container {
+        display: flex;
+        justify-content: flex-end;
+
+        .download-button {
+            margin: var(--spacing-small) var(--spacing-large);
+        }
+    }
+
+    .situation-report-full {
+        background-color: var(--color-foreground);
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+        padding: var(--spacing-large);
+    }
+
+    .heading {
+        padding: var(--spacing-small) 0;
+    }
+
+    .viz-container {
+        padding: var(--spacing-large);
+    }
+
+    .map {
+        padding: var(--spacing-large);
+        width: 100%;
+
+        .map-container {
+            width: 100%;
+            height: 50vh;
+        }
+
+        .map-heading {
+            display: flex;
+            justify-content: center;
+            padding: var(--spacing-small) 0;
+        }
+
+        .legend {
+            display: flex;
+
+            .legend-title {
+                padding: var(--spacing-small);
+                color: var(--color-primary);
+                font-size: var(--font-size-medium);
+                font-weight: var(--font-weight-bold);
+            }
+
+            .hazard-legend {
+                display: flex;
+                flex-wrap: wrap;
+                padding: var(--spacing-small) 0;
+
+                .legend-item {
+                    padding: 0 var(--spacing-extra-small);
+                }
+            }
+        }
+    }
+
+    .charts {
+        display: flex;
+        flex-direction: column;
+        padding: var(--spacing-large);
+        overflow-y: auto;
+
+        .pie-charts {
+            display: flex;
+            margin: var(--spacing-large) 0;
+
+            .pie-chart {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                flex-grow: 1;
+                justify-content: center;
+
+                .legend-container {
+                    display: flex;
+                    justify-content: center;
+
+                    .legend {
+                        padding: 0 var(--spacing-extra-small);
+                    }
+                }
+            }
+        }
+    }
+
+    .table {
+        padding: var(--spacing-large);
+    }
+}
+

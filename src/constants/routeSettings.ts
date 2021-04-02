@@ -1,3 +1,5 @@
+import { authStateSelector } from '#selectors';
+
 export interface Route {
     path: string;
     name: string;
@@ -29,7 +31,7 @@ export interface FallbackRoute {
 
 export type SomeRoute = Route | NavbarRoute | FallbackRoute;
 
-const routeSettings: SomeRoute[] = [
+export const routeSettings: SomeRoute[] = [
     {
         name: 'dashboard',
         title: 'Dashboard',
@@ -85,6 +87,15 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         disabled: false,
         iconName: 'riskInfoSvg',
+    },
+    {
+        name: 'palikaReport',
+        title: 'Palika Report',
+        path: '/palika-report/',
+        load: () => import('../views/PalikaReport'),
+        navbar: false,
+        disabled: false,
+        iconName: 'textDocument',
     },
     {
         name: 'fourHundredThree',

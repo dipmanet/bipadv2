@@ -27,8 +27,9 @@ import CitizenReportsModal from '#components/CitizenReportsModal';
 import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
+import PalikaReport from '#components/PalikaReportModal';
 import Relief from '#components/ReliefModal';
-
+import RouteSetting from '#constants/routeSettings';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
 
@@ -162,6 +163,14 @@ class Navbar extends React.PureComponent<Props, State> {
                         iconName="textDocument"
                         modal={<SituationReport />}
                     />
+
+                    <ModalButton
+                        className={styles.reliefButton}
+                        title="Palika Report"
+                        iconName="textDocument"
+                        modal={<PalikaReport />}
+                    />
+
                     {authenticated && (
                         <ModalButton
                             className={styles.reliefButton}

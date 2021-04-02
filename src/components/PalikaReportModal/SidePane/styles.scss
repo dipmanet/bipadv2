@@ -1,0 +1,21 @@
+.side-pane {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .report {
+        outline: none;
+        border: 0;
+        border-bottom: var(--width-separator-thin) solid var(--color-separator);
+        border-left: var(--width-separator-medium) solid transparent;
+        background-color: transparent;
+        cursor: pointer;
+        padding: var(--spacing-small) var(--spacing-medium);
+        text-align: left;
+
+        &.active {
+            border-left-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+    }
+}

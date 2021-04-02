@@ -1,0 +1,21 @@
+.situation-report-modal {
+    padding: 0!important;
+    width: 90vw;
+    height: 90vh;
+
+    .modal-body {
+        display: flex;
+        border-top: var(--width-separator-thin) solid var(--color-separator);
+        padding: 0;
+
+        .side-pane {
+            flex-shrink: 0;
+            border-right: var(--width-separator-thin) solid var(--color-separator);
+            width: 20%;
+        }
+
+        .report {
+            width: 80%;
+        }
+    }
+}
