@@ -4,9 +4,69 @@
     height: 100vh ;
     top: 0;
     left: 0;
-    background-color: red;
+    // background-color: red;
+    padding:0;
 }
 .modalContainer{
     min-height: 80%;
-    width: 80%;
+    width: calc(60% - 60px);
+    position: absolute;
+    overflow-x: scroll;
+    .modalHeader{
+        background-color: #e1e1e1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        .tabsTitle{
+            height: 60px;
+            display: flex;
+            justify-content: flex-start;
+            position: absolute;
+            left: 0;
+            .tabsTexts{
+                padding: 20px 40px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                border: none;
+                border-right: 1px solid #ccc;
+
+            }
+        }
+    }
+    .modalBody{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 40px;
+        width: 100%;
+        height: 100%;
+    }
+
 }
+
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 480px;
+@media (max-width: $breakpoint-tablet) {
+.modalContainer{
+    width: calc(80% - 60px);
+    .tabsTitle{
+        width: 60px
+    }
+}
+}
+
+@media (max-width: $breakpoint-mobile) {
+    .modalContainer{
+        width: calc(100% - 60px);
+        .modalHeader{
+            .tabsTitle{
+                width: 40px
+            }
+                
+        }
+    }
+      
+    }

@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
 import styles from './styles.scss';
 
-const ReportModal = (props: Props) => {
-    console.log(props);
-    const tabs = ['Tab1', 'Tab2', 'Tab3', 'Tab4'];
+interface Props {
+    keyTab: number;
+}
+
+const ReportModal: React.FC<Props> = (props: Props) => {
+    const { keyTab } = props;
     return (
         <>
-            <div className={styles.tabsTitle}>
-                { tabs.map(tab => tab)}
-            </div>
+            {keyTab === 1
+                && (
+                    <>
+                        <div className={styles.title}>
+                        ADD ANNUAL BUDGET
+                        </div>
+                        <div className={styles.subTitle}>
+                        Insert annual policy program
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <input
+                                type="text"
+                                className={styles.inputElement}
+                                placeholder="Official Email"
+                                onChange={console.log('flskjfls')}
+                                // value={emailprop || ''}
+                            />
+                        </div>
+                    </>
+                )
+            }
         </>
     );
 };
