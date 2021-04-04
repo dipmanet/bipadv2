@@ -2,18 +2,20 @@ import React from 'react';
 import Page from '#components/Page';
 import styles from './styles.scss';
 
-import PalikaReportModal from '#components/PalikaReportModal';
+const PalikaReport = props => (
+    <>
+        <Page hideMap hideFilter />
 
-const PalikaReport = (props) => {
-    const { closeModal } = props;
+        <div className={styles.container}>
+            <div>
+                <p>Hello</p>
+            </div>
+            <div>
+                <p>Whats up</p>
+            </div>
+        </div>
 
-
-    return (
-        <>
-            <Page hideMap hideFilter />
-            <p>Hello</p>
-            <PalikaReportModal />
-        </>
-    );
-};
+        {/* <PalikaReportModal /> */}
+    </>
+);
 export default PalikaReport;
