@@ -63,7 +63,7 @@ class PalikaReportModal extends React.PureComponent {
                 },
             },
         } = this.props;
-
+        console.log('This modal>>>', this.props);
         const { selectedReport } = this.state;
         const selectedReportDetails = this.getSelectedReportDetails(response, selectedReport);
 
