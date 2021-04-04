@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Page from '#components/Page';
 import styles from './styles.scss';
@@ -8,31 +8,34 @@ import ModalHeader from '#rscv/Modal/Header';
 import DangerButton from '#rsca/Button/DangerButton';
 
 interface Props {
-    closeModal?: () => void;
 }
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
-    const { closeModal } = props;
-    console.log(props);
+    const [showReportModal, setShowReportModal] = useState(true);
 
+    const handleCloseModal = () => setShowReportModal(false);
     return (
         <>
             <Page hideMap hideFilter />
             <p>Hello</p>
-            <Modal className={styles.modalContainer}>
-                <ModalHeader
-                    title="Citizen Reports"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <ModalBody className={styles.modalBody} />
-            </Modal>
+            {showReportModal
+            && (
+                <Modal closeOnOutsideClick className={styles.modalContainer}>
+                    <ModalHeader
+                        title="Citizen Reports"
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={handleCloseModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
+                    <ModalBody className={styles.modalBody} />
+                </Modal>
+            )}
+
         </>
     );
 };
