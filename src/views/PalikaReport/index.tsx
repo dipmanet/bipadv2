@@ -7,7 +7,11 @@ import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
 import DangerButton from '#rsca/Button/DangerButton';
 
-const PalikaReport = (props) => {
+interface Props {
+    closeModal?: () => void;
+}
+
+const PalikaReport: React.FC<Props> = (props: Props) => {
     const { closeModal } = props;
     console.log(props);
 
@@ -15,7 +19,7 @@ const PalikaReport = (props) => {
         <>
             <Page hideMap hideFilter />
             <p>Hello</p>
-            <Modal>
+            <Modal className={styles.modalContainer}>
                 <ModalHeader
                     title="Citizen Reports"
                     rightComponent={(
