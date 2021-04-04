@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import Page from '#components/Page';
 import styles from './styles.scss';
+
 import Modal from '#rscv/Modal';
-import ModalBody from '#rscv/Modal/Body';
 import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 
 interface Props {
