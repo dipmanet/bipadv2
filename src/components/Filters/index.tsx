@@ -603,7 +603,7 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
+        console.log('tabs: ', tabs, 'validActiveView: ', validActiveView, 'filter icon: ', FilterIcon);
 
         return (
             <div className={_cs(styles.filters, className)}>
