@@ -93,7 +93,7 @@ export const routeSettings: SomeRoute[] = [
         title: 'Palika Report',
         path: '/palika-report/',
         load: () => import('../views/PalikaReport'),
-        navbar: false,
+        navbar: true,
         disabled: false,
         iconName: 'textDocument',
     },

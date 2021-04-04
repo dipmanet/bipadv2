@@ -163,13 +163,15 @@ class Navbar extends React.PureComponent<Props, State> {
                         iconName="textDocument"
                         modal={<SituationReport />}
                     />
-
-                    <ModalButton
-                        className={styles.reliefButton}
-                        title="Palika Report"
-                        iconName="textDocument"
-                        modal={<PalikaReport />}
-                    />
+                    {/* {authenticated
+                    && (
+                        <ModalButton
+                            className={styles.reliefButton}
+                            title="Palika Report"
+                            iconName="textDocument"
+                            modal={<PalikaReport />}
+                        />
+                    )} */}
 
                     {authenticated && (
                         <ModalButton
