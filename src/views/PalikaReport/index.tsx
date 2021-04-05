@@ -14,53 +14,70 @@ interface Props {
 }
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
-    console.log(props);
     const [showReportModal, setShowReportModal] = useState(true);
-    const [showId, setShwoID] = useState(false);
     const [tabSelected, setTabSelected] = useState(1);
     const [showTabs, setShowTabs] = useState(false);
     const handleCloseModal = () => setShowReportModal(false);
-    const hideWelcomePage = () => setShowTabs(true);
+    const hideWelcomePage = () => {
+        setShowTabs(true);
+        setShowReportModal(false);
+    };
     const tabs = [
         {
             key: 1,
-            content: 'tab1',
+            content: 'Budget',
         },
         {
             key: 2,
-            content: 'tab2',
+            content: 'Budget Activity',
         },
         {
             key: 3,
-            content: 'tab3',
+            content: 'Programme and Policies',
         },
         {
             key: 4,
-            content: 'tab4',
+            content: 'Organisation',
+        },
+        {
+            key: 5,
+            content: 'Inventories',
+        },
+        {
+            key: 6,
+            content: 'Resources',
+        },
+        {
+            key: 7,
+            content: 'Contacts',
+        },
+        {
+            key: 8,
+            content: 'Relief',
+        },
+        {
+            key: 9,
+            content: 'Incident',
+        },
+        {
+            key: 10,
+            content: 'Loss & Damage',
         },
     ];
     const handleTabClick = (tab: number) => setTabSelected(tab);
-
+    const handleAddbuttonClick = () => {
+        setShowReportModal(true);
+        setShowTabs(true);
+    };
     return (
         <>
             <Page hideMap hideFilter />
-            <div className={styles.maincontainer}>
-                <div className={styles.leftContainer}>
-                    {/* left */}
-                    {/* <button
-                        type="button"
-                        onClick={console.log('clickec')}
-                    >
-                        <Icon
-                            name="info"
-                        />
-                    </button> */}
-                </div>
-                <div className={styles.rightContainer}>
-                   right
-                </div>
-
-            </div>
+            <button
+                type="button"
+                onClick={handleAddbuttonClick}
+            >
+                Add data
+            </button>
             {showReportModal
             && (
                 <Modal closeOnOutsideClick className={styles.modalContainer}>
