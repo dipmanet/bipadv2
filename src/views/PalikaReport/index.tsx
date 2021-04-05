@@ -18,8 +18,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
     const [showId, setShwoID] = useState(false);
     const [tabSelected, setTabSelected] = useState(1);
+    const [showTabs, setShowTabs] = useState(false);
     const handleCloseModal = () => setShowReportModal(false);
-
+    const hideWelcomePage = () => setShowTabs(true);
     const tabs = [
         {
             key: 1,
@@ -45,15 +46,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             <Page hideMap hideFilter />
             <div className={styles.maincontainer}>
                 <div className={styles.leftContainer}>
-                   left
-                    <button
+                    {/* left */}
+                    {/* <button
                         type="button"
                         onClick={console.log('clickec')}
                     >
                         <Icon
                             name="info"
                         />
-                    </button>
+                    </button> */}
                 </div>
                 <div className={styles.rightContainer}>
                    right
@@ -65,34 +66,39 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 <Modal closeOnOutsideClick className={styles.modalContainer}>
                     <ModalHeader
                         title=" "
-                        className={styles.modalHeader}
+                        className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}
                         rightComponent={(
                             <>
-                                <div
-                                    className={styles.tabsTitle}
-                                >
-                                    { tabs.map(tab => (
-                                        <button
-                                            type="button"
-                                            className={styles.tabsTexts}
-                                            style={{
-                                                backgroundColor: tabSelected === tab.key
-                                                    ? '#fff'
-                                                    : '#e1e1e1',
-                                                paddingRight: tabSelected === tab.key
-                                                    ? '50%'
-                                                    : '25%',
-                                                paddingLeft: tabSelected === tab.key
-                                                    ? '50%'
-                                                    : '25%',
-                                            }}
-                                            onClick={() => handleTabClick(tab.key)}
-                                            key={tab.key}
-                                        >
-                                            {tab.content}
-                                        </button>
-                                    ))}
-                                </div>
+                                {showTabs
+                             && (
+                                 <div
+                                     className={styles.tabsTitle}
+                                 >
+                                     { tabs.map(tab => (
+                                         <button
+                                             type="button"
+                                             className={styles.tabsTexts}
+                                             style={{
+                                                 backgroundColor: tabSelected === tab.key
+                                                     ? '#fff'
+                                                     : '#e1e1e1',
+                                                 paddingRight: tabSelected === tab.key
+                                                     ? '50%'
+                                                     : '25%',
+                                                 paddingLeft: tabSelected === tab.key
+                                                     ? '50%'
+                                                     : '25%',
+                                             }}
+                                             onClick={() => handleTabClick(tab.key)}
+                                             key={tab.key}
+                                         >
+                                             {tab.content}
+                                         </button>
+                                     ))}
+                                 </div>
+                             )
+
+                                }
 
                                 <DangerButton
                                     transparent
@@ -104,7 +110,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         )}
                     />
                     <ModalBody className={styles.modalBody}>
-                        <ReportModal keyTab={tabSelected} />
+                        <ReportModal
+                            keyTab={tabSelected}
+                            showTabs={showTabs}
+                            hideWelcomePage={hideWelcomePage}
+                        />
                     </ModalBody>
                 </Modal>
             )}
