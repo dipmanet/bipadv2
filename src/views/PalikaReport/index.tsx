@@ -9,6 +9,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import Icon from '#rscg/Icon';
 import ReportModal from './ReportModal';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 interface Props {
 }
@@ -72,13 +73,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     return (
         <>
             <Page hideMap hideFilter />
-            <button
-                type="button"
-                onClick={handleAddbuttonClick}
-            >
+            <div className={showReportModal ? styles.containerFaded : styles.mainContainer}>
+                <button
+                    type="button"
+                    onClick={handleAddbuttonClick}
+                >
                 Add data
-            </button>
-            {showReportModal
+                </button>
+                {showReportModal
             && (
                 <Modal closeOnOutsideClick className={styles.modalContainer}>
                     <ModalHeader
@@ -116,13 +118,21 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                              )
 
                                 }
+                                {/* <div className={styles.closeButton}>
+                                    <button
+                                        type="button"
+                                        onClick={handleCloseModal}
+                                        className={styles.closeBtn}
+                                    >
+                                        <Icon
+                                            name="times"
+                                            className={styles.closeBtnIcon}
+                                        />
+                                    </button>
 
-                                <DangerButton
-                                    transparent
-                                    iconName="close"
-                                    onClick={handleCloseModal}
-                                    title="Close Modal"
-                                />
+
+                                </div> */}
+
                             </>
                         )}
                     />
@@ -132,9 +142,23 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             showTabs={showTabs}
                             hideWelcomePage={hideWelcomePage}
                         />
+                        {showTabs && (
+                            <div className={styles.btnContainer}>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={handleCloseModal}
+                                >
+                                Close
+                                </PrimaryButton>
+                            </div>
+                        )}
+
                     </ModalBody>
                 </Modal>
             )}
+            </div>
+
 
         </>
     );

@@ -93,21 +93,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             {keyTab === 1 && showTabs
                 ? (
                     <>
-                        <div className={styles.title}>
-                        ADD ANNUAL BUDGET
-                        </div>
-                        <div className={styles.subTitle}>
-                        Insert annual policy program
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Official Email"
-                                onChange={console.log('flskjfls')}
-                                // value={emailprop || ''}
-                            />
-                        </div>
+                        {/* Add a table with some data from budget */}
                     </>
                 )
                 : ''
