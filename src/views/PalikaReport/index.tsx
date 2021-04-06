@@ -24,6 +24,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import update from '#rsu/immutable-update';
 
 interface Props {
 
@@ -132,18 +133,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
     // used to close the model
-    const [newRegionValues, setNewRegionValues] = useState(null);
+    const [newRegionValues, setNewRegionValues] = useState({
+        adminLevel: 0,
+        geoarea: 0,
+    });
     // used to store adminlevel and geoarea value selected from filter
     const [filtered, setFiltered] = useState(false);
     // used to check the condition of filter button
     const [AnnualBudget, setAnnualBudget] = useState(null);
     // used to store annual budget data from query
-
+    const [clearFilter, setClearFilter] = useState(false);
 
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
     };
     const handleCloseModal = () => setShowReportModal(false);
+    const {
+        provinces,
+        districts,
+        municipalities,
+        // filters: { region },
+    } = props;
 
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
@@ -154,17 +164,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     PalikaReportGetRequest.setDefaultParams({
         annualBudget: handleAnnualBudget,
+
     });
 
     console.log('This is budget>>>', AnnualBudget);
-    const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
-        const {
-            provinces,
-            districts,
-            municipalities,
-            // filters: { region },
-        } = props;
 
+
+    const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
                 province: provinces.find(p => p.id === geoarea).id,
@@ -204,6 +210,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                 submitQuery: getRegionDetails(),
             });
+            setClearFilter(true);
+            setNewRegionValues({
+                adminLevel: 0,
+                geoarea: 0,
+            });
         } else {
             PalikaReportGetRequest.do({
 
@@ -213,6 +224,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
         setFiltered(true);
     };
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -246,7 +258,7 @@ Palika Reports
                             faramElementName="region"
                             wardsHidden
                             onChange={handleFormRegion}
-                            value={{ adminLevel: 0, geoarea: 0 }}
+                            value={{ adminLevel: 1, geoarea: 6 }}
                             // initialLoc={{ municipality,
                             //     district,
                             //     province }}
@@ -280,6 +292,7 @@ Filter
                         <Table striped bordered hover size="sm" responsive>
                             <thead>
                                 <tr>
+
                                     <th>S.N</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
