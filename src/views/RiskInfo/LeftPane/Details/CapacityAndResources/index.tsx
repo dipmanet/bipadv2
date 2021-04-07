@@ -454,7 +454,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
-
         // checking if its loaded by report module
     }
 
@@ -923,7 +922,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             droneImagePending,
             requests: { openspaceDeleteRequest },
             authState: { authenticated },
+            // setCarKeys,
         } = this.props;
+        // setCarKeys(1);
 
 
         const {

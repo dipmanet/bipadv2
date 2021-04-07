@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
-// import { Link, Route, Router, useHistory } from 'react-router-dom';
-// import * as reactRouter from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
 import Page from '#components/Page';
 import styles from './styles.scss';
@@ -13,6 +13,15 @@ import DangerButton from '#rsca/Button/DangerButton';
 import Icon from '#rscg/Icon';
 import ReportModal from './ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+
+import {
+    setCarKeysAction,
+} from '#actionCreators';
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setCarKeys: params => dispatch(setCarKeysAction(params)),
+});
+
 
 interface Props {
 }
@@ -73,12 +82,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowReportModal(true);
         setShowTabs(true);
     };
-    // eslint-disable-next-line prefer-const
-    // let history = reactRouter.useHistory();
-    // console.log(history);
-    // const navigate = ReachRouter.navigate();
     const handleDataAdd = () => {
-        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { replace: true });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
     };
 
 
@@ -193,4 +198,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         </>
     );
 };
-export default PalikaReport;
+export default compose(
+    connect(undefined, mapDispatchToProps),
+)(PalikaReport);
