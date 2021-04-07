@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import BulletIcon from '#resources/icons/Bullet.svg';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+// import './bootstrap.css';
 
 interface Props {
     keyTab: number;
@@ -29,7 +31,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     used as a placeholder before final copy is available.
                 </div>
 
-                <div className={styles.title}>
+                <div className={styles.subtitle}>
                     What you can do with palika report.
                 </div>
                 <div className={styles.bulletPtRow}>
@@ -93,7 +95,39 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             {keyTab === 1 && showTabs
                 ? (
                     <>
-                        {/* Add a table with some data from budget */}
+                        <div className={styles.tabsPageContainer}>
+                            <Table striped bordered hover size="sm">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Username</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td colSpan="2">Larry the Bird</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+
+                        </div>
+
                     </>
                 )
                 : ''

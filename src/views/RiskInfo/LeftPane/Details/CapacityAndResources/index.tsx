@@ -410,7 +410,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
-            showResourceForm: false,
+            // showResourceForm: false,
+            showResourceForm: true,
+            testVal: true,
             showInventoryModal: false,
             selectedFeatures: undefined,
             resourceList: [],
@@ -452,11 +454,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
+
+        // checking if its loaded by report module
     }
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { faramValues: { region } } = this.props.filters;
-        console.log(this.props.filters.faramValues.region);
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.props.requests.resourceGetRequest.do(
                 {
@@ -503,7 +506,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const temp = { ...activeLayersIndication };
         const { setCarKeys, carKeys } = this.props;
         temp[key] = value;
-        const trueKeys = Object.keys(temp).filter(id => temp[id]);
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
         handleActiveLayerIndication(temp);
@@ -980,6 +982,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             closeButton: false,
             offset: 10,
         };
+
+        console.log('show res form:', showResourceForm,
+            '2nd:', isDefined(resourceDetails),
+            // '3rd', isDefined(resourceDetails.id),
+            '4th', this.state.testVal);
         return (
             <>
                 <Loading pending={pending} />
@@ -1906,14 +1913,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         </>
                     )}
                 </div>
-                { showResourceForm && resourceDetails && (
-                    <AddResourceForm
-                        resourceId={resourceDetails.id}
-                        resourceDetails={resourceDetails}
-                        onEditSuccess={this.handleResourceEdit}
-                        closeModal={this.handleEditResourceFormCloseButtonClick}
-                    />
-                )}
+                { showResourceForm
+                        // && isDefined(resourceDetails)
+                        // && isDefined(resourceDetails.id)
+                        && this.state.testVal
+                        && (
+                            <AddResourceForm
+                                // resourceId={resourceDetails.id}
+                                // resourceDetails={resourceDetails}
+                                onEditSuccess={this.handleResourceEdit}
+                                closeModal={this.handleEditResourceFormCloseButtonClick}
+                            />
+                        )
+                }
+
                 {showInventoryModal
                     && isDefined(resourceDetails)
                     && isDefined(resourceDetails.id)

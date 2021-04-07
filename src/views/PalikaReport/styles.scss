@@ -7,15 +7,9 @@
     // background-color: red;
     padding:0;
     background-color: #333;
+    opacity: 0.7;
 }
-.closeButton{
-    position: absolute;
-    .closeBtn{
-        .closeBtnIcon{
-            font-size: 16px;
-        }
-    }
-}
+
 .mainContainer{
     position: absolute;
     width: 100vw  ;
@@ -23,69 +17,11 @@
     top: 0;
     left: 0;
     padding:0;
-    .modalContainer{
-        min-height: 80%;
-        width: calc(60% - 60px);
-        position: absolute;
-        overflow-x: scroll;
-      
-        .modalHeader{
-            background-color: #e1e1e1;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-    
-            .tabsTitle{
-                height: 60px;
-                display: flex;
-                justify-content: flex-start;
-                position: absolute;
-                left: 0;
 
-                .tabsTexts{
-                    padding: 20px 40px;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    border: none;
-                    border-right: 1px solid #ccc;
-                }
-            }
-        }
-        .modalHeaderFirstPage{
-            background-color: white;
-        }
-        .modalBody{
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 0 40px 40px 40px ;
-            width: 100%;
-            height: calc(100% - 60px);
-            margin-top: 60px;
-            .btnContainer{
-                width: 100%;
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 10px;
-                .agreeBtn{
-                    width: 80px;
-                    filter: saturate(100%);
-                    background-color: rgb(0,105,222) !important;
-                    border-radius: 30px;
-                    color: white !important; 
-                }
-            }
-        }
-    
-    }
-    
 }
 .modalContainer{
-    min-height: 80%;
-    width: calc(60% - 60px);
+    min-height: 65%;
+    width: calc(35% - 60px);
     position: absolute;
     overflow-x: scroll;
     .modalHeader{
@@ -123,7 +59,7 @@
         padding: 0 40px 40px 40px ;
         width: 100%;
         height: calc(100% - 60px);
-        margin-top: 60px;
+        margin-top: 35px;
         .btnContainer{
             width: 100%;
             display: flex;
@@ -139,26 +75,96 @@
             }
         }
     }
-
 }
 
-$breakpoint-tablet: 868px;
-$breakpoint-mobile: 480px;
-@media (max-width: $breakpoint-tablet) {
-.modalContainer{
-    width: calc(80% - 60px);
+.tabsContainer{
+    min-height: 65%;
+    width: calc(75% - 60px);
+    position: absolute;
+    overflow-x: scroll;
+    .modalHeader{
+        background-color: #e1e1e1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
         .tabsTitle{
-            width: 60px
+            height: 60px;
+            display: flex;
+            justify-content: flex-start;
+            position: absolute;
+            left: 0;
+            .tabsTexts{
+                // padding: 20px 10px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                border: none;
+                justify-content: center;
+                border-right: 1px solid #ccc;
+                width: 20px;
+            }
+        }
+    }
+    .modalHeaderFirstPage{
+        background-color: white;
+    }
+    .modalBody{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0 40px 40px 40px ;
+        width: 100%;
+        height: calc(100% - 60px);
+        margin-top: 35px;
+        .btnContainer{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            margin-top: 10px;
+            position: absolute;
+            .agreeBtn{
+                width: 80px;
+                filter: saturate(100%);
+                background-color: rgb(0,105,222) !important;
+                border-radius: 30px;
+                color: white !important; 
+            }
         }
     }
 }
 
+$breakpoint-tablet: 868px;
+$breakpoint-mobile: 450px;
+$breakpoint-laptop: 1466px;
+@media (max-width: $breakpoint-laptop) {
+    .modalContainer{
+        width: calc(50% - 60px);
+        min-height: 70%;
+            .tabsTitle{
+                // width: 60px
+            }
+        }
+    }
+
+@media (max-width: $breakpoint-tablet) {
+.modalContainer{
+    width: calc(80% - 60px);
+        .tabsTitle{
+            // width: 60px
+        }
+    }
+}
+
+
 @media (max-width: $breakpoint-mobile) {
     .modalContainer{
-        width: calc(100% - 60px);
+        width: calc(90% - 60px);
         .modalHeader{
             .tabsTitle{
-                width: 40px
+                // width: 40px
             }
         }
     }

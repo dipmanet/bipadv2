@@ -145,7 +145,7 @@ class Navbar extends React.PureComponent<Props, State> {
 
         const { authenticated, user } = authState;
         // <Logo />
-
+        // console.log('data:', pages, 'KS: ', menuKeySelector);
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView

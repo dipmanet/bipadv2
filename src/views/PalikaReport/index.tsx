@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
+// import { Link, Route, Router, useHistory } from 'react-router-dom';
+// import * as reactRouter from 'react-router-dom';
+import * as ReachRouter from '@reach/router';
 import Page from '#components/Page';
 import styles from './styles.scss';
 
@@ -70,6 +73,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowReportModal(true);
         setShowTabs(true);
     };
+    // eslint-disable-next-line prefer-const
+    // let history = reactRouter.useHistory();
+    // console.log(history);
+    // const navigate = ReachRouter.navigate();
+    const handleDataAdd = () => {
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { replace: true });
+    };
+
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -82,7 +94,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 </button>
                 {showReportModal
             && (
-                <Modal closeOnOutsideClick className={styles.modalContainer}>
+                <Modal
+                    closeOnOutsideClick
+                    className={
+                        showTabs
+                            ? styles.tabsContainer
+                            : styles.modalContainer
+                    }
+                >
                     <ModalHeader
                         title=" "
                         className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}
@@ -151,6 +170,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 >
                                 Close
                                 </PrimaryButton>
+                                <PrimaryButton
+                                    type="button"
+                                    className={styles.agreeBtn}
+                                    onClick={handleDataAdd}
+                                >
+                                    {/* <a href={'http://bipad.com/risk-info/#/capacity-and-resources'}> */}
+                                        Add Budget Data
+                                    {/* </a> */}
+
+                                </PrimaryButton>
+
                             </div>
                         )}
 

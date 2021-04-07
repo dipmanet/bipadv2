@@ -1,14 +1,11 @@
-.firstPage{
-    border: 1px solid red;
-}
+
 .firstPageContainer{
-    padding: 0 5%;
     position: relative;
     top: -60px;
     .title{
         margin-top: 60px;
         color: #222;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         line-height: 1.7em;
         color: #444;
@@ -17,26 +14,39 @@
     .description{
         font-size: 14px;
         color: #666;
-        line-height: 2em;
+        line-height: 1.7em;
+    }
+    .subtitle{
+        margin-top: 70px;
+        color: #222;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4em;
+        color: #444;
+        bottom: 30px;
+        position: relative;
+        margin-bottom: 12px;
 
     }
     .bulletPtRow{
         display: flex;
         flex-direction: row;
+        margin-bottom: 5px;
         .bulletsContainer{
             display: flex;
             flex: 1;
             align-items: center;
-            // border: 1px solid gray;
             justify-content: flex-start;
             .bulletPoint{
-                min-width: 50px;
+                width: 24px;
                 margin-right: 7px;
-                flex: 1;
+                flex: 0.7;
             }
             .bulletText{
                 flex: 5;
                 padding-right: 7px;
+                line-height: 1.4em;
+                font-size: 14px;
             }
         }
     }
@@ -53,59 +63,10 @@
             color: white !important; 
         }
     }
-
 }
-
-$breakpoint-tablet: 768px;
-@media (max-width: $breakpoint-tablet) {
-    .firstPageContainer{
-    padding: 0 1%;
-    .bulletPtRow{
-        display: block;
-        .bulletsContainer{
-            display: flex;
-            flex: 1;
-            align-items: center;
-            // border: 1px solid gray;
-            margin-top: 7px;
-            justify-content: flex-start;
-            .bulletPoint{
-                min-width: 50px;
-                margin-right: 7px;
-                flex: 1;
-            }
-            .bulletText{
-                flex: 5;
-                padding-right: 7px;
-            }
-        }
-    }
-    }
-
+.tabsPageContainer{
+    margin-top: 60px;
 }
-
-// @media (max-width: $breakpoint-mobile) {
-//     .bulletPtRow{
-//         display: block;
-//         .bulletsContainer{
-//             display: flex;
-//             flex: 1;
-//             align-items: center;
-//             // border: 1px solid gray;
-//             justify-content: flex-start;
-//             .bulletPoint{
-//                 min-width: 50px;
-//                 margin-right: 7px;
-//                 flex: 1;
-//             }
-//             .bulletText{
-//                 flex: 5;
-//                 padding-right: 7px;
-//             }
-//         }
-//     }
-
-// }
 
 .inputContainer{
     display: flex;
@@ -142,3 +103,30 @@ $breakpoint-tablet: 768px;
     }
 
     }
+
+$breakpoint-tablet: 868px;
+$breakpoint-mobile: 450px;
+$breakpoint-laptop: 1466px;
+@media (max-width: $breakpoint-laptop) {
+    .firstPageContainer{
+    padding: 0 1%;
+    }
+
+}
+
+@media (max-width: $breakpoint-tablet) {
+    .firstPageContainer{
+    padding: 0 1%;
+
+    }
+
+}
+
+@media (max-width: $breakpoint-mobile) {
+    .firstPageContainer{
+    padding: 0 1%;
+
+    }
+
+}
+
