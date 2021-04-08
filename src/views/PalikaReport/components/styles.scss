@@ -1,0 +1,56 @@
+.menu{
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: large;
+    font-weight: bold;
+    .icons{
+        margin-right: 10px;
+    }
+    .subMenu{
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: medium;
+        margin-left: 10px;
+    }
+    .indicator{
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+}
+
+.palikaTable{
+    table{
+        border-collapse: collapse;
+        width: 100%;
+        }
+        th{
+        padding: 0.5rem;
+        text-align: left;
+        }
+        td{
+        border-top: 1px solid #f5f5f5;
+        border-bottom: 1px solid #f5f5f5;
+        padding: 0.5rem;
+        text-align: left;
+        }
+        tr:nth-child(even) {
+        background-color:#f5f5f5
+        }
+ }
+ 

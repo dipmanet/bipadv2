@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
+import Faram from '@togglecorp/faram';
+import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
 import styles from './styles.scss';
-
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
+import ModalFooter from '#rscv/Modal/Footer';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import Icon from '#rscg/Icon';
-import DropdownButton from './components/dropdownButton';
-import { showProvinceSelector, showDistrictSelector, showMunicipalitySelector,
-    showWardSelector, selectedProvinceIdSelector, selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector, provincesSelector, districtsSelector, municipalitiesSelector,
+
+import { provincesSelector, districtsSelector, municipalitiesSelector,
     wardsSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import { setShowMunicipalityAction } from '#actionCreators';
@@ -25,6 +25,7 @@ import {
     methods,
 } from '#request';
 import update from '#rsu/immutable-update';
+import PalikaReportTable from './components/palikaReportTable';
 
 interface Props {
 
@@ -230,19 +231,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             <Page hideMap hideFilter />
             <div className={styles.reportContainer}>
                 <div className={styles.leftContainer}>
-                    <div className={styles.heading}>BIPAD</div>
-                    <div className={styles.butn}>
-                        <Icon name="play" />
-                        <button type="button">
-Palika Reports
-                            {' '}
-
-                        </button>
-                        <div className={styles.dropdowncontent}>
-                            <a href="https://www.w3schools.com/howto/howto_css_dropdown.asp">Link 1</a>
-                            <a href="https://www.w3schools.com/howto/howto_css_dropdown.asp">Link 2</a>
-                            <a href="https://www.w3schools.com/howto/howto_css_dropdown.asp">Link 3</a>
+                    <div className={styles.heading}>
+                        <div className={styles.bipad}>
+                        BIPAD
                         </div>
+
+                    </div>
+                    <div className={styles.sidebar}>
+                        <Sidebar />
+
                     </div>
 
 
@@ -258,7 +255,7 @@ Palika Reports
                             faramElementName="region"
                             wardsHidden
                             onChange={handleFormRegion}
-                            value={{ adminLevel: 1, geoarea: 6 }}
+                            // value={{ adminLevel: 1, geoarea: 6 }}
                             // initialLoc={{ municipality,
                             //     district,
                             //     province }}
@@ -272,7 +269,7 @@ Palika Reports
                                 className={styles.submitBut}
                                 onClick={handleSubmit}
                             >
-Reset
+                            Reset
                             </button>
                         )
                             : (
@@ -280,107 +277,49 @@ Reset
                                     type="submit"
                                     onClick={handleSubmit}
                                     className={styles.submitBut}
+
                                 >
-Filter
+                            Filter
                                 </button>
                             )
-                        }
 
+                        }
+                        <button
+                            type="submit"
+                            className={styles.addButn}
+                        >
+                         + ADD
+                            {' '}
+
+                        </button>
 
                     </div>
                     <div className={styles.rightContainerTables}>
-                        <Table striped bordered hover size="sm" responsive>
-                            <thead>
-                                <tr>
+                        <PalikaReportTable />
 
-                                    <th>S.N</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                            </tbody>
-                        </Table>
                     </div>
+                    {/* <Modal>
+
+                        <ModalHeader
+                            title="Login"
+                            rightComponent={(
+                                <DangerButton
+                                    transparent
+                                    iconName="close"
+                                    title="Close Modal"
+                                />
+                            )}
+                        />
+                        <ModalBody />
+                        <ModalFooter>
+                            <DangerButton>
+                            Close
+                            </DangerButton>
+
+                        </ModalFooter>
+
+
+                    </Modal> */}
                 </div>
 
             </div>
