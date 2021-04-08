@@ -92,45 +92,121 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         )
 
             }
-            {keyTab === 1 && showTabs
-                ? (
-                    <>
-                        <div className={styles.tabsPageContainer}>
-                            <Table striped bordered hover size="sm">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Username</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td colSpan="2">Larry the Bird</td>
-                                        <td>@twitter</td>
-                                    </tr>
-                                </tbody>
-                            </Table>
+            {
+                keyTab === 1
+               && showTabs
+                    ? (
+                        <>
+                            <div className={styles.tabsPageContainer}>
+                                <Table striped bordered hover size="lg">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>FISCAL YEAR</th>
+                                            <th>TOTAL BUDGET NRS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>2064/2065</td>
+                                            <td>Policy Points</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>2064/2065</td>
+                                            <td>Policy Points</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>2064/2065</td>
+                                            <td>Policy Points</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>2064/2065</td>
+                                            <td>Policy Points</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>2064/2065</td>
+                                            <td>Policy Points</td>
+                                        </tr>
 
-                        </div>
+                                    </tbody>
+                                </Table>
 
-                    </>
-                )
-                : ''
+                            </div>
+
+                        </>
+                    )
+                    : ''
+            }
+            {
+                keyTab > 1
+               && showTabs
+                    ? (
+                        <>
+                            <div className={styles.tabsPageContainer}>
+                                <Table striped bordered hover size="lg">
+                                    <thead>
+                                        <tr>
+                                            <th>Activity Name</th>
+                                            <th>Fund Type</th>
+                                            <th>Budget Code</th>
+                                            <th>Expense Title</th>
+                                            <th>Amount NRs</th>
+                                            <th>Remarks</th>
+                                            <th>Annual Budget NRs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Some activity</td>
+                                            <td>Dollar fund</td>
+                                            <td>112399YT</td>
+                                            <td>Tea and Coffee</td>
+                                            <td>1Bn</td>
+                                            <td>Expensive Tea</td>
+                                            <td>2Bn</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Some activity</td>
+                                            <td>Dollar fund</td>
+                                            <td>112399YT</td>
+                                            <td>Tea and Coffee</td>
+                                            <td>1Bn</td>
+                                            <td>Expensive Tea</td>
+                                            <td>2Bn</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Some activity</td>
+                                            <td>Dollar fund</td>
+                                            <td>112399YT</td>
+                                            <td>Tea and Coffee</td>
+                                            <td>1Bn</td>
+                                            <td>Expensive Tea</td>
+                                            <td>2Bn</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Some activity</td>
+                                            <td>Dollar fund</td>
+                                            <td>112399YT</td>
+                                            <td>Tea and Coffee</td>
+                                            <td>1Bn</td>
+                                            <td>Expensive Tea</td>
+                                            <td>2Bn</td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </Table>
+
+                            </div>
+
+                        </>
+                    )
+                    : ''
             }
         </>
     );

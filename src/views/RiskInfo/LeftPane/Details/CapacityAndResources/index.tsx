@@ -925,7 +925,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             // setCarKeys,
         } = this.props;
         // setCarKeys(1);
-
+        const e = document.getElementById('addResourceButton');
+        console.log('this: ', e);
 
         const {
             activeLayerKey,
@@ -1002,6 +1003,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     iconName="add"
                                     title="Add New Resource"
                                     transparent
+                                    id={'addResourceButton'}
                                     modal={(
                                         <AddResourceForm
                                             onAddSuccess={this.handleResourceAdd}

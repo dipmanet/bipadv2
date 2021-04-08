@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { _cs } from '@togglecorp/fujs';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
@@ -9,8 +8,6 @@ import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import DangerButton from '#rsca/Button/DangerButton';
-import Icon from '#rscg/Icon';
 import ReportModal from './ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -36,6 +33,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowReportModal(false);
     };
     const tabs = [
+        {
+            key: 0,
+            content: 'General',
+        },
         {
             key: 1,
             content: 'Budget',
@@ -78,6 +79,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         },
     ];
     const handleTabClick = (tab: number) => setTabSelected(tab);
+    const handleNextClick = () => {
+        if (tabSelected < tabs.length) {
+            setTabSelected(tabSelected + 1);
+        }
+    };
+    const handlePrevClick = () => {
+        if (tabSelected > 0) {
+            setTabSelected(tabSelected - 1);
+        }
+    };
+
     const handleAddbuttonClick = () => {
         setShowReportModal(true);
         setShowTabs(true);
@@ -142,21 +154,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                              )
 
                                 }
-                                {/* <div className={styles.closeButton}>
-                                    <button
-                                        type="button"
-                                        onClick={handleCloseModal}
-                                        className={styles.closeBtn}
-                                    >
-                                        <Icon
-                                            name="times"
-                                            className={styles.closeBtnIcon}
-                                        />
-                                    </button>
-
-
-                                </div> */}
-
                             </>
                         )}
                     />
@@ -180,11 +177,33 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     className={styles.agreeBtn}
                                     onClick={handleDataAdd}
                                 >
-                                    {/* <a href={'http://bipad.com/risk-info/#/capacity-and-resources'}> */}
                                         Add Budget Data
-                                    {/* </a> */}
 
                                 </PrimaryButton>
+                                {tabSelected > 0
+                                && (
+                                    <PrimaryButton
+                                        type="button"
+                                        className={styles.agreeBtn}
+                                        onClick={handlePrevClick}
+                                    >
+                                        Prev
+
+                                    </PrimaryButton>
+                                )
+                                }
+                                {tabSelected < tabs.length
+                                && (
+                                    <PrimaryButton
+                                        type="button"
+                                        className={styles.agreeBtn}
+                                        onClick={handleNextClick}
+                                    >
+                                        Next
+
+                                    </PrimaryButton>
+                                )
+                                }
 
                             </div>
                         )}
