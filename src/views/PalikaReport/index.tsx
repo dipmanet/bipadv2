@@ -32,50 +32,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
 });
-// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-//     alertsRequest: {
-//         url: '/alert/',
-//         method: methods.GET,
-//         query: ({ props: { filters } }) => ({
-//             ...transformFilters(filters, { start: 'started_on__gt', end: 'started_on__lt' }),
-//             expand: ['event'],
-//             ordering: '-started_on',
-//         }),
-//         onSuccess: ({ response, props: { setAlertList }, params }) => {
-//             interface Response { results: PageTypes.Alert[] }
-//             const { results: alertList = [] } = response as Response;
-//             setAlertList({ alertList });
-//             if (params && params.triggerAlertRequest) {
-//                 params.triggerAlertRequest(60 * 1000);
-//             }
-//         },
-//         onFailure: ({ params }) => {
-//             if (params && params.triggerAlertRequest) {
-//                 params.triggerAlertRequest(60 * 1000);
-//             }
-//         },
-//         onFatal: ({ params }) => {
-//             if (params && params.triggerAlertRequest) {
-//                 params.triggerAlertRequest(60 * 1000);
-//             }
-//         },
-//         onMount: true,
-//         onPropsChanged: {
-//             filters: ({
-//                 props: { filters },
-//                 prevProps: { filters: prevFilters },
-//             }) => {
-//                 const shouldRequest = filters !== prevFilters;
-//                 return shouldRequest;
-//             },
-//         },
-//         extras: {
-//             schemaName: 'alertResponse',
-//         },
-//     },
 
-
-// };
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
@@ -108,29 +65,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
-    // incidentsGetRequest: {
-    //     url: '/incident/',
-    //     method: methods.GET,
-    //     query: () => {
-    //         const today = new Date();
-    //         const oneWeekAgo = new Date(new Date().setDate(today.getDate() - 7));
-    //         return {
-    //             fields: ['id', 'title'],
-    //             // eslint-disable-next-line @typescript-eslint/camelcase
-    //             incident_on__lt: today.toISOString(),
-    //             // eslint-disable-next-line @typescript-eslint/camelcase
-    //             incident_on__gt: oneWeekAgo.toISOString(),
-    //         };
-    //     },
-    //     onSuccess: ({ params, response }) => {
-    //         if (params && params.onSuccess) {
-    //             const incidentsResponse = response as MultiResponse<PageType.Incident>;
-    //             const { onSuccess } = params;
-    //             onSuccess(incidentsResponse.results);
-    //         }
-    //     },
-    //     onMount: true,
-    // },
 };
 
 
@@ -146,11 +80,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // used to check the condition of filter button
     const [AnnualBudget, setAnnualBudget] = useState(null);
     // used to store annual budget data from query
-    const [paginationParameters, setPaginationParameters] = useState();
-    const [clearFilter, setClearFilter] = useState(false);
+    const [paginationParameters, setPaginationParameters] = useState();// used for pagination of table
+    const [clearFilter, setClearFilter] = useState(false);// used for pagination of table
     const [url, setUrl] = useState('/annual-budget/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
-    const [offset, setOffset] = useState(0);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);// used for pagination of table
+    const [offset, setOffset] = useState(0);// used for pagination of table
+    const [showReportModal, setShowReportModal] = useState(true);
+    const [showTabs, setShowTabs] = useState(false);
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
     };
@@ -197,9 +133,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
         finalArr = [...new Set(finalAnnualBudget)];
     }
-
-    console.log('This is pagination>>>', paginationParameters);
-    console.log('This offset>>>', offset);
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
@@ -258,9 +191,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
-        console.log('What selected>>>', selectedPage);
+
         setOffset(selectedPage * 2);
-        console.log('What offset>>>', offset);
     };
 
     useEffect(() => {
@@ -270,7 +202,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
-
+    const handleAddbuttonClick = () => {
+        setShowReportModal(true);
+        setShowTabs(true);
+    };
     return (
         <>
             <Page hideMap hideFilter />
@@ -332,6 +267,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         <button
                             type="submit"
                             className={styles.addButn}
+                            onClick={handleAddbuttonClick}
                         >
                          + ADD
                             {' '}
@@ -342,14 +278,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     <div className={styles.rightContainerTables}>
                         <PalikaReportTable tableData={finalArr} />
                         <div>
-                            {/* <button
-                                type="submit"
-                                className={styles.addButn}
-                            >
-                         XLS
-                                {' '}
-
-                            </button> */}
                             {paginationParameters
                             && (
                                 <ReactPaginate
