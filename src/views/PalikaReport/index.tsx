@@ -14,6 +14,7 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
     setCarKeysAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setCarKeys: params => dispatch(setCarKeysAction(params)),
@@ -25,7 +26,7 @@ interface Props {
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
-    const [tabSelected, setTabSelected] = useState(1);
+    const [tabSelected, setTabSelected] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
     const [translateVal, setTranslateVal] = useState(0);
     const handleCloseModal = () => setShowReportModal(false);
@@ -81,7 +82,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     ];
     const handleTabClick = (tab: number) => setTabSelected(tab);
     const handleNextClick = () => {
-        if (tabSelected < tabs.length) {
+        if (tabSelected < tabs.length - 1) {
             setTabSelected(tabSelected + 1);
         }
     };
@@ -133,36 +134,49 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             <>
                                 {showTabs
                              && (
-                                 <div
-                                     className={styles.tabsTitle}
-                                 >
-                                     { tabs.map(tab => (
-                                         <button
+                                 <div className={styles.tabsMain}>
+                                     <div
+                                         className={styles.tabsTitle}
+                                     >
+                                         { tabs.map(tab => (
+                                             <button
+                                                 type="button"
+                                                 className={styles.tabsTexts}
+                                                 style={{
+                                                     backgroundColor: tabSelected === tab.key
+                                                         ? '#fff'
+                                                         : '#e1e1e1',
+                                                     //  paddingRight: tabSelected === tab.key
+                                                     //      ? '5%'
+                                                     //      : '5%',
+                                                     //  paddingLeft: tabSelected === tab.key
+                                                     //      ? '5%'
+                                                     //      : '5%',
+                                                     transform: `translateX(-${getTranslateVal()}px)`,
+                                                 }}
+                                                 onClick={() => handleTabClick(tab.key)}
+                                                 key={tab.key}
+                                             >
+                                                 {tab.content}
+                                             </button>
+                                         ))}
+                                         {/* {tabs[tabSelected].content} */}
+                                     </div>
+                                     <div className={styles.closeBtnContainer}>
+                                         <PrimaryButton
                                              type="button"
-                                             className={styles.tabsTexts}
-                                             style={{
-                                                 //  position: 'absolute',
-                                                 backgroundColor: tabSelected === tab.key
-                                                     ? '#fff'
-                                                     : '#e1e1e1',
-                                                 paddingRight: tabSelected === tab.key
-                                                     ? '25%'
-                                                     : '25%',
-                                                 paddingLeft: tabSelected === tab.key
-                                                     ? '25%'
-                                                     : '25%',
-                                                 transform: `translateX(-${getTranslateVal()}px)`,
-                                             }}
-                                             onClick={() => handleTabClick(tab.key)}
-                                             key={tab.key}
+                                             className={styles.closeBtn}
+                                             onClick={handleCloseModal}
                                          >
-                                             {tab.content}
-                                         </button>
-                                     ))}
-                                     {/* {tabs[tabSelected].content} */}
+                                             <Icon
+                                                 name="times"
+                                                 className={styles.closeIcon}
+                                             />
+                                         </PrimaryButton>
+                                     </div>
                                  </div>
-                             )
 
+                             )
                                 }
                             </>
                         )}
@@ -175,13 +189,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
-                                <PrimaryButton
-                                    type="button"
-                                    className={styles.agreeBtn}
-                                    onClick={handleCloseModal}
-                                >
-                                Close
-                                </PrimaryButton>
+
                                 <PrimaryButton
                                     type="button"
                                     className={styles.agreeBtn}
@@ -190,30 +198,28 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                         Add Budget Data
 
                                 </PrimaryButton>
-                                {tabSelected > 0
-                                && (
-                                    <PrimaryButton
-                                        type="button"
-                                        className={styles.agreeBtn}
-                                        onClick={handlePrevClick}
-                                    >
+                                <PrimaryButton
+                                    type="button"
+                                    className={tabSelected > 0
+                                        ? styles.agreeBtn
+                                        : styles.disabledBtn
+                                    }
+                                    onClick={handlePrevClick}
+                                >
                                         Prev
 
-                                    </PrimaryButton>
-                                )
-                                }
-                                {tabSelected < tabs.length
-                                && (
-                                    <PrimaryButton
-                                        type="button"
-                                        className={styles.agreeBtn}
-                                        onClick={handleNextClick}
-                                    >
+                                </PrimaryButton>
+                                <PrimaryButton
+                                    type="button"
+                                    className={tabSelected < tabs.length - 1
+                                        ? styles.agreeBtn
+                                        : styles.disabledBtn
+                                    }
+                                    onClick={handleNextClick}
+                                >
                                         Next
 
-                                    </PrimaryButton>
-                                )
-                                }
+                                </PrimaryButton>
 
                             </div>
                         )}
