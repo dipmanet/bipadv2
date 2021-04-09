@@ -79,6 +79,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             key: 10,
             content: 'Loss & Damage',
         },
+        {
+            key: 11,
+            content: 'Preview',
+        },
     ];
     const handleTabClick = (tab: number) => setTabSelected(tab);
     const handleNextClick = () => {
