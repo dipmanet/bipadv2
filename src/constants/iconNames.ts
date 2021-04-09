@@ -92,6 +92,7 @@ const iconNames = {
     lock: 'fa fa-unlock-alt',
     times: 'fa fa-times',
     info: 'fa  fa-info-circle',
+    arrowDown: 'fa fa-caret-down',
 };
 
 export default iconNames;
