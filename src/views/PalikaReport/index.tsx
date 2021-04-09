@@ -27,6 +27,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
     const [tabSelected, setTabSelected] = useState(1);
     const [showTabs, setShowTabs] = useState(false);
+    const [translateVal, setTranslateVal] = useState(0);
     const handleCloseModal = () => setShowReportModal(false);
     const hideWelcomePage = () => {
         setShowTabs(true);
@@ -98,6 +99,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
     };
 
+    const getTranslateVal = () => {
+        if (tabSelected > 5) {
+            return (500);
+        }
+        return 0;
+    };
 
     return (
         <>
@@ -134,15 +141,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                              type="button"
                                              className={styles.tabsTexts}
                                              style={{
+                                                 //  position: 'absolute',
                                                  backgroundColor: tabSelected === tab.key
                                                      ? '#fff'
                                                      : '#e1e1e1',
                                                  paddingRight: tabSelected === tab.key
-                                                     ? '50%'
+                                                     ? '25%'
                                                      : '25%',
                                                  paddingLeft: tabSelected === tab.key
-                                                     ? '50%'
+                                                     ? '25%'
                                                      : '25%',
+                                                 transform: `translateX(-${getTranslateVal()}px)`,
                                              }}
                                              onClick={() => handleTabClick(tab.key)}
                                              key={tab.key}
@@ -150,6 +159,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                              {tab.content}
                                          </button>
                                      ))}
+                                     {/* {tabs[tabSelected].content} */}
                                  </div>
                              )
 
