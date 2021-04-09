@@ -49,22 +49,15 @@ const Sidebar = () => {
         setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
         setSelectedMenuId(id);
-
-        // if (selectedMenuId && isIndicatorClicked) {
-        //     setIsIndicatorClicked(false);
-        // }
     };
-    const handleSelectSubmenu = (index, id) => {
-        setSelectedSubMenuId(id);
-        setIsIndicatorClicked(true);
-    };
-
-    // let finalContent = [];
-    // const test = () => {
-    //     finalContent = selectedSubmenu.filter(contain => contain.id === selectedSubMenuId)
-    //         .map(contain => contain.indicators);
+    // const handleSelectSubmenu = (index, id) => {
+    //     setSelectedSubMenuId(id);
+    //     setIsIndicatorClicked(true);
     // };
-    // test();
+    useEffect(() => {
+        setIsIndicatorClicked(false);
+    }, [selectedMenuId]);
+
 
     return (
         <div>
@@ -78,28 +71,32 @@ const Sidebar = () => {
                         </div>
                         {isSubmenuClicked && selectedMenuId === item.id
                             ? item.components.map((data, index) => (
-                                <button
-                                    className={styles.subMenu}
-                                    type="button"
-                                    key={data.id}
-                                    onClick={() => handleSelectSubmenu(i, data.id)}
-                                >
-                                    <div>
-                                        {isIndicatorClicked && selectedSubMenuId === item.components[index].id ? <Icon className={styles.icons} name="arrowDown" /> : <Icon className={styles.icons} name="play" />}
-                                        {data.title}
-                                    </div>
-                                    {isIndicatorClicked
-                                    && selectedSubMenuId === item.components[index].id
-                                        ? item.components[index].indicators.map(indicator => (
-                                            <button
-                                                className={styles.indicator}
-                                                type="button"
-                                                key={indicator.id}
-                                            >
-                                                {indicator.title}
-                                            </button>
-                                        )) : ''}
-                                </button>
+                                <li key={data.id} className={styles.subMenu}>{data.title}</li>
+                                // <button
+                                //     className={styles.subMenu}
+                                //     type="button"
+                                //     key={data.id}
+                                //     onClick={() => handleSelectSubmenu(i, data.id)}
+                                // >
+                                //     <div>
+                                //         {isIndicatorClicked && selectedSubMenuId
+                                //         === item.components[index].id
+                                //             ? <Icon className={styles.icons} name="arrowDown" />
+                                //             : <Icon className={styles.icons} name="play" />}
+                                //         <li>{data.title}</li>
+                                //     </div>
+                                //     {isIndicatorClicked
+                                //     && selectedSubMenuId === item.components[index].id
+                                //         ? item.components[index].indicators.map(indicator => (
+                                //             <button
+                                //                 className={styles.indicator}
+                                //                 type="button"
+                                //                 key={indicator.id}
+                                //             >
+                                //                 {indicator.title}
+                                //             </button>
+                                //         )) : ''}
+                                // </button>
                             ))
                             : ''
                         }

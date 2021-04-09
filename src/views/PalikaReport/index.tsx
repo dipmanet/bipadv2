@@ -3,15 +3,10 @@ import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import Faram from '@togglecorp/faram';
+import ReactPaginate from 'react-paginate';
 import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
 import styles from './styles.scss';
-import Modal from '#rscv/Modal';
-import ModalHeader from '#rscv/Modal/Header';
-import ModalFooter from '#rscv/Modal/Footer';
-import ModalBody from '#rscv/Modal/Body';
-import DangerButton from '#rsca/Button/DangerButton';
-import Icon from '#rscg/Icon';
 
 import { provincesSelector, districtsSelector, municipalitiesSelector,
     wardsSelector } from '#selectors';
@@ -26,6 +21,7 @@ import {
 } from '#request';
 import update from '#rsu/immutable-update';
 import PalikaReportTable from './components/palikaReportTable';
+import AddFormModal from './components/addFormModal';
 
 interface Props {
 
@@ -82,16 +78,19 @@ const mapStateToProps = (state, props) => ({
 // };
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
-        url: '/annual-budget/',
+        url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
             if (params && params.submitQuery) {
                 return {
                     province: params.submitQuery.province,
                     district: params.submitQuery.district,
                     municipality: params.submitQuery.municipality,
+                    limit: params.page,
                 };
             }
-            return undefined;
+
+
+            return { limit: params.page, offset: params.offset };
         },
         method: methods.GET,
         onMount: true,
@@ -100,8 +99,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
+
             if (params && params.annualBudget) {
                 params.annualBudget(citizenReportList);
+            }
+            if (params && params.paginationParameters) {
+                params.paginationParameters(response);
             }
         },
     },
@@ -143,11 +146,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // used to check the condition of filter button
     const [AnnualBudget, setAnnualBudget] = useState(null);
     // used to store annual budget data from query
+    const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
-
+    const [url, setUrl] = useState('/annual-budget/');
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
+    const [offset, setOffset] = useState(0);
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
     };
+    const handlePaginationParameters = (response) => {
+        setPaginationParameters(response);
+    };
+
     const handleCloseModal = () => setShowReportModal(false);
     const {
         provinces,
@@ -159,17 +169,37 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
         setFiltered(false);
-        console.log('This is value>>>', Values);
     };
     const { requests: { PalikaReportGetRequest } } = props;
 
     PalikaReportGetRequest.setDefaultParams({
         annualBudget: handleAnnualBudget,
+        paginationParameters: handlePaginationParameters,
+        url,
+        page: paginationQueryLimit,
+
 
     });
 
-    console.log('This is budget>>>', AnnualBudget);
+    let finalArr = [];
+    if (AnnualBudget) {
+        const finalAnnualBudget = AnnualBudget.map((item, i) => {
+            const provinceDetails = provinces[i];
+            const districtDetails = districts[i];
+            const municipalityDetails = municipalities[i];
+            if (municipalityDetails) {
+                return { municipalityName: municipalityDetails.title,
+                    provinceName: provinceDetails.title,
+                    districtName: districtDetails.title,
+                    item };
+            }
+            return null;
+        });
+        finalArr = [...new Set(finalAnnualBudget)];
+    }
 
+    console.log('This is pagination>>>', paginationParameters);
+    console.log('This offset>>>', offset);
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
@@ -204,7 +234,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         }
         return '';
     };
-    console.log('Why>>>', newRegionValues);
+
     const handleSubmit = () => {
         if (filtered) {
             PalikaReportGetRequest.do({
@@ -225,6 +255,21 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
         setFiltered(true);
     };
+
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        console.log('What selected>>>', selectedPage);
+        setOffset(selectedPage * 2);
+        console.log('What offset>>>', offset);
+    };
+
+    useEffect(() => {
+        PalikaReportGetRequest.do({
+            offset,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [offset]);
+
 
     return (
         <>
@@ -295,31 +340,36 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                     </div>
                     <div className={styles.rightContainerTables}>
-                        <PalikaReportTable />
+                        <PalikaReportTable tableData={finalArr} />
+                        <div>
+                            {/* <button
+                                type="submit"
+                                className={styles.addButn}
+                            >
+                         XLS
+                                {' '}
 
-                    </div>
-                    {/* <Modal>
-
-                        <ModalHeader
-                            title="Login"
-                            rightComponent={(
-                                <DangerButton
-                                    transparent
-                                    iconName="close"
-                                    title="Close Modal"
+                            </button> */}
+                            {paginationParameters
+                            && (
+                                <ReactPaginate
+                                    previousLabel={'prev'}
+                                    nextLabel={'next'}
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}
+                                    onPageChange={handlePageClick}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    pageCount={Math.ceil(paginationParameters.count / 2)}
+                                    containerClassName={styles.pagination}
+                                    subContainerClassName={_cs(styles.pagination)}
+                                    activeClassName={styles.active}
                                 />
                             )}
-                        />
-                        <ModalBody />
-                        <ModalFooter>
-                            <DangerButton>
-                            Close
-                            </DangerButton>
+                        </div>
 
-                        </ModalFooter>
+                    </div>
 
-
-                    </Modal> */}
                 </div>
 
             </div>
