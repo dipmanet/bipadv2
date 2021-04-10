@@ -22,19 +22,44 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 
 interface Props {
+    setShowTabs: (arg0: boolean) => void;
+    showTabs: boolean;
+    showReportModal: () => void;
+    hideWelcomePage: () => void;
+    setShowReportModal: (arg0: boolean) => void;
 }
 
+type TabContent =
+'General'
+|'Budget Activity'
+|'Programme and Policies'
+|'Organisation'
+|'Inventories'
+|'Resources'
+|'Contacts'
+|'Budget'
+|'Relief'
+|'Incident'
+|'Loss & Damage'
+|'Preview';
+
+
 const MainModal: React.FC<Props> = (props: Props) => {
-    const [showReportModal, setShowReportModal] = useState(true);
+    const {
+        setShowTabs,
+        showTabs,
+        showReportModal,
+        hideWelcomePage,
+        setShowReportModal,
+    } = props;
+
     const [tabSelected, setTabSelected] = useState(0);
-    const [showTabs, setShowTabs] = useState(false);
-    const [translateVal, setTranslateVal] = useState(0);
     const handleCloseModal = () => setShowReportModal(false);
-    const hideWelcomePage = () => {
-        setShowTabs(true);
-        setShowReportModal(false);
-    };
-    const tabs = [
+
+    const tabs: {
+        key: number;
+        content: TabContent;
+    }[] = [
         {
             key: 0,
             content: 'General',
@@ -115,12 +140,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         <>
             <Page hideMap hideFilter />
             <div className={showReportModal ? styles.containerFaded : styles.mainContainer}>
-                <button
-                    type="button"
-                    onClick={handleAddbuttonClick}
-                >
-                Add data
-                </button>
+
                 {showReportModal
             && (
                 <Modal
@@ -150,12 +170,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                                      backgroundColor: tabSelected === tab.key
                                                          ? '#fff'
                                                          : '#e1e1e1',
-                                                     //  paddingRight: tabSelected === tab.key
-                                                     //      ? '5%'
-                                                     //      : '5%',
-                                                     //  paddingLeft: tabSelected === tab.key
-                                                     //      ? '5%'
-                                                     //      : '5%',
                                                      transform: `translateX(-${getTranslateVal()}px)`,
                                                  }}
                                                  onClick={() => handleTabClick(tab.key)}
@@ -164,7 +178,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                                  {tab.content}
                                              </button>
                                          ))}
-                                         {/* {tabs[tabSelected].content} */}
                                      </div>
                                      <div className={styles.closeBtnContainer}>
                                          <PrimaryButton

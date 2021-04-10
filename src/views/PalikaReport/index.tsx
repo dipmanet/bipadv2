@@ -11,7 +11,6 @@ import MainModal from './MainModal';
 import { provincesSelector, districtsSelector, municipalitiesSelector,
     wardsSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
-import { setShowMunicipalityAction } from '#actionCreators';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -21,7 +20,6 @@ import {
 } from '#request';
 import update from '#rsu/immutable-update';
 import PalikaReportTable from './components/palikaReportTable';
-import AddFormModal from './components/addFormModal';
 
 interface Props {
 
@@ -70,47 +68,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
-<<<<<<< HEAD
-    const [tabSelected, setTabSelected] = useState(0);
-    const [showTabs, setShowTabs] = useState(false);
-
-    const handleAddbuttonClick = () => {
-        setShowReportModal(true);
-        setShowTabs(true);
-    };
-
-    return (
-        <>
-            <Page hideMap hideFilter />
-            <div>
-                <button
-                    type="button"
-                    onClick={handleAddbuttonClick}
-                >
-                Add data
-                </button>
-
-            </div>
-            {
-                showReportModal && <MainModal />
-            }
-=======
-    // used to close the model
     const [newRegionValues, setNewRegionValues] = useState({
         adminLevel: 0,
         geoarea: 0,
     });
-    // used to store adminlevel and geoarea value selected from filter
     const [filtered, setFiltered] = useState(false);
-    // used to check the condition of filter button
     const [AnnualBudget, setAnnualBudget] = useState(null);
-    // used to store annual budget data from query
-    const [paginationParameters, setPaginationParameters] = useState();// used for pagination of table
-    const [clearFilter, setClearFilter] = useState(false);// used for pagination of table
+    const [paginationParameters, setPaginationParameters] = useState();
+    const [clearFilter, setClearFilter] = useState(false);
     const [url, setUrl] = useState('/annual-budget/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);// used for pagination of table
-    const [offset, setOffset] = useState(0);// used for pagination of table
-    const [showReportModal, setShowReportModal] = useState(true);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
+    const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
@@ -231,9 +199,23 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowReportModal(true);
         setShowTabs(true);
     };
+    const hideWelcomePage = () => {
+        setShowTabs(true);
+        setShowReportModal(false);
+    };
     return (
         <>
             <Page hideMap hideFilter />
+            {
+                <MainModal
+                    showTabs={showTabs}
+                    setShowTabs={handleAddbuttonClick}
+                    showReportModal={showReportModal}
+                    hideWelcomePage={hideWelcomePage}
+                    setShowReportModal={setShowReportModal}
+
+                />
+            }
             <div className={styles.reportContainer}>
                 <div className={styles.leftContainer}>
                     <div className={styles.heading}>
@@ -328,7 +310,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             </div>
 
             {}
->>>>>>> 5d73538e6f4a44b19322f5e5f8dda2473340d1c0
 
         </>
     );
