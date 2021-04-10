@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 interface Props {
     setShowTabs: (arg0: boolean) => void;
     showTabs: boolean;
-    showReportModal: () => void;
+    showReportModal: boolean;
     hideWelcomePage: () => void;
     setShowReportModal: (arg0: boolean) => void;
 }
@@ -46,7 +46,6 @@ type TabContent =
 
 const MainModal: React.FC<Props> = (props: Props) => {
     const {
-        setShowTabs,
         showTabs,
         showReportModal,
         hideWelcomePage,
@@ -121,10 +120,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
         }
     };
 
-    const handleAddbuttonClick = () => {
-        setShowReportModal(true);
-        setShowTabs(true);
-    };
     const handleDataAdd = () => {
         ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
     };
@@ -206,37 +201,43 @@ const MainModal: React.FC<Props> = (props: Props) => {
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
+                                { tabSelected <= Object.keys(tabs).length - 1
+                                    && (
+                                        <PrimaryButton
+                                            type="button"
+                                            className={styles.agreeBtn}
+                                            onClick={handleDataAdd}
+                                        >
+                                            {`Add ${tabs[tabSelected].content} Data`}
 
-                                <PrimaryButton
-                                    type="button"
-                                    className={styles.agreeBtn}
-                                    onClick={handleDataAdd}
-                                >
-                                        Add Budget Data
-
-                                </PrimaryButton>
-                                <PrimaryButton
-                                    type="button"
-                                    className={tabSelected > 0
-                                        ? styles.agreeBtn
-                                        : styles.disabledBtn
-                                    }
-                                    onClick={handlePrevClick}
-                                >
+                                        </PrimaryButton>
+                                    )
+                                }
+                                <div className={styles.nextPrevBtns}>
+                                    <PrimaryButton
+                                        type="button"
+                                        className={tabSelected > 0
+                                            ? styles.agreeBtn
+                                            : styles.disabledBtn
+                                        }
+                                        onClick={handlePrevClick}
+                                    >
                                         Prev
 
-                                </PrimaryButton>
-                                <PrimaryButton
-                                    type="button"
-                                    className={tabSelected < tabs.length - 1
-                                        ? styles.agreeBtn
-                                        : styles.disabledBtn
-                                    }
-                                    onClick={handleNextClick}
-                                >
+                                    </PrimaryButton>
+                                    <PrimaryButton
+                                        type="button"
+                                        className={tabSelected < tabs.length - 1
+                                            ? styles.agreeBtn
+                                            : styles.disabledBtn
+                                        }
+                                        onClick={handleNextClick}
+                                    >
                                         Next
 
-                                </PrimaryButton>
+                                    </PrimaryButton>
+                                </div>
+
 
                             </div>
                         )}
