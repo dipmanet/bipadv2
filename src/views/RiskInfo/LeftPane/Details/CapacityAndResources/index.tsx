@@ -458,16 +458,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
         // checking if its loaded by report module
-        const addResBtnElement = document.getElementById('addResourceButton');
-        if (addResBtnElement) {
-            const position = addResBtnElement.getBoundingClientRect();
-            this.setState({
-                modalPosTop: position.top,
-                modalPosLeft: position.left,
-            });
-            console.log('in CAR page: ', position);
-            console.log('in CAR page, element: ', addResBtnElement);
-        }
+        const reportWindowSize = () => {
+            const addResBtnElement = document.getElementById('addResourceButton');
+            if (addResBtnElement) {
+                const position = addResBtnElement.getBoundingClientRect();
+                this.setState({
+                    modalPosTop: position.top,
+                    modalPosLeft: position.left,
+                });
+                console.log('in CAR page: ', position);
+                console.log('in CAR page, element: ', addResBtnElement);
+            }
+        };
+        window.addEventListener('resize', reportWindowSize);
     }
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
