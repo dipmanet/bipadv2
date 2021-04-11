@@ -20,11 +20,12 @@ interface Props {
 }
 
 const ReportModal: React.FC<Props> = (props: Props) => {
-    const { keyTab, showTabs, hideWelcomePage } = props;
+    const {
+        keyTab,
+        showTabs,
+        hideWelcomePage,
+    } = props;
     const handleWelcomePage = () => hideWelcomePage();
-    // eslint-disable-next-line new-cap
-
-
     const handlePreviewBtn = () => {
         const divToDisplay = document.getElementById('reportPreview');
         html2canvas(divToDisplay).then((canvas) => {
