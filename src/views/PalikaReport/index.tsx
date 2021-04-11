@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import { Table } from 'react-bootstrap';
-import Faram from '@togglecorp/faram';
 import ReactPaginate from 'react-paginate';
 import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
@@ -11,7 +9,6 @@ import styles from './styles.scss';
 import { provincesSelector, districtsSelector, municipalitiesSelector,
     wardsSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
-import { setShowMunicipalityAction } from '#actionCreators';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -19,9 +16,9 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import update from '#rsu/immutable-update';
 import PalikaReportTable from './components/palikaReportTable';
 import AddFormModal from './components/addFormModal';
+
 
 interface Props {
 
@@ -80,12 +77,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // used to check the condition of filter button
     const [AnnualBudget, setAnnualBudget] = useState(null);
     // used to store annual budget data from query
-    const [paginationParameters, setPaginationParameters] = useState();// used for pagination of table
-    const [clearFilter, setClearFilter] = useState(false);// used for pagination of table
+    const [paginationParameters, setPaginationParameters] = useState();
+    // used for pagination of table
+    const [clearFilter, setClearFilter] = useState(false);
+    // used for pagination of table
     const [url, setUrl] = useState('/annual-budget/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);// used for pagination of table
-    const [offset, setOffset] = useState(0);// used for pagination of table
-    const [showReportModal, setShowReportModal] = useState(true);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
+    // used for pagination of table
+    const [offset, setOffset] = useState(0);
+    // used for pagination of table
     const [showTabs, setShowTabs] = useState(false);
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
@@ -297,6 +297,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         </div>
 
                     </div>
+                    <AddFormModal data={showReportModal} />
 
                 </div>
 

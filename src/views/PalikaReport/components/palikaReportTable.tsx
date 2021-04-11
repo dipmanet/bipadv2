@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import styles from './styles.scss';
+import Icon from '#rscg/Icon';
 
 const PalikaReportTable = (props) => {
     console.log('This props>>>', props.tableData);
@@ -37,13 +38,14 @@ const PalikaReportTable = (props) => {
                     </tbody>
                 </table>
             </div>
+
             <ReactHTMLTableToExcel
                 id="test-table-xls-button"
                 className="download-table-xls-button"
                 table="table-to-xls"
                 filename="tablexls"
                 sheet="tablexls"
-                buttonText="Download as XLS"
+                buttonText="XLS"
             />
         </div>
     );
