@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import { Table } from 'react-bootstrap';
-import Faram from '@togglecorp/faram';
 import ReactPaginate from 'react-paginate';
 import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
@@ -18,8 +16,9 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import update from '#rsu/immutable-update';
 import PalikaReportTable from './components/palikaReportTable';
+import AddFormModal from './components/addFormModal';
+
 
 interface Props {
 
@@ -63,6 +62,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+
 };
 
 
@@ -76,16 +76,23 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [AnnualBudget, setAnnualBudget] = useState(null);
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
-    const [url, setUrl] = useState('/annual-budget/');
+    const [url, setUrl] = useState('/annual-budget-activity/');
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
     const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
+    const [menuId, setMenuId] = useState();
+    const [submenuId, setSubmenuId] = useState();
+    const [subMenuTitle, setSubMenuTitle] = useState('All Reports');
+    const [tableHeader, setTableHeader] = useState([]);
+
+
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
+
 
     const handleCloseModal = () => setShowReportModal(false);
     const {
@@ -99,7 +106,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setNewRegionValues(Values);
         setFiltered(false);
     };
-    const { requests: { PalikaReportGetRequest } } = props;
+    const { requests: { PalikaReportGetRequest, PalikaReportTableHeaderRequest } } = props;
 
     PalikaReportGetRequest.setDefaultParams({
         annualBudget: handleAnnualBudget,
@@ -107,8 +114,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         url,
         page: paginationQueryLimit,
 
-
     });
+
 
     let finalArr = [];
     if (AnnualBudget) {
@@ -203,19 +210,84 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowTabs(true);
         setShowReportModal(false);
     };
+    const generateUrl = (data) => {
+        setUrl(data);
+        PalikaReportGetRequest.do({
+
+            url: data,
+        });
+    };
+
+    const getSubmenuId = (subMenuid) => {
+        console.log('SubMenu Id', subMenuid);
+        setSubmenuId(subMenuid);
+    };
+
+    const getMenuId = (menu) => {
+        console.log('Menu Id', menu);
+        setMenuId(menu);
+    };
+    const getSubmenuTitle = (title) => {
+        setSubMenuTitle(title);
+    };
+    useEffect(() => {
+        // Example POST method implementation:
+        function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
+            // Default options are marked with *
+            fetch(link, {
+                method: 'OPTIONS', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer',
+                // no-referrer, *no-referrer-when-downgrade, origin,
+                // origin-when-cross-origin, same-origin, strict-origin,
+                // strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data), // body data type must match "Content-Type" header
+            })
+                .then((res) => {
+                    const headerData = res.json();
+                    headerData.then(resp => setTableHeader(resp.actions.GET));
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
+        postData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url]);
+
+    // Finding Header for table data
+    const finalTableHeader = Object.keys(tableHeader).map(item => tableHeader[item].label);
+    const TableHeaderForTable = finalTableHeader.filter(item => item !== 'ID' && item !== 'Created on'
+     && item !== 'Modified on' && item !== 'Remarks' && item !== 'Created by'
+     && item !== 'Updated by');
+    console.log('Annual Budget>>>', AnnualBudget);
+    console.log('header>>>', TableHeaderForTable);
     return (
         <>
             <Page hideMap hideFilter />
-            {
-                <MainModal
-                    showTabs={showTabs}
-                    setShowTabs={handleAddbuttonClick}
-                    showReportModal={showReportModal}
-                    hideWelcomePage={hideWelcomePage}
-                    setShowReportModal={setShowReportModal}
 
-                />
-            }
+            <MainModal
+                showTabs={showTabs}
+                setShowTabs={handleAddbuttonClick}
+                showReportModal={showReportModal}
+                hideWelcomePage={hideWelcomePage}
+                setShowReportModal={setShowReportModal}
+            />
+
+
+            {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
+             && <AddFormModal />} */}
+
+
             <div className={styles.reportContainer}>
                 <div className={styles.leftContainer}>
                     <div className={styles.heading}>
@@ -225,7 +297,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                     </div>
                     <div className={styles.sidebar}>
-                        <Sidebar />
+                        <Sidebar
+                            urlData={generateUrl}
+                            getsubmenuId={getSubmenuId}
+                            getmenuId={getMenuId}
+                            getsubmenuTitle={getSubmenuTitle}
+                        />
 
                     </div>
 
@@ -233,7 +310,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className={styles.rightContainer}>
                     <div className={styles.rightContainerHeading}>
-                        <h1>ALL REPORTS</h1>
+                        <h1>{subMenuTitle}</h1>
                     </div>
                     <div className={styles.rightContainerFilters}>
                         <StepwiseRegionSelectInput
@@ -283,9 +360,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                     </div>
                     <div className={styles.rightContainerTables}>
-                        <PalikaReportTable tableData={finalArr} />
+                        <PalikaReportTable
+                            tableData={finalArr}
+                            paginationData={paginationParameters}
+                            tableHeader={TableHeaderForTable}
+                        />
                         <div>
-                            {paginationParameters
+                            {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <ReactPaginate
                                     previousLabel={'prev'}
@@ -304,6 +385,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         </div>
 
                     </div>
+                    {/* <AddFormModal
+                        data={showReportModal}
+
+                    /> */}
 
                 </div>
 

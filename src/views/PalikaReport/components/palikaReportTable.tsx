@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import styles from './styles.scss';
+import Icon from '#rscg/Icon';
 
 const PalikaReportTable = (props) => {
     console.log('This props>>>', props.tableData);
+    const { paginationData, tableData, tableHeader } = props;
+    console.log('What that>>>', paginationData);
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}
@@ -11,6 +14,13 @@ const PalikaReportTable = (props) => {
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
+                            {tableHeader.map((item => (
+
+                                <th key={item}>{item}</th>
+
+                            )))}
+                        </tr>
+                        {/* <tr>
                             <th>S/N</th>
                             <th>Province</th>
                             <th>District</th>
@@ -20,8 +30,10 @@ const PalikaReportTable = (props) => {
                             <th>Other Budget (Nrs)</th>
                             <th>Total Budget (Nrs)</th>
 
-                        </tr>
-                        {props.tableData.map((item, i) => (
+                        </tr> */}
+
+
+                        {tableData.map((item, i) => (
                             <tr key={item.item.id}>
                                 <td>{i + 1}</td>
                                 <td>{item.provinceName}</td>
@@ -36,15 +48,13 @@ const PalikaReportTable = (props) => {
 
                     </tbody>
                 </table>
+
+                {tableData && tableData.length === 0
+&& <p className={styles.dataUnavailable}>Data Unavailable</p>
+
+                }
             </div>
-            <ReactHTMLTableToExcel
-                id="test-table-xls-button"
-                className="download-table-xls-button"
-                table="table-to-xls"
-                filename="tablexls"
-                sheet="tablexls"
-                buttonText="Download as XLS"
-            />
+            { }
         </div>
     );
 };
