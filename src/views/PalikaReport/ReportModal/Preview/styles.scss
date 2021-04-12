@@ -2,18 +2,113 @@
     display:flex;
     flex-direction: column;
     // width: 210mm;
-    // height: 297mm;
-    .previewComps{
+    height: 305mm;
+    // .previewComps{
+    //     display: flex;
+    //     // width: 50%;
+    //     border: 1px solid gray;
+    //     padding: 20px;
+    //     height: 70mm;
+    // }
+    // .chartContainer{
+    //     width: 50%;
+    //     border: 1px solid gray;
+    //     padding: 20px;
+    //     height: 70mm;
+
+    // }
+
+    .reportHeader{
+        height: 11%;
+
+    }
+
+.header{
+    display: flex;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+}
+.rowOne{
+    flex: 3;
+    display: flex;
+ 
+    border: 1px solid gray;
+    
+    .columnOneOne{
+        flex:3;
+    border: 1px solid gray;
+        height: 100%;
         display: flex;
-        // width: 50%;
-        border: 1px solid gray;
-        padding: 20px;
+        justify-content: center;
+        align-items: center;
+
     }
-    .chartContainer{
-        width: 50%;
-        border: 1px solid gray;
-        padding: 20px;
+    .columnOneTwo{
+        flex:2;
+        height: 100%;
+        display: flex;
+
+    border: 1px solid gray;
+    justify-content: center;
+    align-items: center;
+
     }
+}
+
+.rowTwo{
+    display: flex;
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid gray;
+
+    .columnTwoOne{
+        flex: 1;
+    border: 1px solid gray;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .columnTwoTwo{
+    border: 1px solid gray;
+        height: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.rowThree{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+    flex: 2;
+    .columnThreeOne{
+    border: 1px solid gray;
+        height: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .columnThreeTwo{
+    border: 1px solid gray;
+        height: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 }
 
 

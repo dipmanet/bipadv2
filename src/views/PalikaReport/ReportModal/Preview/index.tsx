@@ -16,41 +16,42 @@ const Preview = (props: Props) => {
     const { lineData } = LineData;
     return (
         <div className={styles.previewContainer}>
-            {reportData.map(comp => (
+            {/* {reportData.map(comp => (
                 <div key={comp.name} className={styles.previewComps}>
+
                     {comp}
                 </div>
-            ))}
-            <ResponsiveContainer width={'50%'} height={300}>
-                <LineChart
-                    margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
-                    data={lineData}
-                >
-                    <CartesianGrid
-                        vertical={false}
-                        strokeDasharray="3 3"
-                    />
-                    <XAxis
-                        dataKey="name"
-                        interval="preserveStart"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <YAxis
-                        unit={'℃'}
-                        axisLine={false}
-                        domain={[0, 40]}
-                        padding={{ top: 20 }}
-                        tick={{ fill: '#94bdcf' }}
-                        tickCount={10}
-                        interval="preserveEnd"
-                        allowDataOverflow
-                    />
-                    <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
-                    <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
-                    <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
-                </LineChart>
-            </ResponsiveContainer>
+            ))} */}
+
+            <div className={styles.header}>
+                Header
+            </div>
+            <div className={styles.rowOne}>
+                <div className={styles.columnOneOne}>
+                    Col 1 1
+                </div>
+                <div className={styles.columnOneTwo}>
+                    Col 1 2
+                </div>
+            </div>
+            <div className={styles.rowTwo}>
+                <div className={styles.columnTwoOne}>
+                    Col 2 1
+                </div>
+                <div className={styles.columnTwoTwo}>
+                    Col 2 2
+                </div>
+            </div>
+            <div className={styles.rowThree}>
+                <div className={styles.columnThreeOne}>
+                    Col 3 1
+                </div>
+                <div className={styles.columnThreeTwo}>
+                    Col 3 2
+                </div>
+            </div>
         </div>
+
 
     );
 };
