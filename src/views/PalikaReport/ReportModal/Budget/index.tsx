@@ -9,7 +9,7 @@ const Budget = (props: Props) => {
     console.log(props);
     return (
         <div className={styles.tabsPageContainer}>
-            <Table striped bordered hover size="lg">
+            <Table striped bordered hover size="md">
                 <thead>
                     <tr>
                         <th>ID</th>

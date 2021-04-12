@@ -31,7 +31,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         html2canvas(divToDisplay).then((canvas) => {
             const divImage = canvas.toDataURL('image/png');
             const pdf = new JsPDF();
-            pdf.addImage(divImage, 'PNG', 3, 3);
+            pdf.addImage(divImage, 'PNG', 5, 5);
             pdf.save('preview.pdf');
         });
     };
