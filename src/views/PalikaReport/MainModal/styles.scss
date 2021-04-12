@@ -78,7 +78,10 @@
 }
 
 .tabsContainer{
-    min-height: 80%;
+    // min-height: 80%;
+    width: 210mm;
+    height: 297mm;
+    padding: 10mm;
     // width: calc(75% - 60px);
     position: absolute;
     overflow-x: scroll;

@@ -12,7 +12,6 @@ interface Props{
 }
 
 const Preview = (props: Props) => {
-    console.log(props);
     const { reportData } = props;
     const { lineData } = LineData;
     return (
@@ -22,8 +21,6 @@ const Preview = (props: Props) => {
                     {comp}
                 </div>
             ))}
-
-
             <ResponsiveContainer width={'50%'} height={300}>
                 <LineChart
                     margin={{ top: 0, right: 10, left: 10, bottom: 10 }}

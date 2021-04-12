@@ -1,7 +1,8 @@
 .previewContainer{
     display:flex;
     flex-direction: column;
-    width: 100%;
+    // width: 210mm;
+    // height: 297mm;
     .previewComps{
         display: flex;
         // width: 50%;
@@ -13,5 +14,8 @@
         border: 1px solid gray;
         padding: 20px;
     }
-
 }
+
+
+
+
