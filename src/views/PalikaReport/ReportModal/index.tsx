@@ -27,13 +27,49 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     } = props;
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
+        // eslint-disable-next-line no-var
+        // var pdf = new JsPDF();
+
         const divToDisplay = document.getElementById('reportPreview');
+        // const divToDisplay1 = document.getElementById('reportPreview1');
         html2canvas(divToDisplay).then((canvas) => {
-            const divImage = canvas.toDataURL('image/png');
-            const pdf = new JsPDF();
-            pdf.addImage(divImage, 'PNG', 5, 5);
-            pdf.save('preview.pdf');
+            // const divImage = canvas.toDataURL('image/png');
+
+            // pdf.addImage(divImage, 'PNG', 5, 5);
+            const imgData = canvas.toDataURL('image/png');
+
+            /*
+            Here are the numbers (paper width and height) that I found to work.
+            It still creates a little overlap part between the pages, but good enough for me.
+            if you can find an official number from jsPDF, use them.
+            */
+            const imgWidth = 210;
+            const pageHeight = 295;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+
+            const doc = new JsPDF('p', 'mm');
+            let position = 0;
+
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                doc.addPage();
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+            doc.save('whater.pdf');
         });
+        // pdf.addPage();
+        // html2canvas(divToDisplay1).then((canvas) => {
+        //     const divImage1 = canvas.toDataURL('image/png');
+
+        //     pdf.addImage(divImage1, 'PNG', 5, 5);
+        // });
+
+        // pdf.save('preview.pdf');
     };
 
     return (
@@ -147,10 +183,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     reportData={[<Budget />, <BudgetActivity />]}
 
                                 />
+                                <Preview
+                                    reportData={[<Budget />, <BudgetActivity />]}
+
+                                />
 
                             </div>
-
-
                         </div>
                     ) : ''
             }
