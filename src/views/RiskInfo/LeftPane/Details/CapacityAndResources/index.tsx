@@ -291,6 +291,11 @@ interface Params {
     closeModal?: (key?: boolean) => void;
 }
 
+interface PositionModal {
+    top: string |number;
+    left: string |number;
+}
+
 type Props = NewProps<ComponentProps & PropsFromState, Params>
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
@@ -317,7 +322,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 
             // const region = {municipality: 5002, province: 1, district: 3};
             const regionArr = Object.keys(region);
-            const b = [];
             let a = [];
             if (regionArr) {
                 a = regionArr.map(item => `${item}=${region[item]}`);
@@ -396,6 +400,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     },
 };
 
+const positionModal: PositionModal = {
+    top: '50%',
+    left: '50%',
+};
+
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -404,6 +413,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceGetRequest,
             },
             filters,
+
         } = this.props;
 
         this.state = {
@@ -411,15 +421,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeLayerKey: undefined,
             resourceLngLat: undefined,
             resourceInfo: undefined,
-            // showResourceForm: false,
-            showResourceForm: true,
-            testVal: true,
+            showResourceForm: false,
             showInventoryModal: false,
             selectedFeatures: undefined,
             resourceList: [],
             activeModal: undefined,
-            modalPosTop: '50%',
-            modalPosLeft: '50%',
             singleOpenspaceDetailsModal: false,
             CommunitySpaceDetailsModal: false,
             resourceCollection: {
@@ -451,38 +457,43 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const {
             handleCarActive,
-            filters,
-            setFilters,
+            carKeys,
+            setCarKeys,
         } = this.props;
+
+        console.log('props', this.props);
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
-        // checking if its loaded by report module
-        const reportWindowSize = () => {
-            const addResBtnElement = document.getElementById('addResourceButton');
-            if (addResBtnElement) {
-                const position = addResBtnElement.getBoundingClientRect();
-                this.setState({
-                    modalPosTop: position.top,
-                    modalPosLeft: position.left,
-                });
-                console.log('in CAR page: ', position);
-                console.log('in CAR page, element: ', addResBtnElement);
-            }
-        };
-        window.addEventListener('resize', reportWindowSize);
     }
 
-    public componentDidUpdate(prevProps, prevState, snapshot) {
-        const { faramValues: { region } } = this.props.filters;
-        if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
-            this.props.requests.resourceGetRequest.do(
+    public componentDidUpdate(prevProps) {
+        const {
+            filters: { faramValues: { region } },
+            carKeys,
+            requests,
+            setCarKeys,
+        } = this.props;
+        if (prevProps.filters.faramValues.region !== region) {
+            requests.resourceGetRequest.do(
                 {
                     region,
-                    resourceType: this.props.carKeys,
+                    resourceType: carKeys,
                 },
             );
         }
+
+        const reportWindowSize = () => {
+            const addResBtnElement = document.getElementById('addResourceButton');
+            if (addResBtnElement) {
+                const left = addResBtnElement.offsetLeft;
+                const top = addResBtnElement.offsetTop;
+                positionModal.top = top;
+                positionModal.left = left;
+            }
+        };
+        reportWindowSize();
+        window.addEventListener('resize', reportWindowSize);
     }
 
     public componentWillUnmount() {
@@ -837,6 +848,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({
             showResourceForm: false,
         });
+        this.props.setCarKeys(0);
     }
 
     private handleInventoryModalClose = () => {
@@ -929,6 +941,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         });
     };
 
+
     public render() {
         const {
             className,
@@ -937,9 +950,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             droneImagePending,
             requests: { openspaceDeleteRequest },
             authState: { authenticated },
-            // setCarKeys,
+            carKeys,
         } = this.props;
-        // setCarKeys(1);
 
         const {
             activeLayerKey,
@@ -954,8 +966,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeModal,
             singleOpenspaceDetailsModal,
             CommunitySpaceDetailsModal,
-            modalPosTop,
-            modalPosLeft,
         } = this.state;
 
         const {
@@ -1019,10 +1029,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         <AddResourceForm
                                             onAddSuccess={this.handleResourceAdd}
                                             onEditSuccess={this.handleResourceEdit}
-                                            modalPos={{
-                                                top: modalPosTop,
-                                                left: modalPosLeft,
-                                            }}
+                                            modalPos={positionModal}
                                         />
                                     )}
                                 >
@@ -1935,8 +1942,30 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )}
                 </div>
                 { }
+                { (showResourceForm || carKeys)
+                    && (
+                        <AddResourceForm
+                        // resourceId={resourceDetails.id}
+                        // resourceDetails={resourceDetails}
+                            onEditSuccess={this.handleResourceEdit}
+                            closeModal={this.handleEditResourceFormCloseButtonClick}
+                        />
+                    )
+
+                }
 
                 { }
+                {showInventoryModal
+                    && isDefined(resourceDetails)
+                    && isDefined(resourceDetails.id)
+                    && (
+                        <InventoriesModal
+                            resourceId={resourceDetails.id}
+                            closeModal={this.handleInventoryModalClose}
+                        />
+                    )
+                }
+
                 {activeModal === 'showOpenSpaceInfoModal' ? (
                     <OpenspaceMetaDataModal closeModal={this.handleIconClick} />
                 ) : activeModal === 'communityMetaModal' ? (

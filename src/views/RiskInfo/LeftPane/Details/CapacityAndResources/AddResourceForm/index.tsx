@@ -84,7 +84,7 @@ interface OwnProps {
     resourceDetails?: PageType.Resource;
     onAddSuccess?: (resource: PageType.Resource) => void;
     onEditSuccess?: (resourceId: PageType.Resource['id'], resource: PageType.Resource) => void;
-    modalPos?: {top: number; left: number};
+    modalPos?: {top: number | string; left: number | string};
 }
 
 interface PropsFromState {
@@ -435,7 +435,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             <Modal
                 className={_cs(styles.addResourceModal, className)}
                 modalPos={modalPos}
-
             >
                 <Faram
                     className={styles.form}

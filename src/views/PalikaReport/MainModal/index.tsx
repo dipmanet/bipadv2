@@ -14,12 +14,19 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
     setCarKeysAction,
 } from '#actionCreators';
+
+import {
+    carKeysSelector,
+} from '#selectors';
 import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setCarKeys: params => dispatch(setCarKeysAction(params)),
 });
 
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    carKeys: carKeysSelector(state),
+});
 
 interface Props {
     setShowTabs: (arg0: boolean) => void;
@@ -27,6 +34,7 @@ interface Props {
     showReportModal: boolean;
     hideWelcomePage: () => void;
     setShowReportModal: (arg0: boolean) => void;
+    setCarKeys: number;
 }
 
 type TabContent =
@@ -121,7 +129,9 @@ const MainModal: React.FC<Props> = (props: Props) => {
     };
 
     const handleDataAdd = () => {
+        const { setCarKeys } = props;
         ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
+        setCarKeys(1);
     };
 
     const getTranslateVal = () => {
@@ -201,41 +211,49 @@ const MainModal: React.FC<Props> = (props: Props) => {
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
-                                { tabSelected <= Object.keys(tabs).length - 1
-                                    && (
-                                        <PrimaryButton
-                                            type="button"
-                                            className={styles.agreeBtn}
-                                            onClick={handleDataAdd}
-                                        >
-                                            {`Add ${tabs[tabSelected].content} Data`}
+                                { tabSelected < Object.keys(tabs).length - 1
+                                   && (
+                                       <PrimaryButton
+                                           type="button"
+                                           className={styles.agreeBtn}
+                                           onClick={handleDataAdd}
+                                       >
+                                           {`Add ${tabs[tabSelected].content} Data`}
 
-                                        </PrimaryButton>
-                                    )
+                                       </PrimaryButton>
+                                   )
                                 }
                                 <div className={styles.nextPrevBtns}>
-                                    <PrimaryButton
-                                        type="button"
-                                        className={tabSelected > 0
-                                            ? styles.agreeBtn
-                                            : styles.disabledBtn
-                                        }
-                                        onClick={handlePrevClick}
-                                    >
-                                        Prev
+                                    {
+                                        tabSelected < Object.keys(tabs).length - 1
+                                        && (
+                                            <>
+                                                <PrimaryButton
+                                                    type="button"
+                                                    className={tabSelected > 0
+                                                        ? styles.agreeBtn
+                                                        : styles.disabledBtn
+                                                    }
+                                                    onClick={handlePrevClick}
+                                                >
+                                            Prev
 
-                                    </PrimaryButton>
-                                    <PrimaryButton
-                                        type="button"
-                                        className={tabSelected < tabs.length - 1
-                                            ? styles.agreeBtn
-                                            : styles.disabledBtn
-                                        }
-                                        onClick={handleNextClick}
-                                    >
-                                        Next
+                                                </PrimaryButton>
+                                                <PrimaryButton
+                                                    type="button"
+                                                    className={tabSelected < tabs.length - 1
+                                                        ? styles.agreeBtn
+                                                        : styles.disabledBtn
+                                                    }
+                                                    onClick={handleNextClick}
+                                                >
+                                            Next
 
-                                    </PrimaryButton>
+                                                </PrimaryButton>
+                                            </>
+                                        )
+                                    }
+
                                 </div>
 
 
@@ -252,5 +270,5 @@ const MainModal: React.FC<Props> = (props: Props) => {
     );
 };
 export default compose(
-    connect(undefined, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps),
 )(MainModal);

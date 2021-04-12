@@ -1,0 +1,17 @@
+.previewContainer{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    .previewComps{
+        display: flex;
+        // width: 50%;
+        border: 1px solid gray;
+        padding: 20px;
+    }
+    .chartContainer{
+        width: 50%;
+        border: 1px solid gray;
+        padding: 20px;
+    }
+
+}
