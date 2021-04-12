@@ -156,7 +156,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 [`${destParamName}`]: params.resource_type,
                 [`${destParamName}`]: 'health',
             };
-            console.log('car region', params.region.region);
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 // resource_type: {params.resource_type ? params.resource_type : ''},
@@ -603,7 +602,6 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
 
         return (
             <div className={_cs(styles.filters, className)}>

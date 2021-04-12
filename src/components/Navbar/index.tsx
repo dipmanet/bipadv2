@@ -27,7 +27,6 @@ import CitizenReportsModal from '#components/CitizenReportsModal';
 import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
-import PalikaReport from '#components/PalikaReportModal';
 import Relief from '#components/ReliefModal';
 import RouteSetting from '#constants/routeSettings';
 import MenuItem from './MenuItem';
@@ -146,7 +145,7 @@ class Navbar extends React.PureComponent<Props, State> {
 
         const { authenticated, user } = authState;
         // <Logo />
-
+        // console.log('data:', pages, 'KS: ', menuKeySelector);
         return (
             <nav className={_cs(styles.navbar, className)}>
                 <ListView

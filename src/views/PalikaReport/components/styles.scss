@@ -1,3 +1,23 @@
+.orderList{
+    padding: 0;
+    .menuName{
+        padding-left: 20px;
+        margin-bottom: 10px;
+    }
+    .subMenuDiv{
+        width: 100%;
+        text-align: left;
+        display: flex;
+        height: 30px;
+     
+    }
+    .subMenuDiv :hover{
+        background-color: grey;
+     height: 100%;
+        text-align: left;
+        color: white;
+    }
+}
 .menu{
     display: flex;
     flex-direction: column;
@@ -6,21 +26,33 @@
     cursor: pointer;
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: large;
+    font-size: 16px;
+    color: #405467;
+    opacity: 1;
     font-weight: bold;
+    width: 100%;
+
     .icons{
         margin-right: 10px;
     }
     .subMenu{
-        
-     
         border: none;
         cursor: pointer;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        font-size: medium;
-        margin-left: 30px;
+       
+        font-size: 16px;
+        color: #405467;
+        opacity: 1;
+        font-weight: normal;
+       width: 100%;
+       text-align: left;
+       padding-left: 50px;
     }
+    .subMenuActive{
+        
+     font-weight: bold;
+       
+    }
+   
     .indicator{
         display: flex;
         flex-direction: column;
@@ -34,6 +66,12 @@
 }
 
 .palikaTable{
+    .dataUnavailable{
+        display: flex;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 400;
+    }
     table{
         border-collapse: collapse;
         width: 100%;

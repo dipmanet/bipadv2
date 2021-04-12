@@ -427,6 +427,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
 
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
+
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}

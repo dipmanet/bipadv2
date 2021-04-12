@@ -4,6 +4,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
+import Page from '#components/Page';
 
 const AddFormModal = (props) => {
     const [modalClose, setModalClose] = useState(props.data);
@@ -13,6 +14,7 @@ const AddFormModal = (props) => {
     };
     return (
         <div>
+            <Page hideMap hideFilter />
             {modalClose ? ''
                 : (
                     <Modal>
@@ -31,7 +33,7 @@ const AddFormModal = (props) => {
                         <ModalBody />
                         <ModalFooter>
                             <DangerButton>
-    Close
+                          Close
                             </DangerButton>
 
                         </ModalFooter>
