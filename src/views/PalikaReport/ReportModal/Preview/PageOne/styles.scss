@@ -25,20 +25,34 @@
 
 .header{
     display: flex;
-    width: 90%;
+    width: 100%;
     flex: 1;
-    justify-content: flex-start;
-    align-items: center;
-    // border: 1px solid gray;
-    padding: 0 20px;
+    justify-content: space-between;
+    // align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    // padding: 0 20px;
     .logo{
         width: 100px;
         height: 90px;
+        flex: 1;
     }
     .title{
         padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        flex: 4;
+        // border: 1px solid gray;
+    }
+    .location{
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 2;
+
     }
 }
+
 .rowOne{
     flex: 3;
     display: flex;

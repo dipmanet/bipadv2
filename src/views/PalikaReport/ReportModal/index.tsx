@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import BulletIcon from '#resources/icons/Bullet.svg';
@@ -10,8 +9,8 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import Budget from './Budget';
 import BudgetActivity from './BudgetActivity';
-import Preview from './Preview';
-import PreviewPage from './PreviewPage';
+import Preview from './Preview/PageOne';
+import PreviewPage from './Preview/PageTwo';
 
 
 interface Props {

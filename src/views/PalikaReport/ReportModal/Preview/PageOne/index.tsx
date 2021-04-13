@@ -13,7 +13,7 @@ import { ComposedChart,
 import styles from './styles.scss';
 import LineData from './data';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Logo from '../govtLogo.svg';
+import Logo from '../../../govtLogo.svg';
 
 interface Props{
     reportData: Element[];
@@ -48,9 +48,13 @@ const Preview = (props: Props) => {
                     // src={BulletIcon}
                     alt="Nepal Government Logo"
                 />
+                <div className={styles.location}>
+                    <h1>Rajapur Municipality</h1>
+                    <p>Bardiya District, Lumbini Province</p>
+                </div>
                 <div className={styles.title}>
-                    <h1>Disaster Summary</h1>
-                    <p>2015/1/1 to </p>
+                    <h3>Disaster Risk Reduction and Management Report </h3>
+                    <p>2077/01/12 Lorem Ipsum dolor femet graphics</p>
                 </div>
 
             </div>
