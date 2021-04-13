@@ -13,6 +13,7 @@ import { ComposedChart,
 import styles from './styles.scss';
 import LineData from './data';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Logo from '../govtLogo.svg';
 
 interface Props{
     reportData: Element[];
@@ -43,13 +44,13 @@ const Preview = (props: Props) => {
                 /> */}
                 <ScalableVectorGraphics
                     className={styles.logo}
-                    src={'https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg'}
+                    src={Logo}
                     // src={BulletIcon}
                     alt="Nepal Government Logo"
                 />
                 <div className={styles.title}>
-                    <h1>Dhulikhel Nagarpalika</h1>
-                    <p>Kavre, Bagmati Pradesh</p>
+                    <h1>Disaster Summary</h1>
+                    <p>2015/1/1 to </p>
                 </div>
 
             </div>
