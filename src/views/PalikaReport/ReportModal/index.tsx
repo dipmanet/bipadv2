@@ -11,6 +11,7 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import Budget from './Budget';
 import BudgetActivity from './BudgetActivity';
 import Preview from './Preview';
+import PreviewPage from './PreviewPage';
 
 
 interface Props {
@@ -183,7 +184,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     reportData={[<Budget />, <BudgetActivity />]}
 
                                 />
-                                <Preview
+                                <PreviewPage
                                     reportData={[<Budget />, <BudgetActivity />]}
 
                                 />
