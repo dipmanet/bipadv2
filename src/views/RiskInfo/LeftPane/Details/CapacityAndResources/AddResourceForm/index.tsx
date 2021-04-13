@@ -74,6 +74,8 @@ interface Params {
     body?: object;
     onSuccess?: (resource: PageType.Resource) => void;
     setFaramErrors?: (error: object) => void;
+    top?: number;
+    left?: number;
 }
 interface OwnProps {
     closeModal?: () => void;
@@ -82,6 +84,7 @@ interface OwnProps {
     resourceDetails?: PageType.Resource;
     onAddSuccess?: (resource: PageType.Resource) => void;
     onEditSuccess?: (resourceId: PageType.Resource['id'], resource: PageType.Resource) => void;
+    modalPos?: {top: number | string; left: number | string};
 }
 
 interface PropsFromState {
@@ -401,6 +404,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
             closeModal,
             resourceTypeList,
             enumOptions,
+            modalPos,
             requests: {
                 editResourcePutRequest: {
                     pending: editResourcePending,
@@ -427,10 +431,10 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
 
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
-
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
+                modalPos={modalPos}
             >
                 <Faram
                     className={styles.form}

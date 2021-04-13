@@ -26,7 +26,6 @@
         bottom: 30px;
         position: relative;
         margin-bottom: 12px;
-
     }
     .bulletPtRow{
         display: flex;
@@ -64,28 +63,16 @@
         }
     }
 }
-
-
-.tabsPageContainer{
-    table{
-        border-collapse: collapse;
-        width: 100%;
-    }
-    th{
-        padding: 0.5rem;
-        text-align: left;
-    }
-    td{
-        border-top: 1px solid #f5f5f5;
-        border-bottom: 1px solid #f5f5f5;
-        padding: 0.5rem;
-        text-align: left;
-    }
-        tr:nth-child(even) {
-        background-color:#f5f5f5
-    }
-        
+.agreeBtn{
+    filter: saturate(100%);
+    border: none;
+    background-color: rgb(0,105,222) !important;
+    border-radius: 3px;
+    color: white !important; 
+    padding: 5px;
 }
+
+
 $breakpoint-tablet: 868px;
 $breakpoint-mobile: 450px;
 $breakpoint-laptop: 1466px;

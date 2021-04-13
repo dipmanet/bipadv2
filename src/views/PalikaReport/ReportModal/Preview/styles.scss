@@ -1,0 +1,142 @@
+.previewContainer{
+    display:flex;
+    flex-direction: column;
+    width: 200mm;
+    height: 280mm;
+    // border: 1px solid gray;
+    padding: 4mm;
+    // justify-content: center;
+    padding: 10mm 10mm 0 10mm;
+
+    // .previewComps{
+    //     display: flex;
+    //     // width: 50%;
+        // border: 1px solid gray;
+    //     padding: 20px;
+    //     height: 70mm;
+    // }
+    // .chartContainer{
+    //     width: 50%;
+        // border: 1px solid gray;
+    //     padding: 20px;
+    //     height: 70mm;
+
+    // }
+
+.header{
+    display: flex;
+    width: 90%;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: center;
+    // border: 1px solid gray;
+    padding: 0 20px;
+    .logo{
+        width: 100px;
+        height: 90px;
+    }
+    .title{
+        padding-left: 20px;
+    }
+}
+.rowOne{
+    flex: 3;
+    display: flex;
+ 
+    // border: 1px solid gray;
+    
+    .columnOneOne{
+        // flex:3;
+        // border: 1px solid gray;
+        height: 90%;
+        // display: flex;
+        width: 105mm;
+        padding: 20px 0;
+       
+        
+        // justify-content: center;
+        // align-items: center;
+
+    }
+    .columnOneTwo{
+        // flex:2;
+        height: 100%;
+        // display: flex;
+        width: 105mm;
+        padding: 20px 0;
+       
+    // border: 1px solid gray;
+    // justify-content: center;
+    // align-items: center;
+
+    }
+}
+
+.rowTwo{
+    display: flex;
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+
+    // border: 1px solid gray;
+
+    .columnTwoOne{
+        width: 105mm;
+    //   border: 1px solid gray;
+        height: 90%;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+
+        padding: 20px 0;
+
+    }
+    .columnTwoTwo{
+    // border: 1px solid gray;
+        height: 90%;
+        flex: 1;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+        padding: 20px 0;
+        table{
+            // border: 1px solid blue;
+            display: block;
+            width: 90%;
+        }
+
+    }
+}
+
+.rowThree{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // border: 1px solid gray;
+    flex: 2;
+    .columnThreeOne{
+    // border: 1px solid gray;
+        height: 90%;
+        flex: 1;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+        padding: 20px 0;
+
+    }
+    .columnThreeTwo{
+    // border: 1px solid gray;
+        height: 90%;
+        flex: 1;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+        padding: 20px 0;
+    }
+}
+
+}
+
+
+
+
