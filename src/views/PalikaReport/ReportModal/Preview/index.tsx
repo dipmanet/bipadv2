@@ -36,9 +36,15 @@ const Preview = (props: Props) => {
             ))} */}
 
             <div className={styles.header}>
-                <img
+                {/* <img
                     className={styles.logo}
                     src={'https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg'}
+                    alt="Nepal Government Logo"
+                /> */}
+                <ScalableVectorGraphics
+                    className={styles.logo}
+                    src={'https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg'}
+                    // src={BulletIcon}
                     alt="Nepal Government Logo"
                 />
                 <div className={styles.title}>
