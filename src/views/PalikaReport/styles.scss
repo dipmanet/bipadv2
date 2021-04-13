@@ -82,8 +82,23 @@
               color: white;
               opacity: 0.87;
               font-weight: 700;
+              cursor: pointer;
            
            }
+           .submitButDisabled {
+            background-color: grey;
+            border-radius: 15px;
+            border: 1px solid silver;
+            width: 80px;
+            height: 30px;
+            margin-left: 30px;
+            filter: saturate(100%);
+            color: rgb(228, 225, 225);
+            opacity: 0.67;
+            font-weight: 700;
+            cursor: pointer;
+         
+         }
            .addButn{
             background-color: blue;
             border-radius: 15px;
