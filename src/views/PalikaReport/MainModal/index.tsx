@@ -141,6 +141,16 @@ const MainModal: React.FC<Props> = (props: Props) => {
         return 0;
     };
 
+    const getModalClass = () => {
+        if (showTabs) {
+            if (tabSelected === 11) {
+                return styles.previewTab;
+            }
+            return styles.tabsContainer;
+        }
+        return styles.modalContainer;
+    };
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -150,11 +160,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
             && (
                 <Modal
                     closeOnOutsideClick
-                    className={
-                        showTabs
-                            ? styles.tabsContainer
-                            : styles.modalContainer
-                    }
+                    className={getModalClass()}
                 >
                     <ModalHeader
                         title=" "
@@ -212,6 +218,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                         {showTabs && (
                             <div className={styles.btnContainer}>
                                 { tabSelected < Object.keys(tabs).length - 1
+                                && tabSelected !== 0
                                    && (
                                        <PrimaryButton
                                            type="button"

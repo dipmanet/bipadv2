@@ -11,12 +11,17 @@ import Budget from './Budget';
 import BudgetActivity from './BudgetActivity';
 import Preview from './Preview/PageOne';
 import PreviewPage from './Preview/PageTwo';
+import General from './General';
 
 
 interface Props {
     keyTab: number;
     showTabs: boolean;
     hideWelcomePage: () => void;
+}
+
+interface SyntheticEvent<T> {
+    currentTarget: EventTarget & T;
 }
 
 const ReportModal: React.FC<Props> = (props: Props) => {
@@ -70,6 +75,40 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         // });
 
         // pdf.save('preview.pdf');
+    };
+
+    const [reportTitle, setreportTitle] = useState('');
+    const [datefrom, setdatefrom] = useState('');
+    const [dateTo, setdateTo] = useState('');
+    const [mayor, setmayor] = useState('');
+    const [cao, setcao] = useState('');
+    const [focalPerson, setfocalPerson] = useState('');
+    const [formationDate, setformationDate] = useState('');
+    const [memberCount, setmemberCount] = useState('');
+
+    const handleReportTitle = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setreportTitle(val.currentTarget.value);
+    };
+    const handledateFrom = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setdatefrom(val.currentTarget.value);
+    };
+    const handledateTo = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setdateTo(val.currentTarget.value);
+    };
+    const handleSetMayor = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setmayor(val.currentTarget.value);
+    };
+    const handleSetcao = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setcao(val.currentTarget.value);
+    };
+    const handleFocalPerson = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setfocalPerson(val.currentTarget.value);
+    };
+    const handleFormationDate = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setformationDate(val.currentTarget.value);
+    };
+    const handleMemberCount = (val: React.ChangeEvent<HTMLInputElement>) => {
+        setmemberCount(val.currentTarget.value);
     };
 
     return (
@@ -148,6 +187,32 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             </div>
         )
 
+            }
+            {
+                (keyTab === 0
+               && showTabs)
+                    ? (
+                        <General
+                            reportTitle={reportTitle}
+                            datefrom={datefrom}
+                            dateTo={dateTo}
+                            mayor={mayor}
+                            cao={cao}
+                            focalPerson={focalPerson}
+                            formationDate={formationDate}
+                            memberCount={memberCount}
+                            setreportTitle={handleReportTitle}
+                            setdatefrom={handledateFrom}
+                            setdateTo={handledateTo}
+                            setmayor={handleSetMayor}
+                            setcao={handleSetcao}
+                            setfocalPerson={handleFocalPerson}
+                            setformationDate={handleFormationDate}
+                            setmemberCount={handleMemberCount}
+
+                        />
+                    )
+                    : ''
             }
             {
                 (keyTab === 1

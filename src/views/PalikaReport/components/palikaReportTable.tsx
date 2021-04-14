@@ -1,7 +1,7 @@
 import React from 'react';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-
 
 const PalikaReportTable = (props) => {
     const { paginationData, tableData, tableHeader, tableHeaderDataMatch } = props;
