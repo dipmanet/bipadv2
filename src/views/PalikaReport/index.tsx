@@ -62,29 +62,39 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    FiscalYearFetch: {
+        url: '/nepali-fiscal-year/',
+
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+            params.fiscalYear(citizenReportList);
+        },
+    },
 
 };
 
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
-    const [newRegionValues, setNewRegionValues] = useState({
-        adminLevel: 0,
-        geoarea: 0,
-    });
+    const [newRegionValues, setNewRegionValues] = useState(undefined);
     const [filtered, setFiltered] = useState(false);
-    const [AnnualBudget, setAnnualBudget] = useState(null);
+    const [AnnualBudget, setAnnualBudget] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
-    const [url, setUrl] = useState('/annual-budget-activity/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(2);
+    const [url, setUrl] = useState('/disaster-profile/');
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
     const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
     const [menuId, setMenuId] = useState();
     const [submenuId, setSubmenuId] = useState();
     const [subMenuTitle, setSubMenuTitle] = useState('All Reports');
     const [tableHeader, setTableHeader] = useState([]);
-
+    const [fiscalYear, setFiscalYear] = useState(null);
 
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
@@ -106,7 +116,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setNewRegionValues(Values);
         setFiltered(false);
     };
-    const { requests: { PalikaReportGetRequest, PalikaReportTableHeaderRequest } } = props;
+    const handleFiscalYear = (fiscal) => {
+        setFiscalYear(fiscal);
+    };
+    const { requests: { PalikaReportGetRequest, FiscalYearFetch } } = props;
 
     PalikaReportGetRequest.setDefaultParams({
         annualBudget: handleAnnualBudget,
@@ -115,18 +128,24 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         page: paginationQueryLimit,
 
     });
+    FiscalYearFetch.setDefaultParams({
+        fiscalYear: handleFiscalYear,
+    });
 
 
     let finalArr = [];
+
     if (AnnualBudget) {
         const finalAnnualBudget = AnnualBudget.map((item, i) => {
             const provinceDetails = provinces[i];
             const districtDetails = districts[i];
+            const fiscalYears = fiscalYear[i];
             const municipalityDetails = municipalities[i];
             if (municipalityDetails) {
-                return { municipalityName: municipalityDetails.title,
-                    provinceName: provinceDetails.title,
-                    districtName: districtDetails.title,
+                return { municipality: municipalityDetails.title,
+                    province: provinceDetails.title,
+                    district: districtDetails.title,
+                    fiscalYear: fiscalYears.titleEn,
                     item };
             }
             return null;
@@ -176,8 +195,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             });
             setClearFilter(true);
             setNewRegionValues({
-                adminLevel: 0,
-                geoarea: 0,
+                adminLevel: undefined,
+                geoarea: undefined,
             });
         } else {
             PalikaReportGetRequest.do({
@@ -266,11 +285,24 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     // Finding Header for table data
     const finalTableHeader = Object.keys(tableHeader).map(item => tableHeader[item].label);
+
     const TableHeaderForTable = finalTableHeader.filter(item => item !== 'ID' && item !== 'Created on'
-     && item !== 'Modified on' && item !== 'Remarks' && item !== 'Created by'
+     && item !== 'Modified on' && item !== 'Remarks'
+    && item !== 'Created by'
      && item !== 'Updated by');
-    console.log('Annual Budget>>>', AnnualBudget);
-    console.log('header>>>', TableHeaderForTable);
+
+    // if (AnnualBudget.length) {
+    //     const test = Object.keys(AnnualBudget[0])
+    //         .filter(item => item !== 'id' && item !== 'createdOn'
+    //     && item !== 'modifiedOn' && item !== 'createdBy'
+    // && item !== 'updatedBy'
+    //     && item !== 'Updated by');
+    // }
+
+    const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
+    && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
+
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -340,8 +372,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 <button
                                     type="submit"
                                     onClick={handleSubmit}
-                                    className={styles.submitBut}
-
+                                    className={
+                                        newRegionValues === undefined
+                                            ? styles.submitButDisabled : styles.submitBut}
+                                    disabled={newRegionValues
+                                         === undefined}
                                 >
                             Filter
                                 </button>
@@ -364,6 +399,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             tableData={finalArr}
                             paginationData={paginationParameters}
                             tableHeader={TableHeaderForTable}
+                            tableHeaderDataMatch={TableHeaderForMatchingData}
+
                         />
                         <div>
                             {paginationParameters && paginationParameters.count !== 0
@@ -376,7 +413,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     onPageChange={handlePageClick}
                                     marginPagesDisplayed={2}
                                     pageRangeDisplayed={5}
-                                    pageCount={Math.ceil(paginationParameters.count / 2)}
+                                    pageCount={Math.ceil(paginationParameters.count
+                                         / paginationQueryLimit)}
                                     containerClassName={styles.pagination}
                                     subContainerClassName={_cs(styles.pagination)}
                                     activeClassName={styles.active}
