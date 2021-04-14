@@ -60,11 +60,43 @@ const Preview = (props: Props) => {
             </div>
             <div className={styles.rowOne}>
                 <div className={styles.columnOneOne}>
-                    <div className={styles.title}>
+                    {/* <div className={styles.title}>
                         <h3>Table 1</h3>
                         <p>Something or the other</p>
+                    </div> */}
+                    <ul className={styles.rolesDesc}>
+                        <li>
+                            <h2>Palika Pramukh:</h2>
+                            {' '}
+                            Mr. John Doe
+                        </li>
+                        <li>
+                            <h2>Pramukh Prasasakiya Adhikrit:</h2>
+                            {' '}
+                            Mr Hari Bahadur
+                        </li>
+                        <li>
+                            <h2>Disaster focal person:</h2>
+                            {' '}
+                            Mr Ram Bahadur
+                        </li>
+                    </ul>
+                    <div className={styles.subTitle}>
+                        <h3>Local Disaster Management Commitee</h3>
+                        <div className={styles.dates}>
+                            Gathan Samiti: Lorem Ipsum
+                            <br />
+                            Sadasya Sankhya: 12
+                        </div>
                     </div>
-                    {reportData[0]}
+
+                    <h4>Members</h4>
+                    <ol className={styles.members}>
+                        <li>Nabanit ji , Mob: 98376437647, Nepal </li>
+                        <li>Arun ji, Mob: 98376437647, Nepal </li>
+                        <li>Biplab ji, Mob: 98376437647, Nepal </li>
+                    </ol>
+                    {/* {reportData[0]} */}
                 </div>
                 <div className={styles.columnOneTwo}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -155,6 +187,39 @@ const Preview = (props: Props) => {
                     </ResponsiveContainer>
                 </div>
             </div>
+            <div className={styles.rowFour}>
+                <div className={styles.columnFourOne}>
+                    <div className={styles.title}>
+                        <h3>Table 3</h3>
+                        <p>Something or the other</p>
+                    </div>
+                    {reportData[0]}
+                </div>
+                <div className={styles.columnFourTwo}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            width={500}
+                            height={300}
+                            data={barChart}
+                            margin={{
+                                top: 5,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Legend />
+                            <Bar dataKey="pv" fill="#8884d8" />
+                            <Bar dataKey="uv" fill="#82ca9d" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+
+
         </div>
 
 
