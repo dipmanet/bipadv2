@@ -224,6 +224,8 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             districtList,
             municipalityList,
             wardList,
+            selected,
+
         } = this.props;
 
         const newRegionValues = this.getRegionsFromValue(
@@ -242,11 +244,16 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedMunicipalityId: undefined,
             selectedWardId: undefined,
         });
+        const { checkFilterDisableButton } = this.props;
+
 
         this.handleRegionChange({
             adminLevel: selectedProvinceId ? 1 : undefined,
             geoarea: selectedProvinceId,
         });
+        if (!selectedProvinceId) {
+            checkFilterDisableButton(selectedProvinceId);
+        }
     }
 
     private handleDistrictChange = (selectedDistrictId: number) => {
@@ -257,6 +264,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedProvinceId } = this.state;
+
 
         this.handleRegionChange({
             adminLevel: selectedDistrictId ? 2 : 1,
@@ -294,6 +302,18 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
     });
 
+    // private handleTest=() => {
+    //     const { reset } = this.props;
+    //     if (reset) {
+    //         this.setState({
+    //             selectedProvinceId: undefined,
+    //             selectedDistrictId: undefined,
+    //             selectedMunicipalityId: undefined,
+    //         });
+    //     }
+    // }
+
+
     public render() {
         const {
             className,
@@ -302,16 +322,23 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             municipalityList,
             wardList,
             disabled,
-
+            reset,
             provinceInputClassName,
             districtInputClassName,
             municipalityInputClassName,
             wardInputClassName,
-
             wardsHidden,
             autoFocus,
             showHintAndError,
         } = this.props;
+        console.log('What came>>>', reset);
+        if (reset) {
+            this.setState({
+                selectedProvinceId: undefined,
+                selectedDistrictId: undefined,
+                selectedMunicipalityId: undefined,
+            });
+        }
         const {
             selectedProvinceId,
             selectedDistrictId,

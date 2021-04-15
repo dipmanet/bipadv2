@@ -17,7 +17,6 @@ import {
     methods,
 } from '#request';
 import PalikaReportTable from './components/palikaReportTable';
-import AddFormModal from './components/addFormModal';
 
 
 interface Props {
@@ -95,7 +94,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [subMenuTitle, setSubMenuTitle] = useState('All Reports');
     const [tableHeader, setTableHeader] = useState([]);
     const [fiscalYear, setFiscalYear] = useState(null);
-
+    const [isFilterButnDisable, setIsFilterButnDisable] = useState(true);
+    const [resetFilterProps, setResetFilterProps] = useState(false);
+    const [disableFilterButton, setDisableFilterButton] = useState(true);
     const handleAnnualBudget = (response) => {
         setAnnualBudget(response);
     };
@@ -114,7 +115,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
-        setFiltered(false);
+        // setFiltered(false);
+        setDisableFilterButton(false);
     };
     const handleFiscalYear = (fiscal) => {
         setFiscalYear(fiscal);
@@ -132,15 +134,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         fiscalYear: handleFiscalYear,
     });
 
-
+    console.log('This value>>>', newRegionValues);
     let finalArr = [];
 
     if (AnnualBudget) {
         const finalAnnualBudget = AnnualBudget.map((item, i) => {
-            const provinceDetails = provinces[i];
-            const districtDetails = districts[i];
-            const fiscalYears = fiscalYear[i];
-            const municipalityDetails = municipalities[i];
+            const provinceDetails = provinces.find(data => data.id === item.province);
+            const districtDetails = districts.find(data => data.id === item.district);
+            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
             if (municipalityDetails) {
                 return { municipality: municipalityDetails.title,
                     province: provinceDetails.title,
@@ -188,7 +190,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
 
     const handleSubmit = () => {
-        if (filtered) {
+        if (filtered && newRegionValues !== undefined) {
+            setResetFilterProps(true);
             PalikaReportGetRequest.do({
 
                 submitQuery: getRegionDetails(),
@@ -198,15 +201,22 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 adminLevel: undefined,
                 geoarea: undefined,
             });
+            setDisableFilterButton(true);
         } else {
             PalikaReportGetRequest.do({
 
                 submitQuery: getRegionDetails(newRegionValues),
             });
+            setClearFilter(false);
         }
-
-        setFiltered(true);
+        setFiltered(!filtered);
     };
+
+
+    useEffect(() => {
+        setResetFilterProps(false);
+    }, [clearFilter]);
+
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -238,12 +248,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
 
     const getSubmenuId = (subMenuid) => {
-        console.log('SubMenu Id', subMenuid);
         setSubmenuId(subMenuid);
     };
 
     const getMenuId = (menu) => {
-        console.log('Menu Id', menu);
         setMenuId(menu);
     };
     const getSubmenuTitle = (title) => {
@@ -302,7 +310,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
     && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
 
+    const handleCheckFilterDisableButton = (province) => {
+        setDisableFilterButton(true);
+        if (filtered && !province) {
+            PalikaReportGetRequest.do({
+                submitQuery: getRegionDetails(),
+            });
+            setFiltered(false);
+        }
+    };
 
+
+    console.log('What is disable filter button>>>', newRegionValues);
     return (
         <>
             <Page hideMap hideFilter />
@@ -351,7 +370,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             faramElementName="region"
                             wardsHidden
                             onChange={handleFormRegion}
-                            // value={{ adminLevel: 1, geoarea: 6 }}
+                            checkFilterDisableButton={handleCheckFilterDisableButton}
+                            reset={resetFilterProps}
+
                             // initialLoc={{ municipality,
                             //     district,
                             //     province }}
@@ -373,10 +394,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     type="submit"
                                     onClick={handleSubmit}
                                     className={
-                                        newRegionValues === undefined
+                                        disableFilterButton
                                             ? styles.submitButDisabled : styles.submitBut}
-                                    disabled={newRegionValues
-                                         === undefined}
+                                    disabled={disableFilterButton}
                                 >
                             Filter
                                 </button>

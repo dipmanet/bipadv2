@@ -602,7 +602,7 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
+        console.log('What is faram values>>>', faramValues);
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
