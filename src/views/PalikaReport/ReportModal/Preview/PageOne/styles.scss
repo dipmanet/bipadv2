@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 200mm;
     height: 280mm;
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
     padding: 4mm;
     // justify-content: center;
     padding: 10mm 10mm 0 10mm;
@@ -11,13 +11,13 @@
     // .previewComps{
     //     display: flex;
     //     // width: 50%;
-        // border: 1px solid gray;
+        // border: 1px solid #f5f5f5;
     //     padding: 20px;
     //     height: 70mm;
     // }
     // .chartContainer{
     //     width: 50%;
-        // border: 1px solid gray;
+        // border: 1px solid #f5f5f5;
     //     padding: 20px;
     //     height: 70mm;
 
@@ -42,7 +42,7 @@
         flex-direction: column;
         text-align: right;
         flex: 4;
-        // border: 1px solid gray;
+        // border: 1px solid #f5f5f5;
     }
     .location{
         padding-left: 20px;
@@ -57,11 +57,11 @@
     flex: 3;
     display: flex;
  
-    border: 1px solid gray;
+    border: 1px solid #f5f5f5;
     
     .columnOneOne{
         // flex:3;
-        // border: 1px solid gray;
+        // border: 1px solid #f5f5f5;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -100,7 +100,7 @@
         width: 105mm;
         padding: 20px 0;
        
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
     // justify-content: center;
     // align-items: center;
 
@@ -113,11 +113,11 @@
     justify-content: center;
     align-items: center;
 
-    border: 1px solid gray;
+    border: 1px solid #f5f5f5;
 
     .columnTwoOne{
         width: 105mm;
-    //   border: 1px solid gray;
+    //   border: 1px solid #f5f5f5;
         height: 90%;
         // display: flex;
         // justify-content: center;
@@ -127,7 +127,7 @@
 
     }
     .columnTwoTwo{
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
         height: 90%;
         flex: 1;
         // display: flex;
@@ -147,10 +147,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid gray;
+    border: 1px solid #f5f5f5;
     flex: 2;
     .columnThreeOne{
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
         height: 90%;
         flex: 1;
         // display: flex;
@@ -160,7 +160,7 @@
 
     }
     .columnThreeTwo{
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
         height: 90%;
         flex: 1;
         // display: flex;
@@ -174,10 +174,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid gray;
+    border: 1px solid #f5f5f5;
     flex: 2;
     .columnFourOne{
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
         height: 90%;
         flex: 1;
         // display: flex;
@@ -187,7 +187,7 @@
 
     }
     .columnfourTwo{
-    // border: 1px solid gray;
+    // border: 1px solid #f5f5f5;
         height: 90%;
         flex: 1;
         // display: flex;

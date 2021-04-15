@@ -121,6 +121,7 @@ const DetailsFirstPage = (props: Props) => {
                                 provinceInputClassName={styles.snprovinceinput}
                                 districtInputClassName={styles.sndistinput}
                                 municipalityInputClassName={styles.snmuniinput}
+
                             />
                         </div>
                         {errMsg && showErr ? <span className={styles.errMsg}>Please select at least one field</span> : ''}

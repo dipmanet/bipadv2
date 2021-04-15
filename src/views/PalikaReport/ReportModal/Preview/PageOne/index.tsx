@@ -1,47 +1,27 @@
 import React from 'react';
-import { ComposedChart,
-    Line,
-    Area,
-    Bar,
-    YAxis,
-    XAxis,
-    CartesianGrid,
-    Legend,
-    Scatter,
-    ResponsiveContainer,
-    BarChart } from 'recharts';
 import styles from './styles.scss';
 import LineData from './data';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Logo from '../../../govtLogo.svg';
+import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
+import Contacts from '../../Contacts';
+import DRRMembers from '../../Contacts/DRRMembers';
+import Simulation from '../../Simulation';
+import Organisation from '../../Organisation';
+import Inventory from '../../Inventory';
 
 interface Props{
     reportData: Element[];
 }
 
 const Preview = (props: Props) => {
-    const { reportData } = props;
     const {
-        lineData,
-        composedChart,
-        scatterChart,
-        barChart,
-    } = LineData;
+        generalData,
+    } = props;
+
     return (
         <div className={styles.previewContainer}>
-            {/* {reportData.map(comp => (
-                <div key={comp.name} className={styles.previewComps}>
-
-                    {comp}
-                </div>
-            ))} */}
-
             <div className={styles.header}>
-                {/* <img
-                    className={styles.logo}
-                    src={'https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg'}
-                    alt="Nepal Government Logo"
-                /> */}
                 <ScalableVectorGraphics
                     className={styles.logo}
                     src={Logo}
@@ -53,7 +33,7 @@ const Preview = (props: Props) => {
                     <p>Bardiya District, Lumbini Province</p>
                 </div>
                 <div className={styles.title}>
-                    <h3>Disaster Risk Reduction and Management Report </h3>
+                    <h3>{generalData.reportTitle}</h3>
                     <p>2077/01/12 Lorem Ipsum dolor femet graphics</p>
                 </div>
 
@@ -68,17 +48,17 @@ const Preview = (props: Props) => {
                         <li>
                             <h2>Palika Pramukh:</h2>
                             {' '}
-                            Mr. John Doe
+                            {generalData.mayor}
                         </li>
                         <li>
                             <h2>Pramukh Prasasakiya Adhikrit:</h2>
                             {' '}
-                            Mr Hari Bahadur
+                            {generalData.cao}
                         </li>
                         <li>
                             <h2>Disaster focal person:</h2>
                             {' '}
-                            Mr Ram Bahadur
+                            {generalData.focalPerson}
                         </li>
                     </ul>
                     <div className={styles.subTitle}>
@@ -86,7 +66,8 @@ const Preview = (props: Props) => {
                         <div className={styles.dates}>
                             Gathan Samiti: Lorem Ipsum
                             <br />
-                            Sadasya Sankhya: 12
+                            Sadasya Sankhya:
+                            {generalData.memberCount}
                         </div>
                     </div>
 
@@ -99,7 +80,7 @@ const Preview = (props: Props) => {
                     {/* {reportData[0]} */}
                 </div>
                 <div className={styles.columnOneTwo}>
-                    <ResponsiveContainer width="100%" height="100%">
+                    {/* <ResponsiveContainer width="100%" height="100%">
                         <ComposedChart
                             width={500}
                             height={400}
@@ -120,103 +101,33 @@ const Preview = (props: Props) => {
                             <Line type="monotone" dataKey="uv" stroke="#ff7300" />
                             <Scatter dataKey="cnt" fill="red" />
                         </ComposedChart>
-                    </ResponsiveContainer>
+                    </ResponsiveContainer> */}
+                    <ProgrammeAndPolicies />
                 </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart
-                            width={500}
-                            height={400}
-                            data={scatterChart}
-                            margin={{
-                                top: 20,
-                                right: 80,
-                                bottom: 20,
-                                left: 20,
-                            }}
-                        >
-                            <CartesianGrid stroke="#f5f5f5" />
-                            <Legend />
-                            <XAxis dataKey="index" type="number" label={{ value: 'Index', position: 'insideBottomRight', offset: 0 }} />
-                            <YAxis unit="ms" type="number" label={{ value: 'Time', angle: -90, position: 'insideLeft' }} />
-                            <Scatter name="red" dataKey="red" fill="red" />
-                            <Scatter name="blue" dataKey="blue" fill="blue" />
-                            <Line dataKey="blueLine" stroke="blue" dot={false} activeDot={false} legendType="none" />
-                            <Line dataKey="redLine" stroke="red" dot={false} activeDot={false} legendType="none" />
-                        </ComposedChart>
-                    </ResponsiveContainer>
+                    <Contacts />
                 </div>
                 <div className={styles.columnTwoTwo}>
                     <div className={styles.title}>
-                        <h3>Table 2</h3>
-                        <p>Something or the other</p>
+                        <DRRMembers />
                     </div>
-                    {reportData[1]}
                 </div>
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                    <div className={styles.title}>
-                        <h3>Table 3</h3>
-                        <p>Something or the other</p>
-                    </div>
-                    {reportData[0]}
+                    <Simulation />
                 </div>
                 <div className={styles.columnThreeTwo}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            width={500}
-                            height={300}
-                            data={barChart}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Legend />
-                            <Bar dataKey="pv" fill="#8884d8" />
-                            <Bar dataKey="uv" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    <Organisation />
                 </div>
             </div>
             <div className={styles.rowFour}>
                 <div className={styles.columnFourOne}>
-                    <div className={styles.title}>
-                        <h3>Table 3</h3>
-                        <p>Something or the other</p>
-                    </div>
-                    {reportData[0]}
+                    <Inventory width={'50%'} />
                 </div>
-                <div className={styles.columnFourTwo}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            width={500}
-                            height={300}
-                            data={barChart}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Legend />
-                            <Bar dataKey="pv" fill="#8884d8" />
-                            <Bar dataKey="uv" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+                <div className={styles.columnFourTwo} />
             </div>
 
 

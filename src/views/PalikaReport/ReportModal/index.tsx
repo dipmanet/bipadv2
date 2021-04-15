@@ -9,9 +9,13 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import Budget from './Budget';
 import BudgetActivity from './BudgetActivity';
-import Preview from './Preview/PageOne';
-import PreviewPage from './Preview/PageTwo';
+import PreviewPageOne from './Preview/PageOne';
+import PreviewPageTwo from './Preview/PageTwo';
 import General from './General';
+import ProgrammeAndPolicies from './ProgrammeAndPolicies';
+import Contacts from './Contacts';
+import DRRMembers from './Contacts/DRRMembers';
+import Inventory from './Inventory';
 
 
 interface Props {
@@ -32,15 +36,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     } = props;
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
-        // eslint-disable-next-line no-var
-        // var pdf = new JsPDF();
-
         const divToDisplay = document.getElementById('reportPreview');
-        // const divToDisplay1 = document.getElementById('reportPreview1');
         html2canvas(divToDisplay).then((canvas) => {
-            // const divImage = canvas.toDataURL('image/png');
-
-            // pdf.addImage(divImage, 'PNG', 5, 5);
             const imgData = canvas.toDataURL('image/png');
 
             /*
@@ -67,14 +64,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             doc.save('whater.pdf');
         });
-        // pdf.addPage();
-        // html2canvas(divToDisplay1).then((canvas) => {
-        //     const divImage1 = canvas.toDataURL('image/png');
-
-        //     pdf.addImage(divImage1, 'PNG', 5, 5);
-        // });
-
-        // pdf.save('preview.pdf');
     };
 
     const [reportTitle, setreportTitle] = useState('');
@@ -110,6 +99,17 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const handleMemberCount = (val: React.ChangeEvent<HTMLInputElement>) => {
         setmemberCount(val.currentTarget.value);
     };
+
+    const getGeneralData = () => ({
+        reportTitle,
+        datefrom,
+        dateTo,
+        mayor,
+        cao,
+        focalPerson,
+        formationDate,
+        memberCount,
+    });
 
     return (
         <>
@@ -223,10 +223,36 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     : ''
             }
             {
-                (keyTab > 1 && keyTab <= 10
-               && showTabs)
+                (keyTab === 2)
                     ? (
                         <BudgetActivity />
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 3
+               && showTabs)
+                    ? (
+                        <ProgrammeAndPolicies />
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 5
+               && showTabs)
+                    ? (
+                        <Inventory width={'100%'} height={'50%'} />
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 7
+               && showTabs)
+                    ? (
+                        <>
+                            <Contacts />
+                            <DRRMembers />
+                        </>
                     )
                     : ''
             }
@@ -244,14 +270,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </button>
 
                             <div id={'reportPreview'}>
-                                <Preview
-                                    reportData={[<Budget />, <BudgetActivity />]}
+                                <PreviewPageOne
+                                    generalData={getGeneralData()}
 
                                 />
-                                <PreviewPage
+                                {/* <PreviewPageTwo
                                     reportData={[<Budget />, <BudgetActivity />]}
 
-                                />
+                                /> */}
 
                             </div>
                         </div>

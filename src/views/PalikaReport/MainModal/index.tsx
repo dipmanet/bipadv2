@@ -217,19 +217,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
-                                { tabSelected < Object.keys(tabs).length - 1
-                                && tabSelected !== 0
-                                   && (
-                                       <PrimaryButton
-                                           type="button"
-                                           className={styles.agreeBtn}
-                                           onClick={handleDataAdd}
-                                       >
-                                           {`Add ${tabs[tabSelected].content} Data`}
-
-                                       </PrimaryButton>
-                                   )
-                                }
                                 <div className={styles.nextPrevBtns}>
                                     {
                                         tabSelected < Object.keys(tabs).length - 1
@@ -263,6 +250,20 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
                                 </div>
 
+
+                                { tabSelected < Object.keys(tabs).length - 1
+                                && tabSelected !== 0
+                                   && (
+                                       <PrimaryButton
+                                           type="button"
+                                           className={styles.agreeBtn}
+                                           onClick={handleDataAdd}
+                                       >
+                                           {`Add ${tabs[tabSelected].content} Data`}
+
+                                       </PrimaryButton>
+                                   )
+                                }
 
                             </div>
                         )}
