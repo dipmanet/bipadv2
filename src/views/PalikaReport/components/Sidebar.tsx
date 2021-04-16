@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, reverseRoute } from '@togglecorp/fujs';
+import * as ReachRouter from '@reach/router';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 
@@ -9,101 +10,78 @@ const Sidebar = (props) => {
     const [isSubmenuClicked, setIsSubmenuClicked] = useState(true);
     const [isIndicatorClicked, setIsIndicatorClicked] = useState(true);
     const [selectedSubMenuId, setSelectedSubMenuId] = useState(1);
-    const [selectedSubmenuIndex, setSelectedSubmenuIndex] = useState();
     const [initialRender, setInitialRender] = useState(true);
-
-    // const Data = [{
-    //     id: 1,
-    //     title: 'Palika Reports',
-    //     components: [{ id: 1,
-    //         title: 'All Reports',
-    //         url: '/disaster-profile/',
-    //         indicators: [{ id: 1, title: 'Palika Report count' },
-    //             { id: 2, title: 'Palika 1' }, { id: 3, title: 'Palika 2' }] },
-    //     { id: 2,
-    //         title: 'My Reports',
-    //         url: '/disaster-profile/',
-    //         indicators: [{ id: 1, title: 'my Report count' },
-    //             { id: 2, title: 'Report 1' }, { id: 3, title: 'Report 2' }] }],
-    // }, { id: 2,
-    //     title: 'Budget',
-    //     components: [{ id: 1,
-    //         title: 'Annual Budgets',
-    //         url: '/annual-budget/',
-    //         indicators: [{ id: 1, title: 'Palika Report count' },
-    //             { id: 2, title: 'Paliks1' }, { id: 3, title: 'Palika Audit' }] },
-    //     { id: 2,
-    //         title: 'Annual Budget Activities',
-    //         url: '/annual-budget-activity/',
-    //         indicators: [{ id: 1, title: 'Palika Report count' },
-    //             { id: 2, title: 'Edition1' }, { id: 3, title: 'Edition2' }] }] ,
-    // { id: 3,
-    //     title: 'Annual Policy and Programmes',
-    //     url: '/annual-policy-program/',
-    //     indicators: [{ id: 1, title: 'Palika Report count' },
-    //         { id: 2, title: 'Edition1' }, { id: 3, title: 'Edition2' }] }]},
-
-    // {
-    //     id: 3,
-    //     title: 'Simulation',
-    //     components: [{ id: 1,
-    //         title: 'Simulations',
-    //         url: '/simulation/',
-    //         indicators: [{ id: 1, title: 'Final Palika' },
-    //             { id: 2, title: 'Final 2 palika' }, { id: 3, title: 'extra palika' }] },
-    //     { id: 2,
-    //         title: 'Annual demands',
-    //         url: '/annual-budget-activity/',
-    //         indicators: [{ id: 1, title: 'Palika Report count' },
-    //             { id: 2, title: 'Confirm palika' }, { id: 3, title: 'Rara palika' }] }],
-    // }];
+    const [menuSlug, setMenuSlug] = useState('');
+    const [subMenuSlug, setSubMenuSlug] = useState('');
 
     const Data = [{
         id: 1,
         title: 'Palika Reports',
+        slug: 'palika-reports',
         components: [{ id: 1,
             title: 'All Reports',
-            url: '/disaster-profile/' },
+            url: '/disaster-profile/',
+            slug: 'all-reports' },
         { id: 2,
             title: 'My Reports',
-            url: '/disaster-profile/' }],
+            url: '/disaster-profile/',
+            slug: 'my-reports' }],
     }, { id: 2,
         title: 'Budget',
+        slug: 'budget',
         components: [{ id: 1,
             title: 'Annual Budgets',
-            url: '/annual-budget/' },
+            url: '/annual-budget/',
+            slug: 'annual-budget' },
         { id: 2,
             title: 'Annual Budget Activities',
-            url: '/annual-budget-activity/' },
+            url: '/annual-budget-activity/',
+            slug: 'annual-budget-activities' },
         { id: 3,
             title: 'Annual Policy and Programmes',
-            url: '/annual-policy-program/' }] },
+            url: '/annual-policy-program/',
+            slug: 'annual-policy-and-programmes' }] },
 
     { id: 3,
         title: 'Simulation',
+        slug: 'simulation',
         components: [{ id: 1,
             title: 'All Simulations',
-            url: '/simulation/' }] },
+            url: '/simulation/',
+            slug: 'all-simulations' }] },
     { id: 4,
         title: 'Risk Reduction',
+        slug: 'risk-reduction',
         components: [{ id: 1,
             title: 'All Risk Reductions',
-            url: '/risk-reduction/' }] },
+            url: '/risk-reduction/',
+            slug: 'all-risk-reduction' }] },
     { id: 5,
         title: 'Recovery',
+        slug: 'recovery',
         components: [{ id: 1,
             title: 'All Recoveries',
-            url: '/recovery/' }] },
+            url: '/recovery/',
+            slug: 'all-recoveries' }] },
     { id: 6,
         title: 'Research',
+        slug: 'research',
         components: [{ id: 1,
             title: 'All Researches',
-            url: '/research/' }] },
+            url: '/research/',
+            slug: 'all-researches' }] },
+    { id: 7,
+        title: 'Organization',
+        slug: 'organization',
+        components: [{ id: 1,
+            title: 'All Organizations',
+            url: '/organization/',
+            slug: 'all-organizations' }] },
 
 
     ];
 
-    const handleSelectMenu = (index, id) => {
+    const handleSelectMenu = (index, id, name) => {
         setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
         setSelectedMenuId(id);
@@ -111,20 +89,29 @@ const Sidebar = (props) => {
         props.getmenuId(id);
         props.getsubmenuId(null);
     };
-    const handleSelectSubmenu = (id, url, title) => {
+    const handleSelectSubmenu = (id, url, title, slug, menumainSlug) => {
         setSelectedSubMenuId(id);
         setIsIndicatorClicked(true);
         props.urlData(url);
         props.getsubmenuId(id);
         props.getsubmenuTitle(title);
+        setMenuSlug(menumainSlug);
+        setSubMenuSlug(slug);
+        ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
-    console.log('submenu id>>>', selectedSubMenuId);
+
+    // console.log('Test', Data);
+    // if (menuSlug) {
+    //     const Test = Data.filter(item => item.slug === menuSlug);
+    //     const finalTest = Test.components.filter(item => item.slug === subMenuSlug);
+    //     console.log('What is this>>>>', finalTest);
+    // }
 
     useEffect(() => {
         const InitialRender = () => {
             if (!initialRender) {
                 setIsIndicatorClicked(false);
-                console.log('This');
+
                 // setSelectedSubMenuId(1);
 
                 // const linkUrl = selectedSubmenu.filter(item => item.id
@@ -138,7 +125,12 @@ const Sidebar = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMenuId]);
 
+    // const handleDataAdd = () => {
 
+    //     ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+    // { state: { showForm: true }, replace: true });
+    //     setCarKeys(1);
+    // };
     return (
         <div>
             <ul className={styles.orderList}>
@@ -162,9 +154,11 @@ const Sidebar = (props) => {
                                             ) : styles.subMenu}
 
                                         onClick={() => handleSelectSubmenu(data.id,
-                                            data.url, data.title)}
+                                            data.url, data.title, data.slug, item.slug)}
                                     >
+
                                         {data.title}
+
 
                                     </button>
                                 </div>

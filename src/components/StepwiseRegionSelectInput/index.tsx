@@ -244,16 +244,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedMunicipalityId: undefined,
             selectedWardId: undefined,
         });
-        const { checkFilterDisableButton } = this.props;
+        const { checkFilterButtonProvince } = this.props;
 
 
         this.handleRegionChange({
             adminLevel: selectedProvinceId ? 1 : undefined,
             geoarea: selectedProvinceId,
         });
-        if (!selectedProvinceId) {
-            checkFilterDisableButton(selectedProvinceId);
-        }
+
+        checkFilterButtonProvince(selectedProvinceId);
     }
 
     private handleDistrictChange = (selectedDistrictId: number) => {
@@ -264,12 +263,13 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedProvinceId } = this.state;
-
+        const { checkFilterButtonDistrict } = this.props;
 
         this.handleRegionChange({
             adminLevel: selectedDistrictId ? 2 : 1,
             geoarea: selectedDistrictId || selectedProvinceId,
         });
+        checkFilterButtonDistrict(selectedDistrictId);
     }
 
     private handleMunicipalityChange = (selectedMunicipalityId: number) => {
@@ -279,10 +279,12 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedDistrictId } = this.state;
+        const { checkFilterButtonMun } = this.props;
         this.handleRegionChange({
             adminLevel: selectedMunicipalityId ? 3 : 2,
             geoarea: selectedMunicipalityId || selectedDistrictId,
         });
+        checkFilterButtonMun(selectedMunicipalityId);
     }
 
     private handleWardChange = (selectedWardId: number) => {
@@ -331,7 +333,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             autoFocus,
             showHintAndError,
         } = this.props;
-        console.log('What came>>>', reset);
+
         if (reset) {
             this.setState({
                 selectedProvinceId: undefined,

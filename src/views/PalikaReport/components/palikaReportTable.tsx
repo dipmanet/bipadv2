@@ -2,6 +2,7 @@ import React from 'react';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 const PalikaReportTable = (props) => {
     const { paginationData, tableData, tableHeader, tableHeaderDataMatch } = props;
@@ -14,20 +15,30 @@ const PalikaReportTable = (props) => {
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
-                            {tableHeader.map((item, i) => (
-                                <th key={item.i}>{item}</th>
-                            ))}
+                            {tableData
+                                 && tableHeader.map((item, i) => (
+                                     <th key={item.i}>{item}</th>
+                                 ))}
                         </tr>
-                        {tableData.map(data => (
-                            <tr key={data.item.id}>
-                                {tableHeaderDataMatch.map(title => (
-                                    <td key={title}>{title === 'province' || title === 'district' || title === 'municipality' || title === 'fiscalYear' ? data[title] : String(data.item[title])}</td>
-                                ))}
-                            </tr>
-                        ))}
+
+                        {tableData
+                             && tableData.map(data => (
+                                 <tr key={data.item.id}>
+                                     {tableHeaderDataMatch.map(title => (
+                                         <td key={title}>
+                                             {title === 'province'
+                                        || title === 'district'
+                                         || title === 'municipality'
+                                          || title === 'fiscalYear'
+                                                 ? data[title] : String(data.item[title])}
+
+                                         </td>
+                                     ))}
+                                 </tr>
+                             ))}
                     </tbody>
                 </table>
-                {tableData && tableData.length !== 0
+                {/* {tableData && tableData.length !== 0
                 && (
                     <ReactHTMLTableToExcel
                         id="test-table-xls-button"
@@ -37,7 +48,7 @@ const PalikaReportTable = (props) => {
                         sheet="tablexls"
                         buttonText="XLS"
                     />
-                )}
+                )} */}
                 {tableData && tableData.length === 0
 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 

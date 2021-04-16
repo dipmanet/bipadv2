@@ -97,6 +97,14 @@ export const routeSettings: SomeRoute[] = [
         disabled: false,
         iconName: 'textDocument',
     },
+    // {
+    //     name: 'subMenu',
+    //     title: 'palikaReport subMenu',
+    //     path: '/palika-report/:menu/:subMenu/',
+    //     load: () => import('../views/PalikaReport'),
+    //     navbar: false,
+
+    // },
     {
         name: 'fourHundredThree',
         title: '403',

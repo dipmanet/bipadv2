@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
 import styles from './styles.scss';
@@ -95,8 +96,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [isFilterButnDisable, setIsFilterButnDisable] = useState(true);
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
-    const handleAnnualBudget = (response) => {
-        setAnnualBudget(response);
+    const [fetchedData, setFetechedData] = useState([]);
+    const handleFetchedData = (response) => {
+        setFetechedData(response);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
@@ -122,7 +124,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const { requests: { PalikaReportGetRequest, FiscalYearFetch } } = props;
 
     PalikaReportGetRequest.setDefaultParams({
-        annualBudget: handleAnnualBudget,
+        annualBudget: handleFetchedData,
         paginationParameters: handlePaginationParameters,
         url,
         page: paginationQueryLimit,
@@ -132,24 +134,33 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         fiscalYear: handleFiscalYear,
     });
 
-    let finalArr = [];
 
-    if (AnnualBudget) {
-        const finalAnnualBudget = AnnualBudget.map((item, i) => {
+    let finalArr = [];
+    if (fetchedData) {
+        const finalfetchedData = fetchedData.map((item, i) => {
             const provinceDetails = provinces.find(data => data.id === item.province);
             const districtDetails = districts.find(data => data.id === item.district);
+
             const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+
+
             const municipalityDetails = municipalities.find(data => data.id === item.municipality);
             if (municipalityDetails) {
                 return { municipality: municipalityDetails.title,
                     province: provinceDetails.title,
                     district: districtDetails.title,
-                    fiscalYear: fiscalYears.titleEn,
+                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
                     item };
             }
+            if (!provinceDetails) {
+                return {
+                    item,
+                };
+            }
+
             return null;
         });
-        finalArr = [...new Set(finalAnnualBudget)];
+        finalArr = [...new Set(finalfetchedData)];
     }
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
@@ -306,12 +317,27 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
     && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
 
-    const handleCheckFilterDisableButton = (province) => {
-        setDisableFilterButton(true);
-        if (filtered && !province) {
+    const handleCheckFilterDisableButtonForProvince = (province) => {
+        if (!province) {
+            setDisableFilterButton(true);
             PalikaReportGetRequest.do({
                 submitQuery: getRegionDetails(),
             });
+            setFiltered(false);
+        } else if (province) {
+            setDisableFilterButton(false);
+            setFiltered(false);
+        }
+    };
+    const handleCheckFilterDisableButtonForDistrict = (district) => {
+        if (district) {
+            setDisableFilterButton(false);
+            setFiltered(false);
+        }
+    };
+    const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
+        if (municipality) {
+            setDisableFilterButton(false);
             setFiltered(false);
         }
     };
@@ -362,13 +388,16 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         <h1>{subMenuTitle}</h1>
                     </div>
                     <div className={styles.rightContainerFilters}>
+
                         <StepwiseRegionSelectInput
                             className={
                                 _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                             faramElementName="region"
                             wardsHidden
                             onChange={handleFormRegion}
-                            checkFilterDisableButton={handleCheckFilterDisableButton}
+                            checkFilterButtonProvince={handleCheckFilterDisableButtonForProvince}
+                            checkFilterButtonDistrict={handleCheckFilterDisableButtonForDistrict}
+                            checkFilterButtonMun={handleCheckFilterDisableButtonForMunicipality}
                             reset={resetFilterProps}
 
                             // initialLoc={{ municipality,
@@ -420,23 +449,36 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             tableHeaderDataMatch={TableHeaderForMatchingData}
 
                         />
-                        <div>
+                        <div className={styles.paginationDownload}>
                             {paginationParameters && paginationParameters.count !== 0
                             && (
-                                <ReactPaginate
-                                    previousLabel={'prev'}
-                                    nextLabel={'next'}
-                                    breakLabel={'...'}
-                                    breakClassName={'break-me'}
-                                    onPageChange={handlePageClick}
-                                    marginPagesDisplayed={2}
-                                    pageRangeDisplayed={5}
-                                    pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
-                                    containerClassName={styles.pagination}
-                                    subContainerClassName={_cs(styles.pagination)}
-                                    activeClassName={styles.active}
+                                <ReactHTMLTableToExcel
+                                    id="test-table-xls-button"
+                                    className={styles.downloadTableXlsButton}
+                                    table="table-to-xls"
+                                    filename="tablexls"
+                                    sheet="tablexls"
+                                    buttonText="DOWNLOAD XLS"
                                 />
+                            )}
+                            {paginationParameters && paginationParameters.count !== 0
+                            && (
+                                <div className={styles.paginationRight}>
+                                    <ReactPaginate
+                                        previousLabel={'prev'}
+                                        nextLabel={'next'}
+                                        breakLabel={'...'}
+                                        breakClassName={'break-me'}
+                                        onPageChange={handlePageClick}
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        pageCount={Math.ceil(paginationParameters.count
+                                         / paginationQueryLimit)}
+                                        containerClassName={styles.pagination}
+                                        subContainerClassName={_cs(styles.pagination)}
+                                        activeClassName={styles.active}
+                                    />
+                                </div>
                             )}
                         </div>
 
