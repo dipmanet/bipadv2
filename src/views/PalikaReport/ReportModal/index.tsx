@@ -16,6 +16,7 @@ import ProgrammeAndPolicies from './ProgrammeAndPolicies';
 import Contacts from './Contacts';
 import DRRMembers from './Contacts/DRRMembers';
 import Inventory from './Inventory';
+import DamageAndLoss from './DamageAndLoss';
 
 
 interface Props {
@@ -241,7 +242,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 5
                && showTabs)
                     ? (
-                        <Inventory width={'100%'} height={'50%'} />
+                        <Inventory width={'100%'} height={'60%'} />
                     )
                     : ''
             }
@@ -253,6 +254,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             <Contacts />
                             <DRRMembers />
                         </>
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 10
+               && showTabs)
+                    ? (
+                        <DamageAndLoss />
                     )
                     : ''
             }
@@ -274,10 +283,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     generalData={getGeneralData()}
 
                                 />
-                                {/* <PreviewPageTwo
+                                <PreviewPageTwo
                                     reportData={[<Budget />, <BudgetActivity />]}
 
-                                /> */}
+                                />
 
                             </div>
                         </div>

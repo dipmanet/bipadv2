@@ -3,25 +3,7 @@
     flex-direction: column;
     width: 200mm;
     height: 280mm;
-    // border: 1px solid #f5f5f5;
-    padding: 4mm;
-    // justify-content: center;
     padding: 10mm 10mm 0 10mm;
-
-    // .previewComps{
-    //     display: flex;
-    //     // width: 50%;
-        // border: 1px solid #f5f5f5;
-    //     padding: 20px;
-    //     height: 70mm;
-    // }
-    // .chartContainer{
-    //     width: 50%;
-        // border: 1px solid #f5f5f5;
-    //     padding: 20px;
-    //     height: 70mm;
-
-    // }
 
 .header{
     display: flex;
@@ -54,21 +36,21 @@
 }
 
 .rowOne{
-    flex: 3;
+    flex: 2;
     display: flex;
- 
     border: 1px solid #f5f5f5;
+    align-items: space-between;
     
     .columnOneOne{
         // flex:3;
         // border: 1px solid #f5f5f5;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        height: 90%;
+        justify-content: center;
+        // height: 90%;
         // display: flex;
         width: 105mm;
-        padding: 20px 0;
+        padding: 5px;
         .rolesDesc{
             list-style: none;
             margin: 0;
@@ -95,25 +77,25 @@
     }
     .columnOneTwo{
         // flex:2;
-        height: 100%;
-        // display: flex;
+        // height: 100%;
+        display: flex;
+        flex-direction: column;
         width: 105mm;
-        padding: 20px 0;
-       
-    // border: 1px solid #f5f5f5;
-    // justify-content: center;
-    // align-items: center;
-
+        padding: 5px;
+        // border: 1px solid red;
+        align-items: flex-end;
+        h2{
+            position: relative;
+            left: 50px;
+        }
     }
 }
 
 .rowTwo{
+    flex: 1;
     display: flex;
-    flex: 2;
-    justify-content: center;
-    align-items: center;
-
     border: 1px solid #f5f5f5;
+    align-items: space-between;
 
     .columnTwoOne{
         width: 105mm;
@@ -123,17 +105,17 @@
         // justify-content: center;
         // align-items: center;
 
-        padding: 20px 0;
+        padding: 5px 0;
 
     }
     .columnTwoTwo{
-    // border: 1px solid #f5f5f5;
-        height: 90%;
-        flex: 1;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        width: 105mm;
+        padding: 5px;
+        // border: 1px solid red;
+        align-items: flex-end;
+        padding: 5px 0;
         table{
             // border: 1px solid blue;
             display: block;
@@ -144,11 +126,10 @@
 }
 
 .rowThree{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #f5f5f5;
     flex: 2;
+    display: flex;
+    border: 1px solid #f5f5f5;
+    align-items: space-between;
     .columnThreeOne{
     // border: 1px solid #f5f5f5;
         height: 90%;
@@ -156,26 +137,30 @@
         // display: flex;
         // justify-content: center;
         // align-items: center;
-        padding: 20px 0;
+        padding: 5px 0;
 
     }
     .columnThreeTwo{
-    // border: 1px solid #f5f5f5;
-        height: 90%;
-        flex: 1;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        width: 105mm;
+        padding: 5px;
+        border: 1px solid red;
+        align-items: center;
+        justify-content: center;
+        h2{
+            width: 60%;
+        border: 1px solid red;
+            position: relative;
+        }
     }
 }
 
 .rowFour{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #f5f5f5;
     flex: 2;
+    display: flex;
+    border: 1px solid #f5f5f5;
+    align-items: space-between;
     .columnFourOne{
     // border: 1px solid #f5f5f5;
         height: 90%;
@@ -183,17 +168,16 @@
         // display: flex;
         // justify-content: center;
         // align-items: center;
-        padding: 20px 0;
+        padding: 5px 0;
 
     }
     .columnfourTwo{
-    // border: 1px solid #f5f5f5;
-        height: 90%;
-        flex: 1;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        width: 105mm;
+        padding: 5px;
+        // border: 1px solid red;
+        align-items: flex-end;
     }
 }
 

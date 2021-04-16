@@ -11,7 +11,7 @@ const Contacts = (props: Props) => {
     console.log(props);
     return (
         <div className={styles.tabsPageContainer}>
-            <h2>Members Contact Info</h2>
+            <p><strong>Members Contact Info</strong></p>
             <Table striped bordered hover size="md">
                 <thead>
                     <tr>

@@ -63,7 +63,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/',
-
         method: methods.GET,
         onMount: true,
 
@@ -134,7 +133,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         fiscalYear: handleFiscalYear,
     });
 
-    console.log('This value>>>', newRegionValues);
     let finalArr = [];
 
     if (AnnualBudget) {
@@ -282,7 +280,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     headerData.then(resp => setTableHeader(resp.actions.GET));
                 })
                 .catch((err) => {
-                    console.log(err);
                 });
         }
 
@@ -321,7 +318,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
 
 
-    console.log('What is disable filter button>>>', newRegionValues);
     return (
         <>
             <Page hideMap hideFilter />

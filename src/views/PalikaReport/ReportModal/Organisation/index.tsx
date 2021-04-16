@@ -9,7 +9,11 @@ const Organisation = (props: Props) => {
     console.log(props);
     return (
         <div className={styles.tabsPageContainer}>
-            <h3> Disaster minimisation and reconstruction organisations</h3>
+            <p>
+                <strong>
+                    Disaster minimisation and reconstruction organisations
+                </strong>
+            </p>
             <Table striped bordered hover size="md">
                 <thead>
                     <tr>
@@ -30,15 +34,6 @@ const Organisation = (props: Props) => {
                         <td>3</td>
                         <td>Some organisation</td>
                     </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Some organisation</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Some organisation</td>
-                    </tr>
-
                 </tbody>
             </Table>
 

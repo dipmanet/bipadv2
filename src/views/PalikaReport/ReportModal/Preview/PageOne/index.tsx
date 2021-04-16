@@ -33,7 +33,7 @@ const Preview = (props: Props) => {
                     <p>Bardiya District, Lumbini Province</p>
                 </div>
                 <div className={styles.title}>
-                    <h3>{generalData.reportTitle}</h3>
+                    <p><strong>{generalData.reportTitle}</strong></p>
                     <p>2077/01/12 Lorem Ipsum dolor femet graphics</p>
                 </div>
 
@@ -41,7 +41,7 @@ const Preview = (props: Props) => {
             <div className={styles.rowOne}>
                 <div className={styles.columnOneOne}>
                     {/* <div className={styles.title}>
-                        <h3>Table 1</h3>
+                        <p>Table 1</p>
                         <p>Something or the other</p>
                     </div> */}
                     <ul className={styles.rolesDesc}>
@@ -62,7 +62,7 @@ const Preview = (props: Props) => {
                         </li>
                     </ul>
                     <div className={styles.subTitle}>
-                        <h3>Local Disaster Management Commitee</h3>
+                        <p>Local Disaster Management Commitee</p>
                         <div className={styles.dates}>
                             Gathan Samiti: Lorem Ipsum
                             <br />

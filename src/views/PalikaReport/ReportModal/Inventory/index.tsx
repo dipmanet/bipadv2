@@ -23,7 +23,7 @@ const Inventory = (props: Props) => {
     const { width, height } = props;
     return (
         <>
-            <h2>Disaster Inventory</h2>
+            <p><strong>Disaster Inventory</strong></p>
             <ResponsiveContainer width={width} height={height}>
                 <BarChart
                     width={300}

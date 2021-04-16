@@ -11,7 +11,7 @@ const DRRMembers = (props: Props) => {
     console.log(props);
     return (
         <div className={styles.tabsPageContainer}>
-            <h1>DRR Members</h1>
+            <h2>DRR Members</h2>
             <Table striped bordered hover size="md">
                 <thead>
                     <tr>
