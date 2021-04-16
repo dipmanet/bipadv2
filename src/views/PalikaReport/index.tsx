@@ -26,7 +26,6 @@ const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
-    wards: wardsSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -328,6 +327,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 showReportModal={showReportModal}
                 hideWelcomePage={hideWelcomePage}
                 setShowReportModal={setShowReportModal}
+                provinces={provinces}
+                districts={districts}
+                municipalities={municipalities}
             />
 
 

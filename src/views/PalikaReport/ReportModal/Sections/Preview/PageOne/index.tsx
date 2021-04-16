@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.scss';
 import LineData from './data';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Logo from '../../../govtLogo.svg';
+import Logo from '../../govtLogo.svg';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import Contacts from '../../Contacts';
 import DRRMembers from '../../Contacts/DRRMembers';

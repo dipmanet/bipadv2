@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
@@ -12,13 +12,25 @@ import ReportModal from '../ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+
+import {
+    userSelector,
+
+    carKeysSelector,
+} from '#selectors';
+
+import {
     setCarKeysAction,
 } from '#actionCreators';
 
-import {
-    carKeysSelector,
-} from '#selectors';
+
 import Icon from '#rscg/Icon';
+
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setCarKeys: params => dispatch(setCarKeysAction(params)),
@@ -26,6 +38,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     carKeys: carKeysSelector(state),
+    user: userSelector(state),
 });
 
 interface Props {
@@ -35,6 +48,8 @@ interface Props {
     hideWelcomePage: () => void;
     setShowReportModal: (arg0: boolean) => void;
     setCarKeys: number;
+    requests: Request;
+    reportdata: [];
 }
 
 type TabContent =
@@ -49,7 +64,55 @@ type TabContent =
 |'Relief'
 |'Incident'
 |'Loss & Damage'
+|'Simulation'
+|'Preparedness'
+|'Research'
+|'Simulation'
 |'Preview';
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+    PalikaReportGetRequest: {
+        url: ({ params }) => `${params.url}`,
+        query: ({ params, props }) => {
+            if (params) {
+                return {
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
+                    limit: 5,
+                };
+            }
+
+
+            return { limit: params.page, offset: params.offset };
+        },
+        method: methods.GET,
+        onMount: false,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.reportData) {
+                params.reportData(citizenReportList);
+            }
+        },
+    },
+    FiscalYearFetch: {
+        url: '/nepali-fiscal-year/',
+        method: methods.GET,
+        onMount: false,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+            params.fiscalYear(citizenReportList);
+        },
+    },
+
+};
 
 
 const MainModal: React.FC<Props> = (props: Props) => {
@@ -58,14 +121,33 @@ const MainModal: React.FC<Props> = (props: Props) => {
         showReportModal,
         hideWelcomePage,
         setShowReportModal,
+        user,
     } = props;
 
+    const [reportData, setReportData] = useState([]);
+    const { profile: {
+        municipality,
+        district,
+        province,
+    } } = user;
+    console.log('our report data');
+    const handleReportData = (response) => {
+        setReportData(response);
+    };
+
+    // props.requests.PalikaReportGetRequest.setDefaultParams({
+    //     reportData: handleReportData,
+    // });
+
     const [tabSelected, setTabSelected] = useState(0);
+    const [tableHeader, setTableHeader] = useState([]);
     const handleCloseModal = () => setShowReportModal(false);
+    console.log('tableHeader', tableHeader);
 
     const tabs: {
         key: number;
         content: TabContent;
+        url?: string;
     }[] = [
         {
             key: 0,
@@ -74,14 +156,17 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 1,
             content: 'Budget',
+            url: '/annual-budget/',
         },
         {
             key: 2,
             content: 'Budget Activity',
+            url: '/annual-budget-activity/',
         },
         {
             key: 3,
             content: 'Programme and Policies',
+            url: '/annual-policy-program/',
         },
         {
             key: 4,
@@ -109,14 +194,73 @@ const MainModal: React.FC<Props> = (props: Props) => {
         },
         {
             key: 10,
-            content: 'Loss & Damage',
+            content: 'Simulation',
+            url: '/simulation/',
         },
         {
             key: 11,
+            content: 'Loss & Damage',
+        },
+        {
+            key: 12,
             content: 'Preview',
         },
     ];
-    const handleTabClick = (tab: number) => setTabSelected(tab);
+    useEffect(() => {
+        // Example POST method implementation:
+        function postData(link: string) {
+            // Default options are marked with *
+            fetch(link, {
+                method: 'OPTIONS', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer',
+                // no-referrer, *no-referrer-when-downgrade, origin,
+                // origin-when-cross-origin, same-origin, strict-origin,
+                // strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data), // body data type must match "Content-Type" header
+            })
+                .then((res) => {
+                    const headerData = res.json();
+                    headerData.then(resp => setTableHeader(resp.actions.GET));
+                })
+                .catch((err) => {
+                });
+        }
+
+        if (tabs[tabSelected].url) {
+            postData(tabs[tabSelected].url);
+        }
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tabSelected]);
+
+    const handleTabClick = (tab: number) => {
+        setTabSelected(tab);
+        const getURL = (tabValue: number) => {
+            if (tabs[tabValue].url) {
+                return tabs[tabValue].url;
+            }
+            return null;
+        };
+
+        if (getURL(tab) !== null) {
+            props.requests.PalikaReportGetRequest.do({
+                municipality: 3005,
+                district: 3,
+                province: 1,
+                url: getURL(tab),
+                reportData: handleReportData,
+            });
+        }
+    };
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
             setTabSelected(tabSelected + 1);
@@ -214,6 +358,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
                             keyTab={tabSelected}
                             showTabs={showTabs}
                             hideWelcomePage={hideWelcomePage}
+                            reportData={reportData}
+                            tableHeader={tableHeader}
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
@@ -277,6 +423,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
         </>
     );
 };
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-)(MainModal);
+
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            MainModal,
+        ),
+    ),
+);

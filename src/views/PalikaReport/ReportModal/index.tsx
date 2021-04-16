@@ -7,19 +7,20 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import BulletIcon from '#resources/icons/Bullet.svg';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
-import Budget from './Budget';
-import BudgetActivity from './BudgetActivity';
-import PreviewPageOne from './Preview/PageOne';
-import PreviewPageTwo from './Preview/PageTwo';
-import General from './General';
-import ProgrammeAndPolicies from './ProgrammeAndPolicies';
-import Contacts from './Contacts';
-import DRRMembers from './Contacts/DRRMembers';
-import Inventory from './Inventory';
-import DamageAndLoss from './DamageAndLoss';
-import CriticalInfra from './CriticalInfra';
-import WardwiseDeath from './DamageAndLoss/WardwiseDeath';
-import Organisation from './Organisation';
+import Budget from './Sections/Budget';
+import BudgetActivity from './Sections/BudgetActivity';
+import PreviewPageOne from './Sections/Preview/PageOne';
+import PreviewPageTwo from './Sections/Preview/PageTwo';
+import General from './Sections/General';
+import ProgrammeAndPolicies from './Sections/ProgrammeAndPolicies';
+import Contacts from './Sections/Contacts';
+import DRRMembers from './Sections/Contacts/DRRMembers';
+import Inventory from './Sections/Inventory';
+import DamageAndLoss from './Sections/DamageAndLoss';
+import CriticalInfra from './Sections/CriticalInfra';
+import WardwiseDeath from './Sections/DamageAndLoss/WardwiseDeath';
+import Organisation from './Sections/Organisation';
+import Relief from './Sections/Relief';
 
 interface Props {
     keyTab: number;
@@ -36,6 +37,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         keyTab,
         showTabs,
         hideWelcomePage,
+        reportData,
+        tableHeader,
     } = props;
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
@@ -221,7 +224,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 1
                && showTabs)
                     ? (
-                        <Budget />
+                        <Budget
+                            reportData={reportData}
+                            tableHeader={tableHeader}
+                        />
                     )
                     : ''
             }
@@ -272,6 +278,22 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             <Contacts />
                             <DRRMembers />
                         </>
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 8
+               && showTabs)
+                    ? (
+                        <Relief />
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 9
+               && showTabs)
+                    ? (
+                        <Relief />
                     )
                     : ''
             }

@@ -8,7 +8,6 @@ import Page from '#components/Page';
 
 const AddFormModal = (props) => {
     const [modalClose, setModalClose] = useState(props.data);
-
     const handleCloseModal = () => {
         setModalClose(true);
     };
@@ -18,7 +17,6 @@ const AddFormModal = (props) => {
             {modalClose ? ''
                 : (
                     <Modal>
-
                         <ModalHeader
                             title="Login"
                             rightComponent={(
@@ -37,8 +35,6 @@ const AddFormModal = (props) => {
                             </DangerButton>
 
                         </ModalFooter>
-
-
                     </Modal>
                 )
             }
