@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
-
+import 'nepali-datepicker-reactjs/dist/index.css';
 
 interface Props{
     reportTitle: string;
@@ -30,9 +31,11 @@ interface Location{
 }
 
 const General = (props: Props) => {
-    const [municipality, setMunicipality] = useState(27010);
-    const [district, setDistrict] = useState(27);
-    const [province, setProvince] = useState(3);
+    const [municipality, setMunicipality] = useState<number>(27010);
+    const [district, setDistrict] = useState<number>(27);
+    const [province, setProvince] = useState<number>(3);
+    const [dateto, setDateTo] = useState<string>('');
+    const [datefrom, setDateFrom] = useState<string>('');
 
     const handleFormRegion = (location: Location) => {
         setMunicipality(location.municipalityId);
@@ -42,16 +45,12 @@ const General = (props: Props) => {
 
     const {
         reportTitle,
-        datefrom,
-        dateTo,
         mayor,
         cao,
         focalPerson,
         formationDate,
         memberCount,
         setreportTitle,
-        setdatefrom,
-        setdateTo,
         setmayor,
         setcao,
         setfocalPerson,
@@ -92,22 +91,29 @@ const General = (props: Props) => {
                         </div>
 
                         <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="From Date (BS)"
-                                onChange={setdatefrom}
-                                value={datefrom || ''}
+                            <NepaliDatePicker
+                                inputClassName="form-control"
+                                className=""
+                                value={datefrom}
+                                onChange={(value: string) => setDateFrom(value)}
+                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
                             />
                         </div>
                         <div className={styles.inputContainer}>
-                            <input
+                            <NepaliDatePicker
+                                inputClassName="form-control"
+                                className=""
+                                value={dateto}
+                                onChange={(value: string) => setDateTo(value)}
+                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                            />
+                            {/* <input
                                 type="text"
                                 className={styles.inputElement}
                                 placeholder="To Date (BS)"
                                 onChange={setdateTo}
                                 value={dateTo || ''}
-                            />
+                            /> */}
                         </div>
                         <div className={styles.inputContainer}>
                             <input

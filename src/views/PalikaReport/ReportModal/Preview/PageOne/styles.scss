@@ -148,11 +148,7 @@
         border: 1px solid red;
         align-items: center;
         justify-content: center;
-        h2{
-            width: 60%;
-        border: 1px solid red;
-            position: relative;
-        }
+
     }
 }
 
@@ -171,7 +167,7 @@
         padding: 5px 0;
 
     }
-    .columnfourTwo{
+    .columnFourTwo{
         display: flex;
         flex-direction: column;
         width: 105mm;

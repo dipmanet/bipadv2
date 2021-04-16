@@ -9,6 +9,7 @@ import DRRMembers from '../../Contacts/DRRMembers';
 import Simulation from '../../Simulation';
 import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
+import CriticalInfra from '../../CriticalInfra';
 
 interface Props{
     reportData: Element[];
@@ -125,9 +126,11 @@ const Preview = (props: Props) => {
             </div>
             <div className={styles.rowFour}>
                 <div className={styles.columnFourOne}>
-                    <Inventory width={'50%'} />
+                    <Inventory width={'100%'} height={'60%'} />
                 </div>
-                <div className={styles.columnFourTwo} />
+                <div className={styles.columnFourTwo}>
+                    <CriticalInfra width={'100%'} height={'60%'} />
+                </div>
             </div>
 
 

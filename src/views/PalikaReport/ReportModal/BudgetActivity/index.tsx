@@ -9,6 +9,7 @@ const BudgetActivity = (props: Props) => {
     console.log(props);
     return (
         <div className={styles.tabsPageContainer}>
+            <p><strong>Budget Activities</strong></p>
             <Table striped bordered hover size="lg">
                 <thead>
                     <tr>

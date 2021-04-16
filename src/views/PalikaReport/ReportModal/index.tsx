@@ -17,7 +17,9 @@ import Contacts from './Contacts';
 import DRRMembers from './Contacts/DRRMembers';
 import Inventory from './Inventory';
 import DamageAndLoss from './DamageAndLoss';
-
+import CriticalInfra from './CriticalInfra';
+import WardwiseDeath from './DamageAndLoss/WardwiseDeath';
+import Organisation from './Organisation';
 
 interface Props {
     keyTab: number;
@@ -239,10 +241,26 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     : ''
             }
             {
+                (keyTab === 4
+               && showTabs)
+                    ? (
+                        <Organisation />
+                    )
+                    : ''
+            }
+            {
                 (keyTab === 5
                && showTabs)
                     ? (
-                        <Inventory width={'100%'} height={'60%'} />
+                        <Inventory width={'100%'} height={'40%'} />
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 6
+               && showTabs)
+                    ? (
+                        <CriticalInfra width={'100%'} height={'50%'} />
                     )
                     : ''
             }
@@ -257,11 +275,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
+
             {
                 (keyTab === 10
                && showTabs)
                     ? (
-                        <DamageAndLoss />
+                        <>
+                            <WardwiseDeath width={'100%'} height={'50%'} />
+                            <DamageAndLoss />
+                        </>
                     )
                     : ''
             }
