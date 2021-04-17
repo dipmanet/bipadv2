@@ -251,6 +251,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         <Budget
                             reportData={reportData}
                             tableHeader={tableHeader}
+                            updateTab={updateTab}
+
                         />
                     )
                     : ''

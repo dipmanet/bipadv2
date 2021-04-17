@@ -2,11 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { _cs } from '@togglecorp/fujs';
-import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
-import Select from 'react-select';
 import styles from './styles.scss';
-import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
@@ -15,9 +11,6 @@ import {
 import {
     generalDataSelector,
 } from '#selectors';
-
-
-import Icon from '#rscg/Icon';
 
 
 interface Props{
@@ -45,13 +38,6 @@ interface Location{
     provinceId: number;
 }
 
-const currentFiscalYear = new Date().getFullYear() + 56;
-
-const options = Array.from(Array(10).keys()).map(item => ({
-    value: currentFiscalYear - item,
-    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
-}));
-
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
 });
@@ -60,20 +46,34 @@ const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
 });
 
-const BudgetActivity = (props: Props) => {
-    const { generalData: { fiscalYear } } = props;
+const currentFiscalYear = new Date().getFullYear() + 56;
 
-    const [municipalBudget, setmunicipalBudget] = useState<string>('');
+const options = Array.from(Array(10).keys()).map(item => ({
+    value: currentFiscalYear - item,
+    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
+}));
+
+
+const BudgetActivity = (props: Props) => {
+    const { generalData: { fiscalYear }, updateTab } = props;
+
+    const [municipalBudget, setmunicipalBudget] = useState<number>(0);
+    const [drrFund, setdrrFund] = useState<number>(0);
+    const [additionalFund, setadditionalFund] = useState<number>(0);
 
 
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };
     const handleDRRFund = (fundVal) => {
-        setmunicipalBudget(fundVal.target.value);
+        setdrrFund(fundVal.target.value);
     };
     const handleAddFund = (addFundVal) => {
-        setmunicipalBudget(addFundVal.target.value);
+        setadditionalFund(addFundVal.target.value);
+    };
+
+    const handleDataSave = () => {
+        updateTab();
     };
 
     const selectStyles = {
@@ -102,15 +102,15 @@ const BudgetActivity = (props: Props) => {
                 <h2 className={styles.title}>Please enter Disaster Profile details</h2>
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
-                                 Muicipal Budget of FY
+                                 Total Muicipal Budget of FY
                         {' '}
                         { `${fiscalYear}/${fiscalYear + 1}`}
                         <input
-                            type="text"
+                            type="number"
                             className={styles.inputElement}
                             onChange={handleMunicipalBudget}
-                            placeholder={'Enter Amount'}
-                            value={municipalBudget}
+                            placeholder={'Kindly specify total municipal budget in numbers'}
+                            value={municipalBudget === 0 ? undefined : municipalBudget}
                         />
 
                     </label>
@@ -119,15 +119,16 @@ const BudgetActivity = (props: Props) => {
                 <div className={styles.inputContainer}>
 
                     <label className={styles.label}>
-                                 DRR Fund for FY
+                                 Total DRR Fund for FY
                         { `${fiscalYear}/${fiscalYear + 1}`}
                         <input
-                            type="text"
+                            type="number"
                             className={styles.inputElement}
                             onChange={handleDRRFund}
-                            value={municipalBudget}
-                            placeholder={'Enter Amount'}
+                            value={drrFund === 0 ? undefined : drrFund}
+                            placeholder={'Kindly specify total DRR funds in numbers'}
                         />
+
 
                     </label>
 
@@ -139,18 +140,24 @@ const BudgetActivity = (props: Props) => {
                         { `${fiscalYear}/${fiscalYear + 1}`}
 
                         <input
-                            type="text"
+                            type="number"
                             className={styles.inputElement}
                             onChange={handleAddFund}
-                            placeholder={'Enter Amount'}
-                            value={municipalBudget}
+                            placeholder={'Kindly specify additional funds in numbers'}
+                            value={additionalFund === 0 ? undefined : additionalFund}
                         />
 
                     </label>
 
                 </div>
             </div>
-
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save
+            </button>
         </div>
     );
 };
