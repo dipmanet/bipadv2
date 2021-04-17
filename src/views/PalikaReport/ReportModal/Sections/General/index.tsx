@@ -364,19 +364,17 @@ const General = (props: Props) => {
 
 
                         </div>
+                        <button
+                            type="button"
+                            onClick={handleDataSave}
+                            className={styles.savebtn}
+                        >
+                Save
+                        </button>
                     </div>
                 </div>
 
             </div>
-
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
-                Save
-            </button>
-
         </div>
     );
 };

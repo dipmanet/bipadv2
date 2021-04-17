@@ -415,7 +415,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                 </div>
 
 
-                                { tabSelected < Object.keys(tabs).length - 1
+                                {/* { tabSelected < Object.keys(tabs).length - 1
                                 && tabSelected !== 0
                                    && (
                                        <PrimaryButton
@@ -427,7 +427,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
                                        </PrimaryButton>
                                    )
-                                }
+                                } */}
 
                             </div>
                         )}

@@ -203,6 +203,11 @@ const state: PageState = {
         formationDate: '',
         committeeMembers: 0,
     },
+    budgetData: {
+        totMunBudget: 0,
+        totDrrBudget: 0,
+        additionalDrrBudget: 0,
+    },
 
 };
 export default state;

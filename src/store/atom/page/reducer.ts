@@ -19,10 +19,10 @@ export const setGeneralDataAction = generalData => ({
     generalData,
 });
 
-// export const setCarKeysAction = carKeys => ({
-//     type: Type.PageType.RIC__SET_CAR_KEYS,
-//     carKeys,
-// });
+export const setBudgetDataAction = budgetData => ({
+    type: Type.PageType.SET_BUDGET_DATA,
+    budgetData,
+});
 
 export const setInitialPopupHiddenAction = (
     { value }: { value: boolean },
@@ -1189,9 +1189,17 @@ export const setProfileContactFilters = (
 const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
     const { generalData } = action;
     const newState = produce(state, (deferedState) => {
-        console.log('we re here: ', deferedState.generalData);
         // eslint-disable-next-line no-param-reassign
         deferedState.generalData = generalData;
+    });
+    return newState;
+};
+
+const setBudgetData = (state: Type.PageState, action: Type.SetBudgetData) => {
+    const { budgetData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetData = budgetData;
     });
     return newState;
 };
@@ -1202,6 +1210,8 @@ export default function routeReducer(
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_BUDGET_DATA:
+            return setBudgetData(state, action);
         case Type.PageType.SET_GENERAL_DATA:
             return setGeneralData(state, action);
         case Type.PageType.SET_REGION:

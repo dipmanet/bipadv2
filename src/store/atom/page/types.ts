@@ -22,6 +22,12 @@ export interface GeneralData{
     committeeMembers: number;
 }
 
+export interface BudgetData{
+    totMunBudget: number;
+    totDrrBudget: number;
+    additionalDrrBudget: number;
+}
+
 export interface Province {
     id: number;
     bbox: BBox;
@@ -504,6 +510,7 @@ export interface PageState {
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
+    budgetData: BudgetData;
 }
 
 // ACTION TYPES
@@ -512,6 +519,7 @@ export interface PageState {
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
+    SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
@@ -600,6 +608,10 @@ export interface SetRegion {
 export interface SetGeneralData {
     type: typeof PageType.SET_GENERAL_DATA;
     generalData: GeneralData;
+}
+export interface SetBudgetData {
+    type: typeof PageType.SET_BUDGET_DATA;
+    budgetData: BudgetData;
 }
 
 
@@ -856,7 +868,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetGeneralData| SetRegion | SetInitialPopupHidden |
+    SetBudgetData | SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

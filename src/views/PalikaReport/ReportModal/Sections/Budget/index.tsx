@@ -7,9 +7,11 @@ import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
     setGeneralDataAction,
+    setBudgetDataAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
+    budgetDataSelector,
 } from '#selectors';
 
 
@@ -40,10 +42,12 @@ interface Location{
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
+    budgetData: budgetDataSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+    setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
 });
 
 const currentFiscalYear = new Date().getFullYear() + 56;
@@ -55,7 +59,12 @@ const options = Array.from(Array(10).keys()).map(item => ({
 
 
 const BudgetActivity = (props: Props) => {
-    const { generalData: { fiscalYear }, updateTab } = props;
+    const {
+        generalData: { fiscalYear },
+        budgetData,
+        updateTab,
+        setBudgetDatapp,
+    } = props;
 
     const [municipalBudget, setmunicipalBudget] = useState<number>(0);
     const [drrFund, setdrrFund] = useState<number>(0);
@@ -73,6 +82,11 @@ const BudgetActivity = (props: Props) => {
     };
 
     const handleDataSave = () => {
+        setBudgetDatapp({
+            municipalBudget,
+            drrFund,
+            additionalFund,
+        });
         updateTab();
     };
 
@@ -110,7 +124,7 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                             onChange={handleMunicipalBudget}
                             placeholder={'Kindly specify total municipal budget in numbers'}
-                            value={municipalBudget === 0 ? undefined : municipalBudget}
+                            value={municipalBudget === 0 ? '' : municipalBudget}
                         />
 
                     </label>
@@ -125,7 +139,7 @@ const BudgetActivity = (props: Props) => {
                             type="number"
                             className={styles.inputElement}
                             onChange={handleDRRFund}
-                            value={drrFund === 0 ? undefined : drrFund}
+                            value={drrFund === 0 ? '' : drrFund}
                             placeholder={'Kindly specify total DRR funds in numbers'}
                         />
 
@@ -144,20 +158,21 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                             onChange={handleAddFund}
                             placeholder={'Kindly specify additional funds in numbers'}
-                            value={additionalFund === 0 ? undefined : additionalFund}
+                            value={additionalFund === 0 ? '' : additionalFund}
                         />
 
                     </label>
 
                 </div>
-            </div>
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
+                <button
+                    type="button"
+                    onClick={handleDataSave}
+                    className={styles.savebtn}
+                >
                 Save
-            </button>
+                </button>
+            </div>
+
         </div>
     );
 };
