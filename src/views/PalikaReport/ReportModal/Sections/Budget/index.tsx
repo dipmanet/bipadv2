@@ -58,7 +58,7 @@ const options = Array.from(Array(10).keys()).map(item => ({
 }));
 
 
-const BudgetActivity = (props: Props) => {
+const Budget = (props: Props) => {
     const {
         generalData: { fiscalYear },
         budgetData,
@@ -169,7 +169,7 @@ const BudgetActivity = (props: Props) => {
                     onClick={handleDataSave}
                     className={styles.savebtn}
                 >
-                Save
+                Save and Proceed
                 </button>
             </div>
 
@@ -177,4 +177,4 @@ const BudgetActivity = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BudgetActivity);
+export default connect(mapStateToProps, mapDispatchToProps)(Budget);

@@ -182,6 +182,7 @@
         "react": "16.8.6",
         "react-bootstrap": "^1.5.2",
         "react-color": "^2.17.3",
+        "react-datepicker": "^3.7.0",
         "react-dom": "^16.8.6",
         "react-focus-trap": "^2.7.1",
         "react-ga": "^2.5.0",

@@ -381,7 +381,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
-                                <div className={styles.nextPrevBtns}>
+                                {/* <div className={styles.nextPrevBtns}>
                                     {
                                         tabSelected < Object.keys(tabs).length - 1
                                         && (
@@ -412,7 +412,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                         )
                                     }
 
-                                </div>
+                                </div> */}
 
 
                                 {/* { tabSelected < Object.keys(tabs).length - 1

@@ -369,7 +369,7 @@ const General = (props: Props) => {
                             onClick={handleDataSave}
                             className={styles.savebtn}
                         >
-                            Save
+                            Save and Proceed
                         </button>
                     </div>
                 </div>

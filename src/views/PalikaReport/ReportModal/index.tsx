@@ -260,7 +260,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             {
                 (keyTab === 2)
                     ? (
-                        <BudgetActivity />
+                        <BudgetActivity
+                            updateTab={updateTab}
+
+                        />
                     )
                     : ''
             }
