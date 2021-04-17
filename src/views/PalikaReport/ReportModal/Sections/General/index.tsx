@@ -1,9 +1,15 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import Select from 'react-select';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import 'nepali-datepicker-reactjs/dist/index.css';
+
+
+import Icon from '#rscg/Icon';
+
 
 interface Props{
     reportTitle: string;
@@ -30,17 +36,51 @@ interface Location{
     provinceId: number;
 }
 
+const currentFiscalYear = new Date().getFullYear() + 56;
+
+const options = Array.from(Array(10).keys()).map(item => ({
+    value: currentFiscalYear - item,
+    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
+}));
+
 const General = (props: Props) => {
     const [municipality, setMunicipality] = useState<number>(27010);
     const [district, setDistrict] = useState<number>(27);
     const [province, setProvince] = useState<number>(3);
-    const [dateto, setDateTo] = useState<string>('');
+    const [date, setDate] = useState('');
     const [datefrom, setDateFrom] = useState<string>('');
 
     const handleFormRegion = (location: Location) => {
         setMunicipality(location.municipalityId);
         setDistrict(location.districtId);
         setProvince(location.provinceId);
+    };
+
+    const handleAddContact = () => {
+        console.log('goto contacts add');
+    };
+
+    const handleDateChange = (dateObj) => {
+        setDate(dateObj);
+    };
+
+    const selectStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            borderBottom: '1px dotted gray',
+            color: state.isSelected ? 'white' : 'gray',
+            padding: 10,
+        }),
+        control: () => ({
+            // none of react-select's styles are passed to <Control />
+            width: 200,
+        }),
+        singleValue: (provided, state) => {
+            const opacity = state.isDisabled ? 0.5 : 1;
+            const transition = 'opacity 900ms';
+
+            return { ...provided, opacity, transition };
+        },
     };
 
     const {
@@ -53,17 +93,15 @@ const General = (props: Props) => {
         setreportTitle,
         setmayor,
         setcao,
-        setfocalPerson,
         setformationDate,
         setmemberCount,
 
     } = props;
-    console.log(props);
     return (
         <div className={styles.mainPageDetailsContainer}>
             <div className={styles.formContainer}>
-                <h2>Please enter Disaster Profile details</h2>
-                <div className={styles.inputContainer}>
+                <h2 className={styles.title}>Please enter Disaster Profile details</h2>
+                {/* <div className={styles.inputContainer}>
                     <StepwiseRegionSelectInput
                         className={styles.stepwiseRegionSelectInput}
                         faramElementName="region"
@@ -77,9 +115,10 @@ const General = (props: Props) => {
                         districtInputClassName={styles.sndistinput}
                         municipalityInputClassName={styles.snmuniinput}
                     />
-                </div>
+                </div> */}
                 <div className={styles.newSignupForm}>
                     <div className={styles.formColumn}>
+                        <p><strong>General Information</strong></p>
                         <div className={styles.inputContainer}>
                             <input
                                 type="text"
@@ -90,87 +129,186 @@ const General = (props: Props) => {
                             />
                         </div>
 
+
                         <div className={styles.inputContainer}>
-                            <NepaliDatePicker
-                                inputClassName="form-control"
-                                className=""
-                                value={datefrom}
-                                onChange={(value: string) => setDateFrom(value)}
-                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                            <Select
+                                options={options}
+                                className={styles.select}
+                                placeholder={'Select Fiscal Year'}
                             />
                         </div>
+
+                    </div>
+                    <div className={styles.formColumn}>
+                        <p><strong>Municipal DRR Leadership </strong></p>
                         <div className={styles.inputContainer}>
-                            <NepaliDatePicker
-                                inputClassName="form-control"
-                                className=""
-                                value={dateto}
-                                onChange={(value: string) => setDateTo(value)}
-                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                            />
+                            <label className={styles.label}>
+                                 Mayor or Nagar Pramukh
+                                <input
+                                    type="text"
+                                    className={styles.inputElement}
+                                    placeholder="Mayor or Chairperson"
+                                // onChange={setmayor}
+                                    value={mayor || 'Data Unavailable'}
+                                    disabled
+                                />
+
+                            </label>
+
+
+                            {mayor
+                                ? (
+                                    <button
+                                        type="button"
+                                        onClick={handleAddContact}
+                                        className={styles.addEditBtn}
+                                    >
+                                        <Icon
+                                            name="edit"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+                                : (
+                                    <button
+                                        type="button"
+                                        className={styles.addEditBtn}
+                                        onClick={handleAddContact}
+                                    >
+                                        <Icon
+                                            name="plus"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+
+                            }
+                        </div>
+                        <div className={styles.inputContainer}>
+
+                            <label className={styles.label}>
+                                 Chief Administrative Officer
+                                <input
+                                    type="text"
+                                    className={styles.inputElement}
+                                    placeholder="Chief Administrative Officer"
+                                // onChange={setcao}
+                                    value={cao || 'Data Unavailable'}
+                                    disabled
+                                />
+                            </label>
+
+
+                            {cao
+                                ? (
+                                    <button
+                                        type="button"
+                                        onClick={handleAddContact}
+                                        className={styles.addEditBtn}
+                                    >
+                                        <Icon
+                                            name="edit"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+                                : (
+                                    <button
+                                        type="button"
+                                        className={styles.addEditBtn}
+                                        onClick={handleAddContact}
+                                    >
+                                        <Icon
+                                            name="plus"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+
+                            }
+
+                        </div>
+
+                        <div className={styles.inputContainer}>
+                            <label className={styles.label}>
+                                DRR Focal Person
+                                <input
+                                    type="text"
+                                    className={styles.inputElement}
+                                    placeholder="DRR Focal Person"
+                                // onChange={setfocalPerson}
+                                    value={focalPerson || 'Data Unavailable'}
+                                    disabled
+                                />
+                            </label>
+
+                            {focalPerson
+                                ? (
+                                    <button
+                                        type="button"
+                                        onClick={handleAddContact}
+                                        className={styles.addEditBtn}
+                                    >
+                                        <Icon
+                                            name="edit"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+                                : (
+                                    <button
+                                        type="button"
+                                        className={styles.addEditBtn}
+                                        onClick={handleAddContact}
+                                    >
+                                        <Icon
+                                            name="plus"
+                                            className={styles.addEditIcon}
+                                        />
+                                    </button>
+                                )
+
+                            }
+                        </div>
+                        <div className={styles.inputContainer}>
                             {/* <input
                                 type="text"
                                 className={styles.inputElement}
-                                placeholder="To Date (BS)"
-                                onChange={setdateTo}
-                                value={dateTo || ''}
-                            /> */}
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Mayor or Chairperson"
-                                onChange={setmayor}
-                                value={mayor || ''}
-                            />
-                        </div>
-                    </div>
-                    <div className={styles.formColumn}>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Chief Administrative Officer"
-                                onChange={setcao}
-                                value={cao || ''}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="DRR Focal Person"
-                                onChange={setfocalPerson}
-                                value={focalPerson || ''}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="DRRM committee formation date in B.S."
+                                placeholder="Formation date of DRRM Committee"
                                 onChange={setformationDate}
                                 value={formationDate || ''}
-                            />
+                                disabled
+                            /> */}
+                            <label className={styles.label}>
+                            Formation date of DRRM Committee
+                                <NepaliDatePicker
+                                    inputClassName="form-control"
+                                    className={styles.datepicker}
+                                    value={date}
+                                    onChange={value => setDate(value)}
+                                    options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+
+                                />
+                            </label>
+
                         </div>
                         <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Number of DRRM committee members:"
-                                onChange={setmemberCount}
-                                value={memberCount || ''}
-                            />
+                            <label className={styles.label}>
+                            Number of DRRM committee members
+                                <input
+                                    type="text"
+                                    className={styles.inputElement}
+                                    placeholder={'Enter Number'}
+                                    onChange={setmemberCount}
+                                    value={memberCount || ''}
+                                />
+                            </label>
+
+
                         </div>
                     </div>
                 </div>
-                {/* <p className={styles.moreInfo}>
-                        <Icon
-                            name="info"
-                            className={styles.infoIcon}
-                        />
-                            This is extra info, incase we need some
-                    </p> */}
+
             </div>
         </div>
     );

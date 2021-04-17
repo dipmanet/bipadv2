@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import BulletIcon from '#resources/icons/Bullet.svg';
@@ -21,6 +22,14 @@ import CriticalInfra from './Sections/CriticalInfra';
 import WardwiseDeath from './Sections/DamageAndLoss/WardwiseDeath';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+import { userSelector } from '#selectors';
 
 interface Props {
     keyTab: number;
@@ -31,15 +40,67 @@ interface Props {
 interface SyntheticEvent<T> {
     currentTarget: EventTarget & T;
 }
+const mapStateToProps = (state, props) => ({
+
+    user: userSelector(state),
+});
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+    PalikaReportGetRequest: {
+        url: ({ params }) => `${params.url}`,
+        query: ({ params, props }) => {
+            if (params) {
+                return {
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
+                    limit: -1,
+                };
+            }
+
+
+            return { limit: params.page, offset: params.offset };
+        },
+        method: methods.GET,
+        onMount: false,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.reportData) {
+                params.reportData(citizenReportList);
+            }
+        },
+    },
+    FiscalYearFetch: {
+        url: '/nepali-fiscal-year/',
+        method: methods.GET,
+        onMount: false,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+            params.fiscalYear(citizenReportList);
+        },
+    },
+
+};
+
 
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         keyTab,
         showTabs,
         hideWelcomePage,
-        reportData,
         tableHeader,
+        mayor,
+        cao,
+        focalPerson,
     } = props;
+
+
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
         const divToDisplay = document.getElementById('reportPreview');
@@ -68,18 +129,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
             }
-            doc.save('whater.pdf');
+            doc.save('palika-report.pdf');
         });
     };
 
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
     const [dateTo, setdateTo] = useState('');
-    const [mayor, setmayor] = useState('');
-    const [cao, setcao] = useState('');
-    const [focalPerson, setfocalPerson] = useState('');
+    // const [mayor, setmayor] = useState('');
+    // const [cao, setcao] = useState('');
+    // const [focalPerson, setfocalPerson] = useState('');
     const [formationDate, setformationDate] = useState('');
     const [memberCount, setmemberCount] = useState('');
+    const [reportData, setReportData] = useState([]);
 
     const handleReportTitle = (val: React.ChangeEvent<HTMLInputElement>) => {
         setreportTitle(val.currentTarget.value);
@@ -90,15 +152,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const handledateTo = (val: React.ChangeEvent<HTMLInputElement>) => {
         setdateTo(val.currentTarget.value);
     };
-    const handleSetMayor = (val: React.ChangeEvent<HTMLInputElement>) => {
-        setmayor(val.currentTarget.value);
-    };
-    const handleSetcao = (val: React.ChangeEvent<HTMLInputElement>) => {
-        setcao(val.currentTarget.value);
-    };
-    const handleFocalPerson = (val: React.ChangeEvent<HTMLInputElement>) => {
-        setfocalPerson(val.currentTarget.value);
-    };
+    // const handleSetMayor = (val: React.ChangeEvent<HTMLInputElement>) => {
+    //     setmayor(val.currentTarget.value);
+    // };
+    // const handleSetcao = (val: React.ChangeEvent<HTMLInputElement>) => {
+    //     setcao(val.currentTarget.value);
+    // };
+    // const handleFocalPerson = (val: React.ChangeEvent<HTMLInputElement>) => {
+    //     setfocalPerson(val.currentTarget.value);
+    // };
     const handleFormationDate = (val: React.ChangeEvent<HTMLInputElement>) => {
         setformationDate(val.currentTarget.value);
     };
@@ -210,9 +272,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             setreportTitle={handleReportTitle}
                             setdatefrom={handledateFrom}
                             setdateTo={handledateTo}
-                            setmayor={handleSetMayor}
-                            setcao={handleSetcao}
-                            setfocalPerson={handleFocalPerson}
                             setformationDate={handleFormationDate}
                             setmemberCount={handleMemberCount}
 
@@ -340,4 +399,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default ReportModal;
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            ReportModal,
+        ),
+    ),
+);

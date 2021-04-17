@@ -76,10 +76,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         query: ({ params, props }) => {
             if (params) {
                 return {
-                    province: params.province,
-                    district: params.district,
+                    // province: params.province,
+                    // district: params.district,
                     municipality: params.municipality,
-                    limit: 5,
+                    limit: -1,
                 };
             }
 
@@ -130,19 +130,18 @@ const MainModal: React.FC<Props> = (props: Props) => {
         district,
         province,
     } } = user;
-    console.log('our report data');
     const handleReportData = (response) => {
         setReportData(response);
     };
 
-    // props.requests.PalikaReportGetRequest.setDefaultParams({
-    //     reportData: handleReportData,
-    // });
-
     const [tabSelected, setTabSelected] = useState(0);
     const [tableHeader, setTableHeader] = useState([]);
     const handleCloseModal = () => setShowReportModal(false);
-    console.log('tableHeader', tableHeader);
+
+
+    const [mayor, setmayor] = useState('');
+    const [cao, setcao] = useState('');
+    const [focalPerson, setfocalPerson] = useState('');
 
     const tabs: {
         key: number;
@@ -152,6 +151,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 0,
             content: 'General',
+            url: '/municipality-contact/',
         },
         {
             key: 1,
@@ -206,44 +206,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
             content: 'Preview',
         },
     ];
+
     useEffect(() => {
-        // Example POST method implementation:
-        function postData(link: string) {
-            // Default options are marked with *
-            fetch(link, {
-                method: 'OPTIONS', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                    'Content-Type': 'application/json',
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                redirect: 'follow', // manual, *follow, error
-                referrerPolicy: 'no-referrer',
-                // no-referrer, *no-referrer-when-downgrade, origin,
-                // origin-when-cross-origin, same-origin, strict-origin,
-                // strict-origin-when-cross-origin, unsafe-url
-            // body: JSON.stringify(data), // body data type must match "Content-Type" header
-            })
-                .then((res) => {
-                    const headerData = res.json();
-                    headerData.then(resp => setTableHeader(resp.actions.GET));
-                })
-                .catch((err) => {
-                });
-        }
-
-        if (tabs[tabSelected].url) {
-            postData(tabs[tabSelected].url);
-        }
-
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tabSelected]);
-
-    const handleTabClick = (tab: number) => {
-        setTabSelected(tab);
         const getURL = (tabValue: number) => {
             if (tabs[tabValue].url) {
                 return tabs[tabValue].url;
@@ -251,15 +215,61 @@ const MainModal: React.FC<Props> = (props: Props) => {
             return null;
         };
 
-        if (getURL(tab) !== null) {
+        props.requests.PalikaReportGetRequest.do({
+            municipality,
+            url: getURL(0),
+            reportData: handleReportData,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (reportData) {
+            reportData.map((item) => {
+                if (item.isDrrFocalPerson) {
+                    setfocalPerson(item.name);
+                }
+                if (item.position && item.position.includes('Mayor')) {
+                    const details = `Name: ${item.name}\n,Email:${item.email},Tel:${item.mobileNumber} `;
+                    setmayor(details);
+                }
+                if (item.position && item.position.includes('Chairperson')) {
+                    const details = `Name:${item.name}\n,Email:${item.email},Tel:${item.mobileNumber} `;
+                    setmayor(details);
+                }
+                if (item.position && item.position.includes('Chief Administrative Officer')) {
+                    setcao(item.name);
+                }
+
+                return null;
+            });
+        }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reportData]);
+
+    console.log(reportData);
+
+    useEffect(() => {
+        const getURL = (tabValue: number) => {
+            if (tabs[tabValue].url) {
+                return tabs[tabValue].url;
+            }
+            return null;
+        };
+
+        if (getURL(tabSelected) !== null) {
             props.requests.PalikaReportGetRequest.do({
-                municipality: 3005,
-                district: 3,
-                province: 1,
-                url: getURL(tab),
+                municipality,
+                url: getURL(tabSelected),
                 reportData: handleReportData,
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tabSelected]);
+
+    const handleTabClick = (tab: number) => {
+        setTabSelected(tab);
     };
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
@@ -271,6 +281,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
             setTabSelected(tabSelected - 1);
         }
     };
+
 
     const handleDataAdd = () => {
         const { setCarKeys } = props;
@@ -360,6 +371,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
                             hideWelcomePage={hideWelcomePage}
                             reportData={reportData}
                             tableHeader={tableHeader}
+                            province={province}
+                            district={district}
+                            municipality={municipality}
+                            mayor={mayor}
+                            cao={cao}
+                            focalPerson={focalPerson}
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>

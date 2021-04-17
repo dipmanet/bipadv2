@@ -27,16 +27,20 @@
             padding: 15px;
             width: 100%;
             h2{
-                font-size: 14px;
-                // margin-bottom: 15px;
+                font-size: 16px;
+                margin-bottom: 25px;
             }
 
             .newSignupForm{
                 display:flex;
+                flex-direction: column;
                 // border: 1px solid gray;
+                height: 75%;
+                overflow-y: scroll;
                 .formColumn{
                     flex: 1;
-                    padding: 0 20px 0 0;
+                    padding: 20px 20px 0 0;
+                   
                 }
                 .errMsg{
                     font-size: 9px;
@@ -94,8 +98,32 @@
                 justify-content: flex-start;
                 align-items: center;
                 margin: 4px 0 7px 0;
-                .snstepwiseRegionSelectInput{
-                    border: none !important;
+                .label{
+                    padding: 12px 18px 0 15px;
+                    // border: 1px solid red;
+                    width: 100%;
+                    font-size: 10px;
+                    color: #111;
+                }
+                .datepicker{
+                    width: 100%;
+                }
+                .addEditBtn{
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                    filter: saturate(100%);
+
+                    .addEditIcon{
+                        font-size: 18px;
+                        padding-right: 10px;
+                        color: rgb(49,158,255);
+                    }
+                }
+                
+                .select{
+                    width: 100%;
+                    background-color: gray !important;
                 }
 
           

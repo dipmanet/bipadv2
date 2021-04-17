@@ -93,6 +93,7 @@ const iconNames = {
     times: 'fa fa-times',
     info: 'fa  fa-info-circle',
     arrowDown: 'fa fa-caret-down',
+    plus: 'fa fa-plus',
 };
 
 export default iconNames;

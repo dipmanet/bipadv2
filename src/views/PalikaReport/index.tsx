@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
@@ -7,8 +8,10 @@ import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import MainModal from './MainModal';
-import { provincesSelector, districtsSelector, municipalitiesSelector,
-    wardsSelector } from '#selectors';
+import { provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    userSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import {
     createConnectedRequestCoordinator,
@@ -27,6 +30,7 @@ const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    user: userSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -97,6 +101,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
+
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
@@ -110,9 +116,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         provinces,
         districts,
         municipalities,
+        user,
         // filters: { region },
     } = props;
-
+    const { municipality, district, province } = user;
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
         // setFiltered(false);
@@ -353,9 +360,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 showReportModal={showReportModal}
                 hideWelcomePage={hideWelcomePage}
                 setShowReportModal={setShowReportModal}
-                provinces={provinces}
-                districts={districts}
-                municipalities={municipalities}
+                province={province}
+                district={district}
+                municipality={municipality}
             />
 
 
