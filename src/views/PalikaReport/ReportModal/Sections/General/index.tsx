@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import Select from 'react-select';
@@ -7,9 +8,33 @@ import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
+import {
+    setGeneralDataAction,
+} from '#actionCreators';
+import {
+    generalDataSelector,
+} from '#selectors';
 
 import Icon from '#rscg/Icon';
 
+
+const mapStateToProps = state => ({
+    generalData: generalDataSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+});
+
+export interface GeneralData{
+    reportTitle?: string;
+    fiscalYear: string;
+    mayor: string;
+    cao: string;
+    focalPerson: string;
+    formationDate: string;
+    committeeMembers: number;
+}
 
 interface Props{
     reportTitle: string;
@@ -28,6 +53,7 @@ interface Props{
     setfocalPerson: React.ChangeEventHandler<HTMLInputElement>;
     setformationDate: React.ChangeEventHandler<HTMLInputElement>;
     setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
+    // setGeneralData: GeneralData;
 }
 
 interface Location{
@@ -56,8 +82,19 @@ const General = (props: Props) => {
         setProvince(location.provinceId);
     };
 
+
     const handleAddContact = () => {
         console.log('goto contacts add');
+        props.setGeneralDatapp({
+            reportTitle: 'data data datda',
+            fiscalYear: 'data data datda',
+            mayor: 'data data datda',
+            cao: 'data data datda',
+            focalPerson: 'data data datda',
+            formationDate: 'data data datda',
+            committeeMembers: 1,
+        });
+        console.log(props);
     };
 
     const handleDateChange = (dateObj) => {
@@ -97,6 +134,8 @@ const General = (props: Props) => {
         setmemberCount,
 
     } = props;
+
+
     return (
         <div className={styles.mainPageDetailsContainer}>
             <div className={styles.formContainer}>
@@ -314,4 +353,4 @@ const General = (props: Props) => {
     );
 };
 
-export default General;
+export default connect(mapStateToProps, mapDispatchToProps)(General);

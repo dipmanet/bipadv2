@@ -194,5 +194,15 @@ const state: PageState = {
             pristine: true,
         },
     },
+    generalData: {
+        reportTitle: '',
+        fiscalYear: '',
+        mayor: '',
+        cao: '',
+        focalPerson: '',
+        formationDate: '',
+        committeeMembers: 0,
+    },
+
 };
 export default state;

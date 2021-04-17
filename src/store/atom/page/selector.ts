@@ -549,6 +549,9 @@ export const profileContactListSelector = createSelector(
 // risk info page
 export const carKeysSelector = ({ page }: AppState) => page.carKeys;
 
+// palika report
+export const generalDataSelector = ({ page }: AppState) => page.generalData;
+
 // bounds
 export const selectedProvinceIdSelector = createSelector(
     regionByPropSelector,

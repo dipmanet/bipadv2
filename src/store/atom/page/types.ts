@@ -12,6 +12,16 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
+export interface GeneralData{
+    reportTitle?: string;
+    fiscalYear: string;
+    mayor: string;
+    cao: string;
+    focalPerson: string;
+    formationDate: string;
+    committeeMembers: number;
+}
+
 export interface Province {
     id: number;
     bbox: BBox;
@@ -264,6 +274,7 @@ export interface Point {
     type: string;
     coordinates: number[];
 }
+
 export interface RealTimeRiverDetails {
     id: number;
     createdOn: string;
@@ -492,6 +503,7 @@ export interface PageState {
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
+    generalData: GeneralData;
 }
 
 // ACTION TYPES
@@ -499,6 +511,7 @@ export interface PageState {
 // eslint-disable-next-line import/prefer-default-export
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
+    SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
@@ -583,6 +596,12 @@ export interface SetRegion {
     type: typeof PageType.SET_REGION;
     region: Region;
 }
+
+export interface SetGeneralData {
+    type: typeof PageType.SET_GENERAL_DATA;
+    generalData: GeneralData;
+}
+
 
 export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
@@ -837,7 +856,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetRegion | SetInitialPopupHidden |
+    SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

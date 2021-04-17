@@ -14,6 +14,16 @@ export const setRegionAction = (
     region,
 });
 
+export const setGeneralDataAction = generalData => ({
+    type: Type.PageType.SET_GENERAL_DATA,
+    generalData,
+});
+
+// export const setCarKeysAction = carKeys => ({
+//     type: Type.PageType.RIC__SET_CAR_KEYS,
+//     carKeys,
+// });
+
 export const setInitialPopupHiddenAction = (
     { value }: { value: boolean },
 ) => ({
@@ -1175,11 +1185,25 @@ export const setProfileContactFilters = (
     return newState;
 };
 
+
+const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
+    const { generalData } = action;
+    const newState = produce(state, (deferedState) => {
+        console.log('we re here: ', deferedState.generalData);
+        // eslint-disable-next-line no-param-reassign
+        deferedState.generalData = generalData;
+    });
+    return newState;
+};
+
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_GENERAL_DATA:
+            return setGeneralData(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
