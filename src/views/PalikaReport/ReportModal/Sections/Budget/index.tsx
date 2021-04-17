@@ -1,11 +1,20 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import { _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import Select from 'react-select';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import 'nepali-datepicker-reactjs/dist/index.css';
+
+import {
+    setGeneralDataAction,
+} from '#actionCreators';
+import {
+    generalDataSelector,
+} from '#selectors';
 
 
 import Icon from '#rscg/Icon';
@@ -43,27 +52,28 @@ const options = Array.from(Array(10).keys()).map(item => ({
     label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
 }));
 
+const mapStateToProps = state => ({
+    generalData: generalDataSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+});
+
 const BudgetActivity = (props: Props) => {
-    const [municipality, setMunicipality] = useState<number>(27010);
-    const [district, setDistrict] = useState<number>(27);
-    const [province, setProvince] = useState<number>(3);
-    const [date, setDate] = useState('');
-    const [datefrom, setDateFrom] = useState<string>('');
+    const { generalData: { fiscalYear } } = props;
 
     const [municipalBudget, setmunicipalBudget] = useState<string>('');
 
-    const handleFormRegion = (location: Location) => {
-        setMunicipality(location.municipalityId);
-        setDistrict(location.districtId);
-        setProvince(location.provinceId);
-    };
 
-    const handleAddContact = () => {
-        console.log('goto contacts add');
+    const handleMunicipalBudget = (budgetVal) => {
+        setmunicipalBudget(budgetVal.target.value);
     };
-
-    const handleDateChange = (dateObj) => {
-        setDate(dateObj);
+    const handleDRRFund = (fundVal) => {
+        setmunicipalBudget(fundVal.target.value);
+    };
+    const handleAddFund = (addFundVal) => {
+        setmunicipalBudget(addFundVal.target.value);
     };
 
     const selectStyles = {
@@ -85,66 +95,59 @@ const BudgetActivity = (props: Props) => {
         },
     };
 
-    const {
-        reportTitle,
-        mayor,
-        cao,
-        focalPerson,
-        formationDate,
-        memberCount,
-        setreportTitle,
-        setmayor,
-        setcao,
-        setformationDate,
-        setmemberCount,
 
-    } = props;
     return (
         <div className={styles.mainPageDetailsContainer}>
             <div className={styles.formContainer}>
                 <h2 className={styles.title}>Please enter Disaster Profile details</h2>
-                <div className={styles.formColumn}>
-                    <div className={styles.inputContainer}>
-                        <label className={styles.label}>
-                                 Muicipal Budget
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                onChange={(val: string) => setmunicipalBudget(val)}
-                                value={municipalBudget}
-                            />
+                <div className={styles.inputContainer}>
+                    <label className={styles.label}>
+                                 Muicipal Budget of FY
+                        {' '}
+                        { `${fiscalYear}/${fiscalYear + 1}`}
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleMunicipalBudget}
+                            placeholder={'Enter Amount'}
+                            value={municipalBudget}
+                        />
 
-                        </label>
+                    </label>
 
-                    </div>
-                    <div className={styles.inputContainer}>
+                </div>
+                <div className={styles.inputContainer}>
 
-                        <label className={styles.label}>
-                                 DRR Fund
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                onChange={(val: string) => setmunicipalBudget(val)}
-                                value={municipalBudget}
-                            />
+                    <label className={styles.label}>
+                                 DRR Fund for FY
+                        { `${fiscalYear}/${fiscalYear + 1}`}
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleDRRFund}
+                            value={municipalBudget}
+                            placeholder={'Enter Amount'}
+                        />
 
-                        </label>
+                    </label>
 
-                    </div>
-                    <div className={styles.inputContainer}>
+                </div>
+                <div className={styles.inputContainer}>
 
-                        <label className={styles.label}>
+                    <label className={styles.label}>
                             Additional DRR Fund for FY
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                onChange={(val: string) => setmunicipalBudget(val)}
-                                value={municipalBudget}
-                            />
+                        { `${fiscalYear}/${fiscalYear + 1}`}
 
-                        </label>
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleAddFund}
+                            placeholder={'Enter Amount'}
+                            value={municipalBudget}
+                        />
 
-                    </div>
+                    </label>
+
                 </div>
             </div>
 
@@ -152,4 +155,4 @@ const BudgetActivity = (props: Props) => {
     );
 };
 
-export default BudgetActivity;
+export default connect(mapStateToProps, mapDispatchToProps)(BudgetActivity);

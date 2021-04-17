@@ -377,6 +377,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                             mayor={mayor}
                             cao={cao}
                             focalPerson={focalPerson}
+                            updateTab={handleNextClick}
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>

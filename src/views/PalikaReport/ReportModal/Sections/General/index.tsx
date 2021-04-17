@@ -102,6 +102,7 @@ const General = (props: Props) => {
         cao,
         focalPerson,
         generalData,
+        updateTab,
     } = props;
 
     const handleDataSave = () => {
@@ -114,7 +115,7 @@ const General = (props: Props) => {
             formationDate,
             committeeMembers,
         });
-        console.log('value set: ', generalData);
+        updateTab();
     };
 
     // const handleFormRegion = (location: Location) => {
@@ -190,7 +191,7 @@ const General = (props: Props) => {
                                 options={options}
                                 placeholder={'Select Fiscal Year'}
                                 onChange={handleSelectChange}
-                                inputValue={fiscalYear}
+
                             />
                         </div>
 
