@@ -45,14 +45,14 @@ interface Props{
     focalPerson: string;
     formationDate: string;
     memberCount: string;
-    setreportTitle: React.ChangeEventHandler<HTMLInputElement>;
-    setdatefrom: React.ChangeEventHandler<HTMLInputElement>;
-    setdateTo: React.ChangeEventHandler<HTMLInputElement>;
-    setmayor: React.ChangeEventHandler<HTMLInputElement>;
-    setcao: React.ChangeEventHandler<HTMLInputElement>;
-    setfocalPerson: React.ChangeEventHandler<HTMLInputElement>;
-    setformationDate: React.ChangeEventHandler<HTMLInputElement>;
-    setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
+    // setreportTitle: React.ChangeEventHandler<HTMLInputElement>;
+    // setdatefrom: React.ChangeEventHandler<HTMLInputElement>;
+    // setdateTo: React.ChangeEventHandler<HTMLInputElement>;
+    // setmayor: React.ChangeEventHandler<HTMLInputElement>;
+    // setcao: React.ChangeEventHandler<HTMLInputElement>;
+    // setfocalPerson: React.ChangeEventHandler<HTMLInputElement>;
+    // setformationDate: React.ChangeEventHandler<HTMLInputElement>;
+    // setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
     // setGeneralData: GeneralData;
 }
 
@@ -69,37 +69,67 @@ const options = Array.from(Array(10).keys()).map(item => ({
     label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
 }));
 
-const General = (props: Props) => {
-    const [municipality, setMunicipality] = useState<number>(27010);
-    const [district, setDistrict] = useState<number>(27);
-    const [province, setProvince] = useState<number>(3);
-    const [date, setDate] = useState('');
-    const [datefrom, setDateFrom] = useState<string>('');
 
-    const handleFormRegion = (location: Location) => {
-        setMunicipality(location.municipalityId);
-        setDistrict(location.districtId);
-        setProvince(location.provinceId);
+const General = (props: Props) => {
+    const {
+        reportTitle: rt,
+        fiscalYear: fy,
+        formationDate: fd,
+        committeeMembers: cm,
+    } = props.generalData;
+    console.log(options);
+    const [reportTitle, setreportTitle] = useState<string>(rt);
+    const [fiscalYear, setfiscalYear] = useState<string>(fy);
+    const [formationDate, setformationDate] = useState<string>(fd);
+    const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
+
+    const handleReportTitle = (title: any) => {
+        setreportTitle(title.target.value);
     };
+    const handleFormationDate = (date: any) => {
+        setformationDate(date.target.value);
+    };
+    const handleMembers = (members: any) => {
+        setcommitteeMembers(members.target.value);
+    };
+    const handleSelectChange = (fiscal: any) => {
+        console.log(fiscal.value);
+        setfiscalYear(fiscal.value);
+    };
+
+    const {
+        mayor,
+        cao,
+        focalPerson,
+        generalData,
+    } = props;
+
+    const handleDataSave = () => {
+        props.setGeneralDatapp({
+            reportTitle,
+            fiscalYear,
+            mayor,
+            cao,
+            focalPerson,
+            formationDate,
+            committeeMembers,
+        });
+        console.log('value set: ', generalData);
+    };
+
+    // const handleFormRegion = (location: Location) => {
+    //     setMunicipality(location.municipalityId);
+    //     setDistrict(location.districtId);
+    //     setProvince(location.provinceId);
+    // };
 
 
     const handleAddContact = () => {
         console.log('goto contacts add');
-        props.setGeneralDatapp({
-            reportTitle: 'data data datda',
-            fiscalYear: 'data data datda',
-            mayor: 'data data datda',
-            cao: 'data data datda',
-            focalPerson: 'data data datda',
-            formationDate: 'data data datda',
-            committeeMembers: 1,
-        });
+
         console.log(props);
     };
 
-    const handleDateChange = (dateObj) => {
-        setDate(dateObj);
-    };
 
     const selectStyles = {
         option: (provided, state) => ({
@@ -119,21 +149,6 @@ const General = (props: Props) => {
             return { ...provided, opacity, transition };
         },
     };
-
-    const {
-        reportTitle,
-        mayor,
-        cao,
-        focalPerson,
-        formationDate,
-        memberCount,
-        setreportTitle,
-        setmayor,
-        setcao,
-        setformationDate,
-        setmemberCount,
-
-    } = props;
 
 
     return (
@@ -163,7 +178,7 @@ const General = (props: Props) => {
                                 type="text"
                                 className={styles.inputElement}
                                 placeholder="Report Title"
-                                onChange={setreportTitle}
+                                onChange={handleReportTitle}
                                 value={reportTitle || ''}
                             />
                         </div>
@@ -171,9 +186,11 @@ const General = (props: Props) => {
 
                         <div className={styles.inputContainer}>
                             <Select
-                                options={options}
                                 className={styles.select}
+                                options={options}
                                 placeholder={'Select Fiscal Year'}
+                                onChange={handleSelectChange}
+                                inputValue={fiscalYear}
                             />
                         </div>
 
@@ -323,23 +340,24 @@ const General = (props: Props) => {
                                 <NepaliDatePicker
                                     inputClassName="form-control"
                                     className={styles.datepicker}
-                                    value={date}
-                                    onChange={value => setDate(value)}
+                                    value={formationDate}
+                                    onChange={(value: string) => setformationDate(value)}
                                     options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
                                 />
                             </label>
+
 
                         </div>
                         <div className={styles.inputContainer}>
                             <label className={styles.label}>
                             Number of DRRM committee members
                                 <input
-                                    type="text"
+                                    type="number"
                                     className={styles.inputElement}
                                     placeholder={'Enter Number'}
-                                    onChange={setmemberCount}
-                                    value={memberCount || ''}
+                                    value={committeeMembers || ''}
+                                    onChange={handleMembers}
                                 />
                             </label>
 
@@ -349,6 +367,15 @@ const General = (props: Props) => {
                 </div>
 
             </div>
+
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save
+            </button>
+
         </div>
     );
 };

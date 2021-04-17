@@ -1,6 +1,11 @@
 .mainPageDetailsContainer{
     min-height: 400px !important;
     display: flex;
+    .savebtn{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
     .errMsg{
         font-size: 9px;
         color: red;
