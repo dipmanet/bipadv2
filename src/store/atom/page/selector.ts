@@ -552,6 +552,7 @@ export const carKeysSelector = ({ page }: AppState) => page.carKeys;
 // palika report
 export const generalDataSelector = ({ page }: AppState) => page.generalData;
 export const budgetDataSelector = ({ page }: AppState) => page.budgetData;
+export const budgetActivityDataSelector = ({ page }: AppState) => page.budgetActivityData;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

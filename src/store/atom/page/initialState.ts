@@ -208,6 +208,18 @@ const state: PageState = {
         totDrrBudget: 0,
         additionalDrrBudget: 0,
     },
+    budgetActivityData: {
+        name: '',
+        fundSource: '',
+        additionalDrrBudget: '',
+        budgetCode: '',
+        drrmCycle: '',
+        projStatus: '',
+        projCompletionDate: '',
+        allocatedBudget: '',
+        actualExp: '',
+        remarks: '',
+    },
 
 };
 export default state;

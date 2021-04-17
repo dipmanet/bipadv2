@@ -28,6 +28,19 @@ export interface BudgetData{
     additionalDrrBudget: number;
 }
 
+export interface BudgetActivityData{
+    name: string;
+    fundSource: string;
+    additionalDrrBudget: string;
+    budgetCode: string;
+    drrmCycle: string;
+    projStatus: string;
+    projCompletionDate: string;
+    allocatedBudget: string;
+    actualExp: string;
+    remarks: string;
+}
+
 export interface Province {
     id: number;
     bbox: BBox;
@@ -511,6 +524,7 @@ export interface PageState {
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
     budgetData: BudgetData;
+    budgetActivityData: BudgetActivityData;
 }
 
 // ACTION TYPES
@@ -520,6 +534,7 @@ export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
     SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
+    SET_BUDGET_ACTIVITY_DATA = 'page/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
     SET_DASHBOARD_HAZARD_TYPES = 'page/SET_DASHBOARD_HAZARD_TYPES',
@@ -613,7 +628,10 @@ export interface SetBudgetData {
     type: typeof PageType.SET_BUDGET_DATA;
     budgetData: BudgetData;
 }
-
+export interface SetBudgetActivityData {
+    type: typeof PageType.SET_BUDGET_ACTIVITY_DATA;
+    budgetActivityData: BudgetActivityData;
+}
 
 export interface SetInitialPopupHidden {
     type: typeof PageType.SET_INITIAL_POPUP_HIDDEN;
@@ -868,7 +886,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetBudgetData | SetGeneralData| SetRegion | SetInitialPopupHidden |
+    SetBudgetActivityData | SetBudgetData | SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

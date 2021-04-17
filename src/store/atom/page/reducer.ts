@@ -24,6 +24,11 @@ export const setBudgetDataAction = budgetData => ({
     budgetData,
 });
 
+export const setBudgetActivityDataAction = budgetActivityData => ({
+    type: Type.PageType.SET_BUDGET_ACTIVITY_DATA,
+    budgetActivityData,
+});
+
 export const setInitialPopupHiddenAction = (
     { value }: { value: boolean },
 ) => ({
@@ -1204,12 +1209,23 @@ const setBudgetData = (state: Type.PageState, action: Type.SetBudgetData) => {
     return newState;
 };
 
+const setBudgetActivityData = (state: Type.PageState, action: Type.SetBudgetActivityData) => {
+    const { budgetActivityData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetActivityData = budgetActivityData;
+    });
+    return newState;
+};
+
 
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_BUDGET_ACTIVITY_DATA:
+            return setBudgetActivityData(state, action);
         case Type.PageType.SET_BUDGET_DATA:
             return setBudgetData(state, action);
         case Type.PageType.SET_GENERAL_DATA:
