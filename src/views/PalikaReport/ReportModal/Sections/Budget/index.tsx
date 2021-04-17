@@ -66,9 +66,16 @@ const Budget = (props: Props) => {
         setBudgetDatapp,
     } = props;
 
-    const [municipalBudget, setmunicipalBudget] = useState<number>(0);
-    const [drrFund, setdrrFund] = useState<number>(0);
-    const [additionalFund, setadditionalFund] = useState<number>(0);
+    const {
+        municipalBudget: mb,
+        drrFund: df,
+        additionalFund: af,
+    } = budgetData;
+
+    console.log('budge data', budgetData);
+    const [municipalBudget, setmunicipalBudget] = useState(mb);
+    const [drrFund, setdrrFund] = useState(df);
+    const [additionalFund, setadditionalFund] = useState(af);
 
 
     const handleMunicipalBudget = (budgetVal) => {
@@ -120,11 +127,11 @@ const Budget = (props: Props) => {
                         {' '}
                         { `${fiscalYear}/${fiscalYear + 1}`}
                         <input
-                            type="number"
+                            type="text"
                             className={styles.inputElement}
                             onChange={handleMunicipalBudget}
                             placeholder={'Kindly specify total municipal budget in numbers'}
-                            value={municipalBudget === 0 ? '' : municipalBudget}
+                            value={municipalBudget}
                         />
 
                     </label>
@@ -134,12 +141,12 @@ const Budget = (props: Props) => {
 
                     <label className={styles.label}>
                                  Total DRR Fund for FY
-                        { `${fiscalYear}/${fiscalYear + 1}`}
+                        { `${fiscalYear}`}
                         <input
-                            type="number"
+                            type="text"
                             className={styles.inputElement}
                             onChange={handleDRRFund}
-                            value={drrFund === 0 ? '' : drrFund}
+                            value={drrFund}
                             placeholder={'Kindly specify total DRR funds in numbers'}
                         />
 
@@ -151,14 +158,14 @@ const Budget = (props: Props) => {
 
                     <label className={styles.label}>
                             Additional DRR Fund for FY
-                        { `${fiscalYear}/${fiscalYear + 1}`}
+                        { `${fiscalYear}`}
 
                         <input
                             type="number"
                             className={styles.inputElement}
                             onChange={handleAddFund}
                             placeholder={'Kindly specify additional funds in numbers'}
-                            value={additionalFund === 0 ? '' : additionalFund}
+                            value={additionalFund}
                         />
 
                     </label>

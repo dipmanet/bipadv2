@@ -12,19 +12,32 @@ import {
     setBudgetActivityDataAction,
 } from '#actionCreators';
 import {
-    budgetDataSelector,
+    budgetActivityDataSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
 
 
 const mapStateToProps = state => ({
-    budgetData: budgetDataSelector(state),
+    budgetActivityData: budgetActivityDataSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setBudgetActivityDatapp: params => dispatch(setBudgetActivityDataAction(params)),
 });
+
+interface BudgetActivityData{
+    name: string;
+    fundSource: string;
+    additionalDrrBudget: string;
+    budgetCode: string;
+    drrmCycle: string;
+    projStatus: string;
+    projCompletionDate: string;
+    allocatedBudget: string;
+    actualExp: string;
+    remarks: string;
+}
 
 
 interface Props{
@@ -64,20 +77,33 @@ const BudgetActivity = (props: Props) => {
         updateTab,
         budgetData,
         setBudgetActivityDatapp,
+        budgetActivityData,
     } = props;
+    const {
+        name: nm,
+        fundSource: fd,
+        additionalDrrBudget: ad,
+        budgetCode: bc,
+        drrmCycle: dc,
+        projStatus: ps,
+        projCompletionDate,
+        allocatedBudget: ab,
+        actualExp: ae,
+        remarks: rm,
+    } = budgetActivityData;
 
     const [startDate, setStartDate] = useState(new Date());
     const [projcompletionDate, setprojCompletionDate] = useState(new Date());
-    const [activityName, setactivityName] = useState('');
-    const [fundSource, setfundSource] = useState('');
-    const [fundSourcetype, setfundSourcetype] = useState('');
+    const [activityName, setactivityName] = useState(nm);
+    const [fundSource, setfundSource] = useState(fd);
+    const [fundSourcetype, setfundSourcetype] = useState(ad);
     const [otherFund, setotherFund] = useState('');
-    const [budgetCode, setbudgetCode] = useState('');
-    const [drrmCycle, setdrrmCycle] = useState('');
-    const [projStatus, setprojStatus] = useState('');
-    const [allocatedBudget, setallocatedBudget] = useState('');
-    const [actualExp, setactualExp] = useState('');
-    const [remarks, setremarks] = useState('');
+    const [budgetCode, setbudgetCode] = useState(bc);
+    const [drrmCycle, setdrrmCycle] = useState(dc);
+    const [projStatus, setprojStatus] = useState(ps);
+    const [allocatedBudget, setallocatedBudget] = useState(ab);
+    const [actualExp, setactualExp] = useState(ae);
+    const [remarks, setremarks] = useState(rm);
 
     const handleDataSave = () => {
         setBudgetActivityDatapp({

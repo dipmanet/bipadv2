@@ -77,7 +77,7 @@ const General = (props: Props) => {
         formationDate: fd,
         committeeMembers: cm,
     } = props.generalData;
-    console.log(options);
+
     const [reportTitle, setreportTitle] = useState<string>(rt);
     const [fiscalYear, setfiscalYear] = useState<string>(fy);
     const [formationDate, setformationDate] = useState<string>(fd);
@@ -93,8 +93,7 @@ const General = (props: Props) => {
         setcommitteeMembers(members.target.value);
     };
     const handleSelectChange = (fiscal: any) => {
-        console.log(fiscal.value);
-        setfiscalYear(fiscal.value);
+        setfiscalYear(fiscal.target.value);
     };
 
     const {
@@ -186,13 +185,31 @@ const General = (props: Props) => {
 
 
                         <div className={styles.inputContainer}>
-                            <Select
+                            {/* <Select
                                 className={styles.select}
                                 options={options}
                                 placeholder={'Select Fiscal Year'}
                                 onChange={handleSelectChange}
 
-                            />
+                            /> */}
+
+                            <select
+                                value={fiscalYear}
+                                onChange={handleSelectChange}
+                                className={styles.inputElement}
+                            >
+                                <option value="select">Select an Option</option>
+                                <option value="2076/2077">2076/2077</option>
+                                <option value="2075/2076">2075/2076</option>
+                                <option value="2074/2075">2074/2075</option>
+                                <option value="2073/2074">2073/2074</option>
+                                <option value="2072/2073">2072/2073</option>
+                                <option value="2071/2072">2071/2072</option>
+                                <option value="2070/2071">2070/2071</option>
+                                <option value="2069/2070">2069/2070</option>
+                                <option value="2068/2069">2068/2069</option>
+                                <option value="2067/2068">2067/2068</option>
+                            </select>
                         </div>
 
                     </div>
