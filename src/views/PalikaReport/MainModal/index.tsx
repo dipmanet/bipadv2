@@ -230,11 +230,11 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     setfocalPerson(item.name);
                 }
                 if (item.position && item.position.includes('Mayor')) {
-                    const details = `Name: ${item.name}\n,Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `Name: ${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chairperson')) {
-                    const details = `Name:${item.name}\n,Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `Name:${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
