@@ -220,6 +220,11 @@ const state: PageState = {
         actualExp: '',
         remarks: '',
     },
+    programAndPolicyData: {
+        pointOne: '',
+        pointTwo: '',
+        pointThree: '',
+    },
 
 };
 export default state;

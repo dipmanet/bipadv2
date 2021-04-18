@@ -1,18 +1,45 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
+
+import {
+    setProgramAndPolicyDataAction,
+} from '#actionCreators';
+import {
+    programAndPolicySelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    programAndPolicyData: programAndPolicySelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setProgramData: params => dispatch(setProgramAndPolicyDataAction(params)),
+});
+
 
 interface Props{
 
 }
 
 const ProgramPolicies = (props: Props) => {
-    const { updateTab } = props;
+    const {
+        updateTab,
+        setProgramData,
+        programAndPolicyData,
+    } = props;
 
-    const [pointOne, setpointOne] = useState('');
-    const [pointTwo, setpointTwo] = useState('');
-    const [pointThree, setpointThree] = useState('');
+    const {
+        pointOne: one,
+        pointTwo: two,
+        pointThree: three,
+    } = programAndPolicyData;
+
+    const [pointOne, setpointOne] = useState(one);
+    const [pointTwo, setpointTwo] = useState(two);
+    const [pointThree, setpointThree] = useState(three);
 
     const handlePointOne = (data) => {
         setpointOne(data.target.value);
@@ -27,6 +54,11 @@ const ProgramPolicies = (props: Props) => {
 
     const handleDataSave = () => {
         updateTab();
+        setProgramData({
+            pointOne,
+            pointTwo,
+            pointThree,
+        });
     };
 
     return (
@@ -84,4 +116,4 @@ const ProgramPolicies = (props: Props) => {
     );
 };
 
-export default ProgramPolicies;
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramPolicies);
