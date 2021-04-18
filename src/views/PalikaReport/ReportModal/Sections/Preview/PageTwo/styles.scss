@@ -94,6 +94,53 @@
         padding: 5px 0;
     }
 }
+.rowFour{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // border: 1px solid red;
+    height: 90px;
+    .sectionLeft{
+        display: flex;
+        // border: 1px solid blue;
+        align-items: center;
+        .bulletPoint{
+            width: 20.8mm;
+            height: 17.4;
+
+        }
+        .address{
+            // border: 1px solid red;
+            position: relative;
+            .title{
+                font-size: 16px;
+                font-weight: 600;
+                padding-bottom: 10px;
+                padding-left: 10px;
+            }
+            .desc{
+                font-size: 14px;
+                padding-left: 10px;
+
+            }
+        }
+    }
+
+    .sectionright{
+        display: flex;
+        // border: 1px solid gray;
+       .mayorName{
+           .title{
+               font-weight: 600;
+           }
+
+       }
+        .list{
+            list-style: none;
+        }
+    }
+
+}
 
 }
 
