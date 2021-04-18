@@ -198,7 +198,7 @@ const General = (props: Props) => {
                                 onChange={handleSelectChange}
                                 className={styles.inputElement}
                             >
-                                <option value="select">Select an Option</option>
+                                <option value="select">Select Fiscal Year</option>
                                 <option value="2076/2077">2076/2077</option>
                                 <option value="2075/2076">2075/2076</option>
                                 <option value="2074/2075">2074/2075</option>
