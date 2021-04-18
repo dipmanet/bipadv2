@@ -25,8 +25,11 @@ interface Props{
 }
 
 const ProgramPolicies = (props: Props) => {
-    const { programAndPolicyData,
-        setProgramData } = props;
+    const {
+        programAndPolicyData,
+        setProgramData,
+        updateTab,
+    } = props;
 
     const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
 
@@ -36,8 +39,11 @@ const ProgramPolicies = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log(programAndPolicyData);
-    // handle input change
+
+
+    const handleNext = () => {
+        updateTab();
+    };
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputList];
@@ -84,7 +90,7 @@ const ProgramPolicies = (props: Props) => {
                                 className="mr10"
                                 onClick={() => handleRemoveClick(i)}
                             >
-                                Remove
+                                Remove Point
                             </button>
                         )}
                         {inputList.length - 1 === i && (
@@ -92,12 +98,19 @@ const ProgramPolicies = (props: Props) => {
                                 type="button"
                                 onClick={handleAddClick}
                             >
-                            Add
+                            Add Point
                             </button>
                         )}
                     </div>
                 </>
             ))}
+            <button
+                type="button"
+                onClick={handleNext}
+                className={styles.savebtn}
+            >
+                    Next
+            </button>
         </>
     );
 };
