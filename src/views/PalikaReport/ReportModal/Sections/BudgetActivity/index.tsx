@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Table } from 'react-bootstrap';
 
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
@@ -104,9 +105,14 @@ const BudgetActivity = (props: Props) => {
     const [allocatedBudget, setallocatedBudget] = useState(ab);
     const [actualExp, setactualExp] = useState(ae);
     const [remarks, setremarks] = useState(rm);
+    // const tableData = [];
+
+    const [showTable, setShowTable] = useState(false);
+    const [tableData, setTableData] = useState([]);
+
 
     const handleDataSave = () => {
-        setBudgetActivityDatapp({
+        const newArr = [...tableData, {
             name: activityName,
             fundSource,
             additionalDrrBudget: '',
@@ -117,9 +123,19 @@ const BudgetActivity = (props: Props) => {
             allocatedBudget,
             actualExp,
             remarks,
-        });
-        updateTab();
+        }];
+        setTableData(newArr);
+        setBudgetActivityDatapp(...newArr);
+        setShowTable(true);
+        // updateTab();
+        console.log(tableData);
     };
+
+
+    useEffect(() => {
+        console.log('table data: ', tableData);
+    }, [tableData]);
+
 
     const handleActivityName = (data) => {
         setactivityName(data.target.value);
@@ -319,6 +335,40 @@ const BudgetActivity = (props: Props) => {
 
                     </label>
                 </div>
+                {tableData.length > 0
+                 && (
+
+                     <Table striped bordered hover size="md">
+                         <thead>
+                             <tr>
+                                 {Object.keys(tableData[0]).map(item => (
+                                     <th key={item}>
+                                         {item}
+                                     </th>
+                                 ))}
+
+                             </tr>
+                         </thead>
+                         <tbody>
+                             {
+                                 tableData.map(data => (
+                                     <tr key={data.name}>
+                                         {Object.keys(tableData[0]).map((title) => {
+                                             console.log('data', data[title]);
+                                             return (
+                                                 <td key={title}>
+                                                     {data[title] ? String(data[title]) : 'No data'}
+
+                                                 </td>
+                                             );
+                                         })}
+                                     </tr>
+                                 ))}
+                         </tbody>
+                     </Table>
+                 )
+
+                }
                 <button
                     type="button"
                     onClick={handleDataSave}
