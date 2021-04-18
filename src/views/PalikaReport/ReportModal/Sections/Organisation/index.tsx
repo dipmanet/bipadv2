@@ -120,7 +120,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         <div className={styles.tabsPageContainer}>
             <p>
                 <strong>
-                    DRR related organizations in MUnicipal Government
+                DRR related organizations in Municipal Government
                 </strong>
             </p>
             <div className={styles.palikaTable}>

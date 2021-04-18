@@ -272,7 +272,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 3
                && showTabs)
                     ? (
-                        <ProgrammeAndPolicies />
+                        <ProgrammeAndPolicies
+                            updateTab={updateTab}
+                        />
                     )
                     : ''
             }

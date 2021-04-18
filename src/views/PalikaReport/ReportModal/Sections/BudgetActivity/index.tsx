@@ -111,7 +111,11 @@ const BudgetActivity = (props: Props) => {
     const [tableData, setTableData] = useState([]);
 
 
-    const handleDataSave = () => {
+    const handleNext = () => {
+        updateTab();
+    };
+
+    const handleSave = () => {
         const newArr = [...tableData, {
             name: activityName,
             fundSource,
@@ -125,16 +129,24 @@ const BudgetActivity = (props: Props) => {
             remarks,
         }];
         setTableData(newArr);
-        setBudgetActivityDatapp(...newArr);
-        setShowTable(true);
-        // updateTab();
-        console.log(tableData);
+        setBudgetActivityDatapp(newArr);
     };
 
-
-    useEffect(() => {
-        console.log('table data: ', tableData);
-    }, [tableData]);
+    const handleAddNew = () => {
+        setShowTable(true);
+        setStartDate(new Date());
+        setprojCompletionDate(new Date());
+        setactivityName('');
+        setfundSource('');
+        setfundSourcetype('');
+        setotherFund('');
+        setbudgetCode('');
+        setdrrmCycle('');
+        setprojStatus('');
+        setallocatedBudget('');
+        setactualExp('');
+        setremarks('');
+    };
 
 
     const handleActivityName = (data) => {
@@ -335,13 +347,13 @@ const BudgetActivity = (props: Props) => {
 
                     </label>
                 </div>
-                {tableData.length > 0
+                {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (
 
                      <Table striped bordered hover size="md">
                          <thead>
                              <tr>
-                                 {Object.keys(tableData[0]).map(item => (
+                                 {Object.keys(props.budgetActivityData[0]).map(item => (
                                      <th key={item}>
                                          {item}
                                      </th>
@@ -351,9 +363,9 @@ const BudgetActivity = (props: Props) => {
                          </thead>
                          <tbody>
                              {
-                                 tableData.map(data => (
+                                 props.budgetActivityData.map(data => (
                                      <tr key={data.name}>
-                                         {Object.keys(tableData[0]).map((title) => {
+                                         {Object.keys(props.budgetActivityData[0]).map((title) => {
                                              console.log('data', data[title]);
                                              return (
                                                  <td key={title}>
@@ -371,10 +383,24 @@ const BudgetActivity = (props: Props) => {
                 }
                 <button
                     type="button"
-                    onClick={handleDataSave}
+                    onClick={handleSave}
                     className={styles.savebtn}
                 >
-                            Save and Proceed
+                            Save
+                </button>
+                <button
+                    type="button"
+                    onClick={handleAddNew}
+                    className={styles.savebtn}
+                >
+                            Add New Activity
+                </button>
+                <button
+                    type="button"
+                    onClick={handleNext}
+                    className={styles.savebtn}
+                >
+                            Next
                 </button>
             </div>
 

@@ -28,6 +28,12 @@ export interface BudgetData{
     additionalDrrBudget: number;
 }
 
+export interface ProgramAndPolicyData{
+    pointOne: string;
+    pointTwo: string;
+    pointThree: string;
+}
+
 export interface BudgetActivityData{
     name: string;
     fundSource: string;
@@ -525,6 +531,7 @@ export interface PageState {
     generalData: GeneralData;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
+    programAndPolicyData: ProgramAndPolicyData;
 }
 
 // ACTION TYPES
@@ -534,6 +541,7 @@ export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
     SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
+    SET_PROGRAM_AND_POLICY_DATA = 'page/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/SET_BUDGET_ACTIVITY_DATA',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
@@ -624,13 +632,20 @@ export interface SetGeneralData {
     type: typeof PageType.SET_GENERAL_DATA;
     generalData: GeneralData;
 }
+
 export interface SetBudgetData {
     type: typeof PageType.SET_BUDGET_DATA;
     budgetData: BudgetData;
 }
+
 export interface SetBudgetActivityData {
     type: typeof PageType.SET_BUDGET_ACTIVITY_DATA;
     budgetActivityData: BudgetActivityData;
+}
+
+export interface SetProgramAndPolicyData {
+    type: typeof PageType.SET_PROGRAM_AND_POLICY_DATA;
+    programAndPolicyData: ProgramAndPolicyData;
 }
 
 export interface SetInitialPopupHidden {
@@ -886,7 +901,8 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetBudgetActivityData | SetBudgetData | SetGeneralData| SetRegion | SetInitialPopupHidden |
+    SetProgramAndPolicyData | SetBudgetActivityData | SetBudgetData |
+    SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

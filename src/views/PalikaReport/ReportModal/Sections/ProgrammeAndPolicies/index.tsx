@@ -1,55 +1,118 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
+import styles from './styles.scss';
+
+import {
+    setProgramAndPolicyDataAction,
+} from '#actionCreators';
+import {
+    programAndPolicySelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    programAndPolicyData: programAndPolicySelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setProgramData: params => dispatch(setProgramAndPolicyDataAction(params)),
+});
+
 
 interface Props{
 
 }
 
 const ProgramPolicies = (props: Props) => {
-    console.log('props', props);
+    const {
+        programAndPolicyData,
+        setProgramData,
+        updateTab,
+    } = props;
+
+    const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
+
+    useEffect(() => {
+        if (!('pointOne' in programAndPolicyData)) {
+            setInputList(programAndPolicyData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const handleNext = () => {
+        updateTab();
+    };
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        setInputList(list);
+        setProgramData(inputList);
+    };
+
+    // handle click event of the Remove button
+    const handleRemoveClick = (index) => {
+        const list = [...inputList];
+        list.splice(index, 1);
+        setInputList(list);
+    };
+
+    // handle click event of the Add button
+    const handleAddClick = () => {
+        setInputList([...inputList, { firstName: '', lastName: '' }]);
+    };
+
     return (
         <>
-            <h2>Bipad Sambandhi Niyam Aain ra Nirdeshika</h2>
-            <Table striped bordered hover size="md">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Name</th>
-                        <th>Approval Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Nabanit ji</td>
-                        <td>Policy Points</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Nabanit ji</td>
-                        <td>Policy Points</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Nabanit ji</td>
-                        <td>Policy Points</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Nabanit ji</td>
-                        <td>Policy Points</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Nabanit ji</td>
-                        <td>Policy Points</td>
-                    </tr>
+            <h2>Annual Program and Policy</h2>
+            <p>Disaster related policy points of current fiscal year</p>
+            {inputList.map((x, i) => (
 
-                </tbody>
-            </Table>
+                <>
+                    <div className={styles.inputContainer}>
+                        <label className={styles.label}>
+                            <input
+                                name="firstName"
+                                placeholder="Enter Policy Point"
+                                value={x.firstName}
+                                onChange={e => handleInputChange(e, i)}
+                            />
+                        </label>
+                    </div>
 
+
+                    <div className="btn-box">
+                        {inputList.length !== 1 && (
+                            <button
+                                type="button"
+                                className="mr10"
+                                onClick={() => handleRemoveClick(i)}
+                            >
+                                Remove Point
+                            </button>
+                        )}
+                        {inputList.length - 1 === i && (
+                            <button
+                                type="button"
+                                onClick={handleAddClick}
+                            >
+                            Add Point
+                            </button>
+                        )}
+                    </div>
+                </>
+            ))}
+            <button
+                type="button"
+                onClick={handleNext}
+                className={styles.savebtn}
+            >
+                    Next
+            </button>
         </>
     );
 };
 
-export default ProgramPolicies;
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramPolicies);
