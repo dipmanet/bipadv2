@@ -1,4 +1,5 @@
 import React from 'react';
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import styles from './styles.scss';
 import LineData from './data';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -11,9 +12,20 @@ import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
 import CriticalInfra from '../../CriticalInfra';
 
+import govtlogo from '../../../../govtLogo.svg';
+
 interface Props{
     reportData: Element[];
 }
+
+
+const data02 = [
+    { name: 'Group A', value: 2400 },
+    { name: 'Group B', value: 4567 },
+    { name: 'Group C', value: 1398 },
+
+];
+
 
 const Preview = (props: Props) => {
     const {
@@ -23,25 +35,58 @@ const Preview = (props: Props) => {
     return (
         <div className={styles.previewContainer}>
             <div className={styles.header}>
-                <ScalableVectorGraphics
-                    className={styles.logo}
-                    src={Logo}
-                    // src={BulletIcon}
-                    alt="Nepal Government Logo"
-                />
+
+
+                <div className={styles.address}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={govtlogo}
+                        alt="Nepal Government"
+                    />
+
+                    <div className={styles.desc}>
+                        <ul>
+                            <li className={styles.pageOneTitle}>Rajapur Municipality</li>
+                            <li>Bardiya District, Lumbini Province</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
                 <div className={styles.location}>
-                    <h1>Rajapur Municipality</h1>
-                    <p>Bardiya District, Lumbini Province</p>
+                    <ul>
+                        <li className={styles.pageOneTitle}>Disaster Report</li>
+                        <li>FY 2075/76</li>
+                        {/* <li>Date: 1/1/2021</li> */}
+
+                    </ul>
+
+
                 </div>
-                <div className={styles.title}>
-                    <p><strong>{generalData.reportTitle}</strong></p>
-                    <p>2077/01/12 Lorem Ipsum dolor femet graphics</p>
-                </div>
+
 
             </div>
             <div className={styles.rowOne}>
                 <div className={styles.columnOneOne}>
-                   Section 1
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart width={400} height={400}>
+                            <Pie
+                                dataKey="value"
+                                isAnimationActive={false}
+                                data={data02}
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={80}
+                                fill="#8884d8"
+                                label
+                            />
+                            <Pie dataKey="value" data={data02} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d" />
+                            <Tooltip />
+                            <Legend />
+
+                        </PieChart>
+                    </ResponsiveContainer>
                 </div>
                 <div className={styles.columnOneTwo}>
                     Section 2
