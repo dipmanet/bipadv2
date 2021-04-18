@@ -70,7 +70,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 
-const Organisation: React.FC<Props> = (props: Props) => {
+const Inventory: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
@@ -209,7 +209,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 export default connect(mapStateToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
-            Organisation,
+            Inventory,
         ),
     ),
 );
