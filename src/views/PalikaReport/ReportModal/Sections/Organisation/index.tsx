@@ -88,7 +88,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
         const selectedPage = e.selected;
 
         setOffset(selectedPage * 2);
-        console.log('console', e.selected);
     };
     PalikaReportOrganizationReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -101,11 +100,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     });
 
-    const finalArr = [];
-    console.log('Fetched data>>>', paginationParameters);
-
-
-    console.log('this test', finalArr);
 
     useEffect(() => {
         PalikaReportOrganizationReport.do({
@@ -114,7 +108,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
     // Finding Header for table data
-    const finalTableHeader = Object.keys(tableHeader).map(item => tableHeader[item].label);
+
 
     return (
         <div className={styles.tabsPageContainer}>
@@ -175,8 +169,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     />
                                 </div>
                             )}
-                {finalArr && finalArr.length === 0
-                && <p className={styles.dataUnavailable}>{''}</p>
+                {fetchedData && fetchedData.length === 0
+                && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 }
             </div>
