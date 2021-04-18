@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
@@ -25,93 +25,72 @@ interface Props{
 }
 
 const ProgramPolicies = (props: Props) => {
-    const {
-        updateTab,
-        setProgramData,
-        programAndPolicyData,
-    } = props;
+    const { programAndPolicyData,
+        setProgramData } = props;
 
-    const {
-        pointOne: one,
-        pointTwo: two,
-        pointThree: three,
-    } = programAndPolicyData;
+    const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
 
-    const [pointOne, setpointOne] = useState(one);
-    const [pointTwo, setpointTwo] = useState(two);
-    const [pointThree, setpointThree] = useState(three);
-
-    const handlePointOne = (data) => {
-        setpointOne(data.target.value);
-    };
-    const handlePointTwo = (data) => {
-        setpointTwo(data.target.value);
-    };
-    const handlePointThree = (data) => {
-        setpointThree(data.target.value);
+    useEffect(() => {
+        if (!('pointOne' in programAndPolicyData)) {
+            setInputList(programAndPolicyData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    console.log(programAndPolicyData);
+    // handle input change
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        setInputList(list);
+        setProgramData(inputList);
     };
 
+    // handle click event of the Remove button
+    const handleRemoveClick = (index) => {
+        const list = [...inputList];
+        list.splice(index, 1);
+        setInputList(list);
+    };
 
-    const handleDataSave = () => {
-        updateTab();
-        setProgramData({
-            pointOne,
-            pointTwo,
-            pointThree,
-        });
+    // handle click event of the Add button
+    const handleAddClick = () => {
+        setInputList([...inputList, { firstName: '', lastName: '' }]);
     };
 
     return (
         <>
             <h2>Annual Program and Policy</h2>
             <p>Disaster related policy points of current fiscal year</p>
-            <div className={styles.inputContainer}>
-                <label className={styles.label}>
-                                 Point 1
+            {inputList.map((x, i) => (
+                <div className="box">
                     <input
-                        type="text"
-                        className={styles.inputElement}
-                        onChange={handlePointOne}
-                        placeholder={'Kindly specify Point 1'}
-                        value={pointOne}
+                        name="firstName"
+                        placeholder="Enter Policy Point"
+                        value={x.firstName}
+                        onChange={e => handleInputChange(e, i)}
                     />
-
-                </label>
-            </div>
-            <div className={styles.inputContainer}>
-                <label className={styles.label}>
-                                 Point 2
-                    <input
-                        type="text"
-                        className={styles.inputElement}
-                        onChange={handlePointTwo}
-                        placeholder={'Kindly specify Point 2'}
-                        value={pointTwo}
-                    />
-
-                </label>
-            </div>
-            <div className={styles.inputContainer}>
-                <label className={styles.label}>
-                                 Point 3
-                    <input
-                        type="text"
-                        className={styles.inputElement}
-                        onChange={handlePointThree}
-                        placeholder={'Kindly specify Point 3'}
-                        value={pointThree}
-                    />
-
-                </label>
-            </div>
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
-                            Save and Proceed
-            </button>
-
+                    <div className="btn-box">
+                        {inputList.length !== 1 && (
+                            <button
+                                type="button"
+                                className="mr10"
+                                onClick={() => handleRemoveClick(i)}
+                            >
+                                Remove
+                            </button>
+                        )}
+                        {inputList.length - 1 === i && (
+                            <button
+                                type="button"
+                                onClick={handleAddClick}
+                            >
+                            Add
+                            </button>
+                        )}
+                    </div>
+                </div>
+            ))}
         </>
     );
 };

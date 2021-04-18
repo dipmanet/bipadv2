@@ -11,7 +11,7 @@ const Organisation = (props: Props) => {
         <div className={styles.tabsPageContainer}>
             <p>
                 <strong>
-                    Disaster minimisation and reconstruction organisations
+                DRR related organizations in Municipal Government
                 </strong>
             </p>
             <Table striped bordered hover size="md">
