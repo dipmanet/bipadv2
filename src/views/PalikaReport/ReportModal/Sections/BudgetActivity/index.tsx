@@ -187,7 +187,7 @@ const BudgetActivity = (props: Props) => {
                 <h2 className={styles.title}>Budget Activities</h2>
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
-                                 Name of Activity
+                                 Name of Activity:
                         <input
                             type="text"
                             className={styles.inputElement}
@@ -200,13 +200,13 @@ const BudgetActivity = (props: Props) => {
                 </div>
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
-                                 Source of Fund
+                                 Source of Fund:
                         <select
                             value={fundSource}
                             onChange={handlefundSource}
                             className={styles.inputElement}
                         >
-                            <option value="select">Select an Option</option>
+                            <option value="select">Select a fund source</option>
                             <option value="First">First</option>
                             <option value="Second">Second</option>
                             <option value="Third">Third</option>
@@ -216,7 +216,7 @@ const BudgetActivity = (props: Props) => {
                 </div>
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
-                                 Select One
+                                 Fund source type:
                         <select
                             value={fundSourcetype}
                             onChange={handlefundSourceType}
@@ -381,27 +381,30 @@ const BudgetActivity = (props: Props) => {
                  )
 
                 }
-                <button
-                    type="button"
-                    onClick={handleSave}
-                    className={styles.savebtn}
-                >
+                <div className={styles.btns}>
+                    <button
+                        type="button"
+                        onClick={handleSave}
+                        className={styles.savebtn}
+                    >
                             Save
-                </button>
-                <button
-                    type="button"
-                    onClick={handleAddNew}
-                    className={styles.savebtn}
-                >
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleAddNew}
+                        className={styles.savebtn}
+                    >
                             Add New Activity
-                </button>
-                <button
-                    type="button"
-                    onClick={handleNext}
-                    className={styles.savebtn}
-                >
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleNext}
+                        className={styles.savebtn}
+                    >
                             Next
-                </button>
+                    </button>
+                </div>
+
             </div>
 
         </div>

@@ -65,7 +65,7 @@ const ProgramPolicies = (props: Props) => {
     };
 
     return (
-        <>
+        <div className={styles.pApContainer}>
             <h2>Annual Program and Policy</h2>
             <p>Disaster related policy points of current fiscal year</p>
             {inputList.map((x, i) => (
@@ -104,14 +104,17 @@ const ProgramPolicies = (props: Props) => {
                     </div>
                 </>
             ))}
-            <button
-                type="button"
-                onClick={handleNext}
-                className={styles.savebtn}
-            >
+            <div className={styles.btns}>
+                <button
+                    type="button"
+                    onClick={handleNext}
+                    className={styles.savebtn}
+                >
                     Next
-            </button>
-        </>
+                </button>
+            </div>
+
+        </div>
     );
 };
 
