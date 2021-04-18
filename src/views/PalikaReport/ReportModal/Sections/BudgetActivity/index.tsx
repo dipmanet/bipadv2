@@ -318,8 +318,8 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                         >
                             <option value="select">Select an Option</option>
-                            <option value="Not started">Not started</option>
                             <option value="Rehabilitation">Started</option>
+                            <option value="Not started">Ongoing</option>
                             <option value="INGO">Completed</option>
                         </select>
 
