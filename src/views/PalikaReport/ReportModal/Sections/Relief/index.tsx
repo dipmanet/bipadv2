@@ -7,6 +7,9 @@ interface Props{
 }
 const Relief = (props: Props) => {
     console.log(props);
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     return (
         <div className={styles.tabsPageContainer}>
             <p><strong>Relief Data</strong></p>
@@ -33,6 +36,14 @@ const Relief = (props: Props) => {
                 </tbody>
             </Table>
 
+
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save and Proceed
+            </button>
         </div>
     );
 };

@@ -30,6 +30,7 @@ import {
     methods,
 } from '#request';
 import { userSelector } from '#selectors';
+import Simulation from './Sections/Simulation';
 
 interface Props {
     keyTab: number;
@@ -283,7 +284,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 4
                && showTabs)
                     ? (
-                        <Organisation url={keyTabUrl} />
+                        <Organisation
+                            url={keyTabUrl}
+                            updateTab={updateTab}
+                        />
                     )
                     : ''
             }
@@ -291,7 +295,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 5
                && showTabs)
                     ? (
-                        <Inventory width={'100%'} height={'40%'} />
+                        <Inventory updateTab={updateTab} width={'100%'} height={'40%'} />
                     )
                     : ''
             }
@@ -299,7 +303,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 6
                && showTabs)
                     ? (
-                        <CriticalInfra width={'100%'} height={'50%'} />
+                        <CriticalInfra updateTab={updateTab} width={'100%'} height={'50%'} />
                     )
                     : ''
             }
@@ -308,8 +312,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <Contacts />
-                            <DRRMembers />
+                            <Contacts updateTab={updateTab} />
+                            {/* <DRRMembers updateTab={updateTab} /> */}
                         </>
                     )
                     : ''
@@ -318,7 +322,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 8
                && showTabs)
                     ? (
-                        <Relief />
+                        <Relief updateTab={updateTab} />
                     )
                     : ''
             }
@@ -326,7 +330,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Relief />
+                        <Relief updateTab={updateTab} />
                     )
                     : ''
             }
@@ -336,8 +340,17 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <WardwiseDeath width={'100%'} height={'50%'} />
-                            <DamageAndLoss />
+                            <Simulation updateTab={updateTab} />
+                        </>
+                    )
+                    : ''
+            }
+            {
+                (keyTab === 11
+               && showTabs)
+                    ? (
+                        <>
+                            <DamageAndLoss updateTab={updateTab} />
                         </>
                     )
                     : ''

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { ComposedChart,
     Line,
     Area,
@@ -22,18 +23,33 @@ import BudgetActivity from '../../BudgetActivity';
 
 import govtlogo from '../../../../govtLogo.svg';
 
+import {
+    generalDataSelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    generalData: generalDataSelector(state),
+});
+
 interface Props{
     reportData: Element[];
 }
 
-const Preview = (props: Props) => {
-    const { reportData } = props;
+const PageTwo = (props: Props) => {
+    const { reportData, generalData } = props;
+    const [mayorName, setmayorName] = useState('');
     const {
         lineData,
         composedChart,
         scatterChart,
         barChart,
     } = LineData;
+    useEffect(() => {
+        if (generalData && generalData.mayor) {
+            const mayor = generalData.mayor.split(',')[0].split(':')[1];
+            setmayorName(mayor);
+        }
+    }, [generalData]);
     return (
         <div className={styles.previewContainer}>
             {/* {reportData.map(comp => (
@@ -112,24 +128,24 @@ const Preview = (props: Props) => {
                 <div className={styles.sectionright}>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
-                            <li className={styles.title}>Mr Mayor</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li className={styles.title}>Mayor/NagarPramukh</li>
+                            <li>{mayorName}</li>
+                            <li>9858027167 </li>
 
                         </ul>
                     </div>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
                             <li className={styles.title}>CAO</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li>No Data </li>
+                            <li>No Data </li>
                         </ul>
                     </div>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
                             <li className={styles.title}>Focal Person</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li>Khusi Ram Tharu</li>
+                            <li>9851046372</li>
                         </ul>
                     </div>
 
@@ -142,4 +158,4 @@ const Preview = (props: Props) => {
     );
 };
 
-export default Preview;
+export default connect(mapStateToProps, undefined)(PageTwo);

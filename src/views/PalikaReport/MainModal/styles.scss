@@ -184,7 +184,7 @@
         }
 }
 .tabsContainer{
-    width: calc(55% - 60px);
+    width: calc(75% - 60px);
     height: 90%;
     position: absolute;
     overflow-x: scroll;
@@ -202,7 +202,6 @@
             width: 100%;
             height: 60px;
             display: flex;
-            // border: 1px solid green;
             .tabsTitle{
                 width: 95%;
                 height: 60px;
@@ -221,10 +220,11 @@
                     border-right: 1px solid #ccc;
                     height: 100%;
                     font-size: 12px;
-                    line-height: 1.5em;
+                    line-height: 1.2em;
                     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-                    background-color: red;
+                    // background-color: red;
                     padding: 0 4%;
+                    letter-spacing: 1px;
 
                 }
             }

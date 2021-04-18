@@ -9,6 +9,10 @@ interface Props{
 
 const Contacts = (props: Props) => {
     console.log(props);
+
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     return (
         <div className={styles.tabsPageContainer}>
             <p><strong>Members Contact Info</strong></p>
@@ -42,6 +46,13 @@ const Contacts = (props: Props) => {
                     </tr>
                 </tbody>
             </Table>
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save and Proceed
+            </button>
         </div>
     );
 };

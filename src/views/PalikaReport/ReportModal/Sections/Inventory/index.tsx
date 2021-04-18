@@ -88,6 +88,9 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
@@ -198,6 +201,14 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 }
+
+                <button
+                    type="button"
+                    onClick={handleDataSave}
+                    className={styles.savebtn}
+                >
+                            Next
+                </button>
             </div>
 
         </div>

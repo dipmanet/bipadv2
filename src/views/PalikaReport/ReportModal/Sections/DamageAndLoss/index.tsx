@@ -7,6 +7,9 @@ interface Props{
 }
 const DamageAndLoss = (props: Props) => {
     console.log(props);
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     return (
         <div className={styles.tabsPageContainer}>
             <Table striped bordered hover size="md">
@@ -30,6 +33,13 @@ const DamageAndLoss = (props: Props) => {
                 </tbody>
             </Table>
 
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Next
+            </button>
         </div>
     );
 };

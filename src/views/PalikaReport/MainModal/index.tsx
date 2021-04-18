@@ -310,7 +310,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
     const getModalClass = () => {
         if (showTabs) {
-            if (tabSelected === 11) {
+            if (tabSelected === tabs.length - 1) {
                 return styles.previewTab;
             }
             return styles.tabsContainer;

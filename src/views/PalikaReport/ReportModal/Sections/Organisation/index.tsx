@@ -76,9 +76,17 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
         municipalities,
-        user } = props;
+        user,
+        updateTab } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [meta, setMeta] = useState(2);
+
+
+    const handleDataSave = () => {
+        updateTab();
+    };
+
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
@@ -174,6 +182,13 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 }
+                <button
+                    type="button"
+                    onClick={handleDataSave}
+                    className={styles.savebtn}
+                >
+                            Next
+                </button>
             </div>
 
         </div>
