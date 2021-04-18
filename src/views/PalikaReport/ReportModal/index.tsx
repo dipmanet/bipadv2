@@ -358,6 +358,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             <div id={'reportPreview'}>
                                 <PreviewPageOne
                                     generalData={getGeneralData()}
+                                    url={keyTabUrl}
 
                                 />
                                 <PreviewPageTwo

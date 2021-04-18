@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 import React from 'react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { connect } from 'react-redux';
@@ -17,6 +18,8 @@ import {
     programAndPolicySelector,
 
 } from '#selectors';
+import Organisation from '../../Organisation';
+import Inventory from '../../Inventory';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -79,6 +82,7 @@ const Preview = (props: Props) => {
         programAndPolicyData,
         budgetData,
         budgetActivityData,
+        url,
     } = props;
 
     const {
@@ -162,9 +166,8 @@ const Preview = (props: Props) => {
                     </div>
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart
-                            margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
-                            width={400}
-                            height={400}
+                            width={250}
+                            height={250}
                         >
                             <Pie
                                 dataKey="value"
@@ -193,8 +196,8 @@ const Preview = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                budgetActivityData.map(
+                            {budgetActivityData && budgetActivityData.length > 0
+                                ? budgetActivityData.map(
                                     data => (
                                         <tr key={Math.random()}>
 
@@ -205,7 +208,7 @@ const Preview = (props: Props) => {
                                             ))}
                                         </tr>
                                     ),
-                                )
+                                ) : ''
                             }
 
 
@@ -214,8 +217,7 @@ const Preview = (props: Props) => {
                 </div>
             </div>
             <div className={styles.rowTwo}>
-                <div className={styles.columnTwoOne} />
-                <div className={styles.columnTwoTwo}>
+                <div className={styles.columnTwoOne}>
                     <div className={styles.mainTitle}>
                       DISASTER RELATED TOPICS IN ANNUAL
                       PROGRAM AND POLICIES
@@ -235,6 +237,131 @@ const Preview = (props: Props) => {
 
                     </div>
                 </div>
+                <div className={styles.columnTwoTwo}>
+
+                    sth else needs to go here
+                </div>
+            </div>
+
+
+            <div className={styles.rowOrg}>
+                {/* <Organisation rows={5} url={url} /> */}
+                <div className={styles.mainTitle}>
+                 DRR related organizations in Municipal Government
+                </div>
+                <Table striped bordered hover size="md">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Name of Organisation</th>
+                            <th>Number of Employees</th>
+                            <th>Gender(M/F)</th>
+                            <th>Level(A/B/C)</th>
+                            <th>Type of organisation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Police Station, Godiyana,09 Rajapur</td>
+                            <td>7</td>
+                            <td>7/0</td>
+                            <td>null</td>
+                            <td>Government</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Police Station, Godiyana,09 Rajapur</td>
+                            <td>8</td>
+                            <td>8/0</td>
+                            <td>null</td>
+                            <td>Government</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Police Station, Godiyana,09 Rajapur</td>
+                            <td>7</td>
+                            <td>7/0</td>
+                            <td>null</td>
+                            <td>Government</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Police Station, Godiyana,09 Rajapur</td>
+                            <td>3</td>
+                            <td>2/1</td>
+                            <td>null</td>
+                            <td>CSO</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Police Station, Godiyana,09 Rajapur</td>
+                            <td>14</td>
+                            <td>11/3</td>
+                            <td>null</td>
+                            <td>Government</td>
+                        </tr>
+
+
+                    </tbody>
+                </Table>
+
+            </div>
+
+
+            <div className={styles.rowInventory}>
+                {/* <Inventory rows={5} width={'100%'} height={'40%'} /> */}
+                <div className={styles.mainTitle}>
+                 DRR related organizations in Municipal Government
+                </div>
+                <Table striped bordered hover size="md">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Name of Resource</th>
+                            <th>Quantity</th>
+                            <th>Gender(M/F)</th>
+                            <th>Type of Organization</th>
+                            <th>Added Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1	</td>
+                            <td>Plastic Roll	</td>
+                            <td>1	</td>
+                            <td>Police station, Bhimmapur-09	</td>
+                            <td>Government	</td>
+                            <td>2021-01-15</td>
+                        </tr>
+
+                        <tr>
+                            <td>2	</td>
+                            <td>Life Vest	</td>
+                            <td>4	</td>
+                            <td>Police station, Bhimmapur-09	</td>
+                            <td>Government	</td>
+                            <td>2021-01-15</td>
+                        </tr>
+                        <tr>
+                            <td>3	</td>
+                            <td>Plastic Roll</td>
+                            <td>1	</td>
+                            <td>Police station, Khairichandanpur Rajapur-10	</td>
+                            <td>Government	</td>
+                            <td>2021-01-15</td>
+                        </tr>
+                        <tr>
+                            <td>2	</td>
+                            <td>Life Vest	</td>
+                            <td>5	</td>
+                            <td>Police station, Khairichandanpur Rajapur-10	</td>
+                            <td>Government	</td>
+                            <td>2021-01-15</td>
+                        </tr>
+                    </tbody>
+                </Table>
+
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
