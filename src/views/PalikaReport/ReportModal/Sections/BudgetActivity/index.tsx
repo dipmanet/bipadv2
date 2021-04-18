@@ -14,6 +14,8 @@ import {
 } from '#actionCreators';
 import {
     budgetActivityDataSelector,
+    generalDataSelector,
+    budgetDataSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -21,6 +23,9 @@ import Icon from '#rscg/Icon';
 
 const mapStateToProps = state => ({
     budgetActivityData: budgetActivityDataSelector(state),
+    generalData: generalDataSelector(state),
+    budgetData: budgetDataSelector(state),
+
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -79,6 +84,7 @@ const BudgetActivity = (props: Props) => {
         budgetData,
         setBudgetActivityDatapp,
         budgetActivityData,
+        generalData,
     } = props;
     const {
         name: nm,
@@ -92,6 +98,7 @@ const BudgetActivity = (props: Props) => {
         actualExp: ae,
         remarks: rm,
     } = budgetActivityData;
+
 
     const [startDate, setStartDate] = useState(new Date());
     const [projcompletionDate, setprojCompletionDate] = useState(new Date());
@@ -110,6 +117,14 @@ const BudgetActivity = (props: Props) => {
     const [showTable, setShowTable] = useState(false);
     const [tableData, setTableData] = useState([]);
 
+    const [showSourceType, setSourceType] = useState(false);
+    const [showSourceTypeOther, setSourceTypeOther] = useState(false);
+
+    useEffect(() => {
+        if (budgetData.additionalFund && parseInt(budgetData.additionalFund, 10) > 0) {
+            setSourceType(true);
+        }
+    }, [budgetData]);
 
     const handleNext = () => {
         updateTab();
@@ -154,9 +169,15 @@ const BudgetActivity = (props: Props) => {
     };
     const handlefundSource = (data) => {
         setfundSource(data.target.value);
+        // if (data.target.value === 'Additional') {
+        //     setSourceType(true);
+        // }
     };
     const handlefundSourceType = (data) => {
         setfundSourcetype(data.target.value);
+        if (data.target.value === 'Others') {
+            setSourceTypeOther(true);
+        }
     };
     const handleOtherFund = (data) => {
         setotherFund(data.target.value);
@@ -207,45 +228,57 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                         >
                             <option value="select">Select a fund source</option>
-                            <option value="First">First</option>
-                            <option value="Second">Second</option>
-                            <option value="Third">Third</option>
+                            <option value="Municipal">Municipal Budget</option>
+                            <option value="DRR">DRR Fund</option>
+                            <option value="Additional">Additional DRR Budget</option>
                         </select>
 
                     </label>
                 </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
+                {
+                    showSourceType
+                    && (
+                        <div className={styles.inputContainer}>
+                            <label className={styles.label}>
                                  Fund source type:
-                        <select
-                            value={fundSourcetype}
-                            onChange={handlefundSourceType}
-                            className={styles.inputElement}
-                        >
-                            <option value="select">Select an Option</option>
-                            <option value="Federal Government">Federal Government</option>
-                            <option value="Provincial Government">Provincial Government</option>
-                            <option value="INGO">I/NGOs</option>
-                            <option value="Private Sector">Private Sector</option>
-                            <option value="Academia">Academia</option>
-                            <option value="Others">Others</option>
-                        </select>
+                                <select
+                                    value={fundSourcetype}
+                                    onChange={handlefundSourceType}
+                                    className={styles.inputElement}
+                                >
+                                    <option value="select">Select an Option</option>
+                                    <option value="Federal Government">Federal Government</option>
+                                    <option value="Provincial Government">Provincial Government</option>
+                                    <option value="INGO">I/NGOs</option>
+                                    <option value="Private Sector">Private Sector</option>
+                                    <option value="Academia">Academia</option>
+                                    <option value="Others">Others</option>
+                                </select>
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Please specify
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleOtherFund}
-                            value={otherFund}
-                        />
+                            </label>
+                        </div>
+                    )
 
-                    </label>
+                }
+                {showSourceTypeOther
+                      && (
+                          <div className={styles.inputContainer}>
+                              <label className={styles.label}>
+                                   Please specify Other source type
+                                  <input
+                                      type="text"
+                                      className={styles.inputElement}
+                                      onChange={handleOtherFund}
+                                      value={otherFund}
+                                  />
 
-                </div>
+                              </label>
+
+                          </div>
+                      )
+
+                }
+
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
                                  Budget Code
