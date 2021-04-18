@@ -63,13 +63,20 @@ const ProgramPolicies = (props: Props) => {
             <h2>Annual Program and Policy</h2>
             <p>Disaster related policy points of current fiscal year</p>
             {inputList.map((x, i) => (
-                <div className="box">
-                    <input
-                        name="firstName"
-                        placeholder="Enter Policy Point"
-                        value={x.firstName}
-                        onChange={e => handleInputChange(e, i)}
-                    />
+
+                <>
+                    <div className={styles.inputContainer}>
+                        <label className={styles.label}>
+                            <input
+                                name="firstName"
+                                placeholder="Enter Policy Point"
+                                value={x.firstName}
+                                onChange={e => handleInputChange(e, i)}
+                            />
+                        </label>
+                    </div>
+
+
                     <div className="btn-box">
                         {inputList.length !== 1 && (
                             <button
@@ -89,7 +96,7 @@ const ProgramPolicies = (props: Props) => {
                             </button>
                         )}
                     </div>
-                </div>
+                </>
             ))}
         </>
     );
