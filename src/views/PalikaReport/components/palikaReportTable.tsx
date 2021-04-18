@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import LoadingAnimation from '#rscv/LoadingAnimation';
+
 
 const PalikaReportTable = (props) => {
-    const { paginationData, tableData, tableHeader, tableHeaderDataMatch } = props;
+    const { paginationData, tableData, tableHeader,
+        tableHeaderDataMatch } = props;
 
 
     return (
@@ -38,19 +39,9 @@ const PalikaReportTable = (props) => {
                              ))}
                     </tbody>
                 </table>
-                {/* {tableData && tableData.length !== 0
-                && (
-                    <ReactHTMLTableToExcel
-                        id="test-table-xls-button"
-                        className="download-table-xls-button"
-                        table="table-to-xls"
-                        filename="tablexls"
-                        sheet="tablexls"
-                        buttonText="XLS"
-                    />
-                )} */}
+
                 {tableData && tableData.length === 0
-&& <p className={styles.dataUnavailable}>Data Unavailable</p>
+                && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 }
             </div>

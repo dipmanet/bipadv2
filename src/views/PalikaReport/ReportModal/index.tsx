@@ -99,6 +99,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         cao,
         focalPerson,
         updateTab,
+        keyTabUrl,
     } = props;
 
 
@@ -281,7 +282,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 4
                && showTabs)
                     ? (
-                        <Organisation />
+                        <Organisation url={keyTabUrl} />
                     )
                     : ''
             }
