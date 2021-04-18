@@ -135,6 +135,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     };
 
     const [tabSelected, setTabSelected] = useState(0);
+    const [tabUrlSelected, setTabUrlSelected] = useState('');
     const [tableHeader, setTableHeader] = useState([]);
     const handleCloseModal = () => setShowReportModal(false);
 
@@ -171,26 +172,32 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 4,
             content: 'Organisation',
+            url: '/resource/',
         },
         {
             key: 5,
             content: 'Inventories',
+            url: '',
         },
         {
             key: 6,
             content: 'Resources',
+            url: '',
         },
         {
             key: 7,
             content: 'Contacts',
+            url: '',
         },
         {
             key: 8,
             content: 'Relief',
+            url: '',
         },
         {
             key: 9,
             content: 'Incident',
+            url: '',
         },
         {
             key: 10,
@@ -200,10 +207,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 11,
             content: 'Loss & Damage',
+            url: '',
         },
         {
             key: 12,
             content: 'Preview',
+            url: '',
         },
     ];
 
@@ -268,8 +277,9 @@ const MainModal: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tabSelected]);
 
-    const handleTabClick = (tab: number) => {
+    const handleTabClick = (tab: number, url: string) => {
         setTabSelected(tab);
+        setTabUrlSelected(url);
     };
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
@@ -338,7 +348,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                                          : '#e1e1e1',
                                                      transform: `translateX(-${getTranslateVal()}px)`,
                                                  }}
-                                                 onClick={() => handleTabClick(tab.key)}
+                                                 onClick={() => handleTabClick(tab.key, tab.url)}
                                                  key={tab.key}
                                              >
                                                  {tab.content}
@@ -366,6 +376,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     />
                     <ModalBody className={styles.modalBody}>
                         <ReportModal
+                            keyTabUrl={tabUrlSelected}
                             keyTab={tabSelected}
                             showTabs={showTabs}
                             hideWelcomePage={hideWelcomePage}

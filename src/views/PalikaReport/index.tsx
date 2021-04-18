@@ -21,6 +21,7 @@ import {
     methods,
 } from '#request';
 import PalikaReportTable from './components/palikaReportTable';
+import FilterModal from '#components/_Filters/FilterModal';
 
 
 interface Props {
@@ -348,8 +349,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setFiltered(false);
         }
     };
-
-
+    const fetchUrlFromProps = (urlData) => {
+        if (urlData) {
+            setUrl(urlData);
+        }
+        console.log('is working');
+        return null;
+    };
+    console.log('is it success>>>', url);
     return (
         <>
             <Page hideMap hideFilter />
@@ -395,7 +402,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         <h1>{subMenuTitle}</h1>
                     </div>
                     <div className={styles.rightContainerFilters}>
-
+                        {/* <FilterModal /> */}
                         <StepwiseRegionSelectInput
                             className={
                                 _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
