@@ -1,5 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
@@ -13,6 +14,19 @@ import Contact from './Contact';
 import Document from './Document';
 
 import styles from './styles.scss';
+import {
+    userSelector,
+
+    carKeysSelector,
+} from '#selectors';
+
+import {
+    setCarKeysAction,
+} from '#actionCreators';
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    carKeys: carKeysSelector(state),
+});
 
 type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';
 
@@ -25,13 +39,18 @@ interface State {
 
 const IndicatorButton = modalize(AccentButton);
 
-export default class Profile extends React.PureComponent<Props, State> {
+class Profile extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
         this.state = {
             activeView: 'summary',
         };
+    }
+
+    public componentDidMount() {
+        if (this.props.carKeys && this.props.carKeys === 'contact');
+        this.setState({ activeView: 'contact' });
     }
 
     private handleSummaryButtonClick = () => {
@@ -161,3 +180,4 @@ export default class Profile extends React.PureComponent<Props, State> {
         );
     }
 }
+export default connect(mapStateToProps, undefined)(Profile);

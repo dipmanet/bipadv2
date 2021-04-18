@@ -118,11 +118,11 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     return (
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
                 DRR related organizations in Municipal Government
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
@@ -176,7 +176,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                 </div>
                             )}
                 {finalArr && finalArr.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
+                && <p className={styles.dataUnavailable}>{''}</p>
 
                 }
             </div>

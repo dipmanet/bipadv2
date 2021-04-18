@@ -3,12 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import * as ReachRouter from '@reach/router';
+
 import Select from 'react-select';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
+    setCarKeysAction,
     setGeneralDataAction,
 } from '#actionCreators';
 import {
@@ -17,13 +20,14 @@ import {
 
 import Icon from '#rscg/Icon';
 
-
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+    setCarKeys: params => dispatch(setCarKeysAction(params)),
+
 });
 
 export interface GeneralData{
@@ -78,6 +82,7 @@ const General = (props: Props) => {
         committeeMembers: cm,
     } = props.generalData;
 
+
     const [reportTitle, setreportTitle] = useState<string>(rt);
     const [fiscalYear, setfiscalYear] = useState<string>(fy);
     const [formationDate, setformationDate] = useState<string>(fd);
@@ -96,6 +101,16 @@ const General = (props: Props) => {
         setfiscalYear(fiscal.target.value);
     };
 
+    useEffect(() => {
+        props.setCarKeys('null');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleAddContact = () => {
+        const { setCarKeys } = props;
+        setCarKeys('contact');
+        ReachRouter.navigate('/profile', { state: { showForm: true }, replace: true });
+    };
     const {
         mayor,
         cao,
@@ -122,13 +137,6 @@ const General = (props: Props) => {
     //     setDistrict(location.districtId);
     //     setProvince(location.provinceId);
     // };
-
-
-    const handleAddContact = () => {
-        console.log('goto contacts add');
-
-        console.log(props);
-    };
 
 
     const selectStyles = {
