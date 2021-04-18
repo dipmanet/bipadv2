@@ -1,6 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { connect } from 'react-redux';
+import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -113,6 +114,9 @@ const Preview = (props: Props) => {
         value: parseInt(budgetData[item], 10),
     }));
 
+    const activityTableData = ['name', 'fundSource', 'budgetCode', 'allocatedBudget'];
+
+
     console.log('chart data ', budgetChartData);
 
     return (
@@ -179,7 +183,34 @@ const Preview = (props: Props) => {
                     </ResponsiveContainer>
                 </div>
                 <div className={styles.columnOneTwo}>
-                    Section 2
+                    <Table striped bordered hover size="md">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Source of Fund</th>
+                                <th>Budget Code</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                budgetActivityData.map(
+                                    data => (
+                                        <tr key={Math.random()}>
+
+                                            {activityTableData.map(item => (
+                                                <td key={Math.random()}>
+                                                    {data[item]}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ),
+                                )
+                            }
+
+
+                        </tbody>
+                    </Table>
                 </div>
             </div>
             <div className={styles.rowTwo}>
