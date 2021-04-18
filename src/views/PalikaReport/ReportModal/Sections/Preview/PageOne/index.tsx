@@ -1,6 +1,9 @@
 /* eslint-disable no-tabs */
 import React from 'react';
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Legend,
+    Tooltip, ResponsiveContainer,
+    BarChart, CartesianGrid, XAxis,
+    YAxis, Bar } from 'recharts';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
@@ -120,7 +123,101 @@ const Preview = (props: Props) => {
 
     const activityTableData = ['name', 'fundSource', 'budgetCode', 'allocatedBudget'];
 
+    const disasterInventoryChartData = [
+        {
+            name: 'Bed',
+            Amount: 98,
+        },
+        {
+            name: 'Ambulance',
+            Amount: 12,
+        },
+        {
+            name: 'FireBrigade',
+            Amount: 1,
+        },
+        {
+            name: 'Loader',
+            Amount: 13,
+        },
+        {
+            name: 'Excavator',
+            Amount: 9,
+        },
 
+    ];
+
+    const CIChartData = [
+        {
+            name: 'Education',
+            Amount: 98,
+        },
+        {
+            name: 'Health',
+            Amount: 12,
+        },
+        {
+            name: 'Finance',
+            Amount: 1,
+        },
+        {
+            name: 'Governance',
+            Amount: 13,
+        },
+        {
+            name: 'Tourism',
+            Amount: 9,
+        },
+        {
+            name: 'Culture',
+            Amount: 9,
+        },
+        {
+            name: 'Industry',
+            Amount: 9,
+        },
+        {
+            name: 'Communication',
+            Amount: 9,
+        },
+
+    ];
+
+    const trainedHRData = [
+        {
+            name: 'Education',
+            Amount: 98,
+        },
+        {
+            name: 'Health',
+            Amount: 12,
+        },
+        {
+            name: 'Finance',
+            Amount: 1,
+        },
+        {
+            name: 'Governance',
+            Amount: 13,
+        },
+        {
+            name: 'Tourism',
+            Amount: 9,
+        },
+        {
+            name: 'Culture',
+            Amount: 9,
+        },
+        {
+            name: 'Industry',
+            Amount: 9,
+        },
+        {
+            name: 'Communication',
+            Amount: 9,
+        },
+
+    ];
     console.log('PAP DATA ', programAndPolicyData);
 
     return (
@@ -307,138 +404,79 @@ const Preview = (props: Props) => {
                 </Table>
 
             </div>
-
-
-            <div className={styles.rowInventory}>
-                {/* <Inventory rows={5} width={'100%'} height={'40%'} /> */}
-                <div className={styles.mainTitle}>
-                 DRR related inventories in Municipal Government
-                </div>
-                <Table striped bordered hover size="md">
-                    <thead>
-                        <tr>
-                            <th>S.N</th>
-                            <th>Name of Resource</th>
-                            <th>Quantity</th>
-                            <th>Gender(M/F)</th>
-                            <th>Type of Organization</th>
-                            <th>Added Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1	</td>
-                            <td>Plastic Roll	</td>
-                            <td>1	</td>
-                            <td>Police station, Bhimmapur-09	</td>
-                            <td>Government	</td>
-                            <td>2021-01-15</td>
-                        </tr>
-
-                        <tr>
-                            <td>2	</td>
-                            <td>Life Vest	</td>
-                            <td>4	</td>
-                            <td>Police station, Bhimmapur-09	</td>
-                            <td>Government	</td>
-                            <td>2021-01-15</td>
-                        </tr>
-                        <tr>
-                            <td>3	</td>
-                            <td>Plastic Roll</td>
-                            <td>1	</td>
-                            <td>Police station, Khairichandanpur Rajapur-10	</td>
-                            <td>Government	</td>
-                            <td>2021-01-15</td>
-                        </tr>
-                        <tr>
-                            <td>2	</td>
-                            <td>Life Vest	</td>
-                            <td>5	</td>
-                            <td>Police station, Khairichandanpur Rajapur-10	</td>
-                            <td>Government	</td>
-                            <td>2021-01-15</td>
-                        </tr>
-                    </tbody>
-                </Table>
-
-            </div>
-
-            <div className={styles.rowCI}>
-                {/* <Inventory rows={5} width={'100%'} height={'40%'} /> */}
-                <div className={styles.mainTitle}>
-                 DRR related critical infrastructures in municipality
-                </div>
-                <Table striped bordered hover size="md">
-                    <thead>
-                        <tr>
-                            <th>S.N	</th>
-                            <th>Resource Name	</th>
-                            <th>Resource Type	</th>
-                            <th>Operator Type	</th>
-                            <th>Number Of male Employee	</th>
-                            <th>Number Of female Employee	</th>
-                            <th>Total Employee</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1	</td>
-                            <td>Radio Sathi FM	</td>
-                            <td>communication	</td>
-                            <td>Private	</td>
-                            <td>8	</td>
-                            <td>4	</td>
-                            <td>12</td>
-
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Kothiyaghat Online News Paper	</td>
-                            <td>communication	</td>
-                            <td>Private	</td>
-                            <td>3		</td>
-                            <td>No Data</td>
-                            <td>3</td>
-
-                        </tr>
-                        <tr>
-                            <td>3	</td>
-                            <td>Janata Express Ratriya Daily News Paper	</td>
-                            <td>communication	</td>
-                            <td>Private	</td>
-                            <td>4		</td>
-                            <td>No Data</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>4	</td>
-                            <td>NTC Rajapur Office	</td>
-                            <td>communication	</td>
-                            <td>Government	</td>
-                            <td>4		</td>
-                            <td>No Data</td>
-                            <td>4</td>
-
-                        </tr>
-                    </tbody>
-                </Table>
-
-            </div>
-
-
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                   Section 5
+                    <div className={styles.mainTitle}>
+                 DRR related critical infrastructures in municipality
+                    </div>
+                    <BarChart
+                        width={300}
+                        height={300}
+                        data={CIChartData}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        {/* <Tooltip /> */}
+                        {/* <Legend /> */}
+                        <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
+                    </BarChart>
                 </div>
                 <div className={styles.columnThreeTwo}>
-                    Section 6
+                    <div className={styles.mainTitle}>
+                 DRR related inventories in Municipal Government
+                    </div>
+                    <BarChart
+                        width={300}
+                        height={300}
+                        data={disasterInventoryChartData}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        {/* <Tooltip /> */}
+                        {/* <Legend /> */}
+                        <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
+                    </BarChart>
                 </div>
             </div>
             <div className={styles.rowFour}>
                 <div className={styles.columnFourOne}>
-                    Section 7
+                    <div className={styles.columnThreeOne}>
+                        <div className={styles.mainTitle}>
+                             AVAILABLE TRAINED HUMAN RESOURCE IN DRR
+                        </div>
+                        <BarChart
+                            width={300}
+                            height={300}
+                            data={trainedHRData}
+                            layout="vertical"
+                            margin={{ left: 20, right: 20 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="number" />
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                tick={{ fill: '#94bdcf' }}
+                            />
+                            {/* <Tooltip /> */}
+                            {/* <Legend /> */}
+                            <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
+                        </BarChart>
+                    </div>
                 </div>
                 <div className={styles.columnFourTwo}>
                     Section 8
