@@ -112,11 +112,11 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     return (
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
                 DRR related organizations in Municipal Government
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
