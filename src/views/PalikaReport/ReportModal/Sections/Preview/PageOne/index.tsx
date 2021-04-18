@@ -312,7 +312,7 @@ const Preview = (props: Props) => {
             <div className={styles.rowInventory}>
                 {/* <Inventory rows={5} width={'100%'} height={'40%'} /> */}
                 <div className={styles.mainTitle}>
-                 DRR related organizations in Municipal Government
+                 DRR related inventories in Municipal Government
                 </div>
                 <Table striped bordered hover size="md">
                     <thead>
@@ -363,6 +363,71 @@ const Preview = (props: Props) => {
                 </Table>
 
             </div>
+
+            <div className={styles.rowCI}>
+                {/* <Inventory rows={5} width={'100%'} height={'40%'} /> */}
+                <div className={styles.mainTitle}>
+                 DRR related critical infrastructures in municipality
+                </div>
+                <Table striped bordered hover size="md">
+                    <thead>
+                        <tr>
+                            <th>S.N	</th>
+                            <th>Resource Name	</th>
+                            <th>Resource Type	</th>
+                            <th>Operator Type	</th>
+                            <th>Number Of male Employee	</th>
+                            <th>Number Of female Employee	</th>
+                            <th>Total Employee</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1	</td>
+                            <td>Radio Sathi FM	</td>
+                            <td>communication	</td>
+                            <td>Private	</td>
+                            <td>8	</td>
+                            <td>4	</td>
+                            <td>12</td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Kothiyaghat Online News Paper	</td>
+                            <td>communication	</td>
+                            <td>Private	</td>
+                            <td>3		</td>
+                            <td>No Data</td>
+                            <td>3</td>
+
+                        </tr>
+                        <tr>
+                            <td>3	</td>
+                            <td>Janata Express Ratriya Daily News Paper	</td>
+                            <td>communication	</td>
+                            <td>Private	</td>
+                            <td>4		</td>
+                            <td>No Data</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>4	</td>
+                            <td>NTC Rajapur Office	</td>
+                            <td>communication	</td>
+                            <td>Government	</td>
+                            <td>4		</td>
+                            <td>No Data</td>
+                            <td>4</td>
+
+                        </tr>
+                    </tbody>
+                </Table>
+
+            </div>
+
+
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
                    Section 5
