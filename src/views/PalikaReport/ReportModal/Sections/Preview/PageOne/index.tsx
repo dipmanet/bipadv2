@@ -1,21 +1,66 @@
 import React from 'react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
-import LineData from './data';
+
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Logo from '../../govtLogo.svg';
-import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
-import Contacts from '../../Contacts';
-import DRRMembers from '../../Contacts/DRRMembers';
-import Simulation from '../../Simulation';
-import Organisation from '../../Organisation';
-import Inventory from '../../Inventory';
-import CriticalInfra from '../../CriticalInfra';
+
 
 import govtlogo from '../../../../govtLogo.svg';
 
+
+import {
+    generalDataSelector,
+    budgetDataSelector,
+    budgetActivityDataSelector,
+    programAndPolicySelector,
+
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    generalData: generalDataSelector(state),
+    programAndPolicyData: programAndPolicySelector(state),
+    budgetData: budgetDataSelector(state),
+    budgetActivityData: budgetActivityDataSelector(state),
+});
+
 interface Props{
     reportData: Element[];
+}
+
+export interface GeneralData{
+    reportTitle?: string;
+    fiscalYear: string;
+    mayor: string;
+    cao: string;
+    focalPerson: string;
+    formationDate: string;
+    committeeMembers: number;
+}
+
+export interface BudgetData{
+    totMunBudget: number;
+    totDrrBudget: number;
+    additionalDrrBudget: number;
+}
+
+export interface ProgramAndPolicyData{
+    pointOne: string;
+    pointTwo: string;
+    pointThree: string;
+}
+
+export interface BudgetActivityData{
+    name: string;
+    fundSource: string;
+    additionalDrrBudget: string;
+    budgetCode: string;
+    drrmCycle: string;
+    projStatus: string;
+    projCompletionDate: string;
+    allocatedBudget: string;
+    actualExp: string;
+    remarks: string;
 }
 
 
@@ -30,7 +75,45 @@ const data02 = [
 const Preview = (props: Props) => {
     const {
         generalData,
+        programAndPolicyData,
+        budgetData,
+        budgetActivityData,
     } = props;
+
+    const {
+        reportTitle,
+        fiscalYear,
+        mayor,
+        cao,
+        focalPerson,
+        formationDate,
+        committeeMembers,
+    } = generalData;
+
+    const {
+        municipalBudget,
+        drrFund,
+        additionalFund,
+    } = budgetData;
+
+    const {
+        name,
+        fundSource,
+        budgetCode,
+        drrmCycle,
+        projStatus,
+        projCompletionDate,
+        allocatedBudget,
+        actualExp,
+        remarks,
+    } = budgetActivityData;
+
+    const budgetChartData = Object.keys(budgetData).map(item => ({
+        name: item,
+        value: parseInt(budgetData[item], 10),
+    }));
+
+    console.log('chart data ', budgetChartData);
 
     return (
         <div className={styles.previewContainer}>
@@ -56,34 +139,41 @@ const Preview = (props: Props) => {
                 </div>
                 <div className={styles.location}>
                     <ul>
-                        <li className={styles.pageOneTitle}>Disaster Report</li>
-                        <li>FY 2075/76</li>
-                        {/* <li>Date: 1/1/2021</li> */}
-
+                        <li className={styles.pageOneTitle}>{reportTitle}</li>
+                        <li>
+                            FY
+                            {fiscalYear}
+                        </li>
                     </ul>
-
-
                 </div>
 
 
             </div>
             <div className={styles.rowOne}>
                 <div className={styles.columnOneOne}>
+                    <div className={styles.mainTitle}>
+                        TOTAL MUNICIPAL BUDGET
+                        {' '}
+                        {municipalBudget}
+                    </div>
                     <ResponsiveContainer width="100%" height="100%">
-                        <PieChart width={400} height={400}>
+                        <PieChart
+                            margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+                            width={400}
+                            height={400}
+                        >
                             <Pie
                                 dataKey="value"
                                 isAnimationActive={false}
-                                data={data02}
+                                data={budgetChartData}
                                 cx="50%"
                                 cy="50%"
                                 outerRadius={80}
                                 fill="#8884d8"
                                 label
                             />
-                            <Pie dataKey="value" data={data02} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d" label />
                             <Tooltip />
-                            <Legend />
+                            <Legend align="right" />
 
                         </PieChart>
                     </ResponsiveContainer>
@@ -126,4 +216,4 @@ const Preview = (props: Props) => {
     );
 };
 
-export default Preview;
+export default connect(mapStateToProps, undefined)(Preview);

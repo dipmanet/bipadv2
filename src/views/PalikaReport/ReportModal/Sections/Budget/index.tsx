@@ -125,7 +125,7 @@ const Budget = (props: Props) => {
                     <label className={styles.label}>
                                  Total Muicipal Budget of FY
                         {' '}
-                        { `${fiscalYear}/${fiscalYear + 1}`}
+                        { `${fiscalYear}`}
                         <input
                             type="text"
                             className={styles.inputElement}
