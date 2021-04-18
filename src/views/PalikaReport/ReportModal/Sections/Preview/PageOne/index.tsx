@@ -117,7 +117,7 @@ const Preview = (props: Props) => {
     const activityTableData = ['name', 'fundSource', 'budgetCode', 'allocatedBudget'];
 
 
-    console.log('chart data ', budgetChartData);
+    console.log('PAP DATA ', programAndPolicyData);
 
     return (
         <div className={styles.previewContainer}>
@@ -214,12 +214,25 @@ const Preview = (props: Props) => {
                 </div>
             </div>
             <div className={styles.rowTwo}>
-                <div className={styles.columnTwoOne}>
-                    Section 3
-                </div>
+                <div className={styles.columnTwoOne} />
                 <div className={styles.columnTwoTwo}>
-                    <div className={styles.title}>
-                        Section 4
+                    <div className={styles.mainTitle}>
+                      DISASTER RELATED TOPICS IN ANNUAL
+                      PROGRAM AND POLICIES
+                        {' '}
+                        <ul className={styles.listMain}>
+                            {programAndPolicyData.length > 0
+                        && ('firstName' in programAndPolicyData[0])
+                                ? programAndPolicyData.map(item => (
+                                    <li key={Math.random()}>
+                                        { item.firstName}
+                                    </li>
+                                ))
+                                : 'No data'
+                            }
+                        </ul>
+
+
                     </div>
                 </div>
             </div>

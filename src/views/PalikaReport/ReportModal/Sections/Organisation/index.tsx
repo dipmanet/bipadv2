@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
+import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -118,7 +119,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 </strong>
             </h2>
             <div className={styles.palikaTable}>
-                <table id="table-to-xls">
+                <Table id="table-to-xls">
                     <tbody>
                         <tr>
 
@@ -132,24 +133,26 @@ const Organisation: React.FC<Props> = (props: Props) => {
                         </tr>
 
 
-                        {fetchedData.map((item, i) => (
-                            <tr key={item.id}>
-                                <td>{i + 1}</td>
-                                <td>{item.title}</td>
-                                <td>{item.noOfEmployee}</td>
-                                <td>
-                                    {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
+                        {fetchedData && fetchedData.length > 0
+                            ? fetchedData.map((item, i) => (
+                                <tr key={item.id}>
+                                    <td>{i + 1}</td>
+                                    <td>{item.title}</td>
+                                    <td>{item.noOfEmployee}</td>
+                                    <td>
+                                        {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
 /
-                                    {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
-                                </td>
-                                <td>{item.level ? item.level : 'null'}</td>
-                                <td>{item.type}</td>
-                            </tr>
-                        ))}
+                                        {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
+                                    </td>
+                                    <td>{item.level ? item.level : 'null'}</td>
+                                    <td>{item.type}</td>
+                                </tr>
+                            )) : ''
+                        }
 
 
                     </tbody>
-                </table>
+                </Table>
                 {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
