@@ -110,11 +110,11 @@ const Preview = (props: Props) => {
                 <div className={styles.columnTwoOne}>
                     <Contacts />
                 </div>
-                <div className={styles.columnTwoTwo}>
+                {/* <div className={styles.columnTwoTwo}>
                     <div className={styles.title}>
                         <DRRMembers />
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>

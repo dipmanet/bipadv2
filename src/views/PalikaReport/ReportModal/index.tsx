@@ -241,6 +241,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             cao={cao}
                             focalPerson={focalPerson}
                             updateTab={updateTab}
+                            page={5}
                         />
                     )
                     : ''
@@ -253,6 +254,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             reportData={reportData}
                             tableHeader={tableHeader}
                             updateTab={updateTab}
+                            page={5}
 
                         />
                     )
@@ -263,6 +265,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     ? (
                         <BudgetActivity
                             updateTab={updateTab}
+                            page={5}
 
                         />
                     )
@@ -274,6 +277,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     ? (
                         <ProgrammeAndPolicies
                             updateTab={updateTab}
+                            page={5}
                         />
                     )
                     : ''
@@ -282,7 +286,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 4
                && showTabs)
                     ? (
-                        <Organisation url={keyTabUrl} />
+                        <Organisation url={keyTabUrl} page={5} />
                     )
                     : ''
             }
@@ -290,7 +294,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 5
                && showTabs)
                     ? (
-                        <Inventory width={'100%'} height={'40%'} />
+                        <Inventory width={'100%'} height={'40%'} page={5} />
                     )
                     : ''
             }
@@ -298,7 +302,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 6
                && showTabs)
                     ? (
-                        <CriticalInfra width={'100%'} height={'50%'} />
+                        <CriticalInfra width={'100%'} height={'50%'} page={5} />
                     )
                     : ''
             }
@@ -307,8 +311,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <Contacts />
-                            <DRRMembers />
+                            <Contacts page={5} />
+                            {/* <DRRMembers /> */}
                         </>
                     )
                     : ''
@@ -317,7 +321,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 8
                && showTabs)
                     ? (
-                        <Relief />
+                        <Relief page={5} />
                     )
                     : ''
             }
@@ -325,7 +329,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Relief />
+                        <Relief page={5} />
                     )
                     : ''
             }
@@ -335,8 +339,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <WardwiseDeath width={'100%'} height={'50%'} />
-                            <DamageAndLoss />
+                            <WardwiseDeath width={'100%'} height={'50%'} page={5} />
+                            <DamageAndLoss page={5} />
                         </>
                     )
                     : ''

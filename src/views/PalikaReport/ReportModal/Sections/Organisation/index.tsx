@@ -70,7 +70,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
@@ -150,7 +150,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </table>
-                {paginationParameters && paginationParameters.count !== 0
+                {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -172,7 +172,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 {fetchedData && fetchedData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
-                }
+                } */}
             </div>
 
         </div>

@@ -36,7 +36,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.user.profile.province,
                     district: params.user.profile.district,
                     municipality: params.user.profile.municipality,
-                    // limit: params.page,
+                    limit: params.page,
                     resource_type: params.inventories,
                     expand: params.fields,
                     meta: params.meta,
@@ -74,7 +74,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
     const [url, setUrl] = useState('/resource/');
     const { requests: { PalikaReportInventoriesReport }, provinces,
@@ -119,17 +119,17 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     return (
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
-                DRR related organizations in Municipal Government
+               Inventories
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
 
-                            <th>S.N</th>
+                            {/* <th>S.N</th> */}
                             <th>Name of resource</th>
                             <th>Quantity</th>
                             <th>Owner Organization</th>
@@ -141,9 +141,9 @@ const Inventory: React.FC<Props> = (props: Props) => {
                         {fetchedData.map(item => (
                             item.inventories.map((data, i) => (
                                 <tr>
-                                    <td>
+                                    {/* <td>
                                         {i + 1}
-                                    </td>
+                                    </td> */}
                                     <td>{data.item.title}</td>
                                     <td>{data.quantity}</td>
                                     <td>
@@ -177,7 +177,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </table>
-                {paginationParameters && paginationParameters.count !== 0
+                {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -199,7 +199,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 {fetchedData && fetchedData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
-                }
+                } */}
             </div>
 
         </div>
