@@ -262,10 +262,17 @@
     .columnFourTwo{
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         width: 105mm;
-        padding: 5px;
-        border: 1px solid red;
-        align-items: flex-end;
+        // padding: 5px;
+        // border: 1px solid red;
+        align-items: flex-start;
+        position: relative;
+        left: 50px;
+        padding-top: 10px;
+        .simulations{
+            text-align: left;
+        }
     }
 }
 

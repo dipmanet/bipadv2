@@ -24,6 +24,8 @@ import BudgetActivity from '../../BudgetActivity';
 import page2line2 from './page2line2.svg';
 import page2line21 from './page2line21.svg';
 import page2line3 from './beneficiary.svg';
+import prep from './page2line3.svg';
+import recons from './page2line31.svg';
 
 import govtlogo from '../../../../govtLogo.svg';
 
@@ -119,31 +121,129 @@ const PageTwo = (props: Props) => {
                 </div>
 
             </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                    Budget
+
+
+            <div className={styles.rowNew}>
+                <div className={styles.columnNewOne}>
+                    <div className={styles.mainTitle}>
+                Initiatives taken in Disaster Risk reduction and Preparedness
+                    </div>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+
+                                <th>Activity Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Source of funding</th>
+                                <th>Total Expenditure</th>
+                                <th>SFDRR Priority Area </th>
+
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
                 </div>
-                <div className={styles.columnThreeTwo}>
-                   Budget Activity
-                </div>
-            </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                RELIEF DATA
-                </div>
-                <div className={styles.columnThreeTwo}>
-                Preparedness Data
-                </div>
-            </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                   Research Data
-                </div>
-                <div className={styles.columnThreeTwo}>
-                    Recovery Data
+                <div className={styles.columnNewTwo}>
+                    <div className={styles.mainTitle}>
+                Recovery and reconstruction
+                    </div>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+
+                                <th>Activity Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Source of funding</th>
+                                <th>Total Expenditure</th>
+                                <th>SFDRR Priority Area </th>
+
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
 
                 </div>
             </div>
+
+
             <div className={styles.rowFour}>
 
                 <div className={styles.sectionLeft}>

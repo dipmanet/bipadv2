@@ -39,7 +39,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.user.profile.province,
                     district: params.user.profile.district,
                     municipality: params.user.profile.municipality,
-                    // limit: params.page,
+                    limit: params.page,
 
                     meta: params.meta,
 
@@ -74,7 +74,7 @@ const CriticalInfra = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
     const [url, setUrl] = useState('/resource/');
     const { requests: { PalikaReportInventoriesReport }, provinces,
@@ -126,11 +126,11 @@ const CriticalInfra = (props: Props) => {
     return (
 
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
-                    DRR related Critical Infrastructure data
+                   Critical Infrastructures
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
@@ -148,12 +148,12 @@ const CriticalInfra = (props: Props) => {
                         {fetchedData.map((item, i) => (
                             <tr key={item.id}>
                                 <td>{i + 1}</td>
-                                <td>{item.title}</td>
-                                <td>{item.resourceType}</td>
-                                <td>{item.operatorType}</td>
-                                <td>{item.noOfMaleEmployee}</td>
-                                <td>{item.noOfFemaleEmployee}</td>
-                                <td>{item.noOfEmployee}</td>
+                                <td>{item.title ? item.title : '-'}</td>
+                                <td>{item.resourceType ? item.resourceType : '-'}</td>
+                                <td>{item.operatorType ? item.operatorType : '-'}</td>
+                                <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
+                                <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
+                                <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
                             </tr>
                         ))}
 

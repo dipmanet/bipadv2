@@ -71,7 +71,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
@@ -122,7 +122,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     return (
         <div className={styles.tabsPageContainer}>
             <h2>
-                DRR related organizations in Municipal Government
+                <strong>DRR related organizations in Municipal Government</strong>
             </h2>
             <div className={styles.palikaTable}>
                 <Table id="table-to-xls">
@@ -159,36 +159,20 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </Table>
-                {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <div className={styles.paginationRight}>
-                                    <ReactPaginate
-                                        previousLabel={'prev'}
-                                        nextLabel={'next'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        onPageChange={handlePageClick}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
-                                        containerClassName={styles.pagination}
-                                        subContainerClassName={_cs(styles.pagination)}
-                                        activeClassName={styles.active}
-                                    />
-                                </div>
-                            )}
-                {fetchedData && fetchedData.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
-
+                {
+                    props.hide !== 1
+                        ? (
+                            <button
+                                type="button"
+                                onClick={handleDataSave}
+                                className={styles.savebtn}
+                            >
+                Next
+                            </button>
+                        )
+                        : ''
                 }
-                <button
-                    type="button"
-                    onClick={handleDataSave}
-                    className={styles.savebtn}
-                >
-                            Next
-                </button>
+
             </div>
 
         </div>

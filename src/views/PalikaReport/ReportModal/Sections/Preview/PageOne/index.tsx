@@ -281,6 +281,9 @@ const Preview = (props: Props) => {
                     </PieChart>
                 </div>
                 <div className={styles.columnOneTwo}>
+                    <div className={styles.mainTitle}>
+                        BUDGET ACTIVITIES
+                    </div>
                     <Table striped bordered hover size="md">
                         <thead>
                             <tr>
@@ -332,9 +335,14 @@ const Preview = (props: Props) => {
 
                     </div>
                 </div>
+                {/* <div className={styles.columnTwoTwo}>
+                    <div className={styles.title}>
+                        <DRRMembers />
+                    </div>
+                </div> */}
                 <div className={styles.columnTwoTwo}>
 
-                    sth else needs to go here
+                    <Organisation hide={1} page={5} />
                 </div>
             </div>
 
@@ -477,7 +485,19 @@ const Preview = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.columnFourTwo}>
-                    Section 8
+                    <div className={styles.mainTitle}>
+                 Simulations exercises in Rajapur Municipality
+                    </div>
+                    <div className={styles.simulations}>
+                     Total number of simulations: 50
+                        <ul className={styles.simuList}>
+                            <li>Hazardwise classification</li>
+                            <li>Fire: 20</li>
+                            <li>Flood: 2</li>
+                            <li>Earthquake: 3</li>
+                        </ul>
+
+                    </div>
                 </div>
             </div>
 
