@@ -30,21 +30,19 @@
     display: flex;
     // border: 1px solid red;
     height: 40mm;
-    
+    text-align: center;
+    .mainTitle{
+        font-weight: 600;
+    }
     .columnOneOne{
         height: 90%;
         width: 105mm;
         padding: 5px 0;
-       
-        
-
     }
     .columnOneTwo{
         height: 100%;
         width: 105mm;
         padding: 5px 0;
- 
-
     }
 }
 
@@ -59,6 +57,16 @@
         width: 105mm;
         height: 90%;
         padding: 5px 0;
+        .sectionSvg{
+            width: 90mm;
+            position: relative;
+            bottom: 50px;
+        }
+        .mainTitle{
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
 
     }
     .columnTwoTwo{
@@ -68,6 +76,19 @@
         table{
             display: block;
             width: 90%;
+        }
+        .sectionSvg{
+            width: 90mm;
+            position: relative;
+            bottom: 50px;
+
+        }
+        .mainTitle{
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+
+
         }
 
     }
@@ -88,6 +109,25 @@
         height: 90%;
         flex: 1;
         padding: 5px 0;
+        .sectionSvg{
+            width: 100%;
+            position: relative;
+            bottom: 50mm;
+        }
+        .mainTitle{
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+            bottom: 100px;
+            line-height: 0.5em;
+            .colmunText{
+                display: flex;
+                // border: 1px solid red;
+                position: relative;
+                justify-content: space-between;
+            }
+        }
 
     }
     .columnThreeTwo{

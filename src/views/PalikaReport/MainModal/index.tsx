@@ -211,6 +211,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
         },
         {
             key: 12,
+            content: 'Preparedness',
+            url: '',
+        },
+
+        {
+            key: 13,
             content: 'Preview',
             url: '',
         },

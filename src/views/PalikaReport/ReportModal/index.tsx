@@ -31,6 +31,7 @@ import {
 } from '#request';
 import { userSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
+import Preparedness from './Sections/Preparedness';
 
 interface Props {
     keyTab: number;
@@ -355,7 +356,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
-
+            {
+                (keyTab === 12
+               && showTabs)
+                    ? (
+                        <>
+                            <Preparedness updateTab={updateTab} />
+                        </>
+                    )
+                    : ''
+            }
             {
                 keyTab === (tabsLength - 1) && showTabs
                     ? (

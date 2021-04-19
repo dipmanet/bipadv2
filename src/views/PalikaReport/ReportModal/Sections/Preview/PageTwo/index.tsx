@@ -21,6 +21,10 @@ import WardwiseDeath from '../../DamageAndLoss/WardwiseDeath';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import BudgetActivity from '../../BudgetActivity';
 
+import page2line2 from './page2line2.svg';
+import page2line21 from './page2line21.svg';
+import page2line3 from './beneficiary.svg';
+
 import govtlogo from '../../../../govtLogo.svg';
 
 import {
@@ -59,30 +63,61 @@ const PageTwo = (props: Props) => {
                 </div>
             ))} */}
             <div className={styles.rowOne}>
-                <DamageAndLoss hide={1} />
+                <div className={styles.mainTitle}>
+                    DISASTER INCIDENT SUMMARY
+                    <DamageAndLoss hide={1} />
+                </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                  fjsdkjhf
+                    <div className={styles.mainTitle}>
+                PEOPLE DEATH IN RAJAPUR (TOP 5 WARDS)
+                    </div>
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line2}
+                        alt="Nepal Government"
+                    />
                 </div>
                 <div className={styles.columnTwoTwo}>
-                    fslkdjfs
-                </div>
-                <div className={styles.columnTwoThree}>
-                    datda
+                    <div className={styles.mainTitle}>
+                HAZARDWISE IMPACT
+                    </div>
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line21}
+                        alt="Nepal Government"
+                    />
                 </div>
 
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                        datad
+                    <div className={styles.mainTitle}>
+                    RELIEF
+                    </div>
+                    <div className={styles.mainTitle}>
+                        <p>Total Relief amount: Rs 347688</p>
+                        <p>Total number of beneficiary families: 122</p>
+                        <div className={styles.colmunText}>
+                            <p>Madhesi: 15</p>
+                            <p>Disabled: 18</p>
+                            <p>Female: 22</p>
+                            <p>Janajati: 55</p>
+                            <p>Dalit: 44</p>
+                        </div>
+
+                    </div>
+
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line3}
+                        alt="Nepal Government"
+                    />
                     {' '}
 
                 </div>
-                <div className={styles.columnThreeTwo}>
-                    datda
 
-                </div>
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
