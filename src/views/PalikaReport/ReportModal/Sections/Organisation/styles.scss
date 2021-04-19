@@ -1,12 +1,17 @@
 
 .tabsPageContainer{
   padding: 15px;
+  // position: relative;
+  // border: 1px solid red;
+  // width: fit-content;
   h2{
     margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 400;
   }
     table{
         border-collapse: collapse;
-        width: 100%;
+        // width: 100%;
         // border: 1px solid #f5f5f5;
     }
     th{
@@ -25,6 +30,7 @@
 
 
 .palikaTable{
+
     .dataUnavailable{
         display: flex;
         justify-content: center;

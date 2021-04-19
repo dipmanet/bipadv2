@@ -100,6 +100,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         focalPerson,
         updateTab,
         keyTabUrl,
+        tabsLength,
     } = props;
 
 
@@ -347,7 +348,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
 
             {
-                keyTab === 11 && showTabs
+                keyTab === (tabsLength - 1) && showTabs
                     ? (
                         <div className={styles.tabsPageContainer}>
                             <button
@@ -361,6 +362,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             <div id={'reportPreview'}>
                                 <PreviewPageOne
                                     generalData={getGeneralData()}
+                                    url={keyTabUrl}
 
                                 />
                                 <PreviewPageTwo

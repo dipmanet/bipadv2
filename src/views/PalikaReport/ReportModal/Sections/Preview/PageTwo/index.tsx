@@ -20,6 +20,8 @@ import WardwiseDeath from '../../DamageAndLoss/WardwiseDeath';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import BudgetActivity from '../../BudgetActivity';
 
+import govtlogo from '../../../../govtLogo.svg';
+
 interface Props{
     reportData: Element[];
 }
@@ -41,43 +43,37 @@ const Preview = (props: Props) => {
                 </div>
             ))} */}
             <div className={styles.rowOne}>
-                <DamageAndLoss />
+               fsdjfksh
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                    <p>
-                        <strong>
-                            Top 5 ward in Rajapur Mun that had highest number of deaths
-                        </strong>
-                    </p>
-                    <Inventory width={'100%'} height={'50%'} />
+                  fjsdkjhf
                 </div>
                 <div className={styles.columnTwoTwo}>
-                    <div className={styles.title}>
-                        <p><strong>Hazard Wise number of incidents and death </strong></p>
-                    </div>
-                    <WardwiseDeath width={'100%'} height={'50%'} />
+                    fslkdjfs
                 </div>
                 <div className={styles.columnTwoThree}>
-                    <Budget />
+                    datda
                 </div>
 
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                    <ProgrammeAndPolicies />
+                        datad
+                    {' '}
+
                 </div>
                 <div className={styles.columnThreeTwo}>
-                    <ProgrammeAndPolicies />
+                    datda
 
                 </div>
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                    <Budget />
+                    Budget
                 </div>
                 <div className={styles.columnThreeTwo}>
-                    <BudgetActivity />
+                   Budget Activity
                 </div>
             </div>
             <div className={styles.rowThree}>
@@ -94,6 +90,48 @@ const Preview = (props: Props) => {
                 </div>
                 <div className={styles.columnThreeTwo}>
                     Recovery Data
+
+                </div>
+            </div>
+            <div className={styles.rowFour}>
+
+                <div className={styles.sectionLeft}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={govtlogo}
+                        alt="Nepal Government"
+                    />
+
+                    <div className={styles.address}>
+                        <span className={styles.title}>Rajapur Municipality</span>
+                        <br />
+                        <span className={styles.desc}> Bardiya District, Lumbini Province</span>
+                    </div>
+
+                </div>
+                <div className={styles.sectionright}>
+                    <div className={styles.mayorName}>
+                        <ul className={styles.list}>
+                            <li className={styles.title}>Mr Mayor</li>
+                            <li>Designation</li>
+                            <li>983869220</li>
+
+                        </ul>
+                    </div>
+                    <div className={styles.mayorName}>
+                        <ul className={styles.list}>
+                            <li className={styles.title}>CAO</li>
+                            <li>Designation</li>
+                            <li>983869220</li>
+                        </ul>
+                    </div>
+                    <div className={styles.mayorName}>
+                        <ul className={styles.list}>
+                            <li className={styles.title}>Focal Person</li>
+                            <li>Designation</li>
+                            <li>983869220</li>
+                        </ul>
+                    </div>
 
                 </div>
             </div>

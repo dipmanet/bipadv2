@@ -40,6 +40,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     resource_type: params.inventories,
                     expand: params.fields,
                     meta: params.meta,
+                    limit: 5,
 
                 };
             }
@@ -80,7 +81,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const { requests: { PalikaReportInventoriesReport }, provinces,
         districts,
         municipalities,
-        user } = props;
+        user, rows } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('inventories');
     const [meta, setMeta] = useState(true);
@@ -104,6 +105,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
         fields,
         user,
         meta,
+        rows,
 
     });
     console.log('hang fetch data>>>', fetchedData);
@@ -138,7 +140,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
                         </tr>
 
-                        {fetchedData.map(item => (
+                        {fetchedData && fetchedData.map(item => (
                             item.inventories.map((data, i) => (
                                 <tr>
                                     {/* <td>

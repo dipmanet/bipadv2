@@ -300,6 +300,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
     };
 
     const getTranslateVal = () => {
+        // const rect = document.getElementById('palikaModal').getBoundingClientRect();
+        // console.log(rect);
         if (tabSelected > 5) {
             return (500);
         }
@@ -326,6 +328,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                 <Modal
                     closeOnOutsideClick
                     className={getModalClass()}
+                    id={'palikaModal'}
                 >
                     <ModalHeader
                         title=" "
@@ -389,6 +392,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                             cao={cao}
                             focalPerson={focalPerson}
                             updateTab={handleNextClick}
+                            tabsLength={tabs.length}
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
