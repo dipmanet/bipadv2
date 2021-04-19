@@ -261,26 +261,24 @@ const Preview = (props: Props) => {
                         {' '}
                         {municipalBudget}
                     </div>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart
-                            width={250}
-                            height={250}
-                        >
-                            <Pie
-                                dataKey="value"
-                                isAnimationActive={false}
-                                data={budgetChartData}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                fill="#8884d8"
-                                label
-                            />
-                            <Tooltip />
-                            <Legend align="right" />
+                    <PieChart
+                        width={180}
+                        height={180}
+                    >
+                        <Pie
+                            dataKey="value"
+                            isAnimationActive={false}
+                            data={budgetChartData}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={40}
+                            fill="#8884d8"
+                            label
+                        />
+                        <Tooltip />
+                        <Legend align="right" />
 
-                        </PieChart>
-                    </ResponsiveContainer>
+                    </PieChart>
                 </div>
                 <div className={styles.columnOneTwo}>
                     <Table striped bordered hover size="md">
@@ -411,7 +409,7 @@ const Preview = (props: Props) => {
                     </div>
                     <BarChart
                         width={300}
-                        height={300}
+                        height={130}
                         data={CIChartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -434,7 +432,7 @@ const Preview = (props: Props) => {
                     </div>
                     <BarChart
                         width={300}
-                        height={300}
+                        height={130}
                         data={disasterInventoryChartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -460,7 +458,7 @@ const Preview = (props: Props) => {
                         </div>
                         <BarChart
                             width={300}
-                            height={300}
+                            height={130}
                             data={trainedHRData}
                             layout="vertical"
                             margin={{ left: 20, right: 20 }}

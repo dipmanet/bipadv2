@@ -20,6 +20,7 @@ const DamageAndLoss = (props: Props) => {
     const handleDataSave = () => {
         props.updateTab();
     };
+    console.log('damage prop: ', props.hide);
     return (
         <div className={styles.tabsPageContainer}>
             {/* <Table striped bordered hover size="md">
@@ -44,50 +45,108 @@ const DamageAndLoss = (props: Props) => {
             </Table> */}
 
             <div className={styles.damageContainer}>
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={deathIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={incidentIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={injuredIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={livestockIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={lossIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={missingIcon}
-                    alt="Bullet Point"
-                />
-                <ScalableVectorGraphics
-                    className={styles.bulletPoint}
-                    src={roadIcon}
-                    alt="Bullet Point"
-                />
-            </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={deathIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>Deaths</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={incidentIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>INCIDENTS</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={injuredIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>INJURED</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={livestockIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>LIVESTOCK</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={lossIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>ESTIMATED LOSS</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={missingIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>PEOPLE MISSING</p>
+                        <p>123</p>
+                    </div>
+                </div>
+                <div className={styles.damageItemContainer}>
 
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={roadIcon}
+                        alt="Bullet Point"
+                    />
+                    <div className={styles.damageTitle}>
+                        <hr />
+                        <p>ROAD ACCIDENTS</p>
+                        <p>123</p>
+                    </div>
+                </div>
+
+
+            </div>
+            {
+                props.hide !== 1
+                    ? (
+                        <button
+                            type="button"
+                            onClick={handleDataSave}
+                            className={styles.savebtn}
+                        >
                 Next
-            </button>
+                        </button>
+                    )
+                    : ''
+            }
+
         </div>
     );
 };

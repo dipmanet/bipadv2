@@ -59,7 +59,7 @@ const PageTwo = (props: Props) => {
                 </div>
             ))} */}
             <div className={styles.rowOne}>
-               fsdjfksh
+                <DamageAndLoss hide={1} />
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
