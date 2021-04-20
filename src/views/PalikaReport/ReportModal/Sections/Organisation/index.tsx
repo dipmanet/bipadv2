@@ -159,7 +159,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </Table>
-<<<<<<< HEAD
                 {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
@@ -183,22 +182,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 } */}
-=======
-                {
-                    props.hide !== 1
-                        ? (
-                            <button
-                                type="button"
-                                onClick={handleDataSave}
-                                className={styles.savebtn}
-                            >
-                Next
-                            </button>
-                        )
-                        : ''
-                }
-
->>>>>>> 1c5d5c2463a94b40298f0e1545096ed24136fd50
             </div>
 
         </div>
