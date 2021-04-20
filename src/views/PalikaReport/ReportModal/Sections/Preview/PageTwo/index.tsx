@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { ComposedChart,
     Line,
     Area,
@@ -20,20 +21,41 @@ import WardwiseDeath from '../../DamageAndLoss/WardwiseDeath';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import BudgetActivity from '../../BudgetActivity';
 
+import page2line2 from './page2line2.svg';
+import page2line21 from './page2line21.svg';
+import page2line3 from './beneficiary.svg';
+import prep from './page2line3.svg';
+import recons from './page2line31.svg';
+
 import govtlogo from '../../../../govtLogo.svg';
+
+import {
+    generalDataSelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    generalData: generalDataSelector(state),
+});
 
 interface Props{
     reportData: Element[];
 }
 
-const Preview = (props: Props) => {
-    const { reportData } = props;
+const PageTwo = (props: Props) => {
+    const { reportData, generalData } = props;
+    const [mayorName, setmayorName] = useState('');
     const {
         lineData,
         composedChart,
         scatterChart,
         barChart,
     } = LineData;
+    useEffect(() => {
+        if (generalData && generalData.mayor) {
+            const mayor = generalData.mayor.split(',')[0].split(':')[1];
+            setmayorName(mayor);
+        }
+    }, [generalData]);
     return (
         <div className={styles.previewContainer}>
             {/* {reportData.map(comp => (
@@ -43,56 +65,185 @@ const Preview = (props: Props) => {
                 </div>
             ))} */}
             <div className={styles.rowOne}>
-               fsdjfksh
+                <div className={styles.mainTitle}>
+                    DISASTER INCIDENT SUMMARY
+                    <DamageAndLoss hide={1} />
+                </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                  fjsdkjhf
+                    <div className={styles.mainTitle}>
+                PEOPLE DEATH IN RAJAPUR (TOP 5 WARDS)
+                    </div>
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line2}
+                        alt="Nepal Government"
+                    />
                 </div>
                 <div className={styles.columnTwoTwo}>
-                    fslkdjfs
-                </div>
-                <div className={styles.columnTwoThree}>
-                    datda
+                    <div className={styles.mainTitle}>
+                HAZARDWISE IMPACT
+                    </div>
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line21}
+                        alt="Nepal Government"
+                    />
                 </div>
 
             </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                        datad
+                    <div className={styles.mainTitle}>
+                    RELIEF
+                    </div>
+                    <div className={styles.mainTitle}>
+                        <p>Total Relief amount: Rs 347688</p>
+                        <p>Total number of beneficiary families: 122</p>
+                        <div className={styles.colmunText}>
+                            <p>Madhesi: 15</p>
+                            <p>Disabled: 18</p>
+                            <p>Female: 22</p>
+                            <p>Janajati: 55</p>
+                            <p>Dalit: 44</p>
+                        </div>
+
+                    </div>
+
+                    <ScalableVectorGraphics
+                        className={styles.sectionSvg}
+                        src={page2line3}
+                        alt="Nepal Government"
+                    />
                     {' '}
 
                 </div>
-                <div className={styles.columnThreeTwo}>
-                    datda
+
+            </div>
+
+
+            <div className={styles.rowNew}>
+                <div className={styles.columnNewOne}>
+                    <div className={styles.mainTitle}>
+                Initiatives taken in Disaster Risk reduction and Preparedness
+                    </div>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+
+                                <th>Activity Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Source of funding</th>
+                                <th>Total Expenditure</th>
+                                <th>SFDRR Priority Area </th>
+
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <div className={styles.columnNewTwo}>
+                    <div className={styles.mainTitle}>
+                Recovery and reconstruction
+                    </div>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+
+                                <th>Activity Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Source of funding</th>
+                                <th>Total Expenditure</th>
+                                <th>SFDRR Priority Area </th>
+
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+                            <tr>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+                                <td>{'no data'}</td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
 
                 </div>
             </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                    Budget
-                </div>
-                <div className={styles.columnThreeTwo}>
-                   Budget Activity
-                </div>
-            </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                RELIEF DATA
-                </div>
-                <div className={styles.columnThreeTwo}>
-                Preparedness Data
-                </div>
-            </div>
-            <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                   Research Data
-                </div>
-                <div className={styles.columnThreeTwo}>
-                    Recovery Data
 
-                </div>
-            </div>
+
             <div className={styles.rowFour}>
 
                 <div className={styles.sectionLeft}>
@@ -112,24 +263,24 @@ const Preview = (props: Props) => {
                 <div className={styles.sectionright}>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
-                            <li className={styles.title}>Mr Mayor</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li className={styles.title}>Mayor/NagarPramukh</li>
+                            <li>{mayorName}</li>
+                            <li>9858027167 </li>
 
                         </ul>
                     </div>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
                             <li className={styles.title}>CAO</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li>No Data </li>
+                            <li>No Data </li>
                         </ul>
                     </div>
                     <div className={styles.mayorName}>
                         <ul className={styles.list}>
                             <li className={styles.title}>Focal Person</li>
-                            <li>Designation</li>
-                            <li>983869220</li>
+                            <li>Khusi Ram Tharu</li>
+                            <li>9851046372</li>
                         </ul>
                     </div>
 
@@ -142,4 +293,4 @@ const Preview = (props: Props) => {
     );
 };
 
-export default Preview;
+export default connect(mapStateToProps, undefined)(PageTwo);

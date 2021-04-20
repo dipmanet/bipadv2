@@ -103,7 +103,6 @@ const Contacts = (props: Props) => {
 
 
     });
-    console.log('hang fetch data>>>', fetchedData);
 
     useEffect(() => {
         PalikaReportInventoriesReport.do({
@@ -112,16 +111,17 @@ const Contacts = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
     // Finding Header for table data
-
-
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     return (
 
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
                 DRR related Person Contact Info
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
@@ -147,6 +147,15 @@ const Contacts = (props: Props) => {
 
                     </tbody>
                 </table>
+
+
+                <button
+                    type="button"
+                    onClick={handleDataSave}
+                    className={styles.savebtn}
+                >
+                Save and Proceed
+                </button>
             </div>
         </div>
     );

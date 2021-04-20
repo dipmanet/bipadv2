@@ -261,28 +261,29 @@ const Preview = (props: Props) => {
                         {' '}
                         {municipalBudget}
                     </div>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart
-                            width={250}
-                            height={250}
-                        >
-                            <Pie
-                                dataKey="value"
-                                isAnimationActive={false}
-                                data={budgetChartData}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                fill="#8884d8"
-                                label
-                            />
-                            <Tooltip />
-                            <Legend align="right" />
+                    <PieChart
+                        width={180}
+                        height={180}
+                    >
+                        <Pie
+                            dataKey="value"
+                            isAnimationActive={false}
+                            data={budgetChartData}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={40}
+                            fill="#8884d8"
+                            label
+                        />
+                        <Tooltip />
+                        <Legend align="right" />
 
-                        </PieChart>
-                    </ResponsiveContainer>
+                    </PieChart>
                 </div>
                 <div className={styles.columnOneTwo}>
+                    <div className={styles.mainTitle}>
+                        BUDGET ACTIVITIES
+                    </div>
                     <Table striped bordered hover size="md">
                         <thead>
                             <tr>
@@ -341,7 +342,7 @@ const Preview = (props: Props) => {
                 </div> */}
                 <div className={styles.columnTwoTwo}>
 
-                    sth else needs to go here
+                    <Organisation hide={1} page={5} />
                 </div>
             </div>
 
@@ -416,7 +417,7 @@ const Preview = (props: Props) => {
                     </div>
                     <BarChart
                         width={300}
-                        height={300}
+                        height={130}
                         data={CIChartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -439,7 +440,7 @@ const Preview = (props: Props) => {
                     </div>
                     <BarChart
                         width={300}
-                        height={300}
+                        height={130}
                         data={disasterInventoryChartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -465,7 +466,7 @@ const Preview = (props: Props) => {
                         </div>
                         <BarChart
                             width={300}
-                            height={300}
+                            height={130}
                             data={trainedHRData}
                             layout="vertical"
                             margin={{ left: 20, right: 20 }}
@@ -484,7 +485,19 @@ const Preview = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.columnFourTwo}>
-                    Section 8
+                    <div className={styles.mainTitle}>
+                 Simulations exercises in Rajapur Municipality
+                    </div>
+                    <div className={styles.simulations}>
+                     Total number of simulations: 50
+                        <ul className={styles.simuList}>
+                            <li>Hazardwise classification</li>
+                            <li>Fire: 20</li>
+                            <li>Flood: 2</li>
+                            <li>Earthquake: 3</li>
+                        </ul>
+
+                    </div>
                 </div>
             </div>
 

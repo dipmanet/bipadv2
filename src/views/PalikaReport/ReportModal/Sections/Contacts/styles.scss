@@ -18,6 +18,21 @@
     //     tr:nth-child(even) {
     //     background-color:#f5f5f5
     // }
+        
+
+    .savebtn{
+        position: relative;
+        left: 75%;
+        margin-top: 15px;
+        width: fit-content;
+        background-color: rgb(0,105,222) !important;
+        border-radius: 15px;
+        color: white; 
+        padding: 8px 12px;
+        cursor: pointer;
+        // border: none;
+        filter: saturate(80%);
+    }
 
 
 .palikaTable{

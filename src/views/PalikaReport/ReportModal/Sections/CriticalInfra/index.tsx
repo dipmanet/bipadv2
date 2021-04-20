@@ -90,6 +90,12 @@ const CriticalInfra = (props: Props) => {
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
+
+    const handleDataSave = () => {
+        props.updateTab();
+    };
+
+
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
 
@@ -120,11 +126,11 @@ const CriticalInfra = (props: Props) => {
     return (
 
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
                    Critical Infrastructures
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
@@ -177,6 +183,13 @@ const CriticalInfra = (props: Props) => {
                     && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 } */}
+                <button
+                    type="button"
+                    onClick={handleDataSave}
+                    className={styles.savebtn}
+                >
+                Save and Proceed
+                </button>
             </div>
 
         </div>

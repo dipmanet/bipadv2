@@ -211,6 +211,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
         },
         {
             key: 12,
+            content: 'Preparedness',
+            url: '',
+        },
+
+        {
+            key: 13,
             content: 'Preview',
             url: '',
         },
@@ -310,7 +316,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
     const getModalClass = () => {
         if (showTabs) {
-            if (tabSelected === 11) {
+            if (tabSelected === tabs.length - 1) {
                 return styles.previewTab;
             }
             return styles.tabsContainer;

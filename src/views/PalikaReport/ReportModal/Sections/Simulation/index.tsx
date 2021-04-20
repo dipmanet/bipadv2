@@ -9,6 +9,10 @@ interface Props{
 
 const Simulation = (props: Props) => {
     console.log(props);
+    const handleDataSave = () => {
+        props.updateTab();
+    };
+
     return (
         <div className={styles.tabsPageContainer}>
             <h2>Bipad Simulation at the Municipality</h2>
@@ -38,6 +42,15 @@ const Simulation = (props: Props) => {
                     </tr>
                 </tbody>
             </Table>
+
+
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save and Proceed
+            </button>
         </div>
     );
 };

@@ -69,6 +69,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 const Relief = (props: Props) => {
+    console.log(props);
+    const handleDataSave = () => {
+        props.updateTab();
+    };
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
@@ -116,11 +120,11 @@ const Relief = (props: Props) => {
 
     return (
         <div className={styles.tabsPageContainer}>
-            <p>
+            <h2>
                 <strong>
-            DRR related organizations in Municipal Government
+            Relief
                 </strong>
-            </p>
+            </h2>
             <div className={styles.palikaTable}>
                 <table id="table-to-xls">
                     <tbody>
@@ -198,6 +202,14 @@ const Relief = (props: Props) => {
                 } */}
             </div>
 
+
+            <button
+                type="button"
+                onClick={handleDataSave}
+                className={styles.savebtn}
+            >
+                Save and Proceed
+            </button>
         </div>
     );
 };
