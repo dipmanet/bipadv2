@@ -16,7 +16,9 @@ const Simulation = (props: Props) => {
     return (
         <div className={styles.tabsPageContainer}>
             <h2>Bipad Simulation at the Municipality</h2>
-            <Table striped bordered hover size="md">
+
+            <h1>Work in Progress</h1>
+            {/* <Table striped bordered hover size="md">
                 <thead>
                     <tr>
                         <th>SN</th>
@@ -41,7 +43,7 @@ const Simulation = (props: Props) => {
                         <td>Mobile</td>
                     </tr>
                 </tbody>
-            </Table>
+            </Table> */}
 
 
             <button
