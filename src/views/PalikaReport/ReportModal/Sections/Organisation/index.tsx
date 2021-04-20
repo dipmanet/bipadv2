@@ -150,7 +150,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
 
                     </tbody>
-                </table>
+                </Table>
                 {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
