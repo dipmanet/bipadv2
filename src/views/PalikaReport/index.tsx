@@ -4,10 +4,12 @@ import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { Label } from 'semantic-ui-react';
 import Sidebar from './components/Sidebar';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import MainModal from './MainModal';
+import DateInput from '#rsci/DateInput';
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -22,7 +24,7 @@ import {
 } from '#request';
 import PalikaReportTable from './components/palikaReportTable';
 import FilterModal from '#components/_Filters/FilterModal';
-
+import DashboardFilter from '#components/_Filters';
 
 interface Props {
 
@@ -93,8 +95,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
     const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
-    const [menuId, setMenuId] = useState();
-    const [submenuId, setSubmenuId] = useState();
+    const [menuId, setMenuId] = useState(1);
+    const [submenuId, setSubmenuId] = useState(1);
     const [subMenuTitle, setSubMenuTitle] = useState('All Reports');
     const [tableHeader, setTableHeader] = useState([]);
     const [fiscalYear, setFiscalYear] = useState(null);
@@ -102,7 +104,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
-
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -120,7 +123,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         user,
         // filters: { region },
     } = props;
-    const { municipality, district, province } = user;
+
+
+    console.log('What>>>', user);
+    let municipalityName = '';
+    if (user) {
+        const { profile: { municipality, district, province } } = user;
+        municipalityName = municipalities.find(item => item.id === municipality);
+    }
+
+
+    console.log('mun name', municipalityName);
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
         // setFiltered(false);
@@ -205,14 +218,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         return '';
     };
 
+
     const handleSubmit = () => {
         if (filtered && newRegionValues !== undefined) {
             setResetFilterProps(true);
+            setDateTo('');
+            setDateFrom('');
             PalikaReportGetRequest.do({
 
                 submitQuery: getRegionDetails(),
             });
             setClearFilter(true);
+
             setNewRegionValues({
                 adminLevel: undefined,
                 geoarea: undefined,
@@ -263,8 +280,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
     };
 
-    const getSubmenuId = (subMenuid) => {
-        setSubmenuId(subMenuid);
+    const getSubmenuId = (data) => {
+        setSubmenuId(data);
+        console.log('submenuid', data);
     };
 
     const getMenuId = (menu) => {
@@ -273,6 +291,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const getSubmenuTitle = (title) => {
         setSubMenuTitle(title);
     };
+    console.log('This>>>', submenuId);
     useEffect(() => {
         // Example POST method implementation:
         function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
@@ -356,12 +375,19 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         console.log('is working');
         return null;
     };
-    console.log('is it success>>>', url);
+
+    const changeDateFrom = (dateFrom) => {
+        setDateFrom(dateFrom);
+    };
+    const changeDateTo = (dateTo) => {
+        setDateTo(dateTo);
+    };
+
     return (
         <>
             <Page hideMap hideFilter />
 
-            <MainModal
+            {/* <MainModal
                 showTabs={showTabs}
                 setShowTabs={handleAddbuttonClick}
                 showReportModal={showReportModal}
@@ -370,7 +396,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 province={province}
                 district={district}
                 municipality={municipality}
-            />
+            /> */}
 
 
             {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
@@ -391,6 +417,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             getsubmenuId={getSubmenuId}
                             getmenuId={getMenuId}
                             getsubmenuTitle={getSubmenuTitle}
+                            municipalityName={municipalityName}
                         />
 
                     </div>
@@ -421,6 +448,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             districtInputClassName={styles.sndistinput}
                             municipalityInputClassName={styles.snmuniinput}
                         />
+                        <div>
+                            <Label>From: </Label>
+                            <DateInput dateFrom={changeDateFrom} />
+                        </div>
+                        <div>
+                            <Label>To: </Label>
+                            <DateInput dateTo={changeDateTo} />
+                        </div>
+
                         {filtered ? (
                             <button
                                 type="submit"
@@ -461,6 +497,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             paginationData={paginationParameters}
                             tableHeader={TableHeaderForTable}
                             tableHeaderDataMatch={TableHeaderForMatchingData}
+                            submenuId={submenuId}
 
                         />
                         <div className={styles.paginationDownload}>

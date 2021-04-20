@@ -13,7 +13,9 @@ const Sidebar = (props) => {
     const [initialRender, setInitialRender] = useState(true);
     const [menuSlug, setMenuSlug] = useState('');
     const [subMenuSlug, setSubMenuSlug] = useState('');
-
+    // eslint-disable-next-line react/prop-types
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const { municipalityName, municipalityName: { title_en } } = props;
     const Data = [{
         id: 1,
         title: 'Palika Reports',
@@ -22,8 +24,10 @@ const Sidebar = (props) => {
             title: 'All Reports',
             url: '/disaster-profile/',
             slug: 'all-reports' },
-        { id: 2,
-            title: 'My Reports',
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        municipalityName && title_en && { id: 2,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            title: `${title_en} Municipality Reports`,
             url: '/disaster-profile/',
             slug: 'my-reports' }],
     },
@@ -98,8 +102,12 @@ const Sidebar = (props) => {
         props.getsubmenuTitle(title);
         setMenuSlug(menumainSlug);
         setSubMenuSlug(slug);
-        ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
+        // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
+    useEffect(() => {
+        props.getsubmenuId(selectedSubMenuId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSubMenuId]);
 
     // console.log('Test', Data);
     // if (menuSlug) {
