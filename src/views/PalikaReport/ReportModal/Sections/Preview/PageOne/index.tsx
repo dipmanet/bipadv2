@@ -413,7 +413,7 @@ const Preview = (props: Props) => {
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
                     <div className={styles.mainTitle}>
-                 DRR related critical infrastructures in municipality
+                 DRR RELATED CRITICAL INFRASTRUCTURES IN MUNICIPALITY
                     </div>
                     <BarChart
                         width={300}
@@ -436,7 +436,7 @@ const Preview = (props: Props) => {
                 </div>
                 <div className={styles.columnThreeTwo}>
                     <div className={styles.mainTitle}>
-                 DRR related inventories in Municipal Government
+                 DRR RELATED INVETORIES IN MUNICIPAL GOVERNMENT
                     </div>
                     <BarChart
                         width={300}
@@ -464,29 +464,54 @@ const Preview = (props: Props) => {
                         <div className={styles.mainTitle}>
                              AVAILABLE TRAINED HUMAN RESOURCE IN DRR
                         </div>
-                        <BarChart
-                            width={300}
-                            height={130}
-                            data={trainedHRData}
-                            layout="vertical"
-                            margin={{ left: 20, right: 20 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis type="number" />
-                            <YAxis
-                                type="category"
-                                dataKey="name"
-                                tick={{ fill: '#94bdcf' }}
-                            />
-                            {/* <Tooltip /> */}
-                            {/* <Legend /> */}
-                            <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
-                        </BarChart>
+                        <table id="table-to-xls">
+                            <tbody>
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Training Title</th>
+                                    <th>Training Date</th>
+
+
+                                </tr>
+                                <tr>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+
+                                </tr>
+                                <tr>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+
+                                </tr>
+                                <tr>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+
+                                </tr>
+                                <tr>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+                                    <td>{'no data'}</td>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div className={styles.columnFourTwo}>
                     <div className={styles.mainTitle}>
-                 Simulations exercises in Rajapur Municipality
+                 SIMULATIONS EXERCISES IN RAJAPUR MUNICIPALITY
                     </div>
                     <div className={styles.simulations}>
                      Total number of simulations: 50

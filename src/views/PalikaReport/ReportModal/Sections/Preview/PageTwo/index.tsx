@@ -96,7 +96,7 @@ const PageTwo = (props: Props) => {
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
                     <div className={styles.mainTitle}>
-                    RELIEF
+                        RELIEF
                     </div>
                     <div className={styles.mainTitle}>
                         <p>Total Relief amount: Rs 347688</p>
@@ -184,7 +184,7 @@ const PageTwo = (props: Props) => {
                 </div>
                 <div className={styles.columnNewTwo}>
                     <div className={styles.mainTitle}>
-                Recovery and reconstruction
+                         Recovery and reconstruction
                     </div>
                     <table id="table-to-xls">
                         <tbody>

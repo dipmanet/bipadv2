@@ -67,7 +67,7 @@ const ProgramPolicies = (props: Props) => {
     return (
         <div className={styles.pApContainer}>
             <h2>Annual Program and Policy</h2>
-            <p>Disaster related policy points of current fiscal year</p>
+            <p>DRR programmes listed in the annual policy and programme</p>
             {inputList.map((x, i) => (
 
                 <>
@@ -90,7 +90,7 @@ const ProgramPolicies = (props: Props) => {
                                 className="mr10"
                                 onClick={() => handleRemoveClick(i)}
                             >
-                                Remove Point
+                                Remove Policy Point
                             </button>
                         )}
                         {inputList.length - 1 === i && (
@@ -98,7 +98,7 @@ const ProgramPolicies = (props: Props) => {
                                 type="button"
                                 onClick={handleAddClick}
                             >
-                            Add Point
+                            Add Policy Point
                             </button>
                         )}
                     </div>
