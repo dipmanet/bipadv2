@@ -59,7 +59,7 @@ const PalikaReportTable = (props) => {
                                             <td>{item.district}</td>
                                             <td>{item.municipality}</td>
                                             <td>{item.createdDate}</td>
-                                            <td>{item.item.modifiedDate}</td>
+                                            <td>{item.modifiedDate}</td>
                                             <td>{item.item.createdBy}</td>
                                             <td><button type="button" className={styles.downloadTableXlsButton}>Download</button></td>
                                         </tr>
@@ -91,7 +91,15 @@ const PalikaReportTable = (props) => {
                                             <td>{data.createdDate}</td>
                                             <td>{data.modifiedDate}</td>
                                             <td>{data.item.updatedBy}</td>
-                                            <td>Edit/Delete</td>
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    className={styles.downloadTableXlsButton}
+                                                >
+Edit
+                                                </button>
+
+                                            </td>
                                         </tr>
                                     ))}
 
