@@ -8,7 +8,8 @@
         margin-bottom: 15px;
     }
     .formColumn{
-        padding: 0 0px 0 0;
+        padding: 0;
+        // border: 1px solid gray;
         p{
             font-size: 14px;
         }
@@ -24,16 +25,18 @@
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
-                margin-top: 10px;
+                margin-bottom: 12px;
                 padding-left: 10px;
+                // border: 1px solid blue;
                 .labelDate{
                     padding-left: 10px;
                     color: #777;
                     width: 100%;
+                    // margin-top: 15px;
                 }
                 select{
                     border: none !important;
-                    padding: 15px 10px;
+                    padding: 0px 10px;
                     background: transparent;
                     width: 100%;
                     padding: 15px 10px !important;
@@ -89,19 +92,23 @@
         }
 
         h3{
-            margin-top: 20px;
+            margin-bottom: 15px;
+            // border: 1px solid gray;
+            margin-top: 15px;
         }
         .personalDetailsrow{
             display: flex;
             flex-direction: column;
             width: 61%;
-            margin-bottom: 12px;
-            margin-top: 10px;
+            // margin-bottom: 12px;
+            // margin-top: 10px;
             .personalDetails{
-                margin-top: 10px;
+                // margin-top: 10px;
                 table{
                     border-collapse: collapse;
                     width: 100%;
+                    border: 1px solid #e6e6e6;
+                    margin: 0 0 15px 0;
                 }
                 th{
                     padding: 0.5rem;

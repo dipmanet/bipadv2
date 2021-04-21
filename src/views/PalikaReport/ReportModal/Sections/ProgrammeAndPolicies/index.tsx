@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
@@ -67,50 +66,53 @@ const ProgramPolicies = (props: Props) => {
     };
 
     return (
-        <div className={styles.pApContainer}>
-            <h2>Annual Program and Policy</h2>
-            <p>DRR programmes listed in the annual policy and programme</p>
-            {inputList.map((x, i) => (
+        <div className={styles.mainPageDetailsContainer}>
+            <div className={styles.formColumn}>
+                <h2>Annual Program and Policy</h2>
+                <p>DRR programmes listed in the annual policy and programme</p>
+                <div className={styles.row}>
 
-                <>
-                    <div className={styles.inputContainer}>
-                        <label className={styles.label}>
-                            <input
-                                name="firstName"
-                                placeholder="Enter Policy Point"
-                                value={x.firstName}
-                                onChange={e => handleInputChange(e, i)}
-                            />
-                        </label>
-                    </div>
+                    {inputList.map((x, i) => (
+
+                        <>
+                            <div className={styles.inputContainer}>
+                                <input
+                                    name="firstName"
+                                    placeholder="Enter Policy Point"
+                                    value={x.firstName}
+                                    onChange={e => handleInputChange(e, i)}
+                                />
+                            </div>
 
 
-                    <div className="btn-box">
-                        {inputList.length !== 1 && (
-                            <button
-                                type="button"
-                                className="mr10"
-                                onClick={() => handleRemoveClick(i)}
-                            >
+                            <div className="btn-box">
+                                {inputList.length !== 1 && (
+                                    <button
+                                        type="button"
+                                        className="mr10"
+                                        onClick={() => handleRemoveClick(i)}
+                                    >
                                 Remove Policy Point
-                            </button>
-                        )}
-                        {inputList.length - 1 === i && (
-                            <button
-                                type="button"
-                                onClick={handleAddClick}
-                            >
+                                    </button>
+                                )}
+                                {inputList.length - 1 === i && (
+                                    <button
+                                        type="button"
+                                        onClick={handleAddClick}
+                                    >
                             Add Policy Point
-                            </button>
-                        )}
-                    </div>
-                </>
-            ))}
-            <NextPrevBtns
-                handlePrevClick={props.handlePrevClick}
-                handleNextClick={props.handleNextClick}
-            />
+                                    </button>
+                                )}
+                            </div>
+                        </>
+                    ))}
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
 
+                </div>
+            </div>
         </div>
     );
 };
