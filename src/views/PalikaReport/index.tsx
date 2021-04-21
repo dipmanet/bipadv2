@@ -303,7 +303,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const getSubmenuTitle = (title) => {
         setSubMenuTitle(title);
     };
-    console.log('This>>>', submenuId);
     useEffect(() => {
         // Example POST method implementation:
         function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
