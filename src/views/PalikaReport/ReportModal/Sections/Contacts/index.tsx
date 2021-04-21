@@ -16,6 +16,8 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
+import NextPrevBtns from '../../NextPrevBtns';
+
 
 interface Props{
 
@@ -149,13 +151,10 @@ const Contacts = (props: Props) => {
                 </table>
 
 
-                <button
-                    type="button"
-                    onClick={handleDataSave}
-                    className={styles.savebtn}
-                >
-                Save and Proceed
-                </button>
+                <NextPrevBtns
+                    handlePrevClick={props.handlePrevClick}
+                    handleNextClick={props.handleNextClick}
+                />
             </div>
         </div>
     );

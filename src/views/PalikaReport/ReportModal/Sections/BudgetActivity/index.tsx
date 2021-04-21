@@ -8,6 +8,8 @@ import DatePicker from 'react-datepicker';
 import styles from './styles.scss';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import NextPrevBtns from '../../NextPrevBtns';
+
 
 import {
     setBudgetActivityDataAction,
@@ -415,27 +417,18 @@ const BudgetActivity = (props: Props) => {
 
                 }
                 <div className={styles.btns}>
-                    <button
-                        type="button"
-                        onClick={handleSave}
-                        className={styles.savebtn}
-                    >
-                            Save
-                    </button>
+
                     <button
                         type="button"
                         onClick={handleAddNew}
-                        className={styles.savebtn}
+                        className={styles.newActivityBtn}
                     >
                             Add New Activity
                     </button>
-                    <button
-                        type="button"
-                        onClick={handleNext}
-                        className={styles.savebtn}
-                    >
-                            Next
-                    </button>
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
                 </div>
 
             </div>

@@ -103,6 +103,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
 
+    const [province, setProvince] = useState(null);
+    const [district, setDistrict] = useState(null);
+    const [municipality, setMunicipality] = useState(null);
+
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -120,7 +124,19 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         user,
         // filters: { region },
     } = props;
-    const { municipality, district, province } = user;
+    if (user && user.profile && !user.profile.municipality) {
+        const {
+            profile: {
+                municipality: municipalityfromProp,
+                district: districtfromProp,
+                province: provincefromProp,
+            },
+        } = user;
+
+        setMunicipality(municipalityfromProp);
+        setProvince(provincefromProp);
+        setDistrict(districtfromProp);
+    }
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
         // setFiltered(false);

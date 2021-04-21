@@ -18,6 +18,9 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 
+import NextPrevBtns from '../../NextPrevBtns';
+
+
 interface Props{
 
 }
@@ -159,29 +162,17 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </Table>
-                {/* {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <div className={styles.paginationRight}>
-                                    <ReactPaginate
-                                        previousLabel={'prev'}
-                                        nextLabel={'next'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        onPageChange={handlePageClick}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
-                                        containerClassName={styles.pagination}
-                                        subContainerClassName={_cs(styles.pagination)}
-                                        activeClassName={styles.active}
-                                    />
-                                </div>
-                            )}
-                {fetchedData && fetchedData.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
+                {
+                    props.hide !== 1
+                        ? (
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={props.handleNextClick}
+                            />
+                        )
+                        : ''
+                }
 
-                } */}
             </div>
 
         </div>

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
@@ -8,6 +7,7 @@ import * as ReachRouter from '@reach/router';
 import Select from 'react-select';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
@@ -49,15 +49,6 @@ interface Props{
     focalPerson: string;
     formationDate: string;
     memberCount: string;
-    // setreportTitle: React.ChangeEventHandler<HTMLInputElement>;
-    // setdatefrom: React.ChangeEventHandler<HTMLInputElement>;
-    // setdateTo: React.ChangeEventHandler<HTMLInputElement>;
-    // setmayor: React.ChangeEventHandler<HTMLInputElement>;
-    // setcao: React.ChangeEventHandler<HTMLInputElement>;
-    // setfocalPerson: React.ChangeEventHandler<HTMLInputElement>;
-    // setformationDate: React.ChangeEventHandler<HTMLInputElement>;
-    // setmemberCount: React.ChangeEventHandler<HTMLInputElement>;
-    // setGeneralData: GeneralData;
 }
 
 interface Location{
@@ -70,7 +61,6 @@ const currentFiscalYear = new Date().getFullYear() + 56;
 
 const options = Array.from(Array(10).keys()).map(item => ({
     value: currentFiscalYear - item,
-    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
 }));
 
 
@@ -132,13 +122,6 @@ const General = (props: Props) => {
         updateTab();
     };
 
-    // const handleFormRegion = (location: Location) => {
-    //     setMunicipality(location.municipalityId);
-    //     setDistrict(location.districtId);
-    //     setProvince(location.provinceId);
-    // };
-
-
     const selectStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -158,248 +141,204 @@ const General = (props: Props) => {
         },
     };
 
-
     return (
         <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.formContainer}>
-                <h2 className={styles.title}>Please enter Disaster Profile details</h2>
-                {/* <div className={styles.inputContainer}>
-                    <StepwiseRegionSelectInput
-                        className={styles.stepwiseRegionSelectInput}
-                        faramElementName="region"
-                        wardsHidden
-                        onChange={handleFormRegion}
-                        initialLoc={{ municipality,
-                            district,
-                            province }}
-                        disabled
-                        provinceInputClassName={styles.snprovinceinput}
-                        districtInputClassName={styles.sndistinput}
-                        municipalityInputClassName={styles.snmuniinput}
-                    />
-                </div> */}
-                <div className={styles.newSignupForm}>
-                    <div className={styles.formColumn}>
-                        <p><strong>General Information</strong></p>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Report Title"
-                                onChange={handleReportTitle}
-                                value={reportTitle || ''}
-                            />
-                        </div>
+            <h2 className={styles.title}>Disaster Profile details</h2>
+            <div className={styles.formColumn}>
+                <h3><strong>General Information</strong></h3>
+                <div className={styles.row}>
+                    <div className={styles.inputContainer}>
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            placeholder="Report Title"
+                            onChange={handleReportTitle}
+                            value={reportTitle || ''}
+                        />
+                    </div>
+
+                    <div className={styles.inputContainer}>
+                        <select
+                            value={fiscalYear}
+                            onChange={handleSelectChange}
+                            className={styles.inputElement}
+                        >
+                            <option value="select">Select Fiscal Year</option>
+                            <option value="2077/2078">2077/2078</option>
+                            <option value="2076/2077">2076/2077</option>
+                            <option value="2075/2076">2075/2076</option>
+                            <option value="2074/2075">2074/2075</option>
+                            <option value="2073/2074">2073/2074</option>
+                            <option value="2072/2073">2072/2073</option>
+                            <option value="2071/2072">2071/2072</option>
+                            <option value="2070/2071">2070/2071</option>
+                            <option value="2069/2070">2069/2070</option>
+                            <option value="2068/2069">2068/2069</option>
+                            <option value="2067/2068">2067/2068</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div className={styles.formColumn}>
+                <h3><strong>Municipal DRR Leadership </strong></h3>
+                <div className={styles.personalDetailsrow}>
+                    <div className={styles.personalDetails}>
+                        <ul>
+                            <li>
+                                <span className={styles.titlePersonal}>
+                                Mayor or Nagar Pramukh:
+                                </span>
+                                {' '}
+                                {mayor || 'Data Unavailable'}
+                            </li>
+
+                        </ul>
 
 
-                        <div className={styles.inputContainer}>
-                            {/* <Select
-                                className={styles.select}
-                                options={options}
-                                placeholder={'Select Fiscal Year'}
-                                onChange={handleSelectChange}
+                        {mayor
+                            ? (
+                                <button
+                                    type="button"
+                                    onClick={handleAddContact}
+                                    className={styles.addEditBtn}
+                                >
+                                    <Icon
+                                        name="edit"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
+                            : (
+                                <button
+                                    type="button"
+                                    className={styles.addEditBtn}
+                                    onClick={handleAddContact}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
 
-                            /> */}
+                        }
+                    </div>
+                    <div className={styles.personalDetails}>
+                        <ul>
+                            <li>
+                                <span className={styles.titlePersonal}>
+                                     Chief Administrative Officer:
+                                </span>
+                                {' '}
+                                {cao || 'Data Unavailable'}
+                            </li>
+                        </ul>
 
-                            <select
-                                value={fiscalYear}
-                                onChange={handleSelectChange}
-                                className={styles.inputElement}
-                            >
-                                <option value="select">Select Fiscal Year</option>
-                                <option value="2076/2077">2076/2077</option>
-                                <option value="2075/2076">2075/2076</option>
-                                <option value="2074/2075">2074/2075</option>
-                                <option value="2073/2074">2073/2074</option>
-                                <option value="2072/2073">2072/2073</option>
-                                <option value="2071/2072">2071/2072</option>
-                                <option value="2070/2071">2070/2071</option>
-                                <option value="2069/2070">2069/2070</option>
-                                <option value="2068/2069">2068/2069</option>
-                                <option value="2067/2068">2067/2068</option>
-                            </select>
-                        </div>
+                        {cao
+                            ? (
+                                <button
+                                    type="button"
+                                    onClick={handleAddContact}
+                                    className={styles.addEditBtn}
+                                >
+                                    <Icon
+                                        name="edit"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
+                            : (
+                                <button
+                                    type="button"
+                                    className={styles.addEditBtn}
+                                    onClick={handleAddContact}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
+
+                        }
 
                     </div>
-                    <div className={styles.formColumn}>
-                        <p><strong>Municipal DRR Leadership </strong></p>
-                        <div className={styles.inputContainer}>
-                            <label className={styles.label}>
-                                 Mayor or Nagar Pramukh
-                                <input
-                                    type="text"
-                                    className={styles.inputElement}
-                                    placeholder="Mayor or Chairperson"
-                                // onChange={setmayor}
-                                    value={mayor || 'Data Unavailable'}
-                                    disabled
-                                />
+                    <div className={styles.personalDetails}>
 
-                            </label>
+                        <ul>
+                            <li>
+                                <span className={styles.titlePersonal}>
+                                     DRR Focal Person:
+                                </span>
+                                {' '}
+                                {focalPerson || 'Data Unavailable'}
+                            </li>
+                        </ul>
 
+                        {focalPerson
+                            ? (
+                                <button
+                                    type="button"
+                                    onClick={handleAddContact}
+                                    className={styles.addEditBtn}
+                                >
+                                    <Icon
+                                        name="edit"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
+                            : (
+                                <button
+                                    type="button"
+                                    className={styles.addEditBtn}
+                                    onClick={handleAddContact}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.addEditIcon}
+                                    />
+                                </button>
+                            )
 
-                            {mayor
-                                ? (
-                                    <button
-                                        type="button"
-                                        onClick={handleAddContact}
-                                        className={styles.addEditBtn}
-                                    >
-                                        <Icon
-                                            name="edit"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
-                                : (
-                                    <button
-                                        type="button"
-                                        className={styles.addEditBtn}
-                                        onClick={handleAddContact}
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
+                        }
+                    </div>
+                </div>
+                <div className={styles.row}>
+                    <div className={styles.inputContainer}>
+                        <span className={styles.labelDate}>Formation date of DRRM Committee</span>
+                        <NepaliDatePicker
+                            inputClassName="form-control"
+                            className={styles.datepicker}
+                            value={formationDate}
+                            onChange={(value: string) => setformationDate(value)}
+                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
-                            }
-                        </div>
-                        <div className={styles.inputContainer}>
+                        />
+                    </div>
+                    <div className={styles.inputContainer}>
 
-                            <label className={styles.label}>
-                                 Chief Administrative Officer
-                                <input
-                                    type="text"
-                                    className={styles.inputElement}
-                                    placeholder="Chief Administrative Officer"
-                                // onChange={setcao}
-                                    value={cao || 'Data Unavailable'}
-                                    disabled
-                                />
-                            </label>
-
-
-                            {cao
-                                ? (
-                                    <button
-                                        type="button"
-                                        onClick={handleAddContact}
-                                        className={styles.addEditBtn}
-                                    >
-                                        <Icon
-                                            name="edit"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
-                                : (
-                                    <button
-                                        type="button"
-                                        className={styles.addEditBtn}
-                                        onClick={handleAddContact}
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
-
-                            }
-
-                        </div>
-
-                        <div className={styles.inputContainer}>
-                            <label className={styles.label}>
-                                DRR Focal Person
-                                <input
-                                    type="text"
-                                    className={styles.inputElement}
-                                    placeholder="DRR Focal Person"
-                                // onChange={setfocalPerson}
-                                    value={focalPerson || 'Data Unavailable'}
-                                    disabled
-                                />
-                            </label>
-
-                            {focalPerson
-                                ? (
-                                    <button
-                                        type="button"
-                                        onClick={handleAddContact}
-                                        className={styles.addEditBtn}
-                                    >
-                                        <Icon
-                                            name="edit"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
-                                : (
-                                    <button
-                                        type="button"
-                                        className={styles.addEditBtn}
-                                        onClick={handleAddContact}
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            className={styles.addEditIcon}
-                                        />
-                                    </button>
-                                )
-
-                            }
-                        </div>
-                        <div className={styles.inputContainer}>
-                            {/* <input
-                                type="text"
-                                className={styles.inputElement}
-                                placeholder="Formation date of DRRM Committee"
-                                onChange={setformationDate}
-                                value={formationDate || ''}
-                                disabled
-                            /> */}
-                            <label className={styles.label}>
-                            Formation date of DRRM Committee
-                                <NepaliDatePicker
-                                    inputClassName="form-control"
-                                    className={styles.datepicker}
-                                    value={formationDate}
-                                    onChange={(value: string) => setformationDate(value)}
-                                    options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-
-                                />
-                            </label>
+                        <input
+                            type="number"
+                            className={styles.inputElement}
+                            placeholder={'Number of DRRM committee members'}
+                            value={committeeMembers || ''}
+                            onChange={handleMembers}
+                        />
 
 
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <label className={styles.label}>
-                            Number of DRRM committee members
-                                <input
-                                    type="number"
-                                    className={styles.inputElement}
-                                    placeholder={'Enter Number'}
-                                    value={committeeMembers || ''}
-                                    onChange={handleMembers}
-                                />
-                            </label>
-
-
-                        </div>
-                        <button
-                            type="button"
-                            onClick={handleDataSave}
-                            className={styles.savebtn}
-                        >
-                            Save and Proceed
-                        </button>
                     </div>
                 </div>
 
             </div>
+            <NextPrevBtns
+                handlePrevClick={props.handlePrevClick}
+                handleNextClick={props.handleNextClick}
+                firstpage
+            />
+
+
         </div>
 
     );

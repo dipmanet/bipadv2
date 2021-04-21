@@ -103,6 +103,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         updateTab,
         keyTabUrl,
         tabsLength,
+        handlePrevClick,
+        handleNextClick,
+
     } = props;
 
 
@@ -244,7 +247,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             cao={cao}
                             focalPerson={focalPerson}
                             updateTab={updateTab}
-                            page={5}
+                            page={-1}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
                         />
                     )
                     : ''
@@ -257,7 +262,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             reportData={reportData}
                             tableHeader={tableHeader}
                             updateTab={updateTab}
-                            page={5}
+                            page={-1}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
 
                         />
                     )
@@ -268,7 +275,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     ? (
                         <BudgetActivity
                             updateTab={updateTab}
-                            page={5}
+                            page={-1}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
 
                         />
                     )
@@ -280,7 +289,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     ? (
                         <ProgrammeAndPolicies
                             updateTab={updateTab}
-                            page={5}
+                            page={-1}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
                         />
                     )
                     : ''
@@ -290,7 +301,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
 
-                        <Organisation url={keyTabUrl} page={5} updateTab={updateTab} />
+                        <Organisation
+                            url={keyTabUrl}
+                            page={-1}
+                            updateTab={updateTab}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
+                        />
                     )
                     : ''
             }
@@ -298,7 +315,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 5
                && showTabs)
                     ? (
-                        <Inventory page={5} updateTab={updateTab} width={'100%'} height={'40%'} />
+                        <Inventory
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
+                            page={-1}
+                            updateTab={updateTab}
+                            width={'100%'}
+                            height={'40%'}
+                        />
                     )
                     : ''
             }
@@ -306,7 +330,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 6
                && showTabs)
                     ? (
-                        <CriticalInfra page={5} updateTab={updateTab} width={'100%'} height={'50%'} />
+                        <CriticalInfra
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
+                            page={-1}
+                            updateTab={updateTab}
+                            width={'100%'}
+                            height={'50%'}
+                        />
                     )
                     : ''
             }
@@ -315,7 +346,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <Contacts page={5} updateTab={updateTab} />
+                            <Contacts
+                                handlePrevClick={handlePrevClick}
+                                handleNextClick={handleNextClick}
+                                page={-1}
+                                updateTab={updateTab}
+                            />
                             {/* <DRRMembers updateTab={updateTab} /> */}
                         </>
                     )
@@ -325,7 +361,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 8
                && showTabs)
                     ? (
-                        <Relief updateTab={updateTab} page={5} />
+                        <Relief
+                            updateTab={updateTab}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
+                            page={-1}
+                        />
                     )
                     : ''
             }
@@ -333,7 +374,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Relief page={5} updateTab={updateTab} />
+                        <Relief
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
+                            page={-1}
+                            updateTab={updateTab}
+                        />
                     )
                     : ''
             }
@@ -343,7 +389,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <Simulation page={5} updateTab={updateTab} />
+                            <Simulation
+                                handlePrevClick={handlePrevClick}
+                                handleNextClick={handleNextClick}
+                                page={-1}
+                                updateTab={updateTab}
+                            />
                         </>
                     )
                     : ''
@@ -353,7 +404,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <DamageAndLoss page={5} updateTab={updateTab} />
+                            <DamageAndLoss
+                                handlePrevClick={handlePrevClick}
+                                handleNextClick={handleNextClick}
+                                page={-1}
+                                updateTab={updateTab}
+                            />
                         </>
                     )
                     : ''
@@ -363,7 +419,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                && showTabs)
                     ? (
                         <>
-                            <Preparedness page={5} updateTab={updateTab} />
+                            <Preparedness
+                                handlePrevClick={handlePrevClick}
+                                handleNextClick={handleNextClick}
+                                page={-1}
+                                updateTab={updateTab}
+                            />
                         </>
                     )
                     : ''

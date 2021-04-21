@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import NextPrevBtns from '../../NextPrevBtns';
 
 import styles from './styles.scss';
 
@@ -206,13 +207,10 @@ const Preparedness = (props: Props) => {
 
 
             </div>
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
-                Save and Proceed
-            </button>
+            <NextPrevBtns
+                handlePrevClick={props.handlePrevClick}
+                handleNextClick={props.handleNextClick}
+            />
         </>
     );
 };

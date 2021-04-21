@@ -17,6 +17,7 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
+import NextPrevBtns from '../../NextPrevBtns';
 
 
 interface Props{
@@ -183,13 +184,10 @@ const CriticalInfra = (props: Props) => {
                     && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 } */}
-                <button
-                    type="button"
-                    onClick={handleDataSave}
-                    className={styles.savebtn}
-                >
-                Save and Proceed
-                </button>
+                <NextPrevBtns
+                    handlePrevClick={props.handlePrevClick}
+                    handleNextClick={props.handleNextClick}
+                />
             </div>
 
         </div>

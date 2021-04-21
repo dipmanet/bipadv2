@@ -1,122 +1,46 @@
 .mainPageDetailsContainer{
     min-height: 400px !important;
     display: flex;
-    // flex-direction: column;
-    .savebtn{
-        position: relative;
-        left: 77%;
-        margin-top: 15px;
-        // width: 80px;
-        background-color: rgb(0,105,222) !important;
-        border-radius: 15px;
-        color: white; 
-        padding: 8px 12px;
-        cursor: pointer;
-        // border: none;
-        filter: saturate(80%);
+    flex-direction: column;
+    padding: 50px;
+    h2{
+        text-align: left;
+        margin-bottom: 15px;
     }
-    .errMsg{
-        font-size: 9px;
-        color: red;
-        position: relative;
-        bottom: 10px;
-        padding-right: 15px;
-    }
-
-        .closeBtn{
-            display: flex;
-            justify-content: flex-end;
-            margin: 5px 10px;
-            .dangerbtn{
-            border: none;
-                .closeIcon{
-                    font-size: 16px;
-                }
-            }
+  
+ 
+    .formColumn{
+        padding: 0 0px 0 0;
+        p{
+            font-size: 14px;
         }
-        .formContainer{
+        .row{
             display: flex;
+            width: 61%;
+            // border: 1px solid red;
+            justify-content: flex-start;
             flex-direction: column;
-            // border: 1px solid gray;
-            padding: 15px;
-            width: 100%;
-            h2{
-                font-size: 16px;
-                margin-bottom: 25px;
-            }
-
-            .newSignupForm{
-                display:flex;
-                flex-direction: column;
-                // border: 1px solid gray;
-                // height: 80%;
-                // overflow-y: scroll;
-                .formColumn{
-                    flex: 1;
-                    padding: 0 20px 0 0;
-                   
-                }
-                .errMsg{
-                    font-size: 9px;
-                    color: red;
-                    display: relative;
-                    top: 4px;
-                }
-                .multinputContainer{
-                    display: flex;
-                    border-radius: 4px;
-                    justify-content: flex-start;
-                    align-items: center;
-                    margin: 4px 0 7px 0;
-                input::-webkit-input-placeholder{
-                    font-size: 10px;
-                    vertical-align:middle !important;
-                    line-height: 25px !important;
-                }
-
-                input{
-                    border: none;
-                    padding: 12px 7px;
-                    margin-left: 0;
-                    background: transparent;
-                    width: 100% !important;
-                    background-color: rgb(232,232,232);
-                    border-radius: 4px !important;
-                }
-
-                input:focus{
-                    outline: none;
-                }
-
-                input::placeholder{
-                    font-size: 12px;
-                }
-
-                .smallElements{
-                    // border-right: 10px solid white;
-                    margin-right: 4%;
-                    flex:1;
-                    // border: 1px solid gray;
-                }
-                
-                .biggerElements{
-                    flex:4;
-                    // border: 1px solid gray;
-
-                }
-                }
-                .inputContainer{
+            .inputContainer{
                 display: flex;
-                border-radius: 4px;
+                border-radius: 3px;
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
-                margin: 4px 0 7px 0;
+                margin-top: 10px;
+                padding-left: 10px;
+                .labelDate{
+                    padding-left: 10px;
+                    // border: 1px solid gray;
+                    color: #777;
+                    width: 100%;
+                }
                 select{
-                    height: 50px;
-                    background-color: transparent;
-                    border: none;
-                    margin-left: 15px;
+                    border: none !important;
+                    padding: 15px 10px;
+                    // margin-left: 10px;
+                    background: transparent;
+                    width: 100%;
+                    padding: 15px 10px !important;
                     color: #777;
                 }
                 .label{
@@ -142,12 +66,13 @@
                     }
                 }
                 
-                .select{
-                    width: 100%;
-                    background-color: gray !important;
-                }
+    
 
-          
+                .inputElement{
+                    // margin-top: 20px;
+                    padding: 0;
+                }
+            
                 input::-webkit-input-placeholder{
                     font-size: 10px;
                     vertical-align:middle !important;
@@ -156,11 +81,15 @@
 
                 input{
                     border: none;
-                    padding: 12px 7px;
-                    margin-left: 10px;
+                    padding: 15px 10px !important;
+                    // margin-left: 10px;
                     background: transparent;
                     width: 100%;
+                    // border: 1px solid red;
+
                 }
+
+
 
                 input:focus{
                     outline: none;
@@ -175,43 +104,49 @@
                 }
 
                 }
-            .moreInfo{
-                font-size: 10px;
-                color: #777;
-                .infoIcon{
-                    color: #444;
-                    padding-right: 4px;
-                    font-size: 12px;
-                }
-            }
-            }
+
         }
-        .cancelAgreeBtns{
+
+        h3{
+            margin-top: 20px;
+        }
+        .personalDetailsrow{
             display: flex;
-            justify-content: flex-end;
-            position: relative;
-            padding: 0 7% 3% 0;
-            .agreeBtn{
-                width: 80px;
-                filter: saturate(100%);
-                background-color: rgb(0,105,222) !important;
-                border-radius: 30px;
-                color: white; 
-            }
-            .cancelBtn{
-                width: 60px;
-                filter: saturate(100%);
-                background-color: rgb(255,255,255) !important;
-                border-radius: 30px;
-                color: rgb(0,105,222); 
-                border:none;
-            }
-            .disabled{
-                width: 80px;
-                filter: saturate(100%);
-                background-color: rgb(115, 152, 189) !important;
-                border-radius: 30px;
-                color: rgb(255, 255, 255); 
+            flex-direction: column;
+            border: 1px solid #e5e5e5;
+            width: 61%;
+            margin-bottom: 12px;
+            margin-top: 10px;
+            .personalDetails{
+                // border: 1px solid red;
+                margin-top: 10px;
+                .titlePersonal{
+                    font-size: 14px;
+                    margin-right: 10px;
+                }
+                display: flex;
+                ul{
+                    list-style:none;
+                    li{
+                        display: flex;
+                        // flex-direction: column;
+                        align-items: center;
+
+                        
+                    }
+                }
+                .addEditBtn{
+                    background: transparent;
+                    border: none;
+                    filter: saturate(100%);
+                    margin-left: 12px;
+                    .addEditIcon{
+                        color: rgb(0,92,230);
+                        font-size: 20px;
+                    }
+                        
+                    }
             }
         }
+    }
 }

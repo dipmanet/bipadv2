@@ -13,6 +13,7 @@ import {
     generalDataSelector,
     budgetDataSelector,
 } from '#selectors';
+import NextPrevBtns from '../../NextPrevBtns';
 
 
 interface Props{
@@ -171,14 +172,13 @@ const Budget = (props: Props) => {
                     </label>
 
                 </div>
-                <button
-                    type="button"
-                    onClick={handleDataSave}
-                    className={styles.savebtn}
-                >
-                Save and Proceed
-                </button>
+                <NextPrevBtns
+                    handlePrevClick={props.handlePrevClick}
+                    handleNextClick={props.handleNextClick}
+                />
+
             </div>
+
 
         </div>
     );

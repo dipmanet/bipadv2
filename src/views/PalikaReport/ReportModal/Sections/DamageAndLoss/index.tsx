@@ -11,6 +11,8 @@ import lossIcon from './Icons/icon_loss.svg';
 import missingIcon from './Icons/icon_missing.svg';
 import roadIcon from './Icons/icon_road.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import NextPrevBtns from '../../NextPrevBtns';
+
 
 interface Props{
 
@@ -136,13 +138,10 @@ const DamageAndLoss = (props: Props) => {
             {
                 props.hide !== 1
                     ? (
-                        <button
-                            type="button"
-                            onClick={handleDataSave}
-                            className={styles.savebtn}
-                        >
-                Next
-                        </button>
+                        <NextPrevBtns
+                            handlePrevClick={props.handlePrevClick}
+                            handleNextClick={props.handleNextClick}
+                        />
                     )
                     : ''
             }

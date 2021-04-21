@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import NextPrevBtns from '../../NextPrevBtns';
 
 import styles from './styles.scss';
 
@@ -46,13 +47,10 @@ const Simulation = (props: Props) => {
             </Table> */}
 
 
-            <button
-                type="button"
-                onClick={handleDataSave}
-                className={styles.savebtn}
-            >
-                Save and Proceed
-            </button>
+            <NextPrevBtns
+                handlePrevClick={props.handlePrevClick}
+                handleNextClick={props.handleNextClick}
+            />
         </div>
     );
 };

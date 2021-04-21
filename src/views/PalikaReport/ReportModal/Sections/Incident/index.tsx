@@ -1,6 +1,8 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
+import NextPrevBtns from '../../NextPrevBtns';
+
 
 interface Props{
 
@@ -32,6 +34,10 @@ const Incident = (props: Props) => {
 
                 </tbody>
             </Table>
+            <NextPrevBtns
+                handlePrevClick={props.handlePrevClick}
+                handleNextClick={props.handleNextClick}
+            />
 
         </div>
     );

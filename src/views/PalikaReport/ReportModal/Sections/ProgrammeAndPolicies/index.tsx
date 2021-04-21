@@ -10,6 +10,8 @@ import {
 import {
     programAndPolicySelector,
 } from '#selectors';
+import NextPrevBtns from '../../NextPrevBtns';
+
 
 const mapStateToProps = state => ({
     programAndPolicyData: programAndPolicySelector(state),
@@ -104,15 +106,10 @@ const ProgramPolicies = (props: Props) => {
                     </div>
                 </>
             ))}
-            <div className={styles.btns}>
-                <button
-                    type="button"
-                    onClick={handleNext}
-                    className={styles.savebtn}
-                >
-                    Next
-                </button>
-            </div>
+            <NextPrevBtns
+                handlePrevClick={props.handlePrevClick}
+                handleNextClick={props.handleNextClick}
+            />
 
         </div>
     );

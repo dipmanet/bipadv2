@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
 import { Item } from 'semantic-ui-react';
+import NextPrevBtns from '../../NextPrevBtns';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -207,13 +208,10 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
 
                 } */}
-                <button
-                    type="button"
-                    onClick={handleDataSave}
-                    className={styles.savebtn}
-                >
-                            Next
-                </button>
+                <NextPrevBtns
+                    handlePrevClick={props.handlePrevClick}
+                    handleNextClick={props.handleNextClick}
+                />
             </div>
 
         </div>

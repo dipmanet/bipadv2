@@ -6,7 +6,7 @@
     .btns{
         display: flex;
         justify-content: flex-end;
-        .savebtn{
+        .newActivityBtn{
             position: relative;
             margin-top: 15px;
             width: fit-content;
@@ -17,7 +17,7 @@
             cursor: pointer;
             // border: none;
             filter: saturate(80%);
-            margin-left: 10px; 
+            margin-right: 10px; 
         }
     }
     

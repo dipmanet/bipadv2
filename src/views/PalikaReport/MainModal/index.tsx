@@ -125,11 +125,24 @@ const MainModal: React.FC<Props> = (props: Props) => {
     } = props;
 
     const [reportData, setReportData] = useState([]);
-    const { profile: {
-        municipality,
-        district,
-        province,
-    } } = user;
+    const [province, setProvince] = useState(null);
+    const [district, setDistrict] = useState(null);
+    const [municipality, setMunicipality] = useState(null);
+
+    if (user && user.profile && !user.profile.municipality) {
+        const {
+            profile: {
+                municipality: municipalityfromProp,
+                district: districtfromProp,
+                province: provincefromProp,
+            },
+        } = user;
+
+        setMunicipality(municipalityfromProp);
+        setProvince(provincefromProp);
+        setDistrict(districtfromProp);
+    }
+
     const handleReportData = (response) => {
         setReportData(response);
     };
@@ -399,6 +412,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
                             focalPerson={focalPerson}
                             updateTab={handleNextClick}
                             tabsLength={tabs.length}
+                            handlePrevClick={handlePrevClick}
+                            handleNextClick={handleNextClick}
                         />
                         {showTabs && (
                             <div className={styles.btnContainer}>
