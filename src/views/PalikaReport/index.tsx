@@ -10,6 +10,7 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import MainModal from './MainModal';
 import DateInput from '#rsci/DateInput';
+
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -131,6 +132,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     let municipalityName = '';
 
+    console.log('this is user>>>', user);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -140,12 +142,22 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             },
         } = user;
 
-        municipalityName = municipalities.find(item => item.id === municipality);
 
         setMunicipality(municipalityfromProp);
         setProvince(provincefromProp);
         setDistrict(districtfromProp);
     }
+    if (user && user.profile && user.profile.municipality) {
+        const {
+            profile: {
+                municipality,
+
+            },
+        } = user;
+
+        municipalityName = municipalities.find(item => item.id === municipality);
+    }
+
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
         // setFiltered(false);
@@ -166,10 +178,53 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-
+    console.log('hero>>>', fetchedData);
 
     let finalArr = [];
-    if (fetchedData) {
+    if (fetchedData && submenuId === 2) {
+        const {
+            profile: {
+                municipality,
+
+            },
+        } = user;
+        console.log('What municipality>>>', municipality);
+        const filteredFetchedData = fetchedData.filter(data => data.municipality === municipality);
+        console.log('hang what>>>', filteredFetchedData);
+        const finalfetchedData = filteredFetchedData.map((item, i) => {
+            const provinceDetails = provinces.find(data => data.id === item.province);
+            const districtDetails = districts.find(data => data.id === item.district);
+
+            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+
+
+            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
+            const createdDate = `${(new Date(item.createdOn)).getFullYear()
+            }-${(new Date(item.createdOn)).getMonth() + 1
+            }-${new Date(item.createdOn).getDate()}`;
+            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
+            }-${(new Date(item.modifiedOn)).getMonth() + 1
+            }-${new Date(item.modifiedOn).getDate()}`;
+            if (municipalityDetails) {
+                return { municipality: municipalityDetails.title,
+                    province: provinceDetails.title,
+                    district: districtDetails.title,
+                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+                    createdDate: item.createdOn && createdDate,
+                    modifiedDate: item.modifiedOn && modifiedDate,
+                    item };
+            }
+            if (!provinceDetails) {
+                return {
+                    item,
+                };
+            }
+
+            return null;
+        });
+        finalArr = [...new Set(finalfetchedData)];
+    }
+    if (fetchedData && submenuId !== 2) {
         const finalfetchedData = fetchedData.map((item, i) => {
             const provinceDetails = provinces.find(data => data.id === item.province);
             const districtDetails = districts.find(data => data.id === item.district);
@@ -178,11 +233,19 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
 
             const municipalityDetails = municipalities.find(data => data.id === item.municipality);
+            const createdDate = `${(new Date(item.createdOn)).getFullYear()
+            }-${(new Date(item.createdOn)).getMonth() + 1
+            }-${new Date(item.createdOn).getDate()}`;
+            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
+            }-${(new Date(item.modifiedOn)).getMonth() + 1
+            }-${new Date(item.modifiedOn).getDate()}`;
             if (municipalityDetails) {
                 return { municipality: municipalityDetails.title,
                     province: provinceDetails.title,
                     district: districtDetails.title,
                     fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+                    createdDate: item.createdOn && createdDate,
+                    modifiedDate: item.modifiedOn && modifiedDate,
                     item };
             }
             if (!provinceDetails) {
@@ -196,6 +259,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         finalArr = [...new Set(finalfetchedData)];
     }
 
+    console.log('What is final arr>>', finalArr);
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
@@ -355,15 +419,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
     && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
-
+    console.log('date>>>', dateFrom);
     const handleCheckFilterDisableButtonForProvince = (province) => {
-        if (!province) {
+        if (!province && !dateFrom) {
+            console.log('What');
             setDisableFilterButton(true);
             PalikaReportGetRequest.do({
                 submitQuery: getRegionDetails(),
             });
             setFiltered(false);
-        } else if (province) {
+        }
+        if (province) {
             setDisableFilterButton(false);
             setFiltered(false);
         }
@@ -390,7 +456,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const changeDateFrom = (dateFrom) => {
         setDateFrom(dateFrom);
+        setDisableFilterButton(false);
     };
+    console.log('hanf>>>', newRegionValues);
+    useEffect(() => {
+        if (dateFrom || newRegionValues) {
+            setDisableFilterButton(false);
+        } else {
+            setDisableFilterButton(true);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateFrom]);
+
     const changeDateTo = (dateTo) => {
         setDateTo(dateTo);
     };
@@ -460,11 +537,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             districtInputClassName={styles.sndistinput}
                             municipalityInputClassName={styles.snmuniinput}
                         />
-                        <div>
+                        <div className={styles.dateFrom}>
                             <Label>From: </Label>
                             <DateInput dateFrom={changeDateFrom} />
                         </div>
-                        <div>
+                        <div className={styles.dateTo}>
                             <Label>To: </Label>
                             <DateInput dateTo={changeDateTo} />
                         </div>
@@ -492,15 +569,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             )
 
                         }
-                        <button
-                            type="submit"
-                            className={styles.addButn}
-                            onClick={handleAddbuttonClick}
-                        >
+                        {municipalityName && submenuId === 2
+                        && (
+                            <button
+                                type="submit"
+                                className={styles.addButn}
+                                onClick={handleAddbuttonClick}
+                            >
                          + ADD
-                            {' '}
+                                {' '}
 
-                        </button>
+                            </button>
+                        )}
 
                     </div>
                     <div className={styles.rightContainerTables}>
@@ -513,7 +593,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                         />
                         <div className={styles.paginationDownload}>
-                            {paginationParameters && paginationParameters.count !== 0
+                            {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <ReactHTMLTableToExcel
                                     id="test-table-xls-button"
@@ -523,8 +603,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     sheet="tablexls"
                                     buttonText="DOWNLOAD XLS"
                                 />
-                            )}
-                            {paginationParameters && paginationParameters.count !== 0
+                            )} */}
+                            {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -542,7 +622,24 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                         activeClassName={styles.active}
                                     />
                                 </div>
-                            )}
+                            )} */}
+
+                            <div className={styles.paginationRight}>
+                                <ReactPaginate
+                                    previousLabel={'prev'}
+                                    nextLabel={'next'}
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}
+                                    onPageChange={handlePageClick}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    pageCount={3}
+                                    containerClassName={styles.pagination}
+                                    subContainerClassName={_cs(styles.pagination)}
+                                    activeClassName={styles.active}
+                                />
+                            </div>
+
                         </div>
 
                     </div>
