@@ -104,16 +104,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
-<<<<<<< HEAD
 
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
 
-=======
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
->>>>>>> ff091e023a2491b7045d42c51161152082d973d8
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -131,6 +128,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         user,
         // filters: { region },
     } = props;
+
+    let municipalityName = '';
+
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -139,6 +139,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 province: provincefromProp,
             },
         } = user;
+
+        municipalityName = municipalities.find(item => item.id === municipality);
 
         setMunicipality(municipalityfromProp);
         setProvince(provincefromProp);
@@ -397,7 +399,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         <>
             <Page hideMap hideFilter />
 
-            {/* <MainModal
+            <MainModal
                 showTabs={showTabs}
                 setShowTabs={handleAddbuttonClick}
                 showReportModal={showReportModal}
@@ -406,7 +408,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 province={province}
                 district={district}
                 municipality={municipality}
-            /> */}
+            />
 
 
             {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
