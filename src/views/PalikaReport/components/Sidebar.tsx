@@ -16,7 +16,8 @@ const Sidebar = (props) => {
     // eslint-disable-next-line react/prop-types
     // eslint-disable-next-line @typescript-eslint/camelcase
     const { municipalityName, municipalityName: { title_en } } = props;
-    const Data = [{
+
+    const Data1 = [{
         id: 1,
         title: 'Palika Reports',
         slug: 'palika-reports',
@@ -25,7 +26,7 @@ const Sidebar = (props) => {
             url: '/disaster-profile/',
             slug: 'all-reports' },
         // eslint-disable-next-line @typescript-eslint/camelcase
-        municipalityName && title_en && { id: 2,
+        { id: 2,
             // eslint-disable-next-line @typescript-eslint/camelcase
             title: `${title_en} Municipality Reports`,
             url: '/disaster-profile/',
@@ -85,7 +86,20 @@ const Sidebar = (props) => {
 
 
     ];
-
+    const Data2 = [{
+        id: 1,
+        title: 'Palika Reports',
+        slug: 'palika-reports',
+        components: [{ id: 1,
+            title: 'All Reports',
+            url: '/disaster-profile/',
+            slug: 'all-reports' },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        ],
+    },
+    ];
+    const Data = municipalityName ? Data1 : Data2;
+    console.log('This data>>>', Data);
     const handleSelectMenu = (index, id, name) => {
         setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
