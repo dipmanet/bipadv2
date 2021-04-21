@@ -184,7 +184,132 @@ const General = (props: Props) => {
                 <h3><strong>Municipal DRR Leadership </strong></h3>
                 <div className={styles.personalDetailsrow}>
                     <div className={styles.personalDetails}>
-                        <ul>
+
+                        <table id="table-to-xls">
+                            <tbody>
+                                <tr>
+
+                                    <th>Position</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>{'Add/Edit Details'}</th>
+
+
+                                </tr>
+                                <tr>
+                                    <td>{'Mayor or Nagar Pramukh'}</td>
+                                    <td>{mayor.split(',')[0] || 'No Data'}</td>
+                                    <td>{mayor.split(',')[1] || 'No Data'}</td>
+                                    <td>{mayor.split(',')[2] || 'No Data'}</td>
+                                    <td>
+                                        {mayor
+                                            ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddContact}
+                                                    className={styles.addEditBtn}
+                                                >
+                                                    <Icon
+                                                        name="edit"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+                                            : (
+                                                <button
+                                                    type="button"
+                                                    className={styles.addEditBtn}
+                                                    onClick={handleAddContact}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+
+                                        }
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>{'Chief Administrative Officer'}</td>
+                                    <td>{cao || 'No Data'}</td>
+                                    <td>{'No Data'}</td>
+                                    <td>{'No Data'}</td>
+                                    <td>
+                                        {cao
+                                            ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddContact}
+                                                    className={styles.addEditBtn}
+                                                >
+                                                    <Icon
+                                                        name="edit"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+                                            : (
+                                                <button
+                                                    type="button"
+                                                    className={styles.addEditBtn}
+                                                    onClick={handleAddContact}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+
+                                        }
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{'DRR Focal Person'}</td>
+                                    <td>{focalPerson || 'No Data'}</td>
+                                    <td>{'No Data'}</td>
+                                    <td>{'No Data'}</td>
+                                    <td>
+                                        {focalPerson
+                                            ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddContact}
+                                                    className={styles.addEditBtn}
+                                                >
+                                                    <Icon
+                                                        name="edit"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+                                            : (
+                                                <button
+                                                    type="button"
+                                                    className={styles.addEditBtn}
+                                                    onClick={handleAddContact}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.addEditIcon}
+                                                    />
+                                                </button>
+                                            )
+
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        {/* <ul>
                             <li>
                                 <span className={styles.titlePersonal}>
                                 Mayor or Nagar Pramukh:
@@ -193,117 +318,11 @@ const General = (props: Props) => {
                                 {mayor || 'Data Unavailable'}
                             </li>
 
-                        </ul>
+                        </ul> */}
 
-
-                        {mayor
-                            ? (
-                                <button
-                                    type="button"
-                                    onClick={handleAddContact}
-                                    className={styles.addEditBtn}
-                                >
-                                    <Icon
-                                        name="edit"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-                            : (
-                                <button
-                                    type="button"
-                                    className={styles.addEditBtn}
-                                    onClick={handleAddContact}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-
-                        }
-                    </div>
-                    <div className={styles.personalDetails}>
-                        <ul>
-                            <li>
-                                <span className={styles.titlePersonal}>
-                                     Chief Administrative Officer:
-                                </span>
-                                {' '}
-                                {cao || 'Data Unavailable'}
-                            </li>
-                        </ul>
-
-                        {cao
-                            ? (
-                                <button
-                                    type="button"
-                                    onClick={handleAddContact}
-                                    className={styles.addEditBtn}
-                                >
-                                    <Icon
-                                        name="edit"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-                            : (
-                                <button
-                                    type="button"
-                                    className={styles.addEditBtn}
-                                    onClick={handleAddContact}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-
-                        }
 
                     </div>
-                    <div className={styles.personalDetails}>
 
-                        <ul>
-                            <li>
-                                <span className={styles.titlePersonal}>
-                                     DRR Focal Person:
-                                </span>
-                                {' '}
-                                {focalPerson || 'Data Unavailable'}
-                            </li>
-                        </ul>
-
-                        {focalPerson
-                            ? (
-                                <button
-                                    type="button"
-                                    onClick={handleAddContact}
-                                    className={styles.addEditBtn}
-                                >
-                                    <Icon
-                                        name="edit"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-                            : (
-                                <button
-                                    type="button"
-                                    className={styles.addEditBtn}
-                                    onClick={handleAddContact}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.addEditIcon}
-                                    />
-                                </button>
-                            )
-
-                        }
-                    </div>
                 </div>
                 <div className={styles.row}>
                     <div className={styles.inputContainer}>

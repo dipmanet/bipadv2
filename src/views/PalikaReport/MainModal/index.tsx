@@ -10,6 +10,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ReportModal from '../ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import {
     createConnectedRequestCoordinator,
@@ -96,6 +97,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
             if (params && params.reportData) {
                 params.reportData(citizenReportList);
+                if (params.handlePending) {
+                    params.handlePending(false);
+                }
             }
         },
     },
@@ -128,7 +132,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
-
+    const [pending, setPending] = useState(false);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -157,6 +161,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
 
+    const handlePending = (val: boolean) => setPending(val);
     const tabs: {
         key: number;
         content: TabContent;
@@ -247,6 +252,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
             municipality,
             url: getURL(0),
             reportData: handleReportData,
+            handlePending,
+            pending,
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -258,11 +265,11 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     setfocalPerson(item.name);
                 }
                 if (item.position && item.position.includes('Mayor')) {
-                    const details = `Name: ${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chairperson')) {
-                    const details = `Name:${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
@@ -285,12 +292,15 @@ const MainModal: React.FC<Props> = (props: Props) => {
             }
             return null;
         };
-
+        setPending(true);
         if (getURL(tabSelected) !== null) {
             props.requests.PalikaReportGetRequest.do({
                 municipality,
                 url: getURL(tabSelected),
                 reportData: handleReportData,
+                handlePending,
+                pending,
+
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -349,6 +359,9 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     className={getModalClass()}
                     id={'palikaModal'}
                 >
+                    {pending
+                        && <div className={styles.loader}>Data Loading</div>
+                    }
                     <ModalHeader
                         title=" "
                         className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}

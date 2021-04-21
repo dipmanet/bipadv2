@@ -124,14 +124,14 @@ const Budget = (props: Props) => {
                 <h2 className={styles.title}>Please enter Disaster Profile details</h2>
                 <div className={styles.inputContainer}>
                     <label className={styles.label}>
-                                 Total Muicipal Budget of FY
+                                 Total Municipal Budget of FY
                         {' '}
                         { `${fiscalYear}`}
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleMunicipalBudget}
-                            placeholder={'Kindly specify total municipal budget in numbers'}
+                            placeholder={'Kindly specify total municipal budget in numbers (NPR)'}
                             value={municipalBudget}
                         />
 
@@ -148,7 +148,7 @@ const Budget = (props: Props) => {
                             className={styles.inputElement}
                             onChange={handleDRRFund}
                             value={drrFund}
-                            placeholder={'Kindly specify total DRR funds in numbers'}
+                            placeholder={'Kindly specify total DRR tund for FY in numbers (NPR)'}
                         />
 
 
@@ -158,14 +158,14 @@ const Budget = (props: Props) => {
                 <div className={styles.inputContainer}>
 
                     <label className={styles.label}>
-                            Additional DRR Fund for FY
+                            Other DRR related funding
                         { `${fiscalYear}`}
 
                         <input
                             type="number"
                             className={styles.inputElement}
                             onChange={handleAddFund}
-                            placeholder={'Kindly specify additional funds in numbers'}
+                            placeholder={'Kindly specify other DRR related funding in numbers (NPR)'}
                             value={additionalFund}
                         />
 

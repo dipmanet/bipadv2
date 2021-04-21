@@ -75,7 +75,7 @@ class ProjectsProfileFilter extends React.PureComponent {
             } = {},
         } = this.props;
         let newFaramValues = faramValues;
-
+        console.log('faramvalues', faramValues);
         if (oldFaramValues.priority !== faramValues.priority) {
             newFaramValues = {
                 ...faramValues,
@@ -168,13 +168,13 @@ class ProjectsProfileFilter extends React.PureComponent {
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
                 /> */}
-                <MultiSelectInput
+                {/* <MultiSelectInput
                     label="organization"
                     faramElementName="organizations"
                     options={organizationOptions}
                     keySelector={organizationKeySelector}
                     labelSelector={organizationLabelSelector}
-                />
+                /> */}
             </Faram>
         );
     }

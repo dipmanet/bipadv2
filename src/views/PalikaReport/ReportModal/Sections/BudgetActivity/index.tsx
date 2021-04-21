@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
+import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
@@ -9,7 +9,7 @@ import styles from './styles.scss';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import NextPrevBtns from '../../NextPrevBtns';
-
+import ProjectsProfile from '#views/Profile/ProjectsProfile';
 
 import {
     setBudgetActivityDataAction,
@@ -77,7 +77,6 @@ const currentFiscalYear = new Date().getFullYear() + 56;
 
 const options = Array.from(Array(10).keys()).map(item => ({
     value: currentFiscalYear - item,
-    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
 }));
 
 const BudgetActivity = (props: Props) => {
@@ -95,15 +94,28 @@ const BudgetActivity = (props: Props) => {
         budgetCode: bc,
         drrmCycle: dc,
         projStatus: ps,
-        projCompletionDate,
+        projCompletionDate: pcd,
         allocatedBudget: ab,
         actualExp: ae,
         remarks: rm,
     } = budgetActivityData;
 
+    const TableNameTitle = {
+        name: 'Name',
+        fundSource: 'Fund Source',
+        additionalDrrBudget: 'Additional DRR Budget',
+        budgetCode: 'Budget Code',
+        drrmCycle: 'Priority Area',
+        projStatus: 'Project Status',
+        projCompletionDate: 'Project Completion Date',
+        allocatedBudget: 'Allocated Budget',
+        actualExp: 'Actual Expenses',
+        remarks: 'Remarks',
+    };
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [projcompletionDate, setprojCompletionDate] = useState(new Date());
+
+    const [startDate, setStartDate] = useState('');
+    const [projcompletionDate, setprojCompletionDate] = useState(pcd);
     const [activityName, setactivityName] = useState(nm);
     const [fundSource, setfundSource] = useState(fd);
     const [fundSourcetype, setfundSourcetype] = useState(ad);
@@ -116,11 +128,18 @@ const BudgetActivity = (props: Props) => {
     const [remarks, setremarks] = useState(rm);
     // const tableData = [];
 
+    const [organisationName, setorganisationName] = useState('');
+
+
     const [showTable, setShowTable] = useState(false);
     const [tableData, setTableData] = useState([]);
 
     const [showSourceType, setSourceType] = useState(false);
     const [showSourceTypeOther, setSourceTypeOther] = useState(false);
+
+    const handleOrganisationName = (org: string) => {
+        setorganisationName(org.target.value);
+    };
 
     useEffect(() => {
         if (budgetData.additionalFund && parseInt(budgetData.additionalFund, 10) > 0) {
@@ -150,9 +169,24 @@ const BudgetActivity = (props: Props) => {
     };
 
     const handleAddNew = () => {
+        const newArr = [...tableData, {
+            name: activityName,
+            fundSource,
+            additionalDrrBudget: '',
+            budgetCode,
+            drrmCycle,
+            projStatus,
+            projcompletionDate,
+            allocatedBudget,
+            actualExp,
+            remarks,
+        }];
+        setTableData(newArr);
+        setBudgetActivityDatapp(newArr);
+
         setShowTable(true);
-        setStartDate(new Date());
-        setprojCompletionDate(new Date());
+        setStartDate('');
+        setprojCompletionDate('');
         setactivityName('');
         setfundSource('');
         setfundSourcetype('');
@@ -163,6 +197,7 @@ const BudgetActivity = (props: Props) => {
         setallocatedBudget('');
         setactualExp('');
         setremarks('');
+        document.body.scrollTop = 0;
     };
 
 
@@ -171,11 +206,14 @@ const BudgetActivity = (props: Props) => {
     };
     const handlefundSource = (data) => {
         setfundSource(data.target.value);
-        // if (data.target.value === 'Additional') {
-        //     setSourceType(true);
-        // }
+        if (data.target.value === 'Additional') {
+            setSourceType(true);
+        } else {
+            setSourceType(false);
+        }
     };
     const handlefundSourceType = (data) => {
+        console.log(data.target.value);
         setfundSourcetype(data.target.value);
         if (data.target.value === 'Others') {
             setSourceTypeOther(true);
@@ -206,118 +244,121 @@ const BudgetActivity = (props: Props) => {
 
     return (
         <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.formContainer}>
+            <div className={styles.formColumn}>
                 <h2 className={styles.title}>Budget Activities</h2>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Name of Activity:
+                <div className={styles.row}>
+                    <div className={styles.inputContainer}>
+
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleActivityName}
                             value={activityName}
+                            placeholder={'Name of Activity'}
                         />
 
-                    </label>
 
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Source of Fund:
+                    </div>
+                    <div className={styles.inputContainer}>
+                        <span className={styles.dpText}>Funding Type</span>
                         <select
                             value={fundSource}
                             onChange={handlefundSource}
                             className={styles.inputElement}
                         >
-                            <option value="select">Select a fund source</option>
-                            <option value="Municipal">Municipal Budget</option>
-                            <option value="DRR">DRR Fund</option>
-                            <option value="Additional">Additional DRR Budget</option>
+                            <option value="select"> Select Funding Type</option>
+                            <option value="DRR">DRR Fund of Municipality</option>
+                            <option value="Additional">Other DRR related funding</option>
                         </select>
 
-                    </label>
-                </div>
-                {
-                    showSourceType
-                    && (
-                        <div className={styles.inputContainer}>
-                            <label className={styles.label}>
-                                 Fund source type:
-                                <select
-                                    value={fundSourcetype}
-                                    onChange={handlefundSourceType}
-                                    className={styles.inputElement}
-                                >
-                                    <option value="select">Select an Option</option>
-                                    <option value="Federal Government">Federal Government</option>
-                                    <option value="Provincial Government">Provincial Government</option>
-                                    <option value="INGO">I/NGOs</option>
-                                    <option value="Private Sector">Private Sector</option>
-                                    <option value="Academia">Academia</option>
-                                    <option value="Others">Others</option>
-                                </select>
+                    </div>
+                    {
+                        showSourceType
+                            ? (
+                                <div className={styles.inputContainer}>
+                                    <span className={styles.dpText}>Source of Fund</span>
+                                    <select
+                                        value={fundSourcetype}
+                                        onChange={handlefundSourceType}
+                                        className={styles.inputElement}
+                                    >
+                                        <option value="select">Select Source of Funds</option>
+                                        <option value="Federal Government">Federal Government</option>
+                                        <option value="Provincial Government">Provincial Government</option>
+                                        <option value="INGO">I/NGOs</option>
+                                        <option value="Private Sector">Private Sector</option>
+                                        <option value="Academia">Academia</option>
+                                        <option value="Others">Others</option>
+                                    </select>
 
-                            </label>
-                        </div>
-                    )
+                                </div>
+                            ) : ''
 
-                }
-                {showSourceTypeOther
+                    }
+                    {
+                        !showSourceType
+                            ? (
+                                <div className={styles.inputContainer}>
+
+                                    <input
+                                        type="text"
+                                        className={styles.inputElement}
+                                        onChange={handleOtherFund}
+                                        value={otherFund}
+                                        placeholder={'Source Of Fund: Municipal Government'}
+                                    />
+                                </div>
+                            ) : ''
+
+                    }
+                    {showSourceTypeOther
                       && (
                           <div className={styles.inputContainer}>
-                              <label className={styles.label}>
-                                   Please specify Other source type
-                                  <input
-                                      type="text"
-                                      className={styles.inputElement}
-                                      onChange={handleOtherFund}
-                                      value={otherFund}
-                                  />
 
-                              </label>
+                              <input
+                                  type="text"
+                                  className={styles.inputElement}
+                                  onChange={handleOtherFund}
+                                  value={otherFund}
+                                  placeholder={'Please specify Other source type'}
+                              />
+
 
                           </div>
                       )
 
-                }
+                    }
 
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Budget Code
+                    <div className={styles.inputContainer}>
+
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleBudgetCode}
                             value={budgetCode}
+                            placeholder={'Budget Code'}
                         />
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                DRRM Cycle
-                        <select
-                            value={drrmCycle}
-                            onChange={handleDrrmCycle}
-                            className={styles.inputElement}
-                        >
-                            <option value="select">Select an Option</option>
-                            <option value="Relief">Relief</option>
-                            <option value="Rehabilitation">Rehabilitation</option>
-                            <option value="INGO">Reconstuction</option>
-                            <option value="Private Sector">Livelihood</option>
-                            <option value="Others">Others</option>
-                        </select>
+                    </div>
+                    <div className={styles.inputContainer}>
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                Project Status
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleOrganisationName}
+                            value={organisationName}
+                            placeholder={'Name of Organisation'}
+                        />
+
+                    </div>
+
+                    <div className={styles.inputContainer}>
+
                         <select
                             value={projStatus}
                             onChange={handleprojStatus}
                             className={styles.inputElement}
+                            placeholder={'Project Status'}
                         >
                             <option value="select">Select an Option</option>
                             <option value="Rehabilitation">Started</option>
@@ -325,72 +366,92 @@ const BudgetActivity = (props: Props) => {
                             <option value="INGO">Completed</option>
                         </select>
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                Project Start Date
-                        <DatePicker
+                    </div>
+                    <div className={styles.inputContainer}>
+                        <span className={styles.dpText}>Project Start Date</span>
+                        <NepaliDatePicker
+                            inputClassName="form-control"
+                            className={styles.datepicker}
+                            value={startDate}
+                            onChange={date => setStartDate(date)}
+                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+
+                        />
+                        {/* <DatePicker
                             selected={startDate}
                             onChange={date => setStartDate(date)}
-                        />
+                            className={styles.datepicker}
+                        /> */}
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
+                    </div>
+                    <div className={styles.inputContainer}>
+                        <span className={styles.dpText}>
                                 Project Completion Date
-                        <DatePicker
+                        </span>
+                        <NepaliDatePicker
+                            inputClassName="form-control"
+                            className={styles.datepicker}
+                            value={projcompletionDate}
+                            onChange={date => setprojCompletionDate(date)}
+                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+
+                        />
+                        {/* <DatePicker
                             selected={projcompletionDate}
                             onChange={date => setprojCompletionDate(date)}
-                        />
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Allocated Project Budget
+                        /> */}
+                    </div>
+                    <div className={styles.inputContainer}>
+
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleAlocBudget}
                             value={allocatedBudget}
+                            placeholder={'Allocated Project Budget'}
+
                         />
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Actual Expenditure
+                    </div>
+                    <div className={styles.inputContainer}>
+
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleActualExp}
                             value={actualExp}
+                            placeholder={'Actual Expenditure'}
+
                         />
 
-                    </label>
-                </div>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Remarks
+                    </div>
+                    <div className={styles.inputContainer}>
+
                         <input
                             type="text"
                             className={styles.inputElement}
                             onChange={handleRemarks}
                             value={remarks}
+                            placeholder={'Remarks'}
                         />
 
-                    </label>
+                    </div>
                 </div>
+
+
+                <ProjectsProfile
+                    className={styles.view}
+                />
+
                 {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (
 
-                     <Table striped bordered hover size="md">
+                     <Table className={styles.bdaTable} striped bordered hover size="md">
                          <thead>
                              <tr>
                                  {Object.keys(props.budgetActivityData[0]).map(item => (
                                      <th key={item}>
-                                         {item}
+                                         {TableNameTitle[item]}
                                      </th>
                                  ))}
 
@@ -417,7 +478,10 @@ const BudgetActivity = (props: Props) => {
 
                 }
                 <div className={styles.btns}>
-
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
                     <button
                         type="button"
                         onClick={handleAddNew}
@@ -425,10 +489,7 @@ const BudgetActivity = (props: Props) => {
                     >
                             Add New Activity
                     </button>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
+
                 </div>
 
             </div>
