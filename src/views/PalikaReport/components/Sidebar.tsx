@@ -16,6 +16,7 @@ const Sidebar = (props) => {
     // eslint-disable-next-line react/prop-types
     // eslint-disable-next-line @typescript-eslint/camelcase
     const { municipalityName, municipalityName: { title_en } } = props;
+    console.log('This municipality>>>', municipalityName);
     const Data = [{
         id: 1,
         title: 'Palika Reports',
