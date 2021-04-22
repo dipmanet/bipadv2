@@ -177,7 +177,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-    console.log('fiscal year>>>', fiscalYear);
+
     let finalArr = [];
     if (fetchedData && submenuId === 2 && fiscalYear) {
         const {
@@ -220,7 +220,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
         finalArr = [...new Set(finalfetchedData)];
     }
-    console.log('This is final');
 
     if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
         const finalfetchedData = fetchedData.map((item, i) => {

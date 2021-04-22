@@ -241,6 +241,9 @@ const BudgetActivity = (props: Props) => {
         setremarks(data.target.value);
     };
 
+    const getSelectedOption = (data) => {
+        console.log('selected option', data);
+    };
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -438,10 +441,14 @@ const BudgetActivity = (props: Props) => {
                     </div>
                 </div>
 
+                <div className={styles.inputContainer}>
+                    <ProjectsProfile
+                        className={styles.view}
+                        showFilterOnly
+                        getSelectedOption={getSelectedOption}
+                    />
+                </div>
 
-                <ProjectsProfile
-                    className={styles.view}
-                />
 
                 {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (

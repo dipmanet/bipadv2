@@ -307,6 +307,8 @@ class ProjectsProfile extends React.PureComponent {
             filters: { faramValues = emptyObject } = {},
             regionLevel,
             className,
+            showFilterOnly,
+            getSelectedOption,
         } = this.props;
 
         const ndrrsap = getResults(requests, 'ndrrsapRequest');
@@ -375,6 +377,12 @@ class ProjectsProfile extends React.PureComponent {
         const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
         const categoryMap = listToMap(category, categoryKeySelector, item => item);
 
+
+        console.log('priority options', priorityOptions);
+        console.log('subPriorityOptions options', subPriorityOptions);
+        console.log('activityOptions options', activityOptions);
+
+
         return (
             <TitleContext.Consumer>
                 {(titleContext) => {
@@ -390,23 +398,30 @@ class ProjectsProfile extends React.PureComponent {
                     }
                     return (
                         <React.Fragment>
-                            {/* <Loading pending={pending} /> */}
-                            {/* <Map
-                                projects={filteredProjects}
-                                regions={regions}
-                                regionLevel={regionLevel}
-                            /> */}
-                            {/* <LeftPane
-                                className={_cs(styles.leftPane, className)}
-                                projects={filteredProjects}
-                                drrCycleData={drrPieData}
-                                categoryData={categoryPieData}
-                                drrCycleMap={drrCycleMap}
-                                categoryMap={categoryMap}
-                                organizationMap={organizationMap}
-                                projectMap={projectMap}
-                                projectOrganizationPieData={projectOrganizationPieData}
-                            /> */}
+
+                            { !showFilterOnly
+                            && (
+                                <>
+                                    <Loading pending={pending} />
+                                    <Map
+                                        projects={filteredProjects}
+                                        regions={regions}
+                                        regionLevel={regionLevel}
+                                    />
+                                    <LeftPane
+                                        className={_cs(styles.leftPane, className)}
+                                        projects={filteredProjects}
+                                        drrCycleData={drrPieData}
+                                        categoryData={categoryPieData}
+                                        drrCycleMap={drrCycleMap}
+                                        categoryMap={categoryMap}
+                                        organizationMap={organizationMap}
+                                        projectMap={projectMap}
+                                        projectOrganizationPieData={projectOrganizationPieData}
+                                    />
+                                </>
+                            )
+                            }
                             <ProjectsProfileFilter
                                 drrCycleOptions={drrcycle}
                                 elementsOptions={category}
@@ -414,7 +429,11 @@ class ProjectsProfile extends React.PureComponent {
                                 priorityOptions={priorityOptions}
                                 subPriorityOptions={subPriorityOptions}
                                 activityOptions={activityOptions}
+                                showFilterOnly
+                                getSelectedOption={getSelectedOption}
                             />
+
+
                         </React.Fragment>
                     );
                 }}

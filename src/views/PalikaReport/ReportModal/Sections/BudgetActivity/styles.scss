@@ -15,6 +15,7 @@
         filter: saturate(80%);
         border: none;
         margin-right: 10px;
+        white-space: nowrap;
     }
 
 }
@@ -59,7 +60,7 @@ td{
             // border: 1px solid red;
             justify-content: flex-start;
             flex-direction: column;
-       
+ 
             .inputContainer{
                 display: flex;
                 border-radius: 3px;
