@@ -309,6 +309,7 @@ class ProjectsProfile extends React.PureComponent {
             className,
             showFilterOnly,
             getSelectedOption,
+
         } = this.props;
 
         const ndrrsap = getResults(requests, 'ndrrsapRequest');
