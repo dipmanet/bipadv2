@@ -132,7 +132,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     let municipalityName = '';
 
-    console.log('this is user>>>', user);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -178,19 +177,16 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-    console.log('hero>>>', fetchedData);
-
+    console.log('fiscal year>>>', fiscalYear);
     let finalArr = [];
-    if (fetchedData && submenuId === 2) {
+    if (fetchedData && submenuId === 2 && fiscalYear) {
         const {
             profile: {
                 municipality,
 
             },
         } = user;
-        console.log('What municipality>>>', municipality);
         const filteredFetchedData = fetchedData.filter(data => data.municipality === municipality);
-        console.log('hang what>>>', filteredFetchedData);
         const finalfetchedData = filteredFetchedData.map((item, i) => {
             const provinceDetails = provinces.find(data => data.id === item.province);
             const districtDetails = districts.find(data => data.id === item.district);
@@ -224,7 +220,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
         finalArr = [...new Set(finalfetchedData)];
     }
-    if (fetchedData && submenuId !== 2) {
+    console.log('This is final');
+
+    if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
         const finalfetchedData = fetchedData.map((item, i) => {
             const provinceDetails = provinces.find(data => data.id === item.province);
             const districtDetails = districts.find(data => data.id === item.district);
@@ -232,7 +230,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
 
 
-            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
+            const municipalityDetails = municipalities
+                .find(data => data.id === item.municipality);
             const createdDate = `${(new Date(item.createdOn)).getFullYear()
             }-${(new Date(item.createdOn)).getMonth() + 1
             }-${new Date(item.createdOn).getDate()}`;
@@ -259,7 +258,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         finalArr = [...new Set(finalfetchedData)];
     }
 
-    console.log('What is final arr>>', finalArr);
+
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
@@ -358,7 +357,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const getSubmenuId = (data) => {
         setSubmenuId(data);
-        console.log('submenuid', data);
     };
 
     const getMenuId = (menu) => {
@@ -367,7 +365,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const getSubmenuTitle = (title) => {
         setSubMenuTitle(title);
     };
-    console.log('This>>>', submenuId);
     useEffect(() => {
         // Example POST method implementation:
         function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
@@ -419,10 +416,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
     && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
-    console.log('date>>>', dateFrom);
     const handleCheckFilterDisableButtonForProvince = (province) => {
         if (!province && !dateFrom) {
-            console.log('What');
             setDisableFilterButton(true);
             PalikaReportGetRequest.do({
                 submitQuery: getRegionDetails(),
@@ -450,7 +445,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         if (urlData) {
             setUrl(urlData);
         }
-        console.log('is working');
         return null;
     };
 
@@ -458,7 +452,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setDateFrom(dateFrom);
         setDisableFilterButton(false);
     };
-    console.log('hanf>>>', newRegionValues);
     useEffect(() => {
         if (dateFrom || newRegionValues) {
             setDisableFilterButton(false);
