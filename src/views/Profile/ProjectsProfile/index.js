@@ -309,6 +309,9 @@ class ProjectsProfile extends React.PureComponent {
             className,
             showFilterOnly,
             getSelectedOption,
+            getPriorityOptions,
+            getSubPriorityAction,
+            getPriorityActivity,
 
         } = this.props;
 
@@ -327,6 +330,7 @@ class ProjectsProfile extends React.PureComponent {
 
         const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
         const priorityOptions = unflatten(ndrrsap, ndrrsapKeySelector, ndrrsapParentSelector);
+        getSubPriorityAction(ndrrsap);
 
         let subPriorityOptions = emptyList;
         const selectedPriority = priorityOptions.find(
@@ -372,17 +376,10 @@ class ProjectsProfile extends React.PureComponent {
         })).filter(data => data.value !== 0);
 
         // AGGREGATIONS
-
         const organizationMap = listToMap(organization, organizationKeySelector, item => item);
         const projectMap = listToMap(projects, projectKeySelector, item => item);
         const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
         const categoryMap = listToMap(category, categoryKeySelector, item => item);
-
-
-        console.log('priority options', priorityOptions);
-        console.log('subPriorityOptions options', subPriorityOptions);
-        console.log('activityOptions options', activityOptions);
-
 
         return (
             <TitleContext.Consumer>
