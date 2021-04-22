@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
@@ -83,7 +84,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 
 };
-
+let finalArr = [];
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
@@ -93,7 +94,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
     const [url, setUrl] = useState('/disaster-profile/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(5);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(20);
     const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
     const [menuId, setMenuId] = useState(1);
@@ -105,11 +106,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
-
+    const [sortBy, setSortBy] = useState('');
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
-
+    const [isSort, setIsSort] = useState(false);
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
 
@@ -177,86 +178,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-    console.log('fiscal year>>>', fiscalYear);
-    let finalArr = [];
-    if (fetchedData && submenuId === 2 && fiscalYear) {
-        const {
-            profile: {
-                municipality,
-
-            },
-        } = user;
-        const filteredFetchedData = fetchedData.filter(data => data.municipality === municipality);
-        const finalfetchedData = filteredFetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
-    console.log('This is final');
-
-    if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
-        const finalfetchedData = fetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities
-                .find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
 
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
@@ -465,6 +386,206 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setDateTo(dateTo);
     };
 
+    const handleSortTitle = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return a.municipality - b.municipality;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return b.municipality - a.municipality;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortProvince = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return a.province - b.province;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return b.province - a.province;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortDistrict = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return a.district - b.district;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return b.district - a.district;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortMunicipality = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return a.municipality - b.municipality;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return b.municipality - a.municipality;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortFiscalYear = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return a.fiscalYear - b.fiscalYear;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return b.fiscalYear - a.fiscalYear;
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortCreatedOn = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return new Date(a.createdOn) - new Date(b.createdOn);
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return new Date(b.createdOn) - new Date(a.createdOn);
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    const handleSortModifiedOn = (isSort) => {
+        setFetechedData([]);
+        setIsSort(isSort);
+        if (!isSort) {
+            const data = fetchedData.sort(function (a, b) {
+                return new Date(a.modifiedOn) - new Date(b.modifiedOn);
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        } else {
+            const data = fetchedData.sort(function (a, b) {
+                return new Date(b.modifiedOn) - new Date(a.modifiedOn);
+            });
+            setFetechedData(data);
+            setSortBy(sortBy);
+        }
+    };
+    console.log('This>>>', fetchedData);
+    useEffect(() => {
+        console.log('Hang');
+        if (fetchedData && submenuId === 2 && fiscalYear) {
+            const {
+                profile: {
+                    municipality,
+
+                },
+            } = user;
+            const filteredFetchedData = fetchedData
+                .filter(data => data.municipality === municipality);
+            const finalfetchedData = filteredFetchedData.map((item, i) => {
+                const provinceDetails = provinces.find(data => data.id === item.province);
+                const districtDetails = districts.find(data => data.id === item.district);
+                const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+                const municipalityDetails = municipalities
+                    .find(data => data.id === item.municipality);
+                const createdDate = `${(new Date(item.createdOn)).getFullYear()
+                }-${(new Date(item.createdOn)).getMonth() + 1
+                }-${new Date(item.createdOn).getDate()}`;
+                const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
+                }-${(new Date(item.modifiedOn)).getMonth() + 1
+                }-${new Date(item.modifiedOn).getDate()}`;
+                if (municipalityDetails) {
+                    return { municipality: municipalityDetails.title,
+                        province: provinceDetails.title,
+                        district: districtDetails.title,
+                        fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+                        createdDate: item.createdOn && createdDate,
+                        modifiedDate: item.modifiedOn && modifiedDate,
+                        item };
+                }
+                if (!provinceDetails) {
+                    return {
+                        item,
+                    };
+                }
+
+                return null;
+            });
+            finalArr = [...new Set(finalfetchedData)];
+        }
+        if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
+            const finalfetchedData = fetchedData.map((item, i) => {
+                const provinceDetails = provinces.find(data => data.id === item.province);
+                const districtDetails = districts.find(data => data.id === item.district);
+
+                const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+
+
+                const municipalityDetails = municipalities
+                    .find(data => data.id === item.municipality);
+                const createdDate = `${(new Date(item.createdOn)).getFullYear()
+                }-${(new Date(item.createdOn)).getMonth() + 1
+                }-${new Date(item.createdOn).getDate()}`;
+                const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
+                }-${(new Date(item.modifiedOn)).getMonth() + 1
+                }-${new Date(item.modifiedOn).getDate()}`;
+                if (municipalityDetails) {
+                    return { municipality: municipalityDetails.title,
+                        province: provinceDetails.title,
+                        district: districtDetails.title,
+                        fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+                        createdDate: item.createdOn && createdDate,
+                        modifiedDate: item.modifiedOn && modifiedDate,
+                        item };
+                }
+                if (!provinceDetails) {
+                    return {
+                        item,
+                    };
+                }
+
+                return null;
+            });
+            finalArr = [...new Set(finalfetchedData)];
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSort, submenuId, fetchedData]);
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -583,6 +704,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             tableHeader={TableHeaderForTable}
                             tableHeaderDataMatch={TableHeaderForMatchingData}
                             submenuId={submenuId}
+                            sortTitle={handleSortTitle}
+                            sortProvince={handleSortProvince}
+                            sortDistrict={handleSortDistrict}
+                            sortMunicipality={handleSortMunicipality}
+                            sortFiscalYear={handleSortFiscalYear}
+                            sortCreatedOn={handleSortCreatedOn}
+                            sortModifiedOn={handleSortModifiedOn}
 
                         />
                         <div className={styles.paginationDownload}>
