@@ -168,11 +168,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                 GET STARTED
                             </div>
                             <div className={styles.description}>
-                                In publishing and graphic design, Lorem ipsum is a
-                                placeholder text commonly used to demonstrate the
-                                visual form of a document or a typeface without
-                                relying on meaningful content. Lorem ipsum may be
-                                used as a placeholder before final copy is available.
+                                This module will generate disaster risk reduction and
+                                management report for your Municipality.
                             </div>
 
                             <div className={styles.subtitle}>
@@ -196,7 +193,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <div className={styles.bulletText}>
-                                        Track the progress you palika
+                                        Track the progress your palika
                                         is doing in terms of implementation of DRR
                                     </div>
                                 </div>
@@ -220,7 +217,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <div className={styles.bulletText}>
-                                        Check how you palika is spending Budget in DRR
+                                        Check how your palika is spending Budget in DRR
                                     </div>
                                 </div>
                             </div>

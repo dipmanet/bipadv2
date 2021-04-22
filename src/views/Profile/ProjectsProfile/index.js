@@ -390,13 +390,13 @@ class ProjectsProfile extends React.PureComponent {
                     }
                     return (
                         <React.Fragment>
-                            <Loading pending={pending} />
-                            <Map
+                            {/* <Loading pending={pending} /> */}
+                            {/* <Map
                                 projects={filteredProjects}
                                 regions={regions}
                                 regionLevel={regionLevel}
-                            />
-                            <LeftPane
+                            /> */}
+                            {/* <LeftPane
                                 className={_cs(styles.leftPane, className)}
                                 projects={filteredProjects}
                                 drrCycleData={drrPieData}
@@ -406,7 +406,7 @@ class ProjectsProfile extends React.PureComponent {
                                 organizationMap={organizationMap}
                                 projectMap={projectMap}
                                 projectOrganizationPieData={projectOrganizationPieData}
-                            />
+                            /> */}
                             <ProjectsProfileFilter
                                 drrCycleOptions={drrcycle}
                                 elementsOptions={category}

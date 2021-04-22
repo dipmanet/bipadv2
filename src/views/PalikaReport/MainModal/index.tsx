@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -10,6 +11,7 @@ import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import ReportModal from '../ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import {
     createConnectedRequestCoordinator,
@@ -75,6 +77,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
             if (params) {
+                params.handlePending(true);
                 return {
                     // province: params.province,
                     // district: params.district,
@@ -96,6 +99,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
             if (params && params.reportData) {
                 params.reportData(citizenReportList);
+                if (params.handlePending) {
+                    params.handlePending(false);
+                }
             }
         },
     },
@@ -128,7 +134,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
-
+    const [pending, setPending] = useState(false);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -157,6 +163,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
 
+    const handlePending = (val: boolean) => setPending(val);
     const tabs: {
         key: number;
         content: TabContent;
@@ -242,11 +249,13 @@ const MainModal: React.FC<Props> = (props: Props) => {
             }
             return null;
         };
-
+        // handlePending(false);
         props.requests.PalikaReportGetRequest.do({
             municipality,
             url: getURL(0),
             reportData: handleReportData,
+            handlePending,
+            pending,
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -258,11 +267,11 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     setfocalPerson(item.name);
                 }
                 if (item.position && item.position.includes('Mayor')) {
-                    const details = `Name: ${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chairperson')) {
-                    const details = `Name:${item.name},Email:${item.email},Tel:${item.mobileNumber} `;
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
@@ -285,12 +294,14 @@ const MainModal: React.FC<Props> = (props: Props) => {
             }
             return null;
         };
-
         if (getURL(tabSelected) !== null) {
             props.requests.PalikaReportGetRequest.do({
                 municipality,
                 url: getURL(tabSelected),
                 reportData: handleReportData,
+                handlePending,
+                pending,
+
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -342,135 +353,140 @@ const MainModal: React.FC<Props> = (props: Props) => {
             <Page hideMap hideFilter />
             <div className={showReportModal ? styles.containerFaded : styles.mainContainer}>
 
-                {showReportModal
-            && (
-                <Modal
-                    closeOnOutsideClick
-                    className={getModalClass()}
-                    id={'palikaModal'}
-                >
-                    <ModalHeader
-                        title=" "
-                        className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}
-                        rightComponent={(
-                            <>
-                                {showTabs
-                             && (
-                                 <div className={styles.tabsMain}>
-                                     <div
-                                         className={styles.tabsTitle}
-                                     >
-                                         { tabs.map(tab => (
-                                             <button
-                                                 type="button"
-                                                 className={styles.tabsTexts}
-                                                 style={{
-                                                     backgroundColor: tabSelected === tab.key
-                                                         ? '#fff'
-                                                         : '#e1e1e1',
-                                                     transform: `translateX(-${getTranslateVal()}px)`,
-                                                 }}
-                                                 onClick={() => handleTabClick(tab.key, tab.url)}
-                                                 key={tab.key}
-                                             >
-                                                 {tab.content}
-                                             </button>
-                                         ))}
-                                     </div>
-                                     <div className={styles.closeBtnContainer}>
-                                         <PrimaryButton
-                                             type="button"
-                                             className={styles.closeBtn}
-                                             onClick={handleCloseModal}
-                                         >
-                                             <Icon
-                                                 name="times"
-                                                 className={styles.closeIcon}
-                                             />
-                                         </PrimaryButton>
-                                     </div>
-                                 </div>
+                {
+                    showReportModal
+                        && (
+                            <Modal
+                                closeOnOutsideClick
+                                className={getModalClass()}
+                                id={'palikaModal'}
+                            >
 
-                             )
-                                }
-                            </>
-                        )}
-                    />
-                    <ModalBody className={styles.modalBody}>
-                        <ReportModal
-                            keyTabUrl={tabUrlSelected}
-                            keyTab={tabSelected}
-                            showTabs={showTabs}
-                            hideWelcomePage={hideWelcomePage}
-                            reportData={reportData}
-                            tableHeader={tableHeader}
-                            province={province}
-                            district={district}
-                            municipality={municipality}
-                            mayor={mayor}
-                            cao={cao}
-                            focalPerson={focalPerson}
-                            updateTab={handleNextClick}
-                            tabsLength={tabs.length}
-                            handlePrevClick={handlePrevClick}
-                            handleNextClick={handleNextClick}
-                        />
-                        {showTabs && (
-                            <div className={styles.btnContainer}>
-                                {/* <div className={styles.nextPrevBtns}>
-                                    {
-                                        tabSelected < Object.keys(tabs).length - 1
-                                        && (
-                                            <>
-                                                <PrimaryButton
-                                                    type="button"
-                                                    className={tabSelected > 0
-                                                        ? styles.agreeBtn
-                                                        : styles.disabledBtn
-                                                    }
-                                                    onClick={handlePrevClick}
-                                                >
-                                            Prev
+                                <ModalHeader
+                                    title=" "
+                                    className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}
+                                    rightComponent={(
+                                        <>
+                                            {showTabs
+                                         && (
+                                             <div className={styles.tabsMain}>
+                                                 <div
+                                                     className={styles.tabsTitle}
+                                                 >
+                                                     { tabs.map(tab => (
+                                                         <button
+                                                             type="button"
+                                                             className={styles.tabsTexts}
+                                                             style={{
+                                                                 backgroundColor: tabSelected === tab.key
+                                                                     ? '#fff'
+                                                                     : '#e1e1e1',
+                                                                 transform: `translateX(-${getTranslateVal()}px)`,
+                                                             }}
+                                                             onClick={() => handleTabClick(tab.key, tab.url)}
+                                                             key={tab.key}
+                                                         >
+                                                             {tab.content}
+                                                         </button>
+                                                     ))}
+                                                 </div>
+                                                 <div className={styles.closeBtnContainer}>
+                                                     <PrimaryButton
+                                                         type="button"
+                                                         className={styles.closeBtn}
+                                                         onClick={handleCloseModal}
+                                                     >
+                                                         <Icon
+                                                             name="times"
+                                                             className={styles.closeIcon}
+                                                         />
+                                                     </PrimaryButton>
+                                                 </div>
+                                             </div>
 
-                                                </PrimaryButton>
-                                                <PrimaryButton
-                                                    type="button"
-                                                    className={tabSelected < tabs.length - 1
-                                                        ? styles.agreeBtn
-                                                        : styles.disabledBtn
-                                                    }
-                                                    onClick={handleNextClick}
-                                                >
-                                            Next
+                                         )
+                                            }
+                                        </>
+                                    )}
+                                />
+                                <ModalBody className={styles.modalBody}>
+                                    {pending && <LoadingAnimation />}
+                                    <ReportModal
+                                        keyTabUrl={tabUrlSelected}
+                                        keyTab={tabSelected}
+                                        showTabs={showTabs}
+                                        hideWelcomePage={hideWelcomePage}
+                                        reportData={reportData}
+                                        tableHeader={tableHeader}
+                                        province={province}
+                                        district={district}
+                                        municipality={municipality}
+                                        mayor={mayor}
+                                        cao={cao}
+                                        focalPerson={focalPerson}
+                                        updateTab={handleNextClick}
+                                        tabsLength={tabs.length}
+                                        handlePrevClick={handlePrevClick}
+                                        handleNextClick={handleNextClick}
+                                    />
+                                    {showTabs && (
+                                        <div className={styles.btnContainer}>
+                                            {/* <div className={styles.nextPrevBtns}>
+                                                {
+                                                    tabSelected < Object.keys(tabs).length - 1
+                                                    && (
+                                                        <>
+                                                            <PrimaryButton
+                                                                type="button"
+                                                                className={tabSelected > 0
+                                                                    ? styles.agreeBtn
+                                                                    : styles.disabledBtn
+                                                                }
+                                                                onClick={handlePrevClick}
+                                                            >
+                                                        Prev
 
-                                                </PrimaryButton>
-                                            </>
-                                        )
-                                    }
+                                                            </PrimaryButton>
+                                                            <PrimaryButton
+                                                                type="button"
+                                                                className={tabSelected < tabs.length - 1
+                                                                    ? styles.agreeBtn
+                                                                    : styles.disabledBtn
+                                                                }
+                                                                onClick={handleNextClick}
+                                                            >
+                                                        Next
 
-                                </div> */}
+                                                            </PrimaryButton>
+                                                        </>
+                                                    )
+                                                }
+
+                                            </div> */}
 
 
-                                {/* { tabSelected < Object.keys(tabs).length - 1
-                                && tabSelected !== 0
-                                   && (
-                                       <PrimaryButton
-                                           type="button"
-                                           className={styles.agreeBtn}
-                                           onClick={handleDataAdd}
-                                       >
-                                           {`Add ${tabs[tabSelected].content} Data`}
+                                            {/* { tabSelected < Object.keys(tabs).length - 1
+                                            && tabSelected !== 0
+                                               && (
+                                                   <PrimaryButton
+                                                       type="button"
+                                                       className={styles.agreeBtn}
+                                                       onClick={handleDataAdd}
+                                                   >
+                                                       {`Add ${tabs[tabSelected].content} Data`}
 
-                                       </PrimaryButton>
-                                   )
-                                } */}
+                                                   </PrimaryButton>
+                                               )
+                                            } */}
 
-                            </div>
-                        )}
+                                        </div>
+                                    )}
 
-                    </ModalBody>
-                </Modal>
-            )}
+                                </ModalBody>
+                            </Modal>
+                        )
+
+                }
             </div>
 
 

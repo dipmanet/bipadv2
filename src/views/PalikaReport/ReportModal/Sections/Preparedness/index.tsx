@@ -61,10 +61,7 @@ const Preparedness = (props: Props) => {
         Initiatives taken in Recovery and
         Reconstruction Activity conducted in FY 77/78
             </h2>
-            <div className={styles.featureText}>
-                FEATURE UNDER DEVELOPMENT
-            </div>
-            <div className={styles.disabled} />
+
             <div className={styles.tabsPageContainer}>
 
                 <div className={styles.formColumn}>

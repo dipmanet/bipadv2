@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
@@ -55,7 +54,6 @@ const currentFiscalYear = new Date().getFullYear() + 56;
 
 const options = Array.from(Array(10).keys()).map(item => ({
     value: currentFiscalYear - item,
-    label: `${currentFiscalYear - item}/${currentFiscalYear + 1 - item}`,
 }));
 
 
@@ -120,63 +118,59 @@ const Budget = (props: Props) => {
 
     return (
         <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.formContainer}>
+            <div className={styles.formColumn}>
                 <h2 className={styles.title}>Please enter Disaster Profile details</h2>
-                <div className={styles.inputContainer}>
-                    <label className={styles.label}>
-                                 Total Muicipal Budget of FY
+                <div className={styles.row}>
+
+                    <div className={styles.inputContainer}>
+                        <span className={styles.dpText}>Total Municipal Budget of FY</span>
                         {' '}
                         { `${fiscalYear}`}
                         <input
-                            type="text"
+                            type="number"
                             className={styles.inputElement}
                             onChange={handleMunicipalBudget}
-                            placeholder={'Kindly specify total municipal budget in numbers'}
+                            placeholder={'Kindly specify total municipal budget in numbers (NPR)'}
                             value={municipalBudget}
                         />
 
-                    </label>
 
-                </div>
-                <div className={styles.inputContainer}>
+                    </div>
+                    <div className={styles.inputContainer}>
 
-                    <label className={styles.label}>
-                                 Total DRR Fund for FY
+                        <span className={styles.dpText}>Total DRR Fund for FY</span>
                         { `${fiscalYear}`}
                         <input
-                            type="text"
+                            type="number"
                             className={styles.inputElement}
                             onChange={handleDRRFund}
                             value={drrFund}
-                            placeholder={'Kindly specify total DRR funds in numbers'}
+                            placeholder={'Kindly specify total DRR fund for FY in numbers (NPR)'}
                         />
 
 
-                    </label>
+                    </div>
+                    <div className={styles.inputContainer}>
 
-                </div>
-                <div className={styles.inputContainer}>
-
-                    <label className={styles.label}>
-                            Additional DRR Fund for FY
+                        <span className={styles.dpText}>Other DRR related funding</span>
                         { `${fiscalYear}`}
 
                         <input
                             type="number"
                             className={styles.inputElement}
                             onChange={handleAddFund}
-                            placeholder={'Kindly specify additional funds in numbers'}
+                            placeholder={'Kindly specify other DRR related funding in numbers (NPR)'}
                             value={additionalFund}
                         />
 
-                    </label>
+
+                    </div>
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
 
                 </div>
-                <NextPrevBtns
-                    handlePrevClick={props.handlePrevClick}
-                    handleNextClick={props.handleNextClick}
-                />
-
             </div>
 
 
