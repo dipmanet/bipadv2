@@ -362,6 +362,7 @@ const BudgetActivity = (props: Props) => {
                                         onChange={handleOtherFund}
                                         value={otherFund}
                                         placeholder={'Source Of Fund: Municipal Government'}
+                                        disabled
                                     />
                                 </div>
                             ) : ''
@@ -409,7 +410,7 @@ const BudgetActivity = (props: Props) => {
                     </div>
 
                     <div className={styles.inputContainer}>
-
+                        <span className={styles.dpText}>Project Status</span>
                         <select
                             value={projStatus}
                             onChange={handleprojStatus}
@@ -506,6 +507,9 @@ const BudgetActivity = (props: Props) => {
                                          </th>
                                      ))}
                                      <th>
+                                         Start Date
+                                     </th>
+                                     <th>
                                          Priority Area
                                      </th>
                                      <th>
@@ -514,6 +518,7 @@ const BudgetActivity = (props: Props) => {
                                      <th>
                                          Priority Activity
                                      </th>
+
                                  </tr>
                              </thead>
                              <tbody>
@@ -521,15 +526,15 @@ const BudgetActivity = (props: Props) => {
                                      props.budgetActivityData.map(data => (
                                          <tr key={data.name}>
                                              {Object.keys(props.budgetActivityData[0])
-                                                 .map((title) => {
-                                                     console.log('data', data[title]);
-                                                     return (
-                                                         <td key={title}>
-                                                             {data[title] ? String(data[title]) : 'No data'}
+                                                 .map(title => (
+                                                     <td key={title}>
+                                                         {data[title] ? String(data[title]) : 'No data'}
 
-                                                         </td>
-                                                     );
-                                                 })}
+                                                     </td>
+                                                 ))}
+                                             <td>
+                                                 {startDate}
+                                             </td>
                                              <td>
                                                  {priorityArea}
                                              </td>
