@@ -64,7 +64,7 @@ type TabContent =
 |'Contacts'
 |'Budget'
 |'Relief'
-|'Incident'
+|'Incident and Relief'
 |'Loss & Damage'
 |'Simulation'
 |'Preparedness'
@@ -210,13 +210,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
             url: '',
         },
         {
-            key: 8,
-            content: 'Relief',
-            url: '',
-        },
-        {
             key: 9,
-            content: 'Incident',
+            content: 'Incident and Relief',
             url: '',
         },
         {

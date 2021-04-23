@@ -308,8 +308,8 @@ const Relief = (props: Props) => {
                                         <tr key={currentRelief.id}>
                                             <td>{currentRelief.title}</td>
                                             <td>{currentRelief.hazard}</td>
-                                            <td>{currentRelief.incidentOn}</td>
-                                            <td>{currentRelief.reportedOn}</td>
+                                            <td>{currentRelief.incidentOn.split('T')[0]}</td>
+                                            <td>{currentRelief.reportedOn.split('T')[0]}</td>
                                             <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
                                             <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
                                             <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
@@ -323,7 +323,7 @@ const Relief = (props: Props) => {
                                         + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedRoadCount : 0)}
                                             </td>
                                             <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
-
+                                            <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
 
                                         </tr>
                                     }

@@ -33,6 +33,10 @@ const ProgramPolicies = (props: Props) => {
     } = props;
 
     const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
+    const [policies, setpolicies] = useState('');
+    const handlePolicies = (data) => {
+        setpolicies(data.target.value);
+    };
 
     useEffect(() => {
         if (!('pointOne' in programAndPolicyData)) {
@@ -65,14 +69,22 @@ const ProgramPolicies = (props: Props) => {
         setInputList([...inputList, { firstName: '', lastName: '' }]);
     };
 
+
     return (
         <div className={styles.mainPageDetailsContainer}>
             <div className={styles.formColumn}>
                 <h2>Annual Program and Policy</h2>
                 <p>DRR programmes listed in the annual policy and programme</p>
                 <div className={styles.row}>
-
-                    {inputList.map((x, i) => (
+                    <div className={styles.inputContainer}>
+                        <textarea
+                            placeholder="Kindly enter DRR programmes "
+                            value={policies}
+                            onChange={handlePolicies}
+                            rows={10}
+                        />
+                    </div>
+                    {/* {inputList.map((x, i) => (
 
                         <>
                             <div className={styles.inputContainer}>
@@ -105,7 +117,7 @@ const ProgramPolicies = (props: Props) => {
                                 )}
                             </div>
                         </>
-                    ))}
+                    ))} */}
                     <NextPrevBtns
                         handlePrevClick={props.handlePrevClick}
                         handleNextClick={props.handleNextClick}
