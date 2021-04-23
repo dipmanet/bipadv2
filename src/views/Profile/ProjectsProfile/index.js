@@ -330,7 +330,9 @@ class ProjectsProfile extends React.PureComponent {
 
         const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
         const priorityOptions = unflatten(ndrrsap, ndrrsapKeySelector, ndrrsapParentSelector);
-        getSubPriorityAction(ndrrsap);
+        if (getSubPriorityAction) {
+            getSubPriorityAction(ndrrsap);
+        }
 
         let subPriorityOptions = emptyList;
         const selectedPriority = priorityOptions.find(

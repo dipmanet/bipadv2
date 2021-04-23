@@ -210,8 +210,13 @@ const MainModal: React.FC<Props> = (props: Props) => {
             url: '',
         },
         {
-            key: 9,
+            key: 8,
             content: 'Incident and Relief',
+            url: '',
+        },
+        {
+            key: 9,
+            content: 'Recovery',
             url: '',
         },
         {
@@ -233,7 +238,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 13,
             content: 'Preview',
-            url: '',
+            url: '/simulation/',
         },
     ];
 
@@ -284,7 +289,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         const getURL = (tabValue: number) => {
-            if (tabs[tabValue].url) {
+            if (tabs[tabValue] && tabs[tabValue].url) {
                 return tabs[tabValue].url;
             }
             return null;

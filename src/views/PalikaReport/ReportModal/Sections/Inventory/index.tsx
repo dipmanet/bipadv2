@@ -111,7 +111,6 @@ const Inventory: React.FC<Props> = (props: Props) => {
         rows,
 
     });
-    console.log('hang fetch data>>>', fetchedData);
 
     useEffect(() => {
         PalikaReportInventoriesReport.do({
@@ -121,6 +120,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     }, [offset]);
     // Finding Header for table data
 
+    console.log('inventory data', fetchedData);
 
     return (
         <div className={styles.tabsPageContainer}>
@@ -137,6 +137,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                             {/* <th>S.N</th> */}
                             <th>Name of resource</th>
                             <th>Quantity</th>
+                            <th>Unit</th>
                             <th>Owner Organization</th>
                             <th>Type of Organization</th>
                             <th>Added Date</th>
@@ -151,11 +152,12 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     </td> */}
                                     <td>{data.item.title}</td>
                                     <td>{data.quantity}</td>
+                                    <td>{'pcs'}</td>
                                     <td>
                                         {item.title}
                                     </td>
                                     <td>{item.type}</td>
-                                    <td>{data.createdOn}</td>
+                                    <td>{data.createdOn.split('T')[0]}</td>
                                 </tr>
                             ))
 
