@@ -107,15 +107,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         tabsLength,
         handlePrevClick,
         handleNextClick,
-
+        localMembers,
     } = props;
-    const [reportTitle, setreportTitle] = useState('');
-    const [datefrom, setdatefrom] = useState('');
-    const [dateTo, setdateTo] = useState('');
-    const [formationDate, setformationDate] = useState('');
-    const [memberCount, setmemberCount] = useState('');
-    const [reportData, setReportData] = useState([]);
-    const [pdfReport, setPdfReport] = useState(null);
 
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
@@ -146,16 +139,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 heightLeft -= pageHeight;
             }
             doc.save('palika-report.pdf');
-
-            const pdf = doc.output('blob');
-
-            const data = new FormData();
-            data.append('file', pdf, 'test.pdf');
-
-            // setPdfReport(data);
         });
     };
 
+    const [reportTitle, setreportTitle] = useState('');
+    const [datefrom, setdatefrom] = useState('');
+    const [dateTo, setdateTo] = useState('');
+    const [formationDate, setformationDate] = useState('');
+    const [memberCount, setmemberCount] = useState('');
+    const [reportData, setReportData] = useState([]);
 
     const getGeneralData = () => ({
         reportTitle,
@@ -256,6 +248,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             page={-1}
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
+                            localMembers={localMembers}
                         />
                     )
                     : ''
@@ -380,15 +373,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Recovery />
-                    )
-                    : ''
-            }
-
-            {
-                (keyTab === 10
-               && showTabs)
-                    ? (
                         <>
                             <Simulation
                                 handlePrevClick={handlePrevClick}
@@ -400,36 +384,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
-            {
-                (keyTab === 11
-               && showTabs)
-                    ? (
-                        <>
-                            <DamageAndLoss
-                                handlePrevClick={handlePrevClick}
-                                handleNextClick={handleNextClick}
-                                page={-1}
-                                updateTab={updateTab}
-                            />
-                        </>
-                    )
-                    : ''
-            }
-            {
-                (keyTab === 12
-               && showTabs)
-                    ? (
-                        <>
-                            <Preparedness
-                                handlePrevClick={handlePrevClick}
-                                handleNextClick={handleNextClick}
-                                page={-1}
-                                updateTab={updateTab}
-                            />
-                        </>
-                    )
-                    : ''
-            }
+,
             {
                 keyTab === (tabsLength - 1) && showTabs
                     ? (

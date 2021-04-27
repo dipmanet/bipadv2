@@ -292,6 +292,15 @@ const BudgetActivity = (props: Props) => {
             <div className={styles.formColumn}>
                 <h2 className={styles.title}>Budget Activities</h2>
                 <div className={styles.row}>
+                    <div className={styles.inputContainer}>
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleActivityName}
+                            value={activityName}
+                            placeholder={'Name of Activity'}
+                        />
+                    </div>
                     <div className={_cs(styles.inputContainer, styles.ndrrsaContainer)}>
                         <ProjectsProfile
                             className={styles.view}
@@ -303,18 +312,7 @@ const BudgetActivity = (props: Props) => {
                         // getPriorityActivity={getPriorityActivity}
                         />
                     </div>
-                    <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleActivityName}
-                            value={activityName}
-                            placeholder={'Name of Activity'}
-                        />
-
-
-                    </div>
                     <div className={styles.inputContainer}>
                         <span className={styles.dpText}>Funding Type</span>
                         <select
@@ -528,6 +526,7 @@ const BudgetActivity = (props: Props) => {
                                              {Object.keys(props.budgetActivityData[0])
                                                  .map(title => (
                                                      <td key={title}>
+
                                                          {data[title] ? String(data[title]) : 'No data'}
 
                                                      </td>
