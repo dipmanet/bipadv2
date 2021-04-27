@@ -11,7 +11,7 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import MainModal from './MainModal';
 import DateInput from '#rsci/DateInput';
-
+import DropdownMenu from '#rsca/DropdownMenu';
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -42,17 +42,25 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
+            console.log('this params>>>', params);
             if (params && params.submitQuery) {
                 return {
                     province: params.submitQuery.province,
                     district: params.submitQuery.district,
                     municipality: params.submitQuery.municipality,
                     limit: params.page,
+                    offset: params.offset,
+
                 };
             }
 
 
-            return { limit: params.page, offset: params.offset };
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            return { limit: params.page,
+                offset: params.offset,
+
+                municipality: params.municipality,
+                expand: params.expand };
         },
         method: methods.GET,
         onMount: true,
@@ -61,7 +69,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-
             if (params && params.annualBudget) {
                 params.annualBudget(citizenReportList);
             }
@@ -84,7 +91,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 
 };
-const finalArr = [];
+let finalArr = [];
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
@@ -94,7 +101,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
     const [url, setUrl] = useState('/disaster-profile/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(20);
+    const [paginationQueryLimit, setPaginationQueryLimit] = useState(6);
     const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
     const [menuId, setMenuId] = useState(1);
@@ -113,14 +120,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [isSort, setIsSort] = useState(false);
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
-
+    const [currentPageNumber, setCurrentPageNumber] = useState(1);
+    const [loggedInMunicipality, setLoggedInMunicipality] = useState(null);
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
-
 
     const handleCloseModal = () => setShowReportModal(false);
     const {
@@ -132,7 +139,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     } = props;
 
     let municipalityName = '';
-
+    console.log('this is final fetch data>>>', fetchedData);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -173,92 +180,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         paginationParameters: handlePaginationParameters,
         url,
         page: paginationQueryLimit,
+        expand: 'updated_by',
 
     });
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
 
-    let finalArr = [];
-    if (fetchedData && submenuId === 2 && fiscalYear) {
-        const {
-            profile: {
-                municipality,
-
-            },
-        } = user;
-        const filteredFetchedData = fetchedData.filter(data => data.municipality === municipality);
-        const finalfetchedData = filteredFetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
-
-    if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
-        const finalfetchedData = fetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities
-                .find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
-
-
+    console.log('this value>>>', newRegionValues);
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
@@ -302,6 +231,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             PalikaReportGetRequest.do({
 
                 submitQuery: getRegionDetails(),
+
             });
             setClearFilter(true);
 
@@ -314,6 +244,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             PalikaReportGetRequest.do({
 
                 submitQuery: getRegionDetails(newRegionValues),
+                dateFrom,
+                dateTo,
             });
             setClearFilter(false);
         }
@@ -327,15 +259,45 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
 
     const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-
-        setOffset(selectedPage * 2);
+        const selectedPage = e.selected + 1;
+        setOffset((selectedPage - 1) * paginationQueryLimit);
+        setCurrentPageNumber(selectedPage);
+        console.log('What is click>>>', e.selected);
     };
-
+    console.log('this is >>>', user);
     useEffect(() => {
-        PalikaReportGetRequest.do({
-            offset,
-        });
+        if (user && submenuId === 2) {
+            const {
+                profile: {
+                    municipality,
+
+                },
+            } = user;
+            PalikaReportGetRequest.do({
+                offset,
+                municipality,
+                dateFrom,
+                dateTo,
+            });
+        } else if (newRegionValues) {
+            PalikaReportGetRequest.do({
+
+                submitQuery: getRegionDetails(newRegionValues),
+                offset,
+                dateFrom,
+                dateTo,
+
+
+            });
+        } else {
+            PalikaReportGetRequest.do({
+                offset,
+                dateFrom,
+                dateTo,
+                submitQuery: getRegionDetails(),
+            });
+        }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
@@ -354,9 +316,31 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             url: data,
         });
     };
-
     const getSubmenuId = (data) => {
         setSubmenuId(data);
+        setCurrentPageNumber(1);
+        console.log('Hell data', data);
+        if (user) {
+            const {
+                profile: {
+                    municipality,
+
+                },
+            } = user;
+
+            if (data === 2) {
+                PalikaReportGetRequest.do({
+
+                    municipality,
+                });
+            } else {
+                console.log('Hell');
+                PalikaReportGetRequest.do({
+
+                    municipality: null,
+                });
+            }
+        }
     };
 
     const getMenuId = (menu) => {
@@ -529,10 +513,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             const data = fetchedData.sort(function (a, b) {
                 return b.municipality - a.municipality;
             });
+            console.log('What data>>>', data);
             setFetechedData(data);
             setSortBy(sortBy);
         }
     };
+    console.log('Final data sort>>>', isSort);
+    console.log('This fetch data>>>', fetchedData);
     const handleSortFiscalYear = (isSort) => {
         setFetechedData([]);
         setIsSort(isSort);
@@ -584,50 +571,49 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setSortBy(sortBy);
         }
     };
-    console.log('This>>>', fetchedData);
     useEffect(() => {
-        console.log('Hang');
-        if (fetchedData && submenuId === 2 && fiscalYear) {
-            const {
-                profile: {
-                    municipality,
+        // if (fetchedData && submenuId === 2 && fiscalYear) {
+        //     const {
+        //         profile: {
+        //             municipality,
 
-                },
-            } = user;
-            const filteredFetchedData = fetchedData
-                .filter(data => data.municipality === municipality);
-            const finalfetchedData = filteredFetchedData.map((item, i) => {
-                const provinceDetails = provinces.find(data => data.id === item.province);
-                const districtDetails = districts.find(data => data.id === item.district);
-                const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-                const municipalityDetails = municipalities
-                    .find(data => data.id === item.municipality);
-                const createdDate = `${(new Date(item.createdOn)).getFullYear()
-                }-${(new Date(item.createdOn)).getMonth() + 1
-                }-${new Date(item.createdOn).getDate()}`;
-                const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-                }-${(new Date(item.modifiedOn)).getMonth() + 1
-                }-${new Date(item.modifiedOn).getDate()}`;
-                if (municipalityDetails) {
-                    return { municipality: municipalityDetails.title,
-                        province: provinceDetails.title,
-                        district: districtDetails.title,
-                        fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                        createdDate: item.createdOn && createdDate,
-                        modifiedDate: item.modifiedOn && modifiedDate,
-                        item };
-                }
-                if (!provinceDetails) {
-                    return {
-                        item,
-                    };
-                }
+        //         },
+        //     } = user;
+        //     const filteredFetchedData = fetchedData
+        //         .filter(data => data.municipality === municipality);
+        //     const finalfetchedData = filteredFetchedData.map((item, i) => {
+        //         const provinceDetails = provinces.find(data => data.id === item.province);
+        //         const districtDetails = districts.find(data => data.id === item.district);
+        //         const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
+        //         const municipalityDetails = municipalities
+        //             .find(data => data.id === item.municipality);
+        //         const createdDate = `${(new Date(item.createdOn)).getFullYear()
+        //         }-${(new Date(item.createdOn)).getMonth() + 1
+        //         }-${new Date(item.createdOn).getDate()}`;
+        //         const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
+        //         }-${(new Date(item.modifiedOn)).getMonth() + 1
+        //         }-${new Date(item.modifiedOn).getDate()}`;
+        //         if (municipalityDetails) {
+        //             return { municipality: municipalityDetails.title,
+        //                 province: provinceDetails.title,
+        //                 district: districtDetails.title,
+        //                 fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+        //                 createdDate: item.createdOn && createdDate,
+        //                 modifiedDate: item.modifiedOn && modifiedDate,
+        //                 item };
+        //         }
+        //         if (!provinceDetails) {
+        //             return {
+        //                 item,
+        //             };
+        //         }
 
-                return null;
-            });
-            finalArr = [...new Set(finalfetchedData)];
-        }
-        if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
+        //         return null;
+        //     });
+        //     finalArr = [...new Set(finalfetchedData)];
+        // }
+        if (fetchedData && fiscalYear) {
+            console.log('Testing');
             const finalfetchedData = fetchedData.map((item, i) => {
                 const provinceDetails = provinces.find(data => data.id === item.province);
                 const districtDetails = districts.find(data => data.id === item.district);
@@ -662,8 +648,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             });
             finalArr = [...new Set(finalfetchedData)];
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort, submenuId, fetchedData]);
+    console.log('WWW', submenuId);
 
     return (
         <>
@@ -712,34 +700,33 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     </div>
                     <div className={styles.rightContainerFilters}>
                         {/* <FilterModal /> */}
-                        <StepwiseRegionSelectInput
-                            className={
-                                _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                            faramElementName="region"
-                            wardsHidden
-                            onChange={handleFormRegion}
-                            checkFilterButtonProvince={handleCheckFilterDisableButtonForProvince}
-                            checkFilterButtonDistrict={handleCheckFilterDisableButtonForDistrict}
-                            checkFilterButtonMun={handleCheckFilterDisableButtonForMunicipality}
-                            reset={resetFilterProps}
-
-                            // initialLoc={{ municipality,
-                            //     district,
-                            //     province }}
-                            provinceInputClassName={styles.snprovinceinput}
-                            districtInputClassName={styles.sndistinput}
-                            municipalityInputClassName={styles.snmuniinput}
-                        />
-                        <div className={styles.dateFrom}>
+                        {submenuId === 1
+                        && (
+                            <StepwiseRegionSelectInput
+                                className={
+                                    _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                faramElementName="region"
+                                wardsHidden
+                                onChange={handleFormRegion}
+                                checkProvince={handleCheckFilterDisableButtonForProvince}
+                                checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                reset={resetFilterProps}
+                                provinceInputClassName={styles.snprovinceinput}
+                                districtInputClassName={styles.sndistinput}
+                                municipalityInputClassName={styles.snmuniinput}
+                            />
+                        )}
+                        {/* <div className={styles.dateFrom}>
                             <Label>From: </Label>
                             <DateInput dateFrom={changeDateFrom} />
                         </div>
                         <div className={styles.dateTo}>
                             <Label>To: </Label>
                             <DateInput dateTo={changeDateTo} />
-                        </div>
+                        </div> */}
 
-                        {filtered ? (
+                        {submenuId === 1 && filtered ? (
                             <button
                                 type="submit"
                                 className={styles.submitBut}
@@ -748,7 +735,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             Reset
                             </button>
                         )
-                            : (
+                            : submenuId === 1 && (
                                 <button
                                     type="submit"
                                     onClick={handleSubmit}
@@ -777,6 +764,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                     </div>
                     <div className={styles.rightContainerTables}>
+
                         <PalikaReportTable
                             tableData={finalArr}
                             paginationData={paginationParameters}
@@ -790,6 +778,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             sortFiscalYear={handleSortFiscalYear}
                             sortCreatedOn={handleSortCreatedOn}
                             sortModifiedOn={handleSortModifiedOn}
+                            currentPage={currentPageNumber}
+                            pageSize={paginationQueryLimit}
 
                         />
                         <div className={styles.paginationDownload}>
@@ -823,22 +813,26 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     />
                                 </div>
                             )} */}
+                            {paginationParameters && paginationParameters.count !== 0
+&& (
+    <div className={styles.paginationRight}>
 
-                            <div className={styles.paginationRight}>
-                                <ReactPaginate
-                                    previousLabel={'prev'}
-                                    nextLabel={'next'}
-                                    breakLabel={'...'}
-                                    breakClassName={'break-me'}
-                                    onPageChange={handlePageClick}
-                                    marginPagesDisplayed={2}
-                                    pageRangeDisplayed={5}
-                                    pageCount={3}
-                                    containerClassName={styles.pagination}
-                                    subContainerClassName={_cs(styles.pagination)}
-                                    activeClassName={styles.active}
-                                />
-                            </div>
+        <ReactPaginate
+            previousLabel={'prev'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            onPageChange={handlePageClick}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            pageCount={Math.ceil(paginationParameters.count
+                                        / paginationQueryLimit)}
+            containerClassName={styles.pagination}
+            subContainerClassName={_cs(styles.pagination)}
+            activeClassName={styles.active}
+        />
+    </div>
+)}
 
                         </div>
 

@@ -110,7 +110,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         localMembers,
     } = props;
 
-    console.log('local memebrs in report :', localMembers);
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
         const divToDisplay = document.getElementById('reportPreview');
