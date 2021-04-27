@@ -91,7 +91,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 
 };
-const finalArr = [];
+let finalArr = [];
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
@@ -187,90 +187,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         fiscalYear: handleFiscalYear,
     });
 
-<<<<<<< HEAD
     console.log('this value>>>', newRegionValues);
-=======
-    let finalArr = [];
-    if (fetchedData && submenuId === 2 && fiscalYear) {
-        const {
-            profile: {
-                municipality,
-
-            },
-        } = user;
-        const filteredFetchedData = fetchedData.filter(data => data.municipality === municipality);
-        const finalfetchedData = filteredFetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities.find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
-
-    if (fetchedData.length > 0 && submenuId !== 2 && fiscalYear) {
-        const finalfetchedData = fetchedData.map((item, i) => {
-            const provinceDetails = provinces.find(data => data.id === item.province);
-            const districtDetails = districts.find(data => data.id === item.district);
-
-            const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-
-
-            const municipalityDetails = municipalities
-                .find(data => data.id === item.municipality);
-            const createdDate = `${(new Date(item.createdOn)).getFullYear()
-            }-${(new Date(item.createdOn)).getMonth() + 1
-            }-${new Date(item.createdOn).getDate()}`;
-            const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-            }-${(new Date(item.modifiedOn)).getMonth() + 1
-            }-${new Date(item.modifiedOn).getDate()}`;
-            if (municipalityDetails) {
-                return { municipality: municipalityDetails.title,
-                    province: provinceDetails.title,
-                    district: districtDetails.title,
-                    fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-                    createdDate: item.createdOn && createdDate,
-                    modifiedDate: item.modifiedOn && modifiedDate,
-                    item };
-            }
-            if (!provinceDetails) {
-                return {
-                    item,
-                };
-            }
-
-            return null;
-        });
-        finalArr = [...new Set(finalfetchedData)];
-    }
-
-
->>>>>>> 8d08c32bd3a4e8b51d53f0120ce6ded99382df41
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
