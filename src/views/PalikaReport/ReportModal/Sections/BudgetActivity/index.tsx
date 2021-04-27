@@ -166,7 +166,9 @@ const BudgetActivity = (props: Props) => {
     const handleNext = () => {
         updateTab();
     };
-
+    const handleAreaOfImplementation = (data) => {
+        setareaofImplementation(data.target.value);
+    };
     const handleAddNew = () => {
         const newArr = [...tableData, {
             name: activityName,
@@ -381,6 +383,18 @@ const BudgetActivity = (props: Props) => {
                         />
 
                     </div>
+                    <div className={styles.inputContainer}>
+                        <span className={styles.dpText}>Area of Implementation</span>
+                        <input
+                            type="text"
+                            className={styles.inputElement}
+                            onChange={handleAreaOfImplementation}
+                            value={areaofImplementation}
+                            placeholder={'Enter ward number and village name'}
+                        />
+
+                    </div>
+
                     <div className={styles.inputContainer}>
 
                         <input
